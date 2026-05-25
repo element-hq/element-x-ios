@@ -11,9 +11,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d siffer angitt</string>
+			<string>%1$d dígit introduït</string>
 			<key>other</key>
-			<string>%1$d sifre angitt</string>
+			<string>%1$d dígits introduïts</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -27,9 +27,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d prosent av totalt antall stemmer</string>
+			<string>%1$d percent of total votes</string>
 			<key>other</key>
-			<string>%1$d prosent av totalt antall stemmer</string>
+			<string>%1$d percents of total votes</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -43,9 +43,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Lest av %1$@ og %2$d andre</string>
+			<string>Llegit per %1$@ i %2$d més</string>
 			<key>other</key>
-			<string>Lest av %1$@ og %2$d andre</string>
+			<string>Llegit per %1$@ i %2$d més</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -59,9 +59,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d andre</string>
+			<string>%d més</string>
 			<key>other</key>
-			<string>%d andre</string>
+			<string>%d més</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -75,9 +75,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d medlem</string>
+			<string>%1$d membre</string>
 			<key>other</key>
-			<string>%1$d medlemmer</string>
+			<string>%1$d membres</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -91,9 +91,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d stemme</string>
+			<string>%d vot</string>
 			<key>other</key>
-			<string>%d stemmer</string>
+			<string>%d vots</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -106,8 +106,10 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>one</key>
+			<string>%1$d resposta</string>
 			<key>other</key>
-			<string>%1$d svar</string>
+			<string>%1$d respostes</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -121,9 +123,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Rom</string>
+			<string>%1$d Room</string>
 			<key>other</key>
-			<string>%1$d Rom</string>
+			<string>%1$d Rooms</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -137,9 +139,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d valgt</string>
+			<string>%1$d selected</string>
 			<key>other</key>
-			<string>%1$d valgt</string>
+			<string>%1$d selected</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -153,9 +155,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Område</string>
+			<string>%1$d Space</string>
 			<key>other</key>
-			<string>%1$d Områder</string>
+			<string>%1$d Spaces</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -169,9 +171,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d melding</string>
+			<string>%1$@: %2$d missatge</string>
 			<key>other</key>
-			<string>%1$@: %2$d meldinger</string>
+			<string>%1$@: %2$d missatges</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -185,9 +187,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d varsel</string>
+			<string>%d notificació</string>
 			<key>other</key>
-			<string>%d varsler</string>
+			<string>%d notificacions</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -201,9 +203,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Du har %d ny melding.</string>
+			<string>You have %d new message.</string>
 			<key>other</key>
-			<string>Du har %d nye meldinger.</string>
+			<string>You have %d new messages.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -217,9 +219,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invitasjon</string>
+			<string>%d invitació</string>
 			<key>other</key>
-			<string>%d invitasjoner</string>
+			<string>%d invitacions</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -233,9 +235,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ny melding</string>
+			<string>%d missatge nou</string>
 			<key>other</key>
-			<string>%d nye meldinger</string>
+			<string>%d missatges nous</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -249,9 +251,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ulest varslet melding</string>
+			<string>%d missatge notificat no llegit</string>
 			<key>other</key>
-			<string>%d uleste varslede meldinger</string>
+			<string>%d missatges notificats no llegits</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -265,9 +267,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d rom</string>
+			<string>%d sala</string>
 			<key>other</key>
-			<string>%d rom</string>
+			<string>%d sales</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -297,9 +299,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Du har %1$d forsøk på å låse opp</string>
+			<string>Tens %1$d intent per desbloquejar</string>
 			<key>other</key>
-			<string>Du har %1$d forsøk på å låse opp</string>
+			<string>Tens %1$d intents per desbloquejar</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -313,9 +315,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Feil PIN-kode. Du har %1$d forsøk igjen</string>
+			<string>PIN incorrecte. Tens %1$d intent més</string>
 			<key>other</key>
-			<string>Feil PIN-kode. Du har %1$d forsøk igjen</string>
+			<string>PIN incorrecte. Tens %1$d intents més</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -345,9 +347,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Forlat %1$d rom og område</string>
+			<string>Leave %1$d room and space</string>
 			<key>other</key>
-			<string>Forlat %1$d rom og område</string>
+			<string>Leave %1$d rooms and space</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -377,9 +379,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Festet melding</string>
+			<string>%1$d missatge fixat</string>
 			<key>other</key>
-			<string>%1$d Festede meldinger</string>
+			<string>%1$d missatges fixats</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -393,9 +395,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d utestengt</string>
+			<string>%1$d Banned</string>
 			<key>other</key>
-			<string>%1$d utestengt</string>
+			<string>%1$d Banned</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -409,9 +411,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d persona</string>
 			<key>other</key>
-			<string>%1$d personer</string>
+			<string>%1$d persones</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -425,9 +427,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d invitert</string>
+			<string>%1$d Invited</string>
 			<key>other</key>
-			<string>%1$d invitert</string>
+			<string>%1$d Invited</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -441,9 +443,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d andre ønsker å bli med i dette rommet</string>
+			<string>%1$@ +%2$d altre volen unir-se a la sala</string>
 			<key>other</key>
-			<string>%1$@ +%2$d andre ønsker å bli med i dette rommet</string>
+			<string>%1$@ +%2$d altres volen unir-se a la sala</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -457,9 +459,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d medlem reagerte med %2$@</string>
+			<string>%1$d member reacted with %2$@</string>
 			<key>other</key>
-			<string>%1$d medlemmer reagerte med %2$@</string>
+			<string>%1$d members reacted with %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -473,9 +475,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Du og %1$d medlem reagerte med%2$@</string>
+			<string>You and %1$d member reacted with %2$@</string>
 			<key>other</key>
-			<string>Du og %1$d medlemmer reagerte med%2$@</string>
+			<string>You and %1$d members reacted with %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -489,9 +491,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d romendring</string>
+			<string>%1$d canvi a la sala</string>
 			<key>other</key>
-			<string>%1$d romendringer</string>
+			<string>%1$d canvis a la sala</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -505,9 +507,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ og %3$d annet</string>
+			<string>%1$@, %2$@ i %3$d més</string>
 			<key>other</key>
-			<string>%1$@, %2$@ og %3$d andre</string>
+			<string>%1$@, %2$@ i %3$d més</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -521,9 +523,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ skriver</string>
+			<string>%1$@ està escrivint</string>
 			<key>other</key>
-			<string>%1$@ skriver</string>
+			<string>%1$@ estan escrivint</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -537,9 +539,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Fjern %1$d rom fra %2$@</string>
+			<string>Remove %1$d room from %2$@</string>
 			<key>other</key>
-			<string>Fjern %1$d rommene fra %2$@</string>
+			<string>Remove %1$d rooms from %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -553,9 +555,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Du blokkerte%1$d bruker. Du vil ikke motta varsler for denne brukeren.</string>
+			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
 			<key>other</key>
-			<string>Du blokkerte%1$d brukere. Du vil ikke motta varsler for disse brukerne.</string>
+			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -569,9 +571,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Fant %1$d push-leverandør: %2$@</string>
+			<string>S'ha trobat %1$d proveïdor push: %2$@</string>
 			<key>other</key>
-			<string>Fant %1$d push-leverandører: %2$@</string>
+			<string>S'han trobat %1$d proveïdors push: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -585,9 +587,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distributør funnet: %2$@.</string>
+			<string>%1$d distribuïdor trobat: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distributører funnet: %2$@.</string>
+			<string>%1$d distribuïdors trobats: %2$@.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

@@ -283,9 +283,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
+			<string>%1$d metrin välein</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>%1$d metrin välein</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -318,6 +318,22 @@
 			<string>Väärä PIN-koodi. Sinulla on %1$d yritys jäljellä</string>
 			<key>other</key>
 			<string>Väärä PIN-koodi. Sinulla on %1$d yritystä jäljellä</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_image_edition_a11y_rotation_state</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d aste</string>
+			<key>other</key>
+			<string>%1$d astetta</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

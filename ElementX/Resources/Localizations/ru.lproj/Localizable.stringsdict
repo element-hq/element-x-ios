@@ -316,10 +316,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Каждые %1$d метра</string>
+			<key>many</key>
+			<string>Каждые %1$d метров</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
-			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>Каждый %1$d метр</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -356,6 +358,22 @@
 			<string>Неверный PIN-код. У вас осталось %1$d попыток</string>
 			<key>one</key>
 			<string>Неверный PIN-код. У вас осталась %1$d попытка</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_image_edition_a11y_rotation_state</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d degree</string>
+			<key>other</key>
+			<string>%1$d degrees</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
