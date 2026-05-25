@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomChangeRolesScreenSelectedItem: View {
@@ -48,11 +49,9 @@ struct RoomChangeRolesScreenSelectedItem: View {
             .overlay(alignment: .topTrailing) {
                 if let dismissAction {
                     Button(action: dismissAction) {
-                        Image(systemName: "xmark.circle.fill")
-                            .resizable()
-                            .scaledFrame(size: 20)
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(Color.compound.iconOnSolidPrimary, Color.compound.iconPrimary)
+                        CompoundIcon(\.close, size: .xSmall, relativeTo: .compound.bodyMD)
+                            .foregroundColor(.compound.iconOnSolidPrimary)
+                            .background(Circle().fill(Color.compound.iconPrimary))
                     }
                     // We will use the accessibility action
                     .accessibilityHidden(true)

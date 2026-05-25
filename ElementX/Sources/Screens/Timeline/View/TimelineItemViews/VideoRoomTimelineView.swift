@@ -63,9 +63,7 @@ struct VideoRoomTimelineView: View {
     }
     
     var playIcon: some View {
-        Image(systemName: "play.circle.fill")
-            .resizable()
-            .frame(width: 50, height: 50)
+        CompoundIcon(\.playSolid, size: .custom(50), relativeTo: .compound.headingLG)
             .background(.ultraThinMaterial, in: Circle())
             .foregroundColor(.white)
     }

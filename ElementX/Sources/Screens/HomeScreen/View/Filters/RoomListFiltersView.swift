@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomListFiltersView: View {
@@ -63,9 +64,9 @@ struct RoomListFiltersView: View {
                 scrollViewProxy.scrollTo(leadingID, anchor: .leading)
             }
         }, label: {
-            Image(systemName: "xmark.circle.fill")
-                .font(.system(size: 24))
-                .foregroundColor(.compound.bgActionPrimaryRest)
+            CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyLG)
+                .foregroundColor(.compound.iconOnSolidPrimary)
+                .background(Circle().fill(Color.compound.bgActionPrimaryRest))
         })
         .accessibilityLabel(L10n.screenRoomlistClearFilters)
     }

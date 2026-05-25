@@ -66,9 +66,8 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
                     Button {
                         context.send(viewAction: .skipRecoveryKeyConfirmation)
                     } label: {
-                        Image(systemName: "xmark")
+                        CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyMD)
                             .foregroundColor(.compound.iconSecondary)
-                            .frame(width: 12, height: 12)
                     }
                 }
             }
