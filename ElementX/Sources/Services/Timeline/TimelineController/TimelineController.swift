@@ -171,6 +171,7 @@ class TimelineController: TimelineControllerProtocol {
         switch await activeTimeline.edit(eventOrTransactionID, newContent: .roomMessage(content: messageContent)) {
         case .success:
             MXLog.info("Finished editing message by event")
+            callbacks.send(.messageSentOrEdited)
         case let .failure(error):
             MXLog.error("Failed editing message by event with error: \(error)")
         }
@@ -188,6 +189,7 @@ class TimelineController: TimelineControllerProtocol {
                                            mentions: intentionalMentions.toRustMentions())
         switch await activeTimeline.edit(eventOrTransactionID, newContent: newContent) {
         case .success:
+            callbacks.send(.messageSentOrEdited)
             MXLog.info("Finished editing caption")
         case let .failure(error):
             MXLog.error("Failed editing caption with error: \(error)")
@@ -296,7 +298,7 @@ class TimelineController: TimelineControllerProtocol {
                                                 intentionalMentions: intentionalMentions) {
         case .success:
             MXLog.info("Finished sending message")
-            callbacks.send(.sentMessage)
+            callbacks.send(.messageSentOrEdited)
             await donateSendMessageIntent()
         case .failure(let error):
             MXLog.error("Failed sending message with error: \(error)")
@@ -312,7 +314,7 @@ class TimelineController: TimelineControllerProtocol {
                                               caption: caption,
                                               requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
-            callbacks.send(.sentMessage)
+            callbacks.send(.messageSentOrEdited)
             return .success(())
         case .failure(let error):
             return .failure(error)
@@ -328,7 +330,7 @@ class TimelineController: TimelineControllerProtocol {
                                              caption: caption,
                                              requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
-            callbacks.send(.sentMessage)
+            callbacks.send(.messageSentOrEdited)
             return .success(())
         case .failure(let error):
             return .failure(error)
@@ -346,7 +348,7 @@ class TimelineController: TimelineControllerProtocol {
                                               caption: caption,
                                               requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
-            callbacks.send(.sentMessage)
+            callbacks.send(.messageSentOrEdited)
             return .success(())
         case .failure(let error):
             return .failure(error)
@@ -364,7 +366,7 @@ class TimelineController: TimelineControllerProtocol {
                                               caption: caption,
                                               requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
-            callbacks.send(.sentMessage)
+            callbacks.send(.messageSentOrEdited)
             return .success(())
         case .failure(let error):
             return .failure(error)
@@ -378,7 +380,7 @@ class TimelineController: TimelineControllerProtocol {
                       assetType: AssetType?) async -> Result<Void, TimelineControllerError> {
         switch await activeTimeline.sendLocation(body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
-            callbacks.send(.sentMessage)
+            callbacks.send(.messageSentOrEdited)
             return .success(())
         case .failure(let error):
             return .failure(error)
@@ -393,7 +395,7 @@ class TimelineController: TimelineControllerProtocol {
                                                      audioInfo: audioInfo,
                                                      waveform: waveform, requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
-            callbacks.send(.sentMessage)
+            callbacks.send(.messageSentOrEdited)
             return .success(())
         case .failure(let error):
             return .failure(error)
@@ -405,7 +407,7 @@ class TimelineController: TimelineControllerProtocol {
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
         switch await activeTimeline.createPoll(question: question, answers: answers, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
-            callbacks.send(.sentMessage)
+            callbacks.send(.messageSentOrEdited)
             return .success(())
         case .failure(let error):
             return .failure(error)

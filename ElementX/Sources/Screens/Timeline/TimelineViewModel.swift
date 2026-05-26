@@ -472,7 +472,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                             state.timelineState.focussedEvent = nil
                         }
                     }
-                case .sentMessage:
+                case .messageSentOrEdited:
                     actionsSubject.send(.composer(action: .clear))
                 }
             }
