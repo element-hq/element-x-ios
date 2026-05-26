@@ -303,6 +303,8 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @Bindable var navigationTabCoordinator: NavigationTabCoordinator<Tag>
     
     @State private var standardAppearance = UITabBarAppearance()
+    @State private var window: UIWindow?
+    @State private var isFullScreen = true
     
     var body: some View {
         tabView
@@ -351,13 +353,24 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     var tabRailLayout: some View {
         HStack(spacing: 0) {
             if isRailVisible {
-                TabRailView(navigationTabCoordinator: navigationTabCoordinator)
+                TabRailView(navigationTabCoordinator: navigationTabCoordinator, isFullScreen: isFullScreen)
             }
             
             if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
                 module.coordinator?.toPresentable()
                     .id(module.id)
             }
+        }
+        .introspect(.window, on: .supportedVersions) { window in
+            guard self.window !== window else { return }
+            DispatchQueue.main.async { self.window = window }
+        }
+        .onGeometryChange(for: CGSize.self) { geometry in
+            geometry.size
+        } action: { _ in
+            guard let window else { return }
+            let newValue = window.frame.size == window.windowScene?.screen.bounds.size
+            if newValue != isFullScreen { isFullScreen = newValue }
         }
     }
     
@@ -393,10 +406,9 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
 
 struct TabRailView<Tag: Hashable>: View {
     let navigationTabCoordinator: NavigationTabCoordinator<Tag>
+    let isFullScreen: Bool
     
     @State private var width: CGFloat = .zero
-    @State private var window: UIWindow?
-    @State private var isFullScreen = true
     
     /// Add additional top padding on iPad when the traffic light buttons are shown.
     var topPadding: CGFloat {
@@ -432,18 +444,5 @@ struct TabRailView<Tag: Hashable>: View {
         }
         .scrollBounceBehavior(.basedOnSize)
         .frame(width: width)
-        .introspect(.window, on: .supportedVersions) { window in
-            guard self.window !== window else { return }
-            DispatchQueue.main.async { self.window = window }
-        }
-        .onGeometryChange(for: CGSize.self) { geometry in
-            geometry.size
-        } action: { _ in
-            guard let window else { return }
-            let isFullScreen = window.frame.size == window.windowScene?.screen.bounds.size
-            if self.isFullScreen != isFullScreen {
-                self.isFullScreen = isFullScreen 
-            }
-        }
     }
 }
