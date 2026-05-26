@@ -6,21 +6,6 @@
 
 import Foundation
 
-open class BackupSecretsSDKMock: MatrixRustSDK.BackupSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -5258,16 +5243,16 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - setPusher
 
-    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangThrowableError: Error?
-    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount = 0
-    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount: Int {
+    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendThrowableError: Error?
+    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendUnderlyingCallsCount = 0
+    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount
+                return setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount
+                    returnValue = setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5275,31 +5260,31 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount = newValue
+                setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangUnderlyingCallsCount = newValue
+                    setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCalled: Bool {
-        return setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount > 0
+    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendCalled: Bool {
+        return setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendCallsCount > 0
     }
-    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedArguments: (identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String)?
-    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations: [(identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String)] = []
-    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure: ((PusherIdentifiers, PusherKind, String, String, String?, String) async throws -> Void)?
+    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendReceivedArguments: (identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String, append: Bool)?
+    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendReceivedInvocations: [(identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String, append: Bool)] = []
+    open var setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendClosure: ((PusherIdentifiers, PusherKind, String, String, String?, String, Bool) async throws -> Void)?
 
-    open override func setPusher(identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String) async throws {
-        if let error = setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangThrowableError {
+    open override func setPusher(identifiers: PusherIdentifiers, kind: PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String, append: Bool) async throws {
+        if let error = setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendThrowableError {
             throw error
         }
-        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangCallsCount += 1
-        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedArguments = (identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang)
+        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendCallsCount += 1
+        setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendReceivedArguments = (identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang, append: append)
         DispatchQueue.main.async {
-            self.setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
+            self.setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang, append: append))
         }
-        try await setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang)
+        try await setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang, append)
     }
 
     //MARK: - setUtdDelegate
@@ -6274,6 +6259,71 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return syncV2SettingsListenerClosure(settings, listener)
         } else {
             return syncV2SettingsListenerReturnValue
+        }
+    }
+
+    //MARK: - tileServer
+
+    open var tileServerUnderlyingCallsCount = 0
+    open var tileServerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return tileServerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = tileServerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                tileServerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    tileServerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var tileServerCalled: Bool {
+        return tileServerCallsCount > 0
+    }
+
+    open var tileServerUnderlyingReturnValue: TileServerInfo?
+    open var tileServerReturnValue: TileServerInfo? {
+        get {
+            if Thread.isMainThread {
+                return tileServerUnderlyingReturnValue
+            } else {
+                var returnValue: TileServerInfo?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = tileServerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                tileServerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    tileServerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var tileServerClosure: (() async -> TileServerInfo?)?
+
+    open override func tileServer() async -> TileServerInfo? {
+        tileServerCallsCount += 1
+        if let tileServerClosure = tileServerClosure {
+            return await tileServerClosure()
+        } else {
+            return tileServerReturnValue
         }
     }
 
@@ -8863,21 +8913,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return withSearchIndexStorePathPasswordReturnValue
         }
     }
-}
-open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     public init() {
@@ -24074,21 +24109,6 @@ open class RoomSearchIteratorSDKMock: MatrixRustSDK.RoomSearchIterator, @uncheck
         }
     }
 }
-open class SecretsBundleSDKMock: MatrixRustSDK.SecretsBundle, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class SecretsBundleWithUserIdSDKMock: MatrixRustSDK.SecretsBundleWithUserId, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -26564,6 +26584,77 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
             return journalSizeLimitLimitClosure(limit)
         } else {
             return journalSizeLimitLimitReturnValue
+        }
+    }
+
+    //MARK: - key
+
+    open var keyKeyUnderlyingCallsCount = 0
+    open var keyKeyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return keyKeyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = keyKeyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                keyKeyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    keyKeyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var keyKeyCalled: Bool {
+        return keyKeyCallsCount > 0
+    }
+    open var keyKeyReceivedKey: Data?
+    open var keyKeyReceivedInvocations: [Data?] = []
+
+    open var keyKeyUnderlyingReturnValue: SqliteStoreBuilder!
+    open var keyKeyReturnValue: SqliteStoreBuilder! {
+        get {
+            if Thread.isMainThread {
+                return keyKeyUnderlyingReturnValue
+            } else {
+                var returnValue: SqliteStoreBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = keyKeyUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                keyKeyUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    keyKeyUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var keyKeyClosure: ((Data?) -> SqliteStoreBuilder)?
+
+    open override func key(key: Data?) -> SqliteStoreBuilder {
+        keyKeyCallsCount += 1
+        keyKeyReceivedKey = key
+        DispatchQueue.main.async {
+            self.keyKeyReceivedInvocations.append(key)
+        }
+        if let keyKeyClosure = keyKeyClosure {
+            return keyKeyClosure(key)
+        } else {
+            return keyKeyReturnValue
         }
     }
 

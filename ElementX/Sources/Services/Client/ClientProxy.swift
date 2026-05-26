@@ -803,7 +803,8 @@ class ClientProxy: ClientProxyProtocol {
                                    appDisplayName: configuration.appDisplayName,
                                    deviceDisplayName: configuration.deviceDisplayName,
                                    profileTag: configuration.profileTag,
-                                   lang: configuration.lang)
+                                   lang: configuration.lang,
+                                   append: false)
     }
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
