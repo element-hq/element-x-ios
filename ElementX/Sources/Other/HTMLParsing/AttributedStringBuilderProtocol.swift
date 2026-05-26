@@ -8,13 +8,15 @@
 
 import Foundation
 
-struct AttributedStringBuilderComponent: Hashable {
+struct AttributedStringBuilderComponent: Hashable, Identifiable {
     enum ComponentType {
         case plainText
         case blockquote
         case codeBlock
     }
 
+    /// Identifier for the `Identifiable` conformance, allows edits to the `FormattedBodyText` to animate seamlessly
+    let id: String
     let attributedString: AttributedString
     let type: ComponentType
 }
