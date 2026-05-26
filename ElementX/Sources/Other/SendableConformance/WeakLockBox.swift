@@ -10,9 +10,37 @@ import Foundation
 /// See ``LockBox`` - Mostly the same, but the value stored with `weak` reference semantics
 @dynamicMemberLookup
 final class WeakLockBox<Wrapped: AnyObject> {
-    private let isolationLock = NSRecursiveLock()
+    private let isolationLock = NSLock()
     
     private weak var _value: Wrapped?
+    
+    subscript<T: Sendable>(dynamicMember member: KeyPath<Wrapped, T>) -> T? {
+        withLock {
+            $0[keyPath: member]
+        }
+    }
+    
+    init(_ value: Wrapped) {
+        self._value = value
+    }
+    
+    /// See ``LockBox.withLock`` - Mostly the same, but since the `value` is stored weakly, this
+    /// only executes if the pointer is not nil.
+    func withLock<Success, Failure: Error>(_ block: (inout Wrapped) throws(Failure) -> sending Success?) throws(Failure) -> sending Success? {
+        do {
+            isolationLock.lock()
+            defer { isolationLock.unlock() }
+            guard var _value else { return nil }
+            let output = try block(&_value)
+            self._value = _value
+            return output
+        } catch {
+            throw error
+        }
+    }
+}
+
+extension WeakLockBox: @unchecked Sendable where Wrapped: Sendable {
     var value: Wrapped? {
         get { isolationLock.withLock { _value } }
         set { isolationLock.withLock { _value = newValue } }
@@ -26,28 +54,4 @@ final class WeakLockBox<Wrapped: AnyObject> {
     subscript<T>(dynamicMember member: KeyPath<Wrapped, T>) -> T? {
         value?[keyPath: member]
     }
-    
-    init(_ value: Wrapped) {
-        self._value = value
-    }
-    
-    /// See ``LockBox.withLock`` - Mostly the same, but since the `value` is stored weakly, this
-    /// only executes if the pointer is not nil.
-    func withLock<Success, Failure: Error>(_ block: (inout Wrapped) throws(Failure) -> Success?) throws(Failure) -> Success? {
-        do {
-            return try isolationLock.withLock {
-                guard var _value else { return nil }
-                let output = try block(&_value)
-                self._value = _value
-                return output
-            }
-        } catch let error as Failure {
-            throw error
-        } catch {
-            // NSRecursiveLock rethrows instead of using typed throws, but `block` can only throw `Failure`
-            fatalError("this path is impossible")
-        }
-    }
 }
-
-extension WeakLockBox: @unchecked Sendable where Wrapped: Sendable { }
