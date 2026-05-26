@@ -20,8 +20,6 @@ struct CallScreenViewState: BindableState {
     let script: String?
     var url: URL?
     
-    let certificateValidator: CertificateValidatorHookProtocol
-    
     var bindings = Bindings()
 }
 

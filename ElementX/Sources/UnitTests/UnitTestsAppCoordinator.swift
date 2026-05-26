@@ -18,9 +18,6 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
     init(appDelegate: AppDelegate) {
         windowManager = WindowManager(appDelegate: appDelegate)
         
-        AppSettings.configureWithSuiteName("io.element.elementx.unittests")
-        AppSettings.resetAllSettings()
-
         // As the tests take advantage of Rust's ability to redirect the log files, there is
         // often some debris left from the previous run, so we wipe the entire directory.
         // This is an NOT an advised way to delete logs in production, `Tracing.deleteLogFiles`

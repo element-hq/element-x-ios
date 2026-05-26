@@ -433,7 +433,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
                                                                             appSettings: flowParameters.appSettings,
-                                                                            appHooks: flowParameters.appHooks,
                                                                             analytics: flowParameters.analytics))
         
         callScreenCoordinator.actions

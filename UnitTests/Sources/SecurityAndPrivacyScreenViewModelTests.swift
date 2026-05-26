@@ -20,15 +20,10 @@ final class SecurityAndPrivacyScreenViewModelTests {
     var context: SecurityAndPrivacyScreenViewModelType.Context {
         viewModel.context
     }
-    
-    init() {
-        AppSettings.resetAllSettings()
-    }
-    
+
     deinit {
         viewModel = nil
         roomProxy = nil
-        AppSettings.resetAllSettings()
     }
     
     @Test
@@ -444,7 +439,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
     private func setupViewModel(joinedParentSpaces: [SpaceServiceRoom],
                                 topLevelSpaces: [SpaceServiceRoom] = [],
                                 joinRule: ElementX.JoinRule) {
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         appSettings.knockingEnabled = true
         roomProxy = JoinedRoomProxyMock(.init(isEncrypted: false,
                                               canonicalAlias: "#room:matrix.org",

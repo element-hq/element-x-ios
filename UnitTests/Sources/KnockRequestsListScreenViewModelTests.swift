@@ -11,10 +11,6 @@ import Testing
 
 @MainActor
 struct KnockRequestsListScreenViewModelTests {
-    init() {
-        AppSettings.resetAllSettings()
-    }
-    
     @Test
     func loadingState() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loading, joinRule: .knock))

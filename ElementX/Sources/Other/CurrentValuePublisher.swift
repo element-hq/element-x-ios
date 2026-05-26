@@ -10,7 +10,9 @@ import Combine
 
 /// A wrapper of CurrentValueSubject.
 /// The purpose of this type is to remove the possibility to send new values on the underlying subject.
-struct CurrentValuePublisher<Output, Failure: Error>: Publisher {
+///
+/// `CurrentValueSubject` is documented as thread-safe but is not formally `Sendable`, hence `@unchecked`.
+struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @unchecked Sendable {
     private let subject: CurrentValueSubject<Output, Failure>
     
     init(_ subject: CurrentValueSubject<Output, Failure>) {

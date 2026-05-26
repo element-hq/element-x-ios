@@ -25,12 +25,7 @@ final class HomeScreenViewModelTests {
     var cancellables = Set<AnyCancellable>()
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
+        appSettings = AppSettings.volatile()
     }
     
     @Test
@@ -440,9 +435,9 @@ final class HomeScreenViewModelTests {
         viewModel = HomeScreenViewModel(userSession: userSession,
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: appSettings,
-                                        analyticsService: AnalyticsServiceMock.default,
+                                        analyticsService: AnalyticsServiceMock(.init()),
                                         notificationManager: notificationManager,
-                                        userIndicatorController: UserIndicatorControllerMock.default)
+                                        userIndicatorController: UserIndicatorControllerMock())
     }
 }
 

@@ -79,7 +79,7 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
                     if self.state.canBackPaginate != canBackPaginate {
                         self.state.canBackPaginate = canBackPaginate
                     }
-                case .isLive:
+                case .isLive, .messageSentOrEdited:
                     break
                 }
             }

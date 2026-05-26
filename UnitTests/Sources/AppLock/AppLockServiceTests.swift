@@ -17,18 +17,13 @@ final class AppLockServiceTests {
     private var service: AppLockService
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
         
         keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
         keychainController.resetSecrets()
         
         service = AppLockService(keychainController: keychainController, appSettings: appSettings)
         service.disable()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
     }
     
     // MARK: - PIN Code

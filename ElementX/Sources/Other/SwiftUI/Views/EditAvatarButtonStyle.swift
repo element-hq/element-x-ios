@@ -50,7 +50,7 @@ struct EditAvatarButtonStyle_Previews: PreviewProvider {
                 LoadableAvatarImage(url: nil,
                                     name: "Test", contentID: "test",
                                     avatarSize: .user(on: .editUserDetails),
-                                    mediaProvider: MediaProviderMock(configuration: .init()))
+                                    mediaProvider: MediaProviderMock(.init()))
             }
             .buttonStyle(EditAvatarButtonStyle())
             
@@ -58,7 +58,7 @@ struct EditAvatarButtonStyle_Previews: PreviewProvider {
                 LoadableAvatarImage(url: nil,
                                     name: "Test", contentID: "test",
                                     avatarSize: .user(on: .editUserDetails),
-                                    mediaProvider: MediaProviderMock(configuration: .init()))
+                                    mediaProvider: MediaProviderMock(.init()))
             }
             .buttonStyle(EditAvatarButtonStyle())
             .disabled(true)

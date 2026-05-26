@@ -149,7 +149,7 @@ struct AttributedStringBuilderTests {
         
         let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        #expect(attributedString.uiKit.attachment == nil,
+        #expect(attributedString.suppressedAttachment == nil,
                 "iFrame attachments should be removed as they're not included in the allowedHTMLTags array.")
     }
     
@@ -305,7 +305,7 @@ struct AttributedStringBuilderTests {
             foundBlockquoteAndLink = true
         }
         
-        #expect(foundBlockquoteAndLink != nil, "Couldn't find blockquote or link")
+        #expect(foundBlockquoteAndLink == true, "Couldn't find blockquote or link")
     }
     
     @Test
@@ -358,11 +358,11 @@ struct AttributedStringBuilderTests {
     func userPermalinkMentionAtachment() {
         let string = "https://matrix.to/#/@test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        #expect(attributedStringFromHTML?.attachment != nil)
+        #expect(attributedStringFromHTML?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.userID == "@test:matrix.org")
         #expect(attributedStringFromHTML?.link?.absoluteString == string)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        #expect(attributedStringFromPlain?.attachment != nil)
+        #expect(attributedStringFromPlain?.suppressedAttachment != nil)
         #expect(attributedStringFromPlain?.userID == "@test:matrix.org")
         #expect(attributedStringFromPlain?.link?.absoluteString == string)
     }
@@ -371,11 +371,11 @@ struct AttributedStringBuilderTests {
     func userIDMentionAtachment() {
         let string = "@test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        #expect(attributedStringFromHTML?.attachment != nil)
+        #expect(attributedStringFromHTML?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.userID == "@test:matrix.org")
         #expect(attributedStringFromHTML?.link?.absoluteString == "https://matrix.to/#/@test:matrix.org")
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        #expect(attributedStringFromPlain?.attachment != nil)
+        #expect(attributedStringFromPlain?.suppressedAttachment != nil)
         #expect(attributedStringFromPlain?.userID == "@test:matrix.org")
         #expect(attributedStringFromPlain?.link?.absoluteString == "https://matrix.to/#/@test:matrix.org")
     }
@@ -384,11 +384,11 @@ struct AttributedStringBuilderTests {
     func roomIDPermalinkMentionAttachment() {
         let string = "https://matrix.to/#/!test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        #expect(attributedStringFromHTML?.attachment != nil)
+        #expect(attributedStringFromHTML?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.roomID == "!test:matrix.org")
         #expect(attributedStringFromHTML?.link?.absoluteString == string)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        #expect(attributedStringFromPlain?.attachment != nil)
+        #expect(attributedStringFromPlain?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.roomID == "!test:matrix.org")
         #expect(attributedStringFromPlain?.link?.absoluteString == string)
     }
@@ -397,11 +397,11 @@ struct AttributedStringBuilderTests {
     func roomAliasPermalinkMentionAttachment() {
         let string = "https://matrix.to/#/#test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        #expect(attributedStringFromHTML?.attachment != nil)
+        #expect(attributedStringFromHTML?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.roomAlias == "#test:matrix.org")
         #expect(attributedStringFromHTML?.link?.absoluteString == "https://matrix.to/#/%23test:matrix.org")
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        #expect(attributedStringFromPlain?.attachment != nil)
+        #expect(attributedStringFromPlain?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.roomAlias == "#test:matrix.org")
         #expect(attributedStringFromPlain?.link?.absoluteString == "https://matrix.to/#/%23test:matrix.org")
     }
@@ -410,11 +410,11 @@ struct AttributedStringBuilderTests {
     func roomAliasMentionAttachment() {
         let string = "#test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        #expect(attributedStringFromHTML?.attachment != nil)
+        #expect(attributedStringFromHTML?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.roomAlias == "#test:matrix.org")
         #expect(attributedStringFromHTML?.link?.absoluteString == "https://matrix.to/#/%23test:matrix.org")
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        #expect(attributedStringFromPlain?.attachment != nil)
+        #expect(attributedStringFromPlain?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.roomAlias == "#test:matrix.org")
         #expect(attributedStringFromPlain?.link?.absoluteString == "https://matrix.to/#/%23test:matrix.org")
     }
@@ -423,11 +423,11 @@ struct AttributedStringBuilderTests {
     func eventRoomIDPermalinkMentionAttachment() {
         let string = "https://matrix.to/#/!test:matrix.org/$test"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        #expect(attributedStringFromHTML?.attachment != nil)
+        #expect(attributedStringFromHTML?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.eventOnRoomID == .some(.init(roomID: "!test:matrix.org", eventID: "$test")))
         #expect(attributedStringFromHTML?.link?.absoluteString == string)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        #expect(attributedStringFromPlain?.attachment != nil)
+        #expect(attributedStringFromPlain?.suppressedAttachment != nil)
         #expect(attributedStringFromPlain?.eventOnRoomID == .some(.init(roomID: "!test:matrix.org", eventID: "$test")))
         #expect(attributedStringFromPlain?.link?.absoluteString == string)
     }
@@ -436,11 +436,11 @@ struct AttributedStringBuilderTests {
     func eventRoomAliasPermalinkMentionAttachment() {
         let string = "https://matrix.to/#/#test:matrix.org/$test"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
-        #expect(attributedStringFromHTML?.attachment != nil)
+        #expect(attributedStringFromHTML?.suppressedAttachment != nil)
         #expect(attributedStringFromHTML?.eventOnRoomAlias == .some(.init(alias: "#test:matrix.org", eventID: "$test")))
         #expect(attributedStringFromHTML?.link?.absoluteString == "https://matrix.to/#/%23test:matrix.org/$test")
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
-        #expect(attributedStringFromPlain?.attachment != nil)
+        #expect(attributedStringFromPlain?.suppressedAttachment != nil)
         #expect(attributedStringFromPlain?.eventOnRoomAlias == .some(.init(alias: "#test:matrix.org", eventID: "$test")))
         #expect(attributedStringFromPlain?.link?.absoluteString == "https://matrix.to/#/%23test:matrix.org/$test")
     }
@@ -536,7 +536,7 @@ struct AttributedStringBuilderTests {
         
         #expect(attributedString?.runs.count == 1)
         
-        #expect(attributedString?.attachment == nil)
+        #expect(attributedString?.suppressedAttachment == nil)
     }
     
     @Test
@@ -546,7 +546,7 @@ struct AttributedStringBuilderTests {
         
         #expect(attributedString?.runs.count == 1)
         
-        #expect(attributedString?.attachment == nil)
+        #expect(attributedString?.suppressedAttachment == nil)
     }
     
     @Test
@@ -556,7 +556,7 @@ struct AttributedStringBuilderTests {
         
         #expect(attributedString?.runs.count == 1)
         
-        #expect(attributedString?.attachment == nil)
+        #expect(attributedString?.suppressedAttachment == nil)
     }
     
     @Test
@@ -569,7 +569,7 @@ struct AttributedStringBuilderTests {
         var foundAttachments = 0
         var foundLink: URL?
         for run in attributedStringFromHTML.runs {
-            if run.attachment != nil {
+            if run.suppressedAttachment != nil {
                 foundAttachments += 1
             }
             
@@ -585,7 +585,7 @@ struct AttributedStringBuilderTests {
         foundAttachments = 0
         foundLink = nil
         for run in attributedStringFromPlain.runs {
-            if run.attachment != nil {
+            if run.suppressedAttachment != nil {
                 foundAttachments += 1
             }
             
@@ -607,7 +607,7 @@ struct AttributedStringBuilderTests {
         var foundAttachments = 0
         var foundLink: URL?
         for run in attributedStringFromHTML.runs {
-            if run.attachment != nil {
+            if run.suppressedAttachment != nil {
                 foundAttachments += 1
             }
             
@@ -623,7 +623,7 @@ struct AttributedStringBuilderTests {
         foundAttachments = 0
         foundLink = nil
         for run in attributedStringFromPlain.runs {
-            if run.attachment != nil {
+            if run.suppressedAttachment != nil {
                 foundAttachments += 1
             }
             
@@ -983,7 +983,7 @@ struct AttributedStringBuilderTests {
         
         #expect(String(attributedString2.characters) == "This is visible. And this text and link are visible too.")
         
-        try #require(attributedString2.runs.first { $0.link != nil }?.link, "Couldn't find the link")
+        _ = try #require(attributedString2.runs.first { $0.link != nil }?.link, "Couldn't find the link")
     }
     
     // MARK: - Private
@@ -1006,10 +1006,46 @@ struct AttributedStringBuilderTests {
         
         #expect(attributedString.runs.count == expectedRuns)
         
-        for run in attributedString.runs where run.attachment != nil {
+        for run in attributedString.runs where run.suppressedAttachment != nil {
             return
         }
         
         Issue.record("Couldn't find expected value.")
+    }
+}
+
+// warning suppression
+// `NSTextAttachment` is marked `@_nonSendable(_assumed)` by Apple in the UIKit SDK, and
+// `ScopedAttributeContainer` (returned by `AttributedString.uiKit` and used by dynamic member
+// lookup on `AttributedString` and `AttributedString.Runs.Element`) is marked `Sendable`.
+// The compiler warns at every access point where a `@_nonSendable` value is read through a
+// `Sendable` container — regardless of Swift version or strict concurrency mode. There is no
+// compiler flag that suppresses this cleanly.
+//
+// Attempted fixes:
+// - `@MainActor` on the test class: does not help; the warning is not about actor isolation
+// - `@preconcurrency import UIKit`: does not help; the warning originates from the SDK type attribute
+// - Varying `-strict-concurrency` (targeted/complete) or `-swift-version` (5/6): all produce
+//   the same warning — confirmed via standalone `swiftc` repro
+//
+// The warning is safe to ignore here because no concurrency boundary is actually crossed —
+// the value is accessed synchronously within a single context and never escapes.
+//
+// These two extension properties consolidate 20+ warning sites across this file down to just
+// these two definitions taking the hit. This pattern is test-only; app code reads attachments
+// via `NSAttributedString.attribute(_:at:effectiveRange:)` which does not trigger the warning.
+
+// swiftformat:disable redundantSelf
+// self is not redundant here because these are NOT properties directly on the type, but on a
+// child through dynamicMember which requires the `self` for access
+private extension AttributedString {
+    var suppressedAttachment: NSTextAttachment? {
+        self.attachment
+    }
+}
+
+private extension AttributedString.Runs.Element {
+    var suppressedAttachment: NSTextAttachment? {
+        self.attachment
     }
 }

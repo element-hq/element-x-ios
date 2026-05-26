@@ -10,6 +10,7 @@ import Compound
 import LRUCache
 import MatrixRustSDK
 import SwiftSoup
+import Synchronization
 import UIKit
 
 protocol MentionBuilderProtocol {
@@ -42,11 +43,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let mentionBuilder: MentionBuilderProtocol
     
     private static let attributeMSC4286 = "msc4286-external-payment-details"
-    private static let cacheDispatchQueue = DispatchQueue(label: "io.element.elementx.attributed_string_builder_v2_cache")
-    private static var caches: [String: LRUCache<String, AttributedString>] = [:]
+    private static let caches = Mutex<[String: LRUCache<String, AttributedString>]>([:])
 
     static func invalidateCaches() {
-        caches.removeAll()
+        caches.withLock { $0.removeAll() }
     }
     
     init(cacheKey: String = defaultKey, mentionBuilder: MentionBuilderProtocol) {
@@ -279,22 +279,17 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     private static func cacheValue(_ value: AttributedString?, forKey key: String, cacheKey: String) {
-        cacheDispatchQueue.sync {
+        caches.withLock { caches in
             if caches[cacheKey] == nil {
                 caches[cacheKey] = LRUCache<String, AttributedString>(countLimit: 1000)
             }
-            
+
             caches[cacheKey]?.setValue(value, forKey: key)
         }
     }
-    
+
     private static func cachedValue(forKey key: String, cacheKey: String) -> AttributedString? {
-        var result: AttributedString?
-        cacheDispatchQueue.sync {
-            result = caches[cacheKey]?.value(forKey: key)
-        }
-        
-        return result
+        caches.withLock { $0[cacheKey]?.value(forKey: key) }
     }
     
     // swiftlint:disable:next cyclomatic_complexity

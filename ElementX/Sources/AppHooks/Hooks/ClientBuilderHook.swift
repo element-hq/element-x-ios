@@ -8,7 +8,7 @@
 
 import MatrixRustSDK
 
-protocol ClientBuilderHookProtocol {
+protocol ClientBuilderHookProtocol: Sendable {
     func configure(_ builder: ClientBuilder) -> ClientBuilder
 }
 

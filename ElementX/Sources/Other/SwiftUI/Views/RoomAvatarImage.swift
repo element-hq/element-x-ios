@@ -134,27 +134,27 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
                                               name: "Room",
                                               avatarURL: nil),
                                 avatarSize: .room(on: .chats),
-                                mediaProvider: MediaProviderMock(configuration: .init()))
+                                mediaProvider: MediaProviderMock(.init()))
                 
                 RoomAvatarImage(avatar: .room(id: "!2:server.com",
                                               name: "Room",
                                               avatarURL: .mockMXCAvatar),
                                 avatarSize: .room(on: .chats),
-                                mediaProvider: MediaProviderMock(configuration: .init()))
+                                mediaProvider: MediaProviderMock(.init()))
                 
                 RoomAvatarImage(avatar: .space(id: "!space:server.com",
                                                name: "Room",
                                                avatarURL: nil),
                                 avatarSize: .room(on: .chats),
-                                mediaProvider: MediaProviderMock(configuration: .init()))
+                                mediaProvider: MediaProviderMock(.init()))
                 
                 RoomAvatarImage(avatar: .space(id: "!otherspace:server.com",
                                                name: "Room",
                                                avatarURL: .mockMXCAvatar),
                                 avatarSize: .room(on: .chats),
-                                mediaProvider: MediaProviderMock(configuration: .init()))
+                                mediaProvider: MediaProviderMock(.init()))
                 
-                RoomAvatarImage(avatar: .tombstoned, avatarSize: .room(on: .chats), mediaProvider: MediaProviderMock(configuration: .init()))
+                RoomAvatarImage(avatar: .tombstoned, avatarSize: .room(on: .chats), mediaProvider: MediaProviderMock(.init()))
             }
             
             HStack(spacing: 12) {
@@ -162,18 +162,18 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
                                                        displayName: "User",
                                                        avatarURL: nil)]),
                 avatarSize: .room(on: .chats),
-                mediaProvider: MediaProviderMock(configuration: .init()))
+                mediaProvider: MediaProviderMock(.init()))
                 
                 RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
                                                        displayName: "User",
                                                        avatarURL: .mockMXCAvatar)]),
                 avatarSize: .room(on: .chats),
-                mediaProvider: MediaProviderMock(configuration: .init()))
+                mediaProvider: MediaProviderMock(.init()))
                 
                 RoomAvatarImage(avatar: .heroes([.init(userID: "@alice:server.com", displayName: "Alice", avatarURL: nil),
                                                  .init(userID: "@bob:server.net", displayName: "Bob", avatarURL: nil)]),
                                 avatarSize: .room(on: .chats),
-                                mediaProvider: MediaProviderMock(configuration: .init()))
+                                mediaProvider: MediaProviderMock(.init()))
             }
         }
     }

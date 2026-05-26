@@ -298,7 +298,7 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(empty: empty),
                                            filesTimelineViewModel: makeTimelineViewModel(empty: empty),
                                            initialScreenMode: screenMode,
-                                           mediaProvider: MediaProviderMock(configuration: .init()),
+                                           mediaProvider: MediaProviderMock(.init()),
                                            userIndicatorController: UserIndicatorControllerMock(),
                                            appMediator: AppMediatorMock())
     }
@@ -310,15 +310,15 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
             MockTimelineController.mediaGallery
         }
 
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
-                                 appMediator: AppMediatorMock.default,
+                                 appMediator: AppMediatorMock(.init()),
                                  appSettings: appSettings,
-                                 analyticsService: AnalyticsServiceMock.default,
+                                 analyticsService: AnalyticsServiceMock(.init()),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

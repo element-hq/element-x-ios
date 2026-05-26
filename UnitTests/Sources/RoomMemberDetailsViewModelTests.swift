@@ -164,7 +164,7 @@ struct RoomMemberDetailsViewModelTests {
         try await waitForMemberToLoad.fulfill()
         
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
-        clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(configuration: .init(verificationState: .notVerified)))
+        clientProxy.userIdentityForFallBackToServerReturnValue = .success(UserIdentityProxyMock(.init(verificationState: .notVerified)))
         
         // The user identity becomes known, i.e. not unknown.
         let deferred = deferFulfillment(viewModel.context.$viewState.compactMap(\.bindings.inviteConfirmationUser)) {
@@ -211,8 +211,8 @@ struct RoomMemberDetailsViewModelTests {
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
                                                      userSession: userSession,
-                                                     userIndicatorController: UserIndicatorControllerMock.default,
-                                                     analytics: AnalyticsServiceMock.default,
-                                                     appSettings: AppSettings())
+                                                     userIndicatorController: UserIndicatorControllerMock(),
+                                                     analytics: AnalyticsServiceMock(.init()),
+                                                     appSettings: .volatile())
     }
 }

@@ -140,7 +140,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        dmRecipientVerificationState: verificationState,
                        roomHistorySharingState: historySharingState,
                        
-                       mediaProvider: MediaProviderMock(configuration: .init())) { }
+                       mediaProvider: MediaProviderMock(.init())) { }
             .padding()
     }
 }

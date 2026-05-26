@@ -463,10 +463,10 @@ extension RoomScreenViewModel {
                             roomProxy: roomProxyMock,
                             initialSelectedPinnedEventID: nil,
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                            appSettings: AppSettings(),
+                            appSettings: .volatile(),
                             appHooks: appHooks,
-                            analyticsService: AnalyticsServiceMock.default,
-                            userIndicatorController: UserIndicatorControllerMock.default)
+                            analyticsService: AnalyticsServiceMock(.init()),
+                            userIndicatorController: UserIndicatorControllerMock())
     }
 }
 

@@ -250,8 +250,8 @@ struct NotificationContentBuilder {
 
         if let fetchedImage {
             image = fetchedImage
-        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.avatarDisplayName ?? senderAvatarDisplayName,
-                                                                 id: icon.groupInfo?.id ?? senderID) {
+        } else if let data = await Self.getPlaceholderAvatarImageData(name: icon.groupInfo?.avatarDisplayName ?? senderAvatarDisplayName,
+                                                                      id: icon.groupInfo?.id ?? senderID) {
             image = INImage(imageData: data)
         } else {
             image = INImage(named: "")
@@ -309,7 +309,7 @@ struct NotificationContentBuilder {
     }
 
     @MainActor
-    func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
+    static func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
         // The version value is used in case the design of the placeholder is updated to force a replacement
         let prefix = "notification_placeholderV9"
         

@@ -22,8 +22,8 @@ struct PollFormScreenViewState: BindableState {
         self.maxNumberOfOptions = maxNumberOfOptions
         
         switch mode {
-        case .new:
-            bindings = .init()
+        case .new(let topic):
+            bindings = .init(question: topic ?? "")
         case .edit(_, let poll):
             bindings = .init(poll: poll)
         }
@@ -71,7 +71,7 @@ struct PollFormScreenViewState: BindableState {
 }
 
 enum PollFormMode: Hashable {
-    case new
+    case new(topic: String?)
     case edit(eventID: String, poll: Poll)
 }
 

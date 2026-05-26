@@ -370,7 +370,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .location:
             actionsSubject.send(.displayLocationPicker)
         case .poll:
-            actionsSubject.send(.displayPollForm(mode: .new))
+            actionsSubject.send(.displayNewPollForm)
         }
     }
     
@@ -380,8 +380,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             timelineInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
         case let .end(pollStartID):
             displayAlert(.pollEndConfirmation(pollStartID))
-        case .edit(let pollStartID, let poll):
-            actionsSubject.send(.displayPollForm(mode: .edit(eventID: pollStartID, poll: poll)))
+        case .edit(let eventID, let poll):
+            actionsSubject.send(.displayEditPollForm(eventID: eventID, poll: poll))
         }
     }
     
@@ -472,6 +472,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                             state.timelineState.focussedEvent = nil
                         }
                     }
+                case .messageSentOrEdited:
+                    actionsSubject.send(.composer(action: .clear))
                 }
             }
             .store(in: &cancellables)
@@ -512,8 +514,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .displayMessageForwarding(let itemID):
                     Task { await self.forwardMessage(itemID: itemID) }
-                case .displayPollForm(let mode):
-                    actionsSubject.send(.displayPollForm(mode: mode))
+                case .displayEditPollForm(let eventID, let poll):
+                    actionsSubject.send(.displayEditPollForm(eventID: eventID, poll: poll))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
                 case .displayMediaUploadPreviewScreen(let mediaURLs):
@@ -763,8 +765,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         guard !message.isEmpty else {
             fatalError("This message should never be empty")
         }
-
-        actionsSubject.send(.composer(action: .clear))
         
         switch mode {
         case .reply(let eventID, _, _):
@@ -1121,16 +1121,17 @@ extension TimelineViewModel {
         clientProxyMock.roomSummaryForIdentifierReturnValue = .mock(id: "!room:matrix.org", name: "Room", canonicalAlias: "#room:matrix.org")
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview room", predecessor: hasPredecessor ? .init(roomId: UUID().uuidString) : nil))
 
-        let appSettings = AppSettings()
+        let appSettings = AppSettings.volatile()
+
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
                                  userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 userIndicatorController: UserIndicatorControllerMock.default,
-                                 appMediator: AppMediatorMock.default,
+                                 userIndicatorController: UserIndicatorControllerMock(),
+                                 appMediator: AppMediatorMock(.init()),
                                  appSettings: appSettings,
-                                 analyticsService: AnalyticsServiceMock.default,
+                                 analyticsService: AnalyticsServiceMock(.init()),
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))

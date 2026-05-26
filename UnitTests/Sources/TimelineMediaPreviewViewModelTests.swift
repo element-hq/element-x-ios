@@ -295,7 +295,7 @@ struct TimelineMediaPreviewViewModelTests {
         timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
         timelineController.timelineItems = initialItems
         
-        mediaProvider = MediaProviderMock(configuration: .init())
+        mediaProvider = MediaProviderMock(.init())
         photoLibraryManager = PhotoLibraryManagerMock(.init(authorizationDenied: photoLibraryAuthorizationDenied))
         
         viewModel = TimelineMediaPreviewViewModel(initialItem: initialItems[initialItemIndex],

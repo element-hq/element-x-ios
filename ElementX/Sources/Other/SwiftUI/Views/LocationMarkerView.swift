@@ -141,7 +141,7 @@ struct LocationMarkerView_Previews: PreviewProvider, TestablePreview {
             
             // Static user with avatar
             LocationMarkerView(kind: .staticUser(.mockDan),
-                               mediaProvider: MediaProviderMock(configuration: .init()))
+                               mediaProvider: MediaProviderMock(.init()))
             
             // Static user without avatar
             LocationMarkerView(kind: .staticUser(.init(userID: "@someone:matrix.org",
@@ -149,7 +149,7 @@ struct LocationMarkerView_Previews: PreviewProvider, TestablePreview {
             
             // Live user with avatar
             LocationMarkerView(kind: .liveUser(.mockDan),
-                               mediaProvider: MediaProviderMock(configuration: .init()))
+                               mediaProvider: MediaProviderMock(.init()))
             
             // Live user without avatar
             LocationMarkerView(kind: .liveUser(.init(userID: "@someone:matrix.org",

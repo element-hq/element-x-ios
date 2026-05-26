@@ -19,14 +19,6 @@ final class LiveLocationManagerTests {
     private var appSettings: AppSettings!
     private var beaconInfoSubject: PassthroughSubject<LiveLocationOwnInfoUpdate, Never>!
     
-    init() {
-        AppSettings.resetAllSettings()
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
-    }
-    
     // MARK: - startLiveLocation
     
     @Test
@@ -236,7 +228,7 @@ final class LiveLocationManagerTests {
     }
     
     private func setUp(accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy) {
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
         clientProxy = ClientProxyMock(.init())
         beaconInfoSubject = PassthroughSubject<LiveLocationOwnInfoUpdate, Never>()
         clientProxy.liveLocationOwnInfoUpdatesPublisher = beaconInfoSubject.eraseToAnyPublisher()

@@ -196,8 +196,15 @@ extension NSItemProvider {
     }
 }
 
-private extension NSString {
+extension NSString {
+    /// `NSString.pathExtension` returns the trailing dot-segment regardless of whether
+    /// it's a real extension, and `UTType(filenameExtension:)` synthesises a `dyn.*`
+    /// placeholder for unknown ones instead of returning nil — so check both.
     var hasPathExtension: Bool {
-        !pathExtension.isEmpty
+        guard !pathExtension.isEmpty,
+              let type = UTType(filenameExtension: pathExtension) else {
+            return false
+        }
+        return !type.isDynamic
     }
 }

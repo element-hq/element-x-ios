@@ -28,15 +28,10 @@ final class MediaUploadPreviewScreenViewModelTests {
     }
     
     init() {
-        AppSettings.resetAllSettings()
-        appSettings = AppSettings()
+        appSettings = AppSettings.volatile()
         appSettings.optimizeMediaUploads = false
 
-        userIndicatorController = UserIndicatorControllerMock.default
-    }
-    
-    deinit {
-        AppSettings.resetAllSettings()
+        userIndicatorController = UserIndicatorControllerMock()
     }
     
     @Test
@@ -293,6 +288,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         }
 
         viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: urls,
+                                                      caption: nil,
                                                       title: "Some File",
                                                       isRoomEncrypted: true,
                                                       shouldShowCaptionWarning: true,

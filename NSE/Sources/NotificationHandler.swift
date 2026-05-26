@@ -8,6 +8,7 @@
 
 import CallKit
 import MatrixRustSDK
+import Synchronization
 import UserNotifications
 
 class NotificationHandler {
@@ -18,10 +19,7 @@ class NotificationHandler {
     private let tag: String
     
     private let notificationContentBuilder: NotificationContentBuilder
-    
-    // periphery:ignore - required for instance retention in the rust codebase
-    private var roomInfoObservationToken: TaskHandle?
-    
+
     init(userSession: NSEUserSession,
          settings: CommonSettingsProtocol,
          contentHandler: @escaping (UNNotificationContent) -> Void,
@@ -184,21 +182,28 @@ class NotificationHandler {
         // Check to see if a call is still ongoing
         if let room = userSession.roomForIdentifier(roomID) { // Try to get call details from the room info
             if !room.hasActiveRoomCall() { // If I don't have an active call wait a bit and make sure
+                // Local `Mutex` holder for the SDK subscription token — keeps it alive across the
+                // await without needing `[weak self]`, which would force this class to be `Sendable`.
+                let observationToken = Mutex<TaskHandle?>(nil)
                 let expiringTask = ExpiringTaskRunner {
-                    await withCheckedContinuation { [weak self] continuation in
-                        self?.roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { info in
-                            if info.hasRoomCall {
-                                MXLog.info("Received room info update and the room has an active call now.")
-                                continuation.resume()
-                            } else {
-                                MXLog.info("Received a room info update but the room still doesn't have an ongoing call.")
-                            }
-                        })
+                    await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+                        observationToken.withLock { state in
+                            state = room.subscribeToRoomInfoUpdates(listener: SDKListener { info in
+                                if info.hasRoomCall {
+                                    MXLog.info("Received room info update and the room has an active call now.")
+                                    continuation.resume()
+                                } else {
+                                    MXLog.info("Received a room info update but the room still doesn't have an ongoing call.")
+                                }
+                            })
+                        }
                     }
                 }
-                
-                try? await expiringTask.run(timeout: .seconds(5)) // Wait 5 seconds or just use whatever is available
-                
+
+                try? await expiringTask.run(timeout: Duration.seconds(5)) // Wait 5 seconds or just use whatever is available
+                // Release the SDK subscription explicitly once we no longer need updates.
+                observationToken.withLock { $0 = nil }
+
                 guard room.hasActiveRoomCall() else {
                     MXLog.info("The room no longer has an ongoing call, handling as push notification")
                     return .shouldDisplay

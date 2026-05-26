@@ -96,14 +96,14 @@ struct LeaveSpaceRoomDetailsCell_Previews: PreviewProvider, TestablePreview {
                                                   isLastOwner: false,
                                                   areCreatorsPrivileged: false,
                                                   isSelected: true),
-                                      mediaProvider: MediaProviderMock(configuration: .init())) { }
+                                      mediaProvider: MediaProviderMock(.init())) { }
             LeaveSpaceRoomDetailsCell(room: .init(spaceServiceRoom: SpaceServiceRoom.mock(id: "2",
                                                                                           name: "My Space",
                                                                                           isSpace: true),
                                                   isLastOwner: true,
                                                   areCreatorsPrivileged: false,
                                                   isSelected: false),
-                                      mediaProvider: MediaProviderMock(configuration: .init())) { }
+                                      mediaProvider: MediaProviderMock(.init())) { }
             LeaveSpaceRoomDetailsCell(room: .init(spaceServiceRoom: SpaceServiceRoom.mock(id: "2",
                                                                                           name: "My Space",
                                                                                           isSpace: true),
@@ -111,21 +111,21 @@ struct LeaveSpaceRoomDetailsCell_Previews: PreviewProvider, TestablePreview {
                                                   areCreatorsPrivileged: false,
                                                   isSelected: false),
                                       hideSelection: true,
-                                      mediaProvider: MediaProviderMock(configuration: .init())) { }
+                                      mediaProvider: MediaProviderMock(.init())) { }
             LeaveSpaceRoomDetailsCell(room: .init(spaceServiceRoom: SpaceServiceRoom.mock(id: "3",
                                                                                           name: "Room",
                                                                                           isSpace: false),
                                                   isLastOwner: false,
                                                   areCreatorsPrivileged: false,
                                                   isSelected: true),
-                                      mediaProvider: MediaProviderMock(configuration: .init())) { }
+                                      mediaProvider: MediaProviderMock(.init())) { }
             LeaveSpaceRoomDetailsCell(room: .init(spaceServiceRoom: SpaceServiceRoom.mock(id: "4",
                                                                                           name: "My Room",
                                                                                           isSpace: false),
                                                   isLastOwner: true,
                                                   areCreatorsPrivileged: false,
                                                   isSelected: false),
-                                      mediaProvider: MediaProviderMock(configuration: .init())) { }
+                                      mediaProvider: MediaProviderMock(.init())) { }
             LeaveSpaceRoomDetailsCell(room: .init(spaceServiceRoom: SpaceServiceRoom.mock(id: "4",
                                                                                           name: "My Room",
                                                                                           isSpace: false),
@@ -133,7 +133,7 @@ struct LeaveSpaceRoomDetailsCell_Previews: PreviewProvider, TestablePreview {
                                                   areCreatorsPrivileged: false,
                                                   isSelected: false),
                                       hideSelection: true,
-                                      mediaProvider: MediaProviderMock(configuration: .init())) { }
+                                      mediaProvider: MediaProviderMock(.init())) { }
         }
     }
 }

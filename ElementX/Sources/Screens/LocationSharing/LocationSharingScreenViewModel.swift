@@ -390,12 +390,12 @@ extension LocationSharingScreenViewModel {
         roomProxy.makeLiveLocationServiceReturnValue = liveLocationServiceMock
 
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
-                                              mapURLBuilder: AppSettings().mapTilerConfiguration,
+                                              mapURLBuilder: AppSettings.volatile().mapTilerConfiguration,
                                               roomProxy: roomProxy,
                                               timelineController: MockTimelineController(),
                                               liveLocationManager: LiveLocationManagerMock(),
-                                              analytics: AnalyticsServiceMock.default,
+                                              analytics: AnalyticsServiceMock(.init()),
                                               userIndicatorController: UserIndicatorControllerMock(),
-                                              mediaProvider: MediaProviderMock(configuration: .init()))
+                                              mediaProvider: MediaProviderMock(.init()))
     }
 }

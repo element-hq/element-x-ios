@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol AudioConverterProtocol {
+protocol AudioConverterProtocol: Sendable {
     func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws
     func convertToMPEG4AAC(sourceURL: URL, destinationURL: URL) throws
 }

@@ -84,10 +84,10 @@ struct JoinRoomByAddressView_Previews: PreviewProvider, TestablePreview {
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
 
         return StartChatScreenViewModel(userSession: userSession,
-                                        analytics: AnalyticsServiceMock.default,
+                                        analytics: AnalyticsServiceMock(.init()),
                                         userIndicatorController: UserIndicatorControllerMock(),
                                         userDiscoveryService: userDiscoveryService,
-                                        appSettings: AppSettings())
+                                        appSettings: .volatile())
     }()
     
     static var previews: some View {

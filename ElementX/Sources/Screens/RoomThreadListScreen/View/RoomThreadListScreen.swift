@@ -161,6 +161,6 @@ struct RoomThreadListScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel() -> RoomThreadListScreenViewModel {
         RoomThreadListScreenViewModel(threadListServiceProxy: RoomThreadListServiceProxyMock(.init()),
-                                      mediaProvider: MediaProviderMock(configuration: .init()))
+                                      mediaProvider: MediaProviderMock(.init()))
     }
 }

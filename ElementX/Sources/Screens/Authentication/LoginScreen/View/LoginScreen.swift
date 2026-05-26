@@ -161,8 +161,8 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
         let viewModel = LoginScreenViewModel(authenticationService: authenticationService,
                                              loginHint: nil,
                                              userIndicatorController: UserIndicatorControllerMock(),
-                                             appSettings: AppSettings(),
-                                             analytics: AnalyticsServiceMock.default)
+                                             appSettings: .volatile(),
+                                             analytics: AnalyticsServiceMock(.init()))
         
         if withCredentials {
             viewModel.context.username = "alice"
