@@ -10,7 +10,7 @@ import Foundation
 // sourcery: AutoMockable
 protocol RoomMessageSearchProxyProtocol: AnyObject {
     /// Loads the next batch of search results.
-    /// Returns `nil` when there are no more results for the query, 
+    /// Returns `nil` when there are no more results for the query,
     /// in which case the proxy should not be queried again.
     func loadNextResults() async -> Result<[RoomMessageSearchResult]?, RoomProxyError>
 }
