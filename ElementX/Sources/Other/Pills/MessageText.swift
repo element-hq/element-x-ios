@@ -173,6 +173,11 @@ struct MessageText: UIViewRepresentable {
         
         // Otherwise links can be dragged and dropped when long pressed
         textView.textDragInteraction?.isEnabled = false
+        // Otherwise items dropped onto a bubble land on the text view instead of
+        // bubbling up to the timeline's drop handler.
+        if let textDropInteraction = textView.textDropInteraction {
+            textView.removeInteraction(textDropInteraction)
+        }
         
         textView.contentInset = .zero
         textView.contentInsetAdjustmentBehavior = .never
