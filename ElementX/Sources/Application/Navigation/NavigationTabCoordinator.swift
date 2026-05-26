@@ -352,14 +352,6 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         HStack(spacing: 0) {
             if isRailVisible {
                 TabRailView(navigationTabCoordinator: navigationTabCoordinator)
-                    .background {
-                        Color.compound.bgCanvasDefault
-                            .overlay(alignment: .trailing) {
-                                Divider()
-                            }
-                            .ignoresSafeArea()
-                    }
-                    .zIndex(1)
             }
             
             if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
@@ -403,10 +395,17 @@ struct TabRailView<Tag: Hashable>: View {
     let navigationTabCoordinator: NavigationTabCoordinator<Tag>
     
     @State private var width: CGFloat = .zero
+    @State private var window: UIWindow?
+    @State private var isFullScreen = true
+    
+    /// Add additional top padding on iPad when the traffic light buttons are shown.
+    var topPadding: CGFloat {
+        isFullScreen && ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 40
+    }
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 12) {
+            VStack(spacing: 16) {
                 ForEach(navigationTabCoordinator.tabModules) { module in
                     let isSelected = module.details.tag == navigationTabCoordinator.selectedTab
                     Button {
@@ -418,25 +417,33 @@ struct TabRailView<Tag: Hashable>: View {
                             CompoundIcon(isSelected ? module.details.selectedIcon : module.details.icon)
                         }
                         .foregroundStyle(.compound.iconPrimary)
-                        .padding(8)
-                        .background {
-                            ZStack {
-                                let shape = RoundedRectangle(cornerRadius: 12)
-                                shape.fill(.compound.bgSubtlePrimary)
-                                shape.stroke(isSelected ? .compound.bgActionPrimaryRest : .clear, lineWidth: 2)
-                            }
-                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(isSelected ? .compound.bgSubtleSecondary : .clear, in: .capsule)
                     }
                     .labelStyle(.iconOnly)
                     .badge(10) // TODO: Check if this works.
                 }
             }
-            .padding(.horizontal, ProcessInfo.processInfo.isiOSAppOnMac ? 16 : 12)
-            .padding(.top, ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 40) // FIXME: Properly avoid the traffic lights safe area?
+            .padding(.leading, 8)
+            .padding(.top, topPadding)
             .padding(.bottom)
             .readWidth($width)
         }
         .scrollBounceBehavior(.basedOnSize)
         .frame(width: width)
+        .introspect(.window, on: .supportedVersions) { window in
+            guard self.window !== window else { return }
+            DispatchQueue.main.async { self.window = window }
+        }
+        .onGeometryChange(for: CGSize.self) { geometry in
+            geometry.size
+        } action: { _ in
+            guard let window else { return }
+            let isFullScreen = window.frame.size == window.windowScene?.screen.bounds.size
+            if self.isFullScreen != isFullScreen {
+                self.isFullScreen = isFullScreen 
+            }
+        }
     }
 }

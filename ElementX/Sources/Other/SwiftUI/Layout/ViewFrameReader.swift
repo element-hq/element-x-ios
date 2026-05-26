@@ -17,7 +17,9 @@ extension View {
         onGeometryChange(for: CGRect.self) { geometry in
             geometry.frame(in: .local)
         } action: { newValue in
-            frame.wrappedValue = newValue
+            if frame.wrappedValue != newValue {
+                frame.wrappedValue = newValue
+            }
         }
     }
     
@@ -28,7 +30,9 @@ extension View {
         onGeometryChange(for: CGFloat.self) { geometry in
             geometry.size.height
         } action: { newValue in
-            height.wrappedValue = newValue
+            if height.wrappedValue != newValue {
+                height.wrappedValue = newValue
+            }
         }
     }
     
@@ -39,7 +43,9 @@ extension View {
         onGeometryChange(for: CGFloat.self) { geometry in
             geometry.size.width
         } action: { newValue in
-            width.wrappedValue = newValue
+            if width.wrappedValue != newValue {
+                width.wrappedValue = newValue
+            }
         }
     }
 }
