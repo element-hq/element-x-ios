@@ -63,14 +63,20 @@ struct VideoRoomTimelineView: View {
     }
     
     var playIcon: some View {
-        CompoundIcon(\.playSolid, size: .custom(50), relativeTo: .compound.headingLG)
-            .background(.ultraThinMaterial, in: Circle())
-            .foregroundColor(.white)
+        CompoundIcon(\.playSolid, size: .medium, relativeTo: .compound.headingLG)
+            .foregroundStyle(.compound.iconPrimary)
+            .padding(13)
+            .background {
+                ZStack {
+                    Circle().fill(.compound.bgSubtleSecondary)
+                    Circle().stroke(.compound.borderInteractiveSecondary)
+                }
+            }
     }
     
     var placeholder: some View {
         Rectangle()
-            .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
+            .foregroundStyle(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
             .opacity(0.3)
     }
 }

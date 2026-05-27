@@ -25,7 +25,7 @@ struct UserIndicatorModalView: View {
 
                 HStack(spacing: 8) {
                     if let icon = indicator.icon {
-                        CompoundIcon(icon, size: .medium, relativeTo: .compound.headingMDBold)
+                        CompoundIcon(icon, size: iconSize, relativeTo: titleFont)
                             .foregroundColor(.compound.iconPrimary)
                     }
                     
@@ -67,6 +67,14 @@ struct UserIndicatorModalView: View {
             .compound.headingMDBold
         } else {
             .compound.bodyLG
+        }
+    }
+    
+    private var iconSize: CompoundIcon.Size {
+        if indicator.message != nil {
+            .custom(32)
+        } else {
+            .medium
         }
     }
 }

@@ -37,7 +37,7 @@ struct CollapsibleRoomTimelineView: View {
                     isExpanded.toggle()
                 }
             } label: {
-                HStack(alignment: .center, spacing: 8) {
+                HStack(alignment: .center, spacing: 4) {
                     Text(L10n.screenRoomTimelineStateChanges(timelineItem.items.count))
                         .font(.compound.bodySM)
                     CompoundIcon(\.chevronRight, size: .small, relativeTo: .compound.bodySM)

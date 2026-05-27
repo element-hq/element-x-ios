@@ -58,16 +58,17 @@ struct RoomListFiltersView: View {
     }
     
     private func clearButton(scrollViewProxy: ScrollViewProxy) -> some View {
-        Button(action: {
+        Button {
             withAnimation(.easeInOut(duration: 0.2).disabledDuringTests()) {
                 state.clearFilters()
                 scrollViewProxy.scrollTo(leadingID, anchor: .leading)
             }
-        }, label: {
-            CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyLG)
-                .foregroundColor(.compound.iconOnSolidPrimary)
-                .background(Circle().fill(Color.compound.bgActionPrimaryRest))
-        })
+        } label: {
+            CompoundIcon(\.close, size: .xSmall, relativeTo: .compound.bodyLG)
+                .foregroundStyle(.compound.iconOnSolidPrimary)
+                .padding(4)
+                .background(.compound.bgActionPrimaryRest, in: .circle)
+        }
         .accessibilityLabel(L10n.screenRoomlistClearFilters)
     }
     
