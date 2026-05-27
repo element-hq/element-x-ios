@@ -155,6 +155,74 @@ final class ElementCallServiceTests {
         #expect(CallIntent.audio.rawValue == "audio")
         #expect(CallIntent.video.rawValue == "video")
     }
+    
+    @Test
+    func timeoutClearsIncomingCallStateBeforeNextPush() async {
+        // Drive push #1 to its 60s unanswered timeout
+        await confirmation { confirmation in
+            callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
+                if reason == .unanswered {
+                    confirmation()
+                }
+            }
+            
+            let firstPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: firstPayload, for: .voIP) { }
+            
+            await testClock.advance(by: .seconds(70))
+        }
+        
+        callProvider.reportCallWithEndedAtReasonClosure = nil
+        let firstCallUUID = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid
+        
+        // Send push #2 for the same room; the previous incoming state must be cleared,
+        // so the second push gets a fresh CallID.
+        await confirmation { confirmation in
+            let secondPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: secondPayload, for: .voIP) {
+                confirmation()
+            }
+        }
+        
+        let secondCallUUID = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid
+        
+        #expect(firstCallUUID != nil)
+        #expect(secondCallUUID != nil)
+        #expect(firstCallUUID != secondCallUUID)
+        
+        let unansweredCount = callProvider.reportCallWithEndedAtReasonReceivedInvocations.filter { $0.reason == .unanswered }.count
+        #expect(unansweredCount == 1)
+    }
+    
+    @Test
+    func setupCallSessionCancelsPendingUnansweredTimeout() async {
+        // Schedule the 60s unanswered timer via an incoming push
+        await confirmation { confirmation in
+            let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) {
+                confirmation()
+            }
+        }
+        
+        // Simulate the answer flow handing off to setupCallSession, which must cancel
+        // the pending endUnansweredCallTask as part of clearing the incoming state.
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome")
+        
+        var unansweredFired = false
+        callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
+            if reason == .unanswered {
+                unansweredFired = true
+            }
+        }
+        
+        // Advance past what would have been the 60s unanswered timeout
+        await testClock.advance(by: .seconds(120))
+        for _ in 0..<3 {
+            await Task.yield()
+        }
+        
+        #expect(!unansweredFired, "endUnansweredCallTask should have been cancelled by setupCallSession")
+    }
 }
 
 private class PKPushPayloadMock: PKPushPayload {
