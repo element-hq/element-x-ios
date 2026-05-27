@@ -1282,10 +1282,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
-            case .sent(let roomID):
+            case .sent(let roomIDs):
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                // Timelines are cached - the local echo will be visible when fetching the room by its ID.
-                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
+                processPostMessageForwardingTo(rooms: roomIDs)
             }
         }
         .store(in: &cancellables)
@@ -1524,6 +1523,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func processPostMessageForwardingTo(rooms roomIDs: [String]) {
+        // Only open forwarding target room if single.
+        guard roomIDs.count == 1, let roomID = roomIDs.last else {
+            return
+        }
+        
+        stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
+    }
+    
     // MARK: - Other flows
     
     private func startChildFlow(for roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint) {
@@ -1582,9 +1590,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .displayUser(let userID):
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
-            case .forwardedMessageToRoom(let roomID):
+            case .forwardedMessageToRooms(let roomIDs):
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
+                processPostMessageForwardingTo(rooms: roomIDs)
             case .displayRoomScreenWithFocussedPin(let eventID, let threadRootEventID):
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 if let threadRootEventID {

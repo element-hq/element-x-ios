@@ -18,7 +18,7 @@ struct MessageForwardingScreenCoordinatorParameters {
 
 enum MessageForwardingScreenCoordinatorAction {
     case dismiss
-    case sent(roomID: String)
+    case sent(roomIDs: [String])
 }
 
 final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
@@ -42,8 +42,8 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .dismiss:
                 self?.actionsSubject.send(.dismiss)
-            case .sent(let roomID):
-                self?.actionsSubject.send(.sent(roomID: roomID))
+            case .sent(let roomIDs):
+                self?.actionsSubject.send(.sent(roomIDs: roomIDs))
             }
         }
         .store(in: &cancellables)

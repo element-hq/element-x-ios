@@ -17,7 +17,7 @@ struct MessageForwardingScreen: View {
             Section {
                 ForEach(context.viewState.rooms) { room in
                     MessageForwardingListRow(room: room,
-                                             isSelected: context.viewState.selectedRoomID == room.id,
+                                             isSelected: context.viewState.selectedRoomIDs.contains(room.id),
                                              context: context)
                 }
                 // Replace these with ScrollView's `scrollPosition` when dropping iOS 16.
@@ -46,7 +46,7 @@ struct MessageForwardingScreen: View {
                 Button(L10n.actionSend) {
                     context.send(viewAction: .send)
                 }
-                .disabled(context.viewState.selectedRoomID == nil)
+                .disabled(context.viewState.selectedRoomIDs.isEmpty)
             }
         }
         .searchController(query: $context.searchQuery, showsCancelButton: false)
