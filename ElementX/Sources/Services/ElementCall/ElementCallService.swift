@@ -115,7 +115,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil, isVoiceCall: false)
         }
         
-        incomingCallID = nil
+        clearIncomingCallState()
         ongoingCallID = callID
         
         // Don't bother starting another CallKit session as it won't work properly
@@ -230,6 +230,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             
             if let incomingCallID, incomingCallID.callKitID == callID.callKitID {
                 callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .unanswered)
+                clearIncomingCallState()
             }
         }
     }
@@ -306,6 +307,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             Task {
                 await sendDeclineCallEvent(incomingCallID)
             }
+        }
+        
+        if incomingCallID?.callKitID == action.callUUID {
+            clearIncomingCallState()
         }
         
         tearDownCallSession(sendEndCallAction: false)
@@ -419,9 +424,20 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     private func reportEndedCall(incomingCallID: CallID, reason: CXCallEndedReason) {
+        callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: reason)
+        clearIncomingCallState()
+    }
+    
+    /// Cancels every subscription and task tied to a ringing incoming call and nils `incomingCallID`.
+    /// Call this on every path that ends the incoming-call state (answered, declined, timed out,
+    /// cancelled by remote, answered/declined elsewhere) so that follow-up calls to the same room
+    /// start from a clean slate and the SDK decline-listener subscription doesn't leak.
+    private func clearIncomingCallState() {
+        endUnansweredCallTask?.cancel()
+        endUnansweredCallTask = nil
         declineListenerHandle?.cancel()
         declineListenerHandle = nil
-        endUnansweredCallTask?.cancel()
-        callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: reason)
+        incomingCallRoomInfoCancellable = nil
+        incomingCallID = nil
     }
 }
