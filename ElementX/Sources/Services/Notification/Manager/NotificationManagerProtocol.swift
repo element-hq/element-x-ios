@@ -24,7 +24,7 @@ protocol NotificationManagerDelegate: AnyObject {
 // sourcery: AutoMockable
 protocol NotificationManagerProtocol: AnyObject {
     var delegate: NotificationManagerDelegate? { get set }
-
+    
     func start()
     func register(with deviceToken: Data) async -> Bool
     func registrationFailed(with error: Error)

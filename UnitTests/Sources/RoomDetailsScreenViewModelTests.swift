@@ -21,7 +21,7 @@ struct RoomDetailsScreenViewModelTests {
     var context: RoomDetailsScreenViewModelType.Context {
         viewModel.context
     }
-
+    
     var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -174,7 +174,7 @@ struct RoomDetailsScreenViewModelTests {
         try await deferredRecipient.fulfill()
         
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
-                                    
+        
         let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
                                                   transitionValues: [false, true, false])
         
@@ -240,7 +240,7 @@ struct RoomDetailsScreenViewModelTests {
                                                   transitionValues: [false, true, false])
         
         context.send(viewAction: .unignoreConfirmed)
-                
+        
         try await deferredProcessing.fulfill()
         
         #expect(context.viewState.dmRecipientInfo?.member.isIgnored == false)
@@ -271,7 +271,7 @@ struct RoomDetailsScreenViewModelTests {
                                                   transitionValues: [false, true, false])
         
         context.send(viewAction: .unignoreConfirmed)
-                
+        
         try await deferredProcessing.fulfill()
         
         #expect(context.viewState.dmRecipientInfo?.member.isIgnored == true)

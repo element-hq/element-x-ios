@@ -143,9 +143,9 @@ struct RunTests: AsyncParsableCommand {
         if let testName {
             command += " -only-testing:\(scheme)/\(testName)"
         }
-
+        
         command += " | \(formatter)"
-
+        
         try await CI.run(.path("/bin/zsh"), ["-cu", command])
     }
 }

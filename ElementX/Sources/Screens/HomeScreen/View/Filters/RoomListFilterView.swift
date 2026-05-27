@@ -11,7 +11,7 @@ import SwiftUI
 struct RoomListFilterView: View {
     let filter: RoomListFilter
     @Binding var isActive: Bool
-
+    
     var body: some View {
         Toggle(isOn: $isActive) {
             Text(filter.localizedName)

@@ -28,7 +28,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         .backgroundStyle(.compound.bgCanvasDefault)
         .alert(item: $context.alertInfo)
     }
-        
+    
     @ViewBuilder
     private var content: some View {
         Text(title)

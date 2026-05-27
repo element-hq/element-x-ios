@@ -44,7 +44,7 @@ struct VoiceMessageButton: View {
         self.state = state
         self.action = action
     }
-
+    
     var body: some View {
         Button(action: action) {
             buttonLabel
@@ -58,7 +58,7 @@ struct VoiceMessageButton: View {
         .disabled(state == .loading)
         .accessibilityLabel(accessibilityLabel)
     }
-
+    
     @ViewBuilder
     private var buttonLabel: some View {
         switch state {
@@ -87,7 +87,7 @@ private struct VoiceMessageButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) var isEnabled: Bool
     
     let color: Color
-
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(isEnabled ? color.opacity(configuration.isPressed ? 0.6 : 1) : .compound.iconDisabled)

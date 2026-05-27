@@ -23,7 +23,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
     }
     
     @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
-
+    
     init(initialViewState: EditRoomAddressScreenViewState? = nil,
          roomProxy: JoinedRoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
@@ -169,7 +169,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         if savedCanonicalAlias == nil || savedCanonicalAlias?.hasSuffix(state.serverName) == true {
             var newAlternativeAliases = roomProxy.infoPublisher.value.alternativeAliases
             newAlternativeAliases.removeAll { $0 == savedAliasFromHomeserver }
-
+            
             if case .failure = await roomProxy.updateCanonicalAlias(desiredCanonicalAlias, altAliases: newAlternativeAliases) {
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 return

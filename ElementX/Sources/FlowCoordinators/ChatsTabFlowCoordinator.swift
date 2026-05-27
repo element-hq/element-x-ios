@@ -49,7 +49,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
-
+    
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
     private let actionsSubject: PassthroughSubject<ChatsTabFlowCoordinatorAction, Never> = .init()
@@ -76,7 +76,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func stop() { }
-
+    
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         stateMachine.isDisplayingRoomScreen(withRoomID: roomID)
     }
@@ -94,7 +94,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     func clearRoute(animated: Bool) {
         roomFlowCoordinator?.clearRoute(animated: animated)
     }
-
+    
     // MARK: - Private
     
     func asyncHandleAppRoute(_ appRoute: AppRoute, animated: Bool) async {
@@ -204,7 +204,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 handleSelectRoomTransition(roomID: roomID, via: via, entryPoint: entryPoint, detailState: detailState, animated: animated)
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
-            
+                
             case(.roomList, .startSpaceFlow, .roomList):
                 guard let spaceRoomListProxy = userInfo?.spaceRoomListProxy else { fatalError("A space room list proxy is required.") }
                 startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy, animated: animated)
@@ -247,7 +247,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 presentRoomDirectorySearch()
             case (.roomDirectorySearchScreen, .dismissedRoomDirectorySearchScreen, .roomList):
                 dismissRoomDirectorySearch()
-            
+                
             case (_, .showUserProfileScreen(let userID), .userProfileScreen):
                 presentUserProfileScreen(userID: userID, animated: animated)
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
@@ -572,7 +572,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         case .thread(let rootEventID, let focusEventID):
             coordinator.handleAppRoute(.thread(roomID: roomID, threadRootEventID: rootEventID, focusEventID: focusEventID), animated: animated)
         }
-                
+        
         Task {
             let _ = await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
             
@@ -637,7 +637,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .finished(let result):
                     navigationSplitCoordinator.setSheetCoordinator(nil)
-
+                    
                     switch result {
                     case .room(let roomID):
                         stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))

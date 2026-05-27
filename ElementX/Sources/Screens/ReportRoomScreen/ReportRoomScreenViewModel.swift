@@ -19,7 +19,7 @@ class ReportRoomScreenViewModel: ReportRoomScreenViewModelType, ReportRoomScreen
     var actionsPublisher: AnyPublisher<ReportRoomScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(roomProxy: JoinedRoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
@@ -36,7 +36,7 @@ class ReportRoomScreenViewModel: ReportRoomScreenViewModelType, ReportRoomScreen
             actionsSubject.send(.dismiss(shouldLeaveRoom: false))
         }
     }
-        
+    
     private func report() async {
         showLoadingIndicator()
         let result = await roomProxy.reportRoom(reason: state.bindings.reason)

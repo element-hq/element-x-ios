@@ -95,7 +95,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
             return .failure(.failedAcceptingVerificationRequest)
         }
     }
-        
+    
     func requestDeviceVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         MXLog.info("Requesting device verification")
         

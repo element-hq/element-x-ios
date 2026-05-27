@@ -115,12 +115,12 @@ enum UITestsSignalling {
             await _ = signals.values.first { $0 == .ready }
             NSLog("UITestsSignalling: Connected to app.")
         }
-
+        
         /// Stops listening for signals.
         func stop() throws {
             try fileWatcher.stop()
         }
-
+        
         /// Sends a signal.
         func send(_ signal: UITestsSignal) throws {
             guard isConnected else { throw UITestsSignalError.notConnected }

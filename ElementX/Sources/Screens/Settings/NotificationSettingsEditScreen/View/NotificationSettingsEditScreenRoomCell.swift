@@ -50,7 +50,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
 struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-
+        
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         notificationSettingsProxy.getRoomsWithUserDefinedRulesReturnValue = []
         

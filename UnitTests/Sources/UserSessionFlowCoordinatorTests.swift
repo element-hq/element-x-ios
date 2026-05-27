@@ -51,7 +51,7 @@ struct UserSessionFlowCoordinatorTests {
         
         userIndicatorController = UserIndicatorControllerMock()
         let appSettings = AppSettings.volatile()
-
+        
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),

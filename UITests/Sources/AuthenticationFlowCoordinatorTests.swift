@@ -39,7 +39,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Login Screen: Enter valid credentials
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n", app: app)
         app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678", app: app)
-
+        
         try await app.assertScreenshot()
         
         // Login Screen: Tap next
@@ -72,7 +72,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Login Screen: Enter invalid credentials
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice", app: app)
         app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("87654321", app: app)
-
+        
         // Login Screen: Tap continue
         XCTAssertTrue(continueButton.isEnabled)
         continueButton.tap()

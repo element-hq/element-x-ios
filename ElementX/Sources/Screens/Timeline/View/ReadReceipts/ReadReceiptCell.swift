@@ -23,7 +23,7 @@ struct ReadReceiptCell: View {
         }
         return readReceipt.userID
     }
-        
+    
     var body: some View {
         HStack(spacing: 12) {
             LoadableAvatarImage(url: memberState?.avatarURL,

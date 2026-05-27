@@ -56,7 +56,7 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomMembersListScreen(context: viewModel.context))
     }

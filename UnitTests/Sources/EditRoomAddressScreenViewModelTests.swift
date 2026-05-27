@@ -121,20 +121,20 @@ struct EditRoomAddressScreenViewModelTests {
                 confirm()
                 return .success(true)
             }
-                
+            
             roomProxy.updateCanonicalAliasAltAliasesClosure = { roomAlias, altAliases in
                 #expect(altAliases == [])
                 #expect(roomAlias == "#room-name:matrix.org")
                 confirm()
                 return .success(())
             }
-                
+            
             roomProxy.removeRoomAliasFromRoomDirectoryClosure = { roomAlias in
                 #expect(roomAlias == "#old-room-name:matrix.org")
                 confirm()
                 return .success(true)
             }
-                
+            
             context.send(viewAction: .save)
         }
         

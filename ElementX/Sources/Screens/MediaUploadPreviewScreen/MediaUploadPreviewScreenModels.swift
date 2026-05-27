@@ -21,7 +21,7 @@ struct MediaUploadPreviewScreenViewState: BindableState {
     var shouldDisableInteraction = false
     
     var mediaEditVersion = 0
-
+    
     var bindings: MediaUploadPreviewScreenBindings
 }
 

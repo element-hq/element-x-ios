@@ -26,7 +26,7 @@ struct MediaUploadPreviewScreen: View {
     private var title: String {
         ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : ""
     }
-
+    
     private var colorSchemeOverride: ColorScheme {
         ProcessInfo.processInfo.isiOSAppOnMac ? colorScheme : .dark
     }
@@ -189,7 +189,7 @@ struct MediaUploadPreviewScreen: View {
         
         return type.conforms(to: .image)
     }
-
+    
     private func handleKeyPress(_ key: UIKeyboardHIDUsage) {
         switch key {
         case .keyboardReturnOrEnter:
@@ -217,7 +217,7 @@ private struct PreviewView: UIViewControllerRepresentable {
     let title: String?
     let mediaEditVersion: Int
     @Binding var currentIndex: Int
-
+    
     func makeUIViewController(context: Context) -> UIViewController {
         let previewController = PreviewViewController(currentIndex: $currentIndex)
         previewController.dataSource = context.coordinator
@@ -229,7 +229,7 @@ private struct PreviewView: UIViewControllerRepresentable {
             return UINavigationController(rootViewController: previewController)
         }
     }
-
+    
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
         guard context.coordinator.mediaEditVersion != mediaEditVersion else {
             return
@@ -241,7 +241,7 @@ private struct PreviewView: UIViewControllerRepresentable {
             ?? uiViewController as? QLPreviewController
         previewController?.reloadData()
     }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(view: self)
     }
@@ -249,7 +249,7 @@ private struct PreviewView: UIViewControllerRepresentable {
     class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let view: PreviewView
         var mediaEditVersion: Int
-
+        
         init(view: PreviewView) {
             self.view = view
             mediaEditVersion = view.mediaEditVersion
@@ -260,7 +260,7 @@ private struct PreviewView: UIViewControllerRepresentable {
         func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
             view.mediaURLs.count
         }
-
+        
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
             PreviewItem(previewItemURL: view.mediaURLs[index], previewItemTitle: view.title)
         }
@@ -276,7 +276,7 @@ private struct PreviewView: UIViewControllerRepresentable {
 private class PreviewItem: NSObject, QLPreviewItem {
     var previewItemURL: URL?
     var previewItemTitle: String?
-
+    
     init(previewItemURL: URL?, previewItemTitle: String?) {
         self.previewItemURL = previewItemURL
         self.previewItemTitle = previewItemTitle
@@ -300,7 +300,7 @@ private class PreviewViewController: QLPreviewController {
             }
             .store(in: &cancellables)
     }
-
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
@@ -311,7 +311,7 @@ private class PreviewViewController: QLPreviewController {
         
         // Remove top file details bar
         navigationController?.navigationBar.isHidden = true
-                
+        
         // Hide toolbar share button
         toolbarItems?.first?.isHidden = true
     }
@@ -323,7 +323,7 @@ private struct ImageEditorView: UIViewControllerRepresentable {
     let imageURL: URL
     var onCrop: (UIImage) -> Void
     var onCancel: () -> Void
-
+    
     func makeUIViewController(context: Context) -> CropViewController {
         let image = UIImage(contentsOfFile: imageURL.path) ?? UIImage()
         
@@ -331,29 +331,29 @@ private struct ImageEditorView: UIViewControllerRepresentable {
         cropViewController.delegate = context.coordinator
         return cropViewController
     }
-
+    
     func updateUIViewController(_ uiViewController: CropViewController, context: Context) { }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(onCrop: onCrop, onCancel: onCancel)
     }
-
+    
     class Coordinator: NSObject, CropViewControllerDelegate {
         var onCrop: (UIImage) -> Void
         var onCancel: () -> Void
-
+        
         init(onCrop: @escaping (UIImage) -> Void, onCancel: @escaping () -> Void) {
             self.onCrop = onCrop
             self.onCancel = onCancel
         }
-
+        
         func cropViewControllerDidCrop(_ cropViewController: CropViewController,
                                        cropped: UIImage,
                                        transformation: Transformation,
                                        cropInfo: CropInfo) {
             onCrop(cropped)
         }
-
+        
         func cropViewControllerDidCancel(_ cropViewController: CropViewController, original: UIImage) {
             onCancel()
         }

@@ -26,7 +26,7 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
     private let viewModel: EncryptionResetScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<EncryptionResetScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<EncryptionResetScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -60,7 +60,7 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(EncryptionResetScreen(context: viewModel.context))
     }

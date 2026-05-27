@@ -36,7 +36,7 @@ final class AppLockSetupBiometricsScreenViewModelTests {
         // Then the service should now have biometric unlock enabled.
         #expect(appLockService.enableBiometricUnlockCallsCount == 1)
     }
-
+    
     @Test
     func skip() async throws {
         // When skipping biometrics.

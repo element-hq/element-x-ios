@@ -26,7 +26,7 @@ struct JoinRoomScreen: View {
         }
         return context.viewState.mode == .knocked ? 151 : 32
     }
-
+    
     var body: some View {
         FullscreenDialog(topPadding: topPadding) {
             if context.viewState.mode == .loading {
@@ -130,7 +130,7 @@ struct JoinRoomScreen: View {
             }
         }
     }
-        
+    
     private var knockMessage: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {
@@ -404,7 +404,7 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
         self.customPreviewName = customPreviewName
         
         let appSettings = AppSettings.volatile()
-
+        
         let clientProxy = ClientProxyMock(.init(hideInviteAvatars: hideInviteAvatars))
         clientProxy.canJoinRoomWithReturnValue = canJoinRoom
         

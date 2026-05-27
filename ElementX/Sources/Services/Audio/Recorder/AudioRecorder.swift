@@ -37,7 +37,7 @@ class AudioRecorder: AudioRecorderProtocol {
     private let maximumRecordingTime: TimeInterval = 1800 // 30 minutes
     private let silenceThreshold: Float = -50.0
     private var meterLevel: Float = 0
-
+    
     private(set) var audioFileURL: URL?
     var currentTime: TimeInterval = .zero
     var isRecording: Bool {
@@ -94,7 +94,7 @@ class AudioRecorder: AudioRecorderProtocol {
             }
         }
     }
-        
+    
     func averagePower() -> Float {
         meterLevel
     }
@@ -161,7 +161,7 @@ class AudioRecorder: AudioRecorderProtocol {
             // Initialize a new audio engine
             let audioEngine = AVAudioEngine()
             self.audioEngine = audioEngine
-
+            
             let inputNode = audioEngine.inputNode
             let inputFormat = inputNode.outputFormat(forBus: 0)
             let hardwareSampleRate = audioEngine.inputNode.outputFormat(forBus: 0).sampleRate
@@ -204,12 +204,12 @@ class AudioRecorder: AudioRecorderProtocol {
             } else {
                 audioConverter = nil
             }
-
+            
             // Install tap to process audio buffers coming from the mixer
             mixer.installTap(onBus: 0, bufferSize: 1024, format: mixerFormat) { [weak self] buffer, _ in
                 self?.processAudioBuffer(buffer)
             }
-
+            
             do {
                 try audioEngine.start()
                 completion(.success(()))
@@ -304,7 +304,7 @@ class AudioRecorder: AudioRecorderProtocol {
         // Write the buffer into the audio file
         do {
             try audioFile.write(from: inputBuffer)
-
+            
             // Compute the sample value for the waveform
             updateMeterLevel(inputBuffer)
             
@@ -366,10 +366,10 @@ class AudioRecorder: AudioRecorderProtocol {
             setInternalState(.suspended)
         case .ended:
             MXLog.info("Interruption ended: \(notification)")
-
+            
             guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
             let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
-                        
+            
             if options.contains(.shouldResume) {
                 do {
                     try audioEngine?.start()
@@ -413,7 +413,7 @@ class AudioRecorder: AudioRecorderProtocol {
                 actionsSubject.send(.didStopRecording)
             case .error(let error):
                 cleanupAudioEngine()
-
+                
                 actionsSubject.send(.didFailWithError(error: error))
             }
         }

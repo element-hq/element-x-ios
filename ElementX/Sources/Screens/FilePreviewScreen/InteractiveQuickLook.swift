@@ -43,14 +43,14 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
     let allowEditing: Bool
     let dismissalPublisher: PassthroughSubject<Void, Never>
     let onDismiss: () -> Void
-
+    
     func makeUIViewController(context: Context) -> PreviewHostingController {
         PreviewHostingController(previewItem: previewItem,
                                  allowEditing: allowEditing,
                                  dismissalPublisher: dismissalPublisher,
                                  onDismiss: onDismiss)
     }
-
+    
     func updateUIViewController(_ uiViewController: PreviewHostingController, context: Context) { }
     
     /// A view controller that hosts the QuickLook preview.
@@ -66,7 +66,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         private var dismissalObserver: AnyCancellable?
         
         var previewController: QLPreviewController?
-
+        
         init(previewItem: MediaPreviewItem,
              allowEditing: Bool,
              dismissalPublisher: PassthroughSubject<Void, Never>,
@@ -74,7 +74,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
             self.previewItem = previewItem
             self.allowEditing = allowEditing
             self.onDismiss = onDismiss
-
+            
             super.init(nibName: nil, bundle: nil)
             
             // The QLPreviewController will not automatically dismiss itself when the underlying view is removed
@@ -128,7 +128,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
             1
         }
-
+        
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
             previewItem
         }
@@ -156,9 +156,9 @@ class MediaPreviewItem: NSObject, QLPreviewItem {
     var previewItemURL: URL? {
         file.url
     }
-
+    
     let previewItemTitle: String?
-
+    
     init(file: MediaFileHandleProxy, title: String?) {
         self.file = file
         previewItemTitle = title

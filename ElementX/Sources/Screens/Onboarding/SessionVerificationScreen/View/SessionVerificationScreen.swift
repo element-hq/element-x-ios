@@ -70,7 +70,7 @@ struct SessionVerificationScreen: View {
                     accessibilityFocus = .title
                 }
                 .accessibilityFocused($accessibilityFocus, equals: .title)
-
+            
             Text(context.viewState.message)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
@@ -153,7 +153,7 @@ struct SessionVerificationScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
             }
-        
+            
         case .showingChallenge:
             VStack(spacing: 16) {
                 Button(L10n.screenSessionVerificationTheyMatch) {

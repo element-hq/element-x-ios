@@ -78,7 +78,7 @@ struct MessageComposer: View {
                                      pasteHandler: pasteAction)
         }
     }
-
+    
     private var composerHeight: CGFloat {
         let baseHeight = isExpanded ? ComposerConstant.maxHeight : ComposerConstant.minHeight
         return (baseHeight - composerTranslation).clamped(to: ComposerConstant.allowedHeightRange)
@@ -95,7 +95,7 @@ struct MessageComposer: View {
             EmptyView()
         }
     }
-
+    
     private var resizeGrabber: some View {
         Capsule()
             .foregroundStyle(.tertiary)
@@ -103,7 +103,7 @@ struct MessageComposer: View {
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)
     }
-
+    
     private var dragGesture: some Gesture {
         DragGesture()
             .onChanged { value in

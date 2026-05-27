@@ -15,13 +15,13 @@ import Testing
 @MainActor
 final class TimelineViewModelTests {
     var cancellables = Set<AnyCancellable>()
-
+    
     init() async throws {
         cancellables.removeAll()
     }
-
+    
     // MARK: - Message Grouping
-
+    
     @Test
     func messageGrouping() {
         // Given 3 messages from Bob.
@@ -305,9 +305,9 @@ final class TimelineViewModelTests {
         
         timelineController.timelineItems = items
         timelineController.roomProxy = roomProxy
-
+        
         let appSettings = AppSettings.volatile()
-
+        
         let viewModel = TimelineViewModel(roomProxy: roomProxy,
                                           timelineController: timelineController,
                                           userSession: UserSessionMock(.init()),
@@ -333,7 +333,7 @@ final class TimelineViewModelTests {
         let id = message.id
         
         let appSettings = AppSettings.volatile()
-
+        
         // When showing them in a timeline.
         let timelineController = MockTimelineController()
         timelineController.timelineItems = [message]
@@ -360,7 +360,7 @@ final class TimelineViewModelTests {
     @Test
     func showManageUserAsAdmin() async throws {
         let appSettings = AppSettings.volatile()
-
+        
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
                                                                                          RoomMemberProxyMock.mockAlice],
@@ -399,7 +399,7 @@ final class TimelineViewModelTests {
     @Test
     func showDetailsForAnAdmin() async throws {
         let appSettings = AppSettings.volatile()
-
+        
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
                                                                                          RoomMemberProxyMock.mockAlice],
@@ -438,7 +438,7 @@ final class TimelineViewModelTests {
     @Test
     func showDetailsForABannedUser() async throws {
         let appSettings = AppSettings.volatile()
-
+        
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
                                                                                members: [RoomMemberProxyMock.mockAdmin,
                                                                                          RoomMemberProxyMock.mockBanned[0]],
@@ -480,7 +480,7 @@ final class TimelineViewModelTests {
     @Test
     func pinnedEvents() async throws {
         let appSettings = AppSettings.volatile()
-
+        
         var configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              pinnedEventIDs: .init(["test1"]))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
@@ -511,7 +511,7 @@ final class TimelineViewModelTests {
     @Test
     func canUserPinEvents() async throws {
         let appSettings = AppSettings.volatile()
-
+        
         let configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              powerLevelsConfiguration: .init(canUserPin: true))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
@@ -588,7 +588,7 @@ final class TimelineViewModelTests {
                                focussedEventID: String? = nil,
                                timelineController: TimelineControllerProtocol) -> TimelineViewModel {
         let appSettings = AppSettings.volatile()
-
+        
         return TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                                  focussedEventID: focussedEventID,
                                  timelineController: timelineController,

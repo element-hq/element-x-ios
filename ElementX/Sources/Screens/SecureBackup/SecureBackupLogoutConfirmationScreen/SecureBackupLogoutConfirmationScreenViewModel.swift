@@ -27,7 +27,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     var actions: AnyPublisher<SecureBackupLogoutConfirmationScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(secureBackupController: SecureBackupControllerProtocol, homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>) {
         self.secureBackupController = secureBackupController
         self.homeserverReachabilityPublisher = homeserverReachabilityPublisher

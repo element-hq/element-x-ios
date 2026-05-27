@@ -25,7 +25,7 @@ final class ReportRoomScreenCoordinator: CoordinatorProtocol {
     private let viewModel: ReportRoomScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<ReportRoomScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ReportRoomScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -48,7 +48,7 @@ final class ReportRoomScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(ReportRoomScreen(context: viewModel.context))
     }

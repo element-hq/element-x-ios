@@ -28,9 +28,9 @@ public extension Bundle {
     /// Overrides `Bundle.app.preferredLocalizations` for testing translations since this is
     /// only for testing, and is changed at runtime only in tests, it's fine to keep as `nonisolated(unsafe)`
     nonisolated(unsafe) static var overrideLocalizations: [String]?
-
+    
     private static let cachedBundles = Mutex<[String: Bundle]>([:])
-
+    
     /// Get an lproj language bundle from the receiver bundle.
     /// - Parameter language: The language to try to load.
     /// - Returns: The lproj bundle if found otherwise nil.
@@ -38,24 +38,24 @@ public extension Bundle {
         if let bundle = cachedValue(forKey: language) {
             return bundle
         }
-
+        
         guard let lprojURL = Bundle.app.url(forResource: language, withExtension: "lproj") else {
             return nil
         }
-
+        
         let bundle = Bundle(url: lprojURL)
-
+        
         cacheValue(bundle, forKey: language)
-
+        
         return bundle
     }
-
+    
     // MARK: - Private
-
+    
     private static func cacheValue(_ value: Bundle?, forKey key: String) {
         cachedBundles.withLock { $0[key] = value }
     }
-
+    
     private static func cachedValue(forKey key: String) -> Bundle? {
         cachedBundles.withLock { $0[key] }
     }

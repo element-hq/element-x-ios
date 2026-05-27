@@ -478,7 +478,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationTabCoordinator.setOverlayCoordinator(nil)
     }
-
+    
     // MARK: - Logout
     
     private func runLogoutFlow() async {

@@ -7,11 +7,11 @@ struct UnusedStrings: ParsableCommand {
     
     @Flag(help: "Save the results to disk instead of printing them.")
     var saveToFile = false
-
+    
     func run() throws {
         try peripheryScan()
     }
-
+    
     func peripheryScan() throws {
         print("Analysing project, this may take a while…")
         

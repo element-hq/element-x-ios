@@ -127,7 +127,7 @@ struct UserPreferenceTests {
         
         let value = TestPreferences(testDefaults)
         value.codable = nil
-
+        
         #expect(value.codable == nil)
         #expect(testDefaults.data(forKey: TestsKey.key3.rawValue) == nil)
     }

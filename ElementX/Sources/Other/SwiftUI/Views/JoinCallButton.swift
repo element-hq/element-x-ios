@@ -12,7 +12,7 @@ import SwiftUI
 struct JoinCallButton: View {
     let isVoiceCall: Bool
     let action: () -> Void
-
+    
     var body: some View {
         if #available(iOS 26, *) {
             glassButton

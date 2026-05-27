@@ -18,7 +18,7 @@ struct VideoRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     var shouldBoost = false
     
     let sender: TimelineItemSender
-
+    
     let content: VideoRoomTimelineItemContent
     
     var properties = RoomTimelineItemProperties()

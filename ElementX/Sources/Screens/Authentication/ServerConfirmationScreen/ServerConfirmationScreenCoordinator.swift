@@ -60,7 +60,7 @@ final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(ServerConfirmationScreen(context: viewModel.context))
     }

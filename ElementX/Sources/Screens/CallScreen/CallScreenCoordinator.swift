@@ -70,7 +70,7 @@ final class CallScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(CallScreen(context: viewModel.context))
     }

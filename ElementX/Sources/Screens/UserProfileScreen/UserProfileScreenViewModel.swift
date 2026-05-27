@@ -71,7 +71,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             actionsSubject.send(.dismiss)
         }
     }
-
+    
     // MARK: - Private
     
     private func loadProfile() async {
@@ -169,7 +169,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     private var loadingIndicatorIdentifier: String {
         "\(Self.self)-Loading"
     }
-
+    
     private var statusIndicatorIdentifier: String {
         "\(Self.self)-Status"
     }

@@ -13,7 +13,7 @@ extension UIDevice {
     var isPhone: Bool {
         userInterfaceIdiom == .phone
     }
-
+    
     var initialDeviceName: String {
         L10n.loginInitialDeviceNameIos(InfoPlistReader.main.bundleDisplayName)
     }

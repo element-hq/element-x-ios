@@ -25,7 +25,7 @@ public struct CompoundGradients {
                        .compound.gradientActionStop3,
                        .compound.gradientActionStop4])
     }
-
+    
     public var subtle: Gradient {
         .init(colors: [.compound.gradientSubtleStop1,
                        .compound.gradientSubtleStop2,
@@ -34,7 +34,7 @@ public struct CompoundGradients {
                        .compound.gradientSubtleStop5,
                        .compound.gradientSubtleStop6])
     }
-
+    
     public var info: Gradient {
         .init(colors: [.compound.gradientInfoStop1, .compound.gradientInfoStop2])
     }

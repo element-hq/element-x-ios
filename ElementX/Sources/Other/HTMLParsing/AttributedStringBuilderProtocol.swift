@@ -14,7 +14,7 @@ struct AttributedStringBuilderComponent: Hashable, Identifiable {
         case blockquote
         case codeBlock
     }
-
+    
     /// Identifier for the `Identifiable` conformance, allows edits to the `FormattedBodyText` to animate seamlessly
     let id: String
     let attributedString: AttributedString

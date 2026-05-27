@@ -48,7 +48,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
                 if let logsSize = try? FileManager.default.sizeForDirectory(at: .appGroupLogsDirectory) {
                     components.append(.init(name: "Log Files", size: formatter.format(Int64(logsSize))))
                 }
-            
+                
                 state.storeSizes = components
             }
         }

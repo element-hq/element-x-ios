@@ -18,7 +18,7 @@ struct BugReportScreen: View {
     var canSendLogFiles: Bool {
         context.viewState.canSendLogFiles
     }
-
+    
     var photosPickerTitle: String {
         context.viewState.screenshot == nil ? L10n.screenBugReportAttachScreenshot : L10n.screenBugReportEditScreenshot
     }
@@ -82,7 +82,7 @@ struct BugReportScreen: View {
             }
         }
     }
-
+    
     private var canContactSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.screenBugReportContactMeTitle),
@@ -93,7 +93,7 @@ struct BugReportScreen: View {
                 .compoundListSectionFooter()
         }
     }
-
+    
     private var attachScreenshotSection: some View {
         Section {
             ListRow(kind: .custom {

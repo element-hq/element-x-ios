@@ -13,15 +13,15 @@ struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @EnvironmentObject private var context: TimelineViewModel.Context
-
+    
     private var isLastOutgoingMessage: Bool {
         timelineItem.isOutgoing && context.viewState.timelineState.uniqueIDs.last == timelineItem.id.uniqueID
     }
-
+    
     var body: some View {
         mainContent
     }
-
+    
     @ViewBuilder
     private var mainContent: some View {
         if context.viewState.timelineKind == .pinned {
@@ -33,7 +33,7 @@ struct TimelineItemStatusView: View {
             deliveryStatusBadge
         }
     }
-
+    
     @ViewBuilder
     var deliveryStatusBadge: some View {
         switch adjustedDeliveryStatus {
@@ -49,7 +49,7 @@ struct TimelineItemStatusView: View {
             EmptyView()
         }
     }
-
+    
     var readReceipts: some View {
         TimelineReadReceiptsView(timelineItem: timelineItem)
             .environmentObject(context)

@@ -49,7 +49,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     private var composerViewModel: ComposerToolbarViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<ThreadTimelineScreenCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<ThreadTimelineScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -153,7 +153,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
         composerViewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
-
+                
                 timelineViewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
@@ -167,7 +167,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
         composerViewModel.stop()
         viewModel.stop()
     }
-        
+    
     func toPresentable() -> AnyView {
         let composerToolbar = ComposerToolbar(context: composerViewModel.context)
         

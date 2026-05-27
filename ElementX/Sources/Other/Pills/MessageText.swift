@@ -93,7 +93,7 @@ struct MessageText: UIViewRepresentable {
         guard let baseText = try? NSAttributedString(attributedString, including: \.elementX) else {
             return nil
         }
-
+        
         let combined = NSMutableAttributedString(attributedString: baseText)
         if trailingReservedSize.width > 0 {
             let attachment = TransparentTextAttachment()
@@ -101,7 +101,7 @@ struct MessageText: UIViewRepresentable {
             attachment.bounds = CGRect(origin: .zero,
                                        size: CGSize(width: trailingReservedSize.width,
                                                     height: max(trailingReservedSize.height, 1)))
-
+            
             // Inherit the font from the preceding character so the appended runs
             // (newline and attachment) carry the same line metrics as the surrounding
             // text — otherwise a small default font on those characters can shrink the
@@ -109,7 +109,7 @@ struct MessageText: UIViewRepresentable {
             let trailingFont = baseText.length > 0
                 ? baseText.attribute(.font, at: baseText.length - 1, effectiveRange: nil)
                 : nil
-
+            
             // When the last paragraph's natural text direction doesn't match the layout
             // direction, the inline attachment would land on the wrong side and overlap the
             // overlaid timestamp. Force it onto its own line so the bubble just grows taller.
@@ -122,7 +122,7 @@ struct MessageText: UIViewRepresentable {
                 }
                 combined.append(newlineString)
             }
-
+            
             let attachmentString = NSMutableAttributedString(attachment: attachment)
             if let trailingFont {
                 attachmentString.addAttribute(.font,
@@ -131,19 +131,19 @@ struct MessageText: UIViewRepresentable {
             }
             combined.append(attachmentString)
         }
-
+        
         return combined
     }
-
+    
     private func lastParagraphDirectionMatchesLayout(in attributedText: NSAttributedString) -> Bool {
         let string = attributedText.string as NSString
         guard string.length > 0 else { return true }
-
+        
         // Isolate the last paragraph because its direction is what decides
         // which side the trailing attachment ends up on.
         let lastParagraphRange = string.paragraphRange(for: NSRange(location: string.length - 1, length: 0))
         let lastParagraph = string.substring(with: lastParagraphRange)
-
+        
         let textIsRTL = lastParagraph.firstStrongCharacterIsRTL
         let layoutIsRTL = layoutDirection == .rightToLeft
         return textIsRTL == layoutIsRTL

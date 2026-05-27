@@ -63,7 +63,7 @@ struct AnalyticsPromptScreen: View {
         .frame(maxWidth: .infinity)
         .environment(\.backgroundStyle, AnyShapeStyle(.compound.bgSubtleSecondary))
     }
-
+    
     private func checkMarkItem(title: String, position: ListPosition) -> some View {
         VisualListItem(title: title, position: position) {
             CompoundIcon(\.checkCircle, size: .small, relativeTo: .body)

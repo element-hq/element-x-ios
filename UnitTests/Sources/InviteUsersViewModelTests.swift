@@ -108,7 +108,7 @@ final class InviteUsersScreenViewModelTests {
         
         context.send(viewAction: .toggleUser(.mockAlice))
         try await deferredState.fulfill()
-
+        
         context.send(viewAction: .proceed)
         #expect(context.presentConfirmationDialog)
         

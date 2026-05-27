@@ -23,7 +23,7 @@ final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
     private let viewModel: KnockRequestsListScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<KnockRequestsListScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<KnockRequestsListScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -36,7 +36,7 @@ final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() { }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(KnockRequestsListScreen(context: viewModel.context))
     }

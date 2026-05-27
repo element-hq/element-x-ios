@@ -105,7 +105,7 @@ struct InviteUsersScreen: View {
     }
     
     @ScaledMetric private var selectedUserCellWidth: CGFloat = 80
-
+    
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
@@ -204,10 +204,10 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
                               isSkippable: Bool = true) -> InviteUsersScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.recentConversationCounterpartsReturnValue = [.mockAlice, .mockBob, .mockCharlie, .mockDan, .mockVerbose]
-
+        
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
-
+        
         let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                    roomType: roomType ?? .existingRoom(roomProxy: JoinedRoomProxyMock(.init(members: []))),
                                                    isSkippable: isSkippable,

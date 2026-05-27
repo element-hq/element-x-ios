@@ -40,7 +40,7 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
                                                  roomProxy: parameters.roomProxy,
                                                  clientProxy: parameters.clientProxy)
     }
-
+    
     // MARK: - Public
     
     func start() {
@@ -63,26 +63,26 @@ final class ReportContentScreenCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
     }
-
+    
     func stop() {
         stopLoading()
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(ReportContentScreen(context: viewModel.context))
     }
-
+    
     // MARK: - Private
-
+    
     private static let loadingIndicatorIdentifier = "\(ReportContentScreenCoordinator.self)-Loading"
-
+    
     private func startLoading() {
         parameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                          type: .modal,
                                                                          title: L10n.commonSending,
                                                                          persistent: true))
     }
-
+    
     private func stopLoading() {
         parameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }

@@ -27,7 +27,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     var canEditTopic = false
     var avatarURL: URL?
     var localMedia: MediaInfo?
-
+    
     var bindings: RoomDetailsEditScreenViewStateBindings
     
     var nameDidChange: Bool {
@@ -51,7 +51,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     var avatarDidChange: Bool {
         localMedia != nil || avatarURL != initialAvatarURL
     }
-
+    
     var canSave: Bool {
         !bindings.name.isEmpty && (avatarDidChange || nameDidChange || topicDidChange)
     }

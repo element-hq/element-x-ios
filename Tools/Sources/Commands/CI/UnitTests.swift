@@ -4,7 +4,7 @@ import Foundation
 struct UnitTests: AsyncParsableCommand {
     static let configuration = CommandConfiguration(commandName: "unit-tests",
                                                     abstract: "Runs the unit test CI workflow: lint, unit tests, preview tests, and result collection.")
-        
+    
     @Flag(help: "Skip preview tests")
     var skipPreviews = false
     

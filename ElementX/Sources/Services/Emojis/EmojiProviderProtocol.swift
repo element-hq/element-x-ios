@@ -12,7 +12,7 @@ struct EmojiItem: Equatable, Identifiable {
     var id: String {
         label
     }
-
+    
     let label: String
     let unicode: String
     let keywords: [String]

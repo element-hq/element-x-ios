@@ -22,7 +22,7 @@ final class RoomThreadListScreenCoordinator: CoordinatorProtocol {
     private let viewModel: RoomThreadListScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<RoomThreadListScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomThreadListScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -39,7 +39,7 @@ final class RoomThreadListScreenCoordinator: CoordinatorProtocol {
         viewModel.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             MXLog.info("Coordinator: received view model action: \(action)")
-
+            
             switch action {
             case .presentThread(let threadRootEventID):
                 actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID))
@@ -47,7 +47,7 @@ final class RoomThreadListScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomThreadListScreen(context: viewModel.context))
     }

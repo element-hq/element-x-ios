@@ -13,7 +13,7 @@ enum AppAppearance: CaseIterable, Codable {
     case system
     case dark
     case light
-        
+    
     var interfaceStyle: UIUserInterfaceStyle {
         switch self {
         case .light:

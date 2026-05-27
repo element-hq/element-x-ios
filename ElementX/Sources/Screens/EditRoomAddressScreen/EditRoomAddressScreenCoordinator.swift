@@ -25,7 +25,7 @@ final class EditRoomAddressScreenCoordinator: CoordinatorProtocol {
     private let viewModel: EditRoomAddressScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<EditRoomAddressScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<EditRoomAddressScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -49,7 +49,7 @@ final class EditRoomAddressScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(EditRoomAddressScreen(context: viewModel.context))
     }

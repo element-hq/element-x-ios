@@ -8,7 +8,7 @@ struct IntegrationTests: AsyncParsableCommand {
                                                     Deletes old log files, runs integration tests, validates that logs are set
                                                     to the trace level and don't contain private messages, then collects results.
                                                     """)
-
+    
     @Option(help: "Device name for tests.")
     var device = "iPhone 17"
     

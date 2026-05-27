@@ -29,7 +29,7 @@ protocol VoiceMessageCacheProtocol {
     ///   - move: wheter to move or copy the source file
     /// - Returns: the cached URL
     func cache(mediaSource: MediaSourceProxy, using fileURL: URL, move: Bool) -> Result<URL, VoiceMessageCacheError>
-        
+    
     /// Clears the cache
     func clearCache()
 }

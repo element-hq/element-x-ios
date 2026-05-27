@@ -79,7 +79,7 @@ struct TimelineView: View {
 /// A table view wrapper that displays the timeline of a room.
 struct TimelineViewRepresentable: UIViewControllerRepresentable {
     @EnvironmentObject private var viewModelContext: TimelineViewModel.Context
-
+    
     func makeUIViewController(context: Context) -> TimelineTableViewController {
         TimelineTableViewController(coordinator: context.coordinator,
                                     isScrolledToBottom: $viewModelContext.isScrolledToBottom,
@@ -133,7 +133,7 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
             if tableViewController.readMarkerUniqueID != context.viewState.timelineState.readMarkerUniqueID {
                 tableViewController.readMarkerUniqueID = context.viewState.timelineState.readMarkerUniqueID
             }
-
+            
             if tableViewController.typingMembers.members != context.viewState.typingMembers {
                 tableViewController.setTypingMembers(context.viewState.typingMembers)
             }
@@ -154,7 +154,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
     static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = {
         let appSettings = AppSettings.volatile()
-
+        
         return TimelineViewModel(roomProxy: roomProxyMock,
                                  timelineController: MockTimelineController(),
                                  userSession: UserSessionMock(.init()),
@@ -167,7 +167,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
-
+    
     static var previews: some View {
         ElementNavigationStack {
             RoomScreen(context: roomViewModel.context,

@@ -16,7 +16,7 @@ class IdentityConfirmedScreenViewModel: IdentityConfirmedScreenViewModelType, Id
     var actionsPublisher: AnyPublisher<IdentityConfirmedScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init() {
         super.init(initialViewState: .init())
     }

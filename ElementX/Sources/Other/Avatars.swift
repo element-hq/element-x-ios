@@ -15,7 +15,7 @@ enum Avatars {
         case room(on: RoomAvatarSizeOnScreen)
         ///  custom
         case custom(CGFloat)
-
+        
         /// Value in UIKit points
         var value: CGFloat {
             switch self {
@@ -27,7 +27,7 @@ enum Avatars {
                 return val
             }
         }
-
+        
         /// Value in pixels by using the scale of the main screen
         var scaledValue: CGFloat {
             value * UIScreen.main.scale
@@ -87,7 +87,7 @@ enum UserAvatarSizeOnScreen {
     case threadSummary
     case map
     case classicAppAccount
-
+    
     var value: CGFloat {
         switch self {
         case .readReceipt:
@@ -143,7 +143,7 @@ enum RoomAvatarSizeOnScreen {
     case spaceAddRoomsSelected
     case completionSuggestions
     case createRoomSelectSpace
-
+    
     var value: CGFloat {
         switch self {
         case .notificationSettings:

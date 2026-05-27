@@ -17,7 +17,7 @@ import SwiftUI
 protocol CommonSettingsProtocol: AnyObject, Sendable {
     var lastNotificationBootTime: TimeInterval? { get set }
     var selectedNotificationTone: NotificationTone? { get set }
-
+    
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
     var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
@@ -95,7 +95,7 @@ final class AppSettings: @unchecked Sendable {
     }
     
     static let suiteName: String = InfoPlistReader.main.appGroupIdentifier
-
+    
     /// UserDefaults to be used on reads and writes.
     private let store: UserDefaultsProtocol
     
@@ -174,7 +174,7 @@ final class AppSettings: @unchecked Sendable {
     /// deleted between runs so should clear data in the shared container and keychain.
     @UserPreference
     var lastVersionLaunched: String?
-        
+    
     /// The Set of room identifiers of invites that the user already saw in the invites list.
     /// This Set is being used to implement badges for unread invites.
     @UserPreference
@@ -196,7 +196,7 @@ final class AppSettings: @unchecked Sendable {
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
-
+    
     /// A URL where users can go read more about the app.
     private(set) var websiteURL: URL = "https://element.io"
     /// A URL that contains the app's logo that may be used when showing content in a web view.
@@ -217,7 +217,7 @@ final class AppSettings: @unchecked Sendable {
     private(set) var identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
     /// A URL describing how history sharing works
     private(set) var historySharingDetailsURL: URL = "https://element.io/en/help#e2ee-history-sharing"
-
+    
     /// Any domains that Element web may be hosted on - used for handling links.
     private(set) var elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     /// The domain that account provisioning links will be hosted on - used for handling the links.
@@ -279,13 +279,13 @@ final class AppSettings: @unchecked Sendable {
     
     @UserPreference
     var enableNotifications: Bool
-
+    
     @UserPreference
     var enableInAppNotifications: Bool
     
     @UserPreference
     var hideQuietNotificationAlerts: Bool
-
+    
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference
     var pusherProfileTag: String?
@@ -293,13 +293,13 @@ final class AppSettings: @unchecked Sendable {
     /// The device's last boot time as recorded by the NSE.
     @UserPreference
     var lastNotificationBootTime: TimeInterval?
-
+    
     /// The sound played when delivering noisy notifications. If nil, use the ElementX default
     @UserPreference
     var selectedNotificationTone: NotificationTone?
-
+    
     // MARK: - Logging
-        
+    
     @UserPreference
     var logLevel: LogLevel
     
@@ -369,14 +369,14 @@ final class AppSettings: @unchecked Sendable {
     
     @UserPreference
     var optimizeMediaUploads: Bool
-
+    
     @UserPreference
     var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
-
+    
     /// Whether or not to show a warning on the media caption composer so the user knows
     /// that captions might not be visible to users who are using other Matrix clients.
     let shouldShowMediaCaptionWarning = true
-
+    
     // MARK: - Element Call
     
     #if IS_MAIN_APP
@@ -434,13 +434,13 @@ final class AppSettings: @unchecked Sendable {
     
     @UserPreference
     var focusEventOnNotificationTap: Bool
-        
+    
     @UserPreference
     var linkPreviewsEnabled: Bool
     
     @UserPreference
     var jumpToReadMarkerEnabled: Bool
-
+    
     @UserPreference
     var linkNewDeviceEnabled: Bool
     
@@ -452,11 +452,11 @@ final class AppSettings: @unchecked Sendable {
     
     @UserPreference
     var developerOptionsEnabled: Bool
-	
+    
     init(store: UserDefaultsProtocol) {
         // UserDefaults to be used on reads and writes.
         self.store = store
-		
+        
         _lastVersionLaunched = UserPreference(key: .lastVersionLaunched, storage: store)
         _seenInvites = UserPreference(key: .seenInvites, defaultValue: [], storage: store)
         _hasSeenNewSoundBanner = UserPreference(key: .hasSeenNewSoundBanner, defaultValue: true, storage: store)

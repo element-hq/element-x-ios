@@ -13,7 +13,7 @@ import Testing
 @MainActor
 struct UserDetailsEditScreenViewModelTests {
     private var viewModel: UserDetailsEditScreenViewModel!
-
+    
     private var context: UserDetailsEditScreenViewModelType.Context {
         viewModel.context
     }

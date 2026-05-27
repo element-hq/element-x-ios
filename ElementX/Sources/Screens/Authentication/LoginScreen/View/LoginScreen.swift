@@ -92,7 +92,7 @@ struct LoginScreen: View {
             .onSubmit(submit)
             
             Spacer().frame(height: 32)
-
+            
             Button(action: submit) {
                 Text(L10n.actionContinue)
             }

@@ -16,14 +16,14 @@ final class ServerConfirmationScreenViewModelTests {
     var clientFactory: AuthenticationClientFactoryMock!
     var client: ClientSDKMock!
     var service: AuthenticationServiceProtocol!
-
+    
     var viewModel: ServerConfirmationScreenViewModel!
     var context: ServerConfirmationScreenViewModel.Context {
         viewModel.context
     }
-
+    
     private let appSettings: AppSettings
-
+    
     init() {
         appSettings = AppSettings.volatile()
     }

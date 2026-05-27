@@ -38,7 +38,7 @@ struct TimelineItemSender: Identifiable, Hashable {
                       avatarURL: nil)
         }
     }
-        
+    
     var disambiguatedDisplayName: String? {
         guard let displayName else {
             return nil

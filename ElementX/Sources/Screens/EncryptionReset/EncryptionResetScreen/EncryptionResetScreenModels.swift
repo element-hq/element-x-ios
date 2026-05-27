@@ -35,7 +35,7 @@ struct EncryptionResetScreenViewState: BindableState {
             AttributedString(L10n.screenCreateNewRecoveryKeyListItem5)
         ]
     }
-
+    
     var bindings: EncryptionResetScreenViewStateBindings
 }
 

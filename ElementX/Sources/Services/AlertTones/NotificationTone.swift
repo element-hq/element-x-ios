@@ -13,16 +13,16 @@ struct NotificationTone: Hashable, Comparable, Codable {
     var label: String {
         labelOverride ?? URL(filePath: "/\(relativePath.last, default: "")").deletingPathExtension().lastPathComponent
     }
-
+    
     private let labelOverride: String?
     let storageLocationRoot: StorageLocation
     let relativePath: [String]
-
+    
     /// The audio filename including its extension.
     var filename: String {
         relativePath.last ?? ""
     }
-
+    
     /// - Parameters:
     ///   - labelOverride: Optional custom display name. If `nil`, the filename stem is used.
     ///   - storageLocationRoot: Where the file lives (system, bundle, or library).
@@ -32,7 +32,7 @@ struct NotificationTone: Hashable, Comparable, Codable {
         self.storageLocationRoot = storageLocationRoot
         self.relativePath = relativePath
     }
-
+    
     /// Indicates which storage root backs the tone's audio file.
     enum StorageLocation: Codable, Hashable {
         /// The device's system sounds directory.
@@ -42,22 +42,22 @@ struct NotificationTone: Hashable, Comparable, Codable {
         /// The app's Library directory (user-imported tones).
         case appLibrary
     }
-
+    
     /// Creates a tone backed by a file in the system sounds directory.
     static func createSystemSound(label: String?, filename: String, systemSoundsSubdirectory: [String] = []) -> NotificationTone {
         NotificationTone(labelOverride: label, storageLocationRoot: .system, relativePath: systemSoundsSubdirectory + [filename])
     }
-
+    
     /// Creates a tone backed by a file in the app bundle.
     static func createBundledSound(label: String?, filename: String) -> NotificationTone {
         NotificationTone(labelOverride: label, storageLocationRoot: .appBundle, relativePath: [filename])
     }
-
+    
     /// Creates a tone backed by a user-imported file in the app library.
     static func createCustomUserSound(filename: String) -> NotificationTone {
         NotificationTone(labelOverride: nil, storageLocationRoot: .appLibrary, relativePath: [filename])
     }
-
+    
     static func < (lhs: NotificationTone, rhs: NotificationTone) -> Bool {
         lhs.label < rhs.label
     }

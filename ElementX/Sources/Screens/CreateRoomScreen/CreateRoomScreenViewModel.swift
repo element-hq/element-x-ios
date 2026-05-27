@@ -58,7 +58,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         let bindings = CreateRoomScreenViewStateBindings(roomTopic: "",
                                                          selectedAccessType: selectedAccessType,
                                                          selectedSpace: selectedSpace)
-
+        
         super.init(initialViewState: CreateRoomScreenViewState(isSpace: isSpace,
                                                                shouldShowCancelButton: shouldShowCancelButton,
                                                                roomName: "",
@@ -137,7 +137,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     }
     
     // MARK: - Private
-
+    
     private func setupBindings() {
         // Reset the state related to public rooms if the user choses the room to be empty
         context.$viewState

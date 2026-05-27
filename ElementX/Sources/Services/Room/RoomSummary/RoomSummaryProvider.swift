@@ -17,7 +17,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let appSettings: AppSettings
-
+    
     private let roomListPageSize: UInt32
     
     private let serialDispatchQueue: DispatchQueue
@@ -40,7 +40,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         roomListSubject.asCurrentValuePublisher()
     }
-
+    
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
         stateSubject.asCurrentValuePublisher()
     }
@@ -233,7 +233,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         return updatedItems
     }
-
+    
     private func fetchRoomDetails(from room: Room) -> (roomInfo: RoomInfo?, latestEvent: LatestEventValue?) {
         class FetchResult {
             var roomInfo: RoomInfo?

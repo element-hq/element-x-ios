@@ -22,7 +22,7 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
     var actions: AnyPublisher<ServerConfirmationScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(authenticationService: AuthenticationServiceProtocol,
          mode: ServerConfirmationScreenMode,
          authenticationFlow: AuthenticationFlow,

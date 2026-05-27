@@ -26,7 +26,7 @@ struct NotificationSettingsScreenViewState: BindableState {
     var showSystemNotificationsAlert: Bool {
         bindings.enableNotifications && isUserPermissionGranted == false
     }
-
+    
     var settings: NotificationSettingsScreenSettings?
     var applyingChange = false
     var selectedAlertTone: NotificationTone

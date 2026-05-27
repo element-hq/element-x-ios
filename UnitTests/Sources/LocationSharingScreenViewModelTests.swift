@@ -404,7 +404,7 @@ struct LocationSharingScreenViewModelTests {
                                                    analytics: AnalyticsServiceMock(.init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    mediaProvider: MediaProviderMock(.init()))
-
+        
         // Initially no annotations and no map center since sender and share are both nil.
         #expect(context.viewState.annotations.isEmpty)
         #expect(context.mapCenterLocation == nil)
@@ -441,7 +441,7 @@ struct LocationSharingScreenViewModelTests {
                                                    mediaProvider: MediaProviderMock(.init()))
         viewModel.state.bindings.isLocationAuthorized = true
     }
-
+    
     private mutating func setupViewModel(liveLocationManagerMock: LiveLocationManagerMock,
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
         let appSettings = AppSettings.volatile()

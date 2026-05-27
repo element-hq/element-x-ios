@@ -38,7 +38,7 @@ class VoiceMessageCache: VoiceMessageCacheProtocol {
         }
         return .success(url)
     }
-        
+    
     func clearCache() {
         if FileManager.default.fileExists(atPath: temporaryFilesFolderURL.path) {
             do {

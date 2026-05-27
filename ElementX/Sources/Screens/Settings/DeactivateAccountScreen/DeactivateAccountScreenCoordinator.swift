@@ -23,7 +23,7 @@ final class DeactivateAccountScreenCoordinator: CoordinatorProtocol {
     private let viewModel: DeactivateAccountScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<DeactivateAccountScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<DeactivateAccountScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -48,7 +48,7 @@ final class DeactivateAccountScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(DeactivateAccountScreen(context: viewModel.context))
     }

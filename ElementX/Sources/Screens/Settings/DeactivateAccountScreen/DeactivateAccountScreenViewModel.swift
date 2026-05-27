@@ -19,7 +19,7 @@ class DeactivateAccountScreenViewModel: DeactivateAccountScreenViewModelType, De
     var actionsPublisher: AnyPublisher<DeactivateAccountScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(clientProxy: ClientProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
@@ -49,7 +49,7 @@ class DeactivateAccountScreenViewModel: DeactivateAccountScreenViewModelType, De
                                          },
                                          secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
-
+    
     func deactivateAccount() async {
         userIndicatorController.submitIndicator(UserIndicator(id: deactivatingIndicatorID,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),

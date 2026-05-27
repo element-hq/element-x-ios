@@ -16,7 +16,7 @@ struct TimelineItemFactoryTests {
     func callInvite() throws {
         let ownUserID = "@alice:matrix.org"
         let senderUserID = "@bob:matrix.org"
-
+        
         let factory = RoomTimelineItemFactory(userID: ownUserID,
                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                               stateEventStringBuilder: RoomStateEventStringBuilder(userID: ownUserID))
@@ -24,7 +24,7 @@ struct TimelineItemFactoryTests {
         let eventTimelineItem = EventTimelineItem.mockCallInvite(sender: senderUserID)
         
         let eventTimelineItemProxy = EventTimelineItemProxy(item: eventTimelineItem, uniqueID: .init("0"))
-                
+        
         let item = try #require(factory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false) as? CallInviteRoomTimelineItem,
                                 "Incorrect item type")
         

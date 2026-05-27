@@ -36,14 +36,14 @@ struct TimelineItemMenu: View {
                     if !actions.reactions.isEmpty {
                         reactionsSection
                             .padding(.bottom, 8.0)
-
+                        
                         Divider()
                             .background(Color.compound.bgSubtlePrimary)
                     }
-
+                    
                     if !actions.actions.isEmpty {
                         viewsForActions(actions.actions)
-
+                        
                         Divider()
                             .background(Color.compound.bgSubtlePrimary)
                     }
@@ -278,7 +278,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     
     static let (mediaItem, mediaItemActions) = makeActions(itemType: .outgoingMedia)
     static let (mediaItemWithCaption, mediaItemWithCaptionActions) = makeActions(itemType: .outgoingMediaWithCaption)
-
+    
     static var previews: some View {
         TimelineItemMenu(item: item, actions: actions)
             .environmentObject(viewModel.context)

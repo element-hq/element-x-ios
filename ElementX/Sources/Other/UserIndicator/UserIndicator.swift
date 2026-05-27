@@ -17,7 +17,7 @@ enum UserIndicatorType: Equatable {
     static var toast: Self {
         .toast(progress: .none)
     }
-
+    
     static var modal: Self {
         .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: false)
     }

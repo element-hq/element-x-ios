@@ -19,7 +19,7 @@ class NotificationHandler {
     private let tag: String
     
     private let notificationContentBuilder: NotificationContentBuilder
-
+    
     init(userSession: NSEUserSession,
          settings: CommonSettingsProtocol,
          contentHandler: @escaping (UNNotificationContent) -> Void,
@@ -33,7 +33,7 @@ class NotificationHandler {
         
         let eventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
                                                                style: .plain)
-
+        
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
                                                                 notificationSoundName: settings.notificationSoundName,
                                                                 userSession: userSession)
@@ -82,7 +82,7 @@ class NotificationHandler {
         MXLog.info("\(tag) Delivering notification")
         contentHandler(notificationContent)
     }
-
+    
     private func discardNotification() {
         MXLog.info("\(tag) Discarding notification")
         
@@ -199,11 +199,11 @@ class NotificationHandler {
                         }
                     }
                 }
-
+                
                 try? await expiringTask.run(timeout: Duration.seconds(5)) // Wait 5 seconds or just use whatever is available
                 // Release the SDK subscription explicitly once we no longer need updates.
                 observationToken.withLock { $0 = nil }
-
+                
                 guard room.hasActiveRoomCall() else {
                     MXLog.info("The room no longer has an ongoing call, handling as push notification")
                     return .shouldDisplay

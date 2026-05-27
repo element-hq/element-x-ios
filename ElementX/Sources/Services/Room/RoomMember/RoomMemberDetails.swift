@@ -19,7 +19,7 @@ struct RoomMemberDetails: Identifiable, Hashable {
     var isIgnored: Bool
     var isBanned: Bool
     var isActive: Bool
-
+    
     let role: RoomRole
     let powerLevel: RoomPowerLevel
     

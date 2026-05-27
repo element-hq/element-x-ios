@@ -15,7 +15,7 @@ enum PhishingDetector {
         let disambiguatedDisplayString = displayString.replacingOccurrences(of: "﹒", with: ".")
         let linkMatch = MatrixEntityRegex.linkRegex.firstMatch(in: disambiguatedDisplayString)
         let linkMatchLength = linkMatch?.range.length ?? 0
-
+        
         // We check if we the link string contains a matrix user ID.
         if let match = MatrixEntityRegex.userIdentifierRegex.firstMatch(in: disambiguatedDisplayString),
            // If there is a bigger permalink including it we leave it handled by the link branch

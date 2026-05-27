@@ -89,14 +89,14 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             }
         case .developerOptions:
             actionsSubject.send(.developerOptions)
-        
+            
         case .loginWithQR:
             actionsSubject.send(.loginWithQR)
         case .login:
             Task { await login() }
         case .register:
             actionsSubject.send(.register)
-        
+            
         case .continueWithClassic(let account):
             Task { await login(classicAppAccount: account) }
         case .otherOptions(let account):

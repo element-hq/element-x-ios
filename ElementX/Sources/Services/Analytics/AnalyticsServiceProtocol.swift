@@ -27,7 +27,7 @@ protocol AnalyticsServiceProtocol: AnyObject {
     
     /// Whether analytics tracking is currently enabled.
     var isEnabled: Bool { get }
-
+    
     /// Opts in to analytics tracking.
     func optIn()
     
@@ -45,7 +45,7 @@ protocol AnalyticsServiceProtocol: AnyObject {
     
     /// Resets the consent state for analytics.
     func resetConsentState()
-
+    
     /// Track the presentation of a screen.
     /// - Parameter screen: The screen that was shown.
     /// - Parameter milliseconds: An optional value representing how long the screen was shown for in milliseconds.
@@ -121,11 +121,11 @@ extension AnalyticsServiceProtocol {
     func track(screen: AnalyticsEvent.MobileScreen.ScreenName) {
         track(screen: screen, duration: nil)
     }
-
+    
     func trackInteraction(name: AnalyticsEvent.Interaction.Name) {
         trackInteraction(index: nil, name: name)
     }
-
+    
     @_disfavoredOverload // make sure this doesn't cause infinite recursion
     func trackError(context: String?,
                     domain: AnalyticsEvent.Error.Domain,
@@ -146,7 +146,7 @@ extension AnalyticsServiceProtocol {
                    userTrustsOwnIdentity: userTrustsOwnIdentity,
                    wasVisibleToUser: wasVisibleToUser)
     }
-
+    
     func trackComposer(inThread: Bool,
                        isEditing: Bool,
                        isReply: Bool,

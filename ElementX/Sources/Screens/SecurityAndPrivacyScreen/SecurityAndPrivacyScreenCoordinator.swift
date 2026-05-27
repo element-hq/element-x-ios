@@ -26,7 +26,7 @@ final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
     private let viewModel: SecurityAndPrivacyScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<SecurityAndPrivacyScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SecurityAndPrivacyScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -55,7 +55,7 @@ final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(SecurityAndPrivacyScreen(context: viewModel.context))
     }

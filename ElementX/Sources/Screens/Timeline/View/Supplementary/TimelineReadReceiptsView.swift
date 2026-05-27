@@ -20,7 +20,7 @@ struct TimelineReadReceiptsView: View {
                               contentID: receipt.userID)
         }
     }
-
+    
     var body: some View {
         HStack(spacing: 2) {
             StackedAvatarsView(overlap: 6,
@@ -78,10 +78,10 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
         .mockDan,
         .mockMe
     ]
-
+    
     static let viewModel = {
         let appSettings = AppSettings.volatile()
-
+        
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Test", members: members)),
                                  timelineController: MockTimelineController(),
                                  userSession: UserSessionMock(.init()),
@@ -94,7 +94,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
-
+    
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),
                                 ReadReceipt(userID: RoomMemberProxyMock.mockBob.userID, formattedTimestamp: "Before")]
@@ -105,7 +105,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                                    ReadReceipt(userID: RoomMemberProxyMock.mockBob.userID, formattedTimestamp: "Before"),
                                    ReadReceipt(userID: RoomMemberProxyMock.mockCharlie.userID, formattedTimestamp: "Way before"),
                                    ReadReceipt(userID: RoomMemberProxyMock.mockDan.userID, formattedTimestamp: "Way, way before")]
-
+    
     static func mockTimelineItem(with receipts: [ReadReceipt]) -> TextRoomTimelineItem {
         TextRoomTimelineItem(id: .randomEvent,
                              timestamp: .mock,
@@ -115,7 +115,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                              sender: .init(id: UUID().uuidString), content: .init(body: "Test"),
                              properties: .init(orderedReadReceipts: receipts))
     }
-
+    
     static var previews: some View {
         VStack(spacing: 8) {
             TimelineReadReceiptsView(timelineItem: mockTimelineItem(with: singleReceipt))

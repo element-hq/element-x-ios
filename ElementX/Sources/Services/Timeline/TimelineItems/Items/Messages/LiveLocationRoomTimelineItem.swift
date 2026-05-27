@@ -14,7 +14,7 @@ struct LiveLocationRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     var body: String {
         ""
     }
-
+    
     let timestamp: Date
     let isOutgoing: Bool
     let isEditable: Bool

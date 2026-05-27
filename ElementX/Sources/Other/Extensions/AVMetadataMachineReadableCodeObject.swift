@@ -81,7 +81,7 @@ private extension [Bit] {
         
         return value
     }
-
+    
     mutating func takeBits16(_ count: Int) throws(BitError) -> UInt16 {
         guard count <= 16 else { throw .moreThan16BitsTaken }
         
@@ -92,7 +92,7 @@ private extension [Bit] {
         
         return value
     }
-
+    
     mutating func takeUInt8() throws(BitError) -> UInt8 {
         try takeBits(8)
     }

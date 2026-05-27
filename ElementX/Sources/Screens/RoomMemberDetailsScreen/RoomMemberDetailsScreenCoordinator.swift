@@ -27,14 +27,14 @@ enum RoomMemberDetailsScreenCoordinatorAction {
 
 final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: RoomMemberDetailsScreenViewModelProtocol
-
+    
     private let actionsSubject: PassthroughSubject<RoomMemberDetailsScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
     var actions: AnyPublisher<RoomMemberDetailsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(parameters: RoomMemberDetailsScreenCoordinatorParameters) {
         viewModel = RoomMemberDetailsScreenViewModel(userID: parameters.userID,
                                                      roomProxy: parameters.roomProxy,
@@ -65,7 +65,7 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-
+    
     func toPresentable() -> AnyView {
         AnyView(RoomMemberDetailsScreen(context: viewModel.context))
     }

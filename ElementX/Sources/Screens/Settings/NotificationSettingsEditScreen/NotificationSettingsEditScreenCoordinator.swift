@@ -39,7 +39,7 @@ final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(NotificationSettingsEditScreen(context: viewModel.context))
     }
@@ -48,7 +48,7 @@ final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
     
     private func presentRoomNotificationSettings(roomID: String) async {
         guard case let .joined(roomProxy) = await parameters.userSession.clientProxy.roomForIdentifier(roomID) else { return }
-         
+        
         let roomNotificationSettingsParameters = RoomNotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
                                                                                                      notificationSettingsProxy: parameters.userSession.clientProxy.notificationSettings,
                                                                                                      roomProxy: roomProxy,

@@ -14,11 +14,11 @@ struct MessageComposerTextField: View {
     @Binding var text: NSAttributedString
     @Binding var presendCallback: (() -> Void)?
     @Binding var selectedRange: NSRange
-
+    
     let maxHeight: CGFloat
     let keyHandler: GenericKeyHandler
     let pasteHandler: PasteHandler
-
+    
     var body: some View {
         UITextViewWrapper(text: $text,
                           presendCallback: $presendCallback,
@@ -30,7 +30,7 @@ struct MessageComposerTextField: View {
             .background(placeholderView, alignment: .topLeading)
             .background { keyboardShortcuts }
     }
-
+    
     @ViewBuilder
     private var placeholderView: some View {
         if text.string.isEmpty {
@@ -54,18 +54,18 @@ struct MessageComposerTextField: View {
 
 private struct UITextViewWrapper: UIViewRepresentable {
     @Environment(\.timelineContext) private var timelineContext
-
+    
     @Binding var text: NSAttributedString
     @Binding var presendCallback: (() -> Void)?
     @Binding var selectedRange: NSRange
-
+    
     let maxHeight: CGFloat
-
+    
     let keyHandler: GenericKeyHandler
     let pasteHandler: PasteHandler
-
+    
     private let font = UIFont.preferredFont(forTextStyle: .body)
-
+    
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
         // Need to use TextKit 1 for mentions
         let textView = ElementTextView(timelineContext: timelineContext,
@@ -89,21 +89,21 @@ private struct UITextViewWrapper: UIViewRepresentable {
         if ProcessInfo.processInfo.isiOSAppOnMac {
             textView.autocorrectionType = .no
         }
-
+        
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         return textView
     }
-
+    
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
         // Note: Coalescing a width of zero here returns a size for the view with 1 line of text visible.
         let newSize = uiView.sizeThatFits(CGSize(width: proposal.width ?? .zero, height: maxHeight))
         let width = proposal.width ?? newSize.width
         let height = min(maxHeight, newSize.height)
-
+        
         return CGSize(width: width, height: height)
     }
-
+    
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
         // Prevent the textView from inheriting attributes from mention pills
         textView.typingAttributes = [.font: font,
@@ -149,7 +149,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
             }
         }
     }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
                     selectedRange: $selectedRange,
@@ -157,16 +157,16 @@ private struct UITextViewWrapper: UIViewRepresentable {
                     keyHandler: keyHandler,
                     pasteHandler: pasteHandler)
     }
-
+    
     final class Coordinator: NSObject, UITextViewDelegate, ElementTextViewDelegate {
         private var text: Binding<NSAttributedString>
         private var selectedRange: Binding<NSRange>
-
+        
         private let maxHeight: CGFloat
-
+        
         private let keyHandler: GenericKeyHandler
         private let pasteHandler: PasteHandler
-
+        
         init(text: Binding<NSAttributedString>,
              selectedRange: Binding<NSRange>,
              maxHeight: CGFloat,
@@ -178,11 +178,11 @@ private struct UITextViewWrapper: UIViewRepresentable {
             self.keyHandler = keyHandler
             self.pasteHandler = pasteHandler
         }
-
+        
         func textViewDidChange(_ textView: UITextView) {
             text.wrappedValue = textView.attributedText
         }
-
+        
         func textViewDidReceiveKeyPress(_ textView: UITextView, key: UIKeyboardHIDUsage) {
             keyHandler(key)
         }
@@ -190,7 +190,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         func textViewDidReceiveShiftEnterKeyPress(_ textView: UITextView) {
             textView.insertText("\n")
         }
-
+        
         func textView(_ textView: UITextView, didReceivePasteWith providers: [NSItemProvider]) {
             pasteHandler(providers)
         }
@@ -242,7 +242,7 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         [UIKeyCommand(input: "\r", modifierFlags: .shift, action: #selector(shiftEnterKeyPressed)),
          UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(enterKeyPressed))]
     }
-
+    
     @objc func shiftEnterKeyPressed(sender: UIKeyCommand) {
         elementDelegate?.textViewDidReceiveShiftEnterKeyPress(self)
     }
@@ -269,21 +269,21 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         
         super.pressesBegan(presses, with: event)
     }
-
+    
     // Pasting support
-
+    
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if super.canPerformAction(action, withSender: sender) {
             return true
         }
-
+        
         guard action == #selector(paste(_:)) else {
             return false
         }
-
+        
         return UIPasteboard.general.itemProviders.filter { !$0.isSupportedForPasteOrDrop }.isEmpty
     }
-
+    
     override func paste(_ sender: Any?) {
         let providers = UIPasteboard.general.itemProviders
         
@@ -312,7 +312,7 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     func registerPillView(_ pillView: UIView) {
         pillViews.add(pillView)
     }
-
+    
     func flushPills() {
         for view in pillViews.allObjects {
             view.alpha = 0.0
@@ -341,15 +341,15 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
             PreviewWrapper(text: "A really long message that will wrap to multiple lines on a phone in portrait.")
         }
     }
-
+    
     struct PreviewWrapper: View {
         @State var text: NSAttributedString
-
+        
         init(text: String) {
             _text = .init(initialValue: .init(string: text, attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
                                                                          .foregroundColor: UIColor.compound.textPrimary]))
         }
-
+        
         var body: some View {
             MessageComposerTextField(placeholder: "Placeholder",
                                      text: $text,

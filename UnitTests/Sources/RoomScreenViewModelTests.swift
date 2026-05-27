@@ -56,7 +56,7 @@ final class RoomScreenViewModelTests {
         try await deferred.fulfill()
         #expect(viewModel.context.viewState.pinnedEventsBannerState.isLoading)
         #expect(!viewModel.context.viewState.shouldShowPinnedEventsBanner)
-
+        
         // check if if after the pinned event ids are set the banner is still in a loading state, but is both loading and showing with a counter
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.pinnedEventsBannerState.count == 2
@@ -98,7 +98,7 @@ final class RoomScreenViewModelTests {
         #expect(!viewModel.context.viewState.pinnedEventsBannerState.isLoading)
         #expect(viewModel.context.viewState.shouldShowPinnedEventsBanner)
         #expect(viewModel.context.viewState.pinnedEventsBannerState.selectedPinnedIndex == 1)
-
+        
         // check how the scrolling changes the banner visibility
         viewModel.timelineHasScrolled(direction: .top)
         #expect(!viewModel.context.viewState.shouldShowPinnedEventsBanner)
@@ -254,7 +254,7 @@ final class RoomScreenViewModelTests {
         #expect(viewModel.state.roomAvatar == .room(id: "TestID", name: "StartingName", avatarURL: nil))
         #expect(!viewModel.state.canJoinCall)
         #expect(!viewModel.state.hasOngoingCall)
-                
+        
         let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.roomTitle == "NewName" &&
                 viewState.roomAvatar == .room(id: "TestID", name: "NewName", avatarURL: .mockMXCAvatar) &&
@@ -358,7 +358,7 @@ final class RoomScreenViewModelTests {
                 state.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1")]
         }
         try await deferred.fulfill()
-                
+        
         let deferredAction = deferFulfillment(viewModel.actions) { $0 == .displayKnockRequests }
         viewModel.context.send(viewAction: .viewKnockRequests)
         try await deferredAction.fulfill()
@@ -450,7 +450,7 @@ final class RoomScreenViewModelTests {
         var configuration = JoinedRoomProxyMockConfiguration(isEncrypted: false, historyVisibility: .joined)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
-
+        
         // setup the room proxy actions publisher
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),

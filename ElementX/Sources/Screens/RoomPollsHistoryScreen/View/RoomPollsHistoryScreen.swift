@@ -122,7 +122,7 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
                                                timelineController: timelineController,
                                                userIndicatorController: UserIndicatorControllerMock())
     }()
-
+    
     static let viewModel: RoomPollsHistoryScreenViewModel = {
         let timelineController = MockTimelineController()
         
@@ -131,25 +131,25 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
                      PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true)]
         
         timelineController.timelineItems = polls
-
+        
         for i in 0..<polls.count {
             let item = polls[i]
             let date: Date! = DateComponents(calendar: .current, timeZone: .gmt, year: 2023, month: 12, day: 1 + i, hour: 12).date
             timelineController.timelineItemsTimestamp[item.id] = date
         }
-
+        
         let roomProxyMockConfiguration = JoinedRoomProxyMockConfiguration(name: "Polls", timelineStartReached: true)
         return RoomPollsHistoryScreenViewModel(pollInteractionHandler: PollInteractionHandlerMock(),
                                                timelineController: timelineController,
                                                userIndicatorController: UserIndicatorControllerMock())
     }()
-
+    
     static var previews: some View {
         ElementNavigationStack {
             RoomPollsHistoryScreen(context: viewModelEmpty.context)
         }
         .previewDisplayName("No polls")
-
+        
         ElementNavigationStack {
             RoomPollsHistoryScreen(context: viewModel.context)
         }

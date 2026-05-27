@@ -5,7 +5,7 @@ import Foundation
 struct BumpCalendarVersion: ParsableCommand {
     static let configuration = CommandConfiguration(abstract: "A tool that bumps the CalVer every month (if needed), setting the patch back to 0.",
                                                     discussion: "The tool assumes the release will be published in 6-days so bumps early.")
-
+    
     func run() throws {
         try updateProjectYAML()
         try Zsh.run(command: "xcodegen")

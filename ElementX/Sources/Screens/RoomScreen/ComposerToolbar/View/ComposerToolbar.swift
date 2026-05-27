@@ -236,7 +236,7 @@ struct ComposerToolbar: View {
         // sending e.g. accepting current autocorrection.
         // Fixes https://github.com/element-hq/element-x-ios/issues/3216
         context.presendCallback?()
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             context.send(viewAction: .sendMessage)
         }

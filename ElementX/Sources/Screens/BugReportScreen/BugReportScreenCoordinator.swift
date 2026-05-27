@@ -69,7 +69,7 @@ final class BugReportScreenCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
     }
-
+    
     func stop() {
         stopLoading()
     }

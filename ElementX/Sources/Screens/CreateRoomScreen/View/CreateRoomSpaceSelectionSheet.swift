@@ -66,9 +66,9 @@ struct CreateRoomSpaceSelectionSheet_Previews: PreviewProvider, TestablePreview 
         let clientProxy = ClientProxyMock(.init(userID: "@userid:example.com"))
         clientProxy.spaceService = SpaceServiceProxyMock(.init(editableSpaces: .mockJoinedSpaces2))
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-
+        
         let appSettings = AppSettings.volatile()
-
+        
         return CreateRoomScreenViewModel(isSpace: false,
                                          spaceSelectionMode: .editableSpacesList(preSelectedSpace: nil),
                                          shouldShowCancelButton: false,

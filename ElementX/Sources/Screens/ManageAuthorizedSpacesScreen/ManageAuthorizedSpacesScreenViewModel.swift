@@ -15,7 +15,7 @@ class ManageAuthorizedSpacesScreenViewModel: ManageAuthorizedSpacesScreenViewMod
     var actionsPublisher: AnyPublisher<ManageAuthorizedSpacesScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(authorizedSpacesSelection: AuthorizedSpacesSelection,
          mediaProvider: MediaProviderProtocol) {
         super.init(initialViewState: ManageAuthorizedSpacesScreenViewState(authorizedSpacesSelection: authorizedSpacesSelection),

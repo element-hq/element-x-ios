@@ -91,7 +91,7 @@ struct UserProfileScreen: View {
         }
         .padding(.top, 32)
     }
-        
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         if context.viewState.isPresentedModally {
@@ -138,11 +138,11 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
             
             return .success(identity)
         }
-
+        
         if userID != RoomMemberProxyMock.mockMe.userID {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
         }
-
+        
         return UserProfileScreenViewModel(userID: userID,
                                           isPresentedModally: false,
                                           userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),

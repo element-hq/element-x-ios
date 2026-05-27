@@ -17,7 +17,7 @@ struct EmojiPickerScreenViewModelTests {
     var context: EmojiPickerScreenViewModel.Context {
         viewModel.context
     }
-
+    
     @Test
     mutating func toggleReaction() async throws {
         setupViewModel()

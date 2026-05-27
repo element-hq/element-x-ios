@@ -20,17 +20,17 @@ struct VoiceMessageRecorderTests {
     private var audioRecorderActions: AnyPublisher<AudioRecorderAction, Never> {
         audioRecorderActionsSubject.eraseToAnyPublisher()
     }
-
+    
     private var mediaPlayerProvider: MediaPlayerProviderMock!
     private var audioConverter: AudioConverterMock!
     private var voiceMessageCache: VoiceMessageCacheMock!
-
+    
     private var audioPlayer: AudioPlayerMock!
     private var audioPlayerActionsSubject: PassthroughSubject<AudioPlayerAction, Never> = .init()
     private var audioPlayerActions: AnyPublisher<AudioPlayerAction, Never> {
         audioPlayerActionsSubject.eraseToAnyPublisher()
     }
-
+    
     private let recordingURL = URL("/some/url")
     
     init() async throws {
@@ -58,7 +58,7 @@ struct VoiceMessageRecorderTests {
     private func setRecordingComplete() async throws {
         audioRecorder.audioFileURL = recordingURL
         audioRecorder.currentTime = 5
-
+        
         let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
             switch action {
             case .didStopRecording(_, let url) where url == recordingURL:
@@ -104,14 +104,14 @@ struct VoiceMessageRecorderTests {
         // The recording audio file must have been deleted
         #expect(audioRecorder.deleteRecordingCalled)
     }
-
+    
     @Test
     func deleteRecording() async {
         await voiceMessageRecorder.deleteRecording()
         // The recording audio file must have been deleted
         #expect(audioRecorder.deleteRecordingCalled)
     }
-
+    
     @Test
     func startPlaybackNoPreview() async {
         guard case .failure(.previewNotAvailable) = await voiceMessageRecorder.startPlayback() else {
@@ -139,10 +139,10 @@ struct VoiceMessageRecorderTests {
     @Test
     func pausePlayback() async throws {
         try await setRecordingComplete()
-
+        
         _ = await voiceMessageRecorder.startPlayback()
         #expect(voiceMessageRecorder.previewAudioPlayerState?.isAttached == true)
-
+        
         voiceMessageRecorder.pausePlayback()
         #expect(audioPlayer.pauseCalled)
     }
@@ -151,7 +151,7 @@ struct VoiceMessageRecorderTests {
     func resumePlayback() async throws {
         try await setRecordingComplete()
         audioPlayer.playbackURL = recordingURL
-
+        
         guard case .success = await voiceMessageRecorder.startPlayback() else {
             Issue.record("Playback should start")
             return
@@ -161,11 +161,11 @@ struct VoiceMessageRecorderTests {
         #expect(!audioPlayer.loadSourceURLPlaybackURLAutoplayCalled)
         #expect(audioPlayer.playCalled)
     }
-
+    
     @Test
     func stopPlayback() async throws {
         try await setRecordingComplete()
-
+        
         _ = await voiceMessageRecorder.startPlayback()
         #expect(voiceMessageRecorder.previewAudioPlayerState?.isAttached == true)
         
@@ -177,10 +177,10 @@ struct VoiceMessageRecorderTests {
     @Test
     func seekPlayback() async throws {
         try await setRecordingComplete()
-
+        
         _ = await voiceMessageRecorder.startPlayback()
         #expect(voiceMessageRecorder.previewAudioPlayerState?.isAttached == true)
-
+        
         await voiceMessageRecorder.seekPlayback(to: 0.4)
         #expect(audioPlayer.seekToReceivedProgress == 0.4)
     }
@@ -358,7 +358,7 @@ struct VoiceMessageRecorderTests {
     func audioRecorderActionHandling_didStopRecording() async throws {
         audioRecorder.audioFileURL = recordingURL
         audioRecorder.currentTime = 5
-
+        
         let deferred = deferFulfillment(voiceMessageRecorder.actions) { action in
             switch action {
             case .didStopRecording(_, let url) where url == recordingURL:

@@ -11,9 +11,9 @@ import SwiftUI
 
 struct TimelineSenderAvatarView: View {
     @Environment(\.timelineContext) private var context
-
+    
     let timelineItem: EventBasedTimelineItemProtocol
-        
+    
     var body: some View {
         LoadableAvatarImage(url: timelineItem.sender.avatarURL,
                             name: timelineItem.sender.displayName,

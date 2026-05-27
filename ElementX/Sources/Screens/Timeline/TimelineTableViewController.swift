@@ -148,14 +148,14 @@ class TimelineTableViewController: UIViewController {
     @Binding private var isReadMarkerVisible: Bool
     @Binding private var hasNewMessagesAtBottom: Bool
     @Binding private var floatingDate: Date?
-
+    
     /// The unique ID of the read marker (NEW banner) currently in the timeline, if any.
     /// Updated by `TimelineViewRepresentable.updateUIViewController` whenever it changes.
     var readMarkerUniqueID: TimelineItemIdentifier.UniqueID?
-
+    
     /// A work item used to auto-hide the floating date badge after scrolling stops.
     private var floatingDateHideWorkItem: DispatchWorkItem?
-
+    
     private var timelineItemsIDs: [TimelineItemIdentifier.UniqueID] {
         timelineItemsDictionary.keys.elements.reversed()
     }
@@ -163,7 +163,7 @@ class TimelineTableViewController: UIViewController {
     /// The table's diffable data source.
     private var dataSource: UITableViewDiffableDataSource<TimelineSection, TimelineItemIdentifier.UniqueID>?
     private var cancellables = Set<AnyCancellable>()
-
+    
     /// A publisher used to throttle back pagination requests.
     ///
     /// Our view actions get wrapped in a `Task` so it is possible that a second call in
@@ -196,7 +196,7 @@ class TimelineTableViewController: UIViewController {
         _isReadMarkerVisible = isReadMarkerVisible
         _hasNewMessagesAtBottom = hasNewMessagesAtBottom
         _floatingDate = floatingDate
-
+        
         super.init(nibName: nil, bundle: nil)
         
         tableView.register(TimelineItemCell.self, forCellReuseIdentifier: TimelineItemCell.reuseIdentifier)
@@ -226,7 +226,7 @@ class TimelineTableViewController: UIViewController {
                 self?.scrollToFirstItemForCurrentDate()
             }
             .store(in: &cancellables)
-
+        
         scrollToReadMarkerPublisher
             .sink { [weak self] uniqueID in
                 self?.scrollToItem(uniqueID: uniqueID, animated: true)
@@ -362,7 +362,7 @@ class TimelineTableViewController: UIViewController {
     /// the scroll position will be updated to maintain the position of the last visible item.
     private func applySnapshot() {
         guard let dataSource else { return }
-
+        
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, TimelineItemIdentifier.UniqueID>()
         
         // We don't want to display the typing notification in this timeline
@@ -400,13 +400,13 @@ class TimelineTableViewController: UIViewController {
         if isSwitchingTimelines {
             coordinator.send(viewAction: .hasSwitchedTimeline)
         }
-
+        
         // Re-evaluate after the snapshot has been applied so the new layout is reflected.
         DispatchQueue.main.async { [weak self] in
             self?.updateReadMarkerVisibility()
         }
     }
-
+    
     /// Scrolls to the newest item in the timeline.
     private func scrollToNewestItem(animated: Bool) {
         guard !timelineItemsIDs.isEmpty else {
@@ -415,7 +415,7 @@ class TimelineTableViewController: UIViewController {
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
         scrollDirectionPublisher.send(.bottom)
     }
-
+    
     /// Scrolls to the oldest item in the timeline.
     private func scrollToOldestItem(animated: Bool) {
         guard !timelineItemsIDs.isEmpty else {
@@ -434,7 +434,7 @@ class TimelineTableViewController: UIViewController {
             tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
         }
     }
-
+    
     /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
     private func scrollToItem(eventID: String, animated: Bool) {
         DispatchQueue.main.async { [weak self] in // Fixes #2805
@@ -488,12 +488,12 @@ class TimelineTableViewController: UIViewController {
             }
             return readMarkerIndexPath <= maxVisibleIndexPath
         }()
-
+        
         if isReadMarkerVisible != isVisible {
             isReadMarkerVisible = isVisible
         }
     }
-
+    
     private func sendLastVisibleItemReadReceipt() {
         // Find the last visible timeline item and send a read receipt for it
         guard let visibleIndexPaths = tableView.indexPathsForVisibleRows else {
@@ -520,9 +520,9 @@ extension TimelineTableViewController: UITableViewDelegate {
         // Dispatch to fix runtime warning about making changes during a view update.
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-
+            
             let isScrolledToBottom = scrollView.contentOffset.y <= 0
-
+            
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
             if self.isScrolledToBottom != isScrolledToBottom {
                 self.isScrolledToBottom = isScrolledToBottom
@@ -530,14 +530,14 @@ extension TimelineTableViewController: UITableViewDelegate {
                     self.hasNewMessagesAtBottom = false
                 }
             }
-
+            
             if !isScrolledToBottom {
                 updateFloatingDate()
             }
-
+            
             updateReadMarkerVisibility()
         }
-
+        
         // We never want the table view to be fully at the bottom to allow the status bar tap to work properly
         if scrollView.contentOffset.y == 0 {
             scrollView.contentOffset.y = -1

@@ -28,7 +28,7 @@ final class AppHooks: AppHooksProtocol {
     var compoundHook: CompoundHookProtocol {
         _compoundHook.withLock { $0 }
     }
-
+    
     func registerCompoundHook(_ hook: CompoundHookProtocol) {
         _compoundHook.withLock { $0 = hook }
     }

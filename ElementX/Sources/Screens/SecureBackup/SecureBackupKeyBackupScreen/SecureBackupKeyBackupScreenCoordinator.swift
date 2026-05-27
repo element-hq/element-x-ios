@@ -44,7 +44,7 @@ final class SecureBackupKeyBackupScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(SecureBackupKeyBackupScreen(context: viewModel.context))
     }

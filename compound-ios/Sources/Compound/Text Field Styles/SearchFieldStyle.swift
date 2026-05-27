@@ -77,7 +77,7 @@ struct SearchStyle_Previews: PreviewProvider, TestablePreview {
                     Text("Settings")
                         .compoundListSectionHeader()
                 }
-
+                
                 Section {
                     ListRow(label: .plain(title: "Some setting"),
                             kind: .toggle(.constant(true)))

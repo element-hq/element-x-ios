@@ -27,7 +27,7 @@ final class SpacesScreenCoordinator: CoordinatorProtocol {
     private let viewModel: SpacesScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<SpacesScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SpacesScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -58,7 +58,7 @@ final class SpacesScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(SpacesScreen(context: viewModel.context))
     }

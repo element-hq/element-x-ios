@@ -79,7 +79,7 @@ struct HomeScreenEmptyStateLayout: Layout {
         
         // Place the main view in the center if there is space, otherwise add it to the stack.
         guard let mainView else { return }
-
+        
         let mainViewSize = mainView.sizeThatFits(proposal)
         if (y + mainViewSize.height / 2) < bounds.height / 2 {
             let center = CGPoint(x: bounds.midX, y: bounds.midY)

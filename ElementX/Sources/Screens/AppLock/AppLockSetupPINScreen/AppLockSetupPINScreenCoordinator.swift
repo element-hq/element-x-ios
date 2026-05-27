@@ -60,7 +60,7 @@ final class AppLockSetupPINScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(AppLockSetupPINScreen(context: viewModel.context))
     }

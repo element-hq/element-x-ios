@@ -11,7 +11,7 @@ import MatrixRustSDK
 
 struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
     let appSettings: AppSettings
-
+    
     func buildTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                  initialFocussedEventID: String?,
                                  timelineItemFactory: RoomTimelineItemFactoryProtocol,

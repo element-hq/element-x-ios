@@ -20,9 +20,9 @@ import Foundation
             value = newValue
         }
     }
-
+    
     private var value: Value?
-
+    
     init(value: Value? = nil) {
         self.value = value
     }

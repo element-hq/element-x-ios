@@ -88,7 +88,7 @@ struct SessionVerificationScreenViewState: BindableState {
             return L10n.commonVerificationFailed
         }
     }
-        
+    
     var message: String {
         switch verificationState {
         case .initial, .acceptingVerificationRequest, .requestingVerification,
@@ -127,7 +127,7 @@ struct SessionVerificationScreenViewState: BindableState {
             return L10n.screenSessionVerificationFailedSubtitle
         }
     }
-        
+    
     var isWaiting: Bool {
         switch verificationState {
         case .acceptingVerificationRequest, .requestingVerification, .verificationRequestAccepted,

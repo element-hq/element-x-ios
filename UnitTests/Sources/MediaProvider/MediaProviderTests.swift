@@ -139,7 +139,7 @@ struct MediaProviderTests {
         let url = URL.mockMXCImage
         let key = "\(url.absoluteString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
         let expectedImage = try loadTestImage()
-
+        
         mediaLoader.loadMediaThumbnailForSourceWidthHeightReturnValue = expectedImage.pngData()
         
         _ = try await mediaProvider.loadImageFromSource(MediaSourceProxy(url: url, mimeType: "image/jpeg"),
@@ -151,7 +151,7 @@ struct MediaProviderTests {
     @Test
     func whenLoadImageFromSourceAndImageNotCachedAndRetrieveImageFailsAndNoAvatarSize_imageContentIsLoaded() async throws {
         let expectedImage = try loadTestImage()
-
+        
         mediaLoader.loadMediaContentForSourceReturnValue = expectedImage.pngData()
         
         let result = try await mediaProvider.loadImageFromSource(MediaSourceProxy(url: .mockMXCImage, mimeType: "image/jpeg"),

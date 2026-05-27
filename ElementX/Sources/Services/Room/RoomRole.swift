@@ -49,7 +49,7 @@ extension RoomRole {
             self = .user
         }
     }
-        
+    
     var isAdminOrHigher: Bool {
         switch self {
         case .administrator, .creator, .owner:

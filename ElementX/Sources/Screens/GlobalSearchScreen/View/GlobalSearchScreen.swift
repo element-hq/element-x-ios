@@ -134,7 +134,7 @@ private struct GlobalSearchTextFieldRepresentable: UIViewRepresentable {
     @Binding var text: String
     let keyPressHandler: (UIKeyboardHIDUsage) -> Bool
     let endEditingHandler: () -> Void
-
+    
     func makeUIView(context: Context) -> UITextField {
         let textField = GlobalSearchTextField(keyPressHandler: keyPressHandler)
         textField.delegate = context.coordinator
@@ -142,15 +142,15 @@ private struct GlobalSearchTextFieldRepresentable: UIViewRepresentable {
         textField.placeholder = placeholder
         return textField
     }
-
+    
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
     }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text, endEditingHandler: endEditingHandler)
     }
-
+    
     class Coordinator: NSObject, UITextFieldDelegate {
         var text: Binding<String>
         let endEditingHandler: () -> Void
@@ -188,7 +188,7 @@ private class GlobalSearchTextField: UITextField {
         self.keyPressHandler = keyPressHandler
         super.init(frame: .zero)
     }
-
+    
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         guard let key = presses.first?.key else {
             super.pressesBegan(presses, with: event)

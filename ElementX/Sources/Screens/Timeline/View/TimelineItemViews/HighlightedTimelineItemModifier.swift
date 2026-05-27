@@ -91,7 +91,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
     static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = {
         let appSettings = AppSettings.volatile()
-
+        
         return TimelineViewModel(roomProxy: roomProxyMock,
                                  focussedEventID: focussedEventID,
                                  timelineController: MockTimelineController(),
@@ -105,7 +105,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
-
+    
     static var previews: some View {
         ElementNavigationStack {
             RoomScreen(context: roomViewModel.context,

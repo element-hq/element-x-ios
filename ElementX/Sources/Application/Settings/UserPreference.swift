@@ -27,7 +27,7 @@ final class UserPreference<T: Codable> {
     private var remoteKey: String {
         "\(Self.remotePrefix)\(key)"
     }
-
+    
     private var keyedStorage: any KeyedStorage<T>
     private let defaultValue: T
     private let subject: PassthroughSubject<T, Never> = .init()
@@ -84,7 +84,7 @@ final class UserPreference<T: Codable> {
             }
         }
     }
-                
+    
     var projectedValue: AnyPublisher<T, Never> {
         subject
             .prepend(wrappedValue)
@@ -97,7 +97,7 @@ final class UserPreference<T: Codable> {
 extension UserPreference {
     convenience init(key: any PreferenceKeyable, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
         let storage: any KeyedStorage<T> = UserDefaultsStorage(userDefaults: backingStorage)
-
+        
         self.init(key: key, defaultValue: defaultValue, keyedStorage: storage, mode: mode)
     }
     

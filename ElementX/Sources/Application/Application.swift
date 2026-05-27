@@ -16,7 +16,7 @@ struct Application: App {
     @Environment(\.dismissWindow) private var dismissWindow
     
     private var appCoordinator: AppCoordinatorProtocol!
-
+    
     init() {
         if ProcessInfo.isRunningUITests {
             appCoordinator = UITestsAppCoordinator(appDelegate: appDelegate)
@@ -30,7 +30,7 @@ struct Application: App {
         
         SceneDelegate.windowManager = appCoordinator.windowManager
     }
-
+    
     var body: some Scene {
         WindowGroup(id: SceneDelegate.mainSceneID) {
             appCoordinator.toPresentable()
@@ -114,7 +114,7 @@ struct Application: App {
             openURLInSystemBrowser(url)
         }
     }
-
+    
     /// Hide the status bar so it doesn't interfere with the screenshot tests
     private var shouldHideStatusBar: Bool {
         ProcessInfo.isRunningUITests

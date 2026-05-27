@@ -439,7 +439,7 @@ class MockScreen: Identifiable {
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
-
+            
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomLayoutMiddle:
@@ -529,7 +529,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomWithDisclosedPolls:
             let navigationStackCoordinator = NavigationStackCoordinator()
-
+            
             let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.disclosedPolls
             timelineController.incomingItems = []
@@ -548,12 +548,12 @@ class MockScreen: Identifiable {
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
-
+            
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomWithUndisclosedPolls:
             let navigationStackCoordinator = NavigationStackCoordinator()
-
+            
             let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.undisclosedPolls
             timelineController.incomingItems = []
@@ -572,12 +572,12 @@ class MockScreen: Identifiable {
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
-
+            
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomWithOutgoingPolls:
             let navigationStackCoordinator = NavigationStackCoordinator()
-
+            
             let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.outgoingPolls
             timelineController.incomingItems = []
@@ -596,7 +596,7 @@ class MockScreen: Identifiable {
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
-
+            
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .sessionVerification:
@@ -632,7 +632,7 @@ class MockScreen: Identifiable {
             
             let appMediator = AppMediatorMock(.init())
             appMediator.underlyingWindowManager = windowManager
-
+            
             let flowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
@@ -650,7 +650,7 @@ class MockScreen: Identifiable {
                                                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                                                   notificationManager: NotificationManagerMock(),
                                                                                                   stateMachineFactory: StateMachineFactory()))
-
+            
             flowCoordinator.start()
             
             retainedState.append(flowCoordinator)
@@ -761,7 +761,7 @@ class MockScreen: Identifiable {
                                                                                userIndicatorController: userIndicatorController,
                                                                                navigationStackCoordinator: navigationStackCoordinator,
                                                                                windowManger: windowManager))
-
+            
             retainedState.append(coordinator)
             coordinator.start()
             
@@ -844,7 +844,7 @@ class MockScreen: Identifiable {
                                                                                                userIndicatorController: UserIndicatorControllerMock(),
                                                                                                notificationManager: NotificationManagerMock(),
                                                                                                stateMachineFactory: StateMachineFactory()))
-
+            
             flowCoordinator.start()
             
             retainedState.append(flowCoordinator)

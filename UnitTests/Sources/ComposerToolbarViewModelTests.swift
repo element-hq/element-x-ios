@@ -19,7 +19,7 @@ final class ComposerToolbarViewModelTests {
     private var viewModel: ComposerToolbarViewModel!
     private var completionSuggestionServiceMock: CompletionSuggestionServiceMock!
     private var draftServiceMock: ComposerDraftServiceMock!
-
+    
     init() {
         setUpViewModel()
     }

@@ -30,12 +30,12 @@ struct AppLockScreenViewState: BindableState {
     var numberOfDigitsEntered: Int {
         bindings.pinCode.count
     }
-
+    
     /// Whether the subtitle is in a warning state or not.
     var isSubtitleWarning: Bool {
         numberOfPINAttempts > 0
     }
-
+    
     /// The string shown in the screen's subtitle.
     var subtitle: String {
         if !isSubtitleWarning {

@@ -16,16 +16,16 @@ struct RoomScreen: View {
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
     let composerToolbar: ComposerToolbar
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
-
+    
     enum MarkAsReadSource {
         case up
         case down
     }
-
+    
     /// Which scroll button (if any) currently has the "Mark as read" pill displayed alongside it.
     /// Set when the user long-presses one of the scroll buttons; the pill anchors to that button.
     @State private var markAsReadSource: MarkAsReadSource?
-
+    
     init(context: RoomScreenViewModelType.Context,
          timelineContext: TimelineViewModelType.Context,
          composerToolbar: ComposerToolbar) {
@@ -33,7 +33,7 @@ struct RoomScreen: View {
         self.timelineContext = timelineContext
         self.composerToolbar = composerToolbar
     }
-
+    
     var body: some View {
         TimelineView(timelineContext: timelineContext)
             .overlay {
@@ -183,7 +183,7 @@ struct RoomScreen: View {
             }
         }
     }
-
+    
     private var markAsReadPill: some View {
         Button {
             timelineContext.send(viewAction: .markAllAsRead)
@@ -192,7 +192,7 @@ struct RoomScreen: View {
             markAsReadPillLabel
         }
     }
-
+    
     @ViewBuilder
     private var markAsReadPillLabel: some View {
         // Font scales with Dynamic Type via the Compound token; padding is a fixed point value
@@ -212,15 +212,15 @@ struct RoomScreen: View {
             label.background(.regularMaterial, in: Capsule())
         }
     }
-
+    
     private func revealMarkAsReadPill(source: MarkAsReadSource) {
         markAsReadSource = source
     }
-
+    
     private func dismissMarkAsReadPill() {
         markAsReadSource = nil
     }
-
+    
     /// Whether the scroll button that the pill is anchored to is still being rendered.
     /// Used to dismiss an orphaned pill when the source button gets hidden — without
     /// this, the pill can render alongside an invisible button. Returns `true` when no
@@ -232,13 +232,13 @@ struct RoomScreen: View {
         case .none: true
         }
     }
-
+    
     /// Hide the new-messages dot when the jump-to-read-marker feature is disabled.
     private var scrollToBottomShowsBadge: Bool {
         timelineContext.viewState.jumpToReadMarkerEnabled
             && timelineContext.viewState.bindings.hasNewMessagesAtBottom
     }
-
+    
     @ViewBuilder
     private var composer: some View {
         if context.viewState.hasSuccessor {
@@ -328,7 +328,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let readOnlyViewModels = makeViewModels(canSendMessage: false)
     static let tombstonedViewModels = makeViewModels(hasSuccessor: true)
     static let composerViewModel = ComposerToolbarViewModel.mock()
-
+    
     static var previews: some View {
         ElementNavigationStack {
             RoomScreen(context: viewModels.room.context,
@@ -361,7 +361,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                       successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil,
                                                       powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
-
+        
         let appSettings = AppSettings.volatile()
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                   timelineController: MockTimelineController(),

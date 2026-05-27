@@ -16,18 +16,18 @@ import Testing
 /// relying on that behavior.
 struct NotificationToneManagerTests {
     private let manager: NotificationToneManager
-
+    
     init() {
         manager = NotificationToneManager(appSettings: .volatile())
     }
-
+    
     // MARK: - Deletion
-
+    
     @Test
     func deletingSystemToneThrowsNotACustomTone() {
         // Given a system tone (lives outside the library directory)
         let tone = NotificationTone.createSystemSound(label: nil, filename: "alarm.caf")
-
+        
         // When deletion is attempted
         // Then it throws because only library tones may be deleted
         let error = #expect(throws: NotificationToneManager.ManagerError.self) {
@@ -36,12 +36,12 @@ struct NotificationToneManagerTests {
         
         #expect(error == .notACustomTone)
     }
-
+    
     @Test
     func deletingBundledToneThrowsNotACustomTone() {
         // Given a bundled app tone (lives outside the library directory)
         let tone = NotificationTone.createBundledSound(label: nil, filename: "message.caf")
-
+        
         // When deletion is attempted
         // Then it throws because only library tones may be deleted
         let error = #expect(throws: NotificationToneManager.ManagerError.self) {
@@ -50,9 +50,9 @@ struct NotificationToneManagerTests {
         
         #expect(error == .notACustomTone)
     }
-
+    
     // MARK: - Custom Tone Listing
-
+    
     @Test
     func customTonesFiltersToCAFOnly() throws {
         // Given both CAF and non-CAF files written to the library directory
@@ -64,17 +64,17 @@ struct NotificationToneManagerTests {
         }
         try Data().write(to: cafURL)
         try Data().write(to: mp3URL)
-
+        
         // When fetching the list of custom tones
         let tones = manager.customTones()
-
+        
         // Then only the CAF file is included
         #expect(tones.contains { $0.filename == cafURL.lastPathComponent })
         #expect(!tones.contains { $0.filename == mp3URL.lastPathComponent })
     }
-
+    
     // MARK: - Import
-
+    
     @Test
     func addingDuplicateToneThrowsFileAlreadyExists() async throws {
         // Given a CAF file that has already been imported into the library
@@ -88,7 +88,7 @@ struct NotificationToneManagerTests {
         }
         try Data().write(to: sourceURL)
         try await manager.addNewToneToLibrary(from: sourceURL)
-
+        
         // When importing the same file a second time
         // Then it throws ConversionError (specifically fileAlreadyExists)
         await #expect(throws: NotificationToneManager.ManagerError.self) {

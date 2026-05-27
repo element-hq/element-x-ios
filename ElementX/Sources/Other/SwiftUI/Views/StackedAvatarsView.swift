@@ -48,7 +48,7 @@ struct StackedAvatarsView_Previews: PreviewProvider, TestablePreview {
         .init(url: nil, name: "Charlie", contentID: "@charlie:matrix.org"),
         .init(url: nil, name: "Dan", contentID: "@charlie:matrix.org")
     ]
-
+    
     static var previews: some View {
         VStack(spacing: 10) {
             StackedAvatarsView(overlap: 16,

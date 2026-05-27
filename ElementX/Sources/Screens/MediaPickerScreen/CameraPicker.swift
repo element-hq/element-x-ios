@@ -29,7 +29,7 @@ struct CameraPicker: UIViewControllerRepresentable {
         self.userIndicatorController = userIndicatorController
         self.callback = callback
     }
-
+    
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .camera

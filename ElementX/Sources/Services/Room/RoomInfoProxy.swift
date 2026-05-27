@@ -15,28 +15,28 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var id: String {
         roomInfo.id
     }
-
+    
     var creators: [String] {
         roomInfo.creators ?? []
     }
-
+    
     var displayName: String? {
         roomInfo.displayName
     }
-
+    
     var rawName: String? {
         roomInfo.rawName
     }
-
+    
     var topic: String? {
         roomInfo.topic
     }
-
+    
     /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
     var avatarURL: URL? {
         roomInfo.avatarUrl.flatMap(URL.init)
     }
-
+    
     /// Here we're assuming unknown rooms are unencrypted.
     /// Fortunately https://github.com/matrix-org/matrix-rust-sdk/pull/4778 makes that very much of an edge case and we
     /// also automatically start a `latestEncryptionState` fetch if needed.
@@ -53,7 +53,7 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var isDM: Bool {
         roomInfo.isDm
     }
-
+    
     var isSpace: Bool {
         roomInfo.isSpace
     }
@@ -61,59 +61,59 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var successor: SuccessorRoom? {
         roomInfo.successorRoom
     }
-
+    
     var isFavourite: Bool {
         roomInfo.isFavourite
     }
-
+    
     var canonicalAlias: String? {
         roomInfo.canonicalAlias
     }
-
+    
     var alternativeAliases: [String] {
         roomInfo.alternativeAliases
     }
-
+    
     var membership: Membership {
         roomInfo.membership
     }
-
+    
     var inviter: RoomMemberProxyProtocol? {
         roomInfo.inviter.map(RoomMemberProxy.init)
     }
-
+    
     var heroes: [RoomHero] {
         roomInfo.heroes
     }
-
+    
     var activeMembersCount: Int {
         Int(roomInfo.activeMembersCount)
     }
-
+    
     var invitedMembersCount: Int {
         Int(roomInfo.invitedMembersCount)
     }
-
+    
     var joinedMembersCount: Int {
         Int(roomInfo.joinedMembersCount)
     }
-
+    
     var highlightCount: Int {
         Int(roomInfo.highlightCount)
     }
-
+    
     var notificationCount: Int {
         Int(roomInfo.notificationCount)
     }
-
+    
     var cachedUserDefinedNotificationMode: RoomNotificationMode? {
         roomInfo.cachedUserDefinedNotificationMode
     }
-
+    
     var hasRoomCall: Bool {
         roomInfo.hasRoomCall
     }
-
+    
     var activeRoomCallIntent: CallIntent? {
         switch roomInfo.activeRoomCallConsensusIntent {
         case .full(let intent):
@@ -128,35 +128,35 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var activeRoomCallParticipants: [String] {
         roomInfo.activeRoomCallParticipants
     }
-
+    
     var isMarkedUnread: Bool {
         roomInfo.isMarkedUnread
     }
-
+    
     var unreadMessagesCount: UInt {
         UInt(roomInfo.numUnreadMessages)
     }
-
+    
     var unreadNotificationsCount: UInt {
         UInt(roomInfo.numUnreadNotifications)
     }
-
+    
     var unreadMentionsCount: UInt {
         UInt(roomInfo.numUnreadMentions)
     }
-
+    
     var fullyReadEventID: String? {
         roomInfo.fullyReadEventId
     }
-
+    
     var pinnedEventIDs: Set<String> {
         Set(roomInfo.pinnedEventIds)
     }
-
+    
     var joinRule: JoinRule? {
         roomInfo.joinRule.map(JoinRule.init)
     }
-
+    
     var historyVisibility: RoomHistoryVisibility {
         roomInfo.historyVisibility
     }
@@ -174,39 +174,39 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var id: String {
         roomPreviewInfo.roomId
     }
-
+    
     var displayName: String? {
         roomPreviewInfo.name
     }
-
+    
     var heroes: [RoomHero] {
         roomPreviewInfo.heroes ?? []
     }
-
+    
     var topic: String? {
         roomPreviewInfo.topic
     }
-
+    
     var canonicalAlias: String? {
         roomPreviewInfo.canonicalAlias
     }
-
+    
     var avatarURL: URL? {
         roomPreviewInfo.avatarUrl.flatMap(URL.init)
     }
-
+    
     var isDirect: Bool {
         roomPreviewInfo.isDirect ?? false
     }
-
+    
     var isSpace: Bool {
         roomPreviewInfo.roomType == .space
     }
-
+    
     var activeMembersCount: Int {
         Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers)
     }
-
+    
     var joinedMembersCount: Int {
         Int(roomPreviewInfo.numJoinedMembers)
     }
@@ -214,7 +214,7 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var joinRule: JoinRule? {
         roomPreviewInfo.joinRule.map(JoinRule.init)
     }
-
+    
     var membership: Membership? {
         roomPreviewInfo.membership
     }

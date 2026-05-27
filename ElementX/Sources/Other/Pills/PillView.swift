@@ -21,7 +21,7 @@ struct PillView: View {
     var backgroundColor: Color {
         context.viewState.isOwnMention ? .compound.bgBadgeAccent : .compound.bgBadgePrimary
     }
-        
+    
     var body: some View {
         mainContent
             .onChange(of: context.viewState.displayText) {

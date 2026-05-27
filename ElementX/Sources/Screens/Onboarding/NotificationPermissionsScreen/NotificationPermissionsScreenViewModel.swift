@@ -24,7 +24,7 @@ class NotificationPermissionsScreenViewModel: NotificationPermissionsScreenViewM
         
         super.init(initialViewState: .init())
     }
-
+    
     // MARK: - Public
     
     override func process(viewAction: NotificationPermissionsScreenViewAction) {

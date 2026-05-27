@@ -145,7 +145,7 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
             .tint(.compound.iconAccentTertiary)
             .foregroundStyle(isEnabled ? .compound.textPrimary : .compound.textDisabled)
             .listRowInsets(ListRowPadding.textFieldInsets)
-        
+            
         case .custom(let content):
             content()
         }

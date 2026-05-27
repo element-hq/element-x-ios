@@ -39,7 +39,7 @@ struct SecureBackupKeyBackupScreen: View {
             disableBackupSection
         }
     }
-        
+    
     private var disableBackupSection: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {

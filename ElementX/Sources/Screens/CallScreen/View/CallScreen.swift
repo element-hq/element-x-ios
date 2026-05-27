@@ -196,7 +196,7 @@ private struct CallView: UIViewRepresentable {
                 guard let body = message.body as? [String: String],
                       let level = body["level"],
                       let logMessage = body["message"] else { return }
-
+                
                 switch level {
                 case "log", "debug":
                     MXLog.debug("[ElementCall]: \(logMessage)")
@@ -363,7 +363,7 @@ struct CallScreen_Previews: PreviewProvider {
         widgetDriver.startBaseURLClientIDColorSchemeVoiceOnlyRageshakeURLAnalyticsConfigurationReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
-
+        
         return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
                                    configuration: .init(roomProxy: roomProxy,
                                                         clientProxy: clientProxy,

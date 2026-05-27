@@ -16,15 +16,15 @@ struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatabl
     let canBeRepliedTo: Bool
     
     let sender: TimelineItemSender
-
+    
     let content: LocationRoomTimelineItemContent
     
     var properties = RoomTimelineItemProperties()
-
+    
     var body: String {
         content.body
     }
-
+    
     var contentType: EventBasedMessageTimelineItemContentType {
         .location(content)
     }

@@ -16,7 +16,7 @@ class BannedRoomProxy: BannedRoomProxyProtocol {
     lazy var ownUserID = room.ownUserId()
     
     let info: BaseRoomInfoProxyProtocol
-        
+    
     init(room: Room) async throws {
         self.room = room
         
