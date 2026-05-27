@@ -13,6 +13,9 @@ import Foundation
 import MatrixRustSDK
 
 class MockTimelineController: TimelineControllerProtocol {
+    private let lastInsertedMessageID: TimelineItemIdentifier = .event(uniqueID: .init("last_message"),
+                                                                       eventOrTransactionID: .eventID("last_message"))
+    
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
     var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
@@ -35,7 +38,12 @@ class MockTimelineController: TimelineControllerProtocol {
         }
     }
     
-    var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
+    var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default {
+        didSet {
+            callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
+        }
+    }
+
     var timelineItemsTimestamp: [TimelineItemIdentifier: Date] = [:]
     
     private var client: UITestsSignalling.Client?
@@ -122,7 +130,18 @@ class MockTimelineController: TimelineControllerProtocol {
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               message: String,
               html: String?,
-              intentionalMentions: IntentionalMentions) async { }
+              intentionalMentions: IntentionalMentions) async {
+        callbacks.send(.messageSentOrEdited)
+        
+        timelineItems[timelineItems.endIndex - 1] = TextRoomTimelineItem(id: lastInsertedMessageID,
+                                                                         timestamp: .distantFuture,
+                                                                         isOutgoing: true,
+                                                                         isEditable: true,
+                                                                         canBeRepliedTo: true,
+                                                                         sender: .test,
+                                                                         content: .init(body: message),
+                                                                         properties: .init(isEdited: true))
+    }
     
     func editCaption(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
                      message: String,
@@ -164,12 +183,24 @@ class MockTimelineController: TimelineControllerProtocol {
     func sendMessage(_ message: String,
                      html: String?,
                      inReplyToEventID: String?,
-                     intentionalMentions: IntentionalMentions) async { }
+                     intentionalMentions: IntentionalMentions) async {
+        callbacks.send(.messageSentOrEdited)
+        
+        timelineItems.append(TextRoomTimelineItem(id: lastInsertedMessageID,
+                                                  timestamp: .distantFuture,
+                                                  isOutgoing: true,
+                                                  isEditable: true,
+                                                  canBeRepliedTo: true,
+                                                  sender: .test,
+                                                  content: .init(body: message)))
+    }
     
     func sendAudio(url: URL,
                    audioInfo: MatrixRustSDK.AudioInfo,
                    caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        callbacks.send(.messageSentOrEdited)
+        
         if let timelineProxy {
             return await timelineProxy.sendAudio(url: url,
                                                  audioInfo: audioInfo,
@@ -184,6 +215,8 @@ class MockTimelineController: TimelineControllerProtocol {
                   fileInfo: MatrixRustSDK.FileInfo,
                   caption: String?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        callbacks.send(.messageSentOrEdited)
+        
         if let timelineProxy {
             return await timelineProxy.sendFile(url: url,
                                                 fileInfo: fileInfo,
@@ -199,6 +232,8 @@ class MockTimelineController: TimelineControllerProtocol {
                    imageInfo: MatrixRustSDK.ImageInfo,
                    caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        callbacks.send(.messageSentOrEdited)
+        
         if let timelineProxy {
             return await timelineProxy.sendImage(url: url,
                                                  thumbnailURL: thumbnailURL,
@@ -215,6 +250,8 @@ class MockTimelineController: TimelineControllerProtocol {
                       description: String?,
                       zoomLevel: UInt8?,
                       assetType: MatrixRustSDK.AssetType?) async -> Result<Void, TimelineControllerError> {
+        callbacks.send(.messageSentOrEdited)
+        
         if let timelineProxy {
             return await timelineProxy.sendLocation(body: body,
                                                     geoURI: geoURI,
@@ -231,6 +268,8 @@ class MockTimelineController: TimelineControllerProtocol {
                    videoInfo: MatrixRustSDK.VideoInfo,
                    caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        callbacks.send(.messageSentOrEdited)
+        
         if let timelineProxy {
             return await timelineProxy.sendVideo(url: url,
                                                  thumbnailURL: thumbnailURL,
@@ -246,6 +285,8 @@ class MockTimelineController: TimelineControllerProtocol {
                           audioInfo: MatrixRustSDK.AudioInfo,
                           waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        callbacks.send(.messageSentOrEdited)
+        
         if let timelineProxy {
             return await timelineProxy.sendVoiceMessage(url: url,
                                                         audioInfo: audioInfo,
@@ -259,6 +300,8 @@ class MockTimelineController: TimelineControllerProtocol {
     // MARK: - Polls
     
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        callbacks.send(.messageSentOrEdited)
+        
         if let timelineProxy {
             _ = await timelineProxy.createPoll(question: question, answers: answers, pollKind: pollKind)
         }
@@ -326,7 +369,6 @@ class MockTimelineController: TimelineControllerProtocol {
         
         let incomingItem = incomingItems.removeFirst()
         timelineItems.append(incomingItem)
-        callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
         
         try client?.send(.success)
     }
@@ -342,7 +384,6 @@ class MockTimelineController: TimelineControllerProtocol {
         
         let newItems = backPaginationResponses.removeFirst()
         timelineItems.insert(contentsOf: newItems, at: 0)
-        callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
         
         try client?.send(.success)
     }
