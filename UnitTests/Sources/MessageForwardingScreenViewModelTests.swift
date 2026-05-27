@@ -37,7 +37,7 @@ struct MessageForwardingScreenViewModelTests {
     @Test
     mutating func roomSelection() {
         context.send(viewAction: .selectRoom(roomID: "2"))
-        #expect(context.viewState.selectedRoomID == "2")
+        #expect(context.viewState.selectedRoomIDs == ["2"])
     }
     
     @Test
@@ -54,12 +54,12 @@ struct MessageForwardingScreenViewModelTests {
     @Test
     mutating func forwarding() async throws {
         context.send(viewAction: .selectRoom(roomID: "2"))
-        #expect(context.viewState.selectedRoomID == "2")
+        #expect(context.viewState.selectedRoomIDs == ["2"])
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
-            case .sent(let roomID):
-                return roomID == "2"
+            case .sent(let roomIDs):
+                return roomIDs == ["2"]
             default:
                 return false
             }

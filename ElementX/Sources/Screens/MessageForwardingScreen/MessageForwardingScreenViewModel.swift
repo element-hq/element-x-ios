@@ -63,7 +63,11 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         case .send:
             Task { await forward() }
         case .selectRoom(let roomID):
-            state.selectedRoomID = roomID
+            if let index = state.selectedRoomIDs.firstIndex(of: roomID) {
+                state.selectedRoomIDs.remove(at: index)
+            } else {
+                state.selectedRoomIDs.append(roomID)
+            }
         case .reachedTop:
             updateVisibleRange(edge: .top)
         case .reachedBottom:
@@ -114,23 +118,30 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     }
     
     private func forward() async {
-        guard let roomID = state.selectedRoomID else {
+        guard !state.selectedRoomIDs.isEmpty else {
             fatalError()
         }
         
-        guard case let .joined(targetRoomProxy) = await clientProxy.roomForIdentifier(roomID) else {
-            MXLog.error("Failed retrieving room to forward to with id: \(roomID)")
-            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            return
+        var succeededRoomIdentifiers = [String]()
+        
+        for roomID in state.selectedRoomIDs {
+            guard case let .joined(targetRoomProxy) = await clientProxy.roomForIdentifier(roomID) else {
+                MXLog.error("Failed retrieving room to forward to with id: \(roomID)")
+                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                continue
+            }
+            
+            if case .failure(let error) = await targetRoomProxy.timeline.sendMessageEventContent(forwardingItem.content) {
+                MXLog.error("Failed forwarding message with error: \(error)")
+                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                continue
+            }
+            
+            succeededRoomIdentifiers.append(roomID)
         }
         
-        if case .failure(let error) = await targetRoomProxy.timeline.sendMessageEventContent(forwardingItem.content) {
-            MXLog.error("Failed forwarding message with error: \(error)")
-            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            return
+        if !succeededRoomIdentifiers.isEmpty {
+            actionsSubject.send(.sent(roomIDs: succeededRoomIdentifiers))
         }
-        
-        // Timelines are cached - the local echo will be visible when fetching the room by its ID.
-        actionsSubject.send(.sent(roomID: roomID))
     }
 }
