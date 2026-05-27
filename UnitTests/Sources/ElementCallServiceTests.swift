@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import CallKit
 import Clocks
 @testable import ElementX
 import PushKit
@@ -110,22 +111,6 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func expiredRingLifetimeIsIgnored() {
-        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
-        
-        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
-        
-        currentDate = currentDate.addingTimeInterval(60)
-        
-        service.pushRegistry(pushRegistry,
-                             didReceiveIncomingPushWith: pushPayload,
-                             for: .voIP) { }
-        sleep(20)
-        
-        #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
-    }
-    
-    @Test
     func lifetimeIsCapped() async {
         await confirmation { confirmation in
             callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
@@ -222,6 +207,52 @@ final class ElementCallServiceTests {
         }
         
         #expect(!unansweredFired, "endUnansweredCallTask should have been cancelled by setupCallSession")
+    }
+    
+    @Test
+    func expiredPushReportsMissedCall() async {
+        // An expired push is a real call we missed, so it should show up in Recents as one.
+        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
+        currentDate = currentDate.addingTimeInterval(60)
+        await expectImmediatelyEndedCallReported(forPayload: pushPayload, expectedReason: .unanswered)
+        
+        let update = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update
+        #expect(update?.localizedCallerName == "welcome")
+        #expect(update?.remoteHandle?.value == "!room:example.com")
+    }
+    
+    @Test
+    func duplicateRoomPushReportsCallAsHandled() async {
+        // A duplicate push for an ongoing call is reported as handled, leaving the ongoing call alone.
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome")
+        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
+        await expectImmediatelyEndedCallReported(forPayload: pushPayload, expectedReason: .answeredElsewhere)
+        
+        // The call should be named so neither the brief system UI nor the Recents entry shows "Unknown".
+        let update = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update
+        #expect(update?.localizedCallerName == "welcome")
+        
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+    }
+    
+    private func expectImmediatelyEndedCallReported(forPayload payload: PKPushPayloadMock,
+                                                    expectedReason: CXCallEndedReason) async {
+        let baselineNewIncomingCount = callProvider.reportNewIncomingCallWithUpdateCompletionCallsCount
+        let baselineEndedCount = callProvider.reportCallWithEndedAtReasonCallsCount
+        
+        await confirmation { confirmation in
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) {
+                confirmation()
+            }
+        }
+        
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionCallsCount == baselineNewIncomingCount + 1)
+        #expect(callProvider.reportCallWithEndedAtReasonCallsCount == baselineEndedCount + 1)
+        
+        let reportedCall = callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments
+        let endedCall = callProvider.reportCallWithEndedAtReasonReceivedArguments
+        #expect(reportedCall?.uuid == endedCall?.uuid)
+        #expect(endedCall?.reason == expectedReason)
     }
 }
 
