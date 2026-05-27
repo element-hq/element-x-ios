@@ -8,7 +8,6 @@
 
 import Combine
 import Compound
-import Foundation
 import SwiftUI
 
 enum UserIndicatorType: Equatable {

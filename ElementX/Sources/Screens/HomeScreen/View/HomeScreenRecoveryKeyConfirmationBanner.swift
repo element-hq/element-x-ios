@@ -56,7 +56,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
     
     var content: some View {
         VStack(alignment: .leading, spacing: 4) {
-            HStack(alignment: .firstTextBaseline, spacing: 16) {
+            HStack(alignment: .center, spacing: 16) {
                 Text(title)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textPrimary)
@@ -66,7 +66,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
                     Button {
                         context.send(viewAction: .skipRecoveryKeyConfirmation)
                     } label: {
-                        CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyMD)
+                        CompoundIcon(\.close, size: .medium, relativeTo: .compound.bodyLGSemibold)
                             .foregroundColor(.compound.iconSecondary)
                     }
                 }

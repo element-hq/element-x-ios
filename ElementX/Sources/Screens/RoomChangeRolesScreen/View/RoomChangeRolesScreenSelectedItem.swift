@@ -15,21 +15,12 @@ struct RoomChangeRolesScreenSelectedItem: View {
     let dismissAction: (() -> Void)?
     
     var body: some View {
-        mainContent
-            .accessibilityActions {
-                if let dismissAction {
-                    Button(L10n.actionDismiss) {
-                        dismissAction()
-                    }
-                }
-            }
-    }
-    
-    // MARK: - Private
-    
-    private var mainContent: some View {
         VStack(spacing: 4) {
-            avatar
+            if let dismissAction {
+                avatar.overlayRemoveItemButton(action: dismissAction)
+            } else {
+                avatar
+            }
             
             Text(member.name ?? member.id)
                 .font(.compound.bodyMD)
@@ -37,6 +28,13 @@ struct RoomChangeRolesScreenSelectedItem: View {
                 .lineLimit(1)
         }
         .accessibilityElement(children: .combine)
+        .accessibilityActions {
+            if let dismissAction {
+                Button(L10n.actionDismiss) {
+                    dismissAction()
+                }
+            }
+        }
     }
     
     var avatar: some View {
@@ -46,18 +44,6 @@ struct RoomChangeRolesScreenSelectedItem: View {
                             avatarSize: .user(on: .roomChangeRoles),
                             mediaProvider: mediaProvider)
             .accessibilityHidden(true)
-            .overlay(alignment: .topTrailing) {
-                if let dismissAction {
-                    Button(action: dismissAction) {
-                        CompoundIcon(\.close, size: .xSmall, relativeTo: .compound.bodyMD)
-                            .foregroundColor(.compound.iconOnSolidPrimary)
-                            .background(Circle().fill(Color.compound.iconPrimary))
-                    }
-                    // We will use the accessibility action
-                    .accessibilityHidden(true)
-                    .offset(x: 4)
-                }
-            }
     }
 }
 
