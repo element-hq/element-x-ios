@@ -25,7 +25,7 @@ final class ResolveVerifiedUserSendFailureScreenCoordinator: CoordinatorProtocol
     private let viewModel: ResolveVerifiedUserSendFailureScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<ResolveVerifiedUserSendFailureScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ResolveVerifiedUserSendFailureScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -52,7 +52,7 @@ final class ResolveVerifiedUserSendFailureScreenCoordinator: CoordinatorProtocol
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(ResolveVerifiedUserSendFailureScreen(context: viewModel.context))
     }

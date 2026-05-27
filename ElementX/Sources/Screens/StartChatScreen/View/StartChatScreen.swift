@@ -44,9 +44,9 @@ struct StartChatScreen: View {
             JoinRoomByAddressView(context: context)
         }
     }
-
+    
     // MARK: - Private
-
+    
     /// The content shown in the form when the search query is empty.
     @ViewBuilder
     private var mainContent: some View {

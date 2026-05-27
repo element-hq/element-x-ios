@@ -19,7 +19,7 @@ class RoomThreadListScreenViewModel: RoomThreadListScreenViewModelType, RoomThre
     var actionsPublisher: AnyPublisher<RoomThreadListScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(threadListServiceProxy: RoomThreadListServiceProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.threadListServiceProxy = threadListServiceProxy
         

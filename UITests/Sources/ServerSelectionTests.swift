@@ -17,7 +17,7 @@ class ServerSelectionUITests: XCTestCase {
         // Then it should be configured for matrix.org
         try await app.assertScreenshot()
     }
-
+    
     func testEmptyAddress() async throws {
         // Given the initial server selection screen as a modal.
         let app = Application.launch(.serverSelection)
@@ -29,7 +29,7 @@ class ServerSelectionUITests: XCTestCase {
         // Then the screen should not allow the user to continue.
         try await app.assertScreenshot()
     }
-
+    
     func testInvalidAddress() async throws {
         // Given the initial server selection screen as a modal.
         let app = Application.launch(.serverSelection)

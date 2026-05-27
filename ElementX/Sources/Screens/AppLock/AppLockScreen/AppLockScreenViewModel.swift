@@ -18,7 +18,7 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
     var actions: AnyPublisher<AppLockScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(appLockService: AppLockServiceProtocol) {
         self.appLockService = appLockService
         

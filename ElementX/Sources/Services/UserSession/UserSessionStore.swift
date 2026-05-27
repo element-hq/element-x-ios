@@ -20,7 +20,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     var hasSessions: Bool {
         !keychainController.restorationTokens().isEmpty
     }
-
+    
     /// All the user IDs managed by the store.
     var userIDs: [String] {
         keychainController.restorationTokens().map(\.userID)
@@ -100,7 +100,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             credentials.restorationToken.sessionDirectories.delete()
         }
     }
-        
+    
     // MARK: - Private
     
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) async -> UserSessionProtocol {

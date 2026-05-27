@@ -17,7 +17,7 @@ extension CommonSettingsProtocol {
             return UNNotificationSoundName(NotificationToneManager.selectedToneFilename)
         }
     }
-
+    
     /// A `UNNotificationSound` built from `notificationSoundName`, ready to attach to a notification content object.
     var notificationSound: UNNotificationSound {
         UNNotificationSound(named: notificationSoundName)

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct SnapshotPrecisionPreferenceKey: PreferenceKey {
     static var defaultValue: Float = 1.0
-
+    
     static func reduce(value: inout Float, nextValue: () -> Float) {
         value = nextValue()
     }
@@ -19,7 +19,7 @@ struct SnapshotPrecisionPreferenceKey: PreferenceKey {
 
 struct SnapshotPerceptualPrecisionPreferenceKey: PreferenceKey {
     static var defaultValue: Float = 0.98
-
+    
     static func reduce(value: inout Float, nextValue: () -> Float) {
         value = nextValue()
     }

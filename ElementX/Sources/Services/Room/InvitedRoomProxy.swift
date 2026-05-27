@@ -18,7 +18,7 @@ class InvitedRoomProxy: InvitedRoomProxyProtocol {
     
     let info: BaseRoomInfoProxyProtocol
     let inviter: RoomMemberProxyProtocol?
-            
+    
     init(room: Room) async throws {
         self.room = room
         

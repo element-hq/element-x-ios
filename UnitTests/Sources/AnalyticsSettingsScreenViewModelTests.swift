@@ -13,7 +13,7 @@ import Testing
 final class AnalyticsSettingsScreenViewModelTests {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
-
+    
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
@@ -22,7 +22,7 @@ final class AnalyticsSettingsScreenViewModelTests {
         let client = AnalyticsClientMock()
         client.isRunning = false
         analytics = AnalyticsService(client: client, appSettings: appSettings)
-
+        
         viewModel = AnalyticsSettingsScreenViewModel(appSettings: appSettings,
                                                      analytics: analytics)
         context = viewModel.context
@@ -32,7 +32,7 @@ final class AnalyticsSettingsScreenViewModelTests {
     func initialState() {
         #expect(!context.enableAnalytics)
     }
-
+    
     @Test
     func optIn() {
         appSettings.analyticsConsentState = .optedOut

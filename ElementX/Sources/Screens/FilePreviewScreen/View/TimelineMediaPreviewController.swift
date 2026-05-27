@@ -27,7 +27,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var navigationBar: UINavigationBar? {
         view.subviews.first?.subviews.first { $0 is UINavigationBar } as? UINavigationBar
     }
-
+    
     private var bottomBarItemsContainer: UIView? {
         if #available(iOS 26, *) {
             view.subviews.first?.subviews.last?.subviews.first
@@ -35,11 +35,11 @@ class TimelineMediaPreviewController: QLPreviewController {
             view.subviews.first?.subviews.last { $0 is UIToolbar }
         }
     }
-
+    
     private var pageScrollView: UIScrollView? {
         view.firstScrollView()
     }
-
+    
     private var captionView: UIView {
         captionHostingController.view
     }
@@ -316,7 +316,7 @@ private struct CaptionView: View {
     private var currentItem: TimelineMediaPreviewItem {
         context.viewState.currentItem
     }
-
+    
     var body: some View {
         if case let .media(mediaItem) = currentItem, mediaItem.hasCaption {
             CaptionScrollView(mediaItem: mediaItem)
@@ -361,7 +361,7 @@ private struct CaptionScrollView: View {
                 .ignoresSafeArea()
         }
     }
-
+    
     @ViewBuilder
     private var captionContent: some View {
         if let formattedCaption = mediaItem.formattedCaption {

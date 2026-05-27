@@ -16,7 +16,7 @@ final class MediaUploadPreviewScreenViewModelTests {
     var clientProxy: ClientProxyMock!
     var userIndicatorController: UserIndicatorControllerMock
     private let appSettings: AppSettings
-
+    
     var viewModel: MediaUploadPreviewScreenViewModel!
     var context: MediaUploadPreviewScreenViewModel.Context {
         viewModel.context
@@ -30,7 +30,7 @@ final class MediaUploadPreviewScreenViewModelTests {
     init() {
         appSettings = AppSettings.volatile()
         appSettings.optimizeMediaUploads = false
-
+        
         userIndicatorController = UserIndicatorControllerMock()
     }
     
@@ -286,7 +286,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         if let maxUploadSizeResult {
             clientProxy.underlyingMaxMediaUploadSize = maxUploadSizeResult
         }
-
+        
         viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: urls,
                                                       caption: nil,
                                                       title: "Some File",

@@ -26,7 +26,7 @@ final class RoomChangeRolesScreenCoordinator: CoordinatorProtocol {
     private let viewModel: RoomChangeRolesScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<RoomChangeRolesScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomChangeRolesScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -54,7 +54,7 @@ final class RoomChangeRolesScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomChangeRolesScreen(context: viewModel.context))
     }

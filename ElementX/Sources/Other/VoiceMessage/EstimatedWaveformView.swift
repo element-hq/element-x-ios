@@ -20,7 +20,7 @@ extension EstimatedWaveform {
         guard maxSamplesCount > 0 else {
             return []
         }
-
+        
         // Filter the data to keep only the expected number of samples
         let result: [UInt16]
         if data.count > maxSamplesCount {
@@ -32,7 +32,7 @@ extension EstimatedWaveform {
         } else {
             result = data
         }
-
+        
         // Normalize the sample in the allowed range
         return result.map { Float($0) / Float(Self.dataRange.upperBound) }
     }

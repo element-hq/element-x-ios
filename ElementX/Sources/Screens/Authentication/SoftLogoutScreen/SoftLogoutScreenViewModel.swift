@@ -17,7 +17,7 @@ class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreen
     var actions: AnyPublisher<SoftLogoutScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(credentials: SoftLogoutScreenCredentials,
          homeserver: LoginHomeserver,
          keyBackupNeeded: Bool,
@@ -45,7 +45,7 @@ class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreen
             Task { state.window = window }
         }
     }
-
+    
     @MainActor func displayError(_ type: SoftLogoutScreenErrorType) {
         switch type {
         case .alert(let message):

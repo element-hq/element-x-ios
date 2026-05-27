@@ -279,7 +279,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             displayManageAuthorizedSpacesScreen(isAskToJoin: true)
         }
     }
-
+    
     private func displayManageAuthorizedSpacesScreen(isAskToJoin: Bool) {
         let joinedSpaces = state.selectableJoinedSpaces
         let unknownSpaceIDs = state.currentSettings.accessType.spaceIDs.filter { id in

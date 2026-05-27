@@ -16,9 +16,9 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
             scrollView?.delegate = self
         }
     }
-
+    
     var shouldScrollToTopClosure: ((UIScrollView) -> Bool)?
-
+    
     private let didScrollSubject = PassthroughSubject<Void, Never>()
     var didScroll: AnyPublisher<Void, Never> {
         didScrollSubject.eraseToAnyPublisher()
@@ -54,7 +54,7 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         updateDidScroll(scrollView)
     }
-        
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         updateDidScroll(scrollView)
     }
@@ -62,7 +62,7 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         updateDidScroll(scrollView)
     }
-
+    
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         guard let shouldScrollToTopClosure else {
             // Default behaviour

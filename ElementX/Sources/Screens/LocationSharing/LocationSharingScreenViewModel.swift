@@ -46,7 +46,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenter = notificationCenter
-
+        
         super.init(initialViewState: .init(interactionMode: interactionMode,
                                            mapURLBuilder: mapURLBuilder,
                                            ownUserID: roomProxy.ownUserID),
@@ -338,7 +338,7 @@ extension LocationSharingScreenViewModel {
         case viewLive
         case viewLiveEmpty
     }
-
+    
     static func mock(type: MockType,
                      senderID: String = "@dan:matrix.org") -> LocationSharingScreenViewModel {
         let interactionMode: LocationSharingInteractionMode = switch type {
@@ -388,7 +388,7 @@ extension LocationSharingScreenViewModel {
         let liveLocationServiceMock = RoomLiveLocationServiceMock(.init(shares: liveLocationShares))
         let roomProxy = JoinedRoomProxyMock(.init(members: .allMembers, ownUserID: RoomMemberProxyMock.mockMe.userID))
         roomProxy.makeLiveLocationServiceReturnValue = liveLocationServiceMock
-
+        
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
                                               mapURLBuilder: AppSettings.volatile().mapTilerConfiguration,
                                               roomProxy: roomProxy,

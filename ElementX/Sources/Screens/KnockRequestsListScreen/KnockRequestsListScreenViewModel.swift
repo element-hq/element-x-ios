@@ -19,7 +19,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     var actionsPublisher: AnyPublisher<KnockRequestsListScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {

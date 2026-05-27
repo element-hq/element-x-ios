@@ -113,7 +113,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         actionsSubject.send(.requestPresentation(animated: !isNewLogin))
-
+        
         stateMachine.tryEvent(.next)
     }
     
@@ -203,7 +203,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.notificationPermissions, _, _, _, _):
                 return .finished
-            
+                
             default:
                 return nil
             }
@@ -381,7 +381,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         appLockFlowCoordinator = coordinator
         coordinator.start()
     }
-
+    
     private func presentAnalyticsPromptScreen() {
         let coordinator = AnalyticsPromptScreenCoordinator(analytics: analyticsService, termsURL: appSettings.analyticsTermsURL)
         

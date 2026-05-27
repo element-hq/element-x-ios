@@ -22,7 +22,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     var actions: AnyPublisher<RoomNotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(notificationSettingsProxy: NotificationSettingsProxyProtocol, roomProxy: JoinedRoomProxyProtocol, displayAsUserDefinedRoomSettings: Bool) {
         let bindings = RoomNotificationSettingsScreenViewStateBindings()
         self.notificationSettingsProxy = notificationSettingsProxy
@@ -37,7 +37,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
         setupNotificationSettingsSubscription()
         fetchNotificationSettings()
     }
-        
+    
     // MARK: - Public
     
     override func process(viewAction: RoomNotificationSettingsScreenViewAction) {
@@ -54,7 +54,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     }
     
     // MARK: - Private
-
+    
     private func setupNotificationSettingsSubscription() {
         notificationSettingsProxy.callbacks
             .receive(on: DispatchQueue.main)
@@ -152,7 +152,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,
                                                  message: L10n.screenRoomNotificationSettingsErrorSettingMode)
-
+            
         case .restoreDefaultFailed:
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,

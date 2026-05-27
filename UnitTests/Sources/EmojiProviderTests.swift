@@ -24,7 +24,7 @@ struct EmojiProviderTests {
         let categories = await emojiProvider.categories()
         #expect(emojiLoaderMock.categories == categories)
     }
-
+    
     @Test @MainActor
     func emojisLoadedAndSearchStringEmptyAllCategoriesReturned() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])
@@ -38,7 +38,7 @@ struct EmojiProviderTests {
         let categories = await emojiProvider.categories(searchString: "")
         #expect(emojiLoaderMock.categories == categories)
     }
-
+    
     @Test @MainActor
     func emojisLoadedSecondTimeCachedValuesAreUsed() async {
         let item = EmojiItem(label: "test", unicode: "test", keywords: ["1", "2"], shortcodes: ["1", "2"])

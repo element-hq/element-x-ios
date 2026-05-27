@@ -19,7 +19,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
     var actions: AnyPublisher<SecureBackupScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(secureBackupController: SecureBackupControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          chatBackupDetailsURL: URL) {

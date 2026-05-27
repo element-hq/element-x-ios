@@ -32,7 +32,7 @@ final class LeaveSpaceHandleProxy {
             true
         }
     }
-
+    
     var selectedCount: Int {
         rooms.count { $0.isSelected }
     }

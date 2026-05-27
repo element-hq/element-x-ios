@@ -22,7 +22,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     var actions: AnyPublisher<ServerSelectionScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(authenticationService: AuthenticationServiceProtocol,
          authenticationFlow: AuthenticationFlow,
          appSettings: AppSettings,

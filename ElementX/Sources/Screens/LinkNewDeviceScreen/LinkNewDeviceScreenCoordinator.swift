@@ -24,7 +24,7 @@ final class LinkNewDeviceScreenCoordinator: CoordinatorProtocol {
     private let orientationManager: OrientationManagerProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<LinkNewDeviceScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<LinkNewDeviceScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -58,7 +58,7 @@ final class LinkNewDeviceScreenCoordinator: CoordinatorProtocol {
     func stop() {
         orientationManager.lockOrientation(.all)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(LinkNewDeviceScreen(context: viewModel.context))
     }

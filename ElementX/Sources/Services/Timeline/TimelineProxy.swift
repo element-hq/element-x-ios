@@ -24,7 +24,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let forwardPaginationStateSubject = CurrentValueSubject<PaginationState, Never>(.endReached)
     
     private let kind: TimelineKind
-   
+    
     private var innerTimelineItemProvider: TimelineItemProviderProtocol!
     var timelineItemProvider: TimelineItemProviderProtocol {
         innerTimelineItemProvider
@@ -146,7 +146,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             case .forwards: try await timeline.paginateForwards(numEvents: requestSize)
             }
             MXLog.info("Finished paginating \(direction.rawValue)")
-
+            
             subject.send(timelineEndReached ? .endReached : .idle)
             return .success(())
         } catch {
@@ -170,7 +170,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             try await timeline.edit(eventOrTransactionId: eventOrTransactionID.rustValue, newContent: newContent)
             
             MXLog.info("Finished editing timeline item: \(eventOrTransactionID)")
-
+            
             return .success(())
         } catch {
             MXLog.error("Failed editing timeline item: \(eventOrTransactionID) with error: \(error)")
@@ -412,10 +412,10 @@ final class TimelineProxy: TimelineProxyProtocol {
             } else {
                 MXLog.error("Failed sending message with error: \(error)")
             }
-                
+            
             return .failure(.sdkError(error))
         }
-            
+        
         return .success(())
     }
     
@@ -473,7 +473,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     // MARK: - Polls
-
+    
     func createPoll(question: String, answers: [String],
                     pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Creating poll")
@@ -528,7 +528,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending response for poll with eventID: \(pollStartID)")
         
@@ -543,7 +543,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-        
+    
     func buildMessageContentFor(_ message: String,
                                 html: String?,
                                 intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation {

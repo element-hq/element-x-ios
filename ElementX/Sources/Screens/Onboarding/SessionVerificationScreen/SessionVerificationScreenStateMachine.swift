@@ -71,7 +71,7 @@ class SessionVerificationScreenStateMachine {
     var state: State {
         stateMachine.state
     }
-
+    
     init(state: State) {
         stateMachine = StateMachine(state: state)
         configure()

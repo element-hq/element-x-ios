@@ -21,21 +21,21 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
         case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerTitle
         }
     }
-
+    
     var message: String {
         switch state {
         case .setUpRecovery: L10n.bannerSetUpRecoveryContent
         case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerMessage
         }
     }
-
+    
     var actionTitle: String {
         switch state {
         case .setUpRecovery: L10n.bannerSetUpRecoverySubmit
         case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerPrimaryButtonTitle
         }
     }
-
+    
     var primaryAction: HomeScreenViewAction {
         switch state {
         case .setUpRecovery: .setupRecovery
@@ -119,7 +119,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, Testab
                                                 roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loading))))
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-
+        
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: .volatile(),

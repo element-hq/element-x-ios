@@ -18,7 +18,7 @@ struct RoomMemberDetailsViewModelTests {
     var context: RoomMemberDetailsScreenViewModelType.Context {
         viewModel.context
     }
-
+    
     @Test
     mutating func initialState() async throws {
         setup(roomMemberProxyMock: .mockAlice)
@@ -30,7 +30,7 @@ struct RoomMemberDetailsViewModelTests {
         #expect(context.ignoreUserAlert == nil)
         #expect(context.alertInfo == nil)
     }
-
+    
     @Test
     mutating func ignoreSuccess() async throws {
         setup(roomMemberProxyMock: .mockAlice)
@@ -53,7 +53,7 @@ struct RoomMemberDetailsViewModelTests {
         try await Task.sleep(for: .milliseconds(100))
         #expect(roomProxyMock.updateMembersCalled)
     }
-
+    
     @Test
     mutating func ignoreFailure() async throws {
         let clientProxy = ClientProxyMock(.init())
@@ -79,7 +79,7 @@ struct RoomMemberDetailsViewModelTests {
         try await Task.sleep(for: .milliseconds(100))
         #expect(!roomProxyMock.updateMembersCalled)
     }
-
+    
     @Test
     mutating func unignoreSuccess() async throws {
         setup(roomMemberProxyMock: .mockIgnored)
@@ -102,7 +102,7 @@ struct RoomMemberDetailsViewModelTests {
         try await Task.sleep(for: .milliseconds(100))
         #expect(roomProxyMock.updateMembersCalled)
     }
-
+    
     @Test
     mutating func unignoreFailure() async throws {
         let clientProxy = ClientProxyMock(.init())
@@ -128,7 +128,7 @@ struct RoomMemberDetailsViewModelTests {
         try await Task.sleep(for: .milliseconds(100))
         #expect(!roomProxyMock.updateMembersCalled)
     }
-
+    
     @Test
     mutating func initialStateAccountOwner() async throws {
         setup(roomMemberProxyMock: .mockMe)
@@ -140,7 +140,7 @@ struct RoomMemberDetailsViewModelTests {
         #expect(context.ignoreUserAlert == nil)
         #expect(context.alertInfo == nil)
     }
-
+    
     @Test
     mutating func initialStateIgnoredUser() async throws {
         setup(roomMemberProxyMock: .mockIgnored)
@@ -154,7 +154,7 @@ struct RoomMemberDetailsViewModelTests {
     }
     
     // MARK: - History Sharing
-
+    
     @Test
     mutating func inviteConfirmationFetchesIdentity() async throws {
         let clientProxy = ClientProxyMock(.init())
@@ -196,9 +196,9 @@ struct RoomMemberDetailsViewModelTests {
         
         #expect(clientProxy.userIdentityForFallBackToServerCalled)
     }
-
+    
     // MARK: - Helpers
-
+    
     private mutating func setup(roomMemberProxyMock: RoomMemberProxyMock, clientProxy: ClientProxyMock? = nil) {
         self.roomMemberProxyMock = roomMemberProxyMock
         roomProxyMock = JoinedRoomProxyMock(.init(name: ""))

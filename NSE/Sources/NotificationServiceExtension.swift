@@ -53,11 +53,11 @@ final class NotificationServiceExtension: UNNotificationServiceExtension {
 
 actor NotificationServiceExtensionActor {
     static let receivedWhileOfflineNotificationID = "io.element.elementx.receivedWhileOfflineNotification"
-
+    
     /// Process-wide target configuration, `Mutex`-protected so it can be read/written from any
     /// thread (in particular, from the actor's synchronous `init` without spawning a Task).
     private static let targetConfiguration = Mutex<Target.ConfigurationResult?>(nil)
-
+    
     @MainActor
     private static var hasHandledFirstNotificationSinceBoot = false
     
@@ -72,7 +72,7 @@ actor NotificationServiceExtensionActor {
     private nonisolated(unsafe) var notificationHandler: NotificationHandler?
     private let keychainController = KeychainController(service: .sessions,
                                                         accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        
+    
     deinit {
         ExtensionLogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
@@ -86,7 +86,7 @@ actor NotificationServiceExtensionActor {
         
         appHooks = AppHooks()
         appHooks.setUp()
-
+        
         // If the device is still locked then we can't write to the app group container and
         // the target configuration will fail. We could call exit(0) here, however with the
         // notification filtering entitlement that results in the notification being discarded
@@ -260,13 +260,13 @@ actor NotificationServiceExtensionActor {
         content.body = L10n.notificationReceivedWhileOfflineIos
         content.badge = originalRequest.content.unreadCount as NSNumber?
         content.sound = settings.notificationSound
-
+        
         let request = UNNotificationRequest(identifier: Self.receivedWhileOfflineNotificationID, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
     }
     
     // MARK: - Logging
-
+    
     private nonisolated var tag: String {
         "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())][\(ProcessInfo.processInfo.processIdentifier)]"
     }

@@ -52,7 +52,7 @@ struct ServerConfirmationScreenViewState: BindableState {
     /// The message shown beneath the title.
     var message: String? {
         guard case let .confirmation(homeserverAddress) = mode else { return nil }
-
+        
         return switch authenticationFlow {
         case .login:
             if homeserverAddress == "matrix.org" {

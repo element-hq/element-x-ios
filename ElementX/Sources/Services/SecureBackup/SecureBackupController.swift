@@ -154,7 +154,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             return .failure(.failedConfirmingRecoveryKey)
         }
     }
-        
+    
     func waitForKeyBackupUpload(uploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError> {
         do {
             MXLog.info("Waiting for backup upload steady state")

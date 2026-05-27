@@ -28,7 +28,7 @@ struct SpaceRoomCell: View {
     private var isEditModeActive: Bool {
         editMode?.wrappedValue ?? .inactive != .inactive
     }
-
+    
     private var isHighlighted: Bool {
         isSelected && !isEditModeActive
     }

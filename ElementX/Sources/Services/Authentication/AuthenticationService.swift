@@ -25,7 +25,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> {
         homeserverSubject.asCurrentValuePublisher()
     }
-
+    
     private(set) var flow: AuthenticationFlow
     
     let classicAppAccount: ClassicAppAccount?
@@ -195,7 +195,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             progressSubject.send(completion: .failure(.qrCodeError(.deviceNotSignedIn)))
             return progressSubject.asCurrentValuePublisher()
         }
-
+        
         // n.b. We deliberatley don't check whether the received server is in our appSettings.accountProviders
         
         let listener = SDKListener { progress in
@@ -382,7 +382,7 @@ extension AuthenticationService {
     static var mock: AuthenticationService {
         mock(classicAppManager: nil)
     }
-
+    
     static func mock(classicAppManager: ClassicAppManagerProtocol?) -> AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),

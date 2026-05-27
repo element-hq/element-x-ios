@@ -28,7 +28,7 @@ struct KnockRequestsListScreenViewState: BindableState {
             false
         }
     }
-
+    
     // If you are in this view one of these must have been true so by default we assume all of them to be true
     var canAccept = true
     var canDecline = true

@@ -22,13 +22,13 @@ private struct ProgressMaskModifier: ViewModifier {
     private let progress: CGFloat
     private let trackColor: Color
     private let backgroundTrackColor: Color
-
+    
     init(progress: CGFloat, trackColor: Color, backgroundTrackColor: Color) {
         self.progress = progress
         self.trackColor = trackColor
         self.backgroundTrackColor = backgroundTrackColor
     }
-
+    
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {

@@ -354,7 +354,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         }
     }
-        
+    
     private func updateRooms() {
         guard let roomSummaryProvider else {
             MXLog.error("Room summary provider unavailable")

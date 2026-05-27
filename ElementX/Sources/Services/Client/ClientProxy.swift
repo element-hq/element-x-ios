@@ -27,7 +27,7 @@ class ClientProxy: ClientProxyProtocol {
     private var roomListStateUpdateTaskHandle: TaskHandle?
     // periphery: ignore - only for retain
     private var roomListStateLoadingStateUpdateTaskHandle: TaskHandle?
-
+    
     private var syncService: SyncService
     // periphery: ignore - only for retain
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
@@ -46,7 +46,7 @@ class ClientProxy: ClientProxyProtocol {
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var mediaPreviewConfigListenerTaskHandle: TaskHandle?
-
+    
     // periphery:ignore - required for instance retention in the rust codebase
     private var liveLocationOwnInfoUpdatesListenerTaskHandle: TaskHandle?
     
@@ -60,7 +60,7 @@ class ClientProxy: ClientProxyProtocol {
     private(set) var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol
     
     let notificationSettings: NotificationSettingsProxyProtocol
-
+    
     let secureBackupController: SecureBackupControllerProtocol
     
     private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol?
@@ -128,7 +128,7 @@ class ClientProxy: ClientProxyProtocol {
               users: [:],
               events: [:])
     }
-
+    
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let userAvatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
     var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> {
@@ -191,12 +191,12 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     var roomsToAwait: Set<String> = []
-
+    
     private let liveLocationOwnInfoUpdatesSubject = PassthroughSubject<LiveLocationOwnInfoUpdate, Never>()
     var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> {
         liveLocationOwnInfoUpdatesSubject.eraseToAnyPublisher()
     }
-
+    
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
@@ -240,7 +240,7 @@ class ClientProxy: ClientProxyProtocol {
         syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
         roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
         roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
-                
+        
         delegateHandle = try client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
             self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
@@ -278,7 +278,7 @@ class ClientProxy: ClientProxyProtocol {
         Task {
             mediaPreviewConfigListenerTaskHandle = await createMediaPreviewConfigObserver()
         }
-
+        
         liveLocationOwnInfoUpdatesListenerTaskHandle = createLiveLocationOwnInfoUpdatesObserver()
     }
     
@@ -290,7 +290,7 @@ class ClientProxy: ClientProxyProtocol {
             return "Unknown user identifier"
         }
     }
-
+    
     var deviceID: String? {
         do {
             return try client.deviceId()
@@ -299,7 +299,7 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
     }
-
+    
     var homeserver: String {
         client.homeserver()
     }
@@ -360,7 +360,7 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-
+    
     private(set) lazy var pusherNotificationClientIdentifier: String? = {
         // NOTE: The result is stored as part of the restoration token. Any changes
         // here would require a migration to correctly match incoming notifications.
@@ -378,7 +378,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError> {
         do {
             let result = try await client.encryption().hasDevicesToVerifyAgainst()
@@ -388,7 +388,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func startSync() {
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")
@@ -566,7 +566,7 @@ class ClientProxy: ClientProxyProtocol {
     func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError> {
         do {
             let _ = try await client.joinRoomByIdOrAlias(roomIdOrAlias: roomID, serverNames: via)
-                        
+            
             await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             
             return .success(())
@@ -652,7 +652,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(ClientProxyError.sdkError(error))
         }
     }
-        
+    
     func roomForIdentifier(_ identifier: String) async -> RoomProxyType? {
         let shouldAwait = roomsToAwait.remove(identifier) != nil
         
@@ -706,7 +706,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
             let displayName = try await client.displayName()
@@ -730,7 +730,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
         do {
             let urlString = try await client.avatarUrl()
@@ -748,7 +748,7 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed uploading, invalid media: \(media)")
             return .failure(.invalidMedia)
         }
-            
+        
         do {
             let data = try Data(contentsOf: imageURL)
             try await client.uploadAvatar(mimeType: mimeType, data: data)
@@ -875,7 +875,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func markAllRoomsAsRead() async -> Result<Void, ClientProxyError> {
         do {
             return try await .success(client.markAllRoomsAsRead())
@@ -903,7 +903,7 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-        
+    
     // MARK: Ignored users
     
     func ignoreUser(_ userID: String) async -> Result<Void, ClientProxyError> {
@@ -1123,7 +1123,7 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed retrieving session verification controller proxy with error: \(error)")
         }
     }
-
+    
     private func loadUserAvatarURLFromCache() {
         loadCachedAvatarURLTask = Task {
             do {
@@ -1172,7 +1172,7 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
     }
-
+    
     private func createLiveLocationOwnInfoUpdatesObserver() -> TaskHandle? {
         do {
             return try client.subscribeToOwnBeaconInfoUpdates(listener: SDKListener { [weak self] update in
@@ -1187,7 +1187,7 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
     }
-
+    
     private func createRoomListServiceObserver(_ roomListService: RoomListService) -> TaskHandle {
         roomListService.state(listener: SDKListener { [weak self] state in
             guard let self else { return }
@@ -1272,7 +1272,7 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.info("Wait for \(roomID) failed: \(error)")
         }
     }
-
+    
     private func updateIgnoredUsers() {
         Task {
             do {
@@ -1355,7 +1355,7 @@ private final class ClientDelegateWrapper: ClientDelegate {
     }
     
     // MARK: - ClientDelegate
-
+    
     func didReceiveAuthError(isSoftLogout: Bool) {
         MXLog.error("Received authentication error, softlogout=\(isSoftLogout)")
         authErrorCallback(isSoftLogout)

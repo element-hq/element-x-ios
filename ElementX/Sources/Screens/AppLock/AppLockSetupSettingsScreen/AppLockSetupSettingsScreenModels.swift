@@ -25,7 +25,7 @@ struct AppLockSetupSettingsScreenViewState: BindableState {
     var supportsBiometrics: Bool {
         biometryType != .none
     }
-
+    
     var enableBiometricsTitle: String {
         L10n.screenAppLockSetupBiometricUnlockAllowTitle(biometryType.localizedString)
     }

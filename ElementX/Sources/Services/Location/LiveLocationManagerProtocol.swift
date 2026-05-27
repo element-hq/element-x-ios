@@ -20,7 +20,7 @@ protocol LiveLocationManagerProtocol: AnyObject {
     var hasDisplayedLiveLocationDisclaimer: Bool { get set }
     /// Publishes the current location authorization status.
     var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> { get }
-
+    
     /// Requests "Always" location authorization from the user if the system allows it.
     ///
     /// - Returns: `true` if the request was forwarded to the system and a prompt will be shown;

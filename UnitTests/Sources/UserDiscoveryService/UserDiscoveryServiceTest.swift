@@ -48,7 +48,7 @@ struct UserDiscoveryServiceTest {
         assertSearchResults(results, toBe: 3)
         #expect(!clientProxy.profileForCalled)
     }
-
+    
     @Test
     func getProfileIsNotCalledForAccountOwnerID() async {
         clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: searchResults, limited: true))

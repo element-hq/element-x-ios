@@ -44,7 +44,7 @@ struct LocationShareSheet_Previews: PreviewProvider {
     static let annotation = LocationAnnotation(id: profile.userID,
                                                coordinate: .init(latitude: 51.509865, longitude: -0.118092),
                                                kind: .liveUser(profile))
-
+    
     static var previews: some View {
         LocationShareSheet(annotation: annotation)
             .previewDisplayName("Live location share sheet")

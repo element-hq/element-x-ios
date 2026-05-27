@@ -57,7 +57,7 @@ import SwiftUI
         var id: ObjectIdentifier {
             module.id
         }
-
+        
         @MainActor var coordinator: CoordinatorProtocol? {
             module.coordinator
         }
@@ -137,10 +137,10 @@ import SwiftUI
         if sheetModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
@@ -183,10 +183,10 @@ import SwiftUI
         if fullScreenCoverModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
@@ -234,10 +234,10 @@ import SwiftUI
         if overlayModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             overlayPresentationMode = presentationMode
             overlayModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)

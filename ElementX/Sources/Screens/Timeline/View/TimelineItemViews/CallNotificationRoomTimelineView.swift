@@ -20,14 +20,14 @@ struct CallNotificationRoomTimelineView: View {
             CompoundIcon(iconKeyPath, size: .medium, relativeTo: .compound.headingMDBold)
                 .foregroundStyle(.compound.iconSecondary)
                 .accessibilityHidden(true)
-              
+            
             Text(tileTitle)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textSecondary)
                 .labelStyle(.custom(spacing: 4))
-
+            
             Spacer()
-
+            
             Text(timelineItem.timestamp.formattedTime())
                 .font(.compound.bodyXS)
                 .foregroundColor(.compound.textSecondary)
@@ -39,7 +39,7 @@ struct CallNotificationRoomTimelineView: View {
     }
     
     // MARK: - Private
-        
+    
     private var tileTitle: String {
         if timelineItem.isDM {
             // As per design only have declined variants in DM
@@ -54,7 +54,7 @@ struct CallNotificationRoomTimelineView: View {
             L10n.commonCallStarted
         }
     }
-
+    
     private var iconKeyPath: KeyPath<CompoundIcons, Image> {
         if timelineItem.isDM, timelineItem.isDeclined || timelineItem.isDeclinedByMe {
             // As per design only have declined variants in DM
@@ -82,9 +82,9 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
                                                                  isDeclinedByMe: false,
                                                                  isDeclined: false,
                                                                  isVoiceCall: false))
-
+            
             Divider()
-
+            
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isEditable: false,
@@ -93,9 +93,9 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
                                                                  isDeclinedByMe: false,
                                                                  isDeclined: false,
                                                                  isVoiceCall: true))
-
+            
             Divider()
-
+            
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isEditable: false,
@@ -104,9 +104,9 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
                                                                  isDeclinedByMe: true,
                                                                  isDeclined: true,
                                                                  isVoiceCall: false))
-
+            
             Divider()
-
+            
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isEditable: false,
@@ -115,9 +115,9 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
                                                                  isDeclinedByMe: false,
                                                                  isDeclined: true,
                                                                  isVoiceCall: true))
-
+            
             Divider()
-
+            
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isEditable: false,
@@ -126,9 +126,9 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
                                                                  isDeclinedByMe: true,
                                                                  isDeclined: true,
                                                                  isVoiceCall: true))
-
+            
             Divider()
-
+            
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isEditable: false,
@@ -137,9 +137,9 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
                                                                  isDeclinedByMe: false,
                                                                  isDeclined: true,
                                                                  isVoiceCall: false))
-
+            
             Divider()
-
+            
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isEditable: false,
@@ -148,7 +148,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
                                                                  isDeclinedByMe: true,
                                                                  isDeclined: true,
                                                                  isVoiceCall: false))
-
+            
             Divider()
         }
         .padding()

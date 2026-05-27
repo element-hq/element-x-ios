@@ -23,7 +23,7 @@ final class NotificationManagerTests {
     private var notificationTappedDelegateCalled = false
     private var registerForRemoteNotificationsDelegateCalled: (() -> Void)?
     private let appSettings: AppSettings
-
+    
     init() {
         appSettings = AppSettings.volatile()
         notificationCenter = UserNotificationCenterMock()
@@ -53,7 +53,7 @@ final class NotificationManagerTests {
         let success = await notificationManager.register(with: Data())
         #expect(success)
     }
-
+    
     @Test
     func whenRegisteredAndPusherThrowsError_completionFalseIsCalled() async {
         enum TestError: Error {
@@ -64,7 +64,7 @@ final class NotificationManagerTests {
         let success = await notificationManager.register(with: Data())
         #expect(!success)
     }
-
+    
     @Test
     func whenRegistered_pusherIsCalledWithCorrectValues() async throws {
         let pushkeyData = Data("1234".utf8)
@@ -93,21 +93,21 @@ final class NotificationManagerTests {
                                          pusherNotificationClientIdentifier: nil)
         #expect(try data.defaultPayload == (defaultPayload.toJsonString()))
     }
-
+    
     @Test
     func whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() async {
         appSettings.pusherProfileTag = nil
         _ = await notificationManager.register(with: Data())
         #expect(appSettings.pusherProfileTag != nil)
     }
-
+    
     @Test
     func whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() async {
         appSettings.pusherProfileTag = "12345"
         _ = await notificationManager.register(with: Data())
         #expect(appSettings.pusherProfileTag == "12345")
     }
-
+    
     @Test
     func whenShowLocalNotification_notificationRequestGetsAdded() async throws {
         await notificationManager.showLocalNotification(with: "Title", subtitle: "Subtitle")
@@ -132,13 +132,13 @@ final class NotificationManagerTests {
                                                     options: [])
         #expect(notificationCenter.setNotificationCategoriesReceivedCategories == [messageCategory, inviteCategory])
     }
-
+    
     @Test
     func whenStart_delegateIsSet() throws {
         let delegate = try #require(notificationCenter.delegate)
         #expect(delegate.isEqual(notificationManager))
     }
-
+    
     @Test
     func whenStart_requestAuthorizationCalledWithCorrectParams() async {
         await waitForConfirmation("requestAuthorization should be called", timeout: .seconds(10)) { confirm in
@@ -150,7 +150,7 @@ final class NotificationManagerTests {
         }
         #expect(notificationCenter.requestAuthorizationOptionsReceivedOptions == [.alert, .sound, .badge])
     }
-
+    
     @Test
     func whenStartAndAuthorizationGranted_delegateCalled() async {
         authorizationStatusWasGranted = false
@@ -191,7 +191,7 @@ final class NotificationManagerTests {
         
         #expect(authorizationStatusWasGranted)
     }
-
+    
     @Test
     func whenWillPresentNotificationsDelegateNotSet_CorrectPresentationOptionsReturned() async throws {
         let archiver = MockCoder(requiringSecureCoding: false)
@@ -199,27 +199,27 @@ final class NotificationManagerTests {
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         #expect(options == [.badge, .sound, .list, .banner])
     }
-
+    
     @Test
     func whenWillPresentNotificationsDelegateSetAndNotificationsShoudNotBeDisplayed_CorrectPresentationOptionsReturned() async throws {
         shouldDisplayInAppNotificationReturnValue = false
         notificationManager.delegate = self
-
+        
         let notification = try UNNotification.with(userInfo: [AnyHashable: Any]())
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         #expect(options == [])
     }
-
+    
     @Test
     func whenWillPresentNotificationsDelegateSetAndNotificationsShoudBeDisplayed_CorrectPresentationOptionsReturned() async throws {
         shouldDisplayInAppNotificationReturnValue = true
         notificationManager.delegate = self
-
+        
         let notification = try UNNotification.with(userInfo: [AnyHashable: Any]())
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         #expect(options == [.badge, .sound, .list, .banner])
     }
-
+    
     @Test
     func whenNotificationCenterReceivedResponseInLineReply_delegateIsCalled() async throws {
         handleInlineReplyDelegateCalled = false
@@ -228,7 +228,7 @@ final class NotificationManagerTests {
         await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         #expect(handleInlineReplyDelegateCalled)
     }
-
+    
     @Test
     func whenNotificationCenterReceivedResponseWithActionIdentifier_delegateIsCalled() async throws {
         notificationTappedDelegateCalled = false

@@ -33,17 +33,17 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
     
     init(_ spaceRoomList: SpaceRoomListProtocol) async throws {
         guard let spaceRoom = spaceRoomList.space() else { throw SpaceRoomListProxyError.missingSpace }
-
+        
         self.spaceRoomList = spaceRoomList
         spaceServiceRoomSubject = .init(SpaceServiceRoom(spaceRoom: spaceRoom))
-
+        
         let paginationStateSubject = CurrentValueSubject<SpaceRoomListPaginationState, Never>(spaceRoomList.paginationState())
         paginationStatePublisher = paginationStateSubject.asCurrentValuePublisher()
-
+        
         paginationStateHandle = spaceRoomList.subscribeToPaginationStateUpdates(listener: SDKListener { paginationState in
             paginationStateSubject.send(paginationState)
         })
-
+        
         spaceRoomsHandle = await spaceRoomList.subscribeToRoomUpdate(listener: SDKListener { [weak self] updates in
             self?.handleUpdates(updates)
         })

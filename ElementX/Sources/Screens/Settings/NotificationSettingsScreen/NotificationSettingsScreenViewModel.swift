@@ -21,11 +21,11 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
     private let notificationTonePreviewer: AudioPlayerProtocol
     private let notificationToneManager: NotificationToneManagerProtocol
-
+    
     var actions: AnyPublisher<NotificationSettingsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(appSettings: AppSettings,
          userNotificationCenter: UserNotificationCenterProtocol,
          notificationToneManager: NotificationToneManagerProtocol,
@@ -44,7 +44,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                          isModallyPresented: isModallyPresented,
                                                                          selectedAlertTone: appSettings.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
                                                                          availableCustomTones: notificationToneManager.customTones()))
-
+        
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
@@ -75,7 +75,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     func fetchInitialContent() {
         fetchSettings()
     }
-        
+    
     // MARK: - Public
     
     override func process(viewAction: NotificationSettingsScreenViewAction) {
@@ -117,11 +117,11 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     }
     
     // MARK: - Private
-        
+    
     func readSystemAuthorizationStatus() async {
         state.isUserPermissionGranted = await userNotificationCenter.authorizationStatus() == .authorized
     }
-
+    
     func toggleNotifications() {
         appSettings.enableNotifications.toggle()
     }
@@ -161,11 +161,11 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             // Group chats
             var groupChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: false)
             let encryptedGroupChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: false)
-
+            
             // Direct chats
             var directChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: false, isOneToOne: true)
             let encryptedDirectChatsMode = await notificationSettingsProxy.getDefaultRoomNotificationMode(isEncrypted: true, isOneToOne: true)
-                        
+            
             // Old clients were having specific settings for encrypted and unencrypted rooms,
             // so it's possible for `group chats` and `direct chats` settings to be inconsistent (e.g. encrypted `direct chats` can have a different mode that unencrypted `direct chats`)
             if groupChatsMode != encryptedGroupChatsMode {
@@ -183,16 +183,16 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             let roomMentionsEnabled = try? await notificationSettingsProxy.isRoomMentionEnabled()
             let callEnabled = try? await notificationSettingsProxy.isCallEnabled()
             let invitationsEnabled = try? await notificationSettingsProxy.isInviteForMeEnabled()
-                        
+            
             guard !Task.isCancelled else { return }
-
+            
             let notificationSettings = NotificationSettingsScreenSettings(groupChatsMode: groupChatsMode,
                                                                           directChatsMode: directChatsMode,
                                                                           roomMentionsEnabled: roomMentionsEnabled,
                                                                           callsEnabled: callEnabled,
                                                                           invitationsEnabled: invitationsEnabled,
                                                                           inconsistentSettings: inconsistentSettings)
-
+            
             state.settings = notificationSettings
             state.bindings.roomMentionsEnabled = notificationSettings.roomMentionsEnabled ?? false
             state.bindings.callsEnabled = notificationSettings.callsEnabled ?? false
@@ -234,7 +234,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         }
         state.applyingChange = false
     }
-        
+    
     func enableCalls(_ enable: Bool) async {
         guard let notificationSettings = state.settings else { return }
         do {
@@ -260,7 +260,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         }
         state.applyingChange = false
     }
-
+    
     /// Imports the audio file at the given sandboxed URL into the tone library, refreshing the available custom tones on success.
     private func addCustomAlertTone(from urlResult: Result<URL, Error>) async {
         do {
@@ -290,13 +290,13 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             MXLog.error("Error setting selected alert tone to designated location in filesystem: \(error)")
         }
     }
-
+    
     /// Deletes the given tones from the library. If the active tone is deleted, the selection resets to the default.
     private func deleteAlertTones(_ tones: [NotificationTone]) {
         for tone in tones {
             do {
                 try notificationToneManager.deleteCustomTone(tone)
-
+                
                 if tone == state.selectedAlertTone {
                     appSettings.selectedNotificationTone = nil
                 }

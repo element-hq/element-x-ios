@@ -33,7 +33,7 @@ struct UserDetailsEditScreenViewState: BindableState {
     var nameDidChange: Bool {
         bindings.name != currentDisplayName
     }
-      
+    
     var avatarDidChange: Bool {
         localMedia != nil || selectedAvatarURL != currentAvatarURL
     }

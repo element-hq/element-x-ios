@@ -126,11 +126,11 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                 && selectedRange.location <= upperBound
                 && selectedRange.length <= upperBound - lowerBound
         }
-
+        
         guard let match else {
             return nil
         }
-
+        
         var suggestionText = String(text[match.range])
         let firstChar = suggestionText.removeFirst()
         

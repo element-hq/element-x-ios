@@ -20,7 +20,7 @@ class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelect
     var actionsPublisher: AnyPublisher<RoomSelectionScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(userSession: UserSessionProtocol,
          roomSummaryProvider: RoomSummaryProviderProtocol) {
         clientProxy = userSession.clientProxy

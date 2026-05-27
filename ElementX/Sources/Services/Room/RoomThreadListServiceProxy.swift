@@ -76,7 +76,7 @@ class RoomThreadListProxy: RoomThreadListServiceProxyProtocol {
         
         let sender = TimelineItemSender(senderID: threadListItemEvent.sender, senderProfile: threadListItemEvent.senderProfile)
         let timestamp = Date(timeIntervalSince1970: TimeInterval(threadListItemEvent.timestamp / 1000))
-                
+        
         let message: AttributedString? = if let content = threadListItemEvent.content {
             eventStringBuilder.buildAttributedString(for: content,
                                                      sender: sender,

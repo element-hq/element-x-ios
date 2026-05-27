@@ -73,7 +73,7 @@ struct FormattedBodyText: View {
                                                                type: .plainText))
         }
         let lastPlainTextIndex = components.lastIndex { $0.type == .plainText }
-
+        
         return TimelineBubbleLayout(spacing: 8) {
             // The `ForEach` needs to iterate over the id of the element to allow
             // SwiftUI animations to work properly ater any edit.
@@ -98,7 +98,7 @@ struct FormattedBodyText: View {
                         .timelineBubbleLayoutSize(.natural)
                 }
             }
-
+            
             // Make a second iteration through the components adding naturally sized versions of the
             // block quotes and code blocks which are used for layout calculations but won't be rendered.
             ForEach(components) { component in

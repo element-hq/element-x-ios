@@ -25,7 +25,7 @@ final class AdvancedSettingsScreenCoordinator: CoordinatorProtocol {
                                                     clientProxy: parameters.clientProxy,
                                                     userIndicatorController: parameters.userIndicatorController)
     }
-            
+    
     func toPresentable() -> AnyView {
         AnyView(AdvancedSettingsScreen(context: viewModel.context))
     }

@@ -18,7 +18,7 @@ struct VoiceMessageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equa
     let sender: TimelineItemSender
     
     let content: AudioRoomTimelineItemContent
-
+    
     var properties = RoomTimelineItemProperties()
     
     var body: String {

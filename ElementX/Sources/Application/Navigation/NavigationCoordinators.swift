@@ -13,7 +13,7 @@ import SwiftUI
 /// into a single navigation stack on compact layouts
 @Observable class NavigationSplitCoordinator: CoordinatorProtocol, CustomStringConvertible {
     fileprivate let placeholderModule: NavigationModule
-
+    
     fileprivate var sidebarModule: NavigationModule? {
         didSet {
             if let oldValue {
@@ -105,7 +105,7 @@ import SwiftUI
     var compactLayoutRootCoordinator: (any CoordinatorProtocol)? {
         compactLayoutRootModule?.coordinator
     }
-
+    
     var compactLayoutStackModules: [NavigationModule] {
         get {
             getCompactStackModules()
@@ -114,7 +114,7 @@ import SwiftUI
             setCompactStackModules(newValue)
         }
     }
-
+    
     private func getCompactStackModules() -> [NavigationModule] {
         // Start building the new compact layout navigation stack
         var stackModules: [NavigationModule] = []
@@ -123,23 +123,23 @@ import SwiftUI
         if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
             stackModules.append(contentsOf: sidebarNavigationStackCoordinator.stackModules)
         }
-
+        
         // If the detail is a stackCoordinator then push its root and children to the compact layout stack
         if let detailNavigationStackCoordinator = detailModule?.coordinator as? NavigationStackCoordinator {
             if let detailRootCoordinator = detailNavigationStackCoordinator.rootModule {
                 stackModules.append(detailRootCoordinator)
             }
-
+            
             stackModules.append(contentsOf: detailNavigationStackCoordinator.stackModules)
         } else if let detailModule { // Otherwise just push it entirely
             stackModules.append(detailModule)
         }
         return stackModules
     }
-
+    
     private func setCompactStackModules(_ modules: [NavigationModule]) {
         guard compactLayoutStackModules != modules else { return }
-
+        
         let diffs = modules.difference(from: compactLayoutStackModules)
         diffs.forEach { change in
             switch change {
@@ -150,7 +150,7 @@ import SwiftUI
             }
         }
     }
-
+    
     var compactLayoutStackCoordinators: [any CoordinatorProtocol] {
         compactLayoutStackModules.compactMap(\.coordinator)
     }
@@ -175,10 +175,10 @@ import SwiftUI
         if sidebarModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             sidebarModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
@@ -198,10 +198,10 @@ import SwiftUI
         if detailModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             detailModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
@@ -221,10 +221,10 @@ import SwiftUI
         if sheetModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
@@ -244,15 +244,15 @@ import SwiftUI
         if fullScreenCoverModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
     }
-        
+    
     // MARK: - CoordinatorProtocol
     
     func toPresentable() -> AnyView {
@@ -264,7 +264,7 @@ import SwiftUI
     }
     
     // MARK: - CustomStringConvertible
-
+    
     var description: String {
         switch (sidebarModule?.coordinator, detailModule?.coordinator) {
         case (.some(let sidebarCoordinator), .some(let detailCoordinator)):
@@ -533,10 +533,10 @@ private struct NavigationSplitCoordinatorView: View {
         }
         
         popToRoot(animated: false)
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
@@ -550,7 +550,7 @@ private struct NavigationSplitCoordinatorView: View {
     func push(_ coordinator: any CoordinatorProtocol, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             stackModules.append(NavigationModule(coordinator, dismissalCallback: dismissalCallback))
         }
@@ -562,10 +562,10 @@ private struct NavigationSplitCoordinatorView: View {
         guard !stackModules.isEmpty else {
             return
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             stackModules.removeAll()
         }
@@ -576,7 +576,7 @@ private struct NavigationSplitCoordinatorView: View {
     func pop(animated: Bool = true) {
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             _ = stackModules.popLast()
         }
@@ -617,15 +617,15 @@ private struct NavigationSplitCoordinatorView: View {
         if sheetModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
     }
-
+    
     // periphery:ignore - might be useful to have
     /// Present a fullscreen cover on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
     /// then the presentation will be proxied to the split
@@ -647,10 +647,10 @@ private struct NavigationSplitCoordinatorView: View {
         if fullScreenCoverModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
         }
-
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
-
+        
         withTransaction(transaction) {
             fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }

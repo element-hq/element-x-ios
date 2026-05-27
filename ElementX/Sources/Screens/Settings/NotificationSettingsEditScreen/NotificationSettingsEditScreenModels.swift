@@ -25,7 +25,7 @@ struct NotificationSettingsEditScreenViewState: BindableState {
     var pendingMode: NotificationSettingsEditScreenDefaultMode?
     var roomsWithUserDefinedMode: [NotificationSettingsEditScreenRoom] = []
     var canPushEncryptedEvents = false
-
+    
     func isSelected(mode: NotificationSettingsEditScreenDefaultMode) -> Bool {
         pendingMode == nil && defaultMode == mode
     }
@@ -101,7 +101,7 @@ struct NotificationSettingsEditScreenRoom: Identifiable, Equatable {
     let roomId: String?
     
     var name = ""
-        
+    
     var avatar: RoomAvatar
     
     var notificationMode: RoomNotificationModeProxy?

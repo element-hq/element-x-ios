@@ -16,29 +16,29 @@ struct TimelineScrollButton: View {
         case down
         case up
     }
-
+    
     let direction: Direction
     let isHidden: Bool
     let showsBadge: Bool
     let onLongPress: (() -> Void)?
     let callback: () -> Void
-
+    
     @ScaledMetric(relativeTo: .compound.bodyLG) private var iconSize: CGFloat = 24
     @ScaledMetric(relativeTo: .compound.bodyLG) private var badgeDotSize: CGFloat = 12
     @GestureState private var isPressing = false
     /// Set when a long-press is recognized so the trailing touch-up doesn't also fire `callback()`.
     @State private var consumedByLongPress = false
-
+    
     /// Padding around the chevron, balanced so the total circle stays ~36pt at default text size.
     private let iconPadding: CGFloat = 6
-
+    
     /// Vertical offset that half-centers the badge dot on the circle's edge. Magnitude is half
     /// the dot's diameter so half sits inside the circle, half outside. Sign is applied at the
     /// call site based on direction.
     private var badgeOffsetMagnitude: CGFloat {
         badgeDotSize / 2
     }
-
+    
     init(direction: Direction = .down,
          isHidden: Bool = false,
          showsBadge: Bool = false,
@@ -50,7 +50,7 @@ struct TimelineScrollButton: View {
         self.onLongPress = onLongPress
         self.callback = callback
     }
-
+    
     var body: some View {
         if let onLongPress {
             buttonContent
@@ -76,7 +76,7 @@ struct TimelineScrollButton: View {
             buttonContent
         }
     }
-
+    
     private var buttonContent: some View {
         Button {
             if consumedByLongPress {
@@ -99,7 +99,7 @@ struct TimelineScrollButton: View {
         .accessibilityLabel(direction == .down ? L10n.a11yJumpToBottom : L10n.a11yJumpToUnread)
         .animation(.elementDefault, value: isHidden)
     }
-
+    
     @ViewBuilder
     private var icon: some View {
         let chevron = CompoundIcon(direction == .down ? \.chevronDown : \.chevronUp,
@@ -117,7 +117,7 @@ struct TimelineScrollButton: View {
                 .overlay(Circle().stroke(Color.compound.borderInteractiveSecondary, lineWidth: 1))
         }
     }
-
+    
     private var badge: some View {
         Circle()
             .fill(Color.compound.iconAccentPrimary)

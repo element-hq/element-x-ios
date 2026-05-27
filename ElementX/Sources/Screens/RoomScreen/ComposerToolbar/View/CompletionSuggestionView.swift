@@ -23,7 +23,7 @@ struct CompletionSuggestionView: View {
         /// To make the scrolling more apparent we show a factional amount
         static let maxVisibleRows: CGFloat = 4.5
     }
-
+    
     // MARK: Public
     
     @State private var prototypeListItemFrame: CGRect = .zero
@@ -47,7 +47,7 @@ struct CompletionSuggestionView: View {
             .padding(.bottom, Constants.listItemPadding)
         }
     }
-
+    
     private func list() -> some View {
         List(items) { item in
             Button {
@@ -66,18 +66,18 @@ struct CompletionSuggestionView: View {
     private func contentHeightForRowCount(_ count: CGFloat) -> CGFloat {
         (prototypeListItemFrame.height + Constants.listItemPadding * 2 + Constants.listItemSpacing) * count - Constants.listItemSpacing / 2 + Constants.topPadding - Constants.listItemPadding
     }
-
+    
     private struct ListItemPaddingModifier: ViewModifier {
         private let isFirst: Bool
-
+        
         init(isFirst: Bool) {
             self.isFirst = isFirst
         }
-
+        
         func body(content: Content) -> some View {
             let topPadding: CGFloat = isFirst ? Constants.topPadding : Constants.listItemPadding
             let bottomPadding: CGFloat = Constants.listItemPadding
-
+            
             return content
                 .padding(.top, topPadding)
                 .padding(.bottom, bottomPadding)

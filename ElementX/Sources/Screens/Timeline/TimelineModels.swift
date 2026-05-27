@@ -108,7 +108,7 @@ struct TimelineViewState: BindableState {
     var showReadReceipts = false
     var isDM = false
     var timelineState: TimelineState // check the doc before changing this
-
+    
     var ownUserID: String
     var canCurrentUserSendMessage = false
     var canCurrentUserRedactOthers = false
@@ -125,7 +125,7 @@ struct TimelineViewState: BindableState {
     var jumpToReadMarkerEnabled: Bool
     
     let hasPredecessor: Bool
-        
+    
     /// The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
     /// It's updated from the room info, so it's faster than using the timeline
     var pinnedEventIDs: Set<String> = []
@@ -147,24 +147,24 @@ struct TimelineViewState: BindableState {
     var linkMetadataProvider: LinkMetadataProviderProtocol?
     
     var mapTilerConfiguration: MapTilerConfiguration
-
+    
     var stoppedLiveLocationIDs: Set<TimelineItemIdentifier> = []
-        
+    
     var bindings: TimelineViewStateBindings
 }
 
 struct TimelineViewStateBindings {
     var isScrolledToBottom = true
-
+    
     /// Whether the read marker (NEW banner) is currently visible in the timeline viewport.
     /// Used to hide the jump-to-unread button once the user has scrolled to the read marker.
     var isReadMarkerVisible = false
-
+    
     /// Whether new messages have arrived while the user is scrolled away from the bottom of a
     /// live timeline. Drives the presence dot on the scroll-to-bottom button and resets when the
     /// user returns to the bottom.
     var hasNewMessagesAtBottom = false
-
+    
     /// The timestamp of the topmost visible item, used to drive the floating date badge while scrolling.
     var floatingDate: Date?
     
@@ -183,7 +183,7 @@ struct TimelineViewStateBindings {
     var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
     
     var manageMemberViewModel: ManageRoomMemberSheetViewModel?
-
+    
     var showTranslation = false
     var textToBeTranslated: String?
 }
@@ -248,7 +248,7 @@ struct TimelineState {
             /// The event has already been shown.
             case hasAppeared
         }
-
+        
         /// The ID of the event.
         let eventID: String
         /// How the event should be shown, or whether it has already appeared.
@@ -262,26 +262,26 @@ struct TimelineState {
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     var scrollToFirstItemForDatePublisher = PassthroughSubject<Void, Never>()
     var scrollToReadMarkerPublisher = PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>()
-
+    
     var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
-
+    
     var uniqueIDs: [TimelineItemIdentifier.UniqueID] {
         itemsDictionary.keys.elements
     }
-
+    
     var itemViewStates: [RoomTimelineItemViewState] {
         itemsDictionary.values.elements
     }
-
+    
     /// The unique ID of the read marker (NEW banner) in the timeline, if present.
     /// Recomputed by ``recomputeReadMarkerUniqueID()`` whenever ``itemsDictionary`` changes.
     private(set) var readMarkerUniqueID: TimelineItemIdentifier.UniqueID?
-
+    
     /// The user's `m.fully_read` event ID, pushed from `RoomInfo`. Used as a fallback
     /// signal when ``readMarkerUniqueID`` is nil because the marker event isn't paginated
     /// into the loaded timeline window.
     var fullyReadEventID: String?
-
+    
     /// Recomputes ``readMarkerUniqueID`` from ``itemsDictionary``. Call after assigning a new
     /// value to ``itemsDictionary``.
     mutating func recomputeReadMarkerUniqueID() {
@@ -290,7 +290,7 @@ struct TimelineState {
             return false
         }?.key
     }
-
+    
     func hasLoadedItem(with eventID: String) -> Bool {
         itemViewStates.contains { $0.identifier.eventID == eventID }
     }
@@ -306,13 +306,13 @@ extension TimelineViewState {
     var isAtBottomAndLive: Bool {
         bindings.isScrolledToBottom && timelineState.isLive
     }
-
+    
     /// Whether the scroll-to-bottom button should be shown: the user is scrolled away from the
     /// bottom of a live timeline.
     var shouldShowScrollToBottomButton: Bool {
         !isAtBottomAndLive
     }
-
+    
     /// Whether the jump-to-read-marker button should be shown.
     ///
     /// Primary path: the SDK has materialised a virtual `ReadMarker` item in the
@@ -334,7 +334,7 @@ extension TimelineViewState {
         return !timelineState.itemsDictionary.isEmpty
             && !timelineState.hasLoadedItem(with: fullyReadEventID)
     }
-
+    
     /// The string shown as the message preview.
     ///
     /// This converts the formatted body to a plain string to remove formatting

@@ -41,13 +41,13 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
     let viewModel: TimelineMediaPreviewViewModel
     let dismissalPublisher: PassthroughSubject<Void, Never>
     let onDismiss: () -> Void
-
+    
     func makeUIViewController(context: Context) -> PreviewHostingController {
         PreviewHostingController(viewModel: viewModel,
                                  dismissalPublisher: dismissalPublisher,
                                  onDismiss: onDismiss)
     }
-
+    
     func updateUIViewController(_ uiViewController: PreviewHostingController, context: Context) { }
     
     /// A view controller that hosts the QuickLook preview.
@@ -69,7 +69,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
              onDismiss: @escaping () -> Void) {
             self.onDismiss = onDismiss
             previewController = TimelineMediaPreviewController(context: viewModel.context)
-
+            
             super.init(nibName: nil, bundle: nil)
             
             // The QLPreviewController will not automatically dismiss itself when the underlying view is removed

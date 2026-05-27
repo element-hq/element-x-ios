@@ -55,7 +55,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     var infoPublisher: CurrentValuePublisher<RoomInfoProxyProtocol, Never> {
         infoSubject.asCurrentValuePublisher()
     }
-
+    
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.asCurrentValuePublisher()
@@ -119,7 +119,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
         
         subscribedForUpdates = true
-
+        
         do {
             try await roomListService.subscribeToRooms(roomIds: [id])
         } catch {
@@ -353,7 +353,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             MXLog.error("Failed updating members using sync API: \(error)")
         }
     }
-
+    
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
         if let member = membersPublisher.value.filter({ $0.userID == userID }).first {
             return .success(member)
@@ -396,7 +396,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func setTopic(_ topic: String) async -> Result<Void, RoomProxyError> {
         do {
             return try await .success(room.setTopic(topic: topic))
@@ -420,7 +420,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             MXLog.error("Failed uploading avatar, invalid media: \(media)")
             return .failure(.invalidMedia)
         }
-
+        
         do {
             let data = try Data(contentsOf: imageURL)
             return try await .success(room.uploadAvatar(mimeType: mimeType, data: data, mediaInfo: nil))
@@ -790,7 +790,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     // MARK: - Private
     
     private func subscribeToTypingNotifications() {

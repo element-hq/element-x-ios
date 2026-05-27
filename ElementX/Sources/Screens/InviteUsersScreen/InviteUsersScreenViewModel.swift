@@ -37,9 +37,9 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
-
+        
         let mandatoryInvitees: [UserProfileProxy] = if case .draft(let invitees) = roomType { invitees } else { [] }
-
+        
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: mandatoryInvitees,
                                                                 mandatoryInvitees: mandatoryInvitees,
                                                                 isSkippable: isSkippable),
@@ -92,12 +92,12 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             toggleUser(user)
         }
     }
-
+    
     // MARK: - Private
     
     private func toggleUser(_ user: UserProfileProxy) {
         guard !state.isInviteeMandatory(user) else { return }
-
+        
         if state.selectedUsers.contains(user) {
             state.selectedUsers.removeAll { $0.userID == user.userID }
         } else {
@@ -119,10 +119,10 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private func createDraftRoom(mandatoryUserIDs: [String]) {
         showLoadingIndicator(title: L10n.commonCreatingRoom)
-
+        
         Task {
             defer { hideLoadingIndicator() }
-
+            
             switch await clientProxy.createRoom(name: nil,
                                                 topic: nil,
                                                 accessType: .private,
@@ -244,7 +244,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             }
         }
     }
-        
+    
     private var searchQuery: String {
         context.searchQuery
     }

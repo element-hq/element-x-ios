@@ -18,7 +18,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
     var actionsPublisher: AnyPublisher<LinkNewDeviceScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(clientProxy: ClientProxyProtocol, initialState: LinkNewDeviceScreenViewState? = nil) {
         self.clientProxy = clientProxy
         

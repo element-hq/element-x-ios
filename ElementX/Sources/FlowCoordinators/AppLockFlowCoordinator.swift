@@ -49,7 +49,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         /// The user failed to unlock the app (or forgot their PIN) and is being logged out.
         case loggingOut
     }
-
+    
     /// Events that can be triggered on the flow state machine
     enum Event: EventType {
         /// Starts the flow while the app is launching in the background.
@@ -145,7 +145,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
             switch (fromState, event) {
             case (.initial, .start):
                 return .backgrounded
-            
+                
             case (.unlocked, .willResignActive):
                 return .appObscured
             case (.appObscured, .didBecomeActive):
@@ -169,14 +169,14 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
                 return .unlocked
             case (.attemptingPINUnlock, .forceLogout):
                 return .loggingOut
-            
+                
             // Transition to a valid state when enabling the service for the first time.
             case (.initial, .serviceEnabled):
                 return .unlocked
             // Transition to a valid state once the service is disabled following a forced logout.
             case (.loggingOut, .serviceDisabled):
                 return .unlocked
-            
+                
             default:
                 return fromState
             }

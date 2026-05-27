@@ -384,9 +384,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let allVotes = votes.reduce(0) { count, pair in
             count + pair.value.count
         }
-
+        
         let maxOptionVotes = votes.map(\.value.count).max()
-
+        
         let options = answers.map { answer in
             let optionVotesCount = votes[answer.id]?.count
             
@@ -404,7 +404,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .undisclosed:
             .undisclosed
         }
-
+        
         let poll = Poll(question: question,
                         kind: pollKind,
                         maxSelections: Int(maxSelections),
@@ -412,7 +412,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                         votes: votes,
                         endDate: endTime.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) },
                         createdByAccountOwner: eventItemProxy.sender.id == userID)
-
+        
         return PollRoomTimelineItem(id: eventItemProxy.id,
                                     poll: poll,
                                     body: poll.question,
@@ -538,7 +538,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         if let audioWaveform = messageContent.audio?.waveform {
             waveform = EstimatedWaveform(data: audioWaveform)
         }
-
+        
         return AudioRoomTimelineItemContent(filename: messageContent.filename,
                                             caption: messageContent.caption,
                                             formattedCaption: formattedCaption,
@@ -602,13 +602,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
-
+    
     private func buildLocationTimelineItemContent(_ locationContent: LocationContent) -> LocationRoomTimelineItemContent {
         LocationRoomTimelineItemContent(body: locationContent.body,
                                         geoURI: .init(string: locationContent.geoUri),
                                         kind: .init(from: locationContent.asset))
     }
-
+    
     private func buildFileTimelineItemContent(_ messageContent: FileMessageContent) -> FileRoomTimelineItemContent {
         let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
         let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
@@ -636,7 +636,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let name = senderDisplayName ?? senderID
         
         let htmlBody = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
-
+        
         var formattedBody: AttributedString?
         if let htmlBody {
             formattedBody = buildEmoteFormattedBodyFromHTML(html: htmlBody, name: name)
@@ -686,7 +686,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return a.count > b.count
         }
     }
-
+    
     private func buildOrderedReadReceipts(_ receipts: [String: Receipt]) -> [ReadReceipt] {
         receipts
             .sorted { firstElement, secondElement in

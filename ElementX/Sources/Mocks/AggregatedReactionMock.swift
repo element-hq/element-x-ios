@@ -26,7 +26,7 @@ extension AggregatedReaction {
     private static var alice: String {
         RoomMemberProxyMock.mockAlice.userID
     }
-
+    
     static var mockReactions: [AggregatedReaction] {
         [
             mockReaction(key: "😅", senderIDs: [alice]),

@@ -43,16 +43,16 @@ enum SoftLogoutScreenViewModelAction: CustomStringConvertible {
 struct SoftLogoutScreenViewState: BindableState {
     /// Soft logout credentials
     var credentials: SoftLogoutScreenCredentials
-
+    
     /// Data about the selected homeserver.
     var homeserver: LoginHomeserver
-
+    
     /// Flag indicating soft logged out user needs backup for some keys
     var keyBackupNeeded: Bool
-
+    
     /// View state that can be bound to from SwiftUI.
     var bindings: SoftLogoutScreenBindings
-
+    
     /// The types of login supported by the homeserver.
     var loginMode: LoginMode {
         homeserver.loginMode
@@ -60,12 +60,12 @@ struct SoftLogoutScreenViewState: BindableState {
     
     /// The presentation anchor used for OAuth authentication.
     var window: UIWindow?
-
+    
     /// Whether to show recover encryption keys message
     var showRecoverEncryptionKeysMessage: Bool {
         keyBackupNeeded
     }
-
+    
     /// `true` when valid credentials have been entered and a homeserver has been loaded.
     var canSubmit: Bool {
         !bindings.password.isEmpty

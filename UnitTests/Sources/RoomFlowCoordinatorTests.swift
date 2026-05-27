@@ -18,13 +18,13 @@ final class RoomFlowCoordinatorTests {
     var roomFlowCoordinator: RoomFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
     var cancellables = Set<AnyCancellable>()
-
+    
     private let appSettings: AppSettings
-
+    
     init() {
         appSettings = AppSettings.volatile()
     }
-
+    
     @Test
     func roomPresentation() async throws {
         setupRoomFlowCoordinator()

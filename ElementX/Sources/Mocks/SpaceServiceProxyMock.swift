@@ -61,7 +61,7 @@ extension SpaceServiceProxyMock.Configuration {
             partialResult.append(SpaceServiceFilter(room: spaceRoom, level: 0, descendants: .init()))
             partialResult.append(SpaceServiceFilter(room: spaceRoom, level: 1, descendants: .init()))
         }
-                
+        
         let spaceRoomLists = [SpaceServiceRoom].mockJoinedSpaces.map {
             ($0.id, SpaceRoomListProxyMock(.init(spaceServiceRoom: $0, initialSpaceRooms: .mockSpaceList)))
         }

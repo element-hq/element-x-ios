@@ -19,7 +19,7 @@ class RemotePreference<T: Equatable> {
     var publisher: CurrentValuePublisher<T, Never> {
         subject.asCurrentValuePublisher()
     }
-
+    
     var isRemotelyConfigured: Bool {
         subject.value != defaultValue
     }

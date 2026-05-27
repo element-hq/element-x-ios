@@ -17,12 +17,12 @@ enum NotificationConstants {
         static let pusherNotificationClientIdentifier = "pusher_notification_client_identifier"
         static let receiverIdentifier = "receiver_id"
     }
-
+    
     enum Category {
         static let message = "message"
         static let invite = "invite"
     }
-
+    
     enum Action {
         static let inlineReply = "inline-reply"
     }

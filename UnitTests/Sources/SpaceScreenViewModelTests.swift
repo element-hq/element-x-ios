@@ -26,7 +26,7 @@ struct SpaceScreenViewModelTests {
     var context: SpaceScreenViewModelType.Context {
         viewModel.context
     }
-
+    
     @Test
     mutating func initialState() {
         setupViewModel()

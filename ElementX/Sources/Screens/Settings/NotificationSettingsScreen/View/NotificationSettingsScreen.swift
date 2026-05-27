@@ -38,7 +38,7 @@ struct NotificationSettingsScreen: View {
                     if context.viewState.settings?.invitationsEnabled != nil {
                         additionalSettingsSection
                     }
-
+                    
                     soundSelectionSection
                 }
             }
@@ -126,7 +126,7 @@ struct NotificationSettingsScreen: View {
                 .compoundListSectionHeader()
         }
     }
-        
+    
     private var mentionsSection: some View {
         Section {
             ListRow(label: .plain(title: L10n.screenNotificationSettingsRoomMentionLabel),
@@ -171,7 +171,7 @@ struct NotificationSettingsScreen: View {
                 .compoundListSectionHeader()
         }
     }
-
+    
     @ViewBuilder
     private var soundSelectionSection: some View {
         Section {
@@ -185,12 +185,12 @@ struct NotificationSettingsScreen: View {
             Text(L10n.screenNotificationSettingsSoundSectionTitle)
                 .compoundListSectionHeader()
         }
-
+        
         Section(isExpanded: $context.shouldShowAlertSounds) {
             presetSoundSelectionSection
         } header: { }
     }
-
+    
     private var presetSoundSelectionSection: some View {
         ForEach(NotificationToneManager.allDefaultAlerts, id: \.filename) { alertTone in
             ListRow(label: .plain(title: alertTone.label),
@@ -199,7 +199,7 @@ struct NotificationSettingsScreen: View {
                     })
         }
     }
-
+    
     @ViewBuilder
     private var customSoundSelectionSection: some View {
         ForEach(context.viewState.availableCustomTones, id: \.filename) { alertTone in
@@ -212,10 +212,10 @@ struct NotificationSettingsScreen: View {
             let tones = indices.map {
                 context.viewState.availableCustomTones[$0]
             }
-
+            
             context.send(viewAction: .deleteCustomAlertTones(tones))
         }
-
+        
         ListRow(label: .plain(title: L10n.screenNotificationSettingsSoundCustomSoundButtonTitle),
                 kind: .button {
                     context.shouldShowCustomAlertTonePicker = true
@@ -231,7 +231,7 @@ struct NotificationSettingsScreen: View {
                     context.send(viewAction: .addedCustomAlertTone($0))
                 }
     }
-
+    
     private var configurationMismatchSection: some View {
         Section {
             ListRow(kind: .custom {
@@ -278,9 +278,9 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         }
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
         notificationSettingsProxy.isCallEnabledReturnValue = false
-
+        
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe"))))
-
+        
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationToneManager: NotificationToneManagerMock(.init()),
@@ -310,7 +310,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         notificationSettingsProxy.isCallEnabledReturnValue = false
         
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe"))))
-
+        
         var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationToneManager: NotificationToneManagerMock(.init()),
@@ -320,7 +320,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         viewModel.fetchInitialContent()
         return viewModel
     }()
-
+    
     static var previews: some View {
         NotificationSettingsScreen(context: viewModel.context)
             .snapshotPreferences(expect: viewModel.context.observe(\.viewState.settings).map { $0 != nil })

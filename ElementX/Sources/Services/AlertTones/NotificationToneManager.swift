@@ -170,10 +170,10 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         try FileManager.default.moveItem(at: tempURL, to: destURL)
         MXLog.info("Converted \(sourceURL.path(percentEncoded: false)) to caf")
     }
-
+    
     /// File URL of the active tone copied/linked for use by the system.
     private static let selectedToneLocation = NotificationToneManager.libraryLocation.deletingLastPathComponent().appending(component: selectedToneFilename)
-
+    
     /// Pre-defined iOS system tones available for selection, sorted by name.
     private static let defaultSystemAlerts: [NotificationTone] = [
         .createSystemSound(label: L10n.screenNotificationSettingsSoundSystemTriTone,
@@ -261,7 +261,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         .createBundledSound(label: L10n.screenNotificationSettingsSoundElementFade,
                             filename: "sound_01.caf")
     ].sorted()
-
+    
     private static let systemLocation = {
         let systemRoot: URL
         if let simulatorRoot = ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] {
@@ -271,7 +271,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
         }
         return systemRoot.appending(components: "System", "Library", "Audio", "UISounds", directoryHint: .isDirectory)
     }()
-
+    
     private static let bundledLocation: URL = {
         guard let url = Bundle.app.resourceURL else {
             fatalError("The app is seriously corrupt if resourceURL is missing.")

@@ -13,7 +13,7 @@ extension KeychainControllerMock {
     func retrieveSessionFromKeychain(userId: String) throws -> Session {
         fatalError("Not implemented")
     }
-
+    
     func saveSessionInKeychain(session: Session) {
         fatalError("Not implemented")
     }

@@ -6,10 +6,10 @@ struct AppIconBanner: AsyncParsableCommand {
     
     @Argument(help: "Path to the input image.")
     var path: String
-        
+    
     @Option(help: "Text for the banner.")
     var bannerText: String
-        
+    
     @MainActor
     func run() async throws {
         let currentDirectoryURL = URL(filePath: FileManager.default.currentDirectoryPath)

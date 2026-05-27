@@ -12,7 +12,7 @@ struct LocationRoomTimelineItemContent: Hashable {
     let body: String
     let geoURI: GeoURI?
     let kind: StaticLocationKind
-
+    
     init(body: String,
          geoURI: GeoURI? = nil,
          kind: StaticLocationKind = .sender) {

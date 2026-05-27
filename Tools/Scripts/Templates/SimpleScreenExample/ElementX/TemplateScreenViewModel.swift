@@ -15,7 +15,7 @@ class TemplateScreenViewModel: TemplateScreenViewModelType, TemplateScreenViewMo
     var actionsPublisher: AnyPublisher<TemplateScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init() {
         super.init(initialViewState: TemplateScreenViewState(title: "Template title",
                                                              placeholder: "Enter something here",

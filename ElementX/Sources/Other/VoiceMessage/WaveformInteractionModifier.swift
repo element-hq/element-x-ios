@@ -19,11 +19,11 @@ private struct WaveformInteractionModifier: ViewModifier {
     let progress: Double
     let showCursor: Bool
     let onSeek: (Double) -> Void
-
+    
     @ScaledMetric private var cursorVisibleWidth = 2.0
     @ScaledMetric private var cursorVisibleHeight = 24.0
     private let cursorInteractiveSize: CGFloat = 50
-
+    
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             content
@@ -52,6 +52,6 @@ private struct WaveformInteractionModifier: ViewModifier {
         .coordinateSpace(name: Self.namespaceName)
         .animation(nil, value: progress)
     }
-
+    
     private static let namespaceName = "voice-message-waveform"
 }

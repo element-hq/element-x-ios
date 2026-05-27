@@ -33,26 +33,26 @@ struct InfoPlistReader {
     private enum Values {
         static let mentionPills = "Mention Pills"
     }
-
+    
     /// Info.plist reader on the bundle object that contains the current executable.
     static let main = InfoPlistReader(bundle: .main)
-
+    
     /// Info.plist reader on the bundle object that contains the main app executable.
     static let app = InfoPlistReader(bundle: .app)
-
+    
     private let bundle: Bundle
-
+    
     /// Initializer
     /// - Parameter bundle: bundle to read values from
     init(bundle: Bundle) {
         self.bundle = bundle
     }
-
+    
     /// App group identifier set in Info.plist of the target
     var appGroupIdentifier: String {
         infoPlistValue(forKey: Keys.appGroupIdentifier)
     }
-
+    
     /// Base bundle identifier set in Info.plist of the target
     var baseBundleIdentifier: String {
         infoPlistValue(forKey: Keys.baseBundleIdentifier)
@@ -62,27 +62,27 @@ struct InfoPlistReader {
     var keychainAccessGroupIdentifier: String {
         infoPlistValue(forKey: Keys.keychainAccessGroupIdentifier)
     }
-
+    
     /// Bundle executable of the target
     var bundleExecutable: String {
         infoPlistValue(forKey: kCFBundleExecutableKey as String)
     }
-
+    
     /// Bundle identifier of the target
     var bundleIdentifier: String {
         infoPlistValue(forKey: kCFBundleIdentifierKey as String)
     }
-
+    
     /// Bundle short version string of the target
     var bundleShortVersionString: String {
         infoPlistValue(forKey: Keys.bundleShortVersion)
     }
-
+    
     /// Bundle version of the target
     var bundleVersion: String {
         infoPlistValue(forKey: kCFBundleVersionKey as String)
     }
-
+    
     /// Bundle display name of the target
     var bundleDisplayName: String {
         infoPlistValue(forKey: Keys.bundleDisplayName)
@@ -104,7 +104,7 @@ struct InfoPlistReader {
     }
     
     // MARK: - Mention Pills
-
+    
     /// Mention Pills UTType
     var pillsUTType: String {
         let exportedTypes: [[String: Any]] = infoPlistValue(forKey: Keys.utExportedTypeDeclarationsKey)

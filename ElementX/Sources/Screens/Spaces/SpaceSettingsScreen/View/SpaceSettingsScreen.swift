@@ -138,7 +138,7 @@ struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
                                    attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                    appSettings: .volatile())
     }
-
+    
     static var previews: some View {
         ElementNavigationStack {
             SpaceSettingsScreen(context: ownerViewModel.context)

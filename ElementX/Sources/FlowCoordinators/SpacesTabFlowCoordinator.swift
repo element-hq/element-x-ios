@@ -100,7 +100,7 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .spacesScreen(selectedSpaceID: nil)]) { [weak self] _ in
             self?.presentSpacesScreen()
         }
-                
+        
         stateMachine.addRouteMapping { event, fromState, userInfo in
             guard event == .selectSpace, case .spacesScreen = fromState else { return nil }
             guard let spaceRoomListProxy = userInfo as? SpaceRoomListProxyProtocol else { fatalError("A space proxy must be provided.") }

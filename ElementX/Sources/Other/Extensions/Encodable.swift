@@ -18,7 +18,7 @@ extension Encodable {
         }
         return json
     }
-
+    
     func toJsonString(_ encoder: JSONEncoder = JSONEncoder()) throws -> String? {
         try toJsonDictionary(encoder).jsonString
     }

@@ -37,11 +37,11 @@ struct VoiceMessageRoomTimelineContent: View {
                                      onPlaybackSpeedChange: onPlaybackSpeedChange)
             .fixedSize(horizontal: false, vertical: true)
     }
-
+    
     private func onPlaybackPlayPause() {
         context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
     }
-
+    
     private func onPlaybackSpeedChange() {
         context?.send(viewAction: .handleAudioPlayerAction(.changePlaybackSpeed(itemID: timelineItem.id)))
     }

@@ -21,7 +21,7 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
     var actionsPublisher: AnyPublisher<DeclineAndBlockScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(userID: String,
          roomID: String,
          clientProxy: ClientProxyProtocol,

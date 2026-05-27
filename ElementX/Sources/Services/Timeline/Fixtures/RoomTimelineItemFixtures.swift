@@ -100,7 +100,7 @@ enum RoomTimelineItemFixtures {
          TextRoomTimelineItem(text: "How are you?",
                               senderDisplayName: "Alice")]
     }
-
+    
     /// A small chunk of events, containing 2 text items.
     static var smallChunkWithReadReceipts: [RoomTimelineItemProtocol] {
         [TextRoomTimelineItem(text: "Hey there 👋",
@@ -219,17 +219,17 @@ enum RoomTimelineItemFixtures {
          TextRoomTimelineItem(text: "Pork buffalo mollit culpa strip steak in leberkas flank cow.",
                               senderDisplayName: "Alice")]
     }
-
+    
     static var disclosedPolls: [RoomTimelineItemProtocol] {
         [PollRoomTimelineItem.mock(poll: .disclosed(), isOutgoing: false),
          PollRoomTimelineItem.mock(poll: .endedDisclosed)]
     }
-
+    
     static var undisclosedPolls: [RoomTimelineItemProtocol] {
         [PollRoomTimelineItem.mock(poll: .undisclosed(), isOutgoing: false),
          PollRoomTimelineItem.mock(poll: .endedUndisclosed)]
     }
-
+    
     static var outgoingPolls: [RoomTimelineItemProtocol] {
         [PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true), isOutgoing: true)]
     }

@@ -117,7 +117,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     var firstPreviewItemIndex: Int {
         backwardPadding
     }
-
+    
     var lastPreviewItemIndex: Int {
         backwardPadding + previewItems.count - 1
     }
@@ -276,11 +276,11 @@ enum TimelineMediaPreviewItem: Equatable {
         var caption: String? {
             timelineItem.mediaCaption
         }
-
+        
         var formattedCaption: AttributedString? {
             timelineItem.formattedMediaCaption
         }
-
+        
         var contentType: String? {
             switch timelineItem {
             case let audioItem as AudioRoomTimelineItem:

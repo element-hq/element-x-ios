@@ -59,7 +59,7 @@ struct TimelineMediaPreviewViewState: BindableState {
     var currentItem: TimelineMediaPreviewItem {
         dataSource.currentItem
     }
-
+    
     /// All of the available actions for the current item.
     var currentItemActions: TimelineItemMenuActions?
     

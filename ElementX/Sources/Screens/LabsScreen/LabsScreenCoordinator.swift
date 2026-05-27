@@ -44,7 +44,7 @@ final class LabsScreenCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(LabsScreen(context: viewModel.context))
     }

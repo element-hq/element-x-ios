@@ -65,12 +65,12 @@ private struct AuthenticationBrandLogoModifier: ViewModifier {
     private var isLight: Bool {
         colorScheme == .light
     }
-
+    
     /// Extra padding needed to avoid cropping the shadows.
     private var extra: CGFloat {
         64 * scale
     }
-
+    
     /// The shape that the logo is composed on top of.
     private var outerShape: RoundedRectangle {
         RoundedRectangle(cornerRadius: 44 * scale)

@@ -20,11 +20,11 @@ struct AppLockSetupBiometricsScreenViewState: BindableState {
     var icon: SFSymbol {
         biometryType.systemSymbol
     }
-
+    
     var title: String {
         L10n.screenAppLockSetupBiometricUnlockAllowTitle(biometryType.localizedString)
     }
-
+    
     var subtitle: String {
         L10n.screenAppLockSetupBiometricUnlockSubtitle(biometryType.localizedString)
     }

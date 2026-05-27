@@ -79,10 +79,10 @@ struct RoomAttachmentPicker: View {
 
 struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
-
+    
     static func makeViewModel() -> ComposerToolbarViewModel {
         let appSettings = AppSettings.volatile()
-
+        
         return ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                         wysiwygViewModel: WysiwygComposerViewModel(),
                                         completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
@@ -92,7 +92,7 @@ struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
                                         analyticsService: AnalyticsServiceMock(.init()),
                                         composerDraftService: ComposerDraftServiceMock(.init()))
     }
-
+    
     static var previews: some View {
         RoomAttachmentPicker(context: viewModel.context)
     }

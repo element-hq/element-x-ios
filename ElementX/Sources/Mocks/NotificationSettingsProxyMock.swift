@@ -51,7 +51,7 @@ extension NotificationSettingsProxyMock {
                 self.callbacks.send(.settingsDidChange)
             }
         }
-
+        
         restoreDefaultNotificationModeRoomIdClosure = { [weak self] _ in
             guard let self else { return }
             self.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: configuration.defaultRoomMode, isDefault: true))

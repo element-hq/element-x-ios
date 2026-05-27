@@ -48,7 +48,7 @@ final class AppLockScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(AppLockScreen(context: viewModel.context))
     }

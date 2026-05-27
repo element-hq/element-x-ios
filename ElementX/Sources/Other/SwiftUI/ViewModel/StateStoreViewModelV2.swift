@@ -24,26 +24,26 @@ class StateStoreViewModelV2<State: BindableState, ViewAction> {
     ///
     /// Left as public for `ViewModel` implementations convenience.
     var cancellables = Set<AnyCancellable>()
-
+    
     /// Constrained interface for passing to Views.
     var context: Context
-
+    
     var state: State {
         get { context.viewState }
         set { context.viewState = newValue }
     }
-
+    
     init(initialViewState: State, mediaProvider: MediaProviderProtocol? = nil) {
         context = Context(initialViewState: initialViewState, mediaProvider: mediaProvider)
         context.viewModel = self
     }
-
+    
     /// Override to handles incoming `ViewAction`s from the `ViewModel`.
     /// - Parameter viewAction: The `ViewAction` to be processed in `ViewModel` implementation.
     func process(viewAction: ViewAction) {
         // Default implementation, -no-op
     }
-
+    
     // MARK: - Context
     
     /// A constrained and concise interface for interacting with the ViewModel.
@@ -62,26 +62,26 @@ class StateStoreViewModelV2<State: BindableState, ViewAction> {
     @MainActor
     @Observable final class Context {
         fileprivate weak var viewModel: StateStoreViewModelV2?
-    
+        
         /// Get-able property for the `ViewState`
         fileprivate(set) var viewState: State
-    
+        
         /// An optional image loading service so that views can manage themselves
         /// Intentionally non-generic so that it doesn't grow uncontrollably
         let mediaProvider: MediaProviderProtocol?
-    
+        
         /// Set-able access to the bindable state.
         subscript<T>(dynamicMember keyPath: WritableKeyPath<State.BindStateType, T>) -> T {
             get { viewState.bindings[keyPath: keyPath] }
             set { viewState.bindings[keyPath: keyPath] = newValue }
         }
-    
+        
         /// Send a `ViewAction` to the `ViewModel` for processing.
         /// - Parameter viewAction: The `ViewAction` to send to the `ViewModel`.
         func send(viewAction: ViewAction) {
             viewModel?.process(viewAction: viewAction)
         }
-    
+        
         fileprivate init(initialViewState: State, mediaProvider: MediaProviderProtocol?) {
             self.viewState = initialViewState
             self.mediaProvider = mediaProvider

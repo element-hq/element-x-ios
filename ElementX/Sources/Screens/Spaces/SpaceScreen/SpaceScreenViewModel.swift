@@ -22,7 +22,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     var actionsPublisher: AnyPublisher<SpaceScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(spaceRoomListProxy: SpaceRoomListProxyProtocol,
          spaceServiceProxy: SpaceServiceProxyProtocol,
          selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>,
@@ -269,13 +269,13 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
         state.bindings.leaveSpaceViewModel = leaveSpaceViewModel
     }
-        
+    
     // MARK: - Indicators
     
     private static var removingIndicatorID: String {
         "\(Self.self)-Removing"
     }
-
+    
     private static var failureIndicatorID: String {
         "\(Self.self)-Failure"
     }

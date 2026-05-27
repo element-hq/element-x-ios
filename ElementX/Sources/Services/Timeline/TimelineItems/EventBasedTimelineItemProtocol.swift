@@ -26,11 +26,11 @@ extension EventBasedTimelineItemProtocol {
     var description: String {
         "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
     }
-
+    
     var isForwardable: Bool {
         isRemoteMessage && !(self is PollRoomTimelineItem)
     }
-
+    
     var isRemoteMessage: Bool {
         id.eventID != nil
     }
@@ -50,11 +50,11 @@ extension EventBasedTimelineItemProtocol {
     var hasFailedToSend: Bool {
         properties.deliveryStatus?.isSendingFailed == true
     }
-
+    
     var hasFailedDecryption: Bool {
         self is EncryptedRoomTimelineItem
     }
-
+    
     var timelineMenuDescription: String {
         switch self {
         case is VoiceMessageRoomTimelineItem:
@@ -63,7 +63,7 @@ extension EventBasedTimelineItemProtocol {
             return body.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
-
+    
     /// The inline area to reserve at the trailing edge of the message text so the
     /// bubble's natural size accommodates the timestamp (which is overlaid on the
     /// bubble's bottom-trailing corner). Text wraps around this area: if it fits on
@@ -86,7 +86,7 @@ extension EventBasedTimelineItemProtocol {
         width += 4
         return CGSize(width: ceil(width), height: ceil(height))
     }
-
+    
     /// contains the timestamp and an optional edited localised prefix
     /// example: (edited) 12:17 PM
     var localizedSendInfo: String {
@@ -96,12 +96,12 @@ extension EventBasedTimelineItemProtocol {
         }
         return start + timestamp.formattedTime()
     }
-
+    
     var isCopyable: Bool {
         guard let messageBasedItem = self as? EventBasedMessageTimelineItemProtocol else {
             return false
         }
-
+        
         switch messageBasedItem.contentType {
         case .audio, .file, .image, .video, .location, .voice:
             return false

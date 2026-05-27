@@ -10,14 +10,14 @@ import SwiftUI
 struct PlaybackSpeedButton: View {
     let speed: AudioPlaybackSpeed
     let onTap: () -> Void
-
+    
     var body: some View {
         Button(action: onTap) {
             ZStack {
                 Text(speed.placeholder)
                     .font(.compound.bodyXSSemibold)
                     .hidden()
-
+                
                 Text(speed.label)
                     .font(.compound.bodyXSSemibold)
                     .foregroundColor(.compound.iconSecondary)

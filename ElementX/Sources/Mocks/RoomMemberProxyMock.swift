@@ -37,7 +37,7 @@ extension RoomMemberProxyMock {
         
         powerLevel = configuration.powerLevel
     }
-
+    
     /// Mocks
     static var mockMe: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
@@ -73,19 +73,19 @@ extension RoomMemberProxyMock {
                                         displayName: "Alice",
                                         membership: .invite))
     }
-
+    
     static var mockBob: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@bob:matrix.org",
                                         displayName: "Bob",
                                         membership: .join))
     }
-
+    
     static var mockCharlie: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@charlie:matrix.org",
                                         displayName: "Charlie",
                                         membership: .join))
     }
-
+    
     static var mockDan: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@dan:matrix.org",
                                         displayName: "Dan",
@@ -110,7 +110,7 @@ extension RoomMemberProxyMock {
                                         membership: .invite,
                                         isIgnored: true))
     }
-
+    
     static var mockIgnored: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@ignored:matrix.org",
                                         displayName: "Ignored",

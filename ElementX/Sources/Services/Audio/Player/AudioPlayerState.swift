@@ -50,7 +50,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
     var showProgressIndicator: Bool {
         progress > 0
     }
-
+    
     var isAttached: Bool {
         audioPlayer != nil
     }
@@ -124,7 +124,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
         playbackSpeed = speed
         audioPlayer?.setPlaybackSpeed(speed.rawValue)
     }
-
+    
     // MARK: - Private
     
     private func subscribeToAudioPlayer(audioPlayer: AudioPlayerProtocol) {
@@ -246,7 +246,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
             }
             
             audioPlayer.pause()
-
+            
             return MPRemoteCommandHandlerStatus.success
         }
         

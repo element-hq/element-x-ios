@@ -18,7 +18,7 @@ class ShareExtensionViewController: UIViewController {
         }
         return AppSettings(store: userDefaults)
     }()
-
+    
     private var appHooks: AppHooks!
     
     private let keychainController = KeychainController(service: .sessions,

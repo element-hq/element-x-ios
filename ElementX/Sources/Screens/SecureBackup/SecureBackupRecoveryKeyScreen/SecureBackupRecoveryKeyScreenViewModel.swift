@@ -19,7 +19,7 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
     var actions: AnyPublisher<SecureBackupRecoveryKeyScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(secureBackupController: SecureBackupControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          isModallyPresented: Bool) {

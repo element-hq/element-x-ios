@@ -44,7 +44,7 @@ final class RoomPollsHistoryScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(RoomPollsHistoryScreen(context: viewModel.context))
     }

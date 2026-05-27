@@ -25,7 +25,7 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
     var actions: AnyPublisher<SpaceAddRoomsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(spaceRoomListProxy: SpaceRoomListProxyProtocol,
          userSession: UserSessionProtocol,
          roomSummaryProvider: RoomSummaryProviderProtocol,
@@ -167,7 +167,7 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
     private var savingIndicatorID: String {
         "\(Self.self)-Saving"
     }
-
+    
     private var failureIndicatorID: String {
         "\(Self.self)-Failure"
     }

@@ -198,7 +198,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             .sink { [weak self] sessions in
                 guard let self else { return }
                 syncActiveRoomProxies(with: sessions)
-            
+                
                 if sessions.isEmpty {
                     self.stopUpdatingLocation()
                 } else {

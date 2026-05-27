@@ -37,7 +37,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
     private let viewModel: SpaceScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<SpaceScreenCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SpaceScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -87,7 +87,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(SpaceScreen(context: viewModel.context))
     }

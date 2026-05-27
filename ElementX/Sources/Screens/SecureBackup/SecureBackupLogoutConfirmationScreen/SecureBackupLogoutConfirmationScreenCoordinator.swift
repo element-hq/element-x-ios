@@ -51,7 +51,7 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
         }
         .store(in: &cancellables)
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(SecureBackupLogoutConfirmationScreen(context: viewModel.context))
     }

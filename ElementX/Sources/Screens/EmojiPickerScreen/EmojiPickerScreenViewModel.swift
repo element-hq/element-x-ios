@@ -47,7 +47,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     }
     
     // MARK: - Private
-
+    
     private func loadEmojis() {
         Task(priority: .userInitiated) { [weak self] in
             guard let self else { return }

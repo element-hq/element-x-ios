@@ -64,12 +64,12 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.login)
                 case .register:
                     actionsSubject.send(.register)
-                
+                    
                 case .loginDirectlyWithOAuth(let data, let window):
                     actionsSubject.send(.loginDirectlyWithOAuth(data: data, window: window))
                 case .loginDirectlyWithPassword(let loginHint):
                     actionsSubject.send(.loginDirectlyWithPassword(loginHint: loginHint))
-                
+                    
                 case .reportProblem:
                     actionsSubject.send(.reportProblem)
                 case .developerOptions:

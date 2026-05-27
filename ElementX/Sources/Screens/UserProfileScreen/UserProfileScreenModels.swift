@@ -24,7 +24,7 @@ struct UserProfileScreenViewState: BindableState {
     var isVerified: Bool?
     var permalink: URL?
     var dmRoomID: String?
-
+    
     var bindings: UserProfileScreenViewStateBindings
     
     var showVerifiedBadge: Bool {

@@ -31,13 +31,13 @@ extension URL {
             .appending(component: "Logs", directoryHint: .isDirectory)
             .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
     }
-
+    
     /// The base directory where all session data is stored.
     static var sessionsBaseDirectory: URL {
         let applicationSupportSessionsURL = applicationSupportBaseDirectory.appending(component: "Sessions", directoryHint: .isDirectory)
         
         try? FileManager.default.createDirectoryIfNeeded(at: applicationSupportSessionsURL)
-
+        
         return applicationSupportSessionsURL
     }
     
@@ -47,7 +47,7 @@ extension URL {
             .appending(component: "Library", directoryHint: .isDirectory)
             .appending(component: "Application Support", directoryHint: .isDirectory)
             .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
-
+        
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
         do {
@@ -57,7 +57,7 @@ extension URL {
         } catch {
             MXLog.error("Failed excluding Application Support from backups")
         }
-
+        
         return url
     }
     
@@ -68,12 +68,12 @@ extension URL {
             .appending(component: "Caches", directoryHint: .isDirectory)
             .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
             .appending(component: "Sessions", directoryHint: .isDirectory)
-
+        
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
         // Caches are excluded from backups automatically.
         // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
-
+        
         return url
     }
     
@@ -84,12 +84,12 @@ extension URL {
     static var appGroupTemporaryDirectory: URL {
         let url = appGroupContainerDirectory
             .appending(component: "tmp", directoryHint: .isDirectory)
-
+        
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
         // Temporary files are excluded from backups automatically.
         // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
-
+        
         return url
     }
     
@@ -116,7 +116,7 @@ extension URL {
         
         MXLog.info("Found \(String(describing: proxies?.count)) proxies, using the first one.")
         MXLog.info("Proxy type is \(proxyType)")
-            
+        
         guard let host = firstProxy[kCFProxyHostNameKey] as? String else {
             MXLog.error("Found proxy with invalid host name")
             return nil
@@ -138,23 +138,23 @@ extension URL {
     static var mockMXCAudio: URL {
         "mxc://matrix.org/1234567890AuDiO"
     }
-
+    
     static var mockMXCFile: URL {
         "mxc://matrix.org/1234567890FiLe"
     }
-
+    
     static var mockMXCImage: URL {
         "mxc://matrix.org/1234567890ImAgE"
     }
-
+    
     static var mockMXCVideo: URL {
         "mxc://matrix.org/1234567890ViDeO"
     }
-
+    
     static var mockMXCAvatar: URL {
         "mxc://matrix.org/1234567890AvAtAr"
     }
-
+    
     static var mockMXCUserAvatar: URL {
         "mxc://matrix.org/1234567890AvAtArUsEr"
     }

@@ -18,7 +18,7 @@ class EncryptionResetPasswordScreenViewModel: EncryptionResetPasswordScreenViewM
     var actionsPublisher: AnyPublisher<EncryptionResetPasswordScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(passwordPublisher: PassthroughSubject<String, Never>) {
         self.passwordPublisher = passwordPublisher
         

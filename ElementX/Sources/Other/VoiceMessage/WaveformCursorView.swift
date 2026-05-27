@@ -11,7 +11,7 @@ import SwiftUI
 
 struct WaveformCursorView: View {
     var color: Color = .compound.iconAccentTertiary
-
+    
     var body: some View {
         RoundedRectangle(cornerRadius: 1)
             .fill(color)

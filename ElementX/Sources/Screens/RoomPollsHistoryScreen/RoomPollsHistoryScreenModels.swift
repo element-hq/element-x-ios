@@ -33,7 +33,7 @@ struct RoomPollsHistoryScreenViewState: BindableState {
 struct RoomPollsHistoryScreenViewStateBindings {
     /// Polls list filter
     var filter: RoomPollsHistoryFilter
-
+    
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomPollsHistoryScreenErrorType>?
 }

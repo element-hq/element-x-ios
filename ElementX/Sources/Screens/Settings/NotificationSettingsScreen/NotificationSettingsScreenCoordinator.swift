@@ -38,7 +38,7 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: NotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
-
+        
         viewModel = NotificationSettingsScreenViewModel(appSettings: parameters.appSettings,
                                                         userNotificationCenter: parameters.userNotificationCenter,
                                                         notificationToneManager: NotificationToneManager(appSettings: parameters.appSettings),

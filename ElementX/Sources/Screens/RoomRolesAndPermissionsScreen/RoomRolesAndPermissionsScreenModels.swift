@@ -27,7 +27,7 @@ struct RoomRolesAndPermissionsScreenViewState: BindableState {
     var moderatorCount: Int?
     /// The permissions of the room when loaded.
     var permissions: RoomPermissions?
-        
+    
     var bindings = RoomRolesAndPermissionsScreenViewStateBindings()
 }
 

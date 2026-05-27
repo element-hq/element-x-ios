@@ -42,7 +42,7 @@ class AnalyticsService: AnalyticsServiceProtocol {
         // The order is important here. PostHog ignores the reset if stopped.
         reset()
         client.stop()
-
+        
         MXLog.info("Stopped.")
     }
     
@@ -50,7 +50,7 @@ class AnalyticsService: AnalyticsServiceProtocol {
         guard isEnabled, !client.isRunning, let configuration = appSettings.analyticsConfiguration else { return }
         
         client.start(analyticsConfiguration: configuration)
-
+        
         // Sanity check in case something went wrong.
         guard client.isRunning else { return }
         
@@ -139,17 +139,17 @@ extension AnalyticsService {
         }
         capture(event: AnalyticsEvent.JoinedRoom(isDM: isDM, isSpace: isSpace, roomSize: roomSize, trigger: nil))
     }
-
+    
     func trackPollCreated(isUndisclosed: Bool, numberOfAnswers: Int) {
         capture(event: AnalyticsEvent.PollCreation(action: .Create,
                                                    isUndisclosed: isUndisclosed,
                                                    numberOfAnswers: numberOfAnswers))
     }
-
+    
     func trackPollVote() {
         capture(event: AnalyticsEvent.PollVote(doNotUse: nil))
     }
-
+    
     func trackPollEnd() {
         capture(event: AnalyticsEvent.PollEnd(doNotUse: nil))
     }
@@ -185,7 +185,7 @@ extension AnalyticsService {
         case .settingUp:
             return
         }
-
+        
         let event = AnalyticsEvent.CryptoSessionStateChange(recoveryState: analyticsRecoveryState, verificationState: analyticsVerificationState)
         client.capture(event)
     }

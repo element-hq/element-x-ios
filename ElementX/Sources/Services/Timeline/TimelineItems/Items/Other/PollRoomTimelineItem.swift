@@ -29,11 +29,11 @@ struct Poll: Hashable {
     let endDate: Date?
     /// Whether the poll has been created by the account owner
     let createdByAccountOwner: Bool
-
+    
     var hasEnded: Bool {
         endDate != nil
     }
-
+    
     enum Kind: Hashable {
         case disclosed
         case undisclosed
@@ -42,7 +42,7 @@ struct Poll: Hashable {
     var hasMaxSelections: Bool {
         options.filter(\.isSelected).count == maxSelections
     }
-
+    
     struct Option: Hashable {
         let id: String
         let text: String

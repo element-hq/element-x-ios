@@ -30,7 +30,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     private(set) var notificationSettings: MatrixRustSDK.NotificationSettingsProtocol
     
     let callbacks = PassthroughSubject<NotificationSettingsProxyCallback, Never>()
-
+    
     init(notificationSettings: MatrixRustSDK.NotificationSettingsProtocol) {
         self.notificationSettings = notificationSettings
         notificationSettings.setDelegate(delegate: WeakNotificationSettingsProxy(proxy: self))
@@ -55,7 +55,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         let roomNotificationMode = await notificationSettings.getDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         return RoomNotificationModeProxy.from(roomNotificationMode: roomNotificationMode)
     }
-
+    
     func setDefaultRoomNotificationMode(isEncrypted: Bool, isOneToOne: Bool, mode: RoomNotificationModeProxy) async throws {
         do {
             try await notificationSettings.setDefaultRoomNotificationMode(isEncrypted: isEncrypted, isOneToOne: isOneToOne, mode: mode.roomNotificationMode)
@@ -65,7 +65,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
             MXLog.warning("Unable to find the rule: \(ruleId)")
             return
         }
-
+        
         await updatedSettings()
     }
     
@@ -73,7 +73,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         try await notificationSettings.restoreDefaultRoomNotificationMode(roomId: roomId)
         await updatedSettings()
     }
-       
+    
     func unmuteRoom(roomId: String, isEncrypted: Bool, isOneToOne: Bool) async throws {
         try await notificationSettings.unmuteRoom(roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne)
         await updatedSettings()

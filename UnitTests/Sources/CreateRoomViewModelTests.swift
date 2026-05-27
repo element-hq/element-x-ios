@@ -16,19 +16,19 @@ final class CreateRoomScreenViewModelTests {
     var clientProxy: ClientProxyMock!
     var spaceService: SpaceServiceProxyMock!
     var userSession: UserSessionMock!
-
+    
     private let appSettings: AppSettings
-
+    
     private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
     
     var context: CreateRoomScreenViewModel.Context {
         viewModel.context
     }
-
+    
     init() {
         appSettings = AppSettings.volatile()
     }
-
+    
     deinit {
         viewModel = nil
         clientProxy = nil

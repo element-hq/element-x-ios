@@ -20,7 +20,7 @@ enum ExtensionLogger {
         formatter.minimumFractionDigits = 2
         return formatter
     }
-
+    
     private static var formattedMemoryAvailable: String {
         let freeBytes = os_proc_available_memory()
         let freeMB = Double(freeBytes) / 1024 / 1024
@@ -29,7 +29,7 @@ enum ExtensionLogger {
         }
         return "\(formattedStr) MB"
     }
-
+    
     /// Details: https://developer.apple.com/forums/thread/105088
     /// - Returns: Current memory footprint
     private static var memoryFootprint: Float? {
@@ -50,10 +50,10 @@ enum ExtensionLogger {
         guard kr == KERN_SUCCESS, count >= TASK_VM_INFO_REV1_COUNT else {
             return nil
         }
-
+        
         return Float(info.phys_footprint)
     }
-
+    
     /// Formatted memory footprint for debugging purposes
     /// - Returns: Memory footprint in MBs as a readable string
     static var formattedMemoryFootprint: String {
@@ -64,7 +64,7 @@ enum ExtensionLogger {
         }
         return "\(formattedStr) MB"
     }
-
+    
     static func logMemory(with tag: String) {
         MXLog.info("\(tag) Memory: footprint: \(formattedMemoryFootprint) - available: \(formattedMemoryAvailable)")
     }

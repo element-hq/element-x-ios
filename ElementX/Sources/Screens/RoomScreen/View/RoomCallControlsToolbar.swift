@@ -33,7 +33,7 @@ struct RoomCallControlsToolbar: ToolbarContent {
                             } label: {
                                 Label(L10n.a11yStartVoiceCall, icon: \.voiceCallSolid)
                             }
-                                
+                            
                             Button {
                                 onCallTap(false)
                             } label: {

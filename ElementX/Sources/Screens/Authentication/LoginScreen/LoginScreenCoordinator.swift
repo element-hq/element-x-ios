@@ -30,11 +30,11 @@ enum LoginScreenCoordinatorAction {
 final class LoginScreenCoordinator: CoordinatorProtocol {
     private let parameters: LoginScreenCoordinatorParameters
     private var viewModel: LoginScreenViewModelProtocol
-        
+    
     private var authenticationService: AuthenticationServiceProtocol {
         parameters.authenticationService
     }
-
+    
     private let actionsSubject: PassthroughSubject<LoginScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
@@ -55,7 +55,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     }
     
     // MARK: - Public
-
+    
     func start() {
         viewModel.actions
             .sink { [weak self] action in
@@ -70,7 +70,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
     }
-
+    
     func stop() {
         viewModel.stopLoading()
     }

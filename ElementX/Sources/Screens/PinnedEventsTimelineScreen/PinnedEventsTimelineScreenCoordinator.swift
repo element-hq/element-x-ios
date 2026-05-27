@@ -37,7 +37,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
     private let timelineViewModel: TimelineViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<PinnedEventsTimelineScreenCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<PinnedEventsTimelineScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -108,7 +108,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
     func stop() {
         viewModel.stop()
     }
-        
+    
     func toPresentable() -> AnyView {
         AnyView(PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: timelineViewModel.context))
     }

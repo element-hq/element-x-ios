@@ -15,15 +15,15 @@ class ChatsTabFlowCoordinatorStateMachine {
         case room(roomID: String)
         case space
     }
-
+    
     /// States the AppCoordinator can find itself in
     enum State: StateType {
         /// The initial state, used before the coordinator starts
         case initial
-                
+        
         /// Showing the home screen. The `roomListSelectedRoomID` represents the timeline shown on the detail panel (if any)
         case roomList(detailState: DetailState?)
-                        
+        
         /// Showing the feedback screen.
         case feedbackScreen(detailState: DetailState?)
         
@@ -78,7 +78,7 @@ class ChatsTabFlowCoordinatorStateMachine {
         let animated: Bool
         var spaceRoomListProxy: SpaceRoomListProxyProtocol?
     }
-
+    
     /// Events that can be triggered on the AppCoordinator state machine
     enum Event: EventType {
         /// Start the user session flows.
@@ -152,10 +152,10 @@ class ChatsTabFlowCoordinatorStateMachine {
         stateMachine = StateMachine(state: .initial)
         configure()
     }
-
+    
     private func configure() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(detailState: nil)])
-
+        
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
             case (.roomList, .selectRoom(let roomID, _, _)):
@@ -163,7 +163,7 @@ class ChatsTabFlowCoordinatorStateMachine {
             case (.roomList(let detailState), .deselectRoom):
                 // Ignore the flow's dismissal if it has already been replaced with a space.
                 return detailState == .space ? nil : .roomList(detailState: nil)
-                                
+                
             case (.roomList, .startSpaceFlow):
                 return .roomList(detailState: .space)
             case (.roomList, .finishedSpaceFlow):
@@ -193,7 +193,7 @@ class ChatsTabFlowCoordinatorStateMachine {
                 return .roomDirectorySearchScreen(detailState: detailState)
             case (.roomDirectorySearchScreen(let detailState), .dismissedRoomDirectorySearchScreen):
                 return .roomList(detailState: detailState)
-            
+                
             case (_, .showUserProfileScreen):
                 return .userProfileScreen
             case (.userProfileScreen, .dismissedUserProfileScreen):

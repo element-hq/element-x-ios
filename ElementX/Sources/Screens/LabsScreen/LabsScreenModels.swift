@@ -24,11 +24,11 @@ struct LabsScreenViewState: BindableState {
 @dynamicMemberLookup
 struct LabsScreenViewStateBindings {
     private let labsOptions: LabsOptionsProtocol
-
+    
     init(labsOptions: LabsOptionsProtocol) {
         self.labsOptions = labsOptions
     }
-
+    
     subscript<Setting>(dynamicMember keyPath: ReferenceWritableKeyPath<LabsOptionsProtocol, Setting>) -> Setting {
         get { labsOptions[keyPath: keyPath] }
         set { labsOptions[keyPath: keyPath] = newValue }
