@@ -154,6 +154,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionCopyCaption, icon: \.copy)
         case .edit:
             Label(L10n.actionEdit, icon: \.edit)
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.timelineItemActionMenuAction.edit)
         case .addCaption:
             Label(L10n.actionAddCaption, icon: \.edit)
         case .editCaption:

@@ -183,6 +183,12 @@ enum A11yIdentifiers {
             let openComposeOptions = "composer_toolbar-open_compose_options"
             let closeFormattingOptions = "composer_toolbar-close-formatting-options"
         }
+        
+        let timelineItemActionMenuAction = TimelineItemActionMenuAction()
+        
+        struct TimelineItemActionMenuAction {
+            let edit = "timeline_item_action_menu-edit"
+        }
     }
     
     struct RoomDetailsScreen {

@@ -34,7 +34,7 @@ class UserSessionScreenTests: XCTestCase {
     }
     
     func testUserSessionFlows() async throws {
-        let app = Application.launch(.userSessionScreen)
+        let app = Application.launch(.userSessionScreen, disableTimelineAccessibility: false)
         
         app.swipeDown() // Make sure the header shows a large title
         
@@ -44,7 +44,35 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(app.buttons[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.roomScreen)
-
+        
+        var composer = app.textViews[A11yIdentifiers.roomScreen.messageComposer]
+        composer.tap(.center)
+        composer.typeText("sugar honey ice")
+        
+        app.buttons[A11yIdentifiers.roomScreen.sendButton].tap()
+        
+        let latestMessage = app.textViews.matching(NSPredicate(format: "value CONTAINS 'sugar honey ice'")).firstMatch
+        XCTAssert(latestMessage.waitForExistence(timeout: 5.0))
+         
+        // Tapping on the mesage text view or the cell doesn't work.
+        // Use the sender static text instead.
+        let latestEventSender = app.staticTexts["@test.matrix.org"]
+        XCTAssert(latestEventSender.waitForExistence(timeout: 5.0))
+        latestEventSender.press(forDuration: 5.0)
+        
+        let editButton = app.buttons[A11yIdentifiers.roomScreen.timelineItemActionMenuAction.edit]
+        XCTAssert(editButton.waitForExistence(timeout: 5.0))
+        editButton.tap()
+        
+        composer = app.textViews[A11yIdentifiers.roomScreen.messageComposer]
+        composer.tap(.center)
+        composer.typeText(" & tea")
+        
+        app.buttons[A11yIdentifiers.roomScreen.sendButton].tap()
+        
+        let latestEditedMessage = app.textViews.matching(NSPredicate(format: "value CONTAINS 'sugar honey ice & tea'")).firstMatch
+        XCTAssert(latestEditedMessage.waitForExistence(timeout: 5.0))
+                
         app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap(.center)
         try await app.assertScreenshot(step: Step.composerAttachments)
     }
