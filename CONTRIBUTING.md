@@ -24,7 +24,7 @@ Only once all of the above is met should you open a PR with your proposed change
 * We are also fine with AI led contributions within reasonable bounds
 	*  You are completely responsible for the quality of the PR
 	*  If the PR doesn't show minimal effort (code does not compile, code does not work as expected, etc.) on your part it will be closed
-	*  Try to write the description yourself, we don't have the bandwidth for LLM essays. The code needs to speak for itself.
+	*  Please write the description yourself, we don't have the bandwidth to read LLM essays. The code needs to speak for itself.
 * We use git for version control and GitHub for reviews, so in order to make everybody's life easier please:
 	* Keep the existing pull request template
 	* Don't submit large PRs, especially if not previously talked about. Anything above 200 lines is large (excluding generated code e.g. tests, translations, mocks)
