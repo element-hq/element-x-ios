@@ -12,6 +12,7 @@
 --commas inline
 --ifdef no-indent
 --indent 4
+--indent-blank-lines enabled
 --nospaceoperators ...,..<
 --stripunusedargs closure-only
 --trimwhitespace nonblank-lines
