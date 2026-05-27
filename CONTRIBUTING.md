@@ -19,7 +19,7 @@ Only once all of the above is met should you open a PR with your proposed change
 
 ## Etiquette
 
-* As stated above all significant changes should be communicated through an issue or public room before opening a PR
+* As stated above all significant changes should be communicated through an issue before opening a PR
 * We are happy to receive contributions but features tend to require maintenance, so depending on the change we might not be willing to accept it
 * We are also fine with AI led contributions within reasonable bounds
 	*  You are completely responsible for the quality of the PR
