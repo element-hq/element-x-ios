@@ -23,7 +23,7 @@ Only once all of the above is met should you open a PR with your proposed change
 * We are happy to receive contributions but features always require maintenance, so depending on the change we might not be willing to accept it
 * We are also fine with AI led contributions within reasonable bounds
 	*  You are completely responsible for the quality of the PR
-	*  If the PR doesn't show minimal effort on your part it will be closed
+	*  If the PR doesn't show minimal effort (code does not compile, code does not work as expected, etc.) on your part it will be closed
 	*  Try to write the description yourself, we don't have the bandwidth for LLM essays. The code needs to speak for itself.
 * We use git for version control and GitHub for reviews, so in order to make everybody's life easier please:
 	* Keep the existing pull request template
