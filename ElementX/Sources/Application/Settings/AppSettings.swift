@@ -405,7 +405,7 @@ final class AppSettings: @unchecked Sendable {
                                                                              lightStyleID: "9bc819c8-e627-474a-a348-ec144fe3d810",
                                                                              darkStyleID: "dea61faf-292b-4774-9660-58fcef89a7f3")
 
-    /// The resolved map tile settings. Defaults to ``MapTilerSettings/config(_:)`` with the
+    /// The resolved map tile settings. Defaults to ``MapTilerSettings/configuration(_:)`` with the
     /// bundled configuration and is remotely overridden with ``MapTilerSettings/url(_:)`` when
     /// the homeserver advertises a `style.json` URL via the matrix client well-known.
     private(set) var mapTilerSettings = RemotePreference<MapTilerSettings>(.configuration(AppSettings.bundledMapTilerConfiguration))

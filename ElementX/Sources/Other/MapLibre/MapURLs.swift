@@ -59,6 +59,8 @@ extension MapTilerSettings: MapTilerURLBuilderProtocol {
     }
 }
 
+// MARK: - Private
+
 private extension MapTilerSettings.Configuration {
     func styleURL(for style: MapTilerStyle) -> URL? {
         guard let apiKey else { return nil }

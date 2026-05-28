@@ -11,9 +11,7 @@ import Foundation
 /// The map tile settings used to build interactive and static map URLs.
 ///
 /// Either resolves to a locally-bundled MapTiler configuration, or to a remote
-/// `style.json` URL advertised by the homeserver through the matrix client well-known
-/// (`tile_server.map_style_url`). When the override URL is present it fully replaces
-/// the bundled configuration and is used regardless of light/dark appearance.
+/// `style.json` URL
 enum MapTilerSettings: Equatable {
     /// All of the configuration necessary to use MapTiler maps.
     ///
