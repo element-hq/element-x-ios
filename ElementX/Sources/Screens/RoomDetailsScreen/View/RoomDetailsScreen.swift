@@ -25,18 +25,20 @@ struct RoomDetailsScreen: View {
             // The invitation flow is different for DMs
             if context.viewState.dmRecipientInfo != nil {
                 inviteToNewRoomSection
+                
+                profileSection
+            } else {
+                peopleSection
             }
             
             configurationSection
-            
-            if context.viewState.dmRecipientInfo == nil {
-                peopleSection
-            }
             
             securitySection
             
             if let recipient = context.viewState.dmRecipientInfo?.member {
                 ignoreUserSection(user: recipient)
+            } else if context.viewState.reportRoomEnabled {
+                reportRoomSection
             }
             
             leaveRoomSection
@@ -171,10 +173,33 @@ struct RoomDetailsScreen: View {
     }
     
     private var inviteToNewRoomSection: some View {
-        ListRow(label: .default(title: L10n.actionInvite, icon: \.userAdd),
-                kind: .navigationLink {
-                    context.send(viewAction: .processTapInvite)
-                })
+        Section {
+            ListRow(label: .default(title: L10n.actionInvite, icon: \.userAdd),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapInvite)
+                    })
+        }
+    }
+    
+    private var profileSection: some View {
+        Section {
+            if context.viewState.dmRecipientInfo != nil {
+                let details: ListRowDetails? = switch context.viewState.dmRecipientInfo?.verificationState {
+                case .verified:
+                    .icon(CompoundIcon(\.verified).foregroundStyle(.compound.iconSuccessPrimary))
+                case .verificationViolation:
+                    .icon(CompoundIcon(\.infoSolid).foregroundStyle(.compound.iconCriticalPrimary))
+                case .notVerified, .none:
+                    nil
+                }
+                
+                ListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle, icon: \.userProfile),
+                        details: details,
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapRecipientProfile)
+                        })
+            }
+        }
     }
     
     private var configurationSection: some View {
@@ -201,28 +226,6 @@ struct RoomDetailsScreen: View {
                         kind: .navigationLink {
                             context.send(viewAction: .processTapSecurityAndPrivacy)
                         })
-            }
-            
-            if context.viewState.dmRecipientInfo != nil {
-                switch context.viewState.dmRecipientInfo?.verificationState {
-                case .verified:
-                    ListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle, icon: \.userProfile),
-                            details: .icon(CompoundIcon(\.verified).foregroundStyle(.compound.iconSuccessPrimary)),
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapRecipientProfile)
-                            })
-                case .verificationViolation:
-                    ListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle, icon: \.userProfile),
-                            details: .icon(CompoundIcon(\.infoSolid).foregroundStyle(.compound.iconCriticalPrimary)),
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapRecipientProfile)
-                            })
-                default:
-                    ListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle, icon: \.userProfile),
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapRecipientProfile)
-                            })
-                }
             }
         }
     }
@@ -293,21 +296,6 @@ struct RoomDetailsScreen: View {
         }
     }
     
-    private var leaveRoomSection: some View {
-        Section {
-            if context.viewState.reportRoomEnabled {
-                ListRow(label: .action(title: L10n.actionReportRoom,
-                                       icon: \.chatProblem,
-                                       role: .destructive),
-                        kind: .button { context.send(viewAction: .processTapReport) })
-            }
-            ListRow(label: .action(title: L10n.screenRoomDetailsLeaveRoomTitle,
-                                   icon: \.leave,
-                                   role: .destructive),
-                    kind: .button { context.send(viewAction: .processTapLeave) })
-        }
-    }
-    
     private func ignoreUserSection(user: RoomMemberDetails) -> some View {
         Section {
             ListRow(label: .default(title: user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
@@ -318,6 +306,26 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: user.isIgnored ? .processTapUnignore : .processTapIgnore)
                     })
                     .disabled(context.viewState.isProcessingIgnoreRequest)
+        }
+    }
+    
+    private var reportRoomSection: some View {
+        Section {
+            if context.viewState.reportRoomEnabled {
+                ListRow(label: .action(title: L10n.actionReportRoom,
+                                       icon: \.chatProblem,
+                                       role: .destructive),
+                        kind: .button { context.send(viewAction: .processTapReport) })
+            }
+        }
+    }
+    
+    private var leaveRoomSection: some View {
+        Section {
+            ListRow(label: .action(title: L10n.screenRoomDetailsLeaveRoomTitle,
+                                   icon: \.leave,
+                                   role: .destructive),
+                    kind: .button { context.send(viewAction: .processTapLeave) })
         }
     }
     
@@ -363,26 +371,38 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         RoomDetailsScreen(context: genericJoinedRoomViewModel.context)
             .snapshotPreferences(expect: genericJoinedRoomViewModel.context.observe(\.viewState.permalink).map { $0 != nil })
             .previewDisplayName("Generic Room - Joined History Visibility")
+            .previewLayout(.sizeThatFits)
+            .frame(height: 1400)
         
         RoomDetailsScreen(context: genericWorldReadableRoomViewModel.context)
             .snapshotPreferences(expect: genericWorldReadableRoomViewModel.context.observe(\.viewState.permalink).map { $0 != nil })
             .previewDisplayName("Generic Room - World Readable History Visibility")
+            .previewLayout(.sizeThatFits)
+            .frame(height: 1400)
         
         RoomDetailsScreen(context: simpleRoomViewModel.context)
             .snapshotPreferences(expect: simpleRoomViewModel.context.observe(\.viewState.permalink).map { $0 != nil })
             .previewDisplayName("Simple Room")
+            .previewLayout(.sizeThatFits)
+            .frame(height: 1200)
         
         RoomDetailsScreen(context: dmRoomViewModel.context)
             .snapshotPreferences(expect: dmRoomViewModel.context.observe(\.viewState.accountOwner).map { $0 != nil })
             .previewDisplayName("DM Room")
+            .previewLayout(.sizeThatFits)
+            .frame(height: 1350)
         
         RoomDetailsScreen(context: dmRoomVerifiedViewModel.context)
             .snapshotPreferences(expect: dmRoomVerifiedViewModel.context.observe(\.viewState.dmRecipientInfo?.verificationState).map { $0 == .verified })
             .previewDisplayName("DM Room Verified")
+            .previewLayout(.sizeThatFits)
+            .frame(height: 1350)
         
         RoomDetailsScreen(context: dmRoomVerificationViolationViewModel.context)
             .snapshotPreferences(expect: dmRoomVerificationViolationViewModel.context.observe(\.viewState.accountOwner).map { $0 != nil })
             .previewDisplayName("DM Room Verification Violation")
+            .previewLayout(.sizeThatFits)
+            .frame(height: 1350)
     }
     
     private static func makeGenericRoomViewModel(historyVisibility: RoomHistoryVisibility) -> RoomDetailsScreenViewModel {
