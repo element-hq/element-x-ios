@@ -845,6 +845,7 @@
 		8A5064CAC8E5F3B18645621D /* CallNotificationRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E082B0507FB28F966516A /* CallNotificationRoomTimelineView.swift */; };
 		8A83D715940378B9BA9F739E /* RoomInviterLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB58E4E8D6D634C246AD5C2 /* RoomInviterLabel.swift */; };
 		8AA84EF202F2EFC8453A97BD /* SecureBackupRecoveryKeyScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645E027C112740573D27765C /* SecureBackupRecoveryKeyScreenModels.swift */; };
+		8AAE2EB68802E837F568163C /* SignallingTimelineItemProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE61568A225F7AA068583AA7 /* SignallingTimelineItemProviderMock.swift */; };
 		8AB8ED1051216546CB35FA0E /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5E9C044BEB7C70B1378E91 /* UserSession.swift */; };
 		8AEE47A14223423806A7653A /* LiveLocationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2FEFA393FC7D2870263012 /* LiveLocationSession.swift */; };
 		8B1D5CE017EEC734CF5FE130 /* Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260004737C573A56FA01E86E /* Encodable.swift */; };
@@ -2995,6 +2996,7 @@
 		ED60E4D2CD678E1EBF16F77A /* BlockedUsersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedUsersScreen.swift; sourceTree = "<group>"; };
 		EDDE826EAB1BAB80C1104980 /* SpaceFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceFlowCoordinator.swift; sourceTree = "<group>"; };
 		EE378083653EF0C9B5E9D580 /* EmoteRoomTimelineItemContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoteRoomTimelineItemContent.swift; sourceTree = "<group>"; };
+		EE61568A225F7AA068583AA7 /* SignallingTimelineItemProviderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignallingTimelineItemProviderMock.swift; sourceTree = "<group>"; };
 		EE8BCD14EFED23459A43FDFF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEAB5662310AE73D93815134 /* JoinRoomScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinRoomScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		EED6D8956E554CEDFD4FE00D /* LocationSharingScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSharingScreenViewModelTests.swift; sourceTree = "<group>"; };
@@ -3839,6 +3841,7 @@
 				7396A6491DEC64FCB66F60A1 /* RoomThreadListServiceProxyMock.swift */,
 				4AB29A2D95D3469B5F016655 /* SecureBackupControllerMock.swift */,
 				248649EBA5BC33DB93698734 /* SessionVerificationControllerProxyMock.swift */,
+				EE61568A225F7AA068583AA7 /* SignallingTimelineItemProviderMock.swift */,
 				7DB2A5FF1E68BA580A20D405 /* SpaceRoomListProxyMock.swift */,
 				EF36FC3DE25B20B7FA91F1FD /* SpaceServiceProxyMock.swift */,
 				B0F5CC38803B8382D2C63222 /* TimelineControllerFactoryMock.swift */,
@@ -8979,6 +8982,7 @@
 				1C8BC70A18060677E295A846 /* ShareToMapsAppActivity.swift in Sources */,
 				274CE3C986841D15FD530BF5 /* ShimmerModifier.swift in Sources */,
 				5038E69A5E6A89DE1A345E04 /* ShouldScrollOnKeyboardDidShow.swift in Sources */,
+				8AAE2EB68802E837F568163C /* SignallingTimelineItemProviderMock.swift in Sources */,
 				77920AFA8091AC6B9F190C90 /* Signposter.swift in Sources */,
 				2E6AD068D7767BDC33626F1C /* SnapshotableGlassEffect.swift in Sources */,
 				F08F7BC07CA9AEF5CD157918 /* Snapshotting.swift in Sources */,
