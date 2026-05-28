@@ -20007,6 +20007,1676 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
         }
     }
 }
+class TimelineControllerMock: TimelineControllerProtocol, @unchecked Sendable {
+    var roomID: String {
+        get { return underlyingRoomID }
+        set(value) { underlyingRoomID = value }
+    }
+    var underlyingRoomID: String!
+    var timelineKind: TimelineKind {
+        get { return underlyingTimelineKind }
+        set(value) { underlyingTimelineKind = value }
+    }
+    var underlyingTimelineKind: TimelineKind!
+    var timelineItems: [RoomTimelineItemProtocol] = []
+    var paginationState: TimelinePaginationState {
+        get { return underlyingPaginationState }
+        set(value) { underlyingPaginationState = value }
+    }
+    var underlyingPaginationState: TimelinePaginationState!
+    var callbacks: PassthroughSubject<TimelineControllerCallback, Never> {
+        get { return underlyingCallbacks }
+        set(value) { underlyingCallbacks = value }
+    }
+    var underlyingCallbacks: PassthroughSubject<TimelineControllerCallback, Never>!
+
+    //MARK: - processItemAppearance
+
+    var processItemAppearanceUnderlyingCallsCount = 0
+    var processItemAppearanceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return processItemAppearanceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = processItemAppearanceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                processItemAppearanceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    processItemAppearanceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var processItemAppearanceCalled: Bool {
+        return processItemAppearanceCallsCount > 0
+    }
+    var processItemAppearanceReceivedItemID: TimelineItemIdentifier?
+    var processItemAppearanceReceivedInvocations: [TimelineItemIdentifier] = []
+    var processItemAppearanceClosure: ((TimelineItemIdentifier) async -> Void)?
+
+    func processItemAppearance(_ itemID: TimelineItemIdentifier) async {
+        processItemAppearanceCallsCount += 1
+        processItemAppearanceReceivedItemID = itemID
+        DispatchQueue.main.async {
+            self.processItemAppearanceReceivedInvocations.append(itemID)
+        }
+        await processItemAppearanceClosure?(itemID)
+    }
+    //MARK: - processItemDisappearance
+
+    var processItemDisappearanceUnderlyingCallsCount = 0
+    var processItemDisappearanceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return processItemDisappearanceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = processItemDisappearanceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                processItemDisappearanceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    processItemDisappearanceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var processItemDisappearanceCalled: Bool {
+        return processItemDisappearanceCallsCount > 0
+    }
+    var processItemDisappearanceReceivedItemID: TimelineItemIdentifier?
+    var processItemDisappearanceReceivedInvocations: [TimelineItemIdentifier] = []
+    var processItemDisappearanceClosure: ((TimelineItemIdentifier) async -> Void)?
+
+    func processItemDisappearance(_ itemID: TimelineItemIdentifier) async {
+        processItemDisappearanceCallsCount += 1
+        processItemDisappearanceReceivedItemID = itemID
+        DispatchQueue.main.async {
+            self.processItemDisappearanceReceivedInvocations.append(itemID)
+        }
+        await processItemDisappearanceClosure?(itemID)
+    }
+    //MARK: - focusOnEvent
+
+    var focusOnEventTimelineSizeUnderlyingCallsCount = 0
+    var focusOnEventTimelineSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return focusOnEventTimelineSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = focusOnEventTimelineSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                focusOnEventTimelineSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    focusOnEventTimelineSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var focusOnEventTimelineSizeCalled: Bool {
+        return focusOnEventTimelineSizeCallsCount > 0
+    }
+    var focusOnEventTimelineSizeReceivedArguments: (eventID: String, timelineSize: UInt16)?
+    var focusOnEventTimelineSizeReceivedInvocations: [(eventID: String, timelineSize: UInt16)] = []
+
+    var focusOnEventTimelineSizeUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var focusOnEventTimelineSizeReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return focusOnEventTimelineSizeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = focusOnEventTimelineSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                focusOnEventTimelineSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    focusOnEventTimelineSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var focusOnEventTimelineSizeClosure: ((String, UInt16) async -> Result<Void, TimelineControllerError>)?
+
+    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, TimelineControllerError> {
+        focusOnEventTimelineSizeCallsCount += 1
+        focusOnEventTimelineSizeReceivedArguments = (eventID: eventID, timelineSize: timelineSize)
+        DispatchQueue.main.async {
+            self.focusOnEventTimelineSizeReceivedInvocations.append((eventID: eventID, timelineSize: timelineSize))
+        }
+        if let focusOnEventTimelineSizeClosure = focusOnEventTimelineSizeClosure {
+            return await focusOnEventTimelineSizeClosure(eventID, timelineSize)
+        } else {
+            return focusOnEventTimelineSizeReturnValue
+        }
+    }
+    //MARK: - focusLive
+
+    var focusLiveUnderlyingCallsCount = 0
+    var focusLiveCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return focusLiveUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = focusLiveUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                focusLiveUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    focusLiveUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var focusLiveCalled: Bool {
+        return focusLiveCallsCount > 0
+    }
+    var focusLiveClosure: (() -> Void)?
+
+    func focusLive() {
+        focusLiveCallsCount += 1
+        focusLiveClosure?()
+    }
+    //MARK: - paginateBackwards
+
+    var paginateBackwardsRequestSizeUnderlyingCallsCount = 0
+    var paginateBackwardsRequestSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginateBackwardsRequestSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateBackwardsRequestSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateBackwardsRequestSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateBackwardsRequestSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var paginateBackwardsRequestSizeCalled: Bool {
+        return paginateBackwardsRequestSizeCallsCount > 0
+    }
+    var paginateBackwardsRequestSizeReceivedRequestSize: UInt16?
+    var paginateBackwardsRequestSizeReceivedInvocations: [UInt16] = []
+
+    var paginateBackwardsRequestSizeUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var paginateBackwardsRequestSizeReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return paginateBackwardsRequestSizeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateBackwardsRequestSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateBackwardsRequestSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateBackwardsRequestSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var paginateBackwardsRequestSizeClosure: ((UInt16) async -> Result<Void, TimelineControllerError>)?
+
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
+        paginateBackwardsRequestSizeCallsCount += 1
+        paginateBackwardsRequestSizeReceivedRequestSize = requestSize
+        DispatchQueue.main.async {
+            self.paginateBackwardsRequestSizeReceivedInvocations.append(requestSize)
+        }
+        if let paginateBackwardsRequestSizeClosure = paginateBackwardsRequestSizeClosure {
+            return await paginateBackwardsRequestSizeClosure(requestSize)
+        } else {
+            return paginateBackwardsRequestSizeReturnValue
+        }
+    }
+    //MARK: - paginateForwards
+
+    var paginateForwardsRequestSizeUnderlyingCallsCount = 0
+    var paginateForwardsRequestSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginateForwardsRequestSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateForwardsRequestSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateForwardsRequestSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateForwardsRequestSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var paginateForwardsRequestSizeCalled: Bool {
+        return paginateForwardsRequestSizeCallsCount > 0
+    }
+    var paginateForwardsRequestSizeReceivedRequestSize: UInt16?
+    var paginateForwardsRequestSizeReceivedInvocations: [UInt16] = []
+
+    var paginateForwardsRequestSizeUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var paginateForwardsRequestSizeReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return paginateForwardsRequestSizeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateForwardsRequestSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateForwardsRequestSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateForwardsRequestSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var paginateForwardsRequestSizeClosure: ((UInt16) async -> Result<Void, TimelineControllerError>)?
+
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
+        paginateForwardsRequestSizeCallsCount += 1
+        paginateForwardsRequestSizeReceivedRequestSize = requestSize
+        DispatchQueue.main.async {
+            self.paginateForwardsRequestSizeReceivedInvocations.append(requestSize)
+        }
+        if let paginateForwardsRequestSizeClosure = paginateForwardsRequestSizeClosure {
+            return await paginateForwardsRequestSizeClosure(requestSize)
+        } else {
+            return paginateForwardsRequestSizeReturnValue
+        }
+    }
+    //MARK: - sendReadReceipt
+
+    var sendReadReceiptForUnderlyingCallsCount = 0
+    var sendReadReceiptForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendReadReceiptForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendReadReceiptForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendReadReceiptForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendReadReceiptForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendReadReceiptForCalled: Bool {
+        return sendReadReceiptForCallsCount > 0
+    }
+    var sendReadReceiptForReceivedItemID: TimelineItemIdentifier?
+    var sendReadReceiptForReceivedInvocations: [TimelineItemIdentifier] = []
+    var sendReadReceiptForClosure: ((TimelineItemIdentifier) async -> Void)?
+
+    func sendReadReceipt(for itemID: TimelineItemIdentifier) async {
+        sendReadReceiptForCallsCount += 1
+        sendReadReceiptForReceivedItemID = itemID
+        DispatchQueue.main.async {
+            self.sendReadReceiptForReceivedInvocations.append(itemID)
+        }
+        await sendReadReceiptForClosure?(itemID)
+    }
+    //MARK: - edit
+
+    var editMessageHtmlIntentionalMentionsUnderlyingCallsCount = 0
+    var editMessageHtmlIntentionalMentionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editMessageHtmlIntentionalMentionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editMessageHtmlIntentionalMentionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editMessageHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editMessageHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var editMessageHtmlIntentionalMentionsCalled: Bool {
+        return editMessageHtmlIntentionalMentionsCallsCount > 0
+    }
+    var editMessageHtmlIntentionalMentionsReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, message: String, html: String?, intentionalMentions: IntentionalMentions)?
+    var editMessageHtmlIntentionalMentionsReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, message: String, html: String?, intentionalMentions: IntentionalMentions)] = []
+    var editMessageHtmlIntentionalMentionsClosure: ((TimelineItemIdentifier.EventOrTransactionID, String, String?, IntentionalMentions) async -> Void)?
+
+    func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, message: String, html: String?, intentionalMentions: IntentionalMentions) async {
+        editMessageHtmlIntentionalMentionsCallsCount += 1
+        editMessageHtmlIntentionalMentionsReceivedArguments = (eventOrTransactionID: eventOrTransactionID, message: message, html: html, intentionalMentions: intentionalMentions)
+        DispatchQueue.main.async {
+            self.editMessageHtmlIntentionalMentionsReceivedInvocations.append((eventOrTransactionID: eventOrTransactionID, message: message, html: html, intentionalMentions: intentionalMentions))
+        }
+        await editMessageHtmlIntentionalMentionsClosure?(eventOrTransactionID, message, html, intentionalMentions)
+    }
+    //MARK: - editCaption
+
+    var editCaptionMessageHtmlIntentionalMentionsUnderlyingCallsCount = 0
+    var editCaptionMessageHtmlIntentionalMentionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editCaptionMessageHtmlIntentionalMentionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editCaptionMessageHtmlIntentionalMentionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editCaptionMessageHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editCaptionMessageHtmlIntentionalMentionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var editCaptionMessageHtmlIntentionalMentionsCalled: Bool {
+        return editCaptionMessageHtmlIntentionalMentionsCallsCount > 0
+    }
+    var editCaptionMessageHtmlIntentionalMentionsReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, message: String, html: String?, intentionalMentions: IntentionalMentions)?
+    var editCaptionMessageHtmlIntentionalMentionsReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, message: String, html: String?, intentionalMentions: IntentionalMentions)] = []
+    var editCaptionMessageHtmlIntentionalMentionsClosure: ((TimelineItemIdentifier.EventOrTransactionID, String, String?, IntentionalMentions) async -> Void)?
+
+    func editCaption(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, message: String, html: String?, intentionalMentions: IntentionalMentions) async {
+        editCaptionMessageHtmlIntentionalMentionsCallsCount += 1
+        editCaptionMessageHtmlIntentionalMentionsReceivedArguments = (eventOrTransactionID: eventOrTransactionID, message: message, html: html, intentionalMentions: intentionalMentions)
+        DispatchQueue.main.async {
+            self.editCaptionMessageHtmlIntentionalMentionsReceivedInvocations.append((eventOrTransactionID: eventOrTransactionID, message: message, html: html, intentionalMentions: intentionalMentions))
+        }
+        await editCaptionMessageHtmlIntentionalMentionsClosure?(eventOrTransactionID, message, html, intentionalMentions)
+    }
+    //MARK: - removeCaption
+
+    var removeCaptionUnderlyingCallsCount = 0
+    var removeCaptionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeCaptionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeCaptionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeCaptionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeCaptionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeCaptionCalled: Bool {
+        return removeCaptionCallsCount > 0
+    }
+    var removeCaptionReceivedEventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID?
+    var removeCaptionReceivedInvocations: [TimelineItemIdentifier.EventOrTransactionID] = []
+    var removeCaptionClosure: ((TimelineItemIdentifier.EventOrTransactionID) async -> Void)?
+
+    func removeCaption(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
+        removeCaptionCallsCount += 1
+        removeCaptionReceivedEventOrTransactionID = eventOrTransactionID
+        DispatchQueue.main.async {
+            self.removeCaptionReceivedInvocations.append(eventOrTransactionID)
+        }
+        await removeCaptionClosure?(eventOrTransactionID)
+    }
+    //MARK: - toggleReaction
+
+    var toggleReactionToUnderlyingCallsCount = 0
+    var toggleReactionToCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return toggleReactionToUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = toggleReactionToUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                toggleReactionToUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    toggleReactionToUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var toggleReactionToCalled: Bool {
+        return toggleReactionToCallsCount > 0
+    }
+    var toggleReactionToReceivedArguments: (reaction: String, eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID)?
+    var toggleReactionToReceivedInvocations: [(reaction: String, eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID)] = []
+    var toggleReactionToClosure: ((String, TimelineItemIdentifier.EventOrTransactionID) async -> Void)?
+
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
+        toggleReactionToCallsCount += 1
+        toggleReactionToReceivedArguments = (reaction: reaction, eventOrTransactionID: eventOrTransactionID)
+        DispatchQueue.main.async {
+            self.toggleReactionToReceivedInvocations.append((reaction: reaction, eventOrTransactionID: eventOrTransactionID))
+        }
+        await toggleReactionToClosure?(reaction, eventOrTransactionID)
+    }
+    //MARK: - redact
+
+    var redactUnderlyingCallsCount = 0
+    var redactCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return redactUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = redactUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                redactUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    redactUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var redactCalled: Bool {
+        return redactCallsCount > 0
+    }
+    var redactReceivedEventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID?
+    var redactReceivedInvocations: [TimelineItemIdentifier.EventOrTransactionID] = []
+    var redactClosure: ((TimelineItemIdentifier.EventOrTransactionID) async -> Void)?
+
+    func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
+        redactCallsCount += 1
+        redactReceivedEventOrTransactionID = eventOrTransactionID
+        DispatchQueue.main.async {
+            self.redactReceivedInvocations.append(eventOrTransactionID)
+        }
+        await redactClosure?(eventOrTransactionID)
+    }
+    //MARK: - pin
+
+    var pinEventIDUnderlyingCallsCount = 0
+    var pinEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return pinEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var pinEventIDCalled: Bool {
+        return pinEventIDCallsCount > 0
+    }
+    var pinEventIDReceivedEventID: String?
+    var pinEventIDReceivedInvocations: [String] = []
+    var pinEventIDClosure: ((String) async -> Void)?
+
+    func pin(eventID: String) async {
+        pinEventIDCallsCount += 1
+        pinEventIDReceivedEventID = eventID
+        DispatchQueue.main.async {
+            self.pinEventIDReceivedInvocations.append(eventID)
+        }
+        await pinEventIDClosure?(eventID)
+    }
+    //MARK: - unpin
+
+    var unpinEventIDUnderlyingCallsCount = 0
+    var unpinEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return unpinEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unpinEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unpinEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unpinEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var unpinEventIDCalled: Bool {
+        return unpinEventIDCallsCount > 0
+    }
+    var unpinEventIDReceivedEventID: String?
+    var unpinEventIDReceivedInvocations: [String] = []
+    var unpinEventIDClosure: ((String) async -> Void)?
+
+    func unpin(eventID: String) async {
+        unpinEventIDCallsCount += 1
+        unpinEventIDReceivedEventID = eventID
+        DispatchQueue.main.async {
+            self.unpinEventIDReceivedInvocations.append(eventID)
+        }
+        await unpinEventIDClosure?(eventID)
+    }
+    //MARK: - messageEventContent
+
+    var messageEventContentForUnderlyingCallsCount = 0
+    var messageEventContentForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return messageEventContentForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = messageEventContentForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                messageEventContentForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    messageEventContentForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var messageEventContentForCalled: Bool {
+        return messageEventContentForCallsCount > 0
+    }
+    var messageEventContentForReceivedItemID: TimelineItemIdentifier?
+    var messageEventContentForReceivedInvocations: [TimelineItemIdentifier] = []
+
+    var messageEventContentForUnderlyingReturnValue: RoomMessageEventContentWithoutRelation?
+    var messageEventContentForReturnValue: RoomMessageEventContentWithoutRelation? {
+        get {
+            if Thread.isMainThread {
+                return messageEventContentForUnderlyingReturnValue
+            } else {
+                var returnValue: RoomMessageEventContentWithoutRelation?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = messageEventContentForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                messageEventContentForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    messageEventContentForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var messageEventContentForClosure: ((TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation?)?
+
+    func messageEventContent(for itemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
+        messageEventContentForCallsCount += 1
+        messageEventContentForReceivedItemID = itemID
+        DispatchQueue.main.async {
+            self.messageEventContentForReceivedInvocations.append(itemID)
+        }
+        if let messageEventContentForClosure = messageEventContentForClosure {
+            return await messageEventContentForClosure(itemID)
+        } else {
+            return messageEventContentForReturnValue
+        }
+    }
+    //MARK: - debugInfo
+
+    var debugInfoForUnderlyingCallsCount = 0
+    var debugInfoForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return debugInfoForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = debugInfoForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                debugInfoForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    debugInfoForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var debugInfoForCalled: Bool {
+        return debugInfoForCallsCount > 0
+    }
+    var debugInfoForReceivedItemID: TimelineItemIdentifier?
+    var debugInfoForReceivedInvocations: [TimelineItemIdentifier] = []
+
+    var debugInfoForUnderlyingReturnValue: TimelineItemDebugInfo!
+    var debugInfoForReturnValue: TimelineItemDebugInfo! {
+        get {
+            if Thread.isMainThread {
+                return debugInfoForUnderlyingReturnValue
+            } else {
+                var returnValue: TimelineItemDebugInfo? = nil
+                DispatchQueue.main.sync {
+                    returnValue = debugInfoForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                debugInfoForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    debugInfoForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var debugInfoForClosure: ((TimelineItemIdentifier) -> TimelineItemDebugInfo)?
+
+    func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
+        debugInfoForCallsCount += 1
+        debugInfoForReceivedItemID = itemID
+        DispatchQueue.main.async {
+            self.debugInfoForReceivedInvocations.append(itemID)
+        }
+        if let debugInfoForClosure = debugInfoForClosure {
+            return debugInfoForClosure(itemID)
+        } else {
+            return debugInfoForReturnValue
+        }
+    }
+    //MARK: - sendHandle
+
+    var sendHandleForUnderlyingCallsCount = 0
+    var sendHandleForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendHandleForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendHandleForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendHandleForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendHandleForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendHandleForCalled: Bool {
+        return sendHandleForCallsCount > 0
+    }
+    var sendHandleForReceivedItemID: TimelineItemIdentifier?
+    var sendHandleForReceivedInvocations: [TimelineItemIdentifier] = []
+
+    var sendHandleForUnderlyingReturnValue: SendHandleProxy?
+    var sendHandleForReturnValue: SendHandleProxy? {
+        get {
+            if Thread.isMainThread {
+                return sendHandleForUnderlyingReturnValue
+            } else {
+                var returnValue: SendHandleProxy?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendHandleForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendHandleForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendHandleForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendHandleForClosure: ((TimelineItemIdentifier) -> SendHandleProxy?)?
+
+    func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy? {
+        sendHandleForCallsCount += 1
+        sendHandleForReceivedItemID = itemID
+        DispatchQueue.main.async {
+            self.sendHandleForReceivedInvocations.append(itemID)
+        }
+        if let sendHandleForClosure = sendHandleForClosure {
+            return sendHandleForClosure(itemID)
+        } else {
+            return sendHandleForReturnValue
+        }
+    }
+    //MARK: - eventTimestamp
+
+    var eventTimestampForUnderlyingCallsCount = 0
+    var eventTimestampForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return eventTimestampForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = eventTimestampForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                eventTimestampForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    eventTimestampForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var eventTimestampForCalled: Bool {
+        return eventTimestampForCallsCount > 0
+    }
+    var eventTimestampForReceivedItemID: TimelineItemIdentifier?
+    var eventTimestampForReceivedInvocations: [TimelineItemIdentifier] = []
+
+    var eventTimestampForUnderlyingReturnValue: Date?
+    var eventTimestampForReturnValue: Date? {
+        get {
+            if Thread.isMainThread {
+                return eventTimestampForUnderlyingReturnValue
+            } else {
+                var returnValue: Date?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = eventTimestampForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                eventTimestampForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    eventTimestampForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var eventTimestampForClosure: ((TimelineItemIdentifier) -> Date?)?
+
+    func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
+        eventTimestampForCallsCount += 1
+        eventTimestampForReceivedItemID = itemID
+        DispatchQueue.main.async {
+            self.eventTimestampForReceivedInvocations.append(itemID)
+        }
+        if let eventTimestampForClosure = eventTimestampForClosure {
+            return eventTimestampForClosure(itemID)
+        } else {
+            return eventTimestampForReturnValue
+        }
+    }
+    //MARK: - sendMessage
+
+    var sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = 0
+    var sendMessageHtmlInReplyToEventIDIntentionalMentionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendMessageHtmlInReplyToEventIDIntentionalMentionsCalled: Bool {
+        return sendMessageHtmlInReplyToEventIDIntentionalMentionsCallsCount > 0
+    }
+    var sendMessageHtmlInReplyToEventIDIntentionalMentionsReceivedArguments: (message: String, html: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions)?
+    var sendMessageHtmlInReplyToEventIDIntentionalMentionsReceivedInvocations: [(message: String, html: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions)] = []
+    var sendMessageHtmlInReplyToEventIDIntentionalMentionsClosure: ((String, String?, String?, IntentionalMentions) async -> Void)?
+
+    func sendMessage(_ message: String, html: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions) async {
+        sendMessageHtmlInReplyToEventIDIntentionalMentionsCallsCount += 1
+        sendMessageHtmlInReplyToEventIDIntentionalMentionsReceivedArguments = (message: message, html: html, inReplyToEventID: inReplyToEventID, intentionalMentions: intentionalMentions)
+        DispatchQueue.main.async {
+            self.sendMessageHtmlInReplyToEventIDIntentionalMentionsReceivedInvocations.append((message: message, html: html, inReplyToEventID: inReplyToEventID, intentionalMentions: intentionalMentions))
+        }
+        await sendMessageHtmlInReplyToEventIDIntentionalMentionsClosure?(message, html, inReplyToEventID, intentionalMentions)
+    }
+    //MARK: - sendAudio
+
+    var sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount = 0
+    var sendAudioUrlAudioInfoCaptionRequestHandleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendAudioUrlAudioInfoCaptionRequestHandleCalled: Bool {
+        return sendAudioUrlAudioInfoCaptionRequestHandleCallsCount > 0
+    }
+
+    var sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendAudioUrlAudioInfoCaptionRequestHandleReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendAudioUrlAudioInfoCaptionRequestHandleClosure: ((URL, AudioInfo, String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
+
+    func sendAudio(url: URL, audioInfo: AudioInfo, caption: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        sendAudioUrlAudioInfoCaptionRequestHandleCallsCount += 1
+        if let sendAudioUrlAudioInfoCaptionRequestHandleClosure = sendAudioUrlAudioInfoCaptionRequestHandleClosure {
+            return await sendAudioUrlAudioInfoCaptionRequestHandleClosure(url, audioInfo, caption, requestHandle)
+        } else {
+            return sendAudioUrlAudioInfoCaptionRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendFile
+
+    var sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount = 0
+    var sendFileUrlFileInfoCaptionRequestHandleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendFileUrlFileInfoCaptionRequestHandleCalled: Bool {
+        return sendFileUrlFileInfoCaptionRequestHandleCallsCount > 0
+    }
+
+    var sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendFileUrlFileInfoCaptionRequestHandleReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendFileUrlFileInfoCaptionRequestHandleClosure: ((URL, FileInfo, String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
+
+    func sendFile(url: URL, fileInfo: FileInfo, caption: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        sendFileUrlFileInfoCaptionRequestHandleCallsCount += 1
+        if let sendFileUrlFileInfoCaptionRequestHandleClosure = sendFileUrlFileInfoCaptionRequestHandleClosure {
+            return await sendFileUrlFileInfoCaptionRequestHandleClosure(url, fileInfo, caption, requestHandle)
+        } else {
+            return sendFileUrlFileInfoCaptionRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendImage
+
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount = 0
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCalled: Bool {
+        return sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount > 0
+    }
+
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure: ((URL, URL, ImageInfo, String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
+
+    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, caption: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount += 1
+        if let sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure = sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure {
+            return await sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure(url, thumbnailURL, imageInfo, caption, requestHandle)
+        } else {
+            return sendImageUrlThumbnailURLImageInfoCaptionRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendLocation
+
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingCallsCount = 0
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCalled: Bool {
+        return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount > 0
+    }
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments: (body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)?
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations: [(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?)] = []
+
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure: ((String, GeoURI, String?, UInt8?, AssetType?) async -> Result<Void, TimelineControllerError>)?
+
+    func sendLocation(body: String, geoURI: GeoURI, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async -> Result<Void, TimelineControllerError> {
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeCallsCount += 1
+        sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType)
+        DispatchQueue.main.async {
+            self.sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType))
+        }
+        if let sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure = sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure {
+            return await sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeClosure(body, geoURI, description, zoomLevel, assetType)
+        } else {
+            return sendLocationBodyGeoURIDescriptionZoomLevelAssetTypeReturnValue
+        }
+    }
+    //MARK: - sendVideo
+
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount = 0
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleCalled: Bool {
+        return sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleCallsCount > 0
+    }
+
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure: ((URL, URL, VideoInfo, String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
+
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, caption: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleCallsCount += 1
+        if let sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure {
+            return await sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure(url, thumbnailURL, videoInfo, caption, requestHandle)
+        } else {
+            return sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleReturnValue
+        }
+    }
+    //MARK: - sendVoiceMessage
+
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = 0
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleCalled: Bool {
+        return sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount > 0
+    }
+
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure: ((URL, AudioInfo, [Float], @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
+
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount += 1
+        if let sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure(url, audioInfo, waveform, requestHandle)
+        } else {
+            return sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue
+        }
+    }
+    //MARK: - createPoll
+
+    var createPollQuestionAnswersPollKindUnderlyingCallsCount = 0
+    var createPollQuestionAnswersPollKindCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return createPollQuestionAnswersPollKindUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = createPollQuestionAnswersPollKindUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                createPollQuestionAnswersPollKindUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    createPollQuestionAnswersPollKindUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var createPollQuestionAnswersPollKindCalled: Bool {
+        return createPollQuestionAnswersPollKindCallsCount > 0
+    }
+    var createPollQuestionAnswersPollKindReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)?
+    var createPollQuestionAnswersPollKindReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] = []
+
+    var createPollQuestionAnswersPollKindUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var createPollQuestionAnswersPollKindReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return createPollQuestionAnswersPollKindUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = createPollQuestionAnswersPollKindUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                createPollQuestionAnswersPollKindUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    createPollQuestionAnswersPollKindUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var createPollQuestionAnswersPollKindClosure: ((String, [String], Poll.Kind) async -> Result<Void, TimelineControllerError>)?
+
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        createPollQuestionAnswersPollKindCallsCount += 1
+        createPollQuestionAnswersPollKindReceivedArguments = (question: question, answers: answers, pollKind: pollKind)
+        DispatchQueue.main.async {
+            self.createPollQuestionAnswersPollKindReceivedInvocations.append((question: question, answers: answers, pollKind: pollKind))
+        }
+        if let createPollQuestionAnswersPollKindClosure = createPollQuestionAnswersPollKindClosure {
+            return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
+        } else {
+            return createPollQuestionAnswersPollKindReturnValue
+        }
+    }
+    //MARK: - editPoll
+
+    var editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount = 0
+    var editPollOriginalQuestionAnswersPollKindCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var editPollOriginalQuestionAnswersPollKindCalled: Bool {
+        return editPollOriginalQuestionAnswersPollKindCallsCount > 0
+    }
+    var editPollOriginalQuestionAnswersPollKindReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)?
+    var editPollOriginalQuestionAnswersPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] = []
+
+    var editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var editPollOriginalQuestionAnswersPollKindReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var editPollOriginalQuestionAnswersPollKindClosure: ((String, String, [String], Poll.Kind) async -> Result<Void, TimelineControllerError>)?
+
+    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        editPollOriginalQuestionAnswersPollKindCallsCount += 1
+        editPollOriginalQuestionAnswersPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, pollKind: pollKind)
+        DispatchQueue.main.async {
+            self.editPollOriginalQuestionAnswersPollKindReceivedInvocations.append((eventID: eventID, question: question, answers: answers, pollKind: pollKind))
+        }
+        if let editPollOriginalQuestionAnswersPollKindClosure = editPollOriginalQuestionAnswersPollKindClosure {
+            return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
+        } else {
+            return editPollOriginalQuestionAnswersPollKindReturnValue
+        }
+    }
+    //MARK: - sendPollResponse
+
+    var sendPollResponsePollStartIDAnswersUnderlyingCallsCount = 0
+    var sendPollResponsePollStartIDAnswersCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendPollResponsePollStartIDAnswersUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendPollResponsePollStartIDAnswersUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendPollResponsePollStartIDAnswersUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendPollResponsePollStartIDAnswersUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendPollResponsePollStartIDAnswersCalled: Bool {
+        return sendPollResponsePollStartIDAnswersCallsCount > 0
+    }
+    var sendPollResponsePollStartIDAnswersReceivedArguments: (pollStartID: String, answers: [String])?
+    var sendPollResponsePollStartIDAnswersReceivedInvocations: [(pollStartID: String, answers: [String])] = []
+
+    var sendPollResponsePollStartIDAnswersUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendPollResponsePollStartIDAnswersReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return sendPollResponsePollStartIDAnswersUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendPollResponsePollStartIDAnswersUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendPollResponsePollStartIDAnswersUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendPollResponsePollStartIDAnswersUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendPollResponsePollStartIDAnswersClosure: ((String, [String]) async -> Result<Void, TimelineControllerError>)?
+
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError> {
+        sendPollResponsePollStartIDAnswersCallsCount += 1
+        sendPollResponsePollStartIDAnswersReceivedArguments = (pollStartID: pollStartID, answers: answers)
+        DispatchQueue.main.async {
+            self.sendPollResponsePollStartIDAnswersReceivedInvocations.append((pollStartID: pollStartID, answers: answers))
+        }
+        if let sendPollResponsePollStartIDAnswersClosure = sendPollResponsePollStartIDAnswersClosure {
+            return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
+        } else {
+            return sendPollResponsePollStartIDAnswersReturnValue
+        }
+    }
+    //MARK: - endPoll
+
+    var endPollPollStartIDTextUnderlyingCallsCount = 0
+    var endPollPollStartIDTextCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return endPollPollStartIDTextUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = endPollPollStartIDTextUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                endPollPollStartIDTextUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    endPollPollStartIDTextUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var endPollPollStartIDTextCalled: Bool {
+        return endPollPollStartIDTextCallsCount > 0
+    }
+    var endPollPollStartIDTextReceivedArguments: (pollStartID: String, text: String)?
+    var endPollPollStartIDTextReceivedInvocations: [(pollStartID: String, text: String)] = []
+
+    var endPollPollStartIDTextUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var endPollPollStartIDTextReturnValue: Result<Void, TimelineControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return endPollPollStartIDTextUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = endPollPollStartIDTextUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                endPollPollStartIDTextUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    endPollPollStartIDTextUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var endPollPollStartIDTextClosure: ((String, String) async -> Result<Void, TimelineControllerError>)?
+
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineControllerError> {
+        endPollPollStartIDTextCallsCount += 1
+        endPollPollStartIDTextReceivedArguments = (pollStartID: pollStartID, text: text)
+        DispatchQueue.main.async {
+            self.endPollPollStartIDTextReceivedInvocations.append((pollStartID: pollStartID, text: text))
+        }
+        if let endPollPollStartIDTextClosure = endPollPollStartIDTextClosure {
+            return await endPollPollStartIDTextClosure(pollStartID, text)
+        } else {
+            return endPollPollStartIDTextReturnValue
+        }
+    }
+}
 class TimelineItemProviderMock: TimelineItemProviderProtocol, @unchecked Sendable {
     var updatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never> {
         get { return underlyingUpdatePublisher }
