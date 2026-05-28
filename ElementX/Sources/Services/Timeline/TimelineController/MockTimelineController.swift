@@ -18,8 +18,6 @@ class MockTimelineController: TimelineControllerProtocol {
     
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
     var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
-    /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
-    var incomingItems: [RoomTimelineItemProtocol] = []
     
     var roomProxy: JoinedRoomProxyProtocol?
     var timelineProxy: TimelineProxyProtocol?
@@ -46,8 +44,6 @@ class MockTimelineController: TimelineControllerProtocol {
     
     var timelineItemsTimestamp: [TimelineItemIdentifier: Date] = [:]
     
-    private var client: UITestsSignalling.Client?
-    
     static var mediaGallery: MockTimelineController {
         MockTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: (0..<5).reduce([]) { partialResult, _ in
             partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
@@ -61,7 +57,6 @@ class MockTimelineController: TimelineControllerProtocol {
     }
     
     init(timelineKind: TimelineKind = .live,
-         listenForSignals: Bool = false,
          timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default,
          timelineProxy: TimelineProxyProtocol? = nil) {
         self.timelineKind = timelineKind
@@ -70,14 +65,6 @@ class MockTimelineController: TimelineControllerProtocol {
         
         callbacks.send(.paginationState(paginationState))
         callbacks.send(.isLive(true))
-        
-        guard listenForSignals else { return }
-        
-        do {
-            try startListening()
-        } catch {
-            fatalError("Failure setting up signalling: \(error)")
-        }
     }
     
     private(set) var focusOnEventCallCount = 0
@@ -96,14 +83,21 @@ class MockTimelineController: TimelineControllerProtocol {
     private(set) var paginateBackwardsCallCount = 0
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
         paginateBackwardsCallCount += 1
-        
         paginationState = TimelinePaginationState(backward: .paginating, forward: .endReached)
-        
-        if client == nil {
-            try? await simulateBackPagination()
+        simulateBackPagination()
+        return .success(())
+    }
+    
+    private func simulateBackPagination() {
+        defer {
+            paginationState = TimelinePaginationState(backward: backPaginationResponses.isEmpty ? .endReached : .idle,
+                                                      forward: .endReached)
         }
         
-        return .success(())
+        guard !backPaginationResponses.isEmpty else { return }
+        
+        let newItems = backPaginationResponses.removeFirst()
+        timelineItems.insert(contentsOf: newItems, at: 0)
     }
     
     private(set) var paginateForwardsCallCount = 0
@@ -327,64 +321,5 @@ class MockTimelineController: TimelineControllerProtocol {
             _ = await timelineProxy.endPoll(pollStartID: pollStartID, text: text)
         }
         return .success(())
-    }
-    
-    // MARK: - UI Test signalling
-    
-    /// The cancellable used for UI Tests signalling.
-    private var signalCancellable: AnyCancellable?
-    
-    /// Allows the simulation of server responses by listening for signals from UI tests.
-    private func startListening() throws {
-        let client = try UITestsSignalling.Client(mode: .app)
-        
-        signalCancellable = client.signals.sink { [weak self] signal in
-            Task {
-                do {
-                    try await self?.handleSignal(signal)
-                } catch {
-                    MXLog.error(error.localizedDescription)
-                }
-            }
-        }
-        
-        self.client = client
-    }
-    
-    /// Handles a UI test signal as necessary.
-    private func handleSignal(_ signal: UITestsSignal) async throws {
-        switch signal {
-        case .timeline(.paginate):
-            try await simulateBackPagination()
-        case .timeline(.incomingMessage):
-            try await simulateIncomingItem()
-        default:
-            break
-        }
-    }
-    
-    /// Appends the next incoming item to the `timelineItems` array.
-    private func simulateIncomingItem() async throws {
-        guard !incomingItems.isEmpty else { return }
-        
-        let incomingItem = incomingItems.removeFirst()
-        timelineItems.append(incomingItem)
-        
-        try client?.send(.success)
-    }
-    
-    /// Prepends the next chunk of items to the `timelineItems` array.
-    private func simulateBackPagination() async throws {
-        defer {
-            paginationState = TimelinePaginationState(backward: backPaginationResponses.isEmpty ? .endReached : .idle,
-                                                      forward: .endReached)
-        }
-        
-        guard !backPaginationResponses.isEmpty else { return }
-        
-        let newItems = backPaginationResponses.removeFirst()
-        timelineItems.insert(contentsOf: newItems, at: 0)
-        
-        try client?.send(.success)
     }
 }

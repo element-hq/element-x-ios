@@ -8,11 +8,13 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 extension TimelineProxyMock {
     struct Configuration {
         var isAutoUpdating = false
         var timelineStartReached = false
+        var timelineItemProvider: TimelineItemProviderProtocol?
     }
     
     @MainActor
@@ -20,13 +22,18 @@ extension TimelineProxyMock {
         self.init()
         
         sendMessageEventContentReturnValue = .success(())
+        sendMessageHtmlInReplyToEventIDIntentionalMentionsReturnValue = .success(())
+        editNewContentReturnValue = .success(())
+        buildMessageContentForHtmlIntentionalMentionsReturnValue = RoomMessageEventContentWithoutRelation(noHandle: .init())
         paginateBackwardsRequestSizeReturnValue = .success(())
         paginateForwardsRequestSizeReturnValue = .success(())
         sendReadReceiptForTypeReturnValue = .success(())
         createPollQuestionAnswersPollKindReturnValue = .success(())
         editPollOriginalQuestionAnswersPollKindReturnValue = .success(())
         
-        if configuration.isAutoUpdating {
+        if let provider = configuration.timelineItemProvider {
+            underlyingTimelineItemProvider = provider
+        } else if configuration.isAutoUpdating {
             underlyingTimelineItemProvider = AutoUpdatingTimelineItemProviderMock()
         } else {
             let timelineItemProvider = TimelineItemProviderMock()
