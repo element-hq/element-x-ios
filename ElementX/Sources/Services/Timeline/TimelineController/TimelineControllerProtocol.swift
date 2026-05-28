@@ -148,3 +148,6 @@ protocol TimelineControllerProtocol: Sendable {
     
     func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineControllerError>
 }
+
+// sourcery: AutoMockable
+extension TimelineControllerProtocol { }
