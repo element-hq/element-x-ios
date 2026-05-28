@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum RoomTimelineItemFixtures {
     /// The default timeline items used in Xcode previews etc.
@@ -95,10 +96,7 @@ enum RoomTimelineItemFixtures {
     
     /// A small chunk of events, containing 2 text items.
     static var smallChunk: [RoomTimelineItemProtocol] {
-        [TextRoomTimelineItem(text: "Hey there 👋",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "How are you?",
-                              senderDisplayName: "Alice")]
+        smallChunkProxies.buildRoomTimelineItems()
     }
     
     /// A small chunk of events, containing 2 text items.
@@ -125,99 +123,18 @@ enum RoomTimelineItemFixtures {
     
     /// A chunk of events that contains a single text item.
     static var singleMessageChunk: [RoomTimelineItemProtocol] {
-        [TextRoomTimelineItem(text: "Tap tap tap 🎙️. Is this thing on?",
-                              senderDisplayName: "Helena")]
+        singleMessageChunkProxies.buildRoomTimelineItems()
     }
     
     /// A single text item.
     static var incomingMessage: RoomTimelineItemProtocol {
-        TextRoomTimelineItem(text: "Hello, World!",
-                             senderDisplayName: "Bob")
+        incomingMessageProxy.buildRoomTimelineItem()
     }
     
     /// A large chunk of events, containing 40 text items which should fill an iPad
     /// with enough items so that it won't perform another back pagination.
     static var largeChunk: [RoomTimelineItemProtocol] {
-        [TextRoomTimelineItem(text: "Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Labore ipsum jowl meatloaf adipisicing ham leberkas.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Tongue culpa dolor, short ribs doner cillum do rump id nulla mollit.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Capicola laborum aute porchetta, kevin ut ut bacon swine kielbasa beef rump ipsum.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Leberkas beef ad salami flank laborum ex veniam excepteur picanha occaecat burgdoggen.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Magna leberkas nostrud laboris, biltong in tongue nulla et id drumstick brisket.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Landjaeger adipisicing spare ribs sunt pig voluptate beef ribs venison ut meatloaf nulla beef sed.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Bacon chicken excepteur, filet mignon pastrami meatball ribeye sunt sausage.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Ham et dolore, nisi adipisicing kielbasa andouille ribeye enim chicken.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Ribeye prosciutto aliquip tail dolore.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Salami culpa exercitation ea non rump consectetur ipsum boudin irure jerky spare ribs duis leberkas pastrami.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Andouille shankle magna pig corned beef strip steak ex landjaeger sed chicken drumstick.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Deserunt ea esse quis bresaola, ham hock sirloin spare ribs porchetta dolore ham nisi est.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Consectetur nulla laboris, rump minim tempor turducken sunt tongue in.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Ea ut laboris eu spare ribs occaecat esse et shankle chicken.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Frankfurter brisket eu, landjaeger ea ham hamburger rump eiusmod pastrami cow.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Qui prosciutto sed, officia occaecat drumstick non veniam in elit chicken capicola buffalo beef ribs irure.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "In pork loin lorem, pariatur tail cupim voluptate chicken id eu pancetta esse pastrami.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Excepteur minim ea est, jerky sirloin frankfurter nisi dolor ball tip.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Shank corned beef velit chislic, pork chop enim in chuck in excepteur fatback minim.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Mollit minim ipsum in, in do doner ribeye cow jowl short loin sed.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Meatloaf est hamburger, spare ribs pork belly officia dolor.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Pancetta do aliqua picanha tempor.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Ad pig incididunt doner pork chop flank velit capicola aliqua.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Ullamco ex qui kevin meatball, leberkas hamburger venison.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Capicola et esse, fatback porchetta filet mignon ham nulla salami shank.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Boudin adipisicing pancetta chuck spare ribs beef ribs, in ut pork kevin.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Adipisicing pig short loin hamburger nisi exercitation landjaeger pancetta picanha ex cupim beef ribs.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Burgdoggen tri-tip eu elit consectetur, hamburger dolore commodo bacon capicola esse ex exercitation anim nostrud.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Id burgdoggen bresaola pork.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Pariatur meatloaf dolore tenderloin ea et proident strip steak velit nostrud pork loin laboris.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Pork chop cupim pastrami, prosciutto chislic kevin tempor eu ut deserunt ut occaecat consectetur non.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Aliquip kevin fugiat esse, adipisicing bresaola andouille biltong.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Andouille est picanha, beef ribs boudin exercitation flank venison ea tongue landjaeger meatloaf velit.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Boudin rump hamburger laborum adipisicing consectetur officia frankfurter shoulder quis biltong fugiat esse.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Ham hock culpa corned beef cupim pastrami swine in.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Boudin adipisicing pancetta chuck spare ribs beef ribs, in ut pork kevin.",
-                              senderDisplayName: "Bob"),
-         TextRoomTimelineItem(text: "Aliquip meatball incididunt fatback, pork belly in jowl tri-tip commodo spare ribs.",
-                              senderDisplayName: "Alice"),
-         TextRoomTimelineItem(text: "Excepteur rump tri-tip culpa in shankle esse ut.",
-                              senderDisplayName: "Helena"),
-         TextRoomTimelineItem(text: "Pork buffalo mollit culpa strip steak in leberkas flank cow.",
-                              senderDisplayName: "Alice")]
+        largeChunkProxies.buildRoomTimelineItems()
     }
     
     static var disclosedPolls: [RoomTimelineItemProtocol] {
@@ -260,6 +177,132 @@ enum RoomTimelineItemFixtures {
     static var separator: SeparatorRoomTimelineItem {
         SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(UUID().uuidString)),
                                   timestamp: .now)
+    }
+    
+    // MARK: - TimelineItemProxy fixtures
+    
+    /// ``TimelineItemProxy`` equivalents of ``smallChunk``.
+    static var smallChunkProxies: [TimelineItemProxy] {
+        [
+            .mockText("Hey there 👋", sender: "Alice", isOwn: true),
+            .mockText("How are you?", sender: "Alice", isOwn: true)
+        ]
+    }
+    
+    /// ``TimelineItemProxy`` equivalent of ``singleMessageChunk``.
+    static var singleMessageChunkProxies: [TimelineItemProxy] {
+        [.mockText("Tap tap tap 🎙️. Is this thing on?", sender: "Helena")]
+    }
+    
+    /// ``TimelineItemProxy`` equivalent of ``incomingMessage``.
+    static var incomingMessageProxy: TimelineItemProxy {
+        .mockText("Hello, World!", sender: "Bob")
+    }
+    
+    /// ``TimelineItemProxy`` equivalents of ``largeChunk``.
+    static var largeChunkProxies: [TimelineItemProxy] {
+        [
+            .mockText("Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs.", sender: "Bob"),
+            .mockText("Labore ipsum jowl meatloaf adipisicing ham leberkas.", sender: "Alice", isOwn: true),
+            .mockText("Tongue culpa dolor, short ribs doner cillum do rump id nulla mollit.", sender: "Helena"),
+            .mockText("Capicola laborum aute porchetta, kevin ut ut bacon swine kielbasa beef rump ipsum.", sender: "Alice", isOwn: true),
+            .mockText("Leberkas beef ad salami flank laborum ex veniam excepteur picanha occaecat burgdoggen.", sender: "Bob"),
+            .mockText("Magna leberkas nostrud laboris, biltong in tongue nulla et id drumstick brisket.", sender: "Helena"),
+            .mockText("Landjaeger adipisicing spare ribs sunt pig voluptate beef ribs venison ut meatloaf nulla beef sed.", sender: "Bob"),
+            .mockText("Bacon chicken excepteur, filet mignon pastrami meatball ribeye sunt sausage.", sender: "Alice", isOwn: true),
+            .mockText("Ham et dolore, nisi adipisicing kielbasa andouille ribeye enim chicken.", sender: "Helena"),
+            .mockText("Ribeye prosciutto aliquip tail dolore.", sender: "Alice", isOwn: true),
+            .mockText("Salami culpa exercitation ea non rump consectetur ipsum boudin irure jerky spare ribs duis leberkas pastrami.", sender: "Bob"),
+            .mockText("Andouille shankle magna pig corned beef strip steak ex landjaeger sed chicken drumstick.", sender: "Helena"),
+            .mockText("Deserunt ea esse quis bresaola, ham hock sirloin spare ribs porchetta dolore ham nisi est.", sender: "Bob"),
+            .mockText("Consectetur nulla laboris, rump minim tempor turducken sunt tongue in.", sender: "Alice", isOwn: true),
+            .mockText("Ea ut laboris eu spare ribs occaecat esse et shankle chicken.", sender: "Helena"),
+            .mockText("Frankfurter brisket eu, landjaeger ea ham hamburger rump eiusmod pastrami cow.", sender: "Alice", isOwn: true),
+            .mockText("Qui prosciutto sed, officia occaecat drumstick non veniam in elit chicken capicola buffalo beef ribs irure.", sender: "Bob"),
+            .mockText("In pork loin lorem, pariatur tail cupim voluptate chicken id eu pancetta esse pastrami.", sender: "Helena"),
+            .mockText("Excepteur minim ea est, jerky sirloin frankfurter nisi dolor ball tip.", sender: "Bob"),
+            .mockText("Shank corned beef velit chislic, pork chop enim in chuck in excepteur fatback minim.", sender: "Alice", isOwn: true),
+            .mockText("Mollit minim ipsum in, in do doner ribeye cow jowl short loin sed.", sender: "Helena"),
+            .mockText("Meatloaf est hamburger, spare ribs pork belly officia dolor.", sender: "Alice", isOwn: true),
+            .mockText("Pancetta do aliqua picanha tempor.", sender: "Bob"),
+            .mockText("Ad pig incididunt doner pork chop flank velit capicola aliqua.", sender: "Helena"),
+            .mockText("Ullamco ex qui kevin meatball, leberkas hamburger venison.", sender: "Bob"),
+            .mockText("Capicola et esse, fatback porchetta filet mignon ham nulla salami shank.", sender: "Alice", isOwn: true),
+            .mockText("Boudin adipisicing pancetta chuck spare ribs beef ribs, in ut pork kevin.", sender: "Helena"),
+            .mockText("Adipisicing pig short loin hamburger nisi exercitation landjaeger pancetta picanha ex cupim beef ribs.", sender: "Alice", isOwn: true),
+            .mockText("Burgdoggen tri-tip eu elit consectetur, hamburger dolore commodo bacon capicola esse ex exercitation anim nostrud.", sender: "Bob"),
+            .mockText("Id burgdoggen bresaola pork.", sender: "Helena"),
+            .mockText("Pariatur meatloaf dolore tenderloin ea et proident strip steak velit nostrud pork loin laboris.", sender: "Bob"),
+            .mockText("Pork chop cupim pastrami, prosciutto chislic kevin tempor eu ut deserunt ut occaecat consectetur non.", sender: "Alice", isOwn: true),
+            .mockText("Aliquip kevin fugiat esse, adipisicing bresaola andouille biltong.", sender: "Helena"),
+            .mockText("Andouille est picanha, beef ribs boudin exercitation flank venison ea tongue landjaeger meatloaf velit.", sender: "Alice", isOwn: true),
+            .mockText("Boudin rump hamburger laborum adipisicing consectetur officia frankfurter shoulder quis biltong fugiat esse.", sender: "Bob"),
+            .mockText("Ham hock culpa corned beef cupim pastrami swine in.", sender: "Helena"),
+            .mockText("Boudin adipisicing pancetta chuck spare ribs beef ribs, in ut pork kevin.", sender: "Bob"),
+            .mockText("Aliquip meatball incididunt fatback, pork belly in jowl tri-tip commodo spare ribs.", sender: "Alice", isOwn: true),
+            .mockText("Excepteur rump tri-tip culpa in shankle esse ut.", sender: "Helena"),
+            .mockText("Pork buffalo mollit culpa strip steak in leberkas flank cow.", sender: "Alice", isOwn: true)
+        ]
+    }
+}
+
+// MARK: - Private helpers
+
+private extension RoomTimelineItemFixtures {
+    static let factory = RoomTimelineItemFactory(userID: "@alice:matrix.org",
+                                                 attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                 stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org"))
+}
+
+extension TimelineItemProxy {
+    static func mockOwnMessage(_ body: String, senderID: String = "@test.matrix.org", isEdited: Bool = false) -> TimelineItemProxy {
+        let messageType = MessageType.text(content: .init(body: body, formatted: nil))
+        let content = TimelineItemContent.msgLike(content: .init(kind: .message(content: .init(msgType: messageType,
+                                                                                               body: body,
+                                                                                               isEdited: isEdited,
+                                                                                               mentions: nil)),
+                                                                 reactions: [],
+                                                                 inReplyTo: nil,
+                                                                 threadRoot: nil,
+                                                                 threadSummary: nil))
+        return .event(EventTimelineItemProxy(item: EventTimelineItem(configuration: .init(sender: senderID, isOwn: true, isEditable: !isEdited, content: content)),
+                                             uniqueID: .init(UUID().uuidString)))
+    }
+}
+
+private extension TimelineItemProxy {
+    func buildRoomTimelineItem() -> RoomTimelineItemProtocol {
+        guard case .event(let eventProxy) = self,
+              let item = RoomTimelineItemFixtures.factory.buildTimelineItem(for: eventProxy, isDM: false) else {
+            fatalError()
+        }
+        
+        return item
+    }
+    
+    static func mockText(_ body: String, sender: String, isOwn: Bool = false) -> TimelineItemProxy {
+        let messageType = MessageType.text(content: .init(body: body, formatted: nil))
+        let content = TimelineItemContent.msgLike(content: .init(kind: .message(content: .init(msgType: messageType,
+                                                                                               body: body,
+                                                                                               isEdited: false,
+                                                                                               mentions: nil)),
+                                                                 reactions: [],
+                                                                 inReplyTo: nil,
+                                                                 threadRoot: nil,
+                                                                 threadSummary: nil))
+        let configuration = EventTimelineItemSDKMockConfiguration(sender: "@\(sender.lowercased()):matrix.org",
+                                                                  senderProfile: .ready(displayName: sender, displayNameAmbiguous: false, avatarUrl: nil),
+                                                                  isOwn: isOwn,
+                                                                  canBeRepliedTo: true,
+                                                                  content: content)
+        let item = EventTimelineItem(configuration: configuration)
+        return .event(EventTimelineItemProxy(item: item, uniqueID: .init(UUID().uuidString)))
+    }
+}
+
+private extension [TimelineItemProxy] {
+    func buildRoomTimelineItems() -> [RoomTimelineItemProtocol] {
+        map { $0.buildRoomTimelineItem() }
     }
 }
 
