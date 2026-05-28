@@ -27,10 +27,10 @@ enum MapTilerSettings: Equatable {
         /// A MapLibre style ID for a dark-mode map.
         let darkStyleID: String
     }
-
+    
     case configuration(Configuration)
     case url(URL)
-
+    
     var isEnabled: Bool {
         switch self {
         case .configuration(let configuration): configuration.apiKey != nil
