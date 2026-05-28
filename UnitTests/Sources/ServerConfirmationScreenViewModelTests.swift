@@ -339,7 +339,7 @@ final class ServerConfirmationScreenViewModelTests {
                                  accountProvisioningHost: appSettings.accountProvisioningHost,
                                  bugReportApplicationID: appSettings.bugReportApplicationID,
                                  analyticsTermsURL: appSettings.analyticsTermsURL,
-                                 mapTilerConfiguration: appSettings.mapTilerConfiguration)
+                                 mapTilerConfiguration: AppSettings.bundledMapTilerConfiguration)
             mode = .picker(appSettings.accountProviders)
         }
         

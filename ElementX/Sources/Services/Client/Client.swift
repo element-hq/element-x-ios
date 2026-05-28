@@ -29,4 +29,18 @@ extension ClientProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    /// Reads the homeserver-advertised map tile server (`tile_server.map_style_url`
+    /// from the matrix client well-known) and applies it to ``AppSettings``.
+    ///
+    /// Clears any previously applied URL when none is advertised (or the well-known
+    /// is unavailable), so each session start reflects the latest server-side
+    /// configuration.
+    func updateMapTilerSettings(in appSettings: AppSettings) async {
+        if let url = await tileServer().flatMap({ URL(string: $0.mapStyleUrl) }) {
+            appSettings.mapTilerSettings.applyRemoteValue(.url(url))
+        } else {
+            appSettings.mapTilerSettings.reset()
+        }
+    }
 }

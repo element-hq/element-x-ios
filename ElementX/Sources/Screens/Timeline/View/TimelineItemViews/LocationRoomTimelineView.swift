@@ -18,7 +18,7 @@ struct LocationRoomTimelineView: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(L10n.commonSharedLocation)
                 .onTapGesture {
-                    guard context.viewState.mapTilerConfiguration.isEnabled else { return }
+                    guard context.viewState.mapTilerSettings.isEnabled else { return }
                     context.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                 }
         }
@@ -28,7 +28,7 @@ struct LocationRoomTimelineView: View {
     private var mainContent: some View {
         if let geoURI = timelineItem.content.geoURI {
             MapLibreStaticMapView(geoURI: geoURI,
-                                  mapURLBuilder: context.viewState.mapTilerConfiguration,
+                                  mapURLBuilder: context.viewState.mapTilerSettings,
                                   mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
                 LocationMarkerView(kind: timelineItem.content.kind == .sender ? .staticUser(.init(sender: timelineItem.sender)) : .pin,
                                    mediaProvider: context.mediaProvider)

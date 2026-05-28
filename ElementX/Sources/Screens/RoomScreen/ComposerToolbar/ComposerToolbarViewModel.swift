@@ -68,7 +68,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                                                               audioPlayerState: .init(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: 0),
                                                               audioRecorderState: .init(),
                                                               isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
-                                                              isLocationSharingEnabled: appSettings.mapTilerConfiguration.isEnabled,
+                                                              isLocationSharingEnabled: appSettings.mapTilerSettings.publisher.value.isEnabled,
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)
         
