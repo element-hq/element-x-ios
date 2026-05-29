@@ -60,6 +60,7 @@ struct LoadableAvatarImage: View {
             .frame(width: frameSize, height: frameSize)
             .background(Color.compound.bgCanvasDefault)
             .avatarShape(shape, scaledSize: _frameSize)
+            .allowedDynamicRange(.standard) // Prevent avatars from triggering HDR display.
             .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
     }
     
