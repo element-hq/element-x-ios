@@ -35,8 +35,7 @@ final class TimelineViewModelTests {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the messages should be grouped together.
@@ -64,8 +63,7 @@ final class TimelineViewModelTests {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the messages should be grouped by sender.
@@ -91,8 +89,7 @@ final class TimelineViewModelTests {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the first message should not be grouped but the other two should.
@@ -115,8 +112,7 @@ final class TimelineViewModelTests {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the first and second messages should be grouped and the last one should not.
@@ -139,8 +135,7 @@ final class TimelineViewModelTests {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the messages should be grouped together.
@@ -157,8 +152,7 @@ final class TimelineViewModelTests {
         let items = [TextRoomTimelineItem(eventID: "t1"),
                      TextRoomTimelineItem(eventID: "t2"),
                      TextRoomTimelineItem(eventID: "t3")]
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         
         let viewModel = makeViewModel(timelineController: timelineController)
         #expect(timelineController.focusOnEventCallCount == 0)
@@ -182,8 +176,7 @@ final class TimelineViewModelTests {
         let items = [TextRoomTimelineItem(eventID: "t1"),
                      TextRoomTimelineItem(eventID: "t2"),
                      TextRoomTimelineItem(eventID: "t3")]
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         
         let viewModel = makeViewModel(timelineController: timelineController)
         #expect(timelineController.focusOnEventCallCount == 0)
@@ -207,8 +200,7 @@ final class TimelineViewModelTests {
         let items = [TextRoomTimelineItem(eventID: "t1"),
                      TextRoomTimelineItem(eventID: "t2"),
                      TextRoomTimelineItem(eventID: "t3")]
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         
         let viewModel = makeViewModel(timelineController: timelineController)
         
@@ -294,17 +286,13 @@ final class TimelineViewModelTests {
                                                                                        JoinedRoomProxyMock,
                                                                                        TimelineProxyMock,
                                                                                        MockTimelineController) {
-        let roomProxy = JoinedRoomProxyMock(.init(name: ""))
-        
         let timelineProxy = TimelineProxyMock()
-        
-        roomProxy.timeline = timelineProxy
-        let timelineController = MockTimelineController()
-        
         timelineProxy.sendReadReceiptForTypeReturnValue = .success(())
         
-        timelineController.timelineItems = items
-        timelineController.roomProxy = roomProxy
+        let roomProxy = JoinedRoomProxyMock(.init(name: ""))
+        roomProxy.timeline = timelineProxy
+        
+        let timelineController = MockTimelineController(roomProxy: roomProxy, timelineItems: items)
         
         let appSettings = AppSettings.volatile()
         
@@ -335,8 +323,7 @@ final class TimelineViewModelTests {
         let appSettings = AppSettings.volatile()
         
         // When showing them in a timeline.
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = [message]
+        let timelineController = MockTimelineController(timelineItems: [message])
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
                                           timelineController: timelineController,
                                           userSession: UserSessionMock(.init()),
@@ -556,8 +543,7 @@ final class TimelineViewModelTests {
     func tapSendInfoEncryptionAuthentictyDisplaysAlert() {
         // Given a room with an event whose authenticity could not be verified
         let items = [TextRoomTimelineItem(eventID: "t1", encryptionAuthenticity: .verificationViolation(color: .red))]
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         let viewModel = makeViewModel(timelineController: timelineController)
         
         #expect(viewModel.state.bindings.alertInfo == nil)
@@ -571,8 +557,7 @@ final class TimelineViewModelTests {
     func tapSendInfoEncryptionForwarderDisplaysAlert() {
         // Given a room with an event whose key was forwarded
         let items = [TextRoomTimelineItem(eventID: "t1", keyForwarder: .test)]
-        let timelineController = MockTimelineController()
-        timelineController.timelineItems = items
+        let timelineController = MockTimelineController(timelineItems: items)
         let viewModel = makeViewModel(timelineController: timelineController)
         
         #expect(viewModel.state.bindings.alertInfo == nil)

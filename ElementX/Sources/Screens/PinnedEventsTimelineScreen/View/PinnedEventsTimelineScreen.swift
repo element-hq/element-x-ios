@@ -72,8 +72,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                                                analyticsService: AnalyticsServiceMock(.init()))
     
     static let emptyTimelineViewModel: TimelineViewModel = {
-        let timelineController = MockTimelineController(timelineKind: .pinned)
-        timelineController.timelineItems = []
+        let timelineController = MockTimelineController(timelineKind: .pinned, timelineItems: [])
         
         let appSettings = AppSettings.volatile()
         
