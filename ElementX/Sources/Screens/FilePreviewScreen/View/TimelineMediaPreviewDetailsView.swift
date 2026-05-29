@@ -18,16 +18,20 @@ struct TimelineMediaPreviewDetailsView: View {
     private let topPadding: CGFloat = 19
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                details
-                actions
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    details
+                    actions
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .readHeight($sheetHeight)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .readHeight($sheetHeight)
+            .scrollBounceBehavior(.basedOnSize)
+            // Removed padding(.top, topPadding) for the drag indicator
+            .navigationTitle("File info")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .scrollBounceBehavior(.basedOnSize)
-        .padding(.top, topPadding) // For the drag indicator
         .presentationDetents([.height(sheetHeight + topPadding)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
@@ -90,7 +94,7 @@ struct TimelineMediaPreviewDetailsView: View {
                 }
             }
         }
-        .padding(.top, 24)
+        .padding(.top, 0)
         .padding(.bottom, 32)
         .padding(.horizontal, 16)
     }
@@ -99,21 +103,21 @@ struct TimelineMediaPreviewDetailsView: View {
     private var actions: some View {
         if let actions = context.viewState.currentItemActions {
             VStack(spacing: 0) {
-                if !actions.actions.isEmpty {
+                if !actions.actions.filter({ $0 != .share }).isEmpty {
                     Divider()
                         .background(Color.compound.bgSubtlePrimary)
                 }
                 
-                ForEach(actions.actions, id: \.self) { action in
+                ForEach(actions.actions.filter { $0 != .share }, id: \.self) { action in
                     ActionButton(item: item, action: action, context: context)
                 }
                 
-                if !actions.secondaryActions.isEmpty {
+                if !actions.secondaryActions.filter({ $0 != .share }).isEmpty {
                     Divider()
                         .background(Color.compound.bgSubtlePrimary)
                 }
                 
-                ForEach(actions.secondaryActions, id: \.self) { action in
+                ForEach(actions.secondaryActions.filter { $0 != .share }, id: \.self) { action in
                     ActionButton(item: item, action: action, context: context)
                 }
             }

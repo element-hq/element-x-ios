@@ -172,7 +172,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .forward:
             Label(L10n.actionForward, icon: \.forward)
         case .redact:
-            Label(L10n.actionRemoveMessage, icon: \.delete)
+            Label(L10n.actionDeleteFile, icon: \.delete)
         case .viewSource:
             Label(L10n.actionViewSource, icon: \.code)
         case .report:
@@ -193,7 +193,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .share:
             Label(L10n.actionShare, icon: \.shareIos)
         case .save:
-            Label(L10n.actionSave, icon: \.downloadIos)
+            Label(L10n.actionDownload, icon: \.downloadIos)
         }
     }
 }
