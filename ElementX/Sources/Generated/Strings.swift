@@ -1770,6 +1770,46 @@ internal nonisolated enum L10n {
   internal static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
   /// Add description…
   internal static var screenCreateRoomTopicPlaceholder: String { return L10n.tr("Localizable", "screen_create_room_topic_placeholder") }
+  /// The recovery key you entered doesn't match
+  internal static var screenCustomRecoveryKeyConfirmErrorMismatch: String { return L10n.tr("Localizable", "screen_custom_recovery_key_confirm_error_mismatch") }
+  /// Finish setup
+  internal static var screenCustomRecoveryKeyConfirmSubmit: String { return L10n.tr("Localizable", "screen_custom_recovery_key_confirm_submit") }
+  /// Enter your recovery key again.
+  internal static var screenCustomRecoveryKeyConfirmSubtitle: String { return L10n.tr("Localizable", "screen_custom_recovery_key_confirm_subtitle") }
+  /// Confirm your recovery key
+  internal static var screenCustomRecoveryKeyConfirmTitle: String { return L10n.tr("Localizable", "screen_custom_recovery_key_confirm_title") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenCustomRecoveryKeyInputNotice(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_custom_recovery_key_input_notice", p1)
+  }
+  /// Strength
+  internal static var screenCustomRecoveryKeyInputStrength: String { return L10n.tr("Localizable", "screen_custom_recovery_key_input_strength") }
+  /// Passphrase strength: %1$@
+  internal static func screenCustomRecoveryKeyInputStrengthA11y(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_custom_recovery_key_input_strength_a11y", String(describing: p1))
+  }
+  /// Moderate
+  internal static var screenCustomRecoveryKeyInputStrengthModerate: String { return L10n.tr("Localizable", "screen_custom_recovery_key_input_strength_moderate") }
+  /// Strong
+  internal static var screenCustomRecoveryKeyInputStrengthStrong: String { return L10n.tr("Localizable", "screen_custom_recovery_key_input_strength_strong") }
+  /// Very strong
+  internal static var screenCustomRecoveryKeyInputStrengthVeryStrong: String { return L10n.tr("Localizable", "screen_custom_recovery_key_input_strength_very_strong") }
+  /// Very weak
+  internal static var screenCustomRecoveryKeyInputStrengthVeryWeak: String { return L10n.tr("Localizable", "screen_custom_recovery_key_input_strength_very_weak") }
+  /// Weak
+  internal static var screenCustomRecoveryKeyInputStrengthWeak: String { return L10n.tr("Localizable", "screen_custom_recovery_key_input_strength_weak") }
+  /// Choose a recovery key that you can memorize.
+  internal static var screenCustomRecoveryKeyInputSubtitle: String { return L10n.tr("Localizable", "screen_custom_recovery_key_input_subtitle") }
+  /// Enter a recovery key
+  internal static var screenCustomRecoveryKeyInputTitle: String { return L10n.tr("Localizable", "screen_custom_recovery_key_input_title") }
+  /// Loading recovery key requirements
+  internal static var screenCustomRecoveryKeyLoadingA11y: String { return L10n.tr("Localizable", "screen_custom_recovery_key_loading_a11y") }
+  /// To change your recovery key, go to Settings → Encryption → Backup
+  internal static var screenCustomRecoveryKeySuccessNotice: String { return L10n.tr("Localizable", "screen_custom_recovery_key_success_notice") }
+  /// You can use your recovery key to confirm new devices or restore your encrypted chats if you lose access to all your devices.
+  internal static var screenCustomRecoveryKeySuccessSubtitle: String { return L10n.tr("Localizable", "screen_custom_recovery_key_success_subtitle") }
+  /// Your backup is now fully set up
+  internal static var screenCustomRecoveryKeySuccessTitle: String { return L10n.tr("Localizable", "screen_custom_recovery_key_success_title") }
   /// Please confirm that you want to delete your account. This action cannot be undone.
   internal static var screenDeactivateAccountConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_deactivate_account_confirmation_dialog_content") }
   /// Delete all my messages
