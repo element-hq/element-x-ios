@@ -128,7 +128,7 @@ struct HomeScreenContent: View {
                 }
             }
             .background(Color.compound.bgCanvasDefault)
-            .onGeometryChange(for: CGFloat.self, of: \.size.height) { topSectionHeight = $0 }
+            .readHeight($topSectionHeight)
         }
     }
     
