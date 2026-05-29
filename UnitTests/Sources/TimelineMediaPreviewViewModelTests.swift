@@ -292,8 +292,7 @@ struct TimelineMediaPreviewViewModelTests {
     
     private mutating func setupViewModel(initialItemIndex: Int = 0, photoLibraryAuthorizationDenied: Bool = false) {
         let initialItems = makeItems()
-        timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
-        timelineController.timelineItems = initialItems
+        timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: initialItems)
         
         mediaProvider = MediaProviderMock(.init())
         photoLibraryManager = PhotoLibraryManagerMock(.init(authorizationDenied: photoLibraryAuthorizationDenied))

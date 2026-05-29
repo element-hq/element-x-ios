@@ -16,33 +16,33 @@ class MockTimelineController: TimelineControllerProtocol {
     private let lastInsertedMessageID: TimelineItemIdentifier = .event(uniqueID: .init("last_message"),
                                                                        eventOrTransactionID: .eventID("last_message"))
     
-    /// An array of timeline item arrays that will be inserted in order for each back pagination request.
-    var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
-    
-    var roomProxy: JoinedRoomProxyProtocol?
-    var timelineProxy: TimelineProxyProtocol?
+    private var roomProxy: JoinedRoomProxyProtocol?
+    private var timelineProxy: TimelineProxyProtocol?
     
     var roomID: String {
         roomProxy?.id ?? "MockRoomIdentifier"
     }
     
-    var timelineKind: TimelineKind
+    private(set) var timelineKind: TimelineKind
     
     let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()
+    
+    private(set) var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default {
+        didSet {
+            callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
+        }
+    }
+    
+    private let timelineItemsTimestamps: [TimelineItemIdentifier: Date]
+    
+    /// An array of timeline item arrays that will be inserted in order for each back pagination request.
+    var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
     
     var paginationState: TimelinePaginationState = .initial {
         didSet {
             callbacks.send(.paginationState(paginationState))
         }
     }
-    
-    var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default {
-        didSet {
-            callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
-        }
-    }
-    
-    var timelineItemsTimestamp: [TimelineItemIdentifier: Date] = [:]
     
     static var mediaGallery: MockTimelineController {
         MockTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: (0..<5).reduce([]) { partialResult, _ in
@@ -56,12 +56,16 @@ class MockTimelineController: TimelineControllerProtocol {
         return mock
     }
     
-    init(timelineKind: TimelineKind = .live,
+    init(roomProxy: JoinedRoomProxyProtocol? = nil,
+         timelineKind: TimelineKind = .live,
          timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default,
-         timelineProxy: TimelineProxyProtocol? = nil) {
+         timelineProxy: TimelineProxyProtocol? = nil,
+         timelineItemsTimestamps: [TimelineItemIdentifier: Date] = [TimelineItemIdentifier: Date]()) {
+        self.roomProxy = roomProxy
         self.timelineKind = timelineKind
         self.timelineItems = timelineItems
         self.timelineProxy = timelineProxy
+        self.timelineItemsTimestamps = timelineItemsTimestamps
         
         callbacks.send(.paginationState(paginationState))
         callbacks.send(.isLive(true))
@@ -169,7 +173,7 @@ class MockTimelineController: TimelineControllerProtocol {
     }
     
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
-        timelineItemsTimestamp[itemID] ?? .now
+        timelineItemsTimestamps[itemID] ?? .now
     }
     
     // MARK: - Sending
