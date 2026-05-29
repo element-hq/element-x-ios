@@ -55,7 +55,7 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
-                                  icon: .init(kind: .icon(\.document)))
+                                  icon: .init(kind: .icon(\.attachment)))
                     case .image(let content):
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
