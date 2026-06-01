@@ -195,9 +195,7 @@ class TimelineInteractionHandler {
             analyticsService.trackInteraction(name: .PinnedMessageListViewTimeline)
             guard let eventID = itemID.eventID else { return }
             actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
-        case .share:
-            break // Handled inline in the media preview screen with a ShareLink.
-        case .save:
+        case .downloadMedia:
             break // Handled inline in the media preview screen.
         case .translate:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }

@@ -114,7 +114,8 @@ struct TimelineItemMenuActionProvider {
         }
         
         if canRedactItem(item) {
-            secondaryActions.append(.redact)
+            let isMedia = if case .media = timelineKind { true } else { false }
+            secondaryActions.append(.redact(isMedia: isMedia))
         }
         
         switch timelineKind {
@@ -122,8 +123,7 @@ struct TimelineItemMenuActionProvider {
             actions = actions.filter(\.canAppearInPinnedEventsTimeline)
             secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
         case .media:
-            actions.append(.share)
-            actions.append(.save)
+            actions.append(.downloadMedia)
             actions = actions.filter(\.canAppearInMediaDetails)
             secondaryActions = secondaryActions.filter(\.canAppearInMediaDetails)
         case .live, .detached, .thread:

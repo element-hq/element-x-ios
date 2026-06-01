@@ -174,7 +174,7 @@ struct TimelineMediaPreviewViewModelTests {
         #expect(.media(mediaDetailsItem) == context.viewState.currentItem)
         
         // When choosing to redact the item.
-        context.send(viewAction: .menuAction(.redact, item: mediaItem))
+        context.send(viewAction: .menuAction(.redact(isMedia: true), item: mediaItem))
         
         // Then the confirmation sheet should be presented.
         #expect(context.redactConfirmationItem == mediaItem)
@@ -200,7 +200,7 @@ struct TimelineMediaPreviewViewModelTests {
         #expect(mediaItem.contentType == "JPEG image")
         
         // When choosing to save the image.
-        context.send(viewAction: .menuAction(.save, item: mediaItem))
+        context.send(viewAction: .menuAction(.downloadMedia, item: mediaItem))
         try await Task.sleep(for: .seconds(0.5))
         
         // Then the image should be saved as a photo to the user's photo library.
@@ -222,7 +222,7 @@ struct TimelineMediaPreviewViewModelTests {
         
         // When choosing to save the image.
         let deferred = deferFulfillment(context.viewState.previewControllerDriver) { $0.isAuthorizationRequired }
-        context.send(viewAction: .menuAction(.save, item: mediaItem))
+        context.send(viewAction: .menuAction(.downloadMedia, item: mediaItem))
         
         // Then the user should be prompted to allow access.
         try await deferred.fulfill()
@@ -241,7 +241,7 @@ struct TimelineMediaPreviewViewModelTests {
         #expect(mediaItem.contentType == "MPEG-4 movie")
         
         // When choosing to save the video.
-        context.send(viewAction: .menuAction(.save, item: mediaItem))
+        context.send(viewAction: .menuAction(.downloadMedia, item: mediaItem))
         try await Task.sleep(for: .seconds(0.5))
         
         // Then the video should be saved as a video in the user's photo library.
@@ -263,7 +263,7 @@ struct TimelineMediaPreviewViewModelTests {
         
         // When choosing to save the file.
         let deferred = deferFulfillment(context.viewState.previewControllerDriver) { $0.isExportFile }
-        context.send(viewAction: .menuAction(.save, item: mediaItem))
+        context.send(viewAction: .menuAction(.downloadMedia, item: mediaItem))
         let exportAction = try await deferred.fulfill()
         
         guard case let .exportFile(file) = exportAction else {

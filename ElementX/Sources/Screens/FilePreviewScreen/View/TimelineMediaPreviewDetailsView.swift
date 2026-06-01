@@ -18,7 +18,7 @@ struct TimelineMediaPreviewDetailsView: View {
     private let topPadding: CGFloat = 19
     
     var body: some View {
-        NavigationStack {
+        ElementNavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     details
@@ -28,8 +28,7 @@ struct TimelineMediaPreviewDetailsView: View {
                 .readHeight($sheetHeight)
             }
             .scrollBounceBehavior(.basedOnSize)
-            // Removed padding(.top, topPadding) for the drag indicator
-            .navigationTitle("File info")
+            .navigationTitle(L10n.screenMediaDetailsTitle)
             .navigationBarTitleDisplayMode(.inline)
         }
         .presentationDetents([.height(sheetHeight + topPadding)])
@@ -103,21 +102,21 @@ struct TimelineMediaPreviewDetailsView: View {
     private var actions: some View {
         if let actions = context.viewState.currentItemActions {
             VStack(spacing: 0) {
-                if !actions.actions.filter({ $0 != .share }).isEmpty {
+                if !actions.actions.isEmpty {
                     Divider()
                         .background(Color.compound.bgSubtlePrimary)
                 }
                 
-                ForEach(actions.actions.filter { $0 != .share }, id: \.self) { action in
+                ForEach(actions.actions, id: \.self) { action in
                     ActionButton(item: item, action: action, context: context)
                 }
                 
-                if !actions.secondaryActions.filter({ $0 != .share }).isEmpty {
+                if !actions.secondaryActions.isEmpty {
                     Divider()
                         .background(Color.compound.bgSubtlePrimary)
                 }
                 
-                ForEach(actions.secondaryActions.filter { $0 != .share }, id: \.self) { action in
+                ForEach(actions.secondaryActions, id: \.self) { action in
                     ActionButton(item: item, action: action, context: context)
                 }
             }
@@ -146,14 +145,7 @@ struct TimelineMediaPreviewDetailsView: View {
         let context: TimelineMediaPreviewViewModel.Context
         
         var body: some View {
-            if action == .share {
-                if let itemURL = item.fileHandle?.url {
-                    ShareLink(item: itemURL, message: item.caption.map(Text.init)) {
-                        action.label
-                    }
-                    .buttonStyle(.menuSheet)
-                }
-            } else if action == .save {
+            if action == .downloadMedia {
                 if item.fileHandle?.url != nil {
                     button
                 }
