@@ -214,6 +214,8 @@ internal enum L10n {
   internal static var actionDelete: String { return L10n.tr("Localizable", "action_delete") }
   /// Delete account
   internal static var actionDeleteAccount: String { return L10n.tr("Localizable", "action_delete_account") }
+  /// Delete file
+  internal static var actionDeleteFile: String { return L10n.tr("Localizable", "action_delete_file") }
   /// Delete Poll
   internal static var actionDeletePoll: String { return L10n.tr("Localizable", "action_delete_poll") }
   /// Deselect all
@@ -648,6 +650,8 @@ internal enum L10n {
   internal static func commonPollSummary(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_poll_summary", String(describing: p1))
   }
+  /// Poll
+  internal static var commonPollSummaryPrefix: String { return L10n.tr("Localizable", "common_poll_summary_prefix") }
   /// Total votes: %1$@
   internal static func commonPollTotalVotes(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_poll_total_votes", String(describing: p1))
@@ -1540,6 +1544,10 @@ internal enum L10n {
   internal static var screenBugReportEditorSupporting: String { return L10n.tr("Localizable", "screen_bug_report_editor_supporting") }
   /// The description is too short, please provide more details about what happened. Thanks!
   internal static var screenBugReportErrorDescriptionTooShort: String { return L10n.tr("Localizable", "screen_bug_report_error_description_too_short") }
+  /// You can enter the number of an associated GitHub issue, if any.
+  internal static var screenBugReportGithubIssueDescription: String { return L10n.tr("Localizable", "screen_bug_report_github_issue_description") }
+  /// GitHub issue
+  internal static var screenBugReportGithubIssueLabel: String { return L10n.tr("Localizable", "screen_bug_report_github_issue_label") }
   /// Send crash logs
   internal static var screenBugReportIncludeCrashLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_crash_logs") }
   /// Allow logs
@@ -2290,6 +2298,8 @@ internal enum L10n {
   internal static var screenNotificationOptinTitle: String { return L10n.tr("Localizable", "screen_notification_optin_title") }
   /// Additional settings
   internal static var screenNotificationSettingsAdditionalSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_additional_settings_section_title") }
+  /// Call ringtone
+  internal static var screenNotificationSettingsCallRingtoneLabel: String { return L10n.tr("Localizable", "screen_notification_settings_call_ringtone_label") }
   /// Audio and video calls
   internal static var screenNotificationSettingsCallsLabel: String { return L10n.tr("Localizable", "screen_notification_settings_calls_label") }
   /// Configuration mismatch
@@ -2324,6 +2334,16 @@ internal enum L10n {
   internal static var screenNotificationSettingsMentionsOnlyDisclaimer: String { return L10n.tr("Localizable", "screen_notification_settings_mentions_only_disclaimer") }
   /// Mentions
   internal static var screenNotificationSettingsMentionsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_mentions_section_title") }
+  /// Choose another sound…
+  internal static var screenNotificationSettingsMessageSoundDialogChooseOther: String { return L10n.tr("Localizable", "screen_notification_settings_message_sound_dialog_choose_other") }
+  /// Currently using %1$@
+  internal static func screenNotificationSettingsMessageSoundDialogCurrentSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_notification_settings_message_sound_dialog_current_subtitle", String(describing: p1))
+  }
+  /// Message sound
+  internal static var screenNotificationSettingsMessageSoundDialogTitle: String { return L10n.tr("Localizable", "screen_notification_settings_message_sound_dialog_title") }
+  /// Message sound
+  internal static var screenNotificationSettingsMessageSoundLabel: String { return L10n.tr("Localizable", "screen_notification_settings_message_sound_label") }
   /// All
   internal static var screenNotificationSettingsModeAll: String { return L10n.tr("Localizable", "screen_notification_settings_mode_all") }
   /// Mentions
@@ -2332,6 +2352,8 @@ internal enum L10n {
   internal static var screenNotificationSettingsNotificationSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_notification_section_title") }
   /// Notify me on @room
   internal static var screenNotificationSettingsRoomMentionLabel: String { return L10n.tr("Localizable", "screen_notification_settings_room_mention_label") }
+  /// Custom
+  internal static var screenNotificationSettingsSoundCustomFallback: String { return L10n.tr("Localizable", "screen_notification_settings_sound_custom_fallback") }
   /// Custom sound...
   internal static var screenNotificationSettingsSoundCustomSoundButtonTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_custom_sound_button_title") }
   /// Error deleting file
@@ -2346,8 +2368,12 @@ internal enum L10n {
   internal static var screenNotificationSettingsSoundPreviewSoundErrorTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_preview_sound_error_title") }
   /// Sound
   internal static var screenNotificationSettingsSoundSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_section_title") }
+  /// Dismiss alert sound error
+  internal static var screenNotificationSettingsSoundSetSoundErrorDismissA11y: String { return L10n.tr("Localizable", "screen_notification_settings_sound_set_sound_error_dismiss_a11y") }
   /// Problem setting alert sound
   internal static var screenNotificationSettingsSoundSetSoundErrorTitle: String { return L10n.tr("Localizable", "screen_notification_settings_sound_set_sound_error_title") }
+  /// Silent
+  internal static var screenNotificationSettingsSoundSilent: String { return L10n.tr("Localizable", "screen_notification_settings_sound_silent") }
   /// Alert
   internal static var screenNotificationSettingsSoundSystemAlert: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_alert") }
   /// Anticipate
@@ -2362,6 +2388,8 @@ internal enum L10n {
   internal static var screenNotificationSettingsSoundSystemChime: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_chime") }
   /// Choo Choo
   internal static var screenNotificationSettingsSoundSystemChooChoo: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_choo_choo") }
+  /// System Default
+  internal static var screenNotificationSettingsSoundSystemDefault: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_default") }
   /// Descent
   internal static var screenNotificationSettingsSoundSystemDescent: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_descent") }
   /// Electronic

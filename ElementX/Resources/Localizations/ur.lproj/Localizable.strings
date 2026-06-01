@@ -91,6 +91,7 @@
 "action_decline_and_block" = "Decline and block";
 "action_delete" = "Delete";
 "action_delete_account" = "Delete account";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "رائے شماری حذف کریں";
 "action_deselect_all" = "Deselect all";
 "action_disable" = "غیر فعال کریں";
@@ -295,6 +296,7 @@
 "common_please_wait" = "براہ کرم انتظار کریں…";
 "common_poll_end_confirmation" = "کیا آپ واقعی اس رائے شماری کو ختم کرنا چاہتے ہیں؟";
 "common_poll_summary" = "رائے شماری: %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "ک آراء: %1$@";
 "common_poll_undisclosed_text" = "رائے شماری ختم ہونے کے بعد نتائج ظاہر ہوں گے";
 "common_preparing" = "Preparing…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "مسئلہ بیان کریں…";
 "screen_bug_report_editor_supporting" = "اگر ممکن ہو تو، برائے مہربانی بیان انگریزی میں لکھیں۔";
 "screen_bug_report_error_description_too_short" = "تفصیل بہت مختصر ہے، براہ کرم مزید تفصیلات فراہم کریں کہ کیا ہوا۔ شکریہ!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "ٹکر کے نوشتے بھیجیں";
 "screen_bug_report_include_logs" = "نوشتہجات کی اجازت دیں۔";
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "آپ بعد میں اپنی ترتیبات تبدیل کر سکتے ہیں۔";
 "screen_notification_optin_title" = "اطلاعات کی اجازت دیں اور کبھی بھی کسی پیغام سے محروم نہ ہوں۔";
 "screen_notification_settings_additional_settings_section_title" = "اضافی ترتیبات";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "صوتی اور بصری مکالمات";
 "screen_notification_settings_configuration_mismatch" = "تکوین کی عدم مطابقت";
 "screen_notification_settings_configuration_mismatch_description" = "ہم نے اختیارات کو تلاش کرنا آسان بنانے کے لیے اطلاعات کی ترتیبات کو آسان بنایا ہے۔ آپ کی ماضی میں منتخب کردہ کچھ حسب ضرورت ترتیبات یہاں نہیں دکھائی گئی ہیں، لیکن وہ اب بھی فعال ہیں۔\n\n اگر آپ آگے بڑھتے ہیں تو آپ کی کچھ ترتیبات تبدیل ہو سکتی ہیں۔";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "دعوت نامے";
 "screen_notification_settings_mentions_only_disclaimer" = "آپ کا منزلی خادم مرموز کردہ کمروں میں اس اختیار کی حمایت نہیں کرت، ہوسکتا ہے کچھ کمروں میں آپ کو مطلع نہ کیا جائے۔";
 "screen_notification_settings_mentions_section_title" = "تذکرے";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "تمام";
 "screen_notification_settings_mode_mentions" = "تذکرے";
 "screen_notification_settings_notification_section_title" = "مجھے مطلع کریں برائے";
 "screen_notification_settings_room_mention_label" = "مجھے @کمرہ پر مطلع کریں";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";

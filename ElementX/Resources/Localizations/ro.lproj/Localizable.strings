@@ -91,6 +91,7 @@
 "action_decline_and_block" = "Refuzați și blocați";
 "action_delete" = "Ștergere";
 "action_delete_account" = "Ștergeți contul";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "Ștergeți sondajul";
 "action_deselect_all" = "Deselectați tot";
 "action_disable" = "Dezactivați";
@@ -295,6 +296,7 @@
 "common_please_wait" = "Va rugam asteptati…";
 "common_poll_end_confirmation" = "Sunteți sigur că doriți să încheiați acest sondaj?";
 "common_poll_summary" = "Sondajul %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "Total voturi: %1$@";
 "common_poll_undisclosed_text" = "Rezultatele vor fi afișate după încheierea sondajului";
 "common_preparing" = "Se pregăteşte…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "Descrieți problema…";
 "screen_bug_report_editor_supporting" = "Dacă posibil, vă rugăm să scrieți descrierea în engleză.";
 "screen_bug_report_error_description_too_short" = "Descrierea este prea scurtă, vă rugăm să oferiți mai multe detalii despre ceea ce s-a întâmplat. Vă mulțumim!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "Trimiteți log-uri";
 "screen_bug_report_include_logs" = "Permiteți log-uri";
 "screen_bug_report_include_logs_error" = "Jurnalele dumneavoastră sunt prea mari și nu pot fi incluse în acest raport. Vă rugăm să ni le trimiteți prin altă metodă.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "Puteți modifica setările mai târziu.";
 "screen_notification_optin_title" = "Permiteți notificările și nu pierdeți niciodată un mesaj";
 "screen_notification_settings_additional_settings_section_title" = "Setări adiționale";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Apeluri audio și video";
 "screen_notification_settings_configuration_mismatch" = "Nepotrivire de configurație";
 "screen_notification_settings_configuration_mismatch_description" = "Am simplificat Setările pentru notificări pentru a face opțiunile mai ușor de găsit.\n\nUnele setări personalizate pe care le-ați ales în trecut nu sunt afișate aici, dar sunt încă active.\n\nDacă continuați, unele dintre setările dumneavoastră pot fi modificate.";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "Invitații";
 "screen_notification_settings_mentions_only_disclaimer" = "Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, este posibil să nu primiți notificări în unele camere.";
 "screen_notification_settings_mentions_section_title" = "Mențiuni";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "Toate";
 "screen_notification_settings_mode_mentions" = "Mențiuni";
 "screen_notification_settings_notification_section_title" = "Anunță-mă pentru";
 "screen_notification_settings_room_mention_label" = "Anunțați-mă pentru @room";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";

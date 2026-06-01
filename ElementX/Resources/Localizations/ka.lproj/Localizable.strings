@@ -91,6 +91,7 @@
 "action_decline_and_block" = "Decline and block";
 "action_delete" = "Delete";
 "action_delete_account" = "Delete account";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "გამოკითხვის წაშლა";
 "action_deselect_all" = "Deselect all";
 "action_disable" = "გამორთვა";
@@ -295,6 +296,7 @@
 "common_please_wait" = "Please wait…";
 "common_poll_end_confirmation" = "დარწმუნებული ხართ, რომ გსურთ ამ გამოკითხვის დასრულება?";
 "common_poll_summary" = "გამოკითხვა: %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "სულ ხმები: %1$@";
 "common_poll_undisclosed_text" = "შედეგები გამოკითხვის დასრულების შემდეგ გამოჩნდება";
 "common_preparing" = "Preparing…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "აღწერეთ პრობლემა...";
 "screen_bug_report_editor_supporting" = "თუ შესაძლებელია, გთხოვთ, დაწეროთ აღწერა ინგლისურ ენაზე.";
 "screen_bug_report_error_description_too_short" = "აღწერა ძალიან მოკლეა, გთხოვთ მოგვაწოდოთ მეტი დეტალი მომხდარის შესახებ. მადლობა!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "გაუმართაობის ჟურნალის გაგზავნა";
 "screen_bug_report_include_logs" = "ჟურნალების დაშვება";
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "თქვენ შეგიძლიათ შეცვალოთ თქვენი პარამეტრები მოგვიანებით.";
 "screen_notification_optin_title" = "ყველა შეტყობინებაზე შეტყობინებების მიღება";
 "screen_notification_settings_additional_settings_section_title" = "დამატებითი პარამეტრები";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "აუდიო და ვიდეო ზარები";
 "screen_notification_settings_configuration_mismatch" = "კონფიგურაციის შეუსაბამობა";
 "screen_notification_settings_configuration_mismatch_description" = "ჩვენ გავამარტივეთ შეტყობინებების პარამეტრები, რათა გაგიადვილოთ ვარიანტების პოვნა. \n\nთქვენ მიერ წარსულში არჩეული ზოგიერთი მორგებული პარამეტრი აქ არ არის ნაჩვენები, მაგრამ ისინი კვლავ აქტიურია. თუ გააგრძელებთ, თქვენი ზოგიერთი პარამეტრი შეიძლება შეიცვალოს.";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "მოსაწვევები";
 "screen_notification_settings_mentions_only_disclaimer" = "თქვენი სახლის სერვერი არ უჭერს მხარს ამ პარამეტრს დაშიფრულ ოთახებში, ზოგიერთ ოთახში შეიძლება არ მიიღოთ შეტყობინება.";
 "screen_notification_settings_mentions_section_title" = "ხსენებები";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "ყველა";
 "screen_notification_settings_mode_mentions" = "ხსენებები";
 "screen_notification_settings_notification_section_title" = "ჩემი შეტყობინება შემდეგისთვის:";
 "screen_notification_settings_room_mention_label" = "ჩემი შეტყობინება @room-ზე";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";

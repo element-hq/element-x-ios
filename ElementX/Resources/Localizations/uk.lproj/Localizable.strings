@@ -91,6 +91,7 @@
 "action_decline_and_block" = "Відхилити та заблокувати";
 "action_delete" = "Видалити";
 "action_delete_account" = "Видалити обліковий запис";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "Видалити опитування";
 "action_deselect_all" = "Скасувати вибір усіх";
 "action_disable" = "Вимкнути";
@@ -295,6 +296,7 @@
 "common_please_wait" = "Будь ласка, зачекайте…";
 "common_poll_end_confirmation" = "Ви впевнені, що хочете закінчити це опитування?";
 "common_poll_summary" = "Опитування: %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "Всього голосів: %1$@";
 "common_poll_undisclosed_text" = "Результати будуть показані після завершення опитування";
 "common_preparing" = "Приготування…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "Опишіть проблему...";
 "screen_bug_report_editor_supporting" = "Якщо можливо, будь ласка, напишіть опис англійською мовою.";
 "screen_bug_report_error_description_too_short" = "Опис закороткий, будь ласка, надайте докладнішу інформацію про те, що сталося. Дякуємо!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "Надіслати журнали збоїв";
 "screen_bug_report_include_logs" = "Дозволити журнали";
 "screen_bug_report_include_logs_error" = "Ваші журнали надмірно великі, тому їх не можна включити в цей звіт, будь ласка, надішліть їх нам іншим способом.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "Ви можете змінити свої налаштування пізніше.";
 "screen_notification_optin_title" = "Дозволити сповіщення і ніколи не пропускати повідомлення";
 "screen_notification_settings_additional_settings_section_title" = "Додаткові налаштування";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Аудіо та відеодзвінки";
 "screen_notification_settings_configuration_mismatch" = "Невідповідність конфігурації";
 "screen_notification_settings_configuration_mismatch_description" = "Ми спростили налаштування сповіщень, щоб полегшити пошук параметрів. Деякі користувацькі налаштування, які ви вибрали раніше, тут не відображаються, але вони все ще активні.\n\nЯкщо ви продовжите, деякі з ваших налаштувань можуть змінитися.";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "Запрошення";
 "screen_notification_settings_mentions_only_disclaimer" = "Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви можете не отримати сповіщення в деяких кімнатах.";
 "screen_notification_settings_mentions_section_title" = "Згадки";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "Усі";
 "screen_notification_settings_mode_mentions" = "Згадки";
 "screen_notification_settings_notification_section_title" = "Сповіщати мене про";
 "screen_notification_settings_room_mention_label" = "Сповіщати про @room";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";

@@ -91,6 +91,7 @@
 "action_decline_and_block" = "拒否してブロック";
 "action_delete" = "削除";
 "action_delete_account" = "アカウントを削除";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "投票を削除";
 "action_deselect_all" = "全ての選択を解除";
 "action_disable" = "無効化";
@@ -295,6 +296,7 @@
 "common_please_wait" = "お待ちください...";
 "common_poll_end_confirmation" = "本当に投票を終了しますか？";
 "common_poll_summary" = "投票: %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "総投票数:%1$@";
 "common_poll_undisclosed_text" = "結果は投票終了後に表示されます";
 "common_preparing" = "準備中…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "問題の説明...";
 "screen_bug_report_editor_supporting" = "可能であれば英語で記入してください。";
 "screen_bug_report_error_description_too_short" = "説明が過度に短いです。問題についてより詳細にご記入ください。";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "クラッシュログを送信";
 "screen_bug_report_include_logs" = "ログの記録を許可";
 "screen_bug_report_include_logs_error" = "ログのサイズが大きく、報告に添付することができません。ログは別の方法で送信してください。";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "設定は後で変更することができます。";
 "screen_notification_optin_title" = "メッセージを見逃さないために通知を許可しましょう";
 "screen_notification_settings_additional_settings_section_title" = "追加設定";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "音声・ビデオ通話";
 "screen_notification_settings_configuration_mismatch" = "設定の不一致";
 "screen_notification_settings_configuration_mismatch_description" = "通知設定を簡素化し、見つけやすくしました。以前のカスタム設定の一部はここに表示されませんが、引き続き有効です。\n\n続行すると、一部の設定が変更される可能性があります。";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "招待";
 "screen_notification_settings_mentions_only_disclaimer" = "暗号化されたルームでは、この機能にホームサーバーが対応しないため、一部のルームから通知が届かない可能性があります。";
 "screen_notification_settings_mentions_section_title" = "メンション";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "すべて";
 "screen_notification_settings_mode_mentions" = "メンション";
 "screen_notification_settings_notification_section_title" = "以下を通知";
 "screen_notification_settings_room_mention_label" = "@ルームで通知を受け取る";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "カスタム着信音";
 "screen_notification_settings_sound_delete_sound_error_title" = "ファイルの削除に失敗";
 "screen_notification_settings_sound_element_default" = "Element の既定";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "ファイルの取り込みに失敗";
 "screen_notification_settings_sound_preview_sound_error_title" = "通知音のプレビューで問題が発生しました";
 "screen_notification_settings_sound_section_title" = "音";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "通知音の設定に問題が発生しました";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "アラート";
 "screen_notification_settings_sound_system_anticipate" = "予感";
 "screen_notification_settings_sound_system_bell" = "ベル";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "カリプソ";
 "screen_notification_settings_sound_system_chime" = "チャイム";
 "screen_notification_settings_sound_system_choo_choo" = "汽車ポッポ";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "下降";
 "screen_notification_settings_sound_system_electronic" = "エレクトロニック";
 "screen_notification_settings_sound_system_fanfare" = "ファンファーレ";

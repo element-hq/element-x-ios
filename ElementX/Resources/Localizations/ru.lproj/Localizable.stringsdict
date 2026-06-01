@@ -370,10 +370,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d градуса</string>
+			<key>many</key>
+			<string>%1$d градусов</string>
 			<key>one</key>
-			<string>%1$d degree</string>
-			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>%1$d градус</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
