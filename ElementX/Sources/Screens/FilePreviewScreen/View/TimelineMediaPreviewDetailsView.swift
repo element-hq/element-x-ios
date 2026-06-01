@@ -15,20 +15,24 @@ struct TimelineMediaPreviewDetailsView: View {
     var preferredColorScheme: ColorScheme? = .dark
     @Binding var sheetHeight: CGFloat
     
-    private let topPadding: CGFloat = 19
+    /// Approximate height of the navigation bar.
+    private let topPadding: CGFloat = 72
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                details
-                actions
+        ElementNavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    details
+                    actions
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onGeometryChange(for: CGFloat.self, of: \.size.height) { sheetHeight = $0 + topPadding }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .readHeight($sheetHeight)
+            .scrollBounceBehavior(.basedOnSize)
+            .navigationTitle(L10n.screenMediaDetailsTitle)
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .scrollBounceBehavior(.basedOnSize)
-        .padding(.top, topPadding) // For the drag indicator
-        .presentationDetents([.height(sheetHeight + topPadding)])
+        .presentationDetents([.height(sheetHeight)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
         .preferredColorScheme(preferredColorScheme)
@@ -90,7 +94,6 @@ struct TimelineMediaPreviewDetailsView: View {
                 }
             }
         }
-        .padding(.top, 24)
         .padding(.bottom, 32)
         .padding(.horizontal, 16)
     }
@@ -142,14 +145,7 @@ struct TimelineMediaPreviewDetailsView: View {
         let context: TimelineMediaPreviewViewModel.Context
         
         var body: some View {
-            if action == .share {
-                if let itemURL = item.fileHandle?.url {
-                    ShareLink(item: itemURL, message: item.caption.map(Text.init)) {
-                        action.label
-                    }
-                    .buttonStyle(.menuSheet)
-                }
-            } else if action == .save {
+            if action == .downloadMedia {
                 if item.fileHandle?.url != nil {
                     button
                 }
