@@ -58,6 +58,27 @@ struct RoomEventStringBuilderTests {
         #expect(otherPollString?.string == "Bob: Poll: Which is better?", "Everyone else's polls should be prefixed with their display name.")
     }
     
+    @Test
+    func senderPrefixUsesDisplayNameVerbatim() {
+        let markdownDisplayNameString = stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
+                                                                                                  senderDisplayName: "_username_"))
+        #expect(markdownDisplayNameString?.string == "_username_: Hello, World!",
+                "Display names that contain markdown delimiters should be shown literally in the room list.")
+        
+        let ambiguousMarkdownDisplayNameString = stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@charlie:matrix.org",
+                                                                                                           senderDisplayName: "_username_",
+                                                                                                           senderDisplayNameAmbiguous: true))
+        #expect(ambiguousMarkdownDisplayNameString?.string == "_username_ (@charlie:matrix.org): Hello, World!",
+                "Ambiguous display names should also preserve markdown delimiters when adding disambiguation.")
+        
+        let emoteString = stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@david:matrix.org",
+                                                                                   senderDisplayName: "_username_",
+                                                                                   type: .emote,
+                                                                                   message: "laughs"))
+        #expect(emoteString?.string == "* _username_ laughs",
+                "Emote previews should preserve markdown delimiters in display names too.")
+    }
+    
     // MARK: - Helpers
     
     private enum MockMessageType { case textMessage, emote }
