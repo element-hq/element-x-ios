@@ -43,6 +43,7 @@ private struct MenuSheetLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         HStack(spacing: spacing) {
             configuration.icon
+                .foregroundStyle(.compound.iconSecondary)
             configuration.title
         }
         .multilineTextAlignment(.leading)
