@@ -293,19 +293,18 @@ private extension EdgeInsets {
 private struct PinnedIndicatorViewModifier: ViewModifier {
     let isPinned: Bool
     let isOutgoing: Bool
+    private let indicatorSpacing: CGFloat = 8
     
+    @ViewBuilder
     func body(content: Content) -> some View {
         if isPinned {
-            HStack(alignment: .top, spacing: 8) {
-                if isOutgoing {
+            content
+                .overlay(alignment: isOutgoing ? .topLeading : .topTrailing) {
                     pinnedIndicator
+                        .alignmentGuide(isOutgoing ? .leading : .trailing) { dimensions in
+                            isOutgoing ? dimensions[.trailing] + indicatorSpacing : dimensions[.leading] - indicatorSpacing
+                        }
                 }
-                content
-                    .layoutPriority(1)
-                if !isOutgoing {
-                    pinnedIndicator
-                }
-            }
         } else {
             content
         }
