@@ -357,6 +357,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [Float],
+                          inReplyToEventID: String?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending voice message")
         
@@ -365,7 +366,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                                      caption: nil,
                                                                      formattedCaption: nil,
                                                                      mentions: nil,
-                                                                     inReplyTo: nil),
+                                                                     inReplyTo: inReplyToEventID),
                                                        audioInfo: audioInfo,
                                                        waveform: waveform)
             

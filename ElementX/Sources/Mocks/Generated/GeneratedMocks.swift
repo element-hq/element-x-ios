@@ -21387,9 +21387,17 @@ class TimelineControllerMock: TimelineControllerProtocol, @unchecked Sendable {
         }
     }
     var sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure: ((URL, AudioInfo, [Float], @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReceivedArguments: (url: URL, audioInfo: AudioInfo, waveform: [Float], inReplyToEventID: String?)?
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReceivedInvocations: [(url: URL, audioInfo: AudioInfo, waveform: [Float], inReplyToEventID: String?)] = []
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure: ((URL, AudioInfo, [Float], String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
 
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], inReplyToEventID: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount += 1
+        sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReceivedArguments = (url: url, audioInfo: audioInfo, waveform: waveform, inReplyToEventID: inReplyToEventID)
+        sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReceivedInvocations.append((url: url, audioInfo: audioInfo, waveform: waveform, inReplyToEventID: inReplyToEventID))
+        if let sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure(url, audioInfo, waveform, inReplyToEventID, requestHandle)
+        }
         if let sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure {
             return await sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure(url, audioInfo, waveform, requestHandle)
         } else {
@@ -22696,9 +22704,17 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
         }
     }
     var sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure: ((URL, AudioInfo, [Float], @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReceivedArguments: (url: URL, audioInfo: AudioInfo, waveform: [Float], inReplyToEventID: String?)?
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReceivedInvocations: [(url: URL, audioInfo: AudioInfo, waveform: [Float], inReplyToEventID: String?)] = []
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure: ((URL, AudioInfo, [Float], String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
 
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], inReplyToEventID: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount += 1
+        sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReceivedArguments = (url: url, audioInfo: audioInfo, waveform: waveform, inReplyToEventID: inReplyToEventID)
+        sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReceivedInvocations.append((url: url, audioInfo: audioInfo, waveform: waveform, inReplyToEventID: inReplyToEventID))
+        if let sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure(url, audioInfo, waveform, inReplyToEventID, requestHandle)
+        }
         if let sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure {
             return await sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure(url, audioInfo, waveform, requestHandle)
         } else {
@@ -25112,12 +25128,20 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol, @unchecked Sendabl
         }
     }
     var sendVoiceMessageTimelineControllerAudioConverterClosure: ((TimelineControllerProtocol, AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError>)?
+    var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedArguments: (timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol, inReplyToEventID: String?)?
+    var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedInvocations: [(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol, inReplyToEventID: String?)] = []
+    var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDClosure: ((TimelineControllerProtocol, AudioConverterProtocol, String?) async -> Result<Void, VoiceMessageRecorderError>)?
 
-    func sendVoiceMessage(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
+    func sendVoiceMessage(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol, inReplyToEventID: String?) async -> Result<Void, VoiceMessageRecorderError> {
         sendVoiceMessageTimelineControllerAudioConverterCallsCount += 1
         sendVoiceMessageTimelineControllerAudioConverterReceivedArguments = (timelineController: timelineController, audioConverter: audioConverter)
+        sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedArguments = (timelineController: timelineController, audioConverter: audioConverter, inReplyToEventID: inReplyToEventID)
         DispatchQueue.main.async {
             self.sendVoiceMessageTimelineControllerAudioConverterReceivedInvocations.append((timelineController: timelineController, audioConverter: audioConverter))
+            self.sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedInvocations.append((timelineController: timelineController, audioConverter: audioConverter, inReplyToEventID: inReplyToEventID))
+        }
+        if let sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDClosure = sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDClosure {
+            return await sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDClosure(timelineController, audioConverter, inReplyToEventID)
         }
         if let sendVoiceMessageTimelineControllerAudioConverterClosure = sendVoiceMessageTimelineControllerAudioConverterClosure {
             return await sendVoiceMessageTimelineControllerAudioConverterClosure(timelineController, audioConverter)

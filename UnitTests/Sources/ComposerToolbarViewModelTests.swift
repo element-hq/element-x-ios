@@ -371,6 +371,32 @@ final class ComposerToolbarViewModelTests {
         #expect(draftServiceMock.clearDraftCallsCount == 1)
         #expect(!draftServiceMock.loadDraftCalled)
     }
+
+    @Test
+    func sendsVoiceMessageAsReply() async throws {
+        let replyEventID = "replyID"
+        viewModel.process(timelineAction: .setMode(mode: .reply(eventID: replyEventID,
+                                                                replyDetails: .loaded(sender: .init(id: "@alice:matrix.org"),
+                                                                                      eventID: replyEventID,
+                                                                                      eventContent: .message(.text(.init(body: "reply text")))),
+                                                                isThread: false)))
+        viewModel.process(viewAction: .voiceMessage(.startRecording))
+        viewModel.process(timelineAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: "", duration: 10.0),
+                                                                              waveform: .data([1.0]),
+                                                                              isUploading: false)))
+
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case let .voiceMessage(.send(inReplyToEventID)):
+                return inReplyToEventID == replyEventID
+            default:
+                return false
+            }
+        }
+        viewModel.process(viewAction: .sendMessage)
+
+        try await deferred.fulfill()
+    }
     
     @Test
     func nothingToRestore() async {

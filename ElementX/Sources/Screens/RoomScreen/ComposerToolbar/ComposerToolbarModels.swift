@@ -20,7 +20,7 @@ enum ComposerToolbarVoiceMessageAction {
     case pausePlayback
     case scrubPlayback(scrubbing: Bool)
     case seekPlayback(progress: Double)
-    case send
+    case send(inReplyToEventID: String?)
 }
 
 enum ComposerToolbarViewModelAction {
@@ -134,12 +134,7 @@ struct ComposerToolbarViewState: BindableState {
     }
     
     var isVoiceMessageModeActivated: Bool {
-        switch composerMode {
-        case .recordVoiceMessage, .previewVoiceMessage:
-            return true
-        default:
-            return false
-        }
+        composerMode.isVoiceMessageModeActivated
     }
 }
 
@@ -351,6 +346,15 @@ enum ComposerMode: Equatable {
         case .default, .reply, .edit:
             return true
         case .recordVoiceMessage, .previewVoiceMessage:
+            return false
+        }
+    }
+
+    var isVoiceMessageModeActivated: Bool {
+        switch self {
+        case .recordVoiceMessage, .previewVoiceMessage:
+            return true
+        default:
             return false
         }
     }

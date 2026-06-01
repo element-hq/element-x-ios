@@ -146,7 +146,8 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     }
     
     func sendVoiceMessage(timelineController: TimelineControllerProtocol,
-                          audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
+                          audioConverter: AudioConverterProtocol,
+                          inReplyToEventID: String?) async -> Result<Void, VoiceMessageRecorderError> {
         guard let url = audioRecorder.audioFileURL else {
             return .failure(VoiceMessageRecorderError.missingRecordingFile)
         }
@@ -180,7 +181,8 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
         let result = await timelineController.sendVoiceMessage(url: oggFile,
                                                                audioInfo: audioInfo,
-                                                               waveform: waveform) { _ in }
+                                                               waveform: waveform,
+                                                               inReplyToEventID: inReplyToEventID) { _ in }
         
         if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")

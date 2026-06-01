@@ -390,10 +390,13 @@ class TimelineController: TimelineControllerProtocol {
     func sendVoiceMessage(url: URL,
                           audioInfo: MatrixRustSDK.AudioInfo,
                           waveform: [Float],
+                          inReplyToEventID: String?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         switch await activeTimeline.sendVoiceMessage(url: url,
                                                      audioInfo: audioInfo,
-                                                     waveform: waveform, requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
+                                                     waveform: waveform,
+                                                     inReplyToEventID: inReplyToEventID,
+                                                     requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
             callbacks.send(.messageSentOrEdited)
             return .success(())

@@ -358,7 +358,7 @@ class TimelineInteractionHandler {
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
-    func sendCurrentVoiceMessage() async {
+    func sendCurrentVoiceMessage(inReplyToEventID: String?) async {
         guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState, let recordingURL = voiceMessageRecorder.recordingURL else {
             actionsSubject.send(.displayErrorToast(L10n.errorFailedUploadingVoiceMessage))
             return
@@ -366,14 +366,16 @@ class TimelineInteractionHandler {
         
         analyticsService.trackComposer(inThread: false,
                                        isEditing: false,
-                                       isReply: false,
+                                       isReply: inReplyToEventID != nil,
                                        messageType: .VoiceMessage,
                                        startsThread: nil)
         
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true))))
         await voiceMessageRecorder.stopPlayback()
         
-        switch await voiceMessageRecorder.sendVoiceMessage(timelineController: timelineController, audioConverter: AudioConverter()) {
+        switch await voiceMessageRecorder.sendVoiceMessage(timelineController: timelineController,
+                                                           audioConverter: AudioConverter(),
+                                                           inReplyToEventID: inReplyToEventID) {
         case .success:
             await deleteCurrentVoiceMessage()
         case .failure(let error):

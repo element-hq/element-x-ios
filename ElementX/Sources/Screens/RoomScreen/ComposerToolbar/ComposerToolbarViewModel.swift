@@ -44,6 +44,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private var currentLinkData: WysiwygLinkData?
     
     private var replyLoadingTask: Task<Void, Never>?
+    private var voiceMessageReplyEventID: String?
     
     init(initialText: String? = nil,
          roomProxy: JoinedRoomProxyProtocol,
@@ -191,7 +192,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             
             switch state.composerMode {
             case .previewVoiceMessage:
-                actionsSubject.send(.voiceMessage(.send))
+                actionsSubject.send(.voiceMessage(.send(inReplyToEventID: voiceMessageReplyEventID)))
             default:
                 if context.composerFormattingEnabled {
                     actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
@@ -457,13 +458,16 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
         switch action {
         case .startRecording:
+            voiceMessageReplyEventID = state.composerMode.replyEventID
             state.bindings.composerFormattingEnabled = false
             actionsSubject.send(.voiceMessage(.startRecording))
         case .stopRecording:
             actionsSubject.send(.voiceMessage(.stopRecording))
         case .cancelRecording:
+            voiceMessageReplyEventID = nil
             actionsSubject.send(.voiceMessage(.cancelRecording))
         case .deleteRecording:
+            voiceMessageReplyEventID = nil
             actionsSubject.send(.voiceMessage(.deleteRecording))
         case .startPlayback:
             actionsSubject.send(.voiceMessage(.startPlayback))
@@ -576,15 +580,21 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         guard mode != state.composerMode else { return }
         
+        let previousMode = state.composerMode
         state.composerMode = mode
         switch mode {
         case .default:
-            break
+            if previousMode.isVoiceMessageModeActivated {
+                voiceMessageReplyEventID = nil
+            }
         case .recordVoiceMessage(let audioRecorderState):
             state.audioRecorderState = audioRecorderState
         case .previewVoiceMessage(let audioPlayerState, _, _):
             state.audioPlayerState = audioPlayerState
         case .edit, .reply:
+            if previousMode.isVoiceMessageModeActivated {
+                voiceMessageReplyEventID = nil
+            }
             // Focus composer when switching to reply/edit
             state.bindings.composerFocused = true
         }
