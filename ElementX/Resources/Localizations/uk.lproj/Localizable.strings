@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Зображення та відео, вивантажені в цю кімнату, будуть показані тут.";
 "screen_media_browser_media_empty_state_title" = "Ще не вивантажено жодного медіафайлу";
 "screen_media_browser_title" = "Медіа та файли";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Формат файлу";
 "screen_media_details_filename" = "Назва файлу";
 "screen_media_details_no_more_files_to_show" = "Більше немає файлів для показу";

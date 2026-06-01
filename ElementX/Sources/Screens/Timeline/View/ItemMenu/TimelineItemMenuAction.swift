@@ -135,7 +135,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     
     var canAppearInMediaDetails: Bool {
         switch self {
-        case .viewInRoomTimeline, .share, .save, .redact, .forward:
+        case .viewInRoomTimeline, .save, .redact, .forward:
             true
         default:
             false

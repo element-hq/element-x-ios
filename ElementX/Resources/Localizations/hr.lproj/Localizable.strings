@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Ovdje će se prikazati slike i videozapisi preneseni u ovu sobu.";
 "screen_media_browser_media_empty_state_title" = "Još nijedan medij nije prenesen";
 "screen_media_browser_title" = "Mediji i datoteke";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Oblik datoteke";
 "screen_media_details_filename" = "Naziv datoteke";
 "screen_media_details_no_more_files_to_show" = "Nema više datoteka za prikaz";

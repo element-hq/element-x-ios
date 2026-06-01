@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Tähän huoneeseen lähetetyt kuvat ja videot näytetään täällä.";
 "screen_media_browser_media_empty_state_title" = "Mediaa ei ole vielä lähetetty";
 "screen_media_browser_title" = "Media ja tiedostot";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Tiedostomuoto";
 "screen_media_details_filename" = "Tiedostonimi";
 "screen_media_details_no_more_files_to_show" = "Ei enää näytettäviä tiedostoja";

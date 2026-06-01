@@ -40,6 +40,21 @@ struct TimelineMediaPreviewViewModelTests {
         #expect(context.viewState.currentItem == .media(context.viewState.dataSource.previewItems[0]))
         #expect(context.viewState.currentItemActions != nil)
     }
+
+    @Test
+    mutating func fileInfoActions() {
+        // Given a fresh view model.
+        setupViewModel()
+
+        guard let actions = context.viewState.currentItemActions else {
+            Issue.record("There should be actions for the current media item.")
+            return
+        }
+
+        // Then the file info sheet should offer download without duplicating the previous screen's share action.
+        #expect(actions.actions.contains(.save))
+        #expect(!actions.actions.contains(.share))
+    }
     
     @Test
     mutating func loadingItemFailure() async throws {

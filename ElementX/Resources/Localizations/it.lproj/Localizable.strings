@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Le immagini e i video caricati in questa stanza verranno mostrati qui.";
 "screen_media_browser_media_empty_state_title" = "Nessun file multimediale ancora caricato";
 "screen_media_browser_title" = "File e contenuti multimediali";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Formato del file";
 "screen_media_details_filename" = "Nome del file";
 "screen_media_details_no_more_files_to_show" = "Nessun altro file da mostrare";

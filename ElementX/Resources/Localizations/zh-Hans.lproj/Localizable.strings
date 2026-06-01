@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "上传到此房间的图像和视频将在此处显示。";
 "screen_media_browser_media_empty_state_title" = "尚未上传任何媒体";
 "screen_media_browser_title" = "媒体与文件";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "文件格式";
 "screen_media_details_filename" = "文件名";
 "screen_media_details_no_more_files_to_show" = "没有更多文件可显示了";

@@ -122,7 +122,6 @@ struct TimelineItemMenuActionProvider {
             actions = actions.filter(\.canAppearInPinnedEventsTimeline)
             secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
         case .media:
-            actions.append(.share)
             actions.append(.save)
             actions = actions.filter(\.canAppearInMediaDetails)
             secondaryActions = secondaryActions.filter(\.canAppearInMediaDetails)

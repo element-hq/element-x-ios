@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Bu odaya yüklenen resimler ve videolar burada gösterilecektir.";
 "screen_media_browser_media_empty_state_title" = "Henüz yüklenen medya yok";
 "screen_media_browser_title" = "Medya ve dosyalar";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Dosya biçimi";
 "screen_media_details_filename" = "Dosya adı";
 "screen_media_details_no_more_files_to_show" = "Gösterilecek daha fazla dosya yok";

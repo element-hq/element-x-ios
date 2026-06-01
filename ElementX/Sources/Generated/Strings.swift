@@ -2220,6 +2220,8 @@ internal enum L10n {
   internal static var screenMediaBrowserMediaEmptyStateTitle: String { return L10n.tr("Localizable", "screen_media_browser_media_empty_state_title") }
   /// Media and files
   internal static var screenMediaBrowserTitle: String { return L10n.tr("Localizable", "screen_media_browser_title") }
+  /// Delete file
+  internal static var screenMediaDetailsDeleteFileAction: String { return L10n.tr("Localizable", "screen_media_details_delete_file_action") }
   /// Format
   internal static var screenMediaDetailsFileFormat: String { return L10n.tr("Localizable", "screen_media_details_file_format") }
   /// Name

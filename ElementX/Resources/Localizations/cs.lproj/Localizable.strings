@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Obrázky a videa nahraná do této místnosti budou zobrazeny zde.";
 "screen_media_browser_media_empty_state_title" = "Zatím nebyla nahrána žádná média";
 "screen_media_browser_title" = "Média a soubory";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Formát souboru";
 "screen_media_details_filename" = "Název souboru";
 "screen_media_details_no_more_files_to_show" = "Žádné další soubory k zobrazení";

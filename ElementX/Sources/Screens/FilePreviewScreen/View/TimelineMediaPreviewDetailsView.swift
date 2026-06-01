@@ -41,6 +41,10 @@ struct TimelineMediaPreviewDetailsView: View {
     
     private var details: some View {
         VStack(alignment: .leading, spacing: 20) {
+            Text(L10n.screenMediaDetailsTitle)
+                .font(.compound.headingMDBold)
+                .foregroundStyle(.compound.textPrimary)
+
             DetailsRow(title: L10n.screenMediaDetailsUploadedBy) {
                 HStack(spacing: 12) {
                     LoadableAvatarImage(url: item.sender.avatarURL,
@@ -142,14 +146,7 @@ struct TimelineMediaPreviewDetailsView: View {
         let context: TimelineMediaPreviewViewModel.Context
         
         var body: some View {
-            if action == .share {
-                if let itemURL = item.fileHandle?.url {
-                    ShareLink(item: itemURL, message: item.caption.map(Text.init)) {
-                        action.label
-                    }
-                    .buttonStyle(.menuSheet)
-                }
-            } else if action == .save {
+            if action == .save {
                 if item.fileHandle?.url != nil {
                     button
                 }
@@ -162,9 +159,52 @@ struct TimelineMediaPreviewDetailsView: View {
             Button(role: action.isDestructive ? .destructive : nil) {
                 context.send(viewAction: .menuAction(action, item: item))
             } label: {
-                action.label
+                action.mediaDetailsLabel
             }
             .buttonStyle(.menuSheet)
+        }
+    }
+}
+
+@MainActor
+private extension TimelineItemMenuAction {
+    @ViewBuilder
+    var mediaDetailsLabel: some View {
+        Label {
+            Text(mediaDetailsTitle)
+        } icon: {
+            CompoundIcon(mediaDetailsIcon)
+                .foregroundStyle(.compound.iconSecondary)
+        }
+    }
+
+    var mediaDetailsTitle: String {
+        switch self {
+        case .forward:
+            L10n.actionForward
+        case .redact:
+            L10n.screenMediaDetailsDeleteFileAction
+        case .save:
+            L10n.actionDownload
+        case .viewInRoomTimeline:
+            L10n.actionViewInTimeline
+        default:
+            ""
+        }
+    }
+
+    var mediaDetailsIcon: KeyPath<CompoundIcons, Image> {
+        switch self {
+        case .forward:
+            \.forward
+        case .redact:
+            \.delete
+        case .save:
+            \.downloadIos
+        case .viewInRoomTimeline:
+            \.visibilityOn
+        default:
+            \.info
         }
     }
 }

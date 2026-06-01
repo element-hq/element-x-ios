@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Imaginile și videoclipurile încărcate în această cameră vor fi afișate aici.";
 "screen_media_browser_media_empty_state_title" = "Nu a fost încărcat încă niciun fișier media";
 "screen_media_browser_title" = "Media și fișiere";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Format fişier";
 "screen_media_details_filename" = "Nume fișier";
 "screen_media_details_no_more_files_to_show" = "Nu mai există fișiere de afișat";

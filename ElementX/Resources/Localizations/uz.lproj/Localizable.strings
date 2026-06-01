@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Bu xonaga yuklangan rasm va videolar shu yerda chiqadi.";
 "screen_media_browser_media_empty_state_title" = "Hali hech qanday media yuklanmagan";
 "screen_media_browser_title" = "Media va fayllar";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Fayl formati";
 "screen_media_details_filename" = "Fayl nomi";
 "screen_media_details_no_more_files_to_show" = "Ko‘rsatish uchun boshqa fayllar yo‘q";

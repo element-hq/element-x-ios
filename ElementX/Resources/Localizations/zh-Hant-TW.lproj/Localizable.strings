@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "上傳到此聊天室的圖片與影片將在此處顯示。";
 "screen_media_browser_media_empty_state_title" = "尚未上傳媒體";
 "screen_media_browser_title" = "媒體與檔案";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "檔案格式";
 "screen_media_details_filename" = "檔案名稱";
 "screen_media_details_no_more_files_to_show" = "無可顯示的檔案";

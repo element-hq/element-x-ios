@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Οι εικόνες και τα βίντεο που μεταφορτώνονται σε αυτή την αίθουσα θα εμφανίζονται εδώ.";
 "screen_media_browser_media_empty_state_title" = "Δεν έχουν μεταφορτωθεί ακόμα πολυμέσα";
 "screen_media_browser_title" = "Πολυμέσα και αρχεία";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Μορφή αρχείου";
 "screen_media_details_filename" = "Όνομα αρχείου";
 "screen_media_details_no_more_files_to_show" = "Δεν υπάρχουν άλλα αρχεία για εμφάνιση";

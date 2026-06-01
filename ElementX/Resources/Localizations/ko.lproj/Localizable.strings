@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "이 방에 업로드된 이미지와 동영상은 여기에 표시됩니다.";
 "screen_media_browser_media_empty_state_title" = "아직 미디어가 업로드되지 않았습니다.";
 "screen_media_browser_title" = "미디어 및 파일";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "파일 형식";
 "screen_media_details_filename" = "파일 명";
 "screen_media_details_no_more_files_to_show" = "더 이상 표시할 파일이 없습니다";

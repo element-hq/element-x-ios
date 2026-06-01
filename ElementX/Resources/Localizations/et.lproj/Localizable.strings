@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Antud jututuppa üleslaaditud pildid ja videod kuvatakse siin.";
 "screen_media_browser_media_empty_state_title" = "Mitte keegi pole veel meediat üles laadinud";
 "screen_media_browser_title" = "Meedia ja failid";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Failivorming";
 "screen_media_details_filename" = "Failinimi";
 "screen_media_details_no_more_files_to_show" = "Pole enam kuvatavaid faile";

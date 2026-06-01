@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
 "screen_media_browser_media_empty_state_title" = "No media uploaded yet";
 "screen_media_browser_title" = "Медия и файлове";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Format";
 "screen_media_details_filename" = "Name";
 "screen_media_details_no_more_files_to_show" = "No more files to show";

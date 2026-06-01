@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Imagens e vídeos enviados nesta sala serão mostrados aqui.";
 "screen_media_browser_media_empty_state_title" = "Ainda sem qualquer multimédia";
 "screen_media_browser_title" = "Multimédia e ficheiros";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Formato do ficheiro";
 "screen_media_details_filename" = "Nome do ficheiro";
 "screen_media_details_no_more_files_to_show" = "Sem mais ficheiros para mostrar";

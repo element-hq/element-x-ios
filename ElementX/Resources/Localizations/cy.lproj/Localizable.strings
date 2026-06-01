@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Bydd delweddau a fideos llwythwyd i'r ystafell hon yn cael eu dangos yma.";
 "screen_media_browser_media_empty_state_title" = "Dim cyfrwng wedi'i llwytho eto";
 "screen_media_browser_title" = "Cyfryngau a ffeiliau";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Fformat ffeil";
 "screen_media_details_filename" = "Enw'r ffeil";
 "screen_media_details_no_more_files_to_show" = "Dim mwy o ffeiliau i'w dangos";

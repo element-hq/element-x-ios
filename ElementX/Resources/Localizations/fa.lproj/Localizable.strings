@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "تصویرها و ویدیوهای بار گذاشته در این اتاق این‌جا نشان داده خواهند شد.";
 "screen_media_browser_media_empty_state_title" = "هنوز هیچ رسانه‌ای بارگذاشته نشده";
 "screen_media_browser_title" = "رسانه‌ها و پرونده‌ها";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "قالب پرونده";
 "screen_media_details_filename" = "نام پرونده";
 "screen_media_details_no_more_files_to_show" = "No more files to show";

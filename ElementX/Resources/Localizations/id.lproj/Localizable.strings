@@ -951,6 +951,7 @@
 "screen_media_browser_media_empty_state_subtitle" = "Gambar dan video yang diunggah ke ruangan ini akan ditampilkan di sini.";
 "screen_media_browser_media_empty_state_title" = "Belum ada media yang diunggah";
 "screen_media_browser_title" = "Media dan berkas";
+"screen_media_details_delete_file_action" = "Delete file";
 "screen_media_details_file_format" = "Format berkas";
 "screen_media_details_filename" = "Nama berkas";
 "screen_media_details_no_more_files_to_show" = "Tidak ada lagi berkas untuk ditampilkan";
