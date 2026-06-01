@@ -74,6 +74,40 @@ final class ServerConfirmationScreenViewModelTests {
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
     }
+
+    @Test
+    func passwordFallbackShownWhenOAuthServerSupportsPasswordLogin() async throws {
+        // Given a view model for login using a service configured for a homeserver that supports OAuth and password login.
+        setupViewModel(authenticationFlow: .login)
+        guard case .success = await service.configure(for: viewModel.state.homeserverAddress, flow: .login) else {
+            Issue.record("The configuration should succeed.")
+            return
+        }
+
+        // Then password login can be selected as a fallback without starting another OAuth flow.
+        try await deferFulfillment(context.observe(\.viewState)) { $0.canContinueWithPassword }.fulfill()
+        #expect(context.viewState.canContinueWithPassword)
+
+        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
+        context.send(viewAction: .continueWithPassword)
+        try await deferred.fulfill()
+
+        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
+    }
+
+    @Test
+    func passwordFallbackHiddenWhenOAuthServerDoesNotSupportPasswordLogin() async throws {
+        // Given a view model for login using a service configured for a homeserver that only supports OAuth.
+        setupViewModel(authenticationFlow: .login, supportsPasswordLogin: false)
+        guard case .success = await service.configure(for: viewModel.state.homeserverAddress, flow: .login) else {
+            Issue.record("The configuration should succeed.")
+            return
+        }
+
+        // Then password login isn't offered as a fallback.
+        try await deferFulfillment(context.observe(\.viewState)) { $0.loginMode.supportsOAuthFlow }.fulfill()
+        #expect(!context.viewState.canContinueWithPassword)
+    }
     
     @Test
     func confirmRegisterWithoutConfiguration() async throws {

@@ -31,6 +31,10 @@ struct ServerConfirmationScreenViewState: BindableState {
     let authenticationFlow: AuthenticationFlow
     /// The presentation anchor used for OAuth authentication.
     var window: UIWindow?
+    /// The login mode supported by the selected homeserver.
+    var loginMode: LoginMode = .unknown
+    /// Whether the selected homeserver supports password login.
+    var supportsPasswordLogin = false
     
     var bindings = ServerConfirmationScreenBindings()
     
@@ -66,6 +70,11 @@ struct ServerConfirmationScreenViewState: BindableState {
             L10n.screenServerConfirmationMessageRegister
         }
     }
+
+    /// Whether to offer password login as a fallback from the preferred OAuth flow.
+    var canContinueWithPassword: Bool {
+        authenticationFlow == .login && loginMode.supportsOAuthFlow && supportsPasswordLogin
+    }
 }
 
 struct ServerConfirmationScreenBindings {
@@ -80,6 +89,8 @@ enum ServerConfirmationScreenViewAction {
     case updateWindow(UIWindow)
     /// The user would like to continue with the current homeserver.
     case confirm
+    /// The user would like to continue using password login instead of OAuth.
+    case continueWithPassword
     /// The user would like to change to a different homeserver.
     case changeServer
 }

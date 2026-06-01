@@ -71,14 +71,16 @@ class AuthenticationService: AuthenticationServiceProtocol {
             
             let client = try await makeClient(homeserverAddress: homeserverAddress)
             let loginDetails = await client.homeserverLoginDetails()
+            let supportsPasswordLogin = loginDetails.supportsPasswordLogin()
             
             homeserver.loginMode = if loginDetails.supportsOauthLogin() {
                 .oAuth(supportsCreatePrompt: loginDetails.supportedOauthPrompts().contains(.create))
-            } else if loginDetails.supportsPasswordLogin() {
+            } else if supportsPasswordLogin {
                 .password
             } else {
                 .unsupported
             }
+            homeserver.supportsPasswordLogin = supportsPasswordLogin
             
             if flow == .login, homeserver.loginMode == .unsupported {
                 return .failure(.loginNotSupported)

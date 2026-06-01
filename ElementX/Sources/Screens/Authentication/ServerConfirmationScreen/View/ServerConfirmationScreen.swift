@@ -91,6 +91,13 @@ struct ServerConfirmationScreen: View {
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.continue)
             
+            if context.viewState.canContinueWithPassword {
+                Button { context.send(viewAction: .continueWithPassword) } label: {
+                    Text(L10n.screenOnboardingSignInManually)
+                }
+                .buttonStyle(.compound(.secondary))
+            }
+
             if case .confirmation = context.viewState.mode {
                 Button { context.send(viewAction: .changeServer) } label: {
                     Text(L10n.screenServerConfirmationChangeServer)

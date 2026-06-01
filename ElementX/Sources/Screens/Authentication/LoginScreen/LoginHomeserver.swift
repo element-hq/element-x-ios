@@ -14,13 +14,16 @@ struct LoginHomeserver: Equatable {
     let address: String
     /// The types login supported by the homeserver.
     var loginMode: LoginMode
+    /// Whether the homeserver supports password login, even when another login mode is preferred.
+    var supportsPasswordLogin: Bool
     
     /// Creates a new homeserver value.
-    init(address: String, loginMode: LoginMode) {
+    init(address: String, loginMode: LoginMode, supportsPasswordLogin: Bool = false) {
         let address = Self.sanitized(address).components(separatedBy: "://").last ?? address
         
         self.address = address
         self.loginMode = loginMode
+        self.supportsPasswordLogin = supportsPasswordLogin || loginMode == .password
     }
     
     /// Sanitizes a user entered homeserver address with the following rules
@@ -46,7 +49,7 @@ struct LoginHomeserver: Equatable {
 extension LoginHomeserver {
     /// A mock homeserver that is configured just like matrix.org.
     static var mockMatrixDotOrg: LoginHomeserver {
-        LoginHomeserver(address: "matrix.org", loginMode: .oAuth(supportsCreatePrompt: true))
+        LoginHomeserver(address: "matrix.org", loginMode: .oAuth(supportsCreatePrompt: true), supportsPasswordLogin: true)
     }
     
     /// A mock homeserver that supports login and registration via a password but has no OAuth support.

@@ -38,17 +38,25 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         case .confirmation: nil
         }
         
+        let homeserver = authenticationService.homeserver.value
         super.init(initialViewState: ServerConfirmationScreenViewState(mode: mode,
                                                                        authenticationFlow: authenticationFlow,
+                                                                       loginMode: homeserver.loginMode,
+                                                                       supportsPasswordLogin: homeserver.supportsPasswordLogin,
                                                                        bindings: .init(pickerSelection: pickerSelection)))
         
-        if case .confirmation = mode {
-            authenticationService.homeserver
-                .receive(on: DispatchQueue.main)
-                .map { .confirmation($0.address) }
-                .weakAssign(to: \.state.mode, on: self)
-                .store(in: &cancellables)
-        }
+        authenticationService.homeserver
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] homeserver in
+                guard let self else { return }
+
+                if case .confirmation = state.mode {
+                    state.mode = .confirmation(homeserver.address)
+                }
+                state.loginMode = homeserver.loginMode
+                state.supportsPasswordLogin = homeserver.supportsPasswordLogin
+            }
+            .store(in: &cancellables)
     }
     
     override func process(viewAction: ServerConfirmationScreenViewAction) {
@@ -65,6 +73,8 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
                 startLoading()
                 Task { await pickServer() }
             }
+        case .continueWithPassword:
+            actionsSubject.send(.continueWithPassword)
         case .changeServer:
             actionsSubject.send(.changeServer)
         }

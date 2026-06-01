@@ -433,8 +433,12 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             switch await presenter.authenticate(using: oAuthData) {
             case .success(let userSession):
                 stateMachine.tryEvent(.signedIn, userInfo: userSession)
+            case .failure(.oAuthError(.userCancellation)):
+                break // Nothing to do when the user explicitly cancels the flow.
             case .failure:
-                break // Nothing to do, any alerts will be handled by the presenter.
+                if authenticationService.homeserver.value.supportsPasswordLogin {
+                    stateMachine.tryEvent(.continueWithPassword)
+                }
             }
             oAuthPresenter = nil
         }
