@@ -91,6 +91,7 @@
 "action_decline_and_block" = "Odmietnuť a zablokovať";
 "action_delete" = "Delete";
 "action_delete_account" = "Delete account";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "Odstrániť anketu";
 "action_deselect_all" = "Zrušiť výber všetkých";
 "action_disable" = "Vypnúť";
@@ -295,6 +296,7 @@
 "common_please_wait" = "Prosím, počkajte...";
 "common_poll_end_confirmation" = "Ste si istí, že chcete ukončiť túto anketu?";
 "common_poll_summary" = "Anketa: %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "Celkový počet hlasov: %1$@";
 "common_poll_undisclosed_text" = "Výsledky sa zobrazia po ukončení ankety";
 "common_preparing" = "Pripravuje sa…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "Popíšte chybu…";
 "screen_bug_report_editor_supporting" = "Ak je to možné, napíšte popis v angličtine.";
 "screen_bug_report_error_description_too_short" = "Popis je príliš krátky, uveďte viac podrobností o tom, čo sa stalo. Ďakujeme!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "Odoslať záznamy o zlyhaní";
 "screen_bug_report_include_logs" = "Povoliť záznamy";
 "screen_bug_report_include_logs_error" = "Vaše záznamy sú príliš veľké, takže ich nemožno zahrnúť do tejto správy, pošlite nám ich prosím iným spôsobom.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "Svoje nastavenia môžete neskôr zmeniť.";
 "screen_notification_optin_title" = "Povoľte oznámenia a nikdy nezmeškajte žiadnu správu";
 "screen_notification_settings_additional_settings_section_title" = "Ďalšie nastavenia";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Audio a video hovory";
 "screen_notification_settings_configuration_mismatch" = "Nezhoda konfigurácie";
 "screen_notification_settings_configuration_mismatch_description" = "Zjednodušili sme Nastavenia oznámení, aby ste ľahšie našli možnosti.\n\nNiektoré vlastné nastavenia, ktoré ste si nastavili v minulosti, sa tu nezobrazujú, ale sú stále aktívne.\n\nAk budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť.";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "Pozvánky";
 "screen_notification_settings_mentions_only_disclaimer" = "Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v niektorých miestnostiach nemusíte dostať upozornenie.";
 "screen_notification_settings_mentions_section_title" = "Zmienky";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "Všetky";
 "screen_notification_settings_mode_mentions" = "Zmienky";
 "screen_notification_settings_notification_section_title" = "Upozorniť ma na";
 "screen_notification_settings_room_mention_label" = "Upozorniť ma na @miestnosť";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";

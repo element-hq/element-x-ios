@@ -91,6 +91,7 @@
 "action_decline_and_block" = "거부 및 차단";
 "action_delete" = "Delete";
 "action_delete_account" = "Delete account";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "투표 삭제";
 "action_deselect_all" = "전체 선택 해제";
 "action_disable" = "비활성화";
@@ -295,6 +296,7 @@
 "common_please_wait" = "기다려 주세요…";
 "common_poll_end_confirmation" = "정말로 이 투표를 종료하시겠어요?";
 "common_poll_summary" = "투표: %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "총 투표수: %1$@";
 "common_poll_undisclosed_text" = "결과는 투표가 끝난 이후에 공개됨";
 "common_preparing" = "준비 중…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "문제를 설명해 주세요...";
 "screen_bug_report_editor_supporting" = "가능하다면 영어로 설명을 작성해 주십시오.";
 "screen_bug_report_error_description_too_short" = "설명 내용이 너무 짧습니다. 발생한 상황에 대해 더 자세한 내용을 제공해 주시기 바랍니다. 감사합니다!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "충돌 로그 보내기";
 "screen_bug_report_include_logs" = "로그 허용";
 "screen_bug_report_include_logs_error" = "귀하의 로그가 너무 커서 이 보고서에 포함할 수 없습니다. 다른 방법으로 보내주시기 바랍니다.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "나중에 설정을 변경할 수 있습니다.";
 "screen_notification_optin_title" = "알림을 허용하고 메시지를 놓치지 마세요.";
 "screen_notification_settings_additional_settings_section_title" = "추가 설정";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "음성 및 동영상 통화";
 "screen_notification_settings_configuration_mismatch" = "구성 불일치";
 "screen_notification_settings_configuration_mismatch_description" = "알림 설정을 간소화하여 옵션을 더 쉽게 찾을 수 있도록 했습니다. 과거에 선택한 일부 맞춤 설정은 여기에서 표시되지 않지만, 여전히 활성화되어 있습니다.\n\n계속 진행하면 일부 설정이 변경될 수 있습니다.";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "초대";
 "screen_notification_settings_mentions_only_disclaimer" = "귀하의 홈서버는 암호화된 방에서 이 옵션을 지원하지 않으므로, 일부 방에서는 알림이 표시되지 않을 수 있습니다.";
 "screen_notification_settings_mentions_section_title" = "언급";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "모두";
 "screen_notification_settings_mode_mentions" = "언급";
 "screen_notification_settings_notification_section_title" = "나에게 알려주세요";
 "screen_notification_settings_room_mention_label" = "@room 에서 알림 받기";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";

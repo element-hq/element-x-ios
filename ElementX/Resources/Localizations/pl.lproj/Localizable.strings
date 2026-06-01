@@ -91,6 +91,7 @@
 "action_decline_and_block" = "Odrzuć i zablokuj";
 "action_delete" = "Usuń";
 "action_delete_account" = "Usuń konto";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "Usuń ankietę";
 "action_deselect_all" = "Odznacz wszystko";
 "action_disable" = "Wyłącz";
@@ -295,6 +296,7 @@
 "common_please_wait" = "Proszę czekać...";
 "common_poll_end_confirmation" = "Jesteś pewien, że chcesz zakończyć tę ankietę?";
 "common_poll_summary" = "Ankieta: %1$@";
+"common_poll_summary_prefix" = "Ankieta";
 "common_poll_total_votes" = "Łączna liczba głosów: %1$@";
 "common_poll_undisclosed_text" = "Wyniki zostaną wyświetlone po zakończeniu ankiety";
 "common_preparing" = "Przygotowuję…";
@@ -387,7 +389,7 @@
 "common_video_quality_standard_description" = "Balans między jakością a szybkością przesyłania";
 "common_voice_message" = "Wiadomość głosowa";
 "common_waiting" = "Oczekiwanie…";
-"common_waiting_for_decryption_key" = "Oczekiwanie na tę wiadomość";
+"common_waiting_for_decryption_key" = "Oczekiwanie wiadomości";
 "common_waiting_live_location" = "Czekam na lokalizację na żywo…";
 "common_world_readable_history" = "Każdy może zobaczyć historię";
 "common_you" = "Ty";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "Opisz problem...";
 "screen_bug_report_editor_supporting" = "Jeśli to możliwe, napisz zgłoszenje w języku angielskim.";
 "screen_bug_report_error_description_too_short" = "Opis jest zbyt krótki, podaj więcej szczegółów na temat tego co się stało. Dzięki!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "Wyślij logi awarii";
 "screen_bug_report_include_logs" = "Zezwól na logi";
 "screen_bug_report_include_logs_error" = "Twoje dzienniki są zbyt duże, więc nie można ich uwzględnić w tym raporcie. Prześlij je do nas w inny sposób.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "Możesz zmienić ustawienia później.";
 "screen_notification_optin_title" = "Zezwól na powiadomienia i nie przegap żadnej wiadomości";
 "screen_notification_settings_additional_settings_section_title" = "Dodatkowe ustawienia";
+"screen_notification_settings_call_ringtone_label" = "Dzwonek połączenia";
 "screen_notification_settings_calls_label" = "Połączenia audio i wideo";
 "screen_notification_settings_configuration_mismatch" = "Niezgodność konfiguracji";
 "screen_notification_settings_configuration_mismatch_description" = "Uprościliśmy Ustawienia powiadomień, aby ułatwić nawigowanie między opcjami. Niektóre ustawienia, które wybrałeś mogły zniknąć, lecz są wciąż aktywne.\n\nNiektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz.";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "Zaproszenia";
 "screen_notification_settings_mentions_only_disclaimer" = "Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi.";
 "screen_notification_settings_mentions_section_title" = "Wzmianki";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Wybierz inny dźwięk…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Aktualnie używany %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Dźwięk wiadomości";
+"screen_notification_settings_message_sound_label" = "Dźwięk wiadomości";
 "screen_notification_settings_mode_all" = "Wszystkie";
 "screen_notification_settings_mode_mentions" = "Wzmianki";
 "screen_notification_settings_notification_section_title" = "Powiadamiaj mnie przez";
 "screen_notification_settings_room_mention_label" = "Powiadom mnie na @pokój";
+"screen_notification_settings_sound_custom_fallback" = "Własny";
 "screen_notification_settings_sound_custom_sound_button_title" = "Własny dźwięk...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Błąd usuwania pliku";
 "screen_notification_settings_sound_element_default" = "Domyślny Element";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Błąd importowania pliku";
 "screen_notification_settings_sound_preview_sound_error_title" = "Wystąpił błąd podczas podglądania dźwięku powiadomień";
 "screen_notification_settings_sound_section_title" = "Dźwięk";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Pomiń dźwięk błędu";
 "screen_notification_settings_sound_set_sound_error_title" = "Nie udało się ustawić dźwięku powiadomień";
+"screen_notification_settings_sound_silent" = "Cichy";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Oczekiwanie";
 "screen_notification_settings_sound_system_bell" = "Dzwonek";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Kalipso";
 "screen_notification_settings_sound_system_chime" = "Gong";
 "screen_notification_settings_sound_system_choo_choo" = "Ciuchcia";
+"screen_notification_settings_sound_system_default" = "Ustawienie domyślne";
 "screen_notification_settings_sound_system_descent" = "Opadający";
 "screen_notification_settings_sound_system_electronic" = "Elektroniczna";
 "screen_notification_settings_sound_system_fanfare" = "Fanfary";

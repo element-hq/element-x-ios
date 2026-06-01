@@ -91,6 +91,7 @@
 "action_decline_and_block" = "拒絕並封鎖";
 "action_delete" = "Delete";
 "action_delete_account" = "Delete account";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "刪除投票";
 "action_deselect_all" = "取消全選";
 "action_disable" = "停用";
@@ -295,6 +296,7 @@
 "common_please_wait" = "請稍等...";
 "common_poll_end_confirmation" = "您確定要結束這項投票嗎？";
 "common_poll_summary" = "投票：%1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "總票數：%1$@";
 "common_poll_undisclosed_text" = "結果將在投票結束後公佈";
 "common_preparing" = "正在準備……";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "描述問題...";
 "screen_bug_report_editor_supporting" = "如果方便的話，請使用英文。";
 "screen_bug_report_error_description_too_short" = "您的描述太短了，請提供更多細節。謝謝！";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "傳送當機紀錄";
 "screen_bug_report_include_logs" = "提供日誌";
 "screen_bug_report_include_logs_error" = "您的紀錄檔太大了，無法包含在此報告中，請透過其他方式傳送給我們。";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "您稍後仍可變更設定。";
 "screen_notification_optin_title" = "允許通知，永遠不會錯誤任何訊息";
 "screen_notification_settings_additional_settings_section_title" = "其他設定";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "音訊與視訊通話";
 "screen_notification_settings_configuration_mismatch" = "組態錯誤";
 "screen_notification_settings_configuration_mismatch_description" = "我們簡化了通知設定，讓選項更容易搜尋。您過去選擇的某些自訂設定將不會在此顯示，但它們仍有作用。\n\n若您繼續，您的某些設定可能會變更。";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "邀請";
 "screen_notification_settings_mentions_only_disclaimer" = "您的家伺服器在加密聊天室中不支援此選項，可能無法收到部份聊天室的通知。";
 "screen_notification_settings_mentions_section_title" = "提及";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "全部";
 "screen_notification_settings_mode_mentions" = "提及";
 "screen_notification_settings_notification_section_title" = "通知我";
 "screen_notification_settings_room_mention_label" = "於 @room 通知我";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";

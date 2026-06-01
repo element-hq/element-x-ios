@@ -91,6 +91,7 @@
 "action_decline_and_block" = "Avslå og blokker";
 "action_delete" = "Delete";
 "action_delete_account" = "Delete account";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "Slett avstemning";
 "action_deselect_all" = "Velg bort alle";
 "action_disable" = "Deaktiver";
@@ -295,6 +296,7 @@
 "common_please_wait" = "Vennligst vent...";
 "common_poll_end_confirmation" = "Er du sikker på at du vil avslutte denne avstemningen?";
 "common_poll_summary" = "Avstemning: %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "Totalt antall stemmer: %1$@";
 "common_poll_undisclosed_text" = "Resultatene vises etter at avstemningen er avsluttet";
 "common_preparing" = "Forbereder…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "Beskriv problemet...";
 "screen_bug_report_editor_supporting" = "Hvis mulig, vennligst skriv beskrivelsen på engelsk.";
 "screen_bug_report_error_description_too_short" = "Beskrivelsen er for kort, vennligst gi flere detaljer om hva som skjedde. Takk skal du ha!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "Send krasjlogger";
 "screen_bug_report_include_logs" = "Tillat logger";
 "screen_bug_report_include_logs_error" = "Loggene dine er for store og kan derfor ikke inkluderes i denne rapporten. Vennligst send dem til oss på en annen måte.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "Du kan endre innstillingene dine senere.";
 "screen_notification_optin_title" = "Tillat varslinger og gå aldri glipp av en melding";
 "screen_notification_settings_additional_settings_section_title" = "Ytterligere innstillinger";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Lyd- og videosamtaler";
 "screen_notification_settings_configuration_mismatch" = "Uoverensstemmelse i konfigurasjonen";
 "screen_notification_settings_configuration_mismatch_description" = "Vi har forenklet varslingsinnstillingene for å gjøre det lettere å finne alternativene. Noen av de egendefinerte innstillingene du har valgt tidligere, vises ikke her, men de er fortsatt aktive.\n\nHvis du fortsetter, kan noen av innstillingene dine endres.";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "Invitasjoner";
 "screen_notification_settings_mentions_only_disclaimer" = "Hjemmeserveren din støtter ikke dette alternativet i krypterte rom, og det kan hende at du ikke blir varslet i enkelte rom.";
 "screen_notification_settings_mentions_section_title" = "Omtaler";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "Alle";
 "screen_notification_settings_mode_mentions" = "Omtaler";
 "screen_notification_settings_notification_section_title" = "Varsle meg om";
 "screen_notification_settings_room_mention_label" = "Gi meg varsel på @room";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";

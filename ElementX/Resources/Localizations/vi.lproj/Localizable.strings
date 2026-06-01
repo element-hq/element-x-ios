@@ -91,6 +91,7 @@
 "action_decline_and_block" = "Từ chối và chặn";
 "action_delete" = "Delete";
 "action_delete_account" = "Delete account";
+"action_delete_file" = "Delete file";
 "action_delete_poll" = "Xóa cuộc thăm dò";
 "action_deselect_all" = "Bỏ chọn tất cả";
 "action_disable" = "Tắt";
@@ -295,6 +296,7 @@
 "common_please_wait" = "Vui lòng chờ…";
 "common_poll_end_confirmation" = "Bạn có chắc chắn muốn kết thúc cuộc thăm dò này không?";
 "common_poll_summary" = "Khảo sát: %1$@";
+"common_poll_summary_prefix" = "Poll";
 "common_poll_total_votes" = "Tổng số phiếu: %1$@";
 "common_poll_undisclosed_text" = "Kết quả sẽ hiển thị sau khi cuộc thăm dò kết thúc";
 "common_preparing" = "Đang chuẩn bị…";
@@ -659,6 +661,8 @@
 "screen_bug_report_editor_placeholder" = "Hãy mô tả vấn đề…";
 "screen_bug_report_editor_supporting" = "Nếu có thể, vui lòng viết mô tả bằng tiếng Anh.";
 "screen_bug_report_error_description_too_short" = "Phần mô tả quá ngắn, vui lòng cung cấp thêm chi tiết về những gì đã xảy ra. Cảm ơn!";
+"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
+"screen_bug_report_github_issue_label" = "GitHub issue";
 "screen_bug_report_include_crash_logs" = "Gửi nhật ký sự cố";
 "screen_bug_report_include_logs" = "Cho phép ghi nhật ký";
 "screen_bug_report_include_logs_error" = "Tệp nhật ký của bạn quá lớn nên không thể đưa vào báo cáo này, vui lòng gửi chúng cho chúng tôi bằng cách khác.";
@@ -982,6 +986,7 @@
 "screen_notification_optin_subtitle" = "Bạn có thể thay đổi cài đặt sau.";
 "screen_notification_optin_title" = "Cho phép thông báo để không bỏ lỡ bất kỳ tin nhắn nào";
 "screen_notification_settings_additional_settings_section_title" = "Cài đặt bổ sung";
+"screen_notification_settings_call_ringtone_label" = "Call ringtone";
 "screen_notification_settings_calls_label" = "Cuộc gọi âm thanh và video";
 "screen_notification_settings_configuration_mismatch" = "Cấu hình không khớp";
 "screen_notification_settings_configuration_mismatch_description" = "Chúng tôi đã đơn giản hóa Cài đặt Thông báo để các tùy chọn dễ tìm hơn. Một số cài đặt tùy chỉnh bạn đã chọn trước đây không hiển thị ở đây, nhưng vẫn đang hoạt động. \n\nNếu bạn tiếp tục, một số cài đặt của bạn có thể thay đổi.";
@@ -998,10 +1003,15 @@
 "screen_notification_settings_invite_for_me_label" = "Lời mời";
 "screen_notification_settings_mentions_only_disclaimer" = "Máy chủ không hỗ trợ tùy chọn này trong phòng mã hóa, một số phòng có thể không thông báo.";
 "screen_notification_settings_mentions_section_title" = "Nhắc đến";
+"screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
+"screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
+"screen_notification_settings_message_sound_dialog_title" = "Message sound";
+"screen_notification_settings_message_sound_label" = "Message sound";
 "screen_notification_settings_mode_all" = "Tất cả";
 "screen_notification_settings_mode_mentions" = "Nhắc đến";
 "screen_notification_settings_notification_section_title" = "Thông báo cho tôi khi";
 "screen_notification_settings_room_mention_label" = "Thông báo cho tôi khi @room";
+"screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
 "screen_notification_settings_sound_element_default" = "Element Default";
@@ -1009,7 +1019,9 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
 "screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert" = "Alert";
 "screen_notification_settings_sound_system_anticipate" = "Anticipate";
 "screen_notification_settings_sound_system_bell" = "Bell";
@@ -1017,6 +1029,7 @@
 "screen_notification_settings_sound_system_calypso" = "Calypso";
 "screen_notification_settings_sound_system_chime" = "Chime";
 "screen_notification_settings_sound_system_choo_choo" = "Choo Choo";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent" = "Descent";
 "screen_notification_settings_sound_system_electronic" = "Electronic";
 "screen_notification_settings_sound_system_fanfare" = "Fanfare";
