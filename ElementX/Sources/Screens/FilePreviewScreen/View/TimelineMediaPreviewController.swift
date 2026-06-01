@@ -227,7 +227,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func presentMediaDetails(for mediaItem: TimelineMediaPreviewItem.Media) {
         let safeArea = view.safeAreaInsets.bottom
         let sheetHeightBinding = Binding { safeArea } set: { [weak self] newValue, _ in
-            self?.detailsHostingController?.sheetPresentationController?.detents = [.height(newValue + safeArea)]
+            self?.detailsHostingController?.sheetPresentationController?.detents = [.height(newValue)]
         }
         
         let hostingController = UIHostingController(rootView: TimelineMediaPreviewDetailsView(item: mediaItem,

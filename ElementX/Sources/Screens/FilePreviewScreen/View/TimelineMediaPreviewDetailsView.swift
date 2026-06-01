@@ -15,7 +15,8 @@ struct TimelineMediaPreviewDetailsView: View {
     var preferredColorScheme: ColorScheme? = .dark
     @Binding var sheetHeight: CGFloat
     
-    private let topPadding: CGFloat = 19
+    /// Approximate height of the navigation bar.
+    private let topPadding: CGFloat = 72
     
     var body: some View {
         ElementNavigationStack {
@@ -25,13 +26,13 @@ struct TimelineMediaPreviewDetailsView: View {
                     actions
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .readHeight($sheetHeight)
+                .onGeometryChange(for: CGFloat.self, of: \.size.height) { sheetHeight = $0 + topPadding }
             }
             .scrollBounceBehavior(.basedOnSize)
             .navigationTitle(L10n.screenMediaDetailsTitle)
             .navigationBarTitleDisplayMode(.inline)
         }
-        .presentationDetents([.height(sheetHeight + topPadding)])
+        .presentationDetents([.height(sheetHeight)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
         .preferredColorScheme(preferredColorScheme)
@@ -93,7 +94,6 @@ struct TimelineMediaPreviewDetailsView: View {
                 }
             }
         }
-        .padding(.top, 0)
         .padding(.bottom, 32)
         .padding(.horizontal, 16)
     }
