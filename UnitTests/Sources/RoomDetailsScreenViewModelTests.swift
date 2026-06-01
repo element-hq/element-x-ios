@@ -38,6 +38,22 @@ struct RoomDetailsScreenViewModelTests {
     }
     
     @Test
+    mutating func roomTopicShowsMatrixIdentifiers() {
+        let topic = "This is #room:example.com and @user:example.com is the admin."
+        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", topic: topic))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               userSession: UserSessionMock(.init()),
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                               appSettings: .volatile())
+
+        #expect(context.viewState.topic?.string == topic)
+        #expect(context.viewState.topicSummary?.string == topic)
+    }
+
+    @Test
     mutating func leaveRoomTappedWhenPublic() async throws {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))

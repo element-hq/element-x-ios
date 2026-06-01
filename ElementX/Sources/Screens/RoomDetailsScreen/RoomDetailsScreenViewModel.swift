@@ -59,7 +59,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         self.attributedStringBuilder = attributedStringBuilder
         self.appSettings = appSettings
         
-        let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
+        let topic = Self.buildTopic(from: roomProxy.infoPublisher.value.topic, using: attributedStringBuilder)
         
         super.init(initialViewState: .init(details: roomProxy.details,
                                            isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
@@ -276,7 +276,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.details = roomProxy.details
         state.details.historySharingState = roomInfo.historySharingState
         
-        let topic = attributedStringBuilder.fromPlain(roomInfo.topic)
+        let topic = Self.buildTopic(from: roomInfo.topic, using: attributedStringBuilder)
         state.topic = topic
         state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
         
@@ -494,6 +494,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
         }
     }
+
+    private static func buildTopic(from topic: String?, using attributedStringBuilder: AttributedStringBuilderProtocol) -> AttributedString? {
+        attributedStringBuilder.fromPlain(topic)?.replacingPillAttachmentsWithPlainText()
+    }
     
     private func setupPinnedEventsTimelineItemProviderIfNeeded() {
         guard pinnedEventsTimelineItemProvider == nil else {
@@ -513,6 +517,65 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
 }
 
 private extension AttributedString {
+    /// Returns a new string that replaces pill attachments with their plain text fallback.
+    func replacingPillAttachmentsWithPlainText() -> AttributedString {
+        guard let mutableAttributedString = try? NSMutableAttributedString(self, including: \.elementX) else {
+            return self
+        }
+
+        let fullRange = NSRange(location: 0, length: mutableAttributedString.length)
+        var replacements = [(range: NSRange, text: String, attributes: [NSAttributedString.Key: Any])]()
+
+        mutableAttributedString.enumerateAttributes(in: fullRange) { attributes, range, _ in
+            guard attributes[.attachment] != nil,
+                  let replacementText = Self.pillFallbackText(from: attributes) else {
+                return
+            }
+
+            var replacementAttributes = attributes
+            replacementAttributes[.attachment] = nil
+            replacements.append((range, replacementText, replacementAttributes))
+        }
+
+        for replacement in replacements.reversed() {
+            mutableAttributedString.replaceCharacters(in: replacement.range,
+                                                      with: NSAttributedString(string: replacement.text,
+                                                                               attributes: replacement.attributes))
+        }
+
+        return (try? AttributedString(mutableAttributedString, including: \.elementX)) ?? self
+    }
+
+    private static func pillFallbackText(from attributes: [NSAttributedString.Key: Any]) -> String? {
+        if let userID = attributes[.MatrixUserID] as? String {
+            let displayName = attributes[.MatrixUserDisplayName] as? String
+            return PillUtilities.userPillDisplayText(username: displayName, userID: userID)
+        }
+
+        if attributes[.MatrixAllUsersMention] as? Bool == true {
+            return PillUtilities.atRoom
+        }
+
+        if let roomAlias = attributes[.MatrixRoomAlias] as? String {
+            let displayName = attributes[.MatrixRoomDisplayName] as? String
+            return PillUtilities.roomPillDisplayText(roomName: displayName, rawRoomText: roomAlias)
+        }
+
+        if let roomID = attributes[.MatrixRoomID] as? String {
+            return PillUtilities.roomPillDisplayText(roomName: nil, rawRoomText: roomID)
+        }
+
+        if let eventOnRoomID = attributes[.MatrixEventOnRoomID] as? EventOnRoomIDAttribute.Value {
+            return PillUtilities.eventPillDisplayText(roomName: nil, rawRoomText: eventOnRoomID.roomID)
+        }
+
+        if let eventOnRoomAlias = attributes[.MatrixEventOnRoomAlias] as? EventOnRoomAliasAttribute.Value {
+            return PillUtilities.eventPillDisplayText(roomName: nil, rawRoomText: eventOnRoomAlias.alias)
+        }
+
+        return nil
+    }
+
     /// Returns a new string without attributes and in which newlines are replaced with spaces
     func unattributedStringByReplacingNewlinesWithSpaces() -> AttributedString {
         AttributedString(characters.map { $0.isNewline ? " " : $0 })
