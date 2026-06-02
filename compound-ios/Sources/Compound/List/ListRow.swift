@@ -30,6 +30,8 @@ public enum ListRowPadding {
                                                    leading: horizontal,
                                                    bottom: 11,
                                                    trailing: horizontal)
+    
+    public static let labelIconSpacing: CGFloat = Compound.supportsGlass ? 12 : 16
 }
 
 public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, SelectionValue: Hashable>: View {
