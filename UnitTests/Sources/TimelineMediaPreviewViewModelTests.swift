@@ -22,7 +22,7 @@ struct TimelineMediaPreviewViewModelTests {
     
     var mediaProvider: MediaProviderMock!
     var photoLibraryManager: PhotoLibraryManagerMock!
-    var timelineController: MockTimelineController!
+    var timelineController: TimelineControllerMock!
     
     @Test
     mutating func loadingItem() async throws {
@@ -94,11 +94,10 @@ struct TimelineMediaPreviewViewModelTests {
     mutating func loadingMoreItems() async throws {
         // Given a view model with a loaded item.
         try await loadingItem()
-        #expect(timelineController.paginateBackwardsCallCount == 0)
+        #expect(timelineController.paginateBackwardsRequestSizeCallsCount == 0)
         
         // When swiping to a "loading more" item and there are more media items to load.
-        timelineController.paginationState = .init(backward: .idle, forward: .endReached)
-        timelineController.backPaginationResponses.append(RoomTimelineItemFixtures.mediaChunk)
+        timelineController.update(paginationState: .init(backward: .idle, forward: .endReached))
         let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.loading(.paginatingBackwards)))
         try await failure.fulfill()
@@ -106,7 +105,7 @@ struct TimelineMediaPreviewViewModelTests {
         // Then there should no longer be a media preview and instead of loading any media, a pagination request should be made.
         #expect(mediaProvider.loadFileFromSourceFilenameCallsCount == 1)
         #expect(context.viewState.currentItem == .loading(.paginatingBackwards)) // Note: This item only changes when the preview controller handles the new items.
-        #expect(timelineController.paginateBackwardsCallCount == 1)
+        #expect(timelineController.paginateBackwardsRequestSizeCallsCount == 1)
     }
     
     @Test
@@ -117,7 +116,7 @@ struct TimelineMediaPreviewViewModelTests {
         
         // When more items are added via a back pagination.
         let deferred = deferFulfillment(context.viewState.dataSource.previewItemsPaginationPublisher) { _ in true }
-        timelineController.backPaginationResponses.append(makeItems())
+        timelineController.setupBackPagination(responses: [makeItems()])
         _ = await timelineController.paginateBackwards(requestSize: 20)
         try await deferred.fulfill()
         
@@ -292,7 +291,7 @@ struct TimelineMediaPreviewViewModelTests {
     
     private mutating func setupViewModel(initialItemIndex: Int = 0, photoLibraryAuthorizationDenied: Bool = false) {
         let initialItems = makeItems()
-        timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: initialItems)
+        timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: initialItems))
         
         mediaProvider = MediaProviderMock(.init())
         photoLibraryManager = PhotoLibraryManagerMock(.init(authorizationDenied: photoLibraryAuthorizationDenied))

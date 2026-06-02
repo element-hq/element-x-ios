@@ -23,7 +23,7 @@ struct PillContextTests {
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: MockTimelineController(),
+                                     timelineController: TimelineControllerMock(.init()),
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
@@ -57,7 +57,7 @@ struct PillContextTests {
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = TimelineViewModel(roomProxy: proxyMock,
-                                     timelineController: MockTimelineController(),
+                                     timelineController: TimelineControllerMock(.init()),
                                      userSession: UserSessionMock(.init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
@@ -81,7 +81,7 @@ struct PillContextTests {
         let id = "test_room"
         let displayName = "Test"
         let proxyMock = JoinedRoomProxyMock(.init(id: id, name: displayName, avatarURL: avatarURL))
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
@@ -105,7 +105,7 @@ struct PillContextTests {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let clientMock = ClientProxyMock(.init())
         clientMock.roomSummaryForIdentifierReturnValue = .mock(id: "1", name: "Foundation 🔭🪐🌌")
         let mock = TimelineViewModel(roomProxy: proxyMock,
@@ -132,7 +132,7 @@ struct PillContextTests {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
@@ -157,7 +157,7 @@ struct PillContextTests {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let clientMock = ClientProxyMock(.init())
         clientMock.roomSummaryForAliasReturnValue = .mock(id: "2",
                                                           name: "Foundation and Empire",
@@ -186,7 +186,7 @@ struct PillContextTests {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
@@ -211,7 +211,7 @@ struct PillContextTests {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let clientMock = ClientProxyMock(.init())
         clientMock.roomSummaryForIdentifierReturnValue = .mock(id: "1", name: "Foundation 🔭🪐🌌")
         let mock = TimelineViewModel(roomProxy: proxyMock,
@@ -238,7 +238,7 @@ struct PillContextTests {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),
@@ -263,7 +263,7 @@ struct PillContextTests {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let clientMock = ClientProxyMock(.init())
         clientMock.roomSummaryForAliasReturnValue = .mock(id: "2",
                                                           name: "Foundation and Empire",
@@ -292,7 +292,7 @@ struct PillContextTests {
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
-        let mockController = MockTimelineController(roomProxy: proxyMock)
+        let mockController = TimelineControllerMock(.init(roomProxy: proxyMock))
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: mockController,
                                      userSession: UserSessionMock(.init()),

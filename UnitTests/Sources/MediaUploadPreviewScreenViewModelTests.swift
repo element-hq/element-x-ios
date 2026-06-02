@@ -293,7 +293,7 @@ final class MediaUploadPreviewScreenViewModelTests {
                                                       isRoomEncrypted: true,
                                                       shouldShowCaptionWarning: true,
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
-                                                      timelineController: MockTimelineController(timelineProxy: timelineProxy),
+                                                      timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),
                                                       clientProxy: clientProxy,
                                                       userIndicatorController: userIndicatorController)
     }

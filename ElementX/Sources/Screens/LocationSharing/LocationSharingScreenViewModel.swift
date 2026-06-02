@@ -392,7 +392,7 @@ extension LocationSharingScreenViewModel {
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
                                               mapURLBuilder: AppSettings.volatile().mapTilerSettings.publisher.value,
                                               roomProxy: roomProxy,
-                                              timelineController: MockTimelineController(),
+                                              timelineController: TimelineControllerMock(.init()),
                                               liveLocationManager: LiveLocationManagerMock(),
                                               analytics: AnalyticsServiceMock(.init()),
                                               userIndicatorController: UserIndicatorControllerMock(),

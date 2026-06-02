@@ -156,7 +156,7 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
         let appSettings = AppSettings.volatile()
         
         return TimelineViewModel(roomProxy: roomProxyMock,
-                                 timelineController: MockTimelineController(),
+                                 timelineController: TimelineControllerMock(.init()),
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),

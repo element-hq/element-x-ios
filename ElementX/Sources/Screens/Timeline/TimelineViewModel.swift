@@ -1115,7 +1115,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 extension TimelineViewModel {
     static let mock = mock(timelineKind: .live)
     
-    static func mock(timelineKind: TimelineKind = .live, timelineController: MockTimelineController? = nil, hasPredecessor: Bool = false) -> TimelineViewModel {
+    static func mock(timelineKind: TimelineKind = .live, timelineController: TimelineControllerMock? = nil, hasPredecessor: Bool = false) -> TimelineViewModel {
         let clientProxyMock = ClientProxyMock(.init())
         clientProxyMock.roomSummaryForAliasReturnValue = .mock(id: "!room:matrix.org", name: "Room")
         clientProxyMock.roomSummaryForIdentifierReturnValue = .mock(id: "!room:matrix.org", name: "Room", canonicalAlias: "#room:matrix.org")
@@ -1125,7 +1125,7 @@ extension TimelineViewModel {
         
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
-                                 timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
+                                 timelineController: timelineController ?? TimelineControllerMock(.init(timelineKind: timelineKind)),
                                  userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),

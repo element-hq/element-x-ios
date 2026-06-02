@@ -226,7 +226,7 @@ struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(mode: PollFormMode) -> PollFormScreenViewModel {
         PollFormScreenViewModel(mode: mode,
-                                timelineController: MockTimelineController(),
+                                timelineController: TimelineControllerMock(.init()),
                                 analytics: AnalyticsServiceMock(.init()),
                                 userIndicatorController: UserIndicatorControllerMock())
     }

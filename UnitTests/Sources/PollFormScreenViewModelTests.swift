@@ -178,7 +178,7 @@ struct PollFormScreenViewModelTests {
     
     private mutating func setupViewModel(mode: PollFormMode = .new(topic: nil)) {
         viewModel = PollFormScreenViewModel(mode: mode,
-                                            timelineController: MockTimelineController(timelineProxy: timelineProxy),
+                                            timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),
                                             analytics: AnalyticsServiceMock(.init()),
                                             userIndicatorController: UserIndicatorControllerMock())
     }

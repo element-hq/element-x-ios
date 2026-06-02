@@ -205,7 +205,7 @@ struct VoiceMessageRecorderTests {
     
     @Test
     func sendVoiceMessage_NoRecordingFile() async {
-        let timelineController = MockTimelineController()
+        let timelineController = TimelineControllerMock(.init())
         
         // If there is no recording file, an error is expected
         audioRecorder.audioFileURL = nil
@@ -222,7 +222,7 @@ struct VoiceMessageRecorderTests {
         // If the converter returns an error
         audioConverter.convertToOpusOggSourceURLDestinationURLThrowableError = AudioConverterError.conversionFailed(nil)
         
-        let timelineController = MockTimelineController()
+        let timelineController = TimelineControllerMock(.init())
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(timelineController: timelineController,
                                                                                                       audioConverter: audioConverter) else {
             Issue.record("An error is expected")
@@ -239,7 +239,7 @@ struct VoiceMessageRecorderTests {
         }
         
         let timelineProxy = TimelineProxyMock()
-        let timelineController = MockTimelineController(timelineProxy: timelineProxy)
+        let timelineController = TimelineControllerMock(.init(timelineProxy: timelineProxy))
         timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(timelineController: timelineController,
                                                                                                       audioConverter: audioConverter) else {
@@ -258,7 +258,7 @@ struct VoiceMessageRecorderTests {
         }
         
         let timelineProxy = TimelineProxyMock()
-        let timelineController = MockTimelineController(timelineProxy: timelineProxy)
+        let timelineController = TimelineControllerMock(.init(timelineProxy: timelineProxy))
         timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(timelineController: timelineController,
                                                                                                       audioConverter: audioConverter) else {
@@ -279,7 +279,7 @@ struct VoiceMessageRecorderTests {
         
         // If the media upload fails
         let timelineProxy = TimelineProxyMock()
-        let timelineController = MockTimelineController(timelineProxy: timelineProxy)
+        let timelineController = TimelineControllerMock(.init(timelineProxy: timelineProxy))
         timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(timelineController: timelineController,
                                                                                                       audioConverter: audioConverter) else {
@@ -293,7 +293,7 @@ struct VoiceMessageRecorderTests {
         let imageFileURL = try #require(Bundle(for: UnitTestsAppCoordinator.self).url(forResource: "test_voice_message", withExtension: "m4a"), "Test audio file is missing")
         
         let timelineProxy = TimelineProxyMock()
-        let timelineController = MockTimelineController(timelineProxy: timelineProxy)
+        let timelineController = TimelineControllerMock(.init(timelineProxy: timelineProxy))
         audioRecorder.currentTime = 42
         audioRecorder.audioFileURL = imageFileURL
         _ = await voiceMessageRecorder.startRecording()
