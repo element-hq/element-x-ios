@@ -18,6 +18,7 @@ enum EventBasedMessageTimelineItemContentType: Hashable {
     case video(VideoRoomTimelineItemContent)
     case location(LocationRoomTimelineItemContent)
     case voice(AudioRoomTimelineItemContent)
+    case gallery(GalleryRoomTimelineItemContent)
 }
 
 protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
@@ -27,17 +28,17 @@ protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
 extension EventBasedMessageTimelineItemProtocol {
     var supportsMediaCaption: Bool {
         switch contentType {
-        case .audio, .file, .image, .video:
+        case .audio, .file, .image, .video, .gallery:
             true
         case .emote, .notice, .text, .location, .voice:
             false
         }
     }
-    
+
     var hasMediaCaption: Bool {
         mediaCaption != nil
     }
-    
+
     var mediaCaption: String? {
         switch contentType {
         case .audio(let content):
@@ -48,11 +49,13 @@ extension EventBasedMessageTimelineItemProtocol {
             content.caption
         case .video(let content):
             content.caption
+        case .gallery(let content):
+            content.caption
         case .emote, .notice, .text, .location, .voice:
             nil
         }
     }
-    
+
     var formattedMediaCaption: AttributedString? {
         switch contentType {
         case .audio(let content):
@@ -62,6 +65,8 @@ extension EventBasedMessageTimelineItemProtocol {
         case .image(let content):
             content.formattedCaption
         case .video(let content):
+            content.formattedCaption
+        case .gallery(let content):
             content.formattedCaption
         case .emote, .notice, .text, .location, .voice:
             nil

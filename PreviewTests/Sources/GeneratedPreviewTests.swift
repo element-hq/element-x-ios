@@ -320,6 +320,14 @@ extension PreviewTests {
     }
 
     @Test
+    func galleryRoomTimelineView() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in GalleryRoomTimelineView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func globalSearchScreenListRow() async throws {
         for (index, preview) in GlobalSearchScreenListRow_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

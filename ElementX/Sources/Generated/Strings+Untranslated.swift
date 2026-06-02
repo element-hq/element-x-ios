@@ -10,6 +10,14 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
+  /// Plural format key: "%#@count@"
+  internal static func commonAttachmentsCount(_ p1: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "common_attachments_count", p1)
+  }
+  /// %1$d of %2$d
+  internal static func screenMediaUploadPreviewCount(_ p1: Int, _ p2: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_media_upload_preview_count", p1, p2)
+  }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

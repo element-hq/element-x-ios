@@ -26,6 +26,7 @@ enum TimelineControllerAction {
     }
     
     case displayMediaPreview(item: EventBasedMessageTimelineItemProtocol, timelineViewModel: TimelineViewModelKind)
+    case displayGalleryPreview(galleryItem: GalleryRoomTimelineItem, initialIndex: Int)
     case displayLocation(StaticLocationData)
     case displayLiveLocation(sender: TimelineItemSender, initialLiveLocationShare: LiveLocationShare)
     case none
@@ -134,6 +135,11 @@ protocol TimelineControllerProtocol: Sendable {
                           audioInfo: AudioInfo,
                           waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>
+
+    func sendGallery(itemInfos: [GalleryItemInfo],
+                     caption: String?,
+                     formattedCaption: String?,
+                     inReplyToEventID: String?) async -> Result<Void, TimelineControllerError>
     
     // MARK: - Poll
     

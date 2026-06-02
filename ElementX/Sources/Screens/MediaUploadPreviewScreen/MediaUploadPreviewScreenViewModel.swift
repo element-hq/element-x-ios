@@ -56,27 +56,38 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {
         // Get the current caption before all the processing starts.
-        var caption = state.bindings.caption.nonBlankString
-        
+        let caption = state.bindings.caption.nonBlankString
+
         switch viewAction {
         case .send:
             startLoading()
-            
+
             Task {
                 defer { stopLoading() }
-                
+
                 switch await processingTask.value {
                 case .success(let mediaInfos):
-                    for mediaInfo in mediaInfos {
-                        switch await sendAttachment(mediaInfo: mediaInfo, caption: caption) {
+                    if mediaInfos.count > 1 {
+                        switch await sendGallery(mediaInfos: mediaInfos, caption: caption) {
                         case .success:
-                            caption = nil // Set the caption only on the first uploaded file.
+                            break
                         case .failure(let error):
-                            MXLog.error("Failed sending media with error: \(error)")
+                            MXLog.error("Failed sending gallery with error: \(error)")
                             showError(label: L10n.screenMediaUploadPreviewErrorFailedSending)
                         }
+                    } else {
+                        var perItemCaption = caption
+                        for mediaInfo in mediaInfos {
+                            switch await sendAttachment(mediaInfo: mediaInfo, caption: perItemCaption) {
+                            case .success:
+                                perItemCaption = nil // Set the caption only on the first uploaded file.
+                            case .failure(let error):
+                                MXLog.error("Failed sending media with error: \(error)")
+                                showError(label: L10n.screenMediaUploadPreviewErrorFailedSending)
+                            }
+                        }
                     }
-                    
+
                     actionsSubject.send(.dismiss)
                 case .failure(.maxUploadSizeUnknown):
                     showAlert(.maxUploadSizeUnknown)
@@ -107,6 +118,40 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                 MXLog.error("Failed writing cropped image with error: \(error)")
             }
         }
+    }
+
+    private func sendGallery(mediaInfos: [MediaInfo], caption: String?) async -> Result<Void, TimelineControllerError> {
+        let itemInfos: [GalleryItemInfo] = mediaInfos.map { mediaInfo in
+            switch mediaInfo {
+            case let .image(imageURL, thumbnailURL, imageInfo):
+                return .image(imageInfo: imageInfo,
+                              source: .file(filename: imageURL.path(percentEncoded: false)),
+                              caption: nil,
+                              formattedCaption: nil,
+                              thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)))
+            case let .video(videoURL, thumbnailURL, videoInfo):
+                return .video(videoInfo: videoInfo,
+                              source: .file(filename: videoURL.path(percentEncoded: false)),
+                              caption: nil,
+                              formattedCaption: nil,
+                              thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)))
+            case let .audio(audioURL, audioInfo):
+                return .audio(audioInfo: audioInfo,
+                              source: .file(filename: audioURL.path(percentEncoded: false)),
+                              caption: nil,
+                              formattedCaption: nil)
+            case let .file(fileURL, fileInfo):
+                return .file(fileInfo: fileInfo,
+                             source: .file(filename: fileURL.path(percentEncoded: false)),
+                             caption: nil,
+                             formattedCaption: nil)
+            }
+        }
+
+        return await timelineController.sendGallery(itemInfos: itemInfos,
+                                                    caption: caption,
+                                                    formattedCaption: nil,
+                                                    inReplyToEventID: nil)
     }
     
     func stopProcessing() {

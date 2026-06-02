@@ -38,14 +38,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
-        
+
         let timelineState = timelineViewModel.context.viewState.timelineState
-        
+
         super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(itemViewStates: timelineState.itemViewStates,
                                                                                      initialItem: initialItem,
                                                                                      paginationState: timelineState.paginationState)),
                    mediaProvider: mediaProvider)
-        
+
         rebuildCurrentItemActions()
         
         let canRedactSelfPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
@@ -73,7 +73,37 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             }
             .store(in: &cancellables)
     }
-    
+
+    /// Initialises the preview scoped to a single gallery's attachments. The data source is
+    /// built from the gallery's items directly and isn't kept in sync with the underlying
+    /// timeline — gallery contents don't change without the event being replaced or redacted.
+    init(galleryItem: GalleryRoomTimelineItem,
+         initialIndex: Int,
+         timelineViewModel: TimelineViewModelProtocol,
+         mediaProvider: MediaProviderProtocol,
+         photoLibraryManager: PhotoLibraryManagerProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appMediator: AppMediatorProtocol) {
+        self.timelineViewModel = timelineViewModel
+        self.mediaProvider = mediaProvider
+        self.photoLibraryManager = photoLibraryManager
+        self.userIndicatorController = userIndicatorController
+        self.appMediator = appMediator
+
+        let timelineState = timelineViewModel.context.viewState.timelineState
+        super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(galleryItem: galleryItem,
+                                                                                     initialIndex: initialIndex,
+                                                                                     paginationState: timelineState.paginationState)),
+                   mediaProvider: mediaProvider)
+
+        rebuildCurrentItemActions()
+
+        timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
+            .merge(with: timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers))
+            .sink { [weak self] _ in self?.rebuildCurrentItemActions() }
+            .store(in: &cancellables)
+    }
+
     override func process(viewAction: TimelineMediaPreviewViewAction) {
         switch viewAction {
         case .updateCurrentItem(let item):

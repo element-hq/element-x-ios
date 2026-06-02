@@ -25,18 +25,18 @@ extension View {
 
 private struct TimelineItemBubbleBackgroundModifier: ViewModifier {
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
-    
+
     let isOutgoing: Bool
     let insets: EdgeInsets
     var color: Color?
-    
+
     func body(content: Content) -> some View {
         content
             .padding(insets)
             .background(color)
             .cornerRadius(12, corners: roundedCorners)
     }
-    
+
     private var roundedCorners: UIRectCorner {
         switch timelineGroupStyle {
         case .single:
