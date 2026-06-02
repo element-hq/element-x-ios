@@ -632,7 +632,7 @@ class MockScreen: Identifiable {
             clientProxy.spaceService = spaceServiceProxy
             
             let appMediator = AppMediatorMock(.init())
-            appMediator.underlyingWindowManager = windowManager
+            appMediator.windowManager = windowManager
             
             let itemProvider = SignallingTimelineItemProviderMock(itemProxies: RoomTimelineItemFixtures.largeChunkProxies)
             

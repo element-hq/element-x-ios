@@ -88,8 +88,8 @@ extension AppLockServiceMock {
         mock.isEnabled = pinCode != nil
         mock.isMandatory = isMandatory
         mock.numberOfPINAttempts = CurrentValueSubject<Int, Never>(numberOfPINAttempts).eraseToAnyPublisher()
-        mock.underlyingBiometryType = biometryType
-        mock.underlyingBiometricUnlockEnabled = biometryType != .none
+        mock.biometryType = biometryType
+        mock.biometricUnlockEnabled = biometryType != .none
         mock.unlockWithClosure = { $0 == pinCode }
         return mock
     }

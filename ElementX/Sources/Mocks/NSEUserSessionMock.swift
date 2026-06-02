@@ -19,6 +19,6 @@ extension NSEUserSessionMock {
         
         underlyingInviteAvatarsVisibility = configuration.inviteAvatarsVisibility
         underlyingMediaPreviewVisibility = configuration.mediaPreviewVisibility
-        underlyingThreadsEnabled = configuration.threadsEnabled
+        threadsEnabled = configuration.threadsEnabled
     }
 }

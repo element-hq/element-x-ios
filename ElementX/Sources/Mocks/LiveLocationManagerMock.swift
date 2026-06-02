@@ -19,11 +19,11 @@ extension LiveLocationManagerMock {
         self.init()
         
         let authorizationStatusSubject = CurrentValueSubject<CLAuthorizationStatus, Never>(configuration.authorizationStatus)
-        underlyingAuthorizationStatus = .init(authorizationStatusSubject)
+        authorizationStatus = .init(authorizationStatusSubject)
         
         requestAlwaysAuthorizationIfPossibleReturnValue = configuration.requestAlwaysAuthorizationIfPossibleReturnValue
         startLiveLocationRoomIDDurationReturnValue = .success(())
         
-        underlyingHasDisplayedLiveLocationDisclaimer = configuration.hasDisplayedLiveLocationDisclaimer
+        hasDisplayedLiveLocationDisclaimer = configuration.hasDisplayedLiveLocationDisclaimer
     }
 }

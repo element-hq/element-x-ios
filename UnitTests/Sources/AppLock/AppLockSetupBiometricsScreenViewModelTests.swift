@@ -20,8 +20,8 @@ final class AppLockSetupBiometricsScreenViewModelTests {
     
     init() {
         appLockService = AppLockServiceMock()
-        appLockService.underlyingIsEnabled = true
-        appLockService.underlyingBiometryType = .touchID
+        appLockService.isEnabled = true
+        appLockService.biometryType = .touchID
         appLockService.enableBiometricUnlockReturnValue = .success(())
         viewModel = AppLockSetupBiometricsScreenViewModel(appLockService: appLockService)
     }

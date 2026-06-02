@@ -26,7 +26,7 @@ extension RoomPowerLevelsProxyMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        underlyingValues = RoomPowerLevelsValues.mock
+        values = RoomPowerLevelsValues.mock
         
         canOwnUserSendMessageReturnValue = configuration.canUserSendMessage
         canOwnUserSendStateEventReturnValue = configuration.canUserSendState

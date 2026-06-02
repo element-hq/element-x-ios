@@ -32,14 +32,14 @@ extension TimelineProxyMock {
         editPollOriginalQuestionAnswersPollKindReturnValue = .success(())
         
         if let provider = configuration.timelineItemProvider {
-            underlyingTimelineItemProvider = provider
+            timelineItemProvider = provider
         } else if configuration.isAutoUpdating {
-            underlyingTimelineItemProvider = AutoUpdatingTimelineItemProviderMock()
+            timelineItemProvider = AutoUpdatingTimelineItemProviderMock()
         } else {
-            let timelineItemProvider = TimelineItemProviderMock()
-            timelineItemProvider.paginationState = .init(backward: configuration.timelineStartReached ? .endReached : .idle, forward: .endReached)
-            timelineItemProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
-            underlyingTimelineItemProvider = timelineItemProvider
+            let provider = TimelineItemProviderMock()
+            provider.paginationState = .init(backward: configuration.timelineStartReached ? .endReached : .idle, forward: .endReached)
+            provider.membershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
+            timelineItemProvider = provider
         }
     }
 }

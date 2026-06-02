@@ -179,7 +179,7 @@ final class JoinRoomScreenViewModelTests {
             clientProxy.roomForIdentifierClosure = { _ in
                 let roomProxy = KnockedRoomProxyMock(.init())
                 // to test the cancel knock function
-                roomProxy.cancelKnockUnderlyingReturnValue = .success(())
+                roomProxy.cancelKnockReturnValue = .success(())
                 return .knocked(roomProxy)
             }
         case .joined:

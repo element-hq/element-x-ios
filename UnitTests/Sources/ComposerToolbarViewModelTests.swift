@@ -700,7 +700,7 @@ final class ComposerToolbarViewModelTests {
         }
         
         let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([])
-        roomProxyMock.underlyingIdentityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
+        roomProxyMock.identityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
         
         let appSettings = AppSettings.volatile()
         
@@ -747,7 +747,7 @@ final class ComposerToolbarViewModelTests {
             IdentityStatusChange(userId: "@bob:localhost", changedTo: .verificationViolation)
         ])
         
-        roomProxyMock.underlyingIdentityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
+        roomProxyMock.identityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
         
         let appSettings = AppSettings.volatile()
         
@@ -784,7 +784,7 @@ final class ComposerToolbarViewModelTests {
             .success(roomMemberProxyMock)
         }
         
-        roomProxyMock.underlyingIdentityStatusChangesPublisher = CurrentValueSubject([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinViolation)]).asCurrentValuePublisher()
+        roomProxyMock.identityStatusChangesPublisher = CurrentValueSubject([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinViolation)]).asCurrentValuePublisher()
         let appSettings = AppSettings.volatile()
         
         viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
