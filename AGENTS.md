@@ -10,8 +10,7 @@ PRs must meet these rules. Prefer Xcode MCP tools over terminal commands.
 
 ### Code Style
 
-- Style enforced by **SwiftLint** (`.swiftlint.yml`) and **SwiftFormat** (`.swiftformat`).
-- **Whitespace-only lines:** never strip indentation (Xcode's "Trim whitespace-only lines" is disabled). Adjusting indentation to match scope is fine; removing it causes PR rejection.
+- **SwiftLint** (.swiftlint.yml) and **SwiftFormat** (.swiftformat) enforce style on build; warnings surface in Xcode; build before using **XcodeRefreshCodeIssuesInFile**.
 - Follow [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, including Rust SDK wrappers (e.g. `ID` not `Id`, `URL` not `Url`, `configuration` not `config` or `cfg`).
 - File headers defined in `IDETemplateMacros.plist`.
 
