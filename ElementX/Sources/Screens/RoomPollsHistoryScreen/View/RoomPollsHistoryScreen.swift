@@ -115,7 +115,7 @@ private extension DateFormatter {
 
 struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModelEmpty: RoomPollsHistoryScreenViewModel = {
-        let timelineController = MockTimelineController(timelineItems: [])
+        let timelineController = TimelineControllerMock(.init(timelineItems: []))
         let roomProxyMockConfiguration = JoinedRoomProxyMockConfiguration(name: "Polls")
         return RoomPollsHistoryScreenViewModel(pollInteractionHandler: PollInteractionHandlerMock(),
                                                timelineController: timelineController,
@@ -134,8 +134,8 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
             timelineItemsTimestamps[item.id] = date
         }
         
-        let timelineController = MockTimelineController(timelineItems: polls,
-                                                        timelineItemsTimestamps: timelineItemsTimestamps)
+        let timelineController = TimelineControllerMock(.init(timelineItems: polls,
+                                                              timelineItemsTimestamps: timelineItemsTimestamps))
         
         let roomProxyMockConfiguration = JoinedRoomProxyMockConfiguration(name: "Polls", timelineStartReached: true)
         return RoomPollsHistoryScreenViewModel(pollInteractionHandler: PollInteractionHandlerMock(),

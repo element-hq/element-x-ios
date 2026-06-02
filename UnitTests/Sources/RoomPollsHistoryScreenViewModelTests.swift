@@ -14,11 +14,11 @@ import Testing
 struct RoomPollsHistoryScreenViewModelTests {
     var viewModel: RoomPollsHistoryScreenViewModelProtocol!
     var interactionHandler: PollInteractionHandlerMock!
-    var timelineController: MockTimelineController!
+    var timelineController: TimelineControllerMock!
     
     init() throws {
         interactionHandler = PollInteractionHandlerMock()
-        timelineController = MockTimelineController()
+        timelineController = TimelineControllerMock(.init())
         viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: interactionHandler,
                                                     timelineController: timelineController,
                                                     userIndicatorController: UserIndicatorControllerMock())
@@ -26,12 +26,12 @@ struct RoomPollsHistoryScreenViewModelTests {
     
     @Test
     func backPaginate() async throws {
-        timelineController.backPaginationResponses = [
+        timelineController.setupBackPagination(responses: [
             [PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true),
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true)),
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: false)),
              PollRoomTimelineItem.mock(poll: .endedDisclosed)]
-        ]
+        ])
         
         let deferredViewState = deferFulfillment(viewModel.context.$viewState, keyPath: \.isBackPaginating, transitionValues: [false, true, false])
         
@@ -45,13 +45,13 @@ struct RoomPollsHistoryScreenViewModelTests {
     
     @Test
     func backPaginateCanBackPaginate() async throws {
-        timelineController.backPaginationResponses = [
+        timelineController.setupBackPagination(responses: [
             [PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true),
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true)),
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: false)),
              PollRoomTimelineItem.mock(poll: .endedDisclosed)],
             []
-        ]
+        ])
         
         let deferredViewState = deferFulfillment(viewModel.context.$viewState, keyPath: \.isBackPaginating, transitionValues: [false, true, false])
         
@@ -65,12 +65,12 @@ struct RoomPollsHistoryScreenViewModelTests {
     
     @Test
     func backPaginateTwice() async throws {
-        timelineController.backPaginationResponses = [
+        timelineController.setupBackPagination(responses: [
             [PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true),
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true)),
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: false))],
             [PollRoomTimelineItem.mock(poll: .endedDisclosed)]
-        ]
+        ])
         let deferredViewState = deferFulfillment(viewModel.context.$viewState, keyPath: \.isBackPaginating, transitionValues: [false, true, false])
         
         viewModel.context.send(viewAction: .loadMore)
@@ -84,13 +84,13 @@ struct RoomPollsHistoryScreenViewModelTests {
     
     @Test
     func filters() async throws {
-        timelineController.backPaginationResponses = [
+        timelineController.setupBackPagination(responses: [
             [PollRoomTimelineItem.mock(poll: .emptyDisclosed, isEditable: true),
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: true)),
              PollRoomTimelineItem.mock(poll: .disclosed(createdByAccountOwner: false)),
              PollRoomTimelineItem.mock(poll: .endedDisclosed)],
             []
-        ]
+        ])
         
         let deferredViewState = deferFulfillment(viewModel.context.$viewState) { value in
             !value.pollTimelineItems.isEmpty

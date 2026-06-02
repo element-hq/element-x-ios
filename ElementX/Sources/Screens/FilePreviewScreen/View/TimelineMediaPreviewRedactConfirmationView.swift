@@ -142,7 +142,7 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                                         thumbnailInfo: .mockThumbnail,
                                                         contentType: contentType))
         
-        let timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: [item])
+        let timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: [item]))
         return TimelineMediaPreviewViewModel(initialItem: item,
                                              timelineViewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
                                                                                        timelineController: timelineController),

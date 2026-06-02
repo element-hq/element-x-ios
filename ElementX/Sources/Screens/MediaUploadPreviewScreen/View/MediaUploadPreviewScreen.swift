@@ -372,7 +372,7 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              isRoomEncrypted: true,
                                                              shouldShowCaptionWarning: true,
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: .volatile()),
-                                                             timelineController: MockTimelineController(),
+                                                             timelineController: TimelineControllerMock(.init()),
                                                              clientProxy: ClientProxyMock(.init()),
                                                              userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {

@@ -94,7 +94,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
         
         return TimelineViewModel(roomProxy: roomProxyMock,
                                  focussedEventID: focussedEventID,
-                                 timelineController: MockTimelineController(),
+                                 timelineController: TimelineControllerMock(.init()),
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),

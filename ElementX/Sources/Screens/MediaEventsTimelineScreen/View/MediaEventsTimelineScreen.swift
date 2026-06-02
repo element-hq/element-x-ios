@@ -305,9 +305,9 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     
     private static func makeTimelineViewModel(empty: Bool) -> TimelineViewModel {
         let timelineController = if empty {
-            MockTimelineController.emptyMediaGallery
+            TimelineControllerMock.emptyMediaGallery
         } else {
-            MockTimelineController.mediaGallery
+            TimelineControllerMock.mediaGallery
         }
         
         let appSettings = AppSettings.volatile()

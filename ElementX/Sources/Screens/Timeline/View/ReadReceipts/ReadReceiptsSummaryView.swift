@@ -48,7 +48,7 @@ struct ReadReceiptsSummaryView_Previews: PreviewProvider, TestablePreview {
         let appSettings = AppSettings.volatile()
         
         return TimelineViewModel(roomProxy: roomProxyMock,
-                                 timelineController: MockTimelineController(),
+                                 timelineController: TimelineControllerMock(.init()),
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),

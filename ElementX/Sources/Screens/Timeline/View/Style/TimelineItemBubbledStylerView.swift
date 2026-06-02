@@ -340,7 +340,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         let roomProxy = JoinedRoomProxyMock(.init())
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
-                                 timelineController: MockTimelineController(),
+                                 timelineController: TimelineControllerMock(.init()),
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
@@ -359,7 +359,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: ["pinned"]))
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
-                                 timelineController: MockTimelineController(),
+                                 timelineController: TimelineControllerMock(.init()),
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),

@@ -104,7 +104,7 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,
                                                       selectedEmojis: ["😀", "😄"],
                                                       emojiProvider: EmojiProvider(appSettings: .volatile()),
-                                                      timelineController: MockTimelineController())
+                                                      timelineController: TimelineControllerMock(.init()))
     
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context)
@@ -117,7 +117,7 @@ struct EmojiPickerScreenSheet_Previews: PreviewProvider {
     static let viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,
                                                       selectedEmojis: ["😀", "😄"],
                                                       emojiProvider: EmojiProvider(appSettings: .volatile()),
-                                                      timelineController: MockTimelineController())
+                                                      timelineController: TimelineControllerMock(.init()))
     
     static var previews: some View {
         Text("Timeline view")
