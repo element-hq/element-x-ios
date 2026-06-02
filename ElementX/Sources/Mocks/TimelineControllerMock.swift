@@ -81,29 +81,29 @@ extension TimelineControllerMock {
         
         editMessageHtmlIntentionalMentionsClosure = { [weak self] _, message, _, _ in
             guard let self else { return }
-            self.callbacks.send(.messageSentOrEdited)
-            self.timelineItems[self.timelineItems.endIndex - 1] = TextRoomTimelineItem(id: lastInsertedMessageID,
-                                                                                       timestamp: .distantFuture,
-                                                                                       isOutgoing: true,
-                                                                                       isEditable: true,
-                                                                                       canBeRepliedTo: true,
-                                                                                       sender: .test,
-                                                                                       content: .init(body: message),
-                                                                                       properties: .init(isEdited: true))
-            self.callbacks.send(.updatedTimelineItems(timelineItems: self.timelineItems, isSwitchingTimelines: false))
+            callbacks.send(.messageSentOrEdited)
+            timelineItems[timelineItems.endIndex - 1] = TextRoomTimelineItem(id: lastInsertedMessageID,
+                                                                             timestamp: .distantFuture,
+                                                                             isOutgoing: true,
+                                                                             isEditable: true,
+                                                                             canBeRepliedTo: true,
+                                                                             sender: .test,
+                                                                             content: .init(body: message),
+                                                                             properties: .init(isEdited: true))
+            callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
         }
         
         sendMessageHtmlInReplyToEventIDIntentionalMentionsClosure = { [weak self] message, _, _, _ in
             guard let self else { return }
-            self.callbacks.send(.messageSentOrEdited)
-            self.timelineItems.append(TextRoomTimelineItem(id: lastInsertedMessageID,
-                                                           timestamp: .distantFuture,
-                                                           isOutgoing: true,
-                                                           isEditable: true,
-                                                           canBeRepliedTo: true,
-                                                           sender: .test,
-                                                           content: .init(body: message)))
-            self.callbacks.send(.updatedTimelineItems(timelineItems: self.timelineItems, isSwitchingTimelines: false))
+            callbacks.send(.messageSentOrEdited)
+            timelineItems.append(TextRoomTimelineItem(id: lastInsertedMessageID,
+                                                      timestamp: .distantFuture,
+                                                      isOutgoing: true,
+                                                      isEditable: true,
+                                                      canBeRepliedTo: true,
+                                                      sender: .test,
+                                                      content: .init(body: message)))
+            callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
         }
         
         sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self, timelineProxy] url, audioInfo, caption, requestHandle in
@@ -225,23 +225,23 @@ extension TimelineControllerMock {
             guard let self else { return .success(()) }
             
             let paginating = TimelinePaginationState(backward: .paginating, forward: .endReached)
-            self.paginationState = paginating
-            self.callbacks.send(.paginationState(paginating))
+            paginationState = paginating
+            callbacks.send(.paginationState(paginating))
             
             guard !queue.isEmpty else {
                 let end = TimelinePaginationState(backward: .endReached, forward: .endReached)
-                self.paginationState = end
-                self.callbacks.send(.paginationState(end))
+                paginationState = end
+                callbacks.send(.paginationState(end))
                 return .success(())
             }
             
             let newItems = queue.removeFirst()
-            self.timelineItems.insert(contentsOf: newItems, at: 0)
-            self.callbacks.send(.updatedTimelineItems(timelineItems: self.timelineItems, isSwitchingTimelines: false))
+            timelineItems.insert(contentsOf: newItems, at: 0)
+            callbacks.send(.updatedTimelineItems(timelineItems: timelineItems, isSwitchingTimelines: false))
             
             let final = TimelinePaginationState(backward: queue.isEmpty ? .endReached : .idle, forward: .endReached)
-            self.paginationState = final
-            self.callbacks.send(.paginationState(final))
+            paginationState = final
+            callbacks.send(.paginationState(final))
             
             return .success(())
         }
