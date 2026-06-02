@@ -20,7 +20,7 @@ final class BugReportServiceTests {
         appSettings.bugReportRageshakeURL.reset()
         
         let bugReportServiceMock = BugReportServiceMock()
-        bugReportServiceMock.underlyingCrashedLastRun = false
+        bugReportServiceMock.crashedLastRun = false
         bugReportServiceMock.submitBugReportProgressListenerReturnValue = .success(SubmitBugReportResponse(reportURL: "https://www.example.com/123"))
         bugReportService = bugReportServiceMock
     }

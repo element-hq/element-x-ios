@@ -18,13 +18,13 @@ extension AppMediatorMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        underlyingAppState = configuration.appState
-        requestAuthorizationIfNeededUnderlyingReturnValue = configuration.isCameraAuthorized
-        underlyingNetworkMonitor = configuration.networkMonitor
+        appState = configuration.appState
+        requestAuthorizationIfNeededReturnValue = configuration.isCameraAuthorized
+        networkMonitor = configuration.networkMonitor
         
         let windowManagerMock = WindowManagerMock()
         windowManagerMock.closeAllSecondaryWindowsClosure = { }
         windowManagerMock.closeSecondaryWindowForTypeClosure = { _ in }
-        underlyingWindowManager = windowManagerMock
+        windowManager = windowManagerMock
     }
 }

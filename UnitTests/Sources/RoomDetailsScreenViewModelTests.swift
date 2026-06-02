@@ -790,7 +790,7 @@ struct RoomDetailsScreenViewModelTests {
         let configuration = JoinedRoomProxyMockConfiguration(historyVisibility: .shared)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
-        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        roomProxyMock.infoPublisher = infoSubject.asCurrentValuePublisher()
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),

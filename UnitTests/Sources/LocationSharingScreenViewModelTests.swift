@@ -219,7 +219,7 @@ struct LocationSharingScreenViewModelTests {
     mutating func startLiveLocationWithNotDeterminedAuthorizationTransitionsToWhenInUse() async {
         let authorizationStatusSubject = CurrentValueSubject<CLAuthorizationStatus, Never>(.notDetermined)
         let liveLocationManagerMock = LiveLocationManagerMock()
-        liveLocationManagerMock.underlyingAuthorizationStatus = .init(authorizationStatusSubject)
+        liveLocationManagerMock.authorizationStatus = .init(authorizationStatusSubject)
         liveLocationManagerMock.requestAlwaysAuthorizationIfPossibleReturnValue = true
         setupViewModel(liveLocationManagerMock: liveLocationManagerMock)
         

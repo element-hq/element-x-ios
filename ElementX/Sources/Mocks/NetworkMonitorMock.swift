@@ -17,6 +17,6 @@ extension NetworkMonitorMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        underlyingReachabilityPublisher = configuration.reachabilityPublisher
+        reachabilityPublisher = configuration.reachabilityPublisher
     }
 }

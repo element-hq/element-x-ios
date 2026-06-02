@@ -43,10 +43,10 @@ extension TimelineControllerMock {
         let timelineProxy = configuration.timelineProxy
         let timelineItemsTimestamps = configuration.timelineItemsTimestamps
         
-        underlyingCallbacks = PassthroughSubject()
-        underlyingRoomID = roomProxy?.id ?? "MockRoomIdentifier"
-        underlyingTimelineKind = configuration.timelineKind
-        underlyingPaginationState = configuration.paginationState
+        callbacks = PassthroughSubject()
+        roomID = roomProxy?.id ?? "MockRoomIdentifier"
+        timelineKind = configuration.timelineKind
+        paginationState = configuration.paginationState
         timelineItems = configuration.timelineItems
         
         callbacks.send(.paginationState(configuration.paginationState))

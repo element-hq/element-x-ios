@@ -70,19 +70,19 @@ extension RoomPreviewProxyMock {
     
     convenience init(_ configuration: RoomPreviewProxyMock.Configuration) {
         self.init()
-        underlyingInfo = .init(roomPreviewInfo: .init(roomId: configuration.roomID,
-                                                      canonicalAlias: configuration.canonicalAlias,
-                                                      name: configuration.name,
-                                                      topic: configuration.topic,
-                                                      avatarUrl: configuration.avatarURL,
-                                                      numJoinedMembers: configuration.numJoinedMembers,
-                                                      numActiveMembers: configuration.numActiveMembers,
-                                                      roomType: configuration.roomType,
-                                                      isHistoryWorldReadable: nil,
-                                                      membership: configuration.membership,
-                                                      joinRule: configuration.joinRule.rustValue,
-                                                      isDirect: configuration.isDirect,
-                                                      heroes: nil))
+        info = .init(roomPreviewInfo: .init(roomId: configuration.roomID,
+                                            canonicalAlias: configuration.canonicalAlias,
+                                            name: configuration.name,
+                                            topic: configuration.topic,
+                                            avatarUrl: configuration.avatarURL,
+                                            numJoinedMembers: configuration.numJoinedMembers,
+                                            numActiveMembers: configuration.numActiveMembers,
+                                            roomType: configuration.roomType,
+                                            isHistoryWorldReadable: nil,
+                                            membership: configuration.membership,
+                                            joinRule: configuration.joinRule.rustValue,
+                                            isDirect: configuration.isDirect,
+                                            heroes: nil))
         
         let roomMembershipDetails = RoomMembershipDetailsProxyMock()
         

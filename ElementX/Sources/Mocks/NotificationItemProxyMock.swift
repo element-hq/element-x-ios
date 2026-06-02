@@ -16,7 +16,7 @@ struct NotificationItemProxyMockConfiguration {
         let messageType = MessageType.text(content: TextMessageContent(body: "Hello world!", formatted: nil))
         let messageLikeContent = MessageLikeEventContent.roomMessage(messageType: messageType, inReplyToEventId: nil)
         let event = TimelineEventSDKMock()
-        event.eventIdUnderlyingReturnValue = UUID().uuidString
+        event.eventIdReturnValue = UUID().uuidString
         event.contentReturnValue = .messageLike(content: messageLikeContent)
         return .timeline(event: event)
     }()
@@ -40,18 +40,18 @@ extension NotificationItemProxyMock {
     convenience init(_ configuration: NotificationItemProxyMockConfiguration) {
         self.init()
         event = configuration.event
-        underlyingSenderID = configuration.senderID
-        underlyingRoomID = configuration.roomID
-        underlyingReceiverID = configuration.receiverID
+        senderID = configuration.senderID
+        roomID = configuration.roomID
+        receiverID = configuration.receiverID
         senderDisplayName = configuration.senderDisplayName
         roomAvatarMediaSource = configuration.roomAvatarMediaSource
-        underlyingRoomDisplayName = configuration.roomDisplayName
-        underlyingRoomJoinedMembers = configuration.roomJoinedMembers
-        underlyingIsRoomDirect = configuration.isRoomDirect
-        underlyingIsRoomPrivate = configuration.isRoomPrivate
-        underlyingIsNoisy = configuration.isNoisy
-        underlyingHasMention = configuration.hasMention
+        roomDisplayName = configuration.roomDisplayName
+        roomJoinedMembers = configuration.roomJoinedMembers
+        isRoomDirect = configuration.isRoomDirect
+        isRoomPrivate = configuration.isRoomPrivate
+        isNoisy = configuration.isNoisy
+        hasMention = configuration.hasMention
         threadRootEventID = configuration.threadRootEventID
-        underlyingIsDM = configuration.isRoomDirect && configuration.roomJoinedMembers <= 2
+        isDM = configuration.isRoomDirect && configuration.roomJoinedMembers <= 2
     }
 }

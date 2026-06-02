@@ -34,10 +34,10 @@ class SignallingTimelineItemProviderMock: TimelineItemProviderMock {
         
         self.itemProxies = itemProxies
         
-        underlyingPaginationState = paginationState
-        underlyingKind = .live
-        underlyingUpdatePublisher = stateSubject.eraseToAnyPublisher()
-        underlyingMembershipChangePublisher = Empty().eraseToAnyPublisher()
+        self.paginationState = paginationState
+        kind = .live
+        updatePublisher = stateSubject.eraseToAnyPublisher()
+        membershipChangePublisher = Empty().eraseToAnyPublisher()
         
         guard listenForSignals else { return }
         
@@ -102,7 +102,7 @@ class SignallingTimelineItemProviderMock: TimelineItemProviderMock {
         
         guard !backPaginationResponses.isEmpty else {
             let newState = TimelinePaginationState(backward: .endReached, forward: .endReached)
-            underlyingPaginationState = newState
+            paginationState = newState
             stateSubject.send((items, newState))
             return
         }
@@ -111,7 +111,7 @@ class SignallingTimelineItemProviderMock: TimelineItemProviderMock {
         let newPaginationState = TimelinePaginationState(backward: backPaginationResponses.isEmpty ? .endReached : .idle,
                                                          forward: .endReached)
         itemProxies = newItems + items
-        underlyingPaginationState = newPaginationState
+        paginationState = newPaginationState
         stateSubject.send((newItems + items, newPaginationState))
         try client?.send(.success)
     }

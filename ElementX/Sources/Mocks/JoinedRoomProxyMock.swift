@@ -132,14 +132,14 @@ extension JoinedRoomProxyMock {
         unbanUserReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
-        widgetDriver.underlyingMessagePublisher = .init()
-        widgetDriver.underlyingActions = PassthroughSubject().eraseToAnyPublisher()
+        widgetDriver.messagePublisher = .init()
+        widgetDriver.actions = PassthroughSubject().eraseToAnyPublisher()
         
         guard let url = URL(string: "https://call.element.io/\(UUID().uuidString)#?appPrompt=false") else {
             fatalError()
         }
         
-        widgetDriver.startBaseURLClientIDColorSchemeVoiceOnlyRageshakeURLAnalyticsConfigurationUnderlyingReturnValue = .success(url)
+        widgetDriver.startBaseURLClientIDColorSchemeVoiceOnlyRageshakeURLAnalyticsConfigurationReturnValue = .success(url)
         
         elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         

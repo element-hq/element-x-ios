@@ -22,7 +22,7 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     
     init() {
         secureBackupController = SecureBackupControllerMock()
-        secureBackupController.underlyingKeyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
+        secureBackupController.keyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
         
         reachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
         

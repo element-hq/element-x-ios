@@ -35,7 +35,7 @@ struct VoiceMessageRecorderTests {
     
     init() async throws {
         audioRecorder = AudioRecorderMock()
-        audioRecorder.underlyingCurrentTime = 0
+        audioRecorder.currentTime = 0
         audioRecorder.averagePowerReturnValue = 0
         audioRecorder.actions = audioRecorderActions
         

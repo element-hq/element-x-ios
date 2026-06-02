@@ -22,7 +22,7 @@ extension SessionVerificationControllerProxyMock {
                               otherDeviceStartsSasVerification: Bool = false,
                               requestDelay: Duration = .seconds(1)) -> SessionVerificationControllerProxyMock {
         let mock = SessionVerificationControllerProxyMock()
-        mock.underlyingActions = actions
+        mock.actions = actions
         
         mock.acknowledgeVerificationRequestDetailsReturnValue = .success(())
         

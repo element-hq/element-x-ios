@@ -16,7 +16,7 @@ extension CLLocationManagerMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        underlyingAuthorizationStatus = configuration.authorizationStatus
-        underlyingAccuracyAuthorization = configuration.accuracyAuthorization
+        authorizationStatus = configuration.authorizationStatus
+        accuracyAuthorization = configuration.accuracyAuthorization
     }
 }

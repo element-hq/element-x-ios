@@ -24,7 +24,7 @@ struct AudioRecorderStateTests {
     private func buildAudioRecorderMock() -> AudioRecorderMock {
         let audioRecorderMock = AudioRecorderMock()
         audioRecorderMock.isRecording = false
-        audioRecorderMock.underlyingActions = audioRecorderActions
+        audioRecorderMock.actions = audioRecorderActions
         audioRecorderMock.currentTime = 0.0
         audioRecorderMock.averagePowerReturnValue = 0
         return audioRecorderMock

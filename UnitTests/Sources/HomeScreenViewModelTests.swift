@@ -420,7 +420,7 @@ final class HomeScreenViewModelTests {
             spaceServiceProxy.spaceRoomListSpaceIDClosure = { spaceID in
                 .success(SpaceRoomListProxyMock(.init(spaceServiceRoom: SpaceServiceRoom.mock(id: spaceID, isSpace: true))))
             }
-            clientProxy.underlyingSpaceService = spaceServiceProxy
+            clientProxy.spaceService = spaceServiceProxy
         case nil:
             break
         }

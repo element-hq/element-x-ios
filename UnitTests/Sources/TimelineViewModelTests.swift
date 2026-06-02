@@ -472,7 +472,7 @@ final class TimelineViewModelTests {
                                                              pinnedEventIDs: .init(["test1"]))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
-        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        roomProxyMock.infoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: TimelineControllerMock(.init()),
@@ -503,7 +503,7 @@ final class TimelineViewModelTests {
                                                              powerLevelsConfiguration: .init(canUserPin: true))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
-        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        roomProxyMock.infoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: TimelineControllerMock(.init()),
