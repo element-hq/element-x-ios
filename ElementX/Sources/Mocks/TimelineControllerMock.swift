@@ -16,7 +16,7 @@ import MatrixRustSDKMocks
 struct TimelineControllerMockConfiguration {
     var roomProxy: JoinedRoomProxyProtocol?
     var timelineKind: TimelineKind = .live
-    var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
+    var timelineItems: [RoomTimelineItemProtocol] = TimelineFixtures.default
     var timelineProxy: TimelineProxyProtocol?
     var timelineItemsTimestamps: [TimelineItemIdentifier: Date] = [:]
     var paginationState: TimelinePaginationState = .initial
@@ -25,7 +25,7 @@ struct TimelineControllerMockConfiguration {
 extension TimelineControllerMock {
     static var mediaGallery: TimelineControllerMock {
         TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: (0..<5).reduce([]) { partialResult, _ in
-            partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
+            partialResult + [TimelineFixtures.separator] + TimelineFixtures.mediaChunk
         }))
     }
     

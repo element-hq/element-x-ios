@@ -21,7 +21,7 @@ extension TimelineControllerFactoryMock {
             if let timelineController = configuration.threadTimelineController {
                 return timelineController
             } else {
-                return TimelineControllerMock(.init(timelineItems: RoomTimelineItemFixtures.largeChunk))
+                return TimelineControllerMock(.init(timelineItems: TimelineFixtures.largeChunk))
             }
         }
         
@@ -29,7 +29,7 @@ extension TimelineControllerFactoryMock {
             if let timelineController = configuration.threadTimelineController {
                 return .success(timelineController)
             } else {
-                let timelineController = TimelineControllerMock(.init(timelineKind: .thread(rootEventID: threadRootEventID), timelineItems: RoomTimelineItemFixtures.largeChunk))
+                let timelineController = TimelineControllerMock(.init(timelineKind: .thread(rootEventID: threadRootEventID), timelineItems: TimelineFixtures.largeChunk))
                 return .success(timelineController)
             }
         }
