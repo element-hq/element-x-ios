@@ -32,6 +32,9 @@ jobs:
           # We need to push any changes to the project.
           persist-credentials: true
 
+      - name: Setup environment
+        run: source ci_scripts/ci_common.sh && setup_github_actions_environment
+
       - name: Install dependencies
         run: |
           unset HOMEBREW_NO_INSTALL_FROM_API
