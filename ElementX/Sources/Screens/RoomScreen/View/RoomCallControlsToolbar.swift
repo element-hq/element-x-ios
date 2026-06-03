@@ -47,19 +47,20 @@ struct RoomCallControlsToolbar: ToolbarContent {
                     }
                 } else {
                     ToolbarItem(placement: .primaryAction) {
-                        Button { onCallTap(true) } label: {
-                            CompoundIcon(\.voiceCallSolid)
-                        }
-                        .accessibilityLabel(L10n.a11yStartVoiceCall)
-                        .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVoiceCall)
-                        .disabled(!viewState.canJoinCall)
-                    }
-                    ToolbarItem(placement: .primaryAction) {
                         Button { onCallTap(false) } label: {
                             CompoundIcon(\.videoCallSolid)
                         }
                         .accessibilityLabel(L10n.a11yStartVideoCall)
                         .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVideoCall)
+                        .disabled(!viewState.canJoinCall)
+                    }
+                    
+                    ToolbarItem(placement: .primaryAction) {
+                        Button { onCallTap(true) } label: {
+                            CompoundIcon(\.voiceCallSolid)
+                        }
+                        .accessibilityLabel(L10n.a11yStartVoiceCall)
+                        .accessibilityIdentifier(A11yIdentifiers.roomScreen.startVoiceCall)
                         .disabled(!viewState.canJoinCall)
                     }
                 }
