@@ -80,11 +80,11 @@ packages:
     path: compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.33.2
+    minorVersion: 0.36.0
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.19.3
+    exactVersion: 0.20.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
@@ -105,19 +105,19 @@ packages:
     minorVersion: 1.2.1
   AsyncAlgorithms:
     url: https://github.com/apple/swift-async-algorithms
-    minorVersion: 1.1.3
+    minorVersion: 1.1.4
   Clocks:
     url: https://github.com/pointfreeco/swift-clocks
     from: 1.0.6
   Collections:
     url: https://github.com/apple/swift-collections
-    minorVersion: 1.5.0
+    minorVersion: 1.5.1
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
     minorVersion: 5.8.0
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
-    exactVersion: 14.3.0
+    exactVersion: 14.5.0
   Dynamic:
     url: https://github.com/mhdhejazi/Dynamic
     exactVersion: 1.2
@@ -147,10 +147,10 @@ packages:
     minorVersion: 6.26.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.58.1
+    minorVersion: 3.59.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 9.13.0
+    minorVersion: 9.14.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.19.2
@@ -159,7 +159,7 @@ packages:
     minorVersion: 3.1.1
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
-    minorVersion: 2.13.4
+    minorVersion: 2.13.5
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.1
