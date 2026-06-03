@@ -74,7 +74,15 @@ struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction
     @Environment(\.timelineContext) private var viewModel
     @Environment(\.layoutDirection) private var layoutDirection
-    @State private var computedSizes = [Double: CGSize]()
+    
+    /// Cache key for `sizeThatFits`. Keyed on the reserved trailing size as well as the proposed
+    /// width to account for any changes on the send info label that happen after the first rendering.
+    private struct SizeCacheKey: Hashable {
+        let width: Double
+        let reservedSize: CGSize
+    }
+    
+    @State private var computedSizes = [SizeCacheKey: CGSize]()
     
     @State var attributedString: AttributedString {
         didSet {
@@ -204,14 +212,15 @@ struct MessageText: UIViewRepresentable {
     
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: MessageTextView, context: Context) -> CGSize? {
         let proposalWidth = proposal.width ?? UIView.layoutFittingExpandedSize.width
+        let key = SizeCacheKey(width: proposalWidth, reservedSize: trailingReservedSize)
         
-        if let size = computedSizes[proposalWidth] {
+        if let size = computedSizes[key] {
             return size
         }
         
         let size = uiView.sizeThatFits(CGSize(width: proposalWidth, height: UIView.layoutFittingCompressedSize.height))
         DispatchQueue.main.async {
-            computedSizes[proposalWidth] = size
+            computedSizes[key] = size
         }
         return size
     }
