@@ -273,7 +273,7 @@ extension TimelineItemProxy {
 private extension TimelineItemProxy {
     func buildRoomTimelineItem() -> RoomTimelineItemProtocol {
         guard case .event(let eventProxy) = self,
-              let item = RoomTimelineItemFixtures.factory.buildTimelineItem(for: eventProxy, isDM: false) else {
+              let item = RoomTimelineItemFixtures.factory.buildTimelineItem(for: eventProxy, isDM: false, joinRule: nil) else {
             fatalError()
         }
         

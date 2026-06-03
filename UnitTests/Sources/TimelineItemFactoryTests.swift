@@ -25,7 +25,7 @@ struct TimelineItemFactoryTests {
         
         let eventTimelineItemProxy = EventTimelineItemProxy(item: eventTimelineItem, uniqueID: .init("0"))
         
-        let item = try #require(factory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false) as? CallInviteRoomTimelineItem,
+        let item = try #require(factory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false, joinRule: nil) as? CallInviteRoomTimelineItem,
                                 "Incorrect item type")
         
         #expect(item.isReactable == false)

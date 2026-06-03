@@ -25,7 +25,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         self.stateEventStringBuilder = stateEventStringBuilder
     }
     
-    func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool) -> RoomTimelineItemProtocol? {
+    func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool, joinRule: JoinRule?) -> RoomTimelineItemProtocol? {
         let isOutgoing = eventItemProxy.isOwn
         
         switch eventItemProxy.content {
@@ -56,11 +56,17 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
             return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
         case .roomMembership(userId: let userID, let displayName, change: let change, let reason):
+            if joinRule != .invite, change == .joined || change == .left {
+                return nil
+            }
             if isDM, change == .joined, userID == self.userID {
                 return nil
             }
             return buildStateMembershipChangeTimelineItem(for: eventItemProxy, memberUserID: userID, memberDisplayName: displayName, membershipChange: change, reason: reason, isOutgoing: isOutgoing)
         case .profileChange(let displayName, let prevDisplayName, let avatarUrl, let prevAvatarUrl):
+            guard joinRule == .invite else {
+                return nil
+            }
             return buildStateProfileChangeTimelineItem(for: eventItemProxy,
                                                        displayName: displayName,
                                                        previousDisplayName: prevDisplayName,

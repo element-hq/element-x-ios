@@ -467,6 +467,7 @@ class TimelineController: TimelineControllerProtocol {
         let isDM = roomProxy.infoPublisher.value.isDM
         let displayName = roomProxy.infoPublisher.value.displayName
         let hasPredecessor = roomProxy.predecessorRoom != nil
+        let joinRule = roomProxy.infoPublisher.value.joinRule
         
         var newTimelineItems = await Task.detached { [timelineItemFactory, activeTimeline] in
             var newTimelineItems = [RoomTimelineItemProtocol]()
@@ -481,6 +482,7 @@ class TimelineController: TimelineControllerProtocol {
                                            isDM: isDM,
                                            hasPredecessor: hasPredecessor,
                                            roomDisplayName: displayName,
+                                           joinRule: joinRule,
                                            timelineItemFactory: timelineItemFactory,
                                            activeTimeline: activeTimeline)
                 }
@@ -520,6 +522,8 @@ class TimelineController: TimelineControllerProtocol {
             break
         }
         
+        newTimelineItems = Self.stripOrphanedDateDividers(newTimelineItems)
+        
         timelineItems = newTimelineItems
         
         callbacks.send(.updatedTimelineItems(timelineItems: newTimelineItems, isSwitchingTimelines: isNewTimeline))
@@ -530,11 +534,12 @@ class TimelineController: TimelineControllerProtocol {
                                                isDM: Bool,
                                                hasPredecessor: Bool,
                                                roomDisplayName: String?,
+                                               joinRule: JoinRule?,
                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                activeTimeline: TimelineProxyProtocol) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
-            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: isDM)
+            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: isDM, joinRule: joinRule)
             
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 // Avoid fetching this over and over again as it changes states if it keeps failing to load
@@ -649,6 +654,16 @@ class TimelineController: TimelineControllerProtocol {
             try await interaction.donate()
         } catch {
             MXLog.error("Failed donating send message intent with error: \(error)")
+        }
+    }
+    
+    /// Strips date dividers that have no items between them and the next divider (or end of timeline).
+    /// This can happen when all events in a day are filtered out.
+    static func stripOrphanedDateDividers(_ items: [RoomTimelineItemProtocol]) -> [RoomTimelineItemProtocol] {
+        items.enumerated().filter { index, item in
+            guard item is SeparatorRoomTimelineItem else { return true }
+            let nextNonPagination = items[(index + 1)...].first { !($0 is PaginationIndicatorRoomTimelineItem) }
+            return nextNonPagination.map { !($0 is SeparatorRoomTimelineItem) } ?? false
         }
     }
 }
