@@ -167,7 +167,7 @@ struct MediaUploadPreviewScreen: View {
         if isCurrentMediaImage {
             ToolbarItem(placement: .primaryAction) {
                 Button { context.isPresentingMediaEditor = true } label: {
-                    CompoundIcon(\.editSolid)
+                    CompoundIcon(\.crop)
                 }
                 // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
                 // follow the dark colour scheme on devices running with dark mode disabled.
