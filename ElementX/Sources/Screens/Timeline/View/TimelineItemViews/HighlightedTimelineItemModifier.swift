@@ -87,7 +87,7 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
 struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
     static let roomProxyMock = JoinedRoomProxyMock(.init(name: "Preview room"))
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
-    static let focussedEventID = "RoomTimelineItemFixtures.default.5"
+    static let focussedEventID = "TimelineFixtures.default.5"
     static let composerViewModel = ComposerToolbarViewModel.mock()
     static let timelineViewModel = {
         let appSettings = AppSettings.volatile()

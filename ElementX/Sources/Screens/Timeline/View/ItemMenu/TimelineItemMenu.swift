@@ -362,11 +362,11 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static func makeItem(itemType: ItemType) -> EventBasedTimelineItemProtocol? {
         switch itemType {
         case .incomingText:
-            RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol
+            TimelineFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol
         case .outgoingMedia:
-            RoomTimelineItemFixtures.mediaChunk[1] as? EventBasedTimelineItemProtocol
+            TimelineFixtures.mediaChunk[1] as? EventBasedTimelineItemProtocol
         case .outgoingMediaWithCaption:
-            RoomTimelineItemFixtures.mediaChunk[5] as? EventBasedTimelineItemProtocol
+            TimelineFixtures.mediaChunk[5] as? EventBasedTimelineItemProtocol
         }
     }
 }

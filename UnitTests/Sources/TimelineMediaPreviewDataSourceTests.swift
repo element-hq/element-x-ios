@@ -239,7 +239,7 @@ struct TimelineMediaPreviewDataSourceTests {
     // MARK: Helpers
     
     func newChunk() -> [EventBasedMessageTimelineItemProtocol] {
-        RoomTimelineItemFixtures.mediaChunk
+        TimelineFixtures.mediaChunk
             .compactMap { $0 as? EventBasedMessageTimelineItemProtocol }
             .filter(\.supportsMediaCaption) // Voice messages can't be previewed (and don't support captions).
     }
