@@ -88,7 +88,7 @@ private struct CallView: UIViewRepresentable {
         init(viewModelContext: CallScreenViewModel.Context) {
             self.viewModelContext = viewModelContext
             pictureInPictureViewController = AVPictureInPictureVideoCallViewController()
-            pictureInPictureViewController.preferredContentSize = CGSize(width: 1920, height: 1080)
+            pictureInPictureViewController.preferredContentSize = PiPSize.portrait.size
             
             super.init()
             
@@ -192,6 +192,16 @@ private struct CallView: UIViewRepresentable {
                 viewModelContext?.send(viewAction: .outputDeviceSelected(deviceID: deviceID))
             case .onBackButtonPressed:
                 viewModelContext?.send(viewAction: .navigateBack)
+            case .onPipMediaOrientationUpdate:
+                guard let orientation = message.body as? String else { return }
+                switch orientation {
+                case "portrait":
+                    pictureInPictureViewController.preferredContentSize = PiPSize.portrait.size
+                case "landscape":
+                    pictureInPictureViewController.preferredContentSize = PiPSize.landscape.size
+                default:
+                    break
+                }
             case .forwardLogs:
                 guard let body = message.body as? [String: String],
                       let level = body["level"],
@@ -338,6 +348,20 @@ private struct CallView: UIViewRepresentable {
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             coordinator?.userContentController(userContentController, didReceive: message)
+        }
+    }
+    
+    private enum PiPSize {
+        case portrait
+        case landscape
+        
+        var size: CGSize {
+            switch self {
+            case .portrait:
+                .init(width: 1080, height: 1920)
+            case .landscape:
+                .init(width: 1920, height: 1080)
+            }
         }
     }
 }
