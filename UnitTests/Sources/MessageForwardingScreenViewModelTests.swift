@@ -8,13 +8,14 @@
 
 import Combine
 @testable import ElementX
+import MatrixRustSDKMocks
 import Testing
 
 @MainActor
 struct MessageForwardingScreenViewModelTests {
     let forwardingItem = MessageForwardingItem(id: .event(uniqueID: .init("t1"), eventOrTransactionID: .eventID("t1")),
                                                roomID: "1",
-                                               content: .init(noHandle: .init()))
+                                               content: RoomMessageEventContentWithoutRelationSDKMock())
     var viewModel: MessageForwardingScreenViewModelProtocol!
     var context: MessageForwardingScreenViewModelType.Context!
     

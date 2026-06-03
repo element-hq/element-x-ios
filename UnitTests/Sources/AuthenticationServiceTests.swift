@@ -147,7 +147,7 @@ struct AuthenticationServiceTests {
         
         let classicAppManager = ClassicAppManagerMock(.init(accounts: classicAppAccounts,
                                                             availableSecrets: availableSecrets,
-                                                            secretsBundle: .init(noHandle: .init())))
+                                                            secretsBundle: SecretsBundleWithUserIdSDKMock()))
         
         service = AuthenticationService(userSessionStore: userSessionStore,
                                         encryptionKeyProvider: encryptionKeyProvider,

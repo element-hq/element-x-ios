@@ -8,6 +8,7 @@
 
 @testable import ElementX
 import Foundation
+import MatrixRustSDKMocks
 import Testing
 
 struct RoomSummaryTests {
@@ -95,7 +96,7 @@ struct RoomSummaryTests {
     // MARK: - Helpers
     
     func makeSummary(isDirect: Bool, isSpace: Bool, hasRoomAvatar: Bool, isTombstoned: Bool) -> RoomSummary {
-        RoomSummary(room: .init(noHandle: .init()),
+        RoomSummary(room: RoomSDKMock(),
                     id: roomDetails.id,
                     joinRequestType: nil,
                     name: roomDetails.name,
