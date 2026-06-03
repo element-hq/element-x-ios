@@ -112,7 +112,7 @@ final class RoomSummaryProviderTests {
         dynamicAdaptersResult.controllerReturnValue = dynamicEntriesController
         roomList = RoomListSDKMock()
         roomList.entriesWithDynamicAdaptersPageSizeListenerReturnValue = dynamicAdaptersResult
-        roomList.loadingStateListenerReturnValue = .some(.init(state: .notLoaded, stateStream: .init(noHandle: .init())))
+        roomList.loadingStateListenerReturnValue = .some(.init(state: .notLoaded, stateStream: TaskHandleSDKMock()))
         roomSummaryProvider.setRoomList(roomList)
     }
 }

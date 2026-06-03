@@ -8,6 +8,7 @@
 
 import Combine
 import MatrixRustSDK
+import MatrixRustSDKMocks
 import SwiftUI
 import UIKit
 
@@ -876,7 +877,7 @@ class MockScreen: Identifiable {
         
         timelineProxy.buildMessageContentForHtmlIntentionalMentionsClosure = { text, _, _ in
             pendingEditText = text
-            return RoomMessageEventContentWithoutRelation(noHandle: .init())
+            return RoomMessageEventContentWithoutRelationSDKMock()
         }
         
         timelineProxy.editNewContentClosure = { [weak itemProvider] _, _ in

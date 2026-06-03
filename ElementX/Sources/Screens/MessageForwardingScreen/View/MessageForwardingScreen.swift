@@ -7,6 +7,7 @@
 //
 
 import Compound
+import MatrixRustSDKMocks
 import SwiftUI
 
 struct MessageForwardingScreen: View {
@@ -97,7 +98,7 @@ struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
         let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         let viewModel = MessageForwardingScreenViewModel(forwardingItem: .init(id: .randomEvent,
                                                                                roomID: "",
-                                                                               content: .init(noHandle: .init())),
+                                                                               content: RoomMessageEventContentWithoutRelationSDKMock()),
                                                          userSession: UserSessionMock(.init()),
                                                          roomSummaryProvider: summaryProvider,
                                                          userIndicatorController: UserIndicatorControllerMock())

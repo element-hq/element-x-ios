@@ -8,6 +8,7 @@
 
 import Foundation
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
@@ -204,7 +205,7 @@ struct SendHandleProxy: Hashable {
     static var mock: SendHandleProxy {
         .init(itemID: .event(uniqueID: .init(UUID().uuidString),
                              eventOrTransactionID: .eventID(UUID().uuidString)),
-              underlyingHandle: .init(noHandle: .init()))
+              underlyingHandle: SendHandleSDKMock())
     }
 }
 

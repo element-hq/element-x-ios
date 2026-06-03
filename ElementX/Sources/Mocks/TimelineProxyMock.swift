@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 extension TimelineProxyMock {
     struct Configuration {
@@ -24,7 +25,7 @@ extension TimelineProxyMock {
         sendMessageEventContentReturnValue = .success(())
         sendMessageHtmlInReplyToEventIDIntentionalMentionsReturnValue = .success(())
         editNewContentReturnValue = .success(())
-        buildMessageContentForHtmlIntentionalMentionsReturnValue = RoomMessageEventContentWithoutRelation(noHandle: .init())
+        buildMessageContentForHtmlIntentionalMentionsReturnValue = RoomMessageEventContentWithoutRelationSDKMock()
         paginateBackwardsRequestSizeReturnValue = .success(())
         paginateForwardsRequestSizeReturnValue = .success(())
         sendReadReceiptForTypeReturnValue = .success(())

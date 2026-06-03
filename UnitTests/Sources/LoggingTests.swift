@@ -9,6 +9,7 @@
 @testable import ElementX
 import Foundation
 @testable import MatrixRustSDK
+import MatrixRustSDKMocks
 import Testing
 
 final class LoggingTests {
@@ -72,7 +73,7 @@ final class LoggingTests {
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
         let heroName = "Pseudonym"
-        let roomSummary = RoomSummary(room: .init(noHandle: .init()),
+        let roomSummary = RoomSummary(room: RoomSDKMock(),
                                       id: "myroomid",
                                       joinRequestType: nil,
                                       name: roomName,
@@ -223,19 +224,19 @@ final class LoggingTests {
         let rustImageMessage = ImageMessageContent(filename: "ImageString",
                                                    caption: "ImageString",
                                                    formattedCaption: nil,
-                                                   source: MediaSource(noHandle: .init()),
+                                                   source: MediaSourceSDKMock(),
                                                    info: nil)
         
         let rustVideoMessage = VideoMessageContent(filename: "VideoString",
                                                    caption: "VideoString",
                                                    formattedCaption: nil,
-                                                   source: MediaSource(noHandle: .init()),
+                                                   source: MediaSourceSDKMock(),
                                                    info: nil)
         
         let rustFileMessage = FileMessageContent(filename: "FileString",
                                                  caption: "FileString",
                                                  formattedCaption: nil,
-                                                 source: MediaSource(noHandle: .init()),
+                                                 source: MediaSourceSDKMock(),
                                                  info: nil)
         
         // When logging that value

@@ -11,6 +11,7 @@
 import Combine
 import Foundation
 import MatrixRustSDK
+import MatrixRustSDKMocks
 
 struct TimelineControllerMockConfiguration {
     var roomProxy: JoinedRoomProxyProtocol?
@@ -204,7 +205,7 @@ extension TimelineControllerMock {
             return .success(())
         }
         
-        messageEventContentForReturnValue = .init(noHandle: .init())
+        messageEventContentForReturnValue = RoomMessageEventContentWithoutRelationSDKMock()
         debugInfoForReturnValue = .init(model: "Mock debug description", originalJSON: nil, latestEditJSON: nil)
         
         eventTimestampForClosure = { [timelineItemsTimestamps] itemID in
