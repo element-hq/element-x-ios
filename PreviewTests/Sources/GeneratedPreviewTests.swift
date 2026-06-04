@@ -215,13 +215,6 @@ extension PreviewTests {
     }
 
     @Test
-    func elementTextFieldStyle() async throws {
-        for (index, preview) in ElementTextFieldStyle_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func emojiPickerScreenHeaderView() async throws {
         for (index, preview) in EmojiPickerScreenHeaderView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

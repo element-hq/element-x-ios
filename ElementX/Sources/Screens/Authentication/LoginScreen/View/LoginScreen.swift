@@ -71,7 +71,7 @@ struct LoginScreen: View {
                 Text(L10n.commonUsername).foregroundColor(.compound.textSecondary)
             }
             .focused($isUsernameFocused)
-            .textFieldStyle(.element(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
+            .textFieldStyle(.compound(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
             .disableAutocorrection(true)
             .textContentType(.username)
             .autocapitalization(.none)
@@ -86,7 +86,7 @@ struct LoginScreen: View {
                 Text(L10n.commonPassword).foregroundColor(.compound.textSecondary)
             }
             .focused($isPasswordFocused)
-            .textFieldStyle(.element(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
+            .textFieldStyle(.compound(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
             .textContentType(.password)
             .submitLabel(.done)
             .onSubmit(submit)

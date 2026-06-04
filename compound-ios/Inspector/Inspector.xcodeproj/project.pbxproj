@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		70AC7B23011C802F750E470E /* Pods_Compound_Inspector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2E28F45EEA9A8DE6AFB10E9 /* Pods_Compound_Inspector.framework */; };
+		9103C90F2FD1D82E00679A14 /* TextFieldsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917F563028256DDC00D19543 /* TextFieldsScreen.swift */; };
 		912974102A864F5E004BEA88 /* ListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9129740F2A864F5E004BEA88 /* ListScreen.swift */; };
 		912EA03C2EF18F1F006485DF /* TitleAndIconScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912EA03B2EF18F1D006485DF /* TitleAndIconScreen.swift */; };
 		9132C62D2A72708400EAEF3D /* ActionSheetScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9132C62C2A72708400EAEF3D /* ActionSheetScreen.swift */; };
@@ -321,6 +322,7 @@
 				9132C6312A7280A500EAEF3D /* ContextMenuScreen.swift in Sources */,
 				9132C62F2A72785500EAEF3D /* AlertScreen.swift in Sources */,
 				91CA00362AD7D83200121E0F /* ButtonsScreen.swift in Sources */,
+				9103C90F2FD1D82E00679A14 /* TextFieldsScreen.swift in Sources */,
 				91B2EA9C28CA064800A90A83 /* ColorsScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
