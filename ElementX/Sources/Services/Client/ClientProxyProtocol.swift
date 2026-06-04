@@ -169,7 +169,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError>
     
-    func startSync()
+    func startSync() async
     
     func stopSync()
     
