@@ -389,7 +389,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func startSync() {
+    func startSync() async {
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")
             return
@@ -400,23 +400,21 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        MXLog.info("Starting sync")
-        
-        Task {
-            if appSettings.clientPausingAndResumingEnabled {
-                do {
-                    try await client.resume()
-                } catch {
-                    MXLog.error("Failed resuming client with error: \(error)")
-                }
+        if appSettings.clientPausingAndResumingEnabled {
+            do {
+                MXLog.info("Resuming client")
+                try await client.resume()
+            } catch {
+                MXLog.error("Failed resuming client with error: \(error)")
             }
-            
-            await syncService.start()
-            
-            // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
-            // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
-            await cacheAccountURL()
         }
+        
+        MXLog.info("Starting sync")
+        await syncService.start()
+        
+        // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
+        // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
+        await cacheAccountURL()
     }
     
     /// A stored task for restarting the sync after a failure. This is stored so that we can cancel
@@ -432,7 +430,7 @@ class ClientProxy: ClientProxyProtocol {
                 // Until the SDK can tell us the failure, we add a small
                 // delay to avoid generating multi-gigabyte log files.
                 try await Task.sleep(for: .milliseconds(250))
-                self?.startSync()
+                await self?.startSync()
             } catch {
                 MXLog.error("Restart cancelled.")
             }
@@ -445,8 +443,6 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func stopSync(completion: (() -> Void)?) {
-        MXLog.info("Stopping sync")
-        
         if restartTask != nil {
             MXLog.warning("Removing the sync service restart task.")
             restartTask = nil
@@ -461,17 +457,18 @@ class ClientProxy: ClientProxyProtocol {
                 completion?()
             }
             
+            MXLog.info("Stopping sync")
             await syncService.stop()
+            MXLog.info("Sync stopped")
             
             if appSettings.clientPausingAndResumingEnabled {
                 do {
+                    MXLog.info("Pausing client")
                     try await client.pause()
                 } catch {
                     MXLog.error("Failed pausing client with error: \(error)")
                 }
             }
-            
-            MXLog.info("Sync stopped")
         }
     }
     
@@ -1032,7 +1029,9 @@ class ClientProxy: ClientProxyProtocol {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] reachability in
                 if reachability == .reachable {
-                    self?.startSync()
+                    Task {
+                        await self?.startSync()
+                    }
                 }
             }
             .store(in: &cancellables)

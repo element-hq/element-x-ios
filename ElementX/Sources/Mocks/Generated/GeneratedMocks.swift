@@ -2462,11 +2462,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var startSyncCalled: Bool {
         return startSyncCallsCount > 0
     }
-    var startSyncClosure: (() -> Void)?
+    var startSyncClosure: (() async -> Void)?
 
-    func startSync() {
+    func startSync() async {
         startSyncCallsCountLock.withLock { startSyncUnderlyingCallsCount += 1 }
-        startSyncClosure?()
+        await startSyncClosure?()
     }
     //MARK: - stopSync
 

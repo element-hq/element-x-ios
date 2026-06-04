@@ -41,8 +41,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 configureElementCallService()
                 configureNotificationManager()
                 observeUserSessionChanges()
-                startSync()
-                Task { await appHooks.configure(with: userSession) }
+                Task {
+                    await startSync()
+                    await appHooks.configure(with: userSession)
+                }
             }
         }
     }
@@ -185,8 +187,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
                     // the UIApplication states don't change and syncing is neither started nor ran on
                     // a background task. Handle both manually here.
-                    self?.startSync()
-                    self?.scheduleDelayedSyncStop()
+                    Task {
+                        await self?.startSync()
+                        self?.scheduleDelayedSyncStop()
+                    }
                 default:
                     break
                 }
@@ -1072,12 +1076,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private func startSync() {
+    private func startSync() async {
         guard let userSession else { return }
         
         analyticsService.signpost.startTransaction(.upToDateRoomList)
         
-        userSession.clientProxy.startSync()
+        await userSession.clientProxy.startSync()
         
         guard clientProxyObserver == nil else {
             return
@@ -1180,7 +1184,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func applicationWillEnterForeground() {
         MXLog.info("Application will enter foreground")
         endActiveBackgroundTask()
-        startSync()
+        Task {
+            await startSync()
+        }
     }
     
     @objc
@@ -1207,7 +1213,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 return
             }
             
-            self?.handleBackgroundAppRefresh(task)
+            Task {
+                await self?.handleBackgroundAppRefresh(task)
+            }
         }
         
         MXLog.info("Register background app refresh with result: \(result)")
@@ -1228,7 +1236,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private var backgroundRefreshSyncObserver: AnyCancellable?
-    private func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) {
+    private func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) async {
         MXLog.info("Started background app refresh")
         
         // This is important for the app to keep refreshing in the background
@@ -1255,7 +1263,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        startSync()
+        await startSync()
         
         // Be a good citizen, run for a max of 10 SS responses or 10 seconds
         // An SS request will time out after 30 seconds if no new data is available
