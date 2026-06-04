@@ -169,11 +169,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError>
     
-    func startSync() async
+    func resumeServices() async
     
-    func stopSync()
-    
-    func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
+    func pauseServices(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
     
     func expireSyncSessions() async
     

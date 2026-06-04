@@ -42,7 +42,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 configureNotificationManager()
                 observeUserSessionChanges()
                 Task {
-                    await startSync()
+                    await resumeServices()
                     await appHooks.configure(with: userSession)
                 }
             }
@@ -185,11 +185,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     self?.handleAppRoute(.call(roomID: roomID, isVoiceCall: isVoiceCall), windowType: nil)
                 case .receivedIncomingCallRequest:
                     // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
-                    // the UIApplication states don't change and syncing is neither started nor ran on
+                    // the UIApplication states don't change and services are neither started nor ran on
                     // a background task. Handle both manually here.
                     Task {
-                        await self?.startSync()
-                        self?.scheduleDelayedSyncStop()
+                        await self?.resumeServices()
+                        self?.scheduleDelayedPauseServices()
                     }
                 default:
                     break
@@ -813,7 +813,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         showLoadingIndicator()
         
-        stopSync(isBackgroundTask: false)
+        pauseServices(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
@@ -943,7 +943,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
         
-        stopSync(isBackgroundTask: false)
+        pauseServices(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
         
         // Allow for everything to deallocate properly
@@ -1064,24 +1064,24 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: - Application State
     
-    private func stopSync(isBackgroundTask: Bool, completion: (() -> Void)? = nil) {
+    private func pauseServices(isBackgroundTask: Bool, completion: (() -> Void)? = nil) {
         if isBackgroundTask, UIApplication.shared.applicationState == .active {
-            // Attempt to stop the background task sync loop cleanly, only if the app not already running
+            // Attempt to pause the background task services cleanly, only if the app not already running
             return
         }
         
         MainActor.assumeIsolated {
-            userSession?.clientProxy.stopSync(completion: completion)
+            userSession?.clientProxy.pauseServices(completion: completion)
             clientProxyObserver = nil
         }
     }
     
-    private func startSync() async {
+    private func resumeServices() async {
         guard let userSession else { return }
         
         analyticsService.signpost.startTransaction(.upToDateRoomList)
         
-        await userSession.clientProxy.startSync()
+        await userSession.clientProxy.resumeServices()
         
         guard clientProxyObserver == nil else {
             return
@@ -1147,14 +1147,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @objc
     private func applicationWillTerminate() {
         MXLog.info("Application will terminate")
-        stopSync(isBackgroundTask: false)
+        pauseServices(isBackgroundTask: false)
     }
     
     @objc
     private func applicationDidEnterBackground() {
         MXLog.info("Application did enter background")
         
-        scheduleDelayedSyncStop()
+        scheduleDelayedPauseServices()
         scheduleBackgroundAppRefresh()
     }
     
@@ -1163,7 +1163,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("Application will resign active")
     }
     
-    private func scheduleDelayedSyncStop() {
+    private func scheduleDelayedPauseServices() {
         guard backgroundTask == nil else {
             return
         }
@@ -1174,7 +1174,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             // We're intentionally strongly retaining self here to an EXC_BAD_ACCESS
             // `backgroundTask` will be eventually released in `endActiveBackgroundTask`
             // https://sentry.tools.element.io/organizations/element/issues/4477794/events/9cfd04e4d045440f87498809cf718de5/
-            self.stopSync(isBackgroundTask: true) {
+            self.pauseServices(isBackgroundTask: true) {
                 self.endActiveBackgroundTask()
             }
         }
@@ -1185,7 +1185,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("Application will enter foreground")
         endActiveBackgroundTask()
         Task {
-            await startSync()
+            await resumeServices()
         }
     }
     
@@ -1242,17 +1242,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()
         
-        // We have a lot of crashes stemming here which we previously believed are caused by stopSync not being async
+        // We have a lot of crashes stemming here which we previously believed are caused by pauseServices not being async
         // on the client proxy side (see the comment on that method). We have now realised that will likely not fix anything but
         // we also noticed this does not crash on the main thread, even though the whole AppCoordinator is on the Main actor.
         // As such, we introduced a MainActor conformance on the expirationHandler but we are also assuming main actor
-        // isolated in the `stopSync` method above.
+        // isolated in the `pauseServices` method above.
         // https://sentry.tools.element.io/organizations/element/issues/4477794/
         task.expirationHandler = { @Sendable [weak self] in
             MXLog.info("Background app refresh task is about to expire.")
             
             Task { @MainActor in
-                self?.stopSync(isBackgroundTask: true) {
+                self?.pauseServices(isBackgroundTask: true) {
                     MXLog.info("Marking Background app refresh task as complete.")
                     task.setTaskCompleted(success: true)
                 }
@@ -1263,7 +1263,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        await startSync()
+        await resumeServices()
         
         // Be a good citizen, run for a max of 10 SS responses or 10 seconds
         // An SS request will time out after 30 seconds if no new data is available
@@ -1278,7 +1278,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 
                 // Make sure we stop the sync loop, otherwise the ongoing request is immediately
                 // handled the next time the app refreshes, which can trigger timeout failures.
-                stopSync(isBackgroundTask: true) {
+                pauseServices(isBackgroundTask: true) {
                     MXLog.info("Marking Background app refresh task as complete.")
                     task.setTaskCompleted(success: true)
                 }

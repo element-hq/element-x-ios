@@ -154,7 +154,7 @@ class ClientProxy: ClientProxyProtocol {
     private var hasEncounteredAuthError = false
     
     deinit {
-        stopSync { [delegateHandle] in
+        pauseServices { [delegateHandle] in
             // The delegate handle needs to be cancelled always after the sync stops
             delegateHandle?.cancel()
         }
@@ -389,7 +389,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func startSync() async {
+    func resumeServices() async {
+        MXLog.info("Resuming services")
+        
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")
             return
@@ -418,11 +420,11 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     /// A stored task for restarting the sync after a failure. This is stored so that we can cancel
-    /// it when `stopSync` is called (e.g. when signing out) to prevent an otherwise infinite
+    /// it when `pauseServices` is called (e.g. when signing out) to prevent an otherwise infinite
     /// loop that was triggered by trying to sync a signed out session.
     @CancellableTask private var restartTask: Task<Void, Never>?
     
-    func restartSync() {
+    private func restartServices() {
         guard restartTask == nil else { return }
         
         restartTask = Task { [weak self] in
@@ -430,7 +432,7 @@ class ClientProxy: ClientProxyProtocol {
                 // Until the SDK can tell us the failure, we add a small
                 // delay to avoid generating multi-gigabyte log files.
                 try await Task.sleep(for: .milliseconds(250))
-                await self?.startSync()
+                await self?.resumeServices()
             } catch {
                 MXLog.error("Restart cancelled.")
             }
@@ -438,13 +440,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func stopSync() {
-        stopSync(completion: nil)
-    }
-    
-    func stopSync(completion: (() -> Void)?) {
+    func pauseServices(completion: (() -> Void)?) {
+        MXLog.info("Pausing services")
+        
         if restartTask != nil {
-            MXLog.warning("Removing the sync service restart task.")
             restartTask = nil
         }
         
@@ -1030,7 +1029,7 @@ class ClientProxy: ClientProxyProtocol {
             .sink { [weak self] reachability in
                 if reachability == .reachable {
                     Task {
-                        await self?.startSync()
+                        await self?.resumeServices()
                     }
                 }
             }
@@ -1147,7 +1146,7 @@ class ClientProxy: ClientProxyProtocol {
             case .offline:
                 homeserverReachabilitySubject.send(.unreachable)
             case .error:
-                restartSync()
+                restartServices()
             }
         })
     }
