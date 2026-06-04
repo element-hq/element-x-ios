@@ -327,7 +327,11 @@ private struct ImageEditorView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> CropViewController {
         let image = UIImage(contentsOfFile: imageURL.path) ?? UIImage()
         
-        let cropViewController = Mantis.cropViewController(image: image)
+        var config = Mantis.Config()
+        let toolbarOptions: ToolbarButtonOptions = [.default, .horizontallyFlip, .verticallyFlip]
+        config.cropToolbarConfig.toolbarButtonOptions = toolbarOptions
+        
+        let cropViewController = Mantis.cropViewController(image: image, config: config)
         cropViewController.delegate = context.coordinator
         return cropViewController
     }
