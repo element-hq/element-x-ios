@@ -2451,56 +2451,39 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return hasDevicesToVerifyAgainstReturnValue
         }
     }
-    //MARK: - startSync
+    //MARK: - resumeServices
 
-    private let startSyncCallsCountLock = NSLock()
-    private var startSyncUnderlyingCallsCount = 0
-    var startSyncCallsCount: Int {
-        get { startSyncCallsCountLock.withLock { startSyncUnderlyingCallsCount } }
-        set { startSyncCallsCountLock.withLock { startSyncUnderlyingCallsCount = newValue } }
+    private let resumeServicesCallsCountLock = NSLock()
+    private var resumeServicesUnderlyingCallsCount = 0
+    var resumeServicesCallsCount: Int {
+        get { resumeServicesCallsCountLock.withLock { resumeServicesUnderlyingCallsCount } }
+        set { resumeServicesCallsCountLock.withLock { resumeServicesUnderlyingCallsCount = newValue } }
     }
-    var startSyncCalled: Bool {
-        return startSyncCallsCount > 0
+    var resumeServicesCalled: Bool {
+        return resumeServicesCallsCount > 0
     }
-    var startSyncClosure: (() async -> Void)?
+    var resumeServicesClosure: (() async -> Void)?
 
-    func startSync() async {
-        startSyncCallsCountLock.withLock { startSyncUnderlyingCallsCount += 1 }
-        await startSyncClosure?()
+    func resumeServices() async {
+        resumeServicesCallsCountLock.withLock { resumeServicesUnderlyingCallsCount += 1 }
+        await resumeServicesClosure?()
     }
-    //MARK: - stopSync
+    //MARK: - pauseServices
 
-    private let stopSyncCallsCountLock = NSLock()
-    private var stopSyncUnderlyingCallsCount = 0
-    var stopSyncCallsCount: Int {
-        get { stopSyncCallsCountLock.withLock { stopSyncUnderlyingCallsCount } }
-        set { stopSyncCallsCountLock.withLock { stopSyncUnderlyingCallsCount = newValue } }
+    private let pauseServicesCompletionCallsCountLock = NSLock()
+    private var pauseServicesCompletionUnderlyingCallsCount = 0
+    var pauseServicesCompletionCallsCount: Int {
+        get { pauseServicesCompletionCallsCountLock.withLock { pauseServicesCompletionUnderlyingCallsCount } }
+        set { pauseServicesCompletionCallsCountLock.withLock { pauseServicesCompletionUnderlyingCallsCount = newValue } }
     }
-    var stopSyncCalled: Bool {
-        return stopSyncCallsCount > 0
+    var pauseServicesCompletionCalled: Bool {
+        return pauseServicesCompletionCallsCount > 0
     }
-    var stopSyncClosure: (() -> Void)?
+    var pauseServicesCompletionClosure: (((() -> Void)?) -> Void)?
 
-    func stopSync() {
-        stopSyncCallsCountLock.withLock { stopSyncUnderlyingCallsCount += 1 }
-        stopSyncClosure?()
-    }
-    //MARK: - stopSync
-
-    private let stopSyncCompletionCallsCountLock = NSLock()
-    private var stopSyncCompletionUnderlyingCallsCount = 0
-    var stopSyncCompletionCallsCount: Int {
-        get { stopSyncCompletionCallsCountLock.withLock { stopSyncCompletionUnderlyingCallsCount } }
-        set { stopSyncCompletionCallsCountLock.withLock { stopSyncCompletionUnderlyingCallsCount = newValue } }
-    }
-    var stopSyncCompletionCalled: Bool {
-        return stopSyncCompletionCallsCount > 0
-    }
-    var stopSyncCompletionClosure: (((() -> Void)?) -> Void)?
-
-    func stopSync(completion: (() -> Void)?) {
-        stopSyncCompletionCallsCountLock.withLock { stopSyncCompletionUnderlyingCallsCount += 1 }
-        stopSyncCompletionClosure?(completion)
+    func pauseServices(completion: (() -> Void)?) {
+        pauseServicesCompletionCallsCountLock.withLock { pauseServicesCompletionUnderlyingCallsCount += 1 }
+        pauseServicesCompletionClosure?(completion)
     }
     //MARK: - expireSyncSessions
 
