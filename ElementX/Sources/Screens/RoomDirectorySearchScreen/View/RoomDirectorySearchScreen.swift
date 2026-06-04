@@ -42,10 +42,7 @@ struct RoomDirectorySearchScreen: View {
                     .listRowSeparator(.hidden)
                 }
             }
-            .listStyle(.plain)
-            .environment(\.defaultMinListRowHeight, 48)
-            .scrollContentBackground(.hidden)
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .compoundList(.plain)
             .isSearching($context.isSearching)
             .searchable(text: $context.searchString, placement: .navigationBarDrawer(displayMode: .always))
             .navigationTitle(L10n.screenRoomDirectorySearchTitle)
