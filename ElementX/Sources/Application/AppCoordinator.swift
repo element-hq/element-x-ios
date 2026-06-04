@@ -42,7 +42,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 configureNotificationManager()
                 observeUserSessionChanges()
                 Task {
-                    await resumeServices()
+                    await resumeClientServices()
                     await appHooks.configure(with: userSession)
                 }
             }
@@ -188,7 +188,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     // the UIApplication states don't change and services are neither started nor ran on
                     // a background task. Handle both manually here.
                     Task {
-                        await self?.resumeServices()
+                        await self?.resumeClientServices()
                         self?.scheduleDelayedPauseServices()
                     }
                 default:
@@ -253,7 +253,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func asyncHandleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) async {
         MXLog.info("Handling app route:  \(appRoute)")
         
-        await resumeServices()
+        await resumeClientServices()
         
         if let windowType {
             windowManager.handleRoute(appRoute, windowType: windowType)
@@ -821,7 +821,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         showLoadingIndicator()
         
-        pauseServices(isBackgroundTask: false)
+        pauseClientServices(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
@@ -951,7 +951,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
         
-        pauseServices(isBackgroundTask: false)
+        pauseClientServices(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
         
         // Allow for everything to deallocate properly
@@ -1072,7 +1072,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: - Application State
     
-    private func pauseServices(isBackgroundTask: Bool, completion: (() -> Void)? = nil) {
+    private func pauseClientServices(isBackgroundTask: Bool, completion: (() -> Void)? = nil) {
         if isBackgroundTask, UIApplication.shared.applicationState == .active {
             // Attempt to pause the background task services cleanly, only if the app not already running
             return
@@ -1084,7 +1084,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private func resumeServices() async {
+    private func resumeClientServices() async {
         guard let userSession else { return }
         
         analyticsService.signpost.startTransaction(.upToDateRoomList)
@@ -1155,7 +1155,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @objc
     private func applicationWillTerminate() {
         MXLog.info("Application will terminate")
-        pauseServices(isBackgroundTask: false)
+        pauseClientServices(isBackgroundTask: false)
     }
     
     @objc
@@ -1182,7 +1182,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             // We're intentionally strongly retaining self here to an EXC_BAD_ACCESS
             // `backgroundTask` will be eventually released in `endActiveBackgroundTask`
             // https://sentry.tools.element.io/organizations/element/issues/4477794/events/9cfd04e4d045440f87498809cf718de5/
-            self.pauseServices(isBackgroundTask: true) {
+            self.pauseClientServices(isBackgroundTask: true) {
                 self.endActiveBackgroundTask()
             }
         }
@@ -1193,7 +1193,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("Application will enter foreground")
         endActiveBackgroundTask()
         Task {
-            await resumeServices()
+            await resumeClientServices()
         }
     }
     
@@ -1260,7 +1260,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             MXLog.info("Background app refresh task is about to expire.")
             
             Task { @MainActor in
-                self?.pauseServices(isBackgroundTask: true) {
+                self?.pauseClientServices(isBackgroundTask: true) {
                     MXLog.info("Marking Background app refresh task as complete.")
                     task.setTaskCompleted(success: true)
                 }
@@ -1271,7 +1271,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        await resumeServices()
+        await resumeClientServices()
         
         // Be a good citizen, run for a max of 10 SS responses or 10 seconds
         // An SS request will time out after 30 seconds if no new data is available
@@ -1286,7 +1286,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 
                 // Make sure we stop the sync loop, otherwise the ongoing request is immediately
                 // handled the next time the app refreshes, which can trigger timeout failures.
-                pauseServices(isBackgroundTask: true) {
+                pauseClientServices(isBackgroundTask: true) {
                     MXLog.info("Marking Background app refresh task as complete.")
                     task.setTaskCompleted(success: true)
                 }
