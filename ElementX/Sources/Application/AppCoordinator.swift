@@ -245,7 +245,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
+        Task {
+            await asyncHandleAppRoute(appRoute, windowType: windowType)
+        }
+    }
+    
+    private func asyncHandleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) async {
         MXLog.info("Handling app route:  \(appRoute)")
+        
+        await resumeServices()
         
         if let windowType {
             windowManager.handleRoute(appRoute, windowType: windowType)
