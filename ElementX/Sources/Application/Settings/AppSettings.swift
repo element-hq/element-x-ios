@@ -500,7 +500,7 @@ final class AppSettings: @unchecked Sendable {
         _jumpToReadMarkerEnabled = UserPreference(key: .jumpToReadMarkerEnabled, defaultValue: false, storage: store)
         _linkNewDeviceEnabled = UserPreference(key: .linkNewDeviceEnabled, defaultValue: false, storage: store)
         _automaticBackPaginationEnabled = UserPreference(key: .automaticBackPaginationEnabled, defaultValue: false, storage: store)
-        _clientPausingAndResumingEnabled = UserPreference(key: .clientPausingAndResumingEnabled, defaultValue: false, storage: VolatileUserDefaults())
+        _clientPausingAndResumingEnabled = UserPreference(key: .clientPausingAndResumingEnabled, defaultValue: Self.appBuildType != .release, storage: VolatileUserDefaults())
         _developerOptionsEnabled = UserPreference(key: .developerOptionsEnabled, defaultValue: Self.appBuildType != .release, storage: store)
     }
     
