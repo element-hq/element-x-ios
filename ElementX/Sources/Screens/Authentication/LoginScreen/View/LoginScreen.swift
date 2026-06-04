@@ -61,17 +61,11 @@ struct LoginScreen: View {
     /// The form with text fields for username and password, along with a submit button.
     var loginForm: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(L10n.screenLoginFormHeader)
-                .font(.compound.bodySM)
-                .foregroundColor(.compound.textPrimary)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 8)
-            
             TextField(text: $context.username) {
                 Text(L10n.commonUsername).foregroundColor(.compound.textSecondary)
             }
             .focused($isUsernameFocused)
-            .textFieldStyle(.compound(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
+            .textFieldStyle(.compound(labelText: L10n.screenLoginFormHeader, accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
             .disableAutocorrection(true)
             .textContentType(.username)
             .autocapitalization(.none)
