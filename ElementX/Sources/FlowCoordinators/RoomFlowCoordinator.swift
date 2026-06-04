@@ -1185,6 +1185,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                 roomProxy: roomProxy,
                                                                 timelineController: timelineController,
                                                                 liveLocationManager: flowParameters.userSession.liveLocationManager,
+                                                                appSettings: flowParameters.appSettings,
                                                                 appMediator: flowParameters.appMediator,
                                                                 analytics: flowParameters.analytics,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
