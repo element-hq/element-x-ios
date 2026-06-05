@@ -14,6 +14,12 @@ PRs must meet these rules. Prefer Xcode MCP tools over terminal commands.
 - Follow [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, including Rust SDK wrappers (e.g. `ID` not `Id`, `URL` not `Url`, `configuration` not `config` or `cfg`).
 - File headers defined in `IDETemplateMacros.plist`.
 
+### Comments
+
+- **Code should speak for itself** — documentation comments are fine, but don't add comments restating what clearly written code already says.
+- **Do** comment when the code hides a trap, is hard or convoluted to follow, or a specific choice needs justifying.
+- Keep comments concise — a single line where possible; only exceed it when really necessary.
+
 ### PII & Logging
 
 - Default: `MXLog.info`; unexpected failures: `.error`; noisy dev logs: `.verbose`. `.failure`/`.debug` rarely used.
