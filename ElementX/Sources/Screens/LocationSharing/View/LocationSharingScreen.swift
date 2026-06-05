@@ -97,7 +97,7 @@ struct LocationSharingScreen: View {
                 .tint(.compound.iconPrimary)
                 .padding(13)
         } else {
-            CompoundIcon(context.viewState.isSharingUserLocation ? \.locationNavigatorCentred : \.locationNavigator)
+            CompoundIcon(context.viewState.isMapCenteredOnUser ? \.locationNavigatorCentred : \.locationNavigator)
                 .foregroundStyle(.compound.iconPrimary)
                 .padding(13)
         }

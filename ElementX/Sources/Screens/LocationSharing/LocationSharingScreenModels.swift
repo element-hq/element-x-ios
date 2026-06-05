@@ -80,6 +80,8 @@ struct LocationSharingScreenViewState: BindableState {
     var userProfiles: [String: UserProfileProxy]
     var liveLocationShares: [LiveLocationShare] = []
     var isStoppingLiveLocation = false
+    /// Whether this device has an active live location sharing session in the room.
+    var isSharingLiveLocationOnThisDevice = false
     
     var annotations: [LocationAnnotation] {
         switch interactionMode {
@@ -111,11 +113,30 @@ struct LocationSharingScreenViewState: BindableState {
         userID == ownUserID
     }
     
+    /// Whether the own user has an active live location share in the room, from any of their devices.
+    var isOwnUserSharingLiveLocation: Bool {
+        liveLocationShares.contains { isOwnUser($0.userID) }
+    }
+    
+    /// Whether the own user's live location share in the room originates from this very device,
+    /// requiring both the room's share and this device's sharing session to be active.
+    var isOwnUserSharingLiveLocationOnThisDevice: Bool {
+        isOwnUserSharingLiveLocation && isSharingLiveLocationOnThisDevice
+    }
+    
     var bindings = LocationSharingScreenBindings(showsUserLocationMode: .hide)
     
     /// Indicates whether the user is sharing his current location
     var isSharingUserLocation: Bool {
         bindings.isLocationAuthorized == true && bindings.showsUserLocationMode == .showAndFollow
+    }
+    
+    /// Whether the map is centered on the user, following either their dot or their own live marker.
+    var isMapCenteredOnUser: Bool {
+        if case .hideAndFollowMarker = bindings.showsUserLocationMode {
+            return true
+        }
+        return isSharingUserLocation
     }
     
     var initialMapCenter: CLLocationCoordinate2D {
@@ -141,12 +162,17 @@ struct LocationSharingScreenViewState: BindableState {
         if case .picker = interactionMode {
             // In picker mode permissions are requested immediately so returns true
             // if the user's location has not yet been determined while location permissions are given or not yet set
-            !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized != false
-        } else {
-            // In other modes permissions are requested only if the center to user button is tapped
-            // So we only display the loader if the user's location has not yet been determined while location permissions are given.
-            !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized == true
+            return !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized != false
         }
+        
+        // The dot is hidden in favour of the own user's marker, there is no location to wait for.
+        if case .viewLive = interactionMode, isOwnUserSharingLiveLocationOnThisDevice {
+            return false
+        }
+        
+        // In other modes permissions are requested only if the center to user button is tapped
+        // So we only display the loader if the user's location has not yet been determined while location permissions are given.
+        return !bindings.hasLoadedUserLocation && bindings.isLocationAuthorized == true
     }
     
     var zoomLevel: Double {

@@ -74,7 +74,9 @@ struct MapLibreMapView: UIViewRepresentable {
         }
         
         // If the center coordinate was updated externally (not by the map itself), move the map.
-        if let newCenter = mapCenterCoordinate,
+        // Not applied while following a marker, where the camera is driven by the marker's position.
+        if showsUserLocationMode.followedMarkerID == nil,
+           let newCenter = mapCenterCoordinate,
            newCenter != context.coordinator.lastReportedCenter {
             context.coordinator.lastReportedCenter = newCenter
             mapView.setCenter(newCenter, animated: true)
@@ -86,6 +88,8 @@ struct MapLibreMapView: UIViewRepresentable {
         updateAnnotations(in: mapView)
         
         showUserLocation(in: mapView)
+        
+        context.coordinator.updateMarkerFollowing(in: mapView, markerID: showsUserLocationMode.followedMarkerID)
     }
     
     func makeCoordinator() -> Coordinator {
@@ -162,7 +166,8 @@ struct MapLibreMapView: UIViewRepresentable {
         case (.show, _):
             mapView.showsUserLocation = true
             mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
-        case (.hide, _):
+        case (.hide, _), (.hideAndFollowMarker, _):
+            // In hideAndFollowMarker mode the camera following is handled by the coordinator.
             mapView.showsUserLocation = false
             mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
         }
@@ -182,10 +187,60 @@ extension MapLibreMapView {
         /// so that `updateUIView` can tell apart external binding changes from internal ones.
         var lastReportedCenter: CLLocationCoordinate2D?
         
+        /// The annotation the camera is currently locked on while in the `hideAndFollowMarker` mode.
+        private weak var followedAnnotation: LocationAnnotation?
+        /// Observes the followed annotation's coordinate, updated every frame by the `CoordinateAnimator`.
+        private var followedAnnotationObservation: NSKeyValueObservation?
+        
         // MARK: - Setup
         
         init(_ mapLibreView: MapLibreMapView) {
             self.mapLibreView = mapLibreView
+        }
+        
+        // MARK: - Marker following
+        
+        /// Keeps the camera locked on the marker with the given id, or stops following when nil.
+        func updateMarkerFollowing(in mapView: MLNMapView, markerID: String?) {
+            guard let markerID else {
+                stopFollowingMarker()
+                return
+            }
+            
+            guard let annotation = (mapView.annotations ?? [])
+                .compactMap({ $0 as? LocationAnnotation })
+                .first(where: { $0.id == markerID }) else {
+                // The marker isn't on the map (yet), resolve it again on the next update.
+                stopFollowingMarker()
+                return
+            }
+            
+            guard annotation !== followedAnnotation else { return }
+            startFollowingMarker(annotation, in: mapView)
+        }
+        
+        private func startFollowingMarker(_ annotation: LocationAnnotation, in mapView: MLNMapView) {
+            followedAnnotation = annotation
+            followedAnnotationObservation = nil
+            
+            // Animate to the marker first, attaching the per-frame tracking only on completion
+            // so that it doesn't cancel the transition.
+            mapView.setCenter(annotation.coordinate,
+                              zoomLevel: mapView.zoomLevel,
+                              direction: -1, // negative value keeps the current direction
+                              animated: true) { [weak self, weak annotation, weak mapView] in
+                guard let self, let annotation, let mapView, annotation === followedAnnotation else { return }
+                
+                // Mirror every animated coordinate update to keep the camera as smooth as the marker.
+                followedAnnotationObservation = annotation.observe(\.coordinate) { [weak mapView] annotation, _ in
+                    mapView?.setCenter(annotation.coordinate, animated: false)
+                }
+            }
+        }
+        
+        private func stopFollowingMarker() {
+            followedAnnotation = nil
+            followedAnnotationObservation = nil
         }
         
         // MARK: - MLNMapViewDelegate
@@ -231,6 +286,10 @@ extension MapLibreMapView {
         }
         
         func mapView(_ mapView: MLNMapView, regionDidChangeAnimated animated: Bool) {
+            // While following a marker, don't flood the center binding with per-frame camera updates.
+            // Leaving `lastReportedCenter` untouched avoids an external re-centering when following stops.
+            guard mapLibreView.showsUserLocationMode.followedMarkerID == nil else { return }
+            
             // Avoid `Publishing changes from within view update` warnings
             DispatchQueue.main.async { [mapLibreView, weak self] in
                 let center = mapView.centerCoordinate
@@ -240,22 +299,14 @@ extension MapLibreMapView {
         }
         
         func mapView(_ mapView: MLNMapView, shouldChangeFrom oldCamera: MLNMapCamera, to newCamera: MLNMapCamera, reason: MLNCameraChangeReason) -> Bool {
-            // we send the userDidPan event only for the reasons that actually will change the map center, and not zoom only / rotations only events.
-            switch reason {
-            case .gesturePan,
-                 .gesturePinch,
-                 .gestureRotate:
+            // Send userDidPan only for gestures that actually change the map center. The reason
+            // is an option set and gestures can come combined with other reasons, so check for
+            // containment instead of an exact match.
+            let centerChangingGestures: MLNCameraChangeReason = [.gesturePan, .gesturePinch, .gestureRotate]
+            if !reason.intersection(centerChangingGestures).isEmpty {
+                // Stop following immediately, the camera would fight the gesture otherwise.
+                stopFollowingMarker()
                 mapLibreView.userDidPan?()
-            case .gestureOneFingerZoom,
-                 .gestureTilt,
-                 .gestureZoomIn,
-                 .gestureZoomOut,
-                 .programmatic,
-                 .resetNorth,
-                 .transitionCancelled:
-                break
-            default:
-                break
             }
             return true
         }
