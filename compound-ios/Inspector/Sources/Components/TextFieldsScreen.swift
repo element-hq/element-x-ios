@@ -6,13 +6,13 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import DesignKit
+import Compound
 import SwiftUI
 
 struct TextFieldsScreen: View {
     var body: some View {
         ScreenContent(navigationTitle: "Text Fields") {
-            BorderedInputFieldStyle_Previews.states
+            CompoundTextFieldStyle_Previews.states
         }
     }
 }

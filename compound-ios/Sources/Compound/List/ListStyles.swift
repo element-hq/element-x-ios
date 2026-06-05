@@ -8,12 +8,28 @@
 
 import SwiftUI
 
+public enum CompoundListKind {
+    /// The default style for `List` or `Form`.
+    case inset
+    /// The `.plain` style when using a `List`.
+    case plain
+}
+
 public extension View {
     /// Styles a list using the Compound design tokens.
-    func compoundList() -> some View {
-        environment(\.defaultMinListRowHeight, 48)
-            .scrollContentBackground(.hidden)
-            .background(Color.compound.bgSubtleSecondaryLevel0.ignoresSafeArea())
+    @ViewBuilder
+    func compoundList(_ kind: CompoundListKind = .inset) -> some View {
+        switch kind {
+        case .inset:
+            environment(\.defaultMinListRowHeight, 48)
+                .scrollContentBackground(.hidden)
+                .background(Color.compound.bgSubtleSecondaryLevel0.ignoresSafeArea())
+        case .plain:
+            listStyle(.plain)
+                .environment(\.defaultMinListRowHeight, 48)
+                .scrollContentBackground(.hidden)
+                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        }
     }
     
     /// Styles a list section header using the Compound design tokens.

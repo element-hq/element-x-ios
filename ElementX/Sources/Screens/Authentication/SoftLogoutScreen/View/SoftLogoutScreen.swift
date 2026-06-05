@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct SoftLogoutScreen: View {
@@ -75,7 +76,7 @@ struct SoftLogoutScreen: View {
         VStack(spacing: 14) {
             SecureField(L10n.commonPassword, text: $context.password)
                 .focused($isPasswordFocused)
-                .textFieldStyle(.element())
+                .textFieldStyle(.compound())
                 .textContentType(.password)
                 .submitLabel(.done)
                 .onSubmit(submit)
