@@ -235,7 +235,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentTransferOwnership)
             case .presentRecipientDetails, .presentNotificationSettingsScreen, .presentReportRoomScreen,
                  .presentInviteUsersScreen, .presentInviteToNewRoom, .presentPollsHistory, .presentCall,
-                 .presentPinnedEventsTimeline, .presentMediaEventsTimeline, .presentKnockingRequestsListScreen:
+                 .presentPinnedEventsTimeline, .presentMediaEventsTimeline, .presentKnockingRequestsListScreen,
+                 .presentSupplementaryFlow:
                 fatalError("Not handled in the space context")
             }
         }

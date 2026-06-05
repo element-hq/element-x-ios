@@ -29,6 +29,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case displayKnockingRequests
     case displaySecurityAndPrivacy
     case displayReportRoom
+    case requestSupplementaryFlow(flowID: String)
     case transferOwnership
 }
 
@@ -40,6 +41,7 @@ struct DMRecipientInfo {
 }
 
 struct RoomDetailsScreenViewState: BindableState {
+    let screenHook: RoomDetailsScreenHookProtocol
     var details: RoomDetails
     
     var isEncrypted: Bool
@@ -72,6 +74,8 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var reportRoomEnabled = false
     
+    var hasSecuritySupplementaryRows = false
+    
     var canSeeKnockingRequests: Bool {
         dmRecipientInfo == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
     }
@@ -86,6 +90,10 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var hasTopicSection: Bool {
         topic != nil || canEditRoomTopic
+    }
+    
+    var shouldShowSecuritySection: Bool {
+        isEncrypted || (hasSecuritySupplementaryRows && canEditSecurityAndPrivacy)
     }
     
     var bindings: RoomDetailsScreenViewStateBindings
@@ -234,6 +242,7 @@ enum RoomDetailsScreenViewAction {
     case processTapMediaEvents
     case processTapRequestsToJoin
     case processTapReport
+    case supplementaryFlow(flowID: String)
 }
 
 enum RoomDetailsScreenViewShortcut {

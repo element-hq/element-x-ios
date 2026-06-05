@@ -58,7 +58,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
         
-        let viewState = RoomDetailsScreenViewState(details: roomProxy.details,
+        let viewState = RoomDetailsScreenViewState(screenHook: userSession.userHooks.roomDetailsScreenHook,
+                                                   details: roomProxy.details,
                                                    isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                    isDirect: roomProxy.infoPublisher.value.isDirect,
                                                    topic: topic,
@@ -162,6 +163,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             actionsSubject.send(.requestRecipientDetailsPresentation(userID: userID))
         case .processTapReport:
             actionsSubject.send(.displayReportRoom)
+        case .supplementaryFlow(let flowID):
+            actionsSubject.send(.requestSupplementaryFlow(flowID: flowID))
         }
     }
     

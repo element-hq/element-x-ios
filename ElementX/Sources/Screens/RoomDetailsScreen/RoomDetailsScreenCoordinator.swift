@@ -34,6 +34,7 @@ enum RoomDetailsScreenCoordinatorAction {
     case presentKnockingRequestsListScreen
     case presentSecurityAndPrivacyScreen
     case presentReportRoomScreen
+    case presentSupplementaryFlow(flowID: String)
     case transferOwnership
 }
 
@@ -96,6 +97,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRecipientDetails(userID: userID))
                 case .displayReportRoom:
                     actionsSubject.send(.presentReportRoomScreen)
+                case .requestSupplementaryFlow(let flowID):
+                    actionsSubject.send(.presentSupplementaryFlow(flowID: flowID))
                 case .transferOwnership:
                     actionsSubject.send(.transferOwnership)
                 }
