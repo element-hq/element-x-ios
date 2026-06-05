@@ -51,11 +51,6 @@ extension NSItemProvider {
             return nil
         }
         
-        guard let pngData = uiImage.pngData() else {
-            MXLog.error("Failed extracting PNG data out of the UIImage")
-            return nil
-        }
-        
         let filename = if let suggestedName = suggestedName as NSString?,
                           // Suggestions are nice but their extension is `jpeg`
                           let filename = (suggestedName.deletingPathExtension as NSString).appendingPathExtension(contentType.fileExtension) {
@@ -64,14 +59,10 @@ extension NSItemProvider {
             "\(UUID().uuidString).\(contentType.fileExtension)"
         }
         
-        do {
-            return try FileManager.default.writeDataToTemporaryDirectory(data: pngData,
-                                                                         fileName: filename,
-                                                                         withinAppGroupContainer: withinAppGroupContainer)
-        } catch {
-            MXLog.error("Failed storing NSItemProvider data \(self) with error: \(error)")
-            return nil
-        }
+        return await Self.writePNGData(of: uiImage,
+                                       filename: filename,
+                                       withinAppGroupContainer: withinAppGroupContainer,
+                                       providerDescription: description)
     }
     
     private func generateURLForGenericData(_ contentType: PreferredContentType, withinAppGroupContainer: Bool) async -> URL? {
@@ -108,12 +99,39 @@ extension NSItemProvider {
             "\(UUID().uuidString).\(contentType.fileExtension)"
         }
         
+        return await Self.writeData(shareData,
+                                    filename: filename,
+                                    withinAppGroupContainer: withinAppGroupContainer,
+                                    providerDescription: providerDescription)
+    }
+    
+    // The next 2 methods are static as NSItemProvider isn't Sendable.
+    
+    @concurrent private static func writePNGData(of image: UIImage,
+                                                 filename: String,
+                                                 withinAppGroupContainer: Bool,
+                                                 providerDescription: String) async -> URL? {
+        guard let pngData = image.pngData() else {
+            MXLog.error("Failed extracting PNG data out of the UIImage")
+            return nil
+        }
+        
+        return await writeData(pngData,
+                               filename: filename,
+                               withinAppGroupContainer: withinAppGroupContainer,
+                               providerDescription: providerDescription)
+    }
+    
+    @concurrent private static func writeData(_ data: Data,
+                                              filename: String,
+                                              withinAppGroupContainer: Bool,
+                                              providerDescription: String) async -> URL? {
         do {
-            return try FileManager.default.writeDataToTemporaryDirectory(data: shareData,
+            return try FileManager.default.writeDataToTemporaryDirectory(data: data,
                                                                          fileName: filename,
                                                                          withinAppGroupContainer: withinAppGroupContainer)
         } catch {
-            MXLog.error("Failed storing NSItemProvider data \(self) with error: \(error)")
+            MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
             return nil
         }
     }
