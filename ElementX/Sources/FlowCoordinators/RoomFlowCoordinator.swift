@@ -94,6 +94,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
+    // periphery:ignore - retaining purpose
+    private var supplementaryFlowCoordinator: RoomSupplementaryFlowCoordinatorProtocol?
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
     
@@ -494,6 +496,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.roomDetails, .presentReportRoomScreen, .reportRoom):
                 presentReportRoom()
+                
+            case (.roomDetails, .startSupplementaryFlow(let flowID), .supplementaryFlow):
+                startSupplementaryFlow(flowID: flowID)
+            case (.supplementaryFlow, .stopSupplementaryFlow, _):
+                supplementaryFlowCoordinator = nil
                 
             // Join room
                 
@@ -975,6 +982,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
             case .presentReportRoomScreen:
                 stateMachine.tryEvent(.presentReportRoomScreen)
+            case .presentSupplementaryFlow(let flowID):
+                stateMachine.tryEvent(.startSupplementaryFlow(flowID: flowID))
             case .transferOwnership:
                 stateMachine.tryEvent(.presentTransferOwnershipScreen)
             }
@@ -1430,6 +1439,25 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissSecurityAndPrivacyScreen)
         }
+    }
+    
+    private func startSupplementaryFlow(flowID: String) {
+        let hook = userSession.userHooks.roomFlowCoordinatorHook
+        guard let flowCoordinator = hook.startSupplementaryFlow(flowID: flowID, navigationStackCoordinator: navigationStackCoordinator) else {
+            fatalError("Unhandled supplementary flow \(flowID)")
+        }
+        
+        flowCoordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .finished:
+                stateMachine.tryEvent(.stopSupplementaryFlow)
+            }
+        }
+        .store(in: &cancellables)
+        
+        flowCoordinator.start(animated: true)
+        supplementaryFlowCoordinator = flowCoordinator
     }
     
     private func presentManageAuthorizedSpacesScreen(selection: AuthorizedSpacesSelection) {

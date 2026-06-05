@@ -5,14 +5,19 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import SwiftUI
 
 nonisolated protocol RoomDetailsScreenHookProtocol: Sendable {
     @MainActor func update(_ viewState: RoomDetailsScreenViewState) -> RoomDetailsScreenViewState
+    @MainActor func supplementarySecurityRows(action: @escaping (_ flowID: String) -> Void) -> AnyView
 }
 
 struct DefaultRoomDetailsScreenHook: RoomDetailsScreenHookProtocol {
     func update(_ viewState: RoomDetailsScreenViewState) -> RoomDetailsScreenViewState {
         viewState
+    }
+    
+    func supplementarySecurityRows(action: @escaping (_ flowID: String) -> Void) -> AnyView {
+        AnyView(EmptyView())
     }
 }

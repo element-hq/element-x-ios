@@ -283,13 +283,21 @@ struct RoomDetailsScreen: View {
     
     @ViewBuilder
     private var securitySection: some View {
-        if context.viewState.isEncrypted {
+        if context.viewState.shouldShowSecuritySection {
             Section {
-                ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
-                                        description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                        icon: \.lock),
-                        kind: .label)
-                    .accessibilityAddTraits(.isHeader)
+                if context.viewState.isEncrypted {
+                    ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
+                                            description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
+                                            icon: \.lock),
+                            kind: .label)
+                        .accessibilityAddTraits(.isHeader)
+                }
+                
+                if context.viewState.canEditSecurityAndPrivacy {
+                    context.viewState.screenHook.supplementarySecurityRows { flowID in
+                        context.send(viewAction: .supplementaryFlow(flowID: flowID))
+                    }
+                }
             } header: {
                 Text(L10n.commonSecurity)
                     .compoundListSectionHeader()
