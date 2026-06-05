@@ -282,13 +282,24 @@ struct RoomDetailsScreen: View {
     
     @ViewBuilder
     private var securitySection: some View {
-        if context.viewState.isEncrypted {
+        if context.viewState.shouldShowSecuritySection {
             Section {
-                ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
-                                        description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                        icon: \.lock),
-                        kind: .label)
-                    .accessibilityAddTraits(.isHeader)
+                if context.viewState.isEncrypted {
+                    ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
+                                            description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
+                                            icon: \.lock),
+                            kind: .label)
+                        .accessibilityAddTraits(.isHeader)
+                }
+                
+                if context.viewState.canEditSecurityAndPrivacy {
+                    ListRow(label: .default(title: "Message expiration",
+                                            description: "Set how long messages are kept before they are automatically deleted",
+                                            icon: \.time),
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapMessageRetention)
+                            })
+                }
             } header: {
                 Text(L10n.commonSecurity)
                     .compoundListSectionHeader()

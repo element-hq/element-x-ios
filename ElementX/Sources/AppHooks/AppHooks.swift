@@ -69,6 +69,15 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _developerOptionsScreenHook.withLock { $0 = hook }
     }
     
+    private let _messageRetentionScreenHook: Mutex<MessageRetentionScreenHookProtocol> = Mutex(DefaultMessageRetentionScreenHook())
+    var messageRetentionScreenHook: MessageRetentionScreenHookProtocol {
+        _messageRetentionScreenHook.withLock { $0 }
+    }
+    
+    func registerMessageRetentionScreenHook(_ hook: MessageRetentionScreenHookProtocol) {
+        _messageRetentionScreenHook.withLock { $0 = hook }
+    }
+    
     private let _recoveryKeyScreenHook: Mutex<RecoveryKeyScreenHookProtocol> = Mutex(DefaultRecoveryKeyScreenHook())
     var recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol {
         _recoveryKeyScreenHook.withLock { $0 }

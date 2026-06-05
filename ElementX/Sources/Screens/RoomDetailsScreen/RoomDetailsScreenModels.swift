@@ -29,6 +29,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case displayKnockingRequests
     case displaySecurityAndPrivacy
     case displayReportRoom
+    case displayMessageRetentionSettings
     case transferOwnership
 }
 
@@ -84,6 +85,10 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var hasTopicSection: Bool {
         topic != nil || canEditRoomTopic
+    }
+    
+    var shouldShowSecuritySection: Bool {
+        isEncrypted || canEditSecurityAndPrivacy
     }
     
     var bindings: RoomDetailsScreenViewStateBindings
@@ -232,6 +237,7 @@ enum RoomDetailsScreenViewAction {
     case processTapMediaEvents
     case processTapRequestsToJoin
     case processTapReport
+    case processTapMessageRetention
 }
 
 enum RoomDetailsScreenViewShortcut {

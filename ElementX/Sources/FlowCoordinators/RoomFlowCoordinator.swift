@@ -496,6 +496,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentReportRoomScreen, .reportRoom):
                 presentReportRoom()
                 
+            case (.roomDetails, .presentMessageRetentionScreen, .messageRetentionScreen):
+                presentMessageRetentionScreen()
+                
             // Join room
                 
             case (_, .presentJoinRoomScreen(let via), .joinRoomScreen):
@@ -980,6 +983,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
             case .presentReportRoomScreen:
                 stateMachine.tryEvent(.presentReportRoomScreen)
+            case .presentMessageRetentionScreen:
+                stateMachine.tryEvent(.presentMessageRetentionScreen)
             case .transferOwnership:
                 stateMachine.tryEvent(.presentTransferOwnershipScreen)
             }
@@ -1432,6 +1437,30 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissSecurityAndPrivacyScreen)
+        }
+    }
+    
+    private func presentMessageRetentionScreen() {
+        guard let coordinator = flowParameters.appHooks.messageRetentionScreenHook.makeCoordinator(parameters: .init()) else {
+            // This shouldn't be possible in foss as the button activating this should be flagged, however, this is here as a logical fallback
+            let indicator = UserIndicator(type: .toast, title: "This feature is exclusive to ElementX Pro")
+            flowParameters.userIndicatorController.submitIndicator(indicator)
+            
+            stateMachine.tryEvent(.dismissMessageRetentionScreen)
+            return
+        }
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .done:
+                stateMachine.tryEvent(.dismissMessageRetentionScreen)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissMessageRetentionScreen)
         }
     }
     
