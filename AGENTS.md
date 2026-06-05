@@ -6,46 +6,46 @@
 
 ## Strong Conventions
 
-PRs must meet these rules. Prefer Xcode MCP tools over terminal commands.
+PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
 
 ### Code Style
 
-- **SwiftLint** (.swiftlint.yml) and **SwiftFormat** (.swiftformat) enforce style on build; warnings surface in Xcode; build before using **XcodeRefreshCodeIssuesInFile**.
-- Follow [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, including Rust SDK wrappers (e.g. `ID` not `Id`, `URL` not `Url`, `configuration` not `config` or `cfg`).
-- File headers defined in `IDETemplateMacros.plist`.
+- **SwiftLint** (.swiftlint.yml) + **SwiftFormat** (.swiftformat) enforce style on build. Warnings show in Xcode. Build before **XcodeRefreshCodeIssuesInFile**.
+- Follow [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, Rust SDK wrappers too (`ID` not `Id`, `URL` not `Url`, `configuration` not `config` or `cfg`).
+- File headers live in `IDETemplateMacros.plist`.
 
 ### Comments
 
-- **Code should speak for itself** — documentation comments are fine, but don't add comments restating what clearly written code already says.
-- **Do** comment when the code hides a trap, is hard or convoluted to follow, or a specific choice needs justifying.
-- Keep comments concise — a single line where possible; only exceed it when really necessary.
+- **Code speak for itself** — doc comments fine, but no comments restating what clear code already says.
+- **Do** comment when code hides trap, hard to follow, or choice needs justifying.
+- Comments short — one line where possible. Exceed only when truly needed.
 
 ### PII & Logging
 
-- Default: `MXLog.info`; unexpected failures: `.error`; noisy dev logs: `.verbose`. `.failure`/`.debug` rarely used.
-- **Never log secrets, passwords, keys, or user content** (e.g. message bodies).
-- Action enums with secret-containing associated values **must** conform to `CustomStringConvertible` (logs only case name).
-- Matrix IDs are safe to log.
+- Default: `MXLog.info`. Unexpected failures: `.error`. Noisy dev logs: `.verbose`. `.failure`/`.debug` rare.
+- **Never log secrets, passwords, keys, user content** (e.g. message bodies).
+- Action enums with secret associated values **must** conform `CustomStringConvertible` (log only case name).
+- Matrix IDs safe to log.
 
 ### Strings & Localisation
 
 - Default localisation: `en` (en-GB strings), shared with Element X Android via [Localazy](https://localazy.com/p/element).
-- **Never edit `Localizable.strings`** — it is auto-overwritten.
-- New English strings go in **`Untranslated.strings`** (plurals: `Untranslated.stringsdict`). Team imports to Localazy before merge.
+- **Never edit `Localizable.strings`** — auto-overwritten.
+- New English strings → **`Untranslated.strings`** (plurals: `Untranslated.stringsdict`). Team imports to Localazy before merge.
 - Access strings via generated `L10n` types (e.g. `L10n.actionDone`).
 - **Key naming** (see [element-x-android README](https://github.com/element-hq/element-x-android/blob/develop/tools/localazy/README.md#key-naming-rules)):
-  - Cross-screen verbs: `action_`; nouns/other: `common_`; accessibility: `a11y_`.
-  - Key matches the string, e.g. `action_copy_link` → `Copy link`.
+  - Cross-screen verbs: `action_`. Nouns/other: `common_`. Accessibility: `a11y_`.
+  - Key match string, e.g. `action_copy_link` → `Copy link`.
   - Screen-specific: `screen_<name>_<free>` (e.g. `screen_onboarding_welcome_title`).
   - Errors: `error_` prefix or `_error_` infix.
-  - iOS-only: `_ios` suffix; Android-only: `_android` suffix.
-  - Placeholders: always use numbered form `%1$@`, `%1$d`. Use `%x$@` in iOS source; add translator comment `Localazy: change %x$@ -> %x$s`.
+  - iOS-only: `_ios` suffix. Android-only: `_android` suffix.
+  - Placeholders: always numbered form `%1$@`, `%1$d`. Use `%x$@` in iOS source; add translator comment `Localazy: change %x$@ -> %x$s`.
 
 ### Previews
 
-- Create previews for **all main states**.
-- Use `PreviewProvider` (not `#Preview`) — snapshot/accessibility tests are generated from it.
-- Add `TestablePreview` conformance to generate snapshot and accessibility tests.
+- Previews for **all main states**.
+- Use `PreviewProvider` (not `#Preview`) — snapshot/accessibility tests generated from it.
+- Add `TestablePreview` conformance → snapshot + accessibility tests generated.
 
 ---
 
@@ -54,10 +54,10 @@ PRs must meet these rules. Prefer Xcode MCP tools over terminal commands.
 - Sentence-style titles (no conventional commits).
 - Exactly one `pr-` label (see `.github/release.yml`).
 - Title = changelog entry — descriptive, no "Fixes #…".
-- Leave description template for the developer. Redirect them to the [contributing etiquette](CONTRIBUTING.md#etiquette).
+- Leave description template for developer. Point them to [contributing etiquette](CONTRIBUTING.md#etiquette).
 - Screenshots/videos for visual changes.
-- 500 additions max — split large changes.
-- Commits need a title and description; no tiny or massive commits.
+- 500 additions max — split big changes.
+- Commits need title + description. No tiny commits, no massive commits.
 - No history rewrites.
 
 ---
@@ -68,7 +68,7 @@ PRs must meet these rules. Prefer Xcode MCP tools over terminal commands.
 
 Initial setup: `swift run tools setup-project`
 
-**Git hooks** are installed by `swift run tools setup-project` and run SwiftLint/SwiftFormat on commit — if a hook fails, **do not abandon your changes**, fix the reported issues and recommit.
+**Git hooks** installed by `swift run tools setup-project`, run SwiftLint/SwiftFormat on commit. Hook fail? **Do not abandon changes** — fix reported issues, recommit.
 
 | Tool | Command | Notes |
 |------|---------|-------|
@@ -85,7 +85,7 @@ CI test commands:
 
 ### Targets & Layout
 
-Key targets (each has a `target.yml`):
+Key targets (each has `target.yml`):
 - **ElementX** — main app
 - **NSE** — Notification Service Extension
 - **ShareExtension** — Share Extension
@@ -102,7 +102,7 @@ ElementX/Sources/
 └── {Unit|UI|A11y}Tests/ # Testing infrastructure 
 ```
 
-Mocks, test helpers, and generated files live alongside sources in `Generated/` directories. Test suites are in dedicated targets.
+Mocks, test helpers, generated files live next to sources in `Generated/` directories. Test suites in dedicated targets.
 
 ### Swift Packages
 
@@ -113,13 +113,13 @@ Mocks, test helpers, and generated files live alongside sources in `Generated/` 
 
 - **matrix-rust-sdk** source: [`matrix-org/matrix-rust-sdk`](https://github.com/matrix-org/matrix-rust-sdk).
 - Binary builds (xcframework + Swift bindings): [`element-hq/matrix-rust-components-swift`](https://github.com/element-hq/matrix-rust-components-swift), imported via `project.yml`.
-- SDK hash for a given build: cross-reference the components version in `project.yml` with its tag in the components repo. Find hash in commit message.
+- SDK hash for build: cross-reference components version in `project.yml` with its tag in components repo. Hash in commit message.
 
 ---
 
 ## Architecture: MVVM-C
 
-Every screen follows **MVVM-Coordinator**. Template: `Tools/Scripts/Templates/SimpleScreenExample/` + `createScreen.sh`.
+Every screen = **MVVM-Coordinator**. Template: `Tools/Scripts/Templates/SimpleScreenExample/` + `createScreen.sh`.
 
 ### Files Per Screen (`Foo`)
 
@@ -142,18 +142,18 @@ View ──send(viewAction:)──► ViewModel ──actionsPublisher──► 
 
 ### StateStoreViewModelV2
 
-Located at `ElementX/Sources/Other/SwiftUI/ViewModel/StateStoreViewModelV2.swift` (uses Swift `Observation`):
+Lives at `ElementX/Sources/Other/SwiftUI/ViewModel/StateStoreViewModelV2.swift` (uses Swift `Observation`):
 
-- `state` — mutable state struct conforming to `BindableState`
-- `context` — `@Observable` class passed to the view:
+- `state` — mutable state struct conforming `BindableState`
+- `context` — `@Observable` class passed to view:
   - `context.viewState` — read-only state
   - `context.send(viewAction:)` — sends action to view model
   - `$context.<binding>` — two-way SwiftUI bindings
   - `context.mediaProvider` — optional media service
 - Override `process(viewAction:)` for incoming actions.
-- Use `PassthroughSubject<ViewModelAction, Never>` to notify the coordinator.
+- Use `PassthroughSubject<ViewModelAction, Never>` to notify coordinator.
 
-> Some screens still use the older `StateStoreViewModel.swift` (Combine/`ObservableObject`).
+> Some screens still use older `StateStoreViewModel.swift` (Combine/`ObservableObject`).
 
 ### Screen Coordinator
 
@@ -182,10 +182,10 @@ final class FooScreenCoordinator: CoordinatorProtocol {
 
 ### Error Presentation
 
-1. **SwiftUI Alerts** — Add `AlertInfo` to `bindings`; present with a one-liner in the view.
+1. **SwiftUI Alerts** — add `AlertInfo` to `bindings`. Present with one-liner in view.
 2. **User Indicators** (via `UserIndicatorController`):
    - `.toast` — pill at top of screen (errors)
-   - `.modal` — not for errors (or an actual model). Blocking overlay for waiting.
+   - `.modal` — not for errors (or actual modal). Blocking overlay for waiting.
 
 ---
 
@@ -204,7 +204,7 @@ final class FooScreenCoordinator: CoordinatorProtocol {
 ### State Machines
 
 Uses `StateMachine<State, Event>` from [`ReactKit/SwiftState`](https://github.com/ReactKit/SwiftState):
-- `State`/`Event` enums defined inside the flow coordinator, conforming to `StateType`/`EventType`.
+- `State`/`Event` enums defined inside flow coordinator, conforming `StateType`/`EventType`.
 - Simple transitions: `addRoutes(event:transitions:)`. Associated values: `addRouteMapping`.
 - `addErrorHandler` should `fatalError` on unexpected transitions.
 
@@ -212,18 +212,18 @@ Uses `StateMachine<State, Event>` from [`ReactKit/SwiftState`](https://github.co
 
 | Type | SwiftUI Equivalent | Usage |
 |------|--------------------|-------|
-| `NavigationStackCoordinator` | `NavigationStack` | Push/pop within a flow |
+| `NavigationStackCoordinator` | `NavigationStack` | Push/pop within flow |
 | `NavigationSplitCoordinator` | `NavigationSplitView` | iPad split view |
 | `NavigationTabCoordinator` | `TabView` | Tab navigation |
 | `NavigationRootCoordinator` | Root view | Switch app root (e.g. auth → session) |
 
 ### CommonFlowParameters
 
-Shared dependency bag for **flow coordinators only**. Never pass to screen coordinators or view models — they receive specific dependencies via their `Parameters` struct.
+Shared dependency bag for **flow coordinators only**. Never pass to screen coordinators or view models — they get specific dependencies via their `Parameters` struct.
 
 ### AppRoute (Deep Linking)
 
-`AppRoute` enum represents deep-link destinations. Handled in `handleAppRoute` by rebuilding coordinators, clearing stack, or no-op.
+`AppRoute` enum = deep-link destinations. Handled in `handleAppRoute` by rebuilding coordinators, clearing stack, or no-op.
 
 ---
 
@@ -237,18 +237,18 @@ Shared dependency bag for **flow coordinators only**. Never pass to screen coord
 | Proxy | `ClientProxy` | wraps SDK type, in `Services/<Feature>/` |
 | Mock | `ClientProxyMock` | Sourcery-generated |
 
-Naming: SDK type name + `Proxy` suffix (e.g. `Client` → `ClientProxy`). Exceptions where specialisation is needed (e.g. `JoinedRoomProxy`, `InvitedRoomProxy`).
+Naming: SDK type name + `Proxy` suffix (e.g. `Client` → `ClientProxy`). Exceptions where specialisation needed (e.g. `JoinedRoomProxy`, `InvitedRoomProxy`).
 
 ### Type Mapping (uniffi::Record/Enum)
 
-Map SDK types to app-owned Swift types (avoids importing `MatrixRustSDK` in views):
+Map SDK types to app-owned Swift types (no `MatrixRustSDK` import in views):
 - `init(rustValue:)` — from SDK
 - `var rustValue` — back to SDK
 
 ### Wrapping Guidelines
 
 - `Result<T, E>` with typed errors (no bare `throws`).
-- `async` only when the Rust method is async.
+- `async` only when Rust method async.
 - Prefer computed `var` over methods for simple properties.
 - Map FFI types: `String` → `URL`, timestamp `UInt64` → `Date`, etc.
 - Follow Swift API naming (`userID` not `userId`).
@@ -257,34 +257,34 @@ Map SDK types to app-owned Swift types (avoids importing `MatrixRustSDK` in view
 
 ## Services
 
-Located in `ElementX/Sources/Services/<Feature>/`.
+Live in `ElementX/Sources/Services/<Feature>/`.
 
 1. **Pure app services** (e.g. `AppLockService`) — no SDK involvement.
-2. **SDK-wrapping services** — compose proxies with app logic; keep view models simple/testable.
+2. **SDK-wrapping services** — compose proxies with app logic. Keep view models simple/testable.
 
-Services are where product-level opinions live (the Rust SDK stays spec-faithful).
+Services = where product-level opinions live (Rust SDK stays spec-faithful).
 
 ### Dependency Injection
 
 - Inject via `init` parameters.
-- Screen coordinators get a `Parameters` struct with specific dependencies.
-- `CommonFlowParameters` is flow-coordinator-only.
-- `ServiceLocator` is **deprecated** — never use services directly; always inject from above.
+- Screen coordinators get `Parameters` struct with specific dependencies.
+- `CommonFlowParameters` flow-coordinator-only.
+- `ServiceLocator` **deprecated** — never use services directly. Always inject from above.
 
 ---
 
 ## Concurrency & Actors
 
-- Most protocols are `@MainActor`; conforming types inherit this.
+- Most protocols `@MainActor`. Conforming types inherit.
 - Views, screens, coordinators: always `@MainActor`.
-- Some services are `nonisolated` for background work.
-- `actor` types are rare in the codebase.
+- Some services `nonisolated` for background work.
+- `actor` types rare in codebase.
 
 ---
 
 ## Compound Design System
 
-`compound-ios/` provides **all** UI styling. Use Compound; only deviate when no equivalent exists.
+`compound-ios/` provides **all** UI styling. Use Compound. Deviate only when no equivalent exists.
 
 ### Tokens (`.compound` namespace)
 
@@ -297,7 +297,7 @@ Services are where product-level opinions live (the Rust SDK stays spec-faithful
 | Component | Notes |
 |-----------|-------|
 | `ListRow` | Primary list/form building block. Label styles: `.default`, `.plain`, `.action`, `.centeredAction`. Kinds: `.label`, `.button`, `.textField`, `.toggle`, etc. |
-| `.compoundList()` | Styles a `Form`/`List` with Compound tokens |
+| `.compoundList()` | Styles `Form`/`List` with Compound tokens |
 | `.compoundListSectionHeader/Footer()` | Section header/footer styling |
 | `CompoundButtonStyle` | Styles: `.primary`, `.secondary`, `.tertiary`, `.super`, `.textLink`. Sizes: `.large`, `.medium`, `.small`, `.toolbarIcon` |
 | `CompoundToggleStyle` | `.toggleStyle(.compound)` |
@@ -321,14 +321,14 @@ Form {
 .navigationTitle("Settings")
 ```
 
-See `compound-ios/Sources/Compound/` for the full component set.
+See `compound-ios/Sources/Compound/` for full component set.
 
 ---
 
 ## Testing
 
 Coverage target: **80%** (includes SDK, Compound, Rich Text Editor).
-Project is migrating from XCTest to **Swift Testing** (see PR #5119).
+Project migrating from XCTest to **Swift Testing** (see PR #5119).
 
 ### Test Types
 
@@ -339,13 +339,13 @@ Project is migrating from XCTest to **Swift Testing** (see PR #5119).
 | Preview Tests | `PreviewTests/Sources/` | Auto-generated snapshots from previews |
 | Accessibility Tests | `AccessibilityTests/Sources/` | Auto-generated Xcode Accessibility Audits |
 
-No need for `.serialized` suite traits, tests aren't run in parallel.
+No `.serialized` suite traits needed — tests not run in parallel.
 
 ### Mocks
 
-Generated by Sourcery (configs in `Tools/Sourcery/`); files in `Generated/` directories.
-- Un-configured methods intentionally crash.
-- Common mocks have a `Configuration`-based convenience `init`:
+Generated by Sourcery (configs in `Tools/Sourcery/`). Files in `Generated/` directories.
+- Un-configured methods crash on purpose.
+- Common mocks have `Configuration`-based convenience `init`:
   ```swift
   let mock = ClientProxyMock(.init(userID: "@alice:example.com"))
   ```
@@ -364,7 +364,7 @@ Same pattern for publishers.
 ### Snapshots
 
 - Stored in `<Target>/Sources/__Snapshots__/`, tracked via **Git LFS** (`git lfs install`).
-- Re-record on the correct device/OS if UI changes.
+- Re-record on correct device/OS if UI changes.
 - Powered by [`pointfreeco/swift-snapshot-testing`](https://github.com/pointfreeco/swift-snapshot-testing). Failures produce 3 images: reference, failure, diff.
 
 ---
