@@ -187,36 +187,34 @@ struct MediaEventsTimelineScreen: View {
         } bottomContent: { EmptyView() }
     }
     
+    @ViewBuilder
     private var emptyMedia: some View {
-        Group {
-            BigIcon(icon: \.image)
-            
-            Text(L10n.screenMediaBrowserMediaEmptyStateTitle)
-                .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-            
-            Text(L10n.screenMediaBrowserMediaEmptyStateSubtitle)
-                .foregroundColor(.compound.textSecondary)
-                .font(.compound.bodyMD)
-                .multilineTextAlignment(.center)
-        }
+        BigIcon(icon: \.image)
+        
+        Text(L10n.screenMediaBrowserMediaEmptyStateTitle)
+            .foregroundColor(.compound.textPrimary)
+            .font(.compound.headingMDBold)
+            .multilineTextAlignment(.center)
+        
+        Text(L10n.screenMediaBrowserMediaEmptyStateSubtitle)
+            .foregroundColor(.compound.textSecondary)
+            .font(.compound.bodyMD)
+            .multilineTextAlignment(.center)
     }
     
+    @ViewBuilder
     private var emptyFiles: some View {
-        Group {
-            BigIcon(icon: \.document)
-            
-            Text(L10n.screenMediaBrowserFilesEmptyStateTitle)
-                .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-            
-            Text(L10n.screenMediaBrowserFilesEmptyStateSubtitle)
-                .foregroundColor(.compound.textSecondary)
-                .font(.compound.bodyMD)
-                .multilineTextAlignment(.center)
-        }
+        BigIcon(icon: \.document)
+        
+        Text(L10n.screenMediaBrowserFilesEmptyStateTitle)
+            .foregroundColor(.compound.textPrimary)
+            .font(.compound.headingMDBold)
+            .multilineTextAlignment(.center)
+        
+        Text(L10n.screenMediaBrowserFilesEmptyStateSubtitle)
+            .foregroundColor(.compound.textSecondary)
+            .font(.compound.bodyMD)
+            .multilineTextAlignment(.center)
     }
     
     @ToolbarContentBuilder

@@ -92,13 +92,11 @@ struct GlobalSearchScreen: View {
     }
     
     private var keyboardShortcuts: some View {
-        Group {
-            Button("") {
-                context.send(viewAction: .dismiss)
-            }
-            // Need this to enable escape on the textField and forward the presses
-            .keyboardShortcut(.escape, modifiers: [])
+        Button("") {
+            context.send(viewAction: .dismiss)
         }
+        // Need this to enable escape on the textField and forward the presses
+        .keyboardShortcut(.escape, modifiers: [])
     }
     
     private func backgroundColor(for room: GlobalSearchRoom) -> Color {
