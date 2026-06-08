@@ -807,6 +807,12 @@
 "screen_identity_confirmed_title" = "Seade on verifitseeritud";
 "screen_identity_use_another_device" = "Kasuta teist seadet";
 "screen_identity_waiting_on_other_device" = "Ootame teise seadme järgi…";
+"screen_image_edition_a11y_flip_image_horizontally" = "Pööra pilti ümber rõhttelje";
+"screen_image_edition_a11y_flip_image_horizontally_state_flipped" = "Pilt on pööratud ümber rõhttelje";
+"screen_image_edition_a11y_flip_image_horizontally_state_original" = "Pildi algne variant";
+"screen_image_edition_a11y_flip_image_vertically" = "Pööra pilti ümber püsttelje";
+"screen_image_edition_a11y_flip_image_vertically_state_flipped" = "Pilt on pööratud ümber püsttelje";
+"screen_image_edition_a11y_flip_image_vertically_state_original" = "Pildi algne variant";
 "screen_image_edition_a11y_rotate_to_the_left" = "Pööra pilti vasakule";
 "screen_image_edition_title" = "Muuda fotot";
 "screen_invite_users_already_a_member" = "Sa juba oled jututoa liige";
@@ -1654,3 +1660,5 @@
 "troubleshoot_notifications_test_unified_push_description" = "Palun veendu, et UnifiedPushi levitajad on saadaval.";
 "troubleshoot_notifications_test_unified_push_failure" = "Tõuketeenuse levitajaid ei leidu.";
 "troubleshoot_notifications_test_unified_push_title" = "Kontrolli UnifiedPushi";
+"vulkan_not_supported_dialog_content_android" = "Sinu nutiseadme tarkvara on liiga vana, vajalik on Android 8 või uuem.";
+"vulkan_not_supported_dialog_title_android" = "Kaartide joonistamine pole toetatud";

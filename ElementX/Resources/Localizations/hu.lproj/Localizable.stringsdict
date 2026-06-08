@@ -329,9 +329,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d degree</string>
+			<string>%1$d fok</string>
 			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>%1$d fok</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

@@ -807,6 +807,12 @@
 "screen_identity_confirmed_title" = "裝置已驗證";
 "screen_identity_use_another_device" = "使用另一部裝置";
 "screen_identity_waiting_on_other_device" = "正在等待其他裝置...";
+"screen_image_edition_a11y_flip_image_horizontally" = "Flip image horizontally";
+"screen_image_edition_a11y_flip_image_horizontally_state_flipped" = "Flipped horizontally";
+"screen_image_edition_a11y_flip_image_horizontally_state_original" = "Original";
+"screen_image_edition_a11y_flip_image_vertically" = "Flip image vertically";
+"screen_image_edition_a11y_flip_image_vertically_state_flipped" = "Flipped vertically";
+"screen_image_edition_a11y_flip_image_vertically_state_original" = "Original";
 "screen_image_edition_a11y_rotate_to_the_left" = "Rotate the image to the left";
 "screen_image_edition_title" = "Edit photo";
 "screen_invite_users_already_a_member" = "已是成員";
@@ -1654,3 +1660,5 @@
 "troubleshoot_notifications_test_unified_push_description" = "確保 UnifiedPush 散佈者可用。";
 "troubleshoot_notifications_test_unified_push_failure" = "找不到散佈者。";
 "troubleshoot_notifications_test_unified_push_title" = "檢查 UnifiedPush";
+"vulkan_not_supported_dialog_content_android" = "Your device is too old, a device with Android 8 or newer is required.";
+"vulkan_not_supported_dialog_title_android" = "Rendering maps is not supported";
