@@ -1,4 +1,4 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -35,6 +35,10 @@ let package = Package(
                             .product(name: "Yams", package: "Yams"),
                             .product(name: "Logging", package: "swift-log")
                           ],
-                          path: "Tools/Sources")
+                          path: "Tools/Sources",
+                          swiftSettings: [
+                            .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                            .enableUpcomingFeature("InferIsolatedConformances")
+                          ])
     ]
 )
