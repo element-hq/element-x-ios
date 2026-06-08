@@ -119,7 +119,7 @@ struct ReleaseToGitHub: AsyncParsableCommand {
         
         let releaseDate = Date().formatted(.iso8601.year().month().day())
         
-        let existingContent = try String(contentsOf: changesURL)
+        let existingContent = try String(contentsOf: changesURL, encoding: .utf8)
         let newContent = "## Changes in \(version) (\(releaseDate))\(cleanedNotes)\n\n\(existingContent)"
         
         try newContent.write(to: changesURL, atomically: true, encoding: .utf8)

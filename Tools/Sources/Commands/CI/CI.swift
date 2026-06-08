@@ -25,7 +25,7 @@ struct CI: ParsableCommand {
     /// Reads the `MARKETING_VERSION` from `project.yml`.
     static func readMarketingVersion() throws -> String {
         let projectURL = URL.projectDirectory.appending(component: "project.yml")
-        let projectString = try String(contentsOf: projectURL)
+        let projectString = try String(contentsOf: projectURL, encoding: .utf8)
         
         guard let projectConfig = try Yams.compose(yaml: projectString),
               let version = projectConfig["settings"]?["MARKETING_VERSION"]?.string else {
