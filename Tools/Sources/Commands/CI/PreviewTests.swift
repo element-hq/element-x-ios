@@ -10,7 +10,7 @@ struct PreviewTests: AsyncParsableCommand {
     
     private static let scheme = "PreviewTests"
     private static let device = "iPhone SE (3rd generation)"
-    private static let osVersion = "26.4.1"
+    private static let osVersion = CI.defaultOSVersion
     private static let simulatorType = "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
     private static let testPlanPath = "PreviewTests/SupportingFiles/PreviewTests.xctestplan"
     

@@ -19,6 +19,7 @@ struct CI: ParsableCommand {
                                                         ReleaseToGitHub.self
                                                     ])
     
+    static let defaultOSVersion = "26.5"
     static let testOutputDirectory = "test_output"
     
     /// Reads the `MARKETING_VERSION` from `project.yml`.
