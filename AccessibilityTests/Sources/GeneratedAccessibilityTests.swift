@@ -123,10 +123,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "EditRoomAddressScreen_Previews")
     }
 
-    func testElementTextFieldStyle() async throws {
-        try await performAccessibilityAudit(named: "ElementTextFieldStyle_Previews")
-    }
-
     func testEmojiPickerScreenHeaderView() async throws {
         try await performAccessibilityAudit(named: "EmojiPickerScreenHeaderView_Previews")
     }

@@ -42,6 +42,9 @@ struct SidebarList: View {
             NavigationLink(value: Screen.buttons) {
                 Label("Buttons", systemImage: "rectangle.and.hand.point.up.left")
             }
+            NavigationLink(value: Screen.textFields) {
+                Label("Text Fields", systemImage: "character.textbox")
+            }
             NavigationLink(value: Screen.list) {
                 Label("List", systemImage: "list.bullet.clipboard")
             }

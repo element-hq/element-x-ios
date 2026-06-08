@@ -56,7 +56,7 @@ enum Screen: Hashable, View {
         case .sizes: EmptyView()
         case .labels: EmptyView()
         case .buttons: ButtonsScreen()
-        case .textFields: EmptyView()
+        case .textFields: TextFieldsScreen()
         case .bigIcon: BigIconScreen()
         case .titleAndIcon: TitleAndIconScreen()
             

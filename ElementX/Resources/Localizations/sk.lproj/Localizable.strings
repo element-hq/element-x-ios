@@ -196,7 +196,7 @@
 "banner_new_sound_message" = "Vaše oznámenia boli aktualizované – sú prehľadnejšie, rýchlejšie a menej rušivé.";
 "banner_new_sound_title" = "Obnovili sme vaše zvuky";
 "banner_set_up_recovery_content" = "Vytvorte nový kľúč na obnovenie, ktorý môžete použiť na obnovenie vašej histórie šifrovaných správ v prípade straty prístupu k vašim zariadeniam.";
-"banner_set_up_recovery_submit" = "Nastaviť obnovenie";
+"banner_set_up_recovery_submit" = "Získať kľúč na obnovenie";
 "banner_set_up_recovery_title" = "Nastaviť obnovenie";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call nepodporuje používanie zvukových zariadení Bluetooth v tejto verzii systému Android. Vyberte iné zvukové zariadenie.";
 "common_about" = "O aplikácii";
@@ -622,7 +622,7 @@
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Zadajte prosím ten istý PIN dvakrát";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN kódy sa nezhodujú";
 "screen_app_lock_signout_alert_message" = "Ak chcete pokračovať, musíte sa znovu prihlásiť a vytvoriť nový PIN kód.";
-"screen_app_lock_signout_alert_title" = "Prebieha odhlasovanie";
+"screen_app_lock_signout_alert_title" = "Toto zariadenie sa odstraňuje";
 "screen_blocked_users_empty" = "Nemáte žiadnych blokovaných používateľov";
 "screen_blocked_users_unblock_alert_action" = "Odblokovať";
 "screen_blocked_users_unblock_alert_description" = "Všetky správy od nich budete môcť opäť vidieť.";
@@ -700,7 +700,7 @@
 "screen_chat_backup_recovery_action_change_description" = "Obnovte svoju kryptografickú totožnosť a históriu správ pomocou kľúča na obnovenie, ak ste stratili všetky svoje existujúce zariadenia.";
 "screen_chat_backup_recovery_action_confirm" = "Zadajte kľúč na obnovenie";
 "screen_chat_backup_recovery_action_confirm_description" = "Vaše úložisko kľúčov nie je momentálne synchronizované.";
-"screen_chat_backup_recovery_action_setup" = "Nastaviť obnovenie";
+"screen_chat_backup_recovery_action_setup" = "Získať kľúč na obnovenie";
 "screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_account_title" = "Vytvoriť účet";
 "screen_create_new_recovery_key_list_item_1" = "Otvoriť %1$@ v stolnom počítači";
@@ -807,6 +807,12 @@
 "screen_identity_confirmed_title" = "Zariadenie overené";
 "screen_identity_use_another_device" = "Použite iné zariadenie";
 "screen_identity_waiting_on_other_device" = "Čaká sa na druhom zariadení...";
+"screen_image_edition_a11y_flip_image_horizontally" = "Flip image horizontally";
+"screen_image_edition_a11y_flip_image_horizontally_state_flipped" = "Flipped horizontally";
+"screen_image_edition_a11y_flip_image_horizontally_state_original" = "Original";
+"screen_image_edition_a11y_flip_image_vertically" = "Flip image vertically";
+"screen_image_edition_a11y_flip_image_vertically_state_flipped" = "Flipped vertically";
+"screen_image_edition_a11y_flip_image_vertically_state_original" = "Original";
 "screen_image_edition_a11y_rotate_to_the_left" = "Rotate the image to the left";
 "screen_image_edition_title" = "Edit photo";
 "screen_invite_users_already_a_member" = "Už ste členom";
@@ -852,10 +858,10 @@
 "screen_join_room_subtitle_no_preview" = "Ak chcete zobraziť históriu správ, musíte byť členom tejto miestnosti.";
 "screen_join_room_title_knock" = "Chcete sa pripojiť do tejto miestnosti?";
 "screen_join_room_title_no_preview" = "Náhľad nie je k dispozícii";
-"screen_key_backup_disable_confirmation_action_turn_off" = "Vypnúť";
+"screen_key_backup_disable_confirmation_action_turn_off" = "Odstrániť";
 "screen_key_backup_disable_confirmation_description" = "Ak odstránite všetky svoje zariadenia, stratíte svoju zašifrovanú históriu správ a budete si musieť obnoviť svoju digitálnu identitu.";
-"screen_key_backup_disable_confirmation_title" = "Ste si istí, že chcete vypnúť zálohovanie?";
-"screen_key_backup_disable_description" = "Vypnutím zálohovania sa odstráni aktuálna záloha šifrovacích kľúčov a vypnú sa ďalšie bezpečnostné funkcie. V tomto prípade:";
+"screen_key_backup_disable_confirmation_title" = "Naozaj chcete odstrániť úložisko kľúčov?";
+"screen_key_backup_disable_description" = "Odstránením úložiska kľúčov sa zo servera odstránia vaše kľúče digitálnej identity a správ a vypnú sa nasledujúce bezpečnostné funkcie:";
 "screen_key_backup_disable_description_point_1" = "Na nových zariadeniach nebudete mať zašifrovanú históriu správ";
 "screen_key_backup_disable_description_point_2" = "Stratíte prístup k svojim zašifrovaným správam, ak sa odhlásite z aplikácie %1$@ na všetkých zariadeniach";
 "screen_key_backup_disable_title" = "Ste si istí, že chcete vypnúť zálohovanie?";
@@ -1141,7 +1147,7 @@
 "screen_recovery_key_setup_generate_key" = "Vygenerujte si váš kľúč na obnovenie";
 "screen_recovery_key_setup_generate_key_description" = "Nezdieľajte to s nikým!";
 "screen_recovery_key_setup_success" = "Úspešné nastavenie obnovy";
-"screen_recovery_key_setup_title" = "Nastaviť obnovenie";
+"screen_recovery_key_setup_title" = "Získať kľúč na obnovenie";
 "screen_report_content_block_user" = "Zablokovať používateľa";
 "screen_report_content_block_user_hint" = "Označte, či chcete skryť všetky aktuálne a budúce správy od tohto používateľa";
 "screen_report_content_explanation" = "Táto správa bude nahlásená správcovi vášho domovského servera. Nebude môcť prečítať žiadne šifrované správy.";
@@ -1486,7 +1492,7 @@
 "screen_signout_key_backup_ongoing_title" = "Vaše kľúče sa ešte stále zálohujú";
 "screen_signout_preference_item" = "Odstrániť toto zariadenie";
 "screen_signout_recovery_disabled_subtitle" = "Chystáte sa odhlásiť z vašej poslednej relácie. Ak sa teraz odhlásite, stratíte prístup k svojim šifrovaným správam.";
-"screen_signout_recovery_disabled_title" = "Obnovenie nie je nastavené";
+"screen_signout_recovery_disabled_title" = "Čoskoro stratíte prístup k svojim zašifrovaným konverzáciám";
 "screen_signout_save_recovery_key_subtitle" = "Chystáte sa odhlásiť z vašej poslednej relácie. Ak sa teraz odhlásite, môžete stratiť prístup k svojim šifrovaným správam.";
 "screen_signout_save_recovery_key_title" = "Uložili ste si kľúč na obnovenie?";
 "screen_space_add_room_action" = "Miestnosť";
@@ -1654,3 +1660,5 @@
 "troubleshoot_notifications_test_unified_push_description" = "Uistite sa, že sú dostupní distribútori UnifiedPush.";
 "troubleshoot_notifications_test_unified_push_failure" = "Nenašli sa žiadni distribútori push.";
 "troubleshoot_notifications_test_unified_push_title" = "Skontrolovať UnifiedPush";
+"vulkan_not_supported_dialog_content_android" = "Your device is too old, a device with Android 8 or newer is required.";
+"vulkan_not_supported_dialog_title_android" = "Rendering maps is not supported";

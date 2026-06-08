@@ -42,10 +42,8 @@ struct CreateRoomSpaceSelectionSheet: View {
                     }
                 }
             }
-            .listStyle(.plain)
             .environment(\.defaultMinListRowHeight, 66)
-            .scrollContentBackground(.hidden)
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .compoundList(.plain)
             .navigationTitle(L10n.screenCreateRoomSpaceSelectionSheetTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

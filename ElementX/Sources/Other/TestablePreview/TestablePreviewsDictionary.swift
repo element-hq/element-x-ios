@@ -38,7 +38,6 @@ enum TestablePreviewsDictionary {
         "DeactivateAccountScreen_Previews" : DeactivateAccountScreen_Previews.self,
         "DeclineAndBlockScreen_Previews" : DeclineAndBlockScreen_Previews.self,
         "EditRoomAddressScreen_Previews" : EditRoomAddressScreen_Previews.self,
-        "ElementTextFieldStyle_Previews" : ElementTextFieldStyle_Previews.self,
         "EmojiPickerScreenHeaderView_Previews" : EmojiPickerScreenHeaderView_Previews.self,
         "EmojiPickerScreen_Previews" : EmojiPickerScreen_Previews.self,
         "EmoteRoomTimelineView_Previews" : EmoteRoomTimelineView_Previews.self,

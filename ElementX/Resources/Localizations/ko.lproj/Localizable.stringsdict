@@ -248,10 +248,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Every %1$d meter</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>%1$d미터마다</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -292,10 +290,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d degree</string>
 			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>%1$d도</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -322,10 +318,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d person</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d명</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

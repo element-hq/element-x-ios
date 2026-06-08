@@ -32,6 +32,13 @@ extension PreviewTests {
         }
     }
 
+    @Test("CompoundTextFieldStyle")
+    func compoundTextFieldStyle() async throws {
+        for (index, preview) in CompoundTextFieldStyle_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     @Test("CompoundToggleStyle")
     func compoundToggleStyle() async throws {
         for (index, preview) in CompoundToggleStyle_Previews._allPreviews.enumerated() {

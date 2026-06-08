@@ -91,7 +91,7 @@
 "action_decline_and_block" = "Odrzuć i zablokuj";
 "action_delete" = "Usuń";
 "action_delete_account" = "Usuń konto";
-"action_delete_file" = "Delete file";
+"action_delete_file" = "Usuń plik";
 "action_delete_poll" = "Usuń ankietę";
 "action_deselect_all" = "Odznacz wszystko";
 "action_disable" = "Wyłącz";
@@ -661,8 +661,8 @@
 "screen_bug_report_editor_placeholder" = "Opisz problem...";
 "screen_bug_report_editor_supporting" = "Jeśli to możliwe, napisz zgłoszenje w języku angielskim.";
 "screen_bug_report_error_description_too_short" = "Opis jest zbyt krótki, podaj więcej szczegółów na temat tego co się stało. Dzięki!";
-"screen_bug_report_github_issue_description" = "You can enter the number of an associated GitHub issue, if any.";
-"screen_bug_report_github_issue_label" = "GitHub issue";
+"screen_bug_report_github_issue_description" = "Możesz wpisać numer powiązanego zgłoszenia w serwisie GitHub, jeśli takie istnieje.";
+"screen_bug_report_github_issue_label" = "Zgłoszenie Github";
 "screen_bug_report_include_crash_logs" = "Wyślij logi awarii";
 "screen_bug_report_include_logs" = "Zezwól na logi";
 "screen_bug_report_include_logs_error" = "Twoje dzienniki są zbyt duże, więc nie można ich uwzględnić w tym raporcie. Prześlij je do nas w inny sposób.";
@@ -807,6 +807,12 @@
 "screen_identity_confirmed_title" = "Urządzenie zweryfikowane";
 "screen_identity_use_another_device" = "Użyj innego urządzenia";
 "screen_identity_waiting_on_other_device" = "Oczekiwanie na inne urządzenie...";
+"screen_image_edition_a11y_flip_image_horizontally" = "Odwróć obraz w poziomie";
+"screen_image_edition_a11y_flip_image_horizontally_state_flipped" = "Odwrócono w poziomie";
+"screen_image_edition_a11y_flip_image_horizontally_state_original" = "Oryginalny";
+"screen_image_edition_a11y_flip_image_vertically" = "Odwróć obraz w pionie";
+"screen_image_edition_a11y_flip_image_vertically_state_flipped" = "Odwrócono w pionie";
+"screen_image_edition_a11y_flip_image_vertically_state_original" = "Oryginalny";
 "screen_image_edition_a11y_rotate_to_the_left" = "Obróć obraz w lewo";
 "screen_image_edition_title" = "Edytuj zdjęcie";
 "screen_invite_users_already_a_member" = "Jest już członkiem";
@@ -1113,7 +1119,7 @@
 "screen_qr_code_login_start_over_button" = "Zacznij od nowa";
 "screen_qr_code_login_unknown_error_description" = "Wystąpił nieoczekiwany błąd. Spróbuj ponownie.";
 "screen_qr_code_login_verify_code_loading" = "Oczekiwanie na drugie urządzenie";
-"screen_qr_code_login_verify_code_subtitle" = "Twój dostawca konta może poprosić o podany kod, aby zweryfikować logowanie.";
+"screen_qr_code_login_verify_code_subtitle" = "Twój dostawca konta może poprosić o podany kod w celu weryfikacji logowania.";
 "screen_qr_code_login_verify_code_title" = "Twój kod weryfikacyjny";
 "screen_recovery_key_change_description" = "Uzyskaj nowy klucz przywracania, jeśli straciłeś dostęp do obecnego. Po zmianie klucza przywracania stary nie będzie już działał.";
 "screen_recovery_key_change_generate_key" = "Generuj nowy klucz przywracania";
@@ -1654,3 +1660,5 @@
 "troubleshoot_notifications_test_unified_push_description" = "Upewnij się, że dystrybutorzy UnifiedPush są dostępni.";
 "troubleshoot_notifications_test_unified_push_failure" = "Nie znaleziono dystrybutorów push.";
 "troubleshoot_notifications_test_unified_push_title" = "Sprawdź UnifiedPush";
+"vulkan_not_supported_dialog_content_android" = "Twoje urządzenie jest przestarzałe, wymagany system Android 8 lub nowszy.";
+"vulkan_not_supported_dialog_title_android" = "Renderowanie map nie jest obsługiwane";

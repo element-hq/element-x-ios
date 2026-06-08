@@ -1032,7 +1032,6 @@
 		A808DC3F72D15C6C5A52317E /* TimelineItemDebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDA016D05107DED3B9495CB /* TimelineItemDebugView.swift */; };
 		A816F7087C495D85048AC50E /* RoomMemberDetailsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B6E30BB748F3F480F077969 /* RoomMemberDetailsScreenModels.swift */; };
 		A851635B3255C6DC07034A12 /* RoomScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8108C8F0ACF6A7EB72D0117 /* RoomScreenCoordinator.swift */; };
-		A87DC550659C5176AC1829DE /* ElementTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7673F2B0B038FAB2A8D16AD /* ElementTextFieldStyle.swift */; };
 		A88328D7E17F73AB64501B51 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = EDFB92E97D9AC4BA8540C18C /* SwiftSoup */; };
 		A8DB299C5C891EDAE74A22F4 /* UserLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7482D5D1526E3399B00174 /* UserLocationCell.swift */; };
 		A8E324E700E596E36B0A311B /* BootDetectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F054DE7D47849687662C9D9 /* BootDetectionManager.swift */; };
@@ -2862,7 +2861,6 @@
 		D6DC38E64A5ED3FDB201029A /* BugReportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportService.swift; sourceTree = "<group>"; };
 		D7149BDDE47F8AD104E644E2 /* TraceLogPack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceLogPack.swift; sourceTree = "<group>"; };
 		D751AA05AD2182BFC4608DE6 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ur; path = ur.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		D7673F2B0B038FAB2A8D16AD /* ElementTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementTextFieldStyle.swift; sourceTree = "<group>"; };
 		D77F75B3E9F99864048A422A /* DeactivateAccountScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeactivateAccountScreenViewModelTests.swift; sourceTree = "<group>"; };
 		D78C13EF5035879B6131030F /* Room.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		D79BB714D28C9F588DD69353 /* SecureBackupScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -6829,7 +6827,6 @@
 		E6E1D07163F8752D62DA4A93 /* Styles */ = {
 			isa = PBXGroup;
 			children = (
-				D7673F2B0B038FAB2A8D16AD /* ElementTextFieldStyle.swift */,
 				89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */,
 			);
 			path = Styles;
@@ -8377,7 +8374,6 @@
 				07CC13C5729C24255348CBBD /* ElementCallWidgetDriver.swift in Sources */,
 				370AF5BFCD4384DD455479B6 /* ElementCallWidgetDriverProtocol.swift in Sources */,
 				D29E999538E5ABC00E1668F8 /* ElementNavigationStack.swift in Sources */,
-				A87DC550659C5176AC1829DE /* ElementTextFieldStyle.swift in Sources */,
 				7C1A7B594B2F8143F0DD0005 /* ElementXAttributeScope.swift in Sources */,
 				3A08584ECDD4A4541DBF21F8 /* EmojiLoaderProtocol.swift in Sources */,
 				340D39DB87F3800D53A6A621 /* EmojiPickerScreen.swift in Sources */,
