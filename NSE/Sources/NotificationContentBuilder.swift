@@ -265,13 +265,16 @@ struct NotificationContentBuilder {
                               contactIdentifier: nil,
                               customIdentifier: nil)
         
-        // A placeholder recipient keeps the conversation above two participants, otherwise iOS misclassifies the group as a 1:1 direct message.
         var speakableGroupName: INSpeakableString?
         var recipients: [INPerson]?
         if let groupInfo = icon.groupInfo {
+            let meHandle = INPersonHandle(value: notificationContent.receiverID, type: .unknown)
+            let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
             speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.displayName)
+            // A third placeholder participant keeps the conversation above two people, otherwise iOS misclassifies the group as a 1:1 direct message.
             let placeholderHandle = INPersonHandle(value: groupInfo.id, type: .unknown)
-            recipients = [INPerson(personHandle: placeholderHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil)]
+            let placeholder = INPerson(personHandle: placeholderHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil)
+            recipients = [sender, me, placeholder]
         }
         
         let intent = INSendMessageIntent(recipients: recipients,
