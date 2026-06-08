@@ -43,7 +43,7 @@
 "a11y_settings_with_required_action" = "Settings, action required";
 "a11y_show_password" = "Εμφάνιση κωδικού πρόσβασης";
 "a11y_start_call" = "Ξεκίνησε μια κλήση";
-"a11y_start_video_call" = "Start a video call";
+"a11y_start_video_call" = "Ξεκινήστε μια βιντεοκλήση";
 "a11y_start_voice_call" = "Έναρξη φωνητικής κλήσης";
 "a11y_tombstoned_room" = "Θαμένη αίθουσα";
 "a11y_user_menu" = "Μενού χρήστη";
@@ -807,6 +807,12 @@
 "screen_identity_confirmed_title" = "Επαληθευμένη συσκευή";
 "screen_identity_use_another_device" = "Χρήση άλλης συσκευής";
 "screen_identity_waiting_on_other_device" = "Αναμονή σε άλλη συσκευή...";
+"screen_image_edition_a11y_flip_image_horizontally" = "Flip image horizontally";
+"screen_image_edition_a11y_flip_image_horizontally_state_flipped" = "Flipped horizontally";
+"screen_image_edition_a11y_flip_image_horizontally_state_original" = "Original";
+"screen_image_edition_a11y_flip_image_vertically" = "Flip image vertically";
+"screen_image_edition_a11y_flip_image_vertically_state_flipped" = "Flipped vertically";
+"screen_image_edition_a11y_flip_image_vertically_state_original" = "Original";
 "screen_image_edition_a11y_rotate_to_the_left" = "Rotate the image to the left";
 "screen_image_edition_title" = "Edit photo";
 "screen_invite_users_already_a_member" = "Ήδη μέλος";
@@ -979,7 +985,7 @@
 "screen_missing_key_backup_open_element_classic" = "Άνοιγμα του Element Classic";
 "screen_missing_key_backup_step_1" = "Ανοίξτε το Element Classic στη συσκευή σας.";
 "screen_missing_key_backup_step_2_ios" = "Μεταβείτε στις Ρυθμίσεις χρήστη &gt; Ασφάλεια";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Κάντε κύλιση προς τα κάτω στην επιλογή Ασφαλές αντίγραφο ασφαλείας και πατήστε Ρύθμιση";
 "screen_missing_key_backup_step_4" = "Ακολουθήστε τις οδηγίες για να ενεργοποιήσετε την αποθήκευση κλειδιών";
 "screen_missing_key_backup_step_5" = "Επιστρέψτε στο %1$@";
 "screen_missing_key_backup_title" = "Ενεργοποιήστε την αποθήκευση κλειδιών σας πριν προχωρήσετε στο %1$@";
@@ -1654,3 +1660,5 @@
 "troubleshoot_notifications_test_unified_push_description" = "Βεβαιώσου ότι οι διανομείς UnifiedPush είναι διαθέσιμοι.";
 "troubleshoot_notifications_test_unified_push_failure" = "Δεν βρέθηκαν διανομείς push.";
 "troubleshoot_notifications_test_unified_push_title" = "Έλεγχος UnifiedPush";
+"vulkan_not_supported_dialog_content_android" = "Your device is too old, a device with Android 8 or newer is required.";
+"vulkan_not_supported_dialog_title_android" = "Rendering maps is not supported";

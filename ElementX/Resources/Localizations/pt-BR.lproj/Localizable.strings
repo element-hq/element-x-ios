@@ -807,6 +807,12 @@
 "screen_identity_confirmed_title" = "Dispositivo verificado";
 "screen_identity_use_another_device" = "Usar outro dispositivo";
 "screen_identity_waiting_on_other_device" = "Aguardando o outro dispositivo…";
+"screen_image_edition_a11y_flip_image_horizontally" = "Flip image horizontally";
+"screen_image_edition_a11y_flip_image_horizontally_state_flipped" = "Flipped horizontally";
+"screen_image_edition_a11y_flip_image_horizontally_state_original" = "Original";
+"screen_image_edition_a11y_flip_image_vertically" = "Flip image vertically";
+"screen_image_edition_a11y_flip_image_vertically_state_flipped" = "Flipped vertically";
+"screen_image_edition_a11y_flip_image_vertically_state_original" = "Original";
 "screen_image_edition_a11y_rotate_to_the_left" = "Rotate the image to the left";
 "screen_image_edition_title" = "Edit photo";
 "screen_invite_users_already_a_member" = "Já é membro";
@@ -1654,3 +1660,5 @@
 "troubleshoot_notifications_test_unified_push_description" = "Certifique-se de que os distribuidores do UnifiedPush estejam disponíveis.";
 "troubleshoot_notifications_test_unified_push_failure" = "Nenhum distribuidor push encontrado.";
 "troubleshoot_notifications_test_unified_push_title" = "Verificar o UnifiedPush";
+"vulkan_not_supported_dialog_content_android" = "Your device is too old, a device with Android 8 or newer is required.";
+"vulkan_not_supported_dialog_title_android" = "Rendering maps is not supported";

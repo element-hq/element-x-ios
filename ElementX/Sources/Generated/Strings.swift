@@ -1874,6 +1874,18 @@ internal enum L10n {
   internal static var screenIdentityUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_use_another_device") }
   /// Waiting on other device…
   internal static var screenIdentityWaitingOnOtherDevice: String { return L10n.tr("Localizable", "screen_identity_waiting_on_other_device") }
+  /// Flip image horizontally
+  internal static var screenImageEditionA11yFlipImageHorizontally: String { return L10n.tr("Localizable", "screen_image_edition_a11y_flip_image_horizontally") }
+  /// Flipped horizontally
+  internal static var screenImageEditionA11yFlipImageHorizontallyStateFlipped: String { return L10n.tr("Localizable", "screen_image_edition_a11y_flip_image_horizontally_state_flipped") }
+  /// Original
+  internal static var screenImageEditionA11yFlipImageHorizontallyStateOriginal: String { return L10n.tr("Localizable", "screen_image_edition_a11y_flip_image_horizontally_state_original") }
+  /// Flip image vertically
+  internal static var screenImageEditionA11yFlipImageVertically: String { return L10n.tr("Localizable", "screen_image_edition_a11y_flip_image_vertically") }
+  /// Flipped vertically
+  internal static var screenImageEditionA11yFlipImageVerticallyStateFlipped: String { return L10n.tr("Localizable", "screen_image_edition_a11y_flip_image_vertically_state_flipped") }
+  /// Original
+  internal static var screenImageEditionA11yFlipImageVerticallyStateOriginal: String { return L10n.tr("Localizable", "screen_image_edition_a11y_flip_image_vertically_state_original") }
   /// Rotate the image to the left
   internal static var screenImageEditionA11yRotateToTheLeft: String { return L10n.tr("Localizable", "screen_image_edition_a11y_rotate_to_the_left") }
   /// Plural format key: "%#@COUNT@"
@@ -3915,6 +3927,10 @@ internal enum L10n {
   }
   /// Check UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
+  /// Your device is too old, a device with Android 8 or newer is required.
+  internal static var vulkanNotSupportedDialogContentAndroid: String { return L10n.tr("Localizable", "vulkan_not_supported_dialog_content_android") }
+  /// Rendering maps is not supported
+  internal static var vulkanNotSupportedDialogTitleAndroid: String { return L10n.tr("Localizable", "vulkan_not_supported_dialog_title_android") }
 
   internal enum A11y {
     /// Encryption details
