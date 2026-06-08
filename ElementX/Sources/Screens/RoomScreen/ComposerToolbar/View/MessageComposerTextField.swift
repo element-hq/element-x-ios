@@ -42,13 +42,11 @@ struct MessageComposerTextField: View {
     }
     
     private var keyboardShortcuts: some View {
-        Group {
-            Button("") {
-                keyHandler(.keyboardEscape)
-            }
-            // Need this to enable escape on the textView and forward the presses
-            .keyboardShortcut(.escape, modifiers: [])
+        Button("") {
+            keyHandler(.keyboardEscape)
         }
+        // Need this to enable escape on the textView and forward the presses
+        .keyboardShortcut(.escape, modifiers: [])
     }
 }
 
@@ -346,8 +344,8 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
         @State var text: NSAttributedString
         
         init(text: String) {
-            _text = .init(initialValue: .init(string: text, attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
-                                                                         .foregroundColor: UIColor.compound.textPrimary]))
+            self.text = .init(string: text, attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
+                                                         .foregroundColor: UIColor.compound.textPrimary])
         }
         
         var body: some View {
