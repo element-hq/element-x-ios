@@ -8,7 +8,7 @@ struct UnitTests: AsyncParsableCommand {
     @Flag(help: "Skip preview tests")
     var skipPreviews = false
     
-    private static let osVersion = "26.4.1"
+    private static let osVersion = CI.defaultOSVersion
     private static let device = "iPhone 17"
     
     func run() async throws {
