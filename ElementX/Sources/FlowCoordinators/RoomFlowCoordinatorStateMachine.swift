@@ -198,7 +198,7 @@ extension RoomFlowCoordinator {
     }
     
     // swiftlint:disable:next function_body_length
-    func addRouteMapping(stateMachine: StateMachine<State, Event>) {
+    func addRouteMapping(stateMachine: AsyncStateMachine<State, Event>) {
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
             // Room
