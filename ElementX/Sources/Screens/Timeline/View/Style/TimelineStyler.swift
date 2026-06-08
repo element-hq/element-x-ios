@@ -21,7 +21,7 @@ struct TimelineStyler<Content: View>: View {
     init(timelineItem: EventBasedTimelineItemProtocol, @ViewBuilder content: @escaping () -> Content) {
         self.timelineItem = timelineItem
         self.content = content
-        adjustedDeliveryStatus = timelineItem.properties.deliveryStatus
+        _adjustedDeliveryStatus = State(initialValue: timelineItem.properties.deliveryStatus)
     }
     
     var body: some View {

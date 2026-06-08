@@ -18,7 +18,7 @@ struct LiveLocationRoomTimelineView: View {
     init(currentDate: Date = .now, timelineItem: LiveLocationRoomTimelineItem, isStopped: Bool = false) {
         self.currentDate = currentDate
         self.timelineItem = timelineItem
-        hasExpired = isStopped || currentDate >= timelineItem.content.timeoutDate
+        _hasExpired = State(initialValue: isStopped || currentDate >= timelineItem.content.timeoutDate)
     }
     
     /// A publisher that fires once when the timeoutDate is reached, setting `hasExpired` to true.
