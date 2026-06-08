@@ -113,6 +113,8 @@ struct NotificationContentBuilder {
                                       senderAvatarDisplayName: name,
                                       senderDisplayName: name,
                                       icon: icon(for: notificationItem),
+                                      roomJoinedMembers: notificationItem.roomJoinedMembers,
+                                      hasMention: notificationItem.hasMention,
                                       forcePlaceholder: userSession.inviteAvatarsVisibility == .off,
                                       mediaProvider: mediaProvider)
     }
@@ -139,6 +141,8 @@ struct NotificationContentBuilder {
                                       senderAvatarDisplayName: senderAvatarDisplayName,
                                       senderDisplayName: senderDisplayName,
                                       icon: icon(for: notificationItem),
+                                      roomJoinedMembers: notificationItem.roomJoinedMembers,
+                                      hasMention: notificationItem.hasMention,
                                       mediaProvider: mediaProvider)
     }
     
@@ -234,6 +238,8 @@ struct NotificationContentBuilder {
                                          senderAvatarDisplayName: String,
                                          senderDisplayName: String,
                                          icon: NotificationIcon,
+                                         roomJoinedMembers: Int,
+                                         hasMention: Bool,
                                          forcePlaceholder: Bool = false,
                                          mediaProvider: MediaProviderProtocol) async {
         var fetchedImage: INImage?
@@ -265,19 +271,13 @@ struct NotificationContentBuilder {
                               contactIdentifier: nil,
                               customIdentifier: nil)
         
+        // Recipients are left nil; groups are classified via the donation metadata set below, DMs by default.
         var speakableGroupName: INSpeakableString?
-        var recipients: [INPerson]?
         if let groupInfo = icon.groupInfo {
-            let meHandle = INPersonHandle(value: notificationContent.receiverID, type: .unknown)
-            let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
             speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.displayName)
-            // A third placeholder participant keeps the conversation above two people, otherwise iOS misclassifies the group as a 1:1 direct message.
-            let placeholderHandle = INPersonHandle(value: groupInfo.id, type: .unknown)
-            let placeholder = INPerson(personHandle: placeholderHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil)
-            recipients = [sender, me, placeholder]
         }
         
-        let intent = INSendMessageIntent(recipients: recipients,
+        let intent = INSendMessageIntent(recipients: nil,
                                          outgoingMessageType: .outgoingMessageText,
                                          content: nil,
                                          speakableGroupName: speakableGroupName,
@@ -285,9 +285,14 @@ struct NotificationContentBuilder {
                                          serviceName: nil,
                                          sender: sender,
                                          attachments: nil)
+        let metadata = INSendMessageIntentDonationMetadata()
+        metadata.mentionsCurrentUser = hasMention
         if speakableGroupName != nil {
             intent.setImage(image, forParameterNamed: \.speakableGroupName)
+            // recipientCount marks the conversation as a group; left unset for DMs, where it would add a "You and 1 other" subtitle.
+            metadata.recipientCount = max(1, roomJoinedMembers - 1)
         }
+        intent.donationMetadata = metadata
         
         // Use the intent to initialize the interaction.
         let interaction = INInteraction(intent: intent, response: nil)
