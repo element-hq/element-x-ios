@@ -265,14 +265,13 @@ struct NotificationContentBuilder {
                               contactIdentifier: nil,
                               customIdentifier: nil)
         
-        // These are required to show the group name as subtitle
+        // A placeholder recipient keeps the conversation above two participants, otherwise iOS misclassifies the group as a 1:1 direct message.
         var speakableGroupName: INSpeakableString?
         var recipients: [INPerson]?
         if let groupInfo = icon.groupInfo {
-            let meHandle = INPersonHandle(value: notificationContent.receiverID, type: .unknown)
-            let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
             speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.displayName)
-            recipients = [sender, me]
+            let placeholderHandle = INPersonHandle(value: groupInfo.id, type: .unknown)
+            recipients = [INPerson(personHandle: placeholderHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil)]
         }
         
         let intent = INSendMessageIntent(recipients: recipients,
