@@ -14,7 +14,7 @@ struct BumpCalendarVersion: ParsableCommand {
     /// Updates the project YAML with the new version.
     private func updateProjectYAML() throws {
         let yamlURL = URL.projectDirectory.appendingPathComponent("project.yml")
-        let yamlString = try String(contentsOf: yamlURL)
+        let yamlString = try String(contentsOf: yamlURL, encoding: .utf8)
         
         // Use regex instead of Yams to preserve any whitespace, comments etc in the file.
         let marketingVersionRegex = /MARKETING_VERSION:\s*([^\s]+)/

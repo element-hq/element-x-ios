@@ -125,7 +125,7 @@ struct BuildSDK: AsyncParsableCommand {
     /// Update project.yml with the local path of the SDK.
     func updateProjectYAML() throws {
         let yamlURL = URL.projectDirectory.appendingPathComponent("project.yml")
-        let yamlString = try String(contentsOf: yamlURL)
+        let yamlString = try String(contentsOf: yamlURL, encoding: .utf8)
         guard var projectConfig = try Yams.compose(yaml: yamlString) else { throw Error.failureParsingProjectYAML }
         
         projectConfig["packages"]?.mapping?["MatrixRustSDK"]? = ["path": "../matrix-rust-sdk"]

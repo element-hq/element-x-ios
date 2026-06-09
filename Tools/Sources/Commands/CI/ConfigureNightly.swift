@@ -26,7 +26,7 @@ struct ConfigureNightly: AsyncParsableCommand {
     /// Adds the Nightly variant include path to `project.yml` if it isn't already present.
     private func addNightlyVariant() throws {
         let projectURL = URL.projectDirectory.appending(component: "project.yml")
-        let projectString = try String(contentsOf: projectURL)
+        let projectString = try String(contentsOf: projectURL, encoding: .utf8)
         guard var projectConfig = try Yams.compose(yaml: projectString) else {
             throw ValidationError("Failed to parse project.yml.")
         }
