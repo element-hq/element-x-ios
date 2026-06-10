@@ -61,6 +61,12 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>GuaDefaultAccountProvider</key>
+	<string>$(DEFAULT_ACCOUNT_PROVIDER)</string>
+	<key>GuaOidcRedirectURL</key>
+	<string>$(OIDC_REDIRECT_URL)</string>
+	<key>GuaOidcStaticRegistrations</key>
+	<string>$(OIDC_STATIC_REGISTRATIONS)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>

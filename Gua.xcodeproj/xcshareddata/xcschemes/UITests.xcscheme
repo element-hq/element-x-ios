@@ -4,7 +4,8 @@
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      runPostActionsOnFailure = "NO">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
-               BuildableName = "IntegrationTests.xctest"
-               BlueprintName = "IntegrationTests"
-               ReferencedContainer = "container:ElementX.xcodeproj">
+               BlueprintIdentifier = "33A96E673B477BBCBEDA109B"
+               BuildableName = "UITests.xctest"
+               BlueprintName = "UITests"
+               ReferencedContainer = "container:Gua.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -27,32 +28,26 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <TestPlans>
+         <TestPlanReference
+            default = "YES"
+            reference = "container:UITests/SupportingFiles/UITests.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
-            BuildableName = "IntegrationTests.xctest"
-            BlueprintName = "IntegrationTests"
-            ReferencedContainer = "container:ElementX.xcodeproj">
+            BlueprintIdentifier = "33A96E673B477BBCBEDA109B"
+            BuildableName = "UITests.xctest"
+            BlueprintName = "UITests"
+            ReferencedContainer = "container:Gua.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <CodeCoverageTargets>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "Gua.app"
-            BlueprintName = "ElementX"
-            ReferencedContainer = "container:ElementX.xcodeproj">
-         </BuildableReference>
-      </CodeCoverageTargets>
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:IntegrationTests/SupportingFiles/IntegrationTests.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
+      <Testables>
+      </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -67,12 +62,14 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
-            BuildableName = "IntegrationTests.xctest"
-            BlueprintName = "IntegrationTests"
-            ReferencedContainer = "container:ElementX.xcodeproj">
+            BlueprintIdentifier = "33A96E673B477BBCBEDA109B"
+            BuildableName = "UITests.xctest"
+            BlueprintName = "UITests"
+            ReferencedContainer = "container:Gua.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -80,13 +77,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <CommandLineArguments>
+      </CommandLineArguments>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
-            BuildableName = "IntegrationTests.xctest"
-            BlueprintName = "IntegrationTests"
-            ReferencedContainer = "container:ElementX.xcodeproj">
+            BlueprintIdentifier = "33A96E673B477BBCBEDA109B"
+            BuildableName = "UITests.xctest"
+            BlueprintName = "UITests"
+            ReferencedContainer = "container:Gua.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

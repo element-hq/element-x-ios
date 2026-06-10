@@ -15,7 +15,7 @@ struct AuthenticationStartLogo: View {
     let isOnGradient: Bool
     
     /// Extra padding needed to avoid cropping the shadows.
-    private let extra: CGFloat = 64
+    private let extra: CGFloat = 32
     /// The shape that the logo is composed on top of.
     private let outerShape = RoundedRectangle(cornerRadius: 44)
     private let outerShapeShadowColor = Color(red: 0.11, green: 0.11, blue: 0.13)
@@ -23,27 +23,11 @@ struct AuthenticationStartLogo: View {
     
     var body: some View {
         Image(asset: Asset.Images.appLogo)
-            .background {
-                Circle()
-                    .inset(by: 1)
-                    .shadow(color: .black.opacity(!isLight && isOnGradient ? 0.3 : 0.4),
-                            radius: 12.57143,
-                            y: 6.28571)
-                
-                Circle()
-                    .inset(by: 1)
-                    .shadow(color: .black.opacity(0.5),
-                            radius: 12.57143,
-                            y: 6.28571)
-                    .blendMode(.overlay)
-            }
-            .padding(24)
-            .background {
-                Color.white
-                    .opacity(isLight ? 0.23 : isOnGradient ? 0.05 : 0.13)
-            }
+            .resizable()
+            .scaledToFit()
+            .scaleEffect(0.8)
             .clipShape(outerShape)
-            .overlay {
+            .overlay(alignment: .center) {
                 outerShape
                     .inset(by: 0.25)
                     .stroke(.white.opacity(isLight ? 1 : isOnGradient ? 0.9 : 0.25), lineWidth: 0.5)

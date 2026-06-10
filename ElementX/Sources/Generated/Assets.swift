@@ -29,6 +29,7 @@ internal enum Asset {
     internal static let backgroundColor = ColorAsset(name: "colors/background-color")
   }
   internal enum Images {
+    internal static let iconIOSDark1024x1024 = ImageAsset(name: "images/Icon-iOS-Dark-1024x1024")
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
     internal static let backgroundBottom = ImageAsset(name: "images/background-bottom")

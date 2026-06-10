@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
+               BlueprintIdentifier = "4B70733CD7C13746395196E0"
                BuildableName = "Gua.app"
                BlueprintName = "ElementX"
-               ReferencedContainer = "container:ElementX.xcodeproj">
+               ReferencedContainer = "container:Gua.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,19 +32,19 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
+            BlueprintIdentifier = "4B70733CD7C13746395196E0"
             BuildableName = "Gua.app"
             BlueprintName = "ElementX"
-            ReferencedContainer = "container:ElementX.xcodeproj">
+            ReferencedContainer = "container:Gua.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
+            BlueprintIdentifier = "4B70733CD7C13746395196E0"
             BuildableName = "Gua.app"
             BlueprintName = "ElementX"
-            ReferencedContainer = "container:ElementX.xcodeproj">
+            ReferencedContainer = "container:Gua.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
       <TestPlans>
@@ -68,10 +68,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
+            BlueprintIdentifier = "4B70733CD7C13746395196E0"
             BuildableName = "Gua.app"
             BlueprintName = "ElementX"
-            ReferencedContainer = "container:ElementX.xcodeproj">
+            ReferencedContainer = "container:Gua.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -102,10 +102,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
+            BlueprintIdentifier = "4B70733CD7C13746395196E0"
             BuildableName = "Gua.app"
             BlueprintName = "ElementX"
-            ReferencedContainer = "container:ElementX.xcodeproj">
+            ReferencedContainer = "container:Gua.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
