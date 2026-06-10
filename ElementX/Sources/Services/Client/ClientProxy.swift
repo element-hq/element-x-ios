@@ -171,7 +171,7 @@ class ClientProxy: ClientProxyProtocol {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
-        spaceService = SpaceServiceProxy(spaceService: client.spaceService())
+        spaceService = await SpaceServiceProxy(spaceService: client.spaceService())
         
         let configuredAppService = try await ClientProxyServices(client: client,
                                                                  actionsSubject: actionsSubject,
@@ -269,6 +269,15 @@ class ClientProxy: ClientProxyProtocol {
             return try client.deviceId()
         } catch {
             MXLog.error("Failed retrieving deviceID with error: \(error)")
+            return nil
+        }
+    }
+
+    var accessToken: String? {
+        do {
+            return try client.session().accessToken
+        } catch {
+            MXLog.error("Failed retrieving access token with error: \(error)")
             return nil
         }
     }
@@ -718,7 +727,8 @@ class ClientProxy: ClientProxyProtocol {
                                    appDisplayName: configuration.appDisplayName,
                                    deviceDisplayName: configuration.deviceDisplayName,
                                    profileTag: configuration.profileTag,
-                                   lang: configuration.lang)
+                                   lang: configuration.lang,
+                                   append: false)
     }
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
@@ -1086,7 +1096,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Pinning current identity for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID, fallbackToServer: true) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
@@ -1102,7 +1112,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Withdrawing current identity verification for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID, fallbackToServer: true) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
@@ -1124,7 +1134,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
         do {
-            return try await .success(client.encryption().userIdentity(userId: userID).map(UserIdentityProxy.init))
+            return try await .success(client.encryption().userIdentity(userId: userID, fallbackToServer: true).map(UserIdentityProxy.init))
         } catch {
             MXLog.error("Failed retrieving user identity: \(error)")
             return .failure(.sdkError(error))
@@ -1146,8 +1156,8 @@ private class ClientDelegateWrapper: ClientDelegate {
         authErrorCallback(isSoftLogout)
     }
     
-    func didRefreshTokens() {
-        MXLog.info("Delegating session updates to the ClientSessionDelegate.")
+    func onBackgroundTaskErrorReport(taskName: String, error: BackgroundTaskFailureReason) {
+        MXLog.error("Background task '\(taskName)' failed: \(error)")
     }
 }
 
@@ -1200,7 +1210,6 @@ private struct ClientProxyServices {
          appSettings: AppSettings) async throws {
         let syncService = try await client
             .syncService()
-            .withCrossProcessLock()
             .withOfflineMode()
             .withSharePos(enable: true)
             .finish()

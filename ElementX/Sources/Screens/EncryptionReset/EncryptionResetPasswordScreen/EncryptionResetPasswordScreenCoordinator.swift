@@ -10,6 +10,8 @@ import SwiftUI
 
 struct EncryptionResetPasswordScreenCoordinatorParameters {
     let passwordPublisher: PassthroughSubject<String, Never>
+    let clientProxy: ClientProxyProtocol?
+    let identityServiceClient: IdentityServiceClientProtocol?
 }
 
 enum EncryptionResetPasswordScreenCoordinatorAction {
@@ -30,7 +32,9 @@ final class EncryptionResetPasswordScreenCoordinator: CoordinatorProtocol {
     init(parameters: EncryptionResetPasswordScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = EncryptionResetPasswordScreenViewModel(passwordPublisher: parameters.passwordPublisher)
+        viewModel = EncryptionResetPasswordScreenViewModel(passwordPublisher: parameters.passwordPublisher,
+                                                           clientProxy: parameters.clientProxy,
+                                                           identityServiceClient: parameters.identityServiceClient)
     }
     
     func start() {

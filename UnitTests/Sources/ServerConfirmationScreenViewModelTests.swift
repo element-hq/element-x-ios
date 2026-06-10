@@ -22,6 +22,7 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
     override func setUp() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
+        appSettings.disableIdentityServiceAuthentication()
         // These app settings are kept local to the tests on purpose as if they are registered in the
         // ServiceLocator, the providers override that we apply will break other tests in the suite.
     }
@@ -327,7 +328,8 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
                                  accountProvisioningHost: appSettings.accountProvisioningHost,
                                  bugReportApplicationID: appSettings.bugReportApplicationID,
                                  analyticsTermsURL: appSettings.analyticsTermsURL,
-                                 mapTilerConfiguration: appSettings.mapTilerConfiguration)
+                                 mapTilerConfiguration: appSettings.mapTilerConfiguration,
+                                 identityServiceBaseURL: nil)
             mode = .picker(appSettings.accountProviders)
         }
         

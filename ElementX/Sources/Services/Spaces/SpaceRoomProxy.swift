@@ -16,14 +16,14 @@ class SpaceRoomProxy: SpaceRoomProxyProtocol {
     }
     
     lazy var id = spaceRoom.roomId
-    var name: String? { spaceRoom.name }
+    var name: String? { spaceRoom.rawName ?? spaceRoom.displayName }
     var avatarURL: URL? { spaceRoom.avatarUrl.flatMap(URL.init) }
     
     var isSpace: Bool { spaceRoom.roomType == .space }
     var childrenCount: Int { Int(spaceRoom.childrenCount) }
     
     var joinedMembersCount: Int { Int(spaceRoom.numJoinedMembers) }
-    var heroes: [UserProfileProxy] { (spaceRoom.heroes ?? []).map(UserProfileProxy.init) }
+    var heroes: [UserProfileProxy] { (spaceRoom.heroes ?? []).map { UserProfileProxy(sdkRoomHero: $0) } }
     var topic: String? { spaceRoom.topic }
     var canonicalAlias: String? { spaceRoom.canonicalAlias }
     

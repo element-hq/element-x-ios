@@ -53,7 +53,13 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     func loginWithOIDCCallback(_ callbackURL: URL) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
-    
+    /// Restores a Matrix session that was minted out-of-band (e.g. by the Gua identity-service).
+    func loginWithExistingMatrixSession(accessToken: String,
+                                        refreshToken: String?,
+                                        userId: String,
+                                        deviceId: String,
+                                        homeserverUrl: String) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+
     /// Resets the current configuration requiring `configure(for:flow:)` to be called again.
     func reset()
 }

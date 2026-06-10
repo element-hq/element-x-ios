@@ -62,11 +62,11 @@ final class NSEUserSession {
                          maxRequestRetryTime: 5000,
                          threadsEnabled: appSettings.threadsEnabled)
             .systemIsMemoryConstrained()
-            .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
-                          cachePath: credentials.restorationToken.sessionDirectories.cachePath)
+            .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
+                                       cachePath: credentials.restorationToken.sessionDirectories.cachePath)
+                    .passphrase(passphrase: credentials.restorationToken.passphrase))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
-            .sessionPassphrase(passphrase: credentials.restorationToken.passphrase)
         
         baseClient = try await clientBuilder.build()
         delegateHandle = try baseClient.setDelegate(delegate: ClientDelegateWrapper())
@@ -92,6 +92,9 @@ final class NSEUserSession {
                 return nil
             case .eventFilteredOut:
                 MXLog.warning("Notification event filtered out - roomID: \(roomID) eventID: \(eventID)")
+                return nil
+            case .eventRedacted:
+                MXLog.warning("Notification event redacted - roomID: \(roomID) eventID: \(eventID)")
                 return nil
             }
         } catch {
@@ -121,7 +124,7 @@ private class ClientDelegateWrapper: ClientDelegate {
         MXLog.error("Received authentication error, the NSE can't handle this.")
     }
     
-    func didRefreshTokens() {
-        MXLog.info("Delegating session updates to the ClientSessionDelegate.")
+    func onBackgroundTaskErrorReport(taskName: String, error: BackgroundTaskFailureReason) {
+        MXLog.error("Background task '\(taskName)' failed: \(error)")
     }
 }

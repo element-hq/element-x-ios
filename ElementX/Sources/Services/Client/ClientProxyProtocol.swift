@@ -86,6 +86,10 @@ protocol ClientProxyProtocol: AnyObject {
 
     var deviceID: String? { get }
 
+    /// Current Matrix access token for the active session, if available. Used to authenticate
+    /// requests to the Gua identity-service for privileged account operations (deactivate, etc.).
+    var accessToken: String? { get }
+
     var homeserver: String { get }
     
     var canDeactivateAccount: Bool { get }

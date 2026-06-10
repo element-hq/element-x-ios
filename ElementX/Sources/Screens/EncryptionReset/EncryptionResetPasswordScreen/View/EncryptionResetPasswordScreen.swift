@@ -18,7 +18,9 @@ struct EncryptionResetPasswordScreen: View {
             VStack(spacing: 16) {
                 BigIcon(icon: \.lockSolid)
                 
-                Text(L10n.screenResetEncryptionPasswordTitle)
+                Text(context.viewState.identityServiceAvailable
+                    ? L10n.screenAccountReauthSectionTitle
+                    : L10n.screenResetEncryptionPasswordTitle)
                     .foregroundColor(.compound.textPrimary)
                     .font(.compound.headingMDBold)
                     .multilineTextAlignment(.center)
@@ -28,20 +30,30 @@ struct EncryptionResetPasswordScreen: View {
                     .font(.compound.bodyMD)
                     .multilineTextAlignment(.center)
                 
-                passwordSection
+                if context.viewState.identityServiceAvailable {
+                    reauthSection
+                } else {
+                    passwordSection
+                }
             }
             .padding(16)
         } bottomContent: {
-            Button(L10n.actionResetIdentity, role: .destructive) {
-                context.send(viewAction: .submit)
+            if !context.viewState.identityServiceAvailable {
+                Button(L10n.actionResetIdentity, role: .destructive) {
+                    context.send(viewAction: .submit)
+                }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.encryptionResetPasswordScreen.submit)
             }
-            .buttonStyle(.compound(.primary))
-            .accessibilityIdentifier(A11yIdentifiers.encryptionResetPasswordScreen.submit)
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .interactiveDismissDisabled()
-        .onAppear { textFieldFocus = true }
+        .onAppear {
+            if !context.viewState.identityServiceAvailable {
+                textFieldFocus = true
+            }
+        }
     }
     
     @ViewBuilder
@@ -63,6 +75,53 @@ struct EncryptionResetPasswordScreen: View {
                     context.send(viewAction: .submit)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.encryptionResetPasswordScreen.passwordField)
+        }
+    }
+    
+    @ViewBuilder
+    private var reauthSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(L10n.screenAccountReauthSectionFooter)
+                .foregroundColor(.compound.textSecondary)
+                .font(.compound.bodySM)
+                .multilineTextAlignment(.leading)
+            
+            switch context.viewState.reauthPhase {
+            case .idle, .error:
+                Button(L10n.screenAccountReauthSendCode) {
+                    context.send(viewAction: .sendReauthCode)
+                }
+                .buttonStyle(.compound(.primary))
+                if case let .error(message) = context.viewState.reauthPhase {
+                    Text(message)
+                        .foregroundStyle(.compound.textCriticalPrimary)
+                        .font(.compound.bodySM)
+                }
+            case .sendingCode, .resolving:
+                HStack {
+                    ProgressView()
+                    Text(L10n.commonPleaseWait).foregroundStyle(.compound.textSecondary)
+                }
+            case .awaitingCode, .verifyingCode:
+                Text(L10n.screenAccountReauthCodeLabel)
+                    .foregroundColor(.compound.textPrimary)
+                    .font(.compound.bodySMSemibold)
+                TextField(L10n.screenOtpCodePlaceholder, text: $context.otpCode)
+                    .keyboardType(.numberPad)
+                    .tint(.compound.iconAccentTertiary)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.compound.bgSubtleSecondaryLevel0)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .focused($textFieldFocus)
+                Button(L10n.actionConfirm, role: .destructive) {
+                    context.send(viewAction: .verifyReauthCode)
+                }
+                .buttonStyle(.compound(.primary))
+                if case .verifyingCode = context.viewState.reauthPhase {
+                    ProgressView()
+                }
+            }
         }
     }
 }
