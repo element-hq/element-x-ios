@@ -13,9 +13,8 @@ struct SettingsScreen: View {
     let context: SettingsScreenViewModel.Context
     
     private var shouldHideManageAccountSection: Bool {
-        context.viewState.accountProfileURL == nil &&
-            context.viewState.accountSessionsListURL == nil &&
-            !context.viewState.showBlockedUsers
+        // Always shown: the Two-step verification row lives in this section.
+        false
     }
     
     var body: some View {
@@ -123,6 +122,12 @@ struct SettingsScreen: View {
                             context.send(viewAction: .manageAccount(url: url))
                         })
             }
+            
+            ListRow(label: .default(title: L10n.screenTwoStepVerificationTitle,
+                                    icon: \.lockSolid),
+                    kind: .navigationLink {
+                        context.send(viewAction: .twoStepVerification)
+                    })
             
             if context.viewState.showBlockedUsers {
                 ListRow(label: .default(title: L10n.commonBlockedUsers,

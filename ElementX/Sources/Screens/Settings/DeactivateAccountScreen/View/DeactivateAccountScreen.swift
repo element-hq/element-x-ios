@@ -15,7 +15,11 @@ struct DeactivateAccountScreen: View {
         Form {
             infoSection
             eraseDataSection
-            passwordSection
+            if context.viewState.identityServiceAvailable {
+                reauthSection
+            } else {
+                passwordSection
+            }
         }
         .compoundList()
         .safeAreaInset(edge: .bottom) {
@@ -23,13 +27,21 @@ struct DeactivateAccountScreen: View {
                 context.send(viewAction: .deactivate)
             }
             .buttonStyle(.compound(.primary))
-            .disabled(context.password.isEmpty)
+            .disabled(!canSubmit)
             .padding(16)
             .background(Color.compound.bgSubtleSecondaryLevel0.ignoresSafeArea())
         }
         .navigationTitle(L10n.screenDeactivateAccountTitle)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
+    }
+    
+    private var canSubmit: Bool {
+        if context.viewState.identityServiceAvailable {
+            if case .verified = context.viewState.reauthPhase { return true }
+            return false
+        }
+        return !context.password.isEmpty
     }
     
     private var infoSection: some View {
@@ -68,6 +80,60 @@ struct DeactivateAccountScreen: View {
         } header: {
             Text(L10n.actionConfirmPassword)
                 .compoundListSectionHeader()
+        }
+    }
+    
+    @ViewBuilder
+    private var reauthSection: some View {
+        Section {
+            switch context.viewState.reauthPhase {
+            case .idle, .error:
+                ListRow(label: .action(title: L10n.screenAccountReauthSendCode,
+                                       icon: \.lockSolid),
+                        kind: .button {
+                            context.send(viewAction: .sendReauthCode)
+                        })
+                if case let .error(message) = context.viewState.reauthPhase {
+                    ListRow(kind: .custom {
+                        Text(message)
+                            .foregroundStyle(.compound.textCriticalPrimary)
+                            .font(.compound.bodySM)
+                    })
+                }
+            case .sendingCode:
+                ListRow(kind: .custom {
+                    HStack {
+                        ProgressView()
+                        Text(L10n.commonPleaseWait).foregroundStyle(.compound.textSecondary)
+                    }
+                })
+            case .awaitingCode, .verifyingCode:
+                ListRow(label: .plain(title: L10n.screenAccountReauthCodeLabel),
+                        kind: .textField(text: $context.otpCode))
+                    .submitLabel(.done)
+                ListRow(label: .action(title: L10n.actionConfirm, icon: \.checkCircleSolid),
+                        kind: .button {
+                            context.send(viewAction: .verifyReauthCode)
+                        })
+                if case .verifyingCode = context.viewState.reauthPhase {
+                    ListRow(kind: .custom {
+                        ProgressView()
+                    })
+                }
+            case .verified:
+                ListRow(kind: .custom {
+                    HStack {
+                        CompoundIcon(\.checkCircleSolid).foregroundStyle(.compound.iconSuccessPrimary)
+                        Text(L10n.screenAccountReauthVerified).foregroundStyle(.compound.textSuccessPrimary)
+                    }
+                })
+            }
+        } header: {
+            Text(L10n.screenAccountReauthSectionTitle)
+                .compoundListSectionHeader()
+        } footer: {
+            Text(L10n.screenAccountReauthSectionFooter)
+                .compoundListSectionFooter()
         }
     }
 }

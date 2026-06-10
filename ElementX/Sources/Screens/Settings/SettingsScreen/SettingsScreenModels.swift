@@ -23,6 +23,7 @@ enum SettingsScreenViewModelAction: Equatable {
     case developerOptions
     case logout
     case deactivateAccount
+    case twoStepVerification
 }
 
 enum SettingsScreenSecuritySectionMode {
@@ -71,4 +72,5 @@ enum SettingsScreenViewAction {
     case advancedSettings
     case logout
     case deactivateAccount
+    case twoStepVerification
 }
