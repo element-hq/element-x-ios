@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Zaloguj się do %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Zaloguj się za pomocą kodu QR";
 "screen_onboarding_sign_up" = "Utwórz konto";
-"screen_onboarding_welcome_message" = "Witamy w %1$@. Szybszy i prostszy niż kiedykolwiek.";
-"screen_onboarding_welcome_subtitle" = "Witamy w %1$@. Doładowany, dla szybkości i prostoty.";
-"screen_onboarding_welcome_title" = "Be in your element";
+"screen_onboarding_welcome_message" = "Doładowany dla szybkości i prostoty.";
+"screen_onboarding_welcome_subtitle" = "Doładowany, dla szybkości i prostoty.";
+"screen_onboarding_welcome_title" = "Witamy w Gua";
 "screen_polls_history_empty_ongoing" = "Nie znaleziono ankiet w trakcie.";
 "screen_polls_history_empty_past" = "Nie znaleziono ankiet.";
 "screen_polls_history_filter_ongoing" = "W trakcie";

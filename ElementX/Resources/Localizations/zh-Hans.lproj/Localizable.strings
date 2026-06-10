@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "登录到 %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "使用二维码登录";
 "screen_onboarding_sign_up" = "创建账户";
-"screen_onboarding_welcome_message" = "欢迎使用 %1$@，快而简约的消息应用。";
-"screen_onboarding_welcome_subtitle" = "欢迎使用 %1$@，速度与简洁的极致。";
-"screen_onboarding_welcome_title" = "融入您的 Element";
+"screen_onboarding_welcome_message" = "速度与简洁的极致。";
+"screen_onboarding_welcome_subtitle" = "速度与简洁的极致。";
+"screen_onboarding_welcome_title" = "欢迎使用 Gua";
 "screen_polls_history_empty_ongoing" = "无法找到正在进行的投票。";
 "screen_polls_history_empty_past" = "无法找到历史投票";
 "screen_polls_history_filter_ongoing" = "正在进行";
@@ -1397,3 +1397,25 @@
 "screen_signout_preference_item" = "登出";
 "screen_signout_save_recovery_key_title" = "您保存了恢复密钥吗？";
 "troubleshoot_notifications_entry_point_title" = "排查通知问题";
+
+"screen_phone_login_title" = "输入您的手机号码";
+"screen_phone_login_subtitle" = "我们会向您的手机发送一条 6 位验证码。";
+"screen_phone_login_continue" = "发送验证码";
+"screen_phone_login_phone_placeholder" = "手机号码（包含国家区号）";
+"screen_phone_login_invalid_number" = "请输入包含国家区号的有效手机号码。";
+"screen_phone_login_rate_limited" = "请求验证码次数过多，请稍后再试。";
+"screen_phone_login_send_failed" = "验证码发送失败，请重试。";
+"screen_phone_login_button_title" = "使用手机号码继续";
+
+"screen_otp_title" = "输入验证码";
+"screen_otp_subtitle" = "请输入发送到 %@ 的验证码。";
+"screen_otp_verify" = "验证";
+"screen_otp_resend" = "重新发送验证码";
+"screen_otp_code_placeholder" = "6 位验证码";
+"screen_otp_display_name_placeholder" = "显示名称（可选）";
+"screen_otp_pin_placeholder" = "安全 PIN（如已设置）";
+"screen_otp_invalid_code" = "验证码错误或已过期。";
+"screen_otp_invalid_pin" = "PIN 错误。";
+"screen_otp_verify_failed" = "无法验证验证码，请重试。";
+"screen_otp_resend_failed" = "无法重新发送验证码，请重试。";
+"screen_otp_resent" = "新的验证码已发送。";

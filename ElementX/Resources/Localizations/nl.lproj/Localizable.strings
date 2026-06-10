@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Inloggen met QR-code";
 "screen_onboarding_sign_up" = "Account aanmaken";
-"screen_onboarding_welcome_message" = "Welkom bij de snelste %1$@ ooit. Supercharged, voor snelheid en eenvoud.";
-"screen_onboarding_welcome_subtitle" = "Welkom bij %1$@. Supercharged, voor snelheid en eenvoud.";
-"screen_onboarding_welcome_title" = "Wees in je element";
+"screen_onboarding_welcome_message" = "Supercharged voor snelheid en eenvoud.";
+"screen_onboarding_welcome_subtitle" = "Supercharged, voor snelheid en eenvoud.";
+"screen_onboarding_welcome_title" = "Welkom bij Gua";
 "screen_polls_history_empty_ongoing" = "Kan geen actieve peilingen vinden.";
 "screen_polls_history_empty_past" = "Kan geen eerdere peilingen vinden.";
 "screen_polls_history_filter_ongoing" = "Actief";

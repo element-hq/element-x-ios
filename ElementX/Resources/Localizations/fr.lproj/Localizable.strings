@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Se connecter à %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Se connecter avec un QR code";
 "screen_onboarding_sign_up" = "Créer un compte";
-"screen_onboarding_welcome_message" = "Bienvenue dans l’application %1$@ la plus rapide de tous les temps. Boosté pour plus de rapidité et de simplicité.";
-"screen_onboarding_welcome_subtitle" = "Bienvenue sur %1$@. Boosté, pour plus de rapidité et de simplicité.";
-"screen_onboarding_welcome_title" = "Soyez dans votre Element";
+"screen_onboarding_welcome_message" = "Boosté pour plus de rapidité et de simplicité.";
+"screen_onboarding_welcome_subtitle" = "Boosté, pour plus de rapidité et de simplicité.";
+"screen_onboarding_welcome_title" = "Bienvenue sur Gua";
 "screen_polls_history_empty_ongoing" = "Impossible de trouver des sondages en cours.";
 "screen_polls_history_empty_past" = "Impossible de trouver des sondages terminés.";
 "screen_polls_history_filter_ongoing" = "En cours";
@@ -1397,3 +1397,25 @@
 "screen_signout_preference_item" = "Se déconnecter";
 "screen_signout_save_recovery_key_title" = "Avez-vous sauvegardé votre clé de récupération ?";
 "troubleshoot_notifications_entry_point_title" = "Dépanner les notifications";
+
+"screen_phone_login_title" = "Saisissez votre numéro de téléphone";
+"screen_phone_login_subtitle" = "Nous vous enverrons un code de vérification à 6 chiffres sur votre mobile.";
+"screen_phone_login_continue" = "Envoyer le code";
+"screen_phone_login_phone_placeholder" = "Numéro de téléphone (inclure l'indicatif)";
+"screen_phone_login_invalid_number" = "Saisissez un numéro de téléphone valide avec l'indicatif.";
+"screen_phone_login_rate_limited" = "Vous avez demandé trop de codes. Veuillez patienter avant de réessayer.";
+"screen_phone_login_send_failed" = "Impossible d'envoyer un code. Veuillez réessayer.";
+"screen_phone_login_button_title" = "Continuer avec le numéro de téléphone";
+
+"screen_otp_title" = "Saisissez le code de vérification";
+"screen_otp_subtitle" = "Entrez le code que nous avons envoyé au %@.";
+"screen_otp_verify" = "Vérifier";
+"screen_otp_resend" = "Renvoyer le code";
+"screen_otp_code_placeholder" = "Code à 6 chiffres";
+"screen_otp_display_name_placeholder" = "Nom d'affichage (optionnel)";
+"screen_otp_pin_placeholder" = "Code PIN de sécurité (le cas échéant)";
+"screen_otp_invalid_code" = "Le code est incorrect ou a expiré.";
+"screen_otp_invalid_pin" = "Le code PIN est incorrect.";
+"screen_otp_verify_failed" = "Impossible de vérifier le code. Veuillez réessayer.";
+"screen_otp_resend_failed" = "Impossible de renvoyer le code. Veuillez réessayer.";
+"screen_otp_resent" = "Un nouveau code a été envoyé.";

@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "QR kodu ile giriş yap";
 "screen_onboarding_sign_up" = "Hesap oluştur";
-"screen_onboarding_welcome_message" = "Şimdiye kadarki en hızlı %1$@ hoş geldiniz. Hız ve basitlik için güçlendirildi.";
-"screen_onboarding_welcome_subtitle" = "%1$@'e hoş geldiniz. Hız ve basitlik için süper şarjlı.";
-"screen_onboarding_welcome_title" = "Kendi elementinizde olun";
+"screen_onboarding_welcome_message" = "Hız ve basitlik için süper şarjlı.";
+"screen_onboarding_welcome_subtitle" = "Hız ve basitlik için süper şarjlı.";
+"screen_onboarding_welcome_title" = "Gua'ya hoş geldiniz";
 "screen_polls_history_empty_ongoing" = "Devam eden bir anket bulamadım.";
 "screen_polls_history_empty_past" = "Geçmiş herhangi bir anket bulamıyorum.";
 "screen_polls_history_filter_ongoing" = "Devam ediyor";

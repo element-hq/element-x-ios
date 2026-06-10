@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Bejelentkezés ide: %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Bejelentkezés QR-kóddal";
 "screen_onboarding_sign_up" = "Fiók létrehozása";
-"screen_onboarding_welcome_message" = "Üdvözöljük a valaha volt leggyorsabb %1$@ben. Felturbózva, a sebesség és az egyszerűség érdekében.";
-"screen_onboarding_welcome_subtitle" = "Üdvözli az %1$@. Felturbózva, a sebesség és az egyszerűség jegyében.";
-"screen_onboarding_welcome_title" = "Legyen elemében";
+"screen_onboarding_welcome_message" = "Felturbózva a sebesség és az egyszerűség jegyében.";
+"screen_onboarding_welcome_subtitle" = "Felturbózva, a sebesség és az egyszerűség jegyében.";
+"screen_onboarding_welcome_title" = "Üdvözöljük a Guában";
 "screen_polls_history_empty_ongoing" = "Nem találhatók folyamatban lévő szavazások.";
 "screen_polls_history_empty_past" = "Nem található korábbi szavazás.";
 "screen_polls_history_filter_ongoing" = "Folyamatban";

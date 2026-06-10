@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.7 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -85,6 +85,10 @@ extension AccessibilityTests {
 
     func testComposerToolbar() async throws {
         try await performAccessibilityAudit(named: "ComposerToolbar_Previews")
+    }
+
+    func testCountryPickerScreen() async throws {
+        try await performAccessibilityAudit(named: "CountryPickerScreen_Previews")
     }
 
     func testCreateRoom() async throws {
@@ -327,6 +331,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "NotificationSettingsScreen_Previews")
     }
 
+    func testOtpEntryScreen() async throws {
+        try await performAccessibilityAudit(named: "OtpEntryScreen_Previews")
+    }
+
     func testPINTextField() async throws {
         try await performAccessibilityAudit(named: "PINTextField_Previews")
     }
@@ -335,12 +343,24 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "PaginationIndicatorRoomTimelineView_Previews")
     }
 
+    func testPhoneEntryScreen() async throws {
+        try await performAccessibilityAudit(named: "PhoneEntryScreen_Previews")
+    }
+
     func testPillViewOnBubble() async throws {
         try await performAccessibilityAudit(named: "PillViewOnBubble_Previews")
     }
 
     func testPillView() async throws {
         try await performAccessibilityAudit(named: "PillView_Previews")
+    }
+
+    func testPinChallengeScreen() async throws {
+        try await performAccessibilityAudit(named: "PinChallengeScreen_Previews")
+    }
+
+    func testPinSetupScreen() async throws {
+        try await performAccessibilityAudit(named: "PinSetupScreen_Previews")
     }
 
     func testPinnedEventsTimelineScreen() async throws {
@@ -377,6 +397,10 @@ extension AccessibilityTests {
 
     func testPollView() async throws {
         try await performAccessibilityAudit(named: "PollView_Previews")
+    }
+
+    func testProfileSetupScreen() async throws {
+        try await performAccessibilityAudit(named: "ProfileSetupScreen_Previews")
     }
 
     func testQRCodeLoginScreen() async throws {
@@ -701,6 +725,10 @@ extension AccessibilityTests {
 
     func testTombstonedAvatarImage() async throws {
         try await performAccessibilityAudit(named: "TombstonedAvatarImage_Previews")
+    }
+
+    func testTwoStepVerificationScreen() async throws {
+        try await performAccessibilityAudit(named: "TwoStepVerificationScreen_Previews")
     }
 
     func testTypingIndicatorView() async throws {
