@@ -604,7 +604,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                         appMediator: appMediator,
                                                         appSettings: appSettings,
                                                         analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                        identityServiceClient: IdentityServiceClient())
         coordinator.delegate = self
         
         authenticationFlowCoordinator = coordinator

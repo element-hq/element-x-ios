@@ -64,10 +64,13 @@ final class AppSettings {
         case nextGenHTMLParserEnabled
         case linkPreviewsEnabled
         case latestEventSorterEnabled
+        case legacyAuthEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
         case hideQuietNotificationAlerts
+
+        case pinSetupReminderSnoozedUntil
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -126,7 +129,8 @@ final class AppSettings {
                   accountProvisioningHost: String,
                   bugReportApplicationID: String,
                   analyticsTermsURL: URL?,
-                  mapTilerConfiguration: MapTilerConfiguration) {
+                  mapTilerConfiguration: MapTilerConfiguration,
+                  oidcStaticRegistrations: [URL: String]? = nil) {
         self.accountProviders = accountProviders
         self.allowOtherAccountProviders = allowOtherAccountProviders
         self.hideBrandChrome = hideBrandChrome
@@ -146,6 +150,16 @@ final class AppSettings {
         self.bugReportApplicationID = bugReportApplicationID
         self.analyticsTermsURL = analyticsTermsURL
         self.mapTilerConfiguration = mapTilerConfiguration
+        if let oidcStaticRegistrations {
+            self.oidcStaticRegistrations = oidcStaticRegistrations
+        }
+        oidcConfiguration = OIDCConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
+                                              redirectURI: self.oidcRedirectURL,
+                                              clientURI: self.websiteURL,
+                                              logoURI: self.logoURL,
+                                              tosURI: self.acceptableUseURL,
+                                              policyURI: self.privacyURL,
+                                              staticRegistrations: self.oidcStaticRegistrations.mapKeys { $0.absoluteString })
     }
     
     // MARK: - Application
@@ -218,7 +232,7 @@ final class AppSettings {
     // MARK: - Authentication
     
     /// Any pre-defined static client registrations for OIDC issuers.
-    let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
+    private(set) var oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
     /// The redirect URL used for OIDC. This no longer uses universal links so we don't need the bundle ID to avoid conflicts between Element X, Nightly and PR builds.
     private(set) var oidcRedirectURL: URL = "https://element.io/oidc/login"
     
@@ -310,6 +324,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hideUnreadMessagesBadge, defaultValue: false, storageType: .userDefaults(store))
     var hideUnreadMessagesBadge
+
+    @UserPreference(key: UserDefaultsKeys.pinSetupReminderSnoozedUntil, defaultValue: nil, storageType: .userDefaults(store))
+    var pinSetupReminderSnoozedUntil: Date?
     
     // MARK: - Room Screen
     
@@ -392,6 +409,12 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.latestEventSorterEnabled, defaultValue: false, storageType: .userDefaults(store))
     var latestEventSorterEnabled
+    
+    /// When `true`, the legacy ElementX authentication screens (QR / manual server / OIDC create-account)
+    /// are exposed. Defaults to `false` for the Gua phone-OTP onboarding; gov / special users can enable
+    /// this from developer options to fall back to the original flow.
+    @UserPreference(key: UserDefaultsKeys.legacyAuthEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var legacyAuthEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
