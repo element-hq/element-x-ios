@@ -21,14 +21,14 @@ struct OIDCConfiguration {
 import MatrixRustSDK
 
 extension OIDCConfiguration {
-    var rustValue: OidcConfiguration {
-        OidcConfiguration(clientName: clientName,
-                          redirectUri: redirectURI.absoluteString,
-                          clientUri: clientURI.absoluteString,
-                          logoUri: logoURI.absoluteString,
-                          tosUri: tosURI.absoluteString,
-                          policyUri: policyURI.absoluteString,
-                          staticRegistrations: staticRegistrations)
+    var rustValue: MatrixRustSDK.OAuthConfiguration {
+        MatrixRustSDK.OAuthConfiguration(clientName: clientName,
+                                         redirectUri: redirectURI.absoluteString,
+                                         clientUri: clientURI.absoluteString,
+                                         logoUri: logoURI.absoluteString,
+                                         tosUri: tosURI.absoluteString,
+                                         policyUri: policyURI.absoluteString,
+                                         staticRegistrations: staticRegistrations)
     }
 }
 #endif
