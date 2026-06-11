@@ -28,7 +28,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var encryptionSettingsFlowCoordinator: EncryptionSettingsFlowCoordinator?
     
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<SettingsFlowCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<SettingsFlowCoordinatorAction, Never> {
@@ -232,8 +232,24 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    // GUA FORK: two-step verification entry-point — see SettingsFlowCoordinator+Gua.swift
-        
+    // GUA FORK: Two-step verification entry-point.
+    private func presentTwoStepVerification() {
+        guard let identityServiceClient = IdentityServiceClient() else {
+            MXLog.warning("Identity service is not configured; cannot show two-step verification screen.")
+            return
+        }
+        let parameters = TwoStepVerificationScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
+                                                                        identityServiceClient: identityServiceClient,
+                                                                        userIndicatorController: flowParameters.userIndicatorController)
+        let coordinator = TwoStepVerificationScreenCoordinator(parameters: parameters)
+
+        coordinator.actionsPublisher
+            .sink { _ in }
+            .store(in: &cancellables)
+
+        navigationStackCoordinator.push(coordinator)
+    }
+
     private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
     private func presentAccountManagementURL(_ url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.

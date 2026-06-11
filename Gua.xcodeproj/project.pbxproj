@@ -969,7 +969,6 @@
 		AB6F5AA5FFB6400BAC29A68B /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 32767CDE52FC908FD9DD8DE9 /* DeviceKit */; };
 		ABBA222D9E3FECC31905F13D /* PinSetupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083913FD7519195C80EFDBC7 /* PinSetupScreen.swift */; };
 		ABD6A02A43ADC58290C6A042 /* PhotoLibraryManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C61B344D323E7908155CC41 /* PhotoLibraryManagerMock.swift */; };
-		AC01A614BC64109A41AFA38E /* SettingsFlowCoordinator+Gua.swift in Sources */ = {isa = PBXBuildFile; fileRef = B078D8C8A7BCA01B24F60862 /* SettingsFlowCoordinator+Gua.swift */; };
 		AC43A0FDCB33C16583CB57AD /* UserIdentityProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C4B5AD2E260F7E1BA558C1 /* UserIdentityProxy.swift */; };
 		AC6AC4299AFE42923332C3B8 /* VoiceMessageMediaManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9455D89C7BE5C4D2C13F4883 /* VoiceMessageMediaManagerProtocol.swift */; };
 		AC71F34D68937CE399F31699 /* SplashScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C17891914A993E4E8F908 /* SplashScreenCoordinator.swift */; };
@@ -2452,7 +2451,6 @@
 		B0622704FA609AE4F2621EDF /* KeychainControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainControllerProtocol.swift; sourceTree = "<group>"; };
 		B066569B924AE92196F5A8B0 /* EncryptionResetScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetScreen.swift; sourceTree = "<group>"; };
 		B0683A8F350EA656BCD280D9 /* TimelineItemIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemIdentifier.swift; sourceTree = "<group>"; };
-		B078D8C8A7BCA01B24F60862 /* SettingsFlowCoordinator+Gua.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsFlowCoordinator+Gua.swift"; sourceTree = "<group>"; };
 		B0CA3E8FABE03EDDB404A24F /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B0E5313B352FC25DB45AAD19 /* DeveloperOptionsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsScreenModels.swift; sourceTree = "<group>"; };
 		B1BF177B9897FC8FE34B66E3 /* QRCodeLoginScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeLoginScreenViewModelTests.swift; sourceTree = "<group>"; };
@@ -5842,14 +5840,6 @@
 			path = Logging;
 			sourceTree = "<group>";
 		};
-		B1DD487E000B04FE15AD9325 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				B078D8C8A7BCA01B24F60862 /* SettingsFlowCoordinator+Gua.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		B3B9924A1F43E0BEA808F126 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -6289,7 +6279,6 @@
 			children = (
 				7E0877B7C7F9A25526718695 /* AppHooks */,
 				081808AF2CD0EBF6C47FF94A /* Common */,
-				B1DD487E000B04FE15AD9325 /* Extensions */,
 				54622373182C566E6B30EB5A /* Screens */,
 				2E0247EFE2BF01A64641C12F /* Services */,
 			);
@@ -8312,7 +8301,6 @@
 				11EE8A467DDB934B6E596586 /* SessionVerificationScreenStateMachine.swift in Sources */,
 				0541BBB553A93E49C4638A76 /* SessionVerificationScreenViewModel.swift in Sources */,
 				7C30565B26E22A056F69315D /* SessionVerificationScreenViewModelProtocol.swift in Sources */,
-				AC01A614BC64109A41AFA38E /* SettingsFlowCoordinator+Gua.swift in Sources */,
 				EC14053EF7D1DF1055B44D0D /* SettingsFlowCoordinator.swift in Sources */,
 				81C20E26DDA10F81E5C5EEFE /* SettingsScreen.swift in Sources */,
 				772B4A3EFD538816F1E97348 /* SettingsScreenCoordinator.swift in Sources */,
