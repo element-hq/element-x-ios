@@ -20,6 +20,10 @@ This repository is Gua-ra's fork of [`element-hq/element-x-ios`](https://github.
 | Consent screen | shown for every login | skipped — handled by [`gua-auth-service`](https://github.com/Gua-ra/gua-auth-service) config |
 | Two-step verification | device verification | Account PIN (set, change with OTP cooldown, reset) |
 | Account deactivation | standard Matrix | Gua-specific reauth (phone OTP) gate |
+| Settings identity | full Matrix ID `@alice:dev.local` | localpart only (`alice`) — homeserver hidden |
+| App-lock PIN | "PIN" | "passcode" — renamed to disambiguate from the account two-step PIN |
+| Encryption settings | advanced controls shown | hidden by default (`guaHidesAdvancedEncryption`); E2EE stays on with safe defaults (key storage + recovery) |
+| Client logo | element.io icon | Gua icon (shown in MAS "Where you're signed in") |
 
 ### Active fork branches
 
@@ -27,6 +31,19 @@ This repository is Gua-ra's fork of [`element-hq/element-x-ios`](https://github.
 |---|---|
 | `mvp/phone-otp-oidc-pin-onboarding` | Phone OTP sign-up, PIN screens, settings (two-step verification, deactivation) |
 | `mvp/OIDC-integration` | MAS OIDC integration: removes forced `prompt=consent`, adapts redirect handling |
+
+### Login session handling
+
+The OIDC web-auth session uses `prefersEphemeralWebBrowserSession = true` and
+requests `prompt: .login`, so every login performs a fresh upstream
+authentication (phone → OTP) instead of silently reusing a cached MAS browser
+session. Consent is skipped server-side by the `gua-auth-service` fork, keeping
+the flow frictionless without short-circuiting identity resolution.
+
+The account PIN entered during onboarding is validated against the same strength
+rules as the server (`PinSetupScreenViewModel.isWeak` mirrors the identity
+service's `PinPolicy`: no repeated, sequential, or common 6-digit PINs).
+
 
 ---
 
