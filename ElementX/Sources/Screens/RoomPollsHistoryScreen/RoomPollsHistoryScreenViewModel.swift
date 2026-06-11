@@ -58,8 +58,8 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
             updatePollsList(filter: filter)
         case .loadMore:
             paginateBackwards()
-        case .sendPollResponse(let pollStartID, let optionID):
-            sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+        case .sendPollResponse(let pollStartID, let answerIDs):
+            sendPollResponse(pollStartID: pollStartID, answerIDs: answerIDs)
         }
     }
     
@@ -117,10 +117,10 @@ class RoomPollsHistoryScreenViewModel: RoomPollsHistoryScreenViewModelType, Room
         }
     }
     
-    private func sendPollResponse(pollStartID: String, optionID: String) {
+    private func sendPollResponse(pollStartID: String, answerIDs: [String]) {
         Task {
             do {
-                try await pollInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID).get()
+                try await pollInteractionHandler.sendPollResponse(pollStartID: pollStartID, answerIDs: answerIDs).get()
             } catch {
                 MXLog.error("Failed to send poll response. \(error)")
                 displayError(message: L10n.errorUnknown)

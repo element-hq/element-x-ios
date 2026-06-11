@@ -62,9 +62,9 @@ struct RoomPollsHistoryScreen: View {
                 PollView(poll: pollTimelineItem.item.poll,
                          state: .full(isEditable: pollTimelineItem.item.isEditable), sender: pollTimelineItem.item.sender) { action in
                     switch action {
-                    case .selectOption(let optionID):
+                    case .sendResponse(let answerIDs):
                         guard let pollStartID = pollTimelineItem.item.id.eventID else { return }
-                        context.send(viewAction: .sendPollResponse(pollStartID: pollStartID, optionID: optionID))
+                        context.send(viewAction: .sendPollResponse(pollStartID: pollStartID, answerIDs: answerIDs))
                     case .edit:
                         guard let pollStartID = pollTimelineItem.item.id.eventID else { return }
                         context.send(viewAction: .edit(pollStartID: pollStartID, poll: pollTimelineItem.item.poll))

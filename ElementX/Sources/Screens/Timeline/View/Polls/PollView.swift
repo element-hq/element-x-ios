@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 enum PollViewAction {
-    case selectOption(optionID: String)
+    case sendResponse(answerIDs: [String])
     case edit
     case end
 }
@@ -100,13 +100,13 @@ struct PollView: View {
     }
     
     private func isRemovePreviousSelectionHintEnabled(option: Poll.Option) -> Bool {
-        !poll.hasEnded && poll.hasMaxSelections && !option.isSelected
+        !poll.hasEnded && poll.maxSelections == 1 && poll.hasMaxSelections && !option.isSelected
     }
     
     private func pollOption(option: Poll.Option) -> some View {
         Button {
-            guard !option.isSelected else { return }
-            actionHandler(.selectOption(optionID: option.id))
+            guard let answerIDs = poll.answerIDsAfterSelecting(optionID: option.id) else { return }
+            actionHandler(.sendResponse(answerIDs: answerIDs))
             feedbackGenerator.impactOccurred()
         } label: {
             PollOptionView(pollOption: option,
@@ -114,7 +114,23 @@ struct PollView: View {
                            isFinalResult: poll.hasEnded)
                 .foregroundColor(progressBarColor(for: option))
         }
-        .disabled(poll.hasEnded)
+        .disabled(isOptionDisabled(option))
+    }
+    
+    private func isOptionDisabled(_ option: Poll.Option) -> Bool {
+        if poll.hasEnded {
+            return true
+        }
+        
+        if poll.maxSelections == 1 {
+            return option.isSelected
+        }
+        
+        if option.isSelected {
+            return poll.options.filter(\.isSelected).count == 1
+        }
+        
+        return poll.hasMaxSelections
     }
     
     @ViewBuilder

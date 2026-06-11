@@ -42,7 +42,7 @@ enum RoomPollsHistoryScreenViewAction {
     case filter(RoomPollsHistoryFilter)
     case end(pollStartID: String)
     case edit(pollStartID: String, poll: Poll)
-    case sendPollResponse(pollStartID: String, optionID: String)
+    case sendPollResponse(pollStartID: String, answerIDs: [String])
     case loadMore
 }
 

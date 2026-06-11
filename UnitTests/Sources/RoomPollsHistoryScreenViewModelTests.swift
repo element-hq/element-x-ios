@@ -139,14 +139,14 @@ struct RoomPollsHistoryScreenViewModelTests {
     func sendPollResponse() async throws {
         let deferred = deferFulfillment(interactionHandler.publisher.delay(for: 0.1, scheduler: DispatchQueue.main)) { _ in true }
         
-        interactionHandler.sendPollResponsePollStartIDOptionIDReturnValue = .success(())
-        viewModel.context.send(viewAction: .sendPollResponse(pollStartID: "somePollID", optionID: "someOptionID"))
+        interactionHandler.sendPollResponsePollStartIDAnswerIDsReturnValue = .success(())
+        viewModel.context.send(viewAction: .sendPollResponse(pollStartID: "somePollID", answerIDs: ["firstOptionID", "secondOptionID"]))
         
         try await deferred.fulfill()
         
-        #expect(interactionHandler.sendPollResponsePollStartIDOptionIDCalled)
-        #expect(interactionHandler.sendPollResponsePollStartIDOptionIDReceivedInvocations[0].pollStartID == "somePollID")
-        #expect(interactionHandler.sendPollResponsePollStartIDOptionIDReceivedInvocations[0].optionID == "someOptionID")
+        #expect(interactionHandler.sendPollResponsePollStartIDAnswerIDsCalled)
+        #expect(interactionHandler.sendPollResponsePollStartIDAnswerIDsReceivedInvocations[0].pollStartID == "somePollID")
+        #expect(interactionHandler.sendPollResponsePollStartIDAnswerIDsReceivedInvocations[0].answerIDs == ["firstOptionID", "secondOptionID"])
     }
     
     @Test
@@ -155,14 +155,14 @@ struct RoomPollsHistoryScreenViewModelTests {
             value.bindings.alertInfo != nil
         }
         
-        interactionHandler.sendPollResponsePollStartIDOptionIDReturnValue = .failure(SDKError.generic)
-        viewModel.context.send(viewAction: .sendPollResponse(pollStartID: "somePollID", optionID: "someOptionID"))
+        interactionHandler.sendPollResponsePollStartIDAnswerIDsReturnValue = .failure(SDKError.generic)
+        viewModel.context.send(viewAction: .sendPollResponse(pollStartID: "somePollID", answerIDs: ["someOptionID"]))
         
         try await deferred.fulfill()
         
-        #expect(interactionHandler.sendPollResponsePollStartIDOptionIDCalled)
-        #expect(interactionHandler.sendPollResponsePollStartIDOptionIDReceivedInvocations[0].pollStartID == "somePollID")
-        #expect(interactionHandler.sendPollResponsePollStartIDOptionIDReceivedInvocations[0].optionID == "someOptionID")
+        #expect(interactionHandler.sendPollResponsePollStartIDAnswerIDsCalled)
+        #expect(interactionHandler.sendPollResponsePollStartIDAnswerIDsReceivedInvocations[0].pollStartID == "somePollID")
+        #expect(interactionHandler.sendPollResponsePollStartIDAnswerIDsReceivedInvocations[0].answerIDs == ["someOptionID"])
     }
     
     @Test

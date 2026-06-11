@@ -17,8 +17,8 @@ class PollInteractionHandler: PollInteractionHandlerProtocol {
         self.timelineController = timelineController
     }
     
-    func sendPollResponse(pollStartID: String, optionID: String) async -> Result<Void, Error> {
-        let sendPollResponseResult = await timelineController.sendPollResponse(pollStartID: pollStartID, answers: [optionID])
+    func sendPollResponse(pollStartID: String, answerIDs: [String]) async -> Result<Void, Error> {
+        let sendPollResponseResult = await timelineController.sendPollResponse(pollStartID: pollStartID, answers: answerIDs)
         analyticsService.trackPollVote()
         
         return sendPollResponseResult.mapError { $0 }

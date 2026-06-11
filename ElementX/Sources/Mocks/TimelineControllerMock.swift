@@ -176,17 +176,17 @@ struct TimelineControllerMockConfiguration {
             return .success(())
         }
         
-        createPollQuestionAnswersPollKindClosure = { [weak self, timelineProxy] question, answers, pollKind in
+        createPollQuestionAnswersMaxSelectionsPollKindClosure = { [weak self, timelineProxy] question, answers, maxSelections, pollKind in
             self?.callbacks.send(.messageSentOrEdited)
             if let timelineProxy {
-                _ = await timelineProxy.createPoll(question: question, answers: answers, pollKind: pollKind)
+                _ = await timelineProxy.createPoll(question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
             }
             return .success(())
         }
         
-        editPollOriginalQuestionAnswersPollKindClosure = { [timelineProxy] eventID, question, answers, pollKind in
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure = { [timelineProxy] eventID, question, answers, maxSelections, pollKind in
             if let timelineProxy {
-                _ = await timelineProxy.editPoll(original: eventID, question: question, answers: answers, pollKind: pollKind)
+                _ = await timelineProxy.editPoll(original: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
             }
             return .success(())
         }

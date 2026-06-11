@@ -376,8 +376,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private func handlePollAction(_ action: TimelineViewPollAction) {
         switch action {
-        case let .selectOption(pollStartID, optionID):
-            timelineInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+        case let .sendResponse(pollStartID, answerIDs):
+            timelineInteractionHandler.sendPollResponse(pollStartID: pollStartID, answerIDs: answerIDs)
         case let .end(pollStartID):
             displayAlert(.pollEndConfirmation(pollStartID))
         case .edit(let eventID, let poll):

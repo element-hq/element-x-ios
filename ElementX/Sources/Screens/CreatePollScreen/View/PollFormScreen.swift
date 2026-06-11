@@ -22,7 +22,7 @@ struct PollFormScreen: View {
         Form {
             questionSection
             optionsSection
-            showResultsSection
+            settingsSection
             deletePollSection
         }
         .trackAnalyticsIfNeeded(context: context)
@@ -106,8 +106,16 @@ struct PollFormScreen: View {
         focus = nextOptionIndex.map { .option(index: $0) }
     }
     
-    private var showResultsSection: some View {
+    private var settingsSection: some View {
         Section {
+            PollFormMaxSelectionsRow(maxSelections: context.maxSelections,
+                                     maxNumberOfSelections: context.options.count) {
+                context.send(viewAction: .decrementMaxSelections)
+            } incrementAction: {
+                context.send(viewAction: .incrementMaxSelections)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.maxSelections)
+            
             ListRow(label: .plain(title: L10n.screenCreatePollAnonymousDesc),
                     kind: .toggle($context.isUndisclosed))
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.pollKind)
@@ -157,6 +165,55 @@ private extension View {
         case .new:
             track(screen: .CreatePollView)
         }
+    }
+}
+
+private struct PollFormMaxSelectionsRow: View {
+    let maxSelections: Int
+    let maxNumberOfSelections: Int
+    let decrementAction: () -> Void
+    let incrementAction: () -> Void
+    
+    var body: some View {
+        ListRow(kind: .custom {
+            HStack(spacing: 16) {
+                Text(UntranslatedL10n.screenCreatePollVotesAllowedPerPerson)
+                    .font(.compound.bodyLG)
+                    .foregroundStyle(.compound.textPrimary)
+                    .lineLimit(2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                HStack(spacing: 8) {
+                    Button(action: decrementAction) {
+                        Image(systemSymbol: .minus)
+                            .frame(width: 20, height: 20)
+                    }
+                    .disabled(maxSelections <= 1)
+                    .buttonStyle(.compound(.tertiary, size: .toolbarIcon))
+                    .accessibilityLabel(UntranslatedL10n.a11yScreenCreatePollVotesAllowedDecrease)
+                    .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.maxSelectionsDecrement)
+                    
+                    Text("\(maxSelections)")
+                        .font(.compound.bodyLGSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                        .monospacedDigit()
+                        .frame(minWidth: 28)
+                        .accessibilityLabel(Text(maxSelections.formatted()))
+                    
+                    Button(action: incrementAction) {
+                        Image(systemSymbol: .plus)
+                            .frame(width: 20, height: 20)
+                    }
+                    .disabled(maxSelections >= maxNumberOfSelections)
+                    .buttonStyle(.compound(.tertiary, size: .toolbarIcon))
+                    .accessibilityLabel(UntranslatedL10n.a11yScreenCreatePollVotesAllowedIncrease)
+                    .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.maxSelectionsIncrement)
+                }
+                .layoutPriority(1)
+            }
+            .padding(.horizontal, ListRowPadding.horizontal)
+            .padding(.vertical, ListRowPadding.vertical)
+        })
     }
 }
 

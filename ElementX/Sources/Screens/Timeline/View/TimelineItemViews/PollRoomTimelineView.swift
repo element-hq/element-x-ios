@@ -26,9 +26,9 @@ struct PollRoomTimelineView: View {
                      state: state,
                      sender: timelineItem.sender) { action in
                 switch action {
-                case .selectOption(let optionID):
-                    guard let eventID, let option = poll.options.first(where: { $0.id == optionID }), !option.isSelected else { return }
-                    context.send(viewAction: .handlePollAction(.selectOption(pollStartID: eventID, optionID: option.id)))
+                case .sendResponse(let answerIDs):
+                    guard let eventID else { return }
+                    context.send(viewAction: .handlePollAction(.sendResponse(pollStartID: eventID, answerIDs: answerIDs)))
                 case .edit:
                     guard let eventID else { return }
                     context.send(viewAction: .handlePollAction(.edit(pollStartID: eventID, poll: poll)))

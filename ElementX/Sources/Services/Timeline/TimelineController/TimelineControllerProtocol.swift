@@ -137,11 +137,12 @@ protocol TimelineControllerProtocol: Sendable {
     
     // MARK: - Poll
     
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError>
+    func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError>
     
     func editPoll(original eventID: String,
                   question: String,
                   answers: [String],
+                  maxSelections: Int,
                   pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError>
     
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError>
