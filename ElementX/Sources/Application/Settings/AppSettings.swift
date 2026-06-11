@@ -65,6 +65,7 @@ final class AppSettings {
         case linkPreviewsEnabled
         case latestEventSorterEnabled
         case legacyAuthEnabled
+        case guaHidesAdvancedEncryption
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -189,9 +190,11 @@ final class AppSettings {
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
 
     /// A URL where users can go read more about the app.
-    private(set) var websiteURL: URL = "https://element.io"
+    private(set) var websiteURL: URL = "https://github.com/Gua-ra"
     /// A URL that contains the app's logo that may be used when showing content in a web view.
-    private(set) var logoURL: URL = "https://element.io/mobile-icon.png"
+    /// GUA FORK: Points at the Gua icon so the session/device list (e.g. MAS "Where
+    /// you're signed in") shows Gua branding instead of the generic Element icon.
+    private(set) var logoURL: URL = "https://raw.githubusercontent.com/Gua-ra/gua-branding/main/icons/500x500.png"
     /// A URL that contains that app's copyright notice.
     private(set) var copyrightURL: URL = "https://element.io/copyright"
     /// A URL that contains the app's Terms of use.
@@ -415,6 +418,14 @@ final class AppSettings {
     /// this from developer options to fall back to the original flow.
     @UserPreference(key: UserDefaultsKeys.legacyAuthEnabled, defaultValue: false, storageType: .userDefaults(store))
     var legacyAuthEnabled
+
+    /// GUA FORK: When `true` (the default), the advanced Encryption entry point in
+    /// Settings (secure backup / key storage / recovery / cryptographic identity)
+    /// is hidden. End-to-end encryption itself stays fully enabled with safe
+    /// defaults; this only abstracts the advanced controls away from non-technical
+    /// users. Gov / advanced users can reveal it from developer options.
+    @UserPreference(key: UserDefaultsKeys.guaHidesAdvancedEncryption, defaultValue: true, storageType: .userDefaults(store))
+    var guaHidesAdvancedEncryption
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled

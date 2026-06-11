@@ -91,15 +91,24 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.screenLock)
             
-            switch context.viewState.securitySectionMode {
-            case .secureBackup:
-                ListRow(label: .default(title: L10n.commonEncryption,
-                                        icon: \.key),
-                        details: context.viewState.showSecuritySectionBadge ? .icon(securitySectionBadge) : nil,
-                        kind: .navigationLink { context.send(viewAction: .secureBackup) })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.secureBackup)
-            default:
-                EmptyView()
+            // GUA FORK: The Encryption (secure backup / key storage / recovery)
+            // entry point is intentionally hidden when `hidesAdvancedEncryption`
+            // is set. End-to-end encryption stays fully on with safe defaults —
+            // key storage and recovery are managed automatically — but the advanced
+            // cryptographic controls are not surfaced to non-technical users.
+            // (Engine logic in the view model is left untouched so encryption
+            // keeps working in the background.)
+            if !context.viewState.hidesAdvancedEncryption {
+                switch context.viewState.securitySectionMode {
+                case .secureBackup:
+                    ListRow(label: .default(title: L10n.commonEncryption,
+                                            icon: \.key),
+                            details: context.viewState.showSecuritySectionBadge ? .icon(securitySectionBadge) : nil,
+                            kind: .navigationLink { context.send(viewAction: .secureBackup) })
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.secureBackup)
+                default:
+                    EmptyView()
+                }
             }
         }
     }

@@ -42,6 +42,10 @@ struct SettingsScreenViewState: BindableState {
     var userDisplayName: String?
     var showDeveloperOptions: Bool
 
+    /// GUA FORK: When `true`, the advanced Encryption entry point is hidden from
+    /// Settings. E2EE remains fully enabled with safe defaults.
+    var hidesAdvancedEncryption = true
+
     /// GUA FORK: The bare localpart (e.g. "alice") of `userID`, hiding the
     /// "@" prefix and ":homeserver" suffix for Gua's frictionless design.
     /// Display-only — `userID` is still used for avatars and any logic.
