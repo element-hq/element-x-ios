@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Prisijungti prie %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Prisijungti su QR kodu";
 "screen_onboarding_sign_up" = "Kurti paskyrą";
-"screen_onboarding_welcome_message" = "Sveiki atvykę į sparčiausią „%1$@“ kada nors. Pagerintas spartai ir paprastumui.";
-"screen_onboarding_welcome_subtitle" = "Sveiki atvykę į „%1$@“. Pagerintas spartai ir paprastumui.";
-"screen_onboarding_welcome_title" = "Būkite savo elemente";
+"screen_onboarding_welcome_message" = "Pagerintas spartai ir paprastumui.";
+"screen_onboarding_welcome_subtitle" = "Pagerintas spartai ir paprastumui.";
+"screen_onboarding_welcome_title" = "Sveiki atvykę į Gua";
 "screen_polls_history_empty_ongoing" = "Can't find any ongoing polls.";
 "screen_polls_history_empty_past" = "Can't find any past polls.";
 "screen_polls_history_filter_ongoing" = "Ongoing";

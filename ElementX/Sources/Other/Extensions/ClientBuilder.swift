@@ -21,15 +21,15 @@ extension ClientBuilder {
                             maxRequestRetryTime: UInt64? = nil,
                             threadsEnabled: Bool) -> ClientBuilder {
         var builder = ClientBuilder()
-            .crossProcessStoreLocksHolderName(holderName: InfoPlistReader.main.bundleIdentifier)
-            .enableOidcRefreshLock()
+            .crossProcessLockConfig(crossProcessLockConfig: .multiProcess(holderName: InfoPlistReader.main.bundleIdentifier))
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .threadsEnabled(enabled: threadsEnabled, threadSubscriptions: threadsEnabled)
-            .requestConfig(config: .init(retryLimit: 0,
+            .requestConfig(config: .init(retryLimit: 3,
                                          timeout: requestTimeout,
                                          maxConcurrentRequests: nil,
                                          maxRetryTime: maxRequestRetryTime))
+            .dmRoomDefinition(dmRoomDefinition: .twoMembers)
         
         builder = switch slidingSync {
         case .restored: builder
@@ -42,16 +42,16 @@ extension ClientBuilder {
                 .backupDownloadStrategy(backupDownloadStrategy: .afterDecryptionFailure)
                 .enableShareHistoryOnInvite(enableShareHistoryOnInvite: enableKeyShareOnInvite)
                 .autoEnableBackups(autoEnableBackups: true)
-                
-            if enableOnlySignedDeviceIsolationMode {
-                builder = builder
-                    .roomKeyRecipientStrategy(strategy: .identityBasedStrategy)
-                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
-            } else {
-                builder = builder
-                    .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
-                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
-            }
+        }
+        
+        if enableOnlySignedDeviceIsolationMode {
+            builder = builder
+                .roomKeyRecipientStrategy(strategy: .identityBasedStrategy)
+                .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
+        } else {
+            builder = builder
+                .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
+                .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
         }
         
         if let httpProxy {

@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Přihlásit se do %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Přihlásit se pomocí QR kódu";
 "screen_onboarding_sign_up" = "Vytvořit účet";
-"screen_onboarding_welcome_message" = "Vítejte v dosud nejrychlejším %1$@u. Vylepšený pro rychlost a jednoduchost.";
-"screen_onboarding_welcome_subtitle" = "Vítejte v %1$@u. Vylepšený, pro rychlost a jednoduchost.";
-"screen_onboarding_welcome_title" = "Buďte ve svém živlu";
+"screen_onboarding_welcome_message" = "Vylepšený pro rychlost a jednoduchost.";
+"screen_onboarding_welcome_subtitle" = "Vylepšený, pro rychlost a jednoduchost.";
+"screen_onboarding_welcome_title" = "Vítejte v aplikaci Gua";
 "screen_polls_history_empty_ongoing" = "Nelze najít žádná probíhající hlasování.";
 "screen_polls_history_empty_past" = "Nelze najít žádná minulá hlasování.";
 "screen_polls_history_filter_ongoing" = "Probíhající";

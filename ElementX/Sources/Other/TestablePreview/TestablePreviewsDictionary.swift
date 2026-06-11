@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.7 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -29,6 +29,7 @@ enum TestablePreviewsDictionary {
         "CollapsibleRoomTimelineView_Previews" : CollapsibleRoomTimelineView_Previews.self,
         "CompletionSuggestion_Previews" : CompletionSuggestion_Previews.self,
         "ComposerToolbar_Previews" : ComposerToolbar_Previews.self,
+        "CountryPickerScreen_Previews" : CountryPickerScreen_Previews.self,
         "CreateRoom_Previews" : CreateRoom_Previews.self,
         "DeactivateAccountScreen_Previews" : DeactivateAccountScreen_Previews.self,
         "DeclineAndBlockScreen_Previews" : DeclineAndBlockScreen_Previews.self,
@@ -89,10 +90,14 @@ enum TestablePreviewsDictionary {
         "NotificationSettingsEditScreenRoomCell_Previews" : NotificationSettingsEditScreenRoomCell_Previews.self,
         "NotificationSettingsEditScreen_Previews" : NotificationSettingsEditScreen_Previews.self,
         "NotificationSettingsScreen_Previews" : NotificationSettingsScreen_Previews.self,
+        "OtpEntryScreen_Previews" : OtpEntryScreen_Previews.self,
         "PINTextField_Previews" : PINTextField_Previews.self,
         "PaginationIndicatorRoomTimelineView_Previews" : PaginationIndicatorRoomTimelineView_Previews.self,
+        "PhoneEntryScreen_Previews" : PhoneEntryScreen_Previews.self,
         "PillViewOnBubble_Previews" : PillViewOnBubble_Previews.self,
         "PillView_Previews" : PillView_Previews.self,
+        "PinChallengeScreen_Previews" : PinChallengeScreen_Previews.self,
+        "PinSetupScreen_Previews" : PinSetupScreen_Previews.self,
         "PinnedEventsTimelineScreen_Previews" : PinnedEventsTimelineScreen_Previews.self,
         "PinnedItemsBannerView_Previews" : PinnedItemsBannerView_Previews.self,
         "PinnedItemsIndicatorView_Previews" : PinnedItemsIndicatorView_Previews.self,
@@ -102,6 +107,7 @@ enum TestablePreviewsDictionary {
         "PollOptionView_Previews" : PollOptionView_Previews.self,
         "PollRoomTimelineView_Previews" : PollRoomTimelineView_Previews.self,
         "PollView_Previews" : PollView_Previews.self,
+        "ProfileSetupScreen_Previews" : ProfileSetupScreen_Previews.self,
         "QRCodeLoginScreen_Previews" : QRCodeLoginScreen_Previews.self,
         "ReactionsSummaryView_Previews" : ReactionsSummaryView_Previews.self,
         "ReadMarkerRoomTimelineView_Previews" : ReadMarkerRoomTimelineView_Previews.self,
@@ -183,6 +189,7 @@ enum TestablePreviewsDictionary {
         "TimelineThreadSummaryView_Previews" : TimelineThreadSummaryView_Previews.self,
         "TimelineView_Previews" : TimelineView_Previews.self,
         "TombstonedAvatarImage_Previews" : TombstonedAvatarImage_Previews.self,
+        "TwoStepVerificationScreen_Previews" : TwoStepVerificationScreen_Previews.self,
         "TypingIndicatorView_Previews" : TypingIndicatorView_Previews.self,
         "UnsupportedRoomTimelineView_Previews" : UnsupportedRoomTimelineView_Previews.self,
         "UserDetailsEditScreen_Previews" : UserDetailsEditScreen_Previews.self,

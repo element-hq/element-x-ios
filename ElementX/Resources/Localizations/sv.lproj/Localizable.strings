@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Logga in på %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Logga in med QR-kod";
 "screen_onboarding_sign_up" = "Skapa konto";
-"screen_onboarding_welcome_message" = "Välkommen till den snabbaste %1$@ någonsin. Superladdad för snabbhet och enkelhet.";
-"screen_onboarding_welcome_subtitle" = "Välkommen till %1$@. Superladdad, för snabbhet och enkelhet.";
-"screen_onboarding_welcome_title" = "Var i ditt rätta element";
+"screen_onboarding_welcome_message" = "Superladdad för snabbhet och enkelhet.";
+"screen_onboarding_welcome_subtitle" = "Superladdad, för snabbhet och enkelhet.";
+"screen_onboarding_welcome_title" = "Välkommen till Gua";
 "screen_polls_history_empty_ongoing" = "Kan inte hitta några pågående omröstningar.";
 "screen_polls_history_empty_past" = "Kan inte hitta några tidigare omröstningar.";
 "screen_polls_history_filter_ongoing" = "Pågående";

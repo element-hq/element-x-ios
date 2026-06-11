@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Iniciar sesión en %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Iniciar sesión con un código QR";
 "screen_onboarding_sign_up" = "Crear cuenta";
-"screen_onboarding_welcome_message" = "Bienvenido al %1$@ más rápido de todos los tiempos. Diseñado para la velocidad y la simplicidad.";
-"screen_onboarding_welcome_subtitle" = "Bienvenido a %1$@. Vitaminado, para mayor rapidez y sencillez.";
-"screen_onboarding_welcome_title" = "Siéntete en tu Elemento";
+"screen_onboarding_welcome_message" = "Vitaminado para mayor rapidez y sencillez.";
+"screen_onboarding_welcome_subtitle" = "Vitaminado, para mayor rapidez y sencillez.";
+"screen_onboarding_welcome_title" = "Bienvenido a Gua";
 "screen_polls_history_empty_ongoing" = "No se pudo encontrar ninguna encuesta en curso.";
 "screen_polls_history_empty_past" = "No se pudo encontrar ninguna encuesta anterior.";
 "screen_polls_history_filter_ongoing" = "En curso";

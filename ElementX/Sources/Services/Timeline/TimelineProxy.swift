@@ -371,7 +371,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                                      mentions: nil,
                                                                      inReplyTo: nil),
                                                        audioInfo: audioInfo,
-                                                       waveform: waveform)
+                                                       waveform: waveform.map(Float.init))
             
             await requestHandle(handle)
             
@@ -586,7 +586,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     private func subscribeToPagination() async {
         switch kind {
         case .live:
-            let backPaginationListener = SDKListener<RoomPaginationStatus> { [weak self] status in
+            let backPaginationListener = SDKListener<MatrixRustSDK.PaginationStatus> { [weak self] status in
                 guard let self else {
                     return
                 }

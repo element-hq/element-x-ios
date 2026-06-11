@@ -76,7 +76,7 @@ extension MatrixRustSDK.Session: Codable {
                          userId: container.decode(String.self, forKey: .userId),
                          deviceId: container.decode(String.self, forKey: .deviceId),
                          homeserverUrl: container.decode(String.self, forKey: .homeserverUrl),
-                         oidcData: container.decodeIfPresent(String.self, forKey: .oidcData),
+                         oauthData: container.decodeIfPresent(String.self, forKey: .oauthData),
                          slidingSyncVersion: .native)
     }
     
@@ -87,10 +87,11 @@ extension MatrixRustSDK.Session: Codable {
         try container.encode(userId, forKey: .userId)
         try container.encode(deviceId, forKey: .deviceId)
         try container.encode(homeserverUrl, forKey: .homeserverUrl)
-        try container.encode(oidcData, forKey: .oidcData)
+        try container.encode(oauthData, forKey: .oauthData)
     }
     
     enum CodingKeys: String, CodingKey {
-        case accessToken, refreshToken, userId, deviceId, homeserverUrl, oidcData, slidingSyncProxy
+        case accessToken, refreshToken, userId, deviceId, homeserverUrl, slidingSyncProxy
+        case oauthData = "oidcData"
     }
 }

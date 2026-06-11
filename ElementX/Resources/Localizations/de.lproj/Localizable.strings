@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Bei %1$@ anmelden";
 "screen_onboarding_sign_in_with_qr_code" = "Mit QR-Code anmelden";
 "screen_onboarding_sign_up" = "Konto erstellen";
-"screen_onboarding_welcome_message" = "Willkommen beim schnellsten %1$@ aller Zeiten. Optimiert für Geschwindigkeit und Einfachheit.";
-"screen_onboarding_welcome_subtitle" = "Willkommen zu %1$@. Aufgeladen, für Geschwindigkeit und Einfachheit.";
-"screen_onboarding_welcome_title" = "Sei in Deinem Element";
+"screen_onboarding_welcome_message" = "Aufgeladen für Geschwindigkeit und Einfachheit.";
+"screen_onboarding_welcome_subtitle" = "Aufgeladen, für Geschwindigkeit und Einfachheit.";
+"screen_onboarding_welcome_title" = "Willkommen bei Gua";
 "screen_polls_history_empty_ongoing" = "Keine laufenden Umfragen vorhanden.";
 "screen_polls_history_empty_past" = "Keine beendeten Umfragen vorhanden.";
 "screen_polls_history_filter_ongoing" = "Laufend";

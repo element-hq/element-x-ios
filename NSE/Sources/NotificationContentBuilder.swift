@@ -50,7 +50,7 @@ struct NotificationContentBuilder {
                                  notificationItem: notificationItem,
                                  mediaProvider: mediaProvider)
         case .timeline(let event):
-            guard let eventType = try? event.eventType(),
+            guard let eventType = try? event.content(),
                   case let .messageLike(content) = eventType else {
                 processEmpty(&notificationContent)
                 return

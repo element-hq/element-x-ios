@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Logi sisse teenusesse %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Logi sisse QR-koodi alusel";
 "screen_onboarding_sign_up" = "Loo kasutajakonto";
-"screen_onboarding_welcome_message" = "Läbi aegade kiireim ja mugavaim %1$@.";
-"screen_onboarding_welcome_subtitle" = "Tere tulemast kasutama kiiret ja lihtsat suhtlusrakendust %1$@.";
-"screen_onboarding_welcome_title" = "Ole oma elemendis";
+"screen_onboarding_welcome_message" = "Ülelaetud kiiruse ja lihtsuse jaoks.";
+"screen_onboarding_welcome_subtitle" = "Ülelaetud kiiruse ja lihtsuse jaoks.";
+"screen_onboarding_welcome_title" = "Tere tulemast Gua rakendusse";
 "screen_polls_history_empty_ongoing" = "Ei leia ühtegi käimasolevat küsitlust.";
 "screen_polls_history_empty_past" = "Ei leia ühtegi varasemat küsitlust.";
 "screen_polls_history_filter_ongoing" = "Käimasolev küsitlus";

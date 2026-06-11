@@ -134,7 +134,9 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentPasswordScreen(passwordPublisher: PassthroughSubject<String, Never>) {
-        let coordinator = EncryptionResetPasswordScreenCoordinator(parameters: .init(passwordPublisher: passwordPublisher))
+        let coordinator = EncryptionResetPasswordScreenCoordinator(parameters: .init(passwordPublisher: passwordPublisher,
+                                                                                     clientProxy: userSession.clientProxy,
+                                                                                     identityServiceClient: IdentityServiceClient()))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

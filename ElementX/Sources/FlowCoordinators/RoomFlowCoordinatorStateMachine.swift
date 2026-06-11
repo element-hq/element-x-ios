@@ -74,9 +74,10 @@ extension RoomFlowCoordinator {
         case securityAndPrivacy(previousState: State)
         case reportRoom(previousState: State)
         case declineAndBlockScreen
-        
+
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
+        case spaceFlow(previousState: State)
         /// The flow is complete and is handing control of the stack back to its parent.
         case complete
     }
@@ -88,6 +89,7 @@ extension RoomFlowCoordinator {
 
     enum Event: EventType {
         case presentJoinRoomScreen(via: [String])
+        case presentSpaceFlow
         case dismissJoinRoomScreen
         
         case presentRoom(presentationAction: PresentationAction?)
@@ -326,9 +328,11 @@ extension RoomFlowCoordinator {
                 return .declineAndBlockScreen
             case (.declineAndBlockScreen, .dismissDeclineAndBlockScreen):
                 return .joinRoomScreen
-                
+            case (.joinRoomScreen, .presentSpaceFlow):
+                return .spaceFlow(previousState: fromState)
+
             // Other
-            
+
             case (_, .startChildFlow(let roomID, _, _)):
                 return .presentingChild(childRoomID: roomID, previousState: fromState)
             case (.presentingChild(_, let previousState), .dismissChildFlow):

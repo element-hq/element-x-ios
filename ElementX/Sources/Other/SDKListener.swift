@@ -104,8 +104,8 @@ extension SDKListener: CallDeclineListener where T == String {
 
 // MARK: TimelineProxy
 
-extension SDKListener: PaginationStatusListener where T == RoomPaginationStatus {
-    func onUpdate(status: RoomPaginationStatus) { onUpdateClosure(status) }
+extension SDKListener: PaginationStatusListener where T == MatrixRustSDK.PaginationStatus {
+    func onUpdate(status: MatrixRustSDK.PaginationStatus) { onUpdateClosure(status) }
 }
 
 extension SDKListener: ProgressWatcher where T == Double {

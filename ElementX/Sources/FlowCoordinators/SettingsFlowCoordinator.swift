@@ -51,6 +51,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         switch appRoute {
         case .settings:
             presentSettingsScreen(animated: animated)
+        case .settingsTwoStepVerification:
+            presentSettingsScreen(animated: animated)
+            presentTwoStepVerification()
         case .chatBackupSettings:
             startEncryptionSettingsFlow(animated: animated)
         default:
@@ -106,6 +109,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentDeveloperOptions()
                 case .deactivateAccount:
                     presentDeactivateAccount()
+                case .twoStepVerification:
+                    presentTwoStepVerification()
                 }
             }
             .store(in: &cancellables)
@@ -216,7 +221,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentDeactivateAccount() {
         let parameters = DeactivateAccountScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
-                                                                      userIndicatorController: flowParameters.userIndicatorController)
+                                                                      userIndicatorController: flowParameters.userIndicatorController,
+                                                                      identityServiceClient: IdentityServiceClient())
         let coordinator = DeactivateAccountScreenCoordinator(parameters: parameters)
         
         coordinator.actionsPublisher
@@ -230,6 +236,23 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
+        navigationStackCoordinator.push(coordinator)
+    }
+
+    private func presentTwoStepVerification() {
+        guard let identityServiceClient = IdentityServiceClient() else {
+            MXLog.warning("Identity service is not configured; cannot show two-step verification screen.")
+            return
+        }
+        let parameters = TwoStepVerificationScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
+                                                                        identityServiceClient: identityServiceClient,
+                                                                        userIndicatorController: flowParameters.userIndicatorController)
+        let coordinator = TwoStepVerificationScreenCoordinator(parameters: parameters)
+
+        coordinator.actionsPublisher
+            .sink { _ in }
+            .store(in: &cancellables)
+
         navigationStackCoordinator.push(coordinator)
     }
 

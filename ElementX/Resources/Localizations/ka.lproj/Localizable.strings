@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "შესვლა QR კოდით";
 "screen_onboarding_sign_up" = "ანგარიშის შექმნა";
-"screen_onboarding_welcome_message" = "კეთილი იყოს თქვენი მობრძანება უსწრაფეს %1$@-ში. დამუხტულია სიჩქარისა და სიმარტივისათვის.";
-"screen_onboarding_welcome_subtitle" = "კეთილი იყოს თქვენი მობრძანება %1$@-ში! დამუხტული სიჩქარისა და სიმარტივისთვის.";
-"screen_onboarding_welcome_title" = "იყავი შენს element-ში";
+"screen_onboarding_welcome_message" = "დამუხტული სიჩქარისა და სიმარტივისთვის.";
+"screen_onboarding_welcome_subtitle" = "დამუხტული სიჩქარისა და სიმარტივისთვის.";
+"screen_onboarding_welcome_title" = "კეთილი იყოს თქვენი მობრძანება Gua-ში";
 "screen_polls_history_empty_ongoing" = "მიმდინარე გამოკითხვები ვერ მოიძებნა.";
 "screen_polls_history_empty_past" = "ბოლო გამოკითხვების მოძებნა ვერ მოხერხდა.";
 "screen_polls_history_filter_ongoing" = "მიმდინარე";

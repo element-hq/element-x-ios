@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.7 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -2093,6 +2093,7 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingUserID: String!
     var deviceID: String?
+    var accessToken: String?
     var homeserver: String {
         get { return underlyingHomeserver }
         set(value) { underlyingHomeserver = value }

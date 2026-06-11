@@ -12,6 +12,7 @@ import SwiftUI
 
 enum ChatsFlowCoordinatorAction {
     case showSettings
+    case showTwoStepVerification
     case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
     case showCallScreen(roomProxy: JoinedRoomProxyProtocol)
@@ -159,7 +160,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .transferOwnership))
             }
-        case .accountProvisioningLink, .settings, .chatBackupSettings, .call, .genericCallLink:
+        case .accountProvisioningLink, .settings, .settingsTwoStepVerification, .chatBackupSettings, .call, .genericCallLink:
             break // These routes cannot be handled.
         }
     }
@@ -370,6 +371,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.showStartChatScreen)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
+                case .presentTwoStepVerificationSetup:
+                    actionsSubject.send(.showTwoStepVerification)
                 case .logout:
                     actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):

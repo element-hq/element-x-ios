@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Hasi saioa QR kodearekin";
 "screen_onboarding_sign_up" = "Sortu kontua";
-"screen_onboarding_welcome_message" = "Ongi etorri inoizko %1$@ azkarrenera. Abiaduraz eta sinpletasunaz gainkargatua.";
-"screen_onboarding_welcome_subtitle" = "Ongi etorri %1$@-ra. Abiaduraz eta sinpletasunez gainezka.";
-"screen_onboarding_welcome_title" = "Egon zure saltsan";
+"screen_onboarding_welcome_message" = "Abiaduraz eta sinpletasunez gainezka.";
+"screen_onboarding_welcome_subtitle" = "Abiaduraz eta sinpletasunez gainezka.";
+"screen_onboarding_welcome_title" = "Ongi etorri Gua-ra";
 "screen_polls_history_empty_ongoing" = "Ezin da abian dagoen inkestarik aurkitu.";
 "screen_polls_history_empty_past" = "Ezin da iraungitako inkestarik aurkitu.";
 "screen_polls_history_filter_ongoing" = "Abian direnak";

@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Συνδέσου στο %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Συνδέσου με κωδικό QR";
 "screen_onboarding_sign_up" = "Δημιουργία λογαριασμού";
-"screen_onboarding_welcome_message" = "Καλώς ήλθατε στο γρηγορότερο %1$@ όλων των εποχών. Υπερτροφοδοτούμενο με ταχύτητα και απλότητα.";
-"screen_onboarding_welcome_subtitle" = "Καλώς ήρθες στο %1$@. Υπερφορτισμένο, για ταχύτητα και απλότητα.";
-"screen_onboarding_welcome_title" = "Μείνε στο element σου";
+"screen_onboarding_welcome_message" = "Υπερφορτισμένο για ταχύτητα και απλότητα.";
+"screen_onboarding_welcome_subtitle" = "Υπερφορτισμένο, για ταχύτητα και απλότητα.";
+"screen_onboarding_welcome_title" = "Καλώς ήρθες στο Gua";
 "screen_polls_history_empty_ongoing" = "Δεν είναι δυνατή η εύρεση ενεργών δημοσκοπήσεων";
 "screen_polls_history_empty_past" = "Δεν είναι δυνατή η εύρεση παλιών δημοσκοπήσεων";
 "screen_polls_history_filter_ongoing" = "Σε εξέλιξη";

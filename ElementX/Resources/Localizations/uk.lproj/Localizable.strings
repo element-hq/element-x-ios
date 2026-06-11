@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "Увійти в %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Увійти за допомогою QR-коду";
 "screen_onboarding_sign_up" = "Створити обліковий запис";
-"screen_onboarding_welcome_message" = "Ласкаво просимо до найшвидшого %1$@. Заряджений для швидкості та простоти.";
-"screen_onboarding_welcome_subtitle" = "Ласкаво просимо до %1$@. Заряджений, для швидкості та простоти.";
-"screen_onboarding_welcome_title" = "Будьте у своєму element";
+"screen_onboarding_welcome_message" = "Заряджений для швидкості та простоти.";
+"screen_onboarding_welcome_subtitle" = "Заряджений для швидкості та простоти.";
+"screen_onboarding_welcome_title" = "Ласкаво просимо до Gua";
 "screen_polls_history_empty_ongoing" = "Не вдалося знайти жодних поточних опитувань.";
 "screen_polls_history_empty_past" = "Не вдалося знайти жодних минулих опитувань.";
 "screen_polls_history_filter_ongoing" = "Поточні";

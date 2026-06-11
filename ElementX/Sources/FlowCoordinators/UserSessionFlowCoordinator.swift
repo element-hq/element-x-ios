@@ -123,7 +123,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         switch appRoute {
         case .accountProvisioningLink:
             break // We always ignore this flow when logged in.
-        case .settings, .chatBackupSettings:
+        case .settings, .settingsTwoStepVerification, .chatBackupSettings:
             if stateMachine.state != .settingsScreen {
                 stateMachine.tryEvent(.showSettingsScreen)
             }
@@ -199,6 +199,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .showSettings:
                     handleAppRoute(.settings, animated: true)
+                case .showTwoStepVerification:
+                    handleAppRoute(.settingsTwoStepVerification, animated: true)
                 case .showChatBackupSettings:
                     handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):

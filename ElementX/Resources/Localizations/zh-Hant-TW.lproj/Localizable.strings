@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "登入至 %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "使用 QR code 登入";
 "screen_onboarding_sign_up" = "建立帳號";
-"screen_onboarding_welcome_message" = "歡迎使用有史以來最快的 %1$@。速度超快，操作簡便。";
-"screen_onboarding_welcome_subtitle" = "歡迎使用 %1$@。速度超快且簡單。";
-"screen_onboarding_welcome_title" = "Be in your element";
+"screen_onboarding_welcome_message" = "速度超快且簡單。";
+"screen_onboarding_welcome_subtitle" = "速度超快且簡單。";
+"screen_onboarding_welcome_title" = "歡迎使用 Gua";
 "screen_polls_history_empty_ongoing" = "沒有進行中的投票。";
 "screen_polls_history_empty_past" = "沒有已結束的投票。";
 "screen_polls_history_filter_ongoing" = "進行中";

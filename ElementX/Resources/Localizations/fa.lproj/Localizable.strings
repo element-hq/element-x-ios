@@ -883,9 +883,9 @@
 "screen_onboarding_sign_in_to" = "ورود به %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "ورود با کد QR";
 "screen_onboarding_sign_up" = "ایجاد حساب";
-"screen_onboarding_welcome_message" = "به سریع‌ترین %1$@ خوش آمدید. بازطرّاحی شده برای سرعت و سادگی.";
-"screen_onboarding_welcome_subtitle" = "به %1$@ خوش آمدید. بازطرّاحی شده برای سرعت و سادگی.";
-"screen_onboarding_welcome_title" = "در المنتتان باشید";
+"screen_onboarding_welcome_message" = "بازطراحی شده برای سرعت و سادگی.";
+"screen_onboarding_welcome_subtitle" = "بازطراحی شده برای سرعت و سادگی.";
+"screen_onboarding_welcome_title" = "به Gua خوش آمدید.";
 "screen_polls_history_empty_ongoing" = "نتوانست هیچ نظرسنجی در جریانی بیابد.";
 "screen_polls_history_empty_past" = "نتوانست هیچ نظرسنجی گذشته‌ای بیابد.";
 "screen_polls_history_filter_ongoing" = "در جریان";

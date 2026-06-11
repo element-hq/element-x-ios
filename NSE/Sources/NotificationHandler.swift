@@ -97,7 +97,7 @@ class NotificationHandler {
             return .shouldDisplay
         }
         
-        switch try? event.eventType() {
+        switch try? event.content() {
         case .messageLike(let content):
             switch content {
             case .poll,
@@ -124,7 +124,7 @@ class NotificationHandler {
                 }
                 
                 return .processedShouldDiscard
-            case .rtcNotification(let notificationType, _):
+            case .rtcNotification(let notificationType, _, _):
                 return await handleCallNotification(notificationType: notificationType,
                                                     rtcNotifyEventID: event.eventId(),
                                                     timestamp: event.timestamp(),

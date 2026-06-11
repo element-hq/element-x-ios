@@ -40,13 +40,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildRedactedTimelineItem(eventItemProxy, messageLikeContent, isOutgoing)
             case .unableToDecrypt(let encryptedMessage):
                 return buildEncryptedTimelineItem(eventItemProxy, messageLikeContent, encryptedMessage, isOutgoing)
+            case .liveLocation, .other:
+                return nil
             }
         case .failedToParseMessageLike(let eventType, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .failedToParseState(let eventType, _, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .state(_, let content):
-            if isDM, content == .roomCreate {
+            if isDM, case .roomCreate = content {
                 return nil
             }
             return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
