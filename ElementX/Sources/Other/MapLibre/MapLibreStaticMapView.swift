@@ -66,7 +66,8 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                                 .aspectRatio(contentMode: .fill)
                             pinAnnotationView
                         }
-                    case .failure:
+                    case .failure(let error):
+                        let _ = MXLog.error("Failed retrieving tile with error: \(error.localizedDescription)")
                         errorView
                     @unknown default:
                         EmptyView()
