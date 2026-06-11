@@ -1,56 +1,93 @@
-[![Element iOS Matrix room #element-x-ios:matrix.org](https://img.shields.io/matrix/element-x-ios:matrix.org.svg?label=%23element-x-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-ios:matrix.org)
-![GitHub](https://img.shields.io/github/license/element-hq/element-x-ios)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Gua-ra/gua-branding/refs/heads/main/logos/gua-logo-transparent.png" alt="Gua Logo" width="200"/>
+</p>
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/element-hq/element-x-ios/unit_tests.yml?style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/element-hq/element-x-ios)
+# Gua for iOS
 
-[![codecov](https://codecov.io/gh/element-hq/element-x-ios/branch/develop/graph/badge.svg?token=AVIJB2MJU2)](https://codecov.io/gh/element-hq/element-x-ios)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
+**Gua** is a private, phone-number-based messaging app for iOS, built on top of [Matrix](https://matrix.org/).
 
-# Element X iOS
+This repository is Gua-ra's fork of [`element-hq/element-x-ios`](https://github.com/element-hq/element-x-ios) (Element X iOS). The Gua app replaces Element's brand and login flow with Gua's phone-OTP + PIN onboarding, backed by the [Gua Identity Service](https://github.com/Gua-ra/identity-service).
 
-Element X iOS is the next-generation [Matrix](https://matrix.org/) client provided by [Element](https://element.io/).
+---
 
-Compared to the previous-generation [Element Classic](https://github.com/element-hq/element-ios), it is a total rewrite using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running iOS 17+.
+## What's different from upstream Element X
 
-## Rust SDK
+| Area | Upstream (Element X) | Gua |
+|---|---|---|
+| Brand | Element / New Vector | Gua |
+| Login flow | Matrix password / SSO | Phone number → OTP → PIN (via Gua Identity Service + MAS) |
+| OIDC provider | element.io | Gua Identity Service (`gua-ios` client, PKCE-required) |
+| Consent screen | shown for every login | skipped — handled by [`gua-auth-service`](https://github.com/Gua-ra/gua-auth-service) config |
+| Two-step verification | device verification | Account PIN (set, change with OTP cooldown, reset) |
+| Account deactivation | standard Matrix | Gua-specific reauth (phone OTP) gate |
 
-Element X leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer exposed as a [swift package](https://github.com/matrix-org/matrix-rust-components-swift) that the final client can directly import and use. We're doing this as a way to share code between platforms, with [Element X Android](https://github.com/element-hq/element-x-android) using the same SDK.
+### Active fork branches
 
-## Status
+| Branch | Purpose |
+|---|---|
+| `mvp/phone-otp-oidc-pin-onboarding` | Phone OTP sign-up, PIN screens, settings (two-step verification, deactivation) |
+| `mvp/OIDC-integration` | MAS OIDC integration: removes forced `prompt=consent`, adapts redirect handling |
 
-This project is actively developed and supported. New users are recommended to use Element X instead of the previous-generation app.
+---
 
-## Contributing
+## Architecture
 
-Please see our [contribution guide](CONTRIBUTING.md).
+```
+Gua iOS app
+    │  OIDC authorization-code + PKCE
+    ▼
+Matrix Authentication Service (Gua fork — gua-auth-service)
+    │  upstream OIDC (phone → OTP → PIN)
+    ▼
+Gua Identity Service (Spring Boot)
+    │  Matrix admin API
+    ▼
+Synapse homeserver
+```
 
-Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-x-ios:matrix.org).
+- The iOS app registers as OIDC client `gua-ios` (public, PKCE-required) against MAS.
+- MAS delegates login to the Gua Identity Service via an upstream OIDC provider.
+- The Gua Identity Service implements the phone → OTP → PIN flow and issues JWTs.
+- The consent screen ("Continue to {client}?") is suppressed by the `gua-auth-service` fork via `gua.skip_consent_client_ids`.
 
-## Build instructions
+---
 
-Please refer to the [setting up a development environment](CONTRIBUTING.md#setting-up-a-development-environment) section from the [contribution guide](CONTRIBUTING.md).
+## Building
 
-## Support
+Requirements: **Xcode 16+**, **iOS 17+ simulator or device**.
 
-When you are experiencing an issue on Element X iOS, please first search in [GitHub issues](https://github.com/element-hq/element-x-ios/issues)
-and then in [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org).
-If after your research you still have a question, ask at [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by going to the application settings. This is especially recommended when you encounter a crash.
+```bash
+# Clone with submodules (Matrix Rust SDK swift package resolves via SPM)
+git clone --recurse-submodules git@github.com:Gua-ra/gua-ios.git
+cd gua-ios
+open ElementX.xcworkspace
+```
 
-## Forking
+Select the **Gua** scheme and build. The app connects to the Gua backend; for local development point `ServiceLocator` at your local identity-service instance.
 
-Please read our [forking guide](docs/FORKING.md).
+See the upstream [contribution guide](CONTRIBUTING.md) for full environment setup, code-generation steps, and testing instructions.
 
-## Copyright & License
+---
 
-Copyright (c) 2022 - 2025 New Vector Ltd
+## Upstream relationship
 
-This software is dual licensed by New Vector Ltd (Element). It can be used either:
+This repository tracks [`element-hq/element-x-ios`](https://github.com/element-hq/element-x-ios). To pull upstream changes:
 
-(1) for free under the terms of the GNU Affero General Public License (as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version); OR
+```bash
+git fetch upstream
+git merge upstream/develop   # or the relevant release tag
+# Resolve conflicts, then push
+```
 
-(2) under the terms of a paid-for Element Commercial License agreement between you and Element (the terms of which may vary depending on what you and Element have agreed to). 
+Gua-specific changes are kept on named branches (`mvp/*`) to keep upstream merges clean.
 
-Unless required by applicable law or agreed to in writing, software distributed under the Licenses is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the Licenses for the specific language governing permissions and limitations under the Licenses.
+---
+
+## License
+
+Copyright (c) 2022-2025 New Vector Ltd (upstream code)
+Copyright (c) 2025 Gua-ra (Gua modifications)
+
+Licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) — see [LICENSE](LICENSE).
+
+Alternatively available under a paid Element Commercial License for the upstream portions; see [LICENSE-COMMERCIAL](LICENSE-COMMERCIAL) if applicable.
