@@ -23,6 +23,7 @@ enum SettingsScreenViewModelAction: Equatable {
     case developerOptions
     case logout
     case deactivateAccount
+    // GUA FORK: Two-step verification (PIN) nav target
     case twoStepVerification
 }
 
@@ -72,5 +73,6 @@ enum SettingsScreenViewAction {
     case advancedSettings
     case logout
     case deactivateAccount
+    // GUA FORK: Two-step verification (PIN) action
     case twoStepVerification
 }

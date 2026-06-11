@@ -123,6 +123,7 @@ struct SettingsScreen: View {
                         })
             }
             
+            // GUA FORK: Two-step verification entry point
             ListRow(label: .default(title: L10n.screenTwoStepVerificationTitle,
                                     icon: \.lockSolid),
                     kind: .navigationLink {

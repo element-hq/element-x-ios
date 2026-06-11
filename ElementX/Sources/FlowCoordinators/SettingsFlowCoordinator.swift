@@ -28,7 +28,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var encryptionSettingsFlowCoordinator: EncryptionSettingsFlowCoordinator?
     
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<SettingsFlowCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<SettingsFlowCoordinatorAction, Never> {
@@ -232,24 +232,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentTwoStepVerification() {
-        guard let identityServiceClient = IdentityServiceClient() else {
-            MXLog.warning("Identity service is not configured; cannot show two-step verification screen.")
-            return
-        }
-        let parameters = TwoStepVerificationScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
-                                                                        identityServiceClient: identityServiceClient,
-                                                                        userIndicatorController: flowParameters.userIndicatorController)
-        let coordinator = TwoStepVerificationScreenCoordinator(parameters: parameters)
-
-        coordinator.actionsPublisher
-            .sink { _ in }
-            .store(in: &cancellables)
-
-        navigationStackCoordinator.push(coordinator)
-    }
-
-    // MARK: OIDC Account Management
+    // GUA FORK: two-step verification entry-point — see SettingsFlowCoordinator+Gua.swift
         
     private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
     private func presentAccountManagementURL(_ url: URL) {
