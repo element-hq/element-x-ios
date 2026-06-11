@@ -92,8 +92,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
             // let prompt: OidcPrompt = flow == .register ? .create : .consent
+            // Don't force the consent screen — Gua is a first-party client and the
+            // identity-service already gathers/confirms everything. Passing no prompt
+            // lets MAS skip consent once a grant exists (frictionless re-login).
             let oidcData = try await client.urlForOauth(oauthConfiguration: appSettings.oidcConfiguration.rustValue,
-                                                        prompt: .consent,
+                                                        prompt: nil,
                                                         loginHint: loginHint,
                                                         deviceId: nil,
                                                         additionalScopes: nil)
