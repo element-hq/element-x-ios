@@ -59,7 +59,7 @@ struct SettingsScreen: View {
                             Text(context.viewState.userDisplayName ?? "")
                                 .font(.compound.headingMD)
                                 .foregroundColor(.compound.textPrimary)
-                            Text(context.viewState.userID)
+                            Text(context.viewState.userLocalpart)
                                 .font(.compound.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                         }

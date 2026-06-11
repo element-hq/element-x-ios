@@ -57,9 +57,10 @@ class PinSetupScreenViewModel: PinSetupScreenViewModelType, PinSetupScreenViewMo
     private func advanceFromAutoFill(pin: String) {
         switch state.step {
         case .create:
-            // Reject obviously weak PINs to mirror WhatsApp's basic strength check.
+            // Reject weak PINs to mirror identity-service's PinPolicy. The server
+            // re-validates and remains authoritative; this is for instant feedback.
             if isWeak(pin: pin) {
-                state.errorMessage = "Choose a less predictable PIN (avoid 000000, 123456, etc.)."
+                state.errorMessage = "That PIN is too easy to guess. Avoid repeated, sequential, or common PINs."
                 state.bindings.pin = ""
                 return
             }
@@ -79,11 +80,42 @@ class PinSetupScreenViewModel: PinSetupScreenViewModelType, PinSetupScreenViewMo
         }
     }
 
+    /// Mirrors identity-service `PinPolicy`: rejects all-repeated digits, strictly
+    /// sequential runs (ascending/descending by 1), and a curated common-PIN
+    /// denylist. Keep in sync with PinPolicy.java / pinPolicy.ts.
     private func isWeak(pin: String) -> Bool {
-        // Reject all-same digits and trivial ascending/descending sequences.
-        let weakPins: Set<String> = ["000000", "111111", "222222", "333333", "444444",
-                                     "555555", "666666", "777777", "888888", "999999",
-                                     "123456", "654321", "012345", "543210"]
-        return weakPins.contains(pin)
+        guard pin.count == PinSetupScreenViewState.pinLength, pin.allSatisfy(\.isNumber) else {
+            return false
+        }
+        if isRepeated(pin) || isSequential(pin) || Self.commonPins.contains(pin) {
+            return true
+        }
+        return false
     }
+
+    private func isRepeated(_ pin: String) -> Bool {
+        Set(pin).count == 1
+    }
+
+    private func isSequential(_ pin: String) -> Bool {
+        let digits = pin.compactMap(\.wholeNumberValue)
+        guard digits.count == pin.count else { return false }
+        var ascending = true
+        var descending = true
+        for index in 1..<digits.count {
+            let delta = digits[index] - digits[index - 1]
+            if delta != 1 { ascending = false }
+            if delta != -1 { descending = false }
+        }
+        return ascending || descending
+    }
+
+    private static let commonPins: Set<String> = [
+        "123123", "121212", "123321", "112233", "123654", "159753",
+        "147258", "159357", "753951", "357159", "142536", "789456",
+        "456789", "696969", "777777", "131313", "101010", "102030",
+        "201020", "232323", "456123", "987654", "654321", "212121",
+        "120120", "110110", "100100", "808080", "520520", "999999",
+        "888888"
+    ]
 }
