@@ -24,6 +24,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let identityServiceClient: IdentityServiceClientProtocol?
+    private let usesPhoneLoginHint: Bool
     
     enum State: StateType {
         /// The state machine hasn't started.
@@ -159,7 +160,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         identityServiceClient: IdentityServiceClientProtocol? = nil) {
+         identityServiceClient: IdentityServiceClientProtocol? = nil,
+         usesPhoneLoginHint: Bool = false) {
         self.authenticationService = authenticationService
         self.bugReportService = bugReportService
         self.navigationRootCoordinator = navigationRootCoordinator
@@ -168,6 +170,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.identityServiceClient = identityServiceClient
+        self.usesPhoneLoginHint = usesPhoneLoginHint
         
         navigationStackCoordinator = NavigationStackCoordinator()
         
@@ -176,7 +179,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start() {
-        if identityServiceClient != nil, !appSettings.legacyAuthEnabled {
+        if usesPhoneLoginHint, !appSettings.legacyAuthEnabled {
             stateMachine.tryEvent(.startPhoneAuth)
         } else {
             stateMachine.tryEvent(.start)
@@ -312,13 +315,15 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
         stateMachine.addRoutes(event: .dismissedServerSelection, transitions: [.serverSelectionScreen => .serverConfirmationScreen])
         
-        stateMachine.addRoutes(event: .continueWithOIDC, transitions: [.serverConfirmationScreen => .oidcAuthentication,
+        stateMachine.addRoutes(event: .continueWithOIDC, transitions: [.phoneEntryScreen => .oidcAuthentication,
+                                                                       .serverConfirmationScreen => .oidcAuthentication,
                                                                        .startScreen => .oidcAuthentication]) { [weak self] context in
             guard let (oidcData, window) = context.userInfo as? (OIDCAuthorizationDataProxy, UIWindow) else {
                 fatalError("Missing the OIDC data and presentation anchor.")
             }
             self?.showOIDCAuthentication(oidcData: oidcData, presentationAnchor: window, fromState: context.fromState)
         }
+        stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .phoneEntryScreen), transitions: [.oidcAuthentication => .phoneEntryScreen])
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .serverConfirmationScreen), transitions: [.oidcAuthentication => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .startScreen), transitions: [.oidcAuthentication => .startScreen])
         
@@ -435,24 +440,44 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func handlePhoneSubmission(phoneNumber: String, coordinator: PhoneEntryScreenCoordinator) {
         guard !isHandlingPhoneSubmission else { return }
-        guard let client = identityServiceClient else {
-            coordinator.displayError("Identity service is not configured.")
-            return
-        }
         isHandlingPhoneSubmission = true
         coordinator.setSubmitting(true)
         Task { [weak self] in
+            guard let self else { return }
             defer {
                 coordinator.setSubmitting(false)
-                self?.isHandlingPhoneSubmission = false
+                self.isHandlingPhoneSubmission = false
             }
-            do {
-                try await client.sendOTP(phone: phoneNumber, language: Locale.current.identifier)
-                self?.stateMachine.tryEvent(.continueWithPhone, userInfo: phoneNumber)
-            } catch let error as IdentityServiceError {
+            
+            guard appSettings.accountProviders.indices.contains(0) else {
+                coordinator.displayError(L10n.errorUnknown)
+                return
+            }
+            
+            switch await authenticationService.configure(for: appSettings.accountProviders[0], flow: .login) {
+            case .success:
+                break
+            case .failure(let error):
+                MXLog.error("Failed configuring OIDC login from phone hint: \(error)")
                 coordinator.displayError(error.localizedDescription)
-            } catch {
-                MXLog.error("Failed to send OTP: \(error)")
+                return
+            }
+            
+            guard authenticationService.homeserver.value.loginMode.supportsOIDCFlow else {
+                coordinator.displayError(L10n.screenLoginErrorUnsupportedAuthentication)
+                return
+            }
+            
+            guard let window = appMediator.windowManager.mainWindow else {
+                coordinator.displayError(L10n.errorUnknown)
+                return
+            }
+            
+            switch await authenticationService.urlForOIDCLogin(loginHint: phoneNumber) {
+            case .success(let oidcData):
+                stateMachine.tryEvent(.continueWithOIDC, userInfo: (oidcData, window))
+            case .failure(let error):
+                MXLog.error("Failed creating OIDC login URL from phone hint: \(error)")
                 coordinator.displayError(error.localizedDescription)
             }
         }

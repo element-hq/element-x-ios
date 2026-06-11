@@ -220,23 +220,16 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeactivateAccount() {
-        let parameters = DeactivateAccountScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
-                                                                      userIndicatorController: flowParameters.userIndicatorController,
-                                                                      identityServiceClient: IdentityServiceClient())
-        let coordinator = DeactivateAccountScreenCoordinator(parameters: parameters)
-        
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .accountDeactivated:
-                    actionsSubject.send(.forceLogout)
-                }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            guard let url = await flowParameters.userSession.clientProxy.accountURL(action: .accountDeactivate) else {
+                MXLog.error("MAS account deactivation URL unavailable.")
+                flowParameters.userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                return
             }
-            .store(in: &cancellables)
-        
-        navigationStackCoordinator.push(coordinator)
+            
+            presentAccountManagementURL(url)
+        }
     }
 
     private func presentTwoStepVerification() {
