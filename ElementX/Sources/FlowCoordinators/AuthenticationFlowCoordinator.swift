@@ -68,6 +68,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     enum Event: EventType {
         /// The legacy flow is being started.
         case start
+        /// Modify the flow using the provisioning parameters in the `userInfo`.
+        case applyProvisioningParameters
         // GUA FORK BEGIN: Gua phone-OTP-PIN events
         /// The Gua phone-OTP flow is being started.
         case startPhoneAuth
