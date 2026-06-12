@@ -283,6 +283,13 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     }
     
     override func paste(_ sender: Any?) {
+        // When pasting a link over a selection, wrap the selection in a markdown link.
+        if selectedRange.length > 0, let link = UIPasteboard.general.pastedLink {
+            let selectedText = (attributedText.string as NSString).substring(with: selectedRange)
+            insertText("[\(selectedText)](\(link))")
+            return
+        }
+        
         let providers = UIPasteboard.general.itemProviders
         
         // Use the default behavior if there are any unsupported providers
@@ -328,6 +335,25 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         
         inputDelegate?.selectionWillChange(self)
         inputDelegate?.selectionDidChange(self)
+    }
+}
+
+private extension UIPasteboard {
+    /// The pasteboard's string contents when they consist of a single link and nothing else.
+    var pastedLink: String? {
+        guard let string = string?.trimmingCharacters(in: .whitespacesAndNewlines), !string.isEmpty,
+              let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else {
+            return nil
+        }
+        
+        let range = NSRange(string.startIndex..., in: string)
+        let matches = detector.matches(in: string, range: range)
+        
+        guard matches.count == 1, matches[0].range == range else {
+            return nil
+        }
+        
+        return string
     }
 }
 
