@@ -40,7 +40,7 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
         case .submit:
             let question = state.bindings.question
             let options = state.bindings.options.map(\.text)
-            let maxSelections = clampedMaxSelections
+            let maxSelections = state.bindings.maxSelections
             let pollKind = state.bindings.isUndisclosed ? Poll.Kind.undisclosed : .disclosed
             
             Task {
@@ -75,7 +75,6 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
                     return
                 }
                 state.bindings.options.remove(at: index)
-                clampMaxSelections()
             }
         case .addOption:
             guard state.bindings.options.count < state.maxNumberOfOptions else {
@@ -83,9 +82,9 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
             }
             state.bindings.options.append(.init())
         case .decrementMaxSelections:
-            state.bindings.maxSelections = max(state.bindings.maxSelections - 1, 1)
+            state.bindings.maxSelections -= 1
         case .incrementMaxSelections:
-            state.bindings.maxSelections = min(state.bindings.maxSelections + 1, state.bindings.options.count)
+            state.bindings.maxSelections += 1
         }
     }
     
@@ -115,14 +114,6 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
         case .failure:
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
         }
-    }
-    
-    private func clampMaxSelections() {
-        state.bindings.maxSelections = clampedMaxSelections
-    }
-    
-    private var clampedMaxSelections: Int {
-        min(max(state.bindings.maxSelections, 1), max(state.bindings.options.count, 1))
     }
     
     private func deletePoll() async {

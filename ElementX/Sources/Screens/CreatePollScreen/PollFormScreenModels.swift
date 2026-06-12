@@ -77,8 +77,18 @@ enum PollFormMode: Hashable {
 
 struct PollFormScreenViewStateBindings: Equatable {
     var question = ""
-    var options: [Option] = [.init(), .init()]
-    var maxSelections = 1
+    var options: [Option] = [.init(), .init()] {
+        didSet {
+            maxSelections = clampedMaxSelections
+        }
+    }
+    
+    var maxSelections = 1 {
+        didSet {
+            maxSelections = clampedMaxSelections
+        }
+    }
+    
     var isUndisclosed = false
     
     struct Option: Identifiable, Equatable {
@@ -97,6 +107,10 @@ struct PollFormScreenViewStateBindings: Equatable {
             lhs.options.map(\.text) == rhs.options.map(\.text) &&
             lhs.maxSelections == rhs.maxSelections &&
             lhs.isUndisclosed == rhs.isUndisclosed
+    }
+    
+    private var clampedMaxSelections: Int {
+        min(max(maxSelections, 1), max(options.count, 1))
     }
 }
 

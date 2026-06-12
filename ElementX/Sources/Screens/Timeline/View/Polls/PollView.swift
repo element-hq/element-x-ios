@@ -122,6 +122,8 @@ struct PollView: View {
             return true
         }
         
+        // Single-choice polls replace the current answer; multi-choice polls keep
+        // at least one answer while enforcing the max.
         if poll.maxSelections == 1 {
             return option.isSelected
         }
