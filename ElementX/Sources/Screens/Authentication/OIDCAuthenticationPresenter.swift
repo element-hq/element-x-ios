@@ -35,7 +35,14 @@ class OIDCAuthenticationPresenter: NSObject {
                 continuation.resume(returning: (url, error))
             }
             
-            session.prefersEphemeralWebBrowserSession = false
+            // GUA FORK: Use an ephemeral web session so the MAS session cookie is
+            // NOT shared with Safari or persisted between logins. Upstream uses
+            // `false` for SSO-style convenience, but for Gua's phone-OTP flow that
+            // means MAS reuses its existing session cookie, short-circuits the
+            // upstream authentication, and logs the user straight into whoever
+            // authenticated last (never reaching identity-service). Ephemeral
+            // guarantees a fresh, cookie-free authorization every time.
+            session.prefersEphemeralWebBrowserSession = true
             session.presentationContextProvider = self
             session.additionalHeaderFields = [
                 "X-Element-User-Agent": UserAgentBuilder.makeASCIIUserAgent()

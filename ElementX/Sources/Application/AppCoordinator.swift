@@ -605,7 +605,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                         appSettings: appSettings,
                                                         analytics: ServiceLocator.shared.analytics,
                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                        identityServiceClient: IdentityServiceClient())
+                                                        identityServiceClient: nil,
+                                                        usesPhoneLoginHint: true) // Flip to false to restore the stock start/server-confirmation OIDC entry.
         coordinator.delegate = self
         
         authenticationFlowCoordinator = coordinator

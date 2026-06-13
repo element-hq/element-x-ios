@@ -1220,9 +1220,9 @@ internal enum L10n {
   internal static var screenAppLockBiometricUnlock: String { return L10n.tr("Localizable", "screen_app_lock_biometric_unlock") }
   /// Authentication is needed to access your app
   internal static var screenAppLockBiometricUnlockReasonIos: String { return L10n.tr("Localizable", "screen_app_lock_biometric_unlock_reason_ios") }
-  /// Forgot PIN?
+  /// Forgot passcode?
   internal static var screenAppLockForgotPin: String { return L10n.tr("Localizable", "screen_app_lock_forgot_pin") }
-  /// Change PIN code
+  /// Change app passcode
   internal static var screenAppLockSettingsChangePin: String { return L10n.tr("Localizable", "screen_app_lock_settings_change_pin") }
   /// Allow biometric unlock
   internal static var screenAppLockSettingsEnableBiometricUnlock: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_biometric_unlock") }
@@ -1232,41 +1232,41 @@ internal enum L10n {
   internal static var screenAppLockSettingsEnableOpticIdIos: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_optic_id_ios") }
   /// Allow Touch ID
   internal static var screenAppLockSettingsEnableTouchIdIos: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_touch_id_ios") }
-  /// Remove PIN
+  /// Remove passcode
   internal static var screenAppLockSettingsRemovePin: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin") }
-  /// Are you sure you want to remove PIN?
+  /// Are you sure you want to remove your app passcode?
   internal static var screenAppLockSettingsRemovePinAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_message") }
-  /// Remove PIN?
+  /// Remove passcode?
   internal static var screenAppLockSettingsRemovePinAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_title") }
   /// Allow %1$@
   internal static func screenAppLockSetupBiometricUnlockAllowTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_allow_title", String(describing: p1))
   }
-  /// I’d rather use PIN
+  /// I’d rather use a passcode
   internal static var screenAppLockSetupBiometricUnlockSkip: String { return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_skip") }
   /// Save yourself some time and use %1$@ to unlock the app each time
   internal static func screenAppLockSetupBiometricUnlockSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_subtitle", String(describing: p1))
   }
-  /// Choose PIN
+  /// Choose app passcode
   internal static var screenAppLockSetupChoosePin: String { return L10n.tr("Localizable", "screen_app_lock_setup_choose_pin") }
-  /// Confirm PIN
+  /// Confirm app passcode
   internal static var screenAppLockSetupConfirmPin: String { return L10n.tr("Localizable", "screen_app_lock_setup_confirm_pin") }
   /// Lock %1$@ to add extra security to your chats.
   /// 
-  /// Choose something memorable. If you forget this PIN, you will be logged out of the app.
+  /// This app passcode is separate from your account PIN. Choose something memorable — if you forget it, you’ll be logged out of the app.
   internal static func screenAppLockSetupPinContext(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_app_lock_setup_pin_context", String(describing: p1))
   }
-  /// You cannot choose this as your PIN code for security reasons
+  /// You cannot choose this as your passcode for security reasons
   internal static var screenAppLockSetupPinForbiddenDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_forbidden_dialog_content") }
-  /// Choose a different PIN
+  /// Choose a different passcode
   internal static var screenAppLockSetupPinForbiddenDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_forbidden_dialog_title") }
-  /// Please enter the same PIN twice
+  /// Please enter the same passcode twice
   internal static var screenAppLockSetupPinMismatchDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_content") }
-  /// PINs don't match
+  /// Passcodes don't match
   internal static var screenAppLockSetupPinMismatchDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_title") }
-  /// You’ll need to re-login and create a new PIN to proceed
+  /// You’ll need to re-login and create a new passcode to proceed
   internal static var screenAppLockSignoutAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_message") }
   /// You are being signed out
   internal static var screenAppLockSignoutAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_title") }

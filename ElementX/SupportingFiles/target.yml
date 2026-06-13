@@ -80,6 +80,11 @@ targets:
         GuaDefaultAccountProvider: $(DEFAULT_ACCOUNT_PROVIDER)
         GuaOidcRedirectURL: $(OIDC_REDIRECT_URL)
         GuaOidcStaticRegistrations: $(OIDC_STATIC_REGISTRATIONS)
+        # LOCAL DEV ONLY: allow plain-HTTP to loopback/.local hosts so the app can
+        # reach the local stack (Synapse :8008, MAS :8090). Does NOT relax ATS for
+        # remote servers. Harmless to ship, but tied to the local DEFAULT_ACCOUNT_PROVIDER.
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
         ITSAppUsesNonExemptEncryption: false
         NSUserActivityTypes: [INSendMessageIntent, INStartCallIntent]
         NSCameraUsageDescription: To take pictures or videos and send them as a message $(APP_DISPLAY_NAME) needs access to the camera.

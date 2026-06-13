@@ -220,25 +220,19 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeactivateAccount() {
-        let parameters = DeactivateAccountScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
-                                                                      userIndicatorController: flowParameters.userIndicatorController,
-                                                                      identityServiceClient: IdentityServiceClient())
-        let coordinator = DeactivateAccountScreenCoordinator(parameters: parameters)
-        
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .accountDeactivated:
-                    actionsSubject.send(.forceLogout)
-                }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            guard let url = await flowParameters.userSession.clientProxy.accountURL(action: .accountDeactivate) else {
+                MXLog.error("MAS account deactivation URL unavailable.")
+                flowParameters.userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                return
             }
-            .store(in: &cancellables)
-        
-        navigationStackCoordinator.push(coordinator)
+            
+            presentAccountManagementURL(url)
+        }
     }
 
+    // GUA FORK: Two-step verification entry-point.
     private func presentTwoStepVerification() {
         guard let identityServiceClient = IdentityServiceClient() else {
             MXLog.warning("Identity service is not configured; cannot show two-step verification screen.")
@@ -256,8 +250,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
 
-    // MARK: OIDC Account Management
-        
     private var accountSettingsPresenter: OIDCAccountSettingsPresenter?
     private func presentAccountManagementURL(_ url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.

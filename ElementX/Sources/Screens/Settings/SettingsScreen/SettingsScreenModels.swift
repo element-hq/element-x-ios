@@ -23,6 +23,7 @@ enum SettingsScreenViewModelAction: Equatable {
     case developerOptions
     case logout
     case deactivateAccount
+    // GUA FORK: Two-step verification (PIN) nav target
     case twoStepVerification
 }
 
@@ -40,6 +41,17 @@ struct SettingsScreenViewState: BindableState {
     var userAvatarURL: URL?
     var userDisplayName: String?
     var showDeveloperOptions: Bool
+
+    /// GUA FORK: When `true`, the advanced Encryption entry point is hidden from
+    /// Settings. E2EE remains fully enabled with safe defaults.
+    var hidesAdvancedEncryption = true
+
+    /// GUA FORK: The bare localpart (e.g. "alice") of `userID`, hiding the
+    /// "@" prefix and ":homeserver" suffix for Gua's frictionless design.
+    /// Display-only — `userID` is still used for avatars and any logic.
+    var userLocalpart: String {
+        userID.hasPrefix("@") ? String(userID.dropFirst().prefix { $0 != ":" }) : userID
+    }
     
     var securitySectionMode = SettingsScreenSecuritySectionMode.none
     var showSecuritySectionBadge = false
@@ -72,5 +84,6 @@ enum SettingsScreenViewAction {
     case advancedSettings
     case logout
     case deactivateAccount
+    // GUA FORK: Two-step verification (PIN) action
     case twoStepVerification
 }

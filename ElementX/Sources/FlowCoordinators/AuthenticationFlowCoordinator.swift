@@ -23,12 +23,14 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let identityServiceClient: IdentityServiceClientProtocol?
+    private let identityServiceClient: IdentityServiceClientProtocol? // GUA FORK
+    private let usesPhoneLoginHint: Bool // GUA FORK
     
     enum State: StateType {
         /// The state machine hasn't started.
         case initial
         
+        // GUA FORK BEGIN: Gua phone-OTP-PIN onboarding states
         /// The Gua phone-number entry screen (default entry point for normal users).
         case phoneEntryScreen
         /// The Gua OTP entry screen.
@@ -39,6 +41,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case profileSetupScreen
         /// Optional PIN setup step offered to brand-new users after profile setup.
         case pinSetupScreen
+        // GUA FORK END
         
         /// The initial screen shown when you first launch the app.
         case startScreen
@@ -65,12 +68,11 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     enum Event: EventType {
         /// The legacy flow is being started.
         case start
-        /// The Gua phone-OTP flow is being started.
-        case startPhoneAuth
-        
         /// Modify the flow using the provisioning parameters in the `userInfo`.
         case applyProvisioningParameters
-        
+        // GUA FORK BEGIN: Gua phone-OTP-PIN events
+        /// The Gua phone-OTP flow is being started.
+        case startPhoneAuth
         /// The user submitted a phone number (carried via `userInfo`).
         case continueWithPhone
         /// The user dropped into the legacy auth flow from the phone screen.
@@ -78,21 +80,18 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// The user cancelled OTP entry to edit their phone number.
         case cancelledOTPEntry
         /// OTP verified for a returning user with two-step verification — prompt for PIN.
-        /// `userInfo` is `PinChallengeContext`.
         case needsPinChallenge
         /// The user backed out of the PIN challenge (returns to OTP entry).
         case cancelledPinChallenge
-        /// OTP verified for a brand-new phone — advance to profile setup. `userInfo` is `ProfileSetupContext`.
+        /// OTP verified for a brand-new phone — advance to profile setup.
         case needsProfileSetup
         /// The user backed out of profile setup (returns to OTP entry).
         case cancelledProfileSetup
         /// Profile setup completed; offer to create a PIN before finishing sign-in.
-        /// `userInfo` is `PendingSignupContext`.
         case offerPinSetup
-        /// Backend rejected the chosen username during signup completion — return to profile setup
-        /// so the user can pick a different one. `userInfo` is the original `ProfileSetupContext`
-        /// (signup token is still valid because the backend only consumes it on success).
+        /// Backend rejected the chosen username during signup completion.
         case usernameTakenDuringSignup
+        // GUA FORK END
         
         /// The user would like to login with a QR code.
         case loginWithQR
@@ -159,7 +158,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         identityServiceClient: IdentityServiceClientProtocol? = nil) {
+         identityServiceClient: IdentityServiceClientProtocol? = nil,
+         usesPhoneLoginHint: Bool = false) {
         self.authenticationService = authenticationService
         self.bugReportService = bugReportService
         self.navigationRootCoordinator = navigationRootCoordinator
@@ -168,6 +168,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.identityServiceClient = identityServiceClient
+        self.usesPhoneLoginHint = usesPhoneLoginHint
         
         navigationStackCoordinator = NavigationStackCoordinator()
         
@@ -176,7 +177,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start() {
-        if identityServiceClient != nil, !appSettings.legacyAuthEnabled {
+        if usesPhoneLoginHint, !appSettings.legacyAuthEnabled {
             stateMachine.tryEvent(.startPhoneAuth)
         } else {
             stateMachine.tryEvent(.start)
@@ -312,13 +313,15 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
         stateMachine.addRoutes(event: .dismissedServerSelection, transitions: [.serverSelectionScreen => .serverConfirmationScreen])
         
-        stateMachine.addRoutes(event: .continueWithOIDC, transitions: [.serverConfirmationScreen => .oidcAuthentication,
+        stateMachine.addRoutes(event: .continueWithOIDC, transitions: [.phoneEntryScreen => .oidcAuthentication,
+                                                                       .serverConfirmationScreen => .oidcAuthentication,
                                                                        .startScreen => .oidcAuthentication]) { [weak self] context in
             guard let (oidcData, window) = context.userInfo as? (OIDCAuthorizationDataProxy, UIWindow) else {
                 fatalError("Missing the OIDC data and presentation anchor.")
             }
             self?.showOIDCAuthentication(oidcData: oidcData, presentationAnchor: window, fromState: context.fromState)
         }
+        stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .phoneEntryScreen), transitions: [.oidcAuthentication => .phoneEntryScreen])
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .serverConfirmationScreen), transitions: [.oidcAuthentication => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .startScreen), transitions: [.oidcAuthentication => .startScreen])
         
@@ -435,24 +438,44 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func handlePhoneSubmission(phoneNumber: String, coordinator: PhoneEntryScreenCoordinator) {
         guard !isHandlingPhoneSubmission else { return }
-        guard let client = identityServiceClient else {
-            coordinator.displayError("Identity service is not configured.")
-            return
-        }
         isHandlingPhoneSubmission = true
         coordinator.setSubmitting(true)
         Task { [weak self] in
+            guard let self else { return }
             defer {
                 coordinator.setSubmitting(false)
-                self?.isHandlingPhoneSubmission = false
+                self.isHandlingPhoneSubmission = false
             }
-            do {
-                try await client.sendOTP(phone: phoneNumber, language: Locale.current.identifier)
-                self?.stateMachine.tryEvent(.continueWithPhone, userInfo: phoneNumber)
-            } catch let error as IdentityServiceError {
+            
+            guard appSettings.accountProviders.indices.contains(0) else {
+                coordinator.displayError(L10n.errorUnknown)
+                return
+            }
+            
+            switch await authenticationService.configure(for: appSettings.accountProviders[0], flow: .login) {
+            case .success:
+                break
+            case .failure(let error):
+                MXLog.error("Failed configuring OIDC login from phone hint: \(error)")
                 coordinator.displayError(error.localizedDescription)
-            } catch {
-                MXLog.error("Failed to send OTP: \(error)")
+                return
+            }
+            
+            guard authenticationService.homeserver.value.loginMode.supportsOIDCFlow else {
+                coordinator.displayError(L10n.screenLoginErrorUnsupportedAuthentication)
+                return
+            }
+            
+            guard let window = appMediator.windowManager.mainWindow else {
+                coordinator.displayError(L10n.errorUnknown)
+                return
+            }
+            
+            switch await authenticationService.urlForOIDCLogin(loginHint: phoneNumber) {
+            case .success(let oidcData):
+                stateMachine.tryEvent(.continueWithOIDC, userInfo: (oidcData, window))
+            case .failure(let error):
+                MXLog.error("Failed creating OIDC login URL from phone hint: \(error)")
                 coordinator.displayError(error.localizedDescription)
             }
         }

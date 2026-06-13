@@ -68,6 +68,26 @@ class AuthenticationServiceTests: XCTestCase {
         XCTAssertEqual(service.homeserver.value, .mockMatrixDotOrg)
     }
     
+    func testOIDCLoginPassesLoginHint() async {
+        setupMocks()
+        let loginHint = "+15551234567"
+        
+        switch await service.configure(for: "matrix.org", flow: .login) {
+        case .success:
+            break
+        case .failure(let error):
+            XCTFail("Unexpected failure: \(error)")
+        }
+        
+        switch await service.urlForOIDCLogin(loginHint: loginHint) {
+        case .success:
+            XCTAssertEqual(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount, 1)
+            XCTAssertEqual(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint, loginHint)
+        case .failure(let error):
+            XCTFail("Unexpected failure: \(error)")
+        }
+    }
+    
     func testConfigureRegisterNoSupport() async {
         let homeserverAddress = "example.com"
         setupMocks(serverAddress: homeserverAddress)

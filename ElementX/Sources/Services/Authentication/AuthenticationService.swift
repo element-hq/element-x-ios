@@ -92,8 +92,15 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
             // let prompt: OidcPrompt = flow == .register ? .create : .consent
+            // GUA FORK: Force re-authentication (`.login`) on every OIDC login.
+            // Consent is skipped server-side (Gua is a first-party client and the
+            // identity-service already confirms everything), so we must NOT pass
+            // `nil` here: with no prompt + server-side consent skip, MAS silently
+            // reuses its existing browser session and always returns the SAME
+            // already-logged-in user, never running the phone-OTP flow. `.login`
+            // forces a fresh upstream authentication each time.
             let oidcData = try await client.urlForOauth(oauthConfiguration: appSettings.oidcConfiguration.rustValue,
-                                                        prompt: .consent,
+                                                        prompt: .login,
                                                         loginHint: loginHint,
                                                         deviceId: nil,
                                                         additionalScopes: nil)
