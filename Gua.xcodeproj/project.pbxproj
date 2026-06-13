@@ -4064,13 +4064,6 @@
 			path = PhoneEntryScreen;
 			sourceTree = "<group>";
 		};
-		4916E57156CC3F662E4EDBEB /* OtpEntryScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = OtpEntryScreen;
-			sourceTree = "<group>";
-		};
 		49813E993497EB09E79AD412 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -4126,13 +4119,6 @@
 				EB5AB7E7E4C519ED7D8D7262 /* View */,
 			);
 			path = BugReportScreen;
-			sourceTree = "<group>";
-		};
-		4C7BA4C7F863053A1B1F7A69 /* PhoneEntryScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PhoneEntryScreen;
 			sourceTree = "<group>";
 		};
 		4C84FD41BB79970C10E7C392 /* RoomDirectorySearch */ = {
@@ -4565,7 +4551,6 @@
 				43D26A1702BDB4F61C3A62CC /* NotificationSettingsEditScreen */,
 				0824D0EAFCAB52D1FB547B78 /* NotificationSettingsScreen */,
 				D92F0052F701D6B35327713B /* SettingsScreen */,
-				81A4A9B8927575E13C83E937 /* TwoStepVerificationScreen */,
 				25C35D6D17B658A9132690ED /* UserDetailsEditScreen */,
 			);
 			path = Settings;
@@ -4964,13 +4949,6 @@
 				B35027896A6D3B40F88E9D02 /* TimelineReadReceiptsView.swift */,
 			);
 			path = Supplementary;
-			sourceTree = "<group>";
-		};
-		81A4A9B8927575E13C83E937 /* TwoStepVerificationScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = TwoStepVerificationScreen;
 			sourceTree = "<group>";
 		};
 		82C202E73E53490666DEC043 /* NotificationManager */ = {
@@ -5477,12 +5455,7 @@
 				255BC7F72F0227A560F4DA52 /* MessageForwardingScreen */,
 				736A08E69962C0ABFB950C37 /* Onboarding */,
 				4AF7FC8DEC452E8480BF379B /* Other */,
-				4916E57156CC3F662E4EDBEB /* OtpEntryScreen */,
-				4C7BA4C7F863053A1B1F7A69 /* PhoneEntryScreen */,
-				F67833ACC837E5C546D180FB /* PinChallengeScreen */,
 				4480704452EDAA3549EB87FE /* PinnedEventsTimelineScreen */,
-				ECD60B5EBE64F82AE4C5890F /* PinSetupScreen */,
-				C1E02303F6C59571EA1AA63F /* ProfileSetupScreen */,
 				6D2FBB29B295018D4E044B2D /* QRCodeLoginScreen */,
 				2B5A4B09EB63F7704C4A648E /* ReportContentScreen */,
 				FD1C90A53ADC01C43F4761E0 /* ReportRoomScreen */,
@@ -5969,13 +5942,6 @@
 				0D8F2C0429BD71CC22C0619D /* RoomRolesAndPermissionsScreen.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		C1E02303F6C59571EA1AA63F /* ProfileSetupScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ProfileSetupScreen;
 			sourceTree = "<group>";
 		};
 		C321A08F6702EAAA7DE4D45A /* ItemMenu */ = {
@@ -6648,13 +6614,6 @@
 			path = ElementCall;
 			sourceTree = "<group>";
 		};
-		ECD60B5EBE64F82AE4C5890F /* PinSetupScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PinSetupScreen;
-			sourceTree = "<group>";
-		};
 		ED425D145610289BECB128BD /* AppLockScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -6734,13 +6693,6 @@
 				D771D764F580529D1391C247 /* MessageForwardingScreen.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		F67833ACC837E5C546D180FB /* PinChallengeScreen */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PinChallengeScreen;
 			sourceTree = "<group>";
 		};
 		F7CF24E34497EC52A65CD48C /* View */ = {
@@ -9253,7 +9205,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFAULT_ACCOUNT_PROVIDER = "http://localhost:8008";
+				DEFAULT_ACCOUNT_PROVIDER = dev.gua.sarahlacerda.me;
 				DEVELOPMENT_TEAM = 3HD49L7PSA;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -9428,7 +9380,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFAULT_ACCOUNT_PROVIDER = "http://localhost:8008";
+				DEFAULT_ACCOUNT_PROVIDER = dev.gua.sarahlacerda.me;
 				DEVELOPMENT_TEAM = 3HD49L7PSA;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;

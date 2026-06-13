@@ -5,9 +5,6 @@ settings:
   BASE_BUNDLE_IDENTIFIER: me.sarahlacerda.gua
   ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
   DEVELOPMENT_TEAM: 3HD49L7PSA
-  # LOCAL DEV: point at the local stack (full URL with scheme => used directly as
-  # the homeserver URL, skipping HTTPS .well-known discovery). Revert to
-  # `dev.gua.sarahlacerda.me` before committing / for prod builds.
-  DEFAULT_ACCOUNT_PROVIDER: http://localhost:8008
+  DEFAULT_ACCOUNT_PROVIDER: dev.gua.sarahlacerda.me
   OIDC_REDIRECT_URL: me.sarahlacerda.gua://oidc
   OIDC_STATIC_REGISTRATIONS: ""
