@@ -1033,10 +1033,12 @@ class ClientProxy: ClientProxyProtocol {
         sendQueueStatusSubject
             .combineLatest(homeserverReachabilityPublisher)
             .debounce(for: 1.0, scheduler: DispatchQueue.main)
-            .sink { [client] enabled, reachability in
+            .sink { [weak self, client] enabled, reachability in
                 MXLog.info("Send queue status changed to enabled: \(enabled), homeserver reachability: \(reachability)")
                 
-                if enabled == false, reachability == .reachable {
+                // Don't restart the send queue unless the client is meant to be running; doing so while
+                // suspended would generate network activity in the window we paused to keep quiet.
+                if enabled == false, reachability == .reachable, self?.desiredServiceState == .running {
                     MXLog.info("Enabling all send queues")
                     Task {
                         await client.enableAllSendQueues(enable: true)
@@ -1097,6 +1099,10 @@ class ClientProxy: ClientProxyProtocol {
             // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
             await cacheAccountURL()
+            
+            // Nudge the send queue listener to re-evaluate now that we're running; a resume doesn't otherwise
+            // emit, and the SDK only re-enables queues when client.resume() runs (gated behind the flag).
+            sendQueueStatusSubject.send(sendQueueStatusSubject.value)
         case .suspended:
             MXLog.info("Stopping sync")
             await syncService.stop()
