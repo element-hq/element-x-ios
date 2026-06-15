@@ -154,7 +154,12 @@ class ClientProxy: ClientProxyProtocol {
     private var hasEncounteredAuthError = false
     
     deinit {
-        pauseServices { [delegateHandle] in
+        // Stop the sync and cancel the delegate (in that order) before the client is released. No need to pause
+        // the client as it's being deallocated, so the SDK tears it down anyway. Capture the sync service strongly
+        // as `self` is being deallocated.
+        Task { [syncService, delegateHandle] in
+            await syncService.stop()
+            
             // The delegate handle needs to be cancelled always after the sync stops
             delegateHandle?.cancel()
         }
@@ -402,21 +407,7 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        if appSettings.clientPausingAndResumingEnabled {
-            do {
-                MXLog.info("Resuming client")
-                try await client.resume()
-            } catch {
-                MXLog.error("Failed resuming client with error: \(error)")
-            }
-        }
-        
-        MXLog.info("Starting sync")
-        await syncService.start()
-        
-        // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
-        // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
-        await cacheAccountURL()
+        await transitionServices(to: .running).value
     }
     
     /// A stored task for restarting the sync after a failure. This is stored so that we can cancel
@@ -447,27 +438,10 @@ class ClientProxy: ClientProxyProtocol {
             restartTask = nil
         }
         
-        // Capture the sync service strongly as this method is called on deinit and so the
-        // existence of self when the Task executes is questionable and would sometimes crash.
-        // Note: This isn't strictly necessary now given the unwrap above, but leaving the code as
-        // documentation. SE-0371 will allow us to fix this by using an async deinit.
-        Task { [syncService] in
-            defer {
-                completion?()
-            }
-            
-            MXLog.info("Stopping sync")
-            await syncService.stop()
-            MXLog.info("Sync stopped")
-            
-            if appSettings.clientPausingAndResumingEnabled {
-                do {
-                    MXLog.info("Pausing client")
-                    try await client.pause()
-                } catch {
-                    MXLog.error("Failed pausing client with error: \(error)")
-                }
-            }
+        let task = transitionServices(to: .suspended)
+        Task {
+            await task.value
+            completion?()
         }
     }
     
@@ -1083,6 +1057,67 @@ class ClientProxy: ClientProxyProtocol {
             }
             .store(in: &cancellables)
     }
+    
+    // MARK: - Pausing and resuming
+    
+    private enum ServiceState { case running, suspended }
+    
+    /// The state the sync service and client *should* be in, updated by ``resumeServices()`` and ``pauseServices()``.
+    private var desiredServiceState: ServiceState = .suspended
+    
+    /// Serialises service state transitions so that pause and resume never interleave. Each request chains onto
+    /// the previous one and the reconcile always drives the SDK to the *latest* desired state, so a late background
+    /// pause can no longer strand the client suspended after a foreground resume.
+    private var serviceStateTask: Task<Void, Never>?
+    
+    @discardableResult
+    private func transitionServices(to state: ServiceState) -> Task<Void, Never> {
+        desiredServiceState = state
+        
+        let previousTask = serviceStateTask
+        let task = Task { [weak self] in
+            await previousTask?.value
+            await self?.reconcileServiceState()
+        }
+        serviceStateTask = task
+        return task
+    }
+    
+    private func reconcileServiceState() async {
+        switch desiredServiceState {
+        case .running:
+            if appSettings.clientPausingAndResumingEnabled {
+                do {
+                    MXLog.info("Resuming client")
+                    try await client.resume()
+                } catch {
+                    MXLog.error("Failed resuming client with error: \(error)")
+                }
+            }
+            
+            MXLog.info("Starting sync")
+            await syncService.start()
+            
+            // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
+            // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
+            await cacheAccountURL()
+        case .suspended:
+            MXLog.info("Stopping sync")
+            await syncService.stop()
+            MXLog.info("Sync stopped")
+            
+            if appSettings.clientPausingAndResumingEnabled {
+                do {
+                    MXLog.info("Pausing client")
+                    try await client.pause()
+                } catch {
+                    MXLog.error("Failed pausing client with error: \(error)")
+                }
+            }
+        }
+    }
+    
+    // MARK: - Other
     
     private func cacheAccountURL() async {
         // Calling this function for the first time will cache the account URL in volatile memory for 24 hrs on the SDK.
