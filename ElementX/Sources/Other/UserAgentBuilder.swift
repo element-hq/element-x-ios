@@ -13,7 +13,7 @@ import UIKit
 import DeviceKit
 #endif
 
-enum UserAgentBuilder {
+nonisolated enum UserAgentBuilder {
     static func makeASCIIUserAgent() -> String {
         makeUserAgent()?.asciified() ?? "unknown"
     }
@@ -23,7 +23,7 @@ enum UserAgentBuilder {
         let clientVersion = InfoPlistReader.app.bundleShortVersionString
         
         #if os(iOS)
-        let scale = UIScreen.main.scale
+        let (systemVersion, scale) = mainThreadDeviceInfo()
         return if ProcessInfo.processInfo.isiOSAppOnMac {
             String(format: "%@/%@ (Mac; macOS %@; Scale/%0.2f)",
                    clientName,
@@ -35,7 +35,7 @@ enum UserAgentBuilder {
                    clientName,
                    clientVersion,
                    Device.current.safeDescription,
-                   UIDevice.current.systemVersion,
+                   systemVersion,
                    scale)
         }
         #elseif os(tvOS)
@@ -61,4 +61,18 @@ enum UserAgentBuilder {
         return nil
         #endif
     }
+    
+    #if os(iOS)
+    /// `UIDevice` and `UIScreen` are main actor isolated, but the user agent is also
+    /// built off the main thread (e.g. when the NSE builds its client), so hop over when needed.
+    private static func mainThreadDeviceInfo() -> (systemVersion: String, scale: CGFloat) {
+        if Thread.isMainThread {
+            MainActor.assumeIsolated { (UIDevice.current.systemVersion, UIScreen.main.scale) }
+        } else {
+            DispatchQueue.main.sync {
+                MainActor.assumeIsolated { (UIDevice.current.systemVersion, UIScreen.main.scale) }
+            }
+        }
+    }
+    #endif
 }

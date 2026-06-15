@@ -230,16 +230,24 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
     
     // MARK: - ImageDataProvider
     
-    var cacheKey: String {
+    nonisolated var cacheKey: String {
         mediaSource.url.absoluteString
     }
     
-    func data(handler: @escaping (Result<Data, Error>) -> Void) {
-        guard case let .gifData(data) = contentLoader.content else {
+    nonisolated func data(handler: @escaping (Result<Data, Error>) -> Void) {
+        // Kingfisher isn't annotated but invokes the provider on the main thread.
+        let gifData = MainActor.assumeIsolated { () -> Data? in
+            guard case let .gifData(data) = contentLoader.content else {
+                return nil
+            }
+            return data
+        }
+        
+        guard let gifData else {
             fatalError("Shouldn't reach this point without any gif data")
         }
         
-        handler(.success(data))
+        handler(.success(gifData))
     }
 }
 
@@ -279,7 +287,6 @@ private class ContentLoader: ObservableObject {
         self.mediaProvider = mediaProvider
     }
     
-    @MainActor
     func load() async {
         if isGIF {
             if case let .success(data) = await mediaProvider?.loadImageDataFromSource(mediaSource) {

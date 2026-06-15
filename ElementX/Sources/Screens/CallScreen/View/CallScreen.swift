@@ -71,7 +71,6 @@ private struct CallView: UIViewRepresentable {
         }
     }
     
-    @MainActor
     class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, AVPictureInPictureControllerDelegate {
         private weak var viewModelContext: CallScreenViewModel.Context?
         
@@ -168,6 +167,9 @@ private struct CallView: UIViewRepresentable {
                     if let error {
                         continuaton.resume(throwing: error)
                     } else {
+                        // The completion is called on the main thread which the continuation
+                        // also resumes on, so the result never actually crosses threads.
+                        nonisolated(unsafe) let result = result
                         continuaton.resume(returning: result)
                     }
                 }

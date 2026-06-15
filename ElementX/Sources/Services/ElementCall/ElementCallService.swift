@@ -220,14 +220,19 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // https://stackoverflow.com/a/41230020/730924
         update.remoteHandle = .init(type: .generic, value: roomID)
         
+        // The push registry uses the main queue so the completion is main actor bound,
+        // whereas CallKit invokes its completion on a background queue.
+        let mainActorCompletion = { @MainActor @Sendable in completion() }
         callProvider.reportNewIncomingCall(with: callID.callKitID, update: update) { [weak self] error in
             if let error {
                 MXLog.error("Failed reporting new incoming call with error: \(error)")
             }
             
-            self?.actionsSubject.send(.receivedIncomingCallRequest)
-            
-            completion()
+            Task { @MainActor in
+                self?.actionsSubject.send(.receivedIncomingCallRequest)
+                
+                mainActorCompletion()
+            }
         }
         
         endUnansweredCallTask = Task { [weak self] in
@@ -443,7 +448,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         MXLog.info("Observe decline events for notification \(rtcNotificationID)")
         
-        let listener: CallDeclineListener = SDKListener { [weak self] senderID in
+        let listener: CallDeclineListener = SDKListener.onMainActor { [weak self] senderID in
             guard let self else { return }
             
             MXLog.debug("Call declined event received from \(senderID)")

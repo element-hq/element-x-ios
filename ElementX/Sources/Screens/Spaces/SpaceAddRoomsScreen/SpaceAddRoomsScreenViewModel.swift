@@ -49,10 +49,13 @@ class SpaceAddRoomsScreenViewModel: SpaceAddRoomsScreenViewModelType, SpaceAddRo
             let existingRooms = spaceRoomListProxy.spaceRoomsPublisher.value
             suggestedRooms = await userSession.clientProxy
                 .recentlyVisitedRooms { roomProxy in
-                    !roomProxy.infoPublisher.value.isDirect
-                        && !roomProxy.infoPublisher.value.isSpace
-                        && roomProxy.infoPublisher.value.membership == .joined
-                        && !existingRooms.contains { $0.id == roomProxy.id }
+                    // The filter is Sendable for the mock's sake but the client proxy always calls it on the main actor.
+                    MainActor.assumeIsolated {
+                        !roomProxy.infoPublisher.value.isDirect
+                            && !roomProxy.infoPublisher.value.isSpace
+                            && roomProxy.infoPublisher.value.membership == .joined
+                            && !existingRooms.contains { $0.id == roomProxy.id }
+                    }
                 }
                 .map { .init(roomProxy: $0) }
             
