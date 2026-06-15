@@ -9,9 +9,7 @@ import Foundation
 
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
-internal enum L10n {
-  /// Add avatar
-  internal static var a11yAddAvatar: String { return L10n.tr("Localizable", "a11y_add_avatar") }
+internal nonisolated enum L10n {
   /// Add reaction: %1$@
   internal static func a11yAddReaction(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_add_reaction", String(describing: p1))
@@ -3973,7 +3971,7 @@ internal enum L10n {
 
 // MARK: - Implementation Details
 
-extension L10n {
+nonisolated extension L10n {
   static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
     // Use preferredLocalizations to get a language that is in the bundle and the user's preferred list of languages.
     let languages = Bundle.overrideLocalizations ?? Bundle.app.preferredLocalizations
