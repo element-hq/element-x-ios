@@ -431,18 +431,14 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func pauseServices(completion: (() -> Void)?) {
+    func pauseServices() async {
         MXLog.info("Pausing services")
         
         if restartTask != nil {
             restartTask = nil
         }
         
-        let task = transitionServices(to: .suspended)
-        Task {
-            await task.value
-            completion?()
-        }
+        await transitionServices(to: .suspended).value
     }
     
     func expireSyncSessions() async {

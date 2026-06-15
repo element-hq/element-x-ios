@@ -171,7 +171,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     func resumeServices() async
     
-    func pauseServices(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
+    func pauseServices() async
     
     func expireSyncSessions() async
     

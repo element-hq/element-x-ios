@@ -821,7 +821,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         showLoadingIndicator()
         
-        pauseClientServices(isBackgroundTask: false)
+        Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
@@ -951,7 +951,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
         
-        pauseClientServices(isBackgroundTask: false)
+        Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
         
         // Allow for everything to deallocate properly
@@ -1080,16 +1080,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     // MARK: - Application State
     
-    private func pauseClientServices(isBackgroundTask: Bool, completion: (() -> Void)? = nil) {
+    private func pauseClientServices(isBackgroundTask: Bool) async {
         if isBackgroundTask, UIApplication.shared.applicationState == .active {
             // Attempt to pause the background task services cleanly, only if the app not already running
             return
         }
         
-        MainActor.assumeIsolated {
-            userSession?.clientProxy.pauseServices(completion: completion)
-            clientProxyObserver = nil
-        }
+        await userSession?.clientProxy.pauseServices()
+        clientProxyObserver = nil
     }
     
     private func resumeClientServices() async {
@@ -1163,7 +1161,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @objc
     private func applicationWillTerminate() {
         MXLog.info("Application will terminate")
-        pauseClientServices(isBackgroundTask: false)
+        Task { await pauseClientServices(isBackgroundTask: false) }
     }
     
     @objc
@@ -1190,7 +1188,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             // We're intentionally strongly retaining self here to an EXC_BAD_ACCESS
             // `backgroundTask` will be eventually released in `endActiveBackgroundTask`
             // https://sentry.tools.element.io/organizations/element/issues/4477794/events/9cfd04e4d045440f87498809cf718de5/
-            self.pauseClientServices(isBackgroundTask: true) {
+            Task { @MainActor in
+                await self.pauseClientServices(isBackgroundTask: true)
                 self.endActiveBackgroundTask()
             }
         }
@@ -1258,20 +1257,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()
         
-        // We have a lot of crashes stemming here which we previously believed are caused by pauseServices not being async
-        // on the client proxy side (see the comment on that method). We have now realised that will likely not fix anything but
-        // we also noticed this does not crash on the main thread, even though the whole AppCoordinator is on the Main actor.
-        // As such, we introduced a MainActor conformance on the expirationHandler but we are also assuming main actor
-        // isolated in the `pauseServices` method above.
+        // We have a lot of crashes stemming here which we previously believed were caused by pauseServices not being
+        // async on the client proxy side. We have now realised that will likely not fix anything but we also noticed
+        // this does not crash on the main thread, even though the whole AppCoordinator is on the Main actor. As such,
+        // we hop onto the main actor explicitly before pausing.
         // https://sentry.tools.element.io/organizations/element/issues/4477794/
         task.expirationHandler = { @Sendable [weak self] in
             MXLog.info("Background app refresh task is about to expire.")
             
             Task { @MainActor in
-                self?.pauseClientServices(isBackgroundTask: true) {
-                    MXLog.info("Marking Background app refresh task as complete.")
-                    task.setTaskCompleted(success: true)
-                }
+                await self?.pauseClientServices(isBackgroundTask: true)
+                MXLog.info("Marking Background app refresh task as complete.")
+                task.setTaskCompleted(success: true)
             }
         }
         
@@ -1294,7 +1291,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 
                 // Make sure we stop the sync loop, otherwise the ongoing request is immediately
                 // handled the next time the app refreshes, which can trigger timeout failures.
-                pauseClientServices(isBackgroundTask: true) {
+                Task {
+                    await self.pauseClientServices(isBackgroundTask: true)
                     MXLog.info("Marking Background app refresh task as complete.")
                     task.setTaskCompleted(success: true)
                 }
