@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol ThreadTimelineScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<ThreadTimelineScreenViewModelAction, Never> { get }
     var context: ThreadTimelineScreenViewModelType.Context { get }

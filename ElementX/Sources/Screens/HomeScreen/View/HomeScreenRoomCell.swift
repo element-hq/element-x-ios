@@ -44,7 +44,7 @@ struct HomeScreenRoomCell: View {
         .accessibilityHidden(redactionReasons.contains(.placeholder) ? true : false)
     }
     
-    @ViewBuilder @MainActor
+    @ViewBuilder
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
@@ -211,10 +211,20 @@ import MatrixRustSDKMocks
 
 struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static let summaryProviderGeneric = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-    static let genericRooms = summaryProviderGeneric.roomListPublisher.value.compactMap(mockRoom)
+    static let genericRooms = mockRooms(from: summaryProviderGeneric)
     
     static let summaryProviderForNotificationsState = RoomSummaryProviderMock(.init(state: .loaded(.mockRoomsWithNotificationsState)))
-    static let notificationsStateRooms = summaryProviderForNotificationsState.roomListPublisher.value.compactMap(mockRoom)
+    static let notificationsStateRooms = mockRooms(from: summaryProviderForNotificationsState)
+    
+    static func mockRooms(from provider: RoomSummaryProviderProtocol) -> [HomeScreenRoom] {
+        var rooms = [HomeScreenRoom]()
+        for summary in provider.roomListPublisher.value {
+            if let room = mockRoom(summary: summary) {
+                rooms.append(room)
+            }
+        }
+        return rooms
+    }
     
     static let lastMessageStateRooms = [makeRoom(lastMessageState: .sending), makeRoom(lastMessageState: .failed)]
     

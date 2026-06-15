@@ -32,7 +32,6 @@ enum EmojiProviderState {
     case loaded([EmojiCategory])
 }
 
-@MainActor
 protocol EmojiProviderProtocol {
     var state: EmojiProviderState { get }
     

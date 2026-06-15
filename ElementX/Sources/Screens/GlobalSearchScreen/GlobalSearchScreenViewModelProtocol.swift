@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol GlobalSearchScreenViewModelProtocol {
     var actions: AnyPublisher<GlobalSearchScreenViewModelAction, Never> { get }
     var context: GlobalSearchScreenViewModelType.Context { get }

@@ -41,7 +41,6 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     
     private var lastLocation: CLLocationCoordinate2D?
     
-    @MainActor
     init(clientProxy: ClientProxyProtocol,
          appSettings: AppSettings,
          locationManager: @autoclosure @MainActor () -> CLLocationManagerProtocol = CLLocationManager()) {

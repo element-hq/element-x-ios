@@ -10,7 +10,6 @@ import Combine
 import Foundation
 import SwiftUI
 
-@MainActor
 protocol TimelineViewModelProtocol {
     var actions: AnyPublisher<TimelineViewModelAction, Never> { get }
     var context: TimelineViewModel.Context { get }

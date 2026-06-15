@@ -89,7 +89,7 @@ struct SpaceRoomCell: View {
         .accessibilityIdentifier(A11yIdentifiers.spacesScreen.spaceRoomName(spaceServiceRoom.name))
     }
     
-    @ViewBuilder @MainActor
+    @ViewBuilder
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: spaceServiceRoom.avatar,

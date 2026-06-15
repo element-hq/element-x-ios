@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol SecureBackupRecoveryKeyScreenViewModelProtocol {
     var actions: AnyPublisher<SecureBackupRecoveryKeyScreenViewModelAction, Never> { get }
     var context: SecureBackupRecoveryKeyScreenViewModelType.Context { get }

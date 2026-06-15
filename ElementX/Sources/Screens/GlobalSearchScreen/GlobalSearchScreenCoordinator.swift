@@ -20,7 +20,6 @@ enum GlobalSearchControllerAction {
     case select(roomID: String)
 }
 
-@MainActor
 class GlobalSearchScreenCoordinator: CoordinatorProtocol {
     private let viewModel: GlobalSearchScreenViewModelProtocol
     

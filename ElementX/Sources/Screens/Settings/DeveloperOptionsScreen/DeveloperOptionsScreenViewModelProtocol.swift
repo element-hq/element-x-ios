@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol DeveloperOptionsScreenViewModelProtocol {
     var actions: AnyPublisher<DeveloperOptionsScreenViewModelAction, Never> { get }
     var context: DeveloperOptionsScreenViewModelType.Context { get }

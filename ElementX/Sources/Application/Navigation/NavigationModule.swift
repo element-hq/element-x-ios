@@ -10,7 +10,6 @@ import Foundation
 
 /// A CoordinatorProtocol wrapper and type erasing component that allows
 /// dynamically presenting arbitrary screens
-@MainActor
 class NavigationModule: Identifiable, Hashable {
     let id = UUID()
     

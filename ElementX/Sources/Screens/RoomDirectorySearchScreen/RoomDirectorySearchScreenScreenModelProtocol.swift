@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol RoomDirectorySearchScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<RoomDirectorySearchScreenViewModelAction, Never> { get }
     var context: RoomDirectorySearchScreenViewModelType.Context { get }

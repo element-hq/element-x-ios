@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol EditRoomAddressScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<EditRoomAddressScreenViewModelAction, Never> { get }
     var context: EditRoomAddressScreenViewModelType.Context { get }

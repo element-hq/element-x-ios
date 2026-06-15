@@ -10,7 +10,6 @@ import Compound
 import HTMLParser
 import SwiftUI
 
-@MainActor
 extension HTMLParserStyle {
     static let elementX = HTMLParserStyle(textColor: UIColor.label,
                                           linkColor: UIColor.link,

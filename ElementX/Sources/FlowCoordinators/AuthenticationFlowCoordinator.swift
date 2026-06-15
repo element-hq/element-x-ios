@@ -10,7 +10,6 @@ import Combine
 import SwiftState
 import SwiftUI
 
-@MainActor
 protocol AuthenticationFlowCoordinatorDelegate: AnyObject {
     func authenticationFlowCoordinator(didLoginWithSession userSession: UserSessionProtocol)
 }

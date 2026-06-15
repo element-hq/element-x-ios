@@ -111,7 +111,6 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
 
 // MARK: - Iterators
 
-@MainActor
 private protocol VerifiedUserSendFailureIterator {
     func next() -> (userID: String, failure: TimelineItemSendFailure.VerifiedUser)?
 }

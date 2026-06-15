@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol MediaUploadPreviewScreenViewModelProtocol {
     var actions: AnyPublisher<MediaUploadPreviewScreenViewModelAction, Never> { get }
     var context: MediaUploadPreviewScreenViewModelType.Context { get }

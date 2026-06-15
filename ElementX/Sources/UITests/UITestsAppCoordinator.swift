@@ -107,7 +107,6 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
     }
 }
 
-@MainActor
 class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
     let windowManager: SecureWindowManagerProtocol
@@ -620,11 +619,16 @@ class MockScreen: Identifiable {
                 .mockRooms
             }
             
+            var roomPreviews = [RoomPreviewProxyMock]()
+            for spaceRoom in [SpaceServiceRoom].mockSpaceList {
+                roomPreviews.append(RoomPreviewProxyMock(spaceServiceRoom: spaceRoom))
+            }
+            
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(topLevelSpaces: .mockSpaceList.filter(\.isSpace) + .mockSingleRoom),
-                                                    roomPreviews: [SpaceServiceRoom].mockSpaceList.map(RoomPreviewProxyMock.init),
+                                                    roomPreviews: roomPreviews,
                                                     defaultRoomMembers: .allMembersAsAdmin))
             clientProxy.recentlyVisitedRoomsFilterReturnValue = .mockRooms
             

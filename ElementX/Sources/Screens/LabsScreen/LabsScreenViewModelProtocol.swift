@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol LabsScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<LabsScreenViewModelAction, Never> { get }
     var context: LabsScreenViewModelType.Context { get }

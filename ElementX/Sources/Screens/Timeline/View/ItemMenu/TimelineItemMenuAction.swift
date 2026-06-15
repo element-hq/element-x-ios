@@ -10,7 +10,6 @@ import OrderedCollections
 import SFSafeSymbols
 import SwiftUI
 
-@MainActor
 struct TimelineItemMenuActions {
     let reactions: [TimelineItemMenuReaction]
     let actions: [TimelineItemMenuAction]

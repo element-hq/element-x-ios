@@ -7,7 +7,6 @@
 
 import Combine
 
-@MainActor
 protocol ChatsSpaceFiltersScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<ChatsSpaceFiltersScreenViewModelAction, Never> { get }
     var context: ChatsSpaceFiltersScreenViewModelType.Context { get }

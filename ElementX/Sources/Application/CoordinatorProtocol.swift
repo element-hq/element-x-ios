@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@MainActor
 protocol CoordinatorProtocol: AnyObject {
     func start()
     func stop()

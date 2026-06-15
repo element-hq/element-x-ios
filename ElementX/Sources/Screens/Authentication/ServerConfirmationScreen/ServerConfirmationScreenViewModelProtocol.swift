@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol ServerConfirmationScreenViewModelProtocol {
     var actions: AnyPublisher<ServerConfirmationScreenViewModelAction, Never> { get }
     var context: ServerConfirmationScreenViewModelType.Context { get }

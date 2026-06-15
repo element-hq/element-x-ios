@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol SecureBackupLogoutConfirmationScreenViewModelProtocol {
     var actions: AnyPublisher<SecureBackupLogoutConfirmationScreenViewModelAction, Never> { get }
     var context: SecureBackupLogoutConfirmationScreenViewModelType.Context { get }

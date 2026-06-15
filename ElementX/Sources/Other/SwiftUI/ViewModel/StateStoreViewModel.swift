@@ -16,7 +16,6 @@ import Foundation
 /// a specific portion of state that can be safely bound to.
 /// If we decide to add more features to our state management (like doing state processing off the main thread)
 /// we can do it in this centralised place.
-@MainActor
 class StateStoreViewModel<State: BindableState, ViewAction> {
     /// For storing subscription references.
     ///
@@ -57,7 +56,6 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
     /// It provides a nice layer of consistency and also safety. As we are not passing the `ViewModel` to the view directly, shortcuts/hacks
     /// can't be made into the `ViewModel`.
     @dynamicMemberLookup
-    @MainActor
     final class Context: ObservableObject {
         fileprivate weak var viewModel: StateStoreViewModel?
         

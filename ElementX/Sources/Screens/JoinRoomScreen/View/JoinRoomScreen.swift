@@ -386,7 +386,6 @@ struct JoinRoomScreenSpace_Previews: PreviewProvider, TestablePreview {
     }
 }
 
-@MainActor
 struct JoinRoomScreenPreviewWrapper: Identifiable {
     let id = UUID()
     let viewModel: JoinRoomScreenViewModel

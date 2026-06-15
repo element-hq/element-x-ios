@@ -24,7 +24,7 @@ struct GlobalSearchScreenListRow: View {
         }
     }
     
-    @ViewBuilder @MainActor
+    @ViewBuilder
     var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,

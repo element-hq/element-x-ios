@@ -16,7 +16,6 @@ enum AudioRecorderRecordingState {
     case error
 }
 
-@MainActor
 class AudioRecorderState: ObservableObject, Identifiable {
     let id = UUID()
     
