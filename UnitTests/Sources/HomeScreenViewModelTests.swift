@@ -441,6 +441,7 @@ final class HomeScreenViewModelTests {
     }
 }
 
+@MainActor
 private extension [HomeScreenRoom] {
     var invites: [HomeScreenRoom] {
         filter { room in
@@ -453,7 +454,8 @@ private extension [HomeScreenRoom] {
     }
 }
 
-extension HomeScreenViewModelAction: @retroactive Equatable {
+@MainActor
+extension HomeScreenViewModelAction: @MainActor @retroactive Equatable {
     public static func == (lhs: HomeScreenViewModelAction, rhs: HomeScreenViewModelAction) -> Bool {
         switch (lhs, rhs) {
         case (.presentRoom(let lhsID), .presentRoom(let rhsID)):

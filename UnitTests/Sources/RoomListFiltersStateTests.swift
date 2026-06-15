@@ -9,6 +9,7 @@
 @testable import ElementX
 import Testing
 
+@MainActor
 final class RoomListFiltersStateTests {
     var appSettings: AppSettings
     var state: RoomListFiltersState

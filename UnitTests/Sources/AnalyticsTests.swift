@@ -11,13 +11,13 @@ import AnalyticsEvents
 import PostHog
 import Testing
 
+@MainActor
 final class AnalyticsTests {
     private let appSettings: AppSettings
     private let analytics: AnalyticsServiceProtocol
     private let analyticsClient: AnalyticsClientMock
     private var posthogMock: PHGPostHogMock
     
-    @MainActor
     init() {
         appSettings = AppSettings.volatile()
         

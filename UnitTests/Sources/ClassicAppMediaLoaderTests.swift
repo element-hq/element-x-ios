@@ -14,6 +14,7 @@ final class ClassicAppMediaLoaderTests {
     let mediaLoader: ClassicAppMediaLoader
     let urlSession: URLSession
     
+    @MainActor
     init() throws {
         account = ClassicAppAccount(userID: "@alice:matrix.org",
                                     displayName: nil,
@@ -40,6 +41,7 @@ final class ClassicAppMediaLoaderTests {
         #expect(data == MockURLProtocol.downloadData)
     }
     
+    @MainActor
     @Test
     func loadMediaContentWithInvalidToken() async throws {
         let accountWithoutToken = ClassicAppAccount(userID: "@bob:matrix.org",
