@@ -9653,8 +9653,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(APP_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/SupportingFiles/ElementX-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "GeneratedInterface-Swift.h";
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -9685,8 +9688,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(APP_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/SupportingFiles/ElementX-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "GeneratedInterface-Swift.h";
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
