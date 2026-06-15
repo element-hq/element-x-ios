@@ -146,7 +146,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return
         }
         
-        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { [weak self] roomInfo in
+        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener.onMainActor { [weak self] roomInfo in
             MXLog.info("Received room info update")
             self?.infoSubject.send(RoomInfoProxy(roomInfo: roomInfo))
         })
@@ -794,7 +794,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     // MARK: - Private
     
     private func subscribeToTypingNotifications() {
-        typingNotificationObservationToken = room.subscribeToTypingNotifications(listener: SDKListener { [weak self] typingUserIDs in
+        typingNotificationObservationToken = room.subscribeToTypingNotifications(listener: SDKListener.onMainActor { [weak self] typingUserIDs in
             guard let self else { return }
             
             MXLog.info("Received typing notification update, typingUsers: \(typingUserIDs)")
@@ -813,7 +813,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     private func subscribeToIdentityStatusChanges() async {
         do {
-            identityStatusChangesObservationToken = try await room.subscribeToIdentityStatusChanges(listener: SDKListener { [weak self] changes in
+            identityStatusChangesObservationToken = try await room.subscribeToIdentityStatusChanges(listener: SDKListener.onMainActor { [weak self] changes in
                 guard let self else { return }
                 
                 MXLog.info("Received identity status changes: \(changes)")
@@ -827,7 +827,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     private func subscribeToKnockRequests() async {
         do {
-            knockRequestsChangesObservationToken = try await room.subscribeToKnockRequests(listener: SDKListener { [weak self] requests in
+            knockRequestsChangesObservationToken = try await room.subscribeToKnockRequests(listener: SDKListener.onMainActor { [weak self] requests in
                 guard let self else { return }
                 
                 MXLog.info("Received requests to join update, requests id: \(requests.map(\.eventId))")

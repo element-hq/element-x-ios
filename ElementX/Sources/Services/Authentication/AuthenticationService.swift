@@ -198,12 +198,24 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         // n.b. We deliberatley don't check whether the received server is in our appSettings.accountProviders
         
+        // Bridge from the SDK's synchronous callback into Swift Concurrency. Yielding is safe from
+        // any thread; the single long-lived `for await` consumer forwards the progress updates on
+        // the main actor in FIFO order.
+        let (progressStream, progressContinuation) = AsyncStream<QrLoginProgress>.makeStream()
+        
         let listener = SDKListener { progress in
-            guard let progress = QRLoginProgress(rustProgress: progress) else { return }
-            progressSubject.send(progress)
+            progressContinuation.yield(progress)
         }
         
         Task {
+            for await rustProgress in progressStream {
+                guard let progress = QRLoginProgress(rustProgress: rustProgress) else { continue }
+                progressSubject.send(progress)
+            }
+        }
+        
+        Task {
+            defer { progressContinuation.finish() }
             do {
                 let client = try await makeClient(homeserverAddress: scannedServerNameOrBaseUrl)
                 let qrCodeHandler = client.newLoginWithQrCodeHandler(oauthConfiguration: appSettings.oAuthConfiguration.rustValue)

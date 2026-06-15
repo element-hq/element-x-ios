@@ -29,29 +29,70 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
     }
     
     private let paginationStateHandle: TaskHandle
-    let paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never>
+    private let paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never>
+    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> {
+        paginationStateSubject.asCurrentValuePublisher()
+    }
+    
+    // Bridges from the SDK's synchronous callbacks into Swift Concurrency. Yielding is safe from
+    // any thread; single long-lived `for await` consumers (set up in `init`) apply the updates on
+    // the main actor in FIFO order, guaranteeing one in-flight update at a time.
+    private let paginationStateContinuation: AsyncStream<SpaceRoomListPaginationState>.Continuation
+    private let roomUpdatesContinuation: AsyncStream<[SpaceListUpdate]>.Continuation
+    private let spaceUpdatesContinuation: AsyncStream<SpaceRoom>.Continuation
+    
+    deinit {
+        paginationStateContinuation.finish()
+        roomUpdatesContinuation.finish()
+        spaceUpdatesContinuation.finish()
+    }
     
     init(_ spaceRoomList: SpaceRoomListProtocol) async throws {
         guard let spaceRoom = spaceRoomList.space() else { throw SpaceRoomListProxyError.missingSpace }
         
         self.spaceRoomList = spaceRoomList
         spaceServiceRoomSubject = .init(SpaceServiceRoom(spaceRoom: spaceRoom))
+        paginationStateSubject = .init(spaceRoomList.paginationState())
         
-        let paginationStateSubject = CurrentValueSubject<SpaceRoomListPaginationState, Never>(spaceRoomList.paginationState())
-        paginationStatePublisher = paginationStateSubject.asCurrentValuePublisher()
+        let (paginationStates, paginationStateContinuation) = AsyncStream<SpaceRoomListPaginationState>.makeStream()
+        self.paginationStateContinuation = paginationStateContinuation
+        
+        let (roomUpdates, roomUpdatesContinuation) = AsyncStream<[SpaceListUpdate]>.makeStream()
+        self.roomUpdatesContinuation = roomUpdatesContinuation
+        
+        let (spaceUpdates, spaceUpdatesContinuation) = AsyncStream<SpaceRoom>.makeStream()
+        self.spaceUpdatesContinuation = spaceUpdatesContinuation
         
         paginationStateHandle = spaceRoomList.subscribeToPaginationStateUpdates(listener: SDKListener { paginationState in
-            paginationStateSubject.send(paginationState)
+            paginationStateContinuation.yield(paginationState)
         })
         
-        spaceRoomsHandle = await spaceRoomList.subscribeToRoomUpdate(listener: SDKListener { [weak self] updates in
-            self?.handleUpdates(updates)
+        spaceRoomsHandle = await spaceRoomList.subscribeToRoomUpdate(listener: SDKListener { updates in
+            roomUpdatesContinuation.yield(updates)
         })
         
-        spaceServiceRoomHandle = spaceRoomList.subscribeToSpaceUpdates(listener: SDKListener { [weak self] spaceRoom in
+        spaceServiceRoomHandle = spaceRoomList.subscribeToSpaceUpdates(listener: SDKListener { spaceRoom in
             guard let spaceRoom else { return }
-            self?.spaceServiceRoomSubject.send(SpaceServiceRoom(spaceRoom: spaceRoom))
+            spaceUpdatesContinuation.yield(spaceRoom)
         })
+        
+        Task { [weak self] in
+            for await paginationState in paginationStates {
+                self?.paginationStateSubject.send(paginationState)
+            }
+        }
+        
+        Task { [weak self] in
+            for await updates in roomUpdates {
+                self?.handleUpdates(updates)
+            }
+        }
+        
+        Task { [weak self] in
+            for await spaceRoom in spaceUpdates {
+                self?.spaceServiceRoomSubject.send(SpaceServiceRoom(spaceRoom: spaceRoom))
+            }
+        }
     }
     
     func paginate() async {

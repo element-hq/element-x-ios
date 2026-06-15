@@ -105,6 +105,9 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             .drop { !$0.canEditAddress }
             .map(\.bindings.desiredSettings.accessType)
             .removeDuplicates()
+            // Only react to the user changing the access type, the room's initial
+            // state shouldn't reset the visibility it reports.
+            .dropFirst()
             // To allow the view to update properly
             .receive(on: DispatchQueue.main)
             .sink { [weak self] accessType in

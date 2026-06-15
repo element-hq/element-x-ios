@@ -203,7 +203,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
             SpaceScreen(context: newSpaceViewModel.context)
         }
         .previewDisplayName("New Space")
-        .snapshotPreferences(expect: newSpaceViewModel.context.observe(\.viewState).map(\.canEditChildren))
+        .snapshotPreferences(expect: newSpaceViewModel.context.observe(\.viewState.canEditChildren))
     }
     
     static func makeViewModel(isManagingRooms: Bool = false, isNewSpace: Bool = false) -> SpaceScreenViewModel {

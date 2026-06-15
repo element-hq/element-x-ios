@@ -31,12 +31,32 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     deinit {
+        backPaginationStatusContinuation.finish()
         backPaginationStateObservationToken?.cancel()
     }
+    
+    /// Bridge from the SDK's synchronous callback into Swift Concurrency. Yielding is safe from any
+    /// thread; a single long-lived `for await` consumer (set up in `init`) applies the status updates
+    /// on the main actor in FIFO order.
+    private let backPaginationStatusContinuation: AsyncStream<PaginationStatus>.Continuation
     
     init(timeline: Timeline, kind: TimelineKind) {
         self.timeline = timeline
         self.kind = kind
+        
+        let (backPaginationStatusStream, backPaginationStatusContinuation) = AsyncStream<PaginationStatus>.makeStream()
+        self.backPaginationStatusContinuation = backPaginationStatusContinuation
+        
+        Task { [weak self] in
+            for await status in backPaginationStatusStream {
+                switch status {
+                case .idle(let hitStartOfTimeline):
+                    self?.backPaginationStateSubject.send(hitStartOfTimeline ? .endReached : .idle)
+                case .paginating:
+                    self?.backPaginationStateSubject.send(.paginating)
+                }
+            }
+        }
     }
     
     func subscribeForUpdates() async {
@@ -52,7 +72,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        let provider = await TimelineItemProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
+        let provider = TimelineItemProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
         
         innerTimelineItemProvider = provider
         
@@ -74,7 +94,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
-        guard let content = await timelineItemProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content,
+        guard let content = timelineItemProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content,
               case let .msgLike(messageLikeContent) = content,
               case let .message(messageContent) = messageLikeContent.kind else {
             return nil
@@ -236,7 +256,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                               inReplyTo: nil),
                                                 audioInfo: audioInfo)
             
-            await requestHandle(handle)
+            requestHandle(handle)
             
             try await handle.join()
             MXLog.info("Finished sending audio")
@@ -262,7 +282,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                              inReplyTo: nil),
                                                fileInfo: fileInfo)
             
-            await requestHandle(handle)
+            requestHandle(handle)
             
             try await handle.join()
             MXLog.info("Finished sending file")
@@ -290,7 +310,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                 thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)),
                                                 imageInfo: imageInfo)
             
-            await requestHandle(handle)
+            requestHandle(handle)
             
             try await handle.join()
             MXLog.info("Finished sending image")
@@ -342,7 +362,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                 thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)),
                                                 videoInfo: videoInfo)
             
-            await requestHandle(handle)
+            requestHandle(handle)
             
             try await handle.join()
             MXLog.info("Finished sending video")
@@ -369,7 +389,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                        audioInfo: audioInfo,
                                                        waveform: waveform)
             
-            await requestHandle(handle)
+            requestHandle(handle)
             
             try await handle.join()
             MXLog.info("Finished sending voice message")
@@ -582,17 +602,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     private func subscribeToPagination() async {
         switch kind {
         case .live:
-            let backPaginationListener = SDKListener<PaginationStatus> { [weak self] status in
-                guard let self else {
-                    return
-                }
-                
-                switch status {
-                case .idle(let hitStartOfTimeline):
-                    backPaginationStateSubject.send(hitStartOfTimeline ? .endReached : .idle)
-                case .paginating:
-                    backPaginationStateSubject.send(.paginating)
-                }
+            let backPaginationListener = SDKListener<PaginationStatus> { [backPaginationStatusContinuation] status in
+                backPaginationStatusContinuation.yield(status)
             }
             
             do {

@@ -12,7 +12,6 @@ import MatrixRustSDK
 
 final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     private let roomDirectorySearch: RoomDirectorySearchProtocol
-    private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.room_directory_search_proxy", qos: .default)
     
     private let resultsSubject = CurrentValueSubject<[RoomDirectorySearchResult], Never>([])
     
@@ -25,22 +24,32 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
         set { resultsSubject.send(newValue) }
     }
     
-    private let diffsPublisher = PassthroughSubject<[RoomDirectorySearchEntryUpdate], Never>()
+    /// Bridge from the SDK's synchronous callback into Swift Concurrency. Yielding is safe from any
+    /// thread; a single long-lived `for await` consumer (set up in `init`) applies the updates on the
+    /// main actor in FIFO order, guaranteeing one in-flight update at a time.
+    private let updatesContinuation: AsyncStream<[RoomDirectorySearchEntryUpdate]>.Continuation
     
     private var searchEntriesSubscription: TaskHandle?
     
-    private var cancellables = Set<AnyCancellable>()
+    deinit {
+        updatesContinuation.finish()
+    }
     
     init(roomDirectorySearch: RoomDirectorySearchProtocol) {
         self.roomDirectorySearch = roomDirectorySearch
-        diffsPublisher
-            .receive(on: serialDispatchQueue)
-            .sink { [weak self] in self?.updateResultsWithDiffs($0) }
-            .store(in: &cancellables)
+        
+        let (updatesStream, updatesContinuation) = AsyncStream<[RoomDirectorySearchEntryUpdate]>.makeStream()
+        self.updatesContinuation = updatesContinuation
+        
+        Task { [weak self] in
+            for await updates in updatesStream {
+                self?.updateResultsWithDiffs(updates)
+            }
+        }
         
         Task {
-            searchEntriesSubscription = await roomDirectorySearch.results(listener: SDKListener { [weak self] updates in
-                self?.diffsPublisher.send(updates)
+            searchEntriesSubscription = await roomDirectorySearch.results(listener: SDKListener { updates in
+                updatesContinuation.yield(updates)
             })
         }
     }

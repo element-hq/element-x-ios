@@ -55,15 +55,9 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
             return
         }
         
-        await withTaskGroup { taskGroup in
-            for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
-                taskGroup.addTask {
-                    if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url) {
-                        await MainActor.run {
-                            linkMetadata[url] = metadata
-                        }
-                    }
-                }
+        for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
+            if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url) {
+                linkMetadata[url] = metadata
             }
         }
     }

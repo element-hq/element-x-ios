@@ -69,13 +69,12 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         let progressPublisher = linkNewDeviceService.linkMobileDevice()
         
         do {
-            _ = try await progressPublisher.values
-                .first { progress in
-                    switch progress {
-                    case .qrReady: true
-                    default: false
-                    }
+            var iterator = progressPublisher.values.makeAsyncIterator()
+            while let progress = try await iterator.next(isolation: #isolation) {
+                if case .qrReady = progress {
+                    break
                 }
+            }
             
             actionsSubject.send(.linkMobileDevice(progressPublisher))
             state.mode = .readyToLink(isGeneratingCode: false)

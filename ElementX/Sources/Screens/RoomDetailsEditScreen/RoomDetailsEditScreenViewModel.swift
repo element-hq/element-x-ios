@@ -138,23 +138,19 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             try await withThrowingTaskGroup(of: Void.self) { group in
                 if state.avatarDidChange {
                     group.addTask {
-                        if let localMedia = await self.state.localMedia {
-                            try await self.roomProxy.uploadAvatar(media: localMedia).get()
-                        } else if await self.state.avatarURL == nil {
-                            try await self.roomProxy.removeAvatar().get()
-                        }
+                        try await self.saveAvatar()
                     }
                 }
                 
                 if state.nameDidChange {
                     group.addTask {
-                        try await self.roomProxy.setName(self.state.bindings.name).get()
+                        try await self.saveName()
                     }
                 }
                 
                 if state.topicDidChange {
                     group.addTask {
-                        try await self.roomProxy.setTopic(self.state.bindings.topic).get()
+                        try await self.saveTopic()
                     }
                 }
                 
@@ -167,5 +163,21 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                              title: L10n.screenRoomDetailsEditionErrorTitle,
                                              message: L10n.screenRoomDetailsEditionError)
         }
+    }
+    
+    private func saveAvatar() async throws {
+        if let localMedia = state.localMedia {
+            try await roomProxy.uploadAvatar(media: localMedia).get()
+        } else if state.avatarURL == nil {
+            try await roomProxy.removeAvatar().get()
+        }
+    }
+    
+    private func saveName() async throws {
+        try await roomProxy.setName(state.bindings.name).get()
+    }
+    
+    private func saveTopic() async throws {
+        try await roomProxy.setTopic(state.bindings.topic).get()
     }
 }

@@ -11,46 +11,63 @@ import Foundation
 import MatrixRustSDK
 
 private final class WeakSessionVerificationControllerProxy: SessionVerificationControllerDelegate {
-    private weak var proxy: SessionVerificationControllerProxy?
+    @MainActor private weak var proxy: SessionVerificationControllerProxy?
     
-    init(proxy: SessionVerificationControllerProxy) {
+    @MainActor init(proxy: SessionVerificationControllerProxy) {
         self.proxy = proxy
     }
     
     // MARK: - SessionVerificationControllerDelegate
     
+    // The delegate methods are called by the SDK from arbitrary threads,
+    // hop to the main actor where the proxy lives.
+    
     func didReceiveVerificationRequest(details: MatrixRustSDK.SessionVerificationRequestDetails) {
-        proxy?.didReceiveVerificationRequest(details: details)
+        Task { @MainActor in
+            self.proxy?.didReceiveVerificationRequest(details: details)
+        }
     }
     
     func didReceiveVerificationData(data: MatrixRustSDK.SessionVerificationData) {
         switch data {
         // We can handle only emojis for now
         case .emojis(let emojis, _):
-            proxy?.didReceiveData(emojis)
+            Task { @MainActor in
+                self.proxy?.didReceiveData(emojis)
+            }
         default:
             break
         }
     }
     
     func didAcceptVerificationRequest() {
-        proxy?.didAcceptVerificationRequest()
+        Task { @MainActor in
+            self.proxy?.didAcceptVerificationRequest()
+        }
     }
     
     func didStartSasVerification() {
-        proxy?.didStartSasVerification()
+        Task { @MainActor in
+            self.proxy?.didStartSasVerification()
+        }
     }
     
     func didFail() {
-        proxy?.didFail()
+        Task { @MainActor in
+            self.proxy?.didFail()
+        }
     }
     
     func didCancel() {
-        proxy?.didCancel()
+        Task { @MainActor in
+            self.proxy?.didCancel()
+        }
     }
     
     func didFinish() {
-        proxy?.didFinish()
+        Task { @MainActor in
+            self.proxy?.didFinish()
+        }
     }
 }
 

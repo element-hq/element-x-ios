@@ -13,7 +13,7 @@ struct UserSessionMockConfiguration {
     var clientProxy: ClientProxyProtocol = ClientProxyMock(.init())
 }
 
-extension UserSessionMock {
+@MainActor extension UserSessionMock {
     convenience init(_ configuration: UserSessionMockConfiguration) {
         self.init()
         

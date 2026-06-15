@@ -25,19 +25,48 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         spaceFilterSubject.asCurrentValuePublisher()
     }
     
+    // Bridges from the SDK's synchronous callbacks into Swift Concurrency. Yielding is safe from
+    // any thread; single long-lived `for await` consumers (set up in `init`) apply the updates on
+    // the main actor in FIFO order, guaranteeing one in-flight update at a time.
+    private let spaceListUpdatesContinuation: AsyncStream<[SpaceListUpdate]>.Continuation
+    private let spaceFilterUpdatesContinuation: AsyncStream<[SpaceFilterUpdate]>.Continuation
+    
+    deinit {
+        spaceListUpdatesContinuation.finish()
+        spaceFilterUpdatesContinuation.finish()
+    }
+    
     init(spaceService: SpaceServiceProtocol) {
         self.spaceService = spaceService
+        
+        let (spaceListUpdates, spaceListUpdatesContinuation) = AsyncStream<[SpaceListUpdate]>.makeStream()
+        self.spaceListUpdatesContinuation = spaceListUpdatesContinuation
+        
+        let (spaceFilterUpdates, spaceFilterUpdatesContinuation) = AsyncStream<[SpaceFilterUpdate]>.makeStream()
+        self.spaceFilterUpdatesContinuation = spaceFilterUpdatesContinuation
+        
+        Task { [weak self] in
+            for await updates in spaceListUpdates {
+                self?.handleSpaceListUpdates(updates)
+            }
+        }
+        
+        Task { [weak self] in
+            for await updates in spaceFilterUpdates {
+                self?.handleSpaceFilterUpdates(updates)
+            }
+        }
         
         Task { await setupSubscriptions() }
     }
     
     private func setupSubscriptions() async {
-        topLevelSpacesHandle = await spaceService.subscribeToTopLevelJoinedSpaces(listener: SDKListener { [weak self] updates in
-            self?.handleSpaceListUpdates(updates)
+        topLevelSpacesHandle = await spaceService.subscribeToTopLevelJoinedSpaces(listener: SDKListener { [spaceListUpdatesContinuation] updates in
+            spaceListUpdatesContinuation.yield(updates)
         })
         
-        spaceFilterHandle = await spaceService.subscribeToSpaceFilters(listener: SDKListener { [weak self] updates in
-            self?.handleSpaceFilterUpdates(updates)
+        spaceFilterHandle = await spaceService.subscribeToSpaceFilters(listener: SDKListener { [spaceFilterUpdatesContinuation] updates in
+            spaceFilterUpdatesContinuation.yield(updates)
         })
     }
     

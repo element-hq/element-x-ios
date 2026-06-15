@@ -122,18 +122,18 @@ extension ClientProxyMock {
                 let joinedRoomIDs = configuration.overrides.joinedRoomIDs
                 switch room.joinRequestType {
                 case .invite where !joinedRoomIDs.contains(room.id):
-                    let roomProxy = await InvitedRoomProxyMock(.init(id: room.id, name: room.name, isSpace: room.isSpace))
+                    let roomProxy = InvitedRoomProxyMock(.init(id: room.id, name: room.name, isSpace: room.isSpace))
                     return .invited(roomProxy)
                 case .knock where !joinedRoomIDs.contains(room.id):
-                    let roomProxy = await KnockedRoomProxyMock(.init(id: room.id, name: room.name))
+                    let roomProxy = KnockedRoomProxyMock(.init(id: room.id, name: room.name))
                     return .knocked(roomProxy)
                 default:
-                    let roomProxy = await JoinedRoomProxyMock(.init(id: room.id, name: room.name, isSpace: room.isSpace, members: configuration.defaultRoomMembers))
+                    let roomProxy = JoinedRoomProxyMock(.init(id: room.id, name: room.name, isSpace: room.isSpace, members: configuration.defaultRoomMembers))
                     roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                     return .joined(roomProxy)
                 }
             } else if let spaceServiceRoom = configuration.spaceServiceConfiguration.topLevelSpaces.first(where: { $0.id == identifier }) {
-                let roomProxy = await JoinedRoomProxyMock(.init(id: spaceServiceRoom.id, name: spaceServiceRoom.name, isSpace: spaceServiceRoom.isSpace, members: configuration.defaultRoomMembers))
+                let roomProxy = JoinedRoomProxyMock(.init(id: spaceServiceRoom.id, name: spaceServiceRoom.name, isSpace: spaceServiceRoom.isSpace, members: configuration.defaultRoomMembers))
                 roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                 return .joined(roomProxy)
             } else {

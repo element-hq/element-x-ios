@@ -10,7 +10,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-extension SpaceRoomListProxyMock {
+@MainActor extension SpaceRoomListProxyMock {
     class Configuration {
         var spaceServiceRoom: SpaceServiceRoom
         var initialSpaceRooms: [SpaceServiceRoom]

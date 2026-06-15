@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-extension RoomPreviewProxyMock {
+@MainActor extension RoomPreviewProxyMock {
     struct Configuration {
         var roomID = "1"
         var canonicalAlias = "#3-body-problem:matrix.org"

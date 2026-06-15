@@ -12,7 +12,7 @@ struct RoomLiveLocationServiceMockConfiguration {
     var shares: [LiveLocationShare] = []
 }
 
-extension RoomLiveLocationServiceMock {
+@MainActor extension RoomLiveLocationServiceMock {
     convenience init(_ configuration: RoomLiveLocationServiceMockConfiguration = .init()) {
         self.init()
         liveLocationsPublisher = CurrentValueSubject(configuration.shares).asCurrentValuePublisher()

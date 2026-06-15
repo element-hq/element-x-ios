@@ -19,8 +19,8 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
         async let queriedProfile = profileIfPossible(with: searchQuery)
         
         do {
-            async let searchedUsers = clientProxy.searchUsers(searchTerm: searchQuery, limit: 10).get()
-            let users = try await merge(queriedProfile: queriedProfile, searchResults: searchedUsers)
+            let searchedUsers = try await clientProxy.searchUsers(searchTerm: searchQuery, limit: 10).get()
+            let users = await merge(queriedProfile: queriedProfile, searchResults: searchedUsers)
             return .success(filterAccountOwner(users))
         } catch {
             // we want to show the profile (if any) even if the search fails
