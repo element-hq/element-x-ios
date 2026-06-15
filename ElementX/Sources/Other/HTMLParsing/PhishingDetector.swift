@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum PhishingDetector {
+nonisolated enum PhishingDetector {
     static func isPhishingAttempt(displayString: String, internalURL: URL) -> Bool {
         // Some phishing attempts can be hidden by using the unicode character "﹒" instead of "."
         let disambiguatedDisplayString = displayString.replacingOccurrences(of: "﹒", with: ".")

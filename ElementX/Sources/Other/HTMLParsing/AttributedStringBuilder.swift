@@ -13,7 +13,7 @@ import SwiftSoup
 import Synchronization
 import UIKit
 
-protocol MentionBuilderProtocol {
+nonisolated protocol MentionBuilderProtocol: Sendable {
     func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?)
     func handleRoomIDMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomID: String)
     func handleRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomAlias: String, roomDisplayName: String?)
@@ -22,7 +22,7 @@ protocol MentionBuilderProtocol {
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange)
 }
 
-extension NSAttributedString.Key {
+nonisolated extension NSAttributedString.Key {
     static let MatrixBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
     static let MatrixUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
     static let MatrixUserDisplayName: NSAttributedString.Key = .init(rawValue: UserDisplayNameAttribute.name)
@@ -36,7 +36,7 @@ extension NSAttributedString.Key {
     static let InlineCode: NSAttributedString.Key = .init(rawValue: InlineCodeAttribute.name)
 }
 
-struct AttributedStringBuilder: AttributedStringBuilderProtocol {
+nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private static let defaultKey = "default"
     
     private let cacheKey: String
@@ -468,7 +468,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
 }
 
-private struct TextParsingMatch {
+private nonisolated struct TextParsingMatch {
     enum MatchType {
         case userID(identifier: String)
         case roomAlias(alias: String)
@@ -492,7 +492,7 @@ private struct TextParsingMatch {
     }
 }
 
-private extension NSMutableAttributedString {
+private nonisolated extension NSMutableAttributedString {
     func setFontPreservingSymbolicTraits(_ newFont: UIFont) {
         enumerateAttribute(.font, in: NSRange(location: 0, length: length)) { value, range, _ in
             if let oldFont = value as? UIFont {
@@ -512,7 +512,7 @@ private extension NSMutableAttributedString {
     }
 }
 
-private extension NSString {
+private nonisolated extension NSString {
     func hasSuffixCharacter(from characterSet: CharacterSet) -> Bool {
         if length == 0 {
             return false

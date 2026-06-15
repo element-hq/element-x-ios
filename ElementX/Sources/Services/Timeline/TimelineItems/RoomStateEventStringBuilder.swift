@@ -9,7 +9,7 @@
 import MatrixRustSDK
 import UIKit
 
-struct RoomStateEventStringBuilder {
+nonisolated struct RoomStateEventStringBuilder {
     let userID: String
     
     func buildString(for change: MembershipChange?,

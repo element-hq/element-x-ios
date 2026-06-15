@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct InfoPlistReader {
+nonisolated struct InfoPlistReader {
     private enum Keys {
         static let appGroupIdentifier = "appGroupIdentifier"
         static let baseBundleIdentifier = "baseBundleIdentifier"

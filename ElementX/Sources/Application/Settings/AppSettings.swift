@@ -14,7 +14,7 @@ import Foundation
 import SwiftUI
 
 /// Common settings between app and NSE
-protocol CommonSettingsProtocol: AnyObject, Sendable {
+nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     var lastNotificationBootTime: TimeInterval? { get set }
     var selectedNotificationTone: NotificationTone? { get set }
     
@@ -27,7 +27,7 @@ protocol CommonSettingsProtocol: AnyObject, Sendable {
     var hideQuietNotificationAlerts: Bool { get }
 }
 
-enum AppBuildType {
+nonisolated enum AppBuildType {
     case debug
     case nightly
     case release
@@ -36,7 +36,7 @@ enum AppBuildType {
 /// Store Element specific app settings.
 ///
 /// State is persisted in `UserDefaults`, which is thread-safe per Apple's documentation, hence `@unchecked`.
-final class AppSettings: @unchecked Sendable {
+final nonisolated class AppSettings: @unchecked Sendable {
     fileprivate enum UserDefaultsKeys: String, PreferenceKeyable {
         case lastVersionLaunched
         case seenInvites
@@ -173,16 +173,16 @@ final class AppSettings: @unchecked Sendable {
     /// used to detect when migrations should be run. When `nil` the app may have been
     /// deleted between runs so should clear data in the shared container and keychain.
     @UserPreference
-    var lastVersionLaunched: String?
+    nonisolated(unsafe) var lastVersionLaunched: String?
     
     /// The Set of room identifiers of invites that the user already saw in the invites list.
     /// This Set is being used to implement badges for unread invites.
     @UserPreference
-    var seenInvites: Set<String>
+    nonisolated(unsafe) var seenInvites: Set<String>
     
     /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
     @UserPreference
-    var hasSeenNewSoundBanner: Bool
+    nonisolated(unsafe) var hasSeenNewSoundBanner: Bool
     
     /// The initial set of account providers shown to the user in the authentication flow.
     ///
@@ -227,7 +227,7 @@ final class AppSettings: @unchecked Sendable {
     let elementProAppStoreURL: URL = "https://apps.apple.com/app/element-pro-for-work/id6502951615"
     
     @UserPreference
-    var appAppearance: AppAppearance
+    nonisolated(unsafe) var appAppearance: AppAppearance
     
     // MARK: - Security
     
@@ -239,7 +239,7 @@ final class AppSettings: @unchecked Sendable {
     let appLockPINCodeBlockList = ["0000", "1234"]
     /// The number of attempts the user has made to unlock the app with a PIN code (resets when unlocked).
     @UserPreference
-    var appLockNumberOfPINAttempts: Int
+    nonisolated(unsafe) var appLockNumberOfPINAttempts: Int
     
     // MARK: - Authentication
     
@@ -247,15 +247,17 @@ final class AppSettings: @unchecked Sendable {
     let oAuthStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
     /// The redirect URL used for OAuth. For the normal case we don't actually need the bundle ID as the web authentication session handles the redirect internally.
     /// However in the case where MAS sends the user to an external app, we need to make sure that the system will open the correct variant of the app (e.g. Nightly).
-    private(set) var oAuthRedirectURL: URL! = URL(string: "https://element.io/oauth/ios/\(InfoPlistReader.main.bundleIdentifier)")
+    private(set) nonisolated(unsafe) var oAuthRedirectURL: URL! = URL(string: "https://element.io/oauth/ios/\(InfoPlistReader.main.bundleIdentifier)")
     
-    private(set) lazy var oAuthConfiguration = OAuthConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
-                                                                  redirectURI: oAuthRedirectURL,
-                                                                  clientURI: websiteURL,
-                                                                  logoURI: logoURL,
-                                                                  tosURI: acceptableUseURL,
-                                                                  policyURI: privacyURL,
-                                                                  staticRegistrations: oAuthStaticRegistrations.mapKeys { $0.absoluteString })
+    var oAuthConfiguration: OAuthConfiguration {
+        OAuthConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
+                           redirectURI: oAuthRedirectURL,
+                           clientURI: websiteURL,
+                           logoURI: logoURL,
+                           tosURI: acceptableUseURL,
+                           policyURI: privacyURL,
+                           staticRegistrations: oAuthStaticRegistrations.mapKeys { $0.absoluteString })
+    }
     
     /// Whether or not the Create Account button is shown on the start screen.
     ///
@@ -278,33 +280,33 @@ final class AppSettings: @unchecked Sendable {
     }
     
     @UserPreference
-    var enableNotifications: Bool
+    nonisolated(unsafe) var enableNotifications: Bool
     
     @UserPreference
-    var enableInAppNotifications: Bool
+    nonisolated(unsafe) var enableInAppNotifications: Bool
     
     @UserPreference
-    var hideQuietNotificationAlerts: Bool
+    nonisolated(unsafe) var hideQuietNotificationAlerts: Bool
     
     /// Tag describing which set of device specific rules a pusher executes.
     @UserPreference
-    var pusherProfileTag: String?
+    nonisolated(unsafe) var pusherProfileTag: String?
     
     /// The device's last boot time as recorded by the NSE.
     @UserPreference
-    var lastNotificationBootTime: TimeInterval?
+    nonisolated(unsafe) var lastNotificationBootTime: TimeInterval?
     
     /// The sound played when delivering noisy notifications. If nil, use the ElementX default
     @UserPreference
-    var selectedNotificationTone: NotificationTone?
+    nonisolated(unsafe) var selectedNotificationTone: NotificationTone?
     
     // MARK: - Logging
     
     @UserPreference
-    var logLevel: LogLevel
+    nonisolated(unsafe) var logLevel: LogLevel
     
     @UserPreference
-    var traceLogPacks: Set<TraceLogPack>
+    nonisolated(unsafe) var traceLogPacks: Set<TraceLogPack>
     
     // MARK: - Bug report
     
@@ -332,46 +334,46 @@ final class AppSettings: @unchecked Sendable {
     
     /// Whether the user has opted in to send analytics.
     @UserPreference
-    var analyticsConsentState: AnalyticsConsentState
+    nonisolated(unsafe) var analyticsConsentState: AnalyticsConsentState
     
     @UserPreference
-    var hasRunNotificationPermissionsOnboarding: Bool
+    nonisolated(unsafe) var hasRunNotificationPermissionsOnboarding: Bool
     
     @UserPreference
-    var hasRunIdentityConfirmationOnboarding: Bool
+    nonisolated(unsafe) var hasRunIdentityConfirmationOnboarding: Bool
     
     @UserPreference
-    var hasRequestedLocationAlwaysLocationAuthorization: Bool
+    nonisolated(unsafe) var hasRequestedLocationAlwaysLocationAuthorization: Bool
     
     @UserPreference
-    var frequentlyUsedSystemEmojis: [FrequentlyUsedEmoji]
+    nonisolated(unsafe) var frequentlyUsedSystemEmojis: [FrequentlyUsedEmoji]
     
     // MARK: - Live Location
     
     @UserPreference
-    var liveLocationSharingSessionsByRoomID: [String: LiveLocationSession]
+    nonisolated(unsafe) var liveLocationSharingSessionsByRoomID: [String: LiveLocationSession]
     
     @UserPreference
-    var liveLocationMinimumDistanceUpdate: Int
+    nonisolated(unsafe) var liveLocationMinimumDistanceUpdate: Int
     
     @UserPreference
-    var liveLocationDisclaimerDisplayed: Bool
+    nonisolated(unsafe) var liveLocationDisclaimerDisplayed: Bool
     
     // MARK: - Home Screen
     
     @UserPreference
-    var roomListActivityVisibility: RoomListActivityVisibility
+    nonisolated(unsafe) var roomListActivityVisibility: RoomListActivityVisibility
     
     // MARK: - Room Screen
     
     @UserPreference
-    var viewSourceEnabled: Bool
+    nonisolated(unsafe) var viewSourceEnabled: Bool
     
     @UserPreference
-    var optimizeMediaUploads: Bool
+    nonisolated(unsafe) var optimizeMediaUploads: Bool
     
     @UserPreference
-    var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
+    nonisolated(unsafe) var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
     
     /// Whether or not to show a warning on the media caption composer so the user knows
     /// that captions might not be visible to users who are using other Matrix clients.
@@ -390,7 +392,7 @@ final class AppSettings: @unchecked Sendable {
     let elementCallPosthogSentryDSN = "https://3bd2f95ba5554d4497da7153b552ffb5@sentry.tools.element.io/41"
     
     @UserPreference
-    var elementCallBaseURLOverride: URL?
+    nonisolated(unsafe) var elementCallBaseURLOverride: URL?
     
     // MARK: - Users
     
@@ -413,50 +415,50 @@ final class AppSettings: @unchecked Sendable {
     // MARK: - Presence
     
     @UserPreference
-    var sharePresence: Bool
+    nonisolated(unsafe) var sharePresence: Bool
     
     // MARK: - Feature Flags
     
     /// Others
     @UserPreference
-    var fuzzyRoomListSearchEnabled: Bool
+    nonisolated(unsafe) var fuzzyRoomListSearchEnabled: Bool
     
     @UserPreference
-    var lowPriorityFilterEnabled: Bool
+    nonisolated(unsafe) var lowPriorityFilterEnabled: Bool
     
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference
-    var enableOnlySignedDeviceIsolationMode: Bool
+    nonisolated(unsafe) var enableOnlySignedDeviceIsolationMode: Bool
     
     @UserPreference
-    var knockingEnabled: Bool
+    nonisolated(unsafe) var knockingEnabled: Bool
     
     @UserPreference
-    var threadsEnabled: Bool
+    nonisolated(unsafe) var threadsEnabled: Bool
     
     @UserPreference
-    var roomThreadListEnabled: Bool
+    nonisolated(unsafe) var roomThreadListEnabled: Bool
     
     @UserPreference
-    var focusEventOnNotificationTap: Bool
+    nonisolated(unsafe) var focusEventOnNotificationTap: Bool
     
     @UserPreference
-    var linkPreviewsEnabled: Bool
+    nonisolated(unsafe) var linkPreviewsEnabled: Bool
     
     @UserPreference
-    var jumpToReadMarkerEnabled: Bool
+    nonisolated(unsafe) var jumpToReadMarkerEnabled: Bool
     
     @UserPreference
-    var linkNewDeviceEnabled: Bool
+    nonisolated(unsafe) var linkNewDeviceEnabled: Bool
     
     @UserPreference
-    var automaticBackPaginationEnabled: Bool
+    nonisolated(unsafe) var automaticBackPaginationEnabled: Bool
     
     @UserPreference
-    var clientPausingAndResumingEnabled: Bool
+    nonisolated(unsafe) var clientPausingAndResumingEnabled: Bool
     
     @UserPreference
-    var developerOptionsEnabled: Bool
+    nonisolated(unsafe) var developerOptionsEnabled: Bool
     
     init(store: UserDefaultsProtocol) {
         // UserDefaults to be used on reads and writes.
@@ -509,9 +511,9 @@ final class AppSettings: @unchecked Sendable {
     }
 }
 
-extension AppSettings: CommonSettingsProtocol { }
+nonisolated extension AppSettings: CommonSettingsProtocol { }
 
-private extension UserPreference {
+private nonisolated extension UserPreference {
     convenience init(key: AppSettings.UserDefaultsKeys, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
         self.init(key: key as any PreferenceKeyable, defaultValue: defaultValue, storage: backingStorage, mode: mode)
     }

@@ -17,6 +17,10 @@ import SwiftUI
 /// - Send the notification from the tests you would like posted in the app.
 @MainActor
 class UITestsNotificationCenter: NotificationCenter, @unchecked Sendable {
+    override nonisolated init() {
+        super.init()
+    }
+    
     // periphery:ignore - retaining purpose
     private var client: UITestsSignalling.Client?
     private var signalCancellable: AnyCancellable?

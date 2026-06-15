@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum PillUtilities {
+nonisolated enum PillUtilities {
     static let atRoom = "@room"
     
     /// Used by the WYSIWYG as the urlString value to identify @room mentions

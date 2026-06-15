@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LiveLocationSession: Codable, Equatable {
+nonisolated struct LiveLocationSession: Codable, Equatable {
     let eventID: String
     let expirationDate: Date
 }

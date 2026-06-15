@@ -19,7 +19,7 @@ enum AudioConverterPreferredFileExtension: String {
     case ogg
 }
 
-struct AudioConverter: AudioConverterProtocol {
+nonisolated struct AudioConverter: AudioConverterProtocol {
     func convertToOpusOgg(sourceURL: URL, destinationURL: URL) throws {
         do {
             try OGGConverter.convertM4aFileToOpusOGG(src: sourceURL, dest: destinationURL)

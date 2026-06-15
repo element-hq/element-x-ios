@@ -658,7 +658,7 @@ extension TimelineTableViewController {
 
 extension TimelineTableViewController {
     /// The sections of the table view used in the diffable data source.
-    enum TimelineSection {
+    nonisolated enum TimelineSection {
         case main
         case typingIndicator
     }

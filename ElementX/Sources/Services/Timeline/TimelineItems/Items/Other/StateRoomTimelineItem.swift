@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct StateRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+nonisolated struct StateRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let body: String
     let timestamp: Date

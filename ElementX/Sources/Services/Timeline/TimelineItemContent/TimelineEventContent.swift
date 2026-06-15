@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum TimelineEventContent: Hashable {
+nonisolated enum TimelineEventContent: Hashable {
     case message(EventBasedMessageTimelineItemContentType)
     case poll(question: String)
     case liveLocation

@@ -69,17 +69,25 @@ class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsers
             state.blockedUsers = await withTaskGroup(of: UserProfileProxy.self) { group in
                 for userID in blockedUsers {
                     group.addTask {
-                        switch await self.clientProxy.profile(for: userID) {
-                        case .success(let profile): profile
-                        case .failure: UserProfileProxy(userID: userID)
-                        }
+                        await self.profile(for: userID)
                     }
                 }
                 
-                return await group.reduce(into: []) { partialResult, profile in
-                    partialResult.append(profile)
+                var profiles = [UserProfileProxy]()
+                for await profile in group {
+                    profiles.append(profile)
                 }
+                return profiles
             }
+        }
+    }
+    
+    /// The client proxy isn't Sendable, fetch through this helper so that it
+    /// never leaves the main actor when running calls in parallel.
+    private func profile(for userID: String) async -> UserProfileProxy {
+        switch await clientProxy.profile(for: userID) {
+        case .success(let profile): profile
+        case .failure: UserProfileProxy(userID: userID)
         }
     }
     

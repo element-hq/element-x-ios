@@ -8,7 +8,7 @@
 
 import Compound
 
-protocol CompoundHookProtocol {
+nonisolated protocol CompoundHookProtocol: Sendable {
     @MainActor func override(colors: CompoundColors, uiColors: CompoundUIColors)
 }
 

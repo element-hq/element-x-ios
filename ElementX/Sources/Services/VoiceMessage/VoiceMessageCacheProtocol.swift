@@ -8,12 +8,12 @@
 
 import Foundation
 
-enum VoiceMessageCacheError: Error {
+nonisolated enum VoiceMessageCacheError: Error {
     case invalidFileExtension
     case failedStoringFileInCache
 }
 
-protocol VoiceMessageCacheProtocol {
+nonisolated protocol VoiceMessageCacheProtocol: Sendable {
     /// URL to use for recording
     var urlForRecording: URL { get }
     

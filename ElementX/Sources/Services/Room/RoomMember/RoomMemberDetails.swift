@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomMemberDetails: Identifiable, Hashable {
+nonisolated struct RoomMemberDetails: Identifiable, Hashable {
     let id: String
     let name: String?
     let avatarURL: URL?
@@ -29,7 +29,7 @@ struct RoomMemberDetails: Identifiable, Hashable {
     }
 }
 
-extension RoomMemberDetails {
+nonisolated extension RoomMemberDetails {
     init(withProxy proxy: RoomMemberProxyProtocol) {
         id = proxy.userID
         name = proxy.displayName

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum BootDetectionManager {
+nonisolated enum BootDetectionManager {
     /// Detects after reboot, before unlocked state. Does this by trying to write a file to the filesystem (to the Caches directory) and read it back.
     /// - Parameter containerURL: Container url to write the file.
     /// - Returns: true if the state detected

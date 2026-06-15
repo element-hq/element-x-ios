@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomMessageEventStringBuilder {
+nonisolated struct RoomMessageEventStringBuilder {
     enum Style {
         /// Plain: no prefix, no special text treatment
         /// Shown in push notifications and thread lists

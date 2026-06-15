@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
 
-extension IdentityResetHandleSDKMock {
+nonisolated extension IdentityResetHandleSDKMock {
     struct Configuration { }
     
     convenience init(_ configuration: Configuration) {

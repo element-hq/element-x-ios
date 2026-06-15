@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-enum PillType: Codable, Equatable {
+nonisolated enum PillType: Codable, Equatable {
     enum EventRoom: Codable, Equatable {
         case roomAlias(String)
         case roomID(String)
@@ -24,7 +24,7 @@ enum PillType: Codable, Equatable {
     case allUsers
 }
 
-struct PillTextAttachmentData: Codable, Equatable {
+nonisolated struct PillTextAttachmentData: Codable, Equatable {
     struct Font: Codable, Equatable {
         let descender: CGFloat
         let lineHeight: CGFloat
@@ -37,7 +37,7 @@ struct PillTextAttachmentData: Codable, Equatable {
     let fontData: Font
 }
 
-extension PillTextAttachmentData {
+nonisolated extension PillTextAttachmentData {
     init(type: PillType, font: UIFont) {
         self.type = type
         fontData = Font(descender: font.descender, lineHeight: font.lineHeight)

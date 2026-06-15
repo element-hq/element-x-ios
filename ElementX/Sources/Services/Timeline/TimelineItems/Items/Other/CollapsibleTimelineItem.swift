@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CollapsibleTimelineItem: RoomTimelineItemProtocol, Equatable {
+nonisolated struct CollapsibleTimelineItem: RoomTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let items: [RoomTimelineItemProtocol]
     let itemIDs: [TimelineItemIdentifier]

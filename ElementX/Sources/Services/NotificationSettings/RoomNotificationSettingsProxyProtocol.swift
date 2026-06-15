@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 // sourcery: AutoMockable
-protocol RoomNotificationSettingsProxyProtocol {
+protocol RoomNotificationSettingsProxyProtocol: Sendable {
     var mode: RoomNotificationModeProxy { get }
     var isDefault: Bool { get }
 }

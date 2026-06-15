@@ -12,7 +12,7 @@ import LocalAuthentication
 /// It works as the actual context does and won't update the return values of `biometryType` and
 /// `evaluatedPolicyDomainStateValue` until either `canEvaluatePolicy` or
 /// `evaluatePolicy` have been called.
-class LAContextMock: LAContext {
+nonisolated class LAContextMock: LAContext {
     var biometryTypeValue: LABiometryType!
     private var internalBiometryTypeValue: LABiometryType!
     override var biometryType: LABiometryType {

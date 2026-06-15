@@ -12,7 +12,7 @@ import UIKit
 
 @preconcurrency import MatrixRustSDK
 
-private final class MediaRequest {
+private final nonisolated class MediaRequest {
     var continuations: [CheckedContinuation<Data, Error>] = []
 }
 

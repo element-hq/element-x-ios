@@ -8,11 +8,11 @@
 
 import MatrixRustSDK
 
-protocol ClientBuilderHookProtocol: Sendable {
+nonisolated protocol ClientBuilderHookProtocol: Sendable {
     func configure(_ builder: ClientBuilder) -> ClientBuilder
 }
 
-struct DefaultClientBuilderHook: ClientBuilderHookProtocol {
+nonisolated struct DefaultClientBuilderHook: ClientBuilderHookProtocol {
     func configure(_ builder: ClientBuilder) -> ClientBuilder {
         builder
     }

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-struct MentionBuilder: MentionBuilderProtocol {
+nonisolated struct MentionBuilder: MentionBuilderProtocol {
     struct AttributesToRestore {
         let font: UIFont
         let blockquote: Bool?
@@ -173,7 +173,7 @@ struct MentionBuilder: MentionBuilderProtocol {
     }
 }
 
-private extension Dictionary where Key == NSAttributedString.Key, Value == Any {
+private nonisolated extension Dictionary where Key == NSAttributedString.Key, Value == Any {
     mutating func addBlockquoteIfNeeded(_ value: Bool?) {
         if let value {
             self[.MatrixBlockquote] = value

@@ -5,7 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-enum AudioPlaybackSpeed: Float, CaseIterable, Codable {
+nonisolated enum AudioPlaybackSpeed: Float, CaseIterable, Codable {
     case `default` = 1.0
     case fast = 1.5
     case fastest = 2.0

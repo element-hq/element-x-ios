@@ -6,8 +6,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-extension AsyncSequence {
+nonisolated extension AsyncSequence {
     func first() async rethrows -> Self.Element? {
-        try await first { _ in true }
+        var iterator = makeAsyncIterator()
+        return try await iterator.next(isolation: #isolation)
     }
 }

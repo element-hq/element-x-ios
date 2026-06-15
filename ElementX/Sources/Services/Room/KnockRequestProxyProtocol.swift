@@ -8,12 +8,12 @@
 
 import Foundation
 
-enum KnockRequestProxyError: Error {
+nonisolated enum KnockRequestProxyError: Error {
     case sdkError(Error)
 }
 
 // sourcery: AutoMockable
-protocol KnockRequestProxyProtocol {
+nonisolated protocol KnockRequestProxyProtocol: Sendable {
     var eventID: String { get }
     var userID: String { get }
     var displayName: String? { get }

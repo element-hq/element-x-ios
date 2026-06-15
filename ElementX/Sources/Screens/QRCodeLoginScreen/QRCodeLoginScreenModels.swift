@@ -95,7 +95,7 @@ enum QRCodeLoginScreenViewAction {
     case errorAction(QRCodeErrorView.Action)
 }
 
-enum QRCodeLoginState: Equatable {
+nonisolated enum QRCodeLoginState: Equatable {
     /// Initial state where the user is informed how to login this device by scanning a QR code.
     case loginInstructions
     /// Initial state where the user is informed how to link another device by scanning it's QR code.
@@ -114,7 +114,7 @@ enum QRCodeLoginState: Equatable {
     /// Any full screen error state
     case error(ErrorState)
     
-    enum ErrorState: Equatable, CaseIterable {
+    nonisolated enum ErrorState: Equatable, CaseIterable {
         /// The account provider doesn't support the use of QR codes.
         case notSupported
         case noCameraPermission
@@ -131,7 +131,7 @@ enum QRCodeLoginState: Equatable {
         case unknown
     }
     
-    enum ScanningState: Equatable {
+    nonisolated enum ScanningState: Equatable {
         /// The QR code is scanning.
         case scanning
         /// The QR code has been detected and is being processed.
@@ -139,7 +139,7 @@ enum QRCodeLoginState: Equatable {
         /// The QR code was scanned, but an error occurred.
         case scanFailed(Error)
         
-        enum Error: Equatable {
+        nonisolated enum Error: Equatable {
             /// The QR code has been processed and is invalid.
             case invalid
             /// The QR code has been processed but it is for an account provider that isn't allowed.
@@ -171,14 +171,14 @@ enum QRCodeLoginState: Equatable {
         }
     }
     
-    enum DisplayQRState: Equatable {
+    nonisolated enum DisplayQRState: Equatable {
         /// The QR code is available and is being shown.
         case active(UIImage)
         /// The QR code being shown has expired. We will need to generate a new one.
         case expired
     }
     
-    enum DisplayCodeState: Equatable {
+    nonisolated enum DisplayCodeState: Equatable {
         case deviceCode(String)
         case verificationCode(String)
         
@@ -190,7 +190,7 @@ enum QRCodeLoginState: Equatable {
         }
     }
     
-    enum CheckCodeState: Equatable {
+    nonisolated enum CheckCodeState: Equatable {
         /// The user needs to input the confirmation code.
         case inputCode(CheckCodeSenderProxy)
         /// The code supplied by the user didn't pass local validation.

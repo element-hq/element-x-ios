@@ -13,7 +13,7 @@ enum RestorationTokenError: Error {
     case slidingSyncProxyNotSupported
 }
 
-struct RestorationToken: Equatable {
+nonisolated struct RestorationToken: Equatable {
     let session: MatrixRustSDK.Session
     let sessionDirectories: SessionDirectories
     let passphrase: String
@@ -28,7 +28,7 @@ struct RestorationToken: Equatable {
     }
 }
 
-extension RestorationToken: Codable {
+nonisolated extension RestorationToken: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         

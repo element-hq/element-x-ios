@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct ReadReceipt: Hashable {
+nonisolated struct ReadReceipt: Hashable {
     let userID: String
     let formattedTimestamp: String?
 }
 
-extension ReadReceipt: Identifiable {
+nonisolated extension ReadReceipt: Identifiable {
     var id: String {
         userID
     }

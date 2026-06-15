@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum Tracing {
+nonisolated enum Tracing {
     /// The directory that stores all of the log files.
     static var logsDirectory: URL {
         if ProcessInfo.isRunningIntegrationTests {

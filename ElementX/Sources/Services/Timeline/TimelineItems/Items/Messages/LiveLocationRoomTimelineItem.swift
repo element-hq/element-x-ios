@@ -8,7 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct LiveLocationRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+nonisolated struct LiveLocationRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     /// Always empty just here for protocol conformance
     var body: String {
@@ -25,14 +25,14 @@ struct LiveLocationRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     var properties = RoomTimelineItemProperties()
 }
 
-struct LiveLocationRoomTimelineItemContent: Equatable {
+nonisolated struct LiveLocationRoomTimelineItemContent: Equatable {
     let isLive: Bool
     let timeoutDate: Date
     
     let lastGeoURI: GeoURI?
 }
 
-extension LiveLocationRoomTimelineItemContent {
+nonisolated extension LiveLocationRoomTimelineItemContent {
     init(from content: MatrixRustSDK.LiveLocationContent, timestamp: Date) {
         isLive = content.isLive
         timeoutDate = timestamp.addingTimeInterval(Double(content.timeoutMs) / 1000)

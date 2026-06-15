@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct EmoteRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
+nonisolated struct EmoteRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
     let isOutgoing: Bool

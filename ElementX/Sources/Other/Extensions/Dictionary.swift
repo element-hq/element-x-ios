@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Dictionary {
+nonisolated extension Dictionary {
     var jsonString: String? {
         guard let data = try? JSONSerialization.data(withJSONObject: self,
                                                      options: [.fragmentsAllowed, .sortedKeys]) else {

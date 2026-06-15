@@ -8,9 +8,9 @@
 
 import Foundation
 
-protocol RoomScreenHookProtocol {
-    func configure(with userSession: UserSessionProtocol?) async
-    func update(_ viewState: RoomScreenViewState) -> RoomScreenViewState
+nonisolated protocol RoomScreenHookProtocol: Sendable {
+    @MainActor func configure(with userSession: UserSessionProtocol?) async
+    @MainActor func update(_ viewState: RoomScreenViewState) -> RoomScreenViewState
 }
 
 struct DefaultRoomScreenHook: RoomScreenHookProtocol {

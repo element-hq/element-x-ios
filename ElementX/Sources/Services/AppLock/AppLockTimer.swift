@@ -9,7 +9,7 @@
 import Foundation
 
 /// A timer that adds a grace-period to the app before locking it.
-class AppLockTimer {
+final nonisolated class AppLockTimer {
     /// The amount of time the app should remain unlocked for whilst backgrounded.
     let gracePeriod: TimeInterval
     

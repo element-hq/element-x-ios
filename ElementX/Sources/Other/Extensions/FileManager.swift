@@ -12,7 +12,7 @@ enum FileManagerError: Error {
     case invalidFileSize
 }
 
-extension FileManager {
+nonisolated extension FileManager {
     func directoryExists(at url: URL) -> Bool {
         var isDirectory: ObjCBool = false
         guard fileExists(atPath: url.path(percentEncoded: false), isDirectory: &isDirectory) else {

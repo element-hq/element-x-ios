@@ -11,7 +11,7 @@ import MatrixRustSDK
 import Synchronization
 import UserNotifications
 
-class NotificationHandler {
+nonisolated class NotificationHandler {
     private let userSession: NSEUserSession
     private let settings: CommonSettingsProtocol
     private let contentHandler: (UNNotificationContent) -> Void

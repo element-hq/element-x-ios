@@ -13,7 +13,7 @@ import Combine
 ///
 /// Unlike ``UserPreference``, this type of setting isn't settable by the user, nor is the
 /// remote value persisted between app launches.
-class RemotePreference<T: Equatable> {
+nonisolated class RemotePreference<T: Equatable> {
     private let defaultValue: T
     private let subject: CurrentValueSubject<T, Never>
     var publisher: CurrentValuePublisher<T, Never> {

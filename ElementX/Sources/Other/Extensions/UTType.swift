@@ -8,7 +8,7 @@
 
 import UniformTypeIdentifiers
 
-extension UTType {
+nonisolated extension UTType {
     /// Creates a type based on an optional mime type, falling back to a filename when this type is missing or unknown.
     init?(mimeType: String?, fallbackFilename: String) {
         guard let mimeType, let type = UTType(mimeType: mimeType) else {

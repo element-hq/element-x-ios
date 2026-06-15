@@ -30,7 +30,7 @@ enum RoomMembersListScreenMode {
     case banned
 }
 
-struct RoomMemberListScreenEntry: Equatable {
+nonisolated struct RoomMemberListScreenEntry: Equatable {
     let member: RoomMemberDetails
     let verificationState: UserIdentityVerificationState
 }

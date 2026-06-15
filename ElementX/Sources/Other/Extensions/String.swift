@@ -9,7 +9,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-extension String {
+nonisolated extension String {
     /// Returns the string as an `AttributedString` with the specified character tinted in a different color.
     /// - Parameters:
     ///   - character: The character to be tinted.
@@ -41,7 +41,7 @@ extension String {
     }
 }
 
-extension String {
+nonisolated extension String {
     func ellipsize(length: Int) -> String {
         guard count > length else {
             return self
@@ -50,7 +50,7 @@ extension String {
     }
 }
 
-extension String {
+nonisolated extension String {
     func replacingHtmlBreaksOccurrences() -> String {
         var result = self
         let pattern = #"</p>(\n+)<p>"#
@@ -74,14 +74,14 @@ extension String {
     }
 }
 
-extension String {
+nonisolated extension String {
     /// detects if the string is empty or contains only whitespaces and newlines
     var isBlank: Bool {
         trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
 
-extension String {
+nonisolated extension String {
     static func makeCanonicalAlias(aliasLocalPart: Self?, serverName: Self?) -> Self? {
         guard let aliasLocalPart, !aliasLocalPart.isEmpty,
               let serverName, !serverName.isEmpty else {
@@ -91,7 +91,7 @@ extension String {
     }
 }
 
-extension String {
+nonisolated extension String {
     var validatedFileExtension: String {
         let fileExtension = (self as NSString).pathExtension
         guard !fileExtension.isEmpty else {
@@ -101,7 +101,7 @@ extension String {
     }
 }
 
-extension String {
+nonisolated extension String {
     /// Whether the first character with a strong BiDi direction is right-to-left.
     /// Mirrors the Unicode BiDi "first strong" rule used by TextKit to resolve
     /// paragraph direction when `baseWritingDirection` is `.natural`.
@@ -120,7 +120,7 @@ extension String {
     }
 }
 
-extension String {
+nonisolated extension String {
     /// To be used if the string is actually a URL
     var asSanitizedLink: String {
         var link = self

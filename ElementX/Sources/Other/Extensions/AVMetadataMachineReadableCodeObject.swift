@@ -11,13 +11,13 @@
 import AVKit
 import Foundation
 
-enum AVMetadataBinaryValueError: Error {
+nonisolated enum AVMetadataBinaryValueError: Error {
     case unhandledQRSegmentMode(UInt8)
     case bitError(BitError)
     case unknown(Error)
 }
 
-extension AVMetadataMachineReadableCodeObject {
+nonisolated extension AVMetadataMachineReadableCodeObject {
     var qrBinaryValue: Data? {
         get throws(AVMetadataBinaryValueError) {
             guard type == .qr else { return nil }
@@ -66,11 +66,11 @@ enum BitError: Error {
     case unhandledAlphanumericCharacter(UInt8)
 }
 
-private struct Bit {
+private nonisolated struct Bit {
     let value: UInt8
 }
 
-private extension [Bit] {
+private nonisolated extension [Bit] {
     mutating func takeBits(_ count: Int) throws(BitError) -> UInt8 {
         guard count <= 8 else { throw .moreThan8BitsTaken }
         
@@ -163,7 +163,7 @@ private extension [Bit] {
     }
 }
 
-private extension Data {
+private nonisolated extension Data {
     func bits() -> [Bit] {
         var result = [Bit]()
         forEach { (byte: UInt8) in
@@ -173,7 +173,7 @@ private extension Data {
     }
 }
 
-private extension UInt8 {
+private nonisolated extension UInt8 {
     func bits() -> [Bit] {
         var bits: [Bit] = []
         for i in 0..<8 {

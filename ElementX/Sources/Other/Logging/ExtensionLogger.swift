@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum ExtensionLogger {
+nonisolated enum ExtensionLogger {
     /// Memory formatter, uses exact 2 fraction digits and no grouping
     private static var numberFormatter: NumberFormatter {
         let formatter = NumberFormatter()

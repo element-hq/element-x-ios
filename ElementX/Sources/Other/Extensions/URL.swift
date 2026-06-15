@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Custom URLs
 
-extension URL {
+nonisolated extension URL {
     /// The URL of the primary app group container.
     static var appGroupContainerDirectory: URL {
         guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.main.appGroupIdentifier) else {
@@ -135,34 +135,34 @@ extension URL {
     
     // MARK: Mocks
     
-    static var mockMXCAudio: URL {
+    nonisolated static var mockMXCAudio: URL {
         "mxc://matrix.org/1234567890AuDiO"
     }
     
-    static var mockMXCFile: URL {
+    nonisolated static var mockMXCFile: URL {
         "mxc://matrix.org/1234567890FiLe"
     }
     
-    static var mockMXCImage: URL {
+    nonisolated static var mockMXCImage: URL {
         "mxc://matrix.org/1234567890ImAgE"
     }
     
-    static var mockMXCVideo: URL {
+    nonisolated static var mockMXCVideo: URL {
         "mxc://matrix.org/1234567890ViDeO"
     }
     
-    static var mockMXCAvatar: URL {
+    nonisolated static var mockMXCAvatar: URL {
         "mxc://matrix.org/1234567890AvAtAr"
     }
     
-    static var mockMXCUserAvatar: URL {
+    nonisolated static var mockMXCUserAvatar: URL {
         "mxc://matrix.org/1234567890AvAtArUsEr"
     }
 }
 
 // MARK: - Helpers
 
-extension URL: @retroactive ExpressibleByStringLiteral {
+nonisolated extension URL: @retroactive ExpressibleByStringLiteral {
     public init(stringLiteral value: StaticString) {
         guard let url = URL(string: "\(value)") else {
             fatalError("The static string used to create this URL is invalid")
@@ -177,7 +177,7 @@ extension URL: @retroactive ExpressibleByStringLiteral {
     }
 }
 
-extension String {
+nonisolated extension String {
     /// Assumes that the string is a URL and sanitises it for use as the name of a directory.
     func asURLDirectoryName() -> String {
         replacingOccurrences(of: "https://", with: "")
@@ -188,7 +188,7 @@ extension String {
 
 // MARK: - Phishing Confirmation URL
 
-extension URL {
+nonisolated extension URL {
     static let confirmationScheme = "confirm"
     
     var requiresConfirmation: Bool {
@@ -204,7 +204,7 @@ extension URL {
     }
 }
 
-struct ConfirmURLParameters {
+nonisolated struct ConfirmURLParameters {
     static let internalURLKey = "internalURL"
     static let displayStringKey = "displayString"
     
@@ -217,7 +217,7 @@ struct ConfirmURLParameters {
     }
 }
 
-extension ConfirmURLParameters {
+nonisolated extension ConfirmURLParameters {
     init?(queryItems: [URLQueryItem]) {
         guard let internalURLString = queryItems.first(where: { $0.name == Self.internalURLKey })?.value,
               let internalURL = URL(string: internalURLString),

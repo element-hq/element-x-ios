@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Array {
+nonisolated extension Array {
     func groupBy(_ isGroupable: (Element) -> Bool) -> [[Element]] {
         var newItems = [[Element]]()
         
@@ -60,7 +60,7 @@ extension Array {
     }
 }
 
-extension Array where Element == RoomTimelineItemProtocol {
+nonisolated extension Array where Element == RoomTimelineItemProtocol {
     func firstUsingStableID(_ id: TimelineItemIdentifier) -> Element? {
         first { $0.id.uniqueID == id.uniqueID }
     }

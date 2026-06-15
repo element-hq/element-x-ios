@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-extension ClientBuilder {
+nonisolated extension ClientBuilder {
     /// A helper method that applies the common builder modifiers needed for the app.
     static func baseBuilder(setupEncryption: Bool = true,
                             httpProxy: String? = nil,

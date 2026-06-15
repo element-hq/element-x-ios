@@ -10,7 +10,7 @@ import Foundation
 import UniformTypeIdentifiers
 
 /// Manages notification tone selection, import, conversion, and deletion.
-struct NotificationToneManager: NotificationToneManagerProtocol {
+nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
     @globalActor
     actor ConversionActor {
         static let shared = ConversionActor()
@@ -44,7 +44,7 @@ struct NotificationToneManager: NotificationToneManagerProtocol {
     static let selectedToneFilename = "currentAlert.caf"
     
     /// Directory where user-imported custom tones are stored.
-    static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds", directoryHint: .isDirectory)
+    nonisolated static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds", directoryHint: .isDirectory)
     
     /// Creates the manager and ensures required library directories exist.
     init(appSettings: AppSettings) {

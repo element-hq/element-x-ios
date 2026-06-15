@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class VolatileUserDefaults: UserDefaultsProtocol, Sendable {
+public final nonisolated class VolatileUserDefaults: UserDefaultsProtocol, Sendable {
     private let lock = NSLock()
     
     private nonisolated(unsafe) var _storage: [String: Any]

@@ -13,7 +13,7 @@ import Foundation
 /// to listen for value changes. The publisher does not skip consecutive duplicates, as there is no
 /// `Equatable` enforcement at this level.
 @propertyWrapper
-final class UserPreference<T: Codable> {
+final nonisolated class UserPreference<T: Codable> {
     static var remotePrefix: String {
         "remote-"
     }
@@ -94,7 +94,7 @@ final class UserPreference<T: Codable> {
 
 // MARK: - UserPreference convenience initializers
 
-extension UserPreference {
+nonisolated extension UserPreference {
     convenience init(key: any PreferenceKeyable, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
         let storage: any KeyedStorage<T> = UserDefaultsStorage(userDefaults: backingStorage)
         
@@ -108,11 +108,11 @@ extension UserPreference {
 
 // MARK: - Keys
 
-protocol PreferenceKeyable: RawRepresentable where RawValue == String { }
+nonisolated protocol PreferenceKeyable: RawRepresentable where RawValue == String { }
 
 // MARK: - Storage
 
-protocol KeyedStorage<Value> {
+nonisolated protocol KeyedStorage<Value> {
     associatedtype Value: Codable
     
     subscript(key: String) -> Value? { get set }
@@ -122,7 +122,7 @@ protocol KeyedStorage<Value> {
 ///
 /// When used with a `Value` that conforms to `PlistRepresentable` the Codable encode/decode
 /// phase is skipped, and values are stored natively in the plist.
-final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
+final nonisolated class UserDefaultsStorage<Value: Codable>: KeyedStorage {
     private let userDefaults: UserDefaultsProtocol
     
     init(userDefaults: UserDefaultsProtocol) {
@@ -181,11 +181,11 @@ final class UserDefaultsStorage<Value: Codable>: KeyedStorage {
     }
 }
 
-private protocol Nullable {
+private nonisolated protocol Nullable {
     var isNil: Bool { get }
 }
 
-extension Optional: Nullable {
+nonisolated extension Optional: Nullable {
     var isNil: Bool {
         switch self {
         case .none:
@@ -198,13 +198,13 @@ extension Optional: Nullable {
     }
 }
 
-extension Dictionary: KeyedStorage where Key == String, Value: Codable { }
+nonisolated extension Dictionary: KeyedStorage where Key == String, Value: Codable { }
 
 // MARK: - PlistRepresentable
 
 /// A protocol to mark types as being plist compliant.
 /// UserDefaultsStorage uses this protocol to avoid to encode/decode with Codable plist compliant values.
-protocol PlistRepresentable { }
+nonisolated protocol PlistRepresentable { }
 
 extension Bool: PlistRepresentable { }
 extension String: PlistRepresentable { }
