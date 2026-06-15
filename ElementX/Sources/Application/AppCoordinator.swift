@@ -1019,6 +1019,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             bugReportService.lastCrashEventID = event.eventId.sentryIdString
         }
         
+        // Mirror every crash into our own logs (which ship with rageshakes) before it's sent to Sentry.
+        options.beforeSend = { event in
+            if let crashLog = event.crashLog {
+                MXLog.error("Sentry crash event \(event.eventId.sentryIdString):\n\(crashLog)")
+            }
+            return event
+        }
+        
         // Any ongoing transactions will no longer be valid after calling SentrySDK.start so lets
         // remove them and start over, otherwise the app will crash if finishTransaction is used.
         analytics.signpost.resetTransactions()
