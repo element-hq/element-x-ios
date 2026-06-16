@@ -43,9 +43,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var startChatFlowCoordinator: StartChatFlowCoordinator?
     
-    // periphery:ignore - retaining purpose
-    private var globalSearchScreenCoordinator: GlobalSearchScreenCoordinator?
-    
     private var cancellables = Set<AnyCancellable>()
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
@@ -172,11 +169,9 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.processEvent(.presentTransferOwnershipScreen(roomID: roomID))
             }
-        case .globalSearch:
-            presentGlobalSearch()
         case .chatBackupSettings:
             actionsSubject.send(.showChatBackupSettings)
-        case .accountProvisioningLink, .oAuthCallback, .settings, .call:
+        case .accountProvisioningLink, .oAuthCallback, .settings, .call, .globalSearch:
             break // These routes cannot be handled.
         }
     }
@@ -718,45 +713,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.finishedEncryptionResetFlow)
         }
-    }
-    
-    // MARK: Global search
-    
-    private func presentGlobalSearch() {
-        let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
-        
-        let coordinator = GlobalSearchScreenCoordinator(parameters: .init(roomSummaryProvider: roomSummaryProvider,
-                                                                          mediaProvider: userSession.mediaProvider))
-        
-        globalSearchScreenCoordinator = coordinator
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .dismiss:
-                    dismissGlobalSearch()
-                case .select(let roomID):
-                    dismissGlobalSearch()
-                    handleAppRoute(.room(roomID: roomID, via: []), animated: true)
-                    actionsSubject.send(.switchToChatsTab)
-                }
-            }
-            .store(in: &cancellables)
-        
-        let hostingController = UIHostingController(rootView: coordinator.toPresentable())
-        hostingController.view.backgroundColor = .clear
-        flowParameters.windowManager.globalSearchWindow.rootViewController = hostingController
-        
-        flowParameters.windowManager.showGlobalSearch()
-    }
-    
-    private func dismissGlobalSearch() {
-        flowParameters.windowManager.globalSearchWindow.rootViewController = nil
-        flowParameters.windowManager.hideGlobalSearch()
-        
-        globalSearchScreenCoordinator = nil
     }
     
     // MARK: Room Directory Search

@@ -51,7 +51,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         updateRooms(with: roomSummaryProvider.roomListPublisher.value)
     }
     
-    deinit {
+    isolated deinit {
         searchQueryObservationTask?.cancel()
     }
     
