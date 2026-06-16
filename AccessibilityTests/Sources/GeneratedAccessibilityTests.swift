@@ -611,6 +611,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "SFNumberedListView_Previews")
     }
 
+    func testSearchScreen() async throws {
+        try await performAccessibilityAudit(named: "SearchScreen_Previews")
+    }
+
     func testSecureBackupKeyBackupScreen() async throws {
         try await performAccessibilityAudit(named: "SecureBackupKeyBackupScreen_Previews")
     }

@@ -1069,6 +1069,13 @@ extension PreviewTests {
     }
 
     @Test
+    func searchScreen() async throws {
+        for (index, preview) in SearchScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func secureBackupKeyBackupScreen() async throws {
         for (index, preview) in SecureBackupKeyBackupScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
