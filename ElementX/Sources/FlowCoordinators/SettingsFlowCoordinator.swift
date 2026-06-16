@@ -276,11 +276,35 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     // The direct room now exists; close Settings so the user lands back on
                     // their chat list where the new conversation appears.
                     actionsSubject.send(.dismiss)
+                case .showProfile(let userID):
+                    presentFindFriendsUserProfile(userID: userID)
                 case .close:
                     break
                 }
             }
             .store(in: &cancellables)
+
+        navigationStackCoordinator.push(coordinator)
+    }
+
+    private func presentFindFriendsUserProfile(userID: String) {
+        let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
+                                                                isPresentedModally: false,
+                                                                userSession: flowParameters.userSession,
+                                                                userIndicatorController: flowParameters.userIndicatorController,
+                                                                analytics: flowParameters.analytics)
+        let coordinator = UserProfileScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .openDirectChat:
+                // Opening a chat from a contact's profile lands the user on their chat list.
+                actionsSubject.send(.dismiss)
+            case .startCall, .dismiss:
+                navigationStackCoordinator.pop()
+            }
+        }
+        .store(in: &cancellables)
 
         navigationStackCoordinator.push(coordinator)
     }

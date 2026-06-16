@@ -69,30 +69,41 @@ struct FindFriendsScreen: View {
     }
 
     private func contactRow(_ contact: DiscoveredContact) -> some View {
-        Button {
-            context.send(viewAction: .selectContact(contact))
-        } label: {
-            HStack(spacing: 12) {
+        HStack(spacing: 12) {
+            // Tapping the avatar opens the contact's profile (photo + details).
+            Button {
+                context.send(viewAction: .showProfile(contact))
+            } label: {
                 avatar(for: contact)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(contact.localName)
-                        .font(.body)
-                        .foregroundStyle(.primary)
-                    Text(contact.handle)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer(minLength: 8)
-                if context.viewState.startingChatUserID == contact.userId {
-                    ProgressView()
-                } else {
-                    Image(systemName: "message")
-                        .foregroundStyle(.secondary)
-                }
             }
-            .contentShape(Rectangle())
+            .buttonStyle(.plain)
+            .accessibilityLabel("View \(contact.localName)'s profile")
+
+            // Tapping the rest of the row starts (or opens) the chat.
+            Button {
+                context.send(viewAction: .selectContact(contact))
+            } label: {
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(contact.localName)
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                        Text(contact.handle)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer(minLength: 8)
+                    if context.viewState.startingChatUserID == contact.userId {
+                        ProgressView()
+                    } else {
+                        Image(systemName: "message")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
         .disabled(context.viewState.startingChatUserID != nil)
     }
 

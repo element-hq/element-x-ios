@@ -16,25 +16,24 @@ struct UserProfileListRow: View {
     
     let kind: ListRow<LoadableAvatarImage, EmptyView, EmptyView, Bool>.Kind<EmptyView, Bool>
     
-    var isUnknownProfile: Bool { !user.isVerified && membership == nil }
-    
     private var subtitle: String? {
-        guard !isUnknownProfile else { return L10n.commonInviteUnknownProfile }
-        
+        // GUA FORK: never surface Matrix protocol details ("This Matrix ID can't be
+        // found…") to end users. Show the membership state when known, otherwise the
+        // abstracted handle (homeserver hidden) as the secondary line.
         if let membershipText = membership?.localizedDescription {
             return membershipText
         } else if user.displayName != nil {
-            return user.userID
+            return user.userID.guaDisplayHandle
         } else {
             return nil
         }
     }
-    
+
     var body: some View {
-        ListRow(label: .avatar(title: user.displayName ?? user.userID,
+        ListRow(label: .avatar(title: user.displayName ?? user.userID.guaDisplayHandle,
                                description: subtitle,
                                icon: avatar,
-                               role: isUnknownProfile ? .error : nil),
+                               role: nil),
                 kind: kind)
     }
     

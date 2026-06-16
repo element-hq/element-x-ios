@@ -251,16 +251,19 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         var attributedLastMessage: AttributedString?
         var lastMessageDate: Date?
-        
+
+        // GUA FORK: a 1:1 chat shouldn't preview group-y membership/creation events.
+        let isDirectOneToOneRoom = roomInfo.isDirect && roomInfo.activeMembersCount <= 2
+
         if let latestRoomMessage = roomDetails.latestEvent {
             switch latestRoomMessage {
             case .local(let timestamp, let senderID, let profile, let content, _):
                 let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
-                attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: true)
+                attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: true, isDirectOneToOneRoom: isDirectOneToOneRoom)
                 lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
             case .remote(let timestamp, let senderID, let isOwn, let profile, let content):
                 let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
-                attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
+                attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn, isDirectOneToOneRoom: isDirectOneToOneRoom)
                 lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
             case .remoteInvite(let timestamp, let senderID, let profile):
                 lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))

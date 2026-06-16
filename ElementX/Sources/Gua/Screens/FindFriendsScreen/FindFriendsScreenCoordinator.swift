@@ -15,6 +15,7 @@ struct FindFriendsScreenCoordinatorParameters {
 
 enum FindFriendsScreenCoordinatorAction {
     case startedChat(roomID: String)
+    case showProfile(userID: String)
     case close
 }
 
@@ -41,6 +42,8 @@ final class FindFriendsScreenCoordinator: CoordinatorProtocol {
             switch action {
             case let .startedChat(roomID):
                 actionsSubject.send(.startedChat(roomID: roomID))
+            case let .showProfile(userID):
+                actionsSubject.send(.showProfile(userID: userID))
             case .close:
                 actionsSubject.send(.close)
             }

@@ -48,6 +48,7 @@ struct StartChatScreen: View {
     /// The content shown in the form when the search query is empty.
     @ViewBuilder
     private var mainContent: some View {
+        findFriendsSection
         createRoomSection
         if context.viewState.isRoomDirectoryEnabled {
             roomDirectorySearch
@@ -55,6 +56,16 @@ struct StartChatScreen: View {
         inviteFriendsSection
         joinRoomByAddressSection
         usersSection
+    }
+
+    private var findFriendsSection: some View {
+        Section {
+            // GUA FORK: Discover which phone contacts are already on Gua.
+            ListRow(label: .default(title: "Find friends",
+                                    description: "See which of your contacts are on Gua",
+                                    icon: \.userAdd),
+                    kind: .navigationLink { context.send(viewAction: .findFriends) })
+        }
     }
     
     private var joinRoomByAddressSection: some View {

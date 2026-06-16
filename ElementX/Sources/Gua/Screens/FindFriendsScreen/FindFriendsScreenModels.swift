@@ -10,6 +10,8 @@ enum FindFriendsScreenViewModelAction {
     /// A direct chat with the selected contact is ready; the room id is returned so the
     /// surrounding flow can open it.
     case startedChat(roomID: String)
+    /// The user tapped a contact's avatar — open their profile.
+    case showProfile(userID: String)
     case close
 }
 
@@ -41,5 +43,7 @@ enum FindFriendsScreenViewAction {
     case retry
     case openSystemSettings
     case selectContact(DiscoveredContact)
+    /// Tapping the avatar opens the contact's profile rather than starting a chat.
+    case showProfile(DiscoveredContact)
     case close
 }

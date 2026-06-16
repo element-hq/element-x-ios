@@ -78,6 +78,8 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             joinRoomByAddress()
         case .openRoomDirectorySearch:
             actionsSubject.send(.openRoomDirectorySearch)
+        case .findFriends:
+            actionsSubject.send(.findFriends)
         }
     }
     

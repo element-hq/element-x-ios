@@ -42,6 +42,8 @@ class FindFriendsScreenViewModel: FindFriendsScreenViewModelType, FindFriendsScr
             }
         case let .selectContact(contact):
             Task { await startChat(with: contact) }
+        case let .showProfile(contact):
+            actionsSubject.send(.showProfile(userID: contact.userId))
         case .close:
             actionsSubject.send(.close)
         }

@@ -259,7 +259,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         guard let userIdentity else {
-            MXLog.failure("User identity should be known at this point")
+            // The recipient's cross-signing identity isn't always downloaded yet — e.g. a DM that
+            // was just created from contact discovery. This is an expected transient state, not a
+            // programming error, so don't assert (MXLog.failure traps in debug builds).
+            MXLog.info("User identity not available yet; showing DM as not verified for now")
             state.dmRecipientVerificationState = .notVerified
             return
         }

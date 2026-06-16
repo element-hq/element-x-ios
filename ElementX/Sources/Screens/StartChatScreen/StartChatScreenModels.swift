@@ -17,6 +17,7 @@ enum StartChatScreenViewModelAction: Equatable {
     case createRoom
     case showRoom(withIdentifier: String)
     case openRoomDirectorySearch
+    case findFriends
 }
 
 struct StartChatScreenViewState: BindableState {
@@ -54,6 +55,7 @@ enum StartChatScreenViewAction {
     case selectUser(UserProfileProxy)
     case joinRoomByAddress
     case openRoomDirectorySearch
+    case findFriends
 }
 
 enum JoinByAddressState: Equatable {

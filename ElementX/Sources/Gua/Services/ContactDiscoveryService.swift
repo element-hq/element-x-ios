@@ -17,10 +17,11 @@ struct DiscoveredContact: Identifiable, Equatable {
 
     var id: String { userId }
 
-    /// What to show as the handle line, preferring the global username.
+    /// What to show as the handle line, preferring the global username and never
+    /// surfacing the homeserver.
     var handle: String {
         if let username, !username.isEmpty { return "@\(username)" }
-        return userId
+        return userId.guaDisplayHandle
     }
 }
 

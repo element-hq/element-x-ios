@@ -68,6 +68,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.openRoom(withIdentifier: identifier))
             case .openRoomDirectorySearch:
                 actionsSubject.send(.openRoomDirectorySearch)
+            case .findFriends:
+                presentFindFriends()
             }
         }
         .store(in: &cancellables)
@@ -81,6 +83,58 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
+    private func presentFindFriends() {
+        guard let identityServiceClient = IdentityServiceClient() else {
+            MXLog.warning("Identity service is not configured; cannot show Find Friends.")
+            return
+        }
+        guard let accessToken = parameters.userSession.clientProxy.accessToken else {
+            MXLog.warning("No access token available; cannot run contact discovery.")
+            return
+        }
+
+        let contactDiscoveryService = ContactDiscoveryService(identityServiceClient: identityServiceClient)
+        let coordinatorParameters = FindFriendsScreenCoordinatorParameters(contactDiscoveryService: contactDiscoveryService,
+                                                                           clientProxy: parameters.userSession.clientProxy,
+                                                                           accessToken: accessToken)
+        let coordinator = FindFriendsScreenCoordinator(parameters: coordinatorParameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .startedChat(let roomID):
+                actionsSubject.send(.openRoom(withIdentifier: roomID))
+            case .showProfile(let userID):
+                presentUserProfile(userID: userID)
+            case .close:
+                parameters.navigationStackCoordinator?.pop()
+            }
+        }
+        .store(in: &cancellables)
+
+        parameters.navigationStackCoordinator?.push(coordinator)
+    }
+
+    private func presentUserProfile(userID: String) {
+        let coordinatorParameters = UserProfileScreenCoordinatorParameters(userID: userID,
+                                                                           isPresentedModally: false,
+                                                                           userSession: parameters.userSession,
+                                                                           userIndicatorController: parameters.userIndicatorController,
+                                                                           analytics: parameters.analytics)
+        let coordinator = UserProfileScreenCoordinator(parameters: coordinatorParameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .openDirectChat(let roomID):
+                actionsSubject.send(.openRoom(withIdentifier: roomID))
+            case .startCall, .dismiss:
+                parameters.navigationStackCoordinator?.pop()
+            }
+        }
+        .store(in: &cancellables)
+
+        parameters.navigationStackCoordinator?.push(coordinator)
+    }
+
     private func presentInviteUsersScreen() {
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: parameters.userSession,
                                                                       selectedUsers: selectedUsersPublisher,

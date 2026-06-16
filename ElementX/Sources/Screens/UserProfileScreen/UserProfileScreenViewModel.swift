@@ -86,8 +86,16 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
                 break
             }
         case .failure(let error):
-            state.bindings.alertInfo = .init(id: .unknown)
-            MXLog.error("Failed to find user profile: \(error)")
+            // GUA FORK: a contact surfaced by Find Friends is known to be on Gua even when the
+            // homeserver can't return a full profile right now. Degrade gracefully to a minimal
+            // profile (handle + initials) instead of a dead-end "error occurred" alert — this keeps
+            // the screen usable (and "Send message" working) rather than surfacing a raw failure.
+            MXLog.warning("Falling back to minimal profile for \(state.userID): \(error)")
+            state.userProfile = UserProfileProxy(userID: state.userID)
+            state.permalink = (try? matrixToUserPermalink(userId: state.userID)).flatMap(URL.init(string:))
+            if case let .success(roomID) = userSession.clientProxy.directRoomForUserID(state.userID) {
+                state.dmRoomID = roomID
+            }
         }
         
         if case let .success(.some(identity)) = await identityResult {

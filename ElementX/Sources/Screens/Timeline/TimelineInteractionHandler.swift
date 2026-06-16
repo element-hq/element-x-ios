@@ -572,7 +572,7 @@ class TimelineInteractionHandler {
         if let newTimelineFocus, let newTimelinePresentation {
             let timelineItemFactory = RoomTimelineItemFactory(userID: roomProxy.ownUserID,
                                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID))
+                                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID, isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom))
             
             guard case let .success(timelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: newTimelineFocus,
                                                                                                                                  allowedMessageTypes: messageTypes,

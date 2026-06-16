@@ -97,6 +97,17 @@ extension String {
 }
 
 extension String {
+    /// GUA FORK: A display-only handle for a Matrix user ID that hides the
+    /// ":homeserver" suffix (e.g. `@alice:dev.local` -> `@alice`). Gua's
+    /// frictionless UX never surfaces the homeserver to end users. The raw
+    /// `userID` is still used for any logic, avatars, and routing.
+    var guaDisplayHandle: String {
+        guard hasPrefix("@") else { return self }
+        return "@" + dropFirst().prefix { $0 != ":" }
+    }
+}
+
+extension String {
     static func makeCanonicalAlias(aliasLocalPart: Self?, serverName: Self?) -> Self? {
         guard let aliasLocalPart, !aliasLocalPart.isEmpty,
               let serverName, !serverName.isEmpty else {
