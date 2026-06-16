@@ -54,6 +54,7 @@ struct BugReportScreen: View {
             ListRow(label: .plain(title: L10n.screenBugReportEditorPlaceholder),
                     kind: .textField(text: $context.reportText, axis: .vertical))
                 .lineLimit(4, reservesSpace: true)
+                .accessibilityLabel(L10n.screenBugReportEditorPlaceholder)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
         } footer: {
             Text(L10n.screenBugReportEditorDescription)
