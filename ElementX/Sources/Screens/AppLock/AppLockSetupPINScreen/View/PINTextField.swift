@@ -20,6 +20,8 @@ struct PINTextField: View {
         textField
             .textFieldStyle(PINTextFieldStyle(pinCode: pinCode, isSecure: isSecure, maxLength: maxLength, size: size))
             .keyboardType(.numberPad)
+            // Keep the label persistent: the field's title behaves as a placeholder and is only announced while empty.
+            .accessibilityLabel(L10n.a11yPinField)
             .accessibilityIdentifier(A11yIdentifiers.appLockSetupPINScreen.textField)
             .onChange(of: pinCode) { _, newValue in
                 let sanitized = sanitize(newValue)

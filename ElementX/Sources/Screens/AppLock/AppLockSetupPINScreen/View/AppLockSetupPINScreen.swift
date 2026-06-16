@@ -66,6 +66,7 @@ struct AppLockSetupPINScreen: View {
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
+                .accessibilityAddTraits(.isHeader)
             
             Text(context.viewState.subtitle)
                 .font(.compound.bodyMD)
