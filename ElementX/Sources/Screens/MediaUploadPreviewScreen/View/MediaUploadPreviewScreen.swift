@@ -109,6 +109,7 @@ struct MediaUploadPreviewScreen: View {
             SendButton {
                 context.send(viewAction: .send)
             }
+            .accessibilityLabel(L10n.actionSend)
         }
     }
     
@@ -118,6 +119,7 @@ struct MediaUploadPreviewScreen: View {
         } label: {
             CompoundIcon(\.infoSolid, size: .xSmall, relativeTo: .compound.bodyLG)
         }
+        .accessibilityLabel(L10n.a11yInfo)
         .tint(.compound.iconCriticalPrimary)
         .popover(isPresented: $context.isPresentingMediaCaptionWarning, arrowEdge: .bottom) {
             captionWarningContent
