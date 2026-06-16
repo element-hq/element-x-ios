@@ -313,6 +313,11 @@ class HomeScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         let rejectExpectation = expectation(description: "Expected rejectInvitation to be called.")
+        let notificationExpectation = expectation(description: "Expected delivered notifications to be removed.")
+        notificationManager.removeDeliveredMessageNotificationsForClosure = { roomID in
+            XCTAssertEqual(roomID, invitedRoomIDs[0])
+            notificationExpectation.fulfill()
+        }
         clientProxy.roomForIdentifierClosure = { _ in
             let roomProxy = InvitedRoomProxyMock(.init())
             roomProxy.rejectInvitationClosure = {
@@ -323,7 +328,7 @@ class HomeScreenViewModelTests: XCTestCase {
             return .invited(roomProxy)
         }
         context.viewState.bindings.alertInfo?.verticalButtons?[0].action?()
-        await fulfillment(of: [rejectExpectation], timeout: 1.0)
+        await fulfillment(of: [rejectExpectation, notificationExpectation], timeout: 1.0)
         
         XCTAssertEqual(appSettings.seenInvites, [invitedRoomIDs[1]])
         XCTAssertTrue(notificationManager.removeDeliveredMessageNotificationsForCalled)

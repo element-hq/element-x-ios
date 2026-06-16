@@ -51,7 +51,7 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
     func testInitialPhoneNumberParsesCountry() {
         viewModel = PhoneEntryScreenViewModel(isLegacyAuthEnabled: false, initialPhoneNumber: "+5511987654321")
         XCTAssertEqual(context.viewState.selectedCountry.isoCode, "BR")
-        XCTAssertEqual(context.viewState.bindings.localPhoneNumber, "11987654321")
+        XCTAssertEqual(context.viewState.bindings.localPhoneNumber, "(11) 98765-4321")
     }
 
     func testCountrySelectionUpdatesStateAndDismissesPicker() {

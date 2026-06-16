@@ -12,8 +12,8 @@
     "codeCoverage" : {
       "targets" : [
         {
-          "containerPath" : "container:ElementX.xcodeproj",
-          "identifier" : "C0FAEB81CFD9776CD78CE489",
+          "containerPath" : "container:Gua.xcodeproj",
+          "identifier" : "4B70733CD7C13746395196E0",
           "name" : "ElementX"
         }
       ]
@@ -33,16 +33,16 @@
       }
     ],
     "targetForVariableExpansion" : {
-      "containerPath" : "container:ElementX.xcodeproj",
-      "identifier" : "D3DB351B7FBE0F49649171FC",
+      "containerPath" : "container:Gua.xcodeproj",
+      "identifier" : "206D2E4EBBD08B70378F4DB6",
       "name" : "IntegrationTests"
     }
   },
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:ElementX.xcodeproj",
-        "identifier" : "D3DB351B7FBE0F49649171FC",
+        "containerPath" : "container:Gua.xcodeproj",
+        "identifier" : "206D2E4EBBD08B70378F4DB6",
         "name" : "IntegrationTests"
       }
     }

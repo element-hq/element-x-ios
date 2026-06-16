@@ -1,4 +1,5 @@
 require 'yaml'
+require 'json'
 
 skip_docs
 
@@ -8,7 +9,8 @@ if File.exist?(enterprise)
 end
 
 before_all do
-  xcversion(version: "16.4")
+  xcode_version = ENV["GUA_XCODE_VERSION"] || ENV["XCODE_VERSION"]
+  xcversion(version: xcode_version) unless xcode_version.to_s.empty?
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
@@ -20,7 +22,7 @@ lane :unit_tests do |options|
   
   run_tests(
     scheme: "UnitTests",
-    device: "iPhone 16 (18.5)",
+    device: ENV.fetch("UNIT_TEST_DEVICE", "iPhone 16 (18.6)"),
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
@@ -30,7 +32,7 @@ lane :unit_tests do |options|
   if !options[:skip_previews]
     run_tests(
       scheme: "PreviewTests",
-      device: "iPhone SE (3rd generation) (18.5)",
+      device: ENV.fetch("PREVIEW_TEST_DEVICE", "iPhone SE (3rd generation) (18.5)"),
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
@@ -42,6 +44,8 @@ lane :unit_tests do |options|
 end
 
 lane :ui_tests do |options|
+  ios18_runtime = latest_available_ios_runtime_identifier(major_version: 18)
+
   # We used to run these simultaneously on iPhone and iPad but it is *really* slow on GitHub runners.
   # Presumably because launching 2 simulators uses more memory than the runner has available.
   
@@ -51,7 +55,7 @@ lane :ui_tests do |options|
     create_simulator_if_necessary(
       name: "iPhone-18.5",
       type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
-      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-4"
+      runtime: ios18_runtime
     )
   elsif options[:device] == "iPad"
     device = "iPad-18.5"
@@ -59,7 +63,7 @@ lane :ui_tests do |options|
     create_simulator_if_necessary(
       name: "iPad-18.5",
       type: "com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation",
-      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-4"
+      runtime: ios18_runtime
     )
   else
     UI.user_error!("Please supply a device argument as device:iPhone or device:iPad")
@@ -90,7 +94,7 @@ lane :accessibility_tests do |options|
   
   run_tests(
     scheme: "AccessibilityTests",
-    device: "iPhone 16 (18.5)",
+    device: ENV.fetch("ACCESSIBILITY_TEST_DEVICE", "iPhone 16 (18.6)"),
     ensure_devices_found: true,
     prelaunch_simulator: false,
     result_bundle: true,
@@ -102,11 +106,12 @@ end
 
 lane :integration_tests do
   clear_derived_data()
+  ios18_runtime = latest_available_ios_runtime_identifier(major_version: 18)
   
   create_simulator_if_necessary(
     name: "iPhone-18.5",
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-4"
+    runtime: ios18_runtime
   )
 
   reset_simulator = ENV.key?('CI')
@@ -214,7 +219,7 @@ end
 
 lane :prepare_next_release do
   target_file_path = "../project.yml"
-  xcode_project_file_path = "../ElementX.xcodeproj"
+  xcode_project_file_path = "../Gua.xcodeproj"
 
   data = YAML.load_file target_file_path
   current_version = data["settings"]["MARKETING_VERSION"]
@@ -307,6 +312,16 @@ private_lane :bump_build_number do
   # Increment build number to current date
   build_number = Time.now.strftime("%Y%m%d%H%M")
   increment_build_number(build_number: build_number)
+end
+
+def latest_available_ios_runtime_identifier(major_version:)
+  runtimes_json = sh("xcrun simctl list runtimes iOS --json", log: false)
+  runtimes = JSON.parse(runtimes_json)["runtimes"].select do |runtime|
+    runtime["isAvailable"] && runtime["version"].to_s.split(".").first.to_i == major_version
+  end
+  runtime = runtimes.max_by { |candidate| Gem::Version.new(candidate["version"].to_s) }
+  UI.user_error!("No available iOS #{major_version} simulator runtime found.") unless runtime
+  runtime["identifier"]
 end
 
 private_lane :create_simulator_if_necessary do |options|

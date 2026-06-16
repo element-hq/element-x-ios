@@ -1,7 +1,7 @@
 settings:
   APP_DISPLAY_NAME: Gua
   PRODUCTION_APP_NAME: Gua
-  APP_GROUP_IDENTIFIER: sarahlacerda.me.gua
+  APP_GROUP_IDENTIFIER: group.me.sarahlacerda.gua
   BASE_BUNDLE_IDENTIFIER: me.sarahlacerda.gua
   ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
   DEVELOPMENT_TEAM: 3HD49L7PSA

@@ -44,8 +44,8 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:ElementX.xcodeproj",
-        "identifier" : "7A17BE29BAC81ADBAC6349D9",
+        "containerPath" : "container:Gua.xcodeproj",
+        "identifier" : "2258C8F8431C19C279635833",
         "name" : "PreviewTests"
       }
     }

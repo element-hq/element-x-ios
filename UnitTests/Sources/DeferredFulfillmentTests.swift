@@ -55,9 +55,9 @@ class DeferredFulfillmentTests: XCTestCase {
         
         // When that value is changed asynchronously with some intermediate values before it is reached.
         Task {
-            try await observable.setCounter(100, delay: .seconds(.random(in: 1.0...2.0)))
-            try await observable.setCounter(250, delay: .seconds(.random(in: 1.0...2.0)))
-            try await observable.setCounter(finalValue, delay: .seconds(.random(in: 1.0...2.0)))
+            try await observable.setCounter(100, delay: .milliseconds(50))
+            try await observable.setCounter(250, delay: .milliseconds(50))
+            try await observable.setCounter(finalValue, delay: .milliseconds(50))
         }
         XCTAssertEqual(observable.counter, 0)
         
@@ -76,6 +76,8 @@ class DeferredFulfillmentTests: XCTestCase {
         if let delay {
             try await Task.sleep(for: delay)
         }
-        counter = newValue
+        await MainActor.run {
+            counter = newValue
+        }
     }
 }
