@@ -111,10 +111,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentDeactivateAccount()
                 case .twoStepVerification:
                     presentTwoStepVerification()
+                case .findFriends:
+                    presentFindFriends()
                 }
             }
             .store(in: &cancellables)
-        
+
         navigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
     }
     
@@ -245,6 +247,39 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
 
         coordinator.actionsPublisher
             .sink { _ in }
+            .store(in: &cancellables)
+
+        navigationStackCoordinator.push(coordinator)
+    }
+
+    // GUA FORK: Find-friends-from-contacts entry-point.
+    private func presentFindFriends() {
+        guard let identityServiceClient = IdentityServiceClient() else {
+            MXLog.warning("Identity service is not configured; cannot show Find Friends.")
+            return
+        }
+        guard let accessToken = flowParameters.userSession.clientProxy.accessToken else {
+            MXLog.warning("No access token available; cannot run contact discovery.")
+            return
+        }
+        let contactDiscoveryService = ContactDiscoveryService(identityServiceClient: identityServiceClient)
+        let parameters = FindFriendsScreenCoordinatorParameters(contactDiscoveryService: contactDiscoveryService,
+                                                                clientProxy: flowParameters.userSession.clientProxy,
+                                                                accessToken: accessToken)
+        let coordinator = FindFriendsScreenCoordinator(parameters: parameters)
+
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .startedChat:
+                    // The direct room now exists; close Settings so the user lands back on
+                    // their chat list where the new conversation appears.
+                    actionsSubject.send(.dismiss)
+                case .close:
+                    break
+                }
+            }
             .store(in: &cancellables)
 
         navigationStackCoordinator.push(coordinator)

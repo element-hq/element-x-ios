@@ -41,6 +41,8 @@ targets:
       base:
         PRODUCT_NAME: UnitTests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.unit.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/$(APP_NAME).app/$(APP_NAME)"
+        BUNDLE_LOADER: "$(TEST_HOST)"
       debug:
       release:
 

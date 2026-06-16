@@ -78,6 +78,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To take pictures or videos and send them as a message $(APP_DISPLAY_NAME) needs access to the camera.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>$(APP_DISPLAY_NAME) checks your contacts privately to find which of them are already here. Your contacts are never stored.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Face ID is used to access your app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

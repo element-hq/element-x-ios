@@ -92,6 +92,7 @@ targets:
         NSPhotoLibraryAddUsageDescription: This lets you save images and videos to your photo library.
         NSLocationWhenInUseUsageDescription: Grant location access so that $(APP_DISPLAY_NAME) can share your location.
         NSFaceIDUsageDescription: Face ID is used to access your app.
+        NSContactsUsageDescription: $(APP_DISPLAY_NAME) checks your contacts privately to find which of them are already here. Your contacts are never stored.
         UIBackgroundModes: [audio, fetch, processing, voip]
         BGTaskSchedulerPermittedIdentifiers:
           [io.element.elementx.background.refresh]
@@ -132,6 +133,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: $(APP_NAME)
+        PRODUCT_MODULE_NAME: ElementX
         PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
         MARKETING_VERSION: $(MARKETING_VERSION)
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)

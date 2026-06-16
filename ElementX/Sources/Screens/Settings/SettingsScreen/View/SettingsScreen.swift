@@ -77,6 +77,13 @@ struct SettingsScreen: View {
     
     private var manageMyAppSection: some View {
         Section {
+            // GUA FORK: Find which of the user's phone contacts are already on Gua.
+            ListRow(label: .default(title: "Find friends",
+                                    icon: \.userAdd),
+                    kind: .navigationLink {
+                        context.send(viewAction: .findFriends)
+                    })
+
             ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
                                     icon: \.notifications),
                     kind: .navigationLink {

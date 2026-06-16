@@ -22,8 +22,8 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:ElementX.xcodeproj",
-        "identifier" : "32C23C8D224D46EFE62AFAD0",
+        "containerPath" : "container:Gua.xcodeproj",
+        "identifier" : "1DD4CE8EE9A055AF4B9B6C1F",
         "name" : "UnitTests"
       }
     }

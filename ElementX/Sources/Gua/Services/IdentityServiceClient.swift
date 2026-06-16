@@ -110,6 +110,10 @@ protocol IdentityServiceClientProtocol {
                             pin: String,
                             device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceMatrixSession
     func checkUsernameAvailability(_ username: String) async throws -> UsernameAvailability
+    /// Contact discovery: match a batch of address-book phone numbers (E.164) against Gua
+    /// accounts. The numbers are sent over TLS and digested server-side; only the contacts
+    /// that are on Gua and discoverable come back.
+    func lookupContacts(accessToken: String, phones: [String]) async throws -> [ContactMatch]
     func startAccountReauth(accessToken: String, language: String?) async throws
     func verifyAccountReauth(accessToken: String, code: String) async throws -> String
     func deactivateAccount(accessToken: String, reauthToken: String, eraseData: Bool) async throws
@@ -132,6 +136,18 @@ enum UsernameAvailability: Equatable, Sendable {
     case available
     case taken
     case invalid(reason: String?)
+}
+
+/// A contact-discovery hit: an address-book phone number that belongs to a Gua account.
+/// `phoneNumber` echoes back the submitted number so the client can map it onto the local
+/// address book; `username` is the global Gua handle when one has been assigned.
+struct ContactMatch: Equatable, Sendable, Identifiable {
+    let phoneNumber: String
+    let userId: String
+    let username: String?
+    let displayName: String?
+
+    var id: String { userId }
 }
 
 final class IdentityServiceClient: IdentityServiceClientProtocol {
@@ -283,6 +299,35 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
             return .invalid(reason: body?.message)
         default:
             throw IdentityServiceError.server(status: httpResponse.statusCode, message: nil)
+        }
+    }
+
+    // MARK: - Contact discovery
+
+    func lookupContacts(accessToken: String, phones: [String]) async throws -> [ContactMatch] {
+        struct Body: Encodable { let phones: [String] }
+        struct Response: Decodable {
+            struct Match: Decodable {
+                let phone: String
+                let userId: String
+                let username: String?
+                let displayName: String?
+            }
+
+            let matches: [Match]
+        }
+        let (data, _) = try await sendAuthenticated(path: "/directory/lookup",
+                                                    accessToken: accessToken,
+                                                    body: Body(phones: phones),
+                                                    language: nil,
+                                                    expectsBody: true)
+        do {
+            let response = try decoder.decode(Response.self, from: data)
+            return response.matches.map {
+                ContactMatch(phoneNumber: $0.phone, userId: $0.userId, username: $0.username, displayName: $0.displayName)
+            }
+        } catch {
+            throw IdentityServiceError.decoding(error)
         }
     }
 
