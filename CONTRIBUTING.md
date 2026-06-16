@@ -55,7 +55,7 @@ This will:
 
 ### Xcode
 
-We suggest using an Xcode version later than 15.0.1.
+We suggest always using the Xcode version specified by `xcode_select_for_github_actions` in [ci_common.sh](https://github.com/element-hq/element-x-ios/blob/develop/ci_scripts/ci_common.sh).
 
 The Xcode project can be directly compiled through the shared Element X scheme which includes the main application as well as the unit and UI tests.
 
