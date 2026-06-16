@@ -46,6 +46,7 @@ struct IdentityConfirmationScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
+                .accessibilityAddTraits(.isHeader)
             
             Text(L10n.screenIdentityConfirmationSubtitle)
                 .font(.compound.bodyMD)
