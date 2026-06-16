@@ -74,6 +74,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var linkNewDeviceEnabled: Bool { get set }
     
     var roomThreadListEnabled: Bool { get set }
+    
+    var globalSearchEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

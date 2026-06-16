@@ -24,6 +24,7 @@ nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var threadsEnabled: Bool { get }
+    var globalSearchEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
 }
 
@@ -79,6 +80,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
         case threadsEnabled
+        case globalSearchEnabled
         case roomThreadListEnabled
         case linkPreviewsEnabled
         case jumpToReadMarkerEnabled
@@ -440,6 +442,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     nonisolated(unsafe) var roomThreadListEnabled: Bool
     
     @UserPreference
+    nonisolated(unsafe)  var globalSearchEnabled: Bool
+    
+    @UserPreference
     nonisolated(unsafe) var focusEventOnNotificationTap: Bool
     
     @UserPreference
@@ -496,6 +501,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
         _enableOnlySignedDeviceIsolationMode = UserPreference(key: .enableOnlySignedDeviceIsolationMode, defaultValue: false, storage: store)
         _knockingEnabled = UserPreference(key: .knockingEnabled, defaultValue: false, storage: store)
         _threadsEnabled = UserPreference(key: .threadsEnabled, defaultValue: false, storage: store)
+        _globalSearchEnabled = UserPreference(key: .globalSearchEnabled, defaultValue: false, storage: store)
         _roomThreadListEnabled = UserPreference(key: .roomThreadListEnabled, defaultValue: false, storage: store)
         _focusEventOnNotificationTap = UserPreference(key: .focusEventOnNotificationTap, defaultValue: false, storage: store)
         _linkPreviewsEnabled = UserPreference(key: .linkPreviewsEnabled, defaultValue: false, storage: store)

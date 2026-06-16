@@ -121,7 +121,7 @@ extension RoomSummary: CustomStringConvertible {
 extension RoomSummary {
     /// An empty summary used when the room info is momentarily unavailable (e.g. while the client tears
     /// down on logout). Keeps the diff indices aligned with the SDK instead of crashing.
-    static func placeholder(room: Room) -> RoomSummary {
+    nonisolated static func placeholder(room: Room) -> RoomSummary {
         RoomSummary(room: room,
                     id: room.id(),
                     joinRequestType: nil,
