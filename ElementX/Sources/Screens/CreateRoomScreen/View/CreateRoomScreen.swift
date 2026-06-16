@@ -132,7 +132,7 @@ struct CreateRoomScreen: View {
                     .accessibilityHidden(true)
             }
         }
-        .accessibilityLabel(L10n.a11yEditAvatar)
+        .accessibilityLabel(context.viewState.avatarImage == nil ? L10n.a11yAddAvatar : L10n.a11yEditAvatar)
         .accessibilityRemoveTraits(.isHeader)
         .buttonStyle(.plain)
         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomAvatar)
