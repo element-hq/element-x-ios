@@ -68,6 +68,7 @@ struct SendInviteConfirmationView: View {
                     .multilineTextAlignment(.center)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
                 Text(subtitle)
                     .multilineTextAlignment(.center)
                     .font(.compound.bodyMD)
