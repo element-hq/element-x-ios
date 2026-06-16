@@ -176,6 +176,9 @@ Others
 
 ### What's Changed
 
+🔐 Security fixes
+* Remove support for handling SPA calls within the app by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5515. Fixes [GHSA-54w7-rw44-49m7](https://github.com/element-hq/element-x-ios/security/advisories/GHSA-54w7-rw44-49m7).
+
 ✨ Features
 * Promote "history sharing on invite" out of developer options by @richvdh in https://github.com/element-hq/element-x-ios/pull/5480
 * Removed Live Location Sharing feature flag by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5498
