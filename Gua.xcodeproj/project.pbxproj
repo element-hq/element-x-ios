@@ -1331,6 +1331,7 @@
 		EB1552366445C300D7810065 /* SDKListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280359AFC3E2E226FC5CCE69 /* SDKListener.swift */; };
 		EB6068C02D678F212E9830BA /* ExtensionLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED38FFA74119F49D18800963 /* ExtensionLogger.swift */; };
 		EB82866FAB051FF507A8FBA5 /* AppLockScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699A7D40027F989E5F5722DF /* AppLockScreenModels.swift */; };
+		EBC86B3460CBE83FFD9C2A01 /* GuaDeployment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF105921A877C27D3BB0F5A2 /* GuaDeployment.swift */; };
 		EBEA4A6146952E46452B50B6 /* NotificationSettingsEditScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D5FA0166419373308770C5 /* NotificationSettingsEditScreenViewModelProtocol.swift */; };
 		EBF25CB060334CF5DEEAE285 /* MXLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93F38700A0CBDAF0969F2F5 /* MXLog.swift */; };
 		EBFF4EAD66EC5A46C6C29A3A /* ElementCallServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE7B643EF17472F3EC51CB8 /* ElementCallServiceMock.swift */; };
@@ -2703,6 +2704,7 @@
 		DE9E62AA3D229452A9E79A9F /* KnockRequestsBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnockRequestsBannerView.swift; sourceTree = "<group>"; };
 		DEFE22AC858C8587A07BCCE2 /* UserDetailsEditScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsEditScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		DF0BAC30E7210C341A36F758 /* TimelineItemMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemMenu.swift; sourceTree = "<group>"; };
+		DF105921A877C27D3BB0F5A2 /* GuaDeployment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuaDeployment.swift; sourceTree = "<group>"; };
 		DF2061C564F2881F0B1E812A /* BannedRoomProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannedRoomProxyMock.swift; sourceTree = "<group>"; };
 		DF20C32754230996E3E12FA0 /* DeveloperOptionsScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsScreenViewModelTests.swift; sourceTree = "<group>"; };
 		DF42DA9F738635C5062B5CE1 /* PermalinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermalinkTests.swift; sourceTree = "<group>"; };
@@ -6283,6 +6285,7 @@
 		D6D9A4F9A28AF30D6E125813 /* Gua */ = {
 			isa = PBXGroup;
 			children = (
+				DF105921A877C27D3BB0F5A2 /* GuaDeployment.swift */,
 				7E0877B7C7F9A25526718695 /* AppHooks */,
 				081808AF2CD0EBF6C47FF94A /* Common */,
 				54622373182C566E6B30EB5A /* Screens */,
@@ -7812,6 +7815,7 @@
 				BC725A6A3517A758203FE8E3 /* GlobalSearchScreenModels.swift in Sources */,
 				0775DFDFFF6C7A17C1C22422 /* GlobalSearchScreenViewModel.swift in Sources */,
 				214CCC5EAD7360DD69161748 /* GlobalSearchScreenViewModelProtocol.swift in Sources */,
+				EBC86B3460CBE83FFD9C2A01 /* GuaDeployment.swift in Sources */,
 				4BC2F5C81530E3570917578A /* HTMLFixtures.swift in Sources */,
 				4A16EC04997ED0D89B196F9C /* HTMLParserStyle.swift in Sources */,
 				5580A76BE96A3AFAE520B196 /* HighlightedTimelineItemModifier.swift in Sources */,

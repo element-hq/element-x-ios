@@ -31,8 +31,8 @@ enum GuaDeployment {
         #endif
     }
 
-    /// Federation resolver base URL, or `nil` when unconfigured (clients then fall back to the default
-    /// account provider rather than failing).
+    /// Federation resolver base URL. Gua phone auth requires this to route users to the correct
+    /// homeserver/MAS.
     var resolverBaseURL: URL? {
         switch self {
         case .production:

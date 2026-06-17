@@ -8,6 +8,12 @@
 	<array>
 		<string>$(APP_GROUP_IDENTIFIER)</string>
 	</array>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>webcredentials:gua.global</string>
+		<string>webcredentials:identity.gua.global</string>
+		<string>webcredentials:dev.gua.sarahlacerda.me</string>
+	</array>
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>

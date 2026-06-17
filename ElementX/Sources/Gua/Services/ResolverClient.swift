@@ -64,7 +64,7 @@ final class ResolverClient: ResolverClientProtocol {
     }
 
     /// Convenience initializer using the active `GuaDeployment`'s resolver URL. Returns `nil` when the
-    /// resolver is not configured, so callers fall back to the default account provider.
+    /// resolver is not configured.
     convenience init?() {
         guard let url = GuaDeployment.current.resolverBaseURL else { return nil }
         self.init(baseURL: url)

@@ -111,7 +111,10 @@ targets:
       path: ElementX.entitlements
       properties:
         aps-environment: $(APNS_ENVIRONMENT)
-        #        com.apple.developer.associated-domains:
+        com.apple.developer.associated-domains:
+        - webcredentials:gua.global
+        - webcredentials:identity.gua.global
+        - webcredentials:dev.gua.sarahlacerda.me
         #        - applinks:element.io
         #        - applinks:app.element.io
         #        - applinks:staging.element.io

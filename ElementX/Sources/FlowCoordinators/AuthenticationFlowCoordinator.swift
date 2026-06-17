@@ -451,18 +451,21 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             }
             
             // GUA FORK: ask the resolver which homeserver this phone belongs to (login) or should be
-            // created on (register), instead of hardcoding a single account provider. Falls back to the
-            // configured default provider when the resolver is unavailable or not configured, so the app
-            // keeps working before the resolver is deployed.
+            // created on (register), instead of hardcoding a single account provider.
             // Use the homeserver base URL the resolver returned directly (configure(for:) accepts a
             // server name OR a homeserver URL). This avoids re-discovering via HTTPS well-known on the
             // server name, which is redundant and fails for http/localhost homeservers.
-            let resolution = await resolveHomeserver(forPhone: phoneNumber)
-            guard let accountProvider = resolution?.homeserver.baseURL ?? appSettings.accountProviders.first else {
-                coordinator.displayError(L10n.errorUnknown)
+            let resolution: HomeserverResolution
+            do {
+                resolution = try await resolveHomeserver(forPhone: phoneNumber)
+            } catch {
+                MXLog.error("Resolver lookup failed: \(error)")
+                coordinator.displayError(error.localizedDescription)
                 return
             }
-            let flow: AuthenticationFlow = (resolution?.exists == false) ? .register : .login
+
+            let accountProvider = resolution.homeserver.baseURL
+            let flow: AuthenticationFlow = resolution.exists ? .login : .register
 
             switch await authenticationService.configure(for: accountProvider, flow: flow) {
             case .success:
@@ -493,16 +496,11 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    /// GUA FORK: resolve a phone to its homeserver via the Gua resolver. Returns `nil` (so the caller falls
-    /// back to the default account provider) when the resolver isn't configured or the lookup fails.
-    private func resolveHomeserver(forPhone phoneNumber: String) async -> HomeserverResolution? {
-        guard let resolverClient else { return nil }
-        do {
-            return try await resolverClient.resolve(phoneNumber: phoneNumber)
-        } catch {
-            MXLog.warning("Resolver lookup failed; falling back to the default account provider: \(error)")
-            return nil
-        }
+    /// GUA FORK: resolve a phone to its homeserver via the Gua resolver. The resolver is required for
+    /// phone auth so the app doesn't silently route to the wrong MAS/homeserver.
+    private func resolveHomeserver(forPhone phoneNumber: String) async throws -> HomeserverResolution {
+        guard let resolverClient else { throw ResolverError.notConfigured }
+        return try await resolverClient.resolve(phoneNumber: phoneNumber)
     }
 
     private func showOTPEntryScreen(phoneNumber: String) {
