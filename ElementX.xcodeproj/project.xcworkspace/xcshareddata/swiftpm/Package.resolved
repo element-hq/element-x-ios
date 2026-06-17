@@ -1,5 +1,5 @@
 {
-  "originHash" : "bf41632192a04df14f7ffe4ccc2a6da8cfbe16bdfdb59fd611e72792da0166c4",
+  "originHash" : "96bc6d1f8871c4b0823e82c2f9171715c3d2aeff1da526d2349369204d30b03f",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "9a9f546b0c49ab4f893316ae6d23691ae14b84e0",
-        "version" : "0.20.0"
+        "revision" : "f3171e18bccbfff48fe416d9bbcdcb3163e78e4a",
+        "version" : "0.20.1"
       }
     },
     {
@@ -131,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/guoyingtao/Mantis",
       "state" : {
-        "revision" : "584f03f879e0f6c266a03697e9a44815b09781f4",
-        "version" : "2.31.1"
+        "revision" : "b3c237aff54b8307440157a2f5956bdea2e76791",
+        "version" : "2.31.2"
       }
     },
     {
@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
       "state" : {
-        "revision" : "be0696007ca8b350faa0e5968c0d6397d59db415",
-        "version" : "6.26.0"
+        "revision" : "84a79bc375a301169390ac110c868f06c857b83f",
+        "version" : "6.27.0"
       }
     },
     {
@@ -194,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "15c15c48cfe55613255badb2ff23a0359a743293",
-        "version" : "3.59.2"
+        "revision" : "179438b8e0c9a357ab0caf453577f766ffddbcb3",
+        "version" : "3.59.3"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "cef29e94feb00b1b712514443d6d70b09ef20355",
-        "version" : "9.15.0"
+        "revision" : "e6d00b6171c0c055debdf278554db035ae958926",
+        "version" : "9.16.1"
       }
     },
     {
@@ -239,8 +239,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-clocks",
       "state" : {
-        "revision" : "cc46202b53476d64e824e0b6612da09d84ffde8e",
-        "version" : "1.0.6"
+        "revision" : "72d749bf341b78851203066ab421869b783ec42a",
+        "version" : "1.1.0"
       }
     },
     {
@@ -248,8 +248,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "fea17c02d767f46b23070fdfdacc28a03a39232a",
-        "version" : "1.5.1"
+        "revision" : "a0cb0954ecb21e4e31b0070e6ed5674e8556685a",
+        "version" : "1.6.0"
       }
     },
     {
@@ -329,8 +329,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tevelee/SwiftUI-Flow.git",
       "state" : {
-        "revision" : "d227f999b2894ab737ef5786d9b14d02d3e5362e",
-        "version" : "3.1.1"
+        "revision" : "43433766f5d162cb970cdaa70d4690d683ab6c89",
+        "version" : "3.3.0"
       }
     },
     {
