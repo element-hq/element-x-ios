@@ -40,9 +40,27 @@ nonisolated extension SDKListener where T: Sendable {
             }
         }
         
+        // The wrapper is owned by the listener's closure, so when the SDK releases the listener
+        // (its subscription handle being dropped) the wrapper deinits and finishes the stream,
+        // ending the consumer task above. Deiniting the continuation alone does *not* terminate
+        // the stream (see SE-0406), which would otherwise leak the task.
+        let continuationWrapper = StreamContinuationWrapper(continuation)
         return SDKListener { value in
-            continuation.yield(value)
+            continuationWrapper.continuation.yield(value)
         }
+    }
+}
+
+/// Owns an `AsyncStream.Continuation` and finishes its stream when released.
+private final nonisolated class StreamContinuationWrapper<Element: Sendable>: Sendable {
+    let continuation: AsyncStream<Element>.Continuation
+    
+    init(_ continuation: AsyncStream<Element>.Continuation) {
+        self.continuation = continuation
+    }
+    
+    deinit {
+        continuation.finish()
     }
 }
 
