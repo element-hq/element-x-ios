@@ -55,10 +55,22 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
             return
         }
         
-        for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
-            if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url) {
-                linkMetadata[url] = metadata
+        // Fetch the previews concurrently. The work stays on the main actor (the provider and
+        // its LPLinkMetadata are main actor bound) but each network fetch suspends, so they still
+        // overlap rather than running one after another.
+        await withTaskGroup { taskGroup in
+            for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
+                taskGroup.addTask {
+                    await fetchLinkPreview(for: url)
+                }
             }
+        }
+    }
+    
+    @MainActor
+    private func fetchLinkPreview(for url: URL) async {
+        if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url) {
+            linkMetadata[url] = metadata
         }
     }
 }
