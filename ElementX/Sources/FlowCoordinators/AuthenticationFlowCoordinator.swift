@@ -24,6 +24,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let identityServiceClient: IdentityServiceClientProtocol? // GUA FORK
+    private let resolverClient: ResolverClientProtocol? // GUA FORK: phone -> homeserver routing
     private let usesPhoneLoginHint: Bool // GUA FORK
     
     enum State: StateType {
@@ -159,6 +160,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          identityServiceClient: IdentityServiceClientProtocol? = nil,
+         resolverClient: ResolverClientProtocol? = nil,
          usesPhoneLoginHint: Bool = false) {
         self.authenticationService = authenticationService
         self.bugReportService = bugReportService
@@ -168,6 +170,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.identityServiceClient = identityServiceClient
+        self.resolverClient = resolverClient
         self.usesPhoneLoginHint = usesPhoneLoginHint
         
         navigationStackCoordinator = NavigationStackCoordinator()
@@ -447,12 +450,21 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 self.isHandlingPhoneSubmission = false
             }
             
-            guard appSettings.accountProviders.indices.contains(0) else {
+            // GUA FORK: ask the resolver which homeserver this phone belongs to (login) or should be
+            // created on (register), instead of hardcoding a single account provider. Falls back to the
+            // configured default provider when the resolver is unavailable or not configured, so the app
+            // keeps working before the resolver is deployed.
+            // Use the homeserver base URL the resolver returned directly (configure(for:) accepts a
+            // server name OR a homeserver URL). This avoids re-discovering via HTTPS well-known on the
+            // server name, which is redundant and fails for http/localhost homeservers.
+            let resolution = await resolveHomeserver(forPhone: phoneNumber)
+            guard let accountProvider = resolution?.homeserver.baseURL ?? appSettings.accountProviders.first else {
                 coordinator.displayError(L10n.errorUnknown)
                 return
             }
-            
-            switch await authenticationService.configure(for: appSettings.accountProviders[0], flow: .login) {
+            let flow: AuthenticationFlow = (resolution?.exists == false) ? .register : .login
+
+            switch await authenticationService.configure(for: accountProvider, flow: flow) {
             case .success:
                 break
             case .failure(let error):
@@ -481,6 +493,18 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    /// GUA FORK: resolve a phone to its homeserver via the Gua resolver. Returns `nil` (so the caller falls
+    /// back to the default account provider) when the resolver isn't configured or the lookup fails.
+    private func resolveHomeserver(forPhone phoneNumber: String) async -> HomeserverResolution? {
+        guard let resolverClient else { return nil }
+        do {
+            return try await resolverClient.resolve(phoneNumber: phoneNumber)
+        } catch {
+            MXLog.warning("Resolver lookup failed; falling back to the default account provider: \(error)")
+            return nil
+        }
+    }
+
     private func showOTPEntryScreen(phoneNumber: String) {
         let coordinator = OtpEntryScreenCoordinator(parameters: .init(phoneNumber: phoneNumber))
         

@@ -163,9 +163,9 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
         encoder = JSONEncoder()
     }
 
-    /// Convenience initializer using `Secrets.identityServiceBaseURL`.
+    /// Convenience initializer using the active `GuaDeployment`'s identity-service URL.
     convenience init?() {
-        guard let raw = Secrets.identityServiceBaseURL, let url = URL(string: raw) else { return nil }
+        guard let url = GuaDeployment.current.identityServiceBaseURL else { return nil }
         self.init(baseURL: url)
     }
 
