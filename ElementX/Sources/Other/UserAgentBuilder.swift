@@ -14,6 +14,11 @@ import DeviceKit
 #endif
 
 nonisolated enum UserAgentBuilder {
+    /// The screen scale used in the user agent. It never changes at runtime, so it's captured once
+    /// on the main actor at launch (see the app coordinator) and read freely from any thread/process.
+    /// Contexts without a screen (e.g. the NSE) keep the default.
+    nonisolated(unsafe) static var displayScale: CGFloat = 2.0
+    
     static func makeASCIIUserAgent() -> String {
         makeUserAgent()?.asciified() ?? "unknown"
     }
@@ -23,20 +28,21 @@ nonisolated enum UserAgentBuilder {
         let clientVersion = InfoPlistReader.app.bundleShortVersionString
         
         #if os(iOS)
-        let (systemVersion, scale) = mainThreadDeviceInfo()
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        let systemVersion = "\(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
         return if ProcessInfo.processInfo.isiOSAppOnMac {
             String(format: "%@/%@ (Mac; macOS %@; Scale/%0.2f)",
                    clientName,
                    clientVersion,
                    ProcessInfo.processInfo.operatingSystemVersionString,
-                   scale)
+                   displayScale)
         } else {
             String(format: "%@/%@ (%@; iOS %@; Scale/%0.2f)",
                    clientName,
                    clientVersion,
                    Device.current.safeDescription,
                    systemVersion,
-                   scale)
+                   displayScale)
         }
         #elseif os(tvOS)
         return String(format: "%@/%@ (%@; tvOS %@; Scale/%0.2f)",
@@ -61,18 +67,4 @@ nonisolated enum UserAgentBuilder {
         return nil
         #endif
     }
-    
-    #if os(iOS)
-    /// `UIDevice` and `UIScreen` are main actor isolated, but the user agent is also
-    /// built off the main thread (e.g. when the NSE builds its client), so hop over when needed.
-    private static func mainThreadDeviceInfo() -> (systemVersion: String, scale: CGFloat) {
-        if Thread.isMainThread {
-            MainActor.assumeIsolated { (UIDevice.current.systemVersion, UIScreen.main.scale) }
-        } else {
-            DispatchQueue.main.sync {
-                MainActor.assumeIsolated { (UIDevice.current.systemVersion, UIScreen.main.scale) }
-            }
-        }
-    }
-    #endif
 }

@@ -211,20 +211,10 @@ import MatrixRustSDKMocks
 
 struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static let summaryProviderGeneric = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-    static let genericRooms = mockRooms(from: summaryProviderGeneric)
+    static let genericRooms = summaryProviderGeneric.roomListPublisher.value.compactMap { mockRoom(summary: $0) }
     
     static let summaryProviderForNotificationsState = RoomSummaryProviderMock(.init(state: .loaded(.mockRoomsWithNotificationsState)))
-    static let notificationsStateRooms = mockRooms(from: summaryProviderForNotificationsState)
-    
-    static func mockRooms(from provider: RoomSummaryProviderProtocol) -> [HomeScreenRoom] {
-        var rooms = [HomeScreenRoom]()
-        for summary in provider.roomListPublisher.value {
-            if let room = mockRoom(summary: summary) {
-                rooms.append(room)
-            }
-        }
-        return rooms
-    }
+    static let notificationsStateRooms = summaryProviderForNotificationsState.roomListPublisher.value.compactMap { mockRoom(summary: $0) }
     
     static let lastMessageStateRooms = [makeRoom(lastMessageState: .sending), makeRoom(lastMessageState: .failed)]
     

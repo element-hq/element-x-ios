@@ -139,8 +139,8 @@ struct PreviewsWrapperView: View {
         
         switch fulfillmentSource {
         case .publisher(let publisher):
-            // Not sure whye byt some publisher seem to not properly comunicate their completion,
-            // so we added a timeout. Since we are going to migrate from publishers to stream,
+            // Not sure why but some publishers seem to not properly communicate their completion,
+            // so we added a timeout. Since we are going to migrate from publishers to streams,
             // this is a temporary solution
             var iterator = publisher
                 .timeout(.seconds(1), scheduler: DispatchQueue.main)
