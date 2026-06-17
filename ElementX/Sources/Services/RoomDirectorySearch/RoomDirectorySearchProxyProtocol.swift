@@ -21,7 +21,7 @@ enum RoomDirectorySearchError: Error {
     case nextPageQueryFailed
 }
 
-struct RoomDirectorySearchResult: Identifiable {
+nonisolated struct RoomDirectorySearchResult: Identifiable {
     let id: String
     let alias: String?
     let name: String?

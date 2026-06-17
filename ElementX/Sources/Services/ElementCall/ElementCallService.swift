@@ -356,8 +356,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     private func reportImmediatelyEndedCall(reason: CXCallEndedReason,
                                             callerInfo: (roomID: String, roomDisplayName: String?)? = nil,
                                             completion: @escaping () -> Void) {
-        let provider = callProvider
-        
         let callID = UUID()
         let update = CXCallUpdate()
         // Never answered through CallKit, so the hasVideo workaround for #5335 isn't needed.
@@ -368,14 +366,18 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             update.remoteHandle = .init(type: .generic, value: callerInfo.roomID)
         }
         
-        provider.reportNewIncomingCall(with: callID, update: update) { error in
+        // CallKit invokes the completion on a background queue, so hop back to the main actor
+        // to report the ended call and to run the (main actor bound) completion.
+        let mainActorCompletion = { @MainActor @Sendable in completion() }
+        callProvider.reportNewIncomingCall(with: callID, update: update) { [weak self] error in
             if let error {
                 MXLog.error("Failed reporting immediately ended call with error: \(error)")
             }
             
-            provider.reportCall(with: callID, endedAt: nil, reason: reason)
-            
-            completion()
+            Task { @MainActor in
+                self?.callProvider.reportCall(with: callID, endedAt: nil, reason: reason)
+                mainActorCompletion()
+            }
         }
     }
     

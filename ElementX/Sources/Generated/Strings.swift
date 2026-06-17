@@ -10,6 +10,8 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum L10n {
+  /// Add avatar
+  internal static var a11yAddAvatar: String { return L10n.tr("Localizable", "a11y_add_avatar") }
   /// Add reaction: %1$@
   internal static func a11yAddReaction(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_add_reaction", String(describing: p1))

@@ -228,21 +228,32 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [RoomListEntriesUpdate]) async {
+        // Building the room summaries (SDK fetches + string building) and applying the
+        // CollectionDifference can be expensive, so compute off the main actor and only
+        // hop back to publish the result.
+        rooms = await Self.updatedRooms(from: diffs, on: rooms, eventStringBuilder: eventStringBuilder, name: name)
+    }
+    
+    @concurrent
+    private static func updatedRooms(from diffs: [RoomListEntriesUpdate],
+                                     on currentRooms: [RoomSummary],
+                                     eventStringBuilder: RoomEventStringBuilder,
+                                     name: String) async -> [RoomSummary] {
         let span = MXLog.createSpan("\(name).process_room_list_diffs")
         span.enter()
         defer {
             span.exit()
         }
         
-        var updatedRooms = rooms
+        var updatedRooms = currentRooms
         for diff in diffs {
-            updatedRooms = await processDiff(diff, on: updatedRooms)
+            updatedRooms = await processDiff(diff, on: updatedRooms, eventStringBuilder: eventStringBuilder, name: name)
         }
-        rooms = updatedRooms
+        return updatedRooms
     }
     
-    private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummary]) async -> [RoomSummary] {
-        guard let collectionDiff = await buildDiff(from: diff, on: currentItems) else {
+    private nonisolated static func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummary], eventStringBuilder: RoomEventStringBuilder, name: String) async -> [RoomSummary] {
+        guard let collectionDiff = await buildDiff(from: diff, on: currentItems, eventStringBuilder: eventStringBuilder) else {
             MXLog.error("\(name): Failed building CollectionDifference from \(diff)")
             return currentItems
         }
@@ -255,7 +266,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return updatedItems
     }
     
-    private func fetchRoomDetails(from room: Room) async -> (roomInfo: RoomInfo?, latestEvent: LatestEventValue?) {
+    private nonisolated static func fetchRoomDetails(from room: Room) async -> (roomInfo: RoomInfo?, latestEvent: LatestEventValue?) {
         do {
             let latestEvent = await room.latestEvent()
             let roomInfo = try await room.roomInfo()
@@ -266,7 +277,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    private func buildRoomSummary(from room: Room) async -> RoomSummary {
+    private nonisolated static func buildRoomSummary(from room: Room, eventStringBuilder: RoomEventStringBuilder) async -> RoomSummary {
         let roomDetails = await fetchRoomDetails(from: room)
         
         guard let roomInfo = roomDetails.roomInfo else {
@@ -357,13 +368,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            isTombstoned: roomInfo.successorRoom != nil)
     }
     
-    private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) async -> CollectionDifference<RoomSummary>? {
+    private nonisolated static func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary], eventStringBuilder: RoomEventStringBuilder) async -> CollectionDifference<RoomSummary>? {
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
         switch diff {
         case .append(let values):
             for (index, value) in values.enumerated() {
-                let summary = await buildRoomSummary(from: value)
+                let summary = await buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder)
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
         case .clear:
@@ -371,7 +382,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 changes.append(.remove(offset: index, element: value, associatedWith: nil))
             }
         case .insert(let index, let value):
-            let summary = await buildRoomSummary(from: value)
+            let summary = await buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .popBack:
             guard let value = rooms.last else {
@@ -383,10 +394,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             let summary = rooms[0]
             changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
         case .pushBack(let value):
-            let summary = await buildRoomSummary(from: value)
+            let summary = await buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder)
             changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
         case .pushFront(let value):
-            let summary = await buildRoomSummary(from: value)
+            let summary = await buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder)
             changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
         case .remove(let index):
             let summary = rooms[Int(index)]
@@ -397,10 +408,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
             
             for (index, value) in values.enumerated() {
-                await changes.append(.insert(offset: index, element: buildRoomSummary(from: value), associatedWith: nil))
+                await changes.append(.insert(offset: index, element: buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder), associatedWith: nil))
             }
         case .set(let index, let value):
-            let summary = await buildRoomSummary(from: value)
+            let summary = await buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .truncate(let length):
@@ -431,22 +442,27 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     private func rebuildRoomSummaries() async {
+        MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
+        
+        rooms = await Self.rebuiltRoomSummaries(from: rooms, eventStringBuilder: eventStringBuilder, name: name)
+        
+        MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
+    }
+    
+    @concurrent
+    private static func rebuiltRoomSummaries(from rooms: [RoomSummary], eventStringBuilder: RoomEventStringBuilder, name: String) async -> [RoomSummary] {
         let span = MXLog.createSpan("\(name).rebuild_room_summaries")
         span.enter()
         defer {
             span.exit()
         }
         
-        MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
-        
         var rebuiltRooms = [RoomSummary]()
         rebuiltRooms.reserveCapacity(rooms.count)
         for room in rooms {
-            await rebuiltRooms.append(buildRoomSummary(from: room.room))
+            await rebuiltRooms.append(buildRoomSummary(from: room.room, eventStringBuilder: eventStringBuilder))
         }
-        rooms = rebuiltRooms
-        
-        MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
+        return rebuiltRooms
     }
 }
 
