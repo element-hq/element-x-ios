@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-protocol BaseRoomInfoProxyProtocol {
+nonisolated protocol BaseRoomInfoProxyProtocol: Sendable {
     var id: String { get }
     var displayName: String? { get }
     var topic: String? { get }
@@ -25,7 +25,7 @@ protocol BaseRoomInfoProxyProtocol {
 }
 
 // sourcery: AutoMockable
-protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
+nonisolated protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var id: String { get }
     var creators: [String] { get }
     var displayName: String? { get }

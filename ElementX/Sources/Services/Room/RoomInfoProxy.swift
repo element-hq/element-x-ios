@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomInfoProxy: RoomInfoProxyProtocol {
+nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
     let roomInfo: RoomInfo
     
     var id: String {
@@ -166,7 +166,7 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     }
 }
 
-struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
+nonisolated struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     let roomPreviewInfo: RoomPreviewInfo
     
     let successor: SuccessorRoom? = nil

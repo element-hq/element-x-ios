@@ -305,8 +305,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
         roomProxy.subscribeToRoomInfoUpdates()
         let runner = ExpiringTaskRunner { @MainActor in
             // Necessary to build the room cache so that the space can be added as a parent.
-            var iterator = roomProxy.infoPublisher.values.makeAsyncIterator()
-            while let info = await iterator.next(isolation: #isolation), info.powerLevels == nil { }
+            _ = await roomProxy.infoPublisher.values.first { @Sendable in $0.powerLevels != nil }
         }
         
         do {
