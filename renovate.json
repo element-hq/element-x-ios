@@ -15,14 +15,14 @@
     },
     {
       "matchManagers": ["xcodegen"],
-      "groupName": "XcodeGen",
+      "groupName": "Project Dependencies",
       "schedule": [
           "every 2 weeks on wednesday",
       ]
     },
     {
       "matchManagers": ["swift"],
-      "groupName" : "Tools"
+      "groupName" : "Tool Dependencies"
     },
     {
       "managers": ["swift", "cocoapods"],
