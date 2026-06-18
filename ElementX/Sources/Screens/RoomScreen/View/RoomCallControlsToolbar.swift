@@ -40,7 +40,10 @@ struct RoomCallControlsToolbar: ToolbarContent {
                                 Label(L10n.a11yStartVideoCall, icon: \.videoCallSolid)
                             }
                         } label: {
-                            CompoundIcon(\.voiceCallSolid)
+                            HStack(spacing: 2) {
+                                CompoundIcon(\.voiceCallSolid)
+                                CompoundIcon(\.chevronDown, size: .xSmall, relativeTo: .compound.bodyLG)
+                            }
                         }
                         .accessibilityLabel(L10n.a11yStartCall)
                         .disabled(!viewState.canJoinCall)
