@@ -19,7 +19,7 @@ enum SecureBackupRecoveryKeyScreenCoordinatorAction {
     case complete
 }
 
-final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
+final class SecureBackupRecoveryKeyScreenCoordinator: SecureBackupRecoveryKeyCoordinatorProtocol {
     private let parameters: SecureBackupRecoveryKeyScreenCoordinatorParameters
     private var viewModel: SecureBackupRecoveryKeyScreenViewModelProtocol
     
