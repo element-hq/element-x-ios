@@ -240,7 +240,7 @@ final class ElementCallServiceTests {
         let baselineNewIncomingCount = callProvider.reportNewIncomingCallWithUpdateCompletionCallsCount
         let baselineEndedCount = callProvider.reportCallWithEndedAtReasonCallsCount
         
-        await confirmation { confirmation in
+        await waitForConfirmation { confirmation in
             service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) {
                 confirmation()
             }
