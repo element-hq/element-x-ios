@@ -11,3 +11,5 @@
 "soft_logout_signin_notice" = "Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).";
 "soft_logout_signin_title" = "Sign in";
 "untranslated" = "Untranslated";
+"action_video_call" = "Video call";
+"action_voice_call" = "Voice call";

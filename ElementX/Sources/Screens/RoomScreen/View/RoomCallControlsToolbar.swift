@@ -31,13 +31,13 @@ struct RoomCallControlsToolbar: ToolbarContent {
                             Button {
                                 onCallTap(true)
                             } label: {
-                                Label(L10n.a11yStartVoiceCall, icon: \.voiceCallSolid)
+                                Label(UntranslatedL10n.actionVoiceCall, icon: \.voiceCallSolid)
                             }
                             
                             Button {
                                 onCallTap(false)
                             } label: {
-                                Label(L10n.a11yStartVideoCall, icon: \.videoCallSolid)
+                                Label(UntranslatedL10n.actionVideoCall, icon: \.videoCallSolid)
                             }
                         } label: {
                             HStack(spacing: 2) {
