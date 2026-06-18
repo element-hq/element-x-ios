@@ -260,7 +260,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let roomDetails = fetchRoomDetails(from: room)
         
         guard let roomInfo = roomDetails.roomInfo else {
-            fatalError("Missing room info for \(room.id())")
+            // The room info can be momentarily unavailable while the client tears down (e.g. on logout),
+            // where the SDK still delivers a diff but `room.roomInfo()` throws. Return a placeholder to
+            // keep the diff indices aligned with the SDK instead of crashing.
+            MXLog.error("Missing room info for \(room.id())")
+            return .placeholder(room: room)
         }
         
         var attributedLastMessage: AttributedString?

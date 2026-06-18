@@ -119,6 +119,34 @@ extension RoomSummary: CustomStringConvertible {
 }
 
 extension RoomSummary {
+    /// An empty summary used when the room info is momentarily unavailable (e.g. while the client tears
+    /// down on logout). Keeps the diff indices aligned with the SDK instead of crashing.
+    static func placeholder(room: Room) -> RoomSummary {
+        RoomSummary(room: room,
+                    id: room.id(),
+                    joinRequestType: nil,
+                    name: room.id(),
+                    isDirect: false,
+                    isSpace: false,
+                    avatarURL: nil,
+                    heroes: [],
+                    activeMembersCount: 0,
+                    lastMessage: nil,
+                    lastMessageDate: nil,
+                    lastMessageState: nil,
+                    unreadMessagesCount: 0,
+                    unreadMentionsCount: 0,
+                    unreadNotificationsCount: 0,
+                    notificationMode: nil,
+                    canonicalAlias: nil,
+                    alternativeAliases: [],
+                    hasOngoingCall: false,
+                    activeCallIntent: nil,
+                    isMarkedUnread: false,
+                    isFavourite: false,
+                    isTombstoned: false)
+    }
+    
     init(room: Room, id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool, hasUnreadNotifications: Bool) {
         self.room = room
         self.id = id
