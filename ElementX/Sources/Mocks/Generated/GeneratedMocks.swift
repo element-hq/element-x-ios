@@ -2470,20 +2470,20 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - pauseServices
 
-    private let pauseServicesCompletionCallsCountLock = NSLock()
-    private nonisolated(unsafe) var pauseServicesCompletionUnderlyingCallsCount = 0
-    var pauseServicesCompletionCallsCount: Int {
-        get { pauseServicesCompletionCallsCountLock.withLock { pauseServicesCompletionUnderlyingCallsCount } }
-        set { pauseServicesCompletionCallsCountLock.withLock { pauseServicesCompletionUnderlyingCallsCount = newValue } }
+    private let pauseServicesCallsCountLock = NSLock()
+    private nonisolated(unsafe) var pauseServicesUnderlyingCallsCount = 0
+    var pauseServicesCallsCount: Int {
+        get { pauseServicesCallsCountLock.withLock { pauseServicesUnderlyingCallsCount } }
+        set { pauseServicesCallsCountLock.withLock { pauseServicesUnderlyingCallsCount = newValue } }
     }
-    var pauseServicesCompletionCalled: Bool {
-        return pauseServicesCompletionCallsCount > 0
+    var pauseServicesCalled: Bool {
+        return pauseServicesCallsCount > 0
     }
-    nonisolated(unsafe) var pauseServicesCompletionClosure: (((() -> Void)?) -> Void)?
+    nonisolated(unsafe) var pauseServicesClosure: (() async -> Void)?
 
-    func pauseServices(completion: (() -> Void)?) {
-        pauseServicesCompletionCallsCountLock.withLock { pauseServicesCompletionUnderlyingCallsCount += 1 }
-        pauseServicesCompletionClosure?(completion)
+    @concurrent func pauseServices() async {
+        pauseServicesCallsCountLock.withLock { pauseServicesUnderlyingCallsCount += 1 }
+        await pauseServicesClosure?()
     }
     //MARK: - expireSyncSessions
 
