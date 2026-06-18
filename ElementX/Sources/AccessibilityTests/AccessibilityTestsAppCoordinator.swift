@@ -40,8 +40,6 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
         
         MXLog.configure(currentTarget: "accessibility-tests")
         
-        let appSettings = AppSettings.volatile()
-        
         guard let name = ProcessInfo.accessibilityViewID,
               let previewType = TestablePreviewsDictionary.dictionary[name] else {
             fatalError("Unable to launch with unknown screen.")
@@ -125,7 +123,6 @@ struct PreviewsWrapperView: View {
         self.previews = previews
     }
     
-    @MainActor
     func updateCurrentIndex() async {
         let newIndex = currentIndex + 1
         guard newIndex < previews.count else {
@@ -142,14 +139,17 @@ struct PreviewsWrapperView: View {
         
         switch fulfillmentSource {
         case .publisher(let publisher):
-            _ = await publisher
-                // Not sure whye byt some publisher seem to not properly comunicate their completion,
-                // so we added a timeout. Since we are going to migrate from publishers to stream,
-                // this is a temporary solution
+            // Not sure why but some publishers seem to not properly communicate their completion,
+            // so we added a timeout. Since we are going to migrate from publishers to streams,
+            // this is a temporary solution
+            var iterator = publisher
                 .timeout(.seconds(1), scheduler: DispatchQueue.main)
-                .values.first { $0 == true }
+                .values
+                .makeAsyncIterator()
+            while let value = await iterator.next(isolation: #isolation), value == false { }
         case .sequence(let sequence):
-            _ = await sequence.first { $0 == true }
+            var iterator = sequence.makeAsyncIterator()
+            while let value = await iterator.next(isolation: #isolation), value == false { }
         case .none:
             break
         }

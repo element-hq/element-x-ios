@@ -9,7 +9,7 @@
 import SceneKit
 import SwiftUI
 
-class EffectsScene: SCNScene {
+nonisolated class EffectsScene: SCNScene {
     static let colors: [Color] = [
         .blue,
         .red,
@@ -54,7 +54,7 @@ class EffectsScene: SCNScene {
     }
 }
 
-private extension Color {
+private nonisolated extension Color {
     /// The color's components as an array of floats in the extended linear sRGB colorspace.
     ///
     /// SceneKit works in a colorspace with a linear gamma, which is why this conversion is necessary.

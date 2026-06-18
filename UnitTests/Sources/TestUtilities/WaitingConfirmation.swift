@@ -114,13 +114,26 @@ func waitForConfirmation<R>(_ comment: Comment? = nil,
                                   expectedCount: expectedCount,
                                   isolation: isolation,
                                   sourceLocation: sourceLocation) { confirmation in
-        let result = try body(.init(continuation: continuation,
-                                    expectedCount: expectedCount))
+        let result = try await runBody(on: isolation,
+                                       body,
+                                       with: .init(continuation: continuation,
+                                                   expectedCount: expectedCount))
         for await _ in stream {
             confirmation()
         }
         return result
     }
+}
+
+/// Runs the body on the given actor, so that it can safely touch the caller's isolated state.
+///
+/// Swift Testing's `confirmation` runs its closure on the concurrent executor regardless of the
+/// isolation parameter, so without this hop a body that synchronously triggers main actor
+/// work (e.g. sending a view action) would crash on the runtime's executor check.
+private func runBody<R>(on isolation: isolated (any Actor)?,
+                        _ body: (WaitingConfirmation) throws -> R,
+                        with confirmation: WaitingConfirmation) rethrows -> R {
+    try body(confirmation)
 }
 
 /// Waits for a confirmation to be triggered an expected number of times within a synchronous body,
@@ -181,8 +194,10 @@ func waitForConfirmation<R>(_ comment: Comment? = nil,
                                   expectedCount: expectedCount,
                                   isolation: isolation,
                                   sourceLocation: sourceLocation) { confirmation in
-        let result = try body(.init(continuation: continuation,
-                                    expectedCount: expectedCount))
+        let result = try await runBody(on: isolation,
+                                       body,
+                                       with: .init(continuation: continuation,
+                                                   expectedCount: expectedCount))
         
         // The reason why I don't add to the task group directly the non timeout implementation
         // is that I do not want the body to be marked as @escaping and thus to be able to capture

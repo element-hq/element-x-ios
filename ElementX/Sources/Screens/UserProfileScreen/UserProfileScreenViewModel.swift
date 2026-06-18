@@ -74,9 +74,20 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     
     // MARK: - Private
     
+    // The proxies aren't Sendable, fetch through these helpers so that
+    // they never leave the main actor when running calls in parallel.
+    
+    private func fetchProfile() async -> Result<UserProfileProxy, ClientProxyError> {
+        await userSession.clientProxy.profile(for: state.userID)
+    }
+    
+    private func fetchUserIdentity() async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
+        await userSession.clientProxy.userIdentity(for: state.userID, fallBackToServer: true)
+    }
+    
     private func loadProfile() async {
-        async let profileResult = userSession.clientProxy.profile(for: state.userID)
-        async let identityResult = userSession.clientProxy.userIdentity(for: state.userID, fallBackToServer: true)
+        async let profileResult = fetchProfile()
+        async let identityResult = fetchUserIdentity()
         
         switch await profileResult {
         case .success(let userProfile):

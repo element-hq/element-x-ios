@@ -134,17 +134,13 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             try await withThrowingTaskGroup(of: Void.self) { group in
                 if state.avatarDidChange {
                     group.addTask {
-                        if let localMedia = await self.state.localMedia {
-                            try await self.clientProxy.setUserAvatar(media: localMedia).get()
-                        } else if await self.state.selectedAvatarURL == nil {
-                            try await self.clientProxy.removeUserAvatar().get()
-                        }
+                        try await self.saveAvatar()
                     }
                 }
                 
                 if state.nameDidChange {
                     group.addTask {
-                        try await self.clientProxy.setUserDisplayName(self.state.bindings.name).get()
+                        try await self.saveDisplayName()
                     }
                 }
                 
@@ -157,5 +153,17 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                                              title: L10n.screenEditProfileErrorTitle,
                                              message: L10n.screenEditProfileError)
         }
+    }
+    
+    private func saveAvatar() async throws {
+        if let localMedia = state.localMedia {
+            try await clientProxy.setUserAvatar(media: localMedia).get()
+        } else if state.selectedAvatarURL == nil {
+            try await clientProxy.removeUserAvatar().get()
+        }
+    }
+    
+    private func saveDisplayName() async throws {
+        try await clientProxy.setUserDisplayName(state.bindings.name).get()
     }
 }

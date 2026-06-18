@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ElementCallServiceNotificationKey: String {
+nonisolated enum ElementCallServiceNotificationKey: String {
     case roomID
     case roomDisplayName
     /// When an incoming call is set to ring, there will be a `m.rtc.notification`event  (MSC4075).
@@ -19,4 +19,4 @@ enum ElementCallServiceNotificationKey: String {
     case isVoiceCall
 }
 
-let ElementCallServiceNotificationDiscardDelta = 15.0
+nonisolated let ElementCallServiceNotificationDiscardDelta = 15.0

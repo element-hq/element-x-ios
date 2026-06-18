@@ -11,6 +11,7 @@ import Foundation
 import MatrixRustSDKMocks
 import Testing
 
+@MainActor
 struct RoomSummaryTests {
     // swiftlint:disable:next large_tuple
     let roomDetails: (id: String, name: String, avatarURL: URL) = ("room_id", "Room Name", "mxc://hs.tld/room/avatar")

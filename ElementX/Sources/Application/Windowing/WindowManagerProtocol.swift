@@ -18,7 +18,6 @@ protocol SecureWindowManagerDelegate: AnyObject {
     func windowManagerDidConfigureWindows(_ windowManager: SecureWindowManagerProtocol)
 }
 
-@MainActor
 protocol SecureWindowManagerProtocol: WindowManagerProtocol {
     var delegate: SecureWindowManagerDelegate? { get set }
     

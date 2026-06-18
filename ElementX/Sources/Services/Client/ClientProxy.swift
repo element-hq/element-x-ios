@@ -247,8 +247,11 @@ class ClientProxy: ClientProxyProtocol {
         roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
         
         delegateHandle = try client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
-            self?.hasEncounteredAuthError = true
-            self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+            // Called by the SDK from arbitrary threads, hop to the main actor where the proxy lives.
+            Task { @MainActor in
+                self?.hasEncounteredAuthError = true
+                self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+            }
         } backgroundTaskErrorCallback: { error in
             switch error {
             case .panic(let message, let backtrace):
@@ -628,7 +631,8 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         if !staticRoomSummaryProvider.statePublisher.value.isLoaded {
-            _ = await staticRoomSummaryProvider.statePublisher.values.first { $0.isLoaded }
+            var iterator = staticRoomSummaryProvider.statePublisher.values.makeAsyncIterator()
+            while let state = await iterator.next(isolation: #isolation), !state.isLoaded { }
         }
         
         if shouldAwait {
@@ -904,7 +908,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func recentlyVisitedRooms(filter: (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
+    func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
         let maxResultsToReturn = 5
         
         guard case let .success(roomIdentifiers) = await recentlyVisitedRoomIDs() else {
@@ -1005,7 +1009,7 @@ class ClientProxy: ClientProxyProtocol {
             }
             .store(in: &cancellables)
         
-        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: SDKListener { [weak self] ignoredUsers in
+        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: SDKListener.onMainActor { [weak self] ignoredUsers in
             self?.ignoredUsersSubject.send(ignoredUsers)
         })
         
@@ -1014,12 +1018,12 @@ class ClientProxy: ClientProxyProtocol {
             Task { await self?.updateVerificationState(verificationState) }
         })
         
-        sendQueueStatusListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SDKListener { [weak self] roomID, error in
+        sendQueueStatusListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SDKListener.onMainActor { [weak self] roomID, error in
             MXLog.error("Send queue failed in room: \(roomID) with error: \(error)")
             self?.sendQueueStatusSubject.send(false)
         })
         
-        sendQueueUpdatesListenerTaskHandle = try? await client.subscribeToSendQueueUpdates(listener: SDKListener { [analyticsService] _, update in
+        sendQueueUpdatesListenerTaskHandle = try? await client.subscribeToSendQueueUpdates(listener: SDKListener.onMainActor { [analyticsService] _, update in
             switch update {
             case .newLocalEvent(let transactionID):
                 analyticsService.signpost.startTransaction(.sendMessage(uuid: transactionID))
@@ -1172,7 +1176,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createSyncServiceStateObserver(_ syncService: SyncService) -> TaskHandle {
-        syncService.state(listener: SDKListener { [weak self] state in
+        syncService.state(listener: SDKListener.onMainActor { [weak self] state in
             guard let self else { return }
             
             MXLog.info("Received sync service update: \(state)")
@@ -1190,7 +1194,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private func createMediaPreviewConfigObserver() async -> TaskHandle? {
         do {
-            return try await client.subscribeToMediaPreviewConfig(listener: SDKListener { [weak self] config in
+            return try await client.subscribeToMediaPreviewConfig(listener: SDKListener.onMainActor { [weak self] config in
                 guard let self else { return }
                 
                 if let config {
@@ -1210,7 +1214,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private func createLiveLocationOwnInfoUpdatesObserver() -> TaskHandle? {
         do {
-            return try client.subscribeToOwnBeaconInfoUpdates(listener: SDKListener { [weak self] update in
+            return try client.subscribeToOwnBeaconInfoUpdates(listener: SDKListener.onMainActor { [weak self] update in
                 guard let self else { return }
                 let appUpdate = LiveLocationOwnInfoUpdate(roomID: update.roomId,
                                                           eventID: update.eventId,
@@ -1224,7 +1228,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createRoomListServiceObserver(_ roomListService: RoomListService) -> TaskHandle {
-        roomListService.state(listener: SDKListener { [weak self] state in
+        roomListService.state(listener: SDKListener.onMainActor { [weak self] state in
             guard let self else { return }
             
             MXLog.info("Received room list update: \(state)")
@@ -1246,7 +1250,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createRoomListLoadingStateUpdateObserver(_ roomListService: RoomListService) -> TaskHandle {
-        roomListService.syncIndicator(delayBeforeShowingInMs: 1000, delayBeforeHidingInMs: 0, listener: SDKListener { [weak self] state in
+        roomListService.syncIndicator(delayBeforeShowingInMs: 1000, delayBeforeHidingInMs: 0, listener: SDKListener.onMainActor { [weak self] state in
             guard let self else { return }
             
             switch state {

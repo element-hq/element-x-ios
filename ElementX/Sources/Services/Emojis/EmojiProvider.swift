@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Emojibase
+@preconcurrency import Emojibase
 import Foundation
 
 class EmojiProvider: EmojiProviderProtocol {
@@ -114,7 +114,7 @@ class EmojiProvider: EmojiProviderProtocol {
     }
 }
 
-extension EmojibaseDatasource: EmojiLoaderProtocol {
+nonisolated extension EmojibaseDatasource: EmojiLoaderProtocol {
     func load() async -> [EmojiCategory] {
         do {
             let store: EmojibaseStore = try await load()

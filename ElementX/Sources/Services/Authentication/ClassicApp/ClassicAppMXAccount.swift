@@ -52,11 +52,11 @@ struct ClassicAppAccount: Equatable, CustomStringConvertible {
 
 final class ClassicAppMXAccount: NSObject, NSCoding {
     /// The obtained user ID.
-    var userID: String
+    let userID: String
     /// The access token to create a MXRestClient.
-    var accessToken: String
+    let accessToken: String
     /// The homeserver url (ex: "https://matrix.org").
-    var homeserverURL: URL
+    let homeserverURL: URL
     
     /// Disable the account without logging out (NO by default).
     ///
@@ -72,7 +72,7 @@ final class ClassicAppMXAccount: NSObject, NSCoding {
     }
     
     /// Override the existing `CustomStringConvertible` conformance.
-    override var description: String {
+    override nonisolated var description: String {
         "ClassicAppMXAccount(userID: \(userID), homeserverURL: \(homeserverURL), isDisabled: \(isDisabled), isSoftLogout: \(isSoftLogout))"
     }
     

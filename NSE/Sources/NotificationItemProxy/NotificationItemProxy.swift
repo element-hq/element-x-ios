@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 import UserNotifications
 
-struct NotificationItemProxy: NotificationItemProxyProtocol {
+nonisolated struct NotificationItemProxy: NotificationItemProxyProtocol {
     let notificationItem: NotificationItem
     let eventID: String
     let receiverID: String
@@ -91,7 +91,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 }
 
-struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
+nonisolated struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     let eventID: String
     
     var event: NotificationEvent? {

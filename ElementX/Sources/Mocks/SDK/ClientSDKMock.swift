@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
 
-extension ClientSDKMock {
+nonisolated extension ClientSDKMock {
     struct Configuration {
         // MARK: Authentication
         
@@ -73,7 +73,7 @@ extension ClientSDKMock {
     }
 }
 
-extension HomeserverLoginDetailsSDKMock {
+nonisolated extension HomeserverLoginDetailsSDKMock {
     convenience init(configuration: ClientSDKMock.Configuration) {
         self.init()
         
@@ -89,7 +89,7 @@ extension HomeserverLoginDetailsSDKMock {
     }
 }
 
-extension OAuthAuthorizationDataSDKMock {
+nonisolated extension OAuthAuthorizationDataSDKMock {
     convenience init(configuration: ClientSDKMock.Configuration) {
         self.init()
         

@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-enum HTMLFixtures: String, CaseIterable {
+nonisolated enum HTMLFixtures: String, CaseIterable {
     case plainText
     case headers
     case paragraphs

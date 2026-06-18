@@ -52,7 +52,7 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
         case textField(text: Binding<String>, axis: Axis?)
         case secureField(text: Binding<String>)
         
-        case custom(() -> CustomView)
+        case custom(@MainActor () -> CustomView)
         
         public static func textField(text: Binding<String>) -> Self {
             .textField(text: text, axis: nil)

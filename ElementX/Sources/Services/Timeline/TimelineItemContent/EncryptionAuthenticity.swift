@@ -13,7 +13,7 @@ import SwiftUI
 /// Represents an issue with a timeline item's authenticity such as coming from an
 /// unsigned session or being sent unencrypted in an encrypted room. See Rust's
 /// `ShieldStateCode` for more information about the meaning of the cases.
-enum EncryptionAuthenticity: Hashable {
+nonisolated enum EncryptionAuthenticity: Hashable {
     enum Color { case red, gray }
     
     case notGuaranteed(color: Color)
@@ -65,7 +65,7 @@ enum EncryptionAuthenticity: Hashable {
     }
 }
 
-extension EncryptionAuthenticity {
+nonisolated extension EncryptionAuthenticity {
     init?(shieldState: ShieldState) {
         switch shieldState {
         case .red(let code):

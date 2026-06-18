@@ -241,7 +241,7 @@ struct LocationSharingScreenViewModelTests {
     }
     
     @Test
-    mutating func startLiveLocationWithNotDeterminedAuthorizationTransitionsToWhenInUse() async {
+    mutating func startLiveLocationWithNotDeterminedAuthorizationTransitionsToWhenInUse() {
         let authorizationStatusSubject = CurrentValueSubject<CLAuthorizationStatus, Never>(.notDetermined)
         let liveLocationManagerMock = LiveLocationManagerMock()
         liveLocationManagerMock.authorizationStatus = .init(authorizationStatusSubject)
@@ -252,16 +252,14 @@ struct LocationSharingScreenViewModelTests {
         
         // No alert yet — waiting for MapLibre to resolve the status to whenInUse
         #expect(context.alertInfo == nil)
+        #expect(!liveLocationManagerMock.requestAlwaysAuthorizationIfPossibleCalled)
         
-        // Simulate MapLibre resolving the Authorization to whenInUse, and confirm that the ViewModel
-        // recurses and calls requestAlwaysAuthorizationIfPossible as a result
-        await waitForConfirmation { confirmation in
-            liveLocationManagerMock.requestAlwaysAuthorizationIfPossibleClosure = {
-                confirmation()
-                return true
-            }
-            authorizationStatusSubject.send(.authorizedWhenInUse)
-        }
+        // Simulate MapLibre resolving the Authorization to whenInUse. The subject delivers
+        // synchronously on the main actor, so the ViewModel recurses and calls
+        // requestAlwaysAuthorizationIfPossible before send returns.
+        authorizationStatusSubject.send(.authorizedWhenInUse)
+        
+        #expect(liveLocationManagerMock.requestAlwaysAuthorizationIfPossibleCalled)
         
         // The request was made, so no alert — waiting for the always Authorization prompt response
         #expect(context.alertInfo == nil)

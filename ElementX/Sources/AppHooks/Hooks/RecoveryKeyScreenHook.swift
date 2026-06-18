@@ -12,7 +12,7 @@ import SwiftUI
     var actions: AnyPublisher<SecureBackupRecoveryKeyScreenCoordinatorAction, Never> { get }
 }
 
-protocol RecoveryKeyScreenHookProtocol {
+nonisolated protocol RecoveryKeyScreenHookProtocol: Sendable {
     @MainActor func makeCoordinator(parameters: SecureBackupRecoveryKeyScreenCoordinatorParameters, homeserver: String) -> any SecureBackupRecoveryKeyCoordinatorProtocol
 }
 

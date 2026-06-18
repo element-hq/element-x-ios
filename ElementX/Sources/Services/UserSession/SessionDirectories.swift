@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SessionDirectories: Hashable, Codable {
+nonisolated struct SessionDirectories: Hashable, Codable {
     let dataDirectory: URL
     let cacheDirectory: URL
     
@@ -73,7 +73,7 @@ struct SessionDirectories: Hashable, Codable {
     }
 }
 
-extension SessionDirectories {
+nonisolated extension SessionDirectories {
     /// Creates a fresh set of session directories for a new user.
     init() {
         let sessionDirectoryName = UUID().uuidString
@@ -88,7 +88,7 @@ extension SessionDirectories {
     }
 }
 
-extension SessionDirectories: CustomStringConvertible {
+nonisolated extension SessionDirectories: CustomStringConvertible {
     var description: String {
         "Data: \(dataPath) Caches: \(cachePath)"
     }

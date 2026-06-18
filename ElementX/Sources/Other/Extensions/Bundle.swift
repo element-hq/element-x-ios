@@ -9,7 +9,7 @@
 import Foundation
 import Synchronization
 
-public extension Bundle {
+public nonisolated extension Bundle {
     /// The top-level bundle that contains the entire app.
     static var app: Bundle {
         var bundle = Bundle.main

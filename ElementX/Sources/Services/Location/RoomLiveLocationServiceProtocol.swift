@@ -9,6 +9,6 @@ import Combine
 import Foundation
 
 // sourcery: AutoMockable
-protocol RoomLiveLocationServiceProtocol {
+protocol RoomLiveLocationServiceProtocol: Sendable {
     var liveLocationsPublisher: CurrentValuePublisher<[LiveLocationShare], Never> { get }
 }

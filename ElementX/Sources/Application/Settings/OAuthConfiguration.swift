@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct OAuthConfiguration {
+nonisolated struct OAuthConfiguration {
     let clientName: String
     let redirectURI: URL
     let clientURI: URL
@@ -22,7 +22,7 @@ struct OAuthConfiguration {
 #if canImport(MatrixRustSDK)
 import MatrixRustSDK
 
-extension OAuthConfiguration {
+nonisolated extension OAuthConfiguration {
     var rustValue: MatrixRustSDK.OAuthConfiguration {
         MatrixRustSDK.OAuthConfiguration(clientName: clientName,
                                          redirectUri: redirectURI.absoluteString,

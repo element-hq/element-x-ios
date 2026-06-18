@@ -289,12 +289,14 @@ private enum MultipartFormDataType {
     case file(url: URL)
 }
 
-extension BugReportService: URLSessionTaskDelegate {
+nonisolated extension BugReportService: URLSessionTaskDelegate {
+    /// URLSession calls its delegate on a background queue, hop to the main actor
+    /// where the service lives.
     func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
-        task.progress.publisher(for: \.fractionCompleted)
-            .sink { [weak self] value in
+        Task { @MainActor [weak self] in
+            for await value in task.progress.publisher(for: \.fractionCompleted).values {
                 self?.progressSubject.send(value)
             }
-            .store(in: &cancellables)
+        }
     }
 }

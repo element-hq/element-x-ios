@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-struct FrequentlyUsedEmoji: Codable, Hashable {
+nonisolated struct FrequentlyUsedEmoji: Codable, Hashable {
     let count: UInt
     let key: String
     

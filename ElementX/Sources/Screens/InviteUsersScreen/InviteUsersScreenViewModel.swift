@@ -156,9 +156,11 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                     }
                 }
                 
-                return await group.first { inviteResult in
-                    inviteResult.isFailure
-                } ?? .success(())
+                for await inviteResult in group where inviteResult.isFailure {
+                    return inviteResult
+                }
+                
+                return .success(())
             }
             
             guard case .failure = result else {

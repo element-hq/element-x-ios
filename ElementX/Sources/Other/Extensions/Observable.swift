@@ -14,26 +14,34 @@ extension Observable {
     /// https://github.com/swiftlang/swift-evolution/blob/main/proposals/0475-observed.md
     ///
     /// - Parameter property: The key path to the property you would like to observe.
-    func observe<Value>(_ property: KeyPath<Self, Value>) -> AsyncStream<Value> {
-        AsyncStream { continuation in
-            let isActive = Mutex(true)
-            
-            @Sendable func observe() {
+    @MainActor func observe<Value: Sendable>(_ property: KeyPath<Self, Value>) -> AsyncStream<Value> {
+        let (stream, continuation) = AsyncStream<Value>.makeStream()
+        let (changeSignals, changeSignaller) = AsyncStream<Void>.makeStream()
+        
+        // Read and yield the initial value synchronously at subscription time,
+        // otherwise observers miss changes made right after creating the stream.
+        let initialValue = withObservationTracking {
+            self[keyPath: property]
+        } onChange: {
+            changeSignaller.yield()
+        }
+        continuation.yield(initialValue)
+        
+        let task = Task { @MainActor in
+            // The signal is sent on willSet, but as this task runs on the next main
+            // executor job the new value will have been set by the time we read it.
+            for await _ in changeSignals {
                 let value = withObservationTracking {
                     self[keyPath: property]
                 } onChange: {
-                    // Handle the update on the next run loop as this is willSet not didSet.
-                    DispatchQueue.main.async {
-                        guard isActive.withLock({ $0 }) else { return }
-                        observe()
-                    }
+                    changeSignaller.yield()
                 }
                 continuation.yield(value)
             }
-            
-            continuation.onTermination = { _ in isActive.withLock { $0 = false } }
-            
-            observe()
         }
+        
+        continuation.onTermination = { _ in task.cancel() }
+        
+        return stream
     }
 }

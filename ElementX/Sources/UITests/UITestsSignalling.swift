@@ -112,7 +112,8 @@ enum UITestsSignalling {
             guard mode == .tests else { fatalError("The app can't wait for itself.") }
             
             guard !isConnected else { return }
-            await _ = signals.values.first { $0 == .ready }
+            var iterator = signals.values.makeAsyncIterator()
+            while let signal = await iterator.next(isolation: #isolation), signal != .ready { }
             NSLog("UITestsSignalling: Connected to app.")
         }
         

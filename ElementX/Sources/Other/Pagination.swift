@@ -11,7 +11,7 @@ enum PaginationDirection: String {
     case backwards, forwards
 }
 
-enum PaginationState {
+nonisolated enum PaginationState {
     case idle
     case endReached
     case paginating

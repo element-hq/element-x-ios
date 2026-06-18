@@ -59,7 +59,7 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 {% set enumName %}{{param.enumName|default:"L10n"}}{% endset %}
-{{accessModifier}} enum {{enumName}} {
+{{accessModifier}} nonisolated enum {{enumName}} {
   {% if tables.count > 1 or param.forceFileNameEnum %}
   {% for table in tables %}
     {% filter indent:2 %}{% call recursiveBlock table.name table.levels %}{% endfilter %}
@@ -73,7 +73,7 @@ import Foundation
 
 // MARK: - Implementation Details
 
-extension {{enumName}} {
+nonisolated extension {{enumName}} {
   static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
     // Use preferredLocalizations to get a language that is in the bundle and the user's preferred list of languages.
     let languages = Bundle.overrideLocalizations ?? Bundle.app.preferredLocalizations

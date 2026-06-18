@@ -8,7 +8,6 @@
 
 import Foundation
 
-@MainActor
 struct TimelineItemMenuActionProvider {
     let timelineItem: RoomTimelineItemProtocol
     let canCurrentUserSendMessage: Bool

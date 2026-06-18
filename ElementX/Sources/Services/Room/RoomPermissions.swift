@@ -74,7 +74,7 @@ struct RoomPermissionsSetting: Identifiable {
     }
 }
 
-struct RoomPermissions {
+nonisolated struct RoomPermissions {
     /// The level required to ban a user.
     var ban: Int64
     /// The level required to invite a user.

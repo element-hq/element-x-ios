@@ -15,7 +15,7 @@ struct KeychainCredentials {
 }
 
 // sourcery: AutoMockable
-protocol KeychainControllerProtocol: ClientSessionDelegate {
+nonisolated protocol KeychainControllerProtocol: ClientSessionDelegate {
     // MARK: Restoration Tokens
     
     func setRestorationToken(_ restorationToken: RestorationToken, forUsername: String)

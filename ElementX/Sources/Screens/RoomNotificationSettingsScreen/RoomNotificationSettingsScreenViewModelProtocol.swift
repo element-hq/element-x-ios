@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol RoomNotificationSettingsScreenViewModelProtocol {
     var actions: AnyPublisher<RoomNotificationSettingsScreenViewModelAction, Never> { get }
     var context: RoomNotificationSettingsScreenViewModelType.Context { get }

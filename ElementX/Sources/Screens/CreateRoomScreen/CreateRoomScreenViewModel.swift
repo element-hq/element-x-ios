@@ -303,9 +303,9 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
     
     private func addRoomToSpace(roomProxy: JoinedRoomProxyProtocol, spaceID: String) async {
         roomProxy.subscribeToRoomInfoUpdates()
-        let runner = ExpiringTaskRunner {
+        let runner = ExpiringTaskRunner { @MainActor in
             // Necessary to build the room cache so that the space can be added as a parent.
-            _ = await roomProxy.infoPublisher.values.first { $0.powerLevels != nil }
+            _ = await roomProxy.infoPublisher.values.first { @Sendable in $0.powerLevels != nil }
         }
         
         do {

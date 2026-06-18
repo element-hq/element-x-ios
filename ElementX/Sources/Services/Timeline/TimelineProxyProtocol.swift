@@ -53,7 +53,7 @@ enum TimelineProxyError: Error {
 /// Element X proxies generally wrap the counterpart RustSDK objects while providing platform specific
 /// interfaces. In this case it composes methods for interacting with a room's timeline and should be used alongside
 /// the ``TimelineItemProviderProtocol`` which offers a reactive interface to timeline changes.
-protocol TimelineProxyProtocol {
+protocol TimelineProxyProtocol: Sendable {
     var timelineItemProvider: TimelineItemProviderProtocol { get }
     
     func subscribeForUpdates() async

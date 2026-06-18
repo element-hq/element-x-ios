@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol AnalyticsSettingsScreenViewModelProtocol {
     var context: AnalyticsSettingsScreenViewModelType.Context { get }
 }

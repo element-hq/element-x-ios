@@ -10,7 +10,7 @@ import Foundation
 
 extension Date {
     /// The date formatted with the minimal necessary units given how long ago it occurred.
-    func formattedMinimal() -> String {
+    nonisolated func formattedMinimal() -> String {
         let calendar = Calendar.current
         
         if calendar.isDateInToday(self) {
@@ -35,7 +35,7 @@ extension Date {
     }
     
     /// The date of an expiration formatted with the minimal necessary units given how long in the future it is.
-    func formattedExpiration() -> String {
+    nonisolated func formattedExpiration() -> String {
         let calendar = Calendar.current
         let now = Date.now
         
@@ -75,12 +75,12 @@ extension Date {
     }
     
     /// The date formatted as just the time, for use in timeline items specifically.
-    func formattedTime() -> String {
+    nonisolated func formattedTime() -> String {
         formatted(date: .omitted, time: .shortened)
     }
     
     /// A fixed date used for mocks, previews etc.
-    static var mock: Date {
+    nonisolated static var mock: Date {
         DateComponents(calendar: .current, year: 2007, month: 1, day: 9, hour: 9, minute: 41).date ?? .now
     }
 }

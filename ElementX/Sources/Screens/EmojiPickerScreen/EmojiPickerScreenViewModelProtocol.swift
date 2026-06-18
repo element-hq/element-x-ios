@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol EmojiPickerScreenViewModelProtocol {
     var actions: AnyPublisher<EmojiPickerScreenViewModelAction, Never> { get }
     var context: EmojiPickerScreenViewModelType.Context { get }

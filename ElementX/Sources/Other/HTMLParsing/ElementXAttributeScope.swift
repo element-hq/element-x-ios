@@ -74,7 +74,7 @@ enum InlineCodeAttribute: AttributedStringKey {
 }
 
 // periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
-extension AttributeScopes {
+nonisolated extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
         let blockquote: BlockquoteAttribute
         
@@ -101,7 +101,7 @@ extension AttributeScopes {
 }
 
 // periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
-extension AttributeDynamicLookup {
+nonisolated extension AttributeDynamicLookup {
     subscript<T: AttributedStringKey>(dynamicMember keyPath: KeyPath<AttributeScopes.ElementXAttributes, T>) -> T {
         self[T.self]
     }

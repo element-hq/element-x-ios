@@ -28,7 +28,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
                 .accessibilityIdentifier(A11yIdentifiers.notificationSettingsEditScreen.roomName(room.name))
     }
     
-    @ViewBuilder @MainActor
+    @ViewBuilder
     var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
@@ -39,7 +39,6 @@ struct NotificationSettingsEditScreenRoomCell: View {
         }
     }
     
-    @MainActor
     var roomDetailsLabel: ListRowDetails<EmptyView>? {
         guard let mode = room.notificationMode else { return nil }
         return .label(title: context.viewState.strings.string(for: mode),

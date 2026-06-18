@@ -10,6 +10,7 @@
 import Foundation
 import Testing
 
+@MainActor
 struct AppRouteURLParserTests {
     var appSettings: AppSettings
     var appRouteURLParser: AppRouteURLParser

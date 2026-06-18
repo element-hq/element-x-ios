@@ -11,17 +11,18 @@ import Foundation
 import MatrixRustSDK
 
 private final class WeakNotificationSettingsProxy: NotificationSettingsDelegate {
-    private weak var proxy: NotificationSettingsProxy?
+    @MainActor private weak var proxy: NotificationSettingsProxy?
     
-    init(proxy: NotificationSettingsProxy) {
+    @MainActor init(proxy: NotificationSettingsProxy) {
         self.proxy = proxy
     }
     
     // MARK: - NotificationSettingsDelegate
     
+    /// Called by the SDK from arbitrary threads, hop to the main actor where the proxy lives.
     func settingsDidChange() {
-        Task {
-            await proxy?.settingsDidChange()
+        Task { @MainActor in
+            self.proxy?.settingsDidChange()
         }
     }
 }
@@ -119,12 +120,18 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
     func updatedSettings() async {
         // The timeout avoids having to wait indefinitely. This can happen when setting a mode that is already the current mode,
         // as in this case no API call is made by the RustSDK and the push rules are therefore not updated.
-        _ = await callbacks
+        var iterator = callbacks
             .timeout(.seconds(2.0), scheduler: DispatchQueue.main, options: nil, customError: nil)
-            .values.first { $0 == .settingsDidChange }
+            .values
+            .makeAsyncIterator()
+        
+        while let callback = await iterator.next(isolation: #isolation) {
+            if callback == .settingsDidChange {
+                break
+            }
+        }
     }
     
-    @MainActor
     func settingsDidChange() {
         callbacks.send(.settingsDidChange)
     }

@@ -148,7 +148,7 @@ struct PollFormScreen: View {
 }
 
 private extension View {
-    @MainActor @ViewBuilder
+    @ViewBuilder
     func trackAnalyticsIfNeeded(context: PollFormScreenViewModel.Context) -> some View {
         switch context.viewState.mode {
         case .edit:

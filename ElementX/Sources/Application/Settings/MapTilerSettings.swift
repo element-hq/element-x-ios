@@ -12,7 +12,7 @@ import Foundation
 ///
 /// Either resolves to a locally-bundled MapTiler configuration, or to a remote
 /// `style.json` URL
-enum MapTilerSettings: Equatable {
+nonisolated enum MapTilerSettings: Equatable {
     /// All of the configuration necessary to use MapTiler maps.
     ///
     /// The style IDs need to be generated with the account that the API key belongs to. For more information read

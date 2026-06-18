@@ -9,7 +9,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-struct ImageRoomTimelineItemContent: Hashable {
+nonisolated struct ImageRoomTimelineItemContent: Hashable {
     let filename: String
     var caption: String?
     var formattedCaption: AttributedString?

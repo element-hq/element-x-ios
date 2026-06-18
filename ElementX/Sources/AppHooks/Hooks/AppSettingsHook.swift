@@ -8,8 +8,8 @@
 
 import Foundation
 
-protocol AppSettingsHookProtocol {
-    func configure(_ appSettings: AppSettings) -> AppSettings
+nonisolated protocol AppSettingsHookProtocol: Sendable {
+    @MainActor func configure(_ appSettings: AppSettings) -> AppSettings
 }
 
 struct DefaultAppSettingsHook: AppSettingsHookProtocol {

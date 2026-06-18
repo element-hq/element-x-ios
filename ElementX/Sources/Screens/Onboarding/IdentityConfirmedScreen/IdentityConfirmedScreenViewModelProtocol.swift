@@ -7,7 +7,6 @@
 
 import Combine
 
-@MainActor
 protocol IdentityConfirmedScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<IdentityConfirmedScreenViewModelAction, Never> { get }
     var context: IdentityConfirmedScreenViewModelType.Context { get }

@@ -8,7 +8,7 @@
 import Foundation
 
 /// Represents a notification alert tone and its backing audio file location.
-struct NotificationTone: Hashable, Comparable, Codable {
+nonisolated struct NotificationTone: Hashable, Comparable, Codable {
     /// Display name for the tone, falling back to the filename stem.
     var label: String {
         labelOverride ?? URL(filePath: "/\(relativePath.last, default: "")").deletingPathExtension().lastPathComponent

@@ -9,13 +9,13 @@
 import Foundation
 import MatrixRustSDK
 
-enum RoomNotificationModeProxy: String, CaseIterable, Equatable {
+nonisolated enum RoomNotificationModeProxy: String, CaseIterable, Equatable {
     case allMessages
     case mentionsAndKeywordsOnly
     case mute
 }
 
-extension RoomNotificationModeProxy {
+nonisolated extension RoomNotificationModeProxy {
     static func from(roomNotificationMode: RoomNotificationMode) -> Self {
         switch roomNotificationMode {
         case .allMessages:

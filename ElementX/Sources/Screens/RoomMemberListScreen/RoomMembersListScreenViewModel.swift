@@ -123,7 +123,10 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
     
     private func buildMembersDetails(members: [RoomMemberProxyProtocol]) async -> RoomMembersDetails {
-        await Task.detached { [userSession, roomProxy] in
+        // We don't care about identity statuses on non-encrypted rooms
+        let isEncrypted = roomProxy.infoPublisher.value.isEncrypted
+        
+        return await Task.detached { [weak self] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
             var invitedMembers: [RoomMemberListScreenEntry] = .init()
             var joinedMembers: [RoomMemberListScreenEntry] = .init()
@@ -131,10 +134,8 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             
             for member in members {
                 var verificationState: UserIdentityVerificationState = .notVerified
-                if roomProxy.infoPublisher.value.isEncrypted, // We don't care about identity statuses on non-encrypted rooms
-                   case let .success(userIdentity) = await userSession.clientProxy.userIdentity(for: member.userID, fallBackToServer: false),
-                   let userIdentity {
-                    verificationState = userIdentity.verificationState
+                if isEncrypted, let fetchedState = await self?.userIdentityVerificationState(for: member.userID) {
+                    verificationState = fetchedState
                 }
                 
                 switch member.membership {
@@ -154,6 +155,15 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                          bannedMembers: bannedMembers.sorted { $0.member.id.localizedStandardCompare($1.member.id) == .orderedAscending }) // Re-sort ignoring display name.
         }
         .value
+    }
+    
+    /// The client proxy isn't Sendable, fetch identities through this helper so
+    /// that it never leaves the main actor.
+    private func userIdentityVerificationState(for userID: String) async -> UserIdentityVerificationState? {
+        guard case let .success(userIdentity) = await userSession.clientProxy.userIdentity(for: userID, fallBackToServer: false) else {
+            return nil
+        }
+        return userIdentity?.verificationState
     }
     
     private func selectMember(_ member: RoomMemberDetails) {
@@ -226,7 +236,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
 }
 
-private struct RoomMembersDetails {
+private nonisolated struct RoomMembersDetails {
     var invitedMembers: [RoomMemberListScreenEntry]
     var joinedMembers: [RoomMemberListScreenEntry]
     var bannedMembers: [RoomMemberListScreenEntry]

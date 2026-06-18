@@ -9,7 +9,7 @@
 import Foundation
 
 /// Properties of a matrix event that are common between all timeline items.
-struct RoomTimelineItemProperties: Hashable {
+nonisolated struct RoomTimelineItemProperties: Hashable {
     /// Information on the item this one replying to
     var replyDetails: TimelineItemReplyDetails?
     /// Whether it's part of a thread or not

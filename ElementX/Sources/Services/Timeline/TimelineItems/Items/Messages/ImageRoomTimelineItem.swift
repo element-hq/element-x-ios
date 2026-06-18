@@ -9,7 +9,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
-struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
+nonisolated struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
     let isOutgoing: Bool

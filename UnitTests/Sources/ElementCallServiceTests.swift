@@ -41,7 +41,7 @@ final class ElementCallServiceTests {
     func incomingCall() async {
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
-        await confirmation { confirmation in
+        await waitForConfirmation { confirmation in
             let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
             
             service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
@@ -62,7 +62,7 @@ final class ElementCallServiceTests {
     func incomingVoiceCall() async {
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
-        await confirmation { confirmation in
+        await waitForConfirmation { confirmation in
             let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
                 .updateIsVoice(true)
             
@@ -162,7 +162,7 @@ final class ElementCallServiceTests {
         
         // Send push #2 for the same room; the previous incoming state must be cleared,
         // so the second push gets a fresh CallID.
-        await confirmation { confirmation in
+        await waitForConfirmation { confirmation in
             let secondPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
             service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: secondPayload, for: .voIP) {
                 confirmation()
@@ -182,7 +182,7 @@ final class ElementCallServiceTests {
     @Test
     func setupCallSessionCancelsPendingUnansweredTimeout() async {
         // Schedule the 60s unanswered timer via an incoming push
-        await confirmation { confirmation in
+        await waitForConfirmation { confirmation in
             let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
             service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) {
                 confirmation()
@@ -240,7 +240,7 @@ final class ElementCallServiceTests {
         let baselineNewIncomingCount = callProvider.reportNewIncomingCallWithUpdateCompletionCallsCount
         let baselineEndedCount = callProvider.reportCallWithEndedAtReasonCallsCount
         
-        await confirmation { confirmation in
+        await waitForConfirmation { confirmation in
             service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) {
                 confirmation()
             }

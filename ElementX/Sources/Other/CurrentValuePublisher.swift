@@ -12,7 +12,7 @@ import Combine
 /// The purpose of this type is to remove the possibility to send new values on the underlying subject.
 ///
 /// `CurrentValueSubject` is documented as thread-safe but is not formally `Sendable`, hence `@unchecked`.
-struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @unchecked Sendable {
+nonisolated struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @unchecked Sendable {
     private let subject: CurrentValueSubject<Output, Failure>
     
     init(_ subject: CurrentValueSubject<Output, Failure>) {
@@ -32,7 +32,7 @@ struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @unchecked Send
     }
 }
 
-extension CurrentValueSubject {
+nonisolated extension CurrentValueSubject {
     func asCurrentValuePublisher() -> CurrentValuePublisher<Output, Failure> {
         .init(self)
     }

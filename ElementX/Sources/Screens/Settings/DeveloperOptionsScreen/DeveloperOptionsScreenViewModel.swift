@@ -59,7 +59,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         case .clearCache:
             actionsSubject.send(.clearCache)
         case .markAllRoomsAsRead:
-            Task.detached {
+            Task {
                 await self.clientProxy?.markAllRoomsAsRead()
             }
         }

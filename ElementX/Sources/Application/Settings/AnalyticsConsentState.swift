@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum AnalyticsConsentState: String, Codable {
+nonisolated enum AnalyticsConsentState: String, Codable {
     case optedOut
     case optedIn
     case unknown

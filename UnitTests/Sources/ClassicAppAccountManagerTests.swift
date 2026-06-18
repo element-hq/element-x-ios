@@ -9,6 +9,7 @@
 import Foundation
 import Testing
 
+@MainActor
 final class ClassicAppAccountManagerTests {
     let testDirectory: URL = .temporaryDirectory.appending(component: UUID().uuidString)
     let accountAESKey: Data
@@ -68,6 +69,7 @@ final class ClassicAppAccountManagerTests {
     }
 }
 
+@MainActor
 extension ClassicAppAccount {
     /// Creates a mock account based on the fixtures used by this test.
     static func mock(classicAppAccountManager: ClassicAppAccountManager, cryptoStorePassphrase: Data) -> ClassicAppAccount {

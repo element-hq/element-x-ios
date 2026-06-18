@@ -144,6 +144,9 @@ targets:
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
         DEVELOPMENT_ASSET_PATHS: DevelopmentAssets/Media
+        SWIFT_VERSION: 6.2
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
         OTHER_SWIFT_FLAGS:
         - "-DIS_MAIN_APP"
 

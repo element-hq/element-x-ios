@@ -243,7 +243,6 @@ private struct VerifiedUserSendFailureView: View {
     }
 }
 
-@MainActor
 private extension EncryptionAuthenticity {
     var foregroundStyle: SwiftUI.Color {
         switch color {

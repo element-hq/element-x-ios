@@ -9,7 +9,6 @@
 import Combine
 import Foundation
 
-@MainActor
 final class PillContext: ObservableObject {
     @Published var viewState: PillViewState = .undefined
     

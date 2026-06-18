@@ -19,7 +19,7 @@ struct SpaceAddRoomsScreenViewState: BindableState {
     var bindings = SpaceAddRoomsScreenViewStateBindings()
     
     struct Section {
-        enum SectionType: Equatable { case searchResults, suggestions }
+        nonisolated enum SectionType: Equatable { case searchResults, suggestions }
         let type: SectionType
         
         let rooms: [SpaceAddRoomsScreenRoom]

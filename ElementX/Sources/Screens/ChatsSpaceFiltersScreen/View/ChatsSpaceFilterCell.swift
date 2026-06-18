@@ -49,7 +49,7 @@ struct ChatsSpaceFilterCell: View {
         .padding(.horizontal, horizontalInsets)
     }
     
-    @ViewBuilder @MainActor
+    @ViewBuilder
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: filter.room.avatar,

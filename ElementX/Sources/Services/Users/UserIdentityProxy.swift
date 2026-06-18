@@ -8,7 +8,7 @@
 
 import MatrixRustSDK
 
-class UserIdentityProxy: UserIdentityProxyProtocol {
+final nonisolated class UserIdentityProxy: UserIdentityProxyProtocol {
     private let userIdentity: UserIdentity
     
     init(userIdentity: UserIdentity) {

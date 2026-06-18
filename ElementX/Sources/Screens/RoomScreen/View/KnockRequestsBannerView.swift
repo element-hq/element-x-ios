@@ -19,9 +19,9 @@ struct KnockRequestInfo: Equatable {
 
 struct KnockRequestsBannerView: View {
     let requests: [KnockRequestInfo]
-    let onDismiss: () -> Void
-    let onAccept: ((String) -> Void)?
-    let onViewAll: () -> Void
+    let onDismiss: @MainActor () -> Void
+    let onAccept: (@MainActor (String) -> Void)?
+    let onViewAll: @MainActor () -> Void
     var mediaProvider: MediaProviderProtocol?
     
     var body: some View {
@@ -50,9 +50,9 @@ struct KnockRequestsBannerView: View {
 
 private struct SingleKnockRequestBannerContent: View {
     let request: KnockRequestInfo
-    let onDismiss: () -> Void
-    let onAccept: ((String) -> Void)?
-    let onViewAll: () -> Void
+    let onDismiss: @MainActor () -> Void
+    let onAccept: (@MainActor (String) -> Void)?
+    let onViewAll: @MainActor () -> Void
     var mediaProvider: MediaProviderProtocol?
     
     var body: some View {
@@ -118,8 +118,8 @@ private struct SingleKnockRequestBannerContent: View {
 
 private struct MultipleKnockRequestsBannerContent: View {
     let requests: [KnockRequestInfo]
-    let onDismiss: () -> Void
-    let onViewAll: () -> Void
+    let onDismiss: @MainActor () -> Void
+    let onViewAll: @MainActor () -> Void
     var mediaProvider: MediaProviderProtocol?
     
     private var avatars: [StackedAvatarInfo] {
@@ -162,7 +162,7 @@ private struct MultipleKnockRequestsBannerContent: View {
 }
 
 private struct KnockRequestsBannerDismissButton: View {
-    let onDismiss: () -> Void
+    let onDismiss: @MainActor () -> Void
     
     var body: some View {
         Button {

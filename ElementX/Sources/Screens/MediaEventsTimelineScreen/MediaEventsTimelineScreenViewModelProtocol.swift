@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol MediaEventsTimelineScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<MediaEventsTimelineScreenViewModelAction, Never> { get }
     var context: MediaEventsTimelineScreenViewModelType.Context { get }

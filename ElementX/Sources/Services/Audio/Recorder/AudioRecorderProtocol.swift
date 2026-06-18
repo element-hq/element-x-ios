@@ -9,7 +9,7 @@
 import Combine
 import Foundation
 
-enum AudioRecorderError: Error, Equatable {
+nonisolated enum AudioRecorderError: Error, Equatable {
     case unsupportedAudioFormat
     case audioSessionFailure
     case audioEngineFailure
@@ -19,13 +19,13 @@ enum AudioRecorderError: Error, Equatable {
     case recordPermissionNotGranted
 }
 
-enum AudioRecorderAction {
+nonisolated enum AudioRecorderAction {
     case didStartRecording
     case didStopRecording
     case didFailWithError(error: AudioRecorderError)
 }
 
-protocol AudioRecorderProtocol: AnyObject {
+nonisolated protocol AudioRecorderProtocol: AnyObject, Sendable {
     var actions: AnyPublisher<AudioRecorderAction, Never> { get }
     var currentTime: TimeInterval { get }
     var isRecording: Bool { get }

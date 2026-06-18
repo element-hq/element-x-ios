@@ -14,7 +14,6 @@ import AuthenticationServices
 /// meaning that the user doesn't need to sign in again. `SFSafariViewController` doesn't
 /// have access to this session, and for some reason `prefersEphemeralWebBrowserSession`
 /// isn't sharing the session back to Safari.
-@MainActor
 class OAuthAccountSettingsPresenter: NSObject {
     private let accountURL: URL
     private let redirectURL: URL

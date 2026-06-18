@@ -142,7 +142,6 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
     }
     
-    @MainActor
     private func unignoreUser() async {
         guard let roomMemberProxy else {
             fatalError()
@@ -164,7 +163,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     }
     
     private func updateMembers() {
-        Task.detached {
+        Task {
             await self.roomProxy.updateMembers()
         }
     }

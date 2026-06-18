@@ -7,7 +7,6 @@
 
 import Combine
 
-@MainActor
 protocol SpaceAddRoomsScreenViewModelProtocol {
     var actions: AnyPublisher<SpaceAddRoomsScreenViewModelAction, Never> { get }
     var context: SpaceAddRoomsScreenViewModelType.Context { get }

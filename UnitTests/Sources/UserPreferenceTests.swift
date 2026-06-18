@@ -135,28 +135,28 @@ struct UserPreferenceTests {
     @Test
     func localOverRemoteValue() {
         let storage = VolatileUserDefaults()
-        @UserPreference(key: TestsKey.testKey, defaultValue: "", storage: storage) var preference
-        #expect(preference == "")
+        let preference = UserPreference(key: TestsKey.testKey, defaultValue: "", storage: storage)
+        #expect(preference.wrappedValue == "")
         
-        _preference.remoteValue = "remote"
-        #expect(preference == "remote")
+        preference.remoteValue = "remote"
+        #expect(preference.wrappedValue == "remote")
         
-        preference = "local"
-        #expect(preference == "local")
+        preference.wrappedValue = "local"
+        #expect(preference.wrappedValue == "local")
     }
     
     @Test
     func remoteOverLocalValue() {
         let storage = VolatileUserDefaults()
-        @UserPreference(key: TestsKey.testKey, defaultValue: "", storage: storage, mode: .remoteOverLocal) var preference
-        #expect(preference == "")
+        let preference = UserPreference(key: TestsKey.testKey, defaultValue: "", storage: storage, mode: .remoteOverLocal)
+        #expect(preference.wrappedValue == "")
         
-        _preference.remoteValue = "remote"
-        #expect(preference == "remote")
+        preference.remoteValue = "remote"
+        #expect(preference.wrappedValue == "remote")
         
-        preference = "local"
-        #expect(preference == "remote")
-        #expect(_preference.isLockedToRemote)
+        preference.wrappedValue = "local"
+        #expect(preference.wrappedValue == "remote")
+        #expect(preference.isLockedToRemote)
     }
 }
 

@@ -9,7 +9,7 @@
 import MatrixRustSDK
 import SwiftUI
 
-struct TimelineItemSender: Identifiable, Hashable {
+nonisolated struct TimelineItemSender: Identifiable, Hashable {
     static let test = TimelineItemSender(id: "@test.matrix.org")
     
     let id: String

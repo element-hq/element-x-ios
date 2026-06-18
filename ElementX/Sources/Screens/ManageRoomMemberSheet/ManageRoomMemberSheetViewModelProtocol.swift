@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol ManageRoomMemberSheetViewModelProtocol {
     var actions: AnyPublisher<ManageRoomMemberSheetViewModelAction, Never> { get }
     var context: ManageRoomMemberSheetViewModelType.Context { get }

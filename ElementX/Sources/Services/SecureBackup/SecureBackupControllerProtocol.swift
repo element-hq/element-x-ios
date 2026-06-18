@@ -9,7 +9,7 @@
 import Combine
 import Foundation
 
-enum SecureBackupRecoveryState {
+nonisolated enum SecureBackupRecoveryState {
     case unknown
     case disabled
     case enabled
@@ -19,7 +19,7 @@ enum SecureBackupRecoveryState {
     case settingUp
 }
 
-enum SecureBackupKeyBackupState {
+nonisolated enum SecureBackupKeyBackupState {
     /// Any state where backups couldn't have been enabled but we didn't explicitly disable them on this client.
     /// For all intents and purposes, within the client, this can be treated as `disabled`.
     case unknown

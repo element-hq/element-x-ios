@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol DeactivateAccountScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<DeactivateAccountScreenViewModelAction, Never> { get }
     var context: DeactivateAccountScreenViewModelType.Context { get }

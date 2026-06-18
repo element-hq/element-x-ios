@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ProcessInfo {
+nonisolated extension ProcessInfo {
     /// Flag indicating whether the app is running the unit tests.
     static var isRunningUnitTests: Bool {
         #if DEBUG

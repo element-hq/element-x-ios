@@ -7,7 +7,6 @@
 
 import Combine
 
-@MainActor
 protocol ManageAuthorizedSpacesScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<ManageAuthorizedSpacesScreenViewModelAction, Never> { get }
     var context: ManageAuthorizedSpacesScreenViewModelType.Context { get }

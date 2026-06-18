@@ -11,7 +11,7 @@ import LoremSwiftum
 import MatrixRustSDK
 import MatrixRustSDKMocks
 
-struct EventTimelineItemSDKMockConfiguration {
+nonisolated struct EventTimelineItemSDKMockConfiguration {
     var eventID: String = UUID().uuidString
     var sender = ""
     var senderProfile: ProfileDetails?
@@ -27,7 +27,7 @@ struct EventTimelineItemSDKMockConfiguration {
                                                                threadSummary: nil))
 }
 
-extension EventTimelineItem {
+nonisolated extension EventTimelineItem {
     init(configuration: EventTimelineItemSDKMockConfiguration) {
         let lazyProvider = LazyTimelineItemProviderSDKMock()
         lazyProvider.containsOnlyEmojisReturnValue = false

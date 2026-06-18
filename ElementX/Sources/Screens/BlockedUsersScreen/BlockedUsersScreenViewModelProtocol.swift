@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol BlockedUsersScreenViewModelProtocol {
     var context: BlockedUsersScreenViewModelType.Context { get }
     

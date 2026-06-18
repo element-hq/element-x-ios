@@ -8,7 +8,7 @@
 
 import MatrixRustSDK
 
-enum RoomRole: Comparable {
+nonisolated enum RoomRole: Comparable {
     /// Default role PL 0...49
     case user
     /// Able to perform room moderation actions PL 50...99
@@ -21,7 +21,7 @@ enum RoomRole: Comparable {
     case creator
 }
 
-extension RoomRole {
+nonisolated extension RoomRole {
     init(powerLevel: RoomPowerLevel) {
         do {
             let role = try suggestedRoleForPowerLevel(powerLevel: powerLevel.rustPowerLevel)
@@ -69,7 +69,7 @@ extension RoomRole {
     }
 }
 
-extension RoomRole {
+nonisolated extension RoomRole {
     init(powerLevelValue: Int64) {
         // Also this is not great, and should be handled by a `suggestedRoleForPowerLevelValue` function from the SDK
         guard powerLevelValue < 150 else {

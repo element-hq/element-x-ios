@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum EventBasedMessageTimelineItemContentType: Hashable {
+nonisolated enum EventBasedMessageTimelineItemContentType: Hashable {
     case audio(AudioRoomTimelineItemContent)
     case emote(EmoteRoomTimelineItemContent)
     case file(FileRoomTimelineItemContent)
@@ -20,11 +20,11 @@ enum EventBasedMessageTimelineItemContentType: Hashable {
     case voice(AudioRoomTimelineItemContent)
 }
 
-protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
+nonisolated protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
     var contentType: EventBasedMessageTimelineItemContentType { get }
 }
 
-extension EventBasedMessageTimelineItemProtocol {
+nonisolated extension EventBasedMessageTimelineItemProtocol {
     var supportsMediaCaption: Bool {
         switch contentType {
         case .audio, .file, .image, .video:

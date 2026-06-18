@@ -17,7 +17,6 @@ import SwiftUI
         var dismissalCallback: (() -> Void)?
     }
     
-    @MainActor
     @Observable class TabDetails {
         /// A unique tab that identifies the tab for selection.
         let tag: Tag
@@ -58,7 +57,7 @@ import SwiftUI
             module.id
         }
         
-        @MainActor var coordinator: CoordinatorProtocol? {
+        var coordinator: CoordinatorProtocol? {
             module.coordinator
         }
     }

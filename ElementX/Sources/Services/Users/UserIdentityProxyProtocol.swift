@@ -6,13 +6,13 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-enum UserIdentityVerificationState {
+nonisolated enum UserIdentityVerificationState {
     case notVerified
     case verified
     case verificationViolation
 }
 
 // sourcery: AutoMockable
-protocol UserIdentityProxyProtocol {
+nonisolated protocol UserIdentityProxyProtocol: Sendable {
     var verificationState: UserIdentityVerificationState { get }
 }

@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum LogLevel: String, Codable, Hashable {
+nonisolated enum LogLevel: String, Codable, Hashable {
     case error, warn, info, debug, trace
     
     var title: String {

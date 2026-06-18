@@ -14,7 +14,7 @@ enum SpaceRoomListProxyError: Error {
 }
 
 // sourcery: AutoMockable
-protocol SpaceRoomListProxyProtocol {
+protocol SpaceRoomListProxyProtocol: Sendable {
     var id: String { get }
     
     var spaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoom, Never> { get }

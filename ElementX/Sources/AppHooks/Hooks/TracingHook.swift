@@ -8,10 +8,10 @@
 
 import MatrixRustSDK
 
-protocol TracingHookProtocol: Sendable {
+nonisolated protocol TracingHookProtocol: Sendable {
     func update(_ configuration: TracingConfiguration, with rageshakeURL: RemotePreference<RageshakeConfiguration>)
 }
 
-struct DefaultTracingHook: TracingHookProtocol {
+nonisolated struct DefaultTracingHook: TracingHookProtocol {
     func update(_ configuration: TracingConfiguration, with rageshakeURL: RemotePreference<RageshakeConfiguration>) { }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 /// Text attachment for pills display.
-final class PillTextAttachment: NSTextAttachment {
+final nonisolated class PillTextAttachment: NSTextAttachment {
     convenience init?(attachmentData: PillTextAttachmentData) {
         let encoder = JSONEncoder()
         guard let encodedData = try? encoder.encode(attachmentData) else { return nil }
