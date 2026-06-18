@@ -10290,7 +10290,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 9.16.1;
+				minimumVersion = 9.17.0;
 			};
 		};
 		AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -10362,7 +10362,7 @@
 			repositoryURL = "https://github.com/tevelee/SwiftUI-Flow.git";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 3.3.0;
+				minimumVersion = 3.4.0;
 			};
 		};
 		EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */ = {
