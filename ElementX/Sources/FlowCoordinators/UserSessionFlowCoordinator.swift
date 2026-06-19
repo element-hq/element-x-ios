@@ -168,7 +168,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             if navigationTabCoordinator.selectedTab != .chats {
                 navigationTabCoordinator.selectedTab = .chats
             }
-        case .globalSearch:
+        case .search:
             // Switch to the dedicated search tab when it's available (iOS 26 + flag), otherwise ignore.
             if searchTabNavigationStackCoordinator != nil {
                 navigationTabCoordinator.selectedTab = .search
