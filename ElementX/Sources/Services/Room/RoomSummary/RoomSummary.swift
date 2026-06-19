@@ -80,7 +80,7 @@ nonisolated struct RoomSummary {
     }
 }
 
-extension RoomSummary: CustomStringConvertible {
+nonisolated extension RoomSummary: CustomStringConvertible {
     var description: String {
         """
         RoomSummary: - id: \(id) \
@@ -118,7 +118,7 @@ extension RoomSummary: CustomStringConvertible {
     }
 }
 
-extension RoomSummary {
+nonisolated extension RoomSummary {
     /// An empty summary used when the room info is momentarily unavailable (e.g. while the client tears
     /// down on logout). Keeps the diff indices aligned with the SDK instead of crashing.
     nonisolated static func placeholder(room: Room) -> RoomSummary {

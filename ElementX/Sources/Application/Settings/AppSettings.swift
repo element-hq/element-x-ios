@@ -442,7 +442,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     nonisolated(unsafe) var roomThreadListEnabled: Bool
     
     @UserPreference
-    nonisolated(unsafe)  var globalSearchEnabled: Bool
+    nonisolated(unsafe) var globalSearchEnabled: Bool
     
     @UserPreference
     nonisolated(unsafe) var focusEventOnNotificationTap: Bool
