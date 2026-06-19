@@ -501,7 +501,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
         _enableOnlySignedDeviceIsolationMode = UserPreference(key: .enableOnlySignedDeviceIsolationMode, defaultValue: false, storage: store)
         _knockingEnabled = UserPreference(key: .knockingEnabled, defaultValue: false, storage: store)
         _threadsEnabled = UserPreference(key: .threadsEnabled, defaultValue: false, storage: store)
-        _globalSearchEnabled = UserPreference(key: .globalSearchEnabled, defaultValue: false, storage: store)
+        _globalSearchEnabled = UserPreference(key: .globalSearchEnabled, defaultValue: ProcessInfo().isiOSAppOnMac, storage: store)
         _roomThreadListEnabled = UserPreference(key: .roomThreadListEnabled, defaultValue: false, storage: store)
         _focusEventOnNotificationTap = UserPreference(key: .focusEventOnNotificationTap, defaultValue: false, storage: store)
         _linkPreviewsEnabled = UserPreference(key: .linkPreviewsEnabled, defaultValue: false, storage: store)
