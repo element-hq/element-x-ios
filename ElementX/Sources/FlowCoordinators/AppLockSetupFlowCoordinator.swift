@@ -105,7 +105,9 @@ class AppLockSetupFlowCoordinator: FlowCoordinatorProtocol {
             
             switch (fromState, event) {
             case (.initial, .start):
-                if presentingFlow == .onboarding { return .createPIN(replacingExitingPIN: false) }
+                if presentingFlow == .onboarding {
+                    return .createPIN(replacingExitingPIN: false)
+                }
                 return appLockService.isEnabled ? .unlock : .createPIN(replacingExitingPIN: false)
             case (.unlock, .pinEntered):
                 return .settings

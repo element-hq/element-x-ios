@@ -121,7 +121,9 @@ struct RoomScreen: View {
             .alert(item: $context.alertInfo)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .onChange(of: pillSourceButtonIsVisible) { _, isVisible in
-                if !isVisible { dismissMarkAsReadPill() }
+                if !isVisible {
+                    dismissMarkAsReadPill()
+                }
             }
             .track(screen: .Room)
             .sentryTrace("\(Self.self)")

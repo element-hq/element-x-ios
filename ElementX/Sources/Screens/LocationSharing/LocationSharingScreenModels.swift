@@ -30,7 +30,9 @@ enum LocationSharingInteractionMode: Hashable {
     case viewLive(sender: TimelineItemSender?, initialLiveLocationShare: LiveLocationShare?)
     
     var isPicker: Bool {
-        if case .picker = self { return true }
+        if case .picker = self {
+            return true
+        }
         return false
     }
     
@@ -97,7 +99,9 @@ struct LocationSharingScreenViewState: BindableState {
         case .viewLive:
             return liveLocationShares.compactMap { share in
                 guard let geoURI = share.geoURI else { return nil }
-                if share.userID == ownUserID, isStoppingLiveLocation { return nil }
+                if share.userID == ownUserID, isStoppingLiveLocation {
+                    return nil
+                }
                 
                 let profile = userProfiles[share.userID] ?? UserProfileProxy(userID: share.userID)
                 let kind = LocationMarkerKind.liveUser(profile)

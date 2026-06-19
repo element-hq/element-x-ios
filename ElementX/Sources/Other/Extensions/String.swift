@@ -113,8 +113,12 @@ nonisolated extension String {
             let isStrongRTL = (0x0590...0x08FF).contains(value) ||
                 (0xFB1D...0xFDFF).contains(value) ||
                 (0xFE70...0xFEFF).contains(value)
-            if isStrongRTL { return true }
-            if scalar.properties.isAlphabetic { return false }
+            if isStrongRTL {
+                return true
+            }
+            if scalar.properties.isAlphabetic {
+                return false
+            }
         }
         return false
     }

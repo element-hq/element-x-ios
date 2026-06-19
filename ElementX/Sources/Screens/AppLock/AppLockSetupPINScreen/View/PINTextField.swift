@@ -43,7 +43,9 @@ struct PINTextField: View {
     
     func sanitize(_ pinCode: String) -> String {
         var sanitized = pinCode
-        if sanitized.count > maxLength { sanitized = String(pinCode.prefix(maxLength)) }
+        if sanitized.count > maxLength {
+            sanitized = String(pinCode.prefix(maxLength))
+        }
         return sanitized.filter(\.isNumber)
     }
 }

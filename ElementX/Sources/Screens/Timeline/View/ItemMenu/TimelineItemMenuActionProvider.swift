@@ -113,7 +113,11 @@ struct TimelineItemMenuActionProvider {
         }
         
         if canRedactItem(item) {
-            let isMedia = if case .media = timelineKind { true } else { false }
+            let isMedia = if case .media = timelineKind {
+                true
+            } else {
+                false
+            }
             secondaryActions.append(.redact(isMedia: isMedia))
         }
         

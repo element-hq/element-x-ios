@@ -98,7 +98,9 @@ public struct ListRowLabel<Icon: View>: View {
     
     var iconForegroundColor: Color {
         guard isEnabled else { return .compound.iconTertiaryAlpha }
-        if role == .destructive { return .compound.iconCriticalPrimary }
+        if role == .destructive {
+            return .compound.iconCriticalPrimary
+        }
         if hideIconBackground {
             return .compound.iconTertiaryAlpha
         } else {
@@ -111,7 +113,9 @@ public struct ListRowLabel<Icon: View>: View {
     }
     
     var iconBackgroundColor: Color {
-        if hideIconBackground { return .clear }
+        if hideIconBackground {
+            return .clear
+        }
         if #available(iOS 26, *) {
             return .clear
         } else {

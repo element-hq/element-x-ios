@@ -145,8 +145,12 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
                 state.liveLocationShares = liveLocationsShares
                     .filter { !(isStoppingLiveLocation && ownUserID == $0.userID) }
                     .sorted { lhs, rhs in
-                        if lhs.userID == ownUserID { return true }
-                        if rhs.userID == ownUserID { return false }
+                        if lhs.userID == ownUserID {
+                            return true
+                        }
+                        if rhs.userID == ownUserID {
+                            return false
+                        }
                         return lhs.timestamp > rhs.timestamp
                     }
                 

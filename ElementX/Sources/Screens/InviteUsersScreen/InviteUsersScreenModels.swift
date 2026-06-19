@@ -49,7 +49,9 @@ struct InviteUsersScreenViewState: BindableState {
     }
     
     func isUserDisabled(_ user: UserProfileProxy) -> Bool {
-        if isInviteeMandatory(user) { return true }
+        if isInviteeMandatory(user) {
+            return true
+        }
         let membershipState = membershipState(user)
         return membershipState == .invite || membershipState == .join
     }
