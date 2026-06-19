@@ -139,6 +139,8 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
             .tint(.compound.iconAccentTertiary)
             .foregroundStyle(isEnabled ? .compound.textPrimary : .compound.textDisabled)
             .listRowInsets(ListRowPadding.textFieldInsets)
+            // The title is used as the placeholder, which VoiceOver only reads while empty.
+            .accessibilityLabel(label.title ?? "")
         case .secureField(let text):
             SecureField(text: text) {
                 Text(label.title ?? "")
@@ -147,6 +149,7 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
             .tint(.compound.iconAccentTertiary)
             .foregroundStyle(isEnabled ? .compound.textPrimary : .compound.textDisabled)
             .listRowInsets(ListRowPadding.textFieldInsets)
+            .accessibilityLabel(label.title ?? "")
             
         case .custom(let content):
             content()
