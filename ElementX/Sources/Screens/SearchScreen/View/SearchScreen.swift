@@ -1,23 +1,23 @@
 //
-// Copyright 2025 Element Creations Ltd.
+// Copyright 2026 Element Creations Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
 //
 
 import Compound
+import GameController
 import SwiftUI
 import SwiftUIIntrospect
 
 struct SearchScreen: View {
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    
     @Bindable var context: SearchScreenViewModel.Context
     
     @FocusState private var isSearchFieldFocused: Bool
     /// The room highlighted for hardware keyboard selection (arrow keys + return).
     @State private var selectedRoomID: String?
+    /// The selection is only meaningful with a hardware keyboard, so don't highlight anything otherwise.
+    @State private var isHardwareKeyboardConnected = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -37,24 +37,30 @@ struct SearchScreen: View {
             }
         }
         .frame(maxHeight: .infinity, alignment: .top)
+        .background(Color.compound.bgCanvasDefault)
         .searchable(text: $context.searchQuery, placement: .toolbarPrincipal)
         .searchFocused($isSearchFieldFocused)
         .autocorrectionDisabled(true)
-        .textInputAutocapitalization(.never)
         .onSubmit(of: .search) {
             if let selectedRoomID {
                 context.send(viewAction: .selectRoom(roomID: selectedRoomID))
             }
         }
-        // The search field is owned by the system, so we reach into it to forward the arrow keys
-        // to the results list (the same key handling the old global search did with its own field).
         .searchResultsKeyboardNavigation(moveUp: { moveSelection(backwards: true) },
                                          moveDown: { moveSelection(backwards: false) })
         // The TabView calls onAppear each time the search tab is selected, so the field re-focuses
         // and the selection resets on every switch.
         .onAppear {
+            context.send(viewAction: .appeared)
             isSearchFieldFocused = true
             selectedRoomID = context.viewState.rooms.first?.id
+            updateHardwareKeyboardConnected()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .GCKeyboardDidConnect)) { _ in
+            updateHardwareKeyboardConnected()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .GCKeyboardDidDisconnect)) { _ in
+            updateHardwareKeyboardConnected()
         }
         // Reset to the first result when the results change (e.g. a new query), keyed on the top result
         // so pagination and background updates that leave it untouched don't clobber the selection.
@@ -63,22 +69,15 @@ struct SearchScreen: View {
         }
     }
     
-    private func moveSelection(backwards: Bool) {
-        let rooms = context.viewState.rooms
-        guard let selectedRoomID, let currentIndex = rooms.firstIndex(where: { $0.id == selectedRoomID }) else {
-            selectedRoomID = rooms.first?.id
-            return
-        }
-        
-        let nextIndex = backwards ? currentIndex - 1 : currentIndex + 1
-        guard rooms.indices.contains(nextIndex) else { return }
-        self.selectedRoomID = rooms[nextIndex].id
-    }
-    
     @ViewBuilder
     private var emptyState: some View {
         if context.viewState.isSearching {
-            ContentUnavailableView.search
+            TitleAndIcon(title: L10n.commonNoResults,
+                         subtitle: UntranslatedL10n.screenSearchNoResultsMessage(context.searchQuery),
+                         icon: \.search,
+                         iconStyle: .defaultSolid)
+                .frame(maxWidth: .infinity)
+                .padding(40)
         } else {
             TitleAndIcon(title: UntranslatedL10n.screenSearchEmptyStateTitle,
                          subtitle: UntranslatedL10n.screenSearchEmptyStateMessage,
@@ -92,11 +91,10 @@ struct SearchScreen: View {
     private var roomList: some View {
         List {
             ForEach(context.viewState.rooms) { room in
-                roomCell(for: room)
-                    .listRowInsets(.init())
-                    .listRowBackground(selectionBackground(for: room))
-                    .alignmentGuide(.listRowSeparatorLeading) { _ in 64 } // Inset the separator to the text.
-                    .onTapGesture { context.send(viewAction: .selectRoom(roomID: room.id)) }
+                SearchScreenRoomCell(room: room,
+                                     context: context,
+                                     isLast: room == context.viewState.rooms.last,
+                                     isSelected: isHardwareKeyboardConnected && selectedRoomID == room.id)
                     .onAppear {
                         if room == context.viewState.rooms.first {
                             context.send(viewAction: .reachedTop)
@@ -106,46 +104,69 @@ struct SearchScreen: View {
                     }
             }
         }
-        .listStyle(.plain)
+        .compoundList(.plain)
     }
     
-    private func roomCell(for room: SearchScreenRoom) -> some View {
-        HStack(spacing: 12) {
-            avatar(for: room)
-            
-            VStack(alignment: .leading, spacing: 0) {
-                Text(room.title)
-                    .font(.compound.bodyLG)
-                    .foregroundStyle(.compound.textPrimary)
-                    .lineLimit(1)
+    private func moveSelection(backwards: Bool) {
+        let rooms = context.viewState.rooms
+        guard let selectedRoomID,
+              let currentIndex = rooms.firstIndex(where: { $0.id == selectedRoomID })
+        else {
+            selectedRoomID = rooms.first?.id
+            return
+        }
+        
+        let nextIndex = backwards ? currentIndex - 1 : currentIndex + 1
+        guard rooms.indices.contains(nextIndex) else { return }
+        self.selectedRoomID = rooms[nextIndex].id
+    }
+    
+    private func updateHardwareKeyboardConnected() {
+        isHardwareKeyboardConnected = GCKeyboard.coalesced != nil
+    }
+}
+
+private struct SearchScreenRoomCell: View {
+    let room: SearchScreenRoom
+    let context: SearchScreenViewModel.Context
+    let isLast: Bool
+    let isSelected: Bool
+    
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    
+    var body: some View {
+        Button {
+            context.send(viewAction: .selectRoom(roomID: room.id))
+        } label: {
+            HStack(spacing: 12) {
+                avatar
                 
-                if !room.description.isEmpty {
-                    Text(room.description)
-                        .font(.compound.bodyMD)
-                        .foregroundStyle(.compound.textSecondary)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(room.title)
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
                         .lineLimit(1)
+                    
+                    if !room.description.isEmpty {
+                        Text(room.description)
+                            .font(.compound.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
+                            .lineLimit(1)
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            
-            Spacer(minLength: 0)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .contentShape(.rect)
+        .buttonStyle(SearchScreenRoomCellButtonStyle(isSelected: isSelected))
+        .listRowInsets(.init())
+        .listRowSeparator(.hidden)
+        .rowDivider()
     }
     
     @ViewBuilder
-    private func selectionBackground(for room: SearchScreenRoom) -> some View {
-        if selectedRoomID == room.id {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.compound.bgSubtleSecondary)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 2)
-        }
-    }
-    
-    @ViewBuilder
-    private func avatar(for room: SearchScreenRoom) -> some View {
+    private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
                             avatarSize: .room(on: .globalSearch),
@@ -153,6 +174,17 @@ struct SearchScreen: View {
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
+    }
+}
+
+private struct SearchScreenRoomCellButtonStyle: ButtonStyle {
+    let isSelected: Bool
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(isSelected || configuration.isPressed ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
+            .contentShape(Rectangle())
+            .animation(isSelected ? .none : .easeOut(duration: 0.1).disabledDuringTests(), value: isSelected)
     }
 }
 
@@ -164,7 +196,9 @@ private extension View {
     /// `pressesBegan` — the same key interception the old global search performed on its own field.
     func searchResultsKeyboardNavigation(moveUp: @escaping () -> Void, moveDown: @escaping () -> Void) -> some View {
         introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
-            guard let textField = navigationController.navigationBar.topItem?.searchController?.searchBar.searchTextField else { return }
+            guard let textField = navigationController.navigationBar.topItem?.searchController?.searchBar.searchTextField else {
+                return
+            }
             
             if !(textField is KeyNavigatingSearchTextField) {
                 object_setClass(textField, KeyNavigatingSearchTextField.self)
@@ -211,12 +245,20 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
     static let loadedViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                        mediaProvider: MediaProviderMock(.init()),
                                                        initialSearchQuery: "Foundation")
+    static let noResultsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
+                                                          mediaProvider: MediaProviderMock(.init()),
+                                                          initialSearchQuery: "John Doe")
     
     static var previews: some View {
         ElementNavigationStack {
             SearchScreen(context: emptyViewModel.context)
         }
         .previewDisplayName("Empty")
+        
+        ElementNavigationStack {
+            SearchScreen(context: noResultsViewModel.context)
+        }
+        .previewDisplayName("No results")
         
         ElementNavigationStack {
             SearchScreen(context: loadedViewModel.context)
