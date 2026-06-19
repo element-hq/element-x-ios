@@ -38,8 +38,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let spacesTabFlowCoordinator: SpacesTabFlowCoordinator
     private let spacesTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
     
-    /// The search tab relies on the detached `.search` role tab, so it's only shown on iOS 26.
-    /// It's also gated behind the `globalSearchEnabled` flag.
     private let searchScreenCoordinator: SearchScreenCoordinator?
     private let searchTabNavigationStackCoordinator: NavigationStackCoordinator?
     private let searchTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails?
