@@ -3557,10 +3557,6 @@ internal nonisolated enum L10n {
   }
   /// On the map
   internal static var screenStaticLocationSheetTitle: String { return L10n.tr("Localizable", "screen_static_location_sheet_title") }
-  /// Plural format key: "%#@COUNT@"
-  internal static func screenTimelineActiveCallExtraJoinedCount(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_timeline_active_call_extra_joined_count", p1)
-  }
   /// Message not sent because %1$@’s verified digital identity was reset.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
