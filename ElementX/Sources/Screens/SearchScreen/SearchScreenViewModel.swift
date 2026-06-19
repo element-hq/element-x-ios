@@ -1,10 +1,11 @@
 //
-// Copyright 2025 Element Creations Ltd.
+// Copyright 2026 Element Creations Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AsyncAlgorithms
 import Combine
 import SwiftUI
 
@@ -35,16 +36,9 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
             .store(in: &cancellables)
         
         searchQueryObservationTask = Task { [weak self] in
-            guard let stream = self?.context.observe(\.viewState.bindings.searchQuery) else { return }
-            var lastQuery: String?
+            guard let stream = self?.context.observe(\.viewState.bindings.searchQuery).removeDuplicates() else { return }
             for await searchQuery in stream {
-                guard searchQuery != lastQuery else { continue }
-                lastQuery = searchQuery
-                if searchQuery.isEmpty {
-                    self?.roomSummaryProvider.setFilter(.excludeAll)
-                } else {
-                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery))
-                }
+                self?.updateFilter(for: searchQuery)
             }
         }
         
@@ -55,18 +49,16 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         searchQueryObservationTask?.cancel()
     }
     
-    func stop() {
-        searchQueryObservationTask?.cancel()
-        // This is a shared provider so we should reset the filtering when we are done with the view.
-        roomSummaryProvider.setFilter(.all(filters: []))
-    }
-    
     // MARK: - Public
     
     override func process(viewAction: SearchScreenViewAction) {
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
+        case .appeared:
+            // The provider is shared, so other consumers may have changed its filter while we were off-screen.
+            // Re-apply ours on every appearance to keep the displayed results in sync with the query.
+            updateFilter(for: state.bindings.searchQuery)
         case .selectRoom(let roomID):
             actionsSubject.send(.presentRoom(roomID: roomID))
         case .reachedTop:
@@ -77,6 +69,14 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     }
     
     // MARK: - Private
+    
+    private func updateFilter(for searchQuery: String) {
+        if searchQuery.isEmpty {
+            roomSummaryProvider.setFilter(.excludeAll)
+        } else {
+            roomSummaryProvider.setFilter(.search(query: searchQuery))
+        }
+    }
     
     private func updateRooms(with summaries: [RoomSummary]) {
         state.rooms = summaries.map { summary in
