@@ -264,7 +264,16 @@ private struct PreviewView: UIViewControllerRepresentable {
         }
         
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            PreviewItem(previewItemURL: view.mediaURLs[index], previewItemTitle: view.title)
+            let url = view.mediaURLs[index]
+            // Use a descriptive title instead of the file name so VoiceOver doesn't read a cryptic name.
+            return PreviewItem(previewItemURL: url, previewItemTitle: previewItemTitle(for: url))
+        }
+        
+        private func previewItemTitle(for url: URL) -> String? {
+            guard let type = UTType(filenameExtension: url.pathExtension) else { return view.title }
+            if type.conforms(to: .image) { return L10n.a11yPhotoPreview }
+            if type.conforms(to: .movie) || type.conforms(to: .video) { return L10n.a11yVideoPreview }
+            return view.title
         }
         
         // MARK: - QLPreviewControllerDelegate
