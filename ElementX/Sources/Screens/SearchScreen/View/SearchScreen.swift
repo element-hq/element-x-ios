@@ -204,7 +204,7 @@ private extension View {
                 object_setClass(textField, KeyNavigatingSearchTextField.self)
             }
             
-            (textField as? KeyNavigatingSearchTextField)?.keyHandler = { keyCode in
+            KeyNavigatingSearchTextField.keyHandler = { keyCode in
                 switch keyCode {
                 case .keyboardUpArrow:
                     moveUp()
@@ -220,17 +220,12 @@ private extension View {
 }
 
 /// A `UISearchTextField` whose class is installed at runtime via `object_setClass`, so it must not declare any
-/// stored properties — the key handler is kept as an associated object instead.
+/// stored properties. The handler is static, which is fine as there's only ever a single search field.
 private final class KeyNavigatingSearchTextField: UISearchTextField {
-    private static var handlerKey: UInt8 = 0
-    
-    var keyHandler: ((UIKeyboardHIDUsage) -> Bool)? {
-        get { objc_getAssociatedObject(self, &Self.handlerKey) as? (UIKeyboardHIDUsage) -> Bool }
-        set { objc_setAssociatedObject(self, &Self.handlerKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
-    }
+    static var keyHandler: ((UIKeyboardHIDUsage) -> Bool)?
     
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        if let keyCode = presses.first?.key?.keyCode, keyHandler?(keyCode) == true {
+        if let keyCode = presses.first?.key?.keyCode, Self.keyHandler?(keyCode) == true {
             return
         }
         super.pressesBegan(presses, with: event)
