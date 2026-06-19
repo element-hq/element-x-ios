@@ -81,7 +81,6 @@ Initial setup: `swift run tools setup-project`
 CI test commands:
 - Unit tests: `swift run tools ci unit-tests`
 - CI help: `swift run tools ci --help`
-- Fastlane: `bundle exec fastlane lanes`
 
 ### Targets & Layout
 
@@ -379,7 +378,6 @@ Same pattern for publishers.
 | `.swiftformat` | SwiftFormat rules |
 | `Dangerfile.swift` | Danger PR checks |
 | `Package.swift` | SPM manifest (Tools CLI) |
-| `Gemfile` | Ruby deps (Fastlane, Danger) |
 | `localazy.json` | Localazy translation config |
 | `codecov.yml` | Codecov config |
 | `.periphery.yml` | Periphery dead-code detection |
