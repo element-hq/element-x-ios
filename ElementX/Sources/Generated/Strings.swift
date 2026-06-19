@@ -70,6 +70,8 @@ internal nonisolated enum L10n {
   internal static func a11yPausedVoiceMessage(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "a11y_paused_voice_message", String(describing: p1), String(describing: p2))
   }
+  /// Photo preview
+  internal static var a11yPhotoPreview: String { return L10n.tr("Localizable", "a11y_photo_preview") }
   /// PIN field
   internal static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
   /// Pinned location
@@ -144,6 +146,8 @@ internal nonisolated enum L10n {
   internal static var a11yTombstonedRoom: String { return L10n.tr("Localizable", "a11y_tombstoned_room") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
+  /// Video preview
+  internal static var a11yVideoPreview: String { return L10n.tr("Localizable", "a11y_video_preview") }
   /// View avatar
   internal static var a11yViewAvatar: String { return L10n.tr("Localizable", "a11y_view_avatar") }
   /// View details
@@ -3553,6 +3557,10 @@ internal nonisolated enum L10n {
   }
   /// On the map
   internal static var screenStaticLocationSheetTitle: String { return L10n.tr("Localizable", "screen_static_location_sheet_title") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenTimelineActiveCallExtraJoinedCount(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_timeline_active_call_extra_joined_count", p1)
+  }
   /// Message not sent because %1$@’s verified digital identity was reset.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
