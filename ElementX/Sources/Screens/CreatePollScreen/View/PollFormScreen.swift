@@ -48,6 +48,7 @@ struct PollFormScreen: View {
         } header: {
             Text(L10n.screenCreatePollQuestionDesc)
                 .compoundListSectionHeader()
+                .accessibilityRemoveTraits(.isHeader)
         }
     }
     
