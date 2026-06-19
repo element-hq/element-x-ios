@@ -93,6 +93,7 @@ struct CreateRoomScreen: View {
                         .foregroundStyle(.compound.textPrimary)
                         .tint(.compound.iconAccentTertiary)
                         .focused($focus, equals: .name)
+                        .accessibilityLabel(L10n.commonName)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(.horizontal, ListRowPadding.horizontal)
                         .padding(.vertical, ListRowPadding.vertical)
