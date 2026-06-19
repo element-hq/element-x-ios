@@ -74,7 +74,7 @@ struct Application: App {
             
             CommandGroup(after: .windowArrangement) {
                 Button("Global Search") {
-                    appCoordinator.handleAppRoute(.globalSearch, windowType: nil)
+                    appCoordinator.handleAppRoute(.search, windowType: nil)
                 }
                 .keyboardShortcut("k", modifiers: [.command])
             }

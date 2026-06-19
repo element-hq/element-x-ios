@@ -17,7 +17,6 @@ class WindowManager: SecureWindowManagerProtocol {
     
     private(set) var mainWindow: UIWindow!
     private(set) var overlayWindow: UIWindow!
-    private(set) var globalSearchWindow: UIWindow!
     private(set) var alternateWindow: UIWindow!
     
     private(set) var openWindowAction: OpenWindowAction!
@@ -32,7 +31,7 @@ class WindowManager: SecureWindowManagerProtocol {
     }
     
     var windows: [UIWindow] {
-        [mainWindow, overlayWindow, globalSearchWindow, alternateWindow]
+        [mainWindow, overlayWindow, alternateWindow]
     }
     
     // periphery:ignore - auto cancels when reassigned
@@ -79,11 +78,6 @@ class WindowManager: SecureWindowManagerProtocol {
         overlayWindow.tintColor = .compound.textActionPrimary
         overlayWindow.backgroundColor = .clear
         overlayWindow.isHidden = false
-        
-        globalSearchWindow = UIWindow(windowScene: scene)
-        globalSearchWindow.tintColor = .compound.textActionPrimary
-        globalSearchWindow.backgroundColor = .clear
-        globalSearchWindow.isHidden = true
         
         alternateWindow = UIWindow(windowScene: scene)
         alternateWindow.tintColor = .compound.textActionPrimary
@@ -138,8 +132,6 @@ class WindowManager: SecureWindowManagerProtocol {
         // e.g. the keyboard being displayed on top of a call sheet.
         mainWindow.endEditing(true)
         
-        hideGlobalSearch()
-        
         // alternateWindow.isHidden = false cannot got inside the Task otherwise the timing
         // is poor when you lock the phone - you briefly see the main window for a few
         // frames after you've unlocked the phone and then the placeholder animates in.
@@ -149,39 +141,7 @@ class WindowManager: SecureWindowManagerProtocol {
             
             mainWindow.isHidden = true
             overlayWindow.isHidden = true
-            globalSearchWindow.isHidden = true
         }
-    }
-    
-    func showGlobalSearch() {
-        MXLog.info("Received global search presentation request.")
-        
-        guard alternateWindow.isHidden else {
-            MXLog.info("The alternate window is visible, ignoring.")
-            return
-        }
-        
-        if let mainSession {
-            let request = UISceneSessionActivationRequest(session: mainSession)
-            UIApplication.shared.activateSceneSession(for: request) { error in
-                MXLog.error("Failed to focus window with error: \(error)")
-            }
-        }
-        
-        globalSearchWindow.isHidden = false
-        globalSearchWindow.makeKeyAndVisible()
-    }
-    
-    func hideGlobalSearch() {
-        MXLog.info("Received global search dismissal request.")
-        
-        guard alternateWindow.isHidden else {
-            MXLog.info("The alternate window is visible, ignoring.")
-            return
-        }
-        
-        globalSearchWindow.isHidden = true
-        mainWindow.makeKey()
     }
     
     // MARK: - OrientationManager

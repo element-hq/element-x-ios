@@ -115,6 +115,9 @@ struct HomeScreenViewState: BindableState {
     var shouldShowSpaceFilters = false
     var selectedSpaceFilter: SpaceServiceFilter?
     
+    /// Inline room list search is disabled when the dedicated global search tab is shown instead (see `UserSessionFlowCoordinator`).
+    var isRoomListSearchEnabled = true
+    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms

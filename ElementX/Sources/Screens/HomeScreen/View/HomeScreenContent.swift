@@ -59,10 +59,9 @@ struct HomeScreenContent: View {
                             topSection
                         }
                     }
-                    .isSearching($context.isSearchFieldFocused)
-                    .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
-                    .compoundSearchField()
-                    .disableAutocorrection(true)
+                    .roomListSearchable(isEnabled: context.viewState.isRoomListSearchEnabled,
+                                        isSearchFieldFocused: $context.isSearchFieldFocused,
+                                        searchQuery: $context.searchQuery)
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
@@ -159,5 +158,19 @@ struct HomeScreenContent: View {
         
         // This will be deduped and throttled on the view model layer
         context.send(viewAction: .updateVisibleItemRange(firstIndex..<lastIndex))
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func roomListSearchable(isEnabled: Bool, isSearchFieldFocused: Binding<Bool>, searchQuery: Binding<String>) -> some View {
+        if isEnabled {
+            isSearching(isSearchFieldFocused)
+                .searchable(text: searchQuery, placement: .navigationBarDrawer(displayMode: .always))
+                .compoundSearchField()
+                .disableAutocorrection(true)
+        } else {
+            self
+        }
     }
 }

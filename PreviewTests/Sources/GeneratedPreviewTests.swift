@@ -313,20 +313,6 @@ extension PreviewTests {
     }
 
     @Test
-    func globalSearchScreenListRow() async throws {
-        for (index, preview) in GlobalSearchScreenListRow_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
-    func globalSearchScreen() async throws {
-        for (index, preview) in GlobalSearchScreen_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func highlightedTimelineItemModifier() async throws {
         for (index, preview) in HighlightedTimelineItemModifier_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -1064,6 +1050,13 @@ extension PreviewTests {
     @Test
     func sFNumberedListView() async throws {
         for (index, preview) in SFNumberedListView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
+    func searchScreen() async throws {
+        for (index, preview) in SearchScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

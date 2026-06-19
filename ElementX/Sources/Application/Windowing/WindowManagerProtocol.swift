@@ -50,18 +50,11 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     var mainWindow: UIWindow! { get }
     /// Presented on top of the main window, to display e.g. user indicators.
     var overlayWindow: UIWindow! { get }
-    /// A window layered on top of the main one. Used by the global search function
-    var globalSearchWindow: UIWindow! { get }
     /// A secondary window that can be presented instead of the main/overlay window combo.
     var alternateWindow: UIWindow! { get }
     
     /// All the windows being managed
     var windows: [UIWindow] { get }
-    
-    /// Makes the global search window key. Used to get automatic text field focus.
-    func showGlobalSearch()
-    
-    func hideGlobalSearch()
     
     // MARK: - Secondary window support
     

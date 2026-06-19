@@ -14961,7 +14961,6 @@ nonisolated class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol, @unche
 nonisolated class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
     nonisolated(unsafe) var mainWindow: UIWindow!
     nonisolated(unsafe) var overlayWindow: UIWindow!
-    nonisolated(unsafe) var globalSearchWindow: UIWindow!
     nonisolated(unsafe) var alternateWindow: UIWindow!
     nonisolated(unsafe) var windows: [UIWindow] = []
     var secondaryWindowsEnabled: Bool {
@@ -14970,40 +14969,6 @@ nonisolated class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable 
     }
     nonisolated(unsafe) var underlyingSecondaryWindowsEnabled: Bool!
 
-    //MARK: - showGlobalSearch
-
-    private let showGlobalSearchCallsCountLock = NSLock()
-    private nonisolated(unsafe) var showGlobalSearchUnderlyingCallsCount = 0
-    var showGlobalSearchCallsCount: Int {
-        get { showGlobalSearchCallsCountLock.withLock { showGlobalSearchUnderlyingCallsCount } }
-        set { showGlobalSearchCallsCountLock.withLock { showGlobalSearchUnderlyingCallsCount = newValue } }
-    }
-    var showGlobalSearchCalled: Bool {
-        return showGlobalSearchCallsCount > 0
-    }
-    nonisolated(unsafe) var showGlobalSearchClosure: (() -> Void)?
-
-    func showGlobalSearch() {
-        showGlobalSearchCallsCountLock.withLock { showGlobalSearchUnderlyingCallsCount += 1 }
-        showGlobalSearchClosure?()
-    }
-    //MARK: - hideGlobalSearch
-
-    private let hideGlobalSearchCallsCountLock = NSLock()
-    private nonisolated(unsafe) var hideGlobalSearchUnderlyingCallsCount = 0
-    var hideGlobalSearchCallsCount: Int {
-        get { hideGlobalSearchCallsCountLock.withLock { hideGlobalSearchUnderlyingCallsCount } }
-        set { hideGlobalSearchCallsCountLock.withLock { hideGlobalSearchUnderlyingCallsCount = newValue } }
-    }
-    var hideGlobalSearchCalled: Bool {
-        return hideGlobalSearchCallsCount > 0
-    }
-    nonisolated(unsafe) var hideGlobalSearchClosure: (() -> Void)?
-
-    func hideGlobalSearch() {
-        hideGlobalSearchCallsCountLock.withLock { hideGlobalSearchUnderlyingCallsCount += 1 }
-        hideGlobalSearchClosure?()
-    }
     //MARK: - registerCoordinator
 
     private let registerCoordinatorFlowCoordinatorForWindowTypeCallsCountLock = NSLock()

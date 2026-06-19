@@ -20,7 +20,7 @@ enum UserSessionFlowCoordinatorAction {
 }
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
-    enum HomeTab: Hashable { case chats, spaces }
+    enum HomeTab: Hashable { case chats, spaces, search }
     
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationTabCoordinator: NavigationTabCoordinator<HomeTab>
@@ -37,6 +37,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let chatsTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
     private let spacesTabFlowCoordinator: SpacesTabFlowCoordinator
     private let spacesTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
+    
+    private let searchScreenCoordinator: SearchScreenCoordinator?
+    private let searchTabNavigationStackCoordinator: NavigationStackCoordinator?
+    private let searchTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails?
     
     // periphery:ignore - retaining purpose
     private var settingsFlowCoordinator: SettingsFlowCoordinator?
@@ -92,16 +96,35 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
         
+        if flowParameters.appSettings.globalSearchEnabled, #available(iOS 26.0, *) {
+            let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
+                                                                              mediaProvider: flowParameters.userSession.mediaProvider))
+            let searchStackCoordinator = NavigationStackCoordinator()
+            searchStackCoordinator.setRootCoordinator(searchCoordinator)
+            
+            searchScreenCoordinator = searchCoordinator
+            searchTabNavigationStackCoordinator = searchStackCoordinator
+            searchTabDetails = .init(tag: HomeTab.search, title: UntranslatedL10n.screenHomeTabSearch, icon: \.search, selectedIcon: \.search, isSearch: true)
+        } else {
+            searchScreenCoordinator = nil
+            searchTabNavigationStackCoordinator = nil
+            searchTabDetails = nil
+        }
+        
         onboardingStackCoordinator = NavigationStackCoordinator()
         onboardingFlowCoordinator = OnboardingFlowCoordinator(isNewLogin: isNewLogin,
                                                               appLockService: appLockService,
                                                               navigationStackCoordinator: onboardingStackCoordinator,
                                                               flowParameters: flowParameters)
         
-        navigationTabCoordinator.setTabs([
+        var tabs: [NavigationTabCoordinator<HomeTab>.Tab] = [
             .init(coordinator: chatsSplitCoordinator, details: chatsTabDetails),
             .init(coordinator: spacesSplitCoordinator, details: spacesTabDetails)
-        ])
+        ]
+        if let searchTabNavigationStackCoordinator, let searchTabDetails {
+            tabs.append(.init(coordinator: searchTabNavigationStackCoordinator, details: searchTabDetails))
+        }
+        navigationTabCoordinator.setTabs(tabs)
         
         stateMachine = flowParameters.stateMachineFactory.makeUserSessionFlowStateMachine(state: .initial)
         configureStateMachine()
@@ -137,11 +160,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
-             .share, .transferOwnership, .thread, .globalSearch:
+             .share, .transferOwnership, .thread:
             clearPresentedSheets(animated: animated) // Make sure the presented route is visible.
             chatsTabFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             if navigationTabCoordinator.selectedTab != .chats {
                 navigationTabCoordinator.selectedTab = .chats
+            }
+        case .search:
+            // Switch to the dedicated search tab when it's available (iOS 26 + flag), otherwise ignore.
+            if searchTabNavigationStackCoordinator != nil {
+                navigationTabCoordinator.selectedTab = .search
             }
         }
     }
@@ -195,6 +223,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func setupObservers() {
+        searchScreenCoordinator?.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .presentRoom(let roomID):
+                    handleAppRoute(.room(roomID: roomID, via: []), animated: true)
+                }
+            }
+            .store(in: &cancellables)
+        
         chatsTabFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
