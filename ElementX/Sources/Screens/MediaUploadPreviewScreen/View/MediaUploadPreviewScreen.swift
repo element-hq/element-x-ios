@@ -316,6 +316,11 @@ private class PreviewViewController: QLPreviewController {
         
         // Hide toolbar share button
         toolbarItems?.first?.isHidden = true
+        
+        // The chrome is hidden visually but its buttons remain in VoiceOver's focus order,
+        // so keep the navigation bar and toolbar out of the accessibility tree too.
+        navigationController?.navigationBar.accessibilityElementsHidden = true
+        navigationController?.toolbar?.accessibilityElementsHidden = true
     }
 }
 
