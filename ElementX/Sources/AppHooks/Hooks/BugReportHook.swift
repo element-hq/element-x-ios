@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol BugReportHookProtocol {
+nonisolated protocol BugReportHookProtocol: Sendable {
     func update(_ bugReport: BugReport) -> BugReport
 }
 

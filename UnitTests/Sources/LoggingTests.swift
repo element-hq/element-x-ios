@@ -12,6 +12,7 @@ import Foundation
 import MatrixRustSDKMocks
 import Testing
 
+@MainActor
 final class LoggingTests {
     private enum Constants {
         static let genericFailure = "Test failed"

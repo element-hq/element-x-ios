@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol SpaceScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<SpaceScreenViewModelAction, Never> { get }
     var context: SpaceScreenViewModelType.Context { get }

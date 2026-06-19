@@ -8,7 +8,7 @@
 import Foundation
 
 // sourcery: AutoMockable
-protocol NotificationToneManagerProtocol {
+nonisolated protocol NotificationToneManagerProtocol: Sendable {
     @discardableResult
     func setSelectedTone(_ alertTone: NotificationTone) throws -> URL
     func customTones() -> [NotificationTone]

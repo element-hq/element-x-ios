@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol NotificationPermissionsScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<NotificationPermissionsScreenViewModelAction, Never> { get }
     var context: NotificationPermissionsScreenViewModelType.Context { get }

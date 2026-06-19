@@ -33,7 +33,7 @@ enum RoomProxyType {
 }
 
 // sourcery: AutoMockable
-protocol RoomProxyProtocol {
+protocol RoomProxyProtocol: Sendable {
     var id: String { get }
     var ownUserID: String { get }
 }

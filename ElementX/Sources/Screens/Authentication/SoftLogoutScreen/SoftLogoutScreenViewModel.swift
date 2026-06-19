@@ -46,7 +46,7 @@ class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreen
         }
     }
     
-    @MainActor func displayError(_ type: SoftLogoutScreenErrorType) {
+    func displayError(_ type: SoftLogoutScreenErrorType) {
         switch type {
         case .alert(let message):
             state.bindings.alertInfo = AlertInfo(id: type,

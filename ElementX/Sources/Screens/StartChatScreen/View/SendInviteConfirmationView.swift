@@ -63,11 +63,13 @@ struct SendInviteConfirmationView: View {
                                 contentID: userToInvite.id,
                                 avatarSize: .user(on: .sendInviteConfirmation),
                                 mediaProvider: mediaProvider)
+                .accessibilityHidden(true) // Decorative: the user's name and ID are read from the subtitle below.
             VStack(spacing: 8) {
                 Text(title)
                     .multilineTextAlignment(.center)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
                 Text(subtitle)
                     .multilineTextAlignment(.center)
                     .font(.compound.bodyMD)

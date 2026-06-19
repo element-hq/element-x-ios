@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 // sourcery: AutoMockable
-protocol RoomMemberProxyProtocol: AnyObject {
+nonisolated protocol RoomMemberProxyProtocol: AnyObject, Sendable {
     var userID: String { get }
     
     var displayName: String? { get }
@@ -29,7 +29,7 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var isServiceMember: Bool { get }
 }
 
-extension RoomMemberProxyProtocol {
+nonisolated extension RoomMemberProxyProtocol {
     /// The member is active in the room (joined or invited).
     var isActive: Bool {
         membership == .join || membership == .invite || membership == .knock
@@ -47,7 +47,7 @@ extension RoomMemberProxyProtocol {
     }
 }
 
-extension [RoomMemberProxyProtocol] {
+nonisolated extension [RoomMemberProxyProtocol] {
     /// The members, sorted first by power-level, and then alphabetically within each power-level.
     func sorted() -> Self {
         sorted { lhs, rhs in
@@ -60,7 +60,7 @@ extension [RoomMemberProxyProtocol] {
     }
 }
 
-extension RoomMemberProxyProtocol {
+nonisolated extension RoomMemberProxyProtocol {
     var role: RoomRole {
         .init(powerLevel: powerLevel)
     }

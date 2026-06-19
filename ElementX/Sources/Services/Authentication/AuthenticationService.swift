@@ -198,8 +198,10 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         // n.b. We deliberatley don't check whether the received server is in our appSettings.accountProviders
         
-        let listener = SDKListener { progress in
-            guard let progress = QRLoginProgress(rustProgress: progress) else { return }
+        // The SDK calls the listener from arbitrary threads; onMainActor forwards the progress
+        // updates on the main actor in FIFO order.
+        let listener = SDKListener.onMainActor { rustProgress in
+            guard let progress = QRLoginProgress(rustProgress: rustProgress) else { return }
             progressSubject.send(progress)
         }
         

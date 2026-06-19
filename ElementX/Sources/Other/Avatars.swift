@@ -29,11 +29,11 @@ enum Avatars {
         }
         
         /// Value in pixels by using the scale of the main screen
-        var scaledValue: CGFloat {
+        @MainActor var scaledValue: CGFloat {
             value * UIScreen.main.scale
         }
         
-        var scaledSize: CGSize {
+        @MainActor var scaledSize: CGSize {
             CGSize(width: scaledValue, height: scaledValue)
         }
     }

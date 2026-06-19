@@ -38,6 +38,7 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     }
     
     deinit {
+        // The cache is nonisolated and the proxies it uses are Sendable, safe from any context.
         voiceMessageCache.clearCache()
     }
     
@@ -82,7 +83,7 @@ class VoiceMessageMediaManager: VoiceMessageMediaManagerProtocol {
     
     // MARK: - Private
     
-    private func enqueueVoiceMessageConversionRequest(forSource source: MediaSourceProxy, operation: @escaping () throws -> URL) async throws -> URL {
+    private func enqueueVoiceMessageConversionRequest(forSource source: MediaSourceProxy, operation: @escaping @Sendable () throws -> URL) async throws -> URL {
         if let conversionRequests = conversionRequests[source] {
             return try await withCheckedThrowingContinuation { continuation in
                 conversionRequests.continuations.append(continuation)

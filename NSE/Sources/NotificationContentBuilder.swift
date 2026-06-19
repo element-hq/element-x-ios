@@ -13,7 +13,7 @@ import SwiftUI
 import UserNotifications
 import Version
 
-struct NotificationContentBuilder {
+nonisolated struct NotificationContentBuilder {
     let messageEventStringBuilder: RoomMessageEventStringBuilder
     let notificationSoundName: UNNotificationSoundName
     let userSession: NSEUserSessionProtocol
@@ -337,7 +337,7 @@ struct NotificationContentBuilder {
     }
 }
 
-private struct NotificationIcon {
+private nonisolated struct NotificationIcon {
     struct GroupInfo {
         let avatarDisplayName: String
         let displayName: String

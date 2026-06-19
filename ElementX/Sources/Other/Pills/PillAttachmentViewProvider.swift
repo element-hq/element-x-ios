@@ -23,44 +23,53 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
     
     // MARK: - Override
     
-    override init(textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) {
+    override nonisolated init(textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) {
         super.init(textAttachment: textAttachment, parentView: parentView, textLayoutManager: textLayoutManager, location: location)
         
-        // Keep a reference to the parent text view for size adjustments and pills flushing.
-        delegate = parentView?.superview as? PillAttachmentViewProviderDelegate
+        // TextKit isn't annotated but creates the view providers on the main thread,
+        // the assumeIsolated below would trap otherwise.
+        nonisolated(unsafe) let provider = self
+        MainActor.assumeIsolated {
+            // Keep a reference to the parent text view for size adjustments and pills flushing.
+            provider.delegate = parentView?.superview as? PillAttachmentViewProviderDelegate
+        }
         tracksTextAttachmentViewBounds = true
     }
     
-    @MainActor
-    override func loadView() {
+    override nonisolated func loadView() {
         super.loadView()
         
-        guard let textAttachment = textAttachment as? PillTextAttachment,
-              let pillData = textAttachment.pillData else {
-            MXLog.failure("Attachment is missing data or not of expected class")
-            return
+        // TextKit isn't annotated but loads the view on the main thread,
+        // the assumeIsolated below would trap otherwise.
+        nonisolated(unsafe) let provider = self
+        MainActor.assumeIsolated {
+            guard let textAttachment = provider.textAttachment as? PillTextAttachment,
+                  let pillData = textAttachment.pillData else {
+                MXLog.failure("Attachment is missing data or not of expected class")
+                return
+            }
+            
+            let context: PillContext
+            if ProcessInfo.isXcodePreview || ProcessInfo.isRunningTests {
+                // The mock viewModel simulates the loading logic for testing purposes
+                context = PillContext.mock(viewState: .mention(isOwnMention: false, displayText: "Alice"), delay: .seconds(2))
+            } else if let timelineContext = provider.delegate?.timelineContext {
+                context = PillContext(timelineContext: timelineContext, data: pillData)
+            } else {
+                MXLog.failure("Missing room context")
+                return
+            }
+            
+            let view = PillView(context: context) { [weak provider] in
+                provider?.delegate?.invalidateTextAttachmentsDisplay()
+            }
+            let controller = UIHostingController(rootView: view)
+            controller.view.backgroundColor = .clear
+            // This allows the text view to handle it as a link
+            controller.view.isUserInteractionEnabled = false
+            provider.view = controller.view
+            provider.delegate?.registerPillView(controller.view)
         }
-        
-        let context: PillContext
-        if ProcessInfo.isXcodePreview || ProcessInfo.isRunningTests {
-            // The mock viewModel simulates the loading logic for testing purposes
-            context = PillContext.mock(viewState: .mention(isOwnMention: false, displayText: "Alice"), delay: .seconds(2))
-        } else if let timelineContext = delegate?.timelineContext {
-            context = PillContext(timelineContext: timelineContext, data: pillData)
-        } else {
-            MXLog.failure("Missing room context")
-            return
-        }
-        
-        let view = PillView(context: context) { [weak self] in
-            self?.delegate?.invalidateTextAttachmentsDisplay()
-        }
-        let controller = UIHostingController(rootView: view)
-        controller.view.backgroundColor = .clear
-        // This allows the text view to handle it as a link
-        controller.view.isUserInteractionEnabled = false
-        self.view = controller.view
-        delegate?.registerPillView(controller.view)
     }
     
     // MARK: - NSSecureCoding
@@ -87,7 +96,6 @@ final class ComposerMentionDisplayHelper: MentionDisplayHelper {
         self.timelineContext = timelineContext
     }
     
-    @MainActor
     static var mock: Self {
         Self(timelineContext: TimelineViewModel.mock.context)
     }

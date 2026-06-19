@@ -10,7 +10,6 @@ import Combine
 import Compound
 import SwiftUI
 
-@MainActor
 struct HomeScreenKnockedCell: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
@@ -141,7 +140,6 @@ struct HomeScreenKnockedCell_Previews: PreviewProvider, TestablePreview {
     }
 }
 
-@MainActor
 private extension HomeScreenRoom {
     static var dmInvite: HomeScreenRoom {
         let inviter = RoomMemberProxyMock()

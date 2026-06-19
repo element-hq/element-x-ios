@@ -12,7 +12,6 @@ enum MediaPlayerProviderError: Error {
     case unsupportedMediaType
 }
 
-@MainActor
 protocol MediaPlayerProviderProtocol {
     var player: AudioPlayerProtocol { get }
     

@@ -106,7 +106,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private static let loadingIndicatorIdentifier = "\(SoftLogoutScreenCoordinator.self)-Loading"
     
     /// Show an activity indicator whilst loading.
-    @MainActor private func startLoading() {
+    private func startLoading() {
         parameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                          type: .modal,
                                                                          title: L10n.commonLoading,
@@ -114,17 +114,17 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     }
     
     /// Hide the currently displayed activity indicator.
-    @MainActor private func stopLoading() {
+    private func stopLoading() {
         parameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     /// Shows the forgot password screen.
-    @MainActor private func showForgotPasswordScreen() {
+    private func showForgotPasswordScreen() {
         viewModel.displayError(.alert("Not implemented."))
     }
     
     /// Login with the supplied username and password.
-    @MainActor private func login(withPassword password: String) {
+    private func login(withPassword password: String) {
         let username = parameters.credentials.userID
         
         startLoading()

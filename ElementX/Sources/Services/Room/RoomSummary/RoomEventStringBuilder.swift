@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomEventStringBuilder {
+nonisolated struct RoomEventStringBuilder {
     let stateEventStringBuilder: RoomStateEventStringBuilder
     let messageEventStringBuilder: RoomMessageEventStringBuilder
     let shouldPrefixSenderName: Bool

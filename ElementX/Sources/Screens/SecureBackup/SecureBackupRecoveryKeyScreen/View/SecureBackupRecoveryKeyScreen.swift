@@ -278,9 +278,9 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         backupController.recoveryState = CurrentValueSubject<SecureBackupRecoveryState, Never>(recoveryState).asCurrentValuePublisher()
         
         if let key {
-            backupController.generateRecoveryKeyReturnValue = .success(key)
+            backupController.generateRecoveryKeyWithPassphraseReturnValue = .success(key)
         } else {
-            backupController.generateRecoveryKeyClosure = {
+            backupController.generateRecoveryKeyWithPassphraseClosure = { _ in
                 try? await Task.sleep(for: .seconds(1000))
                 return .success("youshouldntseeme")
             }

@@ -46,8 +46,8 @@ extension Published.Publisher {
             var iterator = values.makeAsyncIterator()
             
             // skips the publisher's current value
-            _ = await iterator.next()
-            return await iterator.next()
+            _ = await iterator.next(isolation: #isolation)
+            return await iterator.next(isolation: #isolation)
         }
     }
 }

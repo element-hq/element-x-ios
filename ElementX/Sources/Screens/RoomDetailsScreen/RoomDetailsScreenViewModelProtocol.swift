@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol RoomDetailsScreenViewModelProtocol {
     var actions: AnyPublisher<RoomDetailsScreenViewModelAction, Never> { get }
     var context: RoomDetailsScreenViewModelType.Context { get }

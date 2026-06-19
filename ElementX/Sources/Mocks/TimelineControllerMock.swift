@@ -22,7 +22,7 @@ struct TimelineControllerMockConfiguration {
     var paginationState: TimelinePaginationState = .initial
 }
 
-extension TimelineControllerMock {
+@MainActor extension TimelineControllerMock {
     static var mediaGallery: TimelineControllerMock {
         TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: (0..<5).reduce([]) { partialResult, _ in
             partialResult + [TimelineFixtures.separator] + TimelineFixtures.mediaChunk

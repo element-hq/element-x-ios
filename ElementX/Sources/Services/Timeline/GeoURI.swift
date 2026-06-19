@@ -10,7 +10,7 @@ import CoreLocation
 import Foundation
 
 /// A structure that parses a geo URI (i.e. geo:53.99803101552848,-8.25347900390625;u=10) and constructs their constituent parts.
-struct GeoURI: Hashable {
+nonisolated struct GeoURI: Hashable {
     // MARK: - Properties
     
     let latitude: Double
@@ -69,8 +69,11 @@ struct GeoURI: Hashable {
 // swiftlint:disable:next large_tuple
 private typealias RegexGeoURI = Regex<(Substring, latitude: Substring, longitude: Substring, uncertainty: Substring?)>
 
-private extension RegexGeoURI {
-    static let standard: Self = /geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitude>-?\d+(?:\.\d+)?)(?:,-?\d+(?:\.\d+)?)?(?:;u=(?<uncertainty>\d+(?:\.\d+)?))?/
+private nonisolated extension RegexGeoURI {
+    /// A computed property as `Regex` isn't Sendable.
+    static var standard: Self {
+        /geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitude>-?\d+(?:\.\d+)?)(?:,-?\d+(?:\.\d+)?)?(?:;u=(?<uncertainty>\d+(?:\.\d+)?))?/
+    }
 }
 
 extension GeoURI {
@@ -79,7 +82,7 @@ extension GeoURI {
     }
 }
 
-private extension NumberFormatter {
+private nonisolated extension NumberFormatter {
     static let decimal: NumberFormatter = {
         let numberFormatter = NumberFormatter()
         numberFormatter.locale = Locale(identifier: "en_US_POSIX")

@@ -574,10 +574,14 @@ class TimelineController: TimelineControllerProtocol {
         
         switch timelineItem.properties.replyDetails {
         case .notLoaded:
-            activeTimeline.fetchDetails(for: eventID)
+            Task { @MainActor in
+                activeTimeline.fetchDetails(for: eventID)
+            }
         case .error:
             if refetchOnError {
-                activeTimeline.fetchDetails(for: eventID)
+                Task { @MainActor in
+                    activeTimeline.fetchDetails(for: eventID)
+                }
             }
         default:
             break
@@ -653,7 +657,7 @@ class TimelineController: TimelineControllerProtocol {
     }
 }
 
-private extension TimelineItemProxy {
+private nonisolated extension TimelineItemProxy {
     var isItemCollapsible: Bool {
         if case let .event(eventItem) = self {
             switch eventItem.content {

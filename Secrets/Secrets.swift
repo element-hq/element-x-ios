@@ -1,4 +1,4 @@
-enum Secrets {
+nonisolated enum Secrets {
     static let sentryDSN: String? = "https://username@sentry.localhost/project_id"
     static let sentryRustDSN: String? = "https://username@sentry.localhost/project_id"
     static let postHogHost: String? = "https://posthog.localhost"

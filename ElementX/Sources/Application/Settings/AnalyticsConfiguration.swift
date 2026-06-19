@@ -9,7 +9,7 @@
 import Foundation
 
 /// A type that represents how to set up the analytics module in the app.
-struct AnalyticsConfiguration {
+nonisolated struct AnalyticsConfiguration {
     /// The host to use for PostHog analytics.
     let host: String
     /// The public key for submitting analytics.

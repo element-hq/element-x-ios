@@ -129,7 +129,7 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
         
         self.widgetDriver = widgetDriver
         
-        Task.detached { [weak self, widgetDriver, messagePublisher] in
+        Task.detached { [weak self, widgetDriver] in
             MXLog.debug("Started message receiving loop")
             
             defer {
@@ -141,10 +141,9 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
                     return
                 }
                 
-                messagePublisher.send(receivedMessage)
                 MXLog.debug("Received message: \(receivedMessage)")
                 
-                self?.handleMessageIfNeeded(receivedMessage)
+                await self?.receiveMessage(receivedMessage)
             }
         }
         
@@ -177,11 +176,17 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
     
     // MARK: - WidgetCapabilitiesProvider
     
-    func acquireCapabilities(capabilities: WidgetCapabilities) -> WidgetCapabilities {
+    /// Called by the SDK from arbitrary threads, only touches Sendable state.
+    nonisolated func acquireCapabilities(capabilities: WidgetCapabilities) -> WidgetCapabilities {
         getElementCallRequiredPermissions(ownUserId: room.ownUserId(), ownDeviceId: deviceID)
     }
     
     // MARK: - Private
+    
+    private func receiveMessage(_ message: String) {
+        messagePublisher.send(message)
+        handleMessageIfNeeded(message)
+    }
     
     func handleMessageIfNeeded(_ message: String) {
         guard let data = message.data(using: .utf8) else {

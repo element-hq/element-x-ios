@@ -29,9 +29,9 @@ struct KnockRequestCellInfo: Equatable {
 struct KnockRequestCell: View {
     let cellInfo: KnockRequestCellInfo
     var mediaProvider: MediaProviderProtocol?
-    let onAccept: ((String) -> Void)?
-    let onDecline: ((String) -> Void)?
-    let onDeclineAndBan: ((String) -> Void)?
+    let onAccept: (@MainActor (String) -> Void)?
+    let onDecline: (@MainActor (String) -> Void)?
+    let onDeclineAndBan: (@MainActor (String) -> Void)?
     
     var body: some View {
         HStack(alignment: .top, spacing: 16) {

@@ -10,7 +10,7 @@ import Foundation
 @preconcurrency import KeychainAccess
 import MatrixRustSDK
 
-enum KeychainControllerService: String {
+nonisolated enum KeychainControllerService: String {
     case sessions
     case tests
     
@@ -23,7 +23,9 @@ enum KeychainControllerService: String {
     }
 }
 
-final class KeychainController: KeychainControllerProtocol {
+/// The SDK calls the `ClientSessionDelegate` methods from arbitrary threads and the
+/// underlying `Keychain` is thread-safe, so the controller doesn't need an actor.
+final nonisolated class KeychainController: KeychainControllerProtocol {
     /// The keychain responsible for storing account restoration tokens (keyed by userID).
     private let restorationTokenKeychain: Keychain
     /// The keychain responsible for storing all other secrets in the app (keyed by `Key`s).

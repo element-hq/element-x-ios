@@ -9,7 +9,6 @@
 import Combine
 import Foundation
 
-@MainActor
 protocol UserDetailsEditScreenViewModelProtocol {
     var actions: AnyPublisher<UserDetailsEditScreenViewModelAction, Never> { get }
     var context: UserDetailsEditScreenViewModelType.Context { get }

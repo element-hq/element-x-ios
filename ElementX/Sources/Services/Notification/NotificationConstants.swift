@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum NotificationConstants {
+nonisolated enum NotificationConstants {
     enum UserInfoKey {
         static let roomIdentifier = "room_id"
         static let eventIdentifier = "event_id"

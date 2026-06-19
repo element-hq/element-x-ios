@@ -107,7 +107,6 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
     }
 }
 
-@MainActor
 class MockScreen: Identifiable {
     let id: UITestsScreenIdentifier
     let windowManager: SecureWindowManagerProtocol
@@ -624,7 +623,7 @@ class MockScreen: Identifiable {
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(topLevelSpaces: .mockSpaceList.filter(\.isSpace) + .mockSingleRoom),
-                                                    roomPreviews: [SpaceServiceRoom].mockSpaceList.map(RoomPreviewProxyMock.init),
+                                                    roomPreviews: [SpaceServiceRoom].mockSpaceList.map { RoomPreviewProxyMock(spaceServiceRoom: $0) },
                                                     defaultRoomMembers: .allMembersAsAdmin))
             clientProxy.recentlyVisitedRoomsFilterReturnValue = .mockRooms
             
@@ -748,6 +747,7 @@ class MockScreen: Identifiable {
             
             let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: userSession,
                                                                                   appSettings: appSettings,
+                                                                                  appHooks: AppHooks(),
                                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                                   navigationStackCoordinator: navigationStackCoordinator))
             retainedState.append(coordinator)

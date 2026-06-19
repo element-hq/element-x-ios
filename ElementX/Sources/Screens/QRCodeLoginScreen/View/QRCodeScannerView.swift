@@ -109,17 +109,19 @@ final class QRScannerController: UIViewController {
     }
     
     func startScan() {
-        // Start video capture.
+        // AVCaptureSession start/stop are blocking calls that Apple documents should be
+        // made off the main thread, the session synchronises access internally.
+        nonisolated(unsafe) let captureSession = captureSession
         DispatchQueue.global(qos: .userInitiated).async {
-            self.captureSession.startRunning()
+            captureSession.startRunning()
             MXLog.info("QRCodeScannerView: capture session started")
         }
     }
     
     func stopScan() {
-        // Stop video capture.
+        nonisolated(unsafe) let captureSession = captureSession
         DispatchQueue.global(qos: .userInitiated).async {
-            self.captureSession.stopRunning()
+            captureSession.stopRunning()
             MXLog.info("QRCodeScannerView: capture session stopped")
         }
     }

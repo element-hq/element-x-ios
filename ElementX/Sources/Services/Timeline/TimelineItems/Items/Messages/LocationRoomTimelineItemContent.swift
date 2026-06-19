@@ -8,7 +8,7 @@
 
 import MatrixRustSDK
 
-struct LocationRoomTimelineItemContent: Hashable {
+nonisolated struct LocationRoomTimelineItemContent: Hashable {
     let body: String
     let geoURI: GeoURI?
     let kind: StaticLocationKind
@@ -22,7 +22,7 @@ struct LocationRoomTimelineItemContent: Hashable {
     }
 }
 
-enum StaticLocationKind {
+nonisolated enum StaticLocationKind {
     case sender
     case pin
     

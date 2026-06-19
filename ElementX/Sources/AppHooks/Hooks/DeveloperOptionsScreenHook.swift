@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-protocol DeveloperOptionsScreenHookProtocol {
+nonisolated protocol DeveloperOptionsScreenHookProtocol: Sendable {
     func generalSectionRows() -> AnyView?
 }
 

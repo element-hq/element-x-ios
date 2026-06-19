@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct AttributedStringBuilderComponent: Hashable, Identifiable {
+nonisolated struct AttributedStringBuilderComponent: Hashable, Identifiable {
     enum ComponentType {
         case plainText
         case blockquote
@@ -21,7 +21,7 @@ struct AttributedStringBuilderComponent: Hashable, Identifiable {
     let type: ComponentType
 }
 
-protocol AttributedStringBuilderProtocol {
+nonisolated protocol AttributedStringBuilderProtocol: Sendable {
     func fromPlain(_ string: String?) -> AttributedString?
     
     func fromHTML(_ htmlString: String?) -> AttributedString?

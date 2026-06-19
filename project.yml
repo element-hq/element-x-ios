@@ -53,7 +53,7 @@ settings:
   ENABLE_BITCODE: false
   APP_NAME: ElementX
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 26.06.1
+  MARKETING_VERSION: 26.06.2
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -74,17 +74,17 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.06.03
+    exactVersion: 26.06.16
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.36.0
+    minorVersion: 0.36.1
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.20.0
+    exactVersion: 0.20.1
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
@@ -108,10 +108,10 @@ packages:
     minorVersion: 1.1.4
   Clocks:
     url: https://github.com/pointfreeco/swift-clocks
-    from: 1.0.6
+    from: 1.1.0
   Collections:
     url: https://github.com/apple/swift-collections
-    minorVersion: 1.5.1
+    minorVersion: 1.6.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
     minorVersion: 5.8.0
@@ -141,22 +141,22 @@ packages:
     minorVersion: 1.2.1
   Mantis:
     url: https://github.com/guoyingtao/Mantis
-    minorVersion: 2.31.1
+    minorVersion: 2.31.2
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    minorVersion: 6.26.0
+    minorVersion: 6.27.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.59.1
+    minorVersion: 3.59.3
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 9.15.0
+    minorVersion: 9.17.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.19.2
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
-    minorVersion: 3.1.1
+    minorVersion: 3.4.0
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
     minorVersion: 2.13.5

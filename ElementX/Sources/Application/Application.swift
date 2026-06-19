@@ -14,6 +14,7 @@ struct Application: App {
     @Environment(\.openURL) private var openURL
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow
+    @Environment(\.displayScale) private var displayScale
     
     private var appCoordinator: AppCoordinatorProtocol!
     
@@ -51,6 +52,7 @@ struct Application: App {
                     appCoordinator.handleUserActivity(userActivity)
                 }
                 .task {
+                    UserAgentBuilder.displayScale = displayScale
                     appCoordinator.start()
                     appCoordinator.windowManager.configure(withOpenWindowAction: openWindow,
                                                            dismissWindowAction: dismissWindow)

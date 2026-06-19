@@ -5,7 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-enum RoomListActivityVisibility: String, CaseIterable, Codable {
+nonisolated enum RoomListActivityVisibility: String, CaseIterable, Codable {
     /// Show unread badges for all unread messages (the default).
     case current
     /// Don't show badges but bold unread room names and their latest message

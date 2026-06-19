@@ -100,7 +100,11 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         
         // A task we can await until the room's info gets modified with the new power levels.
         // Note: Ignore the first value as the publisher is backed by a current value subject.
-        let infoTask = Task { await roomProxy.infoPublisher.dropFirst().values.first { _ in true } }
+        let infoTask = Task {
+            var iterator = roomProxy.infoPublisher.values.makeAsyncIterator()
+            _ = await iterator.next(isolation: #isolation) // The publisher's current value.
+            _ = await iterator.next(isolation: #isolation)
+        }
         
         switch await roomProxy.updatePowerLevelsForUsers([(userID: roomProxy.ownUserID, powerLevel: role.powerLevelValue)]) {
         case .success:

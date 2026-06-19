@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol LogViewerScreenViewModelProtocol {
     var actions: AnyPublisher<LogViewerScreenViewModelAction, Never> { get }
     var context: LogViewerScreenViewModelType.Context { get }

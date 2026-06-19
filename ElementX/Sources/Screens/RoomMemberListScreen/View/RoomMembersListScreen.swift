@@ -128,7 +128,6 @@ struct RoomMembersListScreen: View {
     }
 }
 
-@MainActor
 private enum MembersSection {
     case joined
     case invited

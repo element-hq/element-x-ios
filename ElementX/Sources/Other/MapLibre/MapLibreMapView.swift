@@ -233,7 +233,10 @@ extension MapLibreMapView {
                 
                 // Mirror every animated coordinate update to keep the camera as smooth as the marker.
                 followedAnnotationObservation = annotation.observe(\.coordinate) { [weak mapView] annotation, _ in
-                    mapView?.setCenter(annotation.coordinate, animated: false)
+                    // The coordinate is only ever updated by SwiftUI so KVO fires on the main actor.
+                    MainActor.assumeIsolated {
+                        mapView?.setCenter(annotation.coordinate, animated: false)
+                    }
                 }
             }
         }
@@ -303,7 +306,7 @@ extension MapLibreMapView {
             // is an option set and gestures can come combined with other reasons, so check for
             // containment instead of an exact match.
             let centerChangingGestures: MLNCameraChangeReason = [.gesturePan, .gesturePinch, .gestureRotate]
-            if !reason.intersection(centerChangingGestures).isEmpty {
+            if !reason.isDisjoint(with: centerChangingGestures) {
                 // Stop following immediately, the camera would fight the gesture otherwise.
                 stopFollowingMarker()
                 mapLibreView.userDidPan?()

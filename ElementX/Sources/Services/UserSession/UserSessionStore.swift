@@ -128,7 +128,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        await appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
+        appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
         
         let builder = ClientBuilder
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,

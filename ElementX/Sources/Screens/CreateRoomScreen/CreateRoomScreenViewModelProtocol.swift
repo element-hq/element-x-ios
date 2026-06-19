@@ -9,7 +9,6 @@
 import Combine
 import Foundation
 
-@MainActor
 protocol CreateRoomScreenViewModelProtocol {
     var actions: AnyPublisher<CreateRoomScreenViewModelAction, Never> { get }
     var context: CreateRoomScreenViewModelType.Context { get }

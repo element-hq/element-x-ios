@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-enum TimelineItemThreadSummary: Hashable {
+nonisolated enum TimelineItemThreadSummary: Hashable {
     case notLoaded
     case loading
     case loaded(senderID: String, sender: TimelineItemSender, latestEventContent: TimelineEventContent, numberOfReplies: Int)

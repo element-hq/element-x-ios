@@ -1,3 +1,59 @@
+## Changes in 26.06.1 (2026-06-17)
+
+### What's Changed
+
+✨ Features
+* Add flip options to the MediaUploadPreview image edit screen by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5706
+* Automatically adjust the ElementCall PiP when changing orientations by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5701
+* Wrap selected text in a markdown link when pasting a URL over it by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5732
+
+🙌 Improvements
+* Hide user dot and track own user marker in Live Location mode. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5707
+* Migrate the share extension to swift 6 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5713
+
+🐛 Bugfixes
+* Render user and room alias links in a room's topic view by @mredig in https://github.com/element-hq/element-x-ios/pull/5709
+* Correctly handle user profile dismissals in the RoomMembersFlowCoordinator by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5711
+* Report a phantom call to CallKit on PushKit early-return paths by @danderson-cont in https://github.com/element-hq/element-x-ios/pull/5682
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5717
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5736
+
+🦻 Accessibility
+* Add a11y labels to media upload preview screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5740
+* Create new room - remove wrong header trait by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5741
+* Set pin a11y improvements by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5742
+* Add ishHeader trait were required by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5744
+
+🧱 Build
+* Remove the .editorconfig file by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5703
+* Bring back the .editorconfig file without the trim rule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5712
+* use swift 6.2 for  dev tools by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5720
+* Update codecov action by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5727
+
+Others
+* Update XcodeGen to v3.59.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5693
+* Various testing tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5697
+* Update XcodeGen to v9.15.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5700
+* Added a comments section to agents.md and use caveman by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5710
+* Client pausing and resuming timing fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5705
+* Some more tweaks to compound for User Status. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5708
+* Bump the CI tests to OS26.5 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5719
+* Update GitHub Actions to v6.0.3 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5722
+* bump rich text editor to 2.42.0 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5724
+* Updated user sessions flow ui tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5729
+* Setup proper logging for MapLibre and location views. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5730
+* Update Compound to v10.2.2 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5728
+* Update GitHub Actions to v7 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5734
+* Log Sentry crash events through MXLog by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5737
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5743
+* Voiceover reads add avatar when there is no avatar yet by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5746
+* Update XcodeGen by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5748
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.06.0...release/26.06.1
+
 ## Changes in 26.06.0 (2026-06-03)
 
 ### What's Changed

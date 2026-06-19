@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+nonisolated struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let body: String
     

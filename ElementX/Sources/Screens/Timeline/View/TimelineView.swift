@@ -101,7 +101,6 @@ struct TimelineViewRepresentable: UIViewControllerRepresentable {
     
     // MARK: - Coordinator
     
-    @MainActor
     class Coordinator {
         let context: TimelineViewModel.Context
         

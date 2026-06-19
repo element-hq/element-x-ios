@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomMemberProxyMockConfiguration {
+nonisolated struct RoomMemberProxyMockConfiguration {
     var userID: String
     var displayName: String?
     var avatarURL: URL?

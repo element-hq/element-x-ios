@@ -24,7 +24,6 @@ enum AudioPlayerStateIdentifier {
     case recorderPreview
 }
 
-@MainActor
 class AudioPlayerState: ObservableObject, Identifiable {
     let id: AudioPlayerStateIdentifier
     let title: String

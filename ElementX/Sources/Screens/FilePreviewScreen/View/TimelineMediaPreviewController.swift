@@ -153,7 +153,10 @@ class TimelineMediaPreviewController: QLPreviewController {
         // Ridiculous hack to undo the controller's attempt to replace our info button with the list button.
         if barButtonTimer == nil {
             barButtonTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-                self?.updateBarButtons()
+                // The timer is scheduled on the main run loop so it always fires on the main actor.
+                MainActor.assumeIsolated {
+                    self?.updateBarButtons()
+                }
             }
         }
     }

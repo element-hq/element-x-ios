@@ -34,7 +34,6 @@ enum AppLockServiceBiometricResult {
     case interrupted
 }
 
-@MainActor
 protocol AppLockServiceProtocol: AnyObject {
     /// The use of a PIN code is mandatory for this device.
     var isMandatory: Bool { get }

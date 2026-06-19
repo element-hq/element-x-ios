@@ -113,7 +113,6 @@ private struct TimelineItemSendInfoLabel: View {
 }
 
 /// All the data needed to render a timeline item's send info label.
-@MainActor
 private struct TimelineItemSendInfo {
     enum Status {
         case sendingFailed
@@ -200,7 +199,6 @@ private extension LiveLocationRoomTimelineItem {
     }
 }
 
-@MainActor
 private extension EncryptionAuthenticity {
     var foregroundStyle: SwiftUI.Color {
         switch color {

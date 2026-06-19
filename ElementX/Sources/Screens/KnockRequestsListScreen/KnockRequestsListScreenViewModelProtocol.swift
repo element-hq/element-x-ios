@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol KnockRequestsListScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<KnockRequestsListScreenViewModelAction, Never> { get }
     var context: KnockRequestsListScreenViewModelType.Context { get }

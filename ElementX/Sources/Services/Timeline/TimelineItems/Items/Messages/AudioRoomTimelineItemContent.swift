@@ -9,7 +9,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
-struct AudioRoomTimelineItemContent: Hashable {
+nonisolated struct AudioRoomTimelineItemContent: Hashable {
     let filename: String
     var caption: String?
     var formattedCaption: AttributedString?

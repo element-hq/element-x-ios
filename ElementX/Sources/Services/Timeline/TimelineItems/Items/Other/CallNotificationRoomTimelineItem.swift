@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
+nonisolated struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
     let isEditable: Bool

@@ -14,7 +14,7 @@ struct RoomNotificationSettingsProxyMockConfiguration {
     var isDefault = true
 }
 
-extension RoomNotificationSettingsProxyMock {
+@MainActor extension RoomNotificationSettingsProxyMock {
     convenience init(with configuration: RoomNotificationSettingsProxyMockConfiguration) {
         self.init()
         

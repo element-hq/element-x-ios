@@ -8,8 +8,8 @@
 
 import Foundation
 
-protocol OAuthPresenterHookProtocol {
-    func update(_ url: URL) -> URL
+nonisolated protocol OAuthPresenterHookProtocol: Sendable {
+    @MainActor func update(_ url: URL) -> URL
 }
 
 struct DefaultOAuthPresenterHook: OAuthPresenterHookProtocol {

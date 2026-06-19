@@ -14,7 +14,7 @@ enum LinkNewDeviceScreenViewModelAction {
 }
 
 struct LinkNewDeviceScreenViewState: BindableState {
-    enum Mode: Equatable {
+    nonisolated enum Mode: Equatable {
         case loading
         case readyToLink(isGeneratingCode: Bool)
         case error(QRCodeLoginState.ErrorState)

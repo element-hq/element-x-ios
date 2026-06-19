@@ -10,7 +10,7 @@ import Combine
 import Foundation
 import UIKit
 
-struct BugReport: Equatable {
+nonisolated struct BugReport: Equatable {
     let userID: String?
     let deviceID: String?
     let ed25519: String?

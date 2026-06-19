@@ -28,27 +28,31 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
         spaceRoomsSubject.asCurrentValuePublisher()
     }
     
-    private let paginationStateHandle: TaskHandle
-    let paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never>
+    private var paginationStateHandle: TaskHandle?
+    private let paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never>
+    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> {
+        paginationStateSubject.asCurrentValuePublisher()
+    }
     
     init(_ spaceRoomList: SpaceRoomListProtocol) async throws {
         guard let spaceRoom = spaceRoomList.space() else { throw SpaceRoomListProxyError.missingSpace }
         
         self.spaceRoomList = spaceRoomList
         spaceServiceRoomSubject = .init(SpaceServiceRoom(spaceRoom: spaceRoom))
+        paginationStateSubject = .init(spaceRoomList.paginationState())
         
-        let paginationStateSubject = CurrentValueSubject<SpaceRoomListPaginationState, Never>(spaceRoomList.paginationState())
-        paginationStatePublisher = paginationStateSubject.asCurrentValuePublisher()
-        
-        paginationStateHandle = spaceRoomList.subscribeToPaginationStateUpdates(listener: SDKListener { paginationState in
-            paginationStateSubject.send(paginationState)
+        // The SDK calls listeners from arbitrary threads; onMainActor applies the updates on the
+        // main actor in FIFO order. The subscriptions (and so the listeners) live as long as their
+        // handles, which are released when this proxy is deallocated.
+        paginationStateHandle = spaceRoomList.subscribeToPaginationStateUpdates(listener: SDKListener.onMainActor { [weak self] paginationState in
+            self?.paginationStateSubject.send(paginationState)
         })
         
-        spaceRoomsHandle = await spaceRoomList.subscribeToRoomUpdate(listener: SDKListener { [weak self] updates in
+        spaceRoomsHandle = await spaceRoomList.subscribeToRoomUpdate(listener: SDKListener.onMainActor { [weak self] updates in
             self?.handleUpdates(updates)
         })
         
-        spaceServiceRoomHandle = spaceRoomList.subscribeToSpaceUpdates(listener: SDKListener { [weak self] spaceRoom in
+        spaceServiceRoomHandle = spaceRoomList.subscribeToSpaceUpdates(listener: SDKListener.onMainActor { [weak self] spaceRoom in
             guard let spaceRoom else { return }
             self?.spaceServiceRoomSubject.send(SpaceServiceRoom(spaceRoom: spaceRoom))
         })

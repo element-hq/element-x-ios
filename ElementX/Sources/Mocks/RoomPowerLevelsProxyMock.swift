@@ -8,7 +8,7 @@
 
 import MatrixRustSDK
 
-extension RoomPowerLevelsProxyMock {
+@MainActor extension RoomPowerLevelsProxyMock {
     struct Configuration {
         var canUserSendMessage = true
         var canUserSendState = false

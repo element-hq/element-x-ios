@@ -8,7 +8,7 @@
 
 import MatrixRustSDK
 
-struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
+nonisolated struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     private let powerLevels: RoomPowerLevels
     
     init?(_ powerLevels: RoomPowerLevels?) {

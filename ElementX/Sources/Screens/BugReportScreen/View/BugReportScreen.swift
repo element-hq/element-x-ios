@@ -101,7 +101,10 @@ struct BugReportScreen: View {
                 PhotosPicker(selection: $selectedScreenshot,
                              matching: .screenshots,
                              photoLibrary: .shared()) {
-                    ListRowLabel.plain(title: photosPickerTitle)
+                    // The label builder isn't isolated in SwiftUI's signature but is only ever called on the main actor.
+                    MainActor.assumeIsolated {
+                        ListRowLabel.plain(title: photosPickerTitle)
+                    }
                 }
             })
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)

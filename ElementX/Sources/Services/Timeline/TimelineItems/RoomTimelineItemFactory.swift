@@ -10,7 +10,7 @@ import MatrixRustSDK
 import UIKit
 import UniformTypeIdentifiers
 
-struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
+nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let stateEventStringBuilder: RoomStateEventStringBuilder
     
@@ -927,7 +927,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
 }
 
-private extension EmbeddedEventDetails {
+private nonisolated extension EmbeddedEventDetails {
     var isThreaded: Bool {
         switch self {
         case .ready(.msgLike(let messageLikeContent), _, _, _, _):
@@ -938,7 +938,7 @@ private extension EmbeddedEventDetails {
     }
 }
 
-private extension Receipt {
+private nonisolated extension Receipt {
     var dateTimestamp: Date? {
         guard let timestamp else {
             return nil

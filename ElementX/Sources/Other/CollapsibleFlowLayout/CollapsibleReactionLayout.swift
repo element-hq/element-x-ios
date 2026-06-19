@@ -12,7 +12,7 @@ import SwiftUI
 /// on the same row (moving them both to a new row if necessary).
 /// Each subview should be marked with the appropriate `ReactionLayoutItem` using the `reactionLayoutItem` modified
 /// so the layout can appropriately treat each type of item.
-struct CollapsibleReactionLayout: Layout {
+nonisolated struct CollapsibleReactionLayout: Layout {
     static let pointOffscreen = CGPoint(x: -10000, y: -10000)
     /// The horizontal spacing between items
     var itemSpacing: CGFloat = 0
@@ -250,33 +250,33 @@ struct CollapsibleReactionLayout: Layout {
     }
 }
 
-struct ReactionSubviews {
+nonisolated struct ReactionSubviews {
     var reactions: [FlowLayoutSubview]
     var collapseButton: FlowLayoutSubview
     var addMoreButton: FlowLayoutSubview
 }
 
 /// A protocol representing subviews so that we can inject mocks in unit tests.
-protocol FlowLayoutSubviews: RandomAccessCollection where Element: FlowLayoutSubview, Index == Int, SubSequence == Self { }
+nonisolated protocol FlowLayoutSubviews: RandomAccessCollection where Element: FlowLayoutSubview, Index == Int, SubSequence == Self { }
 
-extension LayoutSubviews: FlowLayoutSubviews { }
+nonisolated extension LayoutSubviews: FlowLayoutSubviews { }
 
 /// A protocol representing a subview so that we can inject mocks in unit tests.
-protocol FlowLayoutSubview {
+nonisolated protocol FlowLayoutSubview {
     func sizeThatFits(_ proposal: ProposedViewSize) -> CGSize
     func place(at position: CGPoint, anchor: UnitPoint, proposal: ProposedViewSize)
     subscript<K>(key: K.Type) -> K.Value where K: LayoutValueKey { get }
 }
 
-extension LayoutSubview: FlowLayoutSubview { }
+nonisolated extension LayoutSubview: FlowLayoutSubview { }
 
-enum ReactionLayoutItem {
+nonisolated enum ReactionLayoutItem {
     case reaction
     case expandCollapse
     case addMore
 }
 
-struct ReactionLayoutItemType: LayoutValueKey {
+nonisolated struct ReactionLayoutItemType: LayoutValueKey {
     static let defaultValue: ReactionLayoutItem = .reaction
 }
 

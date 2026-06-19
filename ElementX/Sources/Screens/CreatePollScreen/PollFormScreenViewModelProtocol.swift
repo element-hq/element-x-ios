@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol PollFormScreenViewModelProtocol {
     var actions: AnyPublisher<PollFormScreenViewModelAction, Never> { get }
     var context: PollFormScreenViewModelType.Context { get }

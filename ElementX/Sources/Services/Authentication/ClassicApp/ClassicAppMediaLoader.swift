@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// A media provider that can download a `ClassicAppAccount`'s avatar image.
-class ClassicAppMediaLoader: MediaLoaderProtocol {
+final class ClassicAppMediaLoader: MediaLoaderProtocol {
     let classicAppAccount: ClassicAppAccount
     let urlSession: URLSession
     

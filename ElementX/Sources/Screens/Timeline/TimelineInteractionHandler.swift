@@ -31,7 +31,6 @@ enum TimelineInteractionHandlerAction {
 
 /// The interaction handler groups logic for dealing with various actions the user can take on a timeline's
 /// view that would've normally been part of the ``TimelineViewModel``
-@MainActor
 class TimelineInteractionHandler {
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol

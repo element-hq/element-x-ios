@@ -10,10 +10,10 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-struct TimelinePaginationState: Equatable {
+nonisolated struct TimelinePaginationState: Equatable {
     /// An initial state that is used to prevent pagination whilst loading the timeline.
     /// Once the initial items are loaded the TimelineProxy will publish the correct value.
-    static var initial = TimelinePaginationState(backward: .endReached, forward: .endReached)
+    static let initial = TimelinePaginationState(backward: .endReached, forward: .endReached)
     let backward: PaginationState
     let forward: PaginationState
 }
@@ -21,7 +21,6 @@ struct TimelinePaginationState: Equatable {
 /// Entities implementing this protocol are responsible for processings diffs coming from the rust timeline
 /// and converting them into an array of Element X specific ``TimelineItemProxy``s that will be
 /// published as an array together with the pagination state through the ``updatePublisher``.
-@MainActor
 protocol TimelineItemProviderProtocol {
     /// A publisher that signals when ``itemProxies`` or ``paginationState`` are changed.
     var updatePublisher: AnyPublisher<([TimelineItemProxy], TimelinePaginationState), Never> { get }

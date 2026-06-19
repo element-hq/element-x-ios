@@ -12,7 +12,7 @@ import SwiftUI
 ///
 /// A custom layout is required as the embedded quote bubbles and code blocks should fill the entire
 /// width of the message bubble, without causing the width of the bubble to fill all of the available space.
-struct TimelineBubbleLayout: Layout {
+nonisolated struct TimelineBubbleLayout: Layout {
     struct Cache {
         var sizes = [Int: [ProposedViewSize: CGSize]]()
     }

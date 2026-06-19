@@ -154,7 +154,12 @@ class ClientProxy: ClientProxyProtocol {
     private var hasEncounteredAuthError = false
     
     deinit {
-        pauseServices { [delegateHandle] in
+        // Stop the sync and cancel the delegate (in that order) before the client is released. No need to pause
+        // the client as it's being deallocated, so the SDK tears it down anyway. Capture the sync service strongly
+        // as `self` is being deallocated.
+        Task { [syncService, delegateHandle] in
+            await syncService.stop()
+            
             // The delegate handle needs to be cancelled always after the sync stops
             delegateHandle?.cancel()
         }
@@ -242,8 +247,11 @@ class ClientProxy: ClientProxyProtocol {
         roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
         
         delegateHandle = try client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
-            self?.hasEncounteredAuthError = true
-            self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+            // Called by the SDK from arbitrary threads, hop to the main actor where the proxy lives.
+            Task { @MainActor in
+                self?.hasEncounteredAuthError = true
+                self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+            }
         } backgroundTaskErrorCallback: { error in
             switch error {
             case .panic(let message, let backtrace):
@@ -402,21 +410,7 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        if appSettings.clientPausingAndResumingEnabled {
-            do {
-                MXLog.info("Resuming client")
-                try await client.resume()
-            } catch {
-                MXLog.error("Failed resuming client with error: \(error)")
-            }
-        }
-        
-        MXLog.info("Starting sync")
-        await syncService.start()
-        
-        // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
-        // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
-        await cacheAccountURL()
+        await transitionServices(to: .running).value
     }
     
     /// A stored task for restarting the sync after a failure. This is stored so that we can cancel
@@ -440,35 +434,14 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func pauseServices(completion: (() -> Void)?) {
+    func pauseServices() async {
         MXLog.info("Pausing services")
         
         if restartTask != nil {
             restartTask = nil
         }
         
-        // Capture the sync service strongly as this method is called on deinit and so the
-        // existence of self when the Task executes is questionable and would sometimes crash.
-        // Note: This isn't strictly necessary now given the unwrap above, but leaving the code as
-        // documentation. SE-0371 will allow us to fix this by using an async deinit.
-        Task { [syncService] in
-            defer {
-                completion?()
-            }
-            
-            MXLog.info("Stopping sync")
-            await syncService.stop()
-            MXLog.info("Sync stopped")
-            
-            if appSettings.clientPausingAndResumingEnabled {
-                do {
-                    MXLog.info("Pausing client")
-                    try await client.pause()
-                } catch {
-                    MXLog.error("Failed pausing client with error: \(error)")
-                }
-            }
-        }
+        await transitionServices(to: .suspended).value
     }
     
     func expireSyncSessions() async {
@@ -658,7 +631,8 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         if !staticRoomSummaryProvider.statePublisher.value.isLoaded {
-            _ = await staticRoomSummaryProvider.statePublisher.values.first { $0.isLoaded }
+            var iterator = staticRoomSummaryProvider.statePublisher.values.makeAsyncIterator()
+            while let state = await iterator.next(isolation: #isolation), !state.isLoaded { }
         }
         
         if shouldAwait {
@@ -934,7 +908,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func recentlyVisitedRooms(filter: (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
+    func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
         let maxResultsToReturn = 5
         
         guard case let .success(roomIdentifiers) = await recentlyVisitedRoomIDs() else {
@@ -1035,7 +1009,7 @@ class ClientProxy: ClientProxyProtocol {
             }
             .store(in: &cancellables)
         
-        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: SDKListener { [weak self] ignoredUsers in
+        ignoredUsersListenerTaskHandle = client.subscribeToIgnoredUsers(listener: SDKListener.onMainActor { [weak self] ignoredUsers in
             self?.ignoredUsersSubject.send(ignoredUsers)
         })
         
@@ -1044,12 +1018,12 @@ class ClientProxy: ClientProxyProtocol {
             Task { await self?.updateVerificationState(verificationState) }
         })
         
-        sendQueueStatusListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SDKListener { [weak self] roomID, error in
+        sendQueueStatusListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SDKListener.onMainActor { [weak self] roomID, error in
             MXLog.error("Send queue failed in room: \(roomID) with error: \(error)")
             self?.sendQueueStatusSubject.send(false)
         })
         
-        sendQueueUpdatesListenerTaskHandle = try? await client.subscribeToSendQueueUpdates(listener: SDKListener { [analyticsService] _, update in
+        sendQueueUpdatesListenerTaskHandle = try? await client.subscribeToSendQueueUpdates(listener: SDKListener.onMainActor { [analyticsService] _, update in
             switch update {
             case .newLocalEvent(let transactionID):
                 analyticsService.signpost.startTransaction(.sendMessage(uuid: transactionID))
@@ -1063,10 +1037,12 @@ class ClientProxy: ClientProxyProtocol {
         sendQueueStatusSubject
             .combineLatest(homeserverReachabilityPublisher)
             .debounce(for: 1.0, scheduler: DispatchQueue.main)
-            .sink { [client] enabled, reachability in
+            .sink { [weak self, client] enabled, reachability in
                 MXLog.info("Send queue status changed to enabled: \(enabled), homeserver reachability: \(reachability)")
                 
-                if enabled == false, reachability == .reachable {
+                // Don't restart the send queue unless the client is meant to be running; doing so while
+                // suspended would generate network activity in the window we paused to keep quiet.
+                if enabled == false, reachability == .reachable, self?.desiredServiceState == .running {
                     MXLog.info("Enabling all send queues")
                     Task {
                         await client.enableAllSendQueues(enable: true)
@@ -1083,6 +1059,71 @@ class ClientProxy: ClientProxyProtocol {
             }
             .store(in: &cancellables)
     }
+    
+    // MARK: - Pausing and resuming
+    
+    private enum ServiceState { case running, suspended }
+    
+    /// The state the sync service and client *should* be in, updated by ``resumeServices()`` and ``pauseServices()``.
+    private var desiredServiceState: ServiceState = .suspended
+    
+    /// Serialises service state transitions so that pause and resume never interleave. Each request chains onto
+    /// the previous one and the reconcile always drives the SDK to the *latest* desired state, so a late background
+    /// pause can no longer strand the client suspended after a foreground resume.
+    private var serviceStateTask: Task<Void, Never>?
+    
+    @discardableResult
+    private func transitionServices(to state: ServiceState) -> Task<Void, Never> {
+        desiredServiceState = state
+        
+        let previousTask = serviceStateTask
+        let task = Task { [weak self] in
+            await previousTask?.value
+            await self?.reconcileServiceState()
+        }
+        serviceStateTask = task
+        return task
+    }
+    
+    private func reconcileServiceState() async {
+        switch desiredServiceState {
+        case .running:
+            if appSettings.clientPausingAndResumingEnabled {
+                do {
+                    MXLog.info("Resuming client")
+                    try await client.resume()
+                } catch {
+                    MXLog.error("Failed resuming client with error: \(error)")
+                }
+            }
+            
+            MXLog.info("Starting sync")
+            await syncService.start()
+            
+            // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
+            // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
+            await cacheAccountURL()
+            
+            // Nudge the send queue listener to re-evaluate now that we're running; a resume doesn't otherwise
+            // emit, and the SDK only re-enables queues when client.resume() runs (gated behind the flag).
+            sendQueueStatusSubject.send(sendQueueStatusSubject.value)
+        case .suspended:
+            MXLog.info("Stopping sync")
+            await syncService.stop()
+            MXLog.info("Sync stopped")
+            
+            if appSettings.clientPausingAndResumingEnabled {
+                do {
+                    MXLog.info("Pausing client")
+                    try await client.pause()
+                } catch {
+                    MXLog.error("Failed pausing client with error: \(error)")
+                }
+            }
+        }
+    }
+    
+    // MARK: - Other
     
     private func cacheAccountURL() async {
         // Calling this function for the first time will cache the account URL in volatile memory for 24 hrs on the SDK.
@@ -1135,7 +1176,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createSyncServiceStateObserver(_ syncService: SyncService) -> TaskHandle {
-        syncService.state(listener: SDKListener { [weak self] state in
+        syncService.state(listener: SDKListener.onMainActor { [weak self] state in
             guard let self else { return }
             
             MXLog.info("Received sync service update: \(state)")
@@ -1153,7 +1194,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private func createMediaPreviewConfigObserver() async -> TaskHandle? {
         do {
-            return try await client.subscribeToMediaPreviewConfig(listener: SDKListener { [weak self] config in
+            return try await client.subscribeToMediaPreviewConfig(listener: SDKListener.onMainActor { [weak self] config in
                 guard let self else { return }
                 
                 if let config {
@@ -1173,7 +1214,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private func createLiveLocationOwnInfoUpdatesObserver() -> TaskHandle? {
         do {
-            return try client.subscribeToOwnBeaconInfoUpdates(listener: SDKListener { [weak self] update in
+            return try client.subscribeToOwnBeaconInfoUpdates(listener: SDKListener.onMainActor { [weak self] update in
                 guard let self else { return }
                 let appUpdate = LiveLocationOwnInfoUpdate(roomID: update.roomId,
                                                           eventID: update.eventId,
@@ -1187,7 +1228,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createRoomListServiceObserver(_ roomListService: RoomListService) -> TaskHandle {
-        roomListService.state(listener: SDKListener { [weak self] state in
+        roomListService.state(listener: SDKListener.onMainActor { [weak self] state in
             guard let self else { return }
             
             MXLog.info("Received room list update: \(state)")
@@ -1209,7 +1250,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createRoomListLoadingStateUpdateObserver(_ roomListService: RoomListService) -> TaskHandle {
-        roomListService.syncIndicator(delayBeforeShowingInMs: 1000, delayBeforeHidingInMs: 0, listener: SDKListener { [weak self] state in
+        roomListService.syncIndicator(delayBeforeShowingInMs: 1000, delayBeforeHidingInMs: 0, listener: SDKListener.onMainActor { [weak self] state in
             guard let self else { return }
             
             switch state {

@@ -59,9 +59,49 @@ public extension TextFieldStyle where Self == CompoundTextFieldStyle {
 public struct CompoundTextFieldStyle: @MainActor TextFieldStyle {
     public enum Kind {
         /// The standard text field style for use on the default canvas.
-        case plain
+        public static var plain: Self {
+            .plain(.standard)
+        }
+        
         /// A style that raises the text field above the background (typically `bgSubtleSecondaryLevel0`).
-        case raised
+        public static var raised: Self {
+            .raised(.standard)
+        }
+        
+        /// The standard text field style for use on the default canvas.
+        case plain(TextEntry)
+        /// A style that raises the text field above the background (typically `bgSubtleSecondaryLevel0`).
+        case raised(TextEntry)
+        
+        var isRaised: Bool {
+            switch self {
+            case .plain: false
+            case .raised: true
+            }
+        }
+        
+        var textEntry: TextEntry {
+            switch self {
+            case .plain(let textEntry),
+                 .raised(let textEntry):
+                textEntry
+            }
+        }
+    }
+    
+    public enum TextEntry {
+        /// The text entry is configured for a standard `TextField`.
+        case standard
+        /// The text entry is configured for a `SecureField`, using the supplied
+        /// accessibility labels on the "eye" button that reveals any entered text.
+        case secure(hideLabel: String, showLabel: String)
+        
+        var isSecure: Bool {
+            switch self {
+            case .standard: false
+            case .secure: true
+            }
+        }
     }
     
     public enum State {
@@ -76,6 +116,10 @@ public struct CompoundTextFieldStyle: @MainActor TextFieldStyle {
     @Environment(\.isEnabled) private var isEnabled
     
     @FocusState private var isFocused: Bool
+    
+    @SwiftUI.State private var isSecureTextRevealed = false
+    @SwiftUI.State private var secureTextField: UITextField?
+    
     let kind: Kind
     let labelText: Text?
     let footerText: Text?
@@ -89,7 +133,7 @@ public struct CompoundTextFieldStyle: @MainActor TextFieldStyle {
     /// The color of the text field's border.
     private var borderColor: Color {
         guard !isError else { return .compound.textCriticalPrimary }
-        return kind == .raised ? .compound.borderInteractiveSecondary : .clear
+        return kind.isRaised ? .compound.borderInteractiveSecondary : .clear
     }
     
     /// The width of the text field's border.
@@ -108,7 +152,7 @@ public struct CompoundTextFieldStyle: @MainActor TextFieldStyle {
     
     /// The color of the text field's background.
     private var backgroundColor: Color {
-        if kind == .raised {
+        if kind.isRaised {
             isError ? .compound.bgCriticalSubtleHovered :
                 .compound.bgCanvasDefaultLevel1
         } else {
@@ -162,26 +206,52 @@ public struct CompoundTextFieldStyle: @MainActor TextFieldStyle {
                 .foregroundColor(labelColor)
                 .padding(.horizontal, 16)
             
-            configuration
-                .focused($isFocused)
-                .font(.compound.bodyLG)
-                .foregroundColor(textColor)
-                .accentColor(accentColor)
-                .padding(.leading, 16.0)
-                .padding([.vertical, .trailing], 11.0)
-                .background {
-                    ZStack {
-                        shape.fill(backgroundColor)
-                        shape.stroke(borderColor, lineWidth: borderWidth)
+            HStack(spacing: 0) {
+                configuration
+                    .focused($isFocused)
+                    .font(.compound.bodyLG)
+                    .foregroundColor(textColor)
+                    .accentColor(accentColor)
+                    .introspect(.textField, on: .supportedVersions) { textField in
+                        textField.clearButtonMode = kind.textEntry.isSecure ? .never : .whileEditing
+                        textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
+                                                                             attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
+                        textField.accessibilityIdentifier = accessibilityIdentifier
+                        
+                        if kind.textEntry.isSecure {
+                            textField.isSecureTextEntry = !isSecureTextRevealed // SecureField can reset this on e.g. focus change.
+                            
+                            if secureTextField !== textField {
+                                DispatchQueue.main.async { secureTextField = textField }
+                            }
+                        }
                     }
-                    .onTapGesture { isFocused = true } // Set focus with taps outside of the text field
+                
+                switch kind.textEntry {
+                case .secure(let hideLabel, let showLabel):
+                    Button {
+                        isSecureTextRevealed.toggle()
+                        secureTextField?.isSecureTextEntry = !isSecureTextRevealed
+                    } label: {
+                        CompoundIcon(isSecureTextRevealed ? \.visibilityOff : \.visibilityOn,
+                                     size: .medium,
+                                     relativeTo: .compound.bodyLG)
+                            .foregroundStyle(.compound.iconSecondary)
+                    }
+                    .accessibilityLabel(isSecureTextRevealed ? hideLabel : showLabel)
+                case .standard:
+                    EmptyView()
                 }
-                .introspect(.textField, on: .supportedVersions) { textField in
-                    textField.clearButtonMode = .whileEditing
-                    textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
-                                                                         attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
-                    textField.accessibilityIdentifier = accessibilityIdentifier
+            }
+            .padding(.leading, 16.0)
+            .padding([.vertical, .trailing], 11.0)
+            .background {
+                ZStack {
+                    shape.fill(backgroundColor)
+                    shape.stroke(borderColor, lineWidth: borderWidth)
                 }
+                .onTapGesture { isFocused = true } // Set focus with taps outside of the text field
+            }
             
             if let footerText {
                 Label {
@@ -222,7 +292,7 @@ public struct CompoundTextFieldStyle_Previews: PreviewProvider, TestablePreview 
         ScrollView {
             states
         }
-        .previewLayout(.fixed(width: 390, height: 1250))
+        .previewLayout(.fixed(width: 390, height: 1500))
     }
     
     @ViewBuilder
@@ -249,15 +319,24 @@ public struct CompoundTextFieldStyle_Previews: PreviewProvider, TestablePreview 
         }
     }
     
+    @ViewBuilder
     static func textFields(_ kind: CompoundTextFieldStyle.Kind = .plain,
                            labelText: String? = nil,
                            footerText: String? = nil) -> some View {
+        let secureKind: CompoundTextFieldStyle.Kind = switch kind {
+        case .plain: .plain(.secure(hideLabel: "Hide", showLabel: "Show"))
+        case .raised: .raised(.secure(hideLabel: "Hide", showLabel: "Show"))
+        }
+        
         VStack(spacing: 20) {
             TextField("Placeholder", text: .constant(""))
                 .textFieldStyle(.compound(kind, labelText: labelText, footerText: footerText))
             
             TextField("Placeholder", text: .constant("Text"))
                 .textFieldStyle(.compound(kind, labelText: labelText, footerText: footerText))
+            
+            SecureField("Placeholder", text: .constant("p4ssw0rd"))
+                .textFieldStyle(.compound(secureKind, labelText: labelText, footerText: footerText))
             
             TextField("Placeholder", text: .constant("Disabled"))
                 .textFieldStyle(.compound(kind, labelText: labelText, footerText: footerText))
@@ -267,7 +346,7 @@ public struct CompoundTextFieldStyle_Previews: PreviewProvider, TestablePreview 
                 .textFieldStyle(.compound(kind, labelText: labelText, footerText: footerText, state: .error))
         }
         .padding()
-        .background(kind == .raised ? .compound.bgSubtleSecondaryLevel0 : .clear)
+        .background(kind.isRaised ? .compound.bgSubtleSecondaryLevel0 : .clear)
     }
     
     struct Header: View {

@@ -9,7 +9,7 @@
 import Algorithms
 import UIKit
 
-struct TextRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
+nonisolated struct TextRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
     let isOutgoing: Bool

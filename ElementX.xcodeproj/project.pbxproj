@@ -700,6 +700,7 @@
 		748F482FEF4E04D61C39AAD7 /* EmojiPickerScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F174A5627CDB3CAF280D1880 /* EmojiPickerScreenModels.swift */; };
 		74DF5BC17DE9F51E077FD457 /* LinkNewDeviceServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA257D747DD7E6FFA5C2BE2D /* LinkNewDeviceServiceMock.swift */; };
 		7501442D52A65F73DF79FFD4 /* PaginationIndicatorRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B987FC3FDBAA0E1C5AA235C /* PaginationIndicatorRoomTimelineItem.swift */; };
+		75072C529C9C363F531721F1 /* RecoveryKeyScreenHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE97AD18893E2D8120F559D /* RecoveryKeyScreenHook.swift */; };
 		754602A7B2AAD443C4228ED4 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 4278261E147DB2DE5CFB7FC5 /* PostHog */; };
 		755395927DDD6EBDDA5E217A /* SettingsFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28F7A6CEEA4A2815B0F0F55 /* SettingsFlowCoordinator.swift */; };
 		755727E0B756430DFFEC4732 /* SessionVerificationViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF05DA24F71B455E8EFEBC3B /* SessionVerificationViewModelTests.swift */; };
@@ -2329,6 +2330,7 @@
 		7ACFFE7814849BB200CE0969 /* SpaceAddRoomsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceAddRoomsScreenModels.swift; sourceTree = "<group>"; };
 		7AE094FCB6387D268C436161 /* SecureBackupScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupScreenViewModel.swift; sourceTree = "<group>"; };
 		7AE75941583A033A9EDC9FE0 /* RoomChangePermissionsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChangePermissionsScreenViewModel.swift; sourceTree = "<group>"; };
+		7AE97AD18893E2D8120F559D /* RecoveryKeyScreenHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryKeyScreenHook.swift; sourceTree = "<group>"; };
 		7AFD012C3A9F5EF276DDD4AA /* AnalyticsPromptScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		7B04BD3874D736127A8156B8 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7B19B2BCC779ED934E0BBC2A /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
@@ -3748,6 +3750,7 @@
 				8B89D6C760E8CAE29CA28FB1 /* CompoundHook.swift */,
 				0F60FDB3AEFC60830BD289FE /* DeveloperOptionsScreenHook.swift */,
 				04CAC77224E949D8E758E2E3 /* OAuthPresenterHook.swift */,
+				7AE97AD18893E2D8120F559D /* RecoveryKeyScreenHook.swift */,
 				D5D186A6DB8FAC5C9D0E4D61 /* RemoteSettingsHook.swift */,
 				B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */,
 				2A95C9B8299A36A6495DECA6 /* TracingHook.swift */,
@@ -8748,6 +8751,7 @@
 				ABD29E06DD1224812E750AF8 /* ReadReceiptCell.swift in Sources */,
 				1653275750CE11F5CE94DDFD /* ReadReceiptsSummaryView.swift in Sources */,
 				C76892321558E75101E68ED6 /* ReadableFrameModifier.swift in Sources */,
+				75072C529C9C363F531721F1 /* RecoveryKeyScreenHook.swift in Sources */,
 				AF19D65A9C60C6B2646F3210 /* RedactedRoomTimelineItem.swift in Sources */,
 				8CFDA5F1562479CB3A34D277 /* RedactedRoomTimelineView.swift in Sources */,
 				3A2640C52505BAB3D983A92A /* RemotePreference.swift in Sources */,
@@ -9649,8 +9653,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(APP_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/SupportingFiles/ElementX-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "GeneratedInterface-Swift.h";
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -9681,8 +9688,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(APP_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/SupportingFiles/ElementX-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "GeneratedInterface-Swift.h";
+				SWIFT_VERSION = 6.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -9789,7 +9799,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)";
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				MARKETING_VERSION = 26.06.1;
+				MARKETING_VERSION = 26.06.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCTION_APP_NAME = Element;
@@ -9869,7 +9879,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)";
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				MARKETING_VERSION = 26.06.1;
+				MARKETING_VERSION = 26.06.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -10170,7 +10180,7 @@
 			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 6.26.0;
+				minimumVersion = 6.27.0;
 			};
 		};
 		395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */ = {
@@ -10226,7 +10236,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 26.06.03;
+				version = 26.06.16;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
@@ -10250,7 +10260,7 @@
 			repositoryURL = "https://github.com/guoyingtao/Mantis";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 2.31.1;
+				minimumVersion = 2.31.2;
 			};
 		};
 		8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */ = {
@@ -10258,7 +10268,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 0.20.0;
+				version = 0.20.1;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
@@ -10274,7 +10284,7 @@
 			repositoryURL = "https://github.com/pointfreeco/swift-clocks";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.6;
+				minimumVersion = 1.1.0;
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
@@ -10282,7 +10292,7 @@
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 3.59.1;
+				minimumVersion = 3.59.3;
 			};
 		};
 		A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
@@ -10290,7 +10300,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 9.15.0;
+				minimumVersion = 9.17.0;
 			};
 		};
 		AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -10306,7 +10316,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-analytics-events";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.36.0;
+				minimumVersion = 0.36.1;
 			};
 		};
 		CCD235515AFCEE6D2005B705 /* XCRemoteSwiftPackageReference "LRUCache" */ = {
@@ -10362,7 +10372,7 @@
 			repositoryURL = "https://github.com/tevelee/SwiftUI-Flow.git";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 3.1.1;
+				minimumVersion = 3.4.0;
 			};
 		};
 		EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */ = {
@@ -10386,7 +10396,7 @@
 			repositoryURL = "https://github.com/apple/swift-collections";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.5.1;
+				minimumVersion = 1.6.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

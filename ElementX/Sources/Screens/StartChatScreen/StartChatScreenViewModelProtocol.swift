@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol StartChatScreenViewModelProtocol {
     var actions: AnyPublisher<StartChatScreenViewModelAction, Never> { get }
     var context: StartChatScreenViewModelType.Context { get }

@@ -9,7 +9,7 @@ import Foundation
 
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
-internal enum UntranslatedL10n {
+internal nonisolated enum UntranslatedL10n {
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
@@ -43,7 +43,7 @@ internal enum UntranslatedL10n {
 
 // MARK: - Implementation Details
 
-extension UntranslatedL10n {
+nonisolated extension UntranslatedL10n {
   static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
     // No need to check languages, we always default to en for untranslated strings
     guard let bundle = Bundle.lprojBundle(for: "en") else { return key }

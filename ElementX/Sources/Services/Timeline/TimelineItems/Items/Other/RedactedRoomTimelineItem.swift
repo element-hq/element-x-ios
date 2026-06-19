@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-struct RedactedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+nonisolated struct RedactedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let body: String
     let timestamp: Date

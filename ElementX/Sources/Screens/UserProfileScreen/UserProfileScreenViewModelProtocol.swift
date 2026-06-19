@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol UserProfileScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<UserProfileScreenViewModelAction, Never> { get }
     var context: UserProfileScreenViewModelType.Context { get }

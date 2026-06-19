@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol AppLockScreenViewModelProtocol {
     var actions: AnyPublisher<AppLockScreenViewModelAction, Never> { get }
     var context: AppLockScreenViewModelType.Context { get }

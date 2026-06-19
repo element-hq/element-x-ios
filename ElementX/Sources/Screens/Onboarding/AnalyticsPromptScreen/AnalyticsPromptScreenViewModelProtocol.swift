@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol AnalyticsPromptScreenViewModelProtocol {
     var actions: AnyPublisher<AnalyticsPromptScreenViewModelAction, Never> { get }
     var context: AnalyticsPromptScreenViewModelType.Context { get }

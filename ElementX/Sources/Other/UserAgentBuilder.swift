@@ -13,7 +13,12 @@ import UIKit
 import DeviceKit
 #endif
 
-enum UserAgentBuilder {
+nonisolated enum UserAgentBuilder {
+    /// The screen scale used in the user agent. It never changes at runtime, so it's captured once
+    /// on the main actor at launch (see the app coordinator) and read freely from any thread/process.
+    /// Contexts without a screen (e.g. the NSE) keep the default.
+    nonisolated(unsafe) static var displayScale: CGFloat = 2.0
+    
     static func makeASCIIUserAgent() -> String {
         makeUserAgent()?.asciified() ?? "unknown"
     }
@@ -23,20 +28,21 @@ enum UserAgentBuilder {
         let clientVersion = InfoPlistReader.app.bundleShortVersionString
         
         #if os(iOS)
-        let scale = UIScreen.main.scale
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        let systemVersion = "\(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
         return if ProcessInfo.processInfo.isiOSAppOnMac {
             String(format: "%@/%@ (Mac; macOS %@; Scale/%0.2f)",
                    clientName,
                    clientVersion,
                    ProcessInfo.processInfo.operatingSystemVersionString,
-                   scale)
+                   displayScale)
         } else {
             String(format: "%@/%@ (%@; iOS %@; Scale/%0.2f)",
                    clientName,
                    clientVersion,
                    Device.current.safeDescription,
-                   UIDevice.current.systemVersion,
-                   scale)
+                   systemVersion,
+                   displayScale)
         }
         #elseif os(tvOS)
         return String(format: "%@/%@ (%@; tvOS %@; Scale/%0.2f)",

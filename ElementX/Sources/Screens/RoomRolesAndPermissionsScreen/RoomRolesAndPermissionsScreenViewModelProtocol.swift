@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol RoomRolesAndPermissionsScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<RoomRolesAndPermissionsScreenViewModelAction, Never> { get }
     var context: RoomRolesAndPermissionsScreenViewModelType.Context { get }

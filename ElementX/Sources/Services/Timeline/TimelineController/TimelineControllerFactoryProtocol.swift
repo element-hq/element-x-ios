@@ -13,7 +13,6 @@ enum TimelineFactoryControllerError: Error {
     case roomProxyError(RoomProxyError)
 }
 
-@MainActor
 protocol TimelineControllerFactoryProtocol {
     func buildTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                  initialFocussedEventID: String?,

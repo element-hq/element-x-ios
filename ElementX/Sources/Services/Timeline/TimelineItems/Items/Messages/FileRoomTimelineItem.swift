@@ -9,7 +9,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
-struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
+nonisolated struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
     let isOutgoing: Bool

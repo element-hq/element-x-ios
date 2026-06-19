@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct ReadMarkerRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
+nonisolated struct ReadMarkerRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
 }

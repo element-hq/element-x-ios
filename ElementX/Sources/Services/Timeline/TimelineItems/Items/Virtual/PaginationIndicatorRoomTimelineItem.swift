@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PaginationIndicatorRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
+nonisolated struct PaginationIndicatorRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     
     enum Position {

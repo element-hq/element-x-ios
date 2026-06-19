@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct KnockRequestProxy: KnockRequestProxyProtocol {
+nonisolated struct KnockRequestProxy: KnockRequestProxyProtocol {
     private let knockRequest: KnockRequest
     
     init(knockRequest: KnockRequest) {

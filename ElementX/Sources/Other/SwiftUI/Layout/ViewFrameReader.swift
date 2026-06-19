@@ -13,10 +13,9 @@ extension View {
     /// Reads the frame of the view and stores it in the `frame` binding.
     /// - Parameters:
     ///   - frame: a `CGRect` binding
-    ///   - coordinateSpace: the coordinate space of the frame.
-    func readFrame(_ frame: Binding<CGRect>, in coordinateSpace: CoordinateSpace = .local) -> some View {
+    func readFrame(_ frame: Binding<CGRect>) -> some View {
         onGeometryChange(for: CGRect.self) { geometry in
-            geometry.frame(in: coordinateSpace)
+            geometry.frame(in: .local)
         } action: { newValue in
             frame.wrappedValue = newValue
         }

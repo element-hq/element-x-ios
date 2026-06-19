@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol LoginScreenViewModelProtocol {
     var actions: AnyPublisher<LoginScreenViewModelAction, Never> { get }
     var context: LoginScreenViewModelType.Context { get }

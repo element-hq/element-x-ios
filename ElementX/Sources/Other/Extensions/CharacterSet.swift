@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension CharacterSet {
+nonisolated extension CharacterSet {
     private static let urlAllowedSets: [CharacterSet] = [
         .urlUserAllowed,
         .urlPasswordAllowed,

@@ -10,6 +10,7 @@
 import OrderedCollections
 import Testing
 
+@MainActor
 struct TimelineStateTests {
     // MARK: - Read marker
     

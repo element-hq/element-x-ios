@@ -12,7 +12,7 @@ import Foundation
 
 /// A wrapper around Rust's `MediaFileHandle` type that provides us with a
 /// media file that is stored unencrypted in a temporary location for previewing.
-final class MediaFileHandleProxy: Sendable {
+final nonisolated class MediaFileHandleProxy: Sendable {
     /// The underlying handle for the file.
     private let handle: MediaFileHandleProtocol
     

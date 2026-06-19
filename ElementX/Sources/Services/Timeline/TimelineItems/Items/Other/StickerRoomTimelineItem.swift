@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
+nonisolated struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let body: String
     let timestamp: Date

@@ -30,7 +30,7 @@ import Synchronization
 // called on the same instance of `NotificationService` as a previous
 // notification.
 
-final class NotificationServiceExtension: UNNotificationServiceExtension {
+final nonisolated class NotificationServiceExtension: UNNotificationServiceExtension {
     let actor: NotificationServiceExtensionActor
     
     override init() {

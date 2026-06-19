@@ -9,7 +9,7 @@
 import Foundation
 import Kingfisher
 
-extension ImageCache {
+nonisolated extension ImageCache {
     static var onlyInMemory: ImageCache {
         let result = ImageCache.default
         result.memoryStorage.config.keepWhenEnteringBackground = true

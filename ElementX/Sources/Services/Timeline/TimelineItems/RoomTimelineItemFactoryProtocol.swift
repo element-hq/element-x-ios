@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-protocol RoomTimelineItemFactoryProtocol {
+nonisolated protocol RoomTimelineItemFactoryProtocol: Sendable {
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool) -> RoomTimelineItemProtocol?
     func buildTimelineItemReply(_ details: MatrixRustSDK.InReplyToDetails) -> TimelineItemReply
 }

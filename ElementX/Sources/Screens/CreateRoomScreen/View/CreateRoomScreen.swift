@@ -132,7 +132,8 @@ struct CreateRoomScreen: View {
                     .accessibilityHidden(true)
             }
         }
-        .accessibilityLabel(L10n.a11yEditAvatar)
+        .accessibilityLabel(context.viewState.avatarImage == nil ? L10n.a11yAddAvatar : L10n.a11yEditAvatar)
+        .accessibilityRemoveTraits(.isHeader)
         .buttonStyle(.plain)
         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomAvatar)
         .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
@@ -168,6 +169,7 @@ struct CreateRoomScreen: View {
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
                 .compoundListSectionHeader()
+                .accessibilityRemoveTraits(.isHeader)
         }
     }
     
@@ -196,6 +198,7 @@ struct CreateRoomScreen: View {
         } header: {
             Text(L10n.screenCreateRoomRoomAddressSectionTitle)
                 .compoundListSectionHeader()
+                .accessibilityRemoveTraits(.isHeader)
         } footer: {
             VStack(alignment: .leading, spacing: 12) {
                 if let errorDescription = context.viewState.aliasErrors.errorDescription {

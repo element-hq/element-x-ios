@@ -9,7 +9,7 @@
 import SwiftUI
 
 /// Used to specify the user's app specific appearance preference
-enum AppAppearance: CaseIterable, Codable {
+nonisolated enum AppAppearance: CaseIterable, Codable {
     case system
     case dark
     case light

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
+nonisolated struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     let id: TimelineItemIdentifier
     let poll: Poll
     let body: String
@@ -20,7 +20,7 @@ struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     var properties: RoomTimelineItemProperties
 }
 
-struct Poll: Hashable {
+nonisolated struct Poll: Hashable {
     let question: String
     let kind: Kind
     let maxSelections: Int

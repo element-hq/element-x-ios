@@ -59,7 +59,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
 /// as an invisible spacer so a message bubble's text reserves room for the overlaid
 /// timestamp. Without this subclass, an attachment with no image would render TextKit's
 /// default "missing image" glyph.
-private final class TransparentTextAttachment: NSTextAttachment {
+private final nonisolated class TransparentTextAttachment: NSTextAttachment {
     override func image(forBounds imageBounds: CGRect,
                         textContainer: NSTextContainer?,
                         characterIndex charIndex: Int) -> UIImage? {

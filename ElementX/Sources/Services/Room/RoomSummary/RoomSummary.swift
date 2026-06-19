@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 /// A quick summary of a Room, useful to describe and give quick informations for the room list
-struct RoomSummary {
+nonisolated struct RoomSummary {
     enum JoinRequestType {
         case invite(inviter: RoomMemberProxyProtocol?)
         case knock

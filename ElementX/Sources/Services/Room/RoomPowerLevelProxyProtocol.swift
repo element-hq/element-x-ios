@@ -9,7 +9,7 @@
 import MatrixRustSDK
 
 // sourcery: AutoMockable
-protocol RoomPowerLevelsProxyProtocol {
+protocol RoomPowerLevelsProxyProtocol: Sendable {
     var values: RoomPowerLevelsValues { get }
     var userPowerLevels: [String: Int64] { get }
     

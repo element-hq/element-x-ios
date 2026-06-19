@@ -8,7 +8,6 @@
 
 import Combine
 
-@MainActor
 protocol HomeScreenViewModelProtocol {
     var actions: AnyPublisher<HomeScreenViewModelAction, Never> { get }
     
