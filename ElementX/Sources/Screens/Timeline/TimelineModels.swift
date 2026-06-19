@@ -286,7 +286,9 @@ struct TimelineState {
     /// value to ``itemsDictionary``.
     mutating func recomputeReadMarkerUniqueID() {
         readMarkerUniqueID = itemsDictionary.first { _, viewState in
-            if case .readMarker = viewState.type { return true }
+            if case .readMarker = viewState.type {
+                return true
+            }
             return false
         }?.key
     }

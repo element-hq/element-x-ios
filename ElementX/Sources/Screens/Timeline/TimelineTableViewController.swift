@@ -103,7 +103,9 @@ class TimelineTableViewController: UIViewController {
     var isLive = true {
         didSet {
             // Update isScrolledToBottom when switching back to a live timeline.
-            if isLive { scrollViewDidScroll(tableView) }
+            if isLive {
+                scrollViewDidScroll(tableView)
+            }
         }
     }
     

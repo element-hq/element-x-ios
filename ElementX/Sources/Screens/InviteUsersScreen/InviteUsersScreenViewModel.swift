@@ -38,7 +38,11 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
         
-        let mandatoryInvitees: [UserProfileProxy] = if case .draft(let invitees) = roomType { invitees } else { [] }
+        let mandatoryInvitees: [UserProfileProxy] = if case .draft(let invitees) = roomType {
+            invitees
+        } else {
+            []
+        }
         
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: mandatoryInvitees,
                                                                 mandatoryInvitees: mandatoryInvitees,

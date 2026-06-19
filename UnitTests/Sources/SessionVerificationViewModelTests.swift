@@ -74,7 +74,9 @@ struct SessionVerificationViewModelTests {
         
         let deferred = deferFulfillment(sessionVerificationController.actions
             .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)) { callback in
-                if case .finished = callback { return true }
+                if case .finished = callback {
+                    return true
+                }
                 return false
             }
         
@@ -92,7 +94,9 @@ struct SessionVerificationViewModelTests {
         
         let deferred = deferFulfillment(sessionVerificationController.actions
             .delay(for: .seconds(0.1), scheduler: DispatchQueue.main)) { callback in
-                if case .cancelled = callback { return true }
+                if case .cancelled = callback {
+                    return true
+                }
                 return false
             }
         

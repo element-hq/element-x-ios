@@ -274,7 +274,9 @@ extension HomeScreenRoom {
         
         let callBadge = if summary.hasOngoingCall {
             summary.activeCallIntent == .audio ? CallBadgeType.voice : CallBadgeType.video
-        } else { CallBadgeType.none }
+        } else {
+            CallBadgeType.none
+        }
         
         let type: HomeScreenRoom.RoomType = switch summary.joinRequestType {
         case .invite(let inviter): .invite(inviterDetails: inviter.map(RoomInviterDetails.init))
