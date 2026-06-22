@@ -6,21 +6,26 @@
 //
 
 import Combine
+import LocalAuthentication
 import MatrixRustSDK
 import SwiftUI
 
 typealias LinkNewDeviceScreenViewModelType = StateStoreViewModelV2<LinkNewDeviceScreenViewState, LinkNewDeviceScreenViewAction>
 
 class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDeviceScreenViewModelProtocol {
+    private enum Device { case mobileDevice, desktopComputer }
+    
     private let clientProxy: ClientProxyProtocol
+    private let authenticationContext: LAContext
     
     private let actionsSubject: PassthroughSubject<LinkNewDeviceScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<LinkNewDeviceScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(clientProxy: ClientProxyProtocol, initialState: LinkNewDeviceScreenViewState? = nil) {
+    init(clientProxy: ClientProxyProtocol, authenticationContext: LAContext = LAContext(), initialState: LinkNewDeviceScreenViewState? = nil) {
         self.clientProxy = clientProxy
+        self.authenticationContext = authenticationContext
         
         if let initialState {
             super.init(initialViewState: initialState)
@@ -41,9 +46,9 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         
         switch viewAction {
         case .linkMobileDevice:
-            Task { await linkMobileDevice() }
+            Task { await authenticateAndLink(.mobileDevice) }
         case .linkDesktopComputer:
-            actionsSubject.send(.linkDesktopComputer)
+            Task { await authenticateAndLink(.desktopComputer) }
         case .errorAction(let action):
             handleErrorAction(action)
         case .dismiss:
@@ -55,14 +60,37 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
     
     private func checkQRCodeLoginSupport() async {
         if await clientProxy.isLoginWithQRCodeSupported {
-            state.mode = .readyToLink(isGeneratingCode: false)
+            state.mode = .readyToLink(.idle)
         } else {
             state.mode = .error(.notSupported)
         }
     }
     
+    private func authenticateAndLink(_ device: Device) async {
+        state.mode = .readyToLink(.authenticatingDeviceOwner)
+        
+        do {
+            guard try await authenticateDeviceOwner() else {
+                state.mode = .readyToLink(.idle)
+                return
+            }
+        } catch {
+            // TODO: Failure UX is pending product confirmation; using the generic error state for now.
+            state.mode = .error(.unknown)
+            return
+        }
+        
+        switch device {
+        case .mobileDevice:
+            await linkMobileDevice() // Automatically sets the state.
+        case .desktopComputer:
+            actionsSubject.send(.linkDesktopComputer)
+            state.mode = .readyToLink(.idle)
+        }
+    }
+    
     private func linkMobileDevice() async {
-        state.mode = .readyToLink(isGeneratingCode: true)
+        state.mode = .readyToLink(.generatingCode)
         
         let linkNewDeviceService = clientProxy.linkNewDeviceService()
         
@@ -77,7 +105,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
             }
             
             actionsSubject.send(.linkMobileDevice(progressPublisher))
-            state.mode = .readyToLink(isGeneratingCode: false)
+            state.mode = .readyToLink(.idle)
         } catch {
             // This is hard to share a mapping from the QRCodeLoginError with the
             // QRCodeLoginScreen given that some of those are scan errors…
@@ -89,12 +117,43 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         switch action {
         case .startOver:
             // Reset to ready state to allow trying again.
-            state.mode = .readyToLink(isGeneratingCode: false)
+            state.mode = .readyToLink(.idle)
         case .openSettings, .signInManually:
             MXLog.error("Unexpected error action: \(action)")
             actionsSubject.send(.dismiss)
         case .cancel:
             actionsSubject.send(.dismiss)
         }
+    }
+    
+    // MARK: - Authentication
+    
+    private func authenticateDeviceOwner() async throws -> Bool {
+        let context = makeAuthenticationContext()
+        
+        var error: NSError?
+        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
+            MXLog.warning("Device owner authentication unavailable, proceeding without: \(String(describing: error))")
+            return true
+        }
+        
+        do {
+            return try await context.evaluatePolicy(.deviceOwnerAuthentication,
+                                                    localizedReason: UntranslatedL10n.screenLinkNewDeviceAuthenticationReasonIos)
+        } catch LAError.userCancel, LAError.systemCancel {
+            MXLog.info("Device owner authentication was cancelled.")
+            return false
+        } catch {
+            MXLog.warning("Device owner authentication failed: \(error)")
+            throw error
+        }
+    }
+    
+    /// Creates a fresh context for each authentication so the user is always prompted.
+    private func makeAuthenticationContext() -> LAContext {
+        // Keep using the injected context for tests etc.
+        guard type(of: authenticationContext) == LAContext.self else { return authenticationContext }
+        
+        return LAContext()
     }
 }
