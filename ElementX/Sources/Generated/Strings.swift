@@ -408,12 +408,16 @@ internal nonisolated enum L10n {
   internal static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
   /// Unpin
   internal static var actionUnpin: String { return L10n.tr("Localizable", "action_unpin") }
+  /// Video call
+  internal static var actionVideoCall: String { return L10n.tr("Localizable", "action_video_call") }
   /// View
   internal static var actionView: String { return L10n.tr("Localizable", "action_view") }
   /// View in timeline
   internal static var actionViewInTimeline: String { return L10n.tr("Localizable", "action_view_in_timeline") }
   /// View source
   internal static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
+  /// Voice call
+  internal static var actionVoiceCall: String { return L10n.tr("Localizable", "action_voice_call") }
   /// Yes
   internal static var actionYes: String { return L10n.tr("Localizable", "action_yes") }
   /// Yes, try again
@@ -2455,7 +2459,7 @@ internal nonisolated enum L10n {
   /// Choo Choo
   internal static var screenNotificationSettingsSoundSystemChooChooIos: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_choo_choo_ios") }
   /// System Default
-  internal static var screenNotificationSettingsSoundSystemDefaultIos: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_default_ios") }
+  internal static var screenNotificationSettingsSoundSystemDefault: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_default") }
   /// Descent
   internal static var screenNotificationSettingsSoundSystemDescentIos: String { return L10n.tr("Localizable", "screen_notification_settings_sound_system_descent_ios") }
   /// Electronic
@@ -3557,6 +3561,10 @@ internal nonisolated enum L10n {
   }
   /// On the map
   internal static var screenStaticLocationSheetTitle: String { return L10n.tr("Localizable", "screen_static_location_sheet_title") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenTimelineActiveCallExtraJoinedCount(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_timeline_active_call_extra_joined_count", p1)
+  }
   /// Message not sent because %1$@’s verified digital identity was reset.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
