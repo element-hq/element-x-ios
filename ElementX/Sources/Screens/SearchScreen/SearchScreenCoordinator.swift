@@ -15,6 +15,7 @@ struct SearchScreenCoordinatorParameters {
 
 enum SearchScreenCoordinatorAction {
     case presentRoom(roomID: String)
+    case cancel
 }
 
 final class SearchScreenCoordinator: CoordinatorProtocol {
@@ -38,6 +39,8 @@ final class SearchScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .presentRoom(let roomID):
                 actionsSubject.send(.presentRoom(roomID: roomID))
+            case .cancel:
+                actionsSubject.send(.cancel)
             }
         }
         .store(in: &cancellables)

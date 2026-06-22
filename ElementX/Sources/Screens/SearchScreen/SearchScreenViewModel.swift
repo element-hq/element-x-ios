@@ -65,6 +65,8 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
             updateVisibleRange(edge: .top)
         case .reachedBottom:
             updateVisibleRange(edge: .bottom)
+        case .cancel:
+            actionsSubject.send(.cancel)
         }
     }
     

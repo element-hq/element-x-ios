@@ -9,6 +9,7 @@ import Foundation
 
 enum SearchScreenViewModelAction {
     case presentRoom(roomID: String)
+    case cancel
 }
 
 struct SearchScreenViewState: BindableState {
@@ -29,6 +30,7 @@ enum SearchScreenViewAction {
     case selectRoom(roomID: String)
     case reachedTop
     case reachedBottom
+    case cancel
 }
 
 struct SearchScreenRoom: Identifiable, Equatable {
