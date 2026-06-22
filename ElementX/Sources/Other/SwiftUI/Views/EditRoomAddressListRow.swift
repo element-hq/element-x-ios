@@ -12,21 +12,10 @@ import SwiftUI
 struct EditRoomAddressListRow: View {
     @Binding var aliasLocalPart: String
     var serverName: String
-    /// The error to display, if any. Also associated with the field for VoiceOver.
-    var errorDescription: String?
-    /// The section's helper text, associated with the field for VoiceOver.
-    var footerText: String?
+    var shouldDisplayError: Bool
     
     private var fullAddress: String {
         "#\(aliasLocalPart):\(serverName)"
-    }
-    
-    /// Associates the helper text and any error with the field, as they're otherwise
-    /// only shown in a separate section footer.
-    private var accessibilityHint: String {
-        [L10n.a11yEditRoomAddressHint(fullAddress), footerText, errorDescription]
-            .compactMap { $0 }
-            .joined(separator: "\n")
     }
     
     var body: some View {
@@ -45,7 +34,7 @@ struct EditRoomAddressListRow: View {
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.horizontal, 8)
                     .accessibilityLabel(L10n.a11yAddress)
-                    .accessibilityHint(accessibilityHint)
+                    .accessibilityHint(L10n.a11yEditRoomAddressHint(fullAddress))
                 Text(":\(serverName)")
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
@@ -53,7 +42,7 @@ struct EditRoomAddressListRow: View {
             }
             .padding(ListRowPadding.textFieldInsets)
             .environment(\.layoutDirection, .leftToRight)
-            .errorBackground(errorDescription != nil)
+            .errorBackground(shouldDisplayError)
         })
     }
 }

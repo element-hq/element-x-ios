@@ -16,9 +16,7 @@ struct EditRoomAddressScreen: View {
         Form {
             Section {
                 EditRoomAddressListRow(aliasLocalPart: $context.desiredAliasLocalPart,
-                                       serverName: context.viewState.serverName,
-                                       errorDescription: context.viewState.aliasErrors.errorDescription,
-                                       footerText: L10n.screenEditRoomAddressRoomAddressSectionFooter)
+                                       serverName: context.viewState.serverName, shouldDisplayError: context.viewState.aliasErrors.errorDescription != nil)
                     .onChange(of: context.desiredAliasLocalPart) { _, newAliasLocalPart in
                         context.desiredAliasLocalPart = newAliasLocalPart.lowercased()
                     }
