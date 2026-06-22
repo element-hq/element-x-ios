@@ -8,12 +8,14 @@
 
 import MatrixRustSDK
 import Sentry
-import UIKit
 
 extension Event {
     /// A human readable crash log matching the format used by the legacy app.
     /// `nil` for non-crash events (handled errors, transactions, etc.).
-    var crashLog: String? {
+    ///
+    /// Device values must be read on the main thread and passed in. `beforeSend`
+    /// runs on a background queue and touching `UIDevice.current` there traps libdispatch.
+    nonisolated func crashLog(deviceModel: String, systemVersion: String) -> String? {
         guard let exceptions,
               exceptions.contains(where: { $0.mechanism?.handled?.boolValue == false }) else {
             return nil
@@ -21,14 +23,13 @@ extension Event {
         
         let reason = exceptions.map { "\($0.type ?? "Unknown"): \($0.value ?? "")" }.joined(separator: "\n")
         let infoPlist = InfoPlistReader.main
-        let device = UIDevice.current
         
         return """
         \(reason)
         Application: \(infoPlist.bundleExecutable) (\(infoPlist.bundleIdentifier))
         Application version: \(infoPlist.bundleShortVersionString) (\(infoPlist.bundleVersion))
         Matrix SDK version: \(sdkGitSha())
-        \(device.model) \(device.systemVersion)
+        \(deviceModel) \(systemVersion)
         """
     }
 }

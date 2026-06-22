@@ -1020,8 +1020,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         // Mirror every crash into our own logs (which ship with rageshakes) before it's sent to Sentry.
-        options.beforeSend = { event in
-            if let crashLog = event.crashLog {
+        // Device values are read here on the main thread; beforeSend runs on a background queue.
+        let deviceModel = UIDevice.current.model
+        let systemVersion = UIDevice.current.systemVersion
+        options.beforeSend = { @Sendable event in
+            if let crashLog = event.crashLog(deviceModel: deviceModel, systemVersion: systemVersion) {
                 MXLog.error("Sentry crash event \(event.eventId.sentryIdString):\n\(crashLog)")
             }
             return event
