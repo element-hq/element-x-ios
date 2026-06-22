@@ -12,6 +12,13 @@ extension PreviewTests {
     // MARK: - PreviewProvider
 
     @Test
+    func activeCallTimelineItemView() async throws {
+        for (index, preview) in ActiveCallTimelineItemView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func advancedSettingsScreen() async throws {
         for (index, preview) in AdvancedSettingsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

@@ -216,6 +216,7 @@
 "common_blocked_users" = "Blocked users";
 "common_bubbles" = "Bubbles";
 "common_call_declined" = "Call declined";
+"common_call_in_progress" = "Call in progress";
 "common_call_started" = "Call started";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Chat backup";
@@ -258,6 +259,7 @@
 "common_forward_message" = "Forward message";
 "common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
+"common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Image";
 "common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "This Matrix ID can't be found, so the invite might not be received.";
@@ -373,6 +375,7 @@
 "common_unmute" = "Unmute";
 "common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Unsupported event";
+"common_user_started_a_call" = "%1$@ started a call";
 "common_username" = "Username";
 "common_verification_cancelled" = "Verification cancelled";
 "common_verification_complete" = "Verification complete";

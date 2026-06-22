@@ -470,6 +470,8 @@ internal enum L10n {
   internal static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
   /// Call declined
   internal static var commonCallDeclined: String { return L10n.tr("Localizable", "common_call_declined") }
+  /// Call in progress
+  internal static var commonCallInProgress: String { return L10n.tr("Localizable", "common_call_in_progress") }
   /// Call started
   internal static var commonCallStarted: String { return L10n.tr("Localizable", "common_call_started") }
   /// You declined a call
@@ -560,6 +562,8 @@ internal enum L10n {
   internal static var commonFrequentlyUsed: String { return L10n.tr("Localizable", "common_frequently_used") }
   /// GIF
   internal static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
+  /// Group call in progress
+  internal static var commonGroupCallInProgress: String { return L10n.tr("Localizable", "common_group_call_in_progress") }
   /// Image
   internal static var commonImage: String { return L10n.tr("Localizable", "common_image") }
   /// In reply to %1$@
@@ -828,6 +832,10 @@ internal enum L10n {
   internal static var commonUnsupportedCall: String { return L10n.tr("Localizable", "common_unsupported_call") }
   /// Unsupported event
   internal static var commonUnsupportedEvent: String { return L10n.tr("Localizable", "common_unsupported_event") }
+  /// %1$@ started a call
+  internal static func commonUserStartedACall(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_user_started_a_call", String(describing: p1))
+  }
   /// Username
   internal static var commonUsername: String { return L10n.tr("Localizable", "common_username") }
   /// Verification cancelled
@@ -3505,6 +3513,10 @@ internal enum L10n {
   }
   /// On the map
   internal static var screenStaticLocationSheetTitle: String { return L10n.tr("Localizable", "screen_static_location_sheet_title") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenTimelineActiveCallExtraJoinedCount(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_timeline_active_call_extra_joined_count", p1)
+  }
   /// Message not sent because %1$@’s verified digital identity was reset.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))

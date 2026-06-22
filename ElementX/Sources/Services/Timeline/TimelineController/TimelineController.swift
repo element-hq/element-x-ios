@@ -467,6 +467,7 @@ class TimelineController: TimelineControllerProtocol {
         let isDM = roomProxy.infoPublisher.value.isDM
         let displayName = roomProxy.infoPublisher.value.displayName
         let hasPredecessor = roomProxy.predecessorRoom != nil
+        let members = roomProxy.membersPublisher
         
         var newTimelineItems = await Task.detached { [timelineItemFactory, activeTimeline] in
             var newTimelineItems = [RoomTimelineItemProtocol]()

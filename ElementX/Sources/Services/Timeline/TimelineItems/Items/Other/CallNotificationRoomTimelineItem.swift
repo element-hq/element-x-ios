@@ -14,10 +14,21 @@ struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
     let isEditable: Bool
     let canBeRepliedTo: Bool
     
+    let sender: TimelineItemSender
     let isDM: Bool
-    let isDeclinedByMe: Bool
-    let isDeclined: Bool
     let isVoiceCall: Bool
+    
+    /// Represents the state of the call notification - either tombstoned (ended) or active (ongoing)
+    enum CallState: Equatable {
+        /// A tombstoned/ended call notification
+        case tombstoned(isDeclinedByMe: Bool, isDeclined: Bool)
+        /// An active/ongoing call notification
+        case active(activeMembers: [String],
+                    isJoined: Bool,
+                    callStartTimestamp: Date?)
+    }
+    
+    let callState: CallState
     
     var properties = RoomTimelineItemProperties()
 }
