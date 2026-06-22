@@ -166,7 +166,15 @@ nonisolated class AudioRecorder: AudioRecorderProtocol, @unchecked Sendable {
             
             let inputNode = audioEngine.inputNode
             let inputFormat = inputNode.outputFormat(forBus: 0)
-            let hardwareSampleRate = audioEngine.inputNode.outputFormat(forBus: 0).sampleRate
+            let hardwareSampleRate = inputFormat.sampleRate
+            
+            // The input format can be invalid (e.g. a zero sample rate) when no input route is
+            // available, which would crash AVAudioEngine when connecting nodes or installing the tap.
+            guard inputFormat.sampleRate > 0, inputFormat.channelCount > 0 else {
+                MXLog.error("Invalid input audio format, can't record: \(inputFormat)")
+                completion(.failure(.unsupportedAudioFormat))
+                return
+            }
             
             // Define a recording audio format. Force the sample rate to 48000 to ensure OGGEncoder won't crash
             guard let recordingFormat = AVAudioFormat(standardFormatWithSampleRate: 48000, channels: 1) else {
