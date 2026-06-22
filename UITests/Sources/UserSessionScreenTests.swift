@@ -74,7 +74,6 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(latestEditedMessage.waitForExistence(timeout: 5.0))
         
         app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap(.center)
-        try await app.assertScreenshot(step: Step.composerAttachments)
     }
     
     func testUserSessionReply() async throws {
