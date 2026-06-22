@@ -362,6 +362,24 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>screen_custom_recovery_key_input_notice</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Co najmniej %1$d znaki. Nie wykorzystuj swojego hasła.</string>
+			<key>many</key>
+			<string>Co najmniej %1$d znaków. Nie wykorzystuj swojego hasła.</string>
+			<key>one</key>
+			<string>Co najmniej %1$d znak. Nie wykorzystuj swojego hasła.</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>screen_image_edition_a11y_rotation_state</key>
 	<dict>
 		<key>COUNT</key>
@@ -610,6 +628,24 @@
 			<string>Usuń %1$d pokoi z %2$@</string>
 			<key>one</key>
 			<string>Usuń %1$d pokój z %2$@</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_timeline_active_call_extra_joined_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>+ %1$d dołączyło</string>
+			<key>many</key>
+			<string>+ %1$d dołączyło</string>
+			<key>one</key>
+			<string>+ %1$d dołączył</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
