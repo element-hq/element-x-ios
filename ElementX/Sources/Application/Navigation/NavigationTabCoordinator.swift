@@ -100,7 +100,16 @@ import SwiftUI
     }
     
     /// The currently selected tab's tag.
-    var selectedTab: Tag?
+    var selectedTab: Tag? {
+        didSet {
+            if oldValue != selectedTab {
+                previousTab = oldValue
+            }
+        }
+    }
+    
+    /// The tab that was selected before the current one, used to return to it (e.g. cancelling search).
+    private(set) var previousTab: Tag?
     
     // MARK: Sheets
     

@@ -47,7 +47,8 @@ struct SearchScreen: View {
             }
         }
         .searchResultsKeyboardNavigation(moveUp: { moveSelection(backwards: true) },
-                                         moveDown: { moveSelection(backwards: false) })
+                                         moveDown: { moveSelection(backwards: false) },
+                                         cancel: { context.send(viewAction: .cancel) })
         // The TabView calls onAppear each time the search tab is selected, so the field re-focuses
         // and the selection resets on every switch.
         .onAppear {
@@ -189,12 +190,12 @@ private struct SearchScreenRoomCellButtonStyle: ButtonStyle {
 }
 
 private extension View {
-    /// Forwards hardware up/down arrow presses from the system search field to the given closures.
+    /// Forwards hardware up/down arrow and escape presses from the system search field to the given closures.
     ///
     /// The `.search` role tab owns its text field, so there's no SwiftUI hook for its key presses. We reach the
     /// field through the navigation stack (as ``SearchFieldStyle`` does) and swap its class for one that overrides
     /// `pressesBegan` — the same key interception the old global search performed on its own field.
-    func searchResultsKeyboardNavigation(moveUp: @escaping () -> Void, moveDown: @escaping () -> Void) -> some View {
+    func searchResultsKeyboardNavigation(moveUp: @escaping () -> Void, moveDown: @escaping () -> Void, cancel: @escaping () -> Void) -> some View {
         introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
             guard let textField = navigationController.navigationBar.topItem?.searchController?.searchBar.searchTextField else {
                 return
@@ -210,6 +211,8 @@ private extension View {
                     moveUp()
                 case .keyboardDownArrow:
                     moveDown()
+                case .keyboardEscape:
+                    cancel()
                 default:
                     return false
                 }

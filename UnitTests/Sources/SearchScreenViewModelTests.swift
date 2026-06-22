@@ -33,10 +33,28 @@ struct SearchScreenViewModelTests {
             switch action {
             case .presentRoom(let roomID):
                 roomID == "2"
+            case .cancel:
+                false
             }
         }
         
         context.send(viewAction: .selectRoom(roomID: "2"))
+        
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func cancel() async throws {
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
+            switch action {
+            case .cancel:
+                true
+            default:
+                false
+            }
+        }
+        
+        context.send(viewAction: .cancel)
         
         try await deferred.fulfill()
     }

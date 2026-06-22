@@ -229,6 +229,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .presentRoom(let roomID):
                     handleAppRoute(.room(roomID: roomID, via: []), animated: true)
+                case .cancel:
+                    // Return to the tab the user came from, but never back into search.
+                    navigationTabCoordinator.selectedTab = navigationTabCoordinator.previousTab == .search ? .chats : navigationTabCoordinator.previousTab ?? .chats
                 }
             }
             .store(in: &cancellables)
