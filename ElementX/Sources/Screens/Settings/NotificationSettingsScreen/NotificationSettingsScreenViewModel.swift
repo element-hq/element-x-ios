@@ -191,7 +191,9 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                           roomMentionsEnabled: roomMentionsEnabled,
                                                                           callsEnabled: callEnabled,
                                                                           invitationsEnabled: invitationsEnabled,
-                                                                          inconsistentSettings: inconsistentSettings)
+                                                                          inconsistentSettings: inconsistentSettings,
+                                                                          // macos lacks default sounds and its sandbox Sounds directory is immutable
+                                                                          customToneSelectionEnabled: !ProcessInfo.processInfo.isiOSAppOnMac)
             
             state.settings = notificationSettings
             state.bindings.roomMentionsEnabled = notificationSettings.roomMentionsEnabled ?? false
