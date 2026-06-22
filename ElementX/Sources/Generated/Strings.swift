@@ -22,6 +22,10 @@ internal nonisolated enum L10n {
   internal static var a11yAvatar: String { return L10n.tr("Localizable", "a11y_avatar") }
   /// Minimise message text field
   internal static var a11yCollapseMessageTextField: String { return L10n.tr("Localizable", "a11y_collapse_message_text_field") }
+  /// Decrease votes allowed per person
+  internal static var a11yCreatePollVotesAllowedDecrease: String { return L10n.tr("Localizable", "a11y_create_poll_votes_allowed_decrease") }
+  /// Increase votes allowed per person
+  internal static var a11yCreatePollVotesAllowedIncrease: String { return L10n.tr("Localizable", "a11y_create_poll_votes_allowed_increase") }
   /// Delete
   internal static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Plural format key: "%#@COUNT@"
@@ -1717,6 +1721,8 @@ internal nonisolated enum L10n {
   internal static var screenCreatePollSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_create_poll_settings_section_title") }
   /// Create Poll
   internal static var screenCreatePollTitle: String { return L10n.tr("Localizable", "screen_create_poll_title") }
+  /// Votes allowed per person
+  internal static var screenCreatePollVotesAllowedPerPerson: String { return L10n.tr("Localizable", "screen_create_poll_votes_allowed_per_person") }
   /// New room
   internal static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
   /// Invite people
