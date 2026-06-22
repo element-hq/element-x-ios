@@ -320,6 +320,22 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>screen_custom_recovery_key_input_notice</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Minimum %1$d character. Do not use your account password</string>
+			<key>other</key>
+			<string>Minimum %1$d characters. Do not use your account password</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>screen_image_edition_a11y_rotation_state</key>
 	<dict>
 		<key>COUNT</key>
@@ -540,6 +556,22 @@
 			<string>Fjern %1$d rom fra %2$@</string>
 			<key>other</key>
 			<string>Fjern %1$d rommene fra %2$@</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_timeline_active_call_extra_joined_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>+ %1$d joined</string>
+			<key>other</key>
+			<string>+ %1$d joined</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

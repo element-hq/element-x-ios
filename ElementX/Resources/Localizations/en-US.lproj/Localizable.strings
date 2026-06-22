@@ -186,9 +186,11 @@
 "action_translate" = "Translate";
 "action_try_again" = "Try again";
 "action_unpin" = "Unpin";
+"action_video_call" = "Video call";
 "action_view" = "View";
 "action_view_in_timeline" = "View in timeline";
 "action_view_source" = "View source";
+"action_voice_call" = "Voice call";
 "action_yes" = "Yes";
 "action_yes_try_again" = "Yes, try again";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
@@ -1058,7 +1060,7 @@
 "screen_notification_settings_sound_system_calypso_ios" = "Calypso";
 "screen_notification_settings_sound_system_chime_ios" = "Chime";
 "screen_notification_settings_sound_system_choo_choo_ios" = "Choo Choo";
-"screen_notification_settings_sound_system_default_ios" = "System Default";
+"screen_notification_settings_sound_system_default" = "System Default";
 "screen_notification_settings_sound_system_descent_ios" = "Descent";
 "screen_notification_settings_sound_system_electronic_ios" = "Electronic";
 "screen_notification_settings_sound_system_fanfare_ios" = "Fanfare";
