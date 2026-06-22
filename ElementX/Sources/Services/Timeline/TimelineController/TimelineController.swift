@@ -404,8 +404,8 @@ class TimelineController: TimelineControllerProtocol {
     
     // MARK: - Polls
     
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
-        switch await activeTimeline.createPoll(question: question, answers: answers, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError) {
+    func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        switch await activeTimeline.createPoll(question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError) {
         case .success:
             callbacks.send(.messageSentOrEdited)
             return .success(())
@@ -414,8 +414,8 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
-    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
-        await activeTimeline.editPoll(original: eventID, question: question, answers: answers, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError)
+    func editPoll(original eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.editPoll(original: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError)
     }
     
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError> {

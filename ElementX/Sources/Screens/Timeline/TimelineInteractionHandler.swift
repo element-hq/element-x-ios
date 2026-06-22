@@ -248,9 +248,9 @@ class TimelineInteractionHandler {
     
     // MARK: Polls
     
-    func sendPollResponse(pollStartID: String, optionID: String) {
+    func sendPollResponse(pollStartID: String, answerIDs: [String]) {
         Task {
-            let sendPollResponseResult = await pollInteractionHandler.sendPollResponse(pollStartID: pollStartID, optionID: optionID)
+            let sendPollResponseResult = await pollInteractionHandler.sendPollResponse(pollStartID: pollStartID, answerIDs: answerIDs)
             
             switch sendPollResponseResult {
             case .success:

@@ -10,6 +10,12 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Decrease votes allowed per person
+  internal static var a11yScreenCreatePollVotesAllowedDecrease: String { return UntranslatedL10n.tr("Untranslated", "a11y_screen_create_poll_votes_allowed_decrease") }
+  /// Increase votes allowed per person
+  internal static var a11yScreenCreatePollVotesAllowedIncrease: String { return UntranslatedL10n.tr("Untranslated", "a11y_screen_create_poll_votes_allowed_increase") }
+  /// Votes allowed per person
+  internal static var screenCreatePollVotesAllowedPerPerson: String { return UntranslatedL10n.tr("Untranslated", "screen_create_poll_votes_allowed_per_person") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
   /// Search for rooms

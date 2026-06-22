@@ -77,7 +77,18 @@ enum PollFormMode: Hashable {
 
 struct PollFormScreenViewStateBindings: Equatable {
     var question = ""
-    var options: [Option] = [.init(), .init()]
+    var options: [Option] = [.init(), .init()] {
+        didSet {
+            maxSelections = clampedMaxSelections
+        }
+    }
+    
+    var maxSelections = 1 {
+        didSet {
+            maxSelections = clampedMaxSelections
+        }
+    }
+    
     var isUndisclosed = false
     
     struct Option: Identifiable, Equatable {
@@ -86,13 +97,20 @@ struct PollFormScreenViewStateBindings: Equatable {
     }
     
     var hasValidContent: Bool {
-        !question.isEmpty && options.count >= 2 && options.allSatisfy { !$0.text.isEmpty }
+        !question.isEmpty && options.count >= 2 && options.allSatisfy { !$0.text.isEmpty } && maxSelections >= 1 && maxSelections <= options.count
     }
     
     var alertInfo: AlertInfo<UUID>?
     
     static func == (lhs: PollFormScreenViewStateBindings, rhs: PollFormScreenViewStateBindings) -> Bool {
-        lhs.question == rhs.question && lhs.options.map(\.text) == rhs.options.map(\.text) && lhs.isUndisclosed == rhs.isUndisclosed
+        lhs.question == rhs.question &&
+            lhs.options.map(\.text) == rhs.options.map(\.text) &&
+            lhs.maxSelections == rhs.maxSelections &&
+            lhs.isUndisclosed == rhs.isUndisclosed
+    }
+    
+    private var clampedMaxSelections: Int {
+        min(max(maxSelections, 1), max(options.count, 1))
     }
 }
 
@@ -100,6 +118,7 @@ extension PollFormScreenViewStateBindings {
     init(poll: Poll) {
         self.init(question: poll.question,
                   options: poll.options.map { .init(text: $0.text) },
+                  maxSelections: min(max(poll.maxSelections, 1), max(poll.options.count, 1)),
                   isUndisclosed: poll.kind == .undisclosed)
     }
 }
@@ -110,4 +129,6 @@ enum PollFormScreenViewAction {
     case delete
     case deleteOption(index: Int)
     case addOption
+    case decrementMaxSelections
+    case incrementMaxSelections
 }

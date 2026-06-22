@@ -29,8 +29,8 @@ extension TimelineProxyMock {
         paginateBackwardsRequestSizeReturnValue = .success(())
         paginateForwardsRequestSizeReturnValue = .success(())
         sendReadReceiptForTypeReturnValue = .success(())
-        createPollQuestionAnswersPollKindReturnValue = .success(())
-        editPollOriginalQuestionAnswersPollKindReturnValue = .success(())
+        createPollQuestionAnswersMaxSelectionsPollKindReturnValue = .success(())
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValue = .success(())
         
         if let provider = configuration.timelineItemProvider {
             timelineItemProvider = provider

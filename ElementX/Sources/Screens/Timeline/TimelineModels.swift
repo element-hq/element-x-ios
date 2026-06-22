@@ -36,7 +36,7 @@ enum TimelineViewModelAction {
 }
 
 enum TimelineViewPollAction {
-    case selectOption(pollStartID: String, optionID: String)
+    case sendResponse(pollStartID: String, answerIDs: [String])
     case end(pollStartID: String)
     case edit(pollStartID: String, poll: Poll)
 }

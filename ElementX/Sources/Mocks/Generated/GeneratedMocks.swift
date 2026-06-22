@@ -9561,44 +9561,44 @@ nonisolated class PollInteractionHandlerMock: PollInteractionHandlerProtocol, @u
 
     //MARK: - sendPollResponse
 
-    private let sendPollResponsePollStartIDOptionIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var sendPollResponsePollStartIDOptionIDUnderlyingCallsCount = 0
-    var sendPollResponsePollStartIDOptionIDCallsCount: Int {
-        get { sendPollResponsePollStartIDOptionIDCallsCountLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingCallsCount } }
-        set { sendPollResponsePollStartIDOptionIDCallsCountLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingCallsCount = newValue } }
+    private let sendPollResponsePollStartIDAnswerIDsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendPollResponsePollStartIDAnswerIDsUnderlyingCallsCount = 0
+    var sendPollResponsePollStartIDAnswerIDsCallsCount: Int {
+        get { sendPollResponsePollStartIDAnswerIDsCallsCountLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingCallsCount } }
+        set { sendPollResponsePollStartIDAnswerIDsCallsCountLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingCallsCount = newValue } }
     }
-    var sendPollResponsePollStartIDOptionIDCalled: Bool {
-        return sendPollResponsePollStartIDOptionIDCallsCount > 0
+    var sendPollResponsePollStartIDAnswerIDsCalled: Bool {
+        return sendPollResponsePollStartIDAnswerIDsCallsCount > 0
     }
-    private let sendPollResponsePollStartIDOptionIDReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var sendPollResponsePollStartIDOptionIDUnderlyingReceivedArguments: (pollStartID: String, optionID: String)?
-    var sendPollResponsePollStartIDOptionIDReceivedArguments: (pollStartID: String, optionID: String)? {
-        get { sendPollResponsePollStartIDOptionIDReceivedArgumentsLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingReceivedArguments } }
-        set { sendPollResponsePollStartIDOptionIDReceivedArgumentsLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingReceivedArguments = newValue } }
+    private let sendPollResponsePollStartIDAnswerIDsReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var sendPollResponsePollStartIDAnswerIDsUnderlyingReceivedArguments: (pollStartID: String, answerIDs: [String])?
+    var sendPollResponsePollStartIDAnswerIDsReceivedArguments: (pollStartID: String, answerIDs: [String])? {
+        get { sendPollResponsePollStartIDAnswerIDsReceivedArgumentsLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingReceivedArguments } }
+        set { sendPollResponsePollStartIDAnswerIDsReceivedArgumentsLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingReceivedArguments = newValue } }
     }
-    private let sendPollResponsePollStartIDOptionIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var sendPollResponsePollStartIDOptionIDUnderlyingReceivedInvocations: [(pollStartID: String, optionID: String)] = []
-    var sendPollResponsePollStartIDOptionIDReceivedInvocations: [(pollStartID: String, optionID: String)] {
-        get { sendPollResponsePollStartIDOptionIDReceivedInvocationsLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingReceivedInvocations } }
-        set { sendPollResponsePollStartIDOptionIDReceivedInvocationsLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingReceivedInvocations = newValue } }
+    private let sendPollResponsePollStartIDAnswerIDsReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendPollResponsePollStartIDAnswerIDsUnderlyingReceivedInvocations: [(pollStartID: String, answerIDs: [String])] = []
+    var sendPollResponsePollStartIDAnswerIDsReceivedInvocations: [(pollStartID: String, answerIDs: [String])] {
+        get { sendPollResponsePollStartIDAnswerIDsReceivedInvocationsLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingReceivedInvocations } }
+        set { sendPollResponsePollStartIDAnswerIDsReceivedInvocationsLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let sendPollResponsePollStartIDOptionIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var sendPollResponsePollStartIDOptionIDUnderlyingReturnValue: Result<Void, Error>!
-    var sendPollResponsePollStartIDOptionIDReturnValue: Result<Void, Error>! {
-        get { sendPollResponsePollStartIDOptionIDReturnValueLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingReturnValue } }
-        set { sendPollResponsePollStartIDOptionIDReturnValueLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingReturnValue = newValue } }
+    private let sendPollResponsePollStartIDAnswerIDsReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendPollResponsePollStartIDAnswerIDsUnderlyingReturnValue: Result<Void, Error>!
+    var sendPollResponsePollStartIDAnswerIDsReturnValue: Result<Void, Error>! {
+        get { sendPollResponsePollStartIDAnswerIDsReturnValueLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingReturnValue } }
+        set { sendPollResponsePollStartIDAnswerIDsReturnValueLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var sendPollResponsePollStartIDOptionIDClosure: ((String, String) async -> Result<Void, Error>)?
+    nonisolated(unsafe) var sendPollResponsePollStartIDAnswerIDsClosure: ((String, [String]) async -> Result<Void, Error>)?
 
-    @concurrent func sendPollResponse(pollStartID: String, optionID: String) async -> Result<Void, Error> {
-        sendPollResponsePollStartIDOptionIDCallsCountLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingCallsCount += 1 }
-        sendPollResponsePollStartIDOptionIDReceivedArguments = (pollStartID: pollStartID, optionID: optionID)
-        sendPollResponsePollStartIDOptionIDReceivedInvocationsLock.withLock { sendPollResponsePollStartIDOptionIDUnderlyingReceivedInvocations.append((pollStartID: pollStartID, optionID: optionID)) }
-        if let sendPollResponsePollStartIDOptionIDClosure = sendPollResponsePollStartIDOptionIDClosure {
-            return await sendPollResponsePollStartIDOptionIDClosure(pollStartID, optionID)
+    @concurrent func sendPollResponse(pollStartID: String, answerIDs: [String]) async -> Result<Void, Error> {
+        sendPollResponsePollStartIDAnswerIDsCallsCountLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingCallsCount += 1 }
+        sendPollResponsePollStartIDAnswerIDsReceivedArguments = (pollStartID: pollStartID, answerIDs: answerIDs)
+        sendPollResponsePollStartIDAnswerIDsReceivedInvocationsLock.withLock { sendPollResponsePollStartIDAnswerIDsUnderlyingReceivedInvocations.append((pollStartID: pollStartID, answerIDs: answerIDs)) }
+        if let sendPollResponsePollStartIDAnswerIDsClosure = sendPollResponsePollStartIDAnswerIDsClosure {
+            return await sendPollResponsePollStartIDAnswerIDsClosure(pollStartID, answerIDs)
         } else {
-            return sendPollResponsePollStartIDOptionIDReturnValue
+            return sendPollResponsePollStartIDAnswerIDsReturnValue
         }
     }
     //MARK: - endPoll
@@ -12772,86 +12772,86 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
     }
     //MARK: - createPoll
 
-    private let createPollQuestionAnswersPollKindCallsCountLock = NSLock()
-    private nonisolated(unsafe) var createPollQuestionAnswersPollKindUnderlyingCallsCount = 0
-    var createPollQuestionAnswersPollKindCallsCount: Int {
-        get { createPollQuestionAnswersPollKindCallsCountLock.withLock { createPollQuestionAnswersPollKindUnderlyingCallsCount } }
-        set { createPollQuestionAnswersPollKindCallsCountLock.withLock { createPollQuestionAnswersPollKindUnderlyingCallsCount = newValue } }
+    private let createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock = NSLock()
+    private nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = 0
+    var createPollQuestionAnswersMaxSelectionsPollKindCallsCount: Int {
+        get { createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount } }
+        set { createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = newValue } }
     }
-    var createPollQuestionAnswersPollKindCalled: Bool {
-        return createPollQuestionAnswersPollKindCallsCount > 0
+    var createPollQuestionAnswersMaxSelectionsPollKindCalled: Bool {
+        return createPollQuestionAnswersMaxSelectionsPollKindCallsCount > 0
     }
-    private let createPollQuestionAnswersPollKindReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var createPollQuestionAnswersPollKindUnderlyingReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)?
-    var createPollQuestionAnswersPollKindReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)? {
-        get { createPollQuestionAnswersPollKindReceivedArgumentsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedArguments } }
-        set { createPollQuestionAnswersPollKindReceivedArgumentsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedArguments = newValue } }
+    private let createPollQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments: (question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)?
+    var createPollQuestionAnswersMaxSelectionsPollKindReceivedArguments: (question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)? {
+        get { createPollQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments } }
+        set { createPollQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments = newValue } }
     }
-    private let createPollQuestionAnswersPollKindReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var createPollQuestionAnswersPollKindUnderlyingReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] = []
-    var createPollQuestionAnswersPollKindReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] {
-        get { createPollQuestionAnswersPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedInvocations } }
-        set { createPollQuestionAnswersPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedInvocations = newValue } }
+    private let createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations: [(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] = []
+    var createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocations: [(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] {
+        get { createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations } }
+        set { createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let createPollQuestionAnswersPollKindReturnValueLock = NSLock()
-    private nonisolated(unsafe) var createPollQuestionAnswersPollKindUnderlyingReturnValue: Result<Void, TimelineControllerError>!
-    var createPollQuestionAnswersPollKindReturnValue: Result<Void, TimelineControllerError>! {
-        get { createPollQuestionAnswersPollKindReturnValueLock.withLock { createPollQuestionAnswersPollKindUnderlyingReturnValue } }
-        set { createPollQuestionAnswersPollKindReturnValueLock.withLock { createPollQuestionAnswersPollKindUnderlyingReturnValue = newValue } }
+    private let createPollQuestionAnswersMaxSelectionsPollKindReturnValueLock = NSLock()
+    private nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var createPollQuestionAnswersMaxSelectionsPollKindReturnValue: Result<Void, TimelineControllerError>! {
+        get { createPollQuestionAnswersMaxSelectionsPollKindReturnValueLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue } }
+        set { createPollQuestionAnswersMaxSelectionsPollKindReturnValueLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var createPollQuestionAnswersPollKindClosure: ((String, [String], Poll.Kind) async -> Result<Void, TimelineControllerError>)?
+    nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindClosure: ((String, [String], Int, Poll.Kind) async -> Result<Void, TimelineControllerError>)?
 
-    @concurrent func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
-        createPollQuestionAnswersPollKindCallsCountLock.withLock { createPollQuestionAnswersPollKindUnderlyingCallsCount += 1 }
-        createPollQuestionAnswersPollKindReceivedArguments = (question: question, answers: answers, pollKind: pollKind)
-        createPollQuestionAnswersPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedInvocations.append((question: question, answers: answers, pollKind: pollKind)) }
-        if let createPollQuestionAnswersPollKindClosure = createPollQuestionAnswersPollKindClosure {
-            return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
+    @concurrent func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount += 1 }
+        createPollQuestionAnswersMaxSelectionsPollKindReceivedArguments = (question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
+        createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)) }
+        if let createPollQuestionAnswersMaxSelectionsPollKindClosure = createPollQuestionAnswersMaxSelectionsPollKindClosure {
+            return await createPollQuestionAnswersMaxSelectionsPollKindClosure(question, answers, maxSelections, pollKind)
         } else {
-            return createPollQuestionAnswersPollKindReturnValue
+            return createPollQuestionAnswersMaxSelectionsPollKindReturnValue
         }
     }
     //MARK: - editPoll
 
-    private let editPollOriginalQuestionAnswersPollKindCallsCountLock = NSLock()
-    private nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount = 0
-    var editPollOriginalQuestionAnswersPollKindCallsCount: Int {
-        get { editPollOriginalQuestionAnswersPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount } }
-        set { editPollOriginalQuestionAnswersPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount = newValue } }
+    private let editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCountLock = NSLock()
+    private nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = 0
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount: Int {
+        get { editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount } }
+        set { editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = newValue } }
     }
-    var editPollOriginalQuestionAnswersPollKindCalled: Bool {
-        return editPollOriginalQuestionAnswersPollKindCallsCount > 0
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindCalled: Bool {
+        return editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount > 0
     }
-    private let editPollOriginalQuestionAnswersPollKindReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindUnderlyingReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)?
-    var editPollOriginalQuestionAnswersPollKindReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)? {
-        get { editPollOriginalQuestionAnswersPollKindReceivedArgumentsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedArguments } }
-        set { editPollOriginalQuestionAnswersPollKindReceivedArgumentsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedArguments = newValue } }
+    private let editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments: (eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)?
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArguments: (eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)? {
+        get { editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments } }
+        set { editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments = newValue } }
     }
-    private let editPollOriginalQuestionAnswersPollKindReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindUnderlyingReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] = []
-    var editPollOriginalQuestionAnswersPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] {
-        get { editPollOriginalQuestionAnswersPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedInvocations } }
-        set { editPollOriginalQuestionAnswersPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedInvocations = newValue } }
+    private let editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations: [(eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] = []
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] {
+        get { editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations } }
+        set { editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let editPollOriginalQuestionAnswersPollKindReturnValueLock = NSLock()
-    private nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue: Result<Void, TimelineControllerError>!
-    var editPollOriginalQuestionAnswersPollKindReturnValue: Result<Void, TimelineControllerError>! {
-        get { editPollOriginalQuestionAnswersPollKindReturnValueLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue } }
-        set { editPollOriginalQuestionAnswersPollKindReturnValueLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue = newValue } }
+    private let editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValueLock = NSLock()
+    private nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValue: Result<Void, TimelineControllerError>! {
+        get { editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValueLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue } }
+        set { editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValueLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindClosure: ((String, String, [String], Poll.Kind) async -> Result<Void, TimelineControllerError>)?
+    nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure: ((String, String, [String], Int, Poll.Kind) async -> Result<Void, TimelineControllerError>)?
 
-    @concurrent func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
-        editPollOriginalQuestionAnswersPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount += 1 }
-        editPollOriginalQuestionAnswersPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, pollKind: pollKind)
-        editPollOriginalQuestionAnswersPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedInvocations.append((eventID: eventID, question: question, answers: answers, pollKind: pollKind)) }
-        if let editPollOriginalQuestionAnswersPollKindClosure = editPollOriginalQuestionAnswersPollKindClosure {
-            return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
+    @concurrent func editPoll(original eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount += 1 }
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations.append((eventID: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)) }
+        if let editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure = editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure {
+            return await editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure(eventID, question, answers, maxSelections, pollKind)
         } else {
-            return editPollOriginalQuestionAnswersPollKindReturnValue
+            return editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValue
         }
     }
     //MARK: - sendPollResponse
@@ -13737,86 +13737,86 @@ nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable 
     }
     //MARK: - createPoll
 
-    private let createPollQuestionAnswersPollKindCallsCountLock = NSLock()
-    private nonisolated(unsafe) var createPollQuestionAnswersPollKindUnderlyingCallsCount = 0
-    var createPollQuestionAnswersPollKindCallsCount: Int {
-        get { createPollQuestionAnswersPollKindCallsCountLock.withLock { createPollQuestionAnswersPollKindUnderlyingCallsCount } }
-        set { createPollQuestionAnswersPollKindCallsCountLock.withLock { createPollQuestionAnswersPollKindUnderlyingCallsCount = newValue } }
+    private let createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock = NSLock()
+    private nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = 0
+    var createPollQuestionAnswersMaxSelectionsPollKindCallsCount: Int {
+        get { createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount } }
+        set { createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = newValue } }
     }
-    var createPollQuestionAnswersPollKindCalled: Bool {
-        return createPollQuestionAnswersPollKindCallsCount > 0
+    var createPollQuestionAnswersMaxSelectionsPollKindCalled: Bool {
+        return createPollQuestionAnswersMaxSelectionsPollKindCallsCount > 0
     }
-    private let createPollQuestionAnswersPollKindReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var createPollQuestionAnswersPollKindUnderlyingReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)?
-    var createPollQuestionAnswersPollKindReceivedArguments: (question: String, answers: [String], pollKind: Poll.Kind)? {
-        get { createPollQuestionAnswersPollKindReceivedArgumentsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedArguments } }
-        set { createPollQuestionAnswersPollKindReceivedArgumentsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedArguments = newValue } }
+    private let createPollQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments: (question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)?
+    var createPollQuestionAnswersMaxSelectionsPollKindReceivedArguments: (question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)? {
+        get { createPollQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments } }
+        set { createPollQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments = newValue } }
     }
-    private let createPollQuestionAnswersPollKindReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var createPollQuestionAnswersPollKindUnderlyingReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] = []
-    var createPollQuestionAnswersPollKindReceivedInvocations: [(question: String, answers: [String], pollKind: Poll.Kind)] {
-        get { createPollQuestionAnswersPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedInvocations } }
-        set { createPollQuestionAnswersPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedInvocations = newValue } }
+    private let createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations: [(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] = []
+    var createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocations: [(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] {
+        get { createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations } }
+        set { createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let createPollQuestionAnswersPollKindReturnValueLock = NSLock()
-    private nonisolated(unsafe) var createPollQuestionAnswersPollKindUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var createPollQuestionAnswersPollKindReturnValue: Result<Void, TimelineProxyError>! {
-        get { createPollQuestionAnswersPollKindReturnValueLock.withLock { createPollQuestionAnswersPollKindUnderlyingReturnValue } }
-        set { createPollQuestionAnswersPollKindReturnValueLock.withLock { createPollQuestionAnswersPollKindUnderlyingReturnValue = newValue } }
+    private let createPollQuestionAnswersMaxSelectionsPollKindReturnValueLock = NSLock()
+    private nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var createPollQuestionAnswersMaxSelectionsPollKindReturnValue: Result<Void, TimelineProxyError>! {
+        get { createPollQuestionAnswersMaxSelectionsPollKindReturnValueLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue } }
+        set { createPollQuestionAnswersMaxSelectionsPollKindReturnValueLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var createPollQuestionAnswersPollKindClosure: ((String, [String], Poll.Kind) async -> Result<Void, TimelineProxyError>)?
+    nonisolated(unsafe) var createPollQuestionAnswersMaxSelectionsPollKindClosure: ((String, [String], Int, Poll.Kind) async -> Result<Void, TimelineProxyError>)?
 
-    @concurrent func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
-        createPollQuestionAnswersPollKindCallsCountLock.withLock { createPollQuestionAnswersPollKindUnderlyingCallsCount += 1 }
-        createPollQuestionAnswersPollKindReceivedArguments = (question: question, answers: answers, pollKind: pollKind)
-        createPollQuestionAnswersPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersPollKindUnderlyingReceivedInvocations.append((question: question, answers: answers, pollKind: pollKind)) }
-        if let createPollQuestionAnswersPollKindClosure = createPollQuestionAnswersPollKindClosure {
-            return await createPollQuestionAnswersPollKindClosure(question, answers, pollKind)
+    @concurrent func createPoll(question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        createPollQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount += 1 }
+        createPollQuestionAnswersMaxSelectionsPollKindReceivedArguments = (question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
+        createPollQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { createPollQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)) }
+        if let createPollQuestionAnswersMaxSelectionsPollKindClosure = createPollQuestionAnswersMaxSelectionsPollKindClosure {
+            return await createPollQuestionAnswersMaxSelectionsPollKindClosure(question, answers, maxSelections, pollKind)
         } else {
-            return createPollQuestionAnswersPollKindReturnValue
+            return createPollQuestionAnswersMaxSelectionsPollKindReturnValue
         }
     }
     //MARK: - editPoll
 
-    private let editPollOriginalQuestionAnswersPollKindCallsCountLock = NSLock()
-    private nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount = 0
-    var editPollOriginalQuestionAnswersPollKindCallsCount: Int {
-        get { editPollOriginalQuestionAnswersPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount } }
-        set { editPollOriginalQuestionAnswersPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount = newValue } }
+    private let editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCountLock = NSLock()
+    private nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = 0
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount: Int {
+        get { editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount } }
+        set { editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount = newValue } }
     }
-    var editPollOriginalQuestionAnswersPollKindCalled: Bool {
-        return editPollOriginalQuestionAnswersPollKindCallsCount > 0
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindCalled: Bool {
+        return editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCount > 0
     }
-    private let editPollOriginalQuestionAnswersPollKindReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindUnderlyingReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)?
-    var editPollOriginalQuestionAnswersPollKindReceivedArguments: (eventID: String, question: String, answers: [String], pollKind: Poll.Kind)? {
-        get { editPollOriginalQuestionAnswersPollKindReceivedArgumentsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedArguments } }
-        set { editPollOriginalQuestionAnswersPollKindReceivedArgumentsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedArguments = newValue } }
+    private let editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments: (eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)?
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArguments: (eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)? {
+        get { editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments } }
+        set { editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArgumentsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedArguments = newValue } }
     }
-    private let editPollOriginalQuestionAnswersPollKindReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindUnderlyingReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] = []
-    var editPollOriginalQuestionAnswersPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], pollKind: Poll.Kind)] {
-        get { editPollOriginalQuestionAnswersPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedInvocations } }
-        set { editPollOriginalQuestionAnswersPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedInvocations = newValue } }
+    private let editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations: [(eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] = []
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocations: [(eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind)] {
+        get { editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations } }
+        set { editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let editPollOriginalQuestionAnswersPollKindReturnValueLock = NSLock()
-    private nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var editPollOriginalQuestionAnswersPollKindReturnValue: Result<Void, TimelineProxyError>! {
-        get { editPollOriginalQuestionAnswersPollKindReturnValueLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue } }
-        set { editPollOriginalQuestionAnswersPollKindReturnValueLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReturnValue = newValue } }
+    private let editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValueLock = NSLock()
+    private nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValue: Result<Void, TimelineProxyError>! {
+        get { editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValueLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue } }
+        set { editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValueLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var editPollOriginalQuestionAnswersPollKindClosure: ((String, String, [String], Poll.Kind) async -> Result<Void, TimelineProxyError>)?
+    nonisolated(unsafe) var editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure: ((String, String, [String], Int, Poll.Kind) async -> Result<Void, TimelineProxyError>)?
 
-    @concurrent func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
-        editPollOriginalQuestionAnswersPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingCallsCount += 1 }
-        editPollOriginalQuestionAnswersPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, pollKind: pollKind)
-        editPollOriginalQuestionAnswersPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersPollKindUnderlyingReceivedInvocations.append((eventID: eventID, question: question, answers: answers, pollKind: pollKind)) }
-        if let editPollOriginalQuestionAnswersPollKindClosure = editPollOriginalQuestionAnswersPollKindClosure {
-            return await editPollOriginalQuestionAnswersPollKindClosure(eventID, question, answers, pollKind)
+    @concurrent func editPoll(original eventID: String, question: String, answers: [String], maxSelections: Int, pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError> {
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindCallsCountLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingCallsCount += 1 }
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedArguments = (eventID: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)
+        editPollOriginalQuestionAnswersMaxSelectionsPollKindReceivedInvocationsLock.withLock { editPollOriginalQuestionAnswersMaxSelectionsPollKindUnderlyingReceivedInvocations.append((eventID: eventID, question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind)) }
+        if let editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure = editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure {
+            return await editPollOriginalQuestionAnswersMaxSelectionsPollKindClosure(eventID, question, answers, maxSelections, pollKind)
         } else {
-            return editPollOriginalQuestionAnswersPollKindReturnValue
+            return editPollOriginalQuestionAnswersMaxSelectionsPollKindReturnValue
         }
     }
     //MARK: - sendPollResponse

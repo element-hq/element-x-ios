@@ -2,6 +2,9 @@
 "screen_search_empty_state_message" = "Search for rooms";
 "screen_search_empty_state_title" = "Start searching...";
 "screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
+"a11y_screen_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_screen_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
 "soft_logout_clear_data_dialog_title" = "Clear data";
 "soft_logout_clear_data_notice" = "Warning: Your personal data (including encryption keys) is still stored on this device.\n\nClear it if you’re finished using this device, or want to sign in to another account.";

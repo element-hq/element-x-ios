@@ -11,13 +11,14 @@ import Foundation
 extension Poll {
     static func mock(question: String,
                      pollKind: Poll.Kind = .disclosed,
+                     maxSelections: Int = 1,
                      options: [Poll.Option],
                      votes: [String: [String]] = [:],
                      ended: Bool = false,
                      createdByAccountOwner: Bool = false) -> Self {
         .init(question: question,
               kind: pollKind,
-              maxSelections: 1,
+              maxSelections: maxSelections,
               options: options,
               votes: votes,
               endDate: ended ? Date() : nil,

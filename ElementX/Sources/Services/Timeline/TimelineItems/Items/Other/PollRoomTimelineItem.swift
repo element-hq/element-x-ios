@@ -43,6 +43,23 @@ nonisolated struct Poll: Hashable {
         options.filter(\.isSelected).count == maxSelections
     }
     
+    func answerIDsAfterSelecting(optionID: String) -> [String]? {
+        guard options.contains(where: { $0.id == optionID }) else { return nil }
+        
+        let selectedOptionIDs = options.filter(\.isSelected).map(\.id)
+        if selectedOptionIDs.contains(optionID) {
+            guard maxSelections > 1, selectedOptionIDs.count > 1 else { return nil }
+            return selectedOptionIDs.filter { $0 != optionID }
+        }
+        
+        guard maxSelections > 1 else {
+            return [optionID]
+        }
+        
+        guard selectedOptionIDs.count < maxSelections else { return nil }
+        return selectedOptionIDs + [optionID]
+    }
+    
     struct Option: Hashable {
         let id: String
         let text: String
