@@ -234,21 +234,22 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
         mediaSource.url.absoluteString
     }
     
-    nonisolated func data(handler: @escaping (Result<Data, Error>) -> Void) {
-        // Kingfisher isn't annotated but invokes the provider on the main thread.
-        let gifData = MainActor.assumeIsolated { () -> Data? in
+    nonisolated func data(handler: @escaping @Sendable (Result<Data, Error>) -> Void) {
+        // Kingfisher isn't annotated and doesn't guarantee the provider is invoked on the main
+        // thread so hop onto the main actor.
+        Task { @MainActor in
             guard case let .gifData(data) = contentLoader.content else {
-                return nil
+                handler(.failure(LoadableImageError.missingGIFData))
+                return
             }
-            return data
+            
+            handler(.success(data))
         }
-        
-        guard let gifData else {
-            fatalError("Shouldn't reach this point without any gif data")
-        }
-        
-        handler(.success(gifData))
     }
+}
+
+private enum LoadableImageError: Error {
+    case missingGIFData
 }
 
 private class ContentLoader: ObservableObject {
