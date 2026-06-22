@@ -193,7 +193,8 @@ struct CreateRoomScreen: View {
         Section {
             EditRoomAddressListRow(aliasLocalPart: aliasBinding,
                                    serverName: context.viewState.serverName,
-                                   shouldDisplayError: context.viewState.aliasErrors.errorDescription != nil)
+                                   errorDescription: context.viewState.aliasErrors.errorDescription,
+                                   footerText: L10n.screenCreateRoomRoomAddressSectionFooter)
                 .focused($focus, equals: .alias)
                 .id(Focus.alias)
         } header: {
