@@ -104,6 +104,11 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
                     return selectedURLs.compactMap { $0 }
                 }
                 
+                guard !selectedURLs.isEmpty else {
+                    // Every selected item failed to load; each failure was already surfaced via .error.
+                    return
+                }
+                
                 photoLibraryPicker.callback(.selectedMediaAtURLs(selectedURLs))
             }
         }
@@ -114,6 +119,9 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
             let provider = result.itemProvider
             
             guard let contentType = provider.preferredContentType else {
+                Task { @MainActor in
+                    photoLibraryPicker.callback(.error(.failedLoadingFileRepresentation(nil)))
+                }
                 return nil
             }
             

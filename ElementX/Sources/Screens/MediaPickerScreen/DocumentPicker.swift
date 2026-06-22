@@ -90,6 +90,11 @@ struct DocumentPicker: UIViewControllerRepresentable {
                 }
             }
             
+            guard !selectedURLs.isEmpty else {
+                // Every picked document failed to copy; each failure was already surfaced via .error.
+                return
+            }
+            
             documentPicker.callback(.selectedMediaAtURLs(selectedURLs))
         }
     }
