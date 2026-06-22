@@ -14,12 +14,28 @@ struct CallNotificationRoomTimelineView: View {
     let timelineItem: CallNotificationRoomTimelineItem
     
     var body: some View {
+        switch timelineItem.callState {
+        case .tombstoned(let isDeclinedByMe, let isDeclined):
+            tombstonedCallView(isDeclinedByMe: isDeclinedByMe, isDeclined: isDeclined)
+        case .active(let activeMembers, let isJoined, let callStartTimestamp):
+            ActiveCallTimelineItemView(isDM: timelineItem.isDM,
+                                       isVoiceCall: timelineItem.isVoiceCall,
+                                       activeMembers: activeMembers,
+                                       sender: timelineItem.sender,
+                                       isJoined: isJoined,
+                                       callStartTimestamp: callStartTimestamp)
+        }
+    }
+    
+    // MARK: - Tombstoned Call View
+    
+    private func tombstonedCallView(isDeclinedByMe: Bool, isDeclined: Bool) -> some View {
         HStack(spacing: 12) {
-            CompoundIcon(iconKeyPath, size: .medium, relativeTo: .compound.headingMDBold)
+            CompoundIcon(iconKeyPath(isDeclinedByMe: isDeclinedByMe, isDeclined: isDeclined), size: .medium, relativeTo: .compound.headingMDBold)
                 .foregroundStyle(.compound.iconSecondary)
                 .accessibilityHidden(true)
             
-            Text(tileTitle)
+            Text(tileTitle(isDeclinedByMe: isDeclinedByMe, isDeclined: isDeclined))
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textSecondary)
                 .labelStyle(.custom(spacing: 4))
@@ -38,12 +54,12 @@ struct CallNotificationRoomTimelineView: View {
     
     // MARK: - Private
     
-    private var tileTitle: String {
+    private func tileTitle(isDeclinedByMe: Bool, isDeclined: Bool) -> String {
         if timelineItem.isDM {
             // As per design only have declined variants in DM
-            if timelineItem.isDeclinedByMe {
+            if isDeclinedByMe {
                 L10n.commonCallYouDeclined
-            } else if timelineItem.isDeclined {
+            } else if isDeclined {
                 L10n.commonCallDeclined
             } else {
                 L10n.commonCallStarted
@@ -53,8 +69,8 @@ struct CallNotificationRoomTimelineView: View {
         }
     }
     
-    private var iconKeyPath: KeyPath<CompoundIcons, Image> {
-        if timelineItem.isDM, timelineItem.isDeclined || timelineItem.isDeclinedByMe {
+    private func iconKeyPath(isDeclinedByMe: Bool, isDeclined: Bool) -> KeyPath<CompoundIcons, Image> {
+        if timelineItem.isDM, isDeclined || isDeclinedByMe {
             // As per design only have declined variants in DM
             timelineItem.isVoiceCall ? \.voiceCallDeclinedSolid : \.videoCallDeclinedSolid
         } else {
@@ -72,68 +88,63 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
     
     static var body: some View {
         VStack(spacing: 0) {
+            // Tombstoned call previews
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isDM: false,
-                                                                 isDeclinedByMe: false,
-                                                                 isDeclined: false,
-                                                                 isVoiceCall: false))
+                                                                 isVoiceCall: false,
+                                                                 callState: .tombstoned(isDeclinedByMe: false, isDeclined: false)))
             
             Divider()
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isDM: true,
-                                                                 isDeclinedByMe: false,
-                                                                 isDeclined: false,
-                                                                 isVoiceCall: true))
+                                                                 isVoiceCall: true,
+                                                                 callState: .tombstoned(isDeclinedByMe: false, isDeclined: false)))
             
             Divider()
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isDM: false,
-                                                                 isDeclinedByMe: true,
-                                                                 isDeclined: true,
-                                                                 isVoiceCall: false))
+                                                                 isVoiceCall: false,
+                                                                 callState: .tombstoned(isDeclinedByMe: true, isDeclined: true)))
             
             Divider()
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isDM: true,
-                                                                 isDeclinedByMe: false,
-                                                                 isDeclined: true,
-                                                                 isVoiceCall: true))
+                                                                 isVoiceCall: true,
+                                                                 callState: .tombstoned(isDeclinedByMe: false, isDeclined: true)))
             
             Divider()
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isDM: true,
-                                                                 isDeclinedByMe: true,
-                                                                 isDeclined: true,
-                                                                 isVoiceCall: true))
+                                                                 isVoiceCall: false,
+                                                                 callState: .tombstoned(isDeclinedByMe: false, isDeclined: true)))
             
             Divider()
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
                                                                  isDM: true,
-                                                                 isDeclinedByMe: false,
-                                                                 isDeclined: true,
-                                                                 isVoiceCall: false))
+                                                                 isVoiceCall: false,
+                                                                 callState: .tombstoned(isDeclinedByMe: true, isDeclined: true)))
             
             Divider()
             
+            // Active call previews
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
-                                                                 isDM: true,
-                                                                 isDeclinedByMe: true,
-                                                                 isDeclined: true,
-                                                                 isVoiceCall: false))
-            
-            Divider()
+                                                                 isDM: false,
+                                                                 isVoiceCall: false,
+                                                                 callState: .active(activeMembers: ["@alice:example.org"],
+                                                                                    isJoined: false,
+                                                                                    callStartTimestamp: Date())))
         }
         .padding()
     }
