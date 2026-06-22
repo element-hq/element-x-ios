@@ -420,10 +420,13 @@ class TimelineTableViewController: UIViewController {
     
     /// Scrolls to the oldest item in the timeline.
     private func scrollToOldestItem(animated: Bool) {
-        guard !timelineItemsIDs.isEmpty else {
+        // The data source can lag behind timelineItemsIDs, so scroll against the table's actual
+        // contents to avoid targeting a section or row that doesn't exist yet.
+        guard tableView.numberOfSections > 1,
+              tableView.numberOfRows(inSection: 1) > 0 else {
             return
         }
-        tableView.scrollToRow(at: IndexPath(item: timelineItemsIDs.count - 1, section: 1), at: .bottom, animated: animated)
+        tableView.scrollToRow(at: IndexPath(item: tableView.numberOfRows(inSection: 1) - 1, section: 1), at: .bottom, animated: animated)
         scrollDirectionPublisher.send(.top)
     }
     
