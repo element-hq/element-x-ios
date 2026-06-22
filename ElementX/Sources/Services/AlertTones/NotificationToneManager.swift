@@ -54,7 +54,10 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
             try FileManager.default.createDirectory(at: NotificationToneManager.libraryLocation, withIntermediateDirectories: true)
             try FileManager.default.createDirectory(at: Self.selectedToneLocation.deletingLastPathComponent(), withIntermediateDirectories: true)
         } catch {
-            fatalError("Catastrophic error setting up tone manager: \(error)")
+            // Don't crash on a recoverable file system error. The underlying problem (directory creation
+            // failing on launch, e.g. a background launch before the container is writable) is acknowledged
+            // and will be treated separately.
+            MXLog.error("Failed setting up tone manager directories: \(error)")
         }
     }
     
