@@ -53,6 +53,7 @@ struct JoinRoomByAddressView: View {
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .textContentType(.URL)
+                    .accessibilityLabel(L10n.screenStartChatJoinRoomByAddressPlaceholder)
                     .focused($textFieldFocus)
                     .onChange(of: context.roomAddress) { _, newValue in
                         context.roomAddress = newValue.trimmingCharacters(in: .whitespacesAndNewlines)

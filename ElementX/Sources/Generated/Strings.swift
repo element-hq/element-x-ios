@@ -3553,7 +3553,7 @@ internal nonisolated enum L10n {
   internal static var screenStartChatJoinRoomByAddressAction: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_action") }
   /// Not a valid address
   internal static var screenStartChatJoinRoomByAddressInvalidAddress: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_invalid_address") }
-  /// Enter...
+  /// Enter Address...
   internal static var screenStartChatJoinRoomByAddressPlaceholder: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_placeholder") }
   /// Matching room found
   internal static var screenStartChatJoinRoomByAddressRoomFound: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_room_found") }
