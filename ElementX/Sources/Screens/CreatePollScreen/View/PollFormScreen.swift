@@ -177,7 +177,7 @@ private struct PollFormMaxSelectionsRow: View {
     var body: some View {
         ListRow(kind: .custom {
             HStack(spacing: 16) {
-                Text(UntranslatedL10n.screenCreatePollVotesAllowedPerPerson)
+                Text(L10n.screenCreatePollVotesAllowedPerPerson)
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textPrimary)
                     .lineLimit(2)
@@ -190,7 +190,7 @@ private struct PollFormMaxSelectionsRow: View {
                     }
                     .disabled(maxSelections <= 1)
                     .buttonStyle(.compound(.tertiary, size: .toolbarIcon))
-                    .accessibilityLabel(UntranslatedL10n.a11yScreenCreatePollVotesAllowedDecrease)
+                    .accessibilityLabel(L10n.a11yCreatePollVotesAllowedDecrease)
                     .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.maxSelectionsDecrement)
                     
                     Text("\(maxSelections)")
@@ -206,7 +206,7 @@ private struct PollFormMaxSelectionsRow: View {
                     }
                     .disabled(maxSelections >= maxNumberOfSelections)
                     .buttonStyle(.compound(.tertiary, size: .toolbarIcon))
-                    .accessibilityLabel(UntranslatedL10n.a11yScreenCreatePollVotesAllowedIncrease)
+                    .accessibilityLabel(L10n.a11yCreatePollVotesAllowedIncrease)
                     .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.maxSelectionsIncrement)
                 }
                 .layoutPriority(1)
