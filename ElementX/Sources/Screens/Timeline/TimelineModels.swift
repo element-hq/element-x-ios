@@ -33,6 +33,7 @@ enum TimelineViewModelAction {
     case viewInRoomTimeline(eventID: String, threadRootEventID: String?)
     case displayRoom(roomID: String, via: [String])
     case displayMediaDetails(item: EventBasedMessageTimelineItemProtocol)
+    case presentCallScreen(isVoiceCall: Bool)
 }
 
 enum TimelineViewPollAction {
@@ -89,6 +90,7 @@ enum TimelineViewAction {
     case hasScrolled(direction: ScrollDirection)
     
     case displayPredecessorRoom
+    case joinActiveCall(isVoiceCall: Bool)
 }
 
 enum TimelineComposerAction {

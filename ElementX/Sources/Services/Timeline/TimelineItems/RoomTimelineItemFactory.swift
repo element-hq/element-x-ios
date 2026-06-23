@@ -69,8 +69,14 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        isOutgoing: isOutgoing)
         case .callInvite:
             return buildCallInviteTimelineItem(for: eventItemProxy)
-        case .rtcNotification(let callIntent, let declinedBy):
-            return buildCallNotificationTimelineItem(for: eventItemProxy, isDM: isDM, callIntent: callIntent, declinedBy: declinedBy)
+        case .rtcNotification(let callIntent, let declinedBy, let activeMembers, let callStartMillis, let isJoined):
+            return buildCallNotificationTimelineItem(for: eventItemProxy,
+                                                     isDM: isDM,
+                                                     callIntent: callIntent,
+                                                     declinedBy: declinedBy,
+                                                     activeMembers: activeMembers,
+                                                     callStartTs: callStartMillis,
+                                                     isJoined: isJoined)
         }
     }
     
@@ -774,17 +780,28 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildCallNotificationTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                                    isDM: Bool,
                                                    callIntent: String?,
-                                                   declinedBy: [String]) -> RoomTimelineItemProtocol {
+                                                   declinedBy: [String],
+                                                   activeMembers: [String],
+                                                   callStartTs: UInt64?,
+                                                   isJoined: Bool) -> RoomTimelineItemProtocol {
         let isVoiceCall = callIntent == CallIntent.audio.rawValue
+        let callStartTimestamp = callStartTs.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) }
+        
+        // Active call
         return CallNotificationRoomTimelineItem(id: eventItemProxy.id,
                                                 timestamp: eventItemProxy.timestamp,
                                                 isEditable: eventItemProxy.isEditable,
                                                 canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                                sender: eventItemProxy.sender,
                                                 isDM: isDM,
-                                                isDeclinedByMe: declinedBy.contains(userID),
-                                                isDeclined: declinedBy.count > 0,
                                                 isVoiceCall: isVoiceCall,
-                                                properties: .init())
+                                                callState: activeMembers.count > 0 ?
+                                                    .active(activeMembers: activeMembers,
+                                                            isJoined: isJoined,
+                                                            callStartTimestamp: callStartTimestamp)
+                                                    :
+                                                    .tombstoned(isDeclinedByMe: declinedBy.contains(userID),
+                                                                isDeclined: declinedBy.count > 0))
     }
     
     // MARK: - State Events
