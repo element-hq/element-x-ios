@@ -25,7 +25,7 @@ jobs:
       - uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
         with:
           submodules: recursive
-          token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          token: ${{ secrets.ELEMENT_BOT_TOKEN || github.token }}
 
       - uses: actions/cache@v4
         with:
@@ -48,8 +48,8 @@ jobs:
         
       - name: Zip results # for faster upload
         if: failure()
-        working-directory: fastlane/test_output
-        run: zip -r UnitTests.zip UnitTests.xcresult
+        run: |
+          [ -d fastlane/test_output ] && cd fastlane/test_output && zip -r UnitTests.zip UnitTests.xcresult || true
       
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
