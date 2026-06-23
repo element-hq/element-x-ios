@@ -4574,6 +4574,49 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
+    //MARK: - enableContentScanner
+
+    private let enableContentScannerScannerUrlCallsCountLock = NSLock()
+    private var enableContentScannerScannerUrlUnderlyingCallsCount = 0
+    open var enableContentScannerScannerUrlCallsCount: Int {
+        get { enableContentScannerScannerUrlCallsCountLock.withLock { enableContentScannerScannerUrlUnderlyingCallsCount } }
+        set { enableContentScannerScannerUrlCallsCountLock.withLock { enableContentScannerScannerUrlUnderlyingCallsCount = newValue } }
+    }
+    open var enableContentScannerScannerUrlCalled: Bool {
+        return enableContentScannerScannerUrlCallsCount > 0
+    }
+    private let enableContentScannerScannerUrlReceivedScannerUrlLock = NSLock()
+    private var enableContentScannerScannerUrlUnderlyingReceivedScannerUrl: String?
+    open var enableContentScannerScannerUrlReceivedScannerUrl: String? {
+        get { enableContentScannerScannerUrlReceivedScannerUrlLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedScannerUrl } }
+        set { enableContentScannerScannerUrlReceivedScannerUrlLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedScannerUrl = newValue } }
+    }
+    private let enableContentScannerScannerUrlReceivedInvocationsLock = NSLock()
+    private var enableContentScannerScannerUrlUnderlyingReceivedInvocations: [String] = []
+    open var enableContentScannerScannerUrlReceivedInvocations: [String] {
+        get { enableContentScannerScannerUrlReceivedInvocationsLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedInvocations } }
+        set { enableContentScannerScannerUrlReceivedInvocationsLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let enableContentScannerScannerUrlReturnValueLock = NSLock()
+    open var enableContentScannerScannerUrlUnderlyingReturnValue: ClientBuilder!
+    open var enableContentScannerScannerUrlReturnValue: ClientBuilder! {
+        get { enableContentScannerScannerUrlReturnValueLock.withLock { enableContentScannerScannerUrlUnderlyingReturnValue } }
+        set { enableContentScannerScannerUrlReturnValueLock.withLock { enableContentScannerScannerUrlUnderlyingReturnValue = newValue } }
+    }
+    open var enableContentScannerScannerUrlClosure: ((String) -> ClientBuilder)?
+
+    open override func enableContentScanner(scannerUrl: String) -> ClientBuilder {
+        enableContentScannerScannerUrlCallsCountLock.withLock { enableContentScannerScannerUrlUnderlyingCallsCount += 1 }
+        enableContentScannerScannerUrlReceivedScannerUrl = scannerUrl
+        enableContentScannerScannerUrlReceivedInvocationsLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedInvocations.append(scannerUrl) }
+        if let enableContentScannerScannerUrlClosure = enableContentScannerScannerUrlClosure {
+            return enableContentScannerScannerUrlClosure(scannerUrl)
+        } else {
+            return enableContentScannerScannerUrlReturnValue
+        }
+    }
+
     //MARK: - enableShareHistoryOnInvite
 
     private let enableShareHistoryOnInviteEnableShareHistoryOnInviteCallsCountLock = NSLock()
@@ -8960,28 +9003,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         clearComposerDraftThreadRootReceivedThreadRoot = threadRoot
         clearComposerDraftThreadRootReceivedInvocationsLock.withLock { clearComposerDraftThreadRootUnderlyingReceivedInvocations.append(threadRoot) }
         try await clearComposerDraftThreadRootClosure?(threadRoot)
-    }
-
-    //MARK: - clearEventCacheStorage
-
-    open var clearEventCacheStorageThrowableError: Error?
-    private let clearEventCacheStorageCallsCountLock = NSLock()
-    private var clearEventCacheStorageUnderlyingCallsCount = 0
-    open var clearEventCacheStorageCallsCount: Int {
-        get { clearEventCacheStorageCallsCountLock.withLock { clearEventCacheStorageUnderlyingCallsCount } }
-        set { clearEventCacheStorageCallsCountLock.withLock { clearEventCacheStorageUnderlyingCallsCount = newValue } }
-    }
-    open var clearEventCacheStorageCalled: Bool {
-        return clearEventCacheStorageCallsCount > 0
-    }
-    open var clearEventCacheStorageClosure: (() async throws -> Void)?
-
-    open override func clearEventCacheStorage() async throws {
-        if let error = clearEventCacheStorageThrowableError {
-            throw error
-        }
-        clearEventCacheStorageCallsCountLock.withLock { clearEventCacheStorageUnderlyingCallsCount += 1 }
-        try await clearEventCacheStorageClosure?()
     }
 
     //MARK: - declineCall

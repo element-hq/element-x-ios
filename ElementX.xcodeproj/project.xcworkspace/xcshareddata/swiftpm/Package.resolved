@@ -1,5 +1,5 @@
 {
-  "originHash" : "96bc6d1f8871c4b0823e82c2f9171715c3d2aeff1da526d2349369204d30b03f",
+  "originHash" : "ff8cfb62fc686fc24c445d89c94fd74a4f51075b737940288a0f0f3da0dd575e",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -167,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "9acf348eeeb3787542cf54e1ada1e79ad75ed67a",
-        "version" : "26.6.16"
+        "revision" : "5b1b8c718e232ec2ff9831e64835054c6ed69b26",
+        "version" : "26.6.23"
       }
     },
     {
