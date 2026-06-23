@@ -268,7 +268,7 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
         let (data, _) = try await sendAuthenticated(path: "/security/passkey/enroll/start",
                                                     accessToken: accessToken,
                                                     body: EmptyBody(),
-                                                    language: nil,
+                                                    language: Locale.current.language.languageCode?.identifier,
                                                     expectsBody: true)
         do {
             let response = try decoder.decode(Response.self, from: data)

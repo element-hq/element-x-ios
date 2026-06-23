@@ -32,8 +32,17 @@ class PasskeyEnrollmentPresenter: NSObject {
     /// either because the page redirected to the callback URL or because the user
     /// closed the sheet.
     func start() async {
+        // Pass the device locale so the IDP renders in the user's language (e.g. French).
+        var urlToOpen = enrollURL
+        if let languageCode = Locale.current.language.languageCode?.identifier,
+           var components = URLComponents(url: enrollURL, resolvingAgainstBaseURL: true) {
+            var queryItems = components.queryItems ?? []
+            queryItems.append(URLQueryItem(name: "ui_locales", value: languageCode))
+            components.queryItems = queryItems
+            urlToOpen = components.url ?? enrollURL
+        }
         await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
-            let session = ASWebAuthenticationSession(url: enrollURL, callback: .oidcRedirectURL(oidcRedirectURL)) { _, _ in
+            let session = ASWebAuthenticationSession(url: urlToOpen, callback: .oidcRedirectURL(oidcRedirectURL)) { _, _ in
                 continuation.resume()
             }
             session.prefersEphemeralWebBrowserSession = false
