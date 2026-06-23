@@ -79,9 +79,18 @@ enum OIDCError: Error {
 
 struct OIDCAuthorizationDataProxy: Hashable {
     let underlyingData: OAuthAuthorizationData
-    
+
     var url: URL {
-        guard let url = URL(string: underlyingData.loginUrl()) else {
+        guard var components = URLComponents(string: underlyingData.loginUrl()) else {
+            fatalError("OIDC login URL hasn't been validated.")
+        }
+        // Pass the device locale so the IDP renders in the user's language (e.g. French).
+        if let languageCode = Locale.current.language.languageCode?.identifier {
+            var queryItems = components.queryItems ?? []
+            queryItems.append(URLQueryItem(name: "ui_locales", value: languageCode))
+            components.queryItems = queryItems
+        }
+        guard let url = components.url else {
             fatalError("OIDC login URL hasn't been validated.")
         }
         return url

@@ -424,7 +424,17 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func accountURL(action: AccountManagementAction) async -> URL? {
-        try? await client.accountUrl(action: action).flatMap(URL.init(string:))
+        guard let urlString = try? await client.accountUrl(action: action),
+              var components = URLComponents(string: urlString) else {
+            return nil
+        }
+        // Pass the device locale so the IDP renders in the user's language (e.g. French).
+        if let languageCode = Locale.current.language.languageCode?.identifier {
+            var queryItems = components.queryItems ?? []
+            queryItems.append(URLQueryItem(name: "ui_locales", value: languageCode))
+            components.queryItems = queryItems
+        }
+        return components.url
     }
     
     func directRoomForUserID(_ userID: String) -> Result<String?, ClientProxyError> {
