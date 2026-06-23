@@ -405,7 +405,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         repeat { // Don't enumerate and mutate at the same time, big no no
             shouldMakeAnotherPass = false
-            attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { @Sendable value, range, stop in
+            attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, stop in
                 guard let value else { return }
                 shouldMakeAnotherPass = true
                 
@@ -429,7 +429,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         repeat {
             shouldMakeAnotherPass = false
-            attributedString.enumerateAttribute(.MatrixAllUsersMention, in: .init(location: 0, length: attributedString.length), options: []) { @Sendable value, range, stop in
+            attributedString.enumerateAttribute(.MatrixAllUsersMention, in: .init(location: 0, length: attributedString.length), options: []) { value, range, stop in
                 guard value != nil else { return }
                 
                 shouldMakeAnotherPass = true
