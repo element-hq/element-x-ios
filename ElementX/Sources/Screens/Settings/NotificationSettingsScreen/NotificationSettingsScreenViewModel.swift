@@ -43,7 +43,9 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
                                                                          selectedAlertTone: appSettings.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
-                                                                         availableCustomTones: notificationToneManager.customTones()))
+                                                                         availableCustomTones: notificationToneManager.customTones(),
+                                                                         // macos lacks default sounds and its sandbox Sounds directory is immutable
+                                                                         customToneSelectionEnabled: !ProcessInfo.processInfo.isiOSAppOnMac))
         
         // Listen for changes to AppSettings.
         appSettings.$enableNotifications
@@ -191,9 +193,7 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                           roomMentionsEnabled: roomMentionsEnabled,
                                                                           callsEnabled: callEnabled,
                                                                           invitationsEnabled: invitationsEnabled,
-                                                                          inconsistentSettings: inconsistentSettings,
-                                                                          // macos lacks default sounds and its sandbox Sounds directory is immutable
-                                                                          customToneSelectionEnabled: !ProcessInfo.processInfo.isiOSAppOnMac)
+                                                                          inconsistentSettings: inconsistentSettings)
             
             state.settings = notificationSettings
             state.bindings.roomMentionsEnabled = notificationSettings.roomMentionsEnabled ?? false

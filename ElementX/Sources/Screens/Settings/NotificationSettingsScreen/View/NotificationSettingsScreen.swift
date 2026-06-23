@@ -39,7 +39,7 @@ struct NotificationSettingsScreen: View {
                         additionalSettingsSection
                     }
                     
-                    if context.viewState.settings?.customToneSelectionEnabled == true {
+                    if context.viewState.customToneSelectionEnabled {
                         soundSelectionSection
                     }
                 }
