@@ -508,7 +508,7 @@ class TimelineInteractionHandler {
                                            duration: voiceMessageRoomTimelineItem.content.duration,
                                            waveform: voiceMessageRoomTimelineItem.content.waveform,
                                            playbackSpeed: appSettings.voiceMessagePlaybackSpeed,
-                                           playbackSpeedPublisher: appSettings.$voiceMessagePlaybackSpeed)
+                                           playbackSpeedPublisher: appSettings.voiceMessagePlaybackSpeedPublisher)
         mediaPlayerProvider.register(audioPlayerState: playerState)
         return playerState
     }

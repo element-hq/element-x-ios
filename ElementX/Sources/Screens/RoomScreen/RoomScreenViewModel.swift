@@ -163,11 +163,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
-        appSettings.$roomThreadListEnabled
+        appSettings.roomThreadListEnabledPublisher
             .weakAssign(to: \.state.roomThreadListEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.$liveLocationSharingSessionsByRoomID
+        appSettings.liveLocationSharingSessionsByRoomIDPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] sessionsByRoomID in
                 guard let self else { return }

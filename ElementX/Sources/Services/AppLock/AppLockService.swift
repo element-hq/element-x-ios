@@ -54,7 +54,7 @@ class AppLockService: AppLockServiceProtocol {
     }
     
     var numberOfPINAttempts: AnyPublisher<Int, Never> {
-        appSettings.$appLockNumberOfPINAttempts
+        appSettings.appLockNumberOfPINAttemptsPublisher
     }
     
     init(keychainController: KeychainControllerProtocol, appSettings: AppSettings, context: LAContext = .init()) {

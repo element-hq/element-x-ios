@@ -183,7 +183,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             }
             .store(in: &cancellables)
         
-        appSettings.$liveLocationSharingSessionsByRoomID
+        appSettings.liveLocationSharingSessionsByRoomIDPublisher
             .removeDuplicates()
             .sink { [weak self] sessions in
                 guard let self else { return }
@@ -197,7 +197,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             }
             .store(in: &cancellables)
         
-        appSettings.$liveLocationMinimumDistanceUpdate
+        appSettings.liveLocationMinimumDistanceUpdatePublisher
             .removeDuplicates()
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .sink { [weak self] newValue in

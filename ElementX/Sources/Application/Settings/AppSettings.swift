@@ -174,17 +174,14 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// The last known version of the app that was launched on this device, which is
     /// used to detect when migrations should be run. When `nil` the app may have been
     /// deleted between runs so should clear data in the shared container and keychain.
-    @UserPreference
-    nonisolated(unsafe) var lastVersionLaunched: String?
+    let _lastVersionLaunched: UserPreference<String?>
     
     /// The Set of room identifiers of invites that the user already saw in the invites list.
     /// This Set is being used to implement badges for unread invites.
-    @UserPreference
-    nonisolated(unsafe) var seenInvites: Set<String>
+    let _seenInvites: UserPreference<Set<String>> // sourcery: publisher
     
     /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
-    @UserPreference
-    nonisolated(unsafe) var hasSeenNewSoundBanner: Bool
+    let _hasSeenNewSoundBanner: UserPreference<Bool> // sourcery: publisher
     
     /// The initial set of account providers shown to the user in the authentication flow.
     ///
@@ -228,8 +225,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// **Note:** This property isn't overridable as it in unexpected for forks to come across the error (or to even have a "Pro" app).
     let elementProAppStoreURL: URL = "https://apps.apple.com/app/element-pro-for-work/id6502951615"
     
-    @UserPreference
-    nonisolated(unsafe) var appAppearance: AppAppearance
+    let _appAppearance: UserPreference<AppAppearance> // sourcery: publisher
     
     // MARK: - Security
     
@@ -240,8 +236,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// Any codes that the user isn't allowed to use for their PIN.
     let appLockPINCodeBlockList = ["0000", "1234"]
     /// The number of attempts the user has made to unlock the app with a PIN code (resets when unlocked).
-    @UserPreference
-    nonisolated(unsafe) var appLockNumberOfPINAttempts: Int
+    let _appLockNumberOfPINAttempts: UserPreference<Int> // sourcery: publisher
     
     // MARK: - Authentication
     
@@ -281,34 +276,26 @@ final nonisolated class AppSettings: @unchecked Sendable {
         pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify")
     }
     
-    @UserPreference
-    nonisolated(unsafe) var enableNotifications: Bool
+    let _enableNotifications: UserPreference<Bool> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var enableInAppNotifications: Bool
+    let _enableInAppNotifications: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var hideQuietNotificationAlerts: Bool
+    let _hideQuietNotificationAlerts: UserPreference<Bool>
     
     /// Tag describing which set of device specific rules a pusher executes.
-    @UserPreference
-    nonisolated(unsafe) var pusherProfileTag: String?
+    let _pusherProfileTag: UserPreference<String?>
     
     /// The device's last boot time as recorded by the NSE.
-    @UserPreference
-    nonisolated(unsafe) var lastNotificationBootTime: TimeInterval?
+    let _lastNotificationBootTime: UserPreference<TimeInterval?>
     
     /// The sound played when delivering noisy notifications. If nil, use the ElementX default
-    @UserPreference
-    nonisolated(unsafe) var selectedNotificationTone: NotificationTone?
+    let _selectedNotificationTone: UserPreference<NotificationTone?> // sourcery: publisher
     
     // MARK: - Logging
     
-    @UserPreference
-    nonisolated(unsafe) var logLevel: LogLevel
+    let _logLevel: UserPreference<LogLevel>
     
-    @UserPreference
-    nonisolated(unsafe) var traceLogPacks: Set<TraceLogPack>
+    let _traceLogPacks: UserPreference<Set<TraceLogPack>>
     
     // MARK: - Bug report
     
@@ -335,47 +322,35 @@ final nonisolated class AppSettings: @unchecked Sendable {
     }
     
     /// Whether the user has opted in to send analytics.
-    @UserPreference
-    nonisolated(unsafe) var analyticsConsentState: AnalyticsConsentState
+    let _analyticsConsentState: UserPreference<AnalyticsConsentState> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var hasRunNotificationPermissionsOnboarding: Bool
+    let _hasRunNotificationPermissionsOnboarding: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var hasRunIdentityConfirmationOnboarding: Bool
+    let _hasRunIdentityConfirmationOnboarding: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var hasRequestedLocationAlwaysLocationAuthorization: Bool
+    let _hasRequestedLocationAlwaysLocationAuthorization: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var frequentlyUsedSystemEmojis: [FrequentlyUsedEmoji]
+    let _frequentlyUsedSystemEmojis: UserPreference<[FrequentlyUsedEmoji]>
     
     // MARK: - Live Location
     
-    @UserPreference
-    nonisolated(unsafe) var liveLocationSharingSessionsByRoomID: [String: LiveLocationSession]
+    let _liveLocationSharingSessionsByRoomID: UserPreference<[String: LiveLocationSession]> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var liveLocationMinimumDistanceUpdate: Int
+    let _liveLocationMinimumDistanceUpdate: UserPreference<Int> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var liveLocationDisclaimerDisplayed: Bool
+    let _liveLocationDisclaimerDisplayed: UserPreference<Bool>
     
     // MARK: - Home Screen
     
-    @UserPreference
-    nonisolated(unsafe) var roomListActivityVisibility: RoomListActivityVisibility
+    let _roomListActivityVisibility: UserPreference<RoomListActivityVisibility> // sourcery: publisher
     
     // MARK: - Room Screen
     
-    @UserPreference
-    nonisolated(unsafe) var viewSourceEnabled: Bool
+    let _viewSourceEnabled: UserPreference<Bool> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var optimizeMediaUploads: Bool
+    let _optimizeMediaUploads: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
+    let _voiceMessagePlaybackSpeed: UserPreference<AudioPlaybackSpeed> // sourcery: publisher
     
     /// Whether or not to show a warning on the media caption composer so the user knows
     /// that captions might not be visible to users who are using other Matrix clients.
@@ -393,8 +368,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     let elementCallPosthogAPIKey = "phc_rXGHx9vDmyEvyRxPziYtdVIv0ahEv8A9uLWFcCi1WcU"
     let elementCallPosthogSentryDSN = "https://3bd2f95ba5554d4497da7153b552ffb5@sentry.tools.element.io/41"
     
-    @UserPreference
-    nonisolated(unsafe) var elementCallBaseURLOverride: URL?
+    let _elementCallBaseURLOverride: UserPreference<URL?>
     
     // MARK: - Users
     
@@ -416,54 +390,39 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     // MARK: - Presence
     
-    @UserPreference
-    nonisolated(unsafe) var sharePresence: Bool
+    let _sharePresence: UserPreference<Bool> // sourcery: publisher
     
     // MARK: - Feature Flags
     
     /// Others
-    @UserPreference
-    nonisolated(unsafe) var fuzzyRoomListSearchEnabled: Bool
+    let _fuzzyRoomListSearchEnabled: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var lowPriorityFilterEnabled: Bool
+    let _lowPriorityFilterEnabled: UserPreference<Bool>
     
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
-    @UserPreference
-    nonisolated(unsafe) var enableOnlySignedDeviceIsolationMode: Bool
+    let _enableOnlySignedDeviceIsolationMode: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var knockingEnabled: Bool
+    let _knockingEnabled: UserPreference<Bool> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var threadsEnabled: Bool
+    let _threadsEnabled: UserPreference<Bool> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var roomThreadListEnabled: Bool
+    let _roomThreadListEnabled: UserPreference<Bool> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var globalSearchEnabled: Bool
+    let _globalSearchEnabled: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var focusEventOnNotificationTap: Bool
+    let _focusEventOnNotificationTap: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var linkPreviewsEnabled: Bool
+    let _linkPreviewsEnabled: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var jumpToReadMarkerEnabled: Bool
+    let _jumpToReadMarkerEnabled: UserPreference<Bool> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var linkNewDeviceEnabled: Bool
+    let _linkNewDeviceEnabled: UserPreference<Bool> // sourcery: publisher
     
-    @UserPreference
-    nonisolated(unsafe) var automaticBackPaginationEnabled: Bool
+    let _automaticBackPaginationEnabled: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var clientPausingAndResumingEnabled: Bool
+    let _clientPausingAndResumingEnabled: UserPreference<Bool>
     
-    @UserPreference
-    nonisolated(unsafe) var developerOptionsEnabled: Bool
+    let _developerOptionsEnabled: UserPreference<Bool> // sourcery: publisher
     
     init(store: UserDefaultsProtocol) {
         // UserDefaults to be used on reads and writes.

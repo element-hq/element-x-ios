@@ -1,0 +1,7 @@
+sources:
+  include:
+    - ../../ElementX/Sources/Application/Settings/AppSettings.swift
+templates:
+  - AppSettingsPreferences.stencil
+output:
+  ../../ElementX/Sources/Generated/AppSettings+Preferences.swift

@@ -1,0 +1,26 @@
+// swiftlint:disable all
+// swiftformat:disable all
+// Generated using Sourcery. DO NOT EDIT.
+
+import Combine
+import Foundation
+
+// Exposes each `_foo: UserPreference<T>` backing as a `foo` value accessor (and, when annotated
+// `// sourcery: publisher`, a `fooPublisher`). Generated rather than hand-written because the
+// declarations can't use the `@UserPreference` property wrapper without emitting a spurious
+// "nonisolated(unsafe) has no effect" warning – see UserPreference.swift.
+nonisolated extension AppSettings {
+{% for type in types.all where type.name == "AppSettings" %}
+{% for variable in type.instanceVariables where variable.typeName.name|hasPrefix:"UserPreference<" %}
+    var {{ variable.name|replace:"_","" }}: {{ variable.typeName.generic.typeParameters.first.typeName.name }} {
+        get { {{ variable.name }}.wrappedValue }
+        set { {{ variable.name }}.wrappedValue = newValue }
+    }
+{% if variable.annotations.publisher %}
+    var {{ variable.name|replace:"_","" }}Publisher: AnyPublisher<{{ variable.typeName.generic.typeParameters.first.typeName.name }}, Never> {
+        {{ variable.name }}.projectedValue
+    }
+{% endif %}
+{% endfor %}
+{% endfor %}
+}

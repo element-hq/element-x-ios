@@ -1052,6 +1052,7 @@
 		AA5924D3B67F7ACD98BBEFDC /* OrientationManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4756240773D26AB74C22668 /* OrientationManagerProtocol.swift */; };
 		AA93B3F9B5DD097DEF79F981 /* NotificationSettingsEditScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB0328F2887BF0A65BC5D49 /* NotificationSettingsEditScreen.swift */; };
 		AAA551AD8768309024D4907B /* KnockRequestsListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1511B1DCECC0DC75EB267328 /* KnockRequestsListScreen.swift */; };
+		AABBA2E550431295639E06FF /* AppSettings+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD970E459AED8D9BB31E6F5 /* AppSettings+Preferences.swift */; };
 		AADE7C2497A7B55D8BED7BD6 /* IdentityConfirmedScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8319173DD66C07F45DC48848 /* IdentityConfirmedScreenViewModelProtocol.swift */; };
 		AAF0BBED840DF4A53EE85E77 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = C2C69B8BA5A9702E7A8BC08F /* MatrixRustSDK */; };
 		ABD29E06DD1224812E750AF8 /* ReadReceiptCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D75941CBD7D336F831924EC /* ReadReceiptCell.swift */; };
@@ -1393,6 +1394,7 @@
 		E82E13CC3EB923CCB8F8273C /* TimelineProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E543072DE58E751F028998 /* TimelineProxy.swift */; };
 		E84ADFE9696936C18C2424B5 /* SecureBackupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A00BB9CD12CF6AC98D5485 /* SecureBackupScreen.swift */; };
 		E8AE3BE5C5D2E6C91751A2A6 /* StateMachineFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC73285743189AE4498A51DD /* StateMachineFactory.swift */; };
+		E8B1D69F19E1CF14F522B59A /* AppSettings+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD970E459AED8D9BB31E6F5 /* AppSettings+Preferences.swift */; };
 		E8B290CBB7E5FF5E3C1B6124 /* KnockRequestsListEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A8B5E798CC778C363655E /* KnockRequestsListEmptyStateView.swift */; };
 		E8BBCFF3B1380F56C73690BC /* ClassicAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C78D5FF15343724902EB20 /* ClassicAppManager.swift */; };
 		E8C4D9F93F0DCED211D5F187 /* HTMLParserStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3877D3CFAC1D33823359BAF /* HTMLParserStyle.swift */; };
@@ -1460,6 +1462,7 @@
 		F252C0EA49088801F4CA6006 /* landscape_test_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96CE9D6642DD487D8CC90C9C /* landscape_test_image.jpg */; };
 		F255083E18CDBFDF7E640FB1 /* Avatars.swift in Sources */ = {isa = PBXBuildFile; fileRef = C142248014E08E885E323E56 /* Avatars.swift */; };
 		F2D5C0E1351DA7BD16867629 /* TimelineStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD4823EAB4B4E8BAB4F6B8C /* TimelineStyle.swift */; };
+		F2E1114DA333F69FA1827213 /* AppSettings+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD970E459AED8D9BB31E6F5 /* AppSettings+Preferences.swift */; };
 		F2E580C0FBFBEFFE9D69893B /* RoomPreviewProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739077686814E4EA339B1C83 /* RoomPreviewProxyProtocol.swift */; };
 		F34D06F86C29E219E7132E87 /* AuthenticationStartScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F71A54CB96DAA1E72C6541D /* AuthenticationStartScreenViewModel.swift */; };
 		F35FAD1B1B289E221A07D719 /* ManageRoomMemberSheetViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7B588A06911B455AC0B4C9 /* ManageRoomMemberSheetViewModelProtocol.swift */; };
@@ -1926,6 +1929,7 @@
 		2F36C5D9B37E50915ECBD3EE /* RoomMemberProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberProxy.swift; sourceTree = "<group>"; };
 		2F65178687F725E8924B723C /* TimelineFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineFixtures.swift; sourceTree = "<group>"; };
 		2F926D08EB3D622A480BCA71 /* TimelineEventContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineEventContent.swift; sourceTree = "<group>"; };
+		2FD970E459AED8D9BB31E6F5 /* AppSettings+Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettings+Preferences.swift"; sourceTree = "<group>"; };
 		303D9438EFB481F57A366E82 /* EncryptionResetPasswordScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetPasswordScreenViewModel.swift; sourceTree = "<group>"; };
 		303FCADE77DF1F3670C086ED /* BugReportScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportScreenViewModel.swift; sourceTree = "<group>"; };
 		306AB507E1027D6C5C147EB6 /* EncryptionResetScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetScreenModels.swift; sourceTree = "<group>"; };
@@ -3956,6 +3960,7 @@
 		337015ADFBA3AB96660DB3A6 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
+				2FD970E459AED8D9BB31E6F5 /* AppSettings+Preferences.swift */,
 				71D52BAA5BADB06E5E8C295D /* Assets.swift */,
 				47EBB5D698CE9A25BB553A2D /* Strings.swift */,
 				B172057567E049007A5C4D92 /* Strings+SAS.swift */,
@@ -7714,7 +7719,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which sourcery >/dev/null; then\n    sourcery --config Tools/Sourcery/AutoMockableConfig.yml\nelse\n    echo \"warning: Sourcery not installed, run swift run tools setup-project\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which sourcery >/dev/null; then\n    sourcery --config Tools/Sourcery/AutoMockableConfig.yml\n    sourcery --config Tools/Sourcery/AppSettingsPreferencesConfig.yml\nelse\n    echo \"warning: Sourcery not installed, run swift run tools setup-project\"\nfi\n";
 		};
 		98CA896D84BFD53B2554E891 /* ⚠️ SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -7819,6 +7824,7 @@
 				4E9ED3E6E979C6C7FEC1D011 /* AnalyticsConsentState.swift in Sources */,
 				68C3AF257678F6E7BB238C3F /* AppAppearance.swift in Sources */,
 				A2172B5A26976F9174228B8A /* AppHooks.swift in Sources */,
+				F2E1114DA333F69FA1827213 /* AppSettings+Preferences.swift in Sources */,
 				E1DE8A5422643F759385290F /* AppSettings.swift in Sources */,
 				484202C5D50983442D24D061 /* AttributedString.swift in Sources */,
 				CDCA8A559E098503DDE29477 /* AttributedStringBuilder.swift in Sources */,
@@ -8073,6 +8079,7 @@
 				585DCA0487A0A6F4E59EF5CA /* AnalyticsConsentState.swift in Sources */,
 				88887E40301FF0543ED5B59F /* AppAppearance.swift in Sources */,
 				944EAB7BC2408B2C6570E722 /* AppHooks.swift in Sources */,
+				E8B1D69F19E1CF14F522B59A /* AppSettings+Preferences.swift in Sources */,
 				2CC3F27CD76DB00A747BEA6C /* AppSettings.swift in Sources */,
 				56C18ACF91DD20463B242460 /* AudioPlaybackSpeed.swift in Sources */,
 				2F2906AE9BC3D0E79A6F98F8 /* Bundle.swift in Sources */,
@@ -8203,6 +8210,7 @@
 				A36AD251013402EDBD666C75 /* AppMediatorMock.swift in Sources */,
 				4BBF6C8E3EFC944B55231B19 /* AppMediatorProtocol.swift in Sources */,
 				355B11D08CE0CEF97A813236 /* AppRoutes.swift in Sources */,
+				AABBA2E550431295639E06FF /* AppSettings+Preferences.swift in Sources */,
 				D304343515CE0464C5089537 /* AppSettings.swift in Sources */,
 				4EAC427267424192964B16B3 /* AppSettingsHook.swift in Sources */,
 				9462C62798F47E39DCC182D2 /* Application.swift in Sources */,

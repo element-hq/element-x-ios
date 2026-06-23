@@ -12,6 +12,14 @@ import Foundation
 /// A property wrapper that allows storing data in a keyed storage while also exposing a Combine publisher
 /// to listen for value changes. The publisher does not skip consecutive duplicates, as there is no
 /// `Equatable` enforcement at this level.
+///
+/// Note: `AppSettings` does **not** use the `@UserPreference` attribute. The module defaults to `MainActor`
+/// isolation, so `AppSettings` is `nonisolated`, which forces `nonisolated` onto its stored properties.
+/// A wrapped property is stored as `var`, requiring `nonisolated(unsafe)`, which emits an unsilenceable
+/// "`nonisolated(unsafe)` has no effect" warning on the wrapper's projection. So `AppSettings` instead holds
+/// each preference as a plain `let _foo: UserPreference<T>` and the `foo`/`fooPublisher` accessors are
+/// code-generated (Sourcery) into `AppSettings+Preferences.swift` from the `// sourcery: publisher`
+/// annotations. This type is still a `@propertyWrapper` because the unit tests exercise it as one.
 @propertyWrapper
 final nonisolated class UserPreference<T: Codable> {
     static var remotePrefix: String {
