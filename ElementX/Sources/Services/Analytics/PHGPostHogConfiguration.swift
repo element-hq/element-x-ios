@@ -10,7 +10,7 @@ import PostHog
 
 extension PostHogConfig {
     static func standard(analyticsConfiguration: AnalyticsConfiguration) -> PostHogConfig? {
-        let postHogConfiguration = PostHogConfig(apiKey: analyticsConfiguration.apiKey, host: analyticsConfiguration.host)
+        let postHogConfiguration = PostHogConfig(projectToken: analyticsConfiguration.apiKey, host: analyticsConfiguration.host)
         // We capture screens manually
         postHogConfiguration.captureScreenViews = false
         postHogConfiguration.surveys = false
