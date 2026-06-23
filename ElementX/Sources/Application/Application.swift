@@ -52,9 +52,7 @@ struct Application: App {
                     guard let url = userActivity.webpageURL else { return }
                     openURL(url, isExternalURL: true)
                 }
-                .onContinueUserActivity("INStartVideoCallIntent") { userActivity in
-                    // `INStartVideoCallIntent` is to be replaced with `INStartCallIntent`
-                    // but calls from Recents still send it ¯\_(ツ)_/¯
+                .onContinueUserActivity("INStartCallIntent") { userActivity in
                     appCoordinator.handleUserActivity(userActivity)
                 }
                 .task {
