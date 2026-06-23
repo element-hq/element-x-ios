@@ -77,8 +77,9 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         switch await profileResult {
         case .success(let userProfile):
             state.userProfile = userProfile
-            state.permalink = (try? matrixToUserPermalink(userId: state.userID)).flatMap(URL.init(string:))
-            
+            // GUA FORK: share the brand link, never matrix.to (which surfaces the homeserver).
+            state.permalink = GuaUserLink.url(for: state.userID)
+
             switch userSession.clientProxy.directRoomForUserID(userProfile.userID) {
             case .success(let roomID):
                 state.dmRoomID = roomID
@@ -92,7 +93,8 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             // the screen usable (and "Send message" working) rather than surfacing a raw failure.
             MXLog.warning("Falling back to minimal profile for \(state.userID): \(error)")
             state.userProfile = UserProfileProxy(userID: state.userID)
-            state.permalink = (try? matrixToUserPermalink(userId: state.userID)).flatMap(URL.init(string:))
+            // GUA FORK: share the brand link, never matrix.to (which surfaces the homeserver).
+            state.permalink = GuaUserLink.url(for: state.userID)
             if case let .success(roomID) = userSession.clientProxy.directRoomForUserID(state.userID) {
                 state.dmRoomID = roomID
             }

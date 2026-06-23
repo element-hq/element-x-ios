@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Log ind på %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Log ind med QR-kode";
 "screen_onboarding_sign_up" = "Opret konto";
-"screen_onboarding_welcome_message" = "Ladet med hastighed og enkelhed.";
-"screen_onboarding_welcome_subtitle" = "Ladet med hastighed og enkelhed.";
 "screen_onboarding_welcome_title" = "Velkommen til Gua";
 "screen_polls_history_empty_ongoing" = "Kan ikke finde nogen igangværende afstemninger.";
 "screen_polls_history_empty_past" = "Kan ikke finde nogen tidligere afstemninger.";

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Export options for the one-tap TestFlight workflow (.github/workflows/testflight.yml).
+
+  Signing is cloud-managed (automatic) via an App Store Connect API key passed to
+  xcodebuild with -allowProvisioningUpdates. Xcode fetches/creates the distribution
+  certificate and the App Store provisioning profiles for all three signed targets
+  (global.gua, global.gua.nse, global.gua.shareextension) on the fly, so no profiles,
+  certs, or team id are pinned in this file.
+
+  manageAppVersionAndBuildNumber is false because the workflow sets a unique build
+  number itself (from the run number) before archiving; we don't want export to
+  re-stamp it. Upload to TestFlight is done as a separate step (altool), so
+  destination stays "export".
+-->
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store-connect</string>
+
+	<key>destination</key>
+	<string>export</string>
+
+	<key>signingStyle</key>
+	<string>automatic</string>
+
+	<key>manageAppVersionAndBuildNumber</key>
+	<false/>
+
+	<key>uploadSymbols</key>
+	<true/>
+
+	<key>stripSwiftSymbols</key>
+	<true/>
+
+	<key>generateAppStoreInformation</key>
+	<false/>
+</dict>
+</plist>

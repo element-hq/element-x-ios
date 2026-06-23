@@ -11,7 +11,7 @@ struct FindFriendsScreen: View {
 
     var body: some View {
         content
-            .navigationTitle("Find friends")
+            .navigationTitle(L10n.screenFindFriendsTitle)
             .navigationBarTitleDisplayMode(.inline)
             .alert(item: $context.alertInfo)
     }
@@ -33,9 +33,9 @@ struct FindFriendsScreen: View {
             }
         case .empty:
             messageState(systemImage: "person.2",
-                         title: "No contacts on Gua yet",
-                         message: "None of your contacts are on Gua yet. Invite them and they'll show up here.",
-                         actionTitle: "Check again") {
+                         title: L10n.findFriendsEmptyTitle,
+                         message: L10n.findFriendsEmptyMessage,
+                         actionTitle: L10n.findFriendsEmptyAction) {
                 context.send(viewAction: .retry)
             }
         case .error:

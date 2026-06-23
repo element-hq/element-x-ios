@@ -76,6 +76,9 @@ class TwoStepVerificationScreenViewModel: TwoStepVerificationScreenViewModelType
         case .cancelEntry:
             resetFlowState()
             state.phase = userHasPin ? .overviewHasPin : .overviewNoPin
+        case .setUpPasskey:
+            // The view model can't present a web sheet; the coordinator does.
+            actionsSubject.send(.setUpPasskey)
         }
     }
 

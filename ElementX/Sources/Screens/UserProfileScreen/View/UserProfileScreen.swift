@@ -100,24 +100,32 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     static let verifiedUserViewModel = makeViewModel(userID: RoomMemberProxyMock.mockDan.userID)
     static let otherUserViewModel = makeViewModel(userID: RoomMemberProxyMock.mockAlice.userID)
     static let accountOwnerViewModel = makeViewModel(userID: RoomMemberProxyMock.mockMe.userID)
-    
+    static let guaMarketingViewModel = makeViewModel(userID: "@camila:gua",
+                                                     profile: .init(userID: "@camila:gua", displayName: "Camila Moraes"))
+
     static var previews: some View {
         UserProfileScreen(context: verifiedUserViewModel.context)
             .snapshotPreferences(expect: verifiedUserViewModel.context.observe(\.viewState.isVerified).map { $0 != nil }.eraseToStream())
             .previewDisplayName("Verified User")
-        
+
         UserProfileScreen(context: otherUserViewModel.context)
             .snapshotPreferences(expect: otherUserViewModel.context.observe(\.viewState.isVerified).map { $0 != nil }.eraseToStream())
             .previewDisplayName("Other User")
-        
+
         UserProfileScreen(context: accountOwnerViewModel.context)
             .snapshotPreferences(expect: accountOwnerViewModel.context.observe(\.viewState.isVerified).map { $0 != nil }.eraseToStream())
             .previewDisplayName("Account Owner")
+
+        UserProfileScreen(context: guaMarketingViewModel.context)
+            .environment(\.colorScheme, .dark)
+            .preferredColorScheme(.dark)
+            .snapshotPreferences(expect: guaMarketingViewModel.context.observe(\.viewState.userProfile).map { $0 != nil }.eraseToStream())
+            .previewDisplayName("GuaMarketingPerfil")
     }
-    
-    static func makeViewModel(userID: String) -> UserProfileScreenViewModel {
+
+    static func makeViewModel(userID: String, profile: UserProfileProxy? = nil) -> UserProfileScreenViewModel {
         let clientProxyMock = ClientProxyMock(.init())
-        
+
         clientProxyMock.userIdentityForClosure = { userID in
             let identity = switch userID {
             case RoomMemberProxyMock.mockDan.userID:
@@ -125,14 +133,18 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
             default:
                 UserIdentityProxyMock(configuration: .init())
             }
-            
+
             return .success(identity)
+        }
+
+        if let profile {
+            clientProxyMock.profileForReturnValue = .success(profile)
         }
 
         if userID != RoomMemberProxyMock.mockMe.userID {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
         }
-        
+
         return UserProfileScreenViewModel(userID: userID,
                                           isPresentedModally: false,
                                           userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),

@@ -127,11 +127,12 @@ struct HomeScreenContent: View {
                 if context.viewState.shouldShowFilters {
                     RoomListFiltersView(state: $context.filtersState)
                 }
-            
+
                 if case let .show(state) = context.viewState.securityBannerMode {
                     HomeScreenRecoveryKeyConfirmationBanner(state: state, context: context)
                 }
 
+                // GUA FORK: Two-step verification PIN setup reminder.
                 if context.viewState.pinSetupReminderVisible {
                     HomeScreenPinSetupReminderBanner(context: context)
                 }

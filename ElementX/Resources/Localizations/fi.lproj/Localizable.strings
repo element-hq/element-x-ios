@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Kirjaudu sisään %1$@ -palvelimelle";
 "screen_onboarding_sign_in_with_qr_code" = "Kirjaudu sisään QR-koodilla";
 "screen_onboarding_sign_up" = "Luo tili";
-"screen_onboarding_welcome_message" = "Ahdettu nopeudella ja yksinkertaisuudella.";
-"screen_onboarding_welcome_subtitle" = "Ahdettu nopeudella ja yksinkertaisuudella.";
 "screen_onboarding_welcome_title" = "Tervetuloa Gua-sovellukseen";
 "screen_polls_history_empty_ongoing" = "Meneillään olevia kyselyjä ei löytynyt.";
 "screen_polls_history_empty_past" = "Aiempia kyselyjä ei löytynyt.";

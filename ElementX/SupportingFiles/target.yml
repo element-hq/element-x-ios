@@ -113,8 +113,9 @@ targets:
         aps-environment: $(APNS_ENVIRONMENT)
         com.apple.developer.associated-domains:
         - webcredentials:gua.global
-        - webcredentials:identity.gua.global
-        - webcredentials:dev.gua.sarahlacerda.me
+        # The non-public dev host's webcredentials entry is intentionally NOT committed.
+        # Add `- webcredentials:<dev-host>` locally (and mark this file assume-unchanged) if you
+        # need passkeys against the dev server.
         #        - applinks:element.io
         #        - applinks:app.element.io
         #        - applinks:staging.element.io
@@ -152,6 +153,10 @@ targets:
           APNS_ENVIRONMENT: development
         Release:
           APNS_ENVIRONMENT: production
+          # TestFlight against the DEV backend: GUA_DEVELOPMENT routes GuaDeployment.current to .development
+          # (dev resolver/identity from Secrets) for Release archives. Remove this — or split out a dedicated
+          # Release-Prod config — once prod (gua.global) is live and you want prod TestFlight builds.
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) GUA_DEVELOPMENT"
 
     preBuildScripts:
       - name: 🛠 SwiftGen

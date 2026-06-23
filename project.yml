@@ -75,7 +75,9 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 4ad0bd0acd825a905bb4955b32979fe34cc538eb
+    # Bumped past 4ad0bd0 to pick up 16f4544 "iOS 26 tweaks" — fixes the ListRow
+    # toggle/picker clipping on the iOS 26 / Xcode 26 SDK (LabeledContent -> HStack).
+    revision: a1db8e1b61db70417af406bdf9f8d324b079041f
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events

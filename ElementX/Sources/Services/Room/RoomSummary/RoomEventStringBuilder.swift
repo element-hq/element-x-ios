@@ -25,11 +25,11 @@ struct RoomEventStringBuilder {
         stateEventStringBuilder.isDirectOneToOneRoom = isDirectOneToOneRoom
 
         let displayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
+            sender.disambiguatedDisplayName ?? sender.id.guaDisplayHandle
         } else {
-            sender.displayName ?? sender.id
+            sender.displayName ?? sender.id.guaDisplayHandle
         }
-        
+
         switch content {
         case .msgLike(let messageLikeContent):
             switch messageLikeContent.kind {

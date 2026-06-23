@@ -24,7 +24,7 @@ struct PlaceholderScreen: View {
     let hideBrandChrome: Bool
     
     var body: some View {
-        AuthenticationStartLogo(isOnGradient: !hideBrandChrome)
+        content
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
                 if !hideBrandChrome {
@@ -35,6 +35,29 @@ struct PlaceholderScreen: View {
             .backgroundStyle(.compound.bgCanvasDefault)
             .ignoresSafeArea(edges: .top) // Remain vertically centred even if there's a navigation bar.
             .ignoresSafeArea(.keyboard) // Specifically for the lock screen, but make sense everywhere.
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if hideBrandChrome {
+            // GUA FORK: the empty iPad detail pane. AuthenticationStartLogo is resizable +
+            // scaledToFit with no intrinsic cap, so without a frame it scales up to fill the
+            // whole detail pane (the "giant logo" bug). Cap it and pair it with a subtle hint
+            // so this reads as a tasteful empty state rather than a hero logo.
+            VStack(spacing: 16) {
+                AuthenticationStartLogo(isOnGradient: false)
+                    .frame(maxWidth: 96, maxHeight: 96)
+
+                Text(L10n.screenRoomlistEmptyMessage)
+                    .font(.compound.bodyMD)
+                    .foregroundColor(.compound.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 24)
+            }
+        } else {
+            // Lock screen: keep the full-size branded hero logo on the gradient.
+            AuthenticationStartLogo(isOnGradient: true)
+        }
     }
 }
 

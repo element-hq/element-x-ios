@@ -22,6 +22,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
     
     private var identityResetHandle: IdentityResetHandle?
     private var passwordCancellable: AnyCancellable?
+    private var oidcCancellable: AnyCancellable?
 
     init(clientProxy: ClientProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
@@ -87,12 +88,23 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
                 guard let url = URL(string: oidcInfo.approvalUrl) else {
                     fatalError("Invalid URL received through identity reset handle: \(oidcInfo.approvalUrl)")
                 }
-                
+
                 hideLoadingIndicator()
-                
-                actionsSubject.send(.requestOIDCAuthorisation(url: url))
-                
-                await resetWithOIDCAuthorisation()
+
+                // The reset must only be performed *after* the user has approved it in the
+                // MAS web sheet. Calling reset(auth: nil) immediately (as before) made the
+                // server reject the unapproved cross-signing key upload, leaving the device
+                // unverified and the identity-confirmation gate looping forever. Wait for the
+                // sheet to be dismissed (signalled on the publisher) before resetting — this
+                // mirrors how the UIAA/password path waits for the entered password.
+                let oidcAuthorisationPublisher = PassthroughSubject<Void, Never>()
+                oidcCancellable = oidcAuthorisationPublisher.sink { [weak self] in
+                    guard let self else { return }
+                    oidcCancellable = nil
+                    Task { await self.resetWithOIDCAuthorisation() }
+                }
+
+                actionsSubject.send(.requestOIDCAuthorisation(url: url, completionPublisher: oidcAuthorisationPublisher))
             }
         case .failure(let error):
             MXLog.error("Failed resetting encryption with error \(error)")
@@ -124,7 +136,13 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         guard let identityResetHandle else {
             fatalError("Requested reset flow continuation without a stored handle")
         }
-        
+
+        showLoadingIndicator()
+
+        defer {
+            hideLoadingIndicator()
+        }
+
         do {
             try await identityResetHandle.reset(auth: nil)
             actionsSubject.send(.resetFinished)

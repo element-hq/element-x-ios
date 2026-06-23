@@ -52,6 +52,34 @@ enum GuaDeployment {
         }
     }
 
+    /// Default account provider (homeserver host) offered on the login screen, or `nil` when unconfigured.
+    /// Production is the committed `gua.global` brand host; development is injected via the `Secrets`
+    /// pipeline — the committed placeholder keeps the non-public dev host out of this repo, same as the
+    /// service URLs above.
+    var defaultAccountProvider: String? {
+        switch self {
+        case .production:
+            return "gua.global"
+        case .development:
+            guard let provider = Secrets.defaultAccountProvider, !provider.isEmpty else { return nil }
+            return provider
+        }
+    }
+
+    /// Brand host used to build user-facing share links (e.g. `https://gua.global/u/<handle>`).
+    /// Production is the committed `gua.global` brand host; development falls back to the injected
+    /// dev account provider so links never leak the non-public dev host into this repo, and never
+    /// surface a raw homeserver. Always returns a value so share links can be built in every build.
+    var linkHost: String {
+        switch self {
+        case .production:
+            return "gua.global"
+        case .development:
+            guard let provider = defaultAccountProvider, !provider.isEmpty else { return "gua.global" }
+            return provider
+        }
+    }
+
     private static func url(from raw: String?) -> URL? {
         guard let raw, !raw.isEmpty else { return nil }
         return URL(string: raw)

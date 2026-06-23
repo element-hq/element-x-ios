@@ -9,6 +9,9 @@ import Foundation
 
 enum TwoStepVerificationScreenViewModelAction {
     case close
+    /// The user asked to set up a passkey. The coordinator presents the authenticated
+    /// web session — the view model can't present a sheet itself.
+    case setUpPasskey
 }
 
 /// Drives the screen between the overview state and the multi-step PIN flows.
@@ -135,4 +138,5 @@ enum TwoStepVerificationScreenViewAction {
     case countrySelected(Country)
     case continueTapped
     case cancelEntry
+    case setUpPasskey
 }

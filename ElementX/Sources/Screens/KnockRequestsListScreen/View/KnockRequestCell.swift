@@ -60,7 +60,7 @@ struct KnockRequestCell: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .top, spacing: 0) {
-                Text(cellInfo.displayName ?? cellInfo.userID)
+                Text(cellInfo.displayName ?? cellInfo.userID.guaDisplayHandle)
                     .font(.compound.bodyLGSemibold)
                     .foregroundStyle(.compound.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -71,7 +71,7 @@ struct KnockRequestCell: View {
                 }
             }
             if cellInfo.displayName != nil {
-                Text(cellInfo.userID)
+                Text(cellInfo.userID.guaDisplayHandle)
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
             }

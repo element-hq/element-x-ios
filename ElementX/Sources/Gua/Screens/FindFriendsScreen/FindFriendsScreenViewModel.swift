@@ -63,6 +63,8 @@ class FindFriendsScreenViewModel: FindFriendsScreenViewModelType, FindFriendsScr
 
         do {
             let contacts = try await contactDiscoveryService.discover(accessToken: accessToken)
+                // Defence in depth: never list the signed-in user among their own friends.
+                .filter { $0.userId != clientProxy.userID }
             state.contacts = contacts
             state.phase = contacts.isEmpty ? .empty : .loaded
         } catch ContactDiscoveryError.accessDenied {
@@ -77,6 +79,7 @@ class FindFriendsScreenViewModel: FindFriendsScreenViewModelType, FindFriendsScr
     }
 
     private func startChat(with contact: DiscoveredContact) async {
+        guard contact.userId != clientProxy.userID else { return }
         guard state.startingChatUserID == nil else { return }
         state.startingChatUserID = contact.userId
         defer { state.startingChatUserID = nil }

@@ -1,12 +1,17 @@
+![](https://github.com/user-attachments/assets/054e40c6-e796-4c6b-9700-7b7c3c4bfc18)
+
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/Gua-ra/gua-branding/refs/heads/main/logos/gua-logo-transparent.png" alt="Gua Logo" width="200"/>
 </p>
 
-# Gua for iOS
+<div align="center">
+    <h1>Gua for iOS</h1>
+</div>
 
 **Gua** is a private, phone-number-based messaging app for iOS, built on top of [Matrix](https://matrix.org/).
 
-This repository is Gua-ra's fork of [`element-hq/element-x-ios`](https://github.com/element-hq/element-x-ios) (Element X iOS). The Gua app replaces Element's brand and login flow with Gua's phone-OTP + PIN onboarding, backed by the [Gua Identity Service](https://github.com/Gua-ra/identity-service).
+This repository is Gua-ra's fork of [`element-hq/element-x-ios`](https://github.com/element-hq/element-x-ios) (Element X iOS). The Gua app replaces Element's brand and login flow with Gua's frictionless onboarding (phone-OTP + PIN default), backed by the [Gua Identity Service](https://github.com/Gua-ra/identity-service).
 
 ---
 
@@ -15,22 +20,16 @@ This repository is Gua-ra's fork of [`element-hq/element-x-ios`](https://github.
 | Area | Upstream (Element X) | Gua |
 |---|---|---|
 | Brand | Element / New Vector | Gua |
-| Login flow | Matrix password / SSO | Phone number → OTP → PIN (via Gua Identity Service + MAS) |
+| Login flow | Matrix password / SSO | Custom SSO options or/and Phone number → OTP → PIN (via Gua Identity Service + MAS) |
 | OIDC provider | element.io | Gua Identity Service (`gua-ios` client, PKCE-required) |
-| Consent screen | shown for every login | skipped — handled by [`gua-auth-service`](https://github.com/Gua-ra/gua-auth-service) config |
+| Consent screen | shown for every login | skipped, handled by [`gua-auth-service`](https://github.com/Gua-ra/gua-auth-service) config |
 | Two-step verification | device verification | Account PIN (set, change with OTP cooldown, reset) |
 | Account deactivation | standard Matrix | Gua-specific reauth (phone OTP) gate |
-| Settings identity | full Matrix ID `@alice:dev.local` | localpart only (`alice`) — homeserver hidden |
+| Settings identity | full Matrix ID `@alice:dev.local` | localpart only (`alice`) — homeserver hidden/abstracted from user |
 | App-lock PIN | "PIN" | "passcode" — renamed to disambiguate from the account two-step PIN |
 | Encryption settings | advanced controls shown | hidden by default (`guaHidesAdvancedEncryption`); E2EE stays on with safe defaults (key storage + recovery) |
 | Client logo | element.io icon | Gua icon (shown in MAS "Where you're signed in") |
 
-### Active fork branches
-
-| Branch | Purpose |
-|---|---|
-| `mvp/phone-otp-oidc-pin-onboarding` | Phone OTP sign-up, PIN screens, settings (two-step verification, deactivation) |
-| `mvp/OIDC-integration` | MAS OIDC integration: removes forced `prompt=consent`, adapts redirect handling |
 
 ### Login session handling
 
@@ -96,14 +95,12 @@ git merge upstream/develop   # or the relevant release tag
 # Resolve conflicts, then push
 ```
 
-Gua-specific changes are kept on named branches (`mvp/*`) to keep upstream merges clean.
-
 ---
 
 ## License
 
 Copyright (c) 2022-2025 New Vector Ltd (upstream code)
-Copyright (c) 2025 Gua-ra (Gua modifications)
+Copyright (c) 2025 Gua (Gua modifications)
 
 Licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) — see [LICENSE](LICENSE).
 

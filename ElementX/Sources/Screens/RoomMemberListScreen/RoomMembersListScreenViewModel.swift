@@ -181,7 +181,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     // MARK: - Member Management
     
     private func unbanMember(_ member: RoomMemberDetails) async {
-        let indicatorTitle = L10n.screenRoomMemberListUnbanningUser(member.name ?? member.id)
+        let indicatorTitle = L10n.screenRoomMemberListUnbanningUser(member.name ?? member.id.guaDisplayHandle)
         showManageMemberIndicator(title: indicatorTitle)
         
         switch await roomProxy.unbanUser(member.id) {

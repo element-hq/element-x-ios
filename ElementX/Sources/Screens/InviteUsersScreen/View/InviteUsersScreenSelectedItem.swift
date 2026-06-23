@@ -17,7 +17,7 @@ struct InviteUsersScreenSelectedItem: View {
             avatar
                 .accessibilityHidden(true)
             
-            Text(user.displayName ?? user.userID)
+            Text(user.displayName ?? user.userID.guaDisplayHandle)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)

@@ -87,6 +87,14 @@ struct TwoStepVerificationScreen: View {
                         kind: .button { context.send(viewAction: .startSetup) })
             }
         }
+
+        Section {
+            ListRow(label: .default(title: L10n.screenTwoStepVerificationPasskeyButton,
+                                    icon: \.key),
+                    kind: .button { context.send(viewAction: .setUpPasskey) })
+        } footer: {
+            Text(L10n.screenTwoStepVerificationPasskeyFooter)
+        }
     }
 
     @ViewBuilder

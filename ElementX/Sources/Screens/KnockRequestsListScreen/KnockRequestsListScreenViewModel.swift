@@ -54,7 +54,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             
             state.bindings.alertInfo = .init(id: .declineRequest,
                                              title: L10n.screenKnockRequestsListDeclineAlertTitle,
-                                             message: L10n.screenKnockRequestsListDeclineAlertDescription(request.userID),
+                                             message: L10n.screenKnockRequestsListDeclineAlertDescription(request.displayName ?? request.userID.guaDisplayHandle),
                                              primaryButton: .init(title: L10n.screenKnockRequestsListDeclineAlertConfirmButtonTitle,
                                                                   role: .destructive) { [weak self] in self?.decline(request: request) },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))

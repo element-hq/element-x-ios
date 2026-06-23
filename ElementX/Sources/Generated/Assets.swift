@@ -30,6 +30,8 @@ internal enum Asset {
   }
   internal enum Images {
     internal static let iconIOSDark1024x1024 = ImageAsset(name: "images/Icon-iOS-Dark-1024x1024")
+    internal static let appLogoBubble = ImageAsset(name: "images/app-logo-bubble")
+    internal static let appLogoWolf = ImageAsset(name: "images/app-logo-wolf")
     internal static let appLogo = ImageAsset(name: "images/app-logo")
     internal static let serverSelectionIcon = ImageAsset(name: "images/server-selection-icon")
     internal static let backgroundBottom = ImageAsset(name: "images/background-bottom")

@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Se connecter à %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Se connecter avec un QR code";
 "screen_onboarding_sign_up" = "Créer un compte";
-"screen_onboarding_welcome_message" = "Boosté pour plus de rapidité et de simplicité.";
-"screen_onboarding_welcome_subtitle" = "Boosté, pour plus de rapidité et de simplicité.";
 "screen_onboarding_welcome_title" = "Bienvenue sur Gua";
 "screen_polls_history_empty_ongoing" = "Impossible de trouver des sondages en cours.";
 "screen_polls_history_empty_past" = "Impossible de trouver des sondages terminés.";
@@ -1407,15 +1405,58 @@
 "screen_phone_login_send_failed" = "Impossible d'envoyer un code. Veuillez réessayer.";
 "screen_phone_login_button_title" = "Continuer avec le numéro de téléphone";
 
-"screen_otp_title" = "Saisissez le code de vérification";
-"screen_otp_subtitle" = "Entrez le code que nous avons envoyé au %@.";
-"screen_otp_verify" = "Vérifier";
-"screen_otp_resend" = "Renvoyer le code";
 "screen_otp_code_placeholder" = "Code à 6 chiffres";
-"screen_otp_display_name_placeholder" = "Nom d'affichage (optionnel)";
-"screen_otp_pin_placeholder" = "Code PIN de sécurité (le cas échéant)";
 "screen_otp_invalid_code" = "Le code est incorrect ou a expiré.";
-"screen_otp_invalid_pin" = "Le code PIN est incorrect.";
-"screen_otp_verify_failed" = "Impossible de vérifier le code. Veuillez réessayer.";
-"screen_otp_resend_failed" = "Impossible de renvoyer le code. Veuillez réessayer.";
-"screen_otp_resent" = "Un nouveau code a été envoyé.";
+
+// GUA FORK: Gua-custom keys missing from fr.lproj — ported from en/pt-BR so the
+// onboarding, two-step verification, PIN, profile-setup and re-auth flows render
+// in French instead of falling back to English.
+"screen_account_reauth_code_label" = "Code de vérification";
+"screen_account_reauth_section_footer" = "Nous enverrons un code de vérification par SMS au téléphone associé à votre compte.";
+"screen_account_reauth_section_title" = "Vérifiez votre identité";
+"screen_account_reauth_send_code" = "Envoyer le code de vérification";
+"screen_account_reauth_verified" = "Vérifié";
+"screen_onboarding_trust_encrypted" = "Chiffré de bout en bout";
+"screen_phone_login_footer" = "Nous enverrons un code de vérification par SMS à ce numéro.";
+"screen_phone_login_legacy" = "Se connecter avec une autre méthode";
+"screen_phone_login_welcome" = "Bienvenue sur Gua";
+
+/* GUA FORK */
+"screen_find_friends_title" = "Trouver des amis";
+"screen_two_step_verification_title" = "Vérification en deux étapes";
+
+/* GUA FORK - Find Friends empty state */
+"find_friends_empty_title" = "Aucun contact sur Gua pour l'instant";
+"find_friends_empty_message" = "Aucun de vos contacts n'est encore sur Gua. Invitez-les et ils apparaîtront ici.";
+"find_friends_empty_action" = "Réessayer";
+
+/* GUA FORK - Two-step verification (missing translations) */
+"screen_two_step_verification_overview_header" = "État";
+"screen_two_step_verification_overview_footer_on" = "Votre code PIN est requis lors de la connexion sur un nouvel appareil. Gardez-le secret — toute personne disposant de votre code PIN et de votre code SMS peut accéder à votre compte.";
+"screen_two_step_verification_overview_footer_off" = "Ajoutez un code PIN à 6 chiffres pour protéger votre compte contre les attaques par échange de carte SIM. Il vous sera demandé lors de la connexion sur un nouvel appareil.";
+"screen_two_step_verification_status_on" = "Code PIN activé";
+"screen_two_step_verification_status_off" = "Aucun code PIN défini";
+"screen_two_step_verification_set_button" = "Configurer un code PIN";
+"screen_two_step_verification_change_button" = "Modifier le code PIN";
+"screen_two_step_verification_passkey_button" = "Configurer une clé d'accès";
+"screen_two_step_verification_passkey_footer" = "Utilisez Face ID, Touch ID ou une clé de sécurité pour vous connecter sans mot de passe.";
+"screen_two_step_verification_current_header" = "Saisissez votre code PIN actuel";
+"screen_two_step_verification_current_footer" = "Confirmez votre code PIN actuel pour autoriser la modification.";
+"screen_two_step_verification_new_header" = "Choisissez un nouveau code PIN";
+"screen_two_step_verification_new_footer" = "Choisissez un code PIN à 6 chiffres difficile à deviner.";
+"screen_two_step_verification_confirm_header" = "Confirmez votre nouveau code PIN";
+"screen_two_step_verification_confirm_footer" = "Saisissez à nouveau votre nouveau code PIN pour confirmer.";
+"screen_two_step_verification_current_incorrect" = "Le code PIN actuel est incorrect.";
+"screen_two_step_verification_same_as_current" = "Le nouveau code PIN doit être différent de l'actuel.";
+"screen_two_step_verification_locked" = "Trop de tentatives incorrectes. Veuillez réessayer plus tard.";
+"screen_two_step_verification_updated" = "Code PIN mis à jour";
+"screen_two_step_verification_reminder_title" = "Protégez votre compte";
+"screen_two_step_verification_reminder_message" = "Configurez un code PIN à 6 chiffres pour que votre compte reste protégé même si quelqu'un prend le contrôle de votre numéro de téléphone.";
+"screen_two_step_verification_reminder_action" = "Configurer un code PIN";
+"screen_two_step_verification_reminder_dismiss" = "Plus tard";
+"screen_two_step_verification_phone_header" = "Confirmez votre numéro de téléphone";
+"screen_two_step_verification_phone_footer" = "Nous enverrons un code de vérification par SMS au téléphone associé à votre compte.";
+"screen_two_step_verification_otp_header" = "Saisissez le code SMS";
+"screen_two_step_verification_otp_footer" = "Saisissez le code à 6 chiffres que nous venons d'envoyer sur votre téléphone.";
+"screen_two_step_verification_otp_invalid" = "Ce code est invalide ou a expiré. Veuillez réessayer.";
+"screen_two_step_verification_cooldown" = "Pour des raisons de sécurité, vous ne pouvez modifier votre code PIN qu'une fois par jour. Veuillez réessayer plus tard.";

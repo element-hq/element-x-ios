@@ -65,7 +65,7 @@ struct TimelineReadReceiptsView: View {
     
     private func displayName(at index: Int) -> String {
         let userID = timelineItem.properties.orderedReadReceipts[index].userID
-        return context.viewState.members[userID]?.displayName ?? userID
+        return context.viewState.members[userID]?.displayName ?? userID.guaDisplayHandle
     }
 }
 

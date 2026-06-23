@@ -24,7 +24,7 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
             return nil
         }
         
-        return member.isNameAmbiguous ? "\(displayName) (\(userID))" : displayName
+        return member.isNameAmbiguous ? "\(displayName) (\(userID.guaDisplayHandle))" : displayName
     }
     
     var avatarURL: URL? { member.avatarUrl.flatMap(URL.init(string:)) }

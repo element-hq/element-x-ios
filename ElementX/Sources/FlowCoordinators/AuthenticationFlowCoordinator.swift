@@ -23,7 +23,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let identityServiceClient: IdentityServiceClientProtocol? // GUA FORK
     private let resolverClient: ResolverClientProtocol? // GUA FORK: phone -> homeserver routing
     private let usesPhoneLoginHint: Bool // GUA FORK
     
@@ -31,18 +30,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// The state machine hasn't started.
         case initial
         
-        // GUA FORK BEGIN: Gua phone-OTP-PIN onboarding states
-        /// The Gua phone-number entry screen (default entry point for normal users).
+        // GUA FORK: Gua phone-number entry screen (default entry point for normal users).
         case phoneEntryScreen
-        /// The Gua OTP entry screen.
-        case otpEntryScreen
-        /// Two-step verification PIN challenge shown to returning users who set a PIN.
-        case pinChallengeScreen
-        /// Profile setup screen shown to new users after a successful OTP verify.
-        case profileSetupScreen
-        /// Optional PIN setup step offered to brand-new users after profile setup.
-        case pinSetupScreen
-        // GUA FORK END
         
         /// The initial screen shown when you first launch the app.
         case startScreen
@@ -71,27 +60,11 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case start
         /// Modify the flow using the provisioning parameters in the `userInfo`.
         case applyProvisioningParameters
-        // GUA FORK BEGIN: Gua phone-OTP-PIN events
-        /// The Gua phone-OTP flow is being started.
+        // GUA FORK BEGIN: Gua phone-OIDC events
+        /// The Gua phone-entry flow is being started.
         case startPhoneAuth
-        /// The user submitted a phone number (carried via `userInfo`).
-        case continueWithPhone
         /// The user dropped into the legacy auth flow from the phone screen.
         case useLegacyAuth
-        /// The user cancelled OTP entry to edit their phone number.
-        case cancelledOTPEntry
-        /// OTP verified for a returning user with two-step verification — prompt for PIN.
-        case needsPinChallenge
-        /// The user backed out of the PIN challenge (returns to OTP entry).
-        case cancelledPinChallenge
-        /// OTP verified for a brand-new phone — advance to profile setup.
-        case needsProfileSetup
-        /// The user backed out of profile setup (returns to OTP entry).
-        case cancelledProfileSetup
-        /// Profile setup completed; offer to create a PIN before finishing sign-in.
-        case offerPinSetup
-        /// Backend rejected the chosen username during signup completion.
-        case usernameTakenDuringSignup
         // GUA FORK END
         
         /// The user would like to login with a QR code.
@@ -136,19 +109,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var phoneEntryScreenCoordinator: PhoneEntryScreenCoordinator?
-    // periphery:ignore - retaining purpose
-    private var otpEntryScreenCoordinator: OtpEntryScreenCoordinator?
-    // periphery:ignore - retaining purpose
-    private var pinChallengeScreenCoordinator: PinChallengeScreenCoordinator?
-    // periphery:ignore - retaining purpose
-    private var profileSetupScreenCoordinator: ProfileSetupScreenCoordinator?
-    // periphery:ignore - retaining purpose
-    private var pinSetupScreenCoordinator: PinSetupScreenCoordinator?
     private var isHandlingPhoneSubmission = false
-    private var isHandlingOTPVerification = false
-    private var isHandlingProfileSubmission = false
-    private var isHandlingPinVerification = false
-    private var isHandlingPinSetup = false
     
     weak var delegate: AuthenticationFlowCoordinatorDelegate?
     
@@ -159,7 +120,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
          appSettings: AppSettings,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         identityServiceClient: IdentityServiceClientProtocol? = nil,
          resolverClient: ResolverClientProtocol? = nil,
          usesPhoneLoginHint: Bool = false) {
         self.authenticationService = authenticationService
@@ -169,7 +129,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
-        self.identityServiceClient = identityServiceClient
         self.resolverClient = resolverClient
         self.usesPhoneLoginHint = usesPhoneLoginHint
         
@@ -209,19 +168,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         switch stateMachine.state {
         case .initial, .startScreen, .phoneEntryScreen:
             break
-        case .otpEntryScreen:
-            navigationStackCoordinator.popToRoot(animated: animated)
-            stateMachine.tryEvent(.cancelledOTPEntry)
-        case .pinChallengeScreen:
-            navigationStackCoordinator.pop(animated: animated)
-            stateMachine.tryEvent(.cancelledPinChallenge)
-        case .profileSetupScreen:
-            navigationStackCoordinator.pop(animated: animated)
-            stateMachine.tryEvent(.cancelledProfileSetup)
-        case .pinSetupScreen:
-            // PIN setup is optional and presented after the user has already committed to a username —
-            // dismissals are handled by an explicit "Not now" button in the screen itself.
-            break
         case .qrCodeLoginScreen:
             navigationStackCoordinator.setSheetCoordinator(nil)
             stateMachine.tryEvent(.cancelledLoginWithQR) // Needs to be handled manually.
@@ -249,37 +195,10 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             self?.showStartScreen(fromState: .initial)
         }
         
-        // Gua phone-OTP flow
-        
+        // Gua phone-OIDC flow
+
         stateMachine.addRoutes(event: .startPhoneAuth, transitions: [.initial => .phoneEntryScreen]) { [weak self] _ in
             self?.showPhoneEntryScreen(fromState: .initial)
-        }
-        stateMachine.addRoutes(event: .continueWithPhone, transitions: [.phoneEntryScreen => .otpEntryScreen]) { [weak self] context in
-            guard let phoneNumber = context.userInfo as? String else { fatalError("Missing phone number for OTP entry.") }
-            self?.showOTPEntryScreen(phoneNumber: phoneNumber)
-        }
-        stateMachine.addRoutes(event: .cancelledOTPEntry, transitions: [.otpEntryScreen => .phoneEntryScreen])
-        stateMachine.addRoutes(event: .needsPinChallenge, transitions: [.otpEntryScreen => .pinChallengeScreen]) { [weak self] context in
-            guard let challengeContext = context.userInfo as? PinChallengeContext else { fatalError("Missing PIN challenge context.") }
-            self?.showPinChallengeScreen(challengeContext: challengeContext)
-        }
-        stateMachine.addRoutes(event: .cancelledPinChallenge, transitions: [.pinChallengeScreen => .otpEntryScreen])
-        stateMachine.addRoutes(event: .needsProfileSetup, transitions: [.otpEntryScreen => .profileSetupScreen]) { [weak self] context in
-            guard let setupContext = context.userInfo as? ProfileSetupContext else { fatalError("Missing profile setup context.") }
-            self?.showProfileSetupScreen(setupContext: setupContext)
-        }
-        stateMachine.addRoutes(event: .cancelledProfileSetup, transitions: [.profileSetupScreen => .otpEntryScreen,
-                                                                            .pinSetupScreen => .phoneEntryScreen])
-        stateMachine.addRoutes(event: .offerPinSetup, transitions: [.profileSetupScreen => .pinSetupScreen]) { [weak self] context in
-            guard let pending = context.userInfo as? PendingSignupContext else { fatalError("Missing pending signup context for PIN setup.") }
-            self?.showPinSetupScreen(pendingSignup: pending)
-        }
-        // Username taken at the very end of signup: pop the PIN setup screen and surface the error
-        // inline on the still-mounted ProfileSetup screen. The signup token survives because the
-        // backend only consumes it on success.
-        stateMachine.addRoutes(event: .usernameTakenDuringSignup, transitions: [.pinSetupScreen => .profileSetupScreen]) { [weak self] _ in
-            self?.navigationStackCoordinator.pop(animated: true)
-            self?.profileSetupScreenCoordinator?.displayError(IdentityServiceError.usernameTaken.localizedDescription)
         }
         stateMachine.addRoutes(event: .useLegacyAuth, transitions: [.phoneEntryScreen => .startScreen]) { [weak self] _ in
             self?.showStartScreen(fromState: .phoneEntryScreen)
@@ -347,11 +266,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addRoutes(event: .signedIn, transitions: [.qrCodeLoginScreen => .complete,
                                                                .oidcAuthentication => .complete,
-                                                               .loginScreen => .complete,
-                                                               .otpEntryScreen => .complete,
-                                                               .pinChallengeScreen => .complete,
-                                                               .profileSetupScreen => .complete,
-                                                               .pinSetupScreen => .complete]) { [weak self] context in
+                                                               .loginScreen => .complete]) { [weak self] context in
             guard let userSession = context.userInfo as? UserSessionProtocol else { fatalError("The user session wasn't included in the context") }
             self?.userHasSignedIn(userSession: userSession)
         }
@@ -411,8 +326,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    // MARK: - Gua Phone-OTP
-    
+    // MARK: - Gua Phone-OIDC
+
     private func showPhoneEntryScreen(fromState: State) {
         let coordinator = PhoneEntryScreenCoordinator(parameters: .init(isLegacyAuthEnabled: appSettings.legacyAuthEnabled))
         
@@ -430,8 +345,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         coordinator.start()
         phoneEntryScreenCoordinator = coordinator
-        otpEntryScreenCoordinator = nil
-        
+
         navigationStackCoordinator.setRootCoordinator(coordinator)
         
         if fromState == .initial {
@@ -503,336 +417,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         return try await resolverClient.resolve(phoneNumber: phoneNumber)
     }
 
-    private func showOTPEntryScreen(phoneNumber: String) {
-        let coordinator = OtpEntryScreenCoordinator(parameters: .init(phoneNumber: phoneNumber))
-        
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .verify(let code):
-                    handleOTPVerification(phoneNumber: phoneNumber, code: code, coordinator: coordinator)
-                case .resend:
-                    handleOTPResend(phoneNumber: phoneNumber, coordinator: coordinator)
-                case .changePhone:
-                    // Fire the state machine event FIRST, then pop. SwiftUI's onDismiss callback
-                    // runs synchronously during pop and would otherwise transition the state
-                    // before this explicit tryEvent ran, leaving us with a duplicate from-state.
-                    stateMachine.tryEvent(.cancelledOTPEntry)
-                    navigationStackCoordinator.pop(animated: true)
-                }
-            }
-            .store(in: &cancellables)
-        
-        coordinator.start()
-        otpEntryScreenCoordinator = coordinator
-        
-        navigationStackCoordinator.push(coordinator) { [weak self] in
-            // The SwiftUI nav stack fires this on programmatic `pop`/`popToRoot` as well as user gestures.
-            // Only emit the cancel event if the state machine is still on this screen; otherwise the
-            // parent flow already transitioned away and the event would be unrouted.
-            guard self?.stateMachine.state == .otpEntryScreen else { return }
-            self?.stateMachine.tryEvent(.cancelledOTPEntry)
-        }
-    }
-    
-    private func handleOTPVerification(phoneNumber: String, code: String, coordinator: OtpEntryScreenCoordinator) {
-        guard !isHandlingOTPVerification else { return }
-        guard let client = identityServiceClient else {
-            coordinator.displayError("Identity service is not configured.")
-            return
-        }
-        isHandlingOTPVerification = true
-        coordinator.setVerifying(true)
-        Task { [weak self] in
-            do {
-                let outcome = try await client.verifyOTP(phone: phoneNumber,
-                                                         code: code,
-                                                         pin: nil,
-                                                         device: .current)
-                switch outcome {
-                case .newUser(let signupToken):
-                    self?.isHandlingOTPVerification = false
-                    coordinator.setVerifying(false)
-                    self?.stateMachine.tryEvent(.needsProfileSetup,
-                                                userInfo: ProfileSetupContext(phoneNumber: phoneNumber, signupToken: signupToken))
-                case .pinRequired(let challengeToken):
-                    self?.isHandlingOTPVerification = false
-                    coordinator.setVerifying(false)
-                    self?.stateMachine.tryEvent(.needsPinChallenge,
-                                                userInfo: PinChallengeContext(phoneNumber: phoneNumber, challengeToken: challengeToken))
-                case .existingUser(let session):
-                    let result = await self?.authenticationService.loginWithExistingMatrixSession(accessToken: session.accessToken,
-                                                                                                  refreshToken: nil,
-                                                                                                  userId: session.userId,
-                                                                                                  deviceId: session.deviceId,
-                                                                                                  homeserverUrl: session.baseUrl)
-                    switch result {
-                    case .success(let userSession):
-                        self?.appSettings.hasRunIdentityConfirmationOnboarding = true
-                        self?.stateMachine.tryEvent(.signedIn, userInfo: userSession)
-                    case .failure(let error):
-                        coordinator.setVerifying(false)
-                        self?.isHandlingOTPVerification = false
-                        MXLog.error("Matrix session restoration failed after OTP verify: \(error)")
-                        coordinator.displayError("Could not start your Matrix session. Please try again.")
-                    case .none:
-                        coordinator.setVerifying(false)
-                        self?.isHandlingOTPVerification = false
-                    }
-                }
-            } catch let error as IdentityServiceError {
-                coordinator.setVerifying(false)
-                self?.isHandlingOTPVerification = false
-                coordinator.displayError(error.localizedDescription)
-            } catch {
-                coordinator.setVerifying(false)
-                self?.isHandlingOTPVerification = false
-                MXLog.error("OTP verification failed: \(error)")
-                coordinator.displayError(error.localizedDescription)
-            }
-        }
-    }
-    
-    // MARK: - Profile Setup (new user signup)
-    
-    private struct ProfileSetupContext {
-        let phoneNumber: String
-        let signupToken: String
-    }
-    
-    private struct PinChallengeContext {
-        let phoneNumber: String
-        let challengeToken: String
-    }
-    
-    private struct PendingSignupContext {
-        let signupToken: String
-        let phoneNumber: String
-        let username: String
-        let displayName: String
-    }
-    
-    private func showProfileSetupScreen(setupContext: ProfileSetupContext) {
-        let coordinator = ProfileSetupScreenCoordinator(parameters: .init(phoneNumber: setupContext.phoneNumber))
-
-        // Real-time username availability so the user finds out before reaching the PIN screen.
-        if let client = identityServiceClient {
-            coordinator.setUsernameAvailabilityChecker { username in
-                try await client.checkUsernameAvailability(username)
-            }
-        }
-        
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .complete(let username, let displayName):
-                    // Only fire the transition if we're still on the profile screen \u2014 SwiftUI/Compound
-                    // button presses can occasionally re-emit, and `offerPinSetup` has no route from
-                    // `.pinSetupScreen` so a duplicate would crash the state machine's error handler.
-                    guard stateMachine.state == .profileSetupScreen else { return }
-                    // Move to optional PIN setup; we'll call completeSignup once the user either
-                    // sets a PIN or explicitly skips, so the signup token is consumed exactly once.
-                    let pending = PendingSignupContext(signupToken: setupContext.signupToken,
-                                                       phoneNumber: setupContext.phoneNumber,
-                                                       username: username,
-                                                       displayName: displayName)
-                    stateMachine.tryEvent(.offerPinSetup, userInfo: pending)
-                case .cancel:
-                    stateMachine.tryEvent(.cancelledProfileSetup)
-                    navigationStackCoordinator.pop(animated: true)
-                }
-            }
-            .store(in: &cancellables)
-        
-        coordinator.start()
-        profileSetupScreenCoordinator = coordinator
-        
-        navigationStackCoordinator.push(coordinator) { [weak self] in
-            guard self?.stateMachine.state == .profileSetupScreen else { return }
-            self?.stateMachine.tryEvent(.cancelledProfileSetup)
-        }
-    }
-    
-    private func showPinSetupScreen(pendingSignup: PendingSignupContext) {
-        let coordinator = PinSetupScreenCoordinator()
-        
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .complete(let pin):
-                    handleSignupCompletion(pendingSignup: pendingSignup, pin: pin, coordinator: coordinator)
-                case .skip:
-                    handleSignupCompletion(pendingSignup: pendingSignup, pin: nil, coordinator: coordinator)
-                }
-            }
-            .store(in: &cancellables)
-        
-        coordinator.start()
-        pinSetupScreenCoordinator = coordinator
-        
-        navigationStackCoordinator.push(coordinator)
-    }
-    
-    private func handleSignupCompletion(pendingSignup: PendingSignupContext,
-                                        pin: String?,
-                                        coordinator: PinSetupScreenCoordinator) {
-        guard !isHandlingProfileSubmission else { return }
-        guard let client = identityServiceClient else {
-            coordinator.displayError("Identity service is not configured.")
-            return
-        }
-        isHandlingProfileSubmission = true
-        coordinator.setSubmitting(true)
-        Task { [weak self] in
-            do {
-                let session = try await client.completeSignup(signupToken: pendingSignup.signupToken,
-                                                              username: pendingSignup.username,
-                                                              displayName: pendingSignup.displayName,
-                                                              pin: pin,
-                                                              device: .current)
-                let result = await self?.authenticationService.loginWithExistingMatrixSession(accessToken: session.accessToken,
-                                                                                              refreshToken: nil,
-                                                                                              userId: session.userId,
-                                                                                              deviceId: session.deviceId,
-                                                                                              homeserverUrl: session.baseUrl)
-                switch result {
-                case .success(let userSession):
-                    self?.appSettings.hasRunIdentityConfirmationOnboarding = true
-                    self?.stateMachine.tryEvent(.signedIn, userInfo: userSession)
-                case .failure(let error):
-                    self?.isHandlingProfileSubmission = false
-                    MXLog.error("Matrix session restoration failed after signup: \(error)")
-                    coordinator.displayError("Could not start your Matrix session. Please try again.")
-                case .none:
-                    self?.isHandlingProfileSubmission = false
-                }
-            } catch let error as IdentityServiceError {
-                self?.isHandlingProfileSubmission = false
-                switch error {
-                case .usernameTaken:
-                    // Recoverable: return to ProfileSetup with the same signup token (backend
-                    // doesn't consume it on failure) so the user can pick a different username.
-                    self?.stateMachine.tryEvent(.usernameTakenDuringSignup)
-                case .invalidSignupToken, .phoneAlreadyLinked:
-                    // The signup session is dead — user has to redo OTP.
-                    self?.userIndicatorController.submitIndicator(.init(title: error.localizedDescription))
-                    self?.stateMachine.tryEvent(.cancelledProfileSetup)
-                    self?.navigationStackCoordinator.popToRoot(animated: true)
-                default:
-                    coordinator.displayError(error.localizedDescription)
-                }
-            } catch {
-                self?.isHandlingProfileSubmission = false
-                MXLog.error("Signup completion failed: \(error)")
-                coordinator.displayError(error.localizedDescription)
-            }
-        }
-    }
-    
-    // MARK: - PIN Challenge (returning user with two-step verification)
-    
-    private func showPinChallengeScreen(challengeContext: PinChallengeContext) {
-        let coordinator = PinChallengeScreenCoordinator(parameters: .init(phoneNumber: challengeContext.phoneNumber))
-        
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .verify(let pin):
-                    handlePinVerification(challengeContext: challengeContext, pin: pin, coordinator: coordinator)
-                case .forgotPin:
-                    coordinator.displayError("PIN recovery isn't available yet. Try again or use another device that's already signed in.")
-                case .cancel:
-                    stateMachine.tryEvent(.cancelledPinChallenge)
-                    navigationStackCoordinator.pop(animated: true)
-                }
-            }
-            .store(in: &cancellables)
-        
-        coordinator.start()
-        pinChallengeScreenCoordinator = coordinator
-        
-        navigationStackCoordinator.push(coordinator) { [weak self] in
-            guard self?.stateMachine.state == .pinChallengeScreen else { return }
-            self?.stateMachine.tryEvent(.cancelledPinChallenge)
-        }
-    }
-    
-    private func handlePinVerification(challengeContext: PinChallengeContext,
-                                       pin: String,
-                                       coordinator: PinChallengeScreenCoordinator) {
-        guard !isHandlingPinVerification else { return }
-        guard let client = identityServiceClient else {
-            coordinator.displayError("Identity service is not configured.")
-            return
-        }
-        isHandlingPinVerification = true
-        coordinator.setVerifying(true)
-        Task { [weak self] in
-            do {
-                let session = try await client.verifyPinChallenge(pinChallengeToken: challengeContext.challengeToken,
-                                                                  pin: pin,
-                                                                  device: .current)
-                let result = await self?.authenticationService.loginWithExistingMatrixSession(accessToken: session.accessToken,
-                                                                                              refreshToken: nil,
-                                                                                              userId: session.userId,
-                                                                                              deviceId: session.deviceId,
-                                                                                              homeserverUrl: session.baseUrl)
-                switch result {
-                case .success(let userSession):
-                    self?.appSettings.hasRunIdentityConfirmationOnboarding = true
-                    self?.stateMachine.tryEvent(.signedIn, userInfo: userSession)
-                case .failure(let error):
-                    coordinator.setVerifying(false)
-                    self?.isHandlingPinVerification = false
-                    MXLog.error("Matrix session restoration failed after PIN verify: \(error)")
-                    coordinator.displayError("Could not start your Matrix session. Please try again.")
-                case .none:
-                    coordinator.setVerifying(false)
-                    self?.isHandlingPinVerification = false
-                }
-            } catch let error as IdentityServiceError {
-                coordinator.setVerifying(false)
-                self?.isHandlingPinVerification = false
-                // If the short-lived challenge expired, force the user back to OTP entry
-                // (the OTP itself is still valid until they request a fresh one).
-                if case .pinChallengeExpired = error {
-                    self?.userIndicatorController.submitIndicator(.init(title: error.localizedDescription))
-                    self?.stateMachine.tryEvent(.cancelledPinChallenge)
-                    self?.navigationStackCoordinator.pop(animated: true)
-                } else {
-                    coordinator.displayError(error.localizedDescription)
-                }
-            } catch {
-                coordinator.setVerifying(false)
-                self?.isHandlingPinVerification = false
-                MXLog.error("PIN verification failed: \(error)")
-                coordinator.displayError(error.localizedDescription)
-            }
-        }
-    }
-    
-    private func handleOTPResend(phoneNumber: String, coordinator: OtpEntryScreenCoordinator) {
-        guard let client = identityServiceClient else {
-            coordinator.displayError("Identity service is not configured.")
-            return
-        }
-        Task {
-            do {
-                try await client.sendOTP(phone: phoneNumber, language: Locale.current.identifier)
-                coordinator.resetForResend()
-            } catch let error as IdentityServiceError {
-                coordinator.displayError(error.localizedDescription)
-            } catch {
-                MXLog.error("Failed to resend OTP: \(error)")
-                coordinator.displayError(error.localizedDescription)
-            }
-        }
-    }
-    
     // MARK: - QR Code
     
     private func showQRCodeLoginScreen() {

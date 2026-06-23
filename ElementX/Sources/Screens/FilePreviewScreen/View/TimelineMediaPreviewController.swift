@@ -242,7 +242,7 @@ private struct HeaderView: View {
         switch currentItem {
         case .media(let mediaItem):
             VStack(spacing: 0) {
-                Text(mediaItem.sender.displayName ?? mediaItem.sender.id)
+                Text(mediaItem.sender.displayName ?? mediaItem.sender.id.guaDisplayHandle)
                     .font(.compound.bodySMSemibold)
                     .foregroundStyle(.compound.textPrimary)
                 Text(mediaItem.timestamp.formatted(date: .abbreviated, time: .omitted))

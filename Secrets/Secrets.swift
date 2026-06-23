@@ -12,5 +12,6 @@ enum Secrets {
     // non-public dev infrastructure out of this repo.
     static let identityServiceBaseURL: String? = "http://localhost:8080"
     static let resolverBaseURL: String? = "http://localhost:8095"
+    static let defaultAccountProvider: String? = "localhost:8008"
 
 }

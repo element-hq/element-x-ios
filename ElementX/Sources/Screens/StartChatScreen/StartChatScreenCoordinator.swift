@@ -93,7 +93,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             return
         }
 
-        let contactDiscoveryService = ContactDiscoveryService(identityServiceClient: identityServiceClient)
+        let contactDiscoveryService = ContactDiscoveryService(identityServiceClient: identityServiceClient,
+                                                              currentUserID: parameters.userSession.clientProxy.userID)
         let coordinatorParameters = FindFriendsScreenCoordinatorParameters(contactDiscoveryService: contactDiscoveryService,
                                                                            clientProxy: parameters.userSession.clientProxy,
                                                                            accessToken: accessToken)

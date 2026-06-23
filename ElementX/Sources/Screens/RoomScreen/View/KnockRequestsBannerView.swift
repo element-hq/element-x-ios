@@ -80,7 +80,7 @@ private struct SingleKnockRequestBannerContent: View {
                                 avatarSize: .user(on: .knockingUserBanner), mediaProvider: mediaProvider)
             VStack(spacing: 0) {
                 HStack(alignment: .top, spacing: 0) {
-                    Text(L10n.screenRoomSingleKnockRequestTitle(request.displayName ?? request.userID))
+                    Text(L10n.screenRoomSingleKnockRequestTitle(request.displayName ?? request.userID.guaDisplayHandle))
                         .lineLimit(2)
                         .font(.compound.bodyMDSemibold)
                         .foregroundStyle(.compound.textPrimary)
@@ -88,7 +88,7 @@ private struct SingleKnockRequestBannerContent: View {
                     KnockRequestsBannerDismissButton(onDismiss: onDismiss)
                 }
                 if request.displayName != nil {
-                    Text(request.userID)
+                    Text(request.userID.guaDisplayHandle)
                         .lineLimit(2)
                         .font(.compound.bodySM)
                         .foregroundStyle(.compound.textSecondary)
@@ -136,7 +136,7 @@ private struct MultipleKnockRequestsBannerContent: View {
             return ""
         }
         
-        let string = first.displayName ?? first.userID
+        let string = first.displayName ?? first.userID.guaDisplayHandle
         return L10n.tr("Localizable", "screen_room_multiple_knock_requests_title", string, avatars.count - 1)
     }
     

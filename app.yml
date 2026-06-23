@@ -1,10 +1,13 @@
 settings:
   APP_DISPLAY_NAME: Gua
   PRODUCTION_APP_NAME: Gua
-  APP_GROUP_IDENTIFIER: group.me.sarahlacerda.gua
-  BASE_BUNDLE_IDENTIFIER: me.sarahlacerda.gua
+  APP_GROUP_IDENTIFIER: group.global.gua
+  BASE_BUNDLE_IDENTIFIER: global.gua
   ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
   DEVELOPMENT_TEAM: 3HD49L7PSA
-  DEFAULT_ACCOUNT_PROVIDER: dev.gua.sarahlacerda.me
-  OIDC_REDIRECT_URL: me.sarahlacerda.gua://oidc
+  # Injected, not committed: empty here so no host is baked into the generated project.
+  # Dev builds resolve the provider from the Secrets pipeline (GuaDeployment.defaultAccountProvider);
+  # CI/local may still override via this build setting -> Info.plist (GuaDefaultAccountProvider).
+  DEFAULT_ACCOUNT_PROVIDER: ""
+  OIDC_REDIRECT_URL: global.gua:/oidc
   OIDC_STATIC_REGISTRATIONS: ""

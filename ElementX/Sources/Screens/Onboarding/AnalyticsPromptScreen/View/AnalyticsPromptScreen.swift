@@ -16,7 +16,7 @@ struct AnalyticsPromptScreen: View {
         FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding, background: .gradient) {
             mainContent
         } bottomContent: {
-            buttons
+            EmptyView()
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
@@ -30,6 +30,7 @@ struct AnalyticsPromptScreen: View {
         VStack(spacing: 40) {
             header
             checkmarkList
+            buttons
         }
     }
     
@@ -71,19 +72,18 @@ struct AnalyticsPromptScreen: View {
         }
     }
     
-    /// The stack of enable/disable buttons.
+    /// The enable/disable buttons. Rendered in the main (white) content area rather than over the
+    /// bottom gradient, so the dark filled buttons stay high-contrast. Both share the same filled
+    /// style so neither choice is visually weaker (no nudge towards sharing analytics).
     private var buttons: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
             Button(L10n.actionOk) { context.send(viewAction: .enable) }
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.enable)
-            
-            Button { context.send(viewAction: .disable) } label: {
-                Text(L10n.actionNotNow)
-                    .font(.compound.bodyLGSemibold)
-                    .padding(14)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.notNow)
+
+            Button(L10n.actionNotNow) { context.send(viewAction: .disable) }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.notNow)
         }
     }
 }

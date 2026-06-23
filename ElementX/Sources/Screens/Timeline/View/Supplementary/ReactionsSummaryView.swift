@@ -105,7 +105,7 @@ private struct ReactionSummarySenderView: View {
     let mediaProvider: MediaProviderProtocol?
     
     var displayName: String {
-        member?.displayName ?? sender.id
+        member?.displayName ?? sender.id.guaDisplayHandle
     }
     
     var body: some View {
@@ -125,7 +125,7 @@ private struct ReactionSummarySenderView: View {
                         .font(.compound.bodyXS)
                         .foregroundColor(.compound.textSecondary)
                 }
-                Text(sender.id)
+                Text(sender.id.guaDisplayHandle)
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }

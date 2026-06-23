@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Войти в %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Войти QR-кодом";
 "screen_onboarding_sign_up" = "Создать учетную запись";
-"screen_onboarding_welcome_message" = "Суперзаряжено для скорости и простоты.";
-"screen_onboarding_welcome_subtitle" = "Суперзаряжено для скорости и простоты.";
 "screen_onboarding_welcome_title" = "Добро пожаловать в Gua";
 "screen_polls_history_empty_ongoing" = "Не найдено текущих опросов.";
 "screen_polls_history_empty_past" = "Не найдено прошлых опросов.";
@@ -1407,15 +1405,5 @@
 "screen_phone_login_send_failed" = "Не удалось отправить код. Повторите попытку.";
 "screen_phone_login_button_title" = "Продолжить по номеру телефона";
 
-"screen_otp_title" = "Введите код подтверждения";
-"screen_otp_subtitle" = "Введите код, который мы отправили на %@.";
-"screen_otp_verify" = "Подтвердить";
-"screen_otp_resend" = "Отправить код ещё раз";
 "screen_otp_code_placeholder" = "6-значный код";
-"screen_otp_display_name_placeholder" = "Отображаемое имя (необязательно)";
-"screen_otp_pin_placeholder" = "PIN-код безопасности (если есть)";
 "screen_otp_invalid_code" = "Код неверный или истёк.";
-"screen_otp_invalid_pin" = "PIN-код неверен.";
-"screen_otp_verify_failed" = "Не удалось подтвердить код. Попробуйте ещё раз.";
-"screen_otp_resend_failed" = "Не удалось повторно отправить код. Попробуйте ещё раз.";
-"screen_otp_resent" = "Новый код отправлен.";

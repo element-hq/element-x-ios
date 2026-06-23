@@ -10,7 +10,9 @@ import Foundation
 
 enum EncryptionResetScreenViewModelAction {
     case requestPassword(passwordPublisher: PassthroughSubject<String, Never>)
-    case requestOIDCAuthorisation(url: URL)
+    /// `completionPublisher` fires when the OIDC approval web sheet is dismissed,
+    /// signalling that the reset may now be performed.
+    case requestOIDCAuthorisation(url: URL, completionPublisher: PassthroughSubject<Void, Never>)
     case resetFinished
     case cancel
 }

@@ -234,6 +234,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
+    // GUA FORK: Find-friends-from-contacts entry-point.
     // GUA FORK: Two-step verification entry-point.
     private func presentTwoStepVerification() {
         guard let identityServiceClient = IdentityServiceClient() else {
@@ -242,7 +243,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
         let parameters = TwoStepVerificationScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
                                                                         identityServiceClient: identityServiceClient,
-                                                                        userIndicatorController: flowParameters.userIndicatorController)
+                                                                        userIndicatorController: flowParameters.userIndicatorController,
+                                                                        windowManager: flowParameters.windowManager,
+                                                                        appSettings: flowParameters.appSettings)
         let coordinator = TwoStepVerificationScreenCoordinator(parameters: parameters)
 
         coordinator.actionsPublisher
@@ -252,7 +255,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
 
-    // GUA FORK: Find-friends-from-contacts entry-point.
     private func presentFindFriends() {
         guard let identityServiceClient = IdentityServiceClient() else {
             MXLog.warning("Identity service is not configured; cannot show Find Friends.")
@@ -262,7 +264,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             MXLog.warning("No access token available; cannot run contact discovery.")
             return
         }
-        let contactDiscoveryService = ContactDiscoveryService(identityServiceClient: identityServiceClient)
+        let contactDiscoveryService = ContactDiscoveryService(identityServiceClient: identityServiceClient,
+                                                              currentUserID: flowParameters.userSession.clientProxy.userID)
         let parameters = FindFriendsScreenCoordinatorParameters(contactDiscoveryService: contactDiscoveryService,
                                                                 clientProxy: flowParameters.userSession.clientProxy,
                                                                 accessToken: accessToken)
@@ -297,8 +300,11 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .openDirectChat:
-                // Opening a chat from a contact's profile lands the user on their chat list.
+            case .openDirectChat(let roomID):
+                // The direct room now exists; route to it the same way the in-row Find Friends
+                // handling does — close Settings so the user lands back on their chat list where
+                // the new conversation appears.
+                MXLog.info("Find Friends opened direct chat \(roomID); dismissing Settings.")
                 actionsSubject.send(.dismiss)
             case .startCall, .dismiss:
                 navigationStackCoordinator.pop()
@@ -313,9 +319,10 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentAccountManagementURL(_ url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
-                                                                presentationAnchor: flowParameters.windowManager.mainWindow,
-                                                                appSettings: flowParameters.appSettings)
-        accountSettingsPresenter?.start()
+        let presenter = OIDCAccountSettingsPresenter(accountURL: url,
+                                                     presentationAnchor: flowParameters.windowManager.mainWindow,
+                                                     appSettings: flowParameters.appSettings)
+        accountSettingsPresenter = presenter
+        Task { await presenter.start() }
     }
 }

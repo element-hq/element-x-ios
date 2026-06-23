@@ -48,16 +48,24 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .failedToParseState(let eventType, _, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .state(_, let content):
-            if isDM, case .roomCreate = content {
+            // GUA FORK: 1:1 conversations are chats, not "rooms". Suppress all state
+            // events (encryption-enabled, name/avatar/topic, room create, etc.) so DMs
+            // never show "N room changes" plumbing.
+            if isDM {
                 return nil
             }
             return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
         case .roomMembership(userId: let userID, let displayName, change: let change, let reason):
-            if isDM, change == .joined, userID == self.userID {
+            // GUA FORK: hide all membership churn (joined/left/invited/etc.) in 1:1s.
+            if isDM {
                 return nil
             }
             return buildStateMembershipChangeTimelineItem(for: eventItemProxy, memberUserID: userID, memberDisplayName: displayName, membershipChange: change, reason: reason, isOutgoing: isOutgoing)
         case .profileChange(let displayName, let prevDisplayName, let avatarUrl, let prevAvatarUrl):
+            // GUA FORK: hide display-name/avatar "changed" lines in 1:1s.
+            if isDM {
+                return nil
+            }
             return buildStateProfileChangeTimelineItem(for: eventItemProxy,
                                                        displayName: displayName,
                                                        previousDisplayName: prevDisplayName,
@@ -597,7 +605,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildEmoteTimelineItemContent(senderDisplayName: String?, senderID: String, messageContent: EmoteMessageContent) -> EmoteRoomTimelineItemContent {
-        let name = senderDisplayName ?? senderID
+        let name = senderDisplayName ?? senderID.guaDisplayHandle
         
         let htmlBody = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
 

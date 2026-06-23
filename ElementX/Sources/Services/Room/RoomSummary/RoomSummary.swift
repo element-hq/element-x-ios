@@ -61,6 +61,17 @@ struct RoomSummary {
     var hasUnreadMentions: Bool { unreadMentionsCount > 0 }
     var hasUnreadNotifications: Bool { unreadNotificationsCount > 0 }
     var isMuted: Bool { notificationMode == .mute }
+
+    /// GUA FORK: a stray "Empty Room" the SDK surfaces when a chat is created but the other member
+    /// never joins (or a creation half-failed) — it has no joined members and no messages. We match
+    /// any room (direct OR not, since these orphans aren't always flagged `isDirect`) that has no
+    /// visible joined member (`heroes`), no last message, and at most the local user
+    /// (`activeMembersCount <= 1`) OR a single invited-but-never-joined peer (count 2 while `heroes`
+    /// is still empty). A genuine conversation always has either a joined hero or a `lastMessage`, so
+    /// it is never hidden; a real invite keeps the inviter as a hero, so invites are never hidden.
+    var isEmptyOrphanRoom: Bool {
+        heroes.isEmpty && lastMessage == nil && activeMembersCount <= 2
+    }
 }
 
 extension RoomSummary: CustomStringConvertible {

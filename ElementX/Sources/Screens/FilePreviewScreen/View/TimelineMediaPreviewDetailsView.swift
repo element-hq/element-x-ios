@@ -56,7 +56,7 @@ struct TimelineMediaPreviewDetailsView: View {
                                 .foregroundStyle(.compound.decorativeColor(for: item.sender.id).text)
                         }
                         
-                        Text(item.sender.id)
+                        Text(item.sender.id.guaDisplayHandle)
                             .font(.compound.bodySM)
                             .foregroundStyle(.compound.textSecondary)
                     }

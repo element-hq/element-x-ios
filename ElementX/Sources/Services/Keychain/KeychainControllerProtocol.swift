@@ -21,7 +21,13 @@ protocol KeychainControllerProtocol: ClientSessionDelegate {
     func restorationTokens() -> [KeychainCredentials]
     func removeRestorationTokenForUsername(_ username: String)
     func removeAllRestorationTokens()
-    
+
+    // MARK: Recovery Keys
+
+    func setRecoveryKey(_ key: String, forUsername username: String)
+    func recoveryKey(forUsername username: String) -> String?
+    func removeRecoveryKey(forUsername username: String)
+
     // MARK: App Secrets
     
     /// Whether or not an App Lock PIN code has been set.

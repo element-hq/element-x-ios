@@ -13,14 +13,14 @@ struct ReadReceiptCell: View {
     let mediaProvider: MediaProviderProtocol?
     
     private var title: String {
-        memberState?.displayName ?? readReceipt.userID
+        memberState?.displayName ?? readReceipt.userID.guaDisplayHandle
     }
-    
+
     private var subtitle: String {
-        guard title != readReceipt.userID else {
+        guard title != readReceipt.userID.guaDisplayHandle else {
             return ""
         }
-        return readReceipt.userID
+        return readReceipt.userID.guaDisplayHandle
     }
         
     var body: some View {

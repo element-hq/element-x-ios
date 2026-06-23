@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Iniciar sesión en %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Iniciar sesión con un código QR";
 "screen_onboarding_sign_up" = "Crear cuenta";
-"screen_onboarding_welcome_message" = "Vitaminado para mayor rapidez y sencillez.";
-"screen_onboarding_welcome_subtitle" = "Vitaminado, para mayor rapidez y sencillez.";
 "screen_onboarding_welcome_title" = "Bienvenido a Gua";
 "screen_polls_history_empty_ongoing" = "No se pudo encontrar ninguna encuesta en curso.";
 "screen_polls_history_empty_past" = "No se pudo encontrar ninguna encuesta anterior.";
@@ -1397,3 +1395,43 @@
 "screen_signout_preference_item" = "Cerrar sesión";
 "screen_signout_save_recovery_key_title" = "¿Has guardado tu clave de recuperación?";
 "troubleshoot_notifications_entry_point_title" = "Solucionar problemas con las notificaciones";
+
+/* GUA FORK */
+"screen_find_friends_title" = "Encontrar amigos";
+"screen_two_step_verification_title" = "Verificación en dos pasos";
+
+/* GUA FORK - Find Friends empty state */
+"find_friends_empty_title" = "Aún no hay contactos en Gua";
+"find_friends_empty_message" = "Ninguno de tus contactos está todavía en Gua. Invítalos y aparecerán aquí.";
+"find_friends_empty_action" = "Volver a comprobar";
+
+/* GUA FORK - Two-step verification (missing translations) */
+"screen_two_step_verification_overview_header" = "Estado";
+"screen_two_step_verification_overview_footer_on" = "Se solicita tu PIN al iniciar sesión en un dispositivo nuevo. Mantenlo en secreto: cualquier persona que tenga tu PIN y tu código SMS puede acceder a tu cuenta.";
+"screen_two_step_verification_overview_footer_off" = "Añade un PIN de 6 dígitos para proteger tu cuenta frente a ataques de intercambio de SIM (SIM swap). Se te pedirá al iniciar sesión en un dispositivo nuevo.";
+"screen_two_step_verification_status_on" = "PIN activado";
+"screen_two_step_verification_status_off" = "Sin PIN configurado";
+"screen_two_step_verification_set_button" = "Configurar PIN";
+"screen_two_step_verification_change_button" = "Cambiar PIN";
+"screen_two_step_verification_passkey_button" = "Configurar una clave de acceso";
+"screen_two_step_verification_passkey_footer" = "Usa Face ID, Touch ID o una llave de seguridad para iniciar sesión sin contraseña.";
+"screen_two_step_verification_current_header" = "Introduce tu PIN actual";
+"screen_two_step_verification_current_footer" = "Confirma tu PIN actual para autorizar el cambio.";
+"screen_two_step_verification_new_header" = "Elige un nuevo PIN";
+"screen_two_step_verification_new_footer" = "Elige un PIN de 6 dígitos difícil de adivinar.";
+"screen_two_step_verification_confirm_header" = "Confirma tu nuevo PIN";
+"screen_two_step_verification_confirm_footer" = "Vuelve a introducir tu nuevo PIN para confirmarlo.";
+"screen_two_step_verification_current_incorrect" = "El PIN actual es incorrecto.";
+"screen_two_step_verification_same_as_current" = "El nuevo PIN debe ser distinto del actual.";
+"screen_two_step_verification_locked" = "Demasiados intentos incorrectos. Inténtalo de nuevo más tarde.";
+"screen_two_step_verification_updated" = "PIN actualizado";
+"screen_two_step_verification_reminder_title" = "Protege tu cuenta";
+"screen_two_step_verification_reminder_message" = "Configura un PIN de 6 dígitos para que tu cuenta siga segura aunque alguien tome el control de tu número de teléfono.";
+"screen_two_step_verification_reminder_action" = "Configurar PIN";
+"screen_two_step_verification_reminder_dismiss" = "Ahora no";
+"screen_two_step_verification_phone_header" = "Confirma tu número de teléfono";
+"screen_two_step_verification_phone_footer" = "Enviaremos un código de verificación por SMS al teléfono vinculado a tu cuenta.";
+"screen_two_step_verification_otp_header" = "Introduce el código del SMS";
+"screen_two_step_verification_otp_footer" = "Introduce el código de 6 dígitos que acabamos de enviar a tu teléfono.";
+"screen_two_step_verification_otp_invalid" = "Ese código no es válido o ha caducado. Inténtalo de nuevo.";
+"screen_two_step_verification_cooldown" = "Por seguridad, solo puedes cambiar tu PIN una vez al día. Inténtalo de nuevo más tarde.";

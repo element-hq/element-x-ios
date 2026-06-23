@@ -40,6 +40,6 @@ struct TimelineItemSender: Identifiable, Hashable {
             return nil
         }
         
-        return isDisplayNameAmbiguous ? "\(displayName) (\(id))" : displayName
+        return isDisplayNameAmbiguous ? "\(displayName) (\(id.guaDisplayHandle))" : displayName
     }
 }

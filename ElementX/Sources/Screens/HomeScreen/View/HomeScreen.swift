@@ -90,7 +90,8 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
     static let loadingViewModel = viewModel(.skeletons)
     static let emptyViewModel = viewModel(.empty)
     static let loadedViewModel = viewModel(.rooms)
-    
+    static let guaMarketingViewModel = viewModel(roomSummaryProviderState: .loaded(.mockRoomsGuaMarketing))
+
     static var previews: some View {
         NavigationStack {
             HomeScreen(context: loadingViewModel.context)
@@ -115,11 +116,19 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
             state.roomListMode == .rooms
         })
         .previewDisplayName("Loaded")
+
+        NavigationStack {
+            HomeScreen(context: guaMarketingViewModel.context)
+        }
+        .environment(\.colorScheme, .dark)
+        .preferredColorScheme(.dark)
+        .snapshotPreferences(expect: guaMarketingViewModel.context.$viewState.map { state in
+            state.roomListMode == .rooms
+        })
+        .previewDisplayName("GuaMarketingConversas")
     }
-    
+
     static func viewModel(_ mode: HomeScreenRoomListMode) -> HomeScreenViewModel {
-        let userID = "@alice:example.com"
-        
         let roomSummaryProviderState: RoomSummaryProviderMockConfigurationState = switch mode {
         case .skeletons:
             .loading
@@ -128,10 +137,17 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         case .rooms:
             .loaded(.mockRooms)
         }
-        
+
+        return viewModel(roomSummaryProviderState: roomSummaryProviderState)
+    }
+
+    static func viewModel(roomSummaryProviderState: RoomSummaryProviderMockConfigurationState) -> HomeScreenViewModel {
+        let userID = "@alice:example.com"
+
         let clientProxy = ClientProxyMock(.init(userID: userID,
                                                 roomSummaryProvider: RoomSummaryProviderMock(.init(state: roomSummaryProviderState))))
-        
+        clientProxy.userDisplayNamePublisher = .init("Ana Costa")
+
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         return HomeScreenViewModel(userSession: userSession,

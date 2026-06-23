@@ -60,7 +60,10 @@ targets:
     entitlements:
       path: NSE.entitlements
       properties:
-        com.apple.developer.usernotifications.filtering: true
+        # NB: com.apple.developer.usernotifications.filtering removed — it's an Apple-restricted entitlement
+        # (needs explicit approval per team) and this is a notification *service* extension that decrypts/
+        # modifies content, which does NOT require it. Re-add only if a notification-filtering feature is
+        # built AND access has been granted for the team.
         com.apple.security.application-groups:
         - $(APP_GROUP_IDENTIFIER)
         keychain-access-groups:

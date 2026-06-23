@@ -33,6 +33,8 @@ class KeychainController: KeychainControllerProtocol {
         case appLockBiometricState
     }
 
+    private static let recoveryKeyPrefix = "recoveryKey."
+
     init(service: KeychainControllerService, accessGroup: String) {
         restorationTokenKeychain = Keychain(service: service.restorationTokenID, accessGroup: accessGroup)
         mainKeychain = Keychain(service: service.mainID, accessGroup: accessGroup)
@@ -68,7 +70,8 @@ class KeychainController: KeychainControllerProtocol {
 
     func restorationTokens() -> [KeychainCredentials] {
         restorationTokenKeychain.allKeys().compactMap { username in
-            guard let restorationToken = restorationTokenForUsername(username) else {
+            guard !username.hasPrefix(Self.recoveryKeyPrefix),
+                  let restorationToken = restorationTokenForUsername(username) else {
                 return nil
             }
 
@@ -88,14 +91,41 @@ class KeychainController: KeychainControllerProtocol {
 
     func removeAllRestorationTokens() {
         MXLog.warning("Removing all user restoration tokens.")
-        
+
         do {
             try restorationTokenKeychain.removeAll()
         } catch {
             MXLog.error("Failed removing all tokens")
         }
     }
-    
+
+    // MARK: - Recovery Keys
+
+    func setRecoveryKey(_ key: String, forUsername username: String) {
+        do {
+            try restorationTokenKeychain.set(key, key: Self.recoveryKeyPrefix + username)
+        } catch {
+            MXLog.error("Failed storing recovery key with error: \(error)")
+        }
+    }
+
+    func recoveryKey(forUsername username: String) -> String? {
+        do {
+            return try restorationTokenKeychain.getString(Self.recoveryKeyPrefix + username)
+        } catch {
+            MXLog.error("Failed retrieving recovery key")
+            return nil
+        }
+    }
+
+    func removeRecoveryKey(forUsername username: String) {
+        do {
+            try restorationTokenKeychain.remove(Self.recoveryKeyPrefix + username)
+        } catch {
+            MXLog.error("Failed removing recovery key with error: \(error)")
+        }
+    }
+
     // MARK: - ClientSessionDelegate
     
     func retrieveSessionFromKeychain(userId: String) throws -> Session {

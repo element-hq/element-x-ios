@@ -79,12 +79,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             HStack(alignment: .top, spacing: 4) {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
                 HStack(alignment: .center, spacing: 4) {
-                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id.guaDisplayHandle)
                         .font(.compound.bodySMSemibold)
                         .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
-                    
+
                     if timelineItem.sender.displayName != nil, timelineItem.sender.isDisplayNameAmbiguous {
-                        Text(timelineItem.sender.id)
+                        Text(timelineItem.sender.id.guaDisplayHandle)
                             .font(.compound.bodyXS)
                             .foregroundColor(.compound.textSecondary)
                     }

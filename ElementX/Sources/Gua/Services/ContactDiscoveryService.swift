@@ -55,11 +55,15 @@ final class ContactDiscoveryService: ContactDiscoveryServiceProtocol {
     private let identityServiceClient: IdentityServiceClientProtocol
     private let store = CNContactStore()
 
+    /// The signed-in user's own ID, so we never surface them as a "friend" to chat with.
+    private let currentUserID: String
+
     /// Identity-service caps the batch; stay under it.
     private let maxNumbersPerRequest: Int
 
-    init(identityServiceClient: IdentityServiceClientProtocol, maxNumbersPerRequest: Int = 1000) {
+    init(identityServiceClient: IdentityServiceClientProtocol, currentUserID: String, maxNumbersPerRequest: Int = 1000) {
         self.identityServiceClient = identityServiceClient
+        self.currentUserID = currentUserID
         self.maxNumbersPerRequest = max(1, maxNumbersPerRequest)
     }
 
@@ -98,6 +102,8 @@ final class ContactDiscoveryService: ContactDiscoveryServiceProtocol {
                                   userId: match.userId,
                                   username: match.username)
             }
+            // Never surface the signed-in user as a contact to start a chat with.
+            .filter { $0.userId.localizedCaseInsensitiveCompare(currentUserID) != .orderedSame }
             .sorted { $0.localName.localizedCaseInsensitiveCompare($1.localName) == .orderedAscending }
     }
 

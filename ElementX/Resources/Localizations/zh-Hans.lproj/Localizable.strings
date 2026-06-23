@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "登录到 %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "使用二维码登录";
 "screen_onboarding_sign_up" = "创建账户";
-"screen_onboarding_welcome_message" = "速度与简洁的极致。";
-"screen_onboarding_welcome_subtitle" = "速度与简洁的极致。";
 "screen_onboarding_welcome_title" = "欢迎使用 Gua";
 "screen_polls_history_empty_ongoing" = "无法找到正在进行的投票。";
 "screen_polls_history_empty_past" = "无法找到历史投票";
@@ -1407,15 +1405,5 @@
 "screen_phone_login_send_failed" = "验证码发送失败，请重试。";
 "screen_phone_login_button_title" = "使用手机号码继续";
 
-"screen_otp_title" = "输入验证码";
-"screen_otp_subtitle" = "请输入发送到 %@ 的验证码。";
-"screen_otp_verify" = "验证";
-"screen_otp_resend" = "重新发送验证码";
 "screen_otp_code_placeholder" = "6 位验证码";
-"screen_otp_display_name_placeholder" = "显示名称（可选）";
-"screen_otp_pin_placeholder" = "安全 PIN（如已设置）";
 "screen_otp_invalid_code" = "验证码错误或已过期。";
-"screen_otp_invalid_pin" = "PIN 错误。";
-"screen_otp_verify_failed" = "无法验证验证码，请重试。";
-"screen_otp_resend_failed" = "无法重新发送验证码，请重试。";
-"screen_otp_resent" = "新的验证码已发送。";

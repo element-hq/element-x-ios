@@ -100,7 +100,7 @@ struct HomeScreenViewState: BindableState {
     /// Set to true when the identity service reports the user has not yet
     /// configured their two-step verification PIN AND the reminder is not snoozed.
     var pinSetupReminderVisible = false
-        
+
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
     

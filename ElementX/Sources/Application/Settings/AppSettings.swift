@@ -36,7 +36,8 @@ final class AppSettings {
         case analyticsConsentState
         case hasRunNotificationPermissionsOnboarding
         case hasRunIdentityConfirmationOnboarding
-        
+        case hasBootstrappedKeyStorage
+
         case frequentlyUsedSystemEmojis
         
         case enableNotifications
@@ -97,6 +98,7 @@ final class AppSettings {
     static func resetSessionSpecificSettings() {
         MXLog.warning("Resetting the user session specific AppSettings.")
         store.removeObject(forKey: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding.rawValue)
+        store.removeObject(forKey: UserDefaultsKeys.hasBootstrappedKeyStorage.rawValue)
     }
     
     static func configureWithSuiteName(_ name: String) {
@@ -301,7 +303,7 @@ final class AppSettings {
     /// The configuration to use for analytics. Set to `nil` to disable analytics.
     let analyticsConfiguration: AnalyticsConfiguration? = AppSettings.makeAnalyticsConfiguration()
     /// The URL to open with more information about analytics terms. When this is `nil` the "Learn more" link will be hidden.
-    private(set) var analyticsTermsURL: URL? = "https://element.io/cookie-policy"
+    private(set) var analyticsTermsURL: URL? = "https://gua.global/privacy"
     /// Whether or not there the app is able ask for user consent to enable analytics or sentry reporting.
     var canPromptForAnalytics: Bool { analyticsConfiguration != nil || bugReportSentryURL != nil }
     
@@ -319,7 +321,10 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
     var hasRunIdentityConfirmationOnboarding
-    
+
+    @UserPreference(key: UserDefaultsKeys.hasBootstrappedKeyStorage, defaultValue: false, storageType: .userDefaults(store))
+    var hasBootstrappedKeyStorage
+
     @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
     var frequentlyUsedSystemEmojis
     
@@ -328,9 +333,10 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hideUnreadMessagesBadge, defaultValue: false, storageType: .userDefaults(store))
     var hideUnreadMessagesBadge
 
+    // GUA FORK: Snooze timestamp for the home-screen two-step-verification PIN setup reminder.
     @UserPreference(key: UserDefaultsKeys.pinSetupReminderSnoozedUntil, defaultValue: nil, storageType: .userDefaults(store))
     var pinSetupReminderSnoozedUntil: Date?
-    
+
     // MARK: - Room Screen
     
     @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))

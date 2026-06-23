@@ -21,9 +21,9 @@ struct SendInviteConfirmationView: View {
     private var subtitle: String {
         let string: String
         if let displayName = userToInvite.displayName {
-            string = L10n.commonNameAndId(displayName, userToInvite.userID)
+            string = L10n.commonNameAndId(displayName, userToInvite.userID.guaDisplayHandle)
         } else {
-            string = userToInvite.userID
+            string = userToInvite.userID.guaDisplayHandle
         }
         return L10n.screenBottomSheetCreateDmMessage(string)
     }

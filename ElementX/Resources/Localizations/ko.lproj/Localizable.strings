@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "%1$@ 에 로그인하세요.";
 "screen_onboarding_sign_in_with_qr_code" = "QR 코드로 로그인";
 "screen_onboarding_sign_up" = "계정 만들기";
-"screen_onboarding_welcome_message" = "속도와 단순성을 위해 최적화된 앱입니다.";
-"screen_onboarding_welcome_subtitle" = "속도와 단순성을 위해 최적화된 앱입니다.";
 "screen_onboarding_welcome_title" = "Gua에 오신 것을 환영합니다";
 "screen_polls_history_empty_ongoing" = "진행 중인 투표를 찾을 수 없습니다.";
 "screen_polls_history_empty_past" = "과거의 투표를 찾을 수 없습니다.";

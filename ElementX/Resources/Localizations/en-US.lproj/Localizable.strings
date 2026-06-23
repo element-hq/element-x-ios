@@ -785,16 +785,16 @@
 "screen_edit_profile_error_title" = "Unable to update profile";
 "screen_edit_profile_title" = "Edit profile";
 "screen_edit_profile_updating_details" = "Updating profile…";
-"screen_encryption_reset_action_continue_reset" = "Continue reset";
-"screen_encryption_reset_bullet_1" = "Your account details, contacts, preferences, and chat list will be kept";
-"screen_encryption_reset_bullet_2" = "You will lose any message history that’s stored only on the server";
-"screen_encryption_reset_bullet_3" = "You will need to verify all your existing devices and contacts again";
-"screen_encryption_reset_footer" = "Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.";
-"screen_encryption_reset_title" = "Can't confirm? You’ll need to reset your identity.";
-"screen_identity_confirmation_cannot_confirm" = "Can't confirm?";
+"screen_encryption_reset_action_continue_reset" = "Continue";
+"screen_encryption_reset_bullet_1" = "Your account, contacts, preferences, and chats list are kept";
+"screen_encryption_reset_bullet_2" = "Older messages that aren’t saved on this device may no longer appear";
+"screen_encryption_reset_bullet_3" = "Your other devices will need to be confirmed again";
+"screen_encryption_reset_footer" = "Only do this if you can’t sign in on another device where you’re already set up.";
+"screen_encryption_reset_title" = "Set up secure messaging on this device";
+"screen_identity_confirmation_cannot_confirm" = "Need help?";
 "screen_identity_confirmation_create_new_recovery_key" = "Create a new recovery key";
-"screen_identity_confirmation_subtitle" = "Verify this device to set up secure messaging.";
-"screen_identity_confirmation_title" = "Confirm your identity";
+"screen_identity_confirmation_subtitle" = "Confirm this device to turn on secure messaging.";
+"screen_identity_confirmation_title" = "Confirm it’s you";
 "screen_identity_confirmation_use_another_device" = "Use another device";
 "screen_identity_confirmation_use_recovery_key" = "Use recovery key";
 "screen_identity_confirmed_subtitle" = "Now you can read or send messages securely, and anyone you chat with can also trust this device.";
@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Sign in with QR code";
 "screen_onboarding_sign_up" = "Create account";
-"screen_onboarding_welcome_message" = "Supercharged for speed and simplicity.";
-"screen_onboarding_welcome_subtitle" = "Supercharged, for speed and simplicity.";
 "screen_onboarding_welcome_title" = "Welcome to Gua";
 "screen_polls_history_empty_ongoing" = "Can't find any ongoing polls.";
 "screen_polls_history_empty_past" = "Can't find any past polls.";
@@ -961,7 +959,7 @@
 "screen_report_content_hint" = "Reason for reporting this content";
 "screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
 "screen_reset_encryption_confirmation_alert_subtitle" = "This process is irreversible.";
-"screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your identity?";
+"screen_reset_encryption_confirmation_alert_title" = "Set up secure messaging from scratch?";
 "screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your identity.";
 "screen_reset_encryption_password_title" = "Enter your account password to continue";
 "screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
@@ -1397,3 +1395,6 @@
 "screen_signout_preference_item" = "Sign out";
 "screen_signout_save_recovery_key_title" = "Have you saved your recovery key?";
 "troubleshoot_notifications_entry_point_title" = "Troubleshoot notifications";
+
+/* GUA FORK */
+"screen_find_friends_title" = "Find friends";

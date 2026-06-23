@@ -331,10 +331,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "NotificationSettingsScreen_Previews")
     }
 
-    func testOtpEntryScreen() async throws {
-        try await performAccessibilityAudit(named: "OtpEntryScreen_Previews")
-    }
-
     func testPINTextField() async throws {
         try await performAccessibilityAudit(named: "PINTextField_Previews")
     }
@@ -353,14 +349,6 @@ extension AccessibilityTests {
 
     func testPillView() async throws {
         try await performAccessibilityAudit(named: "PillView_Previews")
-    }
-
-    func testPinChallengeScreen() async throws {
-        try await performAccessibilityAudit(named: "PinChallengeScreen_Previews")
-    }
-
-    func testPinSetupScreen() async throws {
-        try await performAccessibilityAudit(named: "PinSetupScreen_Previews")
     }
 
     func testPinnedEventsTimelineScreen() async throws {
@@ -397,10 +385,6 @@ extension AccessibilityTests {
 
     func testPollView() async throws {
         try await performAccessibilityAudit(named: "PollView_Previews")
-    }
-
-    func testProfileSetupScreen() async throws {
-        try await performAccessibilityAudit(named: "ProfileSetupScreen_Previews")
     }
 
     func testQRCodeLoginScreen() async throws {

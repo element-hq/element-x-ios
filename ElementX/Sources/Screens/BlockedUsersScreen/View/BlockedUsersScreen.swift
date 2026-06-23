@@ -32,8 +32,8 @@ struct BlockedUsersScreen: View {
         } else {
             Form {
                 ForEach(context.viewState.blockedUsers, id: \.self) { user in
-                    ListRow(label: .avatar(title: user.displayName ?? user.userID,
-                                           description: user.displayName != nil ? user.userID : nil,
+                    ListRow(label: .avatar(title: user.displayName ?? user.userID.guaDisplayHandle,
+                                           description: user.displayName != nil ? user.userID.guaDisplayHandle : nil,
                                            icon: avatar(for: user)),
                             details: .isWaiting(context.viewState.processingUserID == user.userID),
                             kind: .button { context.send(viewAction: .unblockUser(user)) })

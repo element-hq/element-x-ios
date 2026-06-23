@@ -6,24 +6,6 @@
 
 import Foundation
 
-/// A Matrix session minted by the Gua identity-service after a successful OTP verification.
-struct IdentityServiceMatrixSession: Equatable, Sendable {
-    let accessToken: String
-    let userId: String
-    let deviceId: String
-    let baseUrl: String
-}
-
-/// Result of `verifyOTP`. Existing users without two-step verification receive a Matrix session immediately;
-/// brand-new users receive a `signupToken` to pass to `completeSignup` with a chosen username and display name;
-/// returning users with two-step verification enabled receive a `pinChallengeToken` to redeem at
-/// `verifyPinChallenge` together with their account PIN.
-enum IdentityServiceVerifyOutcome: Equatable, Sendable {
-    case existingUser(IdentityServiceMatrixSession)
-    case newUser(signupToken: String)
-    case pinRequired(challengeToken: String)
-}
-
 enum IdentityServiceError: Error, LocalizedError {
     case notConfigured
     case invalidURL
@@ -33,11 +15,6 @@ enum IdentityServiceError: Error, LocalizedError {
     case pinLocked(retryAfterSeconds: Int?)
     case pinChangeCooldown(retryAfterSeconds: Int?)
     case pinChangeChallengeInvalid
-    case pinChallengeExpired
-    case invalidSignupToken
-    case invalidUsername(String?)
-    case usernameTaken
-    case phoneAlreadyLinked
     case invalidReauthToken
     case server(status: Int, message: String?)
     case transport(Error)
@@ -58,11 +35,6 @@ enum IdentityServiceError: Error, LocalizedError {
                 "For security, you can change your PIN again in \(max(1, Int((Double(retry) / 3600.0).rounded(.up)))) hour(s)."
             } else { "For security, you can only change your PIN once per day." }
         case .pinChangeChallengeInvalid: "Your PIN change session expired. Please start over."
-        case .pinChallengeExpired: "Your sign-in session expired. Please verify your phone again."
-        case .invalidSignupToken: "Your signup session has expired. Please verify your phone again."
-        case let .invalidUsername(message): message ?? "That username isn't allowed."
-        case .usernameTaken: "That username is already taken. Please pick another."
-        case .phoneAlreadyLinked: "This phone number is already linked to another account."
         case .invalidReauthToken: "Your verification expired. Please request a new code."
         case let .server(status, message): message ?? "Server error (\(status))."
         case let .transport(error): error.localizedDescription
@@ -71,45 +43,8 @@ enum IdentityServiceError: Error, LocalizedError {
     }
 }
 
-/// Minimal device metadata sent alongside an OTP verification request.
-struct IdentityServiceDeviceInfo: Encodable, Sendable {
-    let name: String?
-    let platform: String?
-    let appVersion: String?
-
-    static var current: IdentityServiceDeviceInfo {
-        let device = ProcessInfo.processInfo
-        let bundle = Bundle.main
-        let appVersion = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-        #if os(iOS)
-        let platform = "iOS"
-        #elseif os(macOS)
-        let platform = "macOS"
-        #else
-        let platform = "unknown"
-        #endif
-        return IdentityServiceDeviceInfo(name: device.hostName,
-                                         platform: platform,
-                                         appVersion: appVersion)
-    }
-}
-
 @MainActor
 protocol IdentityServiceClientProtocol {
-    func sendOTP(phone: String, language: String?) async throws
-    func verifyOTP(phone: String,
-                   code: String,
-                   pin: String?,
-                   device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceVerifyOutcome
-    func completeSignup(signupToken: String,
-                        username: String,
-                        displayName: String,
-                        pin: String?,
-                        device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceMatrixSession
-    func verifyPinChallenge(pinChallengeToken: String,
-                            pin: String,
-                            device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceMatrixSession
-    func checkUsernameAvailability(_ username: String) async throws -> UsernameAvailability
     /// Contact discovery: match a batch of address-book phone numbers (E.164) against Gua
     /// accounts. The numbers are sent over TLS and digested server-side; only the contacts
     /// that are on Gua and discoverable come back.
@@ -118,10 +53,15 @@ protocol IdentityServiceClientProtocol {
     func verifyAccountReauth(accessToken: String, code: String) async throws -> String
     func deactivateAccount(accessToken: String, reauthToken: String, eraseData: Bool) async throws
     func resetIdentityCredentials(accessToken: String, reauthToken: String) async throws -> IdentityResetCredentials
+    // GUA FORK: Two-step verification (account PIN) management.
     func pinStatus(accessToken: String) async throws -> Bool
     func setInitialPin(accessToken: String, userId: String, newPin: String) async throws
     func startPinChange(accessToken: String, phone: String, currentPin: String) async throws -> String
     func completePinChange(accessToken: String, challengeId: String, otpCode: String, newPin: String) async throws
+    /// Begins passkey enrollment and returns the IdP-hosted URL to load in an
+    /// authenticated web session. The flow finishes when that page redirects to
+    /// the app's OIDC redirect URL.
+    func startPasskeyEnrollment(accessToken: String) async throws -> URL
 }
 
 /// Ephemeral credentials minted by the identity-service for the Matrix
@@ -129,13 +69,6 @@ protocol IdentityServiceClientProtocol {
 struct IdentityResetCredentials: Equatable, Sendable {
     let userId: String
     let password: String
-}
-
-/// Result of a real-time `/signup/check-username` query.
-enum UsernameAvailability: Equatable, Sendable {
-    case available
-    case taken
-    case invalid(reason: String?)
 }
 
 /// A contact-discovery hit: an address-book phone number that belongs to a Gua account.
@@ -167,139 +100,6 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
     convenience init?() {
         guard let url = GuaDeployment.current.identityServiceBaseURL else { return nil }
         self.init(baseURL: url)
-    }
-
-    // MARK: - Public
-
-    func sendOTP(phone: String, language: String?) async throws {
-        struct Body: Encodable {
-            let phone: String
-            let language: String?
-        }
-        try await postExpectingEmpty(path: "/otp/send", body: Body(phone: phone, language: language))
-    }
-
-    func verifyOTP(phone: String,
-                   code: String,
-                   pin: String?,
-                   device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceVerifyOutcome {
-        struct Body: Encodable {
-            let phone: String
-            let code: String
-            let pin: String?
-            let device: IdentityServiceDeviceInfo?
-        }
-        let body = Body(phone: phone, code: code, pin: pin, device: device)
-        let response: VerifyResponse = try await post(path: "/otp/verify", body: body)
-        if response.isNewUser == true, let token = response.signupToken {
-            return .newUser(signupToken: token)
-        }
-        if response.pinRequired == true, let challenge = response.pinChallengeToken {
-            return .pinRequired(challengeToken: challenge)
-        }
-        guard let accessToken = response.accessToken,
-              let userId = response.userId,
-              let deviceId = response.deviceId,
-              let baseUrl = response.baseUrl else {
-            throw IdentityServiceError.server(status: 200, message: "Malformed verify response from server.")
-        }
-        return .existingUser(IdentityServiceMatrixSession(accessToken: accessToken,
-                                                          userId: userId,
-                                                          deviceId: deviceId,
-                                                          baseUrl: baseUrl))
-    }
-
-    func completeSignup(signupToken: String,
-                        username: String,
-                        displayName: String,
-                        pin: String?,
-                        device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceMatrixSession {
-        struct Body: Encodable {
-            let signupToken: String
-            let username: String
-            let displayName: String
-            let pin: String?
-            let device: IdentityServiceDeviceInfo?
-        }
-        let body = Body(signupToken: signupToken,
-                        username: username,
-                        displayName: displayName,
-                        pin: pin,
-                        device: device)
-        let response: VerifyResponse = try await post(path: "/signup/complete", body: body)
-        guard let accessToken = response.accessToken,
-              let userId = response.userId,
-              let deviceId = response.deviceId,
-              let baseUrl = response.baseUrl else {
-            throw IdentityServiceError.server(status: 200, message: "Malformed signup response from server.")
-        }
-        return IdentityServiceMatrixSession(accessToken: accessToken,
-                                            userId: userId,
-                                            deviceId: deviceId,
-                                            baseUrl: baseUrl)
-    }
-
-    func verifyPinChallenge(pinChallengeToken: String,
-                            pin: String,
-                            device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceMatrixSession {
-        struct Body: Encodable {
-            let pinChallengeToken: String
-            let pin: String
-            let device: IdentityServiceDeviceInfo?
-        }
-        let body = Body(pinChallengeToken: pinChallengeToken, pin: pin, device: device)
-        let response: VerifyResponse = try await post(path: "/signin/verify-pin", body: body)
-        guard let accessToken = response.accessToken,
-              let userId = response.userId,
-              let deviceId = response.deviceId,
-              let baseUrl = response.baseUrl else {
-            throw IdentityServiceError.server(status: 200, message: "Malformed verify-pin response from server.")
-        }
-        return IdentityServiceMatrixSession(accessToken: accessToken,
-                                            userId: userId,
-                                            deviceId: deviceId,
-                                            baseUrl: baseUrl)
-    }
-
-    func checkUsernameAvailability(_ username: String) async throws -> UsernameAvailability {
-        let trimmed = username.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return .invalid(reason: nil) }
-        guard var components = URLComponents(url: baseURL.appendingPathComponent("/signup/check-username"),
-                                             resolvingAgainstBaseURL: false) else {
-            throw IdentityServiceError.invalidURL
-        }
-        components.queryItems = [URLQueryItem(name: "username", value: trimmed)]
-        guard let url = components.url else { throw IdentityServiceError.invalidURL }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-
-        let data: Data
-        let response: URLResponse
-        do {
-            (data, response) = try await session.data(for: request)
-        } catch {
-            throw IdentityServiceError.transport(error)
-        }
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw IdentityServiceError.server(status: -1, message: "Non-HTTP response.")
-        }
-        switch httpResponse.statusCode {
-        case 200:
-            struct Body: Decodable { let available: Bool }
-            do {
-                let parsed = try decoder.decode(Body.self, from: data)
-                return parsed.available ? .available : .taken
-            } catch {
-                throw IdentityServiceError.decoding(error)
-            }
-        case 400:
-            let body = try? decoder.decode(ErrorBody.self, from: data)
-            return .invalid(reason: body?.message)
-        default:
-            throw IdentityServiceError.server(status: httpResponse.statusCode, message: nil)
-        }
     }
 
     // MARK: - Contact discovery
@@ -460,6 +260,29 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
                                     expectsBody: false)
     }
 
+    // MARK: - Passkey enrollment
+
+    func startPasskeyEnrollment(accessToken: String) async throws -> URL {
+        struct EmptyBody: Encodable { }
+        struct Response: Decodable { let enrollUrl: String }
+        let (data, _) = try await sendAuthenticated(path: "/security/passkey/enroll/start",
+                                                    accessToken: accessToken,
+                                                    body: EmptyBody(),
+                                                    language: nil,
+                                                    expectsBody: true)
+        do {
+            let response = try decoder.decode(Response.self, from: data)
+            guard let url = URL(string: response.enrollUrl) else {
+                throw IdentityServiceError.invalidURL
+            }
+            return url
+        } catch let error as IdentityServiceError {
+            throw error
+        } catch {
+            throw IdentityServiceError.decoding(error)
+        }
+    }
+
     @discardableResult
     private func sendAuthenticated(path: String,
                                    accessToken: String,
@@ -532,17 +355,6 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
 
     // MARK: - Private
 
-    private struct VerifyResponse: Decodable {
-        let accessToken: String?
-        let userId: String?
-        let deviceId: String?
-        let baseUrl: String?
-        let isNewUser: Bool?
-        let signupToken: String?
-        let pinRequired: Bool?
-        let pinChallengeToken: String?
-    }
-
     private struct ErrorBody: Decodable {
         let code: String?
         let message: String?
@@ -554,92 +366,6 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
             case message
             case error
             case errorDescription = "error_description"
-        }
-    }
-
-    private func post<RequestBody: Encodable, ResponseBody: Decodable>(path: String, body: RequestBody) async throws -> ResponseBody {
-        let (data, _) = try await sendRequest(path: path, body: body, expectsBody: true)
-        do {
-            return try decoder.decode(ResponseBody.self, from: data)
-        } catch {
-            throw IdentityServiceError.decoding(error)
-        }
-    }
-
-    private func postExpectingEmpty(path: String, body: some Encodable) async throws {
-        _ = try await sendRequest(path: path, body: body, expectsBody: false)
-    }
-
-    private func sendRequest(path: String, body: some Encodable, expectsBody: Bool) async throws -> (Data, HTTPURLResponse) {
-        guard let url = URL(string: path, relativeTo: baseURL) else {
-            throw IdentityServiceError.invalidURL
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        do {
-            request.httpBody = try encoder.encode(body)
-        } catch {
-            throw IdentityServiceError.transport(error)
-        }
-
-        let data: Data
-        let response: URLResponse
-        do {
-            (data, response) = try await session.data(for: request)
-        } catch {
-            throw IdentityServiceError.transport(error)
-        }
-
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw IdentityServiceError.server(status: -1, message: "Non-HTTP response.")
-        }
-
-        switch httpResponse.statusCode {
-        case 200, 202, 204:
-            return (data, httpResponse)
-        case 400:
-            let errorBody = try? decoder.decode(ErrorBody.self, from: data)
-            if errorBody?.code == "invalid_username" {
-                throw IdentityServiceError.invalidUsername(errorBody?.message)
-            }
-            if errorBody?.code == "invalid_otp" {
-                throw IdentityServiceError.invalidOTP
-            }
-            if errorBody?.code == "invalid_pin" {
-                throw IdentityServiceError.invalidPin
-            }
-            throw IdentityServiceError.server(status: 400, message: errorBody?.message ?? errorBody?.error)
-        case 401:
-            let errorBody = try? decoder.decode(ErrorBody.self, from: data)
-            if errorBody?.code == "invalid_signup_token" {
-                throw IdentityServiceError.invalidSignupToken
-            }
-            if errorBody?.code == "invalid_pin_challenge" {
-                throw IdentityServiceError.pinChallengeExpired
-            }
-            throw IdentityServiceError.invalidOTP
-        case 403:
-            throw IdentityServiceError.invalidPin
-        case 409:
-            let errorBody = try? decoder.decode(ErrorBody.self, from: data)
-            if errorBody?.code == "username_taken" {
-                throw IdentityServiceError.usernameTaken
-            }
-            if errorBody?.code == "phone_already_linked" {
-                throw IdentityServiceError.phoneAlreadyLinked
-            }
-            throw IdentityServiceError.server(status: 409, message: errorBody?.message ?? errorBody?.error)
-        case 429:
-            let errorBody = try? decoder.decode(ErrorBody.self, from: data)
-            if errorBody?.code == "pin_locked" {
-                throw IdentityServiceError.pinLocked(retryAfterSeconds: nil)
-            }
-            throw IdentityServiceError.rateLimited
-        default:
-            let message = (try? decoder.decode(ErrorBody.self, from: data)).flatMap { $0.message ?? $0.errorDescription ?? $0.error }
-            throw IdentityServiceError.server(status: httpResponse.statusCode, message: message)
         }
     }
 }

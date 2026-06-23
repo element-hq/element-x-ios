@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Conectați-vă la %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Conectați-vă cu un cod QR";
 "screen_onboarding_sign_up" = "Creați un cont";
-"screen_onboarding_welcome_message" = "Supraalimentat pentru viteză și simplitate.";
-"screen_onboarding_welcome_subtitle" = "Supraalimentat, pentru viteză și simplitate.";
 "screen_onboarding_welcome_title" = "Bun venit în Gua";
 "screen_polls_history_empty_ongoing" = "Nu s-au putut găsi sondaje în curs de desfășurare.";
 "screen_polls_history_empty_past" = "Nu s-au putut găsi sondaje anterioare.";

@@ -48,6 +48,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         switch await restorePreviousLogin(credentials) {
         case .success(let clientProxy):
+            restoreKeyStorageIfNeeded(clientProxy)
             return .success(buildUserSessionWithClient(clientProxy))
         case .failure(let error):
             MXLog.error("Failed restoring login with error: \(error)")
@@ -73,7 +74,9 @@ class UserSessionStore: UserSessionStoreProtocol {
                                                    forUsername: userID)
             
             MXLog.info("Set up session for user \(userID) at: \(sessionDirectories)")
-            
+
+            bootstrapKeyStorageIfNeeded(clientProxy)
+
             return .success(buildUserSessionWithClient(clientProxy))
         } catch {
             MXLog.error("Failed creating user session with error: \(error)")
@@ -92,7 +95,88 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
         
     // MARK: - Private
-    
+
+    /// On a brand new login, automatically enables key backup, generates a recovery key and stores
+    /// it in the keychain so that re-logins on this device can restore silently.
+    ///
+    /// Runs fully detached and is completely fail-safe: any error is logged and we fall through to
+    /// the existing behaviour. It must never block or fail the login.
+    private func bootstrapKeyStorageIfNeeded(_ clientProxy: ClientProxyProtocol) {
+        let secureBackupController = clientProxy.secureBackupController
+        let userID = clientProxy.userID
+
+        Task { [weak self] in
+            guard let self else { return }
+
+            do {
+                guard !appSettings.hasBootstrappedKeyStorage else { return }
+
+                if secureBackupController.recoveryState.value == .enabled {
+                    MXLog.info("Recovery already enabled, marking key storage as bootstrapped.")
+                    appSettings.hasBootstrappedKeyStorage = true
+                    return
+                }
+
+                if secureBackupController.keyBackupState.value != .enabled {
+                    MXLog.info("Bootstrapping key storage: enabling backup.")
+                    if case .failure(let error) = await secureBackupController.enable() {
+                        MXLog.error("Failed enabling backup while bootstrapping key storage: \(error)")
+                        return
+                    }
+                }
+
+                MXLog.info("Bootstrapping key storage: generating recovery key.")
+                switch await secureBackupController.generateRecoveryKey() {
+                case .success(let key):
+                    keychainController.setRecoveryKey(key, forUsername: userID)
+
+                    if case .failure(let error) = await secureBackupController.confirmRecoveryKey(key) {
+                        MXLog.error("Failed confirming recovery key while bootstrapping key storage: \(error)")
+                        return
+                    }
+
+                    appSettings.hasBootstrappedKeyStorage = true
+                    MXLog.info("Finished bootstrapping key storage.")
+                case .failure(let error):
+                    MXLog.error("Failed generating recovery key while bootstrapping key storage: \(error)")
+                }
+            } catch {
+                MXLog.error("Unexpected error while bootstrapping key storage: \(error)")
+            }
+        }
+    }
+
+    /// On a re-login on the same device, silently restores from the recovery key stored in the
+    /// keychain so the user doesn't hit the encryption confirmation/reset screen.
+    ///
+    /// Runs fully detached and is completely fail-safe: any error is logged and we fall through to
+    /// the existing behaviour.
+    private func restoreKeyStorageIfNeeded(_ clientProxy: ClientProxyProtocol) {
+        let secureBackupController = clientProxy.secureBackupController
+        let userID = clientProxy.userID
+
+        Task { [weak self] in
+            guard let self else { return }
+
+            do {
+                guard let storedKey = keychainController.recoveryKey(forUsername: userID) else { return }
+
+                // Only attempt a restore when recovery isn't already fully enabled (e.g. .incomplete).
+                guard secureBackupController.recoveryState.value != .enabled else { return }
+
+                MXLog.info("Restoring key storage from stored recovery key.")
+                switch await secureBackupController.confirmRecoveryKey(storedKey) {
+                case .success:
+                    MXLog.info("Finished restoring key storage from stored recovery key.")
+                case .failure(let error):
+                    MXLog.error("Failed restoring key storage from stored recovery key: \(error)")
+                }
+            } catch {
+                MXLog.error("Unexpected error while restoring key storage: \(error)")
+            }
+        }
+    }
+
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) -> UserSessionProtocol {
         let mediaProvider = MediaProvider(mediaLoader: clientProxy.mediaLoader,
                                           imageCache: .onlyInMemory,

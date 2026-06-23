@@ -11,9 +11,22 @@ import MatrixRustSDK
 #if IS_MAIN_APP
 private struct GuaAppSettingsHook: AppSettingsHookProtocol {
     private enum Constants {
-        static let defaultAccountProvider = "dev.gua.sarahlacerda.me"
-        static let oidcRedirectURL = "me.sarahlacerda.gua://oidc"
+        // Custom-scheme OIDC redirect. MAS's client-registration policy requires a
+        // native redirect with NO authority (`scheme:/path`, not `scheme://host`) whose
+        // reverse-DNS scheme matches the client_uri host — `global.gua` ⇄ `gua.global`.
+        static let oidcRedirectURL = "global.gua:/oidc"
         static let localMasClientID = "01JXGA7E570000000000000000"
+
+        // OIDC dynamic client registration requires client_uri, logo_uri, tos_uri and
+        // policy_uri to all share a single host, and (for a custom-scheme redirect) that
+        // host must be the scheme's reverse-DNS. The redirect scheme is `global.gua`, so
+        // every URI below lives on `gua.global`. MAS only validates the hosts here — it
+        // never fetches these URLs — so registration succeeds even before the pages exist.
+        static let websiteURL: URL = "https://gua.global"
+        static let logoURL: URL = "https://gua.global/gua-icon.png"
+        static let copyrightURL: URL = "https://gua.global/copyright"
+        static let acceptableUseURL: URL = "https://gua.global/terms"
+        static let privacyURL: URL = "https://gua.global/privacy"
         static let localStaticRegistrationURLs = [
             "http://localhost:8008",
             "http://localhost:8008/",
@@ -26,7 +39,13 @@ private struct GuaAppSettingsHook: AppSettingsHookProtocol {
     }
 
     func configure(_ appSettings: AppSettings) -> AppSettings {
-        let accountProvider = string(for: Constants.infoPlistAccountProviderKey) ?? Constants.defaultAccountProvider
+        // The account provider is injected, never hardcoded: an optional Info.plist override
+        // (empty by default) wins, otherwise GuaDeployment supplies it — the production gua.global
+        // host, or the dev host from the per-machine Secrets pipeline. Falls back to the existing
+        // providers if nothing is configured.
+        let injectedProvider = string(for: Constants.infoPlistAccountProviderKey)?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let resolvedProvider = (injectedProvider?.isEmpty == false ? injectedProvider : nil) ?? GuaDeployment.current.defaultAccountProvider
+        let accountProviders = resolvedProvider.map { [$0] } ?? appSettings.accountProviders
         let redirectURLString = string(for: Constants.infoPlistRedirectURLKey) ?? Constants.oidcRedirectURL
 
         guard let redirectURL = URL(string: redirectURLString) else {
@@ -36,16 +55,16 @@ private struct GuaAppSettingsHook: AppSettingsHookProtocol {
 
         let staticRegistrations = makeStaticRegistrations()
 
-        appSettings.override(accountProviders: [accountProvider],
+        appSettings.override(accountProviders: accountProviders,
                              allowOtherAccountProviders: true,
                              hideBrandChrome: appSettings.hideBrandChrome,
                              pushGatewayBaseURL: appSettings.pushGatewayBaseURL,
                              oidcRedirectURL: redirectURL,
-                             websiteURL: appSettings.websiteURL,
-                             logoURL: appSettings.logoURL,
-                             copyrightURL: appSettings.copyrightURL,
-                             acceptableUseURL: appSettings.acceptableUseURL,
-                             privacyURL: appSettings.privacyURL,
+                             websiteURL: Constants.websiteURL,
+                             logoURL: Constants.logoURL,
+                             copyrightURL: Constants.copyrightURL,
+                             acceptableUseURL: Constants.acceptableUseURL,
+                             privacyURL: Constants.privacyURL,
                              encryptionURL: appSettings.encryptionURL,
                              deviceVerificationURL: appSettings.deviceVerificationURL,
                              chatBackupDetailsURL: appSettings.chatBackupDetailsURL,

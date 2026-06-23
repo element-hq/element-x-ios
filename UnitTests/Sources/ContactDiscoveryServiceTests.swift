@@ -16,7 +16,7 @@ final class ContactDiscoveryServiceTests: XCTestCase {
         identityServiceClient.matchesByPhone = Dictionary(uniqueKeysWithValues: phones.map { phone in
             (phone, ContactMatch(phoneNumber: phone, userId: "@\(phone):dev.local", username: nil, displayName: nil))
         })
-        let service = ContactDiscoveryService(identityServiceClient: identityServiceClient, maxNumbersPerRequest: 2)
+        let service = ContactDiscoveryService(identityServiceClient: identityServiceClient, currentUserID: "@me:dev.local", maxNumbersPerRequest: 2)
 
         let matches = try await service.lookupContactMatches(accessToken: "access-token", phones: phones)
 
@@ -54,26 +54,6 @@ private final class IdentityServiceClientStub: IdentityServiceClientProtocol {
     var lookupRequests: [[String]] = []
     var matchesByPhone: [String: ContactMatch] = [:]
 
-    func sendOTP(phone: String, language: String?) async throws {
-        fatalError("Not implemented")
-    }
-
-    func verifyOTP(phone: String, code: String, pin: String?, device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceVerifyOutcome {
-        fatalError("Not implemented")
-    }
-
-    func completeSignup(signupToken: String, username: String, displayName: String, pin: String?, device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceMatrixSession {
-        fatalError("Not implemented")
-    }
-
-    func verifyPinChallenge(pinChallengeToken: String, pin: String, device: IdentityServiceDeviceInfo?) async throws -> IdentityServiceMatrixSession {
-        fatalError("Not implemented")
-    }
-
-    func checkUsernameAvailability(_ username: String) async throws -> UsernameAvailability {
-        fatalError("Not implemented")
-    }
-
     func lookupContacts(accessToken: String, phones: [String]) async throws -> [ContactMatch] {
         lookupRequests.append(phones)
         return phones.compactMap { matchesByPhone[$0] }
@@ -108,6 +88,10 @@ private final class IdentityServiceClientStub: IdentityServiceClientProtocol {
     }
 
     func completePinChange(accessToken: String, challengeId: String, otpCode: String, newPin: String) async throws {
+        fatalError("Not implemented")
+    }
+
+    func startPasskeyEnrollment(accessToken: String) async throws -> URL {
         fatalError("Not implemented")
     }
 }

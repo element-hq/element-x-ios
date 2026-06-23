@@ -735,9 +735,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             
             let typingMembers = typingUserIDs.compactMap { userID in
                 if let member = self.membersPublisher.value.filter({ $0.userID == userID }).first {
-                    return member.displayName ?? member.userID
+                    return member.displayName ?? member.userID.guaDisplayHandle
                 } else {
-                    return userID
+                    return userID.guaDisplayHandle
                 }
             }
             

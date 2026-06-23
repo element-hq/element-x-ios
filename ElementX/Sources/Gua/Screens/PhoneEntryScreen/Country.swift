@@ -63,9 +63,7 @@ struct Country: Identifiable, Equatable, Hashable {
 extension Country {
     /// Resolves the user's country from device locale, falling back to US.
     static var deviceDefault: Country {
-        let region = Locale.current.region?.identifier
-            ?? Locale.current.regionCode
-            ?? "US"
+        let region = Locale.current.region?.identifier ?? "US"
         return all.first { $0.isoCode == region.uppercased() } ?? fallback
     }
 
@@ -378,6 +376,64 @@ extension Country {
         }
 
         return nil
+    }
+
+    /// Number of digits in a national-format subscriber number for this country, inferred
+    /// from its `nationalExample` (e.g. US `"555 123 4567"` → 10, BR `"11 91234 5678"` → 11).
+    /// Returns `nil` when no curated example exists, so callers can stay conservative.
+    var nationalDigitLength: Int? {
+        guard let example = Country.nationalExamples[isoCode] else { return nil }
+        let count = example.filter(\.isNumber).count
+        return count > 0 ? count : nil
+    }
+
+    /// Normalises raw text the user typed/pasted/autofilled into the *local* number field
+    /// into a clean `(country, localDigits)` pair, transparently stripping a redundant
+    /// country code and switching the country when the input is unambiguously international.
+    ///
+    /// Runs on every text change, so it must be a no-op for ordinary local typing.
+    /// Resolution order:
+    ///
+    /// 1. **Leading "+" (explicit E.164)**: longest-prefix dial-code match → matched country
+    ///    + remainder as local digits. Always safe to strip because the user signalled intent.
+    /// 2. **No "+", leading digits == selected dial code AND total length is exactly
+    ///    `dialCode + nationalLength`**: the dial code was redundantly included (e.g. +1
+    ///    selected, `"15551234567"`). Strip it, keep the country. Only fires when the
+    ///    country has a known national length and the remainder can't itself begin with the
+    ///    dial code (NANP national numbers never start with "1"), keeping it unambiguous.
+    /// 3. **Otherwise**: return the digits untouched (only stripped of formatting) so a valid
+    ///    local number is never mangled.
+    static func normalize(rawInput: String, current: Country) -> (country: Country, localDigits: String) {
+        let trimmed = rawInput.trimmingCharacters(in: .whitespaces)
+
+        // 1. Explicit international format.
+        if trimmed.hasPrefix("+") {
+            let digits = trimmed.filter(\.isNumber)
+            for length in stride(from: min(4, digits.count), through: 1, by: -1) {
+                let prefix = String(digits.prefix(length))
+                if let country = all.first(where: { $0.dialCode == prefix }) {
+                    return (country, String(digits.dropFirst(length)))
+                }
+            }
+            // Unknown dial code: keep the current country, drop the leading "+" formatting only.
+            return (current, digits)
+        }
+
+        let digits = trimmed.filter(\.isNumber)
+
+        // 2. Redundant dial code with no "+".
+        let dial = current.dialCode
+        if digits.count > dial.count, digits.hasPrefix(dial), let nationalLength = current.nationalDigitLength {
+            let remainder = String(digits.dropFirst(dial.count))
+            // Only strip when the remaining digits are exactly a full national number AND the
+            // remainder doesn't itself start with the dial code (which would make it ambiguous,
+            // e.g. a genuine local number that happens to begin with the dial-code digits).
+            if remainder.count == nationalLength, !remainder.hasPrefix(dial) {
+                return (current, remainder)
+            }
+        }
+
+        return (current, digits)
     }
 }
 

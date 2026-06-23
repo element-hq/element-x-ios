@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Prihlásiť sa do %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Prihlásiť sa pomocou QR kódu";
 "screen_onboarding_sign_up" = "Vytvoriť účet";
-"screen_onboarding_welcome_message" = "Nadupaný pre rýchlosť a jednoduchosť.";
-"screen_onboarding_welcome_subtitle" = "Nadupaný, pre rýchlosť a jednoduchosť.";
 "screen_onboarding_welcome_title" = "Vitajte v Gua";
 "screen_polls_history_empty_ongoing" = "Nepodarilo sa nájsť žiadne prebiehajúce ankety.";
 "screen_polls_history_empty_past" = "Nie je možné nájsť žiadne predchádzajúce ankety.";

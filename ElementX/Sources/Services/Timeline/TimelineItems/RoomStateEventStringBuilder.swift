@@ -29,11 +29,11 @@ struct RoomStateEventStringBuilder {
         
         let senderIsYou = isOutgoing
         let memberIsYou = memberUserID == userID
-        let member = memberDisplayName ?? memberUserID
+        let member = memberDisplayName ?? memberUserID.guaDisplayHandle
         let senderDisplayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
+            sender.disambiguatedDisplayName ?? sender.id.guaDisplayHandle
         } else {
-            sender.displayName ?? sender.id
+            sender.displayName ?? sender.id.guaDisplayHandle
         }
         
         // Joining, being invited and accepting an invite are all implicit in a 1:1 chat —
@@ -144,9 +144,9 @@ struct RoomStateEventStringBuilder {
     
     func buildString(for state: OtherState, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
         let displayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
+            sender.disambiguatedDisplayName ?? sender.id.guaDisplayHandle
         } else {
-            sender.displayName ?? sender.id
+            sender.displayName ?? sender.id.guaDisplayHandle
         }
         
         switch state {

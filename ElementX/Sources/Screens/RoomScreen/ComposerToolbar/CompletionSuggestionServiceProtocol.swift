@@ -60,7 +60,7 @@ struct SuggestionItem: Identifiable, Equatable {
         case .allUsers:
             return PillUtilities.everyone
         case .user(let user):
-            return user.displayName ?? user.id
+            return user.displayName ?? user.id.guaDisplayHandle
         case .room(let room):
             return room.name
         }
@@ -71,7 +71,7 @@ struct SuggestionItem: Identifiable, Equatable {
         case .allUsers:
             return PillUtilities.atRoom
         case .user(let user):
-            return user.displayName == nil ? nil : user.id
+            return user.displayName == nil ? nil : user.id.guaDisplayHandle
         case .room(let room):
             return room.canonicalAlias
         }

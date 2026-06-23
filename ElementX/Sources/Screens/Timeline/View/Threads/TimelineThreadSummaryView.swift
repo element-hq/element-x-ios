@@ -138,10 +138,10 @@ struct TimelineThreadSummaryView: View {
                                     mediaProvider: context.mediaProvider)
                     .accessibilityHidden(true)
                 
-                Text(sender?.disambiguatedDisplayName ?? senderID)
+                Text(sender?.disambiguatedDisplayName ?? senderID.guaDisplayHandle)
                     .font(.compound.bodyXSSemibold)
                     .foregroundColor(.compound.textPrimary)
-                    .accessibilityLabel(L10n.commonInReplyTo(sender?.disambiguatedDisplayName ?? senderID))
+                    .accessibilityLabel(L10n.commonInReplyTo(sender?.disambiguatedDisplayName ?? senderID.guaDisplayHandle))
                 
                 Text(context.viewState.buildMessagePreview(formattedBody: formattedBody, plainBody: plainBody))
                     .font(.compound.bodyXS)

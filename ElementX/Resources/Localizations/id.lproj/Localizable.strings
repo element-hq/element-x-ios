@@ -883,8 +883,6 @@
 "screen_onboarding_sign_in_to" = "Masuk ke %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Masuk dengan kode QR";
 "screen_onboarding_sign_up" = "Buat akun";
-"screen_onboarding_welcome_message" = "Berdaya penuh untuk kecepatan dan kesederhanaan.";
-"screen_onboarding_welcome_subtitle" = "Berdaya penuh, untuk kecepatan dan kesederhanaan.";
 "screen_onboarding_welcome_title" = "Selamat datang di Gua";
 "screen_polls_history_empty_ongoing" = "Tidak dapat menemukan pemungutan suara yang sedang berlangsung.";
 "screen_polls_history_empty_past" = "Tidak dapat menemukan pemungutan suara sebelumnya.";

@@ -23,6 +23,30 @@
         },
         "region" : "DE"
       }
+    },
+    {
+      "id" : "B0A1C2D3-4E5F-6A7B-8C9D-0E1F2A3B4C5D",
+      "name" : "Portuguese (Brazil)",
+      "options" : {
+        "language" : "pt-BR",
+        "region" : "BR"
+      }
+    },
+    {
+      "id" : "C1D2E3F4-5A6B-7C8D-9E0F-1A2B3C4D5E6F",
+      "name" : "French",
+      "options" : {
+        "language" : "fr",
+        "region" : "FR"
+      }
+    },
+    {
+      "id" : "D2E3F4A5-6B7C-8D9E-0F1A-2B3C4D5E6F7A",
+      "name" : "English (Canada)",
+      "options" : {
+        "language" : "en",
+        "region" : "CA"
+      }
     }
   ],
   "defaultOptions" : {

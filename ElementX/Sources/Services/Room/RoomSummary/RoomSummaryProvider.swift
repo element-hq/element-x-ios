@@ -269,8 +269,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 if let senderID {
                     let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
-                    let senderDisplayName = sender.displayName ?? sender.id
-                    attributedLastMessage = AttributedString(L10n.screenInvitesInvitedYou(senderDisplayName, sender.id))
+                    let senderDisplayName = sender.displayName ?? sender.id.guaDisplayHandle
+                    attributedLastMessage = AttributedString(L10n.screenInvitesInvitedYou(senderDisplayName, sender.id.guaDisplayHandle))
                 }
             case .none:
                 break

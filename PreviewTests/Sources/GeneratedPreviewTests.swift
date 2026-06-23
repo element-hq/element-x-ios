@@ -497,12 +497,6 @@ extension PreviewTests {
         }
     }
 
-    func testOtpEntryScreen() async throws {
-        for (index, preview) in OtpEntryScreen_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
     func testPINTextField() async throws {
         for (index, preview) in PINTextField_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -529,18 +523,6 @@ extension PreviewTests {
 
     func testPillView() async throws {
         for (index, preview) in PillView_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    func testPinChallengeScreen() async throws {
-        for (index, preview) in PinChallengeScreen_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    func testPinSetupScreen() async throws {
-        for (index, preview) in PinSetupScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
@@ -595,12 +577,6 @@ extension PreviewTests {
 
     func testPollView() async throws {
         for (index, preview) in PollView_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    func testProfileSetupScreen() async throws {
-        for (index, preview) in ProfileSetupScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

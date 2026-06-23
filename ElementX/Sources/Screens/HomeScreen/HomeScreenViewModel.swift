@@ -132,12 +132,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         setupRoomListSubscriptions()
-        
+
         updateRooms()
 
         Task { await refreshPinSetupReminder() }
     }
-    
+
     // MARK: - Public
     
     override func process(viewAction: HomeScreenViewAction) {
@@ -315,6 +315,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         let seenInvites = appSettings.seenInvites
         
         for summary in roomSummaryProvider.roomListPublisher.value {
+            // GUA FORK: hide stray empty "orphan" DMs (no members, no name, no messages) so a
+            // half-created or never-joined room doesn't clutter the chat list.
+            guard !summary.isEmptyOrphanRoom else { continue }
+
             let room = HomeScreenRoom(summary: summary,
                                       hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge,
                                       seenInvites: seenInvites)
@@ -497,6 +501,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                          message: message ?? L10n.errorUnknown)
     }
 
+    // GUA FORK: One-shot check at session start. If the identity service reports no PIN
+    // configured and the reminder isn't snoozed, surface the home-screen banner.
     private func refreshPinSetupReminder() async {
         guard let identityServiceClient = IdentityServiceClient(),
               let accessToken = userSession.clientProxy.accessToken else {
