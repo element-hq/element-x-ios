@@ -32,7 +32,7 @@ final class JoinRoomScreenViewModelTests {
         appSettings = AppSettings.volatile()
     }
     
-    deinit {
+    isolated deinit {
         viewModel = nil
         clientProxy = nil
     }

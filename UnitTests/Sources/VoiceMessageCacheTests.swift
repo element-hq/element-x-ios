@@ -33,7 +33,7 @@ final class VoiceMessageCacheTests {
         try fileManager.createDirectory(at: testTemporaryDirectory, withIntermediateDirectories: true)
     }
     
-    deinit {
+    isolated deinit {
         voiceMessageCache.clearCache()
         try? fileManager.removeItem(at: testTemporaryDirectory)
     }

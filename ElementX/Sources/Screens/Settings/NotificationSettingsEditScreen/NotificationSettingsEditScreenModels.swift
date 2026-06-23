@@ -12,7 +12,7 @@ enum NotificationSettingsEditScreenViewModelAction {
     case requestRoomNotificationSettingsPresentation(roomID: String)
 }
 
-enum NotificationSettingsEditScreenDefaultMode {
+nonisolated enum NotificationSettingsEditScreenDefaultMode {
     case allMessages
     case mentionsAndKeywordsOnly
 }

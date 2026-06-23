@@ -30,7 +30,7 @@ final class ElementCallServiceTests {
         service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: testClock, now: dateProvider))
     }
     
-    deinit {
+    isolated deinit {
         callProvider = nil
         currentDate = nil
         testClock = nil
@@ -256,7 +256,7 @@ final class ElementCallServiceTests {
     }
 }
 
-private class PKPushPayloadMock: PKPushPayload {
+private nonisolated class PKPushPayloadMock: PKPushPayload {
     var dict: [AnyHashable: Any] = [:]
     
     override init() {

@@ -126,7 +126,7 @@ final class ClassicAppMediaLoaderTests {
 
 // MARK: - MockURLProtocol
 
-private class MockURLProtocol: URLProtocol {
+private nonisolated class MockURLProtocol: URLProtocol {
     /// The MXC URL whose media requests will be served successfully.
     static let mxcURL: URL = "mxc://matrix.org/testmediaid"
     /// The MXC URL whose media requests will return a 404.
@@ -141,7 +141,7 @@ private class MockURLProtocol: URLProtocol {
     static let thumbnailData = Data("thumbnail data".utf8)
     
     /// The last request handled, for URL/header inspection in tests.
-    static var lastRequest: URLRequest?
+    nonisolated(unsafe) static var lastRequest: URLRequest?
     
     /// Maps a URL path to a fixed `(statusCode, Data)` response.
     private static let responses: [String: (Int, Data)] = [
