@@ -12,7 +12,6 @@ import Combine
 import SwiftUI
 import Testing
 
-@MainActor
 struct PreviewTests {
     private struct SnapshotDevice {
         let name: String

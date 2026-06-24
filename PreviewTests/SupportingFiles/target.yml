@@ -41,6 +41,9 @@ targets:
       base:
         PRODUCT_NAME: PreviewTests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.preview.tests
+        SWIFT_VERSION: 6.2
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
       debug:
       release:
 
