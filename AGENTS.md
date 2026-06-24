@@ -1,6 +1,7 @@
 # AGENTS.md — Element X iOS
 
 > **Repo:** `element-hq/element-x-ios` — iOS Matrix client (SwiftUI + `matrix-rust-sdk`).
+> **Keep current:** Change break fact here — path, command, convention, structure? Fix that fact, same PR. Change not described here? Leave file alone. Edit file? Use caveman skill — match terse voice. No caveman, no edit.
 
 ---
 
