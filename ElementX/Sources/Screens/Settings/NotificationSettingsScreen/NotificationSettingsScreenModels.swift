@@ -31,6 +31,8 @@ struct NotificationSettingsScreenViewState: BindableState {
     var applyingChange = false
     var selectedAlertTone: NotificationTone
     var availableCustomTones: [NotificationTone]
+    
+    let customToneSelectionEnabled: Bool
 }
 
 struct NotificationSettingsScreenViewStateBindings {
