@@ -21,7 +21,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         viewModel.context
     }
     
-    deinit {
+    isolated deinit {
         viewModel = nil
         roomProxy = nil
     }

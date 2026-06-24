@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class MockCoder: NSKeyedArchiver {
+final nonisolated class MockCoder: NSKeyedArchiver {
     deinit {
         finishEncoding()
     }

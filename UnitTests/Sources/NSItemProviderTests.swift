@@ -44,7 +44,10 @@ struct NSItemProviderTests {
     func storeDataAppendsExtensionWhenSuggestedNameLooksLikeAScreenshot() async throws {
         let imageURL = try #require(Bundle(for: BundleAnchor.self).url(forResource: "test_image.png", withExtension: nil),
                                     "Failed retrieving fixture")
-        let provider = try #require(NSItemProvider(contentsOf: imageURL))
+        guard let provider = NSItemProvider(contentsOf: imageURL) else {
+            Issue.record("Failed creating the item provider")
+            return
+        }
         provider.suggestedName = "Screenshot 2026-05-22 at 14.49.40"
         
         let storedURL = try #require(await provider.storeData())
@@ -57,7 +60,10 @@ struct NSItemProviderTests {
     func storeDataPreservesSuggestedNameWithRealExtension() async throws {
         let imageURL = try #require(Bundle(for: BundleAnchor.self).url(forResource: "test_image.png", withExtension: nil),
                                     "Failed retrieving fixture")
-        let provider = try #require(NSItemProvider(contentsOf: imageURL))
+        guard let provider = NSItemProvider(contentsOf: imageURL) else {
+            Issue.record("Failed creating the item provider")
+            return
+        }
         provider.suggestedName = "IMG_1234.png"
         
         let storedURL = try #require(await provider.storeData())

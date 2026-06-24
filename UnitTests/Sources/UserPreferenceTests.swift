@@ -160,7 +160,7 @@ struct UserPreferenceTests {
     }
 }
 
-private struct TestPreferences {
+private nonisolated struct TestPreferences {
     @UserPreference
     var volatileVar: String?
     
@@ -190,7 +190,7 @@ private struct CodableTestType: Equatable, Codable {
     let b: [Int]
 }
 
-private struct TestsKey: PreferenceKeyable, RawRepresentable {
+private nonisolated struct TestsKey: PreferenceKeyable, RawRepresentable {
     static let testKey = Self(rawValue: "testKey")
     static let key1 = Self(rawValue: "foo.volatile")
     static let key2 = Self(rawValue: "foo.plist")

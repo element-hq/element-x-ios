@@ -11,7 +11,7 @@ import Foundation
 import SwiftUI
 
 /// A mock of the SwiftUI `LayoutSubviews` struct
-struct LayoutSubviewsMock: Equatable, RandomAccessCollection {
+nonisolated struct LayoutSubviewsMock: Equatable, RandomAccessCollection {
     var subviews: [LayoutSubviewMock]
     
     /// A type that contains a subsequence of proxy values.
@@ -45,7 +45,7 @@ struct LayoutSubviewsMock: Equatable, RandomAccessCollection {
 }
 
 /// A mock of the SwiftUI `LayoutSubview` struct
-struct LayoutSubviewMock: FlowLayoutSubview, Equatable {
+nonisolated struct LayoutSubviewMock: FlowLayoutSubview, Equatable {
     var size: CGSize
     var layoutValues = [String: Any]()
     var placedPositionCallback: (CGRect) -> Void

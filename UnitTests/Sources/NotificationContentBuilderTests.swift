@@ -11,7 +11,7 @@ import MatrixRustSDK
 import Testing
 import UserNotifications
 
-struct NotificationContentBuilderTests {
+nonisolated struct NotificationContentBuilderTests {
     var notificationContentBuilder: NotificationContentBuilder
     var mediaProvider: MediaProviderMock
     var notificationContent: UNMutableNotificationContent

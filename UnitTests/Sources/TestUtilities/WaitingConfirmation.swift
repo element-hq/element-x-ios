@@ -131,8 +131,8 @@ func waitForConfirmation<R>(_ comment: Comment? = nil,
 /// isolation parameter, so without this hop a body that synchronously triggers main actor
 /// work (e.g. sending a view action) would crash on the runtime's executor check.
 private func runBody<R>(on isolation: isolated (any Actor)?,
-                        _ body: (WaitingConfirmation) throws -> R,
-                        with confirmation: WaitingConfirmation) rethrows -> R {
+                        _ body: (WaitingConfirmation) throws -> sending R,
+                        with confirmation: WaitingConfirmation) rethrows -> sending R {
     try body(confirmation)
 }
 

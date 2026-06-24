@@ -145,7 +145,7 @@ final class BugReportServiceTests {
     }
 }
 
-private class MockURLProtocol: URLProtocol {
+private nonisolated class MockURLProtocol: URLProtocol {
     override func startLoading() {
         guard let url = request.url else { return }
         let reportURL = url.deletingLastPathComponent().appending(path: "123")
