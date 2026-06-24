@@ -36,6 +36,8 @@ targets:
       base:
         PRODUCT_NAME: AccessibilityTests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.accessibility.tests
+        SWIFT_VERSION: 6.2
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
       configs:
       # This is required to remove the $(inherited) flags
       # which would prevent SnapshotTesting to be imported in UI Tests
