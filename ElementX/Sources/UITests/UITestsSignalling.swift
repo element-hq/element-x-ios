@@ -60,6 +60,7 @@ enum UITestsSignalling {
     /// - Within the app, create a `Client` in `app` mode. This will check that the tests are ready and echo back that the app is too.
     /// - Call `waitForApp()` in the tests when you need to send the signal. This will suspend execution until the app has signalled it is ready.
     /// - The two `Client` objects can now be used for two-way signalling.
+    @MainActor
     class Client {
         /// The file watcher responsible for receiving signals.
         private let fileWatcher: FileWatcher.Local
