@@ -7,6 +7,7 @@
 
 @testable import ElementX
 import Foundation
+import Synchronization
 import Testing
 
 final class ClassicAppMediaLoaderTests {
@@ -141,7 +142,10 @@ private nonisolated class MockURLProtocol: URLProtocol {
     static let thumbnailData = Data("thumbnail data".utf8)
     
     /// The last request handled, for URL/header inspection in tests.
-    nonisolated(unsafe) static var lastRequest: URLRequest?
+    private static let _lastRequest: Mutex<URLRequest?> = .init(nil)
+    static var lastRequest: URLRequest? {
+        _lastRequest.withLock { $0 }
+    }
     
     /// Maps a URL path to a fixed `(statusCode, Data)` response.
     private static let responses: [String: (Int, Data)] = [
@@ -150,7 +154,7 @@ private nonisolated class MockURLProtocol: URLProtocol {
     ]
     
     override func startLoading() {
-        MockURLProtocol.lastRequest = request
+        MockURLProtocol._lastRequest.withLock { $0 = request }
         
         guard let url = request.url else {
             client?.urlProtocol(self, didFailWithError: URLError(.badURL))

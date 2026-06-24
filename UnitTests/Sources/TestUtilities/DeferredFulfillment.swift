@@ -72,26 +72,22 @@ func deferFulfillment<P: Publisher<P.Output, Never>>(_ publisher: P,
     return DeferredFulfillment {
         defer { cancellable.cancel() }
         
-        return try await withThrowingTaskGroup(of: Void.self) { group in
-            group.addTask {
-                try? await Task.sleep(for: timeout)
-                continuation.finish()
-            }
-            
-            defer { group.cancelAll() }
-            
-            // This body inherits the caller's actor isolation (via `#isolation`), so `condition`
-            // is evaluated there rather than on the publisher's (possibly background) emission queue.
-            for await value in stream where condition(value) {
-                return value
-            }
-            
-            guard !Task.isCancelled else {
-                // Required to avoid a double recording of the issue in the case where the task is cancelled due to timeout.
-                throw DeferredFulfillmentError.empty
-            }
-            throw DeferredFulfillmentError.noOutput(message: message, sourceLocation: sourceLocation)
+        let timeoutTask = Task {
+            try? await Task.sleep(for: timeout)
+            continuation.finish()
         }
+        defer { timeoutTask.cancel() }
+        
+        // `condition` runs on the caller's actor, not the publisher's (possibly background) emission queue.
+        for await value in stream where condition(value) {
+            return value
+        }
+        
+        guard !Task.isCancelled else {
+            // Required to avoid a double recording of the issue in the case where the task is cancelled due to timeout.
+            throw DeferredFulfillmentError.empty
+        }
+        throw DeferredFulfillmentError.noOutput(message: message, sourceLocation: sourceLocation)
     }
 }
 
@@ -209,22 +205,16 @@ func deferFailure<P: Publisher<P.Output, Never>>(_ publisher: P,
     return DeferredFulfillment {
         defer { cancellable.cancel() }
         
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            // Timeout elapsing without the condition firing = success.
-            group.addTask {
-                try? await Task.sleep(for: timeout)
-                continuation.finish()
-            }
-            
-            defer { group.cancelAll() }
-            
-            // This body inherits the caller's actor isolation (via `#isolation`), so `condition`
-            // is evaluated there rather than on the publisher's (possibly background) emission queue.
-            // If the condition fires before timeout, that's the unexpected failure.
-            for await value in stream where condition(value) {
-                throw DeferredFulfillmentError.unexpectedFulfillment(message: message, sourceLocation: sourceLocation)
-            }
-            // Stream finished via timeout (or upstream completion) without the condition firing = success.
+        let timeoutTask = Task {
+            try? await Task.sleep(for: timeout)
+            continuation.finish()
+        }
+        defer { timeoutTask.cancel() }
+        
+        // `condition` runs on the caller's actor, not the publisher's (possibly background) emission queue.
+        // The condition firing before the timeout is the unexpected failure; the timeout elapsing is success.
+        for await value in stream where condition(value) {
+            throw DeferredFulfillmentError.unexpectedFulfillment(message: message, sourceLocation: sourceLocation)
         }
     }
 }
