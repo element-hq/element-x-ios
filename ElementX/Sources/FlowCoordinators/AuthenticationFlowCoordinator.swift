@@ -275,7 +275,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         let mediaProvider = authenticationService.classicAppAccount.map { account in
             MediaProvider(mediaLoader: ClassicAppMediaLoader(classicAppAccount: account),
                           imageCache: .onlyInMemory,
-                          homeserverReachabilityPublisher: appMediator.networkMonitor.reachabilityPublisher) // Close enough approximation
+                          homeserverReachabilityPublisher: appMediator.networkMonitor.reachabilityPublisher.map(HomeserverReachability.init)) // Close enough approximation
         }
         
         let parameters = AuthenticationStartScreenParameters(authenticationService: authenticationService,

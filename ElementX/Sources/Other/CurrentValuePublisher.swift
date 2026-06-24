@@ -14,9 +14,12 @@ import Combine
 /// `CurrentValueSubject` is documented as thread-safe but is not formally `Sendable`, hence `@unchecked`.
 nonisolated struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @unchecked Sendable {
     private let subject: CurrentValueSubject<Output, Failure>
+    /// Retains the upstream subscription feeding ``subject`` when this publisher is derived via ``map(_:)``.
+    private let cancellable: AnyCancellable?
     
-    init(_ subject: CurrentValueSubject<Output, Failure>) {
+    init(_ subject: CurrentValueSubject<Output, Failure>, cancellable: AnyCancellable? = nil) {
         self.subject = subject
+        self.cancellable = cancellable
     }
     
     init(_ value: Output) {
@@ -29,6 +32,14 @@ nonisolated struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @un
     
     var value: Output {
         subject.value
+    }
+}
+
+nonisolated extension CurrentValuePublisher where Failure == Never {
+    func map<T>(_ transform: @escaping (Output) -> T) -> CurrentValuePublisher<T, Never> {
+        let subject = CurrentValueSubject<T, Never>(transform(value))
+        let cancellable = sink { subject.send(transform($0)) }
+        return .init(subject, cancellable: cancellable)
     }
 }
 

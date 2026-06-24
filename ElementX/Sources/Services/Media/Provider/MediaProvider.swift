@@ -13,11 +13,11 @@ import UIKit
 nonisolated struct MediaProvider: MediaProviderProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let imageCache: Kingfisher.ImageCache
-    private let homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>?
+    private let homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>?
     
     init(mediaLoader: MediaLoaderProtocol,
          imageCache: Kingfisher.ImageCache,
-         homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>?) {
+         homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>?) {
         self.mediaLoader = mediaLoader
         self.imageCache = imageCache
         self.homeserverReachabilityPublisher = homeserverReachabilityPublisher

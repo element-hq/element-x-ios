@@ -160,7 +160,7 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
             return .success(())
         }
         
-        let reachability: NetworkMonitorReachability = mode == .offline ? .unreachable : .reachable
+        let reachability: HomeserverReachability = mode == .offline ? .unreachable : .reachable
         
         let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
                                                                       homeserverReachabilityPublisher: .init(reachability))

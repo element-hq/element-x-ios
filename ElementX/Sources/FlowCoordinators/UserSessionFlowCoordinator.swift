@@ -285,7 +285,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         let reachabilityNotificationID = "io.element.elementx.reachability.notification"
-        userSession.clientProxy.homeserverConnectivityPublisher.removeDuplicates()
+        userSession.clientProxy.homeserverReachabilityPublisher.removeDuplicates()
             .combineLatest(flowParameters.appMediator.networkMonitor.reachabilityPublisher.removeDuplicates())
             .receive(on: DispatchQueue.main)
             .sink { [weak self] homeserverReachability, networkReachability in
@@ -293,16 +293,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 guard let self else { return }
                 switch (networkReachability, homeserverReachability) {
-                case (.reachable, .reachable):
-                    flowParameters.userIndicatorController.retractIndicatorWithId(reachabilityNotificationID)
-                case (.reachable, .unreachable):
-                    flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
-                                                                                 title: L10n.commonServerUnreachable,
-                                                                                 persistent: true))
                 case (.unreachable, _):
                     flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
                                                                                  title: L10n.commonOffline,
                                                                                  persistent: true))
+                case (.reachable, .unreachable):
+                    flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
+                                                                                 title: L10n.commonServerUnreachable,
+                                                                                 persistent: true))
+                // Don't alarm the user while we've intentionally suspended the client.
+                case (.reachable, .reachable), (.reachable, .suspended):
+                    flowParameters.userIndicatorController.retractIndicatorWithId(reachabilityNotificationID)
                 }
             }
             .store(in: &cancellables)

@@ -63,7 +63,6 @@ extension ClientProxyMock {
         loadingStatePublisher = .init(.notLoading)
         verificationStatePublisher = .init(.unknown)
         homeserverReachabilityPublisher = .init(.reachable)
-        homeserverConnectivityPublisher = .init(.reachable)
         
         userAvatarURLPublisher = .init(nil)
         userDisplayNamePublisher = .init("User display name")

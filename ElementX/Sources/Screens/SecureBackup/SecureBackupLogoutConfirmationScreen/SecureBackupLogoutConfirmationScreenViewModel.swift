@@ -13,7 +13,7 @@ typealias SecureBackupLogoutConfirmationScreenViewModelType = StateStoreViewMode
 
 class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmationScreenViewModelType, SecureBackupLogoutConfirmationScreenViewModelProtocol {
     private let secureBackupController: SecureBackupControllerProtocol
-    private let homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>
+    private let homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>
     
     private let backupUploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never> = .init(.waiting)
     
@@ -28,7 +28,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(secureBackupController: SecureBackupControllerProtocol, homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>) {
+    init(secureBackupController: SecureBackupControllerProtocol, homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>) {
         self.secureBackupController = secureBackupController
         self.homeserverReachabilityPublisher = homeserverReachabilityPublisher
         
@@ -90,7 +90,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         }
     }
     
-    private func updateMode(backupState: SecureBackupSteadyState, reachability: NetworkMonitorReachability) {
+    private func updateMode(backupState: SecureBackupSteadyState, reachability: HomeserverReachability) {
         switch (backupState, reachability) {
         case (.waiting, .reachable):
             state.mode = .waitingToStart(hasStalled: false)
@@ -101,7 +101,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             break // Nothing to do here, it will be handled with the result.
         case (.done, .reachable):
             state.mode = .backupOngoing(progress: 1.0)
-        case (_, .unreachable):
+        case (_, .unreachable), (_, .suspended):
             state.mode = .offline
         }
     }

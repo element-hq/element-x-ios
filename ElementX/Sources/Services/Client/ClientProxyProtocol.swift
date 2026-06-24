@@ -108,9 +108,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     var verificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never> { get }
     
-    var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
-    
-    var homeserverConnectivityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
+    var homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never> { get }
     
     var userID: String { get }
     

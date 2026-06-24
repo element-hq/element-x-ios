@@ -2227,16 +2227,11 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingVerificationStatePublisher = value }
     }
     nonisolated(unsafe) var underlyingVerificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never>!
-    var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
+    var homeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never> {
         get { return underlyingHomeserverReachabilityPublisher }
         set(value) { underlyingHomeserverReachabilityPublisher = value }
     }
-    nonisolated(unsafe) var underlyingHomeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
-    var homeserverConnectivityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
-        get { return underlyingHomeserverConnectivityPublisher }
-        set(value) { underlyingHomeserverConnectivityPublisher = value }
-    }
-    nonisolated(unsafe) var underlyingHomeserverConnectivityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
+    nonisolated(unsafe) var underlyingHomeserverReachabilityPublisher: CurrentValuePublisher<HomeserverReachability, Never>!
     var userID: String {
         get { return underlyingUserID }
         set(value) { underlyingUserID = value }

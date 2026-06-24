@@ -13,6 +13,19 @@ enum NetworkMonitorReachability {
     case unreachable
 }
 
+enum HomeserverReachability {
+    /// The store is open and the homeserver is reachable.
+    case reachable
+    /// The homeserver can't be reached even though we're trying to sync (i.e. offline).
+    case unreachable
+    /// The client is suspended, so the store is closed and we're not trying to reach the homeserver.
+    case suspended
+    
+    init(_ reachability: NetworkMonitorReachability) {
+        self = reachability == .reachable ? .reachable : .unreachable
+    }
+}
+
 protocol NetworkMonitorProtocol {
     var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
 }

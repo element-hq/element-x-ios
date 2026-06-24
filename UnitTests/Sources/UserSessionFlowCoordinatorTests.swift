@@ -19,7 +19,7 @@ struct UserSessionFlowCoordinatorTests {
     private let stateMachineFactory = PublishedStateMachineFactory()
     
     private let networkReachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never> = .init(.reachable)
-    private let homeserverReachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never> = .init(.reachable)
+    private let homeserverReachabilitySubject: CurrentValueSubject<HomeserverReachability, Never> = .init(.reachable)
     private var cancellables = Set<AnyCancellable>()
     
     private var tabCoordinator: NavigationTabCoordinator<UserSessionFlowCoordinator.HomeTab>? {
@@ -228,6 +228,14 @@ struct UserSessionFlowCoordinatorTests {
         // Then the indicator should be hidden now as everything is back to normal
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 3)
         #expect(retractReachabilityIndicatorCallsCount == 2)
+        
+        // When the client is suspended.
+        homeserverReachabilitySubject.send(.suspended)
+        try await Task.sleep(for: .milliseconds(100))
+        
+        // Then no unreachable indicator should be shown as the pause is intentional.
+        #expect(userIndicatorController.submitIndicatorDelayCallsCount == 3)
+        #expect(retractReachabilityIndicatorCallsCount == 3)
     }
     
     // MARK: - Helpers
