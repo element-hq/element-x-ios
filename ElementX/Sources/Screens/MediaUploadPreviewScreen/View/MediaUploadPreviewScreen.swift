@@ -289,8 +289,8 @@ private struct PreviewView: UIViewControllerRepresentable {
 }
 
 private class PreviewItem: NSObject, QLPreviewItem {
-    var previewItemURL: URL?
-    var previewItemTitle: String?
+    nonisolated let previewItemURL: URL? // nonisolated as QuickLook can call from any thread (macOS 26).
+    nonisolated let previewItemTitle: String? // nonisolated as QuickLook can call from any thread (macOS 26).
     
     init(previewItemURL: URL?, previewItemTitle: String?) {
         self.previewItemURL = previewItemURL
