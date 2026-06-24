@@ -285,7 +285,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         let reachabilityNotificationID = "io.element.elementx.reachability.notification"
-        userSession.clientProxy.homeserverReachabilityPublisher.removeDuplicates()
+        userSession.clientProxy.homeserverConnectivityPublisher.removeDuplicates()
             .combineLatest(flowParameters.appMediator.networkMonitor.reachabilityPublisher.removeDuplicates())
             .receive(on: DispatchQueue.main)
             .sink { [weak self] homeserverReachability, networkReachability in

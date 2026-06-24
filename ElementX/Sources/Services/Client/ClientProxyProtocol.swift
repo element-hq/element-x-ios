@@ -110,6 +110,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
     
+    var homeserverConnectivityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
+    
     var userID: String { get }
     
     var deviceID: String? { get }
