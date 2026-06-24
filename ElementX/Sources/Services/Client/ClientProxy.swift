@@ -1100,6 +1100,8 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.info("Starting sync")
             await syncService.start()
             
+            updateHomeserverReachability()
+            
             // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
             await cacheAccountURL()
@@ -1108,6 +1110,8 @@ class ClientProxy: ClientProxyProtocol {
             // emit, and the SDK only re-enables queues when client.resume() runs (gated behind the flag).
             sendQueueStatusSubject.send(sendQueueStatusSubject.value)
         case .suspended:
+            updateHomeserverReachability()
+            
             MXLog.info("Stopping sync")
             await syncService.stop()
             MXLog.info("Sync stopped")
@@ -1175,21 +1179,34 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    /// The latest state reported by the sync service. Stored so reachability can be recomputed after a
+    /// resume, where the store reopens but the service may not emit a fresh state.
+    private var syncServiceState: SyncServiceState?
+    
     private func createSyncServiceStateObserver(_ syncService: SyncService) -> TaskHandle {
         syncService.state(listener: SDKListener.onMainActor { [weak self] state in
             guard let self else { return }
             
             MXLog.info("Received sync service update: \(state)")
             
-            switch state {
-            case .running, .terminated, .idle:
-                homeserverReachabilitySubject.send(.reachable)
-            case .offline:
-                homeserverReachabilitySubject.send(.unreachable)
-            case .error:
+            syncServiceState = state
+            
+            if case .error = state {
                 restartServices()
+            } else {
+                updateHomeserverReachability()
             }
         })
+    }
+    
+    private func updateHomeserverReachability() {
+        let reachability: NetworkMonitorReachability = if desiredServiceState == .running, syncServiceState != .offline {
+            .reachable
+        } else {
+            .unreachable
+        }
+        
+        homeserverReachabilitySubject.send(reachability)
     }
     
     private func createMediaPreviewConfigObserver() async -> TaskHandle? {
