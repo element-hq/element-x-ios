@@ -156,7 +156,10 @@ class RoomScreenUITests: XCTestCase {
     
     private func performOperation(_ operation: UITestsSignal.Timeline, using client: UITestsSignalling.Client) async throws {
         try client.send(.timeline(operation))
-        await _ = client.signals.values.first { $0 == .success }
+        // The type is not sendable so we can't use the first function directly on the values.
+        // So we need to make an async iterator which allows us to await a value on the same isolation context.
+        var iterator = client.signals.values.makeAsyncIterator()
+        while let signal = await iterator.next(isolation: #isolation), signal != .success { }
         try await Task.sleep(for: .seconds(2)) // Allow the timeline to update
     }
     
