@@ -18,13 +18,13 @@ struct SecureBackupLogoutConfirmationScreenViewModelTests {
     }
     
     private var secureBackupController: SecureBackupControllerMock
-    private var reachabilitySubject: CurrentValueSubject<NetworkMonitorReachability, Never>
+    private var reachabilitySubject: CurrentValueSubject<HomeserverReachability, Never>
     
     init() {
         secureBackupController = SecureBackupControllerMock()
         secureBackupController.keyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
         
-        reachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
+        reachabilitySubject = CurrentValueSubject<HomeserverReachability, Never>(.reachable)
         
         viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
                                                                   homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher())

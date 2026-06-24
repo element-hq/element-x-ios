@@ -16,7 +16,7 @@ import Testing
 struct MediaProviderTests {
     private var mediaLoader: MediaLoaderMock
     private var imageCache: MockImageCache
-    private var reachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
+    private var reachabilitySubject = CurrentValueSubject<HomeserverReachability, Never>(.reachable)
     
     var mediaProvider: MediaProvider!
     
@@ -40,7 +40,7 @@ struct MediaProviderTests {
         
         mediaLoader.loadMediaContentForSourceClosure = { [reachabilitySubject] _ in
             switch reachabilitySubject.value {
-            case .unreachable:
+            case .unreachable, .suspended:
                 reachabilitySubject.send(.reachable)
                 throw MediaProviderTestsError.error
             case .reachable:
