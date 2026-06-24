@@ -180,9 +180,19 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
+    /// Reports unreachable while suspended (the store is closed) as well as when offline. Use this to gate
+    /// work that needs an open store, such as media loading.
     private let homeserverReachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
     var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
         homeserverReachabilitySubject.asCurrentValuePublisher()
+    }
+    
+    /// The homeserver's reachability derived from the sync service alone, i.e. it stays reachable while the
+    /// client is suspended. Use this for user-facing messaging so we don't claim the server is unreachable
+    /// when we've simply paused syncing.
+    private let homeserverConnectivitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
+    var homeserverConnectivityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
+        homeserverConnectivitySubject.asCurrentValuePublisher()
     }
     
     private let timelineMediaVisibilitySubject = CurrentValueSubject<TimelineMediaVisibility, Never>(.always)
@@ -1200,6 +1210,8 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func updateHomeserverReachability() {
+        homeserverConnectivitySubject.send(syncServiceState == .offline ? .unreachable : .reachable)
+        
         let reachability: NetworkMonitorReachability = if desiredServiceState == .running, syncServiceState != .offline {
             .reachable
         } else {

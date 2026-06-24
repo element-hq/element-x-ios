@@ -2232,6 +2232,11 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHomeserverReachabilityPublisher = value }
     }
     nonisolated(unsafe) var underlyingHomeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
+    var homeserverConnectivityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
+        get { return underlyingHomeserverConnectivityPublisher }
+        set(value) { underlyingHomeserverConnectivityPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingHomeserverConnectivityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
     var userID: String {
         get { return underlyingUserID }
         set(value) { underlyingUserID = value }
