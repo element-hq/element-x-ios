@@ -1,6 +1,7 @@
 # AGENTS.md — Element X iOS
 
 > **Repo:** `element-hq/element-x-ios` — iOS Matrix client (SwiftUI + `matrix-rust-sdk`).
+> **Keep current:** Change break fact here — path, command, convention, structure? Fix that fact, same PR. Change not described here? Leave file alone. Edit file? Use caveman skill — match terse voice. No caveman, no edit.
 
 ---
 
@@ -274,9 +275,10 @@ Services = where product-level opinions live (Rust SDK stays spec-faithful).
 
 ## Concurrency & Actors
 
-- Most protocols `@MainActor`. Conforming types inherit.
-- Views, screens, coordinators: always `@MainActor`.
-- Some services `nonisolated` for background work.
+- All targets **Swift 6.2**, approachable concurrency.
+- **ElementX** app, **UnitTests** + **PreviewTests**: `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` — no redundant `@MainActor`. Other targets (incl. app extensions) nonisolated.
+- Services + data-layer types: `nonisolated` + `Sendable` when background work need.
+- Never `@unchecked Sendable` / `nonisolated(unsafe)`. Dev add these.
 - `actor` types rare in codebase.
 
 ---
