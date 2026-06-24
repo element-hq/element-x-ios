@@ -153,11 +153,11 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
 class MediaPreviewItem: NSObject, QLPreviewItem {
     let file: MediaFileHandleProxy
     
-    var previewItemURL: URL? {
+    nonisolated var previewItemURL: URL? { // nonisolated as QuickLook can call from any thread (macOS 26).
         file.url
     }
     
-    let previewItemTitle: String?
+    nonisolated let previewItemTitle: String? // nonisolated as QuickLook can call from any thread (macOS 26).
     
     init(file: MediaFileHandleProxy, title: String?) {
         self.file = file

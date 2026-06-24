@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import QuickLook
+import Synchronization
 
 /// A dedicated data source for QLPreviewController to support timeline updates. This was added to
 /// workaround the fact that calling `reloadData` on the controller **always** reloads the current
@@ -147,8 +148,14 @@ enum TimelineMediaPreviewItem: Equatable {
     
     /// Wraps a media file and title to be previewed with QuickLook.
     @Observable class Media: NSObject, QLPreviewItem, Identifiable {
-        fileprivate(set) var timelineItem: EventBasedMessageTimelineItemProtocol
-        var fileHandle: MediaFileHandleProxy?
+        fileprivate(set) var timelineItem: EventBasedMessageTimelineItemProtocol {
+            didSet { updatePreviewItemValues() }
+        }
+        
+        var fileHandle: MediaFileHandleProxy? {
+            didSet { updatePreviewItemValues() }
+        }
+        
         var downloadError: Error?
         
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
@@ -184,15 +191,22 @@ enum TimelineMediaPreviewItem: Equatable {
         
         // MARK: QLPreviewItem
         
-        var previewItemURL: URL? {
-            fileHandle?.url
+        private let _previewItemURL = Mutex<URL?>(nil)
+        nonisolated var previewItemURL: URL? { // nonisolated as QuickLook can call from any thread (macOS 26).
+            _previewItemURL.withLock { $0 }
         }
         
-        var previewItemTitle: String? {
-            switch fileHandle?.url {
-            case .some: filename
-            case .none: " " // Don't show any background text when the preview is still loading.
-            }
+        private let _previewItemTitle = Mutex<String?>(" ")
+        nonisolated var previewItemTitle: String? { // nonisolated as QuickLook can call from any thread (macOS 26).
+            _previewItemTitle.withLock { $0 }
+        }
+        
+        private func updatePreviewItemValues() {
+            let url = fileHandle?.url
+            _previewItemURL.withLock { $0 = url }
+            
+            // Don't show any background text (" ") while the preview is still loading.
+            _previewItemTitle.withLock { $0 = url == nil ? " " : filename }
         }
         
         // MARK: Event details
