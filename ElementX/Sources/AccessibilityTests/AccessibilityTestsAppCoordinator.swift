@@ -143,6 +143,7 @@ struct PreviewsWrapperView: View {
             // so we added a timeout. Since we are going to migrate from publishers to streams,
             // this is a temporary solution
             var iterator = publisher
+                .subscribe(on: DispatchQueue.main)
                 .timeout(.seconds(1), scheduler: DispatchQueue.main)
                 .values
                 .makeAsyncIterator()
