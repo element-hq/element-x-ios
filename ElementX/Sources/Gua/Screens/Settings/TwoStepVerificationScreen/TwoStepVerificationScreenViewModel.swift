@@ -47,6 +47,7 @@ class TwoStepVerificationScreenViewModel: TwoStepVerificationScreenViewModelType
             state.selectedCountry = .deviceDefault
             state.phase = .enteringPhone
         case .phoneChanged:
+            normalizeInput()
             autoDetectCountry()
             reformatNumber()
             if state.errorMessage != nil { state.errorMessage = nil }
@@ -94,6 +95,20 @@ class TwoStepVerificationScreenViewModel: TwoStepVerificationScreenViewModelType
         state.bindings.pin = ""
         state.bindings.localPhoneNumber = ""
         state.bindings.isCountryPickerPresented = false
+    }
+
+    /// Strips an international prefix ("+1…" or a redundant leading dial code) that iOS
+    /// autofill pastes into the local-number field, switching the country when needed.
+    /// Mirrors the same method in `PhoneEntryScreenViewModel`.
+    private func normalizeInput() {
+        let raw = state.bindings.localPhoneNumber
+        let (country, localDigits) = Country.normalize(rawInput: raw, current: state.selectedCountry)
+        if country != state.selectedCountry {
+            state.selectedCountry = country
+        }
+        if localDigits != raw.filter(\.isNumber) {
+            state.bindings.localPhoneNumber = localDigits
+        }
     }
 
     /// Rewrites the local phone digits with the country-specific live-formatted version
