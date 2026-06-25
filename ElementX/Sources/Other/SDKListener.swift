@@ -25,87 +25,123 @@ final class SDKListener<T> {
 // MARK: QRCodeLoginService
 
 extension SDKListener: QrLoginProgressListener where T == QrLoginProgress {
-    func onUpdate(state: QrLoginProgress) { onUpdateClosure(state) }
+    func onUpdate(state: QrLoginProgress) {
+        onUpdateClosure(state)
+    }
 }
 
 // MARK: ClientProxy
 
 extension SDKListener: MediaPreviewConfigListener where T == MediaPreviewConfig? {
-    func onChange(mediaPreviewConfig: MediaPreviewConfig?) { onUpdateClosure(mediaPreviewConfig) }
+    func onChange(mediaPreviewConfig: MediaPreviewConfig?) {
+        onUpdateClosure(mediaPreviewConfig)
+    }
 }
 
 extension SDKListener: SyncServiceStateObserver where T == SyncServiceState {
-    func onUpdate(state: SyncServiceState) { onUpdateClosure(state) }
+    func onUpdate(state: SyncServiceState) {
+        onUpdateClosure(state)
+    }
 }
 
 extension SDKListener: RoomListServiceStateListener where T == RoomListServiceState {
-    func onUpdate(state: RoomListServiceState) { onUpdateClosure(state) }
+    func onUpdate(state: RoomListServiceState) {
+        onUpdateClosure(state)
+    }
 }
 
 extension SDKListener: RoomListServiceSyncIndicatorListener where T == RoomListServiceSyncIndicator {
-    func onUpdate(syncIndicator: RoomListServiceSyncIndicator) { onUpdateClosure(syncIndicator) }
+    func onUpdate(syncIndicator: RoomListServiceSyncIndicator) {
+        onUpdateClosure(syncIndicator)
+    }
 }
 
 extension SDKListener: VerificationStateListener where T == VerificationState {
-    func onUpdate(status: VerificationState) { onUpdateClosure(status) }
+    func onUpdate(status: VerificationState) {
+        onUpdateClosure(status)
+    }
 }
 
 // MARK: SecureBackupController
 
 extension SDKListener: BackupStateListener where T == BackupState {
-    func onUpdate(status: BackupState) { onUpdateClosure(status) }
+    func onUpdate(status: BackupState) {
+        onUpdateClosure(status)
+    }
 }
 
 extension SDKListener: RecoveryStateListener where T == RecoveryState {
-    func onUpdate(status: RecoveryState) { onUpdateClosure(status) }
+    func onUpdate(status: RecoveryState) {
+        onUpdateClosure(status)
+    }
 }
 
 extension SDKListener: EnableRecoveryProgressListener where T == EnableRecoveryProgress {
-    func onUpdate(status: EnableRecoveryProgress) { onUpdateClosure(status) }
+    func onUpdate(status: EnableRecoveryProgress) {
+        onUpdateClosure(status)
+    }
 }
 
 extension SDKListener: BackupSteadyStateListener where T == BackupUploadState {
-    func onUpdate(status: BackupUploadState) { onUpdateClosure(status) }
+    func onUpdate(status: BackupUploadState) {
+        onUpdateClosure(status)
+    }
 }
 
 // MARK: RoomSummaryProvider
 
 extension SDKListener: RoomListEntriesListener where T == [RoomListEntriesUpdate] {
-    func onUpdate(roomEntriesUpdate: [RoomListEntriesUpdate]) { onUpdateClosure(roomEntriesUpdate) }
+    func onUpdate(roomEntriesUpdate: [RoomListEntriesUpdate]) {
+        onUpdateClosure(roomEntriesUpdate)
+    }
 }
 
 extension SDKListener: RoomListLoadingStateListener where T == RoomListLoadingState {
-    func onUpdate(state: RoomListLoadingState) { onUpdateClosure(state) }
+    func onUpdate(state: RoomListLoadingState) {
+        onUpdateClosure(state)
+    }
 }
 
 // MARK: Spaces
 
 extension SDKListener: SpaceServiceJoinedSpacesListener where T == [SpaceListUpdate] {
-    func onUpdate(rooms: [SpaceListUpdate]) { onUpdateClosure(rooms) }
+    func onUpdate(rooms: [SpaceListUpdate]) {
+        onUpdateClosure(rooms)
+    }
 }
 
 extension SDKListener: SpaceRoomListEntriesListener where T == [SpaceListUpdate] {
-    func onUpdate(roomUpdates: [SpaceListUpdate]) { onUpdateClosure(roomUpdates) }
+    func onUpdate(roomUpdates: [SpaceListUpdate]) {
+        onUpdateClosure(roomUpdates)
+    }
 }
 
 extension SDKListener: SpaceRoomListPaginationStateListener where T == SpaceRoomListPaginationState {
-    func onUpdate(paginationState: SpaceRoomListPaginationState) { onUpdateClosure(paginationState) }
+    func onUpdate(paginationState: SpaceRoomListPaginationState) {
+        onUpdateClosure(paginationState)
+    }
 }
 
 // MARK: Room
 
 extension SDKListener: RoomInfoListener where T == RoomInfo {
-    func call(roomInfo: RoomInfo) { onUpdateClosure(roomInfo) }
+    func call(roomInfo: RoomInfo) {
+        onUpdateClosure(roomInfo)
+    }
 }
 
 extension SDKListener: CallDeclineListener where T == String {
-    func call(declinerUserId: String) { onUpdateClosure(declinerUserId) }
+    func call(declinerUserId: String) {
+        onUpdateClosure(declinerUserId)
+    }
 }
 
 // MARK: TimelineProxy
 
 extension SDKListener: PaginationStatusListener where T == MatrixRustSDK.PaginationStatus {
-    func onUpdate(status: MatrixRustSDK.PaginationStatus) { onUpdateClosure(status) }
+    func onUpdate(status: MatrixRustSDK.PaginationStatus) {
+        onUpdateClosure(status)
+    }
 }
 
 extension SDKListener: ProgressWatcher where T == Double {
@@ -119,11 +155,15 @@ extension SDKListener: ProgressWatcher where T == Double {
 // MARK: TimelineItemProvider
 
 extension SDKListener: TimelineListener where T == [TimelineDiff] {
-    func onUpdate(diff: [TimelineDiff]) { onUpdateClosure(diff) }
+    func onUpdate(diff: [TimelineDiff]) {
+        onUpdateClosure(diff)
+    }
 }
 
 // MARK: RoomDirectorySearchProxy
 
 extension SDKListener: RoomDirectorySearchEntriesListener where T == [RoomDirectorySearchEntryUpdate] {
-    func onUpdate(roomEntriesUpdate: [RoomDirectorySearchEntryUpdate]) { onUpdateClosure(roomEntriesUpdate) }
+    func onUpdate(roomEntriesUpdate: [RoomDirectorySearchEntryUpdate]) {
+        onUpdateClosure(roomEntriesUpdate)
+    }
 }

@@ -6,11 +6,9 @@
 //
 
 import Combine
-import XCTest
-
-import MatrixRustSDK
-
 @testable import ElementX
+import MatrixRustSDK
+import XCTest
 
 @MainActor
 final class QRCodeLoginScreenViewModelTests: XCTestCase {

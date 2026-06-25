@@ -7,7 +7,6 @@
 
 import Combine
 import Foundation
-
 import MatrixRustSDK
 
 final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {

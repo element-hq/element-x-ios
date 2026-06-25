@@ -45,8 +45,6 @@ struct KnockRequestsBannerView: View {
                                                onDismiss: onDismiss,
                                                onViewAll: onViewAll,
                                                mediaProvider: mediaProvider)
-        } else {
-            EmptyView()
         }
     }
 }

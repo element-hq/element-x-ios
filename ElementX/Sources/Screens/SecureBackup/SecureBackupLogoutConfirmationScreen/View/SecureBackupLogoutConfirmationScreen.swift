@@ -55,7 +55,6 @@ struct SecureBackupLogoutConfirmationScreen: View {
         }
     }
     
-    @ViewBuilder
     private var footer: some View {
         VStack(spacing: 16.0) {
             if case .saveRecoveryKey = context.viewState.mode {

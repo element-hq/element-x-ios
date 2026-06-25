@@ -54,8 +54,7 @@ extension AVMetadataMachineReadableCodeObject {
             batch = takeBatch(&halves, version: symbolVersion)
             output.append(contentsOf: batch)
         }
-        let data = Data(output)
-        return data
+        return Data(output)
     }
 
     private static func takeBatch(_ input: inout [HalfByte], version: Int) -> [UInt8] {

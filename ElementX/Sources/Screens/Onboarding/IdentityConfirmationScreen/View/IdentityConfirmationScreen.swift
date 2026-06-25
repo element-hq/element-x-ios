@@ -34,7 +34,6 @@ struct IdentityConfirmationScreen: View {
     
     // MARK: - Private
     
-    @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
             BigIcon(icon: \.lockSolid)
@@ -59,7 +58,6 @@ struct IdentityConfirmationScreen: View {
         }
     }
     
-    @ViewBuilder
     private var actionButtons: some View {
         VStack(spacing: 16) {
             if context.viewState.availableActions.contains(.interactiveVerification) {

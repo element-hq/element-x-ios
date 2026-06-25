@@ -11,7 +11,9 @@ struct Country: Identifiable, Equatable, Hashable {
     let isoCode: String // ISO 3166-1 alpha-2, e.g. "US"
     let dialCode: String // E.164 calling code digits, e.g. "1"
 
-    var id: String { isoCode }
+    var id: String {
+        isoCode
+    }
 
     var name: String {
         Locale.current.localizedString(forRegionCode: isoCode) ?? isoCode
@@ -328,7 +330,7 @@ extension Country {
     /// Caribbean countries are disambiguated by full +1XXX dial codes in `all`;
     /// Canada vs US must be disambiguated by the local 3-digit area code.
     /// Source: Canadian Numbering Administrator (CNA), 2024.
-    static let canadianAreaCodes: Set<String> = [
+    static let canadianAreaCodes: Set = [
         "204", "226", "236", "249", "250", "263", "289", "306", "343", "354",
         "365", "367", "368", "382", "387", "403", "416", "418", "428", "431",
         "437", "438", "450", "468", "474", "506", "514", "519", "548", "568",

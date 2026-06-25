@@ -141,6 +141,3 @@ protocol TimelineProxyProtocol {
                                 html: String?,
                                 intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation
 }
-
-// sourcery: AutoMockable
-extension TimelineProxyProtocol { }

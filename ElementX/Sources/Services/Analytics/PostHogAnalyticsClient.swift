@@ -29,7 +29,9 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     /// Not persisted for now, should be set on start.
     private var superProperties: AnalyticsEvent.SuperProperties?
     
-    var isRunning: Bool { postHog != nil }
+    var isRunning: Bool {
+        postHog != nil
+    }
     
     func start(analyticsConfiguration: AnalyticsConfiguration) {
         // Only start if analytics have been configured in BuildSettings

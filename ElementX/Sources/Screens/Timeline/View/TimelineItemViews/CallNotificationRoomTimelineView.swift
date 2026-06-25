@@ -44,10 +44,8 @@ struct CallNotificationRoomTimelineView: View {
                 .foregroundColor(.compound.textSecondary)
         }
         .padding(12)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(.compound.borderInteractiveSecondary, lineWidth: 1)
-        )
+        .overlay(RoundedRectangle(cornerRadius: 8)
+            .stroke(.compound.borderInteractiveSecondary, lineWidth: 1))
         .padding(16)
     }
 }

@@ -113,7 +113,9 @@ struct MapLibreStaticMapView_Previews: PreviewProvider, TestablePreview {
 }
 
 private struct MapTilerURLBuilderMock: MapTilerURLBuilderProtocol {
-    func dynamicMapURL(for style: MapTilerStyle) -> URL? { nil }
+    func dynamicMapURL(for style: MapTilerStyle) -> URL? {
+        nil
+    }
     
     func staticMapURL(for style: MapTilerStyle,
                       coordinates: CLLocationCoordinate2D,

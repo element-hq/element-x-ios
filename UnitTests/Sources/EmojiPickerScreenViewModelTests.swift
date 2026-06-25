@@ -5,16 +5,17 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 final class EmojiPickerScreenViewModelTests: XCTestCase {
     var timelineProxy: TimelineProxyMock!
     
     var viewModel: EmojiPickerScreenViewModel!
-    var context: EmojiPickerScreenViewModel.Context { viewModel.context }
+    var context: EmojiPickerScreenViewModel.Context {
+        viewModel.context
+    }
     
     func testToggleReaction() async throws {
         setupViewModel()

@@ -56,8 +56,13 @@ import SwiftUI
         let module: NavigationModule
         let details: TabDetails
         
-        var id: ObjectIdentifier { module.id }
-        @MainActor var coordinator: CoordinatorProtocol? { module.coordinator }
+        var id: ObjectIdentifier {
+            module.id
+        }
+
+        @MainActor var coordinator: CoordinatorProtocol? {
+            module.coordinator
+        }
     }
     
     fileprivate var tabModules = [TabModule]() {
@@ -119,11 +124,11 @@ import SwiftUI
         sheetModule?.coordinator
     }
     
-    /// Present a sheet on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
-    /// then the presentation will be proxied to the split
-    /// - Parameters:
-    ///   - coordinator: the coordinator to display
-    ///   - animated: whether to animate the transition or not. Default is true
+    // Present a sheet on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
+    // then the presentation will be proxied to the split
+    // - Parameters:
+    //   - coordinator: the coordinator to display
+    //   - animated: whether to animate the transition or not. Default is true
 
     ///   - dismissalCallback: called when the sheet has been dismissed, programatically or otherwise
     func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {

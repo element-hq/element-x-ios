@@ -19,7 +19,7 @@ struct CompletionSuggestionView: View {
         // added by the list itself when presenting the divider
         static let listItemSpacing: CGFloat = 4.0
         static let leadingPadding: CGFloat = 16.0
-        // To make the scrolling more apparent we show a factional amount
+        /// To make the scrolling more apparent we show a factional amount
         static let maxVisibleRows: CGFloat = 4.5
     }
 
@@ -85,13 +85,9 @@ struct CompletionSuggestionView: View {
 }
 
 private struct BackgroundView<Content: View>: View {
-    var content: () -> Content
+    @ViewBuilder var content: () -> Content
     
     private let shadowRadius: CGFloat = 20.0
-    
-    init(@ViewBuilder content: @escaping () -> Content) {
-        self.content = content
-    }
     
     var body: some View {
         content()

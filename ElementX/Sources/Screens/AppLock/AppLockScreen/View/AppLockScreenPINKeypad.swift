@@ -116,7 +116,9 @@ struct AppLockScreenPINKeypad_Previews: PreviewProvider {
         @StateObject var model = PreviewModel()
         class PreviewModel: ObservableObject {
             @Published var pinCode = ""
-            var output: String { pinCode.isEmpty ? "Enter code" : pinCode }
+            var output: String {
+                pinCode.isEmpty ? "Enter code" : pinCode
+            }
         }
         
         var body: some View {

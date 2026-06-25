@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftUIIntrospect
 import UIKit
-
 import WysiwygComposer
 
 protocol PillAttachmentViewProviderDelegate: AnyObject {

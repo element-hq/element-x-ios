@@ -5,9 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class RoomChangePermissionsScreenViewModelTests: XCTestCase {
@@ -67,7 +66,7 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
                        "Only the avatar setting should be applied. No other settings were changed so they should be nil to remain left alone.")
     }
     
-    func testSaveNoChanges() async throws {
+    func testSaveNoChanges() {
         // Given a screen with no changes.
         XCTAssertFalse(context.viewState.hasChanges)
         

@@ -66,7 +66,7 @@ protocol IdentityServiceClientProtocol {
 
 /// Ephemeral credentials minted by the identity-service for the Matrix
 /// `m.login.password` UIA stage during `client.resetIdentity()`.
-struct IdentityResetCredentials: Equatable, Sendable {
+struct IdentityResetCredentials: Equatable {
     let userId: String
     let password: String
 }
@@ -74,13 +74,15 @@ struct IdentityResetCredentials: Equatable, Sendable {
 /// A contact-discovery hit: an address-book phone number that belongs to a Gua account.
 /// `phoneNumber` echoes back the submitted number so the client can map it onto the local
 /// address book; `username` is the global Gua handle when one has been assigned.
-struct ContactMatch: Equatable, Sendable, Identifiable {
+struct ContactMatch: Equatable, Identifiable {
     let phoneNumber: String
     let userId: String
     let username: String?
     let displayName: String?
 
-    var id: String { userId }
+    var id: String {
+        userId
+    }
 }
 
 final class IdentityServiceClient: IdentityServiceClientProtocol {

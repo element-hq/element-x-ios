@@ -123,7 +123,6 @@ struct FindFriendsScreen: View {
         return String(first).uppercased()
     }
 
-    @ViewBuilder
     private func messageState(systemImage: String?,
                               title: String,
                               message: String?,

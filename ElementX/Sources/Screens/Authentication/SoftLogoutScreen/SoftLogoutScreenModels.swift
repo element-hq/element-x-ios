@@ -53,7 +53,9 @@ struct SoftLogoutScreenViewState: BindableState {
     var bindings: SoftLogoutScreenBindings
 
     /// The types of login supported by the homeserver.
-    var loginMode: LoginMode { homeserver.loginMode }
+    var loginMode: LoginMode {
+        homeserver.loginMode
+    }
     
     /// The presentation anchor used for OIDC authentication.
     var window: UIWindow?

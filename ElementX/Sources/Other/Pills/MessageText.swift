@@ -13,7 +13,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
     var updateClosure: (() -> Void)?
     private var pillViews = NSHashTable<UIView>.weakObjects()
     
-    // This prevents the magnifying glass from showing up
+    /// This prevents the magnifying glass from showing up
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         gestureRecognizer as? UILongPressGestureRecognizer == nil
     }

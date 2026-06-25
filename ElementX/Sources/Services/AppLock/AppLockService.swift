@@ -17,7 +17,9 @@ class AppLockService: AppLockServiceProtocol {
     private let timer: AppLockTimer
     private let unlockPolicy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
     
-    var isMandatory: Bool { appSettings.appLockIsMandatory }
+    var isMandatory: Bool {
+        appSettings.appLockIsMandatory
+    }
     
     var isEnabled: Bool {
         do {
@@ -30,7 +32,9 @@ class AppLockService: AppLockServiceProtocol {
     }
     
     private var isEnabledSubject: PassthroughSubject<Bool, Never> = .init()
-    var isEnabledPublisher: AnyPublisher<Bool, Never> { isEnabledSubject.eraseToAnyPublisher() }
+    var isEnabledPublisher: AnyPublisher<Bool, Never> {
+        isEnabledSubject.eraseToAnyPublisher()
+    }
     
     var biometryType: LABiometryType {
         updateBiometrics()
@@ -48,7 +52,9 @@ class AppLockService: AppLockServiceProtocol {
         return state == context.evaluatedPolicyDomainState
     }
     
-    var numberOfPINAttempts: AnyPublisher<Int, Never> { appSettings.$appLockNumberOfPINAttempts }
+    var numberOfPINAttempts: AnyPublisher<Int, Never> {
+        appSettings.$appLockNumberOfPINAttempts
+    }
     
     init(keychainController: KeychainControllerProtocol, appSettings: AppSettings, context: LAContext = .init()) {
         self.keychainController = keychainController

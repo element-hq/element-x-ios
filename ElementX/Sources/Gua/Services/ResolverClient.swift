@@ -10,7 +10,7 @@ import Foundation
 /// created (register). The homeserver is identified by its Matrix `serverName`; the client configures OIDC
 /// against that and discovers the base URL + MAS issuer via well-known, exactly as it would for any
 /// account provider.
-struct ResolvedHomeserver: Equatable, Sendable {
+struct ResolvedHomeserver: Equatable {
     let serverName: String
     let baseURL: String
     let masIssuer: String?
@@ -18,7 +18,7 @@ struct ResolvedHomeserver: Equatable, Sendable {
 }
 
 /// Outcome of resolving a phone number against the Gua resolver.
-struct HomeserverResolution: Equatable, Sendable {
+struct HomeserverResolution: Equatable {
     /// `true` when an account already exists for this phone (→ login); `false` when it does not (→ register).
     let exists: Bool
     /// The homeserver to authenticate against (login) or create the account on (register).

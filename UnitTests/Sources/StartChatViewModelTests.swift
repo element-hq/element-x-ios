@@ -5,9 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class StartChatScreenViewModelTests: XCTestCase {
@@ -31,7 +30,7 @@ class StartChatScreenViewModelTests: XCTestCase {
                                              appSettings: ServiceLocator.shared.settings)
     }
     
-    func testQueryShowingNoResults() async throws {
+    func testQueryShowingNoResults() async {
         await search(query: "A")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
         

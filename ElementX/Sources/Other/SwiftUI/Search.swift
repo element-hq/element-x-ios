@@ -165,7 +165,9 @@ private struct SearchController: UIViewControllerRepresentable {
         }
         
         @available(*, unavailable)
-        required init?(coder: NSCoder) { fatalError() }
+        required init?(coder: NSCoder) {
+            fatalError()
+        }
         
         override func willMove(toParent parent: UIViewController?) {
             parent?.navigationItem.searchController = searchController

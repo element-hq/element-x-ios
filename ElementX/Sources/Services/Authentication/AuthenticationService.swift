@@ -20,7 +20,10 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let appHooks: AppHooks
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
-    var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
+    var homeserver: CurrentValuePublisher<LoginHomeserver, Never> {
+        homeserverSubject.asCurrentValuePublisher()
+    }
+
     private(set) var flow: AuthenticationFlow
     
     private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()

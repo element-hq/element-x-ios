@@ -15,7 +15,9 @@ struct DiscoveredContact: Identifiable, Equatable {
     let userId: String
     let username: String?
 
-    var id: String { userId }
+    var id: String {
+        userId
+    }
 
     /// What to show as the handle line, preferring the global username and never
     /// surfacing the homeserver.
@@ -185,7 +187,6 @@ final class ContactDiscoveryService: ContactDiscoveryServiceProtocol {
     }
 
     private static func isE164(_ number: String) -> Bool {
-        let isE164 = number.range(of: "^\\+[1-9]\\d{6,14}$", options: .regularExpression) != nil
-        return isE164
+        number.range(of: "^\\+[1-9]\\d{6,14}$", options: .regularExpression) != nil
     }
 }

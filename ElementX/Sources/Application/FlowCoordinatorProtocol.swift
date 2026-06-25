@@ -34,6 +34,11 @@ struct CommonFlowParameters {
     let notificationManager: NotificationManagerProtocol
     let stateMachineFactory: StateMachineFactoryProtocol
     
-    var windowManager: WindowManagerProtocol { appMediator.windowManager }
-    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { elementCallService.ongoingCallRoomIDPublisher }
+    var windowManager: WindowManagerProtocol {
+        appMediator.windowManager
+    }
+
+    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
+        elementCallService.ongoingCallRoomIDPublisher
+    }
 }

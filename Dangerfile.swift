@@ -11,7 +11,7 @@ SwiftLint.lint(.modifiedAndCreatedFiles(directory: nil),
 
 let danger = Danger()
 
-// All of the new and modified files together.
+/// All of the new and modified files together.
 let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
 
 // Warn when there is a big PR
@@ -24,7 +24,7 @@ if danger.github.pullRequest.body?.isEmpty ?? true {
     warn("Please provide a description for this PR.")
 }
 
-// Check for screenshots on view changes
+/// Check for screenshots on view changes
 let hasChangedViews = !editedFiles.filter { $0.lowercased().contains("/view") }.isEmpty
 if hasChangedViews {
     if (danger.github.pullRequest.body?.contains("user-attachments") ?? false) == false {
@@ -32,7 +32,7 @@ if hasChangedViews {
     }
 }
 
-// Check for pngs on resources
+/// Check for pngs on resources
 let hasPngs = !editedFiles.filter { $0.lowercased().contains(".xcassets") && $0.lowercased().hasSuffix(".png") }.isEmpty
 if hasPngs {
     warn("You seem to have made changes to some resource images. Please consider using an SVG or PDF.")

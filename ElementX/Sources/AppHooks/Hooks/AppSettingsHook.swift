@@ -12,5 +12,7 @@ protocol AppSettingsHookProtocol {
 }
 
 struct DefaultAppSettingsHook: AppSettingsHookProtocol {
-    func configure(_ appSettings: AppSettings) -> AppSettings { appSettings }
+    func configure(_ appSettings: AppSettings) -> AppSettings {
+        appSettings
+    }
 }

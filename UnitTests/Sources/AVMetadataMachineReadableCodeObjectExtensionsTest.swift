@@ -6,9 +6,8 @@
 //
 
 import AVKit
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 final class AVMetadataMachineReadableCodeObjectExtensionsTest: XCTestCase {
     func testDecodeQRCodeVersion8() {

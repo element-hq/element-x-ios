@@ -32,6 +32,3 @@ protocol VoiceMessageCacheProtocol {
     /// Clears the cache
     func clearCache()
 }
-
-// sourcery: AutoMockable
-extension VoiceMessageCacheProtocol { }

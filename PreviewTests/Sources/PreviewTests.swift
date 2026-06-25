@@ -6,11 +6,10 @@
 //
 
 import Combine
-import SwiftUI
-import XCTest
-
 @testable import ElementX
 @testable import SnapshotTesting
+import SwiftUI
+import XCTest
 
 @MainActor
 class PreviewTests: XCTestCase {
@@ -133,8 +132,7 @@ class PreviewTests: XCTestCase {
                                  preferences: SnapshotPreferences) -> String? {
         let matchingView = isScreen ? AnyView(view) : AnyView(view
             .frame(width: device.size?.width)
-            .fixedSize(horizontal: false, vertical: true)
-        )
+            .fixedSize(horizontal: false, vertical: true))
         
         return withSnapshotTesting(record: recordMode) {
             verifySnapshot(of: matchingView,
@@ -246,5 +244,7 @@ private extension Diffing where Value == UIImage {
 private extension UIEdgeInsets {
     /// A custom inset that prevents the snapshotting library from rendering the
     /// origin at (10000, 10000) which breaks some of our views such as MessageText.
-    static var one: UIEdgeInsets { UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1) }
+    static var one: UIEdgeInsets {
+        UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
+    }
 }

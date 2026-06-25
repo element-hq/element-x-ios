@@ -120,7 +120,9 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     
     // MARK: - Indicators
     
-    private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    private static var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
     
     private func showFailureIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,

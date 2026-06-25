@@ -45,6 +45,3 @@ protocol TimelineItemProviderProtocol {
     /// This is temporary and will be replace by a subscription on the room itself.
     var membershipChangePublisher: AnyPublisher<Void, Never> { get }
 }
-
-// sourcery: AutoMockable
-extension TimelineItemProviderProtocol { }

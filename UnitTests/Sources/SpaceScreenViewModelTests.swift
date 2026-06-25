@@ -6,10 +6,9 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
 import MatrixRustSDK
+import XCTest
 
 @MainActor
 class SpaceScreenViewModelTests: XCTestCase {

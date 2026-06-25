@@ -94,7 +94,9 @@ struct TwoStepVerificationScreenViewState: BindableState {
         }
     }
 
-    var isWorking: Bool { phase == .submitting }
+    var isWorking: Bool {
+        phase == .submitting
+    }
 
     /// Local subscriber digits typed by the user, stripped of any formatting characters.
     var localDigits: String {

@@ -16,19 +16,51 @@ class SpaceRoomProxy: SpaceRoomProxyProtocol {
     }
     
     lazy var id = spaceRoom.roomId
-    var name: String? { spaceRoom.rawName ?? spaceRoom.displayName }
-    var avatarURL: URL? { spaceRoom.avatarUrl.flatMap(URL.init) }
+    var name: String? {
+        spaceRoom.rawName ?? spaceRoom.displayName
+    }
+
+    var avatarURL: URL? {
+        spaceRoom.avatarUrl.flatMap(URL.init)
+    }
     
-    var isSpace: Bool { spaceRoom.roomType == .space }
-    var childrenCount: Int { Int(spaceRoom.childrenCount) }
+    var isSpace: Bool {
+        spaceRoom.roomType == .space
+    }
+
+    var childrenCount: Int {
+        Int(spaceRoom.childrenCount)
+    }
     
-    var joinedMembersCount: Int { Int(spaceRoom.numJoinedMembers) }
-    var heroes: [UserProfileProxy] { (spaceRoom.heroes ?? []).map { UserProfileProxy(sdkRoomHero: $0) } }
-    var topic: String? { spaceRoom.topic }
-    var canonicalAlias: String? { spaceRoom.canonicalAlias }
+    var joinedMembersCount: Int {
+        Int(spaceRoom.numJoinedMembers)
+    }
+
+    var heroes: [UserProfileProxy] {
+        (spaceRoom.heroes ?? []).map { UserProfileProxy(sdkRoomHero: $0) }
+    }
+
+    var topic: String? {
+        spaceRoom.topic
+    }
+
+    var canonicalAlias: String? {
+        spaceRoom.canonicalAlias
+    }
     
-    var joinRule: JoinRule? { spaceRoom.joinRule }
-    var worldReadable: Bool? { spaceRoom.worldReadable }
-    var guestCanJoin: Bool { spaceRoom.guestCanJoin }
-    var state: Membership? { spaceRoom.state }
+    var joinRule: JoinRule? {
+        spaceRoom.joinRule
+    }
+
+    var worldReadable: Bool? {
+        spaceRoom.worldReadable
+    }
+
+    var guestCanJoin: Bool {
+        spaceRoom.guestCanJoin
+    }
+
+    var state: Membership? {
+        spaceRoom.state
+    }
 }

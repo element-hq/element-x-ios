@@ -6,9 +6,8 @@
 //
 
 import Combine
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class CreateRoomScreenViewModelTests: XCTestCase {

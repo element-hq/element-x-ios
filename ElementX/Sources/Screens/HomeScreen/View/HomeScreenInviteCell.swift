@@ -90,7 +90,6 @@ struct HomeScreenInviteCell: View {
         }
     }
     
-    @ViewBuilder
     private var textualContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(title)

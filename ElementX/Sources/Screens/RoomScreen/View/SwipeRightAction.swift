@@ -128,7 +128,9 @@ extension View {
 }
 
 struct SwipeRightAction_Previews: PreviewProvider, TestablePreview {
-    static var previews: some View { Preview() }
+    static var previews: some View {
+        Preview()
+    }
     
     struct Preview: View {
         @State private var isPresentingSheet = false

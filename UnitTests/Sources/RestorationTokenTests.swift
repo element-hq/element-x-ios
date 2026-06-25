@@ -5,10 +5,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
 import MatrixRustSDK
+import XCTest
 
 class RestorationTokenTests: XCTestCase {
     func testDecodeTokenWithSlidingSyncProxy() throws {

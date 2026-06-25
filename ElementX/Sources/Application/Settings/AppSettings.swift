@@ -12,7 +12,7 @@ import EmbeddedElementCall
 import Foundation
 import SwiftUI
 
-// Common settings between app and NSE
+/// Common settings between app and NSE
 protocol CommonSettingsProtocol {
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
@@ -265,7 +265,9 @@ final class AppSettings {
     }
     
     private(set) var pushGatewayBaseURL: URL = "https://matrix.org"
-    var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify") }
+    var pushGatewayNotifyEndpoint: URL {
+        pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify")
+    }
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableNotifications
@@ -305,7 +307,9 @@ final class AppSettings {
     /// The URL to open with more information about analytics terms. When this is `nil` the "Learn more" link will be hidden.
     private(set) var analyticsTermsURL: URL? = "https://gua.global/privacy"
     /// Whether or not there the app is able ask for user consent to enable analytics or sentry reporting.
-    var canPromptForAnalytics: Bool { analyticsConfiguration != nil || bugReportSentryURL != nil }
+    var canPromptForAnalytics: Bool {
+        analyticsConfiguration != nil || bugReportSentryURL != nil
+    }
     
     private static func makeAnalyticsConfiguration() -> AnalyticsConfiguration? {
         guard let host = Secrets.postHogHost, let apiKey = Secrets.postHogAPIKey else { return nil }
@@ -333,7 +337,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hideUnreadMessagesBadge, defaultValue: false, storageType: .userDefaults(store))
     var hideUnreadMessagesBadge
 
-    // GUA FORK: Snooze timestamp for the home-screen two-step-verification PIN setup reminder.
+    /// GUA FORK: Snooze timestamp for the home-screen two-step-verification PIN setup reminder.
     @UserPreference(key: UserDefaultsKeys.pinSetupReminderSnoozedUntil, defaultValue: nil, storageType: .userDefaults(store))
     var pinSetupReminderSnoozedUntil: Date?
 
@@ -371,7 +375,7 @@ final class AppSettings {
     
     // MARK: - Maps
     
-    // maptiler base url
+    /// maptiler base url
     private(set) var mapTilerConfiguration = MapTilerConfiguration(baseURL: "https://api.maptiler.com/maps",
                                                                    apiKey: Secrets.mapLibreAPIKey,
                                                                    lightStyleID: "9bc819c8-e627-474a-a348-ec144fe3d810",

@@ -12,7 +12,7 @@ protocol AlertProtocol {
 }
 
 extension View {
-    func alert<Item, Actions, Message>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions, @ViewBuilder message: (Item) -> Message) -> some View where Item: AlertProtocol, Actions: View, Message: View {
+    func alert<Item: AlertProtocol, Actions: View, Message: View>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions, @ViewBuilder message: (Item) -> Message) -> some View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in
@@ -24,7 +24,7 @@ extension View {
     }
 
     // periphery: ignore - not used yet but might be useful
-    func alert<Item, Actions>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions) -> some View where Item: AlertProtocol, Actions: View {
+    func alert<Item: AlertProtocol, Actions: View>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions) -> some View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in

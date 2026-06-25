@@ -56,7 +56,6 @@ struct EncryptionResetPasswordScreen: View {
         }
     }
     
-    @ViewBuilder
     private var passwordSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonPassword)
@@ -78,7 +77,6 @@ struct EncryptionResetPasswordScreen: View {
         }
     }
     
-    @ViewBuilder
     private var reauthSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(L10n.screenAccountReauthSectionFooter)

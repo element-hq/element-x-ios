@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import MatrixRustSDK
 
 struct ComposerDraftProxy: Equatable {

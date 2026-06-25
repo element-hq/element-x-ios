@@ -9,7 +9,9 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomPermissionsSetting: Identifiable {
-    var id: KeyPath<RoomPermissions, RoomRole> { keyPath }
+    var id: KeyPath<RoomPermissions, RoomRole> {
+        keyPath
+    }
     
     /// The title of this setting.
     let title: String

@@ -501,8 +501,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                          message: message ?? L10n.errorUnknown)
     }
 
-    // GUA FORK: One-shot check at session start. If the identity service reports no PIN
-    // configured and the reminder isn't snoozed, surface the home-screen banner.
+    /// GUA FORK: One-shot check at session start. If the identity service reports no PIN
+    /// configured and the reminder isn't snoozed, surface the home-screen banner.
     private func refreshPinSetupReminder() async {
         guard let identityServiceClient = IdentityServiceClient(),
               let accessToken = userSession.clientProxy.accessToken else {

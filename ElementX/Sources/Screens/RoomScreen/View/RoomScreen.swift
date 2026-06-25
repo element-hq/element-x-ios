@@ -75,7 +75,6 @@ struct RoomScreen: View {
             .sentryTrace("\(Self.self)")
     }
     
-    @ViewBuilder
     private var pinnedItemsBanner: some View {
         Group {
             if context.viewState.shouldShowPinnedEventsBanner {
@@ -88,7 +87,6 @@ struct RoomScreen: View {
         .animation(.elementDefault, value: context.viewState.shouldShowPinnedEventsBanner)
     }
     
-    @ViewBuilder
     private var knockRequestsBanner: some View {
         Group {
             if context.viewState.shouldSeeKnockRequests {

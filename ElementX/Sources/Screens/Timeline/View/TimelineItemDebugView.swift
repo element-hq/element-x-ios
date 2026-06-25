@@ -66,7 +66,6 @@ struct TimelineItemDebugView: View {
             }
         }
         
-        @ViewBuilder
         var disclosureGroupContent: some View {
             VStack(alignment: .leading, spacing: 0) {
                 Divider()

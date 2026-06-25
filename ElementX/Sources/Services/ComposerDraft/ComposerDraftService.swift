@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import MatrixRustSDK
 
 final class ComposerDraftService: ComposerDraftServiceProtocol {

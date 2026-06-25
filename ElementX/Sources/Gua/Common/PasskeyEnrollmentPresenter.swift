@@ -81,5 +81,7 @@ class PasskeyEnrollmentPresenter: NSObject {
 // MARK: ASWebAuthenticationPresentationContextProviding
 
 extension PasskeyEnrollmentPresenter: ASWebAuthenticationPresentationContextProviding {
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor { presentationAnchor }
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        presentationAnchor
+    }
 }

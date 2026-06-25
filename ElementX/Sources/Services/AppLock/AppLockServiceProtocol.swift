@@ -78,9 +78,6 @@ protocol AppLockServiceProtocol: AnyObject {
     var numberOfPINAttempts: AnyPublisher<Int, Never> { get }
 }
 
-// sourcery: AutoMockable
-extension AppLockServiceProtocol { }
-
 extension AppLockServiceMock {
     static func mock(pinCode: String? = "2023", isMandatory: Bool = false, biometryType: LABiometryType = .faceID, numberOfPINAttempts: Int = 0) -> AppLockServiceMock {
         let mock = AppLockServiceMock()

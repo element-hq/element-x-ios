@@ -37,7 +37,7 @@ extension RoomMemberProxyMock {
         powerLevel = configuration.powerLevel
     }
 
-    // Mocks
+    /// Mocks
     static var mockMe: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
                                         displayName: "Me",

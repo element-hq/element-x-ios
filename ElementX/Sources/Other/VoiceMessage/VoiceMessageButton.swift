@@ -82,10 +82,8 @@ private struct VoiceMessageButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(isEnabled ? .compound.textSecondary.opacity(configuration.isPressed ? 0.6 : 1) : .compound.iconDisabled)
-            .background(
-                Circle()
-                    .foregroundColor(configuration.isPressed ? .compound.bgSubtlePrimary : .compound.bgCanvasDefault)
-            )
+            .background(Circle()
+                .foregroundColor(configuration.isPressed ? .compound.bgSubtlePrimary : .compound.bgCanvasDefault))
     }
 }
 

@@ -28,7 +28,6 @@ struct PillView: View {
             }
     }
     
-    @ViewBuilder
     private var mainContent: some View {
         Text(context.viewState.displayText)
             .font(.compound.bodyLGSemibold)

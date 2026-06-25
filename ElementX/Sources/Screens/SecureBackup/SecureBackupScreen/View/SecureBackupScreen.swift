@@ -35,7 +35,6 @@ struct SecureBackupScreen: View {
     
     // MARK: - Private
     
-    @ViewBuilder
     private var keyBackupSection: some View {
         Section {
             ListRow(kind: .custom {

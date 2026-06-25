@@ -5,9 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class PhoneEntryScreenViewModelTests: XCTestCase {
@@ -54,9 +53,9 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.bindings.localPhoneNumber, "(11) 98765-4321")
     }
 
-    func testCountrySelectionUpdatesStateAndDismissesPicker() {
+    func testCountrySelectionUpdatesStateAndDismissesPicker() throws {
         context.isCountryPickerPresented = true
-        let germany = Country.find(isoCode: "DE")!
+        let germany = try XCTUnwrap(Country.find(isoCode: "DE"))
         context.send(viewAction: .countrySelected(germany))
         XCTAssertEqual(context.viewState.selectedCountry, germany)
         XCTAssertFalse(context.viewState.bindings.isCountryPickerPresented)
@@ -71,9 +70,9 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
         context.send(viewAction: .phoneNumberChanged)
     }
 
-    func testAutofillInternationalNumberStripsCountryCode() {
+    func testAutofillInternationalNumberStripsCountryCode() throws {
         // US is the first +1 entry in `Country.all`, so the start state is the +1 plan.
-        context.send(viewAction: .countrySelected(Country.find(isoCode: "US")!))
+        try context.send(viewAction: .countrySelected(XCTUnwrap(Country.find(isoCode: "US"))))
         enterPhone("+15551234567")
         XCTAssertTrue(["US", "CA"].contains(context.viewState.selectedCountry.isoCode))
         XCTAssertEqual(context.viewState.localDigits, "5551234567")
@@ -81,8 +80,8 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canContinue)
     }
 
-    func testAutofillRedundantDialCodeWithoutPlusStrips() {
-        context.send(viewAction: .countrySelected(Country.find(isoCode: "US")!))
+    func testAutofillRedundantDialCodeWithoutPlusStrips() throws {
+        try context.send(viewAction: .countrySelected(XCTUnwrap(Country.find(isoCode: "US"))))
         // No "+", leading "1" is the redundant country code (11 digits, NANP national is 10).
         enterPhone("15551234567")
         XCTAssertTrue(["US", "CA"].contains(context.viewState.selectedCountry.isoCode))
@@ -91,8 +90,8 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canContinue)
     }
 
-    func testAutofillFormattedInternationalNumberStrips() {
-        context.send(viewAction: .countrySelected(Country.find(isoCode: "US")!))
+    func testAutofillFormattedInternationalNumberStrips() throws {
+        try context.send(viewAction: .countrySelected(XCTUnwrap(Country.find(isoCode: "US"))))
         // iOS contact autofill style with separators and parens.
         enterPhone("+1 (555) 123-4567")
         XCTAssertEqual(context.viewState.localDigits, "5551234567")
@@ -100,8 +99,8 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canContinue)
     }
 
-    func testAutofillBrazilInternationalSwitchesCountry() {
-        context.send(viewAction: .countrySelected(Country.find(isoCode: "US")!))
+    func testAutofillBrazilInternationalSwitchesCountry() throws {
+        try context.send(viewAction: .countrySelected(XCTUnwrap(Country.find(isoCode: "US"))))
         enterPhone("+5511912345678")
         XCTAssertEqual(context.viewState.selectedCountry.isoCode, "BR")
         XCTAssertEqual(context.viewState.localDigits, "11912345678")
@@ -109,8 +108,8 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canContinue)
     }
 
-    func testInternationalCanadianAreaCodeAutoSwitchesToCanada() {
-        context.send(viewAction: .countrySelected(Country.find(isoCode: "US")!))
+    func testInternationalCanadianAreaCodeAutoSwitchesToCanada() throws {
+        try context.send(viewAction: .countrySelected(XCTUnwrap(Country.find(isoCode: "US"))))
         // 416 is a Canadian area code; country should flip to CA after stripping "+1".
         enterPhone("+14165551234")
         XCTAssertEqual(context.viewState.selectedCountry.isoCode, "CA")
@@ -118,8 +117,8 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.e164PhoneNumber, "+14165551234")
     }
 
-    func testNormalLocalNumberIsNotStripped() {
-        context.send(viewAction: .countrySelected(Country.find(isoCode: "US")!))
+    func testNormalLocalNumberIsNotStripped() throws {
+        try context.send(viewAction: .countrySelected(XCTUnwrap(Country.find(isoCode: "US"))))
         enterPhone("5551234567")
         XCTAssertEqual(context.viewState.selectedCountry.isoCode, "US")
         XCTAssertEqual(context.viewState.localDigits, "5551234567")
@@ -129,54 +128,54 @@ class PhoneEntryScreenViewModelTests: XCTestCase {
 
     // MARK: - Country.normalize unit tests
 
-    func testNormalizeInternationalPlus() {
-        let us = Country.find(isoCode: "US")!
+    func testNormalizeInternationalPlus() throws {
+        let us = try XCTUnwrap(Country.find(isoCode: "US"))
         let result = Country.normalize(rawInput: "+15551234567", current: us)
         XCTAssertTrue(["US", "CA"].contains(result.country.isoCode))
         XCTAssertEqual(result.localDigits, "5551234567")
     }
 
-    func testNormalizeRedundantDialCodeNoPlus() {
-        let us = Country.find(isoCode: "US")!
+    func testNormalizeRedundantDialCodeNoPlus() throws {
+        let us = try XCTUnwrap(Country.find(isoCode: "US"))
         let result = Country.normalize(rawInput: "15551234567", current: us)
         XCTAssertEqual(result.country.isoCode, "US")
         XCTAssertEqual(result.localDigits, "5551234567")
     }
 
-    func testNormalizeBrazilInternational() {
-        let us = Country.find(isoCode: "US")!
+    func testNormalizeBrazilInternational() throws {
+        let us = try XCTUnwrap(Country.find(isoCode: "US"))
         let result = Country.normalize(rawInput: "+5511912345678", current: us)
         XCTAssertEqual(result.country.isoCode, "BR")
         XCTAssertEqual(result.localDigits, "11912345678")
     }
 
-    func testNormalizeNormalLocalUnchanged() {
-        let us = Country.find(isoCode: "US")!
+    func testNormalizeNormalLocalUnchanged() throws {
+        let us = try XCTUnwrap(Country.find(isoCode: "US"))
         let result = Country.normalize(rawInput: "5551234567", current: us)
         XCTAssertEqual(result.country.isoCode, "US")
         XCTAssertEqual(result.localDigits, "5551234567")
     }
 
-    func testNormalizeDoesNotFalseStripCoincidentalLeadingDigits() {
+    func testNormalizeDoesNotFalseStripCoincidentalLeadingDigits() throws {
         // BR DDD 55 (Santa Maria) typed WITH a redundant +55: remainder still begins with the
         // dial code, so it's ambiguous and must be left untouched.
-        let br = Country.find(isoCode: "BR")!
+        let br = try XCTUnwrap(Country.find(isoCode: "BR"))
         let result = Country.normalize(rawInput: "5555999999999", current: br)
         XCTAssertEqual(result.country.isoCode, "BR")
         XCTAssertEqual(result.localDigits, "5555999999999")
     }
 
-    func testNormalizeShortLocalWithMatchingPrefixNotStripped() {
+    func testNormalizeShortLocalWithMatchingPrefixNotStripped() throws {
         // A genuine BR local number whose DDD starts with "55" must not be stripped: the total
         // length doesn't match dialCode + national length, so there's no redundancy.
-        let br = Country.find(isoCode: "BR")!
+        let br = try XCTUnwrap(Country.find(isoCode: "BR"))
         let result = Country.normalize(rawInput: "55999999999", current: br)
         XCTAssertEqual(result.country.isoCode, "BR")
         XCTAssertEqual(result.localDigits, "55999999999")
     }
 
     func testNationalDigitLength() {
-        XCTAssertEqual(Country.find(isoCode: "US")!.nationalDigitLength, 10)
-        XCTAssertEqual(Country.find(isoCode: "BR")!.nationalDigitLength, 11)
+        XCTAssertEqual(Country.find(isoCode: "US")?.nationalDigitLength, 10)
+        XCTAssertEqual(Country.find(isoCode: "BR")?.nationalDigitLength, 11)
     }
 }

@@ -5,14 +5,15 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class LoginScreenViewModelTests: XCTestCase {
     var viewModel: LoginScreenViewModelProtocol!
-    var context: LoginScreenViewModelType.Context { viewModel.context }
+    var context: LoginScreenViewModelType.Context {
+        viewModel.context
+    }
     
     var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!
@@ -158,7 +159,7 @@ class LoginScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.alertInfo?.id, .elementProAlert, "An alert should be shown to the user.")
     }
     
-    func testLoginHint() async throws {
+    func testLoginHint() async {
         await setupViewModel(loginHint: "")
         XCTAssertEqual(context.username, "")
         

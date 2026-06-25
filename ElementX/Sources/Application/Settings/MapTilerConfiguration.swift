@@ -21,5 +21,7 @@ struct MapTilerConfiguration {
     /// A MapLibre style ID for a dark-mode map.
     let darkStyleID: String
     
-    var isEnabled: Bool { apiKey != nil }
+    var isEnabled: Bool {
+        apiKey != nil
+    }
 }

@@ -47,7 +47,9 @@ enum UITestsSignalError: String, LocalizedError {
     /// Failed to send a signal as a connection hasn't been established.
     case notConnected
     
-    var errorDescription: String? { "UITestsSignalError.\(rawValue)" }
+    var errorDescription: String? {
+        "UITestsSignalError.\(rawValue)"
+    }
 }
 
 enum UITestsSignalling {

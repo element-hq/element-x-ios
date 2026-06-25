@@ -23,7 +23,9 @@ struct SpaceScreenViewState: BindableState {
     
     var bindings = SpaceScreenViewStateBindings()
     
-    var spaceName: String { space.name ?? L10n.commonSpace }
+    var spaceName: String {
+        space.name ?? L10n.commonSpace
+    }
 }
 
 struct SpaceScreenViewStateBindings { }

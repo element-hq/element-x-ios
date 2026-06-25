@@ -10,7 +10,6 @@ import SwiftUI
 import SwiftUIIntrospect
 
 extension View {
-    @ViewBuilder
     func bloom() -> some View {
         modifier(BloomModifier())
     }
@@ -78,9 +77,9 @@ private struct BloomModifier: ViewModifier {
         bloom.colorScheme == colorScheme && bloom.baseColor == .compound.gradientSubtleStop1
     }
     
-    // This is a class to avoid a "Modifying state during view update" warning when storing
-    // the result on the same run-loop - we want to avoid dispatching that to the next loop as
-    // that can result in further (unnecessary) renders being made.
+    /// This is a class to avoid a "Modifying state during view update" warning when storing
+    /// the result on the same run-loop - we want to avoid dispatching that to the next loop as
+    /// that can result in further (unnecessary) renders being made.
     class Bloom {
         var image: UIImage?
         var colorScheme: ColorScheme?

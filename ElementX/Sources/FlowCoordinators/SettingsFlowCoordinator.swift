@@ -234,8 +234,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    // GUA FORK: Find-friends-from-contacts entry-point.
-    // GUA FORK: Two-step verification entry-point.
+    /// GUA FORK: Find-friends-from-contacts entry-point.
+    /// GUA FORK: Two-step verification entry-point.
     private func presentTwoStepVerification() {
         guard let identityServiceClient = IdentityServiceClient() else {
             MXLog.warning("Identity service is not configured; cannot show two-step verification screen.")

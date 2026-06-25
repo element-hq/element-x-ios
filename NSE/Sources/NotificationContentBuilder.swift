@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import MatrixRustSDK
-import UserNotifications
-
 import Intents
+import MatrixRustSDK
 import SwiftUI
+import UserNotifications
 import Version
 
 struct NotificationContentBuilder {
@@ -313,7 +312,7 @@ private struct NotificationIcon {
     }
     
     let mediaSource: MediaSourceProxy?
-    // Required as the key to set images for groups
+    /// Required as the key to set images for groups
     let groupInfo: GroupInfo?
     
     var shouldDisplayAsGroup: Bool {

@@ -1,6 +1,5 @@
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 final class ContactDiscoveryServiceTests: XCTestCase {

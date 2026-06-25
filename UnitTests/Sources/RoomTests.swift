@@ -5,13 +5,12 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+@testable import ElementX
 import MatrixRustSDK
 import XCTest
 
-@testable import ElementX
-
 class RoomTests: XCTestCase {
-    func testCallIntent() async throws {
+    func testCallIntent() async {
         let room = RoomSDKMock()
         room.hasActiveRoomCallReturnValue = false
         room.isDirectReturnValue = false

@@ -34,7 +34,6 @@ struct SecureBackupRecoveryKeyScreen: View {
         .alert(item: $context.alertInfo)
     }
     
-    @ViewBuilder
     private var mainContent: some View {
         VStack(spacing: 48) {
             switch context.viewState.mode {
@@ -177,7 +176,6 @@ struct SecureBackupRecoveryKeyScreen: View {
         context.viewState.mode == .setupRecovery ? L10n.screenRecoveryKeySetupGenerateKey : L10n.screenRecoveryKeyChangeGenerateKey
     }
     
-    @ViewBuilder
     private var confirmRecoveryKeySection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)

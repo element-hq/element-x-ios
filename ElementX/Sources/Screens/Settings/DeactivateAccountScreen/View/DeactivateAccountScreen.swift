@@ -83,7 +83,6 @@ struct DeactivateAccountScreen: View {
         }
     }
     
-    @ViewBuilder
     private var reauthSection: some View {
         Section {
             switch context.viewState.reauthPhase {

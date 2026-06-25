@@ -31,16 +31,22 @@ struct GuaWelcomeLogo: View {
     var size: CGFloat = 84
 
     private let corner: CGFloat = 21
-    private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: corner, style: .continuous) }
+    private var shape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: corner, style: .continuous)
+    }
 
     @State private var tilt = DeviceTiltMotion()
     /// Drives the one-shot fly-in/spin entrance: starts off-screen + rotated, springs to rest.
     @State private var entered = false
 
-    private var isLive: Bool { animated && !ProcessInfo.isRunningTests }
+    private var isLive: Bool {
+        animated && !ProcessInfo.isRunningTests
+    }
 
     /// Off-screen starting offset for the entrance fly-in (the logo arrives from the trailing side).
-    private var entranceTravel: CGFloat { size * 2.6 }
+    private var entranceTravel: CGFloat {
+        size * 2.6
+    }
 
     var body: some View {
         Group {
@@ -117,13 +123,15 @@ struct GuaWelcomeLogo: View {
 
     /// Smoothed tilt magnitude (0 when the phone is flat). The raised layers fade in with it so a
     /// still phone shows the clean base icon and the depth only appears as you move the phone.
-    private var motionMag: Double { (tilt.roll * tilt.roll + tilt.pitch * tilt.pitch).squareRoot() }
+    private var motionMag: Double {
+        (tilt.roll * tilt.roll + tilt.pitch * tilt.pitch).squareRoot()
+    }
 
-    /// The chat bubble and the wolf are split into their OWN layers (`app-logo-bubble`,
-    /// `app-logo-wolf`) and stacked above the gradient tile at STAGGERED depths: the wolf shifts and
-    /// casts a deeper shadow than the bubble, which shifts more than the fixed tile. As the phone
-    /// tilts they read as physically raised glass (the "elevated liquid glass" idea, using the real
-    /// logo content). Both fade in only with motion, so a still phone shows the clean base icon.
+    // The chat bubble and the wolf are split into their OWN layers (`app-logo-bubble`,
+    // `app-logo-wolf`) and stacked above the gradient tile at STAGGERED depths: the wolf shifts and
+    // casts a deeper shadow than the bubble, which shifts more than the fixed tile. As the phone
+    // tilts they read as physically raised glass (the "elevated liquid glass" idea, using the real
+    // logo content). Both fade in only with motion, so a still phone shows the clean base icon.
 
     /// Mid layer: the chat-bubble outline, lifted a little off the tile.
     private func bubbleLayer() -> some View {

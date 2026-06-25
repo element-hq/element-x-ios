@@ -30,7 +30,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// The state machine hasn't started.
         case initial
         
-        // GUA FORK: Gua phone-number entry screen (default entry point for normal users).
+        /// GUA FORK: Gua phone-number entry screen (default entry point for normal users).
         case phoneEntryScreen
         
         /// The initial screen shown when you first launch the app.
@@ -60,7 +60,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case start
         /// Modify the flow using the provisioning parameters in the `userInfo`.
         case applyProvisioningParameters
-        // GUA FORK BEGIN: Gua phone-OIDC events
+        /// GUA FORK BEGIN: Gua phone-OIDC events
         /// The Gua phone-entry flow is being started.
         case startPhoneAuth
         /// The user dropped into the legacy auth flow from the phone screen.

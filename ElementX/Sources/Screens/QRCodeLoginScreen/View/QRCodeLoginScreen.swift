@@ -202,9 +202,7 @@ struct QRCodeLoginScreen: View {
             .frame(maxWidth: 312)
             .readFrame($qrFrame)
             .background(.compound.bgCanvasDefault)
-            .overlay(
-                QRScannerViewOverlay(length: qrFrame.height)
-            )
+            .overlay(QRScannerViewOverlay(length: qrFrame.height))
     }
     
     @ToolbarContentBuilder
@@ -398,10 +396,10 @@ private struct QRScannerViewOverlay: View {
 // MARK: - Previews
 
 struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
-    // Initial
+    /// Initial
     static let initialStateViewModel = QRCodeLoginScreenViewModel.mock(state: .initial)
     
-    // Scanning
+    /// Scanning
     static let scanningStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanning))
     
     static let connectingStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.connecting))
@@ -414,12 +412,12 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let deviceNotSignedInStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.deviceNotSignedIn)))
     
-    // Display Code
+    /// Display Code
     static let deviceCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.deviceCode("12")))
     
     static let verificationCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.verificationCode("123456")))
     
-    // Errors
+    /// Errors
     static let noCameraPermissionStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.noCameraPermission))
     
     static let connectionNotSecureStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.connectionNotSecure))

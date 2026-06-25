@@ -11,6 +11,3 @@ protocol PollInteractionHandlerProtocol {
     func sendPollResponse(pollStartID: String, optionID: String) async -> Result<Void, Error>
     func endPoll(pollStartID: String) async -> Result<Void, Error>
 }
-
-// sourcery: AutoMockable
-extension PollInteractionHandlerProtocol { }

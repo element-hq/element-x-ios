@@ -5,10 +5,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+@testable import ElementX
 import MatrixRustSDK
 import XCTest
-
-@testable import ElementX
 
 @MainActor
 class RoomDetailsEditScreenViewModelTests: XCTestCase {
@@ -92,7 +91,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         XCTAssertEqual(action, .saveFinished)
     }
     
-    func testErrorShownOnFailedFetchOfMedia() async throws {
+    func testErrorShownOnFailedFetchOfMedia() async {
         setupViewModel(roomProxyConfiguration: .init(name: "Some room", members: [.mockMeAdmin]))
         viewModel.didSelectMediaUrl(url: .picturesDirectory)
         try? await Task.sleep(for: .milliseconds(100))

@@ -308,9 +308,9 @@ class TwoStepVerificationScreenViewModel: TwoStepVerificationScreenViewModelType
     }
 
     private func isWeak(pin: String) -> Bool {
-        let weakPins: Set<String> = ["000000", "111111", "222222", "333333", "444444",
-                                     "555555", "666666", "777777", "888888", "999999",
-                                     "123456", "654321", "012345", "543210"]
+        let weakPins: Set = ["000000", "111111", "222222", "333333", "444444",
+                             "555555", "666666", "777777", "888888", "999999",
+                             "123456", "654321", "012345", "543210"]
         return weakPins.contains(pin)
     }
 }
