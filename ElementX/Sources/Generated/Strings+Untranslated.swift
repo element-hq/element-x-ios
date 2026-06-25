@@ -12,8 +12,6 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
-  /// Confirm it's you before linking a new device.
-  internal static var screenLinkNewDeviceAuthenticationReasonIos: String { return UntranslatedL10n.tr("Untranslated", "screen_link_new_device_authentication_reason_ios") }
   /// Search for rooms
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...

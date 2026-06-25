@@ -927,6 +927,7 @@
 "screen_leave_space_title" = "Leave %1$@?";
 "screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Scan the QR code";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_step3" = "Scan the QR code with this device";

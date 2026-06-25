@@ -139,7 +139,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         
         do {
             return try await context.evaluatePolicy(.deviceOwnerAuthentication,
-                                                    localizedReason: UntranslatedL10n.screenLinkNewDeviceAuthenticationReasonIos)
+                                                    localizedReason: L10n.screenLinkNewDeviceAuthenticationReasonIos)
         } catch LAError.userCancel, LAError.systemCancel {
             MXLog.info("Device owner authentication was cancelled.")
             return false

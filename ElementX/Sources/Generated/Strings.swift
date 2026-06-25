@@ -2160,6 +2160,8 @@ internal nonisolated enum L10n {
   }
   /// Transfer ownership
   internal static var screenLeaveSpaceTitleLastOwner: String { return L10n.tr("Localizable", "screen_leave_space_title_last_owner") }
+  /// Confirm it's you before linking a new device.
+  internal static var screenLinkNewDeviceAuthenticationReasonIos: String { return L10n.tr("Localizable", "screen_link_new_device_authentication_reason_ios") }
   /// Scan the QR code
   internal static var screenLinkNewDeviceDesktopScanningTitle: String { return L10n.tr("Localizable", "screen_link_new_device_desktop_scanning_title") }
   /// Open %1$@ on a laptop or desktop computer
