@@ -374,7 +374,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 resolution = try await resolveHomeserver(forPhone: phoneNumber)
             } catch {
                 MXLog.error("Resolver lookup failed: \(error)")
-                coordinator.displayError(error.localizedDescription)
+                let message = (error as? ResolverError)?.userFacingMessage ?? L10n.errorUnknown
+                coordinator.displayError(message)
                 return
             }
 

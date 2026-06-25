@@ -43,6 +43,18 @@ enum ResolverError: Error, LocalizedError {
         case let .decoding(error): "Could not parse the routing service response: \(error.localizedDescription)"
         }
     }
+
+    /// A short, user-facing message for the phone-entry screen. `errorDescription` stays technical for
+    /// logs; this is what the user actually reads. A 4xx means the number we sent was rejected as invalid
+    /// (the user can fix it); anything else is a service/network problem (retry).
+    var userFacingMessage: String {
+        switch self {
+        case let .server(status) where (400...499).contains(status):
+            L10n.screenPhoneLoginInvalidNumber
+        case .server, .transport, .decoding, .malformedResponse, .invalidURL, .notConfigured:
+            L10n.errorUnknown
+        }
+    }
 }
 
 protocol ResolverClientProtocol: Sendable {

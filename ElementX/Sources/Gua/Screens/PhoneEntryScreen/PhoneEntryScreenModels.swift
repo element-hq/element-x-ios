@@ -34,12 +34,13 @@ struct PhoneEntryScreenViewState: BindableState {
         !isSubmitting && Self.isValid(localDigits: localDigits, dialCode: selectedCountry.dialCode)
     }
 
-    /// E.164 numbers are 1–15 digits including the country code. Subscriber number
-    /// minimum is generally 4 digits (e.g. small island states), so we require at
-    /// least that and cap the total length.
+    /// E.164 numbers are 7–15 digits including the country code. The resolver enforces the same
+    /// floor (`+[1-9]\d{6,14}`), so we keep the two in sync — otherwise a number that passes here
+    /// would be rejected by `/resolve` and surface as a confusing error. We also require at least a
+    /// 4-digit subscriber part (small island states) on top of the 7-digit total.
     static func isValid(localDigits: String, dialCode: String) -> Bool {
         let totalDigits = dialCode.count + localDigits.count
-        return localDigits.count >= 4 && totalDigits <= 15
+        return localDigits.count >= 4 && totalDigits >= 7 && totalDigits <= 15
     }
 }
 
