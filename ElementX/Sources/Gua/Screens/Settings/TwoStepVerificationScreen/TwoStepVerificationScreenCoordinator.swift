@@ -82,7 +82,13 @@ final class TwoStepVerificationScreenCoordinator: CoordinatorProtocol {
                                                    presentationAnchor: parameters.windowManager.mainWindow,
                                                    appSettings: parameters.appSettings)
         passkeyEnrollmentPresenter = presenter
-        await presenter.start()
+        do {
+            try await presenter.start()
+        } catch {
+            MXLog.error("Passkey enrollment failed: \(error)")
+            parameters.userIndicatorController.submitIndicator(UserIndicator(title: error.localizedDescription,
+                                                                             iconName: "xmark"))
+        }
         passkeyEnrollmentPresenter = nil
     }
 

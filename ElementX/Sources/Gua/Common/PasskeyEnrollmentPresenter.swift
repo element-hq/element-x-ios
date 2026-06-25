@@ -31,7 +31,11 @@ class PasskeyEnrollmentPresenter: NSObject {
     /// Presents the web authentication session and returns once it is dismissed —
     /// either because the page redirected to the callback URL or because the user
     /// closed the sheet.
-    func start() async {
+    ///
+    /// Throws if the IDP redirects back with an OIDC `error` parameter, or if
+    /// `ASWebAuthenticationSession` fails for a reason other than user cancellation.
+    /// User cancellation is treated as success (no error thrown).
+    func start() async throws {
         // Pass the device locale so the IDP renders in the user's language (e.g. French).
         var urlToOpen = enrollURL
         if let languageCode = Locale.current.language.languageCode?.identifier,
@@ -41,9 +45,27 @@ class PasskeyEnrollmentPresenter: NSObject {
             components.queryItems = queryItems
             urlToOpen = components.url ?? enrollURL
         }
-        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
-            let session = ASWebAuthenticationSession(url: urlToOpen, callback: .oidcRedirectURL(oidcRedirectURL)) { _, _ in
-                continuation.resume()
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            let session = ASWebAuthenticationSession(url: urlToOpen, callback: .oidcRedirectURL(oidcRedirectURL)) { callbackURL, error in
+                if let error {
+                    // Treat user-initiated cancellation as a normal dismissal (no error to surface).
+                    if (error as? ASWebAuthenticationSessionError)?.code == .canceledLogin {
+                        continuation.resume()
+                    } else {
+                        continuation.resume(throwing: error)
+                    }
+                } else if let callbackURL,
+                          let components = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false),
+                          let errorCode = components.queryItems?.first(where: { $0.name == "error" })?.value {
+                    // IDP redirected back with an OIDC error (e.g. access_denied).
+                    let description = components.queryItems?.first(where: { $0.name == "error_description" })?.value
+                    let message = description ?? errorCode
+                    continuation.resume(throwing: NSError(domain: "PasskeyEnrollment",
+                                                          code: -1,
+                                                          userInfo: [NSLocalizedDescriptionKey: message]))
+                } else {
+                    continuation.resume()
+                }
             }
             session.prefersEphemeralWebBrowserSession = false
             session.presentationContextProvider = self
