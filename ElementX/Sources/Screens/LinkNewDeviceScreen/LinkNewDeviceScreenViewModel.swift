@@ -72,7 +72,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         case .verified, .unavailable:
             break
         case .appLockPINRequired:
-            // TODO: present the App Lock PIN screen to verify the device owner.
+            // Follow-up PR: present the App Lock PIN screen to verify the device owner.
             return
         case .cancelled, .unverified:
             state.mode = .readyToLink(.idle)
