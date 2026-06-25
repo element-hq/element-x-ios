@@ -64,6 +64,7 @@ struct AppLockScreen: View {
                 ToolbarButton(role: .cancel) {
                     context.send(viewAction: .cancelVerifyDeviceOwner)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.appLockScreen.cancel)
             }
         }
     }

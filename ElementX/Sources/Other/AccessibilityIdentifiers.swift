@@ -57,6 +57,7 @@ enum A11yIdentifiers {
     }
     
     struct AppLockScreen {
+        let cancel = "app_lock-cancel"
         func numpad(_ digit: Int) -> String {
             "app_lock-numpad_\(digit)"
         }
