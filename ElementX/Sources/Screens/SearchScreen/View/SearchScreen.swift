@@ -42,15 +42,15 @@ struct SearchScreen: View {
         .searchFocused($isSearchFieldFocused)
         .autocorrectionDisabled(true)
         .onSubmit(of: .search) {
-            isSearchFieldFocused = false
+            // A software keyboard's submit/search button just dismisses; only a hardware return selects.
+            if isHardwareKeyboardConnected, let selectedRoomID {
+                context.send(viewAction: .selectRoom(roomID: selectedRoomID))
+            } else {
+                isSearchFieldFocused = false
+            }
         }
         .searchResultsKeyboardNavigation(moveUp: { moveSelection(backwards: true) },
                                          moveDown: { moveSelection(backwards: false) },
-                                         select: {
-                                             if let selectedRoomID {
-                                                 context.send(viewAction: .selectRoom(roomID: selectedRoomID))
-                                             }
-                                         },
                                          cancel: { context.send(viewAction: .cancel) })
         // The TabView calls onAppear each time the search tab is selected, so the field re-focuses
         // and the selection resets on every switch.
@@ -198,7 +198,7 @@ private extension View {
     /// The `.search` role tab owns its text field, so there's no SwiftUI hook for its key presses. We reach the
     /// field through the navigation stack (as ``SearchFieldStyle`` does) and swap its class for one that overrides
     /// `pressesBegan` — the same key interception the old global search performed on its own field.
-    func searchResultsKeyboardNavigation(moveUp: @escaping () -> Void, moveDown: @escaping () -> Void, select: @escaping () -> Void, cancel: @escaping () -> Void) -> some View {
+    func searchResultsKeyboardNavigation(moveUp: @escaping () -> Void, moveDown: @escaping () -> Void, cancel: @escaping () -> Void) -> some View {
         introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
             guard let textField = navigationController.navigationBar.topItem?.searchController?.searchBar.searchTextField else {
                 return
@@ -214,8 +214,6 @@ private extension View {
                     moveUp()
                 case .keyboardDownArrow:
                     moveDown()
-                case .keyboardReturnOrEnter, .keypadEnter:
-                    select()
                 case .keyboardEscape:
                     cancel()
                 default:
