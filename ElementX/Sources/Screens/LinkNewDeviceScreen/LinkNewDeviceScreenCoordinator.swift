@@ -16,6 +16,7 @@ enum LinkNewDeviceScreenCoordinatorAction {
 
 struct LinkNewDeviceScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
+    let appLockService: AppLockServiceProtocol
     let orientationManager: OrientationManagerProtocol
 }
 
@@ -31,7 +32,8 @@ final class LinkNewDeviceScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: LinkNewDeviceScreenCoordinatorParameters) {
-        viewModel = LinkNewDeviceScreenViewModel(clientProxy: parameters.clientProxy)
+        viewModel = LinkNewDeviceScreenViewModel(clientProxy: parameters.clientProxy,
+                                                 appLockService: parameters.appLockService)
         orientationManager = parameters.orientationManager
     }
     

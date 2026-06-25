@@ -15,7 +15,7 @@ final nonisolated class AppLockTimer {
     
     /// Whether the timer considers the app to be locked or not. Always starts with a locked app.
     ///
-    /// Internally this value may be incorrect, always call `needsUnlock` to get the correct value.
+    /// Internally this value may be incorrect, always call ``computeLockState`` to get the correct value.
     private var isLocked = true
     /// The date when the app was last backgrounded whilst in an unlocked state.
     private var lastUnlockedBackground: Date?

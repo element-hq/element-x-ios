@@ -7,14 +7,13 @@
 
 import Combine
 @testable import ElementX
-import LocalAuthentication
 import SwiftUI
 import Testing
 
 @MainActor
 class LinkNewDeviceScreenViewModelTests {
     var linkNewDeviceService: LinkNewDeviceServiceMock!
-    var authenticationContext: LAContextMock!
+    var appLockService: AppLockServiceMock!
     
     var viewModel: LinkNewDeviceScreenViewModel!
     var context: LinkNewDeviceScreenViewModel.Context {
@@ -46,7 +45,7 @@ class LinkNewDeviceScreenViewModelTests {
     // MARK: - Linking
     
     @Test
-    func linkingMobileDeviceAuthenticatesThenGeneratesQRCode() async throws {
+    func linkingMobileDeviceVerifiesThenGeneratesQRCode() async throws {
         // Given a ready screen whose QR code isn't immediately available.
         let progressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
         setupViewModel(linkMobileProgressPublisher: progressSubject.asCurrentValuePublisher(),
@@ -54,13 +53,13 @@ class LinkNewDeviceScreenViewModelTests {
         
         // When linking a mobile device.
         let deferredGenerating = deferFulfillment(context.observe(\.viewState.mode),
-                                                  transitionValues: [.readyToLink(.authenticatingDeviceOwner),
+                                                  transitionValues: [.readyToLink(.verifyingDeviceOwner),
                                                                      .readyToLink(.generatingCode)])
         context.send(viewAction: .linkMobileDevice)
         
-        // Then it should authenticate the device owner and start generating the QR code.
+        // Then it should verify the device owner and start generating the QR code.
         try await deferredGenerating.fulfill()
-        #expect(authenticationContext.evaluatePolicyCalled)
+        #expect(appLockService.verifyDeviceOwnerReasonCalled)
         #expect(linkNewDeviceService.linkMobileDeviceCalled)
         
         // When the QR code has been generated.
@@ -74,52 +73,69 @@ class LinkNewDeviceScreenViewModelTests {
     }
     
     @Test
-    func linkingDesktopComputerAuthenticatesThenEmitsAction() async throws {
+    func linkingDesktopComputerVerifiesThenEmitsAction() async throws {
         // Given a ready screen.
         setupViewModel(mode: .loading)
         
         // When linking a desktop computer.
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { $0.isLinkDesktopComputer }
         let deferredMode = deferFulfillment(context.observe(\.viewState.mode),
-                                            transitionValues: [.readyToLink(.authenticatingDeviceOwner), .readyToLink(.idle)])
+                                            transitionValues: [.readyToLink(.verifyingDeviceOwner), .readyToLink(.idle)])
         context.send(viewAction: .linkDesktopComputer)
         
-        // Then it should authenticate the device owner, and continue the flow to link a desktop.
+        // Then it should verify the device owner, and continue the flow to link a desktop.
         try await deferredAction.fulfill()
         try await deferredMode.fulfill()
-        #expect(authenticationContext.evaluatePolicyCalled)
+        #expect(appLockService.verifyDeviceOwnerReasonCalled)
         #expect(!linkNewDeviceService.linkMobileDeviceCalled)
     }
     
     @Test
-    func linkingProceedsWhenAuthenticationUnavailable() async throws {
-        // Given a device that can't evaluate the device owner authentication policy.
+    func linkingProceedsWhenVerificationUnavailable() async throws {
+        // Given a device with no passcode set, so device owner verification is unavailable.
         let progressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
         setupViewModel(linkMobileProgressPublisher: progressSubject.asCurrentValuePublisher(),
-                       canEvaluatePolicy: false,
+                       deviceOwnerResult: .unavailable,
                        mode: .loading)
         
         // When linking a mobile device.
         let deferredGenerating = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .readyToLink(.generatingCode) }
         context.send(viewAction: .linkMobileDevice)
         
-        // Then it should skip authentication and continue by generating a QR code.
+        // Then it should proceed by generating a QR code.
         try await deferredGenerating.fulfill()
-        #expect(!authenticationContext.evaluatePolicyCalled)
+        #expect(appLockService.verifyDeviceOwnerReasonCalled)
         #expect(linkNewDeviceService.linkMobileDeviceCalled)
     }
     
-    // MARK: - Authentication failures
+    @Test
+    func appLockPINRequiredDoesNotLink() async throws {
+        // Given a device with no passcode but an App Lock PIN set, so PIN verification is required.
+        setupViewModel(deviceOwnerResult: .appLockPINRequired,
+                       mode: .loading)
+        
+        // When linking a mobile device, it should not proceed to generate a QR code.
+        // TODO: assert the App Lock PIN screen is presented once it's wired up.
+        let deferred = deferFailure(context.observe(\.viewState.mode), timeout: .seconds(1)) { $0 == .readyToLink(.generatingCode) }
+        context.send(viewAction: .linkMobileDevice)
+        try await deferred.fulfill()
+        
+        // Then verification should have been attempted but linking should not have started.
+        #expect(appLockService.verifyDeviceOwnerReasonCalled)
+        #expect(!linkNewDeviceService.linkMobileDeviceCalled)
+    }
+    
+    // MARK: - Verification failures
     
     @Test
-    func cancellingAuthenticationReturnsToIdle() async throws {
-        // Given a screen where the user will cancel the device owner authentication.
-        setupViewModel(evaluatePolicyThrowableError: LAError(.userCancel),
+    func cancellingVerificationReturnsToIdle() async throws {
+        // Given a screen where the user will cancel the device owner verification.
+        setupViewModel(deviceOwnerResult: .cancelled,
                        mode: .loading)
         
         // When linking a mobile device.
         let deferred = deferFulfillment(context.observe(\.viewState.mode),
-                                        transitionValues: [.readyToLink(.authenticatingDeviceOwner), .readyToLink(.idle)])
+                                        transitionValues: [.readyToLink(.verifyingDeviceOwner), .readyToLink(.idle)])
         context.send(viewAction: .linkMobileDevice)
         
         // Then the cancellation should silently return to idle without generating a QR code.
@@ -128,32 +144,32 @@ class LinkNewDeviceScreenViewModelTests {
     }
     
     @Test
-    func declinedAuthenticationReturnsToIdle() async throws {
-        // Given a screen where the device owner authentication returns false.
-        setupViewModel(evaluatePolicyReturnValue: false,
+    func unverifiedReturnsToIdle() async throws {
+        // Given a screen where the device owner verification completes without success.
+        setupViewModel(deviceOwnerResult: .unverified,
                        mode: .loading)
         
         // When linking a mobile device.
         let deferred = deferFulfillment(context.observe(\.viewState.mode),
-                                        transitionValues: [.readyToLink(.authenticatingDeviceOwner), .readyToLink(.idle)])
+                                        transitionValues: [.readyToLink(.verifyingDeviceOwner), .readyToLink(.idle)])
         context.send(viewAction: .linkMobileDevice)
         
-        // Then the declined authentication should silently return to idle without generating a QR code.
+        // Then the unverified result should silently return to idle without generating a QR code.
         try await deferred.fulfill()
         #expect(!linkNewDeviceService.linkMobileDeviceCalled)
     }
     
     @Test
-    func failedAuthenticationShowsError() async throws {
-        // Given a screen where the device owner authentication fails unexpectedly.
-        setupViewModel(evaluatePolicyThrowableError: LAError(.authenticationFailed),
+    func verificationErrorShowsError() async throws {
+        // Given a screen where the device owner verification errors.
+        setupViewModel(deviceOwnerResult: .error,
                        mode: .loading)
         
         // When linking a mobile device.
         let deferred = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .error(.unknown) }
         context.send(viewAction: .linkMobileDevice)
         
-        // Then the failure should surface an error without generating a QR code.
+        // Then the error should surface without generating a QR code.
         try await deferred.fulfill()
         #expect(!linkNewDeviceService.linkMobileDeviceCalled)
     }
@@ -203,9 +219,7 @@ class LinkNewDeviceScreenViewModelTests {
     
     private func setupViewModel(isLoginWithQRCodeSupported: Bool = true,
                                 linkMobileProgressPublisher: LinkNewDeviceService.LinkMobileProgressPublisher = .init(.qrReady(LinkNewDeviceServiceMock.mockQRCodeImage)),
-                                canEvaluatePolicy: Bool = true,
-                                evaluatePolicyReturnValue: Bool = true,
-                                evaluatePolicyThrowableError: Error? = nil,
+                                deviceOwnerResult: AppLockDeviceOwnerResult = .verified,
                                 mode: LinkNewDeviceScreenViewState.Mode? = nil) {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.underlyingIsLoginWithQRCodeSupported = isLoginWithQRCodeSupported
@@ -213,15 +227,13 @@ class LinkNewDeviceScreenViewModelTests {
         linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressPublisher))
         clientProxy.linkNewDeviceServiceReturnValue = linkNewDeviceService
         
-        authenticationContext = LAContextMock()
-        authenticationContext.canEvaluatePolicyReturnValue = canEvaluatePolicy
-        authenticationContext.evaluatePolicyReturnValue = evaluatePolicyReturnValue
-        authenticationContext.evaluatePolicyThrowableError = evaluatePolicyThrowableError
+        appLockService = AppLockServiceMock.mock()
+        appLockService.verifyDeviceOwnerReasonReturnValue = deviceOwnerResult
         
         let initialState = mode.map { LinkNewDeviceScreenViewState(mode: $0, showLinkDesktopComputerButton: true) }
         
         viewModel = LinkNewDeviceScreenViewModel(clientProxy: clientProxy,
-                                                 authenticationContext: authenticationContext,
+                                                 appLockService: appLockService,
                                                  initialState: initialState)
     }
 }

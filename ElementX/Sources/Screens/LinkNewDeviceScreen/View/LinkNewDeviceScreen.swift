@@ -105,7 +105,7 @@ struct LinkNewDeviceScreen: View {
 
 struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(mode: .readyToLink(.idle))
-    static let authenticatingViewModel = makeViewModel(mode: .readyToLink(.authenticatingDeviceOwner))
+    static let verifyingViewModel = makeViewModel(mode: .readyToLink(.verifyingDeviceOwner))
     static let generatingViewModel = makeViewModel(mode: .readyToLink(.generatingCode))
     static let loadingViewModel = makeViewModel(mode: .loading)
     static let unsupportedViewModel = makeViewModel(mode: .error(.notSupported))
@@ -119,10 +119,10 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(.idle) })
         
         ElementNavigationStack {
-            LinkNewDeviceScreen(context: authenticatingViewModel.context)
+            LinkNewDeviceScreen(context: verifyingViewModel.context)
         }
-        .previewDisplayName("Authenticating")
-        .snapshotPreferences(expect: authenticatingViewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(.authenticatingDeviceOwner) })
+        .previewDisplayName("Verifying")
+        .snapshotPreferences(expect: verifyingViewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(.verifyingDeviceOwner) })
         
         ElementNavigationStack {
             LinkNewDeviceScreen(context: generatingViewModel.context)
@@ -150,6 +150,7 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(mode: LinkNewDeviceScreenViewState.Mode) -> LinkNewDeviceScreenViewModel {
         LinkNewDeviceScreenViewModel(clientProxy: ClientProxyMock(.init()),
+                                     appLockService: AppLockServiceMock.mock(),
                                      initialState: .init(mode: mode,
                                                          showLinkDesktopComputerButton: true))
     }

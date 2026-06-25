@@ -1001,6 +1001,48 @@ nonisolated class AppLockServiceMock: AppLockServiceProtocol, @unchecked Sendabl
             return unlockWithBiometricsReturnValue
         }
     }
+    //MARK: - verifyDeviceOwner
+
+    private let verifyDeviceOwnerReasonCallsCountLock = NSLock()
+    private nonisolated(unsafe) var verifyDeviceOwnerReasonUnderlyingCallsCount = 0
+    var verifyDeviceOwnerReasonCallsCount: Int {
+        get { verifyDeviceOwnerReasonCallsCountLock.withLock { verifyDeviceOwnerReasonUnderlyingCallsCount } }
+        set { verifyDeviceOwnerReasonCallsCountLock.withLock { verifyDeviceOwnerReasonUnderlyingCallsCount = newValue } }
+    }
+    var verifyDeviceOwnerReasonCalled: Bool {
+        return verifyDeviceOwnerReasonCallsCount > 0
+    }
+    private let verifyDeviceOwnerReasonReceivedReasonLock = NSLock()
+    private nonisolated(unsafe) var verifyDeviceOwnerReasonUnderlyingReceivedReason: String?
+    var verifyDeviceOwnerReasonReceivedReason: String? {
+        get { verifyDeviceOwnerReasonReceivedReasonLock.withLock { verifyDeviceOwnerReasonUnderlyingReceivedReason } }
+        set { verifyDeviceOwnerReasonReceivedReasonLock.withLock { verifyDeviceOwnerReasonUnderlyingReceivedReason = newValue } }
+    }
+    private let verifyDeviceOwnerReasonReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var verifyDeviceOwnerReasonUnderlyingReceivedInvocations: [String] = []
+    var verifyDeviceOwnerReasonReceivedInvocations: [String] {
+        get { verifyDeviceOwnerReasonReceivedInvocationsLock.withLock { verifyDeviceOwnerReasonUnderlyingReceivedInvocations } }
+        set { verifyDeviceOwnerReasonReceivedInvocationsLock.withLock { verifyDeviceOwnerReasonUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let verifyDeviceOwnerReasonReturnValueLock = NSLock()
+    private nonisolated(unsafe) var verifyDeviceOwnerReasonUnderlyingReturnValue: AppLockDeviceOwnerResult!
+    var verifyDeviceOwnerReasonReturnValue: AppLockDeviceOwnerResult! {
+        get { verifyDeviceOwnerReasonReturnValueLock.withLock { verifyDeviceOwnerReasonUnderlyingReturnValue } }
+        set { verifyDeviceOwnerReasonReturnValueLock.withLock { verifyDeviceOwnerReasonUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var verifyDeviceOwnerReasonClosure: ((String) async -> AppLockDeviceOwnerResult)?
+
+    @concurrent func verifyDeviceOwner(reason: String) async -> AppLockDeviceOwnerResult {
+        verifyDeviceOwnerReasonCallsCountLock.withLock { verifyDeviceOwnerReasonUnderlyingCallsCount += 1 }
+        verifyDeviceOwnerReasonReceivedReason = reason
+        verifyDeviceOwnerReasonReceivedInvocationsLock.withLock { verifyDeviceOwnerReasonUnderlyingReceivedInvocations.append(reason) }
+        if let verifyDeviceOwnerReasonClosure = verifyDeviceOwnerReasonClosure {
+            return await verifyDeviceOwnerReasonClosure(reason)
+        } else {
+            return verifyDeviceOwnerReasonReturnValue
+        }
+    }
 }
 nonisolated class AppMediatorMock: AppMediatorProtocol, @unchecked Sendable {
     var windowManager: WindowManagerProtocol {

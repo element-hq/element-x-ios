@@ -17,6 +17,7 @@ class AppLockService: AppLockServiceProtocol {
     
     private let timer: AppLockTimer
     private let unlockPolicy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
+    private let deviceOwnerPolicy: LAPolicy = .deviceOwnerAuthentication
     
     var isMandatory: Bool {
         appSettings.appLockIsMandatory
@@ -163,6 +164,30 @@ class AppLockService: AppLockServiceProtocol {
         }
     }
     
+    func verifyDeviceOwner(reason: String) async -> AppLockDeviceOwnerResult {
+        let context = verificationContext()
+        
+        var error: NSError?
+        guard context.canEvaluatePolicy(deviceOwnerPolicy, error: &error) else {
+            MXLog.warning("Device owner verification unavailable: \(String(describing: error))")
+            return isEnabled ? .appLockPINRequired : .unavailable
+        }
+        
+        do {
+            guard try await context.evaluatePolicy(deviceOwnerPolicy, localizedReason: reason) else {
+                MXLog.warning("Device owner verification completed without success.")
+                return .unverified
+            }
+            return .verified
+        } catch LAError.userCancel, LAError.systemCancel {
+            MXLog.info("Device owner verification was cancelled.")
+            return .cancelled
+        } catch {
+            MXLog.warning("Device owner verification failed: \(error)")
+            return .error
+        }
+    }
+    
     // MARK: - Private
     
     /// Queries the context for supported biometrics and enrolment state.
@@ -185,6 +210,12 @@ class AppLockService: AppLockServiceProtocol {
         let context = LAContext()
         context.localizedFallbackTitle = L10n.actionEnterPin
         return context
+    }
+    
+    /// Creates a fresh context for device owner verification so the user is always prompted.
+    private func verificationContext() -> LAContext {
+        // Keep using the injected context for tests etc.
+        type(of: context) == LAContext.self ? LAContext() : context
     }
     
     /// Shared logic for completing an unlock via a PIN or biometrics.

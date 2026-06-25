@@ -17,7 +17,7 @@ struct LinkNewDeviceScreenViewState: BindableState {
     nonisolated enum Mode: Equatable {
         enum ReadyState: Equatable {
             case idle
-            case authenticatingDeviceOwner
+            case verifyingDeviceOwner
             case generatingCode
         }
         
