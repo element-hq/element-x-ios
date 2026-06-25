@@ -804,7 +804,7 @@ class MockScreen: Identifiable {
                     switch action {
                     case .dismiss:
                         navigationRootCoordinator.setSheetCoordinator(nil)
-                    case .requestOAuthAuthorisation:
+                    case .requestOAuthAuthorisation, .forceLogout:
                         break
                     }
                 }

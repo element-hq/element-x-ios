@@ -54,6 +54,18 @@ struct AppLockScreen: View {
                 .animation(.elementDefault, value: context.viewState.forcedLogoutIndicator)
         }
         .alert(item: $context.alertInfo)
+        .toolbar { toolbar }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        if context.viewState.mode == .verifyDeviceOwner {
+            ToolbarItem(placement: .cancellationAction) {
+                ToolbarButton(role: .cancel) {
+                    context.send(viewAction: .cancelVerifyDeviceOwner)
+                }
+            }
+        }
     }
     
     var header: some View {
@@ -114,10 +126,17 @@ struct AppLockScreen: View {
 
 struct AppLockScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = AppLockScreenViewModel(appLockService: AppLockServiceMock.mock())
+    static let verifyViewModel = AppLockScreenViewModel(appLockService: AppLockServiceMock.mock(), mode: .verifyDeviceOwner)
     
     static var previews: some View {
         ElementNavigationStack {
             AppLockScreen(context: viewModel.context)
         }
+        .previewDisplayName("Unlock")
+        
+        ElementNavigationStack {
+            AppLockScreen(context: verifyViewModel.context)
+        }
+        .previewDisplayName("Verify")
     }
 }

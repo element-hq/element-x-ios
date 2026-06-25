@@ -19,10 +19,10 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(appLockService: AppLockServiceProtocol) {
+    init(appLockService: AppLockServiceProtocol, mode: AppLockScreenMode = .appUnlock) {
         self.appLockService = appLockService
         
-        super.init(initialViewState: AppLockScreenViewState(bindings: .init()))
+        super.init(initialViewState: AppLockScreenViewState(mode: mode, bindings: .init()))
         
         appLockService.numberOfPINAttempts
             .weakAssign(to: \.state.numberOfPINAttempts, on: self)
@@ -51,6 +51,8 @@ class AppLockScreenViewModel: AppLockScreenViewModelType, AppLockScreenViewModel
             state.bindings.pinCode = ""
         case .forgotPIN:
             handleForgotPIN()
+        case .cancelVerifyDeviceOwner:
+            actionsSubject.send(.cancelVerifyDeviceOwner)
         }
     }
     

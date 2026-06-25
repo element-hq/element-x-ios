@@ -44,6 +44,19 @@ final class AppLockScreenViewModelTests {
     }
     
     @Test
+    func cancelVerifyDeviceOwner() async throws {
+        // Given a screen shown to verify the device owner.
+        viewModel = AppLockScreenViewModel(appLockService: appLockService, mode: .verifyDeviceOwner)
+        
+        // When the user cancels.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .cancelVerifyDeviceOwner }
+        viewModel.context.send(viewAction: .cancelVerifyDeviceOwner)
+        
+        // Then the cancellation should be reported.
+        try await deferred.fulfill()
+    }
+    
+    @Test
     func forgotPIN() async throws {
         // Given a fresh launch of the app.
         #expect(context.alertInfo == nil, "No alert should be shown initially.")

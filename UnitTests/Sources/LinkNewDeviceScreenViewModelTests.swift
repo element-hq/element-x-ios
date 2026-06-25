@@ -109,20 +109,56 @@ class LinkNewDeviceScreenViewModelTests {
     }
     
     @Test
-    func appLockPINRequiredDoesNotLink() async throws {
+    func appLockPINRequiredRequestsVerification() async throws {
         // Given a device with no passcode but an App Lock PIN set, so PIN verification is required.
         setupViewModel(deviceOwnerResult: .appLockPINRequired,
                        mode: .loading)
         
-        // When linking a mobile device, it should not proceed to generate a QR code.
-        // TODO: assert the App Lock PIN screen is presented once it's wired up.
-        let deferred = deferFailure(context.observe(\.viewState.mode), timeout: .seconds(1)) { $0 == .readyToLink(.generatingCode) }
+        // When linking a mobile device.
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0.isVerifyWithAppLockPIN }
         context.send(viewAction: .linkMobileDevice)
-        try await deferred.fulfill()
+        let action = try await deferred.fulfill()
         
-        // Then verification should have been attempted but linking should not have started.
+        // Then it should request App Lock PIN verification rather than linking.
         #expect(appLockService.verifyDeviceOwnerReasonCalled)
         #expect(!linkNewDeviceService.linkMobileDeviceCalled)
+        
+        // When cancelling the verification.
+        guard case let .verifyWithAppLockPIN(continuation) = action else {
+            Issue.record("Unexpected action.")
+            return
+        }
+        let deferredIdle = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .readyToLink(.idle) }
+        continuation.resume(returning: false)
+        
+        // Then it should return to idle without linking.
+        try await deferredIdle.fulfill()
+        #expect(!linkNewDeviceService.linkMobileDeviceCalled)
+    }
+    
+    @Test
+    func appLockPINVerifiedContinuesLinking() async throws {
+        // Given a device that requires App Lock PIN verification.
+        let progressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
+        setupViewModel(linkMobileProgressPublisher: progressSubject.asCurrentValuePublisher(),
+                       deviceOwnerResult: .appLockPINRequired,
+                       mode: .loading)
+        
+        // When linking a mobile device and the PIN verification succeeds.
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0.isVerifyWithAppLockPIN }
+        context.send(viewAction: .linkMobileDevice)
+        let action = try await deferred.fulfill()
+        guard case let .verifyWithAppLockPIN(continuation) = action else {
+            Issue.record("Unexpected action.")
+            return
+        }
+        
+        let deferredGenerating = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .readyToLink(.generatingCode) }
+        continuation.resume(returning: true)
+        
+        // Then it should proceed to generate the QR code.
+        try await deferredGenerating.fulfill()
+        #expect(linkNewDeviceService.linkMobileDeviceCalled)
     }
     
     // MARK: - Verification failures
@@ -256,6 +292,13 @@ private extension LinkNewDeviceScreenViewModelAction {
     var isDismiss: Bool {
         switch self {
         case .dismiss: true
+        default: false
+        }
+    }
+    
+    var isVerifyWithAppLockPIN: Bool {
+        switch self {
+        case .verifyWithAppLockPIN: true
         default: false
         }
     }

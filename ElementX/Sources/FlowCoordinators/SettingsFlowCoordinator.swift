@@ -192,6 +192,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     navigationStackCoordinator.setSheetCoordinator(nil)
                 case .requestOAuthAuthorisation(let url, let continuation):
                     presentAccountManagementURL(url, continuation: continuation)
+                case .forceLogout:
+                    actionsSubject.send(.forceLogout)
                 }
             }
             .store(in: &cancellables)

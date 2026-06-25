@@ -13,9 +13,21 @@ enum AppLockScreenViewModelAction {
     case appUnlocked
     /// The user failed to unlock the app (or forgot their PIN).
     case forceLogout
+    /// The user cancelled device owner verification. Only sent in the `.verifyDeviceOwner` mode.
+    case cancelVerifyDeviceOwner
+}
+
+enum AppLockScreenMode {
+    /// Unlocking the app on launch/foregrounding.
+    case appUnlock
+    /// Verifying that the user is the device owner to gate a sensitive action.
+    case verifyDeviceOwner
 }
 
 struct AppLockScreenViewState: BindableState {
+    /// The context in which the screen is being shown.
+    var mode: AppLockScreenMode = .appUnlock
+    
     /// The number of attempts allowed to unlock the app.
     let maximumAttempts = 3
     
@@ -64,4 +76,6 @@ enum AppLockScreenViewAction {
     case clearPINCode
     /// The user didn't heed the warnings and can't remember their PIN.
     case forgotPIN
+    /// The user cancelled device owner verification.
+    case cancelVerifyDeviceOwner
 }
