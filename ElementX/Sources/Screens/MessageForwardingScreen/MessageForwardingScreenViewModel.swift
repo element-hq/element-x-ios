@@ -26,13 +26,14 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     init(forwardingItem: MessageForwardingItem,
          userSession: UserSessionProtocol,
          roomSummaryProvider: RoomSummaryProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         maxRoomSelectionCount: Int = MessageForwardingScreenCoordinatorParameters.defaultMaxRoomSelectionCount) {
         self.forwardingItem = forwardingItem
         clientProxy = userSession.clientProxy
         self.roomSummaryProvider = roomSummaryProvider
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: MessageForwardingScreenViewState(), mediaProvider: userSession.mediaProvider)
+        super.init(initialViewState: MessageForwardingScreenViewState(maxRoomSelectionCount: maxRoomSelectionCount), mediaProvider: userSession.mediaProvider)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
@@ -63,10 +64,10 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         case .send:
             Task { await forward() }
         case .selectRoom(let roomID):
-            if let index = state.selectedRoomIDs.firstIndex(of: roomID) {
-                state.selectedRoomIDs.remove(at: index)
+            if state.selectedRoomIDs.contains(roomID) == false, state.selectedRoomIDs.count < state.maxRoomSelectionCount {
+                state.selectedRoomIDs.insert(roomID)
             } else {
-                state.selectedRoomIDs.append(roomID)
+                state.selectedRoomIDs.remove(roomID)
             }
         case .reachedTop:
             updateVisibleRange(edge: .top)

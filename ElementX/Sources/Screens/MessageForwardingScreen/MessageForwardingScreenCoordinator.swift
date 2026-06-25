@@ -10,10 +10,13 @@ import Combine
 import SwiftUI
 
 struct MessageForwardingScreenCoordinatorParameters {
+    static let defaultMaxRoomSelectionCount = 10
+    
     let forwardingItem: MessageForwardingItem
     let userSession: UserSessionProtocol
     let roomSummaryProvider: RoomSummaryProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    var maxRoomSelectionCount: Int = MessageForwardingScreenCoordinatorParameters.defaultMaxRoomSelectionCount
 }
 
 enum MessageForwardingScreenCoordinatorAction {
@@ -34,7 +37,8 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
         viewModel = MessageForwardingScreenViewModel(forwardingItem: parameters.forwardingItem,
                                                      userSession: parameters.userSession,
                                                      roomSummaryProvider: parameters.roomSummaryProvider,
-                                                     userIndicatorController: parameters.userIndicatorController)
+                                                     userIndicatorController: parameters.userIndicatorController,
+                                                     maxRoomSelectionCount: parameters.maxRoomSelectionCount)
     }
     
     func start() {
