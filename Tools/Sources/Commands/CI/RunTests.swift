@@ -127,10 +127,8 @@ struct RunTests: AsyncParsableCommand {
     private func executeXcodeBuild() async throws {
         var command = "set -o pipefail && xcodebuild test"
         command += " -scheme \(scheme)"
-        command += " -sdk iphonesimulator"
         command += " -destination 'platform=iOS Simulator,name=\(device),OS=\(osVersion),arch=arm64'"
         command += " -resultBundlePath \(resultBundlePath)"
-        command += " -skipPackagePluginValidation"
         
         // Use xcodebuild's native retry support to re-run only failing tests
         // instead of re-running the entire suite. retries=0 means no retries (single run).
