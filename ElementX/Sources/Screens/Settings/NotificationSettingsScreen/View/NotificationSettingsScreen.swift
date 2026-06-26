@@ -264,6 +264,8 @@ struct NotificationSettingsScreen: View {
 
 // MARK: - Previews
 
+// sourcery: iOS26Preview
+@available(iOS 26.0, *)
 struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel: NotificationSettingsScreenViewModel = {
         let appSettings = AppSettings.volatile()

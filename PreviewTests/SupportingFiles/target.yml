@@ -41,6 +41,8 @@ targets:
       base:
         PRODUCT_NAME: PreviewTests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.preview.tests
+        # Requires iOS 26 as the generated tests reference previews gated to the Observations-based observe(_:).
+        IPHONEOS_DEPLOYMENT_TARGET: '26.0'
         SWIFT_VERSION: 6.2
         SWIFT_APPROACHABLE_CONCURRENCY: YES
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor

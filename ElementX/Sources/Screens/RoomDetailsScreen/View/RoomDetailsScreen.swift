@@ -359,6 +359,8 @@ struct RoomDetailsScreen: View {
 
 import MatrixRustSDK
 
+// sourcery: iOS26Preview
+@available(iOS 26.0, *)
 struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericWorldReadableRoomViewModel = makeGenericRoomViewModel(historyVisibility: .worldReadable)
     static let genericJoinedRoomViewModel = makeGenericRoomViewModel(historyVisibility: .joined)

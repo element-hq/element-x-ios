@@ -116,6 +116,8 @@ struct IdentityConfirmationScreen: View {
 
 // MARK: - Previews
 
+// sourcery: iOS26Preview
+@available(iOS 26.0, *)
 struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     static var viewModel = makeViewModel()
     static var loadingViewModel = makeViewModel(recoveryState: .unknown)

@@ -169,6 +169,8 @@ struct TimelineMediaPreviewDetailsView: View {
 
 import UniformTypeIdentifiers
 
+// sourcery: iOS26Preview
+@available(iOS 26.0, *)
 struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(contentType: .jpeg, isOutgoing: true)
     static let loadingViewModel = makeViewModel(contentType: .jpeg, isOutgoing: true, isDownloaded: false)

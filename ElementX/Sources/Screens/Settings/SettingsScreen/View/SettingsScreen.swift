@@ -255,6 +255,8 @@ struct SettingsScreen: View {
 
 // MARK: - Previews
 
+// sourcery: iOS26Preview
+@available(iOS 26.0, *)
 struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let bugReportDisabledViewModel = makeViewModel(isBugReportServiceEnabled: false)

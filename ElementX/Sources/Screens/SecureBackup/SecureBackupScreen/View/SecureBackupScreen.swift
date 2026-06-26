@@ -116,6 +116,8 @@ struct SecureBackupScreen: View {
 
 // MARK: - Previews
 
+// sourcery: iOS26Preview
+@available(iOS 26.0, *)
 struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
     static let bothSetupViewModel = viewModel(keyBackupState: .enabled, recoveryState: .enabled)
     static let onlyKeyBackupSetUpViewModel = viewModel(keyBackupState: .enabled, recoveryState: .disabled)

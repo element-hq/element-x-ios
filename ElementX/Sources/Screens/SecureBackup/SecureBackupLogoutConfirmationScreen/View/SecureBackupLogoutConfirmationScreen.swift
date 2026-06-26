@@ -110,6 +110,8 @@ struct SecureBackupLogoutConfirmationScreen: View {
 
 // MARK: - Previews
 
+// sourcery: iOS26Preview
+@available(iOS 26.0, *)
 struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(mode: .saveRecoveryKey)
     static let waitingViewModel = makeViewModel(mode: .waitingToStart(hasStalled: false))

@@ -157,6 +157,8 @@ private struct SpaceAddRoomsListRow: View {
 
 // MARK: - Previews
 
+// sourcery: iOS26Preview
+@available(iOS 26.0, *)
 struct SpaceAddRoomsScreen_Previews: PreviewProvider, TestablePreview {
     static let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
     static let viewModel = makeViewModel()
