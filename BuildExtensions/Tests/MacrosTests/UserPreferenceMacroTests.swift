@@ -21,12 +21,10 @@ final class UserPreferenceMacroTests: XCTestCase {
                              """
                              var hasSeenNewSoundBanner: Bool {
                                  get {
-                                     let storage = UserDefaultsStorage<Bool>(userDefaults: store)
-                                     return storage["hasSeenNewSoundBanner"] ?? true
+                                     store["hasSeenNewSoundBanner"] ?? true
                                  }
                                  set {
-                                     let storage = UserDefaultsStorage<Bool>(userDefaults: store)
-                                     storage["hasSeenNewSoundBanner"] = newValue
+                                     store["hasSeenNewSoundBanner"] = newValue
                                      _hasSeenNewSoundBannerSubject.send(newValue)
                                  }
                              }
@@ -38,8 +36,7 @@ final class UserPreferenceMacroTests: XCTestCase {
                              }
                              
                              func resetHasSeenNewSoundBanner() {
-                                 let storage = UserDefaultsStorage<Bool>(userDefaults: store)
-                                 storage["hasSeenNewSoundBanner"] = nil
+                                 store.removeObject(forKey: "hasSeenNewSoundBanner")
                              }
                              """,
                              macros: macros)
@@ -54,12 +51,10 @@ final class UserPreferenceMacroTests: XCTestCase {
                              """
                              var liveLocationSharingSessionsByRoomID: [String: LiveLocationSession] {
                                  get {
-                                     let storage = UserDefaultsStorage<[String: LiveLocationSession]>(userDefaults: store)
-                                     return storage["liveLocationSharingTimeoutDatesByRoomID"] ?? [String: LiveLocationSession]()
+                                     store["liveLocationSharingTimeoutDatesByRoomID"] ?? [String: LiveLocationSession]()
                                  }
                                  set {
-                                     let storage = UserDefaultsStorage<[String: LiveLocationSession]>(userDefaults: store)
-                                     storage["liveLocationSharingTimeoutDatesByRoomID"] = newValue
+                                     store["liveLocationSharingTimeoutDatesByRoomID"] = newValue
                                      _liveLocationSharingSessionsByRoomIDSubject.send(newValue)
                                  }
                              }
@@ -71,8 +66,7 @@ final class UserPreferenceMacroTests: XCTestCase {
                              }
                              
                              func resetLiveLocationSharingSessionsByRoomID() {
-                                 let storage = UserDefaultsStorage<[String: LiveLocationSession]>(userDefaults: store)
-                                 storage["liveLocationSharingTimeoutDatesByRoomID"] = nil
+                                 store.removeObject(forKey: "liveLocationSharingTimeoutDatesByRoomID")
                              }
                              """,
                              macros: macros)
@@ -87,12 +81,10 @@ final class UserPreferenceMacroTests: XCTestCase {
                              """
                              var pusherProfileTag: String? {
                                  get {
-                                     let storage = UserDefaultsStorage<String?>(userDefaults: store)
-                                     return storage["pusherProfileTag"] ?? nil
+                                     store["pusherProfileTag"]
                                  }
                                  set {
-                                     let storage = UserDefaultsStorage<String?>(userDefaults: store)
-                                     storage["pusherProfileTag"] = newValue
+                                     store["pusherProfileTag"] = newValue
                                      _pusherProfileTagSubject.send(newValue)
                                  }
                              }
@@ -104,8 +96,7 @@ final class UserPreferenceMacroTests: XCTestCase {
                              }
                              
                              func resetPusherProfileTag() {
-                                 let storage = UserDefaultsStorage<String?>(userDefaults: store)
-                                 storage["pusherProfileTag"] = nil
+                                 store.removeObject(forKey: "pusherProfileTag")
                              }
                              """,
                              macros: macros)
@@ -120,12 +111,10 @@ final class UserPreferenceMacroTests: XCTestCase {
                              """
                              var viewSourceEnabled: Bool {
                                  get {
-                                     let storage = UserDefaultsStorage<Bool>(userDefaults: store)
-                                     return storage["viewSourceEnabled"] ?? (Self.appBuildType == .debug)
+                                     store["viewSourceEnabled"] ?? (Self.appBuildType == .debug)
                                  }
                                  set {
-                                     let storage = UserDefaultsStorage<Bool>(userDefaults: store)
-                                     storage["viewSourceEnabled"] = newValue
+                                     store["viewSourceEnabled"] = newValue
                                      _viewSourceEnabledSubject.send(newValue)
                                  }
                              }
@@ -137,8 +126,7 @@ final class UserPreferenceMacroTests: XCTestCase {
                              }
                              
                              func resetViewSourceEnabled() {
-                                 let storage = UserDefaultsStorage<Bool>(userDefaults: store)
-                                 storage["viewSourceEnabled"] = nil
+                                 store.removeObject(forKey: "viewSourceEnabled")
                              }
                              """,
                              macros: macros)
