@@ -35,6 +35,8 @@ targets:
     - package: AsyncAlgorithms
     - package: Clocks
     - package: Dynamic
+    - package: BuildExtensions
+      product: Macros
 
     info:
       path: ../SupportingFiles/Info.plist

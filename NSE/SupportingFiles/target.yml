@@ -37,6 +37,8 @@ targets:
       - package: Kingfisher
       - package: Collections
       - package: Compound
+      - package: BuildExtensions
+        product: Macros
       - package: DeviceKit
       - package: LRUCache
       - package: Version
