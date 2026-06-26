@@ -170,7 +170,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         registerBackgroundAppRefresh()
         
-        appSettings.$analyticsConsentState
+        appSettings.analyticsConsentStatePublisher
             .dropFirst() // Sentry is configured during init; only reconfigure when consent state actually changes
             .sink { [bugReportService, analyticsService, appSettings] _ in
                 Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
@@ -221,7 +221,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     func toPresentable() -> AnyView {
         AnyView(navigationRootCoordinator.toPresentable()
             .environment(\.analyticsService, analyticsService)
-            .onReceive(appSettings.$appAppearance) { [weak self] appAppearance in
+            .onReceive(appSettings.appAppearancePublisher) { [weak self] appAppearance in
                 guard let self else { return }
                 
                 windowManager.windows.forEach { window in

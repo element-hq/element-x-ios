@@ -152,7 +152,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             .weakAssign(to: \.state.isSpace, on: self)
             .store(in: &cancellables)
         
-        appSettings.$knockingEnabled
+        appSettings.knockingEnabledPublisher
             .weakAssign(to: \.state.isKnockingEnabled, on: self)
             .store(in: &cancellables)
     }
