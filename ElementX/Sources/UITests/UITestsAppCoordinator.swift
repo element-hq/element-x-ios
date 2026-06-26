@@ -784,6 +784,7 @@ class MockScreen: Identifiable {
             
             let navigationStackCoordinator = NavigationStackCoordinator()
             let flowCoordinator = LinkNewDeviceFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
+                                                               appLockService: AppLockServiceMock.mock(),
                                                                flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                                                     bugReportService: BugReportServiceMock(.init()),
                                                                                                     elementCallService: ElementCallServiceMock(.init()),

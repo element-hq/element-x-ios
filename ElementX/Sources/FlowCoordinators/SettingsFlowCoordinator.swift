@@ -181,6 +181,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func startLinkNewDeviceFlow() {
         let stackCoordinator = NavigationStackCoordinator()
         let flowCoordinator = LinkNewDeviceFlowCoordinator(navigationStackCoordinator: stackCoordinator,
+                                                           appLockService: appLockService,
                                                            flowParameters: flowParameters)
         flowCoordinator.actionsPublisher
             .sink { [weak self] action in

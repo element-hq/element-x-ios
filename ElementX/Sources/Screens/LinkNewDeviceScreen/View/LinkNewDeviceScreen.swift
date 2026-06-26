@@ -59,7 +59,8 @@ struct LinkNewDeviceScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .disabled(true)
-        case .readyToLink(let isGeneratingCode):
+        case .readyToLink(let linkState):
+            let isGeneratingCode = linkState == .generatingCode
             VStack(spacing: 16) {
                 Button { context.send(viewAction: .linkMobileDevice) } label: {
                     Label {
@@ -84,7 +85,7 @@ struct LinkNewDeviceScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.linkNewDeviceScreen.desktopComputer)
                 }
             }
-            .disabled(isGeneratingCode)
+            .disabled(linkState != .idle)
         case .error:
             EmptyView() // Not reachable.
         }
@@ -103,8 +104,9 @@ struct LinkNewDeviceScreen: View {
 // MARK: - Previews
 
 struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = makeViewModel(mode: .readyToLink(isGeneratingCode: false))
-    static let generatingViewModel = makeViewModel(mode: .readyToLink(isGeneratingCode: true))
+    static let viewModel = makeViewModel(mode: .readyToLink(.idle))
+    static let verifyingViewModel = makeViewModel(mode: .readyToLink(.verifyingDeviceOwner))
+    static let generatingViewModel = makeViewModel(mode: .readyToLink(.generatingCode))
     static let loadingViewModel = makeViewModel(mode: .loading)
     static let unsupportedViewModel = makeViewModel(mode: .error(.notSupported))
     static let unknownErrorViewModel = makeViewModel(mode: .error(.unknown))
@@ -114,13 +116,19 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
             LinkNewDeviceScreen(context: viewModel.context)
         }
         .previewDisplayName("Ready")
-        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(isGeneratingCode: false) })
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(.idle) })
+        
+        ElementNavigationStack {
+            LinkNewDeviceScreen(context: verifyingViewModel.context)
+        }
+        .previewDisplayName("Verifying")
+        .snapshotPreferences(expect: verifyingViewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(.verifyingDeviceOwner) })
         
         ElementNavigationStack {
             LinkNewDeviceScreen(context: generatingViewModel.context)
         }
         .previewDisplayName("Generating")
-        .snapshotPreferences(expect: generatingViewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(isGeneratingCode: true) })
+        .snapshotPreferences(expect: generatingViewModel.context.observe(\.viewState.mode).map { $0 == .readyToLink(.generatingCode) })
         
         ElementNavigationStack {
             LinkNewDeviceScreen(context: loadingViewModel.context)
@@ -142,6 +150,7 @@ struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(mode: LinkNewDeviceScreenViewState.Mode) -> LinkNewDeviceScreenViewModel {
         LinkNewDeviceScreenViewModel(clientProxy: ClientProxyMock(.init()),
+                                     appLockService: AppLockServiceMock.mock(),
                                      initialState: .init(mode: mode,
                                                          showLinkDesktopComputerButton: true))
     }

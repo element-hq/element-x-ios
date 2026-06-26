@@ -15,6 +15,7 @@ enum LinkNewDeviceFlowCoordinatorAction {
 
 class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
+    private let appLockService: AppLockServiceProtocol
     private let flowParameters: CommonFlowParameters
     
     private var cancellables = Set<AnyCancellable>()
@@ -25,8 +26,10 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     init(navigationStackCoordinator: NavigationStackCoordinator,
+         appLockService: AppLockServiceProtocol,
          flowParameters: CommonFlowParameters) {
         self.navigationStackCoordinator = navigationStackCoordinator
+        self.appLockService = appLockService
         self.flowParameters = flowParameters
     }
     
@@ -44,6 +47,7 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentLinkNewDeviceScreen() {
         let coordinator = LinkNewDeviceScreenCoordinator(parameters: .init(clientProxy: flowParameters.userSession.clientProxy,
+                                                                           appLockService: appLockService,
                                                                            orientationManager: flowParameters.appMediator.windowManager))
         coordinator.actionsPublisher
             .sink { [weak self] action in

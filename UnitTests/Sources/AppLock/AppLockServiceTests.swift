@@ -8,6 +8,7 @@
 
 @testable import ElementX
 import Foundation
+import LocalAuthentication
 import Testing
 
 @MainActor
@@ -345,5 +346,101 @@ final class AppLockServiceTests {
         
         // Then the attempts counts should both be reset.
         #expect(appSettings.appLockNumberOfPINAttempts == 0, "The PIN attempts should be reset.")
+    }
+    
+    // MARK: - Device Owner Verification
+    
+    @Test
+    func deviceOwnerVerified() async {
+        // Given a service that can evaluate the device owner policy successfully.
+        let context = LAContextMock()
+        context.canEvaluatePolicyReturnValue = true
+        context.evaluatePolicyReturnValue = true
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        
+        // When verifying the device owner.
+        let result = await service.verifyDeviceOwner(reason: "Test")
+        
+        // Then the owner should be verified.
+        #expect(result == .verified)
+    }
+    
+    @Test
+    func deviceOwnerUnverified() async {
+        // Given a service where the policy evaluation completes without success.
+        let context = LAContextMock()
+        context.canEvaluatePolicyReturnValue = true
+        context.evaluatePolicyReturnValue = false
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        
+        // When verifying the device owner.
+        let result = await service.verifyDeviceOwner(reason: "Test")
+        
+        // Then the result should be unverified.
+        #expect(result == .unverified)
+    }
+    
+    @Test
+    func deviceOwnerVerificationCancelled() async {
+        // Given a service where the user cancels the prompt.
+        let context = LAContextMock()
+        context.canEvaluatePolicyReturnValue = true
+        context.evaluatePolicyThrowableError = LAError(.userCancel)
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        
+        // When verifying the device owner.
+        let result = await service.verifyDeviceOwner(reason: "Test")
+        
+        // Then the result should be cancelled.
+        #expect(result == .cancelled)
+    }
+    
+    @Test
+    func deviceOwnerVerificationErrored() async {
+        // Given a service where the policy evaluation throws an error.
+        let context = LAContextMock()
+        context.canEvaluatePolicyReturnValue = true
+        context.evaluatePolicyThrowableError = LAError(.authenticationFailed)
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        
+        // When verifying the device owner.
+        let result = await service.verifyDeviceOwner(reason: "Test")
+        
+        // Then the result should be an error.
+        #expect(result == .error)
+    }
+    
+    @Test
+    func deviceOwnerVerificationUnavailableWithoutPIN() async {
+        // Given a service that can't evaluate the policy and has no App Lock PIN set.
+        let context = LAContextMock()
+        context.canEvaluatePolicyReturnValue = false
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        #expect(!service.isEnabled, "The service shouldn't be enabled.")
+        
+        // When verifying the device owner.
+        let result = await service.verifyDeviceOwner(reason: "Test")
+        
+        // Then verification should be unavailable.
+        #expect(result == .unavailable)
+    }
+    
+    @Test
+    func deviceOwnerVerificationRequiresAppLockPIN() async {
+        // Given a service that can't evaluate the policy but has an App Lock PIN set.
+        let context = LAContextMock()
+        context.canEvaluatePolicyReturnValue = false
+        service = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+        guard case .success = service.setupPINCode("2023") else {
+            Issue.record("The PIN should be valid.")
+            return
+        }
+        #expect(service.isEnabled, "The service should be enabled.")
+        
+        // When verifying the device owner.
+        let result = await service.verifyDeviceOwner(reason: "Test")
+        
+        // Then it should request the App Lock PIN instead.
+        #expect(result == .appLockPINRequired)
     }
 }
