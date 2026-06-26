@@ -48,11 +48,11 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                          customToneSelectionEnabled: !ProcessInfo.processInfo.isiOSAppOnMac))
         
         // Listen for changes to AppSettings.
-        appSettings.$enableNotifications
+        appSettings.enableNotificationsPublisher
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
             .store(in: &cancellables)
         
-        appSettings.$selectedNotificationTone
+        appSettings.selectedNotificationTonePublisher
             .map { $0 ?? NotificationToneManager.defaultElementXMessageTone }
             .weakAssign(to: \.state.selectedAlertTone, on: self)
             .store(in: &cancellables)

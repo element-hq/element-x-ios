@@ -190,7 +190,7 @@ final class LiveLocationManagerTests {
         try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
         #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
         
-        let deferred = deferFulfillment(appSettings.$liveLocationSharingSessionsByRoomID) { $0["!room:matrix.org"] == nil }
+        let deferred = deferFulfillment(appSettings.liveLocationSharingSessionsByRoomIDPublisher) { $0["!room:matrix.org"] == nil }
         beaconInfoSubject.send(LiveLocationOwnInfoUpdate(roomID: "!room:matrix.org", eventID: "$external_event:matrix.org", isLive: true))
         try await deferred.fulfill()
         
@@ -237,7 +237,7 @@ final class LiveLocationManagerTests {
     }
     
     private func simulateBeaconEcho(roomID: String, eventID: String) async throws {
-        let deferred = deferFulfillment(appSettings.$liveLocationSharingSessionsByRoomID) { $0[roomID] != nil }
+        let deferred = deferFulfillment(appSettings.liveLocationSharingSessionsByRoomIDPublisher) { $0[roomID] != nil }
         beaconInfoSubject.send(LiveLocationOwnInfoUpdate(roomID: roomID, eventID: eventID, isLive: true))
         try await deferred.fulfill()
     }

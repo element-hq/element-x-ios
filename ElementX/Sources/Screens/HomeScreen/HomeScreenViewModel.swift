@@ -118,21 +118,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        appSettings.$roomListActivityVisibility
+        appSettings.roomListActivityVisibilityPublisher
             .sink { [weak self] value in
                 self?.state.roomListActivityVisibility = value
                 self?.updateRooms()
             }
             .store(in: &cancellables)
         
-        appSettings.$seenInvites
+        appSettings.seenInvitesPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.updateRooms()
             }
             .store(in: &cancellables)
         
-        appSettings.$hasSeenNewSoundBanner
+        appSettings.hasSeenNewSoundBannerPublisher
             .sink { [weak self] hasSeenNewSoundBanner in
                 self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner
             }

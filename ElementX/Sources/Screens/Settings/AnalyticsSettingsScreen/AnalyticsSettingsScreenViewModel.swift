@@ -23,7 +23,7 @@ class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, An
         
         super.init(initialViewState: state)
         
-        appSettings.$analyticsConsentState
+        appSettings.analyticsConsentStatePublisher
             .map { $0 == .optedIn }
             .weakAssign(to: \.state.bindings.enableAnalytics, on: self)
             .store(in: &cancellables)

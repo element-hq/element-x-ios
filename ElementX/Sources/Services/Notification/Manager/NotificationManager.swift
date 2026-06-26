@@ -51,7 +51,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         MXLog.info("App setting 'enableNotifications' is '\(notificationsEnabled)'")
         
         // Listen for changes to AppSettings.enableNotifications
-        appSettings.$enableNotifications
+        appSettings.enableNotificationsPublisher
             .sink { [weak self] newValue in
                 self?.enableNotifications(newValue)
             }

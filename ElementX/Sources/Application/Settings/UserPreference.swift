@@ -6,123 +6,15 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Combine
 import Foundation
-
-/// A property wrapper that allows storing data in a keyed storage while also exposing a Combine publisher
-/// to listen for value changes. The publisher does not skip consecutive duplicates, as there is no
-/// `Equatable` enforcement at this level.
-@propertyWrapper
-final nonisolated class UserPreference<T: Codable> {
-    static var remotePrefix: String {
-        "remote-"
-    }
-    
-    enum Mode {
-        case localOverRemote
-        case remoteOverLocal
-    }
-    
-    private let key: String
-    private var remoteKey: String {
-        "\(Self.remotePrefix)\(key)"
-    }
-    
-    private var keyedStorage: any KeyedStorage<T>
-    private let defaultValue: T
-    private let subject: PassthroughSubject<T, Never> = .init()
-    private let mode: Mode
-    
-    /// This can be used to check if is still possible for the user to change the value or not
-    /// Can only be accessed by using `_preferenceName.isLockedToRemote`
-    var isLockedToRemote: Bool {
-        mode == .remoteOverLocal && remoteValue != nil
-    }
-    
-    /// Initializes the property wrapper with a static default value.
-    ///
-    /// - Parameters:
-    ///   - key: The key used to store and retrieve the value.
-    ///   - defaultValue: The default value to use if no stored value exists or if `forceDefault` is `true`.
-    ///   - keyedStorage: The storage instance where the value is saved.
-    ///   - forceDefault: A publisher that determines whether the default value should always be used. Defaults to publish `false`. Useful in the context of remote settings that need to override the local value.
-    init(key: any PreferenceKeyable,
-         defaultValue: T,
-         keyedStorage: any KeyedStorage<T>,
-         mode: Mode) {
-        self.key = key.rawValue
-        self.defaultValue = defaultValue
-        self.keyedStorage = keyedStorage
-        self.mode = mode
-    }
-    
-    /// The wrapped value is supposed to be the one updated by the user so it can only control the local value
-    var wrappedValue: T {
-        get {
-            switch mode {
-            case .localOverRemote:
-                return keyedStorage[key] ?? keyedStorage[remoteKey] ?? defaultValue
-            case .remoteOverLocal:
-                return keyedStorage[remoteKey] ?? keyedStorage[key] ?? defaultValue
-            }
-        }
-        set {
-            keyedStorage[key] = newValue
-            subject.send(wrappedValue)
-        }
-    }
-    
-    /// This is supposed to be the value that is set by the remote settings
-    /// So it can only be accessed by doing `AppSettings._preferenceName.remoteValue`
-    var remoteValue: T? {
-        get {
-            keyedStorage[remoteKey]
-        } set {
-            keyedStorage[remoteKey] = newValue
-            if mode == .remoteOverLocal || keyedStorage[key] == nil {
-                subject.send(wrappedValue)
-            }
-        }
-    }
-    
-    var projectedValue: AnyPublisher<T, Never> {
-        subject
-            .prepend(wrappedValue)
-            .eraseToAnyPublisher()
-    }
-}
-
-// MARK: - UserPreference convenience initializers
-
-nonisolated extension UserPreference {
-    convenience init(key: any PreferenceKeyable, defaultValue: T, storage backingStorage: UserDefaultsProtocol, mode: Mode = .localOverRemote) {
-        let storage: any KeyedStorage<T> = UserDefaultsStorage(userDefaults: backingStorage)
-        
-        self.init(key: key, defaultValue: defaultValue, keyedStorage: storage, mode: mode)
-    }
-    
-    convenience init(key: any PreferenceKeyable, storage: UserDefaultsProtocol, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
-        self.init(key: key, defaultValue: nil, storage: storage, mode: mode)
-    }
-}
-
-// MARK: - Keys
-
-nonisolated protocol PreferenceKeyable: RawRepresentable where RawValue == String { }
 
 // MARK: - Storage
 
-nonisolated protocol KeyedStorage<Value> {
-    associatedtype Value: Codable
-    
-    subscript(key: String) -> Value? { get set }
-}
-
-/// An implementation of KeyedStorage on the UserDefaults.
+/// Typed storage of a `Codable` value in `UserDefaults`, used by the `@UserPreference` macro.
 ///
 /// When used with a `Value` that conforms to `PlistRepresentable` the Codable encode/decode
 /// phase is skipped, and values are stored natively in the plist.
-final nonisolated class UserDefaultsStorage<Value: Codable>: KeyedStorage {
+nonisolated struct UserDefaultsStorage<Value: Codable> {
     private let userDefaults: UserDefaultsProtocol
     
     init(userDefaults: UserDefaultsProtocol) {
@@ -140,7 +32,7 @@ final nonisolated class UserDefaultsStorage<Value: Codable>: KeyedStorage {
             
             return value
         }
-        set {
+        nonmutating set {
             if Value.self is PlistRepresentable.Type {
                 encodePlistRepresentable(value: newValue, for: key)
             } else {
@@ -197,8 +89,6 @@ nonisolated extension Optional: Nullable {
         }
     }
 }
-
-nonisolated extension Dictionary: KeyedStorage where Key == String, Value: Codable { }
 
 // MARK: - PlistRepresentable
 
