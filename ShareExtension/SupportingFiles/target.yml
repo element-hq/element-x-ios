@@ -36,6 +36,8 @@ targets:
       - package: Compound
       - package: Collections
       - package: KeychainAccess
+      - package: BuildExtensions
+        product: Macros
 
     info:
       path: Info.plist

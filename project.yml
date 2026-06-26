@@ -78,6 +78,8 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
+  BuildExtensions:
+    path: BuildExtensions
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     minorVersion: 0.36.1

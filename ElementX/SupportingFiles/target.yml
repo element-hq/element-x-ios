@@ -230,6 +230,8 @@ targets:
     - package: MatrixRustSDK
       embed: true
     - package: Compound
+    - package: BuildExtensions
+      product: Macros
     - package: Algorithms
     - package: AsyncAlgorithms
     - package: AnalyticsEvents
