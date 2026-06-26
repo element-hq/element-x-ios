@@ -9,8 +9,8 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 
 /// Implements `@UserPreference`. The generated property reads and writes through the enclosing
-/// type's `store` (a `UserDefaultsProtocol`), wrapped in `UserDefaultsStorage` for the
-/// encode/decode handling, and publishes changes via a generated per-preference subject.
+/// type's `store` (a `UserDefaultsProtocol`), and publishes changes via a generated per-preference
+/// subject.
 ///
 /// A `volatile` preference instead reads and writes through a generated in-memory store, so its
 /// value is never persisted and resets on each launch.
@@ -33,7 +33,7 @@ public enum UserPreferenceMacro {
         let name: String
         let type: TypeSyntax
         let key: ExprSyntax
-        let defaultValue: ExprSyntax
+        let defaultValue: ExprSyntax?
         let isVolatile: Bool
         
         var subjectName: TokenSyntax {
@@ -79,7 +79,7 @@ public enum UserPreferenceMacro {
         return Preference(name: name,
                           type: type,
                           key: key ?? "\(literal: name)",
-                          defaultValue: defaultValue ?? "nil",
+                          defaultValue: defaultValue,
                           isVolatile: isVolatile)
     }
 }
@@ -106,29 +106,33 @@ extension UserPreferenceMacro: AccessorMacro {
             ]
         }
         
-        let type = preference.type
         let key = preference.key
-        
-        // Parenthesise a default that's a binary expression: `??` binds tighter than e.g. `==`,
-        // so `storage[key] ?? a == b` would otherwise parse as `(storage[key] ?? a) == b`.
-        let isBinaryExpression = preference.defaultValue.is(SequenceExprSyntax.self) || preference.defaultValue.is(InfixOperatorExprSyntax.self)
-        let defaultValue: ExprSyntax = isBinaryExpression ? "(\(preference.defaultValue))" : preference.defaultValue
         
         return [
             """
             get {
-                let storage = UserDefaultsStorage<\(type)>(userDefaults: store)
-                return storage[\(key)] ?? \(defaultValue)
+                \(readExpression(for: preference))
             }
             """,
             """
             set {
-                let storage = UserDefaultsStorage<\(type)>(userDefaults: store)
-                storage[\(key)] = newValue
+                store[\(key)] = newValue
                 \(preference.subjectName).send(newValue)
             }
             """
         ]
+    }
+    
+    /// The getter expression: `store[key]`, with the default appended when there is one. A default
+    /// that's a binary expression is parenthesised, as `??` binds tighter than e.g. `==`.
+    private static func readExpression(for preference: Preference) -> ExprSyntax {
+        guard let defaultValue = preference.defaultValue else {
+            return "store[\(preference.key)]"
+        }
+        
+        let isBinaryExpression = defaultValue.is(SequenceExprSyntax.self) || defaultValue.is(InfixOperatorExprSyntax.self)
+        let wrappedDefault: ExprSyntax = isBinaryExpression ? "(\(defaultValue))" : defaultValue
+        return "store[\(preference.key)] ?? \(wrappedDefault)"
     }
 }
 
@@ -143,7 +147,7 @@ extension UserPreferenceMacro: PeerMacro {
         var peers: [DeclSyntax] = []
         
         if preference.isVolatile {
-            peers.append("private var \(preference.volatileValueName): \(type) = \(preference.defaultValue)")
+            peers.append("private var \(preference.volatileValueName): \(type) = \(preference.defaultValue ?? "nil")")
         }
         
         peers.append("private let \(preference.subjectName) = PassthroughSubject<\(type), Never>()")
@@ -163,14 +167,13 @@ extension UserPreferenceMacro: PeerMacro {
         if preference.isVolatile {
             """
             func \(preference.resetMethodName)() {
-                \(preference.volatileValueName) = \(preference.defaultValue)
+                \(preference.volatileValueName) = \(preference.defaultValue ?? "nil")
             }
             """
         } else {
             """
             func \(preference.resetMethodName)() {
-                let storage = UserDefaultsStorage<\(preference.type)>(userDefaults: store)
-                storage[\(preference.key)] = nil
+                store.removeObject(forKey: \(preference.key))
             }
             """
         }
