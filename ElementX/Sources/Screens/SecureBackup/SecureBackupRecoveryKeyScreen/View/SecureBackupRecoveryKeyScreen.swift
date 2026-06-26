@@ -237,7 +237,6 @@ private struct RecoveryKeyView: View {
 
 // MARK: - Previews
 
-// sourcery: iOS26Preview
 @available(iOS 26.0, *)
 struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview {
     static let key = "EsTM njec uHYA yHmh dQdW Nj4o bNRU 9jMN XGMc KUNM UFr5 R8GY"

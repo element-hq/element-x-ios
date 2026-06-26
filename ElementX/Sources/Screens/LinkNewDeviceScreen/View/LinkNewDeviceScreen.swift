@@ -103,7 +103,6 @@ struct LinkNewDeviceScreen: View {
 
 // MARK: - Previews
 
-// sourcery: iOS26Preview
 @available(iOS 26.0, *)
 struct LinkNewDeviceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(mode: .readyToLink(.idle))

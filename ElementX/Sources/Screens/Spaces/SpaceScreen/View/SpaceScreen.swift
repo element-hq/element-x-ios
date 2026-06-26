@@ -184,7 +184,6 @@ struct SpaceScreen: View {
 
 // MARK: - Previews
 
-// sourcery: iOS26Preview
 @available(iOS 26.0, *)
 struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()

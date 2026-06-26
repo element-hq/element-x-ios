@@ -106,7 +106,6 @@ struct UserProfileScreen: View {
 
 // MARK: - Previews
 
-// sourcery: iOS26Preview
 @available(iOS 26.0, *)
 struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     static let verifiedUserViewModel = makeViewModel(userID: RoomMemberProxyMock.mockDan.userID)

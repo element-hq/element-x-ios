@@ -91,7 +91,6 @@ struct ServerSelectionScreen: View {
 
 // MARK: - Previews
 
-// sourcery: iOS26Preview
 @available(iOS 26.0, *)
 struct ServerSelection_Previews: PreviewProvider, TestablePreview {
     static let matrixViewModel = makeViewModel(for: "https://matrix.org")

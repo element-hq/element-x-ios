@@ -20,13 +20,14 @@ import {{ import }}
 enum TestablePreviewsDictionary {
     static let dictionary: [String: any PreviewProvider.Type] = {
         var dictionary: [String: any PreviewProvider.Type] = [
-            {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" and not type|annotated:"iOS26Preview" %}
+            {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" and not type.attributes.available %}
             "{{ type.name }}" : {{ type.name }}.self,
             {% endfor %}
         ]
-        // Previews that observe state through the iOS 26 Observations-based observe(_:) are gated accordingly.
+        // Previews carrying an @available attribute (e.g. those observing state through the iOS 26
+        // Observations-based observe(_:)) can't be referenced unconditionally in this iOS 18 target.
         if #available(iOS 26.0, *) {
-            {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" and type|annotated:"iOS26Preview" %}
+            {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" and type.attributes.available %}
             dictionary["{{ type.name }}"] = {{ type.name }}.self
             {% endfor %}
         }

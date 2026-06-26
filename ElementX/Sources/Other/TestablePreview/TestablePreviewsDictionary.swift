@@ -218,7 +218,8 @@ enum TestablePreviewsDictionary {
             "VoiceMessageTrashButton_Previews" : VoiceMessageTrashButton_Previews.self,
             "WaveformCursorView_Previews" : WaveformCursorView_Previews.self,
         ]
-        // Previews that observe state through the iOS 26 Observations-based observe(_:) are gated accordingly.
+        // Previews carrying an @available attribute (e.g. those observing state through the iOS 26
+        // Observations-based observe(_:)) can't be referenced unconditionally in this iOS 18 target.
         if #available(iOS 26.0, *) {
             dictionary["EmojiPickerScreen_Previews"] = EmojiPickerScreen_Previews.self
             dictionary["IdentityConfirmationScreen_Previews"] = IdentityConfirmationScreen_Previews.self
