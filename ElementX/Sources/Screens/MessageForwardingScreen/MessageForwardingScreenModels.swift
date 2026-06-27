@@ -17,7 +17,7 @@ enum MessageForwardingScreenViewModelAction {
 struct MessageForwardingScreenViewState: BindableState {
     var rooms: [MessageForwardingRoom] = []
     var selectedRoomIDs: Set<String> = []
-    var maxRoomSelectionCount = MessageForwardingScreenCoordinatorParameters.defaultMaxRoomSelectionCount
+    let maxRoomSelectionCount = 10
     var bindings = MessageForwardingScreenViewStateBindings()
     
     var isAtRoomSelectionLimit: Bool {
