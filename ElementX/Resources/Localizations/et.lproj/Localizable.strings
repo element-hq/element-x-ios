@@ -3,6 +3,8 @@
 "a11y_address" = "Aadress";
 "a11y_avatar" = "Tunnuspilt";
 "a11y_collapse_message_text_field" = "Vähenda tekstivälja";
+"a11y_create_poll_votes_allowed_decrease" = "Vähenda kasutaja kohta lubatud hääletuskordi";
+"a11y_create_poll_votes_allowed_increase" = "Suurenda kasutaja kohta lubatud hääletuskordi";
 "a11y_delete" = "Kustuta";
 "a11y_duration" = "Kestus: %1$@";
 "a11y_edit_avatar" = "Muuda tunnuspilti";
@@ -21,7 +23,7 @@
 "a11y_page_n" = "%1$d. lehekülg";
 "a11y_pause" = "Peata";
 "a11y_paused_voice_message" = "Häälsõnum, kestus:%1$@, praegune asukoht: %2$@";
-"a11y_photo_preview" = "Photo preview";
+"a11y_photo_preview" = "Foto eelvaade";
 "a11y_pin_field" = "PIN-koodi väli";
 "a11y_pinned_location" = "Esiletõstetud asukoht";
 "a11y_play" = "Esita";
@@ -49,7 +51,7 @@
 "a11y_start_voice_call" = "Helista";
 "a11y_tombstoned_room" = "Lõpetatuks märgitud jututuba";
 "a11y_user_menu" = "Kasutajamenüü";
-"a11y_video_preview" = "Video preview";
+"a11y_video_preview" = "Video eelvaade";
 "a11y_view_avatar" = "Vaata tunnuspilti";
 "a11y_view_details" = "Vaata üksikasju";
 "a11y_voice_message" = "Häälsõnum, kestus:%1$@";
@@ -186,11 +188,11 @@
 "action_translate" = "Tõlgi";
 "action_try_again" = "Proovi uuesti";
 "action_unpin" = "Eemalda esiletõstmine";
-"action_video_call" = "Video call";
+"action_video_call" = "Videokõne";
 "action_view" = "Vaata";
 "action_view_in_timeline" = "Vaata ajajoonel";
 "action_view_source" = "Vaata lähtekoodi";
-"action_voice_call" = "Voice call";
+"action_voice_call" = "Häälkõne";
 "action_yes" = "Jah";
 "action_yes_try_again" = "Jah, proovi uuesti";
 "banner_migrate_to_native_sliding_sync_action" = "Logi välja ja uuenda";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Fail on salvestatud";
 "common_forward_message" = "Edasta sõnum";
 "common_frequently_used" = "Sagedasti kasutatud";
+"common_gallery" = "Galerii";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Rühmakõne on pooleli";
 "common_image" = "Pilt";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Kustuta: %1$@";
 "screen_create_poll_settings_section_title" = "Seadistused";
 "screen_create_poll_title" = "Loo küsitlus";
+"screen_create_poll_votes_allowed_per_person" = "Hääletuskordi kasutaja kohta";
 "screen_create_room_action_create_room" = "Uus jututuba";
 "screen_create_room_add_people_title" = "Kutsu osalejaid";
 "screen_create_room_error_creating_room" = "Jututoa loomisel tekkis viga";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Kas lahkud %1$@ kogukonnast?";
 "screen_leave_space_title_last_admin" = "Sa oled siin ainus peakasutaja: %1$@";
 "screen_leave_space_title_last_owner" = "Anna omand üle";
+"screen_link_new_device_authentication_reason_ios" = "Enne uue seadme sidumist kinnita, et see oled ikka sina.";
 "screen_link_new_device_desktop_scanning_title" = "Skaneeri QR-koodi";
 "screen_link_new_device_desktop_step1" = "Ava %1$@ kas oma süle- või lauaarvutis";
 "screen_link_new_device_desktop_step3" = "Skaneeri QR-koodi selle seadmega";
@@ -1537,7 +1542,7 @@
 "screen_start_chat_error_starting_chat" = "Vestluse alustamisel tekkis viga";
 "screen_start_chat_join_room_by_address_action" = "Liitu jututoaga aadressi alusel";
 "screen_start_chat_join_room_by_address_invalid_address" = "See pole kehtiv aadress";
-"screen_start_chat_join_room_by_address_placeholder" = "Sisene...";
+"screen_start_chat_join_room_by_address_placeholder" = "Sisesta aadress...";
 "screen_start_chat_join_room_by_address_room_found" = "Leidsime vastava jututoa";
 "screen_start_chat_join_room_by_address_room_not_found" = "Jututuba ei leidu";
 "screen_start_chat_join_room_by_address_supporting_text" = "nt. #jututoa-nimi:matrix.org";

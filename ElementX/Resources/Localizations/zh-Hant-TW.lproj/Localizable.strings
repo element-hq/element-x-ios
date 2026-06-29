@@ -3,6 +3,8 @@
 "a11y_address" = "地址";
 "a11y_avatar" = "大頭貼";
 "a11y_collapse_message_text_field" = "最小化訊息文字欄位";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "刪除";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "編輯大頭照";
@@ -262,6 +264,7 @@
 "common_file_saved" = "檔案已儲存";
 "common_forward_message" = "轉寄訊息";
 "common_frequently_used" = "經常使用";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "圖片";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "移除 %1$@";
 "screen_create_poll_settings_section_title" = "設定";
 "screen_create_poll_title" = "建立投票";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "建立聊天室";
 "screen_create_room_add_people_title" = "邀請夥伴";
 "screen_create_room_error_creating_room" = "建立聊天室時發生錯誤";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "離開 %1$@？";
 "screen_leave_space_title_last_admin" = "您是 %1$@ 唯一的管理員";
 "screen_leave_space_title_last_owner" = "轉移所有權";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "掃描 QR code";
 "screen_link_new_device_desktop_step1" = "在筆記型電腦或桌上型電腦上開啟 %1$@";
 "screen_link_new_device_desktop_step3" = "使用此裝置掃描 QR code";

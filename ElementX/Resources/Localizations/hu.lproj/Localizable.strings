@@ -3,6 +3,8 @@
 "a11y_address" = "Cím";
 "a11y_avatar" = "Profilkép";
 "a11y_collapse_message_text_field" = "Üzenet szövegmezőjének minimalizálása";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Törlés";
 "a11y_duration" = "Időtartam: %1$@";
 "a11y_edit_avatar" = "Profilkép szerkesztése";
@@ -262,6 +264,7 @@
 "common_file_saved" = "A fájl mentve";
 "common_forward_message" = "Üzenet továbbítása";
 "common_frequently_used" = "Gyakran használt";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Kép";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Eltávolítás: %1$@";
 "screen_create_poll_settings_section_title" = "Beállítások";
 "screen_create_poll_title" = "Szavazás létrehozása";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Új szoba";
 "screen_create_room_add_people_title" = "Ismerősök meghívása";
 "screen_create_room_error_creating_room" = "Hiba történt a szoba létrehozásakor";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Kilép innen: %1$@?";
 "screen_leave_space_title_last_admin" = "Ön az egyetlen adminisztrátor itt: %1$@";
 "screen_leave_space_title_last_owner" = "Tulajdonjog átruházása";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Olvassa be a QR-kódot";
 "screen_link_new_device_desktop_step1" = "Nyissa meg az %1$@ alkalmazást egy laptopon vagy asztali számítógépen.";
 "screen_link_new_device_desktop_step3" = "Olvassa be a QR-kódot ezzel az eszközzel";

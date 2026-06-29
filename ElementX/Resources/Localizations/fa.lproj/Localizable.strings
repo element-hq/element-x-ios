@@ -3,6 +3,8 @@
 "a11y_address" = "Address";
 "a11y_avatar" = "چهرک";
 "a11y_collapse_message_text_field" = "Minimise message text field";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "حذف";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "ویرایش چهرک";
@@ -262,6 +264,7 @@
 "common_file_saved" = "پرونده ذخیره شد";
 "common_forward_message" = "هدایت پیام";
 "common_frequently_used" = "پراستفاده";
+"common_gallery" = "Gallery";
 "common_gif" = "جیف";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "تصویر";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
 "screen_create_poll_settings_section_title" = "تنظیمات";
 "screen_create_poll_title" = "ایجاد نظرسنجی";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "اتاق جدید";
 "screen_create_room_add_people_title" = "دعوت افراد";
 "screen_create_room_error_creating_room" = "هنگام ایجاد اتاق خطایی رخ داد";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "ترک %1$@؟";
 "screen_leave_space_title_last_admin" = "تنها مدیر %1$@ هستید";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "پویش کد پاس";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_step3" = "پویش کد پاس با این افزاره";

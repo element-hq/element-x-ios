@@ -3,6 +3,8 @@
 "a11y_address" = "Địa chỉ";
 "a11y_avatar" = "Ảnh đại diện";
 "a11y_collapse_message_text_field" = "Thu nhỏ ô nhập tin nhắn";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Xóa";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Đổi ảnh đại diện";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Tệp đã được lưu";
 "common_forward_message" = "Chuyển tiếp tin nhắn";
 "common_frequently_used" = "Thường được sử dụng";
+"common_gallery" = "Gallery";
 "common_gif" = "Ảnh động";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Ảnh";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
 "screen_create_poll_settings_section_title" = "Settings";
 "screen_create_poll_title" = "Tạo Cuộc thăm dò ý kiến";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Phòng mới";
 "screen_create_room_add_people_title" = "Mời ai đó";
 "screen_create_room_error_creating_room" = "Đã xảy ra lỗi khi tạo phòng.";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Leave %1$@?";
 "screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Scan the QR code";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_step3" = "Scan the QR code with this device";
@@ -1537,7 +1542,7 @@
 "screen_start_chat_error_starting_chat" = "Đã xảy ra lỗi khi cố gắng bắt đầu cuộc trò chuyện";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
 "screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
-"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter address…";
 "screen_start_chat_join_room_by_address_room_found" = "Matching room found";
 "screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
 "screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";

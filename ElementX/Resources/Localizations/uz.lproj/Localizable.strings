@@ -3,6 +3,8 @@
 "a11y_address" = "Manzil";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Xabar matni maydonini kichraytirish";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Oʻchirish";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Avatarni tahrirlash";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Fayl saqlandi";
 "common_forward_message" = "Xabarni yo'naltirish";
 "common_frequently_used" = "Tez-tez ishlatiladigan";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Surat";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "%1$@ni olib tashlash";
 "screen_create_poll_settings_section_title" = "Sozlamalar";
 "screen_create_poll_title" = "So‘rovnoma yaratish";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Yangi xona";
 "screen_create_room_add_people_title" = "Odamlarni taklif qiling";
 "screen_create_room_error_creating_room" = "Xonani yaratishda xatolik yuz berdi";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "%1$@ dan chiqasizmi?";
 "screen_leave_space_title_last_admin" = "Siz %1$@ uchun yagona administratorsiz";
 "screen_leave_space_title_last_owner" = "Egalikni topshirish";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "QR kodni skanerlash";
 "screen_link_new_device_desktop_step1" = "%1$@ ilovasini noutbuk yoki desktopda ochish";
 "screen_link_new_device_desktop_step3" = "Bu qurilma bilan QR kodni skanerlang";

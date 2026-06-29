@@ -1,5 +1,5 @@
 "NSCameraUsageDescription" = "Pildistamiseks ja videote salvestamiseks sõnumite saatmise kontekstis vajab Element X ligipääsu kaamerale.";
-"NSFaceIDUsageDescription" = "Ligipääsuks sinu rakendusele on kasutusel Face ID";
+"NSFaceIDUsageDescription" = "Ligipääsu sinu rakendusele kaitseb Face ID";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "Reaalajas asukoha jagamiseks vajab Element X õigust asukoha tuvastamiseks, kui rakendus töötab taustal.";
 "NSLocationWhenInUseUsageDescription" = "Oma asukoha jagamisel luba rakendusel Element X tuvastada sinu asukohta.";
 "NSMicrophoneUsageDescription" = "Heli salvestamiseks sõnumite saatmise kontekstis vajab Element X ligipääsu mikrofonile.";

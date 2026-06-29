@@ -3,6 +3,8 @@
 "a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Krymp meddelandetextfältet";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Radera";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Redigera avatar";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Fil sparad";
 "common_forward_message" = "Vidarebefordra meddelande";
 "common_frequently_used" = "Används ofta";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Bild";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Ta bort %1$@";
 "screen_create_poll_settings_section_title" = "Inställningar";
 "screen_create_poll_title" = "Skapa omröstning";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Nytt rum";
 "screen_create_room_add_people_title" = "Bjud in personer";
 "screen_create_room_error_creating_room" = "Ett fel uppstod när rummet skapades";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Lämna %1$@?";
 "screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Skanna QR-koden";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_step3" = "Skanna QR-koden med den här enheten";

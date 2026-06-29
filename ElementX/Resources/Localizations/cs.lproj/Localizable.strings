@@ -3,6 +3,8 @@
 "a11y_address" = "Adresa";
 "a11y_avatar" = "Profilový obrázek";
 "a11y_collapse_message_text_field" = "Minimalizovat textové pole zprávy";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Smazat";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Upravit avatar";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Soubor uložen";
 "common_forward_message" = "Přeposlat zprávu";
 "common_frequently_used" = "Často používané";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Obrázek";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Odstranit %1$@";
 "screen_create_poll_settings_section_title" = "Nastavení";
 "screen_create_poll_title" = "Vytvořit hlasování";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Nová místnost";
 "screen_create_room_add_people_title" = "Pozvat přátele";
 "screen_create_room_error_creating_room" = "Při vytváření místnosti došlo k chybě";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Opustit %1$@?";
 "screen_leave_space_title_last_admin" = "Jste jediným administrátorem pro %1$@";
 "screen_leave_space_title_last_owner" = "Převést vlastnictví";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Naskenujte QR kód";
 "screen_link_new_device_desktop_step1" = "Otevřete %1$@ na notebooku nebo stolním počítači";
 "screen_link_new_device_desktop_step3" = "Naskenujte QR kód pomocí tohoto zařízení";

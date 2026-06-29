@@ -370,10 +370,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Щонайменше %1$d символи. Не використовуйте пароль облікового запису.</string>
+			<key>many</key>
+			<string>Щонайменше %1$d символів. Не використовуйте пароль облікового запису.</string>
 			<key>one</key>
-			<string>Minimum %1$d character. Do not use your account password</string>
-			<key>other</key>
-			<string>Minimum %1$d characters. Do not use your account password</string>
+			<string>Щонайменше %1$d символ. Не використовуйте пароль облікового запису.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -638,10 +640,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>+ %1$d приєднуються</string>
+			<key>many</key>
+			<string>+ %1$d приєднуються</string>
 			<key>one</key>
-			<string>+ %1$d joined</string>
-			<key>other</key>
-			<string>+ %1$d joined</string>
+			<string>+ %1$d приєднується</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

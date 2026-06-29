@@ -3,6 +3,8 @@
 "a11y_address" = "Адрес";
 "a11y_avatar" = "Аватар";
 "a11y_collapse_message_text_field" = "Свернуть поле ввода";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Удалить";
 "a11y_duration" = "Продолжительность: %1$@";
 "a11y_edit_avatar" = "Изменить аватар";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Файл сохранен";
 "common_forward_message" = "Переслать сообщение";
 "common_frequently_used" = "Часто используемые";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Изображение";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Удалить %1$@";
 "screen_create_poll_settings_section_title" = "Настройки";
 "screen_create_poll_title" = "Создать опрос";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Создать новую комнату";
 "screen_create_room_add_people_title" = "Пригласить в комнату";
 "screen_create_room_error_creating_room" = "Произошла ошибка при создании комнаты";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Выйти из %1$@?";
 "screen_leave_space_title_last_admin" = "Вы единственный администратор для %1$@";
 "screen_leave_space_title_last_owner" = "Передача владения";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Сканировать QR-код";
 "screen_link_new_device_desktop_step1" = "Откройте %1$@ на ноутбуке или компьютере";
 "screen_link_new_device_desktop_step3" = "Отсканируйте QR-код с помощью этого устройства";

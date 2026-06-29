@@ -3,6 +3,8 @@
 "a11y_address" = "주소";
 "a11y_avatar" = "아바타";
 "a11y_collapse_message_text_field" = "메시지 텍스트 필드 최소화";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "삭제";
 "a11y_duration" = "소요 시간: %1$@";
 "a11y_edit_avatar" = "아바타 편집";
@@ -262,6 +264,7 @@
 "common_file_saved" = "파일 저장됨";
 "common_forward_message" = "메시지 전달";
 "common_frequently_used" = "자주 사용되는";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "이미지";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "%1$@ 제거";
 "screen_create_poll_settings_section_title" = "설정";
 "screen_create_poll_title" = "투표 생성";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "새 방";
 "screen_create_room_add_people_title" = "사람 초대하기";
 "screen_create_room_error_creating_room" = "방을 생성하던 중 오류가 발생했어요";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "%1$@에서 나가시겠습니까?";
 "screen_leave_space_title_last_admin" = "귀하는 %1$@의 유일한 관리자입니다.";
 "screen_leave_space_title_last_owner" = "소유권 이전";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "QR 코드를 스캔하세요";
 "screen_link_new_device_desktop_step1" = "노트북이나 데스크톱 컴퓨터에서 %1$@을(를) 여세요.";
 "screen_link_new_device_desktop_step3" = "이 기기로 QR 코드를 스캔하세요.";

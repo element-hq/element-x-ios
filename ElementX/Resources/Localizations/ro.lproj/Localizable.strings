@@ -3,6 +3,8 @@
 "a11y_address" = "Adresă";
 "a11y_avatar" = "Imagine de profil";
 "a11y_collapse_message_text_field" = "Micșorați câmpul mesajului";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Ștergere";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Editați avatarul";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Fișier salvat";
 "common_forward_message" = "Redirecționați mesajul";
 "common_frequently_used" = "Utilizate frecvent";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Imagine";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Ștergeți %1$@";
 "screen_create_poll_settings_section_title" = "Setări";
 "screen_create_poll_title" = "Creați un sondaj";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Cameră nouă";
 "screen_create_room_add_people_title" = "Invitați prieteni";
 "screen_create_room_error_creating_room" = "A apărut o eroare la crearea camerei";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Părăsiți %1$@?";
 "screen_leave_space_title_last_admin" = "Sunteți singurul administrator pentru %1$@";
 "screen_leave_space_title_last_owner" = "Transferați proprietatea";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Scanați codul QR";
 "screen_link_new_device_desktop_step1" = "Deschide %1$@ pe un laptop sau un computer desktop";
 "screen_link_new_device_desktop_step3" = "Scanați codul QR cu acest dispozitiv";
