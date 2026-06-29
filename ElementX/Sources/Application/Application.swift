@@ -46,6 +46,12 @@ struct Application: App {
                 .onOpenURL { url in
                     openURL(url, isExternalURL: true)
                 }
+                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { userActivity in
+                    // Universal Links opened from the Camera app's QR scanner (and NFC tags) are
+                    // delivered as a browsing-web user activity rather than through `onOpenURL` 🤷‍♂️
+                    guard let url = userActivity.webpageURL else { return }
+                    openURL(url, isExternalURL: true)
+                }
                 .onContinueUserActivity("INStartVideoCallIntent") { userActivity in
                     // `INStartVideoCallIntent` is to be replaced with `INStartCallIntent`
                     // but calls from Recents still send it ¯\_(ツ)_/¯
