@@ -408,8 +408,6 @@ struct TabRailView<Tag: Hashable>: View {
     let navigationTabCoordinator: NavigationTabCoordinator<Tag>
     let isFullScreen: Bool
     
-    @State private var width: CGFloat = .zero
-    
     /// Add additional top padding on iPad when the traffic light buttons are shown.
     var topPadding: CGFloat {
         isFullScreen && ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 40
@@ -440,9 +438,8 @@ struct TabRailView<Tag: Hashable>: View {
             .padding(.leading, 8)
             .padding(.top, topPadding)
             .padding(.bottom)
-            .readWidth($width)
         }
         .scrollBounceBehavior(.basedOnSize)
-        .frame(width: width)
+        .fixedSize(horizontal: true, vertical: false)
     }
 }
