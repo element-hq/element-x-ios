@@ -3,6 +3,8 @@
 "a11y_address" = "Adres";
 "a11y_avatar" = "Awatar";
 "a11y_collapse_message_text_field" = "Zmniejsz pole tekstowe wiadomości";
+"a11y_create_poll_votes_allowed_decrease" = "Zmniejsz liczbę głosów dozwolonych na osobę";
+"a11y_create_poll_votes_allowed_increase" = "Zwiększ liczbę głosów dozwolonych na osobę";
 "a11y_delete" = "Usuń";
 "a11y_duration" = "Czas trwania: %1$@";
 "a11y_edit_avatar" = "Edytuj awatar";
@@ -186,11 +188,11 @@
 "action_translate" = "Przetłumacz";
 "action_try_again" = "Spróbuj ponownie";
 "action_unpin" = "Odepnij";
-"action_video_call" = "Video call";
+"action_video_call" = "Rozmowa wideo";
 "action_view" = "Wyświetl";
 "action_view_in_timeline" = "Wyświetl na osi czasu";
 "action_view_source" = "Wyświetl źródło";
-"action_voice_call" = "Voice call";
+"action_voice_call" = "Rozmowa głosowa";
 "action_yes" = "Tak";
 "action_yes_try_again" = "Tak, spróbuj ponownie";
 "banner_migrate_to_native_sliding_sync_action" = "Wyloguj się i zaktualizuj";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Plik zapisany";
 "common_forward_message" = "Przekaż wiadomość";
 "common_frequently_used" = "Często używane";
+"common_gallery" = "Galeria";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Trwa połączenie grupowe";
 "common_image" = "Zdjęcie";
@@ -301,7 +304,7 @@
 "common_pinned" = "Przypięte";
 "common_please_check_internet_connection" = "Sprawdź swoje połączenie internetowe";
 "common_please_wait" = "Proszę czekać...";
-"common_poll_end_confirmation" = "Jesteś pewien, że chcesz zakończyć tę ankietę?";
+"common_poll_end_confirmation" = "Czy na pewno chcesz zakończyć tę ankietę?";
 "common_poll_summary" = "Ankieta: %1$@";
 "common_poll_summary_prefix" = "Ankieta";
 "common_poll_total_votes" = "Łączna liczba głosów: %1$@";
@@ -484,12 +487,12 @@
 "invite_friends_rich_title" = "🔐️ Dołącz do mnie na %1$@";
 "invite_friends_text" = "Hej, porozmawiajmy na %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Czy na pewno chcesz opuścić tę konwersację? Konwersacja nie jest publiczna i nie będziesz mógł dołączyć ponownie bez zaproszenia.";
-"leave_room_alert_empty_subtitle" = "Jesteś pewien, że chcesz opuścić ten pokój? Jesteś tu jedyną osobą. Jeśli wyjdziesz, nikt nie będzie mógł dołączyć, w tym Ty.";
+"leave_room_alert_empty_subtitle" = "Czy na pewno chcesz opuścić ten pokój? Jesteś tu jedyną osobą. Jeśli wyjdziesz, nikt nie będzie mógł dołączyć, w tym Ty.";
 "leave_room_alert_private_subtitle" = "Czy na pewno chcesz opuścić ten pokój? Ten pokój nie jest publiczny i nie będziesz mógł do niego wrócić bez zaproszenia.";
 "leave_room_alert_select_new_owner_action" = "Wybierz właścicieli";
 "leave_room_alert_select_new_owner_subtitle" = "Jesteś jedynym właścicielem tego pokoju. Musisz przenieść własność na kogoś innego, zanim go opuścisz.";
 "leave_room_alert_select_new_owner_title" = "Przenieś własność";
-"leave_room_alert_subtitle" = "Jesteś pewien, że chcesz wyjść z tego pokoju?";
+"leave_room_alert_subtitle" = "Czy na pewno chcesz wyjść z tego pokoju?";
 "login_initial_device_name_ios" = "%1$@ iOS";
 "Notification" = "Powiadomienie";
 "notification_channel_call" = "Zadzwoń";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Usuń %1$@";
 "screen_create_poll_settings_section_title" = "Ustawienia";
 "screen_create_poll_title" = "Utwórz ankietę";
+"screen_create_poll_votes_allowed_per_person" = "Liczba głosów na osobę";
 "screen_create_room_action_create_room" = "Nowy pokój";
 "screen_create_room_add_people_title" = "Zaproś znajomych";
 "screen_create_room_error_creating_room" = "Wystąpił błąd w trakcie tworzenia pokoju";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Opuścić %1$@?";
 "screen_leave_space_title_last_admin" = "Jesteś jedynym administratorem %1$@";
 "screen_leave_space_title_last_owner" = "Przenieś własność";
+"screen_link_new_device_authentication_reason_ios" = "Przed podłączeniem nowego urządzenia potwierdź, że to naprawdę Ty.";
 "screen_link_new_device_desktop_scanning_title" = "Skanuj kod QR";
 "screen_link_new_device_desktop_step1" = "Otwórz %1$@ na laptopie lub komputerze stacjonarnym";
 "screen_link_new_device_desktop_step3" = "Zeskanuj kod QR za pomocą tego urządzenia";
@@ -1094,8 +1099,8 @@
 "screen_onboarding_welcome_message" = "Witamy w %1$@. Szybszy i prostszy niż kiedykolwiek.";
 "screen_onboarding_welcome_subtitle" = "Witamy w %1$@. Doładowany, dla szybkości i prostoty.";
 "screen_onboarding_welcome_title" = "Be in your element";
-"screen_pinned_timeline_empty_state_description" = "Naciśnij wiadomość i wybierz “%1$@”, aby dołączyć tutaj.";
-"screen_pinned_timeline_empty_state_headline" = "Przypinaj ważne wiadomości, aby można było je łatwo znaleźć";
+"screen_pinned_timeline_empty_state_description" = "Przytrzymaj wiadomość i wybierz “%1$@”, aby umieścić ją tutaj.";
+"screen_pinned_timeline_empty_state_headline" = "Przypinaj ważne wiadomości, by łatwo je później odnaleźć";
 "screen_pinned_timeline_screen_title_empty" = "Przypięte wiadomości";
 "screen_polls_history_empty_ongoing" = "Nie znaleziono ankiet w trakcie.";
 "screen_polls_history_empty_past" = "Nie znaleziono ankiet.";
@@ -1253,7 +1258,7 @@
 "screen_room_details_edit_room_title" = "Edytuj szczegóły";
 "screen_room_details_edition_error" = "Wystąpił nieznany błąd i nie można było zmienić informacji.";
 "screen_room_details_edition_error_title" = "Nie można zaktualizować pokoju";
-"screen_room_details_encryption_enabled_subtitle" = "Wiadomości są zabezpieczone kłódkami. Tylko Ty i odbiorcy macie unikalne klucze do ich odblokowania.";
+"screen_room_details_encryption_enabled_subtitle" = "Wiadomości są zabezpieczone kłódkami. Tylko Ty i Twoi odbiorcy posiadacie klucze do ich otwarcia.";
 "screen_room_details_encryption_enabled_title" = "Szyfrowanie wiadomości włączone";
 "screen_room_details_error_loading_notification_settings" = "Wystąpił błąd podczas ładowania ustawień powiadomień.";
 "screen_room_details_error_muting" = "Wyciszenie tego pokoju nie powiodło się, spróbuj ponownie.";
@@ -1537,7 +1542,7 @@
 "screen_start_chat_error_starting_chat" = "Wystąpił błąd podczas próby rozpoczęcia czatu";
 "screen_start_chat_join_room_by_address_action" = "Dołącz do pokoju za pomocą adresu";
 "screen_start_chat_join_room_by_address_invalid_address" = "Nieprawidłowy adres";
-"screen_start_chat_join_room_by_address_placeholder" = "Wprowadź...";
+"screen_start_chat_join_room_by_address_placeholder" = "Wprowadź adres…";
 "screen_start_chat_join_room_by_address_room_found" = "Znaleziono pasujący pokój";
 "screen_start_chat_join_room_by_address_room_not_found" = "Nie znaleziono pokoju";
 "screen_start_chat_join_room_by_address_supporting_text" = "np. #room-name:matrix.org";

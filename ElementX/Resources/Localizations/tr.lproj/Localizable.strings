@@ -3,6 +3,8 @@
 "a11y_address" = "Address";
 "a11y_avatar" = "Profil resmi";
 "a11y_collapse_message_text_field" = "Mesaj metin alanını küçült";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Sil";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Fotoğrafı düzenle";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Dosya kaydedildi";
 "common_forward_message" = "Mesajı ilet";
 "common_frequently_used" = "Sık kullanılanlar";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Resim";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
 "screen_create_poll_settings_section_title" = "Settings";
 "screen_create_poll_title" = "Anket Oluştur";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Yeni oda";
 "screen_create_room_add_people_title" = "Kişileri davet et";
 "screen_create_room_error_creating_room" = "Oda oluşturulurken bir hata oluştu";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "%1$@ alanından ayrılmak istiyor musunuz?";
 "screen_leave_space_title_last_admin" = "%1$@ alanının tek yöneticisisiniz";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "QR kodunu tara";
 "screen_link_new_device_desktop_step1" = "%1$@ uygulamasını bir dizüstü veya masaüstü bilgisayarda açın";
 "screen_link_new_device_desktop_step3" = "QR kodunu bu cihazla tarayın";
@@ -1537,7 +1542,7 @@
 "screen_start_chat_error_starting_chat" = "Sohbet başlatmaya çalışırken bir hata oluştu";
 "screen_start_chat_join_room_by_address_action" = "Bir adres ile odaya katılın";
 "screen_start_chat_join_room_by_address_invalid_address" = "Geçerli bir adres değil";
-"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter address…";
 "screen_start_chat_join_room_by_address_room_found" = "Eşleşen oda bulundu";
 "screen_start_chat_join_room_by_address_room_not_found" = "Oda bulunamadı";
 "screen_start_chat_join_room_by_address_supporting_text" = "örn. #room-isim:matrix.org";

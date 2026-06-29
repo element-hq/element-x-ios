@@ -3,6 +3,8 @@
 "a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Minimizar campo de texto da mensagem";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Eliminar";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Editar avatar";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Ficheiro guardado";
 "common_forward_message" = "Reencaminhar mensagem";
 "common_frequently_used" = "Frequentemente utilizado";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Imagem";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Remover %1$@";
 "screen_create_poll_settings_section_title" = "Configurações";
 "screen_create_poll_title" = "Criar sondagem";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Nova sala";
 "screen_create_room_add_people_title" = "Convidar pessoas";
 "screen_create_room_error_creating_room" = "Ocorreu um erro ao criar a sala";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Sair de %1$@?";
 "screen_leave_space_title_last_admin" = "És o único administrador do %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Ler o código QR";
 "screen_link_new_device_desktop_step1" = "Open %1$@ on a laptop or desktop computer";
 "screen_link_new_device_desktop_step3" = "Lê o código QR com este dispositivo";

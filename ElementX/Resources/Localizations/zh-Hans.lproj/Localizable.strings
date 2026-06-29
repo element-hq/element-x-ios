@@ -3,6 +3,8 @@
 "a11y_address" = "地址";
 "a11y_avatar" = "头像";
 "a11y_collapse_message_text_field" = "最小化消息文本框";
+"a11y_create_poll_votes_allowed_decrease" = "减少每人允许的投票数";
+"a11y_create_poll_votes_allowed_increase" = "增加每人允许的投票数";
 "a11y_delete" = "删除";
 "a11y_duration" = "持续时间：%1$@";
 "a11y_edit_avatar" = "编辑头像";
@@ -186,11 +188,11 @@
 "action_translate" = "翻译";
 "action_try_again" = "重试";
 "action_unpin" = "取消置顶";
-"action_video_call" = "Video call";
+"action_video_call" = "视频通话";
 "action_view" = "查看";
 "action_view_in_timeline" = "在时间线上查看";
 "action_view_source" = "查看源码";
-"action_voice_call" = "Voice call";
+"action_voice_call" = "语音通话";
 "action_yes" = "是";
 "action_yes_try_again" = "是，重试";
 "banner_migrate_to_native_sliding_sync_action" = "注销并升级";
@@ -262,6 +264,7 @@
 "common_file_saved" = "文件已保存";
 "common_forward_message" = "转发消息";
 "common_frequently_used" = "常用";
+"common_gallery" = "图库";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "群组通话进行中";
 "common_image" = "图片";
@@ -379,7 +382,7 @@
 "common_unmute" = "解除静音";
 "common_unsupported_call" = "不受支持的通话";
 "common_unsupported_event" = "不支持的事件";
-"common_user_started_a_call" = "%1$@ 开始了通话";
+"common_user_started_a_call" = "%1$@ 已开始通话";
 "common_username" = "用户名";
 "common_verification_cancelled" = "验证已取消";
 "common_verification_complete" = "验证完成";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "移除 %1$@";
 "screen_create_poll_settings_section_title" = "设置";
 "screen_create_poll_title" = "创建投票";
+"screen_create_poll_votes_allowed_per_person" = "每人允许的投票数";
 "screen_create_room_action_create_room" = "新房间";
 "screen_create_room_add_people_title" = "邀请人员";
 "screen_create_room_error_creating_room" = "创建房间时出错";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "离开 %1$@？";
 "screen_leave_space_title_last_admin" = "你是 %1$@ 中唯一的管理员";
 "screen_leave_space_title_last_owner" = "转让所有权";
+"screen_link_new_device_authentication_reason_ios" = "在连接新设备前，请确认身份。";
 "screen_link_new_device_desktop_scanning_title" = "扫描二维码";
 "screen_link_new_device_desktop_step1" = "在笔记本电脑或台式机上打开 %1$@";
 "screen_link_new_device_desktop_step3" = "使用此设备扫描二维码";
@@ -1537,7 +1542,7 @@
 "screen_start_chat_error_starting_chat" = "在开始聊天时发生了错误";
 "screen_start_chat_join_room_by_address_action" = "输入地址加入房间";
 "screen_start_chat_join_room_by_address_invalid_address" = "地址无效";
-"screen_start_chat_join_room_by_address_placeholder" = "输入…";
+"screen_start_chat_join_room_by_address_placeholder" = "输入地址…";
 "screen_start_chat_join_room_by_address_room_found" = "找到匹配的房间";
 "screen_start_chat_join_room_by_address_room_not_found" = "未找到房间";
 "screen_start_chat_join_room_by_address_supporting_text" = "例如 #room-name:matrix.org";

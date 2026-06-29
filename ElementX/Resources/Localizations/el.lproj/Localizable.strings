@@ -3,6 +3,8 @@
 "a11y_address" = "Διεύθυνση";
 "a11y_avatar" = "Εικόνα Προφίλ";
 "a11y_collapse_message_text_field" = "Ελαχιστοποίηση πεδίου κειμένου μηνύματος";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Διαγραφή";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Επεξεργασία Άβαταρ";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Το αρχείο αποθηκεύτηκε";
 "common_forward_message" = "Προώθηση μηνύματος";
 "common_frequently_used" = "Χρησιμοποιείται συχνά";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Εικόνα";
@@ -639,8 +642,8 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Αποστολή πρόσκλησης";
 "screen_bottom_sheet_create_dm_message" = "Θα θέλατε να ξεκινήσετε μια συνομιλία με τον χρήστη %1$@;";
 "screen_bottom_sheet_create_dm_title" = "Αποστολή πρόσκλησης;";
-"screen_bottom_sheet_create_dm_unknown_user_content" = "You currently don’t have any chats with this person. Confirm inviting them before continuing.";
-"screen_bottom_sheet_create_dm_unknown_user_title" = "Start a chat with this new contact?";
+"screen_bottom_sheet_create_dm_unknown_user_content" = "Προς το παρόν δεν έχετε καμία συνομιλία με αυτό το άτομο. Επιβεβαιώστε την πρόσκλησή του πριν συνεχίσετε.";
+"screen_bottom_sheet_create_dm_unknown_user_title" = "Έναρξη συνομιλίας με αυτήν τη νέα επαφή;";
 "screen_bottom_sheet_manage_room_member_ban" = "Αφαίρεση και αποκλεισμός μέλους";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Αποκλεισμός";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Δεν θα μπορούν να ενταχθούν ξανά σε αυτή την αίθουσα, αν προσκληθούν.";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Αφαίρεση %1$@";
 "screen_create_poll_settings_section_title" = "Ρυθμίσεις";
 "screen_create_poll_title" = "Δημιουργία Δημοσκόπησης";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Νέα αίθουσα";
 "screen_create_room_add_people_title" = "Πρόσκληση ατόμων";
 "screen_create_room_error_creating_room" = "Προέκυψε σφάλμα κατά τη δημιουργία της αίθουσας";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Αποχώρηση από %1$@ ;";
 "screen_leave_space_title_last_admin" = "Είστε ο μόνος διαχειριστής για %1$@";
 "screen_leave_space_title_last_owner" = "Μεταβίβαση ιδιοκτησίας";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Σάρωση κωδικού QR";
 "screen_link_new_device_desktop_step1" = "Ανοίξτε το %1$@ σε φορητό ή επιτραπέζιο υπολογιστή";
 "screen_link_new_device_desktop_step3" = "Σάρωσε τον κωδικό QR με αυτήν τη συσκευή";
@@ -957,9 +962,9 @@
 "screen_link_new_device_root_title" = "Τι είδους συσκευή θέλετε να συνδέσετε;";
 "screen_link_new_device_wrong_number_subtitle" = "Δοκιμάστε ξανά και βεβαιωθείτε ότι έχετε εισαγάγει σωστά τον 2ψήφιο κωδικό. Εάν οι αριθμοί εξακολουθούν να μην ταιριάζουν, επικοινωνήστε με τον πάροχο του λογαριασμού σας.";
 "screen_link_new_device_wrong_number_title" = "Οι αριθμοί δεν ταιριάζουν";
-"screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
-"screen_live_location_sheet_sharing_live_location" = "Sharing live location";
-"screen_live_location_sheet_title" = "On the map";
+"screen_live_location_sheet_nobody_sharing" = "Κανείς δεν μοιράζεται την τοποθεσία του";
+"screen_live_location_sheet_sharing_live_location" = "Κοινοποιείς την τοποθεσία σε πραγματικό χρόνο";
+"screen_live_location_sheet_title" = "Στον χάρτη";
 "screen_login_error_deactivated_account" = "Αυτός ο λογαριασμός έχει διαγραφεί.";
 "screen_login_error_invalid_credentials" = "Λανθασμένο όνομα χρήστη ή κωδικός πρόσβασης";
 "screen_login_error_invalid_user_id" = "Αυτό δεν είναι έγκυρο αναγνωριστικό χρήστη. Αναμενόμενη μορφή: '@χρήστης:homeserver.org'";
@@ -1085,7 +1090,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Ειδοποιήσεις συστήματος ανενεργές";
 "screen_notification_settings_title" = "Ειδοποιήσεις";
 "screen_onboarding_app_version" = "Έκδοση %1$@";
-"screen_onboarding_checking_account" = "Checking account";
+"screen_onboarding_checking_account" = "Έλεγχος λογαριασμού";
 "screen_onboarding_sign_in_manually" = "Σύνδεση χειροκίνητα";
 "screen_onboarding_sign_in_to" = "Συνδέσου στο %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Συνδέσου με κωδικό QR";
@@ -1290,7 +1295,7 @@
 "screen_room_grouped_state_events_reduce" = "Μείωση";
 "screen_room_invite_again_alert_message" = "Θα ήθελες να τους προσκαλέσεις και συ;";
 "screen_room_invite_again_alert_title" = "Είσαι μόνος σε αυτή τη συνομιλία";
-"screen_room_live_location_banner" = "Sharing live location";
+"screen_room_live_location_banner" = "Κοινοποιείς την τοποθεσία σε πραγματικό χρόνο";
 "screen_room_member_details_block_alert_action" = "Αποκλεισμός";
 "screen_room_member_details_block_alert_description" = "Οι αποκλεισμένοι χρήστες δεν θα μπορούν να σου στέλνουν μηνύματα και όλα τα μηνύματά τους θα είναι κρυμμένα. Μπορείς να τα ξεμπλοκάρεις ανά πάσα στιγμή.";
 "screen_room_member_details_block_user" = "Αποκλεισμός χρήστη";
@@ -1537,7 +1542,7 @@
 "screen_start_chat_error_starting_chat" = "Παρουσιάστηκε σφάλμα κατά την προσπάθεια έναρξης μιας συνομιλίας";
 "screen_start_chat_join_room_by_address_action" = "Συμμετοχή σε αίθουσα μέσω διεύθυνσης";
 "screen_start_chat_join_room_by_address_invalid_address" = "Μη έγκυρη διεύθυνση";
-"screen_start_chat_join_room_by_address_placeholder" = "Εισάγετε...";
+"screen_start_chat_join_room_by_address_placeholder" = "Εισαγάγετε διεύθυνση...";
 "screen_start_chat_join_room_by_address_room_found" = "Βρέθηκε η αντίστοιχη αίθουσα";
 "screen_start_chat_join_room_by_address_room_not_found" = "Η αίθουσα δεν βρέθηκε";
 "screen_start_chat_join_room_by_address_supporting_text" = "π.χ. #όνομα-αίθουσας:matrix.org";

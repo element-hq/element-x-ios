@@ -572,6 +572,8 @@ internal nonisolated enum L10n {
   internal static var commonForwardMessage: String { return L10n.tr("Localizable", "common_forward_message") }
   /// Frequently used
   internal static var commonFrequentlyUsed: String { return L10n.tr("Localizable", "common_frequently_used") }
+  /// Gallery
+  internal static var commonGallery: String { return L10n.tr("Localizable", "common_gallery") }
   /// GIF
   internal static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Group call in progress

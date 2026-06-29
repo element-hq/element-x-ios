@@ -3,6 +3,8 @@
 "a11y_address" = "アドレス";
 "a11y_avatar" = "アバター";
 "a11y_collapse_message_text_field" = "入力欄を縮小";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "削除";
 "a11y_duration" = "長さ: %1$@";
 "a11y_edit_avatar" = "アバターを編集";
@@ -262,6 +264,7 @@
 "common_file_saved" = "ファイルを保存しました";
 "common_forward_message" = "メッセージを転送";
 "common_frequently_used" = "頻繁に使用";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "画像";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "%1$@ を削除";
 "screen_create_poll_settings_section_title" = "設定";
 "screen_create_poll_title" = "投票を作成";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "新しいルーム";
 "screen_create_room_add_people_title" = "ユーザーを招待";
 "screen_create_room_error_creating_room" = "ルームの作成中に問題が発生しました";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "%1$@ を退出しますか？";
 "screen_leave_space_title_last_admin" = "あなたが唯一の %1$@ の管理者です。";
 "screen_leave_space_title_last_owner" = "所有権の譲渡";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "QRコードを読み取り";
 "screen_link_new_device_desktop_step1" = "%1$@ をコンピュータで開いてください";
 "screen_link_new_device_desktop_step3" = "この端末でQRコードを読み取る";

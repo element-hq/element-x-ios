@@ -3,6 +3,8 @@
 "a11y_address" = "Osoite";
 "a11y_avatar" = "Avatar";
 "a11y_collapse_message_text_field" = "Pienennä viestin tekstikenttä";
+"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
+"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
 "a11y_delete" = "Poista";
 "a11y_duration" = "Kesto: %1$@";
 "a11y_edit_avatar" = "Muokkaa avataria";
@@ -262,6 +264,7 @@
 "common_file_saved" = "Tiedosto tallennettu";
 "common_forward_message" = "Välitä viesti";
 "common_frequently_used" = "Usein käytetyt";
+"common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
 "common_image" = "Kuva";
@@ -732,6 +735,7 @@
 "screen_create_poll_remove_accessibility_label" = "Poista %1$@";
 "screen_create_poll_settings_section_title" = "Asetukset";
 "screen_create_poll_title" = "Luo kysely";
+"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
 "screen_create_room_action_create_room" = "Uusi huone";
 "screen_create_room_add_people_title" = "Kutsu henkilöitä";
 "screen_create_room_error_creating_room" = "Huoneen luomisessa tapahtui virhe";
@@ -929,6 +933,7 @@
 "screen_leave_space_title" = "Haluatko poistua tilasta %1$@?";
 "screen_leave_space_title_last_admin" = "Olet ainoa ylläpitäjä tilassa %1$@";
 "screen_leave_space_title_last_owner" = "Siirrä omistajuus";
+"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Skannaa QR-koodi";
 "screen_link_new_device_desktop_step1" = "Avaa %1$@ läppärillä tai pöytätietokoneella";
 "screen_link_new_device_desktop_step3" = "Skannaa QR-koodi tällä laitteella";

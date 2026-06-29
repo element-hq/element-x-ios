@@ -379,9 +379,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d άτομο</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d άτομα</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
