@@ -204,6 +204,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         }
     }
     
+    @concurrent
     private func zipFiles(_ logFiles: [URL]) async -> Logs {
         MXLog.info("zipFiles")
         
@@ -211,7 +212,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         
         for url in logFiles {
             do {
-                try attachFile(at: url, to: &compressedLogs)
+                try await attachFile(at: url, to: &compressedLogs)
             } catch {
                 MXLog.error("Failed to compress log at \(url)")
                 // Continue so that other logs can still be sent.
@@ -224,7 +225,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     }
     
     /// Zips a file creating chunks based on 10MB inputs.
-    private func attachFile(at url: URL, to zippedFiles: inout Logs) throws {
+    @concurrent
+    private func attachFile(at url: URL, to zippedFiles: inout Logs) async throws {
         let fileHandle = try FileHandle(forReadingFrom: url)
         
         while let data = try fileHandle.readToEnd() {
@@ -235,7 +237,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
                 try? FileManager.default.removeItem(at: zippedURL)
                 
                 try zippedData.write(to: zippedURL)
-                zippedFiles.appendFile(at: zippedURL, zippedSize: zippedData.count, originalSize: data.count)
+                await zippedFiles.appendFile(at: zippedURL, zippedSize: zippedData.count, originalSize: data.count)
             }
         }
     }
