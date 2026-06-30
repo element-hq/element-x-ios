@@ -26,14 +26,13 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     init(forwardingItem: MessageForwardingItem,
          userSession: UserSessionProtocol,
          roomSummaryProvider: RoomSummaryProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         maxRoomSelectionCount: Int = MessageForwardingScreenCoordinatorParameters.defaultMaxRoomSelectionCount) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.forwardingItem = forwardingItem
         clientProxy = userSession.clientProxy
         self.roomSummaryProvider = roomSummaryProvider
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: MessageForwardingScreenViewState(maxRoomSelectionCount: maxRoomSelectionCount), mediaProvider: userSession.mediaProvider)
+        super.init(initialViewState: MessageForwardingScreenViewState(), mediaProvider: userSession.mediaProvider)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
