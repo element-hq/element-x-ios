@@ -6,21 +6,6 @@
 
 import Foundation
 
-open class BackupSecretsSDKMock: MatrixRustSDK.BackupSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -418,6 +403,35 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         clearCachesSyncServiceReceivedSyncService = syncService
         clearCachesSyncServiceReceivedInvocationsLock.withLock { clearCachesSyncServiceUnderlyingReceivedInvocations.append(syncService) }
         try await clearCachesSyncServiceClosure?(syncService)
+    }
+
+    //MARK: - contentScanner
+
+    private let contentScannerCallsCountLock = NSLock()
+    private var contentScannerUnderlyingCallsCount = 0
+    open var contentScannerCallsCount: Int {
+        get { contentScannerCallsCountLock.withLock { contentScannerUnderlyingCallsCount } }
+        set { contentScannerCallsCountLock.withLock { contentScannerUnderlyingCallsCount = newValue } }
+    }
+    open var contentScannerCalled: Bool {
+        return contentScannerCallsCount > 0
+    }
+
+    private let contentScannerReturnValueLock = NSLock()
+    open var contentScannerUnderlyingReturnValue: ContentScanner?
+    open var contentScannerReturnValue: ContentScanner? {
+        get { contentScannerReturnValueLock.withLock { contentScannerUnderlyingReturnValue } }
+        set { contentScannerReturnValueLock.withLock { contentScannerUnderlyingReturnValue = newValue } }
+    }
+    open var contentScannerClosure: (() async -> ContentScanner?)?
+
+    open override func contentScanner() async -> ContentScanner? {
+        contentScannerCallsCountLock.withLock { contentScannerUnderlyingCallsCount += 1 }
+        if let contentScannerClosure = contentScannerClosure {
+            return await contentScannerClosure()
+        } else {
+            return contentScannerReturnValue
+        }
     }
 
     //MARK: - createRoom
@@ -2921,6 +2935,38 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await setAvatarUrlUrlClosure?(url)
     }
 
+    //MARK: - setContentScanner
+
+    private let setContentScannerContentScannerCallsCountLock = NSLock()
+    private var setContentScannerContentScannerUnderlyingCallsCount = 0
+    open var setContentScannerContentScannerCallsCount: Int {
+        get { setContentScannerContentScannerCallsCountLock.withLock { setContentScannerContentScannerUnderlyingCallsCount } }
+        set { setContentScannerContentScannerCallsCountLock.withLock { setContentScannerContentScannerUnderlyingCallsCount = newValue } }
+    }
+    open var setContentScannerContentScannerCalled: Bool {
+        return setContentScannerContentScannerCallsCount > 0
+    }
+    private let setContentScannerContentScannerReceivedContentScannerLock = NSLock()
+    private var setContentScannerContentScannerUnderlyingReceivedContentScanner: ContentScanner?
+    open var setContentScannerContentScannerReceivedContentScanner: ContentScanner? {
+        get { setContentScannerContentScannerReceivedContentScannerLock.withLock { setContentScannerContentScannerUnderlyingReceivedContentScanner } }
+        set { setContentScannerContentScannerReceivedContentScannerLock.withLock { setContentScannerContentScannerUnderlyingReceivedContentScanner = newValue } }
+    }
+    private let setContentScannerContentScannerReceivedInvocationsLock = NSLock()
+    private var setContentScannerContentScannerUnderlyingReceivedInvocations: [ContentScanner?] = []
+    open var setContentScannerContentScannerReceivedInvocations: [ContentScanner?] {
+        get { setContentScannerContentScannerReceivedInvocationsLock.withLock { setContentScannerContentScannerUnderlyingReceivedInvocations } }
+        set { setContentScannerContentScannerReceivedInvocationsLock.withLock { setContentScannerContentScannerUnderlyingReceivedInvocations = newValue } }
+    }
+    open var setContentScannerContentScannerClosure: ((ContentScanner?) async -> Void)?
+
+    open override func setContentScanner(contentScanner: ContentScanner?) async {
+        setContentScannerContentScannerCallsCountLock.withLock { setContentScannerContentScannerUnderlyingCallsCount += 1 }
+        setContentScannerContentScannerReceivedContentScanner = contentScanner
+        setContentScannerContentScannerReceivedInvocationsLock.withLock { setContentScannerContentScannerUnderlyingReceivedInvocations.append(contentScanner) }
+        await setContentScannerContentScannerClosure?(contentScanner)
+    }
+
     //MARK: - setDelegate
 
     open var setDelegateDelegateThrowableError: Error?
@@ -3110,6 +3156,42 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         setMediaRetentionPolicyPolicyReceivedPolicy = policy
         setMediaRetentionPolicyPolicyReceivedInvocationsLock.withLock { setMediaRetentionPolicyPolicyUnderlyingReceivedInvocations.append(policy) }
         try await setMediaRetentionPolicyPolicyClosure?(policy)
+    }
+
+    //MARK: - setPresence
+
+    open var setPresencePresenceImmediateThrowableError: Error?
+    private let setPresencePresenceImmediateCallsCountLock = NSLock()
+    private var setPresencePresenceImmediateUnderlyingCallsCount = 0
+    open var setPresencePresenceImmediateCallsCount: Int {
+        get { setPresencePresenceImmediateCallsCountLock.withLock { setPresencePresenceImmediateUnderlyingCallsCount } }
+        set { setPresencePresenceImmediateCallsCountLock.withLock { setPresencePresenceImmediateUnderlyingCallsCount = newValue } }
+    }
+    open var setPresencePresenceImmediateCalled: Bool {
+        return setPresencePresenceImmediateCallsCount > 0
+    }
+    private let setPresencePresenceImmediateReceivedArgumentsLock = NSLock()
+    private var setPresencePresenceImmediateUnderlyingReceivedArguments: (presence: PresenceState, immediate: Bool)?
+    open var setPresencePresenceImmediateReceivedArguments: (presence: PresenceState, immediate: Bool)? {
+        get { setPresencePresenceImmediateReceivedArgumentsLock.withLock { setPresencePresenceImmediateUnderlyingReceivedArguments } }
+        set { setPresencePresenceImmediateReceivedArgumentsLock.withLock { setPresencePresenceImmediateUnderlyingReceivedArguments = newValue } }
+    }
+    private let setPresencePresenceImmediateReceivedInvocationsLock = NSLock()
+    private var setPresencePresenceImmediateUnderlyingReceivedInvocations: [(presence: PresenceState, immediate: Bool)] = []
+    open var setPresencePresenceImmediateReceivedInvocations: [(presence: PresenceState, immediate: Bool)] {
+        get { setPresencePresenceImmediateReceivedInvocationsLock.withLock { setPresencePresenceImmediateUnderlyingReceivedInvocations } }
+        set { setPresencePresenceImmediateReceivedInvocationsLock.withLock { setPresencePresenceImmediateUnderlyingReceivedInvocations = newValue } }
+    }
+    open var setPresencePresenceImmediateClosure: ((PresenceState, Bool) async throws -> Void)?
+
+    open override func setPresence(presence: PresenceState, immediate: Bool) async throws {
+        if let error = setPresencePresenceImmediateThrowableError {
+            throw error
+        }
+        setPresencePresenceImmediateCallsCountLock.withLock { setPresencePresenceImmediateUnderlyingCallsCount += 1 }
+        setPresencePresenceImmediateReceivedArguments = (presence: presence, immediate: immediate)
+        setPresencePresenceImmediateReceivedInvocationsLock.withLock { setPresencePresenceImmediateUnderlyingReceivedInvocations.append((presence: presence, immediate: immediate)) }
+        try await setPresencePresenceImmediateClosure?(presence, immediate)
     }
 
     //MARK: - setPusher
@@ -4093,48 +4175,48 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - searchMessages
 
-    open var searchMessagesQueryFilterNumResultsPerBatchThrowableError: Error?
-    private let searchMessagesQueryFilterNumResultsPerBatchCallsCountLock = NSLock()
-    private var searchMessagesQueryFilterNumResultsPerBatchUnderlyingCallsCount = 0
-    open var searchMessagesQueryFilterNumResultsPerBatchCallsCount: Int {
-        get { searchMessagesQueryFilterNumResultsPerBatchCallsCountLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingCallsCount } }
-        set { searchMessagesQueryFilterNumResultsPerBatchCallsCountLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingCallsCount = newValue } }
+    open var searchMessagesQueryFilterThrowableError: Error?
+    private let searchMessagesQueryFilterCallsCountLock = NSLock()
+    private var searchMessagesQueryFilterUnderlyingCallsCount = 0
+    open var searchMessagesQueryFilterCallsCount: Int {
+        get { searchMessagesQueryFilterCallsCountLock.withLock { searchMessagesQueryFilterUnderlyingCallsCount } }
+        set { searchMessagesQueryFilterCallsCountLock.withLock { searchMessagesQueryFilterUnderlyingCallsCount = newValue } }
     }
-    open var searchMessagesQueryFilterNumResultsPerBatchCalled: Bool {
-        return searchMessagesQueryFilterNumResultsPerBatchCallsCount > 0
+    open var searchMessagesQueryFilterCalled: Bool {
+        return searchMessagesQueryFilterCallsCount > 0
     }
-    private let searchMessagesQueryFilterNumResultsPerBatchReceivedArgumentsLock = NSLock()
-    private var searchMessagesQueryFilterNumResultsPerBatchUnderlyingReceivedArguments: (query: String, filter: SearchRoomFilter, numResultsPerBatch: UInt32)?
-    open var searchMessagesQueryFilterNumResultsPerBatchReceivedArguments: (query: String, filter: SearchRoomFilter, numResultsPerBatch: UInt32)? {
-        get { searchMessagesQueryFilterNumResultsPerBatchReceivedArgumentsLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingReceivedArguments } }
-        set { searchMessagesQueryFilterNumResultsPerBatchReceivedArgumentsLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingReceivedArguments = newValue } }
+    private let searchMessagesQueryFilterReceivedArgumentsLock = NSLock()
+    private var searchMessagesQueryFilterUnderlyingReceivedArguments: (query: String, filter: SearchRoomFilter)?
+    open var searchMessagesQueryFilterReceivedArguments: (query: String, filter: SearchRoomFilter)? {
+        get { searchMessagesQueryFilterReceivedArgumentsLock.withLock { searchMessagesQueryFilterUnderlyingReceivedArguments } }
+        set { searchMessagesQueryFilterReceivedArgumentsLock.withLock { searchMessagesQueryFilterUnderlyingReceivedArguments = newValue } }
     }
-    private let searchMessagesQueryFilterNumResultsPerBatchReceivedInvocationsLock = NSLock()
-    private var searchMessagesQueryFilterNumResultsPerBatchUnderlyingReceivedInvocations: [(query: String, filter: SearchRoomFilter, numResultsPerBatch: UInt32)] = []
-    open var searchMessagesQueryFilterNumResultsPerBatchReceivedInvocations: [(query: String, filter: SearchRoomFilter, numResultsPerBatch: UInt32)] {
-        get { searchMessagesQueryFilterNumResultsPerBatchReceivedInvocationsLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingReceivedInvocations } }
-        set { searchMessagesQueryFilterNumResultsPerBatchReceivedInvocationsLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingReceivedInvocations = newValue } }
+    private let searchMessagesQueryFilterReceivedInvocationsLock = NSLock()
+    private var searchMessagesQueryFilterUnderlyingReceivedInvocations: [(query: String, filter: SearchRoomFilter)] = []
+    open var searchMessagesQueryFilterReceivedInvocations: [(query: String, filter: SearchRoomFilter)] {
+        get { searchMessagesQueryFilterReceivedInvocationsLock.withLock { searchMessagesQueryFilterUnderlyingReceivedInvocations } }
+        set { searchMessagesQueryFilterReceivedInvocationsLock.withLock { searchMessagesQueryFilterUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let searchMessagesQueryFilterNumResultsPerBatchReturnValueLock = NSLock()
-    open var searchMessagesQueryFilterNumResultsPerBatchUnderlyingReturnValue: GlobalSearchIterator!
-    open var searchMessagesQueryFilterNumResultsPerBatchReturnValue: GlobalSearchIterator! {
-        get { searchMessagesQueryFilterNumResultsPerBatchReturnValueLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingReturnValue } }
-        set { searchMessagesQueryFilterNumResultsPerBatchReturnValueLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingReturnValue = newValue } }
+    private let searchMessagesQueryFilterReturnValueLock = NSLock()
+    open var searchMessagesQueryFilterUnderlyingReturnValue: GlobalSearchIterator!
+    open var searchMessagesQueryFilterReturnValue: GlobalSearchIterator! {
+        get { searchMessagesQueryFilterReturnValueLock.withLock { searchMessagesQueryFilterUnderlyingReturnValue } }
+        set { searchMessagesQueryFilterReturnValueLock.withLock { searchMessagesQueryFilterUnderlyingReturnValue = newValue } }
     }
-    open var searchMessagesQueryFilterNumResultsPerBatchClosure: ((String, SearchRoomFilter, UInt32) async throws -> GlobalSearchIterator)?
+    open var searchMessagesQueryFilterClosure: ((String, SearchRoomFilter) async throws -> GlobalSearchIterator)?
 
-    open override func searchMessages(query: String, filter: SearchRoomFilter, numResultsPerBatch: UInt32) async throws -> GlobalSearchIterator {
-        if let error = searchMessagesQueryFilterNumResultsPerBatchThrowableError {
+    open override func searchMessages(query: String, filter: SearchRoomFilter) async throws -> GlobalSearchIterator {
+        if let error = searchMessagesQueryFilterThrowableError {
             throw error
         }
-        searchMessagesQueryFilterNumResultsPerBatchCallsCountLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingCallsCount += 1 }
-        searchMessagesQueryFilterNumResultsPerBatchReceivedArguments = (query: query, filter: filter, numResultsPerBatch: numResultsPerBatch)
-        searchMessagesQueryFilterNumResultsPerBatchReceivedInvocationsLock.withLock { searchMessagesQueryFilterNumResultsPerBatchUnderlyingReceivedInvocations.append((query: query, filter: filter, numResultsPerBatch: numResultsPerBatch)) }
-        if let searchMessagesQueryFilterNumResultsPerBatchClosure = searchMessagesQueryFilterNumResultsPerBatchClosure {
-            return try await searchMessagesQueryFilterNumResultsPerBatchClosure(query, filter, numResultsPerBatch)
+        searchMessagesQueryFilterCallsCountLock.withLock { searchMessagesQueryFilterUnderlyingCallsCount += 1 }
+        searchMessagesQueryFilterReceivedArguments = (query: query, filter: filter)
+        searchMessagesQueryFilterReceivedInvocationsLock.withLock { searchMessagesQueryFilterUnderlyingReceivedInvocations.append((query: query, filter: filter)) }
+        if let searchMessagesQueryFilterClosure = searchMessagesQueryFilterClosure {
+            return try await searchMessagesQueryFilterClosure(query, filter)
         } else {
-            return searchMessagesQueryFilterNumResultsPerBatchReturnValue
+            return searchMessagesQueryFilterReturnValue
         }
     }
 }
@@ -4571,49 +4653,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return dmRoomDefinitionDmRoomDefinitionClosure(dmRoomDefinition)
         } else {
             return dmRoomDefinitionDmRoomDefinitionReturnValue
-        }
-    }
-
-    //MARK: - enableContentScanner
-
-    private let enableContentScannerScannerUrlCallsCountLock = NSLock()
-    private var enableContentScannerScannerUrlUnderlyingCallsCount = 0
-    open var enableContentScannerScannerUrlCallsCount: Int {
-        get { enableContentScannerScannerUrlCallsCountLock.withLock { enableContentScannerScannerUrlUnderlyingCallsCount } }
-        set { enableContentScannerScannerUrlCallsCountLock.withLock { enableContentScannerScannerUrlUnderlyingCallsCount = newValue } }
-    }
-    open var enableContentScannerScannerUrlCalled: Bool {
-        return enableContentScannerScannerUrlCallsCount > 0
-    }
-    private let enableContentScannerScannerUrlReceivedScannerUrlLock = NSLock()
-    private var enableContentScannerScannerUrlUnderlyingReceivedScannerUrl: String?
-    open var enableContentScannerScannerUrlReceivedScannerUrl: String? {
-        get { enableContentScannerScannerUrlReceivedScannerUrlLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedScannerUrl } }
-        set { enableContentScannerScannerUrlReceivedScannerUrlLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedScannerUrl = newValue } }
-    }
-    private let enableContentScannerScannerUrlReceivedInvocationsLock = NSLock()
-    private var enableContentScannerScannerUrlUnderlyingReceivedInvocations: [String] = []
-    open var enableContentScannerScannerUrlReceivedInvocations: [String] {
-        get { enableContentScannerScannerUrlReceivedInvocationsLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedInvocations } }
-        set { enableContentScannerScannerUrlReceivedInvocationsLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let enableContentScannerScannerUrlReturnValueLock = NSLock()
-    open var enableContentScannerScannerUrlUnderlyingReturnValue: ClientBuilder!
-    open var enableContentScannerScannerUrlReturnValue: ClientBuilder! {
-        get { enableContentScannerScannerUrlReturnValueLock.withLock { enableContentScannerScannerUrlUnderlyingReturnValue } }
-        set { enableContentScannerScannerUrlReturnValueLock.withLock { enableContentScannerScannerUrlUnderlyingReturnValue = newValue } }
-    }
-    open var enableContentScannerScannerUrlClosure: ((String) -> ClientBuilder)?
-
-    open override func enableContentScanner(scannerUrl: String) -> ClientBuilder {
-        enableContentScannerScannerUrlCallsCountLock.withLock { enableContentScannerScannerUrlUnderlyingCallsCount += 1 }
-        enableContentScannerScannerUrlReceivedScannerUrl = scannerUrl
-        enableContentScannerScannerUrlReceivedInvocationsLock.withLock { enableContentScannerScannerUrlUnderlyingReceivedInvocations.append(scannerUrl) }
-        if let enableContentScannerScannerUrlClosure = enableContentScannerScannerUrlClosure {
-            return enableContentScannerScannerUrlClosure(scannerUrl)
-        } else {
-            return enableContentScannerScannerUrlReturnValue
         }
     }
 
@@ -5320,7 +5359,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 }
-open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
+open class ContentScannerSDKMock: MatrixRustSDK.ContentScanner, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
     }
@@ -5334,6 +5373,53 @@ open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unche
         set(value) { underlyingHandle = value }
     }
     fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - scan
+
+    open var scanClientMediaSourceThrowableError: Error?
+    private let scanClientMediaSourceCallsCountLock = NSLock()
+    private var scanClientMediaSourceUnderlyingCallsCount = 0
+    open var scanClientMediaSourceCallsCount: Int {
+        get { scanClientMediaSourceCallsCountLock.withLock { scanClientMediaSourceUnderlyingCallsCount } }
+        set { scanClientMediaSourceCallsCountLock.withLock { scanClientMediaSourceUnderlyingCallsCount = newValue } }
+    }
+    open var scanClientMediaSourceCalled: Bool {
+        return scanClientMediaSourceCallsCount > 0
+    }
+    private let scanClientMediaSourceReceivedArgumentsLock = NSLock()
+    private var scanClientMediaSourceUnderlyingReceivedArguments: (client: Client, mediaSource: MediaSource)?
+    open var scanClientMediaSourceReceivedArguments: (client: Client, mediaSource: MediaSource)? {
+        get { scanClientMediaSourceReceivedArgumentsLock.withLock { scanClientMediaSourceUnderlyingReceivedArguments } }
+        set { scanClientMediaSourceReceivedArgumentsLock.withLock { scanClientMediaSourceUnderlyingReceivedArguments = newValue } }
+    }
+    private let scanClientMediaSourceReceivedInvocationsLock = NSLock()
+    private var scanClientMediaSourceUnderlyingReceivedInvocations: [(client: Client, mediaSource: MediaSource)] = []
+    open var scanClientMediaSourceReceivedInvocations: [(client: Client, mediaSource: MediaSource)] {
+        get { scanClientMediaSourceReceivedInvocationsLock.withLock { scanClientMediaSourceUnderlyingReceivedInvocations } }
+        set { scanClientMediaSourceReceivedInvocationsLock.withLock { scanClientMediaSourceUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let scanClientMediaSourceReturnValueLock = NSLock()
+    open var scanClientMediaSourceUnderlyingReturnValue: MediaScanResponse!
+    open var scanClientMediaSourceReturnValue: MediaScanResponse! {
+        get { scanClientMediaSourceReturnValueLock.withLock { scanClientMediaSourceUnderlyingReturnValue } }
+        set { scanClientMediaSourceReturnValueLock.withLock { scanClientMediaSourceUnderlyingReturnValue = newValue } }
+    }
+    open var scanClientMediaSourceClosure: ((Client, MediaSource) async throws -> MediaScanResponse)?
+
+    open override func scan(client: Client, mediaSource: MediaSource) async throws -> MediaScanResponse {
+        if let error = scanClientMediaSourceThrowableError {
+            throw error
+        }
+        scanClientMediaSourceCallsCountLock.withLock { scanClientMediaSourceUnderlyingCallsCount += 1 }
+        scanClientMediaSourceReceivedArguments = (client: client, mediaSource: mediaSource)
+        scanClientMediaSourceReceivedInvocationsLock.withLock { scanClientMediaSourceUnderlyingReceivedInvocations.append((client: client, mediaSource: mediaSource)) }
+        if let scanClientMediaSourceClosure = scanClientMediaSourceClosure {
+            return try await scanClientMediaSourceClosure(client, mediaSource)
+        } else {
+            return scanClientMediaSourceReturnValue
+        }
+    }
 }
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     public init() {
@@ -12224,44 +12310,44 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - searchMessages
 
-    private let searchMessagesQueryNumResultsPerBatchCallsCountLock = NSLock()
-    private var searchMessagesQueryNumResultsPerBatchUnderlyingCallsCount = 0
-    open var searchMessagesQueryNumResultsPerBatchCallsCount: Int {
-        get { searchMessagesQueryNumResultsPerBatchCallsCountLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingCallsCount } }
-        set { searchMessagesQueryNumResultsPerBatchCallsCountLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingCallsCount = newValue } }
+    private let searchMessagesQueryCallsCountLock = NSLock()
+    private var searchMessagesQueryUnderlyingCallsCount = 0
+    open var searchMessagesQueryCallsCount: Int {
+        get { searchMessagesQueryCallsCountLock.withLock { searchMessagesQueryUnderlyingCallsCount } }
+        set { searchMessagesQueryCallsCountLock.withLock { searchMessagesQueryUnderlyingCallsCount = newValue } }
     }
-    open var searchMessagesQueryNumResultsPerBatchCalled: Bool {
-        return searchMessagesQueryNumResultsPerBatchCallsCount > 0
+    open var searchMessagesQueryCalled: Bool {
+        return searchMessagesQueryCallsCount > 0
     }
-    private let searchMessagesQueryNumResultsPerBatchReceivedArgumentsLock = NSLock()
-    private var searchMessagesQueryNumResultsPerBatchUnderlyingReceivedArguments: (query: String, numResultsPerBatch: UInt32)?
-    open var searchMessagesQueryNumResultsPerBatchReceivedArguments: (query: String, numResultsPerBatch: UInt32)? {
-        get { searchMessagesQueryNumResultsPerBatchReceivedArgumentsLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingReceivedArguments } }
-        set { searchMessagesQueryNumResultsPerBatchReceivedArgumentsLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingReceivedArguments = newValue } }
+    private let searchMessagesQueryReceivedQueryLock = NSLock()
+    private var searchMessagesQueryUnderlyingReceivedQuery: String?
+    open var searchMessagesQueryReceivedQuery: String? {
+        get { searchMessagesQueryReceivedQueryLock.withLock { searchMessagesQueryUnderlyingReceivedQuery } }
+        set { searchMessagesQueryReceivedQueryLock.withLock { searchMessagesQueryUnderlyingReceivedQuery = newValue } }
     }
-    private let searchMessagesQueryNumResultsPerBatchReceivedInvocationsLock = NSLock()
-    private var searchMessagesQueryNumResultsPerBatchUnderlyingReceivedInvocations: [(query: String, numResultsPerBatch: UInt32)] = []
-    open var searchMessagesQueryNumResultsPerBatchReceivedInvocations: [(query: String, numResultsPerBatch: UInt32)] {
-        get { searchMessagesQueryNumResultsPerBatchReceivedInvocationsLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingReceivedInvocations } }
-        set { searchMessagesQueryNumResultsPerBatchReceivedInvocationsLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingReceivedInvocations = newValue } }
+    private let searchMessagesQueryReceivedInvocationsLock = NSLock()
+    private var searchMessagesQueryUnderlyingReceivedInvocations: [String] = []
+    open var searchMessagesQueryReceivedInvocations: [String] {
+        get { searchMessagesQueryReceivedInvocationsLock.withLock { searchMessagesQueryUnderlyingReceivedInvocations } }
+        set { searchMessagesQueryReceivedInvocationsLock.withLock { searchMessagesQueryUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let searchMessagesQueryNumResultsPerBatchReturnValueLock = NSLock()
-    open var searchMessagesQueryNumResultsPerBatchUnderlyingReturnValue: RoomSearchIterator!
-    open var searchMessagesQueryNumResultsPerBatchReturnValue: RoomSearchIterator! {
-        get { searchMessagesQueryNumResultsPerBatchReturnValueLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingReturnValue } }
-        set { searchMessagesQueryNumResultsPerBatchReturnValueLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingReturnValue = newValue } }
+    private let searchMessagesQueryReturnValueLock = NSLock()
+    open var searchMessagesQueryUnderlyingReturnValue: RoomSearchIterator!
+    open var searchMessagesQueryReturnValue: RoomSearchIterator! {
+        get { searchMessagesQueryReturnValueLock.withLock { searchMessagesQueryUnderlyingReturnValue } }
+        set { searchMessagesQueryReturnValueLock.withLock { searchMessagesQueryUnderlyingReturnValue = newValue } }
     }
-    open var searchMessagesQueryNumResultsPerBatchClosure: ((String, UInt32) -> RoomSearchIterator)?
+    open var searchMessagesQueryClosure: ((String) -> RoomSearchIterator)?
 
-    open override func searchMessages(query: String, numResultsPerBatch: UInt32) -> RoomSearchIterator {
-        searchMessagesQueryNumResultsPerBatchCallsCountLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingCallsCount += 1 }
-        searchMessagesQueryNumResultsPerBatchReceivedArguments = (query: query, numResultsPerBatch: numResultsPerBatch)
-        searchMessagesQueryNumResultsPerBatchReceivedInvocationsLock.withLock { searchMessagesQueryNumResultsPerBatchUnderlyingReceivedInvocations.append((query: query, numResultsPerBatch: numResultsPerBatch)) }
-        if let searchMessagesQueryNumResultsPerBatchClosure = searchMessagesQueryNumResultsPerBatchClosure {
-            return searchMessagesQueryNumResultsPerBatchClosure(query, numResultsPerBatch)
+    open override func searchMessages(query: String) -> RoomSearchIterator {
+        searchMessagesQueryCallsCountLock.withLock { searchMessagesQueryUnderlyingCallsCount += 1 }
+        searchMessagesQueryReceivedQuery = query
+        searchMessagesQueryReceivedInvocationsLock.withLock { searchMessagesQueryUnderlyingReceivedInvocations.append(query) }
+        if let searchMessagesQueryClosure = searchMessagesQueryClosure {
+            return searchMessagesQueryClosure(query)
         } else {
-            return searchMessagesQueryNumResultsPerBatchReturnValue
+            return searchMessagesQueryReturnValue
         }
     }
 }
@@ -13868,14 +13954,14 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
     }
 
     private let eventsReturnValueLock = NSLock()
-    open var eventsUnderlyingReturnValue: [TimelineEventType: Int64]!
-    open var eventsReturnValue: [TimelineEventType: Int64]! {
+    open var eventsUnderlyingReturnValue: [FfiTimelineEventType: Int64]!
+    open var eventsReturnValue: [FfiTimelineEventType: Int64]! {
         get { eventsReturnValueLock.withLock { eventsUnderlyingReturnValue } }
         set { eventsReturnValueLock.withLock { eventsUnderlyingReturnValue = newValue } }
     }
-    open var eventsClosure: (() -> [TimelineEventType: Int64])?
+    open var eventsClosure: (() -> [FfiTimelineEventType: Int64])?
 
-    open override func events() -> [TimelineEventType: Int64] {
+    open override func events() -> [FfiTimelineEventType: Int64] {
         eventsCallsCountLock.withLock { eventsUnderlyingCallsCount += 1 }
         if let eventsClosure = eventsClosure {
             return eventsClosure()
@@ -14135,21 +14221,6 @@ open class RoomSearchIteratorSDKMock: MatrixRustSDK.RoomSearchIterator, @uncheck
             return nextEventsReturnValue
         }
     }
-}
-open class SecretsBundleSDKMock: MatrixRustSDK.SecretsBundle, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class SecretsBundleWithUserIdSDKMock: MatrixRustSDK.SecretsBundleWithUserId, @unchecked Sendable {
     public init() {
