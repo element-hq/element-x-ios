@@ -81,6 +81,9 @@ final class AccessibilityTests: XCTestCase {
                         return true
                     }
                     
+                    // swiftlint:disable:next print_deprecation
+                    print("🔍 A11Y ISSUE [\(name)] type=\(issue.auditType) desc=\(issue.compactDescription) element=\(issue.element?.debugDescription ?? "nil")")
+                    
                     return false
                 }
             } catch {
