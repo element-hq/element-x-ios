@@ -63,10 +63,10 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         case .send:
             Task { await forward() }
         case .selectRoom(let roomID):
-            if let index = state.selectedRoomIDs.firstIndex(of: roomID) {
-                state.selectedRoomIDs.remove(at: index)
+            if state.selectedRoomIDs.contains(roomID) == false, state.selectedRoomIDs.count < state.maxRoomSelectionCount {
+                state.selectedRoomIDs.insert(roomID)
             } else {
-                state.selectedRoomIDs.append(roomID)
+                state.selectedRoomIDs.remove(roomID)
             }
         case .reachedTop:
             updateVisibleRange(edge: .top)
