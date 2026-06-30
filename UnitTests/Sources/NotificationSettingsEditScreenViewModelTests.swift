@@ -112,8 +112,10 @@ struct NotificationSettingsEditScreenViewModelTests {
         
         try await deferred.fulfill()
         
+        #expect(viewModel.context.viewState.pendingMode == nil)
+        
         var deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.pendingMode),
-                                                 transitionValues: [nil, .allMessages, nil])
+                                                 transitionValues: [.allMessages, nil])
         
         context.send(viewAction: .setMode(.allMessages))
         
@@ -150,8 +152,10 @@ struct NotificationSettingsEditScreenViewModelTests {
         
         try await deferred.fulfill()
         
+        #expect(viewModel.context.viewState.pendingMode == nil)
+        
         var deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.pendingMode),
-                                                 transitionValues: [nil, .mentionsAndKeywordsOnly, nil])
+                                                 transitionValues: [.mentionsAndKeywordsOnly, nil])
         
         context.send(viewAction: .setMode(.mentionsAndKeywordsOnly))
         
@@ -190,8 +194,10 @@ struct NotificationSettingsEditScreenViewModelTests {
         
         try await deferred.fulfill()
         
+        #expect(viewModel.context.viewState.pendingMode == nil)
+        
         let deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.pendingMode),
-                                                 transitionValues: [nil, .allMessages, nil])
+                                                 transitionValues: [.allMessages, nil])
         
         context.send(viewAction: .setMode(.allMessages))
         
@@ -222,8 +228,10 @@ struct NotificationSettingsEditScreenViewModelTests {
         
         try await deferred.fulfill()
         
+        #expect(viewModel.context.viewState.pendingMode == nil)
+        
         let deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.pendingMode),
-                                                 transitionValues: [nil, .allMessages, nil])
+                                                 transitionValues: [.allMessages, nil])
         
         context.send(viewAction: .setMode(.allMessages))
         
