@@ -237,6 +237,7 @@ private struct RecoveryKeyView: View {
 
 // MARK: - Previews
 
+@available(iOS 26.0, *)
 struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview {
     static let key = "EsTM njec uHYA yHmh dQdW Nj4o bNRU 9jMN XGMc KUNM UFr5 R8GY"
     static let notSetUpViewModel = viewModel(recoveryState: .disabled)

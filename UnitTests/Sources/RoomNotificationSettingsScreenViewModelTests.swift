@@ -141,8 +141,10 @@ struct RoomNotificationSettingsScreenViewModelTests {
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
+        #expect(viewModel.context.viewState.isRestoringDefaultSetting == false)
+        
         let deferredIsRestoringDefaultSettings = deferFulfillment(viewModel.context.observe(\.viewState.isRestoringDefaultSetting),
-                                                                  transitionValues: [false, true, false])
+                                                                  transitionValues: [true, false])
         
         viewModel.state.bindings.allowCustomSetting = false
         viewModel.context.send(viewAction: .changedAllowCustomSettings)
@@ -200,8 +202,10 @@ struct RoomNotificationSettingsScreenViewModelTests {
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
+        #expect(viewModel.context.viewState.pendingCustomMode == nil)
+        
         var deferredMode = deferFulfillment(viewModel.context.observe(\.viewState.pendingCustomMode),
-                                            transitionValues: [nil, .allMessages, nil])
+                                            transitionValues: [.allMessages, nil])
         viewModel.context.send(viewAction: .setCustomMode(.allMessages))
         
         try await deferredMode.fulfill()
@@ -210,8 +214,10 @@ struct RoomNotificationSettingsScreenViewModelTests {
         #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeReceivedArguments?.1 == .allMessages)
         #expect(notificationSettingsProxyMock.setNotificationModeRoomIdModeCallsCount == 1)
         
+        #expect(viewModel.context.viewState.pendingCustomMode == nil)
+        
         deferredMode = deferFulfillment(viewModel.context.observe(\.viewState.pendingCustomMode),
-                                        transitionValues: [nil, .mute, nil])
+                                        transitionValues: [.mute, nil])
         viewModel.context.send(viewAction: .setCustomMode(.mute))
         
         try await deferredMode.fulfill()
@@ -222,8 +228,10 @@ struct RoomNotificationSettingsScreenViewModelTests {
         
         try await Task.sleep(for: .milliseconds(10)) // Workaround for flaky test
         
+        #expect(viewModel.context.viewState.pendingCustomMode == nil)
+        
         deferredMode = deferFulfillment(viewModel.context.observe(\.viewState.pendingCustomMode),
-                                        transitionValues: [nil, .mentionsAndKeywordsOnly, nil])
+                                        transitionValues: [.mentionsAndKeywordsOnly, nil])
         viewModel.context.send(viewAction: .setCustomMode(.mentionsAndKeywordsOnly))
         
         try await deferredMode.fulfill()

@@ -42,6 +42,7 @@ struct TemplateScreen: View {
 
 // MARK: - Previews
 
+@available(iOS 26.0, *)
 struct TemplateScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let incrementedViewModel = makeViewModel(counterValue: 1)

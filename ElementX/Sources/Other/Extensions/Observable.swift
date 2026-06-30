@@ -7,13 +7,25 @@
 //
 
 import Foundation
+import Observation
 import Synchronization
 
 extension Observable {
-    /// Creates an async stream for the specified property on this object. We probably won't need this once SE-0475 is available:
-    /// https://github.com/swiftlang/swift-evolution/blob/main/proposals/0475-observed.md
+    /// A convenience wrapper around the `Observations` sequence (SE-0475).
     ///
     /// - Parameter property: The key path to the property you would like to observe.
+    @available(iOS 26.0, *)
+    @MainActor func observe<Value: Sendable>(_ property: KeyPath<Self, Value>) -> Observations<Value, Never> {
+        Observations { self[keyPath: property] }
+    }
+    
+    /// Creates an async stream for the specified property on this object.
+    ///
+    /// iOS 18 fallback for ``observe(_:)``. Remove once the minimum deployment target reaches iOS 26.
+    ///
+    /// - Parameter property: The key path to the property you would like to observe.
+    @available(iOS, deprecated: 26.0, message: "Use observe(_:) which is backed by the Observations sequence.")
+    @_disfavoredOverload
     @MainActor func observe<Value: Sendable>(_ property: KeyPath<Self, Value>) -> AsyncStream<Value> {
         let (stream, continuation) = AsyncStream<Value>.makeStream()
         let (changeSignals, changeSignaller) = AsyncStream<Void>.makeStream()
