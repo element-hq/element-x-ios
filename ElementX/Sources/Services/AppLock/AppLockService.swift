@@ -16,7 +16,12 @@ class AppLockService: AppLockServiceProtocol {
     private let context: LAContext
     
     private let timer: AppLockTimer
+    /// Only use Biometrics to unlock the app, we want to fall back to the App Lock PIN, not the device's passcode.
     private let unlockPolicy: LAPolicy = .deviceOwnerAuthenticationWithBiometrics
+    /// Use biometrics *or* the device's passcode to verify the device owner. Available regardless of whether biometrics are enrolled.
+    ///
+    /// **Note:** Verifying the device owner is used to gate sensitive actions, it isn't related to unlocking the app.
+    /// Maybe we should rename this service in the future.
     private let deviceOwnerPolicy: LAPolicy = .deviceOwnerAuthentication
     
     var isMandatory: Bool {

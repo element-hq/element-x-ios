@@ -91,8 +91,8 @@ class LinkNewDeviceScreenViewModelTests {
     }
     
     @Test
-    func linkingProceedsWhenVerificationUnavailable() async throws {
-        // Given a device with no passcode set, so device owner verification is unavailable.
+    func linkingWithoutDevicePasscodeOrAppLockPIN() async throws {
+        // Given a device with neither a passcode nor an App Lock PIN set (device owner verification is unavailable).
         let progressSubject = CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError>(.starting)
         setupViewModel(linkMobileProgressPublisher: progressSubject.asCurrentValuePublisher(),
                        deviceOwnerResult: .unavailable,

@@ -72,6 +72,8 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentAppLockScreen(continuation: CheckedContinuation<Bool, Never>) {
+        // We can use the AppLockScreen as a fallback here. It might seem weird but in the end it only calls
+        // AppLockService.unlock which is a no-op when the app is already unlocked.
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = AppLockScreenCoordinator(parameters: .init(appLockService: appLockService, mode: .verifyDeviceOwner))
         
