@@ -11,8 +11,7 @@ import Observation
 import Synchronization
 
 extension Observable {
-    /// Creates an async sequence for the specified property on this object, emitting the current
-    /// value and then every subsequent change, backed by the Observation `Observations` sequence (SE-0475).
+    /// A convenience wrapper around the `Observations` sequence (SE-0475).
     ///
     /// - Parameter property: The key path to the property you would like to observe.
     @available(iOS 26.0, *)
