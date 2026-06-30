@@ -184,6 +184,7 @@ struct SpaceScreen: View {
 
 // MARK: - Previews
 
+@available(iOS 26.0, *)
 struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let managingViewModel = makeViewModel(isManagingRooms: true)

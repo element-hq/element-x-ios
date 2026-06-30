@@ -45,6 +45,8 @@ targets:
       base:
         PRODUCT_NAME: UnitTests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.unit.tests
+        # Requires iOS 26 so tests exercise the Observations-based observe(_:) overload.
+        IPHONEOS_DEPLOYMENT_TARGET: '26.0'
         SWIFT_VERSION: 6.2
         SWIFT_APPROACHABLE_CONCURRENCY: YES
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor

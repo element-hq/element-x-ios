@@ -123,6 +123,7 @@ struct LoginScreen: View {
 
 // MARK: - Previews
 
+@available(iOS 26.0, *)
 struct LoginScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let credentialsViewModel = makeViewModel(withCredentials: true)
