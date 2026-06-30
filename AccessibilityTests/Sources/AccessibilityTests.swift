@@ -108,7 +108,11 @@ final class AccessibilityTests: XCTestCase {
     /// Use this array to filter add specific filters to ignore specific tests
     private static let ignoredA11yTest: [String: [FilterType]] = [
         // It's an image rendering test doesn't need to have descriptions
-        "RoomAvatarImage_Previews-0": [.auditType(.sufficientElementDescription)]
+        "RoomAvatarImage_Previews-0": [.auditType(.sufficientElementDescription)],
+        // Empty container slots of the principal search toolbar, system chrome with nothing to describe
+        "SearchScreen_Previews-Empty": [.emptyContainerDescription],
+        "SearchScreen_Previews-No results": [.emptyContainerDescription],
+        "SearchScreen_Previews-Loaded": [.emptyContainerDescription]
     ]
 }
 
@@ -117,9 +121,12 @@ private enum FilterType {
     case compactDescription(String)
     /// Filter by the type of the issue
     case auditType(XCUIAccessibilityAuditType)
+    /// Filter "no description" issues on empty container elements (label + identifier empty), e.g. system toolbar slots
+    case emptyContainerDescription
 }
 
 private extension Array where Element == FilterType {
+    @MainActor
     func isAccessibilityIssueFiltered(_ issue: XCUIAccessibilityAuditIssue) -> Bool {
         for filter in self {
             switch filter {
@@ -127,6 +134,14 @@ private extension Array where Element == FilterType {
                 return true
             case .compactDescription(issue.compactDescription):
                 return true
+            case .emptyContainerDescription:
+                if issue.auditType == .sufficientElementDescription,
+                   let element = issue.element,
+                   element.elementType == .other,
+                   element.label.isEmpty,
+                   element.identifier.isEmpty {
+                    return true
+                }
             default:
                 break
             }
