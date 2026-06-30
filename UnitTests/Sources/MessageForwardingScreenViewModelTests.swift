@@ -32,7 +32,7 @@ struct MessageForwardingScreenViewModelTests {
     
     @Test
     func initialState() {
-        #expect(context.viewState.rooms.first { $0.id == forwardingItem.roomID } == nil, "The source room ID shouldn't be shown")
+        #expect(!context.viewState.rooms.contains(where: { $0.id == forwardingItem.roomID }), "The source room ID shouldn't be shown")
     }
     
     @Test
