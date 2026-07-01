@@ -72,6 +72,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var jumpToReadMarkerEnabled: Bool { get set }
     
     var linkNewDeviceEnabled: Bool { get set }
+    var userStatusEnabled: Bool { get set }
     
     var roomThreadListEnabled: Bool { get set }
     
