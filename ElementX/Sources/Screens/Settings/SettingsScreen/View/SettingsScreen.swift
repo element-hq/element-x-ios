@@ -51,18 +51,18 @@ struct SettingsScreen: View {
                     context.send(viewAction: .userDetails)
                 } label: {
                     HStack(spacing: 12) {
-                        LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                            name: context.viewState.userDisplayName,
-                                            contentID: context.viewState.userID,
+                        LoadableAvatarImage(url: context.viewState.userProfile.avatarURL,
+                                            name: context.viewState.userProfile.displayName,
+                                            contentID: context.viewState.userProfile.id,
                                             avatarSize: .user(on: .settings),
                                             mediaProvider: context.mediaProvider)
                             .accessibilityHidden(true)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(context.viewState.userDisplayName ?? "")
+                            Text(context.viewState.userProfile.displayName ?? "")
                                 .font(.compound.headingMD)
                                 .foregroundColor(.compound.textPrimary)
-                            Text(context.viewState.userID)
+                            Text(context.viewState.userProfile.id)
                                 .font(.compound.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                         }

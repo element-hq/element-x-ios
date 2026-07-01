@@ -130,14 +130,9 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private var loadCachedAvatarURLTask: Task<Void, Never>?
-    private let userAvatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
-    var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> {
-        userAvatarURLSubject.asCurrentValuePublisher()
-    }
-    
-    private let userDisplayNameSubject = CurrentValueSubject<String?, Never>(nil)
-    var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> {
-        userDisplayNameSubject.asCurrentValuePublisher()
+    private let userProfileSubject: CurrentValueSubject<UserProfile, Never>
+    var userProfilePublisher: CurrentValuePublisher<UserProfile, Never> {
+        userProfileSubject.asCurrentValuePublisher()
     }
     
     private let ignoredUsersSubject = CurrentValueSubject<[String]?, Never>(nil)
@@ -212,6 +207,8 @@ class ClientProxy: ClientProxyProtocol {
         self.networkMonitor = networkMonitor
         self.appSettings = appSettings
         self.analyticsService = analyticsService
+        
+        userProfileSubject = .init(UserProfile(userID: (try? client.userId()) ?? ""))
         
         if appSettings.automaticBackPaginationEnabled {
             // Must be called before creating the sync service, timelines etc.
@@ -677,13 +674,19 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
+    func loadUserProfile() async -> Result<Void, ClientProxyError> {
         do {
-            let displayName = try await client.displayName()
-            userDisplayNameSubject.send(displayName)
+            async let displayName = client.displayName()
+            async let avatarURLString = client.avatarUrl()
+            
+            let profile = try await UserProfile(userID: userID,
+                                                displayName: displayName,
+                                                avatarURL: avatarURLString.flatMap(URL.init))
+            loadCachedAvatarURLTask?.cancel()
+            userProfileSubject.send(profile)
             return .success(())
         } catch {
-            MXLog.error("Failed loading user display name with error: \(error)")
+            MXLog.error("Failed loading user profile with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -692,23 +695,11 @@ class ClientProxy: ClientProxyProtocol {
         do {
             try await client.setDisplayName(name: name)
             Task {
-                await self.loadUserDisplayName()
+                await self.loadUserProfile()
             }
             return .success(())
         } catch {
             MXLog.error("Failed setting user display name with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
-        do {
-            let urlString = try await client.avatarUrl()
-            loadCachedAvatarURLTask?.cancel()
-            userAvatarURLSubject.send(urlString.flatMap(URL.init))
-            return .success(())
-        } catch {
-            MXLog.error("Failed loading user avatar URL with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -723,7 +714,7 @@ class ClientProxy: ClientProxyProtocol {
             let data = try Data(contentsOf: imageURL)
             try await client.uploadAvatar(mimeType: mimeType, data: data)
             Task {
-                await self.loadUserAvatarURL()
+                await self.loadUserProfile()
             }
             return .success(())
         } catch {
@@ -736,7 +727,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             try await client.removeAvatar()
             Task {
-                await self.loadUserAvatarURL()
+                await self.loadUserProfile()
             }
             return .success(())
         } catch {
@@ -1172,7 +1163,10 @@ class ClientProxy: ClientProxyProtocol {
             do {
                 let urlString = try await self.client.cachedAvatarUrl()
                 guard !Task.isCancelled else { return }
-                self.userAvatarURLSubject.value = urlString.flatMap(URL.init)
+                let profile = self.userProfileSubject.value
+                self.userProfileSubject.value = UserProfile(userID: profile.id,
+                                                            displayName: profile.displayName,
+                                                            avatarURL: urlString.flatMap(URL.init))
             } catch {
                 MXLog.error("Failed to look for the avatar url in the cache: \(error)")
             }

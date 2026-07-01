@@ -96,9 +96,9 @@ struct SpacesScreen: View {
             Button {
                 context.send(viewAction: .showSettings)
             } label: {
-                LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                    name: context.viewState.userDisplayName,
-                                    contentID: context.viewState.userID,
+                LoadableAvatarImage(url: context.viewState.userProfile.avatarURL,
+                                    name: context.viewState.userProfile.displayName,
+                                    contentID: context.viewState.userProfile.id,
                                     avatarSize: .user(on: .spaces),
                                     mediaProvider: context.mediaProvider)
                     .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)

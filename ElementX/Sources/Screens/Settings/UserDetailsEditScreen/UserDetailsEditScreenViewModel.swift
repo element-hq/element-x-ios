@@ -28,36 +28,22 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: UserDetailsEditScreenViewState(userID: clientProxy.userID,
+        super.init(initialViewState: UserDetailsEditScreenViewState(currentUserProfile: clientProxy.userProfilePublisher.value,
                                                                     bindings: .init()), mediaProvider: userSession.mediaProvider)
         
-        clientProxy.userAvatarURLPublisher
+        clientProxy.userProfilePublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.currentAvatarURL, on: self)
-            .store(in: &cancellables)
-        
-        clientProxy.userAvatarURLPublisher
-            .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.selectedAvatarURL, on: self)
-            .store(in: &cancellables)
-        
-        clientProxy.userDisplayNamePublisher
-            .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.currentDisplayName, on: self)
-            .store(in: &cancellables)
-        
-        clientProxy.userDisplayNamePublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] displayName in
+            .sink { [weak self] profile in
                 guard let self else { return }
                 
-                state.bindings.name = displayName ?? ""
+                state.currentUserProfile = profile
+                state.selectedAvatarURL = profile.avatarURL
+                state.bindings.name = profile.displayName ?? ""
             }
             .store(in: &cancellables)
         
         Task {
-            await self.clientProxy.loadUserAvatarURL()
-            await self.clientProxy.loadUserDisplayName()
+            await self.clientProxy.loadUserProfile()
             state.canEditAvatar = await clientProxy.capabilities.canChangeAvatar()
             state.canEditDisplayName = await clientProxy.capabilities.canChangeDisplayName()
         }
