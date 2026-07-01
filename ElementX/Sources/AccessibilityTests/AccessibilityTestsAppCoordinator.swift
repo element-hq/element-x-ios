@@ -149,8 +149,14 @@ struct PreviewsWrapperView: View {
                 .makeAsyncIterator()
             while let value = await iterator.next(isolation: #isolation), value == false { }
         case .sequence(let sequence):
-            var iterator = sequence.makeAsyncIterator()
-            while let value = await iterator.next(isolation: #isolation), value == false { }
+            // Mirror the publisher timeout above so a preview expecting a state that never
+            // arrives (e.g. a transient one that already expired) doesn't hang the suite.
+            let task = Task {
+                var iterator = sequence.makeAsyncIterator()
+                while let value = await iterator.next(isolation: #isolation), value == false { }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { task.cancel() }
+            await task.value
         case .none:
             break
         }
