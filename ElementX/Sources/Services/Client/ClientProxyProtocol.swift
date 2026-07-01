@@ -230,7 +230,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     func setPusher(with configuration: PusherConfiguration) async throws
     
-    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>
+    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError>
     
     func profile(for userID: String) async -> Result<UserProfile, ClientProxyError>
     

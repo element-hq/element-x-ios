@@ -32,7 +32,7 @@ final class UserDiscoveryService: UserDiscoveryServiceProtocol {
         }
     }
     
-    private func merge(queriedProfile: UserProfile?, searchResults: SearchUsersResultsProxy) -> [UserProfile] {
+    private func merge(queriedProfile: UserProfile?, searchResults: SearchUsersResults) -> [UserProfile] {
         let searchResults = searchResults.results
         
         guard let queriedProfile else {
