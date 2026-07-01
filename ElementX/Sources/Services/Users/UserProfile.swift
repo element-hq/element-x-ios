@@ -55,12 +55,12 @@ nonisolated struct UserProfile: Hashable, Identifiable {
     }
 }
 
-struct SearchUsersResultsProxy {
+struct SearchUsersResults {
     let results: [UserProfile]
     let limited: Bool
 }
 
-extension SearchUsersResultsProxy {
+extension SearchUsersResults {
     init(sdkResults: MatrixRustSDK.SearchUsersResults) {
         results = sdkResults.results.map(UserProfile.init)
         limited = sdkResults.limited

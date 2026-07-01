@@ -3491,14 +3491,14 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let searchUsersSearchTermLimitReturnValueLock = NSLock()
-    private nonisolated(unsafe) var searchUsersSearchTermLimitUnderlyingReturnValue: Result<SearchUsersResultsProxy, ClientProxyError>!
-    var searchUsersSearchTermLimitReturnValue: Result<SearchUsersResultsProxy, ClientProxyError>! {
+    private nonisolated(unsafe) var searchUsersSearchTermLimitUnderlyingReturnValue: Result<SearchUsersResults, ClientProxyError>!
+    var searchUsersSearchTermLimitReturnValue: Result<SearchUsersResults, ClientProxyError>! {
         get { searchUsersSearchTermLimitReturnValueLock.withLock { searchUsersSearchTermLimitUnderlyingReturnValue } }
         set { searchUsersSearchTermLimitReturnValueLock.withLock { searchUsersSearchTermLimitUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var searchUsersSearchTermLimitClosure: ((String, UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>)?
+    nonisolated(unsafe) var searchUsersSearchTermLimitClosure: ((String, UInt) async -> Result<SearchUsersResults, ClientProxyError>)?
 
-    @concurrent func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
+    @concurrent func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError> {
         searchUsersSearchTermLimitCallsCountLock.withLock { searchUsersSearchTermLimitUnderlyingCallsCount += 1 }
         searchUsersSearchTermLimitReceivedArguments = (searchTerm: searchTerm, limit: limit)
         searchUsersSearchTermLimitReceivedInvocationsLock.withLock { searchUsersSearchTermLimitUnderlyingReceivedInvocations.append((searchTerm: searchTerm, limit: limit)) }
