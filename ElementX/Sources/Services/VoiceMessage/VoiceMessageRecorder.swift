@@ -194,6 +194,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     private func addObservers() {
         audioRecorder.actions
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self else { return }
                 self.handleAudioRecorderAction(action)
