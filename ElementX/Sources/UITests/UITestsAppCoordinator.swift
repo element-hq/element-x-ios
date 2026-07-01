@@ -775,16 +775,30 @@ class MockScreen: Identifiable {
             coordinator.start()
             
             return navigationStackCoordinator
-        case .linkNewDevice:
+        case .linkNewDevice, .linkNewDeviceWithAppLockPIN:
             let linkMobileProgressSubject: CurrentValueSubject<LinkNewDeviceService.LinkMobileProgress, QRCodeLoginError> = .init(.qrReady(LinkNewDeviceServiceMock.mockQRCodeImage))
             let linkNewDeviceService = LinkNewDeviceServiceMock(.init(linkMobileProgressPublisher: linkMobileProgressSubject.asCurrentValuePublisher()))
             
             let clientProxy = ClientProxyMock(.init())
             clientProxy.linkNewDeviceServiceReturnValue = linkNewDeviceService
             
+            let keychainController = KeychainController(service: .tests, accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+            keychainController.resetSecrets()
+            
+            let context = LAContextMock()
+            context.canEvaluatePolicyReturnValue = false // No device passcode in the simulator.
+            
+            let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings, context: context)
+            
+            // Set an App Lock PIN for the dedicated variant so linking requires it (and forced logout can be tested).
+            // Without a PIN the service is disabled, so verification is unavailable and linking proceeds.
+            if id == .linkNewDeviceWithAppLockPIN, case .failure = appLockService.setupPINCode("2023") {
+                fatalError("Failed to preset the PIN code.")
+            }
+            
             let navigationStackCoordinator = NavigationStackCoordinator()
             let flowCoordinator = LinkNewDeviceFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
-                                                               appLockService: AppLockServiceMock.mock(),
+                                                               appLockService: appLockService,
                                                                flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                                                     bugReportService: BugReportServiceMock(.init()),
                                                                                                     elementCallService: ElementCallServiceMock(.init()),
@@ -804,7 +818,7 @@ class MockScreen: Identifiable {
                     switch action {
                     case .dismiss:
                         navigationRootCoordinator.setSheetCoordinator(nil)
-                    case .requestOAuthAuthorisation:
+                    case .requestOAuthAuthorisation, .forceLogout:
                         break
                     }
                 }

@@ -11,6 +11,7 @@ import SwiftUI
 enum LinkNewDeviceScreenCoordinatorAction {
     case linkMobileDevice(LinkNewDeviceService.LinkMobileProgressPublisher)
     case linkDesktopComputer
+    case verifyWithAppLockPIN(CheckedContinuation<Bool, Never>)
     case dismiss
 }
 
@@ -47,6 +48,8 @@ final class LinkNewDeviceScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.linkMobileDevice(progressPublisher))
             case .linkDesktopComputer:
                 actionsSubject.send(.linkDesktopComputer)
+            case .verifyWithAppLockPIN(let continuation):
+                actionsSubject.send(.verifyWithAppLockPIN(continuation))
             case .dismiss:
                 actionsSubject.send(.dismiss)
             }

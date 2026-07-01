@@ -242,6 +242,8 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
                 stateMachine.tryEvent(.didUnlockWithPIN)
             case .forceLogout:
                 stateMachine.tryEvent(.forceLogout)
+            case .cancelVerifyDeviceOwner:
+                fatalError("Cancelling is not allowed when unlocking the app.")
             }
         }
         .store(in: &cancellables)

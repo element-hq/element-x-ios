@@ -10,6 +10,7 @@ import Foundation
 enum LinkNewDeviceScreenViewModelAction {
     case linkMobileDevice(LinkNewDeviceService.LinkMobileProgressPublisher)
     case linkDesktopComputer
+    case verifyWithAppLockPIN(CheckedContinuation<Bool, Never>)
     case dismiss
 }
 

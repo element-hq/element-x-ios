@@ -13,6 +13,9 @@ class LinkNewDeviceTests: XCTestCase {
         static let selectDevice = 1
         static let linkMobileDevice = 2
         static let linkDesktopComputer = 3
+        static let appLockPIN = 4
+        static let logoutAlert = 5
+        static let forcedLogout = 6
         static let dismissed = 99
     }
     
@@ -44,5 +47,58 @@ class LinkNewDeviceTests: XCTestCase {
         let cancelButton = app.buttons[A11yIdentifiers.linkNewDeviceScreen.cancel]
         cancelButton.tap()
         try await app.assertScreenshot(step: Step.dismissed)
+    }
+    
+    func testAppLockPINVerification() async throws {
+        // Root screen
+        let app = Application.launch(.linkNewDeviceWithAppLockPIN)
+        try await app.assertScreenshot(step: Step.selectDevice)
+        
+        // Linking requires verifying the device owner with the App Lock PIN.
+        let mobileDeviceButton = app.buttons[A11yIdentifiers.linkNewDeviceScreen.mobileDevice]
+        mobileDeviceButton.tap()
+        try await app.assertScreenshot(step: Step.appLockPIN)
+        
+        // Cancelling verification returns to the root screen.
+        app.buttons[A11yIdentifiers.appLockScreen.cancel].tap()
+        try await app.assertScreenshot(step: Step.selectDevice)
+        
+        // Entering the correct PIN continues to generate the QR code.
+        mobileDeviceButton.tap()
+        try await app.assertScreenshot(step: Step.appLockPIN)
+        enterPIN(app)
+        try await app.assertScreenshot(step: Step.linkMobileDevice)
+    }
+    
+    func testForceLogout() async throws {
+        // Root screen
+        let app = Application.launch(.linkNewDeviceWithAppLockPIN)
+        
+        // Linking requires verifying the device owner with the App Lock PIN.
+        app.buttons[A11yIdentifiers.linkNewDeviceScreen.mobileDevice].tap()
+        try await app.assertScreenshot(step: Step.appLockPIN)
+        
+        // Entering the wrong PIN three times signs the user out.
+        enterWrongPIN(app)
+        enterWrongPIN(app)
+        enterWrongPIN(app)
+        try await app.assertScreenshot(step: Step.logoutAlert)
+        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch.tap()
+        try await app.assertScreenshot(step: Step.forcedLogout)
+    }
+    
+    // MARK: - Helpers
+    
+    private func enterPIN(_ app: XCUIApplication) {
+        app.buttons[A11yIdentifiers.appLockScreen.numpad(2)].tap()
+        app.buttons[A11yIdentifiers.appLockScreen.numpad(0)].tap()
+        app.buttons[A11yIdentifiers.appLockScreen.numpad(2)].tap()
+        app.buttons[A11yIdentifiers.appLockScreen.numpad(3)].tap()
+    }
+    
+    private func enterWrongPIN(_ app: XCUIApplication) {
+        for _ in 0..<4 {
+            app.buttons[A11yIdentifiers.appLockScreen.numpad(0)].tap()
+        }
     }
 }

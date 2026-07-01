@@ -72,8 +72,10 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         case .verified, .unavailable:
             break
         case .appLockPINRequired:
-            // Follow-up PR: present the App Lock PIN screen to verify the device owner.
-            return
+            guard await verifyWithAppLockPIN() else {
+                state.mode = .readyToLink(.idle)
+                return
+            }
         case .cancelled, .unverified:
             state.mode = .readyToLink(.idle)
             return
@@ -89,6 +91,13 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
         case .desktopComputer:
             actionsSubject.send(.linkDesktopComputer)
             state.mode = .readyToLink(.idle)
+        }
+    }
+    
+    /// Asks the coordinator to verify the device owner with the App Lock PIN, suspending until it has a result.
+    private func verifyWithAppLockPIN() async -> Bool {
+        await withCheckedContinuation { continuation in
+            actionsSubject.send(.verifyWithAppLockPIN(continuation))
         }
     }
     

@@ -88,18 +88,22 @@ protocol AppLockServiceProtocol: AnyObject {
     /// Attempt to unlock the app using FaceID or TouchID.
     func unlockWithBiometrics() async -> AppLockServiceBiometricResult
     
+    /// The number of attempts the user had made to unlock with a PIN code.
+    ///
+    /// Note: We don't track the biometric attempts as LAContext does that automatically.
+    var numberOfPINAttempts: AnyPublisher<Int, Never> { get }
+    
+    // MARK: Device Owner Verification
+    
     /// Verifies the device owner via the device passcode/biometrics, e.g. to gate a sensitive action.
     ///
     /// This is a standalone identity check: it does **not** unlock the app or touch any App Lock
     /// state (the grace-period timer or PIN attempt count).
     /// - Parameter reason: The localised reason shown in the system prompt.
     func verifyDeviceOwner(reason: String) async -> AppLockDeviceOwnerResult
-    
-    /// The number of attempts the user had made to unlock with a PIN code.
-    ///
-    /// Note: We don't track the biometric attempts as LAContext does that automatically.
-    var numberOfPINAttempts: AnyPublisher<Int, Never> { get }
 }
+
+// MARK: - Mocks
 
 // sourcery: AutoMockable
 extension AppLockServiceProtocol { }
