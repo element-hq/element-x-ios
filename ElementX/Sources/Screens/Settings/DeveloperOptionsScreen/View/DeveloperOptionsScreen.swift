@@ -54,6 +54,10 @@ struct DeveloperOptionsScreen: View {
                     Text("Moves search to a separate tab")
                 }
                 
+                Toggle(isOn: $context.userStatusEnabled) {
+                    Text("User status")
+                }
+                
                 context.viewState.appHooks
                     .developerOptionsScreenHook
                     .generalSectionRows()
