@@ -16,7 +16,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
     let context: NotificationSettingsEditScreenViewModel.Context
     
     var body: some View {
-        ListRow(label: .action(title: room.name,
+        ListRow(label: .avatar(title: room.name,
                                icon: avatar),
                 details: roomDetailsLabel,
                 kind: .navigationLink {
@@ -47,7 +47,18 @@ struct NotificationSettingsEditScreenRoomCell: View {
 }
 
 struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, TestablePreview {
+    static let (rooms, viewModel) = makeRooms()
+    
     static var previews: some View {
+        Form {
+            ForEach(rooms) { room in
+                NotificationSettingsEditScreenRoomCell(room: room, context: viewModel.context)
+            }
+        }
+        .compoundList()
+    }
+    
+    private static func makeRooms() -> ([NotificationSettingsEditScreenRoom], NotificationSettingsEditScreenViewModel) {
         let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
@@ -59,17 +70,13 @@ struct NotificationSettingsEditScreenRoomCell_Previews: PreviewProvider, Testabl
         let viewModel = NotificationSettingsEditScreenViewModel(chatType: .groupChat,
                                                                 userSession: userSession)
         
-        let rooms: [NotificationSettingsEditScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> NotificationSettingsEditScreenRoom? in
+        let rooms = summaryProvider.roomListPublisher.value.map { summary in
             NotificationSettingsEditScreenRoom(id: UUID().uuidString,
                                                roomId: summary.id,
                                                name: summary.name,
                                                avatar: summary.avatar)
         }
         
-        return VStack(spacing: 0) {
-            ForEach(rooms) { room in
-                NotificationSettingsEditScreenRoomCell(room: room, context: viewModel.context)
-            }
-        }
+        return (rooms, viewModel)
     }
 }
