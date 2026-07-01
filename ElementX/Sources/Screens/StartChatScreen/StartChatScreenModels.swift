@@ -50,8 +50,8 @@ struct StartChatScreenViewStateBindings {
 enum StartChatScreenViewAction {
     case close
     case createRoom
-    case createDM(user: UserProfileProxy)
-    case selectUser(UserProfileProxy)
+    case createDM(user: UserProfile)
+    case selectUser(UserProfile)
     case joinRoomByAddress
     case openRoomDirectorySearch
 }

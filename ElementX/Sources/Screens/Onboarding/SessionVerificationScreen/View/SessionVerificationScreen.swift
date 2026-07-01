@@ -232,9 +232,9 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
         sessionVerificationScreen(state: .initial, flow: .userInitiator(userID: "@bob:matrix.org"))
             .previewDisplayName("Initial - User Initiator")
         
-        let details = SessionVerificationRequestDetails(senderProfile: UserProfileProxy(userID: "@bob:matrix.org",
-                                                                                        displayName: "Billy Bob",
-                                                                                        avatarURL: .mockMXCUserAvatar),
+        let details = SessionVerificationRequestDetails(senderProfile: UserProfile(userID: "@bob:matrix.org",
+                                                                                   displayName: "Billy Bob",
+                                                                                   avatarURL: .mockMXCUserAvatar),
                                                         flowID: "123",
                                                         deviceID: "CODEMISTAKE",
                                                         deviceDisplayName: "Bob's Element X iOS",

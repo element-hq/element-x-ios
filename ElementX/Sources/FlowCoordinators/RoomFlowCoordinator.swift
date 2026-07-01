@@ -64,7 +64,7 @@ enum InviteUsersFlow: Hashable {
     /// Invite people into the current room.
     case existingRoom
     /// Start a new room with the given invitee pre-selected and mandatory.
-    case newRoom(mandatoryInvitee: UserProfileProxy)
+    case newRoom(mandatoryInvitee: UserProfile)
 }
 
 // swiftlint:disable:next type_body_length

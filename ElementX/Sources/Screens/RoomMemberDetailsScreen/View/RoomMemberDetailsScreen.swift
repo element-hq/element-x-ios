@@ -59,7 +59,7 @@ struct RoomMemberDetailsScreen: View {
                 .padding(.top, 24)
             }
         } else {
-            AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
+            AvatarHeaderView(user: UserProfile(userID: context.viewState.userID),
                              isVerified: context.viewState.showVerifiedBadge,
                              avatarSize: .user(on: .memberDetails),
                              mediaProvider: context.mediaProvider) { }

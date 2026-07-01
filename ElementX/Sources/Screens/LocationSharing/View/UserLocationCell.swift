@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct UserLocationCell: View {
-    let profile: UserProfileProxy
+    let profile: UserProfile
     let isOwnUser: Bool
     let kind: Kind
     var mediaProvider: MediaProviderProtocol?
@@ -23,7 +23,7 @@ struct UserLocationCell: View {
     }
     
     private var name: String {
-        isOwnUser ? L10n.commonYou : profile.displayName ?? profile.userID
+        isOwnUser ? L10n.commonYou : profile.displayName ?? profile.id
     }
     
     var body: some View {

@@ -14,5 +14,5 @@ enum UserDiscoveryErrorType: Error {
 
 // sourcery: AutoMockable
 protocol UserDiscoveryServiceProtocol {
-    func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType>
+    func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], UserDiscoveryErrorType>
 }

@@ -89,7 +89,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         MXLog.info("Acknowledging verification request")
         
         do {
-            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: details.senderProfile.userID, flowId: details.flowID)
+            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: details.senderProfile.id, flowId: details.flowID)
             return .success(())
         } catch {
             MXLog.error("Failed requesting session verification with error: \(error)")
@@ -190,7 +190,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     fileprivate func didReceiveVerificationRequest(details: MatrixRustSDK.SessionVerificationRequestDetails) {
         MXLog.info("Received verification request \(details)")
         
-        let details = SessionVerificationRequestDetails(senderProfile: UserProfileProxy(sdkUserProfile: details.senderProfile),
+        let details = SessionVerificationRequestDetails(senderProfile: UserProfile(sdkUserProfile: details.senderProfile),
                                                         flowID: details.flowId,
                                                         deviceID: details.deviceId,
                                                         deviceDisplayName: details.deviceDisplayName,

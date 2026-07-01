@@ -19,7 +19,7 @@ final class CreateRoomScreenViewModelTests {
     
     private let appSettings: AppSettings
     
-    private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
+    private let usersSubject = CurrentValueSubject<[UserProfile], Never>([])
     
     var context: CreateRoomScreenViewModel.Context {
         viewModel.context

@@ -19,7 +19,7 @@ struct UserProfileScreenViewState: BindableState {
     let isOwnUser: Bool
     let isPresentedModally: Bool
     
-    var userProfile: UserProfileProxy?
+    var userProfile: UserProfile?
     var isIdentityKnown = false
     var isVerified: Bool?
     var permalink: URL?

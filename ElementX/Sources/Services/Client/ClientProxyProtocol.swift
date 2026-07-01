@@ -232,7 +232,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>
     
-    func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError>
+    func profile(for userID: String) async -> Result<UserProfile, ClientProxyError>
     
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
     
@@ -261,7 +261,7 @@ protocol ClientProxyProtocol: AnyObject {
     func trackRecentlyVisitedRoom(_ roomID: String) async -> Result<Void, ClientProxyError>
     
     func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol]
-    func recentConversationCounterparts() async -> [UserProfileProxy]
+    func recentConversationCounterparts() async -> [UserProfile]
     
     // MARK: - Crypto
     

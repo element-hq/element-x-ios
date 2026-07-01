@@ -16,7 +16,7 @@ struct LocationShareSheet: View {
     }
     
     private var senderName: String? {
-        annotation.kind.displayName ?? annotation.kind.userProfile?.userID
+        annotation.kind.displayName ?? annotation.kind.userProfile?.id
     }
     
     var body: some View {
@@ -40,8 +40,8 @@ struct LocationShareSheet: View {
 // MARK: - Previews
 
 struct LocationShareSheet_Previews: PreviewProvider {
-    static let profile = UserProfileProxy(userID: "@alice:example.com", displayName: "Alice")
-    static let annotation = LocationAnnotation(id: profile.userID,
+    static let profile = UserProfile(userID: "@alice:example.com", displayName: "Alice")
+    static let annotation = LocationAnnotation(id: profile.id,
                                                coordinate: .init(latitude: 51.509865, longitude: -0.118092),
                                                kind: .liveUser(profile))
     

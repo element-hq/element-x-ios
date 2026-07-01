@@ -43,7 +43,7 @@ nonisolated struct RoomSummary {
     let isSpace: Bool
     let avatarURL: URL?
     
-    let heroes: [UserProfileProxy]
+    let heroes: [UserProfile]
     let activeMembersCount: UInt
     
     let lastMessage: AttributedString?

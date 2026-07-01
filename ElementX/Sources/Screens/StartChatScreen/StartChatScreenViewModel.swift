@@ -19,7 +19,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let appSettings: AppSettings
     
-    private var suggestedUsers = [UserProfileProxy]()
+    private var suggestedUsers = [UserProfile]()
     
     private let actionsSubject: PassthroughSubject<StartChatScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<StartChatScreenViewModelAction, Never> {
@@ -61,7 +61,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         case .selectUser(let user):
             showLoadingIndicator(delay: .milliseconds(200))
             
-            let currentDirectRoom = userSession.clientProxy.directRoomForUserID(user.userID)
+            let currentDirectRoom = userSession.clientProxy.directRoomForUserID(user.id)
             switch currentDirectRoom {
             case .success(.some(let roomId)):
                 hideLoadingIndicator()
@@ -69,7 +69,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             case .success:
                 Task {
                     // If an error occured while fetching the identity, assume they are unknown.
-                    let isUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.userID, fallBackToServer: false) {
+                    let isUnknown = if case .success(let identity) = await self.userSession.clientProxy.userIdentity(for: user.id, fallBackToServer: false) {
                         identity == nil
                     } else {
                         true
@@ -186,12 +186,12 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         }
     }
     
-    private func createDirectRoom(user: UserProfileProxy) async {
+    private func createDirectRoom(user: UserProfile) async {
         defer {
             hideLoadingIndicator()
         }
         showLoadingIndicator()
-        switch await userSession.clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
+        switch await userSession.clientProxy.createDirectRoom(with: user.id, expectedRoomName: user.displayName) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.showRoom(roomID: roomId))

@@ -354,7 +354,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            isDirect: roomInfo.isDirect,
                            isSpace: roomInfo.isSpace,
                            avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
-                           heroes: roomInfo.heroes.map(UserProfileProxy.init),
+                           heroes: roomInfo.heroes.map(UserProfile.init),
                            activeMembersCount: UInt(roomInfo.activeMembersCount),
                            lastMessage: attributedLastMessage,
                            lastMessageDate: lastMessageDate,

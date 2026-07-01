@@ -69,7 +69,7 @@ struct LocationMarkerView: View {
             if let userProfile = kind.userProfile {
                 LoadableAvatarImage(url: userProfile.avatarURL,
                                     name: userProfile.displayName,
-                                    contentID: userProfile.userID,
+                                    contentID: userProfile.id,
                                     avatarSize: .user(on: .map),
                                     mediaProvider: mediaProvider)
                     .overlay {

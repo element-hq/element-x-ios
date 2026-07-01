@@ -15,7 +15,7 @@ import Testing
 struct RoomSummaryTests {
     // swiftlint:disable:next large_tuple
     let roomDetails: (id: String, name: String, avatarURL: URL) = ("room_id", "Room Name", "mxc://hs.tld/room/avatar")
-    let heroes = [UserProfileProxy(userID: "hero_1", displayName: "Hero 1", avatarURL: "mxc://hs.tld/user/avatar")]
+    let heroes = [UserProfile(userID: "hero_1", displayName: "Hero 1", avatarURL: "mxc://hs.tld/user/avatar")]
     
     @Test
     func roomAvatar() {
