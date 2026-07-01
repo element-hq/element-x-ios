@@ -146,9 +146,7 @@ enum RoomAvatarSizeOnScreen {
     
     var value: CGFloat {
         switch self {
-        case .notificationSettings:
-            30
-        case .timeline, .leaveSpace, .roomDirectorySearch,
+        case .timeline, .leaveSpace, .notificationSettings, .roomDirectorySearch,
              .completionSuggestions, .authorizedSpaces, .createRoomSelectSpace,
              .spaceFilters, .globalSearch:
             32
