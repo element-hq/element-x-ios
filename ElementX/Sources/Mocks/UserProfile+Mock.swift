@@ -8,29 +8,29 @@
 
 import Foundation
 
-extension UserProfileProxy {
+extension UserProfile {
     /// Mocks
-    static var mockAlice: UserProfileProxy {
+    static var mockAlice: UserProfile {
         .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA")
     }
     
-    static var mockBob: UserProfileProxy {
+    static var mockBob: UserProfile {
         .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
     }
     
-    static var mockBobby: UserProfileProxy {
+    static var mockBobby: UserProfile {
         .init(userID: "@bobby:matrix.org", displayName: "Bobby", avatarURL: nil)
     }
     
-    static var mockCharlie: UserProfileProxy {
+    static var mockCharlie: UserProfile {
         .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
     }
     
-    static var mockDan: UserProfileProxy {
+    static var mockDan: UserProfile {
         .init(userID: "@dan:matrix.org", displayName: "Dan", avatarURL: .mockMXCUserAvatar)
     }
     
-    static var mockVerbose: UserProfileProxy {
+    static var mockVerbose: UserProfile {
         .init(userID: "@charlie:matrix.org", displayName: "Charlie is the best display name", avatarURL: nil)
     }
 }

@@ -33,20 +33,20 @@ struct BlockedUsersScreen: View {
         } else {
             Form {
                 ForEach(context.viewState.blockedUsers, id: \.self) { user in
-                    ListRow(label: .avatar(title: user.displayName ?? user.userID,
-                                           description: user.displayName != nil ? user.userID : nil,
+                    ListRow(label: .avatar(title: user.displayName ?? user.id,
+                                           description: user.displayName != nil ? user.id : nil,
                                            icon: avatar(for: user)),
-                            details: .isWaiting(context.viewState.processingUserID == user.userID),
+                            details: .isWaiting(context.viewState.processingUserID == user.id),
                             kind: .button { context.send(viewAction: .unblockUser(user)) })
                 }
             }
         }
     }
     
-    private func avatar(for user: UserProfileProxy) -> some View {
+    private func avatar(for user: UserProfile) -> some View {
         LoadableAvatarImage(url: user.avatarURL,
                             name: user.displayName,
-                            contentID: user.userID,
+                            contentID: user.id,
                             avatarSize: .user(on: .blockedUsers),
                             mediaProvider: context.mediaProvider)
             .accessibilityHidden(true)

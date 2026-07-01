@@ -9,7 +9,7 @@ import Foundation
 
 struct UserToInvite: Identifiable {
     /// The profile of the user being invited.
-    var user: UserProfileProxy
+    var user: UserProfile
     
     /// The ID of the user being invited.
     var id: String {

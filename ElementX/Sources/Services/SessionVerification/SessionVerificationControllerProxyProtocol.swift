@@ -31,7 +31,7 @@ enum SessionVerificationControllerProxyAction: Equatable {
 }
 
 struct SessionVerificationRequestDetails: Equatable {
-    let senderProfile: UserProfileProxy
+    let senderProfile: UserProfile
     let flowID: String
     let deviceID: String
     let deviceDisplayName: String?

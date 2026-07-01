@@ -52,7 +52,7 @@ struct LocationSharingScreenViewState: BindableState {
         self.mapURLBuilder = mapURLBuilder
         self.ownUserID = ownUserID
         
-        let initialProfile: UserProfileProxy = switch interactionMode {
+        let initialProfile: UserProfile = switch interactionMode {
         case .viewStatic(let locationData):
             .init(sender: locationData.sender)
         case .viewLive(let sender, _):
@@ -64,7 +64,7 @@ struct LocationSharingScreenViewState: BindableState {
         case .picker:
             .init(userID: ownUserID)
         }
-        userProfiles = [initialProfile.userID: initialProfile]
+        userProfiles = [initialProfile.id: initialProfile]
         
         if case .viewLive(_, let initialLiveLocationShare) = interactionMode, let initialLiveLocationShare {
             liveLocationShares = [initialLiveLocationShare]
@@ -79,7 +79,7 @@ struct LocationSharingScreenViewState: BindableState {
     let interactionMode: LocationSharingInteractionMode
     let mapURLBuilder: MapTilerURLBuilderProtocol
     let ownUserID: String
-    var userProfiles: [String: UserProfileProxy]
+    var userProfiles: [String: UserProfile]
     var liveLocationShares: [LiveLocationShare] = []
     var isStoppingLiveLocation = false
     /// Whether this device has an active live location sharing session in the room.
@@ -103,10 +103,10 @@ struct LocationSharingScreenViewState: BindableState {
                     return nil
                 }
                 
-                let profile = userProfiles[share.userID] ?? UserProfileProxy(userID: share.userID)
+                let profile = userProfiles[share.userID] ?? UserProfile(userID: share.userID)
                 let kind = LocationMarkerKind.liveUser(profile)
                 let coordinate = CLLocationCoordinate2D(latitude: geoURI.latitude, longitude: geoURI.longitude)
-                return LocationAnnotation(id: profile.userID, coordinate: coordinate, kind: kind)
+                return LocationAnnotation(id: profile.id, coordinate: coordinate, kind: kind)
             }
         case .picker:
             return []
@@ -287,8 +287,8 @@ extension AlertInfo where T == LocationSharingViewAlert {
 
 enum LocationMarkerKind: Equatable {
     case pin
-    case staticUser(UserProfileProxy)
-    case liveUser(UserProfileProxy)
+    case staticUser(UserProfile)
+    case liveUser(UserProfile)
     case placeholder
     
     var id: String {
@@ -296,7 +296,7 @@ enum LocationMarkerKind: Equatable {
         case .pin, .placeholder:
             UUID().uuidString
         case .staticUser(let profile), .liveUser(let profile):
-            profile.userID
+            profile.id
         }
     }
     
@@ -309,7 +309,7 @@ enum LocationMarkerKind: Equatable {
         }
     }
     
-    var userProfile: UserProfileProxy? {
+    var userProfile: UserProfile? {
         switch self {
         case .pin, .placeholder:
             nil

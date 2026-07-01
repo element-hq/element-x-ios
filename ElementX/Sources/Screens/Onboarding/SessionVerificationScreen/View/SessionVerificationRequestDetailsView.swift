@@ -30,18 +30,18 @@ struct SessionVerificationRequestDetailsView: View {
         HStack(spacing: 12) {
             LoadableAvatarImage(url: details.senderProfile.avatarURL,
                                 name: details.senderProfile.displayName,
-                                contentID: details.senderProfile.userID,
+                                contentID: details.senderProfile.id,
                                 avatarSize: .user(on: .sessionVerification),
                                 mediaProvider: mediaProvider)
                 .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 0) {
-                Text(details.senderProfile.displayName ?? details.senderProfile.userID)
+                Text(details.senderProfile.displayName ?? details.senderProfile.id)
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
                 
                 if details.senderProfile.displayName != nil {
-                    Text(details.senderProfile.userID)
+                    Text(details.senderProfile.id)
                         .font(.compound.bodyMD)
                         .foregroundColor(.compound.textPrimary)
                 }
@@ -66,7 +66,7 @@ struct SessionVerificationRequestDetailsView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                     
                     let displayName = isUserVerification ? details.senderProfile.displayName : details.deviceDisplayName
-                    Text(displayName ?? details.senderProfile.userID)
+                    Text(displayName ?? details.senderProfile.id)
                         .font(.compound.bodyMDSemibold)
                         .foregroundColor(.compound.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -110,9 +110,9 @@ struct SessionVerificationRequestDetailsView: View {
 }
 
 struct SessionVerificationRequestDetailsView_Previews: PreviewProvider, TestablePreview {
-    static let details = SessionVerificationRequestDetails(senderProfile: UserProfileProxy(userID: "@bob:matrix.org",
-                                                                                           displayName: "Billy bob",
-                                                                                           avatarURL: .mockMXCUserAvatar),
+    static let details = SessionVerificationRequestDetails(senderProfile: UserProfile(userID: "@bob:matrix.org",
+                                                                                      displayName: "Billy bob",
+                                                                                      avatarURL: .mockMXCUserAvatar),
                                                            flowID: "123",
                                                            deviceID: "CODEMISTAKE",
                                                            deviceDisplayName: "Bob's Element X iOS",

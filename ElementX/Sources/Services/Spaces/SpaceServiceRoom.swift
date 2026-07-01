@@ -28,7 +28,7 @@ struct SpaceServiceRoom {
     var childrenCount: Int
     
     var joinedMembersCount: Int
-    var heroes: [UserProfileProxy]
+    var heroes: [UserProfile]
     var topic: String?
     var canonicalAlias: String?
     
@@ -75,7 +75,7 @@ extension SpaceServiceRoom {
         childrenCount = Int(spaceRoom.childrenCount)
         
         joinedMembersCount = Int(spaceRoom.numJoinedMembers)
-        heroes = (spaceRoom.heroes ?? []).map(UserProfileProxy.init)
+        heroes = (spaceRoom.heroes ?? []).map(UserProfile.init)
         topic = spaceRoom.topic
         canonicalAlias = spaceRoom.canonicalAlias
         
@@ -97,7 +97,7 @@ extension SpaceServiceRoom {
                      isDM: Bool? = nil,
                      childrenCount: Int = 0,
                      joinedMembersCount: Int = 0,
-                     heroes: [UserProfileProxy] = [],
+                     heroes: [UserProfile] = [],
                      topic: String? = nil,
                      canonicalAlias: String? = nil,
                      joinRule: JoinRule? = nil,

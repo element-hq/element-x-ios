@@ -77,7 +77,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     // The proxies aren't Sendable, fetch through these helpers so that
     // they never leave the main actor when running calls in parallel.
     
-    private func fetchProfile() async -> Result<UserProfileProxy, ClientProxyError> {
+    private func fetchProfile() async -> Result<UserProfile, ClientProxyError> {
         await userSession.clientProxy.profile(for: state.userID)
     }
     
@@ -94,7 +94,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             state.userProfile = userProfile
             state.permalink = (try? matrixToUserPermalink(userId: state.userID)).flatMap(URL.init(string:))
             
-            switch userSession.clientProxy.directRoomForUserID(userProfile.userID) {
+            switch userSession.clientProxy.directRoomForUserID(userProfile.id) {
             case .success(let roomID):
                 state.dmRoomID = roomID
             case .failure:
@@ -133,13 +133,13 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
-        switch userSession.clientProxy.directRoomForUserID(userProfile.userID) {
+        switch userSession.clientProxy.directRoomForUserID(userProfile.id) {
         case .success(let roomID):
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
                 Task {
-                    let isUnknown = if case let .success(identity) = await userSession.clientProxy.userIdentity(for: userProfile.userID, fallBackToServer: false) {
+                    let isUnknown = if case let .success(identity) = await userSession.clientProxy.userIdentity(for: userProfile.id, fallBackToServer: false) {
                         identity == nil
                     } else {
                         true
@@ -158,7 +158,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
-        switch await userSession.clientProxy.createDirectRoom(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
+        switch await userSession.clientProxy.createDirectRoom(with: userProfile.id, expectedRoomName: userProfile.displayName) {
         case .success(let roomID):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openDirectChat(roomID: roomID))

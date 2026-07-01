@@ -18,7 +18,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case requestMemberDetailsPresentation
     case requestRecipientDetailsPresentation(userID: String)
     case requestInvitePeoplePresentation
-    case requestInviteToNewRoomPresentation(selectedInvitee: UserProfileProxy)
+    case requestInviteToNewRoomPresentation(selectedInvitee: UserProfile)
     case leftRoom
     case requestEditDetailsPresentation
     case requestPollsHistoryPresentation

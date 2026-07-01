@@ -41,7 +41,7 @@ struct StaticLocationSheet: View {
                                                                  longitude: location.geoURI.longitude)))
                 } label: {
                     UserLocationCell(profile: profile,
-                                     isOwnUser: context.viewState.isOwnUser(profile.userID),
+                                     isOwnUser: context.viewState.isOwnUser(profile.id),
                                      kind: .static(isUserLocation: location.kind == .sender,
                                                    timestamp: location.timestamp),
                                      mediaProvider: context.mediaProvider,

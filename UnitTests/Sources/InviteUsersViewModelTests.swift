@@ -29,7 +29,7 @@ final class InviteUsersScreenViewModelTests {
         #expect(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
         #expect(context.viewState.selectedUsers.count == 1)
-        #expect(context.viewState.selectedUsers.first?.userID == UserProfileProxy.mockAlice.userID)
+        #expect(context.viewState.selectedUsers.first?.id == UserProfile.mockAlice.id)
     }
     
     @Test
@@ -41,7 +41,7 @@ final class InviteUsersScreenViewModelTests {
         #expect(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
         #expect(context.viewState.selectedUsers.count == 1)
-        #expect(context.viewState.selectedUsers.first?.userID == UserProfileProxy.mockAlice.userID)
+        #expect(context.viewState.selectedUsers.first?.id == UserProfile.mockAlice.id)
         context.send(viewAction: .toggleUser(.mockAlice))
         #expect(context.viewState.selectedUsers.isEmpty)
     }
@@ -55,7 +55,7 @@ final class InviteUsersScreenViewModelTests {
         #expect(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
         #expect(context.viewState.selectedUsers.count == 1)
-        #expect(context.viewState.selectedUsers.first?.userID == UserProfileProxy.mockAlice.userID)
+        #expect(context.viewState.selectedUsers.first?.id == UserProfile.mockAlice.id)
         context.send(viewAction: .toggleUser(.mockAlice))
         #expect(context.viewState.selectedUsers.isEmpty)
     }
@@ -174,7 +174,7 @@ final class InviteUsersScreenViewModelTests {
                                                appSettings: .volatile())
         
         // The locked invitee starts pre-selected and locked.
-        #expect(context.viewState.selectedUsers.map(\.userID) == [UserProfileProxy.mockAlice.userID])
+        #expect(context.viewState.selectedUsers.map(\.id) == [UserProfile.mockAlice.id])
         #expect(context.viewState.isInviteeMandatory(.mockAlice))
         // The proceed button is disabled while the only selected user is the locked invitee.
         #expect(!context.viewState.hasInvitableSelectedUsers)
@@ -218,7 +218,7 @@ final class InviteUsersScreenViewModelTests {
         #expect(args.topic == nil)
         #expect(args.accessType == .private)
         #expect(args.isSpace == false)
-        #expect(args.userIDs == [UserProfileProxy.mockAlice.userID, UserProfileProxy.mockBob.userID])
+        #expect(args.userIDs == [UserProfile.mockAlice.id, UserProfile.mockBob.id])
         #expect(args.avatarURL == nil)
         #expect(args.aliasLocalPart == nil)
     }

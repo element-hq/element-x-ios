@@ -786,7 +786,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
+    func profile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
         do {
             return try await .success(.init(sdkUserProfile: client.getProfile(userId: userID)))
         } catch {
@@ -933,14 +933,14 @@ class ClientProxy: ClientProxyProtocol {
         return rooms
     }
     
-    func recentConversationCounterparts() async -> [UserProfileProxy] {
+    func recentConversationCounterparts() async -> [UserProfile] {
         let maxResultsToReturn = 5
         
         guard case let .success(roomIdentifiers) = await recentlyVisitedRoomIDs() else {
             return []
         }
         
-        var users: OrderedSet<UserProfileProxy> = []
+        var users: OrderedSet<UserProfile> = []
         
         for roomID in roomIdentifiers {
             guard case let .joined(roomProxy) = await roomForIdentifier(roomID),

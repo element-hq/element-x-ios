@@ -405,7 +405,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 MXLog.info("Received session verification request")
                 
-                if details.senderProfile.userID == userSession.clientProxy.userID {
+                if details.senderProfile.id == userSession.clientProxy.userID {
                     presentSessionVerificationScreen(flow: .deviceResponder(requestDetails: details))
                 } else {
                     presentSessionVerificationScreen(flow: .userResponder(requestDetails: details))

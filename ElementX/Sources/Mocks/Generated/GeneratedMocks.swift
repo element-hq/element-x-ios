@@ -3533,14 +3533,14 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let profileForReturnValueLock = NSLock()
-    private nonisolated(unsafe) var profileForUnderlyingReturnValue: Result<UserProfileProxy, ClientProxyError>!
-    var profileForReturnValue: Result<UserProfileProxy, ClientProxyError>! {
+    private nonisolated(unsafe) var profileForUnderlyingReturnValue: Result<UserProfile, ClientProxyError>!
+    var profileForReturnValue: Result<UserProfile, ClientProxyError>! {
         get { profileForReturnValueLock.withLock { profileForUnderlyingReturnValue } }
         set { profileForReturnValueLock.withLock { profileForUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var profileForClosure: ((String) async -> Result<UserProfileProxy, ClientProxyError>)?
+    nonisolated(unsafe) var profileForClosure: ((String) async -> Result<UserProfile, ClientProxyError>)?
 
-    @concurrent func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
+    @concurrent func profile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
         profileForCallsCountLock.withLock { profileForUnderlyingCallsCount += 1 }
         profileForReceivedUserID = userID
         profileForReceivedInvocationsLock.withLock { profileForUnderlyingReceivedInvocations.append(userID) }
@@ -3972,14 +3972,14 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let recentConversationCounterpartsReturnValueLock = NSLock()
-    private nonisolated(unsafe) var recentConversationCounterpartsUnderlyingReturnValue: [UserProfileProxy]!
-    var recentConversationCounterpartsReturnValue: [UserProfileProxy]! {
+    private nonisolated(unsafe) var recentConversationCounterpartsUnderlyingReturnValue: [UserProfile]!
+    var recentConversationCounterpartsReturnValue: [UserProfile]! {
         get { recentConversationCounterpartsReturnValueLock.withLock { recentConversationCounterpartsUnderlyingReturnValue } }
         set { recentConversationCounterpartsReturnValueLock.withLock { recentConversationCounterpartsUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var recentConversationCounterpartsClosure: (() async -> [UserProfileProxy])?
+    nonisolated(unsafe) var recentConversationCounterpartsClosure: (() async -> [UserProfile])?
 
-    @concurrent func recentConversationCounterparts() async -> [UserProfileProxy] {
+    @concurrent func recentConversationCounterparts() async -> [UserProfile] {
         recentConversationCounterpartsCallsCountLock.withLock { recentConversationCounterpartsUnderlyingCallsCount += 1 }
         if let recentConversationCounterpartsClosure = recentConversationCounterpartsClosure {
             return await recentConversationCounterpartsClosure()
@@ -14057,14 +14057,14 @@ nonisolated class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol, @unche
     }
 
     private let searchProfilesWithReturnValueLock = NSLock()
-    private nonisolated(unsafe) var searchProfilesWithUnderlyingReturnValue: Result<[UserProfileProxy], UserDiscoveryErrorType>!
-    var searchProfilesWithReturnValue: Result<[UserProfileProxy], UserDiscoveryErrorType>! {
+    private nonisolated(unsafe) var searchProfilesWithUnderlyingReturnValue: Result<[UserProfile], UserDiscoveryErrorType>!
+    var searchProfilesWithReturnValue: Result<[UserProfile], UserDiscoveryErrorType>! {
         get { searchProfilesWithReturnValueLock.withLock { searchProfilesWithUnderlyingReturnValue } }
         set { searchProfilesWithReturnValueLock.withLock { searchProfilesWithUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var searchProfilesWithClosure: ((String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType>)?
+    nonisolated(unsafe) var searchProfilesWithClosure: ((String) async -> Result<[UserProfile], UserDiscoveryErrorType>)?
 
-    @concurrent func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
+    @concurrent func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], UserDiscoveryErrorType> {
         searchProfilesWithCallsCountLock.withLock { searchProfilesWithUnderlyingCallsCount += 1 }
         searchProfilesWithReceivedSearchQuery = searchQuery
         searchProfilesWithReceivedInvocationsLock.withLock { searchProfilesWithUnderlyingReceivedInvocations.append(searchQuery) }

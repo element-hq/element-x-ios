@@ -11,7 +11,7 @@ import MatrixRustSDK
 import SwiftUI
 
 struct UserProfileListRow: View {
-    let user: UserProfileProxy
+    let user: UserProfile
     let membership: MembershipState?
     let mediaProvider: MediaProviderProtocol?
     
@@ -27,14 +27,14 @@ struct UserProfileListRow: View {
         if let membershipText = membership?.localizedDescription {
             return membershipText
         } else if user.displayName != nil {
-            return user.userID
+            return user.id
         } else {
             return nil
         }
     }
     
     var body: some View {
-        ListRow(label: .avatar(title: user.displayName ?? user.userID,
+        ListRow(label: .avatar(title: user.displayName ?? user.id,
                                description: subtitle,
                                icon: avatar,
                                role: isUnknownProfile ? .error : nil),
@@ -44,7 +44,7 @@ struct UserProfileListRow: View {
     var avatar: LoadableAvatarImage {
         LoadableAvatarImage(url: user.avatarURL,
                             name: user.displayName,
-                            contentID: user.userID,
+                            contentID: user.id,
                             avatarSize: .user(on: .startChat),
                             mediaProvider: mediaProvider)
     }

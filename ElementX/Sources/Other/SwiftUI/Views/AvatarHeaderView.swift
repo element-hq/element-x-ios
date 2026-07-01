@@ -13,7 +13,7 @@ import SwiftUI
 struct AvatarHeaderView<Footer: View>: View {
     private enum AvatarInfo {
         case room(RoomAvatar)
-        case user(UserProfileProxy)
+        case user(UserProfile)
     }
     
     private enum Badge: Hashable {
@@ -44,7 +44,7 @@ struct AvatarHeaderView<Footer: View>: View {
         if let roomAlias = room.canonicalAlias {
             subtitle = roomAlias
         } else if room.isDirect, case let .heroes(heroes) = room.avatar, heroes.count == 1 {
-            subtitle = heroes[0].userID
+            subtitle = heroes[0].id
         } else {
             subtitle = nil
         }
@@ -70,10 +70,10 @@ struct AvatarHeaderView<Footer: View>: View {
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
-        let dmRecipientProfile = UserProfileProxy(member: dmRecipient)
-        avatarInfo = .room(.heroes([dmRecipientProfile, UserProfileProxy(member: accountOwner)]))
-        title = dmRecipientProfile.displayName ?? dmRecipientProfile.userID
-        subtitle = dmRecipientProfile.displayName == nil ? nil : dmRecipientProfile.userID
+        let dmRecipientProfile = UserProfile(member: dmRecipient)
+        avatarInfo = .room(.heroes([dmRecipientProfile, UserProfile(member: accountOwner)]))
+        title = dmRecipientProfile.displayName ?? dmRecipientProfile.id
+        subtitle = dmRecipientProfile.displayName == nil ? nil : dmRecipientProfile.id
         
         avatarSize = .user(on: .dmDetails)
         self.mediaProvider = mediaProvider
@@ -89,7 +89,7 @@ struct AvatarHeaderView<Footer: View>: View {
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
-        let profile = UserProfileProxy(member: member)
+        let profile = UserProfile(member: member)
         
         self.init(user: profile,
                   isVerified: isVerified,
@@ -99,15 +99,15 @@ struct AvatarHeaderView<Footer: View>: View {
                   footer: footer)
     }
     
-    init(user: UserProfileProxy,
+    init(user: UserProfile,
          isVerified: Bool,
          avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .user(user)
-        title = user.displayName ?? user.userID
-        subtitle = user.displayName == nil ? nil : user.userID
+        title = user.displayName ?? user.id
+        subtitle = user.displayName == nil ? nil : user.id
         
         self.avatarSize = avatarSize
         self.mediaProvider = mediaProvider
@@ -123,7 +123,7 @@ struct AvatarHeaderView<Footer: View>: View {
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
-        let profile = UserProfileProxy(sender: sender)
+        let profile = UserProfile(sender: sender)
         
         self.init(user: profile,
                   isVerified: false,
@@ -180,8 +180,8 @@ struct AvatarHeaderView<Footer: View>: View {
         switch avatarInfo {
         case .room(let roomAvatar):
             return roomAvatar.hasURL ? L10n.a11yViewAvatar : L10n.a11yAvatar
-        case .user(let userProfileProxy):
-            return userProfileProxy.avatarURL != nil ? L10n.a11yViewAvatar : L10n.a11yAvatar
+        case .user(let userProfile):
+            return userProfile.avatarURL != nil ? L10n.a11yViewAvatar : L10n.a11yAvatar
         }
     }
     
@@ -198,7 +198,7 @@ struct AvatarHeaderView<Footer: View>: View {
         case .user(let userProfile):
             LoadableAvatarImage(url: userProfile.avatarURL,
                                 name: userProfile.displayName,
-                                contentID: userProfile.userID,
+                                contentID: userProfile.id,
                                 avatarSize: avatarSize,
                                 mediaProvider: mediaProvider,
                                 onTap: onAvatarTap)
