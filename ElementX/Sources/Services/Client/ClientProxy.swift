@@ -20,6 +20,7 @@ class ClientProxy: ClientProxyProtocol {
     private let analyticsService: AnalyticsServiceProtocol
     
     let mediaLoader: MediaLoaderProtocol
+    let contentScanner: ContentScannerProxyProtocol?
     private let clientQueue: DispatchQueue
     
     private var roomListService: RoomListService
@@ -218,6 +219,16 @@ class ClientProxy: ClientProxyProtocol {
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
         mediaLoader = MediaLoader(client: client)
+        
+        // Route media downloads through a content scanner when one has been configured for the server,
+        // and expose a proxy for the active scanning of content in the timeline.
+        if let contentScannerURL = appSettings.contentScannerURL.publisher.value, let client = client as? Client {
+            let scanner = ContentScanner(scannerUrl: contentScannerURL.absoluteString)
+            await client.setContentScanner(contentScanner: scanner)
+            contentScanner = ContentScannerProxy(contentScanner: scanner, client: client)
+        } else {
+            contentScanner = nil
+        }
         
         notificationSettings = await NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         

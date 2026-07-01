@@ -2317,6 +2317,7 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingMediaLoader = value }
     }
     nonisolated(unsafe) var underlyingMediaLoader: MediaLoaderProtocol!
+    nonisolated(unsafe) var contentScanner: ContentScannerProxyProtocol?
     var roomSummaryProvider: RoomSummaryProviderProtocol {
         get { return underlyingRoomSummaryProvider }
         set(value) { underlyingRoomSummaryProvider = value }
@@ -4534,6 +4535,139 @@ nonisolated class ComposerDraftServiceMock: ComposerDraftServiceProtocol, @unche
             return await getReplyEventIDClosure(eventID)
         } else {
             return getReplyEventIDReturnValue
+        }
+    }
+}
+nonisolated class ContentScannerProxyMock: ContentScannerProxyProtocol, @unchecked Sendable {
+
+    //MARK: - scan
+
+    private let scanMediaSourceCallsCountLock = NSLock()
+    private nonisolated(unsafe) var scanMediaSourceUnderlyingCallsCount = 0
+    var scanMediaSourceCallsCount: Int {
+        get { scanMediaSourceCallsCountLock.withLock { scanMediaSourceUnderlyingCallsCount } }
+        set { scanMediaSourceCallsCountLock.withLock { scanMediaSourceUnderlyingCallsCount = newValue } }
+    }
+    var scanMediaSourceCalled: Bool {
+        return scanMediaSourceCallsCount > 0
+    }
+    private let scanMediaSourceReceivedMediaSourceLock = NSLock()
+    private nonisolated(unsafe) var scanMediaSourceUnderlyingReceivedMediaSource: MediaSourceProxy?
+    var scanMediaSourceReceivedMediaSource: MediaSourceProxy? {
+        get { scanMediaSourceReceivedMediaSourceLock.withLock { scanMediaSourceUnderlyingReceivedMediaSource } }
+        set { scanMediaSourceReceivedMediaSourceLock.withLock { scanMediaSourceUnderlyingReceivedMediaSource = newValue } }
+    }
+    private let scanMediaSourceReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var scanMediaSourceUnderlyingReceivedInvocations: [MediaSourceProxy] = []
+    var scanMediaSourceReceivedInvocations: [MediaSourceProxy] {
+        get { scanMediaSourceReceivedInvocationsLock.withLock { scanMediaSourceUnderlyingReceivedInvocations } }
+        set { scanMediaSourceReceivedInvocationsLock.withLock { scanMediaSourceUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let scanMediaSourceReturnValueLock = NSLock()
+    private nonisolated(unsafe) var scanMediaSourceUnderlyingReturnValue: Result<Bool, ContentScannerProxyError>!
+    var scanMediaSourceReturnValue: Result<Bool, ContentScannerProxyError>! {
+        get { scanMediaSourceReturnValueLock.withLock { scanMediaSourceUnderlyingReturnValue } }
+        set { scanMediaSourceReturnValueLock.withLock { scanMediaSourceUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var scanMediaSourceClosure: ((MediaSourceProxy) async -> Result<Bool, ContentScannerProxyError>)?
+
+    @concurrent func scan(mediaSource: MediaSourceProxy) async -> Result<Bool, ContentScannerProxyError> {
+        scanMediaSourceCallsCountLock.withLock { scanMediaSourceUnderlyingCallsCount += 1 }
+        scanMediaSourceReceivedMediaSource = mediaSource
+        scanMediaSourceReceivedInvocationsLock.withLock { scanMediaSourceUnderlyingReceivedInvocations.append(mediaSource) }
+        if let scanMediaSourceClosure = scanMediaSourceClosure {
+            return await scanMediaSourceClosure(mediaSource)
+        } else {
+            return scanMediaSourceReturnValue
+        }
+    }
+}
+nonisolated class ContentScannerServiceMock: ContentScannerServiceProtocol, @unchecked Sendable {
+
+    //MARK: - scanResultFromSource
+
+    private let scanResultFromSourceCallsCountLock = NSLock()
+    private nonisolated(unsafe) var scanResultFromSourceUnderlyingCallsCount = 0
+    var scanResultFromSourceCallsCount: Int {
+        get { scanResultFromSourceCallsCountLock.withLock { scanResultFromSourceUnderlyingCallsCount } }
+        set { scanResultFromSourceCallsCountLock.withLock { scanResultFromSourceUnderlyingCallsCount = newValue } }
+    }
+    var scanResultFromSourceCalled: Bool {
+        return scanResultFromSourceCallsCount > 0
+    }
+    private let scanResultFromSourceReceivedSourceLock = NSLock()
+    private nonisolated(unsafe) var scanResultFromSourceUnderlyingReceivedSource: MediaSourceProxy?
+    var scanResultFromSourceReceivedSource: MediaSourceProxy? {
+        get { scanResultFromSourceReceivedSourceLock.withLock { scanResultFromSourceUnderlyingReceivedSource } }
+        set { scanResultFromSourceReceivedSourceLock.withLock { scanResultFromSourceUnderlyingReceivedSource = newValue } }
+    }
+    private let scanResultFromSourceReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var scanResultFromSourceUnderlyingReceivedInvocations: [MediaSourceProxy] = []
+    var scanResultFromSourceReceivedInvocations: [MediaSourceProxy] {
+        get { scanResultFromSourceReceivedInvocationsLock.withLock { scanResultFromSourceUnderlyingReceivedInvocations } }
+        set { scanResultFromSourceReceivedInvocationsLock.withLock { scanResultFromSourceUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let scanResultFromSourceReturnValueLock = NSLock()
+    private nonisolated(unsafe) var scanResultFromSourceUnderlyingReturnValue: Bool?
+    var scanResultFromSourceReturnValue: Bool? {
+        get { scanResultFromSourceReturnValueLock.withLock { scanResultFromSourceUnderlyingReturnValue } }
+        set { scanResultFromSourceReturnValueLock.withLock { scanResultFromSourceUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var scanResultFromSourceClosure: ((MediaSourceProxy) -> Bool?)?
+
+    func scanResultFromSource(_ source: MediaSourceProxy) -> Bool? {
+        scanResultFromSourceCallsCountLock.withLock { scanResultFromSourceUnderlyingCallsCount += 1 }
+        scanResultFromSourceReceivedSource = source
+        scanResultFromSourceReceivedInvocationsLock.withLock { scanResultFromSourceUnderlyingReceivedInvocations.append(source) }
+        if let scanResultFromSourceClosure = scanResultFromSourceClosure {
+            return scanResultFromSourceClosure(source)
+        } else {
+            return scanResultFromSourceReturnValue
+        }
+    }
+    //MARK: - loadScanResultFromSource
+
+    private let loadScanResultFromSourceCallsCountLock = NSLock()
+    private nonisolated(unsafe) var loadScanResultFromSourceUnderlyingCallsCount = 0
+    var loadScanResultFromSourceCallsCount: Int {
+        get { loadScanResultFromSourceCallsCountLock.withLock { loadScanResultFromSourceUnderlyingCallsCount } }
+        set { loadScanResultFromSourceCallsCountLock.withLock { loadScanResultFromSourceUnderlyingCallsCount = newValue } }
+    }
+    var loadScanResultFromSourceCalled: Bool {
+        return loadScanResultFromSourceCallsCount > 0
+    }
+    private let loadScanResultFromSourceReceivedSourceLock = NSLock()
+    private nonisolated(unsafe) var loadScanResultFromSourceUnderlyingReceivedSource: MediaSourceProxy?
+    var loadScanResultFromSourceReceivedSource: MediaSourceProxy? {
+        get { loadScanResultFromSourceReceivedSourceLock.withLock { loadScanResultFromSourceUnderlyingReceivedSource } }
+        set { loadScanResultFromSourceReceivedSourceLock.withLock { loadScanResultFromSourceUnderlyingReceivedSource = newValue } }
+    }
+    private let loadScanResultFromSourceReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var loadScanResultFromSourceUnderlyingReceivedInvocations: [MediaSourceProxy] = []
+    var loadScanResultFromSourceReceivedInvocations: [MediaSourceProxy] {
+        get { loadScanResultFromSourceReceivedInvocationsLock.withLock { loadScanResultFromSourceUnderlyingReceivedInvocations } }
+        set { loadScanResultFromSourceReceivedInvocationsLock.withLock { loadScanResultFromSourceUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let loadScanResultFromSourceReturnValueLock = NSLock()
+    private nonisolated(unsafe) var loadScanResultFromSourceUnderlyingReturnValue: Result<Bool, ContentScannerServiceError>!
+    var loadScanResultFromSourceReturnValue: Result<Bool, ContentScannerServiceError>! {
+        get { loadScanResultFromSourceReturnValueLock.withLock { loadScanResultFromSourceUnderlyingReturnValue } }
+        set { loadScanResultFromSourceReturnValueLock.withLock { loadScanResultFromSourceUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var loadScanResultFromSourceClosure: ((MediaSourceProxy) async -> Result<Bool, ContentScannerServiceError>)?
+
+    @discardableResult
+    @concurrent func loadScanResultFromSource(_ source: MediaSourceProxy) async -> Result<Bool, ContentScannerServiceError> {
+        loadScanResultFromSourceCallsCountLock.withLock { loadScanResultFromSourceUnderlyingCallsCount += 1 }
+        loadScanResultFromSourceReceivedSource = source
+        loadScanResultFromSourceReceivedInvocationsLock.withLock { loadScanResultFromSourceUnderlyingReceivedInvocations.append(source) }
+        if let loadScanResultFromSourceClosure = loadScanResultFromSourceClosure {
+            return await loadScanResultFromSourceClosure(source)
+        } else {
+            return loadScanResultFromSourceReturnValue
         }
     }
 }
@@ -14446,6 +14580,7 @@ nonisolated class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
         set(value) { underlyingLiveLocationManager = value }
     }
     nonisolated(unsafe) var underlyingLiveLocationManager: LiveLocationManagerProtocol!
+    nonisolated(unsafe) var contentScannerService: ContentScannerServiceProtocol?
     var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> {
         get { return underlyingSessionSecurityStatePublisher }
         set(value) { underlyingSessionSecurityStatePublisher = value }

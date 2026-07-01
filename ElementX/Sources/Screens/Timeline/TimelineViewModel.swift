@@ -109,7 +109,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        linkMetadataProvider: hideTimelineMedia ? nil : linkMetadataProvider,
                                                        mapTilerSettings: appSettings.mapTilerSettings.publisher.value,
                                                        bindings: .init(reactionsCollapsed: [:])),
-                   mediaProvider: userSession.mediaProvider)
+                   mediaProvider: userSession.mediaProvider,
+                   contentScannerService: userSession.contentScannerService)
         
         if focussedEventID != nil {
             // The timeline controller will start loading a detached timeline.
