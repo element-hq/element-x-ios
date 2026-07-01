@@ -16,26 +16,22 @@ enum UserDetailsEditScreenViewModelAction {
 }
 
 struct UserDetailsEditScreenViewState: BindableState {
-    let userID: String
+    var currentUserProfile: UserProfile
     
     var canEditAvatar = true
     var canEditDisplayName = true
     
-    var currentAvatarURL: URL?
     var selectedAvatarURL: URL?
-    
-    var currentDisplayName: String?
-    
     var localMedia: MediaInfo?
     
     var bindings: UserDetailsEditScreenViewStateBindings
     
     var nameDidChange: Bool {
-        bindings.name != currentDisplayName
+        bindings.name != currentUserProfile.displayName
     }
     
     var avatarDidChange: Bool {
-        localMedia != nil || selectedAvatarURL != currentAvatarURL
+        localMedia != nil || selectedAvatarURL != currentUserProfile.avatarURL
     }
     
     var canSave: Bool {

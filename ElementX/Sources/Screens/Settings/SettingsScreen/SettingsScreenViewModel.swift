@@ -24,7 +24,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         self.appSettings = appSettings
         
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
-                                           userID: userSession.clientProxy.userID,
+                                           userProfile: userSession.clientProxy.userProfilePublisher.value,
                                            showLinkNewDeviceButton: appSettings.linkNewDeviceEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: appSettings.developerOptionsEnabled,
@@ -41,14 +41,9 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.showLinkNewDeviceButton, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.userAvatarURLPublisher
+        userSession.clientProxy.userProfilePublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.userAvatarURL, on: self)
-            .store(in: &cancellables)
-        
-        userSession.clientProxy.userDisplayNamePublisher
-            .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.userDisplayName, on: self)
+            .weakAssign(to: \.state.userProfile, on: self)
             .store(in: &cancellables)
         
         userSession.sessionSecurityStatePublisher
@@ -86,8 +81,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .store(in: &cancellables)
         
         Task {
-            await userSession.clientProxy.loadUserAvatarURL()
-            await userSession.clientProxy.loadUserDisplayName()
+            await userSession.clientProxy.loadUserProfile()
             await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
         }
     }

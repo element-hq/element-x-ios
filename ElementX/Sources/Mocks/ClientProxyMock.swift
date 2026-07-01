@@ -64,8 +64,7 @@ extension ClientProxyMock {
         verificationStatePublisher = .init(.unknown)
         homeserverReachabilityPublisher = .init(.reachable)
         
-        userAvatarURLPublisher = .init(nil)
-        userDisplayNamePublisher = .init("User display name")
+        userProfilePublisher = .init(UserProfile(userID: configuration.userID, displayName: "User display name"))
         
         ignoredUsersPublisher = .init([RoomMemberProxyMock].allMembers.map(\.userID))
         
@@ -85,9 +84,8 @@ extension ClientProxyMock {
         }
         joinRoomAliasReturnValue = .success(())
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        loadUserProfileReturnValue = .success(())
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        loadUserAvatarURLReturnValue = .success(())
         setUserAvatarMediaReturnValue = .success(())
         removeUserAvatarReturnValue = .success(())
         isAliasAvailableReturnValue = .success(true)

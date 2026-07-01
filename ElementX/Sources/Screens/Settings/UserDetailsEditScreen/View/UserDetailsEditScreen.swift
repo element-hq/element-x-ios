@@ -18,7 +18,7 @@ struct UserDetailsEditScreen: View {
             Section {
                 avatar
             } footer: {
-                Text(context.viewState.userID)
+                Text(context.viewState.currentUserProfile.id)
                     .frame(maxWidth: .infinity)
                     .font(.compound.bodyLG)
                     .foregroundColor(.compound.textPrimary)
@@ -62,8 +62,8 @@ struct UserDetailsEditScreen: View {
         } label: {
             OverridableAvatarImage(overrideURL: context.viewState.localMedia?.thumbnailURL,
                                    url: context.viewState.selectedAvatarURL,
-                                   name: context.viewState.currentDisplayName,
-                                   contentID: context.viewState.userID,
+                                   name: context.viewState.currentUserProfile.displayName,
+                                   contentID: context.viewState.currentUserProfile.id,
                                    shape: .circle,
                                    avatarSize: .user(on: .editUserDetails),
                                    mediaProvider: context.mediaProvider)
