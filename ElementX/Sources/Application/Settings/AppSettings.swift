@@ -23,6 +23,7 @@ nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
     var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
+    var contentScannerURL: RemotePreference<URL?> { get }
     
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var threadsEnabled: Bool { get }
@@ -265,6 +266,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
     private(set) var bugReportApplicationID = "element-x-ios"
+    
+    // MARK: - Content scanner
+    
+    /// The base URL of the content scanner server used to scan media before it is downloaded.
+    /// `nil` when content scanning is disabled.
+    let contentScannerURL: RemotePreference<URL?> = .init(nil)
     
     // MARK: - Analytics
     
