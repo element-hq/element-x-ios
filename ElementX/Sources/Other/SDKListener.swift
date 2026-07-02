@@ -301,3 +301,9 @@ nonisolated extension SDKListener: SearchServiceResultsListener where T == [Sear
         onUpdateClosure(updates)
     }
 }
+
+nonisolated extension SDKListener: SearchServicePaginationStateListener where T == MatrixRustSDK.SearchServicePaginationState {
+    func onUpdate(paginationState: MatrixRustSDK.SearchServicePaginationState) {
+        onUpdateClosure(paginationState)
+    }
+}
