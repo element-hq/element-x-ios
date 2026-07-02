@@ -66,6 +66,7 @@ class ClientProxy: ClientProxyProtocol {
     private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol?
     
     let spaceService: SpaceServiceProxyProtocol
+    let searchService: SearchServiceProxyProtocol
     
     let capabilities: HomeserverCapabilitiesProxyProtocol
     
@@ -227,6 +228,13 @@ class ClientProxy: ClientProxyProtocol {
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
         spaceService = await SpaceServiceProxy(spaceService: client.spaceService())
+        
+        let searchUserID = try client.userId()
+        searchService = SearchServiceProxy(searchService: client.searchService(),
+                                           timelineItemFactory: RoomTimelineItemFactory(userID: searchUserID,
+                                                                                        attributedStringBuilder: AttributedStringBuilder(cacheKey: "search",
+                                                                                                                                         mentionBuilder: PlainMentionBuilder()),
+                                                                                        stateEventStringBuilder: RoomStateEventStringBuilder(userID: searchUserID)))
         
         capabilities = HomeserverCapabilitiesProxy(underlyingCapabilities: client.homeserverCapabilities())
         

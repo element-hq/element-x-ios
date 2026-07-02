@@ -155,6 +155,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     var spaceService: SpaceServiceProxyProtocol { get }
     
+    var searchService: SearchServiceProxyProtocol { get }
+    
     var capabilities: HomeserverCapabilitiesProxyProtocol { get }
     
     var isReportRoomSupported: Bool { get async }
