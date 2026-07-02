@@ -74,7 +74,7 @@ struct SearchScreen: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .background(Color.compound.bgCanvasDefault)
-        .searchable(text: $context.searchQuery, placement: .toolbarPrincipal)
+        .conditionalSearchable(searchQuery: $context.searchQuery)
         .searchFocused($isSearchFieldFocused)
         .autocorrectionDisabled(true)
         .background(tabShortcuts)
@@ -210,6 +210,17 @@ struct SearchScreen: View {
     
     private func updateHardwareKeyboardConnected() {
         isHardwareKeyboardConnected = GCKeyboard.coalesced != nil
+    }
+}
+
+private extension View {
+    /// Searchable makes the preview contents randomly appear lower
+    @ViewBuilder func conditionalSearchable(searchQuery: Binding<String>) -> some View {
+        if !ProcessInfo.isXcodePreview, !ProcessInfo.isRunningTests {
+            searchable(text: searchQuery, placement: .toolbarPrincipal)
+        } else {
+            self
+        }
     }
 }
 
