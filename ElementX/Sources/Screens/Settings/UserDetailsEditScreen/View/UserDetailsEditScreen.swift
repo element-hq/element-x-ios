@@ -138,10 +138,13 @@ struct UserDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(canChangeProfile: Bool = true) -> UserDetailsEditScreenViewModel {
-        UserDetailsEditScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@stefan:matrix.org",
-                                                                                                             canChangeAvatar: canChangeProfile,
-                                                                                                             canChangeDisplayName: canChangeProfile)))),
-        mediaUploadingPreprocessor: .init(appSettings: .volatile()),
-        userIndicatorController: UserIndicatorControllerMock())
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@stefan:matrix.org",
+                                                                                   displayName: "Stefan",
+                                                                                   canChangeAvatar: canChangeProfile,
+                                                                                   canChangeDisplayName: canChangeProfile))))
+        
+        return UserDetailsEditScreenViewModel(userSession: userSession,
+                                              mediaUploadingPreprocessor: .init(appSettings: .volatile()),
+                                              userIndicatorController: UserIndicatorControllerMock())
     }
 }

@@ -28,8 +28,11 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: UserDetailsEditScreenViewState(currentUserProfile: clientProxy.userProfilePublisher.value,
-                                                                    bindings: .init()), mediaProvider: userSession.mediaProvider)
+        let profile = clientProxy.userProfilePublisher.value
+        super.init(initialViewState: UserDetailsEditScreenViewState(currentUserProfile: profile,
+                                                                    selectedAvatarURL: profile.avatarURL,
+                                                                    bindings: .init(name: profile.displayName ?? "")),
+                   mediaProvider: userSession.mediaProvider)
         
         clientProxy.userProfilePublisher
             .receive(on: DispatchQueue.main)
