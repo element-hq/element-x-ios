@@ -12,7 +12,7 @@ struct InviteUsersConfirmationSheetView: View {
     @ObservedObject var context: InviteUsersScreenViewModel.Context
     
     /// The users whose identities we wish the user to confirm.
-    var users: [UserProfileProxy]
+    var users: [UserProfile]
     
     var body: some View {
         FullscreenDialog(topPadding: 24, horizontalPadding: 24) {
@@ -22,7 +22,7 @@ struct InviteUsersConfirmationSheetView: View {
                              icon: \.userAddSolid,
                              iconStyle: .defaultSolid)
                 VStack(spacing: 0) {
-                    ForEach(users, id: \.userID) { user in
+                    ForEach(users, id: \.id) { user in
                         UserProfileListRow(user: user,
                                            membership: nil,
                                            mediaProvider: context.mediaProvider,

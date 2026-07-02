@@ -26,7 +26,7 @@ enum RoomDetailsScreenCoordinatorAction {
     case presentRoomDetailsEditScreen
     case presentNotificationSettingsScreen
     case presentInviteUsersScreen
-    case presentInviteToNewRoom(invitee: UserProfileProxy)
+    case presentInviteToNewRoom(invitee: UserProfile)
     case presentPollsHistory
     case presentRolesAndPermissionsScreen
     case presentCall(isVoiceCall: Bool)

@@ -9,37 +9,37 @@
 import Foundation
 import MatrixRustSDK
 
-nonisolated struct UserProfileProxy: Equatable, Hashable {
-    let userID: String
+nonisolated struct UserProfile: Hashable, Identifiable {
+    let id: String
     let displayName: String?
     let avatarURL: URL?
     
     init(userID: String, displayName: String? = nil, avatarURL: URL? = nil) {
-        self.userID = userID
+        id = userID
         self.displayName = displayName
         self.avatarURL = avatarURL
     }
     
     init(member: RoomMemberDetails) {
-        userID = member.id
+        id = member.id
         displayName = member.isBanned ? nil : member.name
         avatarURL = member.isBanned ? nil : member.avatarURL
     }
     
     init(sender: TimelineItemSender) {
-        userID = sender.id
+        id = sender.id
         displayName = sender.displayName
         avatarURL = sender.avatarURL
     }
     
     init(sdkUserProfile: MatrixRustSDK.UserProfile) {
-        userID = sdkUserProfile.userId
+        id = sdkUserProfile.userId
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
     }
     
     init(sdkRoomHero: MatrixRustSDK.RoomHero) {
-        userID = sdkRoomHero.userId
+        id = sdkRoomHero.userId
         displayName = sdkRoomHero.displayName
         avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
     }
@@ -55,20 +55,14 @@ nonisolated struct UserProfileProxy: Equatable, Hashable {
     }
 }
 
-struct SearchUsersResultsProxy {
-    let results: [UserProfileProxy]
+struct SearchUsersResults {
+    let results: [UserProfile]
     let limited: Bool
 }
 
-extension SearchUsersResultsProxy {
+extension SearchUsersResults {
     init(sdkResults: MatrixRustSDK.SearchUsersResults) {
-        results = sdkResults.results.map(UserProfileProxy.init)
+        results = sdkResults.results.map(UserProfile.init)
         limited = sdkResults.limited
-    }
-}
-
-extension UserProfileProxy: Identifiable {
-    var id: String {
-        userID
     }
 }

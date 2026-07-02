@@ -10,7 +10,7 @@ import Foundation
 
 struct UserDiscoverySection {
     let type: UserDiscoverySectionType
-    let users: [UserProfileProxy]
+    let users: [UserProfile]
     
     var title: String? {
         switch type {

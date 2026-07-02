@@ -43,7 +43,7 @@ struct JoinRoomScreenRoomDetails {
     let canonicalAlias: String?
     let avatar: RoomAvatar?
     let memberCount: Int?
-    let heroes: [UserProfileProxy]
+    let heroes: [UserProfile]
     let inviter: RoomInviterDetails?
     let isDirect: Bool?
     

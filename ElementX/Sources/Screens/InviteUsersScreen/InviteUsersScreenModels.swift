@@ -20,7 +20,7 @@ enum InviteUsersScreenViewModelAction {
 }
 
 enum InviteUsersScreenRoomType {
-    case draft(mandatoryInvitees: [UserProfileProxy])
+    case draft(mandatoryInvitees: [UserProfile])
     case existingRoom(roomProxy: JoinedRoomProxyProtocol)
 }
 
@@ -29,10 +29,10 @@ struct InviteUsersScreenViewState: BindableState {
     
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
     
-    var selectedUsers: [UserProfileProxy] = []
-    var mandatoryInvitees: [UserProfileProxy] = []
+    var selectedUsers: [UserProfile] = []
+    var mandatoryInvitees: [UserProfile] = []
     var membershipState: [String: MembershipState] = .init()
-    var usersToConfirm: [UserProfileProxy] = []
+    var usersToConfirm: [UserProfile] = []
     
     var isSearching = false
     
@@ -44,11 +44,11 @@ struct InviteUsersScreenViewState: BindableState {
         selectedUsers.contains { !isInviteeMandatory($0) }
     }
     
-    func isUserSelected(_ user: UserProfileProxy) -> Bool {
-        isUserDisabled(user) || selectedUsers.contains { $0.userID == user.userID }
+    func isUserSelected(_ user: UserProfile) -> Bool {
+        isUserDisabled(user) || selectedUsers.contains { $0.id == user.id }
     }
     
-    func isUserDisabled(_ user: UserProfileProxy) -> Bool {
+    func isUserDisabled(_ user: UserProfile) -> Bool {
         if isInviteeMandatory(user) {
             return true
         }
@@ -56,12 +56,12 @@ struct InviteUsersScreenViewState: BindableState {
         return membershipState == .invite || membershipState == .join
     }
     
-    func isInviteeMandatory(_ user: UserProfileProxy) -> Bool {
-        mandatoryInvitees.contains { $0.userID == user.userID }
+    func isInviteeMandatory(_ user: UserProfile) -> Bool {
+        mandatoryInvitees.contains { $0.id == user.id }
     }
     
-    func membershipState(_ user: UserProfileProxy) -> MembershipState? {
-        membershipState[user.userID]
+    func membershipState(_ user: UserProfile) -> MembershipState? {
+        membershipState[user.id]
     }
     
     let isSkippable: Bool
@@ -83,5 +83,5 @@ enum InviteUsersScreenViewAction {
     case proceed
     case removeUnknownUsers
     case confirmUnknownUsers
-    case toggleUser(UserProfileProxy)
+    case toggleUser(UserProfile)
 }

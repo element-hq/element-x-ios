@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct InviteUsersScreenSelectedItem: View {
-    let user: UserProfileProxy
+    let user: UserProfile
     let mediaProvider: MediaProviderProtocol?
     var isLocked = false
     let dismissAction: () -> Void
@@ -20,7 +20,7 @@ struct InviteUsersScreenSelectedItem: View {
             avatar
                 .accessibilityHidden(true)
             
-            Text(user.displayName ?? user.userID)
+            Text(user.displayName ?? user.id)
                 .font(.compound.bodySM)
                 .foregroundColor(.compound.textSecondary)
                 .lineLimit(1)
@@ -39,7 +39,7 @@ struct InviteUsersScreenSelectedItem: View {
     var avatar: some View {
         let avatarImage = LoadableAvatarImage(url: user.avatarURL,
                                               name: user.displayName,
-                                              contentID: user.userID,
+                                              contentID: user.id,
                                               avatarSize: .user(on: .inviteUsers),
                                               mediaProvider: mediaProvider)
         if isLocked {
@@ -58,12 +58,12 @@ struct InviteUsersScreenSelectedItem: View {
 }
 
 struct InviteUsersScreenSelectedItem_Previews: PreviewProvider, TestablePreview {
-    static let people: [UserProfileProxy] = [.mockAlice, .mockVerbose]
+    static let people: [UserProfile] = [.mockAlice, .mockVerbose]
     
     static var previews: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 8) {
-                ForEach(people, id: \.userID) { user in
+                ForEach(people, id: \.id) { user in
                     InviteUsersScreenSelectedItem(user: user, mediaProvider: MediaProviderMock(.init())) { }
                         .frame(width: 80)
                 }

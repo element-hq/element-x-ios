@@ -120,9 +120,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     var userIDServerName: String? { get }
     
-    var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { get }
-    
-    var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> { get }
+    var userProfilePublisher: CurrentValuePublisher<UserProfile, Never> { get }
     
     /// We delay fetching this until after the first sync. Nil until then
     var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> { get }
@@ -212,11 +210,9 @@ protocol ClientProxyProtocol: AnyObject {
     /// Will only work for rooms that are in our room list/local store
     func reportRoomForIdentifier(_ identifier: String, reason: String) async -> Result<Void, ClientProxyError>
     
-    @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
+    @discardableResult func loadUserProfile() async -> Result<Void, ClientProxyError>
     
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
-    
-    @discardableResult func loadUserAvatarURL() async -> Result<Void, ClientProxyError>
     
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
     
@@ -230,9 +226,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     func setPusher(with configuration: PusherConfiguration) async throws
     
-    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>
+    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError>
     
-    func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError>
+    func profile(for userID: String) async -> Result<UserProfile, ClientProxyError>
     
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
     
@@ -261,7 +257,7 @@ protocol ClientProxyProtocol: AnyObject {
     func trackRecentlyVisitedRoom(_ roomID: String) async -> Result<Void, ClientProxyError>
     
     func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol]
-    func recentConversationCounterparts() async -> [UserProfileProxy]
+    func recentConversationCounterparts() async -> [UserProfile]
     
     // MARK: - Crypto
     

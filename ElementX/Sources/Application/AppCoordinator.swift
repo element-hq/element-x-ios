@@ -715,7 +715,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         Task {
             let credentials = SoftLogoutScreenCredentials(userID: userSession.clientProxy.userID,
                                                           homeserverName: userSession.clientProxy.homeserver,
-                                                          userDisplayName: userSession.clientProxy.userDisplayNamePublisher.value ?? "",
+                                                          userDisplayName: userSession.clientProxy.userProfilePublisher.value.displayName ?? "",
                                                           deviceID: userSession.clientProxy.deviceID)
             
             let authenticationService = AuthenticationService(userSessionStore: userSessionStore,

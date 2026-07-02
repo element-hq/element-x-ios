@@ -29,7 +29,7 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: SpacesScreenViewState(userID: userSession.clientProxy.userID,
+        super.init(initialViewState: SpacesScreenViewState(userProfile: userSession.clientProxy.userProfilePublisher.value,
                                                            topLevelSpaces: spaceServiceProxy.topLevelSpacesPublisher.value),
                    mediaProvider: userSession.mediaProvider)
         
@@ -42,14 +42,9 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
             .weakAssign(to: \.state.selectedSpaceID, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.userAvatarURLPublisher
+        userSession.clientProxy.userProfilePublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.userAvatarURL, on: self)
-            .store(in: &cancellables)
-        
-        userSession.clientProxy.userDisplayNamePublisher
-            .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.userDisplayName, on: self)
+            .weakAssign(to: \.state.userProfile, on: self)
             .store(in: &cancellables)
     }
     

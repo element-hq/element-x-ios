@@ -14,7 +14,7 @@ struct UserDiscoveryServiceTest {
     private var service: UserDiscoveryService
     private var clientProxy: ClientProxyMock
     
-    private var searchResults: [UserProfileProxy] {
+    private var searchResults: [UserProfile] {
         [.mockAlice, .mockBob, .mockCharlie]
     }
     
@@ -25,7 +25,7 @@ struct UserDiscoveryServiceTest {
     
     @Test
     func queryShowingResults() async {
-        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfileProxy.mockAlice], limited: true))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfile.mockAlice], limited: true))
         
         let results = await (try? search(query: "AAA").get()) ?? []
         assertSearchResults(results, toBe: 1)
@@ -33,7 +33,7 @@ struct UserDiscoveryServiceTest {
     
     @Test
     func ownerIsFiltered() async {
-        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfileProxy(userID: "@foo:matrix.org")], limited: true))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [UserProfile(userID: "@foo:matrix.org")], limited: true))
         
         let results = await (try? search(query: "AAA").get()) ?? []
         assertSearchResults(results, toBe: 0)
@@ -104,7 +104,7 @@ struct UserDiscoveryServiceTest {
         let results = await (try? search(query: "@a:b.com").get()) ?? []
         
         assertSearchResults(results, toBe: 3)
-        let firstUserID = results.first?.userID
+        let firstUserID = results.first?.id
         #expect(firstUserID == "@bob:matrix.org")
         #expect(clientProxy.profileForCalled)
     }
@@ -116,20 +116,20 @@ struct UserDiscoveryServiceTest {
         
         let results = await (try? search(query: "@a:b.com").get()) ?? []
         
-        let firstUserID = results.first?.userID
+        let firstUserID = results.first?.id
         #expect(firstUserID == "@a:b.com")
         #expect(clientProxy.profileForCalled)
     }
     
     // MARK: - Private
     
-    private func assertSearchResults(_ results: [UserProfileProxy], toBe count: Int) {
+    private func assertSearchResults(_ results: [UserProfile], toBe count: Int) {
         #expect(count >= 0)
         #expect(results.count == count)
         #expect(results.isEmpty == (count == 0))
     }
     
-    private func search(query: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
+    private func search(query: String) async -> Result<[UserProfile], UserDiscoveryErrorType> {
         await service.searchProfiles(with: query)
     }
 }

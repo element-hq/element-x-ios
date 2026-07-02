@@ -90,9 +90,7 @@ enum HomeScreenSecurityBannerMode: Equatable {
 }
 
 struct HomeScreenViewState: BindableState {
-    let userID: String
-    var userDisplayName: String?
-    var userAvatarURL: URL?
+    var userProfile: UserProfile
     
     var securityBannerMode = HomeScreenSecurityBannerMode.none
     var shouldShowNewSoundBanner = false

@@ -85,7 +85,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
             // Show the matrix identifier as the subtitle: the other member's user ID for DMs,
             // otherwise the room's canonical alias.
             let identifier = if summary.isDirect {
-                summary.heroes.first?.userID ?? summary.canonicalAlias
+                summary.heroes.first?.id ?? summary.canonicalAlias
             } else {
                 summary.canonicalAlias
             }

@@ -78,7 +78,7 @@ extension BaseRoomInfoProxyProtocol {
         }
         
         if isDirect, avatarURL == nil, heroes.count == 1 {
-            return .heroes(heroes.map(UserProfileProxy.init))
+            return .heroes(heroes.map(UserProfile.init))
         }
         
         return .room(id: id, name: displayName, avatarURL: avatarURL)
@@ -121,7 +121,7 @@ extension RoomInfoProxyProtocol {
         }
         
         // Otherwise check the alternative aliases and return the first one that matches
-        if let matchingAlternativeAlias = alternativeAliases.filter({ $0.range(of: serverName) != nil }).first {
+        if let matchingAlternativeAlias = alternativeAliases.first(where: { $0.range(of: serverName) != nil }) {
             return matchingAlternativeAlias
         }
         

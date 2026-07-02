@@ -194,11 +194,11 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     private func updateUserProfiles(members: [RoomMemberProxyProtocol]) {
         switch state.interactionMode {
         case .picker:
-            let ownUser = members.first { $0.userID == roomProxy.ownUserID }.map(UserProfileProxy.init) ?? .init(userID: roomProxy.ownUserID)
-            state.userProfiles = [ownUser.userID: ownUser]
+            let ownUser = members.first { $0.userID == roomProxy.ownUserID }.map(UserProfile.init) ?? .init(userID: roomProxy.ownUserID)
+            state.userProfiles = [ownUser.id: ownUser]
         case .viewStatic(let location):
-            let sender = members.first { $0.userID == location.sender.id }.map(UserProfileProxy.init) ?? .init(sender: location.sender)
-            state.userProfiles = [sender.userID: sender]
+            let sender = members.first { $0.userID == location.sender.id }.map(UserProfile.init) ?? .init(sender: location.sender)
+            state.userProfiles = [sender.id: sender]
         case .viewLive(let sender, _):
             var userIDs = Set(state.liveLocationShares.map(\.userID))
             if let senderID = sender?.id {
@@ -206,9 +206,9 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
             }
             state.userProfiles = userIDs.reduce(into: [:]) { dict, userID in
                 if let member = members.first(where: { $0.userID == userID }) {
-                    dict[userID] = UserProfileProxy(member: member)
+                    dict[userID] = UserProfile(member: member)
                 } else {
-                    dict[userID] = UserProfileProxy(userID: userID)
+                    dict[userID] = UserProfile(userID: userID)
                 }
             }
         }

@@ -45,7 +45,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
-        super.init(initialViewState: .init(userID: userSession.clientProxy.userID,
+        super.init(initialViewState: .init(userProfile: userSession.clientProxy.userProfilePublisher.value,
                                            bindings: .init(filtersState: .init(appSettings: appSettings))),
                    mediaProvider: userSession.mediaProvider)
         
@@ -53,14 +53,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             state.isRoomListSearchEnabled = false
         }
         
-        userSession.clientProxy.userAvatarURLPublisher
+        userSession.clientProxy.userProfilePublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.userAvatarURL, on: self)
-            .store(in: &cancellables)
-        
-        userSession.clientProxy.userDisplayNamePublisher
-            .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.userDisplayName, on: self)
+            .weakAssign(to: \.state.userProfile, on: self)
             .store(in: &cancellables)
         
         userSession.sessionSecurityStatePublisher
@@ -353,8 +348,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         // Delay user profile detail loading until after the initial room list loads
         if roomListMode == .rooms {
             Task {
-                await self.userSession.clientProxy.loadUserAvatarURL()
-                await self.userSession.clientProxy.loadUserDisplayName()
+                await self.userSession.clientProxy.loadUserProfile()
             }
         }
     }

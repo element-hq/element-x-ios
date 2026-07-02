@@ -14,6 +14,7 @@ struct ClientProxyMockConfiguration {
     var homeserver = ""
     var userIDServerName: String?
     var userID: String = RoomMemberProxyMock.mockMe.userID
+    var displayName: String? = "User display name"
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
     var spaceServiceConfiguration: SpaceServiceProxyMock.Configuration = .init()
@@ -64,8 +65,7 @@ extension ClientProxyMock {
         verificationStatePublisher = .init(.unknown)
         homeserverReachabilityPublisher = .init(.reachable)
         
-        userAvatarURLPublisher = .init(nil)
-        userDisplayNamePublisher = .init("User display name")
+        userProfilePublisher = .init(UserProfile(userID: configuration.userID, displayName: configuration.displayName))
         
         ignoredUsersPublisher = .init([RoomMemberProxyMock].allMembers.map(\.userID))
         
@@ -85,9 +85,8 @@ extension ClientProxyMock {
         }
         joinRoomAliasReturnValue = .success(())
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        loadUserProfileReturnValue = .success(())
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        loadUserAvatarURLReturnValue = .success(())
         setUserAvatarMediaReturnValue = .success(())
         removeUserAvatarReturnValue = .success(())
         isAliasAvailableReturnValue = .success(true)

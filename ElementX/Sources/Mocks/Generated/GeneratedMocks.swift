@@ -2291,16 +2291,11 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingCanDeactivateAccount: Bool!
     nonisolated(unsafe) var userIDServerName: String?
-    var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> {
-        get { return underlyingUserDisplayNamePublisher }
-        set(value) { underlyingUserDisplayNamePublisher = value }
+    var userProfilePublisher: CurrentValuePublisher<UserProfile, Never> {
+        get { return underlyingUserProfilePublisher }
+        set(value) { underlyingUserProfilePublisher = value }
     }
-    nonisolated(unsafe) var underlyingUserDisplayNamePublisher: CurrentValuePublisher<String?, Never>!
-    var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> {
-        get { return underlyingUserAvatarURLPublisher }
-        set(value) { underlyingUserAvatarURLPublisher = value }
-    }
-    nonisolated(unsafe) var underlyingUserAvatarURLPublisher: CurrentValuePublisher<URL?, Never>!
+    nonisolated(unsafe) var underlyingUserProfilePublisher: CurrentValuePublisher<UserProfile, Never>!
     var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> {
         get { return underlyingIgnoredUsersPublisher }
         set(value) { underlyingIgnoredUsersPublisher = value }
@@ -3174,33 +3169,33 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return reportRoomForIdentifierReasonReturnValue
         }
     }
-    //MARK: - loadUserDisplayName
+    //MARK: - loadUserProfile
 
-    private let loadUserDisplayNameCallsCountLock = NSLock()
-    private nonisolated(unsafe) var loadUserDisplayNameUnderlyingCallsCount = 0
-    var loadUserDisplayNameCallsCount: Int {
-        get { loadUserDisplayNameCallsCountLock.withLock { loadUserDisplayNameUnderlyingCallsCount } }
-        set { loadUserDisplayNameCallsCountLock.withLock { loadUserDisplayNameUnderlyingCallsCount = newValue } }
+    private let loadUserProfileCallsCountLock = NSLock()
+    private nonisolated(unsafe) var loadUserProfileUnderlyingCallsCount = 0
+    var loadUserProfileCallsCount: Int {
+        get { loadUserProfileCallsCountLock.withLock { loadUserProfileUnderlyingCallsCount } }
+        set { loadUserProfileCallsCountLock.withLock { loadUserProfileUnderlyingCallsCount = newValue } }
     }
-    var loadUserDisplayNameCalled: Bool {
-        return loadUserDisplayNameCallsCount > 0
+    var loadUserProfileCalled: Bool {
+        return loadUserProfileCallsCount > 0
     }
 
-    private let loadUserDisplayNameReturnValueLock = NSLock()
-    private nonisolated(unsafe) var loadUserDisplayNameUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var loadUserDisplayNameReturnValue: Result<Void, ClientProxyError>! {
-        get { loadUserDisplayNameReturnValueLock.withLock { loadUserDisplayNameUnderlyingReturnValue } }
-        set { loadUserDisplayNameReturnValueLock.withLock { loadUserDisplayNameUnderlyingReturnValue = newValue } }
+    private let loadUserProfileReturnValueLock = NSLock()
+    private nonisolated(unsafe) var loadUserProfileUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var loadUserProfileReturnValue: Result<Void, ClientProxyError>! {
+        get { loadUserProfileReturnValueLock.withLock { loadUserProfileUnderlyingReturnValue } }
+        set { loadUserProfileReturnValueLock.withLock { loadUserProfileUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var loadUserDisplayNameClosure: (() async -> Result<Void, ClientProxyError>)?
+    nonisolated(unsafe) var loadUserProfileClosure: (() async -> Result<Void, ClientProxyError>)?
 
     @discardableResult
-    @concurrent func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
-        loadUserDisplayNameCallsCountLock.withLock { loadUserDisplayNameUnderlyingCallsCount += 1 }
-        if let loadUserDisplayNameClosure = loadUserDisplayNameClosure {
-            return await loadUserDisplayNameClosure()
+    @concurrent func loadUserProfile() async -> Result<Void, ClientProxyError> {
+        loadUserProfileCallsCountLock.withLock { loadUserProfileUnderlyingCallsCount += 1 }
+        if let loadUserProfileClosure = loadUserProfileClosure {
+            return await loadUserProfileClosure()
         } else {
-            return loadUserDisplayNameReturnValue
+            return loadUserProfileReturnValue
         }
     }
     //MARK: - setUserDisplayName
@@ -3243,35 +3238,6 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return await setUserDisplayNameClosure(name)
         } else {
             return setUserDisplayNameReturnValue
-        }
-    }
-    //MARK: - loadUserAvatarURL
-
-    private let loadUserAvatarURLCallsCountLock = NSLock()
-    private nonisolated(unsafe) var loadUserAvatarURLUnderlyingCallsCount = 0
-    var loadUserAvatarURLCallsCount: Int {
-        get { loadUserAvatarURLCallsCountLock.withLock { loadUserAvatarURLUnderlyingCallsCount } }
-        set { loadUserAvatarURLCallsCountLock.withLock { loadUserAvatarURLUnderlyingCallsCount = newValue } }
-    }
-    var loadUserAvatarURLCalled: Bool {
-        return loadUserAvatarURLCallsCount > 0
-    }
-
-    private let loadUserAvatarURLReturnValueLock = NSLock()
-    private nonisolated(unsafe) var loadUserAvatarURLUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var loadUserAvatarURLReturnValue: Result<Void, ClientProxyError>! {
-        get { loadUserAvatarURLReturnValueLock.withLock { loadUserAvatarURLUnderlyingReturnValue } }
-        set { loadUserAvatarURLReturnValueLock.withLock { loadUserAvatarURLUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var loadUserAvatarURLClosure: (() async -> Result<Void, ClientProxyError>)?
-
-    @discardableResult
-    @concurrent func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
-        loadUserAvatarURLCallsCountLock.withLock { loadUserAvatarURLUnderlyingCallsCount += 1 }
-        if let loadUserAvatarURLClosure = loadUserAvatarURLClosure {
-            return await loadUserAvatarURLClosure()
-        } else {
-            return loadUserAvatarURLReturnValue
         }
     }
     //MARK: - setUserAvatar
@@ -3491,14 +3457,14 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let searchUsersSearchTermLimitReturnValueLock = NSLock()
-    private nonisolated(unsafe) var searchUsersSearchTermLimitUnderlyingReturnValue: Result<SearchUsersResultsProxy, ClientProxyError>!
-    var searchUsersSearchTermLimitReturnValue: Result<SearchUsersResultsProxy, ClientProxyError>! {
+    private nonisolated(unsafe) var searchUsersSearchTermLimitUnderlyingReturnValue: Result<SearchUsersResults, ClientProxyError>!
+    var searchUsersSearchTermLimitReturnValue: Result<SearchUsersResults, ClientProxyError>! {
         get { searchUsersSearchTermLimitReturnValueLock.withLock { searchUsersSearchTermLimitUnderlyingReturnValue } }
         set { searchUsersSearchTermLimitReturnValueLock.withLock { searchUsersSearchTermLimitUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var searchUsersSearchTermLimitClosure: ((String, UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError>)?
+    nonisolated(unsafe) var searchUsersSearchTermLimitClosure: ((String, UInt) async -> Result<SearchUsersResults, ClientProxyError>)?
 
-    @concurrent func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
+    @concurrent func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError> {
         searchUsersSearchTermLimitCallsCountLock.withLock { searchUsersSearchTermLimitUnderlyingCallsCount += 1 }
         searchUsersSearchTermLimitReceivedArguments = (searchTerm: searchTerm, limit: limit)
         searchUsersSearchTermLimitReceivedInvocationsLock.withLock { searchUsersSearchTermLimitUnderlyingReceivedInvocations.append((searchTerm: searchTerm, limit: limit)) }
@@ -3533,14 +3499,14 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let profileForReturnValueLock = NSLock()
-    private nonisolated(unsafe) var profileForUnderlyingReturnValue: Result<UserProfileProxy, ClientProxyError>!
-    var profileForReturnValue: Result<UserProfileProxy, ClientProxyError>! {
+    private nonisolated(unsafe) var profileForUnderlyingReturnValue: Result<UserProfile, ClientProxyError>!
+    var profileForReturnValue: Result<UserProfile, ClientProxyError>! {
         get { profileForReturnValueLock.withLock { profileForUnderlyingReturnValue } }
         set { profileForReturnValueLock.withLock { profileForUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var profileForClosure: ((String) async -> Result<UserProfileProxy, ClientProxyError>)?
+    nonisolated(unsafe) var profileForClosure: ((String) async -> Result<UserProfile, ClientProxyError>)?
 
-    @concurrent func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
+    @concurrent func profile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
         profileForCallsCountLock.withLock { profileForUnderlyingCallsCount += 1 }
         profileForReceivedUserID = userID
         profileForReceivedInvocationsLock.withLock { profileForUnderlyingReceivedInvocations.append(userID) }
@@ -3972,14 +3938,14 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let recentConversationCounterpartsReturnValueLock = NSLock()
-    private nonisolated(unsafe) var recentConversationCounterpartsUnderlyingReturnValue: [UserProfileProxy]!
-    var recentConversationCounterpartsReturnValue: [UserProfileProxy]! {
+    private nonisolated(unsafe) var recentConversationCounterpartsUnderlyingReturnValue: [UserProfile]!
+    var recentConversationCounterpartsReturnValue: [UserProfile]! {
         get { recentConversationCounterpartsReturnValueLock.withLock { recentConversationCounterpartsUnderlyingReturnValue } }
         set { recentConversationCounterpartsReturnValueLock.withLock { recentConversationCounterpartsUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var recentConversationCounterpartsClosure: (() async -> [UserProfileProxy])?
+    nonisolated(unsafe) var recentConversationCounterpartsClosure: (() async -> [UserProfile])?
 
-    @concurrent func recentConversationCounterparts() async -> [UserProfileProxy] {
+    @concurrent func recentConversationCounterparts() async -> [UserProfile] {
         recentConversationCounterpartsCallsCountLock.withLock { recentConversationCounterpartsUnderlyingCallsCount += 1 }
         if let recentConversationCounterpartsClosure = recentConversationCounterpartsClosure {
             return await recentConversationCounterpartsClosure()
@@ -14057,14 +14023,14 @@ nonisolated class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol, @unche
     }
 
     private let searchProfilesWithReturnValueLock = NSLock()
-    private nonisolated(unsafe) var searchProfilesWithUnderlyingReturnValue: Result<[UserProfileProxy], UserDiscoveryErrorType>!
-    var searchProfilesWithReturnValue: Result<[UserProfileProxy], UserDiscoveryErrorType>! {
+    private nonisolated(unsafe) var searchProfilesWithUnderlyingReturnValue: Result<[UserProfile], UserDiscoveryErrorType>!
+    var searchProfilesWithReturnValue: Result<[UserProfile], UserDiscoveryErrorType>! {
         get { searchProfilesWithReturnValueLock.withLock { searchProfilesWithUnderlyingReturnValue } }
         set { searchProfilesWithReturnValueLock.withLock { searchProfilesWithUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var searchProfilesWithClosure: ((String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType>)?
+    nonisolated(unsafe) var searchProfilesWithClosure: ((String) async -> Result<[UserProfile], UserDiscoveryErrorType>)?
 
-    @concurrent func searchProfiles(with searchQuery: String) async -> Result<[UserProfileProxy], UserDiscoveryErrorType> {
+    @concurrent func searchProfiles(with searchQuery: String) async -> Result<[UserProfile], UserDiscoveryErrorType> {
         searchProfilesWithCallsCountLock.withLock { searchProfilesWithUnderlyingCallsCount += 1 }
         searchProfilesWithReceivedSearchQuery = searchQuery
         searchProfilesWithReceivedInvocationsLock.withLock { searchProfilesWithUnderlyingReceivedInvocations.append(searchQuery) }
