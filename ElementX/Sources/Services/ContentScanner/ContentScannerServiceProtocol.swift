@@ -20,8 +20,8 @@ nonisolated protocol ContentScannerServiceProtocol: Sendable {
     /// it is unsafe, or `nil` when the source hasn't been scanned yet.
     func scanResultFromSource(_ source: MediaSourceProxy) -> Bool?
     
-    /// Returns the cached verdict for the given source, scanning it first when needed.
-    /// Failed scans aren't cached so that they can be retried.
+    /// Starts a scan for the given source unless there's already a cached verdict, in which case
+    /// that is returned. Failed scans aren't cached so that they can be retried.
     @discardableResult
     func loadScanResultFromSource(_ source: MediaSourceProxy) async -> Result<Bool, ContentScannerServiceError>
 }

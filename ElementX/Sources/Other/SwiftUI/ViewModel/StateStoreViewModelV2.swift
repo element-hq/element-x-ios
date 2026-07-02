@@ -68,8 +68,9 @@ class StateStoreViewModelV2<State: BindableState, ViewAction> {
         /// Intentionally non-generic so that it doesn't grow uncontrollably
         let mediaProvider: MediaProviderProtocol?
         
-        /// An optional content scanning service so that views can validate media themselves,
-        /// `nil` when no content scanner is configured for the server.
+        /// An optional content scanning service so that views can validate media themselves.
+        /// `nil` when no content scanner is configured for the server, or when the screen
+        /// intentionally doesn't provide one because it has no media to scan.
         let contentScannerService: ContentScannerServiceProtocol?
         
         /// Set-able access to the bindable state.
