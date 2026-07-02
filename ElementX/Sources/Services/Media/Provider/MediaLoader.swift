@@ -13,17 +13,18 @@ import UIKit
 @preconcurrency import MatrixRustSDK
 
 actor MediaLoader: MediaLoaderProtocol {
-    /// We noticed that the keyboard appears to hold onto a reference to the `Context` of the last
-    /// screen that had text input focus, resulting in its MediaProvider staying alive which in
-    /// turn keeps this loader alive: https://github.com/element-hq/element-x-ios/issues/4465
-    /// Therefore the client is `weak` so that the underlying `MatrixRustSDK.Client` is released
-    /// when e.g. clearing the cache, otherwise we have the potential for 2 `Client`s to be alive
-    /// at the same time causing havoc.
-    ///
-    /// Whilst a more correct fix would be to make `Context.mediaProvider` weak, this requires a
-    /// bunch of workarounds in our preview tests to keep the mock provider alive as some ViewModels
-    /// don't have an accompanying ClientMock to own it.
+    // We noticed that the keyboard appears to hold onto a reference to the `Context` of the last
+    // screen that had text input focus, resulting in its MediaProvider staying alive which in
+    // turn keeps this loader alive: https://github.com/element-hq/element-x-ios/issues/4465
+    // Therefore the client is `weak` so that the underlying `MatrixRustSDK.Client` is released
+    // when e.g. clearing the cache, otherwise we have the potential for 2 `Client`s to be alive
+    // at the same time causing havoc.
+    //
+    // Whilst a more correct fix would be to make `Context.mediaProvider` weak, this requires a
+    // bunch of workarounds in our preview tests to keep the mock provider alive as some ViewModels
+    // don't have an accompanying ClientMock to own it.
     private weak var client: ClientProtocol?
+    private var ongoingRequests = [MediaSourceProxy: Task<Data, Error>]()
     
     init(client: ClientProtocol) {
         self.client = client

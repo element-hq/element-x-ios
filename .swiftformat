@@ -7,6 +7,7 @@
 --disable preferForLoop
 --disable consistentSwitchCaseSpacing
 --disable docCommentsBeforeModifiers # throwing false positives in AuthenticationServiceProtocol on v0.58.0
+--disable docComments # converts regular comments into doc comments even when they're implementation notes
 --disable emptyExtensions
 
 --commas inline
