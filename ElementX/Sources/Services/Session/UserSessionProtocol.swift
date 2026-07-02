@@ -25,6 +25,9 @@ protocol UserSessionProtocol: Sendable {
     var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }
     var liveLocationManager: LiveLocationManagerProtocol { get }
     
+    /// Scans media content, `nil` when no content scanner is configured for the server.
+    var contentScannerService: ContentScannerServiceProtocol? { get }
+    
     var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> { get }
     
     var callbacks: PassthroughSubject<UserSessionCallback, Never> { get }

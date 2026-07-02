@@ -32,8 +32,8 @@ class StateStoreViewModelV2<State: BindableState, ViewAction> {
         set { context.viewState = newValue }
     }
     
-    init(initialViewState: State, mediaProvider: MediaProviderProtocol? = nil) {
-        context = Context(initialViewState: initialViewState, mediaProvider: mediaProvider)
+    init(initialViewState: State, mediaProvider: MediaProviderProtocol? = nil, contentScannerService: ContentScannerServiceProtocol? = nil) {
+        context = Context(initialViewState: initialViewState, mediaProvider: mediaProvider, contentScannerService: contentScannerService)
         context.viewModel = self
     }
     
@@ -68,6 +68,11 @@ class StateStoreViewModelV2<State: BindableState, ViewAction> {
         /// Intentionally non-generic so that it doesn't grow uncontrollably
         let mediaProvider: MediaProviderProtocol?
         
+        /// An optional content scanning service so that views can validate media themselves.
+        /// `nil` when no content scanner is configured for the server, or when the screen
+        /// intentionally doesn't provide one because it has no media to scan.
+        let contentScannerService: ContentScannerServiceProtocol?
+        
         /// Set-able access to the bindable state.
         subscript<T>(dynamicMember keyPath: WritableKeyPath<State.BindStateType, T>) -> T {
             get { viewState.bindings[keyPath: keyPath] }
@@ -80,9 +85,10 @@ class StateStoreViewModelV2<State: BindableState, ViewAction> {
             viewModel?.process(viewAction: viewAction)
         }
         
-        fileprivate init(initialViewState: State, mediaProvider: MediaProviderProtocol?) {
+        fileprivate init(initialViewState: State, mediaProvider: MediaProviderProtocol?, contentScannerService: ContentScannerServiceProtocol?) {
             self.viewState = initialViewState
             self.mediaProvider = mediaProvider
+            self.contentScannerService = contentScannerService
         }
     }
 }
