@@ -16,6 +16,10 @@ struct VoiceMessageRoomPlaybackView: View {
     @ScaledMetric private var waveformLinePadding = 2.0
     @GestureState var isDragging = false
     
+    /// Whether the voice message is being scanned by the content scanner, in which case
+    /// the play button shows a spinner and playback isn't available.
+    var isScanning = false
+    
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
@@ -23,7 +27,7 @@ struct VoiceMessageRoomPlaybackView: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            VoiceMessageButton(state: .init(playerState.playerButtonPlaybackState),
+            VoiceMessageButton(state: isScanning ? .loading : .init(playerState.playerButtonPlaybackState),
                                size: .medium,
                                action: onPlayPause)
             VStack(spacing: 2) {

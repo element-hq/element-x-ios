@@ -173,6 +173,13 @@ extension PreviewTests {
     }
 
     @Test
+    func contentScannerErrorView() async throws {
+        for (index, preview) in ContentScannerErrorView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func copyTextButton() async throws {
         for (index, preview) in CopyTextButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

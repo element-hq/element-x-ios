@@ -20,6 +20,8 @@ internal nonisolated enum L10n {
   internal static var a11yAddress: String { return L10n.tr("Localizable", "a11y_address") }
   /// Avatar
   internal static var a11yAvatar: String { return L10n.tr("Localizable", "a11y_avatar") }
+  /// Clear search field
+  internal static var a11yClearSearchField: String { return L10n.tr("Localizable", "a11y_clear_search_field") }
   /// Minimise message text field
   internal static var a11yCollapseMessageTextField: String { return L10n.tr("Localizable", "a11y_collapse_message_text_field") }
   /// Decrease votes allowed per person
@@ -490,6 +492,14 @@ internal nonisolated enum L10n {
   internal static var commonCallYouDeclined: String { return L10n.tr("Localizable", "common_call_you_declined") }
   /// Chat backup
   internal static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
+  /// Download not available.
+  internal static var commonContentScannerNotFound: String { return L10n.tr("Localizable", "common_content_scanner_not_found") }
+  /// File not found
+  internal static var commonContentScannerNotFoundTitle: String { return L10n.tr("Localizable", "common_content_scanner_not_found_title") }
+  /// Preview and download have been disabled.
+  internal static var commonContentScannerUnsafeMessage: String { return L10n.tr("Localizable", "common_content_scanner_unsafe_message") }
+  /// The file is not safe
+  internal static var commonContentScannerUnsafeTitle: String { return L10n.tr("Localizable", "common_content_scanner_unsafe_title") }
   /// Copied to clipboard
   internal static var commonCopiedToClipboard: String { return L10n.tr("Localizable", "common_copied_to_clipboard") }
   /// Copyright
@@ -2396,7 +2406,7 @@ internal nonisolated enum L10n {
   internal static var screenNotificationSettingsEditFailedUpdatingDefaultMode: String { return L10n.tr("Localizable", "screen_notification_settings_edit_failed_updating_default_mode") }
   /// All messages
   internal static var screenNotificationSettingsEditModeAllMessages: String { return L10n.tr("Localizable", "screen_notification_settings_edit_mode_all_messages") }
-  /// Mentions and Keywords only
+  /// Mentions and replies only
   internal static var screenNotificationSettingsEditModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_notification_settings_edit_mode_mentions_and_keywords") }
   /// On direct chats, notify me for
   internal static var screenNotificationSettingsEditScreenDirectSectionHeader: String { return L10n.tr("Localizable", "screen_notification_settings_edit_screen_direct_section_header") }
@@ -3080,7 +3090,7 @@ internal nonisolated enum L10n {
   internal static var screenRoomNotificationSettingsMentionsOnlyDisclaimer: String { return L10n.tr("Localizable", "screen_room_notification_settings_mentions_only_disclaimer") }
   /// All messages
   internal static var screenRoomNotificationSettingsModeAllMessages: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_all_messages") }
-  /// Mentions and Keywords only
+  /// Mentions and replies only
   internal static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
   /// In this room, notify me for
   internal static var screenRoomNotificationSettingsRoomCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_room_custom_settings_title") }
