@@ -10,11 +10,13 @@ import SwiftUI
 
 struct SearchScreenCoordinatorParameters {
     let roomSummaryProvider: RoomSummaryProviderProtocol
+    let searchService: SearchServiceProxyProtocol
+    let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }
 
 enum SearchScreenCoordinatorAction {
-    case presentRoom(roomID: String)
+    case presentRoom(roomID: String, eventID: String?)
     case cancel
 }
 
@@ -30,6 +32,8 @@ final class SearchScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: SearchScreenCoordinatorParameters) {
         viewModel = SearchScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
+                                          searchService: parameters.searchService,
+                                          clientProxy: parameters.clientProxy,
                                           mediaProvider: parameters.mediaProvider)
     }
     
@@ -37,8 +41,8 @@ final class SearchScreenCoordinator: CoordinatorProtocol {
         viewModel.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .presentRoom(let roomID):
-                actionsSubject.send(.presentRoom(roomID: roomID))
+            case .presentRoom(let roomID, let eventID):
+                actionsSubject.send(.presentRoom(roomID: roomID, eventID: eventID))
             case .cancel:
                 actionsSubject.send(.cancel)
             }

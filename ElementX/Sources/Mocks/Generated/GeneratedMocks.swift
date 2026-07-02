@@ -2354,6 +2354,11 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingSpaceService = value }
     }
     nonisolated(unsafe) var underlyingSpaceService: SpaceServiceProxyProtocol!
+    var searchService: SearchServiceProxyProtocol {
+        get { return underlyingSearchService }
+        set(value) { underlyingSearchService = value }
+    }
+    nonisolated(unsafe) var underlyingSearchService: SearchServiceProxyProtocol!
     var capabilities: HomeserverCapabilitiesProxyProtocol {
         get { return underlyingCapabilities }
         set(value) { underlyingCapabilities = value }
@@ -11033,6 +11038,78 @@ nonisolated class RoomThreadListServiceProxyMock: RoomThreadListServiceProxyProt
         } else {
             return paginateReturnValue
         }
+    }
+}
+nonisolated class SearchServiceProxyMock: SearchServiceProxyProtocol, @unchecked Sendable {
+    var resultsPublisher: CurrentValuePublisher<[SearchServiceResult], Never> {
+        get { return underlyingResultsPublisher }
+        set(value) { underlyingResultsPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingResultsPublisher: CurrentValuePublisher<[SearchServiceResult], Never>!
+    var paginationStatePublisher: CurrentValuePublisher<SearchServicePaginationState, Never> {
+        get { return underlyingPaginationStatePublisher }
+        set(value) { underlyingPaginationStatePublisher = value }
+    }
+    nonisolated(unsafe) var underlyingPaginationStatePublisher: CurrentValuePublisher<SearchServicePaginationState, Never>!
+
+    //MARK: - setQuery
+
+    private let setQueryCallsCountLock = NSLock()
+    private nonisolated(unsafe) var setQueryUnderlyingCallsCount = 0
+    var setQueryCallsCount: Int {
+        get { setQueryCallsCountLock.withLock { setQueryUnderlyingCallsCount } }
+        set { setQueryCallsCountLock.withLock { setQueryUnderlyingCallsCount = newValue } }
+    }
+    var setQueryCalled: Bool {
+        return setQueryCallsCount > 0
+    }
+    private let setQueryReceivedQueryLock = NSLock()
+    private nonisolated(unsafe) var setQueryUnderlyingReceivedQuery: String?
+    var setQueryReceivedQuery: String? {
+        get { setQueryReceivedQueryLock.withLock { setQueryUnderlyingReceivedQuery } }
+        set { setQueryReceivedQueryLock.withLock { setQueryUnderlyingReceivedQuery = newValue } }
+    }
+    private let setQueryReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var setQueryUnderlyingReceivedInvocations: [String] = []
+    var setQueryReceivedInvocations: [String] {
+        get { setQueryReceivedInvocationsLock.withLock { setQueryUnderlyingReceivedInvocations } }
+        set { setQueryReceivedInvocationsLock.withLock { setQueryUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let setQueryReturnValueLock = NSLock()
+    private nonisolated(unsafe) var setQueryUnderlyingReturnValue: Result<Void, SearchServiceProxyError>!
+    var setQueryReturnValue: Result<Void, SearchServiceProxyError>! {
+        get { setQueryReturnValueLock.withLock { setQueryUnderlyingReturnValue } }
+        set { setQueryReturnValueLock.withLock { setQueryUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var setQueryClosure: ((String) async -> Result<Void, SearchServiceProxyError>)?
+
+    @concurrent func setQuery(_ query: String) async -> Result<Void, SearchServiceProxyError> {
+        setQueryCallsCountLock.withLock { setQueryUnderlyingCallsCount += 1 }
+        setQueryReceivedQuery = query
+        setQueryReceivedInvocationsLock.withLock { setQueryUnderlyingReceivedInvocations.append(query) }
+        if let setQueryClosure = setQueryClosure {
+            return await setQueryClosure(query)
+        } else {
+            return setQueryReturnValue
+        }
+    }
+    //MARK: - paginate
+
+    private let paginateCallsCountLock = NSLock()
+    private nonisolated(unsafe) var paginateUnderlyingCallsCount = 0
+    var paginateCallsCount: Int {
+        get { paginateCallsCountLock.withLock { paginateUnderlyingCallsCount } }
+        set { paginateCallsCountLock.withLock { paginateUnderlyingCallsCount = newValue } }
+    }
+    var paginateCalled: Bool {
+        return paginateCallsCount > 0
+    }
+    nonisolated(unsafe) var paginateClosure: (() async -> Void)?
+
+    @concurrent func paginate() async {
+        paginateCallsCountLock.withLock { paginateUnderlyingCallsCount += 1 }
+        await paginateClosure?()
     }
 }
 nonisolated class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sendable {

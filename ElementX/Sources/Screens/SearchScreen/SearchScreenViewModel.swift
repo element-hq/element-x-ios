@@ -13,7 +13,11 @@ typealias SearchScreenViewModelType = StateStoreViewModelV2<SearchScreenViewStat
 
 class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelProtocol {
     private let roomSummaryProvider: RoomSummaryProviderProtocol
+    private let searchService: SearchServiceProxyProtocol
+    private let clientProxy: ClientProxyProtocol
     private var searchQueryObservationTask: Task<Void, Never>?
+    private var loadingObservationTask: Task<Void, Never>?
+    private var setQueryTask: Task<Void, Never>?
     
     private let actionsSubject: PassthroughSubject<SearchScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SearchScreenViewModelAction, Never> {
@@ -21,11 +25,16 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     }
     
     init(roomSummaryProvider: RoomSummaryProviderProtocol,
+         searchService: SearchServiceProxyProtocol,
+         clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         initialSearchQuery: String = "") {
+         initialSearchQuery: String = "",
+         initialSearchMode: SearchScreenMode = .rooms) {
         self.roomSummaryProvider = roomSummaryProvider
+        self.searchService = searchService
+        self.clientProxy = clientProxy
         
-        super.init(initialViewState: SearchScreenViewState(bindings: .init(searchQuery: initialSearchQuery)),
+        super.init(initialViewState: SearchScreenViewState(bindings: .init(searchQuery: initialSearchQuery, searchMode: initialSearchMode)),
                    mediaProvider: mediaProvider)
         
         roomSummaryProvider.roomListPublisher
@@ -35,10 +44,44 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
             }
             .store(in: &cancellables)
         
+        searchService.resultsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] results in
+                guard let self else { return }
+                // A previous query's fetch can complete after the field was cleared; drop its late results.
+                guard !state.bindings.searchQuery.isEmpty else {
+                    state.messages = []
+                    return
+                }
+                state.messages = results.map { result in
+                    SearchScreenMessage(result,
+                                        roomSummary: clientProxy.roomSummaryForIdentifier(result.roomID),
+                                        isOutgoing: result.sender.id == clientProxy.userID)
+                }
+            }
+            .store(in: &cancellables)
+        
+        searchService.paginationStatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] paginationState in
+                self?.state.isLoadingMessages = paginationState == .loading
+            }
+            .store(in: &cancellables)
+        
         searchQueryObservationTask = Task { [weak self] in
-            guard let stream = self?.context.observe(\.viewState.bindings.searchQuery).removeDuplicates() else { return }
+            guard let stream = self?.context.observe(\.viewState.bindings.searchQuery).debounce(for: .milliseconds(250)).removeDuplicates() else { return }
             for await searchQuery in stream {
                 self?.updateFilter(for: searchQuery)
+            }
+        }
+        
+        // Flip the loading indicator on the moment the user starts typing, ahead of the debounced
+        // query above, so the empty state doesn't flash while the first search is still pending.
+        loadingObservationTask = Task { [weak self] in
+            guard let stream = self?.context.observe(\.viewState.bindings.searchQuery).removeDuplicates() else { return }
+            for await searchQuery in stream {
+                self?.state.isLoadingRooms = !searchQuery.isEmpty
+                self?.state.isLoadingMessages = !searchQuery.isEmpty
             }
         }
         
@@ -47,6 +90,8 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     
     isolated deinit {
         searchQueryObservationTask?.cancel()
+        loadingObservationTask?.cancel()
+        setQueryTask?.cancel()
     }
     
     // MARK: - Public
@@ -56,15 +101,22 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         
         switch viewAction {
         case .appeared:
-            // The provider is shared, so other consumers may have changed its filter while we were off-screen.
-            // Re-apply ours on every appearance to keep the displayed results in sync with the query.
             updateFilter(for: state.bindings.searchQuery)
         case .selectRoom(let roomID):
-            actionsSubject.send(.presentRoom(roomID: roomID))
+            actionsSubject.send(.presentRoom(roomID: roomID, eventID: nil))
+        case .selectMessage(let roomID, let eventID):
+            actionsSubject.send(.presentRoom(roomID: roomID, eventID: eventID))
         case .reachedTop:
-            updateVisibleRange(edge: .top)
+            if state.bindings.searchMode == .rooms {
+                updateVisibleRange(edge: .top)
+            }
         case .reachedBottom:
-            updateVisibleRange(edge: .bottom)
+            switch state.bindings.searchMode {
+            case .rooms:
+                updateVisibleRange(edge: .bottom)
+            case .messages:
+                Task { await searchService.paginate() }
+            }
         case .cancel:
             actionsSubject.send(.cancel)
         }
@@ -73,17 +125,24 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     // MARK: - Private
     
     private func updateFilter(for searchQuery: String) {
+        // Supersede any in-flight query so its results can't land after a newer one's.
+        setQueryTask?.cancel()
+        
         if searchQuery.isEmpty {
             roomSummaryProvider.setFilter(.excludeAll)
+            state.messages = []
         } else {
             roomSummaryProvider.setFilter(.search(query: searchQuery))
+            setQueryTask = Task { [weak self] in
+                await self?.searchService.setQuery(searchQuery)
+            }
         }
     }
     
     private func updateRooms(with summaries: [RoomSummary]) {
+        // The list has caught up with the current filter, so we're no longer waiting on results.
+        state.isLoadingRooms = false
         state.rooms = summaries.map { summary in
-            // Show the matrix identifier as the subtitle: the other member's user ID for DMs,
-            // otherwise the room's canonical alias.
             let identifier = if summary.isDirect {
                 summary.heroes.first?.id ?? summary.canonicalAlias
             } else {
@@ -97,12 +156,6 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         }
     }
     
-    /// The actual range values don't matter as long as they contain the lower
-    /// or upper bounds. updateVisibleRange is a hybrid API that powers both
-    /// sliding sync visible range update and list paginations.
-    /// For lists other than the home screen one we don't care about visible ranges,
-    /// we just need the respective bounds to be there to trigger a next page load or
-    /// a reset to just one page.
     private func updateVisibleRange(edge: UIRectEdge) {
         switch edge {
         case .top:

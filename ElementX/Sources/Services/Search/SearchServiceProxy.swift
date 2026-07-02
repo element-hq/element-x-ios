@@ -11,27 +11,41 @@ import MatrixRustSDK
 class SearchServiceProxy: SearchServiceProxyProtocol {
     private let searchService: SearchServiceProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
-
+    
     // periphery:ignore - required for instance retention in the rust codebase
     private var resultsHandle: TaskHandle?
-
+    
     private let resultsSubject = CurrentValueSubject<[SearchServiceResult], Never>([])
     var resultsPublisher: CurrentValuePublisher<[SearchServiceResult], Never> {
         resultsSubject.asCurrentValuePublisher()
     }
-
+    
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var paginationStateHandle: TaskHandle?
+    
+    private let paginationStateSubject: CurrentValueSubject<SearchServicePaginationState, Never>
+    var paginationStatePublisher: CurrentValuePublisher<SearchServicePaginationState, Never> {
+        paginationStateSubject.asCurrentValuePublisher()
+    }
+    
     init(searchService: SearchServiceProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol) {
         self.searchService = searchService
         self.timelineItemFactory = timelineItemFactory
+        
+        paginationStateSubject = CurrentValueSubject(.init(sdkState: searchService.paginationState()))
+        
+        paginationStateHandle = searchService.subscribeToPaginationStateUpdates(listener: SDKListener.onMainActor { [weak self] state in
+            self?.paginationStateSubject.send(.init(sdkState: state))
+        })
     }
-
+    
     func setQuery(_ query: String) async -> Result<Void, SearchServiceProxyError> {
         if resultsHandle == nil {
             resultsHandle = await searchService.subscribeToResults(listener: SDKListener.onMainActor { [weak self] updates in
                 self?.handleResultUpdates(updates)
             })
         }
-
+        
         do {
             try await searchService.setQuery(query: query)
             return .success(())
@@ -40,7 +54,7 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-
+    
     func paginate() async {
         do {
             try await searchService.paginate()
@@ -48,12 +62,12 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
             MXLog.error("Failed to paginate search results: \(error)")
         }
     }
-
+    
     // MARK: - Private
-
+    
     private func handleResultUpdates(_ updates: [SearchServiceResultsUpdate]) {
         var results = resultsSubject.value
-
+        
         for update in updates {
             switch update {
             case .append(let values):
@@ -88,15 +102,15 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
                 results = values.compactMap { self.makeResult($0) }
             }
         }
-
+        
         resultsSubject.send(results)
     }
-
+    
     private func makeResult(_ searchResult: MatrixRustSDK.SearchServiceResult) -> SearchServiceResult? {
         switch searchResult {
         case .message(let roomID, let result):
             let sender = TimelineItemSender(senderID: result.sender, senderProfile: result.senderProfile)
-
+            
             let content: TimelineEventContent
             switch result.content {
             case .msgLike(let msgLike):
@@ -111,7 +125,7 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
             default:
                 content = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
             }
-
+            
             return SearchServiceResult(roomID: roomID,
                                        eventID: result.eventId,
                                        sender: sender,

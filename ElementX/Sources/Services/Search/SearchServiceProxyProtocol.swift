@@ -15,9 +15,11 @@ enum SearchServiceProxyError: Error {
 // sourcery: AutoMockable
 protocol SearchServiceProxyProtocol {
     var resultsPublisher: CurrentValuePublisher<[SearchServiceResult], Never> { get }
-
+    
+    var paginationStatePublisher: CurrentValuePublisher<SearchServicePaginationState, Never> { get }
+    
     func setQuery(_ query: String) async -> Result<Void, SearchServiceProxyError>
-
+    
     /// Loads the next page of results. No-ops if a page is already loading or the end has been reached.
     func paginate() async
 }
@@ -28,4 +30,20 @@ struct SearchServiceResult {
     let sender: TimelineItemSender
     let content: TimelineEventContent
     let timestamp: Date
+}
+
+enum SearchServicePaginationState: Equatable {
+    case idle(endReached: Bool)
+    case loading
+}
+
+extension SearchServicePaginationState {
+    init(sdkState: MatrixRustSDK.SearchServicePaginationState) {
+        switch sdkState {
+        case .loading:
+            self = .loading
+        case .idle(let endReached):
+            self = .idle(endReached: endReached)
+        }
+    }
 }

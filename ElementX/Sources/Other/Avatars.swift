@@ -87,6 +87,7 @@ enum UserAvatarSizeOnScreen {
     case threadSummary
     case map
     case classicAppAccount
+    case globalSearch
     
     var value: CGFloat {
         switch self {
@@ -107,7 +108,7 @@ enum UserAvatarSizeOnScreen {
         case .roomDetails:
             44
         case .inviteUsers, .knockingUserList, .sessionVerification,
-             .settings, .threadList, .mediaPreviewDetails:
+             .settings, .threadList, .mediaPreviewDetails, .globalSearch:
             52
         case .roomChangeRoles:
             56
@@ -148,13 +149,13 @@ enum RoomAvatarSizeOnScreen {
         switch self {
         case .timeline, .leaveSpace, .notificationSettings, .roomDirectorySearch,
              .completionSuggestions, .authorizedSpaces, .createRoomSelectSpace,
-             .spaceFilters, .globalSearch:
+             .spaceFilters:
             32
         case .messageForwarding, .roomSelection,
              .spaceAddRooms:
             36
         case .chats, .spaces, .spaceSettings,
-             .spaceAddRoomsSelected:
+             .spaceAddRoomsSelected, .globalSearch:
             52
         case .joinRoom, .spaceHeader, .editSpaceDetails:
             64

@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 @testable import ElementX
 import Testing
 
@@ -16,7 +17,14 @@ struct SearchScreenViewModelTests {
     }
     
     init() {
+        let searchService = SearchServiceProxyMock()
+        searchService.underlyingResultsPublisher = CurrentValueSubject<[SearchServiceResult], Never>([]).asCurrentValuePublisher()
+        searchService.underlyingPaginationStatePublisher = CurrentValueSubject(.idle(endReached: true)).asCurrentValuePublisher()
+        searchService.setQueryReturnValue = .success(())
+        
         viewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                          searchService: searchService,
+                                          clientProxy: ClientProxyMock(.init()),
                                           mediaProvider: MediaProviderMock(.init()))
     }
     
@@ -31,7 +39,7 @@ struct SearchScreenViewModelTests {
     func roomSelection() async throws {
         let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
             switch action {
-            case .presentRoom(let roomID):
+            case .presentRoom(let roomID, _):
                 roomID == "2"
             case .cancel:
                 false

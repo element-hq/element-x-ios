@@ -98,6 +98,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         if flowParameters.appSettings.globalSearchEnabled, #available(iOS 26.0, *) {
             let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
+                                                                              searchService: flowParameters.userSession.clientProxy.searchService,
+                                                                              clientProxy: flowParameters.userSession.clientProxy,
                                                                               mediaProvider: flowParameters.userSession.mediaProvider))
             let searchStackCoordinator = NavigationStackCoordinator()
             searchStackCoordinator.setRootCoordinator(searchCoordinator)
@@ -222,20 +224,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    // swiftlint:disable:next function_body_length
     private func setupObservers() {
-        searchScreenCoordinator?.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .presentRoom(let roomID):
-                    handleAppRoute(.room(roomID: roomID, via: []), animated: true)
-                case .cancel:
-                    // Return to the tab the user came from, but never back into search.
-                    navigationTabCoordinator.selectedTab = navigationTabCoordinator.previousTab == .search ? .chats : navigationTabCoordinator.previousTab ?? .chats
-                }
-            }
-            .store(in: &cancellables)
-        
         chatsTabFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }
@@ -331,6 +321,23 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     self?.dismissCallScreenIfNeeded()
                 default:
                     break
+                }
+            }
+            .store(in: &cancellables)
+        
+        searchScreenCoordinator?.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .presentRoom(let roomID, let eventID):
+                    if let eventID {
+                        handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []), animated: true)
+                    } else {
+                        handleAppRoute(.room(roomID: roomID, via: []), animated: true)
+                    }
+                case .cancel:
+                    // Return to the tab the user came from, but never back into search.
+                    navigationTabCoordinator.selectedTab = navigationTabCoordinator.previousTab == .search ? .chats : navigationTabCoordinator.previousTab ?? .chats
                 }
             }
             .store(in: &cancellables)
