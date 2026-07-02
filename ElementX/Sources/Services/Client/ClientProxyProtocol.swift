@@ -135,6 +135,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     var mediaLoader: MediaLoaderProtocol { get }
     
+    var contentScanner: ContentScannerProxyProtocol? { get }
+    
     var roomSummaryProvider: RoomSummaryProviderProtocol { get }
     
     /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering

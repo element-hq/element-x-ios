@@ -2322,6 +2322,7 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingMediaLoader = value }
     }
     nonisolated(unsafe) var underlyingMediaLoader: MediaLoaderProtocol!
+    nonisolated(unsafe) var contentScanner: ContentScannerProxyProtocol?
     var roomSummaryProvider: RoomSummaryProviderProtocol {
         get { return underlyingRoomSummaryProvider }
         set(value) { underlyingRoomSummaryProvider = value }
@@ -4571,6 +4572,85 @@ nonisolated class ComposerDraftServiceMock: ComposerDraftServiceProtocol, @unche
         }
     }
 }
+nonisolated class ContentScannerProxyMock: ContentScannerProxyProtocol, @unchecked Sendable {
+
+    //MARK: - scan
+
+    private let scanMediaSourceCallsCountLock = NSLock()
+    private nonisolated(unsafe) var scanMediaSourceUnderlyingCallsCount = 0
+    var scanMediaSourceCallsCount: Int {
+        get { scanMediaSourceCallsCountLock.withLock { scanMediaSourceUnderlyingCallsCount } }
+        set { scanMediaSourceCallsCountLock.withLock { scanMediaSourceUnderlyingCallsCount = newValue } }
+    }
+    var scanMediaSourceCalled: Bool {
+        return scanMediaSourceCallsCount > 0
+    }
+    private let scanMediaSourceReceivedMediaSourceLock = NSLock()
+    private nonisolated(unsafe) var scanMediaSourceUnderlyingReceivedMediaSource: MediaSourceProxy?
+    var scanMediaSourceReceivedMediaSource: MediaSourceProxy? {
+        get { scanMediaSourceReceivedMediaSourceLock.withLock { scanMediaSourceUnderlyingReceivedMediaSource } }
+        set { scanMediaSourceReceivedMediaSourceLock.withLock { scanMediaSourceUnderlyingReceivedMediaSource = newValue } }
+    }
+    private let scanMediaSourceReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var scanMediaSourceUnderlyingReceivedInvocations: [MediaSourceProxy] = []
+    var scanMediaSourceReceivedInvocations: [MediaSourceProxy] {
+        get { scanMediaSourceReceivedInvocationsLock.withLock { scanMediaSourceUnderlyingReceivedInvocations } }
+        set { scanMediaSourceReceivedInvocationsLock.withLock { scanMediaSourceUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let scanMediaSourceReturnValueLock = NSLock()
+    private nonisolated(unsafe) var scanMediaSourceUnderlyingReturnValue: Result<Bool, ContentScannerProxyError>!
+    var scanMediaSourceReturnValue: Result<Bool, ContentScannerProxyError>! {
+        get { scanMediaSourceReturnValueLock.withLock { scanMediaSourceUnderlyingReturnValue } }
+        set { scanMediaSourceReturnValueLock.withLock { scanMediaSourceUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var scanMediaSourceClosure: ((MediaSourceProxy) async -> Result<Bool, ContentScannerProxyError>)?
+
+    @concurrent func scan(mediaSource: MediaSourceProxy) async -> Result<Bool, ContentScannerProxyError> {
+        scanMediaSourceCallsCountLock.withLock { scanMediaSourceUnderlyingCallsCount += 1 }
+        scanMediaSourceReceivedMediaSource = mediaSource
+        scanMediaSourceReceivedInvocationsLock.withLock { scanMediaSourceUnderlyingReceivedInvocations.append(mediaSource) }
+        if let scanMediaSourceClosure = scanMediaSourceClosure {
+            return await scanMediaSourceClosure(mediaSource)
+        } else {
+            return scanMediaSourceReturnValue
+        }
+    }
+}
+nonisolated class ContentScannerServiceMock: ContentScannerServiceProtocol, @unchecked Sendable {
+
+    //MARK: - scan
+
+    private let scanEventIDMediaSourceCallsCountLock = NSLock()
+    private nonisolated(unsafe) var scanEventIDMediaSourceUnderlyingCallsCount = 0
+    var scanEventIDMediaSourceCallsCount: Int {
+        get { scanEventIDMediaSourceCallsCountLock.withLock { scanEventIDMediaSourceUnderlyingCallsCount } }
+        set { scanEventIDMediaSourceCallsCountLock.withLock { scanEventIDMediaSourceUnderlyingCallsCount = newValue } }
+    }
+    var scanEventIDMediaSourceCalled: Bool {
+        return scanEventIDMediaSourceCallsCount > 0
+    }
+    private let scanEventIDMediaSourceReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var scanEventIDMediaSourceUnderlyingReceivedArguments: (eventID: String, mediaSource: MediaSourceProxy)?
+    var scanEventIDMediaSourceReceivedArguments: (eventID: String, mediaSource: MediaSourceProxy)? {
+        get { scanEventIDMediaSourceReceivedArgumentsLock.withLock { scanEventIDMediaSourceUnderlyingReceivedArguments } }
+        set { scanEventIDMediaSourceReceivedArgumentsLock.withLock { scanEventIDMediaSourceUnderlyingReceivedArguments = newValue } }
+    }
+    private let scanEventIDMediaSourceReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var scanEventIDMediaSourceUnderlyingReceivedInvocations: [(eventID: String, mediaSource: MediaSourceProxy)] = []
+    var scanEventIDMediaSourceReceivedInvocations: [(eventID: String, mediaSource: MediaSourceProxy)] {
+        get { scanEventIDMediaSourceReceivedInvocationsLock.withLock { scanEventIDMediaSourceUnderlyingReceivedInvocations } }
+        set { scanEventIDMediaSourceReceivedInvocationsLock.withLock { scanEventIDMediaSourceUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var scanEventIDMediaSourceClosure: ((String, MediaSourceProxy) async -> Void)?
+
+    @concurrent func scan(eventID: String, mediaSource: MediaSourceProxy) async {
+        scanEventIDMediaSourceCallsCountLock.withLock { scanEventIDMediaSourceUnderlyingCallsCount += 1 }
+        scanEventIDMediaSourceReceivedArguments = (eventID: eventID, mediaSource: mediaSource)
+        scanEventIDMediaSourceReceivedInvocationsLock.withLock { scanEventIDMediaSourceUnderlyingReceivedInvocations.append((eventID: eventID, mediaSource: mediaSource)) }
+        await scanEventIDMediaSourceClosure?(eventID, mediaSource)
+    }
+}
 nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked Sendable {
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
         get { return underlyingActions }
@@ -4795,6 +4875,124 @@ nonisolated class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, 
         } else {
             return handleMessageReturnValue
         }
+    }
+}
+nonisolated class EventContentValidationCacheMock: EventContentValidationCacheProtocol, @unchecked Sendable {
+
+    //MARK: - validationPublisher
+
+    private let validationPublisherForCallsCountLock = NSLock()
+    private nonisolated(unsafe) var validationPublisherForUnderlyingCallsCount = 0
+    var validationPublisherForCallsCount: Int {
+        get { validationPublisherForCallsCountLock.withLock { validationPublisherForUnderlyingCallsCount } }
+        set { validationPublisherForCallsCountLock.withLock { validationPublisherForUnderlyingCallsCount = newValue } }
+    }
+    var validationPublisherForCalled: Bool {
+        return validationPublisherForCallsCount > 0
+    }
+    private let validationPublisherForReceivedEventIDLock = NSLock()
+    private nonisolated(unsafe) var validationPublisherForUnderlyingReceivedEventID: String?
+    var validationPublisherForReceivedEventID: String? {
+        get { validationPublisherForReceivedEventIDLock.withLock { validationPublisherForUnderlyingReceivedEventID } }
+        set { validationPublisherForReceivedEventIDLock.withLock { validationPublisherForUnderlyingReceivedEventID = newValue } }
+    }
+    private let validationPublisherForReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var validationPublisherForUnderlyingReceivedInvocations: [String] = []
+    var validationPublisherForReceivedInvocations: [String] {
+        get { validationPublisherForReceivedInvocationsLock.withLock { validationPublisherForUnderlyingReceivedInvocations } }
+        set { validationPublisherForReceivedInvocationsLock.withLock { validationPublisherForUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let validationPublisherForReturnValueLock = NSLock()
+    private nonisolated(unsafe) var validationPublisherForUnderlyingReturnValue: CurrentValuePublisher<ContentValidation, Never>!
+    var validationPublisherForReturnValue: CurrentValuePublisher<ContentValidation, Never>! {
+        get { validationPublisherForReturnValueLock.withLock { validationPublisherForUnderlyingReturnValue } }
+        set { validationPublisherForReturnValueLock.withLock { validationPublisherForUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var validationPublisherForClosure: ((String) -> CurrentValuePublisher<ContentValidation, Never>)?
+
+    func validationPublisher(for eventID: String) -> CurrentValuePublisher<ContentValidation, Never> {
+        validationPublisherForCallsCountLock.withLock { validationPublisherForUnderlyingCallsCount += 1 }
+        validationPublisherForReceivedEventID = eventID
+        validationPublisherForReceivedInvocationsLock.withLock { validationPublisherForUnderlyingReceivedInvocations.append(eventID) }
+        if let validationPublisherForClosure = validationPublisherForClosure {
+            return validationPublisherForClosure(eventID)
+        } else {
+            return validationPublisherForReturnValue
+        }
+    }
+    //MARK: - validation
+
+    private let validationForCallsCountLock = NSLock()
+    private nonisolated(unsafe) var validationForUnderlyingCallsCount = 0
+    var validationForCallsCount: Int {
+        get { validationForCallsCountLock.withLock { validationForUnderlyingCallsCount } }
+        set { validationForCallsCountLock.withLock { validationForUnderlyingCallsCount = newValue } }
+    }
+    var validationForCalled: Bool {
+        return validationForCallsCount > 0
+    }
+    private let validationForReceivedEventIDLock = NSLock()
+    private nonisolated(unsafe) var validationForUnderlyingReceivedEventID: String?
+    var validationForReceivedEventID: String? {
+        get { validationForReceivedEventIDLock.withLock { validationForUnderlyingReceivedEventID } }
+        set { validationForReceivedEventIDLock.withLock { validationForUnderlyingReceivedEventID = newValue } }
+    }
+    private let validationForReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var validationForUnderlyingReceivedInvocations: [String] = []
+    var validationForReceivedInvocations: [String] {
+        get { validationForReceivedInvocationsLock.withLock { validationForUnderlyingReceivedInvocations } }
+        set { validationForReceivedInvocationsLock.withLock { validationForUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let validationForReturnValueLock = NSLock()
+    private nonisolated(unsafe) var validationForUnderlyingReturnValue: ContentValidation!
+    var validationForReturnValue: ContentValidation! {
+        get { validationForReturnValueLock.withLock { validationForUnderlyingReturnValue } }
+        set { validationForReturnValueLock.withLock { validationForUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var validationForClosure: ((String) -> ContentValidation)?
+
+    func validation(for eventID: String) -> ContentValidation {
+        validationForCallsCountLock.withLock { validationForUnderlyingCallsCount += 1 }
+        validationForReceivedEventID = eventID
+        validationForReceivedInvocationsLock.withLock { validationForUnderlyingReceivedInvocations.append(eventID) }
+        if let validationForClosure = validationForClosure {
+            return validationForClosure(eventID)
+        } else {
+            return validationForReturnValue
+        }
+    }
+    //MARK: - update
+
+    private let updateForCallsCountLock = NSLock()
+    private nonisolated(unsafe) var updateForUnderlyingCallsCount = 0
+    var updateForCallsCount: Int {
+        get { updateForCallsCountLock.withLock { updateForUnderlyingCallsCount } }
+        set { updateForCallsCountLock.withLock { updateForUnderlyingCallsCount = newValue } }
+    }
+    var updateForCalled: Bool {
+        return updateForCallsCount > 0
+    }
+    private let updateForReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var updateForUnderlyingReceivedArguments: (validation: ContentValidation, eventID: String)?
+    var updateForReceivedArguments: (validation: ContentValidation, eventID: String)? {
+        get { updateForReceivedArgumentsLock.withLock { updateForUnderlyingReceivedArguments } }
+        set { updateForReceivedArgumentsLock.withLock { updateForUnderlyingReceivedArguments = newValue } }
+    }
+    private let updateForReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var updateForUnderlyingReceivedInvocations: [(validation: ContentValidation, eventID: String)] = []
+    var updateForReceivedInvocations: [(validation: ContentValidation, eventID: String)] {
+        get { updateForReceivedInvocationsLock.withLock { updateForUnderlyingReceivedInvocations } }
+        set { updateForReceivedInvocationsLock.withLock { updateForUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var updateForClosure: ((ContentValidation, String) -> Void)?
+
+    func update(_ validation: ContentValidation, for eventID: String) {
+        updateForCallsCountLock.withLock { updateForUnderlyingCallsCount += 1 }
+        updateForReceivedArguments = (validation: validation, eventID: eventID)
+        updateForReceivedInvocationsLock.withLock { updateForUnderlyingReceivedInvocations.append((validation: validation, eventID: eventID)) }
+        updateForClosure?(validation, eventID)
     }
 }
 nonisolated class HomeserverCapabilitiesProxyMock: HomeserverCapabilitiesProxyProtocol, @unchecked Sendable {
