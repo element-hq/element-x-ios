@@ -119,6 +119,14 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
                     content = .message(timelineItemFactory.buildMessageTimelineItemContent(messageType: msg.msgType,
                                                                                            senderID: result.sender,
                                                                                            senderDisplayName: sender.displayName))
+                case .poll(let question, _, _, _, _, _, _):
+                    content = .poll(question: question)
+                case .sticker(let body, _, _):
+                    content = .message(.text(.init(body: body)))
+                case .redacted:
+                    content = .redacted
+                case .liveLocation:
+                    content = .liveLocation
                 default:
                     content = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
                 }
