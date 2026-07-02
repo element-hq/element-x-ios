@@ -7,7 +7,6 @@
 //
 
 import Compound
-import HyperionCore
 import SwiftUI
 
 struct ListScreen: View {
