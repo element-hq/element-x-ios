@@ -14,6 +14,7 @@ struct ClientProxyMockConfiguration {
     var homeserver = ""
     var userIDServerName: String?
     var userID: String = RoomMemberProxyMock.mockMe.userID
+    var displayName: String? = "User display name"
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
     var spaceServiceConfiguration: SpaceServiceProxyMock.Configuration = .init()
@@ -64,7 +65,7 @@ extension ClientProxyMock {
         verificationStatePublisher = .init(.unknown)
         homeserverReachabilityPublisher = .init(.reachable)
         
-        userProfilePublisher = .init(UserProfile(userID: configuration.userID, displayName: "User display name"))
+        userProfilePublisher = .init(UserProfile(userID: configuration.userID, displayName: configuration.displayName))
         
         ignoredUsersPublisher = .init([RoomMemberProxyMock].allMembers.map(\.userID))
         
