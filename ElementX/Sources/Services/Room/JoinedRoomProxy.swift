@@ -355,7 +355,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
-        if let member = membersPublisher.value.filter({ $0.userID == userID }).first {
+        if let member = membersPublisher.value.first(where: { $0.userID == userID }) {
             return .success(member)
         }
         
@@ -800,7 +800,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             MXLog.info("Received typing notification update, typingUsers: \(typingUserIDs)")
             
             let typingMembers = typingUserIDs.compactMap { userID in
-                if let member = self.membersPublisher.value.filter({ $0.userID == userID }).first {
+                if let member = self.membersPublisher.value.first(where: { $0.userID == userID }) {
                     return member.displayName ?? member.userID
                 } else {
                     return userID
