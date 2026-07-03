@@ -188,7 +188,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubble: some View {
         contentWithReply
-            .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
+            .timelineItemSendInfo(timelineItem: timelineItem,
+                                  adjustedDeliveryStatus: adjustedDeliveryStatus,
+                                  hasMediaScanFailure: hasMediaScanFailure,
+                                  context: context)
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
                               insets: timelineItem.bubbleInsets(hasMediaScanFailure: hasMediaScanFailure),
                               color: hasMediaScanFailure ? .compound.bgCriticalSubtle : timelineItem.bubbleBackgroundColor,

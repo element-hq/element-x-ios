@@ -18,8 +18,8 @@ struct ContentScannerErrorView: View {
     let failure: MediaScanFailure
     
     var body: some View {
-        HStack(alignment: .top, spacing: 8) {
-            CompoundIcon(\.errorSolid, size: .medium, relativeTo: .compound.bodyMDSemibold)
+        HStack(spacing: 8) {
+            CompoundIcon(\.error, size: .medium, relativeTo: .compound.bodyMDSemibold)
                 .foregroundStyle(.compound.iconCriticalPrimary)
             
             VStack(alignment: .leading, spacing: 2) {

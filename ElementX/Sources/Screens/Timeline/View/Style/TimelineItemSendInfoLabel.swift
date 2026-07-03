@@ -13,9 +13,11 @@ extension View {
     /// Adds the send info (timestamp along indicators for edits and delivery/encryption issues) for the given timeline item to this view.
     func timelineItemSendInfo(timelineItem: EventBasedTimelineItemProtocol,
                               adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
+                              hasMediaScanFailure: Bool = false,
                               context: TimelineViewModel.Context) -> some View {
         modifier(TimelineItemSendInfoModifier(sendInfo: .init(timelineItem: timelineItem,
-                                                              adjustedDeliveryStatus: adjustedDeliveryStatus),
+                                                              adjustedDeliveryStatus: adjustedDeliveryStatus,
+                                                              hasMediaScanFailure: hasMediaScanFailure),
                                               context: context))
     }
 }
@@ -148,7 +150,9 @@ private struct TimelineItemSendInfo {
 }
 
 private extension TimelineItemSendInfo {
-    init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?) {
+    init(timelineItem: EventBasedTimelineItemProtocol,
+         adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
+         hasMediaScanFailure: Bool = false) {
         itemID = timelineItem.id
         localizedString = timelineItem.localizedSendInfo
         
@@ -162,29 +166,35 @@ private extension TimelineItemSendInfo {
             nil
         }
         
-        layoutType = switch timelineItem {
-        case is TextBasedRoomTimelineItem:
-            .overlay(capsuleStyle: false)
-        case let liveLocationTimelineItem as LiveLocationRoomTimelineItem:
-            liveLocationTimelineItem.layout
-        case let message as EventBasedMessageTimelineItemProtocol:
-            switch message {
-            case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
-                .overlay(capsuleStyle: !message.hasMediaCaption)
-            case is AudioRoomTimelineItem, is FileRoomTimelineItem:
-                // swiftlint:disable:next void_function_in_ternary
-                message.hasMediaCaption ? .overlay(capsuleStyle: false) : .horizontal(spacing: 0) // No spacing as the content already contains it.
-            case let locationTimelineItem as LocationRoomTimelineItem:
-                .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
+        layoutType = if hasMediaScanFailure {
+            // The content scanner failure placeholder replaces the media,
+            // so the send info is laid out like it is for a text message.
+            timelineItem.hasMediaCaption ? .overlay(capsuleStyle: false) : .horizontal()
+        } else {
+            switch timelineItem {
+            case is TextBasedRoomTimelineItem:
+                .overlay(capsuleStyle: false)
+            case let liveLocationTimelineItem as LiveLocationRoomTimelineItem:
+                liveLocationTimelineItem.layout
+            case let message as EventBasedMessageTimelineItemProtocol:
+                switch message {
+                case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
+                    .overlay(capsuleStyle: !message.hasMediaCaption)
+                case is AudioRoomTimelineItem, is FileRoomTimelineItem:
+                    // swiftlint:disable:next void_function_in_ternary
+                    message.hasMediaCaption ? .overlay(capsuleStyle: false) : .horizontal(spacing: 0) // No spacing as the content already contains it.
+                case let locationTimelineItem as LocationRoomTimelineItem:
+                    .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
+                default:
+                    .horizontal()
+                }
+            case is StickerRoomTimelineItem:
+                .overlay(capsuleStyle: true)
+            case is PollRoomTimelineItem:
+                .vertical(spacing: 16)
             default:
                 .horizontal()
             }
-        case is StickerRoomTimelineItem:
-            .overlay(capsuleStyle: true)
-        case is PollRoomTimelineItem:
-            .vertical(spacing: 16)
-        default:
-            .horizontal()
         }
     }
 }
