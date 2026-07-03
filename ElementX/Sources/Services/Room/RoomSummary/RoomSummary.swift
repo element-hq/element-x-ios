@@ -79,9 +79,10 @@ struct RoomSummary {
     /// visible joined member (`heroes`), no last message, and at most the local user
     /// (`activeMembersCount <= 1`) OR a single invited-but-never-joined peer (count 2 while `heroes`
     /// is still empty). A genuine conversation always has either a joined hero or a `lastMessage`, so
-    /// it is never hidden; a real invite keeps the inviter as a hero, so invites are never hidden.
+    /// it is never hidden. Rooms with a pending join request (an invite or knock) are never orphans:
+    /// they can look identical (no heroes/messages/members yet) but the user must see them to act.
     var isEmptyOrphanRoom: Bool {
-        heroes.isEmpty && lastMessage == nil && activeMembersCount <= 2
+        joinRequestType == nil && heroes.isEmpty && lastMessage == nil && activeMembersCount <= 2
     }
 }
 

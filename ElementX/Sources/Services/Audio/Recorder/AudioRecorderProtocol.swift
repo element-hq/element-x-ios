@@ -35,3 +35,6 @@ protocol AudioRecorderProtocol: AnyObject {
     func deleteRecording() async
     func averagePower() -> Float
 }
+
+// sourcery: AutoMockable
+extension AudioRecorderProtocol { }

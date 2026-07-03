@@ -47,3 +47,6 @@ protocol WindowManagerProtocol: AnyObject, OrientationManagerProtocol {
     
     func hideGlobalSearch()
 }
+
+// sourcery: AutoMockable
+extension WindowManagerProtocol { }

@@ -35,8 +35,9 @@ class RoomEventStringBuilderTests: XCTestCase {
         let ambiguousMessageString = stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@charlie:matrix.org",
                                                                                               senderDisplayName: "Charlie",
                                                                                               senderDisplayNameAmbiguous: true))
-        XCTAssertEqual(ambiguousMessageString?.string, "Charlie (@charlie:matrix.org): Hello, World!",
-                       "Messages from senders with ambiguous display names should include their user ID in the prefix.")
+        // GUA FORK: the disambiguation suffix uses `guaDisplayHandle`, which hides the homeserver.
+        XCTAssertEqual(ambiguousMessageString?.string, "Charlie (@charlie): Hello, World!",
+                       "Messages from senders with ambiguous display names should include their handle in the prefix.")
         
         let ownEmoteString = stringBuilder.buildAttributedString(for: makeMessageItem(senderID: ownUserID,
                                                                                       senderDisplayName: "Alice",

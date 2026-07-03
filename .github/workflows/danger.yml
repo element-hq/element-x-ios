@@ -2,23 +2,33 @@ name: Danger CI
 
 on:
   pull_request:
-    types: [ labeled, synchronize, opened, reopened ]
+    types: [labeled, synchronize, opened, reopened]
+
+permissions: {}
 
 jobs:
   build:
     name: Danger
-    runs-on: macos-15
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+
+    concurrency:
+      group: ${{ format('danger-ci-{0}', github.ref) }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
-      - name: Setup environment
-        run: 
-          brew install danger/tap/danger-swift swiftlint
-
+      # The dockerized action bundles a compatible danger-js runtime; the brew
+      # tap's packaged binary crashes fetching PR data (pkg snapshot stream bug).
       - name: Danger
-        run: 
-          danger-swift ci
-        env: 
+        uses: danger/swift@434d7c25f3b02d490a340b23f5e78dd15a5670bc # 3.22.1
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

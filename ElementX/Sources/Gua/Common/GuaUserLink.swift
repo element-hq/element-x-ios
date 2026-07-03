@@ -25,9 +25,10 @@ enum GuaUserLink {
         let localpart = userID.dropFirst().prefix { $0 != ":" }
         guard !localpart.isEmpty else { return nil }
 
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = GuaDeployment.current.linkHost
+        // The development link host can carry a port (e.g. "localhost:8008"). Parse the whole
+        // authority instead of assigning it to `URLComponents.host`, which rejects the colon
+        // and would yield a nil URL.
+        guard var components = URLComponents(string: "https://\(GuaDeployment.current.linkHost)") else { return nil }
         components.path = "/u/\(localpart)"
         return components.url
     }

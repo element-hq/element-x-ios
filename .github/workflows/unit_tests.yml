@@ -11,7 +11,7 @@ on:
 jobs:
   tests:
     name: Tests
-    runs-on: macos-15
+    runs-on: macos-26
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
@@ -31,14 +31,59 @@ jobs:
       - name: Setup environment
         run:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
-      
+
+      - name: Install iOS 18.6 simulator runtime
+        run: |
+          # The macos-26 image only ships iOS 26.x simulators, but the unit and
+          # preview tests are pinned to iOS 18.6 (the committed snapshots were
+          # recorded on that runtime, enforced by PreviewTests.checkEnvironments).
+          if ! xcrun simctl list runtimes | grep -q "iOS 18.6"; then
+            xcodebuild -downloadPlatform iOS -buildVersion 18.6
+          fi
+          RUNTIME_ID=$(xcrun simctl list -j runtimes | jq -r '.runtimes[] | select(.identifier | startswith("com.apple.CoreSimulator.SimRuntime.iOS-18-6")) | .identifier' | head -n 1)
+          if [ -z "$RUNTIME_ID" ]; then
+            echo "The iOS 18.6 simulator runtime is not available." >&2
+            xcrun simctl list runtimes >&2
+            exit 1
+          fi
+          ensure_device() {
+            if ! xcrun simctl list -j devices | jq -e --arg rt "$RUNTIME_ID" --arg name "$1" '.devices[$rt] // [] | map(select(.name == $name)) | length > 0' > /dev/null; then
+              xcrun simctl create "$1" "$2" "$RUNTIME_ID"
+            fi
+          }
+          ensure_device "iPhone 16" "com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+          ensure_device "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
+          xcrun simctl list devices "iOS 18.6"
+
       - name: SwiftFormat
         run:
           swiftformat --lint .
       
       - name: Run tests
         run: bundle exec fastlane unit_tests
-        
+
+      - name: Collect recorded snapshots # TEMPORARY: remove together with the RECORD_FAILURES test plan change
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p recorded-snapshots
+          git status --porcelain -- PreviewTests/Sources/__Snapshots__ | tee recorded-snapshots/status.txt
+          git status --porcelain -z -- PreviewTests/Sources/__Snapshots__ | while IFS= read -r -d '' entry; do
+            path="${entry:3}"
+            if [ -f "$path" ]; then
+              mkdir -p "recorded-snapshots/$(dirname "$path")"
+              cp "$path" "recorded-snapshots/$path"
+            fi
+          done
+
+      - name: Upload recorded snapshots # TEMPORARY: remove together with the RECORD_FAILURES test plan change
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: RecordedSnapshots
+          path: recorded-snapshots
+          retention-days: 1
+          if-no-files-found: warn
+
       - name: Zip results # for faster upload
         if: failure()
         working-directory: fastlane/test_output
@@ -62,16 +107,24 @@ jobs:
       - name: Upload coverage to Codecov
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }} # Skip in forks
         uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
+        continue-on-error: true # No CODECOV_TOKEN is configured for this repo yet; don't block CI on upload issues.
         with:
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unittests
 
       - name: Collect test results
         if: ${{ !cancelled() }}
         run: |
-          xcresultparser -q -o junit -p $(pwd) fastlane/test_output/UnitTests.xcresult > fastlane/test_output/unit-junit.xml
-          xcresultparser -q -o junit -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-junit.xml
+          # A result bundle can be missing when the test step aborts early (e.g. failing unit
+          # tests stop the lane before the preview tests run). Only parse what exists so this
+          # step doesn't mask the real failure with an xcresultparser error.
+          if [ -d fastlane/test_output/UnitTests.xcresult ]; then
+            xcresultparser -q -o junit -p $(pwd) fastlane/test_output/UnitTests.xcresult > fastlane/test_output/unit-junit.xml
+          fi
+          if [ -d fastlane/test_output/PreviewTests.xcresult ]; then
+            xcresultparser -q -o junit -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-junit.xml
+          fi
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}

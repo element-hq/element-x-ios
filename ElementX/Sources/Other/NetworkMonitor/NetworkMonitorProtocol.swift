@@ -15,3 +15,6 @@ enum NetworkMonitorReachability {
 protocol NetworkMonitorProtocol {
     var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
 }
+
+// sourcery: AutoMockable
+extension NetworkMonitorProtocol { }

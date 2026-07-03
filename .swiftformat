@@ -6,6 +6,9 @@
 --disable hoistPatternLet
 --disable preferForLoop
 --disable consistentSwitchCaseSpacing
+# Keep `// sourcery: AutoMockable` empty extensions — emptyExtensions strips them,
+# which silently drops the generated mocks and breaks the build (regression from #21).
+--disable emptyExtensions
 
 --commas inline
 --ifdef no-indent

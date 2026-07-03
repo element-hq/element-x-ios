@@ -21,6 +21,7 @@ lane :unit_tests do |options|
   reset_simulator = ENV.key?('CI')
   
   run_tests(
+    project: "./Gua.xcodeproj",
     scheme: "UnitTests",
     device: ENV.fetch("UNIT_TEST_DEVICE", "iPhone 16 (18.6)"),
     ensure_devices_found: true,
@@ -31,8 +32,9 @@ lane :unit_tests do |options|
   
   if !options[:skip_previews]
     run_tests(
+      project: "./Gua.xcodeproj",
       scheme: "PreviewTests",
-      device: ENV.fetch("PREVIEW_TEST_DEVICE", "iPhone SE (3rd generation) (18.5)"),
+      device: ENV.fetch("PREVIEW_TEST_DEVICE", "iPhone SE (3rd generation) (18.6)"),
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,

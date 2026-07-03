@@ -7,91 +7,72 @@
   <h1>Gua for iOS</h1>
 </div>
 
-**Gua** is a private, phone-number-based messaging app for iOS, built on top of [Matrix](https://matrix.org/).
+**Gua** is a private messenger built on the open [Matrix](https://matrix.org/) protocol. It pairs an end-to-end encrypted, federated network with the simplicity people expect from a mainstream messaging app: sign in with something you already have, find your friends privately, and start talking. Sign-in is deliberately simple: it is phone-based by default today, and the account model is designed to stay flexible, including institutional SSO for organizations that bring their own identity.
 
-This repository is Gua-ra's fork of [`element-hq/element-x-ios`](https://github.com/element-hq/element-x-ios) (Element X iOS). The Gua app replaces Element's brand and login flow with Gua's frictionless onboarding (phone-OTP + PIN default), backed by the [Gua Identity Service](https://github.com/Gua-ra/identity-service).
-
----
-
-## What's different from upstream Element X
-
-| Area | Upstream (Element X) | Gua |
-|---|---|---|
-| Brand | Element / New Vector | Gua |
-| Login flow | Matrix password / SSO | Custom SSO options or/and Phone number → OTP → PIN (via Gua Identity Service + MAS) |
-| OIDC provider | element.io | Gua Identity Service (`gua-ios` client, PKCE-required) |
-| Consent screen | shown for every login | skipped, handled by [`gua-auth-service`](https://github.com/Gua-ra/gua-auth-service) config |
-| Two-step verification | device verification | Account PIN (set, change with OTP cooldown, reset) |
-| Account deactivation | standard Matrix | Gua-specific reauth (phone OTP) gate |
-| Settings identity | full Matrix ID `@alice:dev.local` | localpart only (`alice`) — homeserver hidden/abstracted from user |
-| App-lock PIN | "PIN" | "passcode" — renamed to disambiguate from the account two-step PIN |
-| Encryption settings | advanced controls shown | hidden by default (`guaHidesAdvancedEncryption`); E2EE stays on with safe defaults (key storage + recovery) |
-| Client logo | element.io icon | Gua icon (shown in MAS "Where you're signed in") |
-
-
-### Login session handling
-
-The OIDC web-auth session uses `prefersEphemeralWebBrowserSession = true` and
-requests `prompt: .login`, so every login performs a fresh upstream
-authentication (phone → OTP) instead of silently reusing a cached MAS browser
-session. Consent is skipped server-side by the `gua-auth-service` fork, keeping
-the flow frictionless without short-circuiting identity resolution.
-
-The account PIN entered during onboarding is validated against the same strength
-rules as the server (`PinSetupScreenViewModel.isWeak` mirrors the identity
-service's `PinPolicy`: no repeated, sequential, or common 6-digit PINs).
-
+This repository is the Gua iOS client. It began as a fork of [`element-hq/element-x-ios`](https://github.com/element-hq/element-x-ios) and keeps its Matrix core (Matrix Rust SDK, timelines, calls, encryption) while adding a Gua product layer that spans routing, onboarding, account security, contact discovery, and the day-to-day experience.
 
 ---
+
+## The Gua product layer
+
+- **Trusted-federation routing.** Sign-in starts at the Gua resolver, which answers where in the closed Gua federation an account lives (sign-in) or should be created (registration). The client then authenticates against that server. Users never pick, type, or see a server name.
+- **Homeserver abstraction.** Server details stay out of the product: people appear as simple usernames rather than full Matrix IDs, and the homeserver behind an account is an implementation detail, not part of a user's identity.
+- **Simplified onboarding.** A native welcome and sign-in flow: enter a phone number, confirm a one-time code, set up a profile, and secure the account, all inside the app. Under the hood the client authenticates over OIDC (authorization code + PKCE) against a Matrix Authentication Service that delegates identity to the Gua identity service.
+- **Two-step verification (account PIN).** A six-digit account PIN is the account's second factor: set during onboarding, required for sensitive operations, and changeable or resettable with verification. The client mirrors the server's PIN strength policy (no repeated, sequential, or common PINs).
+- **Private contact discovery.** Find Friends shows which of your contacts are already on Gua. It runs only with address-book permission, normalizes numbers on the device, and looks up matches in capped batches; the address book itself never leaves the phone.
+- **Phone-number management.** The number linked to an account can be changed from Settings, verified with a one-time code sent to the new number plus the account PIN as the second factor.
+- **Welcome experience.** A polished, localized welcome screen (en, fr, es, pt, pt-BR) with the animated glass Gua logo.
+- **Safe defaults.** End-to-end encryption stays on with sensible defaults while advanced encryption controls are hidden; the app-lock code is called a passcode so it is never confused with the account PIN.
 
 ## Architecture
 
 ```
 Gua iOS app
-    │  OIDC authorization-code + PKCE
+    |  1. resolver lookup: which homeserver serves this account?
     ▼
-Matrix Authentication Service (Gua fork — gua-auth-service)
-    │  upstream OIDC (phone → OTP → PIN)
+Gua resolver
+    |  2. OIDC authorization code + PKCE against the resolved server
     ▼
-Gua Identity Service (Spring Boot)
-    │  Matrix admin API
+Matrix Authentication Service (gua-auth-service)
+    |  3. delegated sign-in (phone + one-time code + PIN today, SSO-capable)
     ▼
-Synapse homeserver
+Gua Identity Service
+    |
+    ▼
+Matrix homeserver in the Gua federation
 ```
 
-- The iOS app registers as OIDC client `gua-ios` (public, PKCE-required) against MAS.
-- MAS delegates login to the Gua Identity Service via an upstream OIDC provider.
-- The Gua Identity Service implements the phone → OTP → PIN flow and issues JWTs.
-- The consent screen ("Continue to {client}?") is suppressed by the `gua-auth-service` fork via `gua.skip_consent_client_ids`.
+- The resolver answers "where does this account live?" so the client stays universal and account placement remains a backend concern.
+- [`gua-auth-service`](https://github.com/Gua-ra/gua-auth-service) is Gua's Matrix Authentication Service; it skips the consent interstitial for first-party clients and delegates identity upstream.
+- The [Gua Identity Service](https://github.com/Gua-ra/identity-service) implements verification codes, the account PIN, contact lookup, and phone-number changes.
+- Every sign-in performs a fresh upstream authentication (ephemeral web session, `prompt=login`), so a cached browser session never bypasses verification.
 
 ---
 
 ## Building
 
-Requirements: **Xcode 16+**, **iOS 17+ simulator or device**.
+Requirements: **Xcode 26.5** and an iOS simulator (iOS 17.5 or newer).
 
 ```bash
-# Clone with submodules (Matrix Rust SDK swift package resolves via SPM)
-git clone --recurse-submodules git@github.com:Gua-ra/gua-ios.git
+git clone git@github.com:Gua-ra/gua-ios.git
 cd gua-ios
-open ElementX.xcworkspace
+open Gua.xcodeproj
 ```
 
-Select the **Gua** scheme and build. The app connects to the Gua backend; for local development point `ServiceLocator` at your local identity-service instance.
+Select the **Gua** scheme and run. Open `Gua.xcodeproj`; the `ElementX.xcodeproj` next to it is an upstream leftover scheduled for removal.
 
-See the upstream [contribution guide](CONTRIBUTING.md) for full environment setup, code-generation steps, and testing instructions.
+Things to know:
+
+- **Secrets.** `Secrets/Secrets.swift` is committed with placeholder values (localhost development endpoints and dummy analytics keys) so the project always compiles. Debug builds read the development backend endpoints from this file; point them at your own backend locally and keep those edits out of your commits. Release builds use the production configuration instead.
+- **Project generation.** The Xcode project is generated from `project.yml` / `app.yml` with XcodeGen; if you change project configuration, run `xcodegen` and rebuild.
+- **Forking.** Bundle identifiers, app groups, team configuration, and the OIDC client requirements are covered in [docs/FORKING.md](docs/FORKING.md).
+- **Everything else.** Code generation, tests, and tooling are described in the [contribution guide](CONTRIBUTING.md).
 
 ---
 
 ## Upstream relationship
 
-This repository tracks [`element-hq/element-x-ios`](https://github.com/element-hq/element-x-ios). To pull upstream changes:
-
-```bash
-git fetch upstream
-git merge upstream/develop   # or the relevant release tag
-# Resolve conflicts, then push
-```
+This fork tracks [`element-hq/element-x-ios`](https://github.com/element-hq/element-x-ios) as its upstream but does not share git history with it. Catching up with upstream means re-porting Gua's changes onto a new upstream snapshot rather than running `git merge`. See [docs/FORKING.md](docs/FORKING.md) for the fork configuration itself.
 
 ---
 
@@ -100,6 +81,6 @@ git merge upstream/develop   # or the relevant release tag
 Copyright (c) 2022-2025 New Vector Ltd (upstream code)
 Copyright (c) 2025 Gua (Gua modifications)
 
-Licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) — see [LICENSE](LICENSE).
+Licensed under the GNU Affero General Public License v3.0 (AGPL-3.0), see [LICENSE](LICENSE).
 
 Alternatively available under a paid Element Commercial License for the upstream portions; see [LICENSE-COMMERCIAL](LICENSE-COMMERCIAL) if applicable.
