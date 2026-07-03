@@ -1,13 +1,10 @@
 [![Element iOS Matrix room #element-x-ios:matrix.org](https://img.shields.io/matrix/element-x-ios:matrix.org.svg?label=%23element-x-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-ios:matrix.org)
 ![GitHub](https://img.shields.io/github/license/element-hq/element-x-ios)
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/element-hq/element-x-ios/unit_tests.yml?style=flat-square)
+![Build Status](https://img.shields.io/github/actions/workflow/status/element-hq/element-x-ios/unit-tests.yml)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/element-hq/element-x-ios)
 
 [![codecov](https://codecov.io/gh/element-hq/element-x-ios/branch/develop/graph/badge.svg?token=AVIJB2MJU2)](https://codecov.io/gh/element-hq/element-x-ios)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
 
 # Element X iOS
 
