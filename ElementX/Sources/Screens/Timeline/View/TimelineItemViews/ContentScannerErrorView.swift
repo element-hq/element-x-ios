@@ -31,7 +31,6 @@ struct ContentScannerErrorView: View {
                     .font(.compound.bodySM)
                     .foregroundStyle(.compound.textSecondary)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     
