@@ -1,12 +1,10 @@
 ![](https://github.com/user-attachments/assets/054e40c6-e796-4c6b-9700-7b7c3c4bfc18)
 
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Gua-ra/gua-branding/refs/heads/main/logos/gua-logo-transparent.png" alt="Gua Logo" width="200"/>
-</p>
-
 <div align="center">
-    <h1>Gua for iOS</h1>
+  
+  ![Gua Logo](https://github.com/user-attachments/assets/33d5300f-24ac-42fe-84c2-37ca84920bd1)
+  
+  <h1>Gua for iOS</h1>
 </div>
 
 **Gua** is a private, phone-number-based messaging app for iOS, built on top of [Matrix](https://matrix.org/).
