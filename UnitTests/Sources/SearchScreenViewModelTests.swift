@@ -22,9 +22,11 @@ struct SearchScreenViewModelTests {
         searchService.underlyingPaginationStatePublisher = CurrentValueSubject(.idle(endReached: true)).asCurrentValuePublisher()
         searchService.setQueryReturnValue = .success(())
         
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.searchService = searchService
+        
         viewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                          searchService: searchService,
-                                          clientProxy: ClientProxyMock(.init()),
+                                          clientProxy: clientProxy,
                                           mediaProvider: MediaProviderMock(.init()))
     }
     

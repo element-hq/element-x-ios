@@ -267,7 +267,7 @@ private struct SearchScreenRoomCell: View {
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
-                            avatarSize: .room(on: .globalSearch),
+                            avatarSize: .room(on: .search),
                             mediaProvider: context.mediaProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
@@ -338,7 +338,7 @@ private struct SearchScreenMessageCell: View {
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: message.roomAvatar,
-                            avatarSize: .room(on: .globalSearch),
+                            avatarSize: .room(on: .search),
                             mediaProvider: context.mediaProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
@@ -350,12 +350,10 @@ private struct SearchScreenMediaPreviewView: View {
     let preview: SearchScreenMediaPreview
     let mediaProvider: MediaProviderProtocol?
     
-    private static let mediaSize: CGFloat = 36
-    
     var body: some View {
         HStack(spacing: 8) {
             media
-                .frame(width: Self.mediaSize, height: Self.mediaSize)
+                .scaledFrame(width: 36, height: 36)
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(preview.title)
@@ -390,9 +388,9 @@ private struct SearchScreenMediaPreviewView: View {
     }
     
     private func icon(_ icon: KeyPath<CompoundIcons, Image>) -> some View {
-        CompoundIcon(icon, size: .medium, relativeTo: .body)
+        CompoundIcon(icon)
             .foregroundStyle(.compound.iconPrimary)
-            .frame(width: Self.mediaSize, height: Self.mediaSize)
+            .scaledFrame(width: 36, height: 36)
             .background(.compound.iconOnSolidPrimary,
                         in: RoundedRectangle(cornerRadius: 4, style: .continuous))
     }
@@ -470,48 +468,26 @@ private final class KeyNavigatingSearchTextField: UISearchTextField {
 
 struct SearchScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                      searchService: makeSearchService(),
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()))
     static let noResultsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                          searchService: makeSearchService(),
                                                           clientProxy: makeClientProxy(),
                                                           mediaProvider: MediaProviderMock(.init()),
                                                           initialSearchQuery: "John Doe")
     static let roomsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                      searchService: makeSearchService(),
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()),
                                                       initialSearchQuery: "Foundation")
     static let messagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                         searchService: makeSearchService(results: .mockResults),
-                                                         clientProxy: makeClientProxy(),
+                                                         clientProxy: makeClientProxy(searchService: makeSearchService(results: .mockResults)),
                                                          mediaProvider: MediaProviderMock(.init()),
                                                          initialSearchQuery: "Foundation",
                                                          initialSearchMode: .messages)
     static let loadingMessagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                                searchService: makeSearchService(paginationState: .loading),
-                                                                clientProxy: makeClientProxy(),
+                                                                clientProxy: makeClientProxy(searchService: makeSearchService(paginationState: .loading)),
                                                                 mediaProvider: MediaProviderMock(.init()),
                                                                 initialSearchQuery: "Foundation",
                                                                 initialSearchMode: .messages)
-    
-    private static func makeSearchService(results: [SearchServiceResult] = [], paginationState: SearchServicePaginationState = .idle(endReached: true)) -> SearchServiceProxyMock {
-        let mock = SearchServiceProxyMock()
-        mock.underlyingResultsPublisher = CurrentValueSubject<[SearchServiceResult], Never>(results).asCurrentValuePublisher()
-        mock.underlyingPaginationStatePublisher = CurrentValueSubject(paginationState).asCurrentValuePublisher()
-        mock.setQueryReturnValue = .success(())
-        return mock
-    }
-    
-    private static func makeClientProxy() -> ClientProxyMock {
-        let mock = ClientProxyMock(.init(userID: "@alice:matrix.org"))
-        let names: [String: String] = ["!room1:matrix.org": "Alice", "!room2:matrix.org": "Bob", "!room3:matrix.org": "Coline",
-                                       "!room4:matrix.org": "Bob", "!room5:matrix.org": "Office", "!room6:matrix.org": "Data analytics",
-                                       "!room7:matrix.org": "Alice", "!room8:matrix.org": "Bob", "!room9:matrix.org": "Coline"]
-        mock.roomSummaryForIdentifierClosure = { id in .mock(id: id, name: names[id] ?? id) }
-        return mock
-    }
     
     static var previews: some View {
         ElementNavigationStack {
@@ -538,6 +514,24 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
             SearchScreen(context: loadingMessagesViewModel.context)
         }
         .previewDisplayName("Loading messages")
+    }
+    
+    private static func makeSearchService(results: [SearchServiceResult] = [], paginationState: SearchServicePaginationState = .idle(endReached: true)) -> SearchServiceProxyMock {
+        let mock = SearchServiceProxyMock()
+        mock.underlyingResultsPublisher = CurrentValueSubject<[SearchServiceResult], Never>(results).asCurrentValuePublisher()
+        mock.underlyingPaginationStatePublisher = CurrentValueSubject(paginationState).asCurrentValuePublisher()
+        mock.setQueryReturnValue = .success(())
+        return mock
+    }
+    
+    private static func makeClientProxy(searchService: SearchServiceProxyMock = makeSearchService()) -> ClientProxyMock {
+        let mock = ClientProxyMock(.init(userID: "@alice:matrix.org"))
+        mock.searchService = searchService
+        let names: [String: String] = ["!room1:matrix.org": "Alice", "!room2:matrix.org": "Bob", "!room3:matrix.org": "Coline",
+                                       "!room4:matrix.org": "Bob", "!room5:matrix.org": "Office", "!room6:matrix.org": "Data analytics",
+                                       "!room7:matrix.org": "Alice", "!room8:matrix.org": "Bob", "!room9:matrix.org": "Coline"]
+        mock.roomSummaryForIdentifierClosure = { id in .mock(id: id, name: names[id] ?? id) }
+        return mock
     }
 }
 

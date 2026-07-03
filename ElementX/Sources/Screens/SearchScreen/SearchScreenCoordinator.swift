@@ -10,7 +10,6 @@ import SwiftUI
 
 struct SearchScreenCoordinatorParameters {
     let roomSummaryProvider: RoomSummaryProviderProtocol
-    let searchService: SearchServiceProxyProtocol
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }
@@ -32,7 +31,6 @@ final class SearchScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: SearchScreenCoordinatorParameters) {
         viewModel = SearchScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
-                                          searchService: parameters.searchService,
                                           clientProxy: parameters.clientProxy,
                                           mediaProvider: parameters.mediaProvider)
     }
