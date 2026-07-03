@@ -20,7 +20,7 @@ struct ContentScannerServiceTests {
         #expect(service.scanResultFromSource(source) == nil, "A source should not have a verdict before being scanned.")
         
         let result = await service.loadScanResultFromSource(source)
-        #expect(try result.get() == true) // swiftlint:disable:this force_try
+        #expect(try result.get() == true)
         
         #expect(service.scanResultFromSource(source) == true)
         
@@ -37,7 +37,7 @@ struct ContentScannerServiceTests {
         let source = makeSource("1")
         
         let result = await service.loadScanResultFromSource(source)
-        #expect(try result.get() == false) // swiftlint:disable:this force_try
+        #expect(try result.get() == false)
         
         #expect(service.scanResultFromSource(source) == false)
         
@@ -79,7 +79,7 @@ struct ContentScannerServiceTests {
         proxy.scanMediaSourceReturnValue = .success(true)
         result = await service.loadScanResultFromSource(source)
         
-        #expect(try result.get() == true) // swiftlint:disable:this force_try
+        #expect(try result.get() == true)
         #expect(proxy.scanMediaSourceCallsCount == 2)
     }
     

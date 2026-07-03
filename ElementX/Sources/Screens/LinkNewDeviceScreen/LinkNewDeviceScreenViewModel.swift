@@ -80,7 +80,7 @@ class LinkNewDeviceScreenViewModel: LinkNewDeviceScreenViewModelType, LinkNewDev
             state.mode = .readyToLink(.idle)
             return
         case .error:
-            // TODO: Failure UX is pending product confirmation; using the generic error state for now.
+            // TODO: @pixlwave Failure UX is pending product confirmation; using the generic error state for now.
             state.mode = .error(.unknown)
             return
         }
