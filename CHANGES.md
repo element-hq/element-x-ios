@@ -1,3 +1,26 @@
+## Changes in 26.07.1 (2026-07-03)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix voice message recording crashes caused by an isolation assertion failure by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5820
+* Stop reserving space for the non-existant icon background in ListRowLabel on iOS 26. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5822
+
+🦻 Accessibility
+* Fix AccessibilityTests hang on previews expecting expired transient state by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5821
+
+🧱 Build
+* Remove Hyperion from the Compound Inspector app. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5828
+
+🚧 In development 🚧
+* Make LinkNewDeviceScreen fall back to the App Lock PIN code when there's no passcode. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5794
+* Add the content scanner URL to the app settings by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5823
+* User Status preparation. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5825
+* Content Scanner Service by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5826
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.07.0...release/26.07.1
+
 ## Changes in 26.07.0 (2026-06-30)
 
 ### What's Changed
