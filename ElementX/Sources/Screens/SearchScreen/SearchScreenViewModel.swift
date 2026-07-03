@@ -135,7 +135,8 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         } else {
             roomSummaryProvider.setFilter(.search(query: searchQuery))
             setQueryTask = Task { [weak self] in
-                await self?.searchService.setQuery(searchQuery)
+                // TODO: @stefanceriu Surface set query errors
+                _ = await self?.searchService.setQuery(searchQuery)
             }
         }
     }
