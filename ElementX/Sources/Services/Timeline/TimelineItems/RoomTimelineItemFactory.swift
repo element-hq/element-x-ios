@@ -25,6 +25,8 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         self.stateEventStringBuilder = stateEventStringBuilder
     }
     
+    // MARK: - Public
+    
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool) -> RoomTimelineItemProtocol? {
         let isOutgoing = eventItemProxy.isOwn
         
@@ -73,6 +75,83 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildCallNotificationTimelineItem(for: eventItemProxy, isDM: isDM, callIntent: callIntent, declinedBy: declinedBy)
         }
     }
+    
+    func buildTimelineItemReply(_ details: MatrixRustSDK.InReplyToDetails) -> TimelineItemReply {
+        let isThreaded = details.event().isThreaded
+        switch details.event() {
+        case .unavailable:
+            return .init(details: .notLoaded(eventID: details.eventId()), isThreaded: isThreaded)
+        case .pending:
+            return .init(details: .loading(eventID: details.eventId()), isThreaded: isThreaded)
+        case let .ready(timelineItem, senderID, senderProfile, _, _):
+            let sender = TimelineItemSender(senderID: senderID, senderProfile: senderProfile)
+            
+            let replyContent: TimelineEventContent
+            
+            switch timelineItem {
+            case .msgLike(let messageLikeContent):
+                switch messageLikeContent.kind {
+                case .message(let messageContent):
+                    let replyContent = buildMessageTimelineItemContent(messageType: messageContent.msgType,
+                                                                       senderID: sender.id,
+                                                                       senderDisplayName: sender.displayName)
+                    return .init(details: .loaded(sender: sender,
+                                                  eventID: details.eventId(),
+                                                  eventContent: .message(replyContent)),
+                                 isThreaded: isThreaded)
+                case .poll(let question, _, _, _, _, _, _):
+                    replyContent = .poll(question: question)
+                case .sticker(let body, _, _):
+                    replyContent = .message(.text(.init(body: body)))
+                case .redacted:
+                    replyContent = .redacted
+                case .liveLocation:
+                    replyContent = .liveLocation
+                default:
+                    replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
+                }
+            default:
+                replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
+            }
+            
+            return .init(details: .loaded(sender: sender, eventID: details.eventId(), eventContent: replyContent), isThreaded: isThreaded)
+        case let .error(message):
+            return .init(details: .error(eventID: details.eventId(), message: message), isThreaded: isThreaded)
+        }
+    }
+    
+    func buildMessageTimelineItemContent(messageType: MessageType?, senderID: String, senderDisplayName: String?) -> EventBasedMessageTimelineItemContentType {
+        switch messageType {
+        case .audio(let content):
+            if content.voice != nil {
+                .voice(buildAudioTimelineItemContent(content))
+            } else {
+                .audio(buildAudioTimelineItemContent(content))
+            }
+        case .emote(let content):
+            .emote(buildEmoteTimelineItemContent(senderDisplayName: senderDisplayName, senderID: senderID, messageContent: content))
+        case .file(let content):
+            .file(buildFileTimelineItemContent(content))
+        case .image(let content):
+            .image(buildImageTimelineItemContent(content))
+        case .notice(let content):
+            .notice(buildNoticeTimelineItemContent(content))
+        case .text(let content):
+            .text(buildTextTimelineItemContent(content))
+        case .video(let content):
+            .video(buildVideoTimelineItemContent(content))
+        case .location(let content):
+            .location(buildLocationTimelineItemContent(content))
+        case .gallery(let content):
+            .text(.init(body: content.body))
+        case .other(_, let body):
+            .text(.init(body: body))
+        case .none:
+            .text(.init(body: L10n.commonUnsupportedEvent))
+        }
+    }
+    
+    // MARK: - Private
     
     // MARK: - MsgLike Events
     
@@ -847,83 +926,6 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return buildTimelineItemReply(details).details
-    }
-    
-    func buildTimelineItemReply(_ details: MatrixRustSDK.InReplyToDetails) -> TimelineItemReply {
-        let isThreaded = details.event().isThreaded
-        switch details.event() {
-        case .unavailable:
-            return .init(details: .notLoaded(eventID: details.eventId()), isThreaded: isThreaded)
-        case .pending:
-            return .init(details: .loading(eventID: details.eventId()), isThreaded: isThreaded)
-        case let .ready(timelineItem, senderID, senderProfile, _, _):
-            let sender = TimelineItemSender(senderID: senderID, senderProfile: senderProfile)
-            
-            let replyContent: TimelineEventContent
-            
-            switch timelineItem {
-            case .msgLike(let messageLikeContent):
-                switch messageLikeContent.kind {
-                case .message(let messageContent):
-                    let replyContent = buildMessageTimelineItemContent(messageType: messageContent.msgType,
-                                                                       senderID: sender.id,
-                                                                       senderDisplayName: sender.displayName)
-                    return .init(details: .loaded(sender: sender,
-                                                  eventID: details.eventId(),
-                                                  eventContent: .message(replyContent)),
-                                 isThreaded: isThreaded)
-                case .poll(let question, _, _, _, _, _, _):
-                    replyContent = .poll(question: question)
-                case .sticker(let body, _, _):
-                    replyContent = .message(.text(.init(body: body)))
-                case .redacted:
-                    replyContent = .redacted
-                case .liveLocation:
-                    replyContent = .liveLocation
-                default:
-                    replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
-                }
-            default:
-                replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
-            }
-            
-            return .init(details: .loaded(sender: sender, eventID: details.eventId(), eventContent: replyContent), isThreaded: isThreaded)
-        case let .error(message):
-            return .init(details: .error(eventID: details.eventId(), message: message), isThreaded: isThreaded)
-        }
-    }
-    
-    // MARK: - Helpers
-    
-    func buildMessageTimelineItemContent(messageType: MessageType?, senderID: String, senderDisplayName: String?) -> EventBasedMessageTimelineItemContentType {
-        switch messageType {
-        case .audio(let content):
-            if content.voice != nil {
-                .voice(buildAudioTimelineItemContent(content))
-            } else {
-                .audio(buildAudioTimelineItemContent(content))
-            }
-        case .emote(let content):
-            .emote(buildEmoteTimelineItemContent(senderDisplayName: senderDisplayName, senderID: senderID, messageContent: content))
-        case .file(let content):
-            .file(buildFileTimelineItemContent(content))
-        case .image(let content):
-            .image(buildImageTimelineItemContent(content))
-        case .notice(let content):
-            .notice(buildNoticeTimelineItemContent(content))
-        case .text(let content):
-            .text(buildTextTimelineItemContent(content))
-        case .video(let content):
-            .video(buildVideoTimelineItemContent(content))
-        case .location(let content):
-            .location(buildLocationTimelineItemContent(content))
-        case .gallery(let content):
-            .text(.init(body: content.body))
-        case .other(_, let body):
-            .text(.init(body: body))
-        case .none:
-            .text(.init(body: L10n.commonUnsupportedEvent))
-        }
     }
 }
 
