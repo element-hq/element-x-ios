@@ -71,7 +71,7 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
         for update in updates {
             switch update {
             case .append(let values):
-                results.append(contentsOf: values.compactMap { self.makeResult($0) })
+                results.append(contentsOf: values.compactMap(makeResult))
             case .clear:
                 results.removeAll()
             case .pushFront(let value):
@@ -99,7 +99,7 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
             case .truncate(let length):
                 results.removeSubrange(Int(length)..<results.count)
             case .reset(let values):
-                results = values.compactMap { self.makeResult($0) }
+                results = values.compactMap(makeResult)
             }
         }
         
@@ -128,10 +128,10 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
                 case .liveLocation:
                     content = .liveLocation
                 default:
-                    content = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
+                    return nil
                 }
             default:
-                content = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
+                return nil
             }
             
             return SearchServiceResult(roomID: roomID,
