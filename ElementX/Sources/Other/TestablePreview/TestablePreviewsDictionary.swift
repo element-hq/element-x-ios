@@ -33,7 +33,7 @@ enum TestablePreviewsDictionary {
             "CollapsibleRoomTimelineView_Previews" : CollapsibleRoomTimelineView_Previews.self,
             "CompletionSuggestion_Previews" : CompletionSuggestion_Previews.self,
             "ComposerToolbar_Previews" : ComposerToolbar_Previews.self,
-            "ContentScannerErrorView_Previews" : ContentScannerErrorView_Previews.self,
+            "ContentScanningFailureView_Previews" : ContentScanningFailureView_Previews.self,
             "CopyTextButton_Previews" : CopyTextButton_Previews.self,
             "CreateRoomSpaceSelectionSheet_Previews" : CreateRoomSpaceSelectionSheet_Previews.self,
             "CreateRoom_Previews" : CreateRoom_Previews.self,

@@ -19,11 +19,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder let content: () -> Content
     
     /// Whether the item's media failed content scanning, in which case the whole bubble adopts
-    /// the critical styling. Reported by the item's `MediaView` through the preference key.
-    @State private var mediaScanFailure: MediaScanFailure?
+    /// the critical styling. Reported by the item's `ContentScanningView` through the preference key.
+    @State private var contentScanningFailure: ContentScanningFailure?
     
-    private var hasMediaScanFailure: Bool {
-        mediaScanFailure != nil
+    private var hasContentScanningFailure: Bool {
+        contentScanningFailure != nil
     }
     
     private var isDM: Bool {
@@ -86,7 +86,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
         .padding(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
         .highlightedTimelineItem(isFocussed)
-        .onPreferenceChange(MediaScanFailurePreferenceKey.self) { mediaScanFailure = $0 }
+        .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
     }
     
     @ViewBuilder
@@ -190,12 +190,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         contentWithReply
             .timelineItemSendInfo(timelineItem: timelineItem,
                                   adjustedDeliveryStatus: adjustedDeliveryStatus,
-                                  hasMediaScanFailure: hasMediaScanFailure,
+                                  hasContentScanningFailure: hasContentScanningFailure,
                                   context: context)
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
-                              insets: timelineItem.bubbleInsets(hasMediaScanFailure: hasMediaScanFailure),
-                              color: hasMediaScanFailure ? .compound.bgCriticalSubtle : timelineItem.bubbleBackgroundColor,
-                              borderColor: hasMediaScanFailure ? .compound.borderCriticalSubtle : nil)
+                              insets: timelineItem.bubbleInsets(hasContentScanningFailure: hasContentScanningFailure),
+                              color: hasContentScanningFailure ? .compound.bgCriticalSubtle : timelineItem.bubbleBackgroundColor,
+                              borderColor: hasContentScanningFailure ? .compound.borderCriticalSubtle : nil)
     }
     
     var contentWithReply: some View {
@@ -261,11 +261,11 @@ private extension EventBasedTimelineItemProtocol {
     
     /// The insets for the full bubble content.
     /// Padding affecting just the "send info" should be added inside `TimelineItemSendInfoView`
-    func bubbleInsets(hasMediaScanFailure: Bool) -> EdgeInsets {
+    func bubbleInsets(hasContentScanningFailure: Bool) -> EdgeInsets {
         let defaultInsets: EdgeInsets = .init(around: 8)
         
         // The content scanner failure placeholder is always rendered inset within the critical bubble.
-        if hasMediaScanFailure {
+        if hasContentScanningFailure {
             return defaultInsets
         }
         

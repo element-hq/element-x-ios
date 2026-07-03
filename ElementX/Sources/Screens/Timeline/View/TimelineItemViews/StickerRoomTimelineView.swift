@@ -15,8 +15,8 @@ struct StickerRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            MediaView(contentScannerService: context?.contentScannerService,
-                      mediaSource: timelineItem.imageInfo.source) {
+            ContentScanningView(contentScannerService: context?.contentScannerService,
+                                mediaSource: timelineItem.imageInfo.source) {
                 LoadableImage(mediaSource: timelineItem.imageInfo.source,
                               mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID),
                               blurhash: timelineItem.blurhash,
@@ -30,12 +30,12 @@ struct StickerRoomTimelineView: View {
                 .onTapGesture {
                     context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                 }
-            } scanningContent: {
+            } loading: {
                 placeholder
                     .overlay { ProgressView() }
                     .timelineMediaFrame(imageInfo: timelineItem.imageInfo)
-            } unsafeContent: { failure in
-                ContentScannerErrorView(failure: failure)
+            } failed: { failure in
+                ContentScanningFailureView(failure: failure)
             }
         }
     }

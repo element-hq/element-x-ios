@@ -13,7 +13,7 @@ struct ImageRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: ImageRoomTimelineItem
     
-    @State private var mediaScanFailure: MediaScanFailure?
+    @State private var contentScanningFailure: ContentScanningFailure?
     
     var hasMediaCaption: Bool {
         timelineItem.content.caption != nil
@@ -22,9 +22,9 @@ struct ImageRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             // The caption sits 8pts below the content scanner failure placeholder, 4pts below the media.
-            VStack(alignment: .leading, spacing: mediaScanFailure == nil ? 4 : 8) {
-                MediaView(contentScannerService: context?.contentScannerService,
-                          mediaSource: timelineItem.content.imageInfo.source) {
+            VStack(alignment: .leading, spacing: contentScanningFailure == nil ? 4 : 8) {
+                ContentScanningView(contentScannerService: context?.contentScannerService,
+                                    mediaSource: timelineItem.content.imageInfo.source) {
                     loadableImage
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(L10n.commonImage)
@@ -34,17 +34,17 @@ struct ImageRoomTimelineView: View {
                         .onTapGesture {
                             context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                         }
-                } scanningContent: {
+                } loading: {
                     placeholder
                         .overlay { ProgressView() }
                         .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
-                } unsafeContent: { failure in
-                    ContentScannerErrorView(failure: failure)
+                } failed: { failure in
+                    ContentScanningFailureView(failure: failure)
                 }
                 
                 caption
             }
-            .onPreferenceChange(MediaScanFailurePreferenceKey.self) { mediaScanFailure = $0 }
+            .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
         }
     }
     

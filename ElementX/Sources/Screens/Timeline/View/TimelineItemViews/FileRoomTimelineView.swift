@@ -59,8 +59,8 @@ struct MediaFileRoomTimelineContent: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            MediaView(contentScannerService: contentScannerService,
-                      mediaSource: mediaSource) {
+            ContentScanningView(contentScannerService: contentScannerService,
+                                mediaSource: mediaSource) {
                 if let onMediaTap {
                     filePreview(isScanning: false)
                         .onTapGesture {
@@ -69,10 +69,10 @@ struct MediaFileRoomTimelineContent: View {
                 } else {
                     filePreview(isScanning: false)
                 }
-            } scanningContent: {
+            } loading: {
                 filePreview(isScanning: true)
-            } unsafeContent: { failure in
-                ContentScannerErrorView(failure: failure)
+            } failed: { failure in
+                ContentScanningFailureView(failure: failure)
             }
             
             if let formattedCaption {

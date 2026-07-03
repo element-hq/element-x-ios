@@ -99,8 +99,8 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ComposerToolbar_Previews")
     }
 
-    func testContentScannerErrorView() async throws {
-        try await performAccessibilityAudit(named: "ContentScannerErrorView_Previews")
+    func testContentScanningFailureView() async throws {
+        try await performAccessibilityAudit(named: "ContentScanningFailureView_Previews")
     }
 
     func testCopyTextButton() async throws {

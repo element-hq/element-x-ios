@@ -30,15 +30,15 @@ struct VoiceMessageRoomTimelineContent: View {
     let playerState: AudioPlayerState
     
     var body: some View {
-        MediaView(contentScannerService: context?.contentScannerService,
-                  mediaSource: timelineItem.content.source) {
+        ContentScanningView(contentScannerService: context?.contentScannerService,
+                            mediaSource: timelineItem.content.source) {
             VoiceMessageRoomPlaybackView(playerState: playerState,
                                          onPlayPause: onPlaybackPlayPause,
                                          onSeek: { onPlaybackSeek($0) },
                                          onScrubbing: { onPlaybackScrubbing($0) },
                                          onPlaybackSpeedChange: onPlaybackSpeedChange)
                 .fixedSize(horizontal: false, vertical: true)
-        } scanningContent: {
+        } loading: {
             VoiceMessageRoomPlaybackView(playerState: playerState,
                                          isScanning: true,
                                          onPlayPause: { },
@@ -46,8 +46,8 @@ struct VoiceMessageRoomTimelineContent: View {
                                          onScrubbing: { _ in },
                                          onPlaybackSpeedChange: { })
                 .fixedSize(horizontal: false, vertical: true)
-        } unsafeContent: { failure in
-            ContentScannerErrorView(failure: failure)
+        } failed: { failure in
+            ContentScanningFailureView(failure: failure)
         }
     }
     

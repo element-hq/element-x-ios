@@ -14,8 +14,8 @@ import SwiftUI
 /// This view only renders the failure title and message - the critical background is applied
 /// to the whole message bubble by `TimelineItemBubbledStylerView`, so that any caption and
 /// reply preview are included in the critical area too.
-struct ContentScannerErrorView: View {
-    let failure: MediaScanFailure
+struct ContentScanningFailureView: View {
+    let failure: ContentScanningFailure
     
     var body: some View {
         HStack(spacing: 8) {
@@ -51,11 +51,11 @@ struct ContentScannerErrorView: View {
 
 // MARK: - Previews
 
-struct ContentScannerErrorView_Previews: PreviewProvider, TestablePreview {
+struct ContentScanningFailureView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 16) {
-            ContentScannerErrorView(failure: .notSafe)
-            ContentScannerErrorView(failure: .notFound)
+            ContentScanningFailureView(failure: .notSafe)
+            ContentScanningFailureView(failure: .notFound)
         }
         .frame(width: 260)
         .padding()

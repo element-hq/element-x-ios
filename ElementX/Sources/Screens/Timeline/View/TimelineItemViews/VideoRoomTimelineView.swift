@@ -13,7 +13,7 @@ struct VideoRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: VideoRoomTimelineItem
     
-    @State private var mediaScanFailure: MediaScanFailure?
+    @State private var contentScanningFailure: ContentScanningFailure?
     
     private var hasMediaCaption: Bool {
         timelineItem.content.caption != nil
@@ -22,9 +22,9 @@ struct VideoRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             // The caption sits 8pts below the content scanner failure placeholder, 4pts below the media.
-            VStack(alignment: .leading, spacing: mediaScanFailure == nil ? 4 : 8) {
-                MediaView(contentScannerService: context?.contentScannerService,
-                          mediaSource: timelineItem.content.videoInfo.source) {
+            VStack(alignment: .leading, spacing: contentScanningFailure == nil ? 4 : 8) {
+                ContentScanningView(contentScannerService: context?.contentScannerService,
+                                    mediaSource: timelineItem.content.videoInfo.source) {
                     thumbnail
                         .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
                         .accessibilityElement(children: .ignore)
@@ -35,12 +35,12 @@ struct VideoRoomTimelineView: View {
                         .onTapGesture {
                             context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                         }
-                } scanningContent: {
+                } loading: {
                     placeholder
                         .overlay { ProgressView() }
                         .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
-                } unsafeContent: { failure in
-                    ContentScannerErrorView(failure: failure)
+                } failed: { failure in
+                    ContentScanningFailureView(failure: failure)
                 }
                 
                 if let attributedCaption = timelineItem.content.formattedCaption {
@@ -53,7 +53,7 @@ struct VideoRoomTimelineView: View {
                                       boostFontSize: timelineItem.shouldBoost)
                 }
             }
-            .onPreferenceChange(MediaScanFailurePreferenceKey.self) { mediaScanFailure = $0 }
+            .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
         }
     }
     

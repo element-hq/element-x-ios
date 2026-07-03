@@ -8,88 +8,88 @@
 import SwiftUI
 
 /// The reason a media item can't be presented.
-nonisolated enum MediaScanFailure {
+nonisolated enum ContentScanningFailure {
     /// The content scanner flagged the media as unsafe.
     case notSafe
     /// The media couldn't be scanned, e.g. it wasn't found or a network error occurred.
     case notFound
 }
 
-/// Reports a ``MediaScanFailure`` up the view hierarchy so that ancestors (such as the message
-/// bubble) can adopt the critical styling without having to track the scan state themselves.
-nonisolated struct MediaScanFailurePreferenceKey: PreferenceKey {
-    static let defaultValue: MediaScanFailure? = nil
+/// Reports a ``ContentScanningFailure`` up the view hierarchy so that ancestors (such as the
+/// message bubble) can adopt the critical styling without having to track the scan state themselves.
+nonisolated struct ContentScanningFailurePreferenceKey: PreferenceKey {
+    static let defaultValue: ContentScanningFailure? = nil
     
-    static func reduce(value: inout MediaScanFailure?, nextValue: () -> MediaScanFailure?) {
+    static func reduce(value: inout ContentScanningFailure?, nextValue: () -> ContentScanningFailure?) {
         value = value ?? nextValue()
     }
 }
 
 /// A wrapper that gates the presentation of a media item on its content scan state.
 ///
-/// The safe content is rendered when the media is known to be safe or when there's no content
-/// scanner configured, the scanning content whilst a scan is in flight and the unsafe content
-/// when the media is unsafe or couldn't be scanned. Any failure is also reported up the view
-/// hierarchy through ``MediaScanFailurePreferenceKey``.
+/// The content is rendered when the media is known to be safe or when there's no content scanner
+/// configured, the loading content whilst a scan is in flight and the failed content when the
+/// media is unsafe or couldn't be scanned. Any failure is also reported up the view hierarchy
+/// through ``ContentScanningFailurePreferenceKey``.
 ///
-/// - Important: Any interactions with the media (taps, playback etc.) must live inside the safe
+/// - Important: Any interactions with the media (taps, playback etc.) must live inside the
 /// content so that they're unavailable whilst the media is being scanned or is unsafe.
-struct MediaView<SafeContent: View, ScanningContent: View, UnsafeContent: View>: View {
+struct ContentScanningView<Content: View, LoadingContent: View, FailedContent: View>: View {
     private enum ScanState {
-        case safe
-        case scanning
-        case failed(MediaScanFailure)
+        case loaded
+        case loading
+        case failed(ContentScanningFailure)
     }
     
     private let contentScannerService: ContentScannerServiceProtocol?
     private let mediaSource: MediaSourceProxy?
-    private let safeContent: () -> SafeContent
-    private let scanningContent: () -> ScanningContent
-    private let unsafeContent: (MediaScanFailure) -> UnsafeContent
+    private let content: () -> Content
+    private let loadingContent: () -> LoadingContent
+    private let failedContent: (ContentScanningFailure) -> FailedContent
     
     @State private var scanState: ScanState?
     
     /// - Parameters:
     ///   - contentScannerService: The service used to scan the media. Passing `nil` disables
-    ///     scanning and the safe content is always rendered.
-    ///   - mediaSource: The media source to scan. Passing `nil` renders the safe content, this
+    ///     scanning and the content is always rendered.
+    ///   - mediaSource: The media source to scan. Passing `nil` renders the content, this
     ///     makes it convenient to wrap items whose media source is optional.
-    ///   - safeContent: The regular presentation of the media, including any interactions with it.
-    ///   - scanningContent: The presentation of the media whilst it's being scanned.
-    ///   - unsafeContent: The presentation of the media when it can't be shown.
+    ///   - content: The regular presentation of the media, including any interactions with it.
+    ///   - loading: The presentation of the media whilst it's being scanned.
+    ///   - failed: The presentation of the media when it can't be shown.
     init(contentScannerService: ContentScannerServiceProtocol?,
          mediaSource: MediaSourceProxy?,
-         @ViewBuilder safeContent: @escaping () -> SafeContent,
-         @ViewBuilder scanningContent: @escaping () -> ScanningContent,
-         @ViewBuilder unsafeContent: @escaping (MediaScanFailure) -> UnsafeContent) {
+         @ViewBuilder content: @escaping () -> Content,
+         @ViewBuilder loading: @escaping () -> LoadingContent,
+         @ViewBuilder failed: @escaping (ContentScanningFailure) -> FailedContent) {
         self.contentScannerService = contentScannerService
         self.mediaSource = mediaSource
-        self.safeContent = safeContent
-        self.scanningContent = scanningContent
-        self.unsafeContent = unsafeContent
+        self.content = content
+        loadingContent = loading
+        failedContent = failed
     }
     
     var body: some View {
-        content
-            .preference(key: MediaScanFailurePreferenceKey.self, value: scanFailure)
+        scanStateContent
+            .preference(key: ContentScanningFailurePreferenceKey.self, value: scanFailure)
             .task(id: mediaSource?.url.absoluteString) {
                 await scan()
             }
     }
     
     @ViewBuilder
-    private var content: some View {
+    private var scanStateContent: some View {
         switch resolvedScanState {
-        case .safe:
-            safeContent()
-        case .scanning:
-            scanningContent()
+        case .loaded:
+            content()
+        case .loading:
+            loadingContent()
         case .failed(let failure):
-            unsafeContent(failure)
+            failedContent(failure)
         }
     }
     
-    private var scanFailure: MediaScanFailure? {
+    private var scanFailure: ContentScanningFailure? {
         guard case .failed(let failure) = resolvedScanState else {
             return nil
         }
@@ -98,7 +98,7 @@ struct MediaView<SafeContent: View, ScanningContent: View, UnsafeContent: View>:
     
     private var resolvedScanState: ScanState {
         guard let contentScannerService, let mediaSource else {
-            return .safe
+            return .loaded
         }
         
         if let scanState {
@@ -107,9 +107,9 @@ struct MediaView<SafeContent: View, ScanningContent: View, UnsafeContent: View>:
         
         // Until the scan triggered by this view resolves, reflect any verdict already in the cache.
         switch contentScannerService.scanResultFromSource(mediaSource) {
-        case true: return .safe
+        case true: return .loaded
         case false: return .failed(.notSafe)
-        default: return .scanning
+        default: return .loading
         }
     }
     
@@ -120,7 +120,7 @@ struct MediaView<SafeContent: View, ScanningContent: View, UnsafeContent: View>:
         
         switch await contentScannerService.loadScanResultFromSource(mediaSource) {
         case .success(true):
-            scanState = .safe
+            scanState = .loaded
         case .success(false):
             scanState = .failed(.notSafe)
         case .failure:

@@ -13,11 +13,11 @@ extension View {
     /// Adds the send info (timestamp along indicators for edits and delivery/encryption issues) for the given timeline item to this view.
     func timelineItemSendInfo(timelineItem: EventBasedTimelineItemProtocol,
                               adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
-                              hasMediaScanFailure: Bool = false,
+                              hasContentScanningFailure: Bool = false,
                               context: TimelineViewModel.Context) -> some View {
         modifier(TimelineItemSendInfoModifier(sendInfo: .init(timelineItem: timelineItem,
                                                               adjustedDeliveryStatus: adjustedDeliveryStatus,
-                                                              hasMediaScanFailure: hasMediaScanFailure),
+                                                              hasContentScanningFailure: hasContentScanningFailure),
                                               context: context))
     }
 }
@@ -152,7 +152,7 @@ private struct TimelineItemSendInfo {
 private extension TimelineItemSendInfo {
     init(timelineItem: EventBasedTimelineItemProtocol,
          adjustedDeliveryStatus: TimelineItemDeliveryStatus?,
-         hasMediaScanFailure: Bool = false) {
+         hasContentScanningFailure: Bool = false) {
         itemID = timelineItem.id
         localizedString = timelineItem.localizedSendInfo
         
@@ -166,7 +166,7 @@ private extension TimelineItemSendInfo {
             nil
         }
         
-        layoutType = if hasMediaScanFailure {
+        layoutType = if hasContentScanningFailure {
             // The content scanner failure placeholder replaces the media,
             // so the send info is laid out like it is for a text message.
             timelineItem.hasMediaCaption ? .overlay(capsuleStyle: false) : .horizontal()
