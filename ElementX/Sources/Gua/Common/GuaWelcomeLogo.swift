@@ -18,10 +18,11 @@ import SwiftUI
 ///    direction. Still phone → clean icon, no motion. No gyroscope on simulator (tilt stays at rest
 ///    there; the entrance still plays).
 ///  - **Glyph relief** (liquid-glass edges): the wolf and the chat-bubble frame — their own layered
-///    assets (`appLogoWolf`, `appLogoBubble`) — carry a thin specular bevel: a light crescent hugs
-///    the lit edge and a shade crescent the far edge, so both read as raised glass. The bevel's
-///    light direction tracks the device tilt and the two layers drift at staggered depths (the wolf
-///    rides higher), like the home-screen icon parallax. At rest it is a soft overhead light.
+///    assets (`appLogoWolf`, `appLogoBubble`) — carry a thin, *fixed* specular bevel: a light crescent
+///    hugs the top edge and a shade crescent the bottom, so both read as raised glass. The bevel
+///    geometry never moves — it is baked to a soft overhead light so the whole tile stays one solid
+///    object at any tilt (moving the glyph copies is what used to ghost). Only its brightness lifts a
+///    touch while the phone is in motion, like light catching real glass.
 ///  - **Light** (`SwiftUI.TimelineView(.animation)`, display-link backed; `SwiftUI.` qualifier avoids
 ///    ElementX's own `TimelineView`): an occasional diagonal sheen sweep across the glass (~1s every
 ///    ~11s) and a steady Gua-green aura behind the tile.
@@ -162,53 +163,51 @@ struct GuaWelcomeLogo: View {
         min(1, (tilt.roll * tilt.roll + tilt.pitch * tilt.pitch).squareRoot())
     }
 
-    /// The light angle used by the glyph bevel. The constant `+0.55` overhead bias keeps `atan2`
-    /// well-defined at rest — the light sits at 12 o'clock on a still phone (instead of spinning on
-    /// sensor noise) and swings smoothly toward the raised edge as the device tilts.
-    private var bevelLightAngle: Angle {
-        Angle(radians: atan2(tilt.roll, -tilt.pitch + 0.55) - .pi / 2)
-    }
-
-    /// Unit vector pointing from the tile centre toward the bevel light (screen coordinates, y down).
+    /// Fixed overhead light direction for the glyph bevel: straight up (12 o'clock), in screen
+    /// coordinates (y down). This is exactly the at-rest value of the old tilt-tracking angle
+    /// (`atan2(0, 0.55) - .pi/2`), now frozen so the bevel geometry never translates with tilt —
+    /// that translation is what made the wolf and bubble ghost as offset duplicates.
     private var bevelLightVector: CGSize {
-        CGSize(width: cos(bevelLightAngle.radians), height: sin(bevelLightAngle.radians))
+        CGSize(width: 0, height: -1)
     }
 
     /// The specular bevel around the wolf-in-speech-bubble glyph: for each glyph layer
-    /// (`appLogoBubble`, then `appLogoWolf` raised slightly higher) a thin white crescent hugs the
-    /// lit edge and a dark crescent the far edge, so the glyph reads as raised glass. The crescents
-    /// are built by shifting a tinted copy of the glyph toward/away from the light and punching the
-    /// unshifted glyph back out (`.destinationOut`), leaving only the exposed edge. The light
-    /// direction and bevel depth track the device tilt; at rest the glyph is lit softly from above.
+    /// (`appLogoBubble`, then `appLogoWolf`) a thin white crescent hugs the top edge and a dark
+    /// crescent the bottom, so the glyph reads as raised glass. The crescents are built by shifting a
+    /// tinted copy of the glyph up/down and punching the unshifted glyph back out (`.destinationOut`),
+    /// leaving only the exposed edge. The shift is a *fixed* sub-tile bake — it does not track tilt and
+    /// the two layers share the same drift (none), so on tilt the whole tile moves as one rigid unit
+    /// with no offset duplicate. Only the crescents' brightness lifts a touch while the phone is in
+    /// motion, so the glass still catches the light.
     private func glyphRelief() -> some View {
         let mag = tiltMagnitude
-        // Bevel depth in points: visible at rest, digs slightly deeper while the phone moves.
-        let depth = size * (0.014 + 0.012 * mag)
+        // Fixed bevel depth in points — identical at rest and in motion, so no growing/moving copy.
+        let depth = size * 0.014
 
         return ZStack {
-            glyphBevel(asset: Asset.Images.appLogoBubble, depth: depth * 0.85, mag: mag, parallax: 0.010)
-            glyphBevel(asset: Asset.Images.appLogoWolf, depth: depth * 1.15, mag: mag, parallax: 0.020)
+            glyphBevel(asset: Asset.Images.appLogoBubble, depth: depth * 0.85, mag: mag)
+            glyphBevel(asset: Asset.Images.appLogoWolf, depth: depth * 1.15, mag: mag)
         }
         .allowsHitTesting(false)
     }
 
-    /// Light + shade crescents for one glyph layer. `parallax` staggers the layers' drift with the
-    /// tilt (the wolf rides higher than the bubble), keeping the depths distinct.
-    private func glyphBevel(asset: ImageAsset, depth: CGFloat, mag: Double, parallax: CGFloat) -> some View {
+    /// Light + shade crescents for one glyph layer, baked to the fixed overhead light. `mag` only
+    /// modulates brightness (the light "catches" more in motion); the crescent geometry is identical
+    /// at every tilt so the layer never drifts away from the base artwork.
+    private func glyphBevel(asset: ImageAsset, depth: CGFloat, mag: Double) -> some View {
         ZStack {
-            // Specular crescent on the lit edge.
+            // Specular crescent on the lit (top) edge.
             glyphCrescent(asset: asset,
                           color: .white,
                           offset: CGSize(width: bevelLightVector.width * depth, height: bevelLightVector.height * depth))
                 .opacity(0.55 + 0.30 * mag)
                 .blendMode(.screen)
-            // Shade crescent on the far edge — sells the raised 3D relief.
+            // Shade crescent on the far (bottom) edge — sells the raised 3D relief.
             glyphCrescent(asset: asset,
                           color: .black,
                           offset: CGSize(width: -bevelLightVector.width * depth * 0.8, height: -bevelLightVector.height * depth * 0.8))
                 .opacity(0.22 + 0.14 * mag)
         }
-        .offset(x: tilt.roll * size * parallax, y: tilt.pitch * size * parallax)
     }
 
     /// A thin edge crescent: the glyph tinted `color`, shifted by `offset`, minus the glyph at rest —
