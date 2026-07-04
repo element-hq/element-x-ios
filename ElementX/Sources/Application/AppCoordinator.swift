@@ -38,6 +38,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         didSet {
             userSessionObserver?.cancel()
             if let userSession {
+                presenceReporter = PresenceReporter(clientProxy: userSession.clientProxy,
+                                                    appSettings: appSettings,
+                                                    isForegroundActive: UIApplication.shared.applicationState == .active)
                 configureElementCallService()
                 configureNotificationManager()
                 observeUserSessionChanges()
@@ -45,9 +48,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     await resumeClientServices()
                     await appHooks.configure(with: userSession)
                 }
+            } else {
+                presenceReporter = nil
             }
         }
     }
+    
+    private var presenceReporter: PresenceReporter?
     
     private var authenticationFlowCoordinator: AuthenticationFlowCoordinator?
     private let appLockFlowCoordinator: AppLockFlowCoordinator
@@ -1176,6 +1183,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @objc
     private func applicationWillResignActive() {
         MXLog.info("Application will resign active")
+        presenceReporter?.applicationWillResignActive()
     }
     
     private func scheduleDelayedPauseServices() {
@@ -1208,6 +1216,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     @objc
     private func applicationDidBecomeActive() {
         MXLog.info("Application did become active")
+        presenceReporter?.applicationDidBecomeActive()
     }
     
     private func endActiveBackgroundTask() {
@@ -1279,6 +1288,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard let userSession else {
             return
         }
+        
+        // State-only (no HTTP): make the background-refresh sync carry set_presence=offline instead of the
+        // reporter's last value, so a push-driven refresh never marks the user online or idle.
+        _ = await userSession.clientProxy.setPresence(.offline, sendImmediately: false)
         
         await resumeClientServices()
         

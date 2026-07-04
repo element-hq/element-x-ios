@@ -994,6 +994,18 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    // MARK: Presence
+    
+    func setPresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.setPresence(presence: presence.rustValue, immediate: sendImmediately)
+            return .success(())
+        } catch {
+            MXLog.error("Failed setting presence with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func setupSubscriptions() async {
@@ -1531,6 +1543,19 @@ private extension TimelineMediaVisibility {
             .off
         case .privateOnly:
             .private
+        }
+    }
+}
+
+private extension ClientProxyPresence {
+    var rustValue: PresenceState {
+        switch self {
+        case .online:
+            .online
+        case .unavailable:
+            .unavailable
+        case .offline:
+            .offline
         }
     }
 }

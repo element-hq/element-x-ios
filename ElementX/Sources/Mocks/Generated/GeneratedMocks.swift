@@ -4281,6 +4281,48 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return setHideInviteAvatarsReturnValue
         }
     }
+    //MARK: - setPresence
+
+    private let setPresenceSendImmediatelyCallsCountLock = NSLock()
+    private nonisolated(unsafe) var setPresenceSendImmediatelyUnderlyingCallsCount = 0
+    var setPresenceSendImmediatelyCallsCount: Int {
+        get { setPresenceSendImmediatelyCallsCountLock.withLock { setPresenceSendImmediatelyUnderlyingCallsCount } }
+        set { setPresenceSendImmediatelyCallsCountLock.withLock { setPresenceSendImmediatelyUnderlyingCallsCount = newValue } }
+    }
+    var setPresenceSendImmediatelyCalled: Bool {
+        return setPresenceSendImmediatelyCallsCount > 0
+    }
+    private let setPresenceSendImmediatelyReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var setPresenceSendImmediatelyUnderlyingReceivedArguments: (presence: ClientProxyPresence, sendImmediately: Bool)?
+    var setPresenceSendImmediatelyReceivedArguments: (presence: ClientProxyPresence, sendImmediately: Bool)? {
+        get { setPresenceSendImmediatelyReceivedArgumentsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedArguments } }
+        set { setPresenceSendImmediatelyReceivedArgumentsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedArguments = newValue } }
+    }
+    private let setPresenceSendImmediatelyReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var setPresenceSendImmediatelyUnderlyingReceivedInvocations: [(presence: ClientProxyPresence, sendImmediately: Bool)] = []
+    var setPresenceSendImmediatelyReceivedInvocations: [(presence: ClientProxyPresence, sendImmediately: Bool)] {
+        get { setPresenceSendImmediatelyReceivedInvocationsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedInvocations } }
+        set { setPresenceSendImmediatelyReceivedInvocationsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let setPresenceSendImmediatelyReturnValueLock = NSLock()
+    private nonisolated(unsafe) var setPresenceSendImmediatelyUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var setPresenceSendImmediatelyReturnValue: Result<Void, ClientProxyError>! {
+        get { setPresenceSendImmediatelyReturnValueLock.withLock { setPresenceSendImmediatelyUnderlyingReturnValue } }
+        set { setPresenceSendImmediatelyReturnValueLock.withLock { setPresenceSendImmediatelyUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var setPresenceSendImmediatelyClosure: ((ClientProxyPresence, Bool) async -> Result<Void, ClientProxyError>)?
+
+    @concurrent func setPresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError> {
+        setPresenceSendImmediatelyCallsCountLock.withLock { setPresenceSendImmediatelyUnderlyingCallsCount += 1 }
+        setPresenceSendImmediatelyReceivedArguments = (presence: presence, sendImmediately: sendImmediately)
+        setPresenceSendImmediatelyReceivedInvocationsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedInvocations.append((presence: presence, sendImmediately: sendImmediately)) }
+        if let setPresenceSendImmediatelyClosure = setPresenceSendImmediatelyClosure {
+            return await setPresenceSendImmediatelyClosure(presence, sendImmediately)
+        } else {
+            return setPresenceSendImmediatelyReturnValue
+        }
+    }
 }
 nonisolated class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol, @unchecked Sendable {
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> {

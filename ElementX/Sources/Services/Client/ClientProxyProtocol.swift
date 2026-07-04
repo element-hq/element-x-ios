@@ -29,6 +29,12 @@ enum ClientProxyLoadingState {
     case notLoading
 }
 
+enum ClientProxyPresence: Equatable, Sendable {
+    case online
+    case unavailable
+    case offline
+}
+
 enum ClientProxyError: Error {
     case sdkError(Error)
     case forbiddenAccess
@@ -283,4 +289,10 @@ protocol ClientProxyProtocol: AnyObject {
     
     func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError>
     func setHideInviteAvatars(_ value: Bool) async -> Result<Void, ClientProxyError>
+    
+    // MARK: - Presence
+    
+    /// Updates the process presence that rides on every future sync request. When `sendImmediately` is `true` the SDK
+    /// also issues a direct presence update instead of waiting for the next sync request to carry the new value.
+    func setPresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError>
 }
