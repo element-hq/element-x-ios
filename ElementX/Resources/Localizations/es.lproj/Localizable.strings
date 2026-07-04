@@ -1435,3 +1435,26 @@
 "screen_two_step_verification_otp_footer" = "Introduce el código de 6 dígitos que acabamos de enviar a tu teléfono.";
 "screen_two_step_verification_otp_invalid" = "Ese código no es válido o ha caducado. Inténtalo de nuevo.";
 "screen_two_step_verification_cooldown" = "Por seguridad, solo puedes cambiar tu PIN una vez al día. Inténtalo de nuevo más tarde.";
+
+/* GUA FORK - Change phone number */
+"screen_change_phone_title" = "Cambiar número de teléfono";
+"screen_change_phone_intro_header" = "Cambia tu número";
+"screen_change_phone_intro_message" = "Confirmaremos tu PIN y luego enviaremos un código por SMS a tu nuevo número. Tu cuenta, tus chats y tus mensajes se mantienen igual.";
+"screen_change_phone_already_linked" = "Ese número de teléfono ya está vinculado a otra cuenta.";
+"screen_change_phone_new_header" = "Nuevo número de teléfono";
+"screen_change_phone_new_footer" = "Introduce el número que quieres usar a partir de ahora.";
+"screen_change_phone_pin_setup_required_header" = "Configura primero un PIN";
+"screen_change_phone_pin_setup_required_message" = "Necesitas un PIN para cambiar tu número. Configura uno y luego vuelve para cambiar tu número.";
+"screen_change_phone_pin_setup_required_action" = "Configurar PIN";
+"screen_change_phone_cooldown_header" = "Todavía no";
+"screen_change_phone_cooldown_message" = "Por seguridad, podrás cambiar tu número en %1$@.";
+"screen_change_phone_cooldown_message_generic" = "Por seguridad, todavía no puedes cambiar tu número. Inténtalo de nuevo más tarde.";
+"screen_change_phone_pin_header" = "Introduce tu PIN";
+"screen_change_phone_pin_footer" = "Confirma tu PIN de 6 dígitos para autorizar este cambio.";
+"screen_change_phone_pin_incorrect" = "Ese PIN es incorrecto. Inténtalo de nuevo.";
+"screen_change_phone_otp_header" = "Verifica tu nuevo número";
+"screen_change_phone_otp_footer" = "Introduce el código de 6 dígitos que enviamos a tu nuevo número.";
+"screen_change_phone_otp_invalid" = "Ese código no es válido o ha caducado. Inténtalo de nuevo.";
+"screen_change_phone_success" = "Tu número de teléfono se ha actualizado.";
+"screen_change_phone_done_header" = "Todo listo";
+"screen_change_phone_done_message" = "Tu número de teléfono se ha actualizado. A partir de ahora, usarás tu nuevo número para iniciar sesión.";

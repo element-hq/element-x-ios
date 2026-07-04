@@ -1460,3 +1460,26 @@
 "screen_two_step_verification_otp_footer" = "Saisissez le code à 6 chiffres que nous venons d'envoyer sur votre téléphone.";
 "screen_two_step_verification_otp_invalid" = "Ce code est invalide ou a expiré. Veuillez réessayer.";
 "screen_two_step_verification_cooldown" = "Pour des raisons de sécurité, vous ne pouvez modifier votre code PIN qu'une fois par jour. Veuillez réessayer plus tard.";
+
+/* GUA FORK - Change phone number */
+"screen_change_phone_title" = "Modifier le numéro de téléphone";
+"screen_change_phone_intro_header" = "Modifiez votre numéro";
+"screen_change_phone_intro_message" = "Nous confirmerons votre code PIN, puis enverrons un code par SMS à votre nouveau numéro. Votre compte, vos conversations et vos messages restent identiques.";
+"screen_change_phone_already_linked" = "Ce numéro de téléphone est déjà associé à un autre compte.";
+"screen_change_phone_new_header" = "Nouveau numéro de téléphone";
+"screen_change_phone_new_footer" = "Saisissez le numéro que vous souhaitez utiliser à partir de maintenant.";
+"screen_change_phone_pin_setup_required_header" = "Configurez d'abord un code PIN";
+"screen_change_phone_pin_setup_required_message" = "Vous avez besoin d'un code PIN pour modifier votre numéro. Configurez-en un, puis revenez pour modifier votre numéro.";
+"screen_change_phone_pin_setup_required_action" = "Configurer un code PIN";
+"screen_change_phone_cooldown_header" = "Pas tout de suite";
+"screen_change_phone_cooldown_message" = "Pour des raisons de sécurité, vous pourrez modifier votre numéro dans %1$@.";
+"screen_change_phone_cooldown_message_generic" = "Pour des raisons de sécurité, vous ne pouvez pas encore modifier votre numéro. Veuillez réessayer plus tard.";
+"screen_change_phone_pin_header" = "Saisissez votre code PIN";
+"screen_change_phone_pin_footer" = "Confirmez votre code PIN à 6 chiffres pour autoriser cette modification.";
+"screen_change_phone_pin_incorrect" = "Ce code PIN est incorrect. Veuillez réessayer.";
+"screen_change_phone_otp_header" = "Vérifiez votre nouveau numéro";
+"screen_change_phone_otp_footer" = "Saisissez le code à 6 chiffres que nous avons envoyé à votre nouveau numéro.";
+"screen_change_phone_otp_invalid" = "Ce code est invalide ou a expiré. Veuillez réessayer.";
+"screen_change_phone_success" = "Votre numéro de téléphone a été mis à jour.";
+"screen_change_phone_done_header" = "C'est fait";
+"screen_change_phone_done_message" = "Votre numéro de téléphone a été mis à jour. Vous utiliserez votre nouveau numéro pour vous connecter à partir de maintenant.";
