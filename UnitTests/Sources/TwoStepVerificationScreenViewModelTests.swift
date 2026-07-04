@@ -79,8 +79,8 @@ private final class TwoStepVerificationIdentityServiceStub: IdentityServiceClien
         IdentityResetCredentials(userId: "", password: "")
     }
 
-    func pinStatus(accessToken: String) async throws -> Bool {
-        false
+    func pinStatus(accessToken: String) async throws -> PinStatus {
+        PinStatus(hasPin: false, cooldownRemaining: 0)
     }
 
     func setInitialPin(accessToken: String, userId: String, newPin: String) async throws { }
@@ -89,6 +89,12 @@ private final class TwoStepVerificationIdentityServiceStub: IdentityServiceClien
     }
 
     func completePinChange(accessToken: String, challengeId: String, otpCode: String, newPin: String) async throws { }
+    func verifyPinReauth(accessToken: String, userId: String, pin: String) async throws -> String {
+        ""
+    }
+
+    func requestPhoneChangeOTP(accessToken: String, userId: String, newPhone: String, reauthToken: String, language: String?) async throws { }
+    func changePhoneNumber(accessToken: String, userId: String, newPhone: String, code: String, reauthToken: String) async throws { }
     func startPasskeyEnrollment(accessToken: String) async throws -> URL {
         URL(string: "https://example.com")!
     }

@@ -512,8 +512,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         do {
-            let hasPin = try await identityServiceClient.pinStatus(accessToken: accessToken)
-            state.pinSetupReminderVisible = !hasPin
+            let pinStatus = try await identityServiceClient.pinStatus(accessToken: accessToken)
+            state.pinSetupReminderVisible = !pinStatus.hasPin
         } catch {
             MXLog.warning("Could not fetch PIN status for home screen reminder: \(error)")
         }

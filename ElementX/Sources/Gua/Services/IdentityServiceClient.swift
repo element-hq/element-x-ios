@@ -15,7 +15,12 @@ enum IdentityServiceError: Error, LocalizedError {
     case pinLocked(retryAfterSeconds: Int?)
     case pinChangeCooldown(retryAfterSeconds: Int?)
     case pinChangeChallengeInvalid
+    /// The user has no PIN set, but the requested operation (e.g. change-phone step-up) requires one.
+    case pinSetupRequired
+    /// Change-phone is temporarily blocked because the PIN was set/changed too recently (fresh-2FA cooldown).
+    case twoFactorCooldown(retryAfterSeconds: Int?)
     case invalidReauthToken
+    case phoneAlreadyLinked
     case server(status: Int, message: String?)
     case transport(Error)
     case decoding(Error)
@@ -35,12 +40,42 @@ enum IdentityServiceError: Error, LocalizedError {
                 "For security, you can change your PIN again in \(max(1, Int((Double(retry) / 3600.0).rounded(.up)))) hour(s)."
             } else { "For security, you can only change your PIN once per day." }
         case .pinChangeChallengeInvalid: "Your PIN change session expired. Please start over."
+        case .pinSetupRequired: "You'll need to set up a PIN before you can change your number."
+        case let .twoFactorCooldown(retry):
+            if let retry, retry > 0 {
+                "For your security, you can change your number in \(IdentityServiceError.humanReadableDuration(seconds: retry))."
+            } else { "For your security, you can't change your number just yet. Please try again later." }
         case .invalidReauthToken: "Your verification expired. Please request a new code."
+        case .phoneAlreadyLinked: "That phone number is already linked to another account."
         case let .server(status, message): message ?? "Server error (\(status))."
         case let .transport(error): error.localizedDescription
         case let .decoding(error): "Could not parse the server response: \(error.localizedDescription)"
         }
     }
+
+    /// Coarse, human-friendly rendering of a remaining-duration in seconds, e.g. "7 days",
+    /// "3 hours", "5 minutes". Rounds up so we never under-promise availability.
+    static func humanReadableDuration(seconds: Int) -> String {
+        let seconds = max(0, seconds)
+        let day = 86400, hour = 3600, minute = 60
+        if seconds >= day {
+            let days = Int((Double(seconds) / Double(day)).rounded(.up))
+            return days == 1 ? L10n.commonDurationOneDay : L10n.commonDurationDays(days)
+        }
+        if seconds >= hour {
+            let hours = Int((Double(seconds) / Double(hour)).rounded(.up))
+            return hours == 1 ? L10n.commonDurationOneHour : L10n.commonDurationHours(hours)
+        }
+        let minutes = max(1, Int((Double(seconds) / Double(minute)).rounded(.up)))
+        return minutes == 1 ? L10n.commonDurationOneMinute : L10n.commonDurationMinutes(minutes)
+    }
+}
+
+/// GUA FORK: PIN status from `GET /security/pin/status`. `cooldownRemaining` is the change-phone
+/// fresh-2FA cooldown in seconds (0 = no active cooldown).
+struct PinStatus {
+    let hasPin: Bool
+    let cooldownRemaining: Int
 }
 
 @MainActor
@@ -54,10 +89,16 @@ protocol IdentityServiceClientProtocol {
     func deactivateAccount(accessToken: String, reauthToken: String, eraseData: Bool) async throws
     func resetIdentityCredentials(accessToken: String, reauthToken: String) async throws -> IdentityResetCredentials
     // GUA FORK: Two-step verification (account PIN) management.
-    func pinStatus(accessToken: String) async throws -> Bool
+    func pinStatus(accessToken: String) async throws -> PinStatus
     func setInitialPin(accessToken: String, userId: String, newPin: String) async throws
     func startPinChange(accessToken: String, phone: String, currentPin: String) async throws -> String
     func completePinChange(accessToken: String, challengeId: String, otpCode: String, newPin: String) async throws
+    // GUA FORK: Change phone number — PIN step-up FIRST (`/security/pin/reauth` → reauthToken), then
+    // request an OTP to the NEW number (`/otp/change-number/request`, SMS fires here), then atomically
+    // re-bind the account to it with that OTP + the reauthToken (`/otp/change-number`).
+    func verifyPinReauth(accessToken: String, userId: String, pin: String) async throws -> String
+    func requestPhoneChangeOTP(accessToken: String, userId: String, newPhone: String, reauthToken: String, language: String?) async throws
+    func changePhoneNumber(accessToken: String, userId: String, newPhone: String, code: String, reauthToken: String) async throws
     /// Begins passkey enrollment and returns the IdP-hosted URL to load in an
     /// authenticated web session. The flow finishes when that page redirects to
     /// the app's OIDC redirect URL.
@@ -186,8 +227,11 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
 
     // MARK: - Two-step verification (PIN)
 
-    func pinStatus(accessToken: String) async throws -> Bool {
-        struct Response: Decodable { let hasPin: Bool }
+    func pinStatus(accessToken: String) async throws -> PinStatus {
+        struct Response: Decodable {
+            let hasPin: Bool
+            let changePhoneCooldownRemainingSeconds: Int?
+        }
         guard let url = URL(string: "/security/pin/status", relativeTo: baseURL) else {
             throw IdentityServiceError.invalidURL
         }
@@ -210,7 +254,9 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
             throw IdentityServiceError.server(status: httpResponse.statusCode, message: message)
         }
         do {
-            return try decoder.decode(Response.self, from: data).hasPin
+            let response = try decoder.decode(Response.self, from: data)
+            return PinStatus(hasPin: response.hasPin,
+                             cooldownRemaining: max(0, response.changePhoneCooldownRemainingSeconds ?? 0))
         } catch {
             throw IdentityServiceError.decoding(error)
         }
@@ -258,6 +304,64 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
         try await sendAuthenticated(path: "/security/pin/change/complete",
                                     accessToken: accessToken,
                                     body: Body(challengeId: challengeId, otpCode: otpCode, newPin: newPin),
+                                    language: nil,
+                                    expectsBody: false)
+    }
+
+    // MARK: - Change phone number
+
+    /// PIN step-up (`POST /security/pin/reauth`). Validates the account PIN and mints a short-lived
+    /// reauth token (300s) that authorizes the subsequent change-number request/commit. No SMS fires
+    /// here. 400 `invalid_pin` → ``IdentityServiceError/invalidPin``, 429 `pin_locked` → locked.
+    func verifyPinReauth(accessToken: String, userId: String, pin: String) async throws -> String {
+        struct Body: Encodable {
+            let userId: String
+            let pin: String
+        }
+        struct Response: Decodable {
+            let reauthToken: String
+            let expiresInSeconds: Int?
+        }
+        let (data, _) = try await sendAuthenticated(path: "/security/pin/reauth",
+                                                    accessToken: accessToken,
+                                                    body: Body(userId: userId, pin: pin),
+                                                    language: nil,
+                                                    expectsBody: true)
+        do {
+            return try decoder.decode(Response.self, from: data).reauthToken
+        } catch {
+            throw IdentityServiceError.decoding(error)
+        }
+    }
+
+    /// Sends a verification OTP to the *new* phone number (`POST /otp/change-number/request`). The
+    /// reauth token is peeked (not consumed) server-side; the SMS fires here. 202 on success.
+    func requestPhoneChangeOTP(accessToken: String, userId: String, newPhone: String, reauthToken: String, language: String?) async throws {
+        struct Body: Encodable {
+            let userId: String
+            let newPhone: String
+            let reauthToken: String
+            let language: String?
+        }
+        try await sendAuthenticated(path: "/otp/change-number/request",
+                                    accessToken: accessToken,
+                                    body: Body(userId: userId, newPhone: newPhone, reauthToken: reauthToken, language: language),
+                                    language: language,
+                                    expectsBody: false)
+    }
+
+    /// Atomically re-binds the account to the new number (`POST /otp/change-number`), verifying the
+    /// new-number OTP and consuming the reauth token server-side. 204 on success.
+    func changePhoneNumber(accessToken: String, userId: String, newPhone: String, code: String, reauthToken: String) async throws {
+        struct Body: Encodable {
+            let userId: String
+            let newPhone: String
+            let code: String
+            let reauthToken: String
+        }
+        try await sendAuthenticated(path: "/otp/change-number",
+                                    accessToken: accessToken,
+                                    body: Body(userId: userId, newPhone: newPhone, code: code, reauthToken: reauthToken),
                                     language: nil,
                                     expectsBody: false)
     }
@@ -323,6 +427,12 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
             let errorBody = try? decoder.decode(ErrorBody.self, from: data)
             if errorBody?.code == "invalid_otp" { throw IdentityServiceError.invalidOTP }
             if errorBody?.code == "invalid_pin" { throw IdentityServiceError.invalidPin }
+            if errorBody?.code == "pin_setup_required" { throw IdentityServiceError.pinSetupRequired }
+            if errorBody?.code == "twofa_cooldown_active" {
+                let retry = errorBody?.retryAfterSeconds
+                    ?? httpResponse.value(forHTTPHeaderField: "Retry-After").flatMap(Int.init)
+                throw IdentityServiceError.twoFactorCooldown(retryAfterSeconds: retry)
+            }
             throw IdentityServiceError.server(status: 400, message: errorBody?.message ?? errorBody?.error)
         case 401:
             let errorBody = try? decoder.decode(ErrorBody.self, from: data)
@@ -343,6 +453,12 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
                 throw IdentityServiceError.pinChangeCooldown(retryAfterSeconds: retry)
             }
             throw IdentityServiceError.server(status: 425, message: errorBody?.message ?? errorBody?.error)
+        case 409:
+            let errorBody = try? decoder.decode(ErrorBody.self, from: data)
+            if errorBody?.code == "phone_already_linked" {
+                throw IdentityServiceError.phoneAlreadyLinked
+            }
+            throw IdentityServiceError.server(status: 409, message: errorBody?.message ?? errorBody?.error)
         case 429:
             let errorBody = try? decoder.decode(ErrorBody.self, from: data)
             if errorBody?.code == "pin_locked" {
@@ -362,12 +478,14 @@ final class IdentityServiceClient: IdentityServiceClientProtocol {
         let message: String?
         let error: String?
         let errorDescription: String?
+        let retryAfterSeconds: Int?
 
         enum CodingKeys: String, CodingKey {
             case code
             case message
             case error
             case errorDescription = "error_description"
+            case retryAfterSeconds
         }
     }
 }

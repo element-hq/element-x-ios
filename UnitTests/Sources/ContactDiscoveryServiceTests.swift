@@ -74,7 +74,7 @@ private final class IdentityServiceClientStub: IdentityServiceClientProtocol {
         fatalError("Not implemented")
     }
 
-    func pinStatus(accessToken: String) async throws -> Bool {
+    func pinStatus(accessToken: String) async throws -> PinStatus {
         fatalError("Not implemented")
     }
 
@@ -87,6 +87,18 @@ private final class IdentityServiceClientStub: IdentityServiceClientProtocol {
     }
 
     func completePinChange(accessToken: String, challengeId: String, otpCode: String, newPin: String) async throws {
+        fatalError("Not implemented")
+    }
+
+    func verifyPinReauth(accessToken: String, userId: String, pin: String) async throws -> String {
+        fatalError("Not implemented")
+    }
+
+    func requestPhoneChangeOTP(accessToken: String, userId: String, newPhone: String, reauthToken: String, language: String?) async throws {
+        fatalError("Not implemented")
+    }
+
+    func changePhoneNumber(accessToken: String, userId: String, newPhone: String, code: String, reauthToken: String) async throws {
         fatalError("Not implemented")
     }
 

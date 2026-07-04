@@ -188,7 +188,7 @@ class TwoStepVerificationScreenViewModel: TwoStepVerificationScreenViewModelType
         }
         state.phase = .loading
         do {
-            let hasPin = try await identityServiceClient.pinStatus(accessToken: accessToken)
+            let hasPin = try await identityServiceClient.pinStatus(accessToken: accessToken).hasPin
             userHasPin = hasPin
             state.phase = hasPin ? .overviewHasPin : .overviewNoPin
         } catch {

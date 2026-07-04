@@ -111,6 +111,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentDeactivateAccount()
                 case .twoStepVerification:
                     presentTwoStepVerification()
+                case .changePhoneNumber:
+                    presentChangePhone()
                 case .findFriends:
                     presentFindFriends()
                 }
@@ -252,6 +254,36 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             .sink { _ in }
             .store(in: &cancellables)
 
+        navigationStackCoordinator.push(coordinator)
+    }
+
+    /// GUA FORK: Change-phone-number entry-point.
+    private func presentChangePhone() {
+        guard let identityServiceClient = IdentityServiceClient() else {
+            MXLog.warning("Identity service is not configured; cannot show change phone number screen.")
+            return
+        }
+        let parameters = ChangePhoneScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
+                                                                identityServiceClient: identityServiceClient,
+                                                                userIndicatorController: flowParameters.userIndicatorController)
+        let coordinator = ChangePhoneScreenCoordinator(parameters: parameters)
+
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .close:
+                    navigationStackCoordinator.pop()
+                case .setUpPin:
+                    // No PIN set — drop the change-phone screen and route to the 2SV PIN-setup flow.
+                    // The fresh-2FA cooldown will hold after setup, so no auto-return is needed.
+                    navigationStackCoordinator.pop()
+                    presentTwoStepVerification()
+                }
+            }
+            .store(in: &cancellables)
+
+        coordinator.start()
         navigationStackCoordinator.push(coordinator)
     }
 
