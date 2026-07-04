@@ -8,21 +8,23 @@
 import CoreMotion
 import SwiftUI
 
-/// The welcome-screen app logo: the Gua app-icon artwork presented as a raised "liquid glass" object.
+/// The welcome-screen app logo: the Gua app-icon artwork presented as a raised glass tile.
 ///
-/// It comes alive in three independent ways:
-///  - **Entrance** (one-shot, on appear): the logo flies in rapidly from the side and spins into
-///    place — a 3D rotation that settles with a gentle spring. This is pure SwiftUI state, so it
-///    plays on every device **and on the simulator**. Skipped under Reduce Motion (the logo just
-///    appears).
-///  - **Device-motion parallax** (`CoreMotion`): once settled, the wolf and chat bubble — split into
-///    their own raised layers (`appLogoWolf`, `appLogoBubble`) above the gradient tile — lift and
-///    slide at staggered depths as you tilt the phone, with a glass highlight tracking the tilt.
-///    There is **no idle motion**: a still phone shows the clean, raised base icon. The simulator has
-///    no gyroscope, so the parallax stays at rest there (expected — the *entrance* still plays).
-///  - **Light** (`SwiftUI.TimelineView(.animation)`, display-link backed; the `SwiftUI.` qualifier
-///    avoids ElementX's own `TimelineView`): an occasional specular sheen that sweeps across the glass
-///    (~1s every ~11s) and a steady Gua-green aura that spills past the icon edges.
+/// Comes alive in four ways:
+///  - **Entrance** (one-shot, on appear): the logo flies in from the side and spins into place with a
+///    spring settle. Pure SwiftUI `@State` — plays on the simulator too. Skipped under Reduce Motion.
+///  - **Device-motion angle-of-view** (`CoreMotion`): the logo tilts ±5° in 3D as the phone moves,
+///    and a specular highlight sweeps around the two concentric glass-edge lines tracking the tilt
+///    direction. Still phone → clean icon, no motion. No gyroscope on simulator (tilt stays at rest
+///    there; the entrance still plays).
+///  - **Glyph relief** (liquid-glass edges): the wolf and the chat-bubble frame — their own layered
+///    assets (`appLogoWolf`, `appLogoBubble`) — carry a thin specular bevel: a light crescent hugs
+///    the lit edge and a shade crescent the far edge, so both read as raised glass. The bevel's
+///    light direction tracks the device tilt and the two layers drift at staggered depths (the wolf
+///    rides higher), like the home-screen icon parallax. At rest it is a soft overhead light.
+///  - **Light** (`SwiftUI.TimelineView(.animation)`, display-link backed; `SwiftUI.` qualifier avoids
+///    ElementX's own `TimelineView`): an occasional diagonal sheen sweep across the glass (~1s every
+///    ~11s) and a steady Gua-green aura behind the tile.
 ///
 /// Static under Reduce Motion (`animated == false`) and in snapshot tests.
 struct GuaWelcomeLogo: View {
@@ -38,6 +40,12 @@ struct GuaWelcomeLogo: View {
     @State private var tilt = DeviceTiltMotion()
     /// Drives the one-shot fly-in/spin entrance: starts off-screen + rotated, springs to rest.
     @State private var entered = false
+    /// Set once the entrance spring has been scheduled, so per-frame ticks don't re-arm it.
+    @State private var entranceScheduled = false
+    /// Time the logo has actually spent on screen (sum of rendered-frame deltas, stall-capped).
+    @State private var renderedLeadIn: TimeInterval = 0
+    /// Timestamp of the previous rendered frame, for the lead-in accumulation.
+    @State private var lastTick: TimeInterval?
 
     private var isLive: Bool {
         animated && !ProcessInfo.isRunningTests
@@ -53,6 +61,7 @@ struct GuaWelcomeLogo: View {
             if isLive {
                 SwiftUI.TimelineView(.animation) { context in
                     treated(t: context.date.timeIntervalSinceReferenceDate)
+                        .onChange(of: context.date) { startEntranceIfNeeded(now: context.date) }
                 }
             } else {
                 treated(t: 0)
@@ -68,12 +77,8 @@ struct GuaWelcomeLogo: View {
         .opacity(entered ? 1 : 0)
         .accessibilityHidden(true)
         .onAppear {
-            if isLive { tilt.start() }
-            guard !entered else { return }
-            if animated {
-                withAnimation(.spring(response: 0.52, dampingFraction: 0.66).delay(0.1)) {
-                    entered = true
-                }
+            if isLive {
+                tilt.start()
             } else {
                 entered = true // Reduce Motion / tests: appear in place, no fly-in.
             }
@@ -81,18 +86,41 @@ struct GuaWelcomeLogo: View {
         .onDisappear { tilt.stop() }
     }
 
+    /// Starts the one-shot entrance after ~0.35s of *rendered* frames rather than from `onAppear`.
+    ///
+    /// At app launch `onAppear` fires while the launch screen still covers the app and the main
+    /// thread is busy starting up, so a wall-clock spring started there burns out before anything
+    /// is visible — the logo just pops into place (the "entrance doesn't play" regression). The
+    /// `TimelineView` only ticks for frames that are really drawn, so the lead-in is accumulated
+    /// from per-frame deltas (capped, so a startup stall can't consume it) and the spring fires
+    /// only once the screen has demonstrably been rendering in front of the user for a beat.
+    private func startEntranceIfNeeded(now: Date) {
+        guard !entranceScheduled else { return }
+        let t = now.timeIntervalSinceReferenceDate
+        defer { lastTick = t }
+        guard let lastTick else { return }
+        renderedLeadIn += min(t - lastTick, 1 / 20)
+        guard renderedLeadIn >= 0.35 else { return }
+        entranceScheduled = true
+        withAnimation(.spring(response: 0.52, dampingFraction: 0.66)) {
+            entered = true
+        }
+    }
+
     private func treated(t: TimeInterval) -> some View {
-        // No breathing/pulsing — the logo comes alive only through light (the sheen sweep + the
-        // tilt-tracking glass highlight) and the device-motion parallax tilt.
         logo
-            .overlay { bubbleLayer() }
-            .overlay { wolfLayer() }
+            .overlay { glyphRelief() } // raised liquid-glass edges on the wolf + bubble layers
             .overlay { sheen(t: t) }
             .overlay { glassHighlight() }
+            .overlay { innerRimLine() } // inner edge line, clipped to icon boundary
             .clipShape(shape)
-            .overlay { shape.stroke(.white.opacity(0.16), lineWidth: 0.5) } // crisp glass edge
+            .overlay { outerRimLine() } // outer edge line, unclipped — creates the double-line look
+            // Slight parallax against the (anchored) aura as the phone tilts — the tile reads as
+            // floating above the glow, like the home-screen icon parallax. Zero at rest, so a still
+            // phone shows the icon exactly in place.
+            .offset(x: tilt.roll * size * 0.025, y: tilt.pitch * size * 0.025)
             .background { aura(t: t) }
-            // Subtle device-motion parallax: ±5° max, no movement when the phone is still.
+            // Whole logo tilts ±5° in 3D — shifting the angle-of-view of the raised glass edges.
             .rotation3DEffect(.degrees(tilt.pitch * 5), axis: (x: 1, y: 0, z: 0), perspective: 0.6)
             .rotation3DEffect(.degrees(tilt.roll * 5), axis: (x: 0, y: 1, z: 0), perspective: 0.6)
             .shadow(color: .black.opacity(0.18), radius: 16, y: 8)
@@ -121,41 +149,123 @@ struct GuaWelcomeLogo: View {
             .frame(width: size, height: size)
     }
 
-    /// Smoothed tilt magnitude (0 when the phone is flat). The raised layers fade in with it so a
-    /// still phone shows the clean base icon and the depth only appears as you move the phone.
-    private var motionMag: Double {
-        (tilt.roll * tilt.roll + tilt.pitch * tilt.pitch).squareRoot()
+    /// The tilt-driven light-source angle for the rim specular.
+    /// At rest (roll=0, pitch=0) the highlight sits at 12 o'clock — natural overhead light.
+    private var rimLightAngle: Angle {
+        Angle(radians: atan2(tilt.roll, -tilt.pitch) - .pi / 2)
     }
 
-    // The chat bubble and the wolf are split into their OWN layers (`app-logo-bubble`,
-    // `app-logo-wolf`) and stacked above the gradient tile at STAGGERED depths: the wolf shifts and
-    // casts a deeper shadow than the bubble, which shifts more than the fixed tile. As the phone
-    // tilts they read as physically raised glass (the "elevated liquid glass" idea, using the real
-    // logo content). Both fade in only with motion, so a still phone shows the clean base icon.
+    // MARK: - Glyph liquid-glass bevel
 
-    /// Mid layer: the chat-bubble outline, lifted a little off the tile.
-    private func bubbleLayer() -> some View {
-        Image(asset: Asset.Images.appLogoBubble)
+    /// Smoothed tilt magnitude: 0 with the phone still, →1 as it tilts.
+    private var tiltMagnitude: Double {
+        min(1, (tilt.roll * tilt.roll + tilt.pitch * tilt.pitch).squareRoot())
+    }
+
+    /// The light angle used by the glyph bevel. The constant `+0.55` overhead bias keeps `atan2`
+    /// well-defined at rest — the light sits at 12 o'clock on a still phone (instead of spinning on
+    /// sensor noise) and swings smoothly toward the raised edge as the device tilts.
+    private var bevelLightAngle: Angle {
+        Angle(radians: atan2(tilt.roll, -tilt.pitch + 0.55) - .pi / 2)
+    }
+
+    /// Unit vector pointing from the tile centre toward the bevel light (screen coordinates, y down).
+    private var bevelLightVector: CGSize {
+        CGSize(width: cos(bevelLightAngle.radians), height: sin(bevelLightAngle.radians))
+    }
+
+    /// The specular bevel around the wolf-in-speech-bubble glyph: for each glyph layer
+    /// (`appLogoBubble`, then `appLogoWolf` raised slightly higher) a thin white crescent hugs the
+    /// lit edge and a dark crescent the far edge, so the glyph reads as raised glass. The crescents
+    /// are built by shifting a tinted copy of the glyph toward/away from the light and punching the
+    /// unshifted glyph back out (`.destinationOut`), leaving only the exposed edge. The light
+    /// direction and bevel depth track the device tilt; at rest the glyph is lit softly from above.
+    private func glyphRelief() -> some View {
+        let mag = tiltMagnitude
+        // Bevel depth in points: visible at rest, digs slightly deeper while the phone moves.
+        let depth = size * (0.014 + 0.012 * mag)
+
+        return ZStack {
+            glyphBevel(asset: Asset.Images.appLogoBubble, depth: depth * 0.85, mag: mag, parallax: 0.010)
+            glyphBevel(asset: Asset.Images.appLogoWolf, depth: depth * 1.15, mag: mag, parallax: 0.020)
+        }
+        .allowsHitTesting(false)
+    }
+
+    /// Light + shade crescents for one glyph layer. `parallax` staggers the layers' drift with the
+    /// tilt (the wolf rides higher than the bubble), keeping the depths distinct.
+    private func glyphBevel(asset: ImageAsset, depth: CGFloat, mag: Double, parallax: CGFloat) -> some View {
+        ZStack {
+            // Specular crescent on the lit edge.
+            glyphCrescent(asset: asset,
+                          color: .white,
+                          offset: CGSize(width: bevelLightVector.width * depth, height: bevelLightVector.height * depth))
+                .opacity(0.55 + 0.30 * mag)
+                .blendMode(.screen)
+            // Shade crescent on the far edge — sells the raised 3D relief.
+            glyphCrescent(asset: asset,
+                          color: .black,
+                          offset: CGSize(width: -bevelLightVector.width * depth * 0.8, height: -bevelLightVector.height * depth * 0.8))
+                .opacity(0.22 + 0.14 * mag)
+        }
+        .offset(x: tilt.roll * size * parallax, y: tilt.pitch * size * parallax)
+    }
+
+    /// A thin edge crescent: the glyph tinted `color`, shifted by `offset`, minus the glyph at rest —
+    /// only the sliver of the shifted copy that clears the glyph's own silhouette survives.
+    private func glyphCrescent(asset: ImageAsset, color: Color, offset: CGSize) -> some View {
+        ZStack {
+            glyphTemplate(asset, color: color)
+                .offset(offset)
+            glyphTemplate(asset, color: .black)
+                .blendMode(.destinationOut)
+        }
+        .compositingGroup()
+        .blur(radius: size * 0.006)
+    }
+
+    private func glyphTemplate(_ asset: ImageAsset, color: Color) -> some View {
+        Image(asset: asset)
+            .renderingMode(.template)
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)
-            .shadow(color: .black.opacity(0.22), radius: size * 0.025,
-                    x: -tilt.roll * size * 0.02, y: -tilt.pitch * size * 0.02)
-            .offset(x: tilt.roll * size * 0.03, y: tilt.pitch * size * 0.03)
-            .opacity(0.95) // always-on raised relief — stays visible when the phone is still
+            .foregroundStyle(color)
+    }
+
+    /// Inner glass-edge line — sits ~2.5 pt inside the clip boundary, with a specular highlight
+    /// that tracks the tilt direction. Placed before `.clipShape` so it's bounded by the icon.
+    private func innerRimLine() -> some View {
+        RoundedRectangle(cornerRadius: corner - 2.5, style: .continuous)
+            .stroke(AngularGradient(stops: [
+                        .init(color: .white.opacity(0.85), location: 0.00),
+                        .init(color: .white.opacity(0.18), location: 0.28),
+                        .init(color: .clear, location: 0.50),
+                        .init(color: .white.opacity(0.18), location: 0.72),
+                        .init(color: .white.opacity(0.85), location: 1.00)
+                    ],
+                    center: .center,
+                    startAngle: rimLightAngle,
+                    endAngle: rimLightAngle + .degrees(360)),
+                    lineWidth: 1.0)
             .allowsHitTesting(false)
     }
 
-    /// Top layer: the wolf, raised highest — biggest parallax shift + deepest shadow.
-    private func wolfLayer() -> some View {
-        Image(asset: Asset.Images.appLogoWolf)
-            .resizable()
-            .scaledToFit()
-            .frame(width: size, height: size)
-            .shadow(color: .black.opacity(0.3), radius: size * 0.04,
-                    x: -tilt.roll * size * 0.04, y: -tilt.pitch * size * 0.04)
-            .offset(x: tilt.roll * size * 0.06, y: tilt.pitch * size * 0.06)
-            .opacity(1) // always-on raised relief — stays visible when the phone is still
+    /// Outer glass-edge line — sits at the clip boundary (placed after `.clipShape`, so it's not
+    /// clipped). Together with `innerRimLine` this creates the double-line raised-glass-edge look.
+    private func outerRimLine() -> some View {
+        shape
+            .stroke(AngularGradient(stops: [
+                        .init(color: .white.opacity(0.55), location: 0.00),
+                        .init(color: .white.opacity(0.07), location: 0.28),
+                        .init(color: .clear, location: 0.50),
+                        .init(color: .white.opacity(0.07), location: 0.72),
+                        .init(color: .white.opacity(0.55), location: 1.00)
+                    ],
+                    center: .center,
+                    startAngle: rimLightAngle,
+                    endAngle: rimLightAngle + .degrees(360)),
+                    lineWidth: 1.0)
             .allowsHitTesting(false)
     }
 
