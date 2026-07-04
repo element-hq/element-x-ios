@@ -428,11 +428,9 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
         // Pass the device locale so the IDP renders in the user's language (e.g. French).
-        if let languageCode = Locale.current.language.languageCode?.identifier {
-            var queryItems = components.queryItems ?? []
-            queryItems.append(URLQueryItem(name: "ui_locales", value: languageCode))
-            components.queryItems = queryItems
-        }
+        // GUA FORK: append without re-serializing the query so any existing percent-encoding
+        // (e.g. a `%2B`-escaped value) survives untouched. See appendUILocalesPreservingEncoding.
+        components.appendUILocalesPreservingEncoding()
         return components.url
     }
     
