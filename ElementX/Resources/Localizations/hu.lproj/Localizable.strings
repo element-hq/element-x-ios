@@ -2,9 +2,10 @@
 "a11y_add_reaction" = "Reakció hozzáadása: %1$@";
 "a11y_address" = "Cím";
 "a11y_avatar" = "Profilkép";
+"a11y_clear_search_field" = "Keresőmező törlése";
 "a11y_collapse_message_text_field" = "Üzenet szövegmezőjének minimalizálása";
-"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
-"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_create_poll_votes_allowed_decrease" = "Személyenként engedélyezett szavazatok számának csökkentése";
+"a11y_create_poll_votes_allowed_increase" = "Személyenként engedélyezett szavazatok számának növelése";
 "a11y_delete" = "Törlés";
 "a11y_duration" = "Időtartam: %1$@";
 "a11y_edit_avatar" = "Profilkép szerkesztése";
@@ -23,7 +24,7 @@
 "a11y_page_n" = "%1$d. oldal";
 "a11y_pause" = "Szüneteltetés";
 "a11y_paused_voice_message" = "Hangüzenet, időtartam:%1$@, jelenlegi pozíció:%2$@";
-"a11y_photo_preview" = "Photo preview";
+"a11y_photo_preview" = "Fénykép előnézete";
 "a11y_pin_field" = "PIN-mező";
 "a11y_pinned_location" = "Rögzített hely";
 "a11y_play" = "Lejátszás";
@@ -36,9 +37,9 @@
 "a11y_qr_code" = "QR-kód";
 "a11y_react_with" = "Reagálás a következővel: %1$@";
 "a11y_react_with_other_emojis" = "Reagálás más emodzsikkal";
-"a11y_read_receipts_multiple" = "Olvasta: %1$@ és %2$@";
-"a11y_read_receipts_single" = "Olvasta: %1$@";
-"a11y_read_receipts_tap_to_show_all" = "Koppintson az összes megjelenítéséhez";
+"a11y_read_receipts_multiple" = "Az előző üzenetet olvasta: %1$@ és %2$@";
+"a11y_read_receipts_single" = "Az előző üzenetet olvasta: %1$@";
+"a11y_read_receipts_tap_to_show_all_ios" = "Koppintson az összes megjelenítéséhez";
 "a11y_remove_reaction" = "Reakció eltávolítása: %1$@";
 "a11y_remove_reaction_with" = "Reakció eltávolítása: %1$@";
 "a11y_send_files" = "Fájlküldés";
@@ -51,7 +52,7 @@
 "a11y_start_voice_call" = "Hanghívás indítása";
 "a11y_tombstoned_room" = "Elévült szoba";
 "a11y_user_menu" = "Felhasználói menü";
-"a11y_video_preview" = "Video preview";
+"a11y_video_preview" = "Videó előnézete";
 "a11y_view_avatar" = "Profilkép megtekintése";
 "a11y_view_details" = "Részletek megtekintése";
 "a11y_voice_message" = "Hangüzenet, időtartam: %1$@";
@@ -188,11 +189,11 @@
 "action_translate" = "Fordítás";
 "action_try_again" = "Próbálja újra";
 "action_unpin" = "Kitűzés feloldása";
-"action_video_call" = "Video call";
+"action_video_call" = "Videóhívás";
 "action_view" = "Megtekintés";
 "action_view_in_timeline" = "Megtekintés az idővonalon";
 "action_view_source" = "Forrás megtekintése";
-"action_voice_call" = "Voice call";
+"action_voice_call" = "Hanghívás";
 "action_yes" = "Igen";
 "action_yes_try_again" = "Igen, újrapróbálkozás";
 "banner_migrate_to_native_sliding_sync_action" = "Kijelentkezés és frissítés";
@@ -222,7 +223,7 @@
 "common_blocked_users" = "Letiltott felhasználók";
 "common_bubbles" = "Buborékok";
 "common_call_declined" = "Hívás elutasítva";
-"common_call_in_progress" = "Call in progress";
+"common_call_in_progress" = "Hívás folyamatban";
 "common_call_started" = "A hívás elindult";
 "common_call_you_declined" = "Elutasított egy hívást";
 "common_chat_backup" = "Csevegés biztonsági mentése";
@@ -264,9 +265,9 @@
 "common_file_saved" = "A fájl mentve";
 "common_forward_message" = "Üzenet továbbítása";
 "common_frequently_used" = "Gyakran használt";
-"common_gallery" = "Gallery";
+"common_gallery" = "Galéria";
 "common_gif" = "GIF";
-"common_group_call_in_progress" = "Group call in progress";
+"common_group_call_in_progress" = "Csoportos hívás folyamatban";
 "common_image" = "Kép";
 "common_in_reply_to" = "Válasz erre: %1$@";
 "common_invite_unknown_profile" = "Ez a Matrix-azonosító nem található, ezért előfordulhat, hogy a meghívó nem érkezik meg.";
@@ -382,7 +383,7 @@
 "common_unmute" = "Némítás feloldása";
 "common_unsupported_call" = "Nem támogatott hívás";
 "common_unsupported_event" = "Nem támogatott esemény";
-"common_user_started_a_call" = "%1$@ started a call";
+"common_user_started_a_call" = "%1$@ hívást indított";
 "common_username" = "Felhasználónév";
 "common_verification_cancelled" = "Az ellenőrzés megszakítva";
 "common_verification_complete" = "Az ellenőrzés befejeződött";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Adja meg a helyreállítási kulcsot";
 "confirm_recovery_key_banner_secondary_button_title" = "Elfelejtette a helyreállítási kulcsot?";
 "confirm_recovery_key_banner_title" = "A kulcstároló nincs szinkronizálva";
+"content_scanner_not_found" = "A letöltés nem érhető el.";
+"content_scanner_not_found_title" = "A fájl nem található";
+"content_scanner_unsafe_message" = "Az előnézet és a letöltés le van tiltva.";
+"content_scanner_unsafe_title" = "A fájl nem biztonságos";
 "crash_detection_dialog_content" = "Az %1$@ összeomlott a legutóbbi használata óta. Megosztja velünk az összeomlás-jelentést?";
 "crypto_event_authenticity_mismatched_sender" = "Az esemény feladója nem egyezik az eseményt küldő eszköz tulajdonosával.";
 "crypto_event_authenticity_not_guaranteed" = "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.";
@@ -735,7 +740,7 @@
 "screen_create_poll_remove_accessibility_label" = "Eltávolítás: %1$@";
 "screen_create_poll_settings_section_title" = "Beállítások";
 "screen_create_poll_title" = "Szavazás létrehozása";
-"screen_create_poll_votes_allowed_per_person" = "Votes allowed per person";
+"screen_create_poll_votes_allowed_per_person" = "Személyenként engedélyezett szavazatok száma";
 "screen_create_room_action_create_room" = "Új szoba";
 "screen_create_room_add_people_title" = "Ismerősök meghívása";
 "screen_create_room_error_creating_room" = "Hiba történt a szoba létrehozásakor";
@@ -933,7 +938,7 @@
 "screen_leave_space_title" = "Kilép innen: %1$@?";
 "screen_leave_space_title_last_admin" = "Ön az egyetlen adminisztrátor itt: %1$@";
 "screen_leave_space_title_last_owner" = "Tulajdonjog átruházása";
-"screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
+"screen_link_new_device_authentication_reason_ios" = "Új eszköz összekapcsolása előtt erősítse meg, hogy Ön az.";
 "screen_link_new_device_desktop_scanning_title" = "Olvassa be a QR-kódot";
 "screen_link_new_device_desktop_step1" = "Nyissa meg az %1$@ alkalmazást egy laptopon vagy asztali számítógépen.";
 "screen_link_new_device_desktop_step3" = "Olvassa be a QR-kódot ezzel az eszközzel";
@@ -1542,7 +1547,7 @@
 "screen_start_chat_error_starting_chat" = "Hiba történt a csevegés indításakor";
 "screen_start_chat_join_room_by_address_action" = "Csatlakozás a szobához cím szerint";
 "screen_start_chat_join_room_by_address_invalid_address" = "Nem érvényes cím";
-"screen_start_chat_join_room_by_address_placeholder" = "Írja be...";
+"screen_start_chat_join_room_by_address_placeholder" = "Cím megadása…";
 "screen_start_chat_join_room_by_address_room_found" = "Megfelelő szoba található";
 "screen_start_chat_join_room_by_address_room_not_found" = "Szoba nem található";
 "screen_start_chat_join_room_by_address_supporting_text" = "pl. #szoba-neve:matrix.org";

@@ -47,11 +47,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Прочитано %1$@ та %2$d іншими</string>
+			<string>Попереднє повідомлення прочитали %1$@ та ще %2$d користувачі</string>
 			<key>many</key>
-			<string>Прочитано %1$@ та %2$d іншими</string>
+			<string>Попереднє повідомлення прочитали %1$@ та ще %2$d користувачів</string>
 			<key>one</key>
-			<string>Прочитано %1$@ та %2$d іншим</string>
+			<string>Попереднє повідомлення прочитали %1$@ та ще %2$d користувач</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

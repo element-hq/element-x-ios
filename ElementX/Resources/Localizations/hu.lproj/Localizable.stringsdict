@@ -43,9 +43,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Olvasta: %1$@ és még %2$d felhasználó</string>
+			<string>Az előző üzenetet olvasta: %1$@ és még %2$d felhasználó</string>
 			<key>other</key>
-			<string>Olvasta: %1$@ és még %2$d felhasználó</string>
+			<string>Az előző üzenetet olvasta: %1$@ és még %2$d felhasználó</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -569,9 +569,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>+ %1$d joined</string>
+			<string>+ %1$d csatlakozott</string>
 			<key>other</key>
-			<string>+ %1$d joined</string>
+			<string>+ %1$d csatlakozott</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

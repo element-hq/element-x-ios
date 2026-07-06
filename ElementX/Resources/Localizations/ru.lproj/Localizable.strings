@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "Добавить реакцию: %1$@";
 "a11y_address" = "Адрес";
 "a11y_avatar" = "Аватар";
+"a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "Свернуть поле ввода";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -38,7 +39,7 @@
 "a11y_react_with_other_emojis" = "Реакция с помощью эмодзи";
 "a11y_read_receipts_multiple" = "Прочитано %1$@ и %2$@";
 "a11y_read_receipts_single" = "Прочитано %1$@";
-"a11y_read_receipts_tap_to_show_all" = "Нажмите, чтобы показать все";
+"a11y_read_receipts_tap_to_show_all_ios" = "Нажмите, чтобы показать все";
 "a11y_remove_reaction" = "Удалить реакцию с %1$@";
 "a11y_remove_reaction_with" = "Удалить реакцию %1$@";
 "a11y_send_files" = "Отправить файлы";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Введите ключ восстановления";
 "confirm_recovery_key_banner_secondary_button_title" = "Забыли ключ восстановления?";
 "confirm_recovery_key_banner_title" = "Хранилище ключей не синхронизировано";
+"content_scanner_not_found" = "Download not available.";
+"content_scanner_not_found_title" = "File not found";
+"content_scanner_unsafe_message" = "Preview and download have been disabled.";
+"content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "При последнем использовании %1$@ произошел сбой. Хотите отправить отчет?";
 "crypto_event_authenticity_mismatched_sender" = "Отправитель события и владелец устройства не совпадают.";
 "crypto_event_authenticity_not_guaranteed" = "Подлинность этого зашифрованного сообщения не может быть гарантирована на этом устройстве.";

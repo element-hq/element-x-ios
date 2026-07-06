@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "Lisää reaktio: %1$@";
 "a11y_address" = "Osoite";
 "a11y_avatar" = "Avatar";
+"a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "Pienennä viestin tekstikenttä";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -38,7 +39,7 @@
 "a11y_react_with_other_emojis" = "Reagoi muilla emojeilla";
 "a11y_read_receipts_multiple" = "%1$@ ja %2$@ on lukenut viestin";
 "a11y_read_receipts_single" = "%1$@ on lukenut viestin";
-"a11y_read_receipts_tap_to_show_all" = "Näytä kaikki napauttamalla";
+"a11y_read_receipts_tap_to_show_all_ios" = "Näytä kaikki napauttamalla";
 "a11y_remove_reaction" = "Poista reaktio: %1$@";
 "a11y_remove_reaction_with" = "Poista reaktio: %1$@";
 "a11y_send_files" = "Lähetä tiedostoja";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Anna palautusavaimesi";
 "confirm_recovery_key_banner_secondary_button_title" = "Unohditko palautusavaimesi?";
 "confirm_recovery_key_banner_title" = "Avainten säilytys ei ole synkronoitu";
+"content_scanner_not_found" = "Download not available.";
+"content_scanner_not_found_title" = "File not found";
+"content_scanner_unsafe_message" = "Preview and download have been disabled.";
+"content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ kaatui edellisellä käyttökerralla. Haluatko jakaa virheraportin kanssamme?";
 "crypto_event_authenticity_mismatched_sender" = "Tapahtuman lähettäjä ei vastaa sitä lähettäneen laitteen omistajaa.";
 "crypto_event_authenticity_not_guaranteed" = "Tämän salatun viestin aitoutta ei voida taata tällä laitteella.";

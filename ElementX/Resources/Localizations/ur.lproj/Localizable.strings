@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "ایک رد عمل کا اضافہ کریں: %1$@";
 "a11y_address" = "Address";
 "a11y_avatar" = "اوتار";
+"a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -38,7 +39,7 @@
 "a11y_react_with_other_emojis" = "دیگر رموز تعبیری سے رد عمل کریں";
 "a11y_read_receipts_multiple" = "%1$@ اور %2$@ نے پڑھا";
 "a11y_read_receipts_single" = "%1$@ نے پڑھا";
-"a11y_read_receipts_tap_to_show_all" = "سب دکھانے کے لیے تھپتھپائیں";
+"a11y_read_receipts_tap_to_show_all_ios" = "سب دکھانے کے لیے تھپتھپائیں";
 "a11y_remove_reaction" = "%1$@ کے ساتھ رد عمل ہٹائیں";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "مسلیں بھیجیں";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "آپ کا کلید کا ذخیرہ غیر ہم وقت ساز ہے۔";
+"content_scanner_not_found" = "Download not available.";
+"content_scanner_not_found_title" = "File not found";
+"content_scanner_unsafe_message" = "Preview and download have been disabled.";
+"content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@آخری بار استعمال ہونے پر ٹکرا گیا۔ کیا آپ ہمارے ساتھ ٹکر کی گزارش (رپورٹ) کا اشتراک کرنا چاہیں گے؟";
 "crypto_event_authenticity_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "crypto_event_authenticity_not_guaranteed" = "اس آلہ پر اس مرموز کردہ پیغام کی صداقت کی ضمانت نہیں دی جا سکتی۔";
