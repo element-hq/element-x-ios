@@ -38,7 +38,7 @@ struct VoiceMessageRoomTimelineContent: View {
                                          onScrubbing: { onPlaybackScrubbing($0) },
                                          onPlaybackSpeedChange: onPlaybackSpeedChange)
                 .fixedSize(horizontal: false, vertical: true)
-        } loading: {
+        } scanningContent: {
             VoiceMessageRoomPlaybackView(playerState: playerState,
                                          isScanning: true,
                                          onPlayPause: { },
@@ -46,7 +46,7 @@ struct VoiceMessageRoomTimelineContent: View {
                                          onScrubbing: { _ in },
                                          onPlaybackSpeedChange: { })
                 .fixedSize(horizontal: false, vertical: true)
-        } failed: { failure in
+        } unsafeContent: { failure in
             ContentScanningFailureView(failure: failure)
         }
     }

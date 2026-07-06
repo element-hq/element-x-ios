@@ -63,15 +63,13 @@ struct MediaFileRoomTimelineContent: View {
                                 mediaSource: mediaSource) {
                 if let onMediaTap {
                     filePreview(isScanning: false)
-                        .onTapGesture {
-                            onMediaTap()
-                        }
+                        .onTapGesture(perform: onMediaTap)
                 } else {
                     filePreview(isScanning: false)
                 }
-            } loading: {
+            } scanningContent: {
                 filePreview(isScanning: true)
-            } failed: { failure in
+            } unsafeContent: { failure in
                 ContentScanningFailureView(failure: failure)
             }
             
@@ -104,7 +102,7 @@ struct MediaFileRoomTimelineContent: View {
             Group {
                 if isScanning {
                     ProgressView()
-                        .scaledFrame(size: 24, relativeTo: .body)
+                        .scaledFrame(size: CompoundIcon.Size.medium.value, relativeTo: .body)
                 } else {
                     CompoundIcon(icon, size: .medium, relativeTo: .body)
                         .foregroundColor(.compound.iconPrimary)

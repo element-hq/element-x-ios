@@ -110,7 +110,7 @@ internal nonisolated enum L10n {
   }
   /// React with other emojis
   internal static var a11yReactWithOtherEmojis: String { return L10n.tr("Localizable", "a11y_react_with_other_emojis") }
-  /// Read by %1$@ and %2$@
+  /// Previous message read by %1$@ and %2$@
   internal static func a11yReadReceiptsMultiple(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_multiple", String(describing: p1), String(describing: p2))
   }
@@ -118,12 +118,12 @@ internal nonisolated enum L10n {
   internal static func a11yReadReceiptsMultipleWithOthers(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_multiple_with_others", p1)
   }
-  /// Read by %1$@
+  /// Previous message read by %1$@
   internal static func a11yReadReceiptsSingle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_single", String(describing: p1))
   }
   /// Tap to show all
-  internal static var a11yReadReceiptsTapToShowAll: String { return L10n.tr("Localizable", "a11y_read_receipts_tap_to_show_all") }
+  internal static var a11yReadReceiptsTapToShowAllIos: String { return L10n.tr("Localizable", "a11y_read_receipts_tap_to_show_all_ios") }
   /// Remove reaction: %1$@
   internal static func a11yRemoveReaction(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_remove_reaction", String(describing: p1))
@@ -492,14 +492,6 @@ internal nonisolated enum L10n {
   internal static var commonCallYouDeclined: String { return L10n.tr("Localizable", "common_call_you_declined") }
   /// Chat backup
   internal static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
-  /// Download not available.
-  internal static var commonContentScannerNotFound: String { return L10n.tr("Localizable", "common_content_scanner_not_found") }
-  /// File not found
-  internal static var commonContentScannerNotFoundTitle: String { return L10n.tr("Localizable", "common_content_scanner_not_found_title") }
-  /// Preview and download have been disabled.
-  internal static var commonContentScannerUnsafeMessage: String { return L10n.tr("Localizable", "common_content_scanner_unsafe_message") }
-  /// The file is not safe
-  internal static var commonContentScannerUnsafeTitle: String { return L10n.tr("Localizable", "common_content_scanner_unsafe_title") }
   /// Copied to clipboard
   internal static var commonCopiedToClipboard: String { return L10n.tr("Localizable", "common_copied_to_clipboard") }
   /// Copyright
@@ -910,6 +902,14 @@ internal nonisolated enum L10n {
   internal static var confirmRecoveryKeyBannerSecondaryButtonTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_secondary_button_title") }
   /// Your key storage is out of sync
   internal static var confirmRecoveryKeyBannerTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_title") }
+  /// Download not available.
+  internal static var contentScannerNotFound: String { return L10n.tr("Localizable", "content_scanner_not_found") }
+  /// File not found
+  internal static var contentScannerNotFoundTitle: String { return L10n.tr("Localizable", "content_scanner_not_found_title") }
+  /// Preview and download have been disabled.
+  internal static var contentScannerUnsafeMessage: String { return L10n.tr("Localizable", "content_scanner_unsafe_message") }
+  /// The file is not safe
+  internal static var contentScannerUnsafeTitle: String { return L10n.tr("Localizable", "content_scanner_unsafe_title") }
   /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
   internal static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))

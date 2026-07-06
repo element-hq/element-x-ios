@@ -35,11 +35,11 @@ struct VideoRoomTimelineView: View {
                         .onTapGesture {
                             context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                         }
-                } loading: {
+                } scanningContent: {
                     placeholder
                         .overlay { ProgressView() }
                         .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
-                } failed: { failure in
+                } unsafeContent: { failure in
                     ContentScanningFailureView(failure: failure)
                 }
                 

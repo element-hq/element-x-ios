@@ -27,25 +27,25 @@ nonisolated struct ContentScanningFailurePreferenceKey: PreferenceKey {
 
 /// A wrapper that gates the presentation of a media item on its content scan state.
 ///
-/// The content is rendered when the media is known to be safe or when there's no content scanner
-/// configured, the loading content whilst a scan is in flight and the failed content when the
-/// media is unsafe or couldn't be scanned. Any failure is also reported up the view hierarchy
-/// through ``ContentScanningFailurePreferenceKey``.
+/// The safe content is rendered when the media is known to be safe or when there's no content
+/// scanner configured, the scanning content whilst a scan is in flight and the unsafe content
+/// when the media is unsafe or couldn't be scanned. Any failure is also reported up the view
+/// hierarchy through ``ContentScanningFailurePreferenceKey``.
 ///
-/// - Important: Any interactions with the media (taps, playback etc.) must live inside the
+/// - Important: Any interactions with the media (taps, playback etc.) must live inside the safe
 /// content so that they're unavailable whilst the media is being scanned or is unsafe.
-struct ContentScanningView<Content: View, LoadingContent: View, FailedContent: View>: View {
+struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeContent: View>: View {
     private enum ScanState {
-        case loaded
-        case loading
-        case failed(ContentScanningFailure)
+        case safe
+        case scanning
+        case unsafe(ContentScanningFailure)
     }
     
     private let contentScannerService: ContentScannerServiceProtocol?
     private let mediaSource: MediaSourceProxy?
-    private let content: () -> Content
-    private let loadingContent: () -> LoadingContent
-    private let failedContent: (ContentScanningFailure) -> FailedContent
+    private let safeContent: () -> SafeContent
+    private let scanningContent: () -> ScanningContent
+    private let unsafeContent: (ContentScanningFailure) -> UnsafeContent
     
     @State private var scanState: ScanState?
     
@@ -54,23 +54,23 @@ struct ContentScanningView<Content: View, LoadingContent: View, FailedContent: V
     ///     scanning and the content is always rendered.
     ///   - mediaSource: The media source to scan. Passing `nil` renders the content, this
     ///     makes it convenient to wrap items whose media source is optional.
-    ///   - content: The regular presentation of the media, including any interactions with it.
-    ///   - loading: The presentation of the media whilst it's being scanned.
-    ///   - failed: The presentation of the media when it can't be shown.
+    ///   - safeContent: The regular presentation of the media, including any interactions with it.
+    ///   - scanningContent: The presentation of the media whilst it's being scanned.
+    ///   - unsafeContent: The presentation of the media when it can't be shown.
     init(contentScannerService: ContentScannerServiceProtocol?,
          mediaSource: MediaSourceProxy?,
-         @ViewBuilder content: @escaping () -> Content,
-         @ViewBuilder loading: @escaping () -> LoadingContent,
-         @ViewBuilder failed: @escaping (ContentScanningFailure) -> FailedContent) {
+         @ViewBuilder safeContent: @escaping () -> SafeContent,
+         @ViewBuilder scanningContent: @escaping () -> ScanningContent,
+         @ViewBuilder unsafeContent: @escaping (ContentScanningFailure) -> UnsafeContent) {
         self.contentScannerService = contentScannerService
         self.mediaSource = mediaSource
-        self.content = content
-        loadingContent = loading
-        failedContent = failed
+        self.safeContent = safeContent
+        self.scanningContent = scanningContent
+        self.unsafeContent = unsafeContent
     }
     
     var body: some View {
-        scanStateContent
+        content
             .preference(key: ContentScanningFailurePreferenceKey.self, value: scanFailure)
             .task(id: mediaSource?.url.absoluteString) {
                 await scan()
@@ -78,19 +78,19 @@ struct ContentScanningView<Content: View, LoadingContent: View, FailedContent: V
     }
     
     @ViewBuilder
-    private var scanStateContent: some View {
+    private var content: some View {
         switch resolvedScanState {
-        case .loaded:
-            content()
-        case .loading:
-            loadingContent()
-        case .failed(let failure):
-            failedContent(failure)
+        case .safe:
+            safeContent()
+        case .scanning:
+            scanningContent()
+        case .unsafe(let failure):
+            unsafeContent(failure)
         }
     }
     
     private var scanFailure: ContentScanningFailure? {
-        guard case .failed(let failure) = resolvedScanState else {
+        guard case .unsafe(let failure) = resolvedScanState else {
             return nil
         }
         return failure
@@ -98,7 +98,7 @@ struct ContentScanningView<Content: View, LoadingContent: View, FailedContent: V
     
     private var resolvedScanState: ScanState {
         guard let contentScannerService, let mediaSource else {
-            return .loaded
+            return .safe
         }
         
         if let scanState {
@@ -107,9 +107,9 @@ struct ContentScanningView<Content: View, LoadingContent: View, FailedContent: V
         
         // Until the scan triggered by this view resolves, reflect any verdict already in the cache.
         switch contentScannerService.scanResultFromSource(mediaSource) {
-        case true: return .loaded
-        case false: return .failed(.notSafe)
-        default: return .loading
+        case true: return .safe
+        case false: return .unsafe(.notSafe)
+        default: return .scanning
         }
     }
     
@@ -120,11 +120,11 @@ struct ContentScanningView<Content: View, LoadingContent: View, FailedContent: V
         
         switch await contentScannerService.loadScanResultFromSource(mediaSource) {
         case .success(true):
-            scanState = .loaded
+            scanState = .safe
         case .success(false):
-            scanState = .failed(.notSafe)
+            scanState = .unsafe(.notSafe)
         case .failure:
-            scanState = .failed(.notFound)
+            scanState = .unsafe(.notFound)
         }
     }
 }

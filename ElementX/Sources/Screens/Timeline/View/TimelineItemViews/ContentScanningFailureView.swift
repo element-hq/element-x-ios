@@ -32,19 +32,20 @@ struct ContentScanningFailureView: View {
                     .foregroundStyle(.compound.textSecondary)
             }
         }
+        .accessibilityElement(children: .combine)
     }
     
     private var title: String {
         switch failure {
-        case .notSafe: L10n.commonContentScannerUnsafeTitle
-        case .notFound: L10n.commonContentScannerNotFoundTitle
+        case .notSafe: L10n.contentScannerUnsafeTitle
+        case .notFound: L10n.contentScannerNotFoundTitle
         }
     }
     
     private var message: String {
         switch failure {
-        case .notSafe: L10n.commonContentScannerUnsafeMessage
-        case .notFound: L10n.commonContentScannerNotFound
+        case .notSafe: L10n.contentScannerUnsafeMessage
+        case .notFound: L10n.contentScannerNotFound
         }
     }
 }

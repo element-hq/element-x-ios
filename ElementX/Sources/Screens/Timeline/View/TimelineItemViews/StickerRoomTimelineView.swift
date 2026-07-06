@@ -30,11 +30,11 @@ struct StickerRoomTimelineView: View {
                 .onTapGesture {
                     context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                 }
-            } loading: {
+            } scanningContent: {
                 placeholder
                     .overlay { ProgressView() }
                     .timelineMediaFrame(imageInfo: timelineItem.imageInfo)
-            } failed: { failure in
+            } unsafeContent: { failure in
                 ContentScanningFailureView(failure: failure)
             }
         }

@@ -17,7 +17,7 @@ struct VoiceMessageRoomPlaybackView: View {
     @GestureState var isDragging = false
     
     /// Whether the voice message is being scanned by the content scanner, in which case
-    /// the play button shows a spinner and playback isn't available.
+    /// the play button shows a spinner and playback isn't available (which prevents the audio file from being downloaded).
     var isScanning = false
     
     let onPlayPause: () -> Void
