@@ -136,7 +136,7 @@ struct SpaceScreen: View {
                             }
                             .accessibilityIdentifier(A11yIdentifiers.spaceScreen.addExistingRooms)
                             
-                            if context.viewState.rooms.count > 0 {
+                            if !context.viewState.rooms.isEmpty {
                                 Button { context.send(viewAction: .manageChildren) } label: {
                                     Label(L10n.actionManageRooms, icon: \.edit)
                                 }

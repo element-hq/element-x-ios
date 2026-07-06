@@ -78,6 +78,6 @@ struct CreateRoomSpaceSelectionSheet_Previews: PreviewProvider, TestablePreview 
     
     static var previews: some View {
         CreateRoomSpaceSelectionSheet(context: viewModel.context)
-            .snapshotPreferences(expect: viewModel.context.$viewState.map { $0.editableSpaces.count > 0 })
+            .snapshotPreferences(expect: viewModel.context.$viewState.map { !$0.editableSpaces.isEmpty })
     }
 }

@@ -81,7 +81,7 @@ struct RoomMembersListScreenViewState: BindableState {
     var shouldShowEmptyState: Bool {
         switch bindings.mode {
         case .banned:
-            visibleBannedMembers.count == 0
+            visibleBannedMembers.isEmpty
         case .members:
             visibleInvitedMembers.count + visibleJoinedMembers.count == 0
         }
