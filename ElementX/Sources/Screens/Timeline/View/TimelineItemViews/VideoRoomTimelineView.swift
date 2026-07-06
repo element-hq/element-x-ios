@@ -13,23 +13,35 @@ struct VideoRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: VideoRoomTimelineItem
     
+    @State private var contentScanningFailure: ContentScanningFailure?
+    
     private var hasMediaCaption: Bool {
         timelineItem.content.caption != nil
     }
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            VStack(alignment: .leading, spacing: 4) {
-                thumbnail
-                    .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(L10n.commonVideo)
-                    // This clip shape is distinct from the one in the styler as that one
-                    // operates on the entire message so wouldn't round the bottom corners.
-                    .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
-                    .onTapGesture {
-                        context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
-                    }
+            // The caption sits 8pts below the content scanner failure placeholder, 4pts below the media.
+            VStack(alignment: .leading, spacing: contentScanningFailure == nil ? 4 : 8) {
+                ContentScanningView(contentScannerService: context?.contentScannerService,
+                                    mediaSource: timelineItem.content.videoInfo.source) {
+                    thumbnail
+                        .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(L10n.commonVideo)
+                        // This clip shape is distinct from the one in the styler as that one
+                        // operates on the entire message so wouldn't round the bottom corners.
+                        .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
+                        .onTapGesture {
+                            context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+                        }
+                } scanningContent: {
+                    placeholder
+                        .overlay { ProgressView() }
+                        .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
+                } unsafeContent: { failure in
+                    ContentScanningFailureView(failure: failure)
+                }
                 
                 if let attributedCaption = timelineItem.content.formattedCaption {
                     FormattedBodyText(attributedString: attributedCaption,
@@ -41,6 +53,7 @@ struct VideoRoomTimelineView: View {
                                       boostFontSize: timelineItem.shouldBoost)
                 }
             }
+            .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
         }
     }
     
@@ -83,6 +96,8 @@ struct VideoRoomTimelineView: View {
 
 struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
+    static let scanningViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: nil)))
+    static let unsafeViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
     
     static var previews: some View {
         ScrollView {
@@ -101,6 +116,17 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         .environment(\.timelineContext, viewModel.context)
         .previewLayout(.fixed(width: 390, height: 975))
         .padding(.bottom, 20)
+        
+        VStack(spacing: 20.0) {
+            VideoRoomTimelineView(timelineItem: makeTimelineItem())
+                .environmentObject(scanningViewModel.context)
+                .environment(\.timelineContext, scanningViewModel.context)
+            VideoRoomTimelineView(timelineItem: makeTimelineItem(caption: "This is an unsafe video."))
+                .environmentObject(unsafeViewModel.context)
+                .environment(\.timelineContext, unsafeViewModel.context)
+        }
+        .environmentObject(viewModel.context)
+        .previewDisplayName("Content Scanner")
     }
     
     private static func makeTimelineItem(caption: String? = nil, isEdited: Bool = false) -> VideoRoomTimelineItem {

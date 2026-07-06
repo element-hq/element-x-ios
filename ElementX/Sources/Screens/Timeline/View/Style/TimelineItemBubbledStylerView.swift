@@ -18,6 +18,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @ViewBuilder let content: () -> Content
     
+    /// Whether the item's media failed content scanning, in which case the whole bubble adopts
+    /// the critical styling. Reported by the item's `ContentScanningView` through the preference key.
+    @State private var contentScanningFailure: ContentScanningFailure?
+    
+    private var hasContentScanningFailure: Bool {
+        contentScanningFailure != nil
+    }
+    
     private var isDM: Bool {
         context.viewState.isDM
     }
@@ -78,6 +86,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
         .padding(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
         .highlightedTimelineItem(isFocussed)
+        .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
     }
     
     @ViewBuilder
@@ -179,10 +188,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubble: some View {
         contentWithReply
-            .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
+            .timelineItemSendInfo(timelineItem: timelineItem,
+                                  adjustedDeliveryStatus: adjustedDeliveryStatus,
+                                  hasContentScanningFailure: hasContentScanningFailure,
+                                  context: context)
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
-                              insets: timelineItem.bubbleInsets,
-                              color: timelineItem.bubbleBackgroundColor)
+                              insets: timelineItem.bubbleInsets(hasContentScanningFailure: hasContentScanningFailure),
+                              color: hasContentScanningFailure ? .compound.bgCriticalSubtle : timelineItem.bubbleBackgroundColor,
+                              borderColor: hasContentScanningFailure ? .compound.borderCriticalSubtle : nil)
     }
     
     var contentWithReply: some View {
@@ -248,8 +261,13 @@ private extension EventBasedTimelineItemProtocol {
     
     /// The insets for the full bubble content.
     /// Padding affecting just the "send info" should be added inside `TimelineItemSendInfoView`
-    var bubbleInsets: EdgeInsets {
+    func bubbleInsets(hasContentScanningFailure: Bool) -> EdgeInsets {
         let defaultInsets: EdgeInsets = .init(around: 8)
+        
+        // The content scanner failure placeholder is always rendered inset within the critical bubble.
+        if hasContentScanningFailure {
+            return defaultInsets
+        }
         
         switch self {
         case is StickerRoomTimelineItem:
@@ -370,6 +388,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
     
+    static let unsafeViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
+    
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
@@ -439,6 +459,26 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              content: .init(body: "Short message"),
                                                                              properties: properties),
                                                   groupStyle: .single))
+            
+            RoomTimelineItemView(viewState: .init(item: FileRoomTimelineItem(id: .randomEvent,
+                                                                             timestamp: .mock,
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(filename: "unsafe.pdf",
+                                                                                            caption: "Replying with an unsafe file.",
+                                                                                            formattedCaption: nil,
+                                                                                            source: try? MediaSourceProxy(url: .mockMXCFile, mimeType: nil),
+                                                                                            fileSize: 3 * 1024 * 1024,
+                                                                                            thumbnailSource: nil,
+                                                                                            contentType: nil),
+                                                                             properties: .init(replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                                     eventID: "123",
+                                                                                                                     eventContent: .message(.text(.init(body: "Short")))))),
+                                                  groupStyle: .single))
+                .environmentObject(unsafeViewModel.context)
+                .environment(\.timelineContext, unsafeViewModel.context)
         }
         .environmentObject(viewModel.context)
         .environment(\.timelineContext, viewModel.context)

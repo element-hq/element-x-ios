@@ -39,7 +39,7 @@ struct TimelineReadReceiptsView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(L10n.a11yReadReceiptsTapToShowAll)
+        .accessibilityHint(L10n.a11yReadReceiptsTapToShowAllIos)
     }
     
     private var remaining: Int {

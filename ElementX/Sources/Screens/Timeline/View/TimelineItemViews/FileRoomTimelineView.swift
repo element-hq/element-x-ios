@@ -20,7 +20,9 @@ struct FileRoomTimelineView: View {
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
                                          trailingReservedSize: timelineItem.trailingReservedSize,
-                                         shouldBoost: timelineItem.shouldBoost) {
+                                         shouldBoost: timelineItem.shouldBoost,
+                                         contentScannerService: context?.contentScannerService,
+                                         mediaSource: timelineItem.content.source) {
                 context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
             }
             .accessibilityLabel(L10n.commonFile)
@@ -38,6 +40,8 @@ struct MediaFileRoomTimelineContent: View {
     var trailingReservedSize: CGSize = .zero
     var shouldBoost = false
     var isAudioFile = false
+    var contentScannerService: ContentScannerServiceProtocol?
+    var mediaSource: MediaSourceProxy?
     
     private var fileDescription: String {
         var fileDescription = "\(filename.validatedFileExtension.uppercased())"
@@ -55,13 +59,18 @@ struct MediaFileRoomTimelineContent: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            if let onMediaTap {
-                filePreview
-                    .onTapGesture {
-                        onMediaTap()
-                    }
-            } else {
-                filePreview
+            ContentScanningView(contentScannerService: contentScannerService,
+                                mediaSource: mediaSource) {
+                if let onMediaTap {
+                    filePreview(isScanning: false)
+                        .onTapGesture(perform: onMediaTap)
+                } else {
+                    filePreview(isScanning: false)
+                }
+            } scanningContent: {
+                filePreview(isScanning: true)
+            } unsafeContent: { failure in
+                ContentScanningFailureView(failure: failure)
             }
             
             if let formattedCaption {
@@ -76,7 +85,7 @@ struct MediaFileRoomTimelineContent: View {
         }
     }
     
-    var filePreview: some View {
+    func filePreview(isScanning: Bool) -> some View {
         Label {
             VStack(alignment: .leading, spacing: 0) {
                 Text(filename)
@@ -90,11 +99,18 @@ struct MediaFileRoomTimelineContent: View {
             .foregroundStyle(.compound.textPrimary)
             .lineLimit(2)
         } icon: {
-            CompoundIcon(icon, size: .medium, relativeTo: .body)
-                .foregroundColor(.compound.iconPrimary)
-                .scaledPadding(6)
-                .background(.compound.iconOnSolidPrimary,
-                            in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+            Group {
+                if isScanning {
+                    ProgressView()
+                        .scaledFrame(size: CompoundIcon.Size.medium.value, relativeTo: .body)
+                } else {
+                    CompoundIcon(icon, size: .medium, relativeTo: .body)
+                        .foregroundColor(.compound.iconPrimary)
+                }
+            }
+            .scaledPadding(6)
+            .background(.compound.iconOnSolidPrimary,
+                        in: RoundedRectangle(cornerRadius: 4, style: .continuous))
         }
         .labelStyle(.custom(spacing: 8, alignment: .center))
         .padding(.horizontal, 4) // Add to the styler's padding of 8, as we use the default insets for the caption.
@@ -105,6 +121,8 @@ struct MediaFileRoomTimelineContent: View {
 
 struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
+    static let scanningViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: nil)))
+    static let unsafeViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
     
     static var previews: some View {
         VStack(spacing: 20.0) {
@@ -126,6 +144,21 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                         formattedCaption: "Formatted caption"))
         }
         .environmentObject(viewModel.context)
+        
+        VStack(spacing: 20.0) {
+            FileRoomTimelineView(timelineItem: makeItem(filename: "scanning.pdf",
+                                                        fileSize: 3 * 1024 * 1024,
+                                                        caption: "The file is being scanned."))
+                .environmentObject(scanningViewModel.context)
+                .environment(\.timelineContext, scanningViewModel.context)
+            
+            FileRoomTimelineView(timelineItem: makeItem(filename: "unsafe.pdf",
+                                                        fileSize: 3 * 1024 * 1024,
+                                                        caption: "The file is not safe."))
+                .environmentObject(unsafeViewModel.context)
+                .environment(\.timelineContext, unsafeViewModel.context)
+        }
+        .previewDisplayName("Content Scanner")
     }
     
     static func makeItem(filename: String,
@@ -141,7 +174,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
               content: .init(filename: filename,
                              caption: caption,
                              formattedCaption: formattedCaption,
-                             source: nil,
+                             source: try? MediaSourceProxy(url: .mockMXCFile, mimeType: nil),
                              fileSize: fileSize,
                              thumbnailSource: nil,
                              contentType: nil))

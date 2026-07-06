@@ -27,7 +27,7 @@ public struct CompoundIcon: View {
         /// A custom icon size.
         case custom(CGFloat)
         
-        var value: CGFloat {
+        public var value: CGFloat {
             switch self {
             case .xSmall: return 16
             case .small: return 20
