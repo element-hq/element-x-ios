@@ -96,7 +96,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: [], joinRule: .restricted(rules: [.roomMembership(roomID: space.id)]))
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 0 }
+        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.isEmpty }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType == .spaceMembers(spaceIDs: [space.id]))

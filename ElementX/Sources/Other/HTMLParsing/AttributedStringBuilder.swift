@@ -347,7 +347,7 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             TextParsingMatch(type: .atRoom, range: match.range)
         })
         
-        guard matches.count > 0 else {
+        guard !matches.isEmpty else {
             return
         }
         

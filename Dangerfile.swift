@@ -25,7 +25,7 @@ if danger.github.pullRequest.body?.isEmpty ?? true {
 }
 
 /// Check for screenshots on view changes
-let hasChangedViews = !editedFiles.filter { $0.lowercased().contains("/view") }.isEmpty
+let hasChangedViews = editedFiles.contains { $0.lowercased().contains("/view") }
 if hasChangedViews {
     if (danger.github.pullRequest.body?.contains("user-attachments") ?? false) == false {
         warn("You seem to have made changes to views. Please consider adding screenshots.")
@@ -33,7 +33,7 @@ if hasChangedViews {
 }
 
 /// Check for pngs on resources
-let hasPngs = !editedFiles.filter { $0.lowercased().contains(".xcassets") && $0.lowercased().hasSuffix(".png") }.isEmpty
+let hasPngs = editedFiles.contains { $0.lowercased().contains(".xcassets") && $0.lowercased().hasSuffix(".png") }
 if hasPngs {
     warn("You seem to have made changes to some resource images. Please consider using an SVG or PDF.")
 }

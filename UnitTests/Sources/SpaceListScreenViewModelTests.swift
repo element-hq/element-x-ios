@@ -53,10 +53,10 @@ final class SpacesScreenViewModelTests {
     
     @Test
     func topLevelSpacesSubscription() async throws {
-        var deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 0 }
+        var deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.isEmpty }
         topLevelSpacesSubject.send([])
         try await deferred.fulfill()
-        #expect(context.viewState.topLevelSpaces.count == 0)
+        #expect(context.viewState.topLevelSpaces.isEmpty)
         
         deferred = deferFulfillment(context.observe(\.viewState.topLevelSpaces)) { $0.count == 1 }
         topLevelSpacesSubject.send([

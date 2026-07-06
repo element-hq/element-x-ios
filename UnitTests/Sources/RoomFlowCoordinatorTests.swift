@@ -68,7 +68,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         try await process(route: .roomDetails(roomID: "1"))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -82,7 +82,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         try await process(route: .childRoom(roomID: "2", via: []))
         #expect(navigationStackCoordinator.stackCoordinators.count == 1)
@@ -95,7 +95,7 @@ final class RoomFlowCoordinatorTests {
         
         try await clearRoute(expectedActions: [.finished])
         #expect(navigationStackCoordinator.rootCoordinator == nil)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
     }
     
     /// Tests the child flow teardown in isolation of it's parent.
@@ -124,7 +124,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         try await process(route: .childRoom(roomID: "2", via: []))
         #expect(navigationStackCoordinator.stackCoordinators.count == 1)
@@ -142,10 +142,10 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         try await process(route: .childRoom(roomID: "1", via: []))
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0,
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty,
                 "A room flow shouldn't present a direct child for the same room.")
         
         try await process(route: .childRoom(roomID: "2", via: []))
@@ -165,7 +165,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         try await clearRoute(expectedActions: [.finished])
         #expect(navigationStackCoordinator.rootCoordinator == nil)
@@ -174,7 +174,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         // "Join" the room
         clientProxy.roomForIdentifierClosure = { _ in
@@ -183,7 +183,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
     }
     
     @Test
@@ -224,11 +224,11 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .event(eventID: "1", roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         try await process(route: .childEvent(eventID: "2", roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         try await process(route: .childEvent(eventID: "3", roomID: "2", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -324,13 +324,13 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: "1", mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
         try await process(route: .share(sharePayload))
         
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
         
@@ -340,7 +340,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .share(sharePayload))
         
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
@@ -350,13 +350,13 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         let sharePayload: ShareExtensionPayload = .text(roomID: "1", text: "Important text")
         try await process(route: .share(sharePayload))
         
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         #expect(navigationStackCoordinator.sheetCoordinator == nil, "The media upload sheet shouldn't be shown when sharing text.")
         
@@ -366,7 +366,7 @@ final class RoomFlowCoordinatorTests {
         
         try await process(route: .share(sharePayload))
         
-        #expect(navigationStackCoordinator.stackCoordinators.count == 0)
+        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         #expect(navigationStackCoordinator.sheetCoordinator == nil, "The media upload sheet shouldn't be shown when sharing text.")
     }
     

@@ -105,7 +105,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             self.currentUserProxy = members.first { $0.userID == roomProxy.ownUserID }
             
             var newBindings = state.bindings
-            if roomMembersDetails.bannedMembers.count == 0 {
+            if roomMembersDetails.bannedMembers.isEmpty {
                 newBindings.mode = .members
             }
             self.state = .init(joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,

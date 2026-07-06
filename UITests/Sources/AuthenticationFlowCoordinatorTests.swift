@@ -150,7 +150,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
                 XCTFail("Failed to present the web authentication session.")
             }
             
-            if app.alerts.count > 0 {
+            if !app.alerts.isEmpty {
                 app.alerts.firstMatch.buttons["OK"].tap()
             }
         }

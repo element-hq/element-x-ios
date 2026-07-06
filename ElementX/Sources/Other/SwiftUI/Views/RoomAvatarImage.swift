@@ -68,7 +68,7 @@ struct RoomAvatarImage: View {
                                 onTap: onAvatarTap)
         case .heroes(let users):
             // We will expand upon this with more stack sizes in the future.
-            if users.count == 0 {
+            if users.isEmpty {
                 let _ = assertionFailure("We should never pass empty heroes here.")
                 PlaceholderAvatarImage(name: nil, contentID: "")
             } else if users.count == 2 {

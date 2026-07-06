@@ -79,7 +79,7 @@ struct RoomMembersListScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(viewModel.state.joinedMembersCount == 2)
-        #expect(viewModel.state.visibleJoinedMembers.count == 0)
+        #expect(viewModel.state.visibleJoinedMembers.isEmpty)
     }
     
     @Test
@@ -107,7 +107,7 @@ struct RoomMembersListScreenViewModelTests {
         
         #expect(viewModel.state.joinedMembersCount == 0)
         #expect(viewModel.state.visibleInvitedMembers.count == 1)
-        #expect(viewModel.state.visibleJoinedMembers.count == 0)
+        #expect(viewModel.state.visibleJoinedMembers.isEmpty)
     }
     
     @Test
@@ -122,7 +122,7 @@ struct RoomMembersListScreenViewModelTests {
         
         #expect(viewModel.state.joinedMembersCount == 0)
         #expect(viewModel.state.visibleInvitedMembers.count == 1)
-        #expect(viewModel.state.visibleJoinedMembers.count == 0)
+        #expect(viewModel.state.visibleJoinedMembers.isEmpty)
     }
     
     @Test
@@ -286,7 +286,7 @@ struct RoomMembersListScreenViewModelTests {
         context.mode = .banned
         try await deferred.fulfill()
         
-        deferred = deferFulfillment(context.$viewState) { $0.visibleBannedMembers.count == 0 && $0.bindings.mode == .members }
+        deferred = deferFulfillment(context.$viewState) { $0.visibleBannedMembers.isEmpty && $0.bindings.mode == .members }
         subject.value = [RoomMemberProxyMock].allMembersAsAdmin
         try await deferred.fulfill()
     }
