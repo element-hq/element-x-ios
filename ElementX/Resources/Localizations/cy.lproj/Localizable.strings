@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "Ychwanegu adwaith: %1$@";
 "a11y_address" = "Address";
 "a11y_avatar" = "Afatar";
+"a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "Lleihau maes testun neges";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -38,7 +39,7 @@
 "a11y_react_with_other_emojis" = "Ymateb gydag emojis eraill";
 "a11y_read_receipts_multiple" = "Wedi'i ddarllen gan %1$@ a %2$@";
 "a11y_read_receipts_single" = "Wedi'i ddarllen gan %1$@";
-"a11y_read_receipts_tap_to_show_all" = "Tapio i ddangos y cyfan";
+"a11y_read_receipts_tap_to_show_all_ios" = "Tapio i ddangos y cyfan";
 "a11y_remove_reaction" = "Wedi dileu adwaith gyda %1$@";
 "a11y_remove_reaction_with" = "Wedi dileu adwaith gyda %1$@";
 "a11y_send_files" = "Anfon ffeiliau";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Rhowch eich allwedd adfer";
 "confirm_recovery_key_banner_secondary_button_title" = "Wedi anghofio'ch allwedd adfer?";
 "confirm_recovery_key_banner_title" = "Dyw eich allwedd storfa heb ei gydweddu";
+"content_scanner_not_found" = "Download not available.";
+"content_scanner_not_found_title" = "File not found";
+"content_scanner_unsafe_message" = "Preview and download have been disabled.";
+"content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "Chwalodd %1$@ y tro diwethaf iddo gael ei ddefnyddio. Hoffech chi rannu adroddiad gwall gyda ni?";
 "crypto_event_authenticity_mismatched_sender" = "Nid yw anfonwr y digwyddiad yn cyfateb i berchennog y ddyfais a'i hanfonodd.";
 "crypto_event_authenticity_not_guaranteed" = "Nid oes modd gwarantu dilysrwydd y neges hon sydd wedi'i hamgryptio ar y ddyfais hon.";

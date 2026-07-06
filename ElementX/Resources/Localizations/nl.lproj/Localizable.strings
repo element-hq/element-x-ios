@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "Reactie toevoegen: %1$@";
 "a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
+"a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -38,7 +39,7 @@
 "a11y_react_with_other_emojis" = "Reageer met andere emoji's";
 "a11y_read_receipts_multiple" = "Gelezen door %1$@ en %2$@";
 "a11y_read_receipts_single" = "Gelezen door %1$@";
-"a11y_read_receipts_tap_to_show_all" = "Tik om alles weer te geven";
+"a11y_read_receipts_tap_to_show_all_ios" = "Tik om alles weer te geven";
 "a11y_remove_reaction" = "Verwijder reactie met %1$@";
 "a11y_remove_reaction_with" = "Reactie met %1$@ verwijderen";
 "a11y_send_files" = "Bestanden verzenden";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "Je sleutelopslag is niet gesynchroniseerd";
+"content_scanner_not_found" = "Download not available.";
+"content_scanner_not_found_title" = "File not found";
+"content_scanner_unsafe_message" = "Preview and download have been disabled.";
+"content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ crashte de laatste keer dat het werd gebruikt. Wil je een crashrapport met ons delen?";
 "crypto_event_authenticity_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "crypto_event_authenticity_not_guaranteed" = "De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd.";

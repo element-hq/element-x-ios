@@ -1,5 +1,5 @@
 "NSCameraUsageDescription" = "برای گرفتن عکس یا فیلم و ارسال آنها به عنوان پیام، Element X نیاز به دسترسی به دوربین دارد.";
-"NSFaceIDUsageDescription" = "از Face ID برای دسترسی به برنامه شما استفاده می‌شود.";
+"NSFaceIDUsageDescription" = "از Face ID برای دسترسی به حسابتان استفاده می‌شود.";
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X needs location access when the app is in the background.";
 "NSLocationWhenInUseUsageDescription" = "دسترسی به موقعیت مکانی را اعطا کنید تا Element X بتواند موقعیت مکانی شما را به اشتراک بگذارد.";
 "NSMicrophoneUsageDescription" = "برای ضبط و ارسال پیام‌های صوتی، Element X باید به میکروفون دسترسی داشته باشد.";

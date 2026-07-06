@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "반응 추가: %1$@";
 "a11y_address" = "주소";
 "a11y_avatar" = "아바타";
+"a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "메시지 텍스트 필드 최소화";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -38,7 +39,7 @@
 "a11y_react_with_other_emojis" = "다른 이모지로 반응하세요";
 "a11y_read_receipts_multiple" = "읽은 사람 %1$@ 그리고 %2$@";
 "a11y_read_receipts_single" = "%1$@ 님이 읽음";
-"a11y_read_receipts_tap_to_show_all" = "모두 표시하려면 탭하세요";
+"a11y_read_receipts_tap_to_show_all_ios" = "모두 표시하려면 탭하세요";
 "a11y_remove_reaction" = "반응 제거: %1$@";
 "a11y_remove_reaction_with" = "%1$@ 반응을 제거하세요";
 "a11y_send_files" = "파일 보내기";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "복구 키를 입력하세요";
 "confirm_recovery_key_banner_secondary_button_title" = "복구 키를 잊으셨나요?";
 "confirm_recovery_key_banner_title" = "귀하의 키 저장소가 동기화되지 않았습니다";
+"content_scanner_not_found" = "Download not available.";
+"content_scanner_not_found_title" = "File not found";
+"content_scanner_unsafe_message" = "Preview and download have been disabled.";
+"content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@이(가) 이전에 마지막으로 사용할 때 충돌했습니다. 충돌 보고서를 공유해주실 수 있나요?";
 "crypto_event_authenticity_mismatched_sender" = "이벤트의 발신자가 이벤트를 보낸 장치의 소유자와 일치하지 않습니다.";
 "crypto_event_authenticity_not_guaranteed" = "이 장치에서는 이 암호화된 메시지의 진위 여부를 보장할 수 없습니다.";

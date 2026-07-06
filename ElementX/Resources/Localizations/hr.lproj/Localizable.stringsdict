@@ -370,10 +370,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>Minimum %1$d character. Do not use your account password</string>
+			<string>Minimalno %1$d znakova. Nemojte koristiti lozinku računa.</string>
 			<key>other</key>
-			<string>Minimum %1$d characters. Do not use your account password</string>
+			<string>Minimalno %1$d znakova. Nemojte koristiti lozinku računa.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -386,10 +388,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>%1$d degree</string>
+			<string>%1$d stupanj</string>
 			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>%1$d stupnjevi</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -636,10 +640,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>+ %1$d joined</string>
+			<string>+ %1$d se pridružio</string>
 			<key>other</key>
-			<string>+ %1$d joined</string>
+			<string>+ %1$d se pridružio</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

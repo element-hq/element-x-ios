@@ -43,9 +43,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Lest av %1$@ og %2$d andre</string>
+			<string>Forrige melding lest av %1$@ og %2$d annen</string>
 			<key>other</key>
-			<string>Lest av %1$@ og %2$d andre</string>
+			<string>Forrige melding lest av %1$@ og %2$d andre</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

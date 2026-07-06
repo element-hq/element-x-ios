@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "Tambahkan reaksi: %1$@";
 "a11y_address" = "Address";
 "a11y_avatar" = "Avatar";
+"a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "Minimalkan bidang teks message";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -38,7 +39,7 @@
 "a11y_react_with_other_emojis" = "Reaksi dengan emoji lain";
 "a11y_read_receipts_multiple" = "Dibaca oleh %1$@ dan %2$@";
 "a11y_read_receipts_single" = "Dibaca oleh %1$@";
-"a11y_read_receipts_tap_to_show_all" = "Ketuk untuk melihat semua";
+"a11y_read_receipts_tap_to_show_all_ios" = "Ketuk untuk melihat semua";
 "a11y_remove_reaction" = "Hapus reaksi dengan %1$@";
 "a11y_remove_reaction_with" = "Hapus reaksi dengan %1$@";
 "a11y_send_files" = "Kirim berkas";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Masukkan kunci pemulihan Anda";
 "confirm_recovery_key_banner_secondary_button_title" = "Lupa kunci pemulihan Anda?";
 "confirm_recovery_key_banner_title" = "Penyimpanan kunci Anda tidak sinkron";
+"content_scanner_not_found" = "Download not available.";
+"content_scanner_not_found_title" = "File not found";
+"content_scanner_unsafe_message" = "Preview and download have been disabled.";
+"content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ mengalami kemogokan saat terakhir kali digunakan. Apakah Anda ingin berbagi laporan kerusakan dengan kami?";
 "crypto_event_authenticity_mismatched_sender" = "Pengirim peristiwa tidak cocok dengan pemilik perangkat yang mengirimnya.";
 "crypto_event_authenticity_not_guaranteed" = "Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini.";
