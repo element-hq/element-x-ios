@@ -43,6 +43,7 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     
     private let contentScannerService: ContentScannerServiceProtocol?
     private let mediaSource: MediaSourceProxy?
+    private let shouldReportFailure: Bool
     private let safeContent: () -> SafeContent
     private let scanningContent: () -> ScanningContent
     private let unsafeContent: (ContentScanningFailure) -> UnsafeContent
@@ -54,16 +55,21 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     ///     scanning and the content is always rendered.
     ///   - mediaSource: The media source to scan. Passing `nil` renders the content, this
     ///     makes it convenient to wrap items whose media source is optional.
+    ///   - shouldReportFailure: Whether a failure is reported up the view hierarchy through
+    ///     ``ContentScanningFailurePreferenceKey``. Pass `false` when the failure should only
+    ///     affect this view, e.g. inside a reply preview where the bubble must stay regular.
     ///   - safeContent: The regular presentation of the media, including any interactions with it.
     ///   - scanningContent: The presentation of the media whilst it's being scanned.
     ///   - unsafeContent: The presentation of the media when it can't be shown.
     init(contentScannerService: ContentScannerServiceProtocol?,
          mediaSource: MediaSourceProxy?,
+         shouldReportFailure: Bool = true,
          @ViewBuilder safeContent: @escaping () -> SafeContent,
          @ViewBuilder scanningContent: @escaping () -> ScanningContent,
          @ViewBuilder unsafeContent: @escaping (ContentScanningFailure) -> UnsafeContent) {
         self.contentScannerService = contentScannerService
         self.mediaSource = mediaSource
+        self.shouldReportFailure = shouldReportFailure
         self.safeContent = safeContent
         self.scanningContent = scanningContent
         self.unsafeContent = unsafeContent
@@ -71,7 +77,7 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     
     var body: some View {
         content
-            .preference(key: ContentScanningFailurePreferenceKey.self, value: scanFailure)
+            .preference(key: ContentScanningFailurePreferenceKey.self, value: shouldReportFailure ? scanFailure : nil)
             .task(id: mediaSource?.url.absoluteString) {
                 await scan()
             }
