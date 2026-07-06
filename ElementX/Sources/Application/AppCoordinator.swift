@@ -758,7 +758,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard let userSession else {
             fatalError("User session not setup")
         }
-        
+
+        appSettings.hasSignedInBefore = true
+
         if let serverName = userSession.clientProxy.userIDServerName {
             analyticsService.signpost.addGlobalTag(.homeserver, value: serverName)
         }
