@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "Додати реакцію: %1$@";
 "a11y_address" = "Адреса";
 "a11y_avatar" = "Аватар";
+"a11y_clear_search_field" = "Очистити поле пошуку";
 "a11y_collapse_message_text_field" = "Згорнути поле тексту повідомлення";
 "a11y_create_poll_votes_allowed_decrease" = "Зменшити кількість голосів, дозволених на одну особу";
 "a11y_create_poll_votes_allowed_increase" = "Збільшити кількість голосів, дозволених на одну особу";
@@ -36,9 +37,9 @@
 "a11y_qr_code" = "QR-код";
 "a11y_react_with" = "Реагувати з%1$@";
 "a11y_react_with_other_emojis" = "Відреагувати іншими смайликами";
-"a11y_read_receipts_multiple" = "Прочитано %1$@ та %2$@";
-"a11y_read_receipts_single" = "Прочитано %1$@";
-"a11y_read_receipts_tap_to_show_all" = "Натисніть, щоб показати все";
+"a11y_read_receipts_multiple" = "Попереднє повідомлення прочитали %1$@ та %2$@";
+"a11y_read_receipts_single" = "Попереднє повідомлення прочитано користувачем %1$@";
+"a11y_read_receipts_tap_to_show_all_ios" = "Натисніть, щоб показати все";
 "a11y_remove_reaction" = "Видалити реакцію з %1$@";
 "a11y_remove_reaction_with" = "Прибрати реакцію %1$@";
 "a11y_send_files" = "Надіслати файли";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Введіть ключ відновлення";
 "confirm_recovery_key_banner_secondary_button_title" = "Забули ключ відновлення?";
 "confirm_recovery_key_banner_title" = "Ваше сховище ключів не синхронізовано";
+"content_scanner_not_found" = "Завантаження недоступне.";
+"content_scanner_not_found_title" = "Файл не знайдено";
+"content_scanner_unsafe_message" = "Попередній перегляд і завантаження вимкнено.";
+"content_scanner_unsafe_title" = "Файл не є безпечним";
 "crash_detection_dialog_content" = "Стався збій %1$@ під час останнього користування. Хочете поділитися з нами звітом про збій?";
 "crypto_event_authenticity_mismatched_sender" = "Відправник події не збігається з власником пристрою, який його надіслав.";
 "crypto_event_authenticity_not_guaranteed" = "Автентичність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої.";

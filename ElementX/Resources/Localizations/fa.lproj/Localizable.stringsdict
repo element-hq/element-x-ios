@@ -43,9 +43,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>خوانده شده توسط%1$@ و%2$d نفر دیگر</string>
+			<string>پیام پیشین به دست %1$@ و %2$d دیگر خوانده شد</string>
 			<key>other</key>
-			<string>خوانده شده توسط%1$@ و%2$d نفر دیگر</string>
+			<string>پیام پیشین به دست %1$@ و %2$d دیگر خوانده شد</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

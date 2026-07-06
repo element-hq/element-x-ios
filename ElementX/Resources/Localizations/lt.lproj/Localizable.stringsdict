@@ -43,9 +43,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Previous message read by %1$@ and %2$d other</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Previous message read by %1$@ and %2$d others</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

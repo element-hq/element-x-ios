@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "Reaktion hinzufügen: %1$@";
 "a11y_address" = "Adresse";
 "a11y_avatar" = "Avatar";
+"a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "Nachrichtentextfeld minimieren";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -38,7 +39,7 @@
 "a11y_react_with_other_emojis" = "Mit anderen Emojis reagieren";
 "a11y_read_receipts_multiple" = "Gelesen von %1$@ und %2$@";
 "a11y_read_receipts_single" = "Gelesen von %1$@";
-"a11y_read_receipts_tap_to_show_all" = "Tippe, um alle anzuzeigen";
+"a11y_read_receipts_tap_to_show_all_ios" = "Tippe, um alle anzuzeigen";
 "a11y_remove_reaction" = "Reaktion mit %1$@ entfernen";
 "a11y_remove_reaction_with" = "Entferne Reaktionen mit %1$@";
 "a11y_send_files" = "Dateien senden";
@@ -408,6 +409,10 @@
 "confirm_recovery_key_banner_primary_button_title" = "Gib deinen Wiederherstellungsschlüssel ein";
 "confirm_recovery_key_banner_secondary_button_title" = "Hast du deinen Wiederherstellungsschlüssel vergessen?";
 "confirm_recovery_key_banner_title" = "Dein Schlüsselspeicher ist nicht synchronisiert";
+"content_scanner_not_found" = "Download not available.";
+"content_scanner_not_found_title" = "File not found";
+"content_scanner_unsafe_message" = "Preview and download have been disabled.";
+"content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ ist bei der letzten Nutzung abgestürzt. Möchtest du einen Absturzbericht mit uns teilen?";
 "crypto_event_authenticity_mismatched_sender" = "Der Absender des Ereignisses stimmt nicht mit dem Besitzer des Gerätes überein, das es gesendet hat.";
 "crypto_event_authenticity_not_guaranteed" = "Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden.";
