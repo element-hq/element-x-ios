@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "f3171e18bccbfff48fe416d9bbcdcb3163e78e4a",
-        "version" : "0.20.1"
+        "revision" : "d2ecef5a54e5718ed6344dde6f72a4da42f1fcd9",
+        "version" : "0.20.2"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "cf8be20d07654570554c8a8a4952bc8a5766a8b0",
-        "version" : "8.9.0"
+        "revision" : "ac632bd26a1c00f139ff62fd01806f21cf67325e",
+        "version" : "8.10.0"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-analytics-events",
       "state" : {
-        "revision" : "3e585a8d078d341c2fca446af5ff6bc70aa0cb42",
-        "version" : "0.36.1"
+        "revision" : "4b143b14a16a231bd4fc3c6705845f852177abe3",
+        "version" : "0.37.0"
       }
     },
     {
@@ -194,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "179438b8e0c9a357ab0caf453577f766ffddbcb3",
-        "version" : "3.59.3"
+        "revision" : "6e70aa24bbd3778182fe039f7f5800a17674a6d6",
+        "version" : "3.61.1"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "2c420d31d0c31b525fa9e7c552ef0fc9d924befc",
-        "version" : "9.17.1"
+        "revision" : "43abfbf9a26089ad34604c718ad0935440caf1d4",
+        "version" : "9.18.0"
       }
     },
     {
