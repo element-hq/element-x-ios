@@ -116,12 +116,12 @@ extension RoomInfoProxyProtocol {
         
         // Check if the canonical alias matches the homeserver
         if let canonicalAlias,
-           canonicalAlias.range(of: serverName) != nil {
+           canonicalAlias.contains(serverName) {
             return canonicalAlias
         }
         
         // Otherwise check the alternative aliases and return the first one that matches
-        if let matchingAlternativeAlias = alternativeAliases.first(where: { $0.range(of: serverName) != nil }) {
+        if let matchingAlternativeAlias = alternativeAliases.first(where: { $0.contains(serverName) }) {
             return matchingAlternativeAlias
         }
         

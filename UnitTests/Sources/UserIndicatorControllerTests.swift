@@ -39,7 +39,7 @@ struct UserIndicatorControllerTests {
         
         indicatorController.retractAllIndicators()
         
-        #expect(indicatorController.indicatorQueue.count == 0)
+        #expect(indicatorController.indicatorQueue.isEmpty)
     }
     
     @Test
@@ -94,7 +94,7 @@ struct UserIndicatorControllerTests {
         
         try await fulfillment.fulfill()
         
-        #expect(indicatorController.indicatorQueue.count == 0)
+        #expect(indicatorController.indicatorQueue.isEmpty)
         #expect(indicatorController.activeIndicator == nil)
     }
 }

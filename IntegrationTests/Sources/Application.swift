@@ -26,7 +26,7 @@ enum Application {
 extension XCUIApplication {
     var homeserver: String? {
         guard let homeserver = ProcessInfo.processInfo.environment["INTEGRATION_TESTS_HOST"],
-              homeserver.count > 0 else {
+              !homeserver.isEmpty else {
             return nil
         }
         
@@ -35,7 +35,7 @@ extension XCUIApplication {
     
     var username: String {
         guard let username = ProcessInfo.processInfo.environment["INTEGRATION_TESTS_USERNAME"],
-              username.count > 0 else {
+              !username.isEmpty else {
             return "default"
         }
         
@@ -44,7 +44,7 @@ extension XCUIApplication {
     
     var password: String {
         guard let password = ProcessInfo.processInfo.environment["INTEGRATION_TESTS_PASSWORD"],
-              password.count > 0 else {
+              !password.isEmpty else {
             return "default"
         }
         

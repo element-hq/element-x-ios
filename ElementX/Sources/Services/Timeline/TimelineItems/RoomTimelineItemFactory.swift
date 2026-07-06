@@ -861,7 +861,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                                 isDM: isDM,
                                                 isDeclinedByMe: declinedBy.contains(userID),
-                                                isDeclined: declinedBy.count > 0,
+                                                isDeclined: !declinedBy.isEmpty,
                                                 isVoiceCall: isVoiceCall,
                                                 properties: .init())
     }

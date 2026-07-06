@@ -207,7 +207,7 @@ struct ChatsTabFlowCoordinatorTests {
     mutating func roomClearsStack() async throws {
         try await process(route: .room(roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect(detailNavigationStack?.stackCoordinators.count == 0)
+        #expect(detailNavigationStack?.stackCoordinators.isEmpty == true)
         #expect(detailCoordinator != nil)
         
         chatsTabFlowCoordinator.handleAppRoute(.childRoom(roomID: "2", via: []), animated: true)
@@ -219,7 +219,7 @@ struct ChatsTabFlowCoordinatorTests {
         
         try await process(route: .room(roomID: "3", via: []), expectedState: .roomList(detailState: .room(roomID: "3")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect(detailNavigationStack?.stackCoordinators.count == 0)
+        #expect(detailNavigationStack?.stackCoordinators.isEmpty == true)
         #expect(detailCoordinator != nil)
     }
     
@@ -228,7 +228,7 @@ struct ChatsTabFlowCoordinatorTests {
         // A regular event route should set its room as the root of the stack and focus on the event.
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(detailState: .room(roomID: "1")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect(detailNavigationStack?.stackCoordinators.count == 0)
+        #expect(detailNavigationStack?.stackCoordinators.isEmpty == true)
         #expect(detailCoordinator != nil)
         #expect(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderCallsCount == 1)
         #expect(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReceivedArguments?.initialFocussedEventID == "1")
@@ -246,7 +246,7 @@ struct ChatsTabFlowCoordinatorTests {
         // A subsequent regular event route should clear the stack and set the new room as the root of the stack.
         try await process(route: .event(eventID: "3", roomID: "3", via: []), expectedState: .roomList(detailState: .room(roomID: "3")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect(detailNavigationStack?.stackCoordinators.count == 0)
+        #expect(detailNavigationStack?.stackCoordinators.isEmpty == true)
         #expect(detailCoordinator != nil)
         #expect(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderCallsCount == 3)
         #expect(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReceivedArguments?.initialFocussedEventID == "3")
@@ -254,7 +254,7 @@ struct ChatsTabFlowCoordinatorTests {
         // A regular event route for the same room should set a new instance of the room as the root of the stack.
         try await process(route: .event(eventID: "4", roomID: "3", via: []), expectedState: .roomList(detailState: .room(roomID: "3")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect(detailNavigationStack?.stackCoordinators.count == 0)
+        #expect(detailNavigationStack?.stackCoordinators.isEmpty == true)
         #expect(detailCoordinator != nil)
         #expect(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderCallsCount == 4)
         #expect(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReceivedArguments?.initialFocussedEventID == "4",

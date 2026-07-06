@@ -279,7 +279,7 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
             return false
         }
         
-        return UIPasteboard.general.itemProviders.filter { !$0.isSupportedForPasteOrDrop }.isEmpty
+        return !UIPasteboard.general.itemProviders.contains(where: { !$0.isSupportedForPasteOrDrop })
     }
     
     override func paste(_ sender: Any?) {
@@ -293,7 +293,7 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         let providers = UIPasteboard.general.itemProviders
         
         // Use the default behavior if there are any unsupported providers
-        guard providers.filter({ !$0.isSupportedForPasteOrDrop }).isEmpty else {
+        guard !providers.contains(where: { !$0.isSupportedForPasteOrDrop }) else {
             super.paste(sender)
             return
         }
