@@ -51,7 +51,7 @@ final class RoomScreenViewModelTests {
         
         // check if in the default state is not showing but is indeed loading
         var deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
-            viewState.pinnedEventsBannerState.count == 0
+            viewState.pinnedEventsBannerState.isEmpty
         }
         try await deferred.fulfill()
         #expect(viewModel.context.viewState.pinnedEventsBannerState.isLoading)

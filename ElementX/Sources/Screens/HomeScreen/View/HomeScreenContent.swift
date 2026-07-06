@@ -142,7 +142,7 @@ struct HomeScreenContent: View {
         guard let scrollView = scrollViewAdapter.scrollView,
               scrollViewAdapter.isScrolling.value == false, // Ignore while scrolling
               context.searchQuery.isEmpty == true, // Ignore while filtering
-              context.viewState.visibleRooms.count > 0 else {
+              !context.viewState.visibleRooms.isEmpty else {
             return
         }
         

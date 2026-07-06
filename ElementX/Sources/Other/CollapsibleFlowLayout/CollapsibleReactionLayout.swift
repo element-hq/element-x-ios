@@ -24,7 +24,7 @@ nonisolated struct CollapsibleReactionLayout: Layout {
     var rowsBeforeCollapsible: Int?
     
     func sizeThatFits(proposal: ProposedViewSize, subviews: some FlowLayoutSubviews, cache: inout ()) -> CGSize {
-        guard let subviewsByType = getSubviewsByItemType(subviews: Array(subviews)), subviewsByType.reactions.count > 0 else {
+        guard let subviewsByType = getSubviewsByItemType(subviews: Array(subviews)), !subviewsByType.reactions.isEmpty else {
             return .zero
         }
         
@@ -53,7 +53,7 @@ nonisolated struct CollapsibleReactionLayout: Layout {
     }
     
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: some FlowLayoutSubviews, cache: inout ()) {
-        guard let subviewsByType = getSubviewsByItemType(subviews: Array(subviews)), subviewsByType.reactions.count > 0 else {
+        guard let subviewsByType = getSubviewsByItemType(subviews: Array(subviews)), !subviewsByType.reactions.isEmpty else {
             subviews.forEach { subview in
                 subview.place(at: Self.pointOffscreen, anchor: .leading, proposal: .zero)
             }
@@ -119,7 +119,7 @@ nonisolated struct CollapsibleReactionLayout: Layout {
             currentRow.append(subview)
         }
         // If there are items in the current row remember to append it to the returned value
-        if currentRow.count > 0 {
+        if !currentRow.isEmpty {
             rows.append(currentRow)
         }
         return rows
@@ -243,7 +243,7 @@ nonisolated struct CollapsibleReactionLayout: Layout {
                 addMoreButton = subview
             }
         }
-        guard let collapseButton, let addMoreButton, reactions.count > 0 else {
+        guard let collapseButton, let addMoreButton, !reactions.isEmpty else {
             return nil
         }
         return ReactionSubviews(reactions: reactions, collapseButton: collapseButton, addMoreButton: addMoreButton)

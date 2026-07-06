@@ -64,7 +64,7 @@ extension XCUIApplication {
                 throw IntegrationTestsError.webAuthenticationSessionFailure
             }
             
-            if alerts.count > 0 {
+            if !alerts.isEmpty {
                 alerts.firstMatch.buttons["OK"].firstMatch.tap()
             }
         }

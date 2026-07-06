@@ -82,7 +82,7 @@ private extension RoomInfoProxyProtocol {
             return alias
         }
         
-        guard heroes.count > 0 else {
+        guard !heroes.isEmpty else {
             return ""
         }
         
