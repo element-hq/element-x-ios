@@ -279,7 +279,7 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
             return false
         }
         
-        return !UIPasteboard.general.itemProviders.contains(where: { !$0.isSupportedForPasteOrDrop })
+        return !UIPasteboard.general.itemProviders.contains { !$0.isSupportedForPasteOrDrop }
     }
     
     override func paste(_ sender: Any?) {
