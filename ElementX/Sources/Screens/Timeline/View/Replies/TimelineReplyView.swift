@@ -22,31 +22,26 @@ struct TimelineReplyView: View {
     var maxWidth: CGFloat?
     
     var body: some View {
-        // The failure isn't reported up the view hierarchy as it should only affect
-        // the reply preview and not the whole bubble of the reply itself.
         ContentScanningView(contentScannerService: timelineContext?.contentScannerService,
                             mediaSource: scannedMediaSource,
-                            shouldReportFailure: false) {
+                            containerShowsFailure: false) {
             content
-                .roundedCard(cornerRadius: 8,
-                             padding: 4,
-                             maxWidth: maxWidth,
-                             backgroundColor: .compound.bgCanvasDefault,
-                             borderColor: .compound.separatorPrimary)
+                .roundedContainer(padding: 4,
+                                  maxWidth: maxWidth,
+                                  backgroundColor: .compound.bgCanvasDefault,
+                                  borderColor: .compound.separatorPrimary)
         } scanningContent: {
             LoadingReplyView()
-                .roundedCard(cornerRadius: 8,
-                             padding: 4,
-                             maxWidth: maxWidth,
-                             backgroundColor: .compound.bgCanvasDefault,
-                             borderColor: .compound.separatorPrimary)
+                .roundedContainer(padding: 4,
+                                  maxWidth: maxWidth,
+                                  backgroundColor: .compound.bgCanvasDefault,
+                                  borderColor: .compound.separatorPrimary)
         } unsafeContent: { failure in
             ContentScanningFailureView(failure: failure)
-                .roundedCard(cornerRadius: 8,
-                             padding: 8,
-                             maxWidth: maxWidth,
-                             backgroundColor: .compound.bgCriticalSubtle,
-                             borderColor: .compound.borderCriticalSubtle)
+                .roundedContainer(padding: 8,
+                                  maxWidth: maxWidth,
+                                  backgroundColor: .compound.bgCriticalSubtle,
+                                  borderColor: .compound.borderCriticalSubtle)
         }
     }
     
@@ -222,21 +217,14 @@ struct TimelineReplyView: View {
     }
 }
 
-/// Styles a view as a rounded card with a background fill and a border.
-private struct RoundedCardModifier: ViewModifier {
-    var cornerRadius: CGFloat = 12
-    var padding: CGFloat = 12
-    var maxWidth: CGFloat?
-    let backgroundColor: Color
-    let borderColor: Color
-    
-    private var backgroundShape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: cornerRadius)
-    }
-    
-    func body(content: Content) -> some View {
-        content
-            .fixedSize(horizontal: false, vertical: true)
+private extension View {
+    /// Styles the view as a rounded container with a background fill and a border.
+    func roundedContainer(padding: CGFloat = 12,
+                          maxWidth: CGFloat? = nil,
+                          backgroundColor: Color,
+                          borderColor: Color) -> some View {
+        let backgroundShape = RoundedRectangle(cornerRadius: 8)
+        return fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: maxWidth, alignment: .leading)
             .padding(padding)
             .background {
@@ -245,21 +233,6 @@ private struct RoundedCardModifier: ViewModifier {
                     backgroundShape.stroke(borderColor)
                 }
             }
-    }
-}
-
-private extension View {
-    /// Styles the view as a rounded card with a background fill and a border.
-    func roundedCard(cornerRadius: CGFloat = 12,
-                     padding: CGFloat = 12,
-                     maxWidth: CGFloat? = nil,
-                     backgroundColor: Color,
-                     borderColor: Color) -> some View {
-        modifier(RoundedCardModifier(cornerRadius: cornerRadius,
-                                     padding: padding,
-                                     maxWidth: maxWidth,
-                                     backgroundColor: backgroundColor,
-                                     borderColor: borderColor))
     }
 }
 
