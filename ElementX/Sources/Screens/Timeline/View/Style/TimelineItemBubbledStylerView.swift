@@ -479,6 +479,46 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .single))
                 .environmentObject(unsafeViewModel.context)
                 .environment(\.timelineContext, unsafeViewModel.context)
+            
+            // A safe message replying to an unsafe image: only the reply preview shows the failure.
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
+                                                                             timestamp: .mock,
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "Replying to an unsafe image."),
+                                                                             properties: .init(replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                                     eventID: "123",
+                                                                                                                     eventContent: .message(.image(.init(filename: "amazing.jpeg",
+                                                                                                                                                         imageInfo: .mockImage,
+                                                                                                                                                         thumbnailInfo: .mockThumbnail)))))),
+                                                  groupStyle: .single))
+                .environmentObject(unsafeViewModel.context)
+                .environment(\.timelineContext, unsafeViewModel.context)
+            
+            // An unsafe file replying to an unsafe image: the whole bubble and the reply preview show the failure.
+            RoomTimelineItemView(viewState: .init(item: FileRoomTimelineItem(id: .randomEvent,
+                                                                             timestamp: .mock,
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(filename: "unsafe.pdf",
+                                                                                            caption: "Replying with an unsafe file to an unsafe image.",
+                                                                                            formattedCaption: nil,
+                                                                                            source: try? MediaSourceProxy(url: .mockMXCFile, mimeType: nil),
+                                                                                            fileSize: 3 * 1024 * 1024,
+                                                                                            thumbnailSource: nil,
+                                                                                            contentType: nil),
+                                                                             properties: .init(replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                                     eventID: "123",
+                                                                                                                     eventContent: .message(.image(.init(filename: "amazing.jpeg",
+                                                                                                                                                         imageInfo: .mockImage,
+                                                                                                                                                         thumbnailInfo: .mockThumbnail)))))),
+                                                  groupStyle: .single))
+                .environmentObject(unsafeViewModel.context)
+                .environment(\.timelineContext, unsafeViewModel.context)
         }
         .environmentObject(viewModel.context)
         .environment(\.timelineContext, viewModel.context)

@@ -15,23 +15,51 @@ enum TimelineReplyViewPlacement {
 }
 
 struct TimelineReplyView: View {
+    @Environment(\.timelineContext) private var timelineContext
+    
     let placement: TimelineReplyViewPlacement
     let timelineItemReplyDetails: TimelineItemReplyDetails?
     var maxWidth: CGFloat?
     
-    private let backgroundShape = RoundedRectangle(cornerRadius: 8)
-    
     var body: some View {
-        content
-            .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: maxWidth, alignment: .leading)
-            .padding(4.0)
-            .background {
-                ZStack {
-                    backgroundShape.fill(.compound.bgCanvasDefault)
-                    backgroundShape.stroke(.compound.separatorPrimary)
-                }
-            }
+        ContentScanningView(contentScannerService: timelineContext?.contentScannerService,
+                            mediaSource: scannedMediaSource,
+                            containerShowsFailure: false) {
+            content
+                .roundedContainer(padding: 4,
+                                  maxWidth: maxWidth,
+                                  backgroundColor: .compound.bgCanvasDefault,
+                                  borderColor: .compound.separatorPrimary)
+        } scanningContent: {
+            LoadingReplyView()
+                .roundedContainer(padding: 4,
+                                  maxWidth: maxWidth,
+                                  backgroundColor: .compound.bgCanvasDefault,
+                                  borderColor: .compound.separatorPrimary)
+        } unsafeContent: { failure in
+            ContentScanningFailureView(failure: failure)
+                .roundedContainer(padding: 8,
+                                  maxWidth: maxWidth,
+                                  backgroundColor: .compound.bgCriticalSubtle,
+                                  borderColor: .compound.borderCriticalSubtle)
+        }
+    }
+    
+    /// The media source validated by the content scanner when the replied to message contains media.
+    private var scannedMediaSource: MediaSourceProxy? {
+        guard case .loaded(_, _, let eventContent) = timelineItemReplyDetails,
+              case .message(let message) = eventContent else {
+            return nil
+        }
+        
+        switch message {
+        case .audio(let content): return content.source
+        case .file(let content): return content.source
+        case .image(let content): return content.imageInfo.source
+        case .video(let content): return content.videoInfo.source
+        case .voice(let content): return content.source
+        default: return nil
+        }
     }
     
     @ViewBuilder
@@ -189,8 +217,29 @@ struct TimelineReplyView: View {
     }
 }
 
+private extension View {
+    /// Styles the view as a rounded container with a background fill and a border.
+    func roundedContainer(padding: CGFloat = 12,
+                          maxWidth: CGFloat? = nil,
+                          backgroundColor: Color,
+                          borderColor: Color) -> some View {
+        let backgroundShape = RoundedRectangle(cornerRadius: 8)
+        return fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: maxWidth, alignment: .leading)
+            .padding(padding)
+            .background {
+                ZStack {
+                    backgroundShape.fill(backgroundColor)
+                    backgroundShape.stroke(borderColor)
+                }
+            }
+    }
+}
+
 struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
+    static let scanningViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: nil)))
+    static let unsafeViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
     
     static let attributedStringWithMention = {
         var attributedString = AttributedString("To be replaced")
@@ -350,5 +399,28 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
         .padding()
         .environmentObject(viewModel.context)
         .previewLayout(.sizeThatFits)
+        
+        VStack(alignment: .leading, spacing: 20) {
+            imageReply
+                .environmentObject(scanningViewModel.context)
+                .environment(\.timelineContext, scanningViewModel.context)
+            
+            imageReply
+                .environmentObject(unsafeViewModel.context)
+                .environment(\.timelineContext, unsafeViewModel.context)
+        }
+        .padding()
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Content Scanner")
+    }
+    
+    static var imageReply: TimelineReplyView {
+        TimelineReplyView(placement: .timeline,
+                          timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                            eventID: "123",
+                                                            eventContent: .message(.image(.init(filename: "image.jpg",
+                                                                                                caption: "Some image",
+                                                                                                imageInfo: .mockImage,
+                                                                                                thumbnailInfo: .mockThumbnail)))))
     }
 }
