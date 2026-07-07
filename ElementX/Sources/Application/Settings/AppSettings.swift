@@ -298,7 +298,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// user is signed out unexpectedly (invalidated token, corrupted storage, etc).
     @UserPreference(defaultValue: false)
     var hasSignedInBefore: Bool
-
+    
     @UserPreference(defaultValue: false)
     var hasRunNotificationPermissionsOnboarding: Bool
     
