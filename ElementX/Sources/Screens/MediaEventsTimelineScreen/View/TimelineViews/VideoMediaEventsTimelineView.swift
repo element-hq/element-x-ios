@@ -14,15 +14,22 @@ struct VideoMediaEventsTimelineView: View {
     let timelineItem: VideoRoomTimelineItem
     
     var body: some View {
-        Color.clear // Let the image aspect fill in place
-            .aspectRatio(1, contentMode: .fill)
-            .overlay {
-                thumbnail
-            }
-            .clipped()
-            .overlay(alignment: .bottom) { overlay }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(L10n.commonVideo)
+        ContentScanningView(contentScannerService: context?.contentScannerService,
+                            mediaSource: timelineItem.content.videoInfo.source) {
+            Color.clear // Let the image aspect fill in place
+                .aspectRatio(1, contentMode: .fill)
+                .overlay {
+                    thumbnail
+                }
+                .clipped()
+                .overlay(alignment: .bottom) { overlay }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(L10n.commonVideo)
+        } scanningContent: {
+            ScanningMediaEventsTimelineView()
+        } unsafeContent: { failure in
+            UnsafeMediaEventsTimelineView(failure: failure)
+        }
     }
     
     @ViewBuilder

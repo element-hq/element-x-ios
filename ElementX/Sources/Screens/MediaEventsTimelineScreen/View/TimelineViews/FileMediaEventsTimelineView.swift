@@ -10,17 +10,28 @@ import Compound
 import SwiftUI
 
 struct FileMediaEventsTimelineView: View {
+    @Environment(\.timelineContext) private var context
+    
     let timelineItem: FileRoomTimelineItem
+    
+    /// Whether the item's media failed content scanning, in which case the bubble adopts
+    /// the critical styling. Reported by the `ContentScanningView` through the preference key.
+    @State private var contentScanningFailure: ContentScanningFailure?
     
     var body: some View {
         MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
                                      fileSize: timelineItem.content.fileSize,
                                      caption: timelineItem.content.caption,
                                      formattedCaption: timelineItem.content.formattedCaption,
-                                     trailingReservedSize: timelineItem.trailingReservedSize)
+                                     trailingReservedSize: timelineItem.trailingReservedSize,
+                                     contentScannerService: context?.contentScannerService,
+                                     mediaSource: timelineItem.content.source)
             .accessibilityLabel(L10n.commonFile)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .bubbleBackground(isOutgoing: timelineItem.isOutgoing)
+            .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
+                              color: contentScanningFailure == nil ? .compound.bgSubtleSecondary : .compound.bgCriticalSubtle,
+                              borderColor: contentScanningFailure == nil ? nil : .compound.borderCriticalSubtle)
+            .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
     }
 }
 
