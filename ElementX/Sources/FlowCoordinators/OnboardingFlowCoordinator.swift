@@ -225,6 +225,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 presentNotificationPermissionsScreen()
             case (_, _, .finished):
                 isNewLogin = false
+                appSettings.hasSignedInBefore = true
                 actionsSubject.send(.dismiss)
                 stateMachine.tryState(.initial)
             case (.finished, _, .initial):

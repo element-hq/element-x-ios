@@ -293,6 +293,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: AnalyticsConsentState.unknown)
     var analyticsConsentState: AnalyticsConsentState
     
+    /// Whether a user session has ever been set up on this device. Deliberately not cleared on
+    /// logout: it stops the Classic app migration prompt from reappearing when an Element X
+    /// user is signed out unexpectedly (invalidated token, corrupted storage, etc).
+    @UserPreference(defaultValue: false)
+    var hasSignedInBefore: Bool
+    
     @UserPreference(defaultValue: false)
     var hasRunNotificationPermissionsOnboarding: Bool
     

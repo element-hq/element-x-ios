@@ -46,7 +46,12 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appHooks = appHooks
         
         do {
-            if let classicAppManager {
+            if appSettings.hasSignedInBefore {
+                // Element X has already been used on this device, so an account left behind by the
+                // Classic app is stale — don't offer to migrate it again after a logout.
+                MXLog.info("Already signed in to Element X before, skipping loadAccounts.")
+                classicAppAccount = nil
+            } else if let classicAppManager {
                 classicAppAccount = try classicAppManager.loadAccounts().first
             } else {
                 MXLog.info("Classic App not configured, skipping loadAccounts.")

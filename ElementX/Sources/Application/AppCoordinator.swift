@@ -504,6 +504,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             appSettings.hasSeenNewSoundBanner = false
         }
         
+        if oldVersion < Version(26, 07, 3) {
+            MXLog.info("Migrating to version 26.07.3, marking the app as previously signed in.")
+            appSettings.hasSignedInBefore = true
+        }
+        
         userSessionMigrationsOldVersion = nil
     }
     
