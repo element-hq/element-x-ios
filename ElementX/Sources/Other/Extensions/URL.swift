@@ -158,6 +158,14 @@ nonisolated extension URL {
     nonisolated static var mockMXCUserAvatar: URL {
         "mxc://matrix.org/1234567890AvAtArUsEr"
     }
+    
+    nonisolated static var mockMXCScanning: URL {
+        "mxc://matrix.org/1234567890ScAnNiNg"
+    }
+    
+    nonisolated static var mockMXCUnsafe: URL {
+        "mxc://matrix.org/1234567890UnSaFe"
+    }
 }
 
 // MARK: - Helpers

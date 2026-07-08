@@ -324,26 +324,23 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     
     // MARK: Content scanning
     
-    private static let scanningMediaURL: URL = "mxc://matrix.org/scanning"
-    private static let unsafeMediaURL: URL = "mxc://matrix.org/unsafe"
-    
-    /// A content scanner that reports the dedicated sources above as being scanned/unsafe and everything else as safe.
+    /// A content scanner that reports the dedicated mock sources as being scanned/unsafe and everything else as safe.
     private static let contentScannerService = {
         let contentScannerService = ContentScannerServiceMock()
         contentScannerService.scanResultFromSourceClosure = { source in
             switch source.url {
-            case scanningMediaURL: nil
-            case unsafeMediaURL: false
+            case .mockMXCScanning: nil
+            case .mockMXCUnsafe: false
             default: true
             }
         }
         contentScannerService.loadScanResultFromSourceClosure = { source in
             switch source.url {
-            case scanningMediaURL:
+            case .mockMXCScanning:
                 // Never resolve so that the scanning state remains visible.
                 try? await Task.sleep(for: .seconds(3600))
                 return .failure(.failedScanning)
-            case unsafeMediaURL:
+            case .mockMXCUnsafe:
                 return .success(false)
             default:
                 return .success(true)
@@ -360,9 +357,9 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         
         switch screenMode {
         case .media:
-            timelineItems.append(contentsOf: [makeImageItem(url: scanningMediaURL), makeImageItem(url: unsafeMediaURL)])
+            timelineItems.append(contentsOf: [makeImageItem(url: .mockMXCScanning), makeImageItem(url: .mockMXCUnsafe)])
         case .files:
-            timelineItems.append(contentsOf: [makeFileItem(url: scanningMediaURL), makeFileItem(url: unsafeMediaURL)])
+            timelineItems.append(contentsOf: [makeFileItem(url: .mockMXCScanning), makeFileItem(url: .mockMXCUnsafe)])
         }
         
         return TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: timelineItems))
