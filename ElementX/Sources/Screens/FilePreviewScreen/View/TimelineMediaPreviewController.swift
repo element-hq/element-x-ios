@@ -390,7 +390,9 @@ private struct DownloadIndicatorView: View {
     }
     
     var body: some View {
-        if case let .media(mediaItem) = currentItem, mediaItem.downloadError != nil {
+        if case let .media(mediaItem) = currentItem, let contentScanningFailure = mediaItem.contentScanningFailure {
+            TimelineMediaContentScanningFailureView(failure: contentScanningFailure)
+        } else if case let .media(mediaItem) = currentItem, mediaItem.downloadError != nil {
             VStack(spacing: 24) {
                 CompoundIcon(\.errorSolid, size: .custom(48), relativeTo: .compound.headingLG)
                     .foregroundStyle(.compound.iconCriticalPrimary)
