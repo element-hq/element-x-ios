@@ -14,14 +14,21 @@ struct ImageMediaEventsTimelineView: View {
     let timelineItem: ImageRoomTimelineItem
     
     var body: some View {
-        Color.clear // Let the image aspect fill in place
-            .aspectRatio(1, contentMode: .fill)
-            .overlay {
-                loadableImage
-            }
-            .clipped()
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(L10n.commonImage)
+        ContentScanningView(contentScannerService: context?.contentScannerService,
+                            mediaSource: timelineItem.content.imageInfo.source) {
+            Color.clear // Let the image aspect fill in place
+                .aspectRatio(1, contentMode: .fill)
+                .overlay {
+                    loadableImage
+                }
+                .clipped()
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(L10n.commonImage)
+        } scanningContent: {
+            ScanningMediaEventsTimelineView()
+        } unsafeContent: { failure in
+            UnsafeMediaEventsTimelineView(failure: failure)
+        }
     }
     
     @ViewBuilder
@@ -57,6 +64,9 @@ struct ImageMediaEventsTimelineView: View {
 struct ImageMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
+    static let scanningViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: nil)))
+    static let unsafeViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
+    
     static var previews: some View {
         ImageMediaEventsTimelineView(timelineItem: makeTimelineItem())
             .frame(width: 100, height: 100)
@@ -64,6 +74,20 @@ struct ImageMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
             .environment(\.timelineContext, viewModel.context)
             .previewLayout(.sizeThatFits)
             .background(.black)
+        
+        HStack(spacing: 16) {
+            ImageMediaEventsTimelineView(timelineItem: makeTimelineItem())
+                .frame(width: 100, height: 100)
+                .environmentObject(scanningViewModel.context)
+                .environment(\.timelineContext, scanningViewModel.context)
+            
+            ImageMediaEventsTimelineView(timelineItem: makeTimelineItem())
+                .frame(width: 100, height: 100)
+                .environmentObject(unsafeViewModel.context)
+                .environment(\.timelineContext, unsafeViewModel.context)
+        }
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Content Scanner")
     }
     
     private static func makeTimelineItem() -> ImageRoomTimelineItem {

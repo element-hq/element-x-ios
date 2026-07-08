@@ -1062,6 +1062,13 @@ extension PreviewTests {
     }
 
     @Test
+    func scanStateMediaEventsTimelineViews() async throws {
+        for (index, preview) in ScanStateMediaEventsTimelineViews_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func searchScreen() async throws {
         for (index, preview) in SearchScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

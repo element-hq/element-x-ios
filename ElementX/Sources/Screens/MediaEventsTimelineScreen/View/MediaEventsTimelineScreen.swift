@@ -293,25 +293,25 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     
     private static func makeViewModel(empty: Bool = false,
                                       screenMode: MediaEventsTimelineScreenMode) -> MediaEventsTimelineScreenViewModel {
-        MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(empty: empty),
-                                           filesTimelineViewModel: makeTimelineViewModel(empty: empty),
+        MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(empty: empty, screenMode: .media),
+                                           filesTimelineViewModel: makeTimelineViewModel(empty: empty, screenMode: .files),
                                            initialScreenMode: screenMode,
                                            mediaProvider: MediaProviderMock(.init()),
                                            userIndicatorController: UserIndicatorControllerMock(),
                                            appMediator: AppMediatorMock())
     }
     
-    private static func makeTimelineViewModel(empty: Bool) -> TimelineViewModel {
+    private static func makeTimelineViewModel(empty: Bool, screenMode: MediaEventsTimelineScreenMode) -> TimelineViewModel {
         let timelineController = if empty {
             TimelineControllerMock.emptyMediaGallery
         } else {
-            TimelineControllerMock.mediaGallery
+            makeTimelineController(screenMode: screenMode)
         }
         
         let appSettings = AppSettings.volatile()
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
-                                 userSession: UserSessionMock(.init()),
+                                 userSession: UserSessionMock(.init(contentScannerService: contentScannerService)),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock(.init()),
@@ -320,5 +320,85 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  emojiProvider: EmojiProvider(appSettings: appSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+    }
+    
+    // MARK: Content scanning
+    
+    /// A content scanner that reports the dedicated mock sources as being scanned/unsafe and everything else as safe.
+    private static let contentScannerService = {
+        let contentScannerService = ContentScannerServiceMock()
+        contentScannerService.scanResultFromSourceClosure = { source in
+            switch source.url {
+            case .mockMXCScanning: nil
+            case .mockMXCUnsafe: false
+            default: true
+            }
+        }
+        contentScannerService.loadScanResultFromSourceClosure = { source in
+            switch source.url {
+            case .mockMXCScanning:
+                // Never resolve so that the scanning state remains visible.
+                try? await Task.sleep(for: .seconds(3600))
+                return .failure(.failedScanning)
+            case .mockMXCUnsafe:
+                return .success(false)
+            default:
+                return .success(true)
+            }
+        }
+        return contentScannerService
+    }()
+    
+    /// The regular gallery items followed by one that is being scanned and an unsafe one.
+    private static func makeTimelineController(screenMode: MediaEventsTimelineScreenMode) -> TimelineControllerMock {
+        var timelineItems: [RoomTimelineItemProtocol] = (0..<5).reduce([]) { partialResult, _ in
+            partialResult + [TimelineFixtures.separator] + TimelineFixtures.mediaChunk
+        }
+        
+        switch screenMode {
+        case .media:
+            timelineItems.append(contentsOf: [makeImageItem(url: .mockMXCScanning), makeImageItem(url: .mockMXCUnsafe)])
+        case .files:
+            timelineItems.append(contentsOf: [makeFileItem(url: .mockMXCScanning), makeFileItem(url: .mockMXCUnsafe)])
+        }
+        
+        return TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: timelineItems))
+    }
+    
+    private static func makeImageItem(url: URL) -> ImageRoomTimelineItem {
+        guard let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpg") else {
+            fatalError("Invalid mock media source URL")
+        }
+        
+        return ImageRoomTimelineItem(id: .randomEvent,
+                                     timestamp: .mock,
+                                     isOutgoing: false,
+                                     isEditable: false,
+                                     canBeRepliedTo: true,
+                                     sender: .init(id: "@bob:matrix.org"),
+                                     content: .init(filename: "image.jpg",
+                                                    imageInfo: .init(source: mediaSource, width: 2730, height: 2048, mimeType: "image/jpg", fileSize: nil),
+                                                    thumbnailInfo: nil,
+                                                    blurhash: "KpE4oyayR5|GbHb];3j@of"))
+    }
+    
+    private static func makeFileItem(url: URL) -> FileRoomTimelineItem {
+        guard let mediaSource = try? MediaSourceProxy(url: url, mimeType: nil) else {
+            fatalError("Invalid mock media source URL")
+        }
+        
+        return FileRoomTimelineItem(id: .randomEvent,
+                                    timestamp: .mock,
+                                    isOutgoing: false,
+                                    isEditable: false,
+                                    canBeRepliedTo: true,
+                                    sender: .init(id: "@bob:matrix.org"),
+                                    content: .init(filename: "important-document.pdf",
+                                                   caption: nil,
+                                                   formattedCaption: nil,
+                                                   source: mediaSource,
+                                                   fileSize: 3 * 1024 * 1024,
+                                                   thumbnailSource: nil,
+                                                   contentType: nil))
     }
 }

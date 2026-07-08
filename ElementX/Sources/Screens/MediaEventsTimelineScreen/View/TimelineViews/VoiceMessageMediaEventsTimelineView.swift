@@ -13,12 +13,19 @@ struct VoiceMessageMediaEventsTimelineView: View {
     let timelineItem: VoiceMessageRoomTimelineItem
     let playerState: AudioPlayerState
     
+    /// Whether the item's media failed content scanning, in which case the bubble adopts
+    /// the critical styling. Reported by the `ContentScanningView` through the preference key.
+    @State private var contentScanningFailure: ContentScanningFailure?
+    
     var body: some View {
         VoiceMessageRoomTimelineContent(timelineItem: timelineItem,
                                         playerState: playerState)
             .accessibilityLabel(L10n.commonVoiceMessage)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .bubbleBackground(isOutgoing: timelineItem.isOutgoing)
+            .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
+                              color: contentScanningFailure == nil ? .compound.bgSubtleSecondary : .compound.bgCriticalSubtle,
+                              borderColor: contentScanningFailure == nil ? nil : .compound.borderCriticalSubtle)
+            .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
     }
 }
 
