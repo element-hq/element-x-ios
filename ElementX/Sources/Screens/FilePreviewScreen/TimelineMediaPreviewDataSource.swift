@@ -161,6 +161,9 @@ enum TimelineMediaPreviewItem: Equatable {
         /// When set, the media failed content scanning and must not be downloaded or previewed.
         var contentScanningFailure: ContentScanningFailure?
         
+        /// Whether the media is currently being scanned by the content scanner.
+        var isBeingScanned = false
+        
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
             self.timelineItem = timelineItem
         }

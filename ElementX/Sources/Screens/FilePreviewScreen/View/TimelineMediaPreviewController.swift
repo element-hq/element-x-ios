@@ -22,6 +22,10 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var barButtonTimer: Timer?
     
+    private var pageScrollViewObservation: NSKeyValueObservation?
+    /// The content offset that the page scroll view rests at when showing the current item.
+    private var pageScrollViewRestingOffset: CGFloat = 0
+    
     private var cancellables: Set<AnyCancellable> = []
     
     private var navigationBar: UINavigationBar? {
@@ -64,6 +68,8 @@ class TimelineMediaPreviewController: QLPreviewController {
         downloadIndicatorHostingController = UIHostingController(rootView: DownloadIndicatorView(context: context))
         downloadIndicatorHostingController.view.backgroundColor = .clear
         downloadIndicatorHostingController.sizingOptions = .intrinsicContentSize
+        // Let swipes that start on the overlay reach the page scroll view underneath.
+        downloadIndicatorHostingController.view.isUserInteractionEnabled = false
         
         super.init(nibName: nil, bundle: nil)
         
@@ -148,6 +154,8 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         navigationBar?.topItem?.titleView = headerHostingController.view
         
+        observePageScrollViewIfNeeded()
+        
         updateBarButtons()
         
         // Ridiculous hack to undo the controller's attempt to replace our info button with the list button.
@@ -156,6 +164,8 @@ class TimelineMediaPreviewController: QLPreviewController {
                 // The timer is scheduled on the main run loop so it always fires on the main actor.
                 MainActor.assumeIsolated {
                     self?.updateBarButtons()
+                    // Also re-centers the overlay once the scroll view has settled on an item.
+                    self?.updateOverlayPosition()
                 }
             }
         }
@@ -173,6 +183,36 @@ class TimelineMediaPreviewController: QLPreviewController {
             let button = UIBarButtonItem(customView: detailsButtonHostingController.view)
             navigationBar?.topItem?.leftBarButtonItem = button
         }
+    }
+    
+    /// Makes the centered overlay (scan failure, download error/indicator) track the page scroll view
+    /// when swiping between items, as it would otherwise float statically above the moving pages.
+    private func observePageScrollViewIfNeeded() {
+        guard pageScrollViewObservation == nil, let pageScrollView else { return }
+        
+        pageScrollViewObservation = pageScrollView.observe(\.contentOffset) { [weak self] _, _ in
+            // The observation is registered on the main thread so it always fires on the main actor.
+            MainActor.assumeIsolated {
+                self?.updateOverlayPosition()
+            }
+        }
+    }
+    
+    private func updateOverlayPosition() {
+        guard let pageScrollView, let overlayView = downloadIndicatorHostingController.view else { return }
+        
+        let pageWidth = pageScrollView.bounds.width
+        guard pageWidth > 0 else { return }
+        
+        // Whilst resting on an item, keep track of the offset that any swipe will start from.
+        if !pageScrollView.isDragging, !pageScrollView.isDecelerating {
+            pageScrollViewRestingOffset = pageScrollView.contentOffset.x
+        }
+        
+        let delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
+        overlayView.transform = CGAffineTransform(translationX: -delta, y: 0)
+        // Fade towards the midpoint so the overlay never clashes with the neighbouring item's state.
+        overlayView.alpha = max(0, 1 - abs(delta) / (pageWidth / 2))
     }
     
     // MARK: Item loading
@@ -414,9 +454,17 @@ private struct DownloadIndicatorView: View {
             .padding(.vertical, 40)
             .background(.compound.bgSubtlePrimary, in: RoundedRectangle(cornerRadius: 14))
         } else if shouldShowDownloadIndicator {
-            ProgressView()
-                .controlSize(.large)
-                .tint(.compound.iconPrimary)
+            VStack(spacing: 32) {
+                ProgressView()
+                    .controlSize(.large)
+                    .tint(.compound.iconPrimary)
+                
+                if case let .media(mediaItem) = currentItem, mediaItem.isBeingScanned {
+                    Text(L10n.contentScannerScanning)
+                        .font(.compound.bodyLGSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                }
+            }
         }
     }
 }

@@ -143,6 +143,18 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private func checkSourceSafetyIfNeeded(for mediaItem: TimelineMediaPreviewItem.Media, source: MediaSourceProxy) async -> Bool {
         guard let contentScannerService else { return true }
         
+        // Only reflect the scanning state when there's no cached verdict, so that
+        // scanned items don't flash the scanning indicator when they're revisited.
+        if contentScannerService.scanResultFromSource(source) == nil {
+            context.objectWillChange.send() // Manually trigger the SwiftUI view update.
+            mediaItem.isBeingScanned = true
+        }
+        
+        defer {
+            context.objectWillChange.send() // Manually trigger the SwiftUI view update.
+            mediaItem.isBeingScanned = false
+        }
+        
         switch await contentScannerService.loadScanResultFromSource(source) {
         case .success(true):
             return true
