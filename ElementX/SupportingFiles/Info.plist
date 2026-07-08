@@ -122,6 +122,8 @@
 	<string>$(CLASSIC_APP_KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
 	<key>classicAppKeychainServiceIdentifier</key>
 	<string>$(CLASSIC_APP_KEYCHAIN_SERVICE_IDENTIFIER)</string>
+	<key>isNightlyBuild</key>
+	<string>$(IS_NIGHTLY_BUILD)</string>
 	<key>keychainAccessGroupIdentifier</key>
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
 	<key>productionAppName</key>

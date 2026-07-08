@@ -49,6 +49,7 @@ targets:
         baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
         keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
         productionAppName: $(PRODUCTION_APP_NAME)
+        isNightlyBuild: $(IS_NIGHTLY_BUILD)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.share-services
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareExtensionViewController
