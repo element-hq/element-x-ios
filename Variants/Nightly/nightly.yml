@@ -1,6 +1,7 @@
 settings:
   APP_GROUP_IDENTIFIER: group.io.element.nightly
   BASE_BUNDLE_IDENTIFIER: io.element.elementx.nightly
+  IS_NIGHTLY_BUILD: true
 
 targets:
   ElementX:

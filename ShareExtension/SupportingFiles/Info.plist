@@ -51,6 +51,8 @@
 	<string>$(APP_GROUP_IDENTIFIER)</string>
 	<key>baseBundleIdentifier</key>
 	<string>$(BASE_BUNDLE_IDENTIFIER)</string>
+	<key>isNightlyBuild</key>
+	<string>$(IS_NIGHTLY_BUILD)</string>
 	<key>keychainAccessGroupIdentifier</key>
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
 	<key>productionAppName</key>

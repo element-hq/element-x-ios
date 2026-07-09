@@ -40,11 +40,10 @@ nonisolated enum AppBuildType {
         #if DEBUG
         return .debug
         #else
-        switch InfoPlistReader.main.baseBundleIdentifier {
-        case "io.element.elementx.nightly":
-            return .nightly
-        default:
-            return .release
+        if InfoPlistReader.main.isNightlyBuild {
+            .nightly
+        } else {
+            .release
         }
         #endif
     }

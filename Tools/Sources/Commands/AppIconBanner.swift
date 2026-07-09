@@ -7,8 +7,8 @@ struct AppIconBanner: AsyncParsableCommand {
     @Argument(help: "Path to the input image.")
     var path: String
     
-    @Option(help: "Text for the banner.")
-    var bannerText: String
+    @Option(help: "The build number appended to the app's version.")
+    var buildNumber: Int
     
     @MainActor
     func run() async throws {
@@ -18,6 +18,9 @@ struct AppIconBanner: AsyncParsableCommand {
         guard let image = NSImage(contentsOf: pathURL) else {
             throw ValidationError("Could not load the image at \(pathURL).")
         }
+        
+        let version = try CI.readMarketingVersion()
+        let bannerText = "\(version) (\(buildNumber))"
         
         let renderer = ImageRenderer(content: BannerImage(image: image,
                                                           text: bannerText))
