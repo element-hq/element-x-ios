@@ -45,7 +45,7 @@ struct MediaEventsTimelineScreenViewModelTests {
     
     // MARK: - Helpers
     
-    /// Both timelines are given the same mixed chunk of items so that the mode based filtering is what's under test.
+    // Both timelines are given the same mixed chunk of items so that the mode based filtering is what's under test.
     private func makeTimelineViewModel() -> TimelineViewModel {
         let timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen),
                                                               timelineItems: [TimelineFixtures.separator] + TimelineFixtures.mediaChunk))

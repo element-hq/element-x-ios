@@ -150,10 +150,7 @@ struct MediaEventsTimelineScreen: View {
         }
     }
     
-    /// The mode check makes sure that items of the other mode never render, e.g. from a stale
-    /// `groups` that was built for the previous mode when switching between the two. It's passed
-    /// in by the caller (which statically knows its own mode) rather than read from the state, as
-    /// reading the state from within a lazy container's rows isn't reliable when the mode changes.
+    /// The mode check makes sure that stale items from the other mode's layout are never rendered.
     @ViewBuilder
     private func viewForTimelineItem(_ item: RoomTimelineItemViewState, screenMode: MediaEventsTimelineScreenMode) -> some View {
         switch item.type {
