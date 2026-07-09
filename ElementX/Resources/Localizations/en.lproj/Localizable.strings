@@ -411,6 +411,7 @@
 "confirm_recovery_key_banner_title" = "Your key storage is out of sync";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
