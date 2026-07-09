@@ -22,6 +22,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     
+    private var contentScannerService: ContentScannerServiceProtocol? {
+        timelineViewModel.context.contentScannerService
+    }
+    
     private let actionsSubject: PassthroughSubject<TimelineMediaPreviewViewModelAction, Never> = .init()
     var actions: AnyPublisher<TimelineMediaPreviewViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -109,26 +113,63 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
         if case let .media(item) = previewItem {
-            item.downloadError = nil // Clear any existing error.
+            item.downloadError = nil // Clear any existing error so that the download is retried.
         }
-        state.dataSource.updateCurrentItem(previewItem)
-        rebuildCurrentItemActions()
+        setCurrentItem(previewItem)
         
         if case let .media(mediaItem) = previewItem {
-            if mediaItem.fileHandle == nil, let source = mediaItem.mediaSource {
-                switch await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) {
-                case .success(let handle):
-                    mediaItem.fileHandle = handle
-                    state.previewControllerDriver.send(.itemLoaded(mediaItem.id))
-                case .failure(let error):
-                    MXLog.error("Failed loading media: \(error)")
-                    context.objectWillChange.send() // Manually trigger the SwiftUI view update.
-                    mediaItem.downloadError = error
-                }
+            guard mediaItem.fileHandle == nil, let source = mediaItem.mediaSource else { return }
+            
+            guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
+            
+            switch await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) {
+            case .success(let handle):
+                mediaItem.fileHandle = handle
+                state.previewControllerDriver.send(.itemLoaded(mediaItem.id))
+            case .failure(let error):
+                MXLog.error("Failed loading media: \(error)")
+                context.objectWillChange.send() // Manually trigger the SwiftUI view update.
+                mediaItem.downloadError = error
             }
         } else {
             paginateIfNeeded()
         }
+    }
+    
+    /// Scans the media when a content scanner is configured, returning whether it's safe to be downloaded
+    /// and previewed, reflecting the scan's progress and outcome in the current item.
+    private func checkSourceIsSafeIfNeeded(for mediaItem: TimelineMediaPreviewItem.Media, source: MediaSourceProxy) async -> Bool {
+        guard let contentScannerService else { return true }
+        
+        // Only reflect the scanning state when there's no cached verdict, so that
+        // scanned items don't flash the scanning indicator when they're revisited.
+        if contentScannerService.scanResultFromSource(source) == nil {
+            setCurrentItem(.contentScan(.init(media: mediaItem, state: .scanning)))
+        }
+        
+        switch await contentScannerService.loadScanResultFromSource(source) {
+        case .success(true):
+            finishScan(with: .media(mediaItem), for: mediaItem)
+            return true
+        case .success(false):
+            finishScan(with: .contentScan(.init(media: mediaItem, state: .failure(.notSafe))), for: mediaItem)
+            return false
+        case .failure:
+            finishScan(with: .contentScan(.init(media: mediaItem, state: .failure(.notFound))), for: mediaItem)
+            return false
+        }
+    }
+    
+    /// Reflects the outcome of a scan in the current item, unless the user has already swiped on to another item.
+    private func finishScan(with previewItem: TimelineMediaPreviewItem, for mediaItem: TimelineMediaPreviewItem.Media) {
+        guard state.currentItem.mediaItem === mediaItem else { return }
+        setCurrentItem(previewItem)
+    }
+    
+    private func setCurrentItem(_ previewItem: TimelineMediaPreviewItem) {
+        context.objectWillChange.send() // The data source is a reference type so the view needs a manual update.
+        state.dataSource.updateCurrentItem(previewItem)
+        rebuildCurrentItemActions()
     }
     
     private func paginateIfNeeded() {
@@ -148,8 +189,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     private func rebuildCurrentItemActions() {
         let timelineContext = timelineViewModel.context
-        state.currentItemActions = switch state.currentItem {
-        case .media(let mediaItem):
+        state.currentItemActions = state.currentItem.mediaItem.flatMap { mediaItem in
             TimelineItemMenuActionProvider(timelineItem: mediaItem.timelineItem,
                                            canCurrentUserSendMessage: timelineContext.viewState.canCurrentUserSendMessage,
                                            canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
@@ -162,8 +202,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                            timelineKind: timelineContext.viewState.timelineKind,
                                            emojiProvider: timelineContext.viewState.emojiProvider)
                 .makeActions()
-        case .loading:
-            nil
         }
     }
     

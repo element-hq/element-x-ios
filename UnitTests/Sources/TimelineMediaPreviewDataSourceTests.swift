@@ -271,9 +271,6 @@ struct TimelineMediaPreviewDataSourceTests {
 
 private extension TimelineMediaPreviewDataSource {
     var currentMediaItemID: TimelineItemIdentifier.EventOrTransactionID? {
-        switch currentItem {
-        case .media(let mediaItem): mediaItem.id
-        case .loading: nil
-        }
+        currentItem.mediaItem?.id
     }
 }

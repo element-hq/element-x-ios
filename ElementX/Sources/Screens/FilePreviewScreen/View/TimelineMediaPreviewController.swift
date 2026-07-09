@@ -22,6 +22,10 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var barButtonTimer: Timer?
     
+    private var pageScrollViewObservation: AnyCancellable?
+    /// The content offset that the page scroll view rests at when showing the current item.
+    private var pageScrollViewRestingOffset: CGFloat = 0
+    
     private var cancellables: Set<AnyCancellable> = []
     
     private var navigationBar: UINavigationBar? {
@@ -64,6 +68,8 @@ class TimelineMediaPreviewController: QLPreviewController {
         downloadIndicatorHostingController = UIHostingController(rootView: DownloadIndicatorView(context: context))
         downloadIndicatorHostingController.view.backgroundColor = .clear
         downloadIndicatorHostingController.sizingOptions = .intrinsicContentSize
+        // Let swipes that start on the overlay reach the page scroll view underneath.
+        downloadIndicatorHostingController.view.isUserInteractionEnabled = false
         
         super.init(nibName: nil, bundle: nil)
         
@@ -148,6 +154,8 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         navigationBar?.topItem?.titleView = headerHostingController.view
         
+        observePageScrollViewIfNeeded()
+        
         updateBarButtons()
         
         // Ridiculous hack to undo the controller's attempt to replace our info button with the list button.
@@ -156,6 +164,8 @@ class TimelineMediaPreviewController: QLPreviewController {
                 // The timer is scheduled on the main run loop so it always fires on the main actor.
                 MainActor.assumeIsolated {
                     self?.updateBarButtons()
+                    // Also re-centers the overlay once the scroll view has settled on an item.
+                    self?.updateOverlayPosition()
                 }
             }
         }
@@ -173,6 +183,34 @@ class TimelineMediaPreviewController: QLPreviewController {
             let button = UIBarButtonItem(customView: detailsButtonHostingController.view)
             navigationBar?.topItem?.leftBarButtonItem = button
         }
+    }
+    
+    /// Makes the centered overlay (scan failure, download error/indicator) track the page scroll view
+    /// when swiping between items, as it would otherwise float statically above the moving pages.
+    private func observePageScrollViewIfNeeded() {
+        guard pageScrollViewObservation == nil, let pageScrollView else { return }
+        
+        pageScrollViewObservation = pageScrollView.publisher(for: \.contentOffset)
+            .sink { [weak self] _ in
+                self?.updateOverlayPosition()
+            }
+    }
+    
+    private func updateOverlayPosition() {
+        guard let pageScrollView, let overlayView = downloadIndicatorHostingController.view else { return }
+        
+        let pageWidth = pageScrollView.bounds.width
+        guard pageWidth > 0 else { return }
+        
+        // Whilst resting on an item, keep track of the offset that any swipe will start from.
+        if !pageScrollView.isDragging, !pageScrollView.isDecelerating {
+            pageScrollViewRestingOffset = pageScrollView.contentOffset.x
+        }
+        
+        let delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
+        overlayView.transform = CGAffineTransform(translationX: -delta, y: 0)
+        // Fade towards the midpoint so the overlay never clashes with the neighbouring item's state.
+        overlayView.alpha = max(0, 1 - abs(delta) / (pageWidth / 2))
     }
     
     // MARK: Item loading
@@ -271,8 +309,7 @@ private struct HeaderView: View {
     }
     
     var body: some View {
-        switch currentItem {
-        case .media(let mediaItem):
+        if let mediaItem = currentItem.mediaItem {
             VStack(spacing: 0) {
                 Text(mediaItem.sender.displayName ?? mediaItem.sender.id)
                     .font(.compound.bodySMSemibold)
@@ -283,7 +320,7 @@ private struct HeaderView: View {
                     .textCase(.uppercase)
             }
             .fixedSize(horizontal: true, vertical: false)
-        case .loading:
+        } else {
             Text(L10n.commonLoadingMore)
                 .font(.compound.bodySMSemibold)
                 .foregroundStyle(.compound.textPrimary)
@@ -299,14 +336,11 @@ private struct DetailsButton: View {
     }
     
     var isHidden: Bool {
-        switch currentItem {
-        case .media: false
-        case .loading: true
-        }
+        currentItem.mediaItem == nil
     }
     
     var body: some View {
-        if case .media(let mediaItem) = currentItem {
+        if let mediaItem = currentItem.mediaItem {
             Button { context.send(viewAction: .showItemDetails(mediaItem)) } label: {
                 CompoundIcon(\.info)
             }
@@ -321,7 +355,7 @@ private struct CaptionView: View {
     }
     
     var body: some View {
-        if case let .media(mediaItem) = currentItem, mediaItem.hasCaption {
+        if let mediaItem = currentItem.mediaItem, mediaItem.hasCaption {
             CaptionScrollView(mediaItem: mediaItem)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         }
@@ -381,40 +415,62 @@ private struct DownloadIndicatorView: View {
         context.viewState.currentItem
     }
     
-    private var shouldShowDownloadIndicator: Bool {
+    var body: some View {
         switch currentItem {
-        case .media(let mediaItem): mediaItem.fileHandle == nil
-        case .loading(.paginatingBackwards), .loading(.paginatingForwards): true
-        case .loading: false
+        case .media(let mediaItem):
+            if mediaItem.downloadError != nil {
+                downloadErrorView
+            } else if mediaItem.fileHandle == nil {
+                loadingIndicator(isScanning: false)
+            }
+        case .contentScan(let scan):
+            switch scan.state {
+            case .scanning:
+                loadingIndicator(isScanning: true)
+            case .failure(let failure):
+                TimelineMediaContentScanningFailureView(failure: failure)
+            }
+        case .loading(.paginatingBackwards), .loading(.paginatingForwards):
+            loadingIndicator(isScanning: false)
+        case .loading:
+            EmptyView()
         }
     }
     
-    var body: some View {
-        if case let .media(mediaItem) = currentItem, mediaItem.downloadError != nil {
-            VStack(spacing: 24) {
-                CompoundIcon(\.errorSolid, size: .custom(48), relativeTo: .compound.headingLG)
-                    .foregroundStyle(.compound.iconCriticalPrimary)
-                    .padding(.vertical, 24.5)
-                    .padding(.horizontal, 28.5)
-                
-                VStack(spacing: 2) {
-                    Text(L10n.commonDownloadFailed)
-                        .font(.compound.headingMDBold)
-                        .foregroundStyle(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
-                    Text(L10n.screenMediaBrowserDownloadErrorMessage)
-                        .font(.compound.bodyMD)
-                        .foregroundStyle(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
-                }
+    private var downloadErrorView: some View {
+        VStack(spacing: 24) {
+            CompoundIcon(\.errorSolid, size: .custom(48), relativeTo: .compound.headingLG)
+                .foregroundStyle(.compound.iconCriticalPrimary)
+                .padding(.vertical, 24.5)
+                .padding(.horizontal, 28.5)
+            
+            VStack(spacing: 2) {
+                Text(L10n.commonDownloadFailed)
+                    .font(.compound.headingMDBold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
+                Text(L10n.screenMediaBrowserDownloadErrorMessage)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
             }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 40)
-            .background(.compound.bgSubtlePrimary, in: RoundedRectangle(cornerRadius: 14))
-        } else if shouldShowDownloadIndicator {
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 40)
+        .background(.compound.bgSubtlePrimary, in: RoundedRectangle(cornerRadius: 14))
+    }
+    
+    private func loadingIndicator(isScanning: Bool) -> some View {
+        VStack(spacing: 32) {
             ProgressView()
                 .controlSize(.large)
                 .tint(.compound.iconPrimary)
+            
+            if isScanning {
+                Text(L10n.contentScannerScanning)
+                    .font(.compound.bodyLGSemibold)
+                    .foregroundStyle(.compound.textPrimary)
+            }
         }
     }
 }

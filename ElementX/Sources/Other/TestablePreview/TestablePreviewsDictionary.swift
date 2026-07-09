@@ -189,6 +189,7 @@ enum TestablePreviewsDictionary {
             "TimelineItemMenu_Previews" : TimelineItemMenu_Previews.self,
             "TimelineItemSendInfoLabel_Previews" : TimelineItemSendInfoLabel_Previews.self,
             "TimelineItemStyler_Previews" : TimelineItemStyler_Previews.self,
+            "TimelineMediaContentScanningFailureView_Previews" : TimelineMediaContentScanningFailureView_Previews.self,
             "TimelineMediaPreviewRedactConfirmationView_Previews" : TimelineMediaPreviewRedactConfirmationView_Previews.self,
             "TimelineReactionView_Previews" : TimelineReactionView_Previews.self,
             "TimelineReadReceiptsView_Previews" : TimelineReadReceiptsView_Previews.self,

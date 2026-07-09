@@ -24,8 +24,8 @@ struct MediaEventsTimelineScreen: View {
             .environment(\.timelineContext, context.viewState.activeTimelineContext)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .sheet(item: $context.mediaPreviewSheetViewModel) { sheet in
-                if case let .media(media) = sheet.state.currentItem {
-                    TimelineMediaPreviewDetailsView(item: media,
+                if let mediaItem = sheet.state.currentItem.mediaItem {
+                    TimelineMediaPreviewDetailsView(item: mediaItem,
                                                     context: sheet.context,
                                                     preferredColorScheme: nil,
                                                     sheetHeight: $sheetHeight)

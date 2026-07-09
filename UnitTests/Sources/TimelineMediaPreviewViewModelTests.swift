@@ -275,6 +275,64 @@ struct TimelineMediaPreviewViewModelTests {
         #expect(file.url == mediaItem.fileHandle?.url)
     }
     
+    @Test
+    mutating func safeItem() async throws {
+        // Given a view model with a content scanner that reports the media as safe.
+        setupViewModel(contentScannerService: ContentScannerServiceMock(.init(scanResult: true)))
+        
+        // When the preview controller sets the current item.
+        try await loadInitialItem()
+        
+        // Then the media should be downloaded as usual.
+        guard case .media = context.viewState.currentItem else {
+            Issue.record("The item should be previewable")
+            return
+        }
+        #expect(mediaProvider.loadFileFromSourceFilenameCalled)
+    }
+    
+    @Test
+    mutating func unsafeItem() async throws {
+        // Given a view model with a content scanner that reports the media as unsafe.
+        setupViewModel(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
+        guard case let .media(mediaItem) = context.viewState.currentItem else {
+            Issue.record("There should be a current item")
+            return
+        }
+        
+        // When the preview controller sets the current item.
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
+        try await failure.fulfill()
+        
+        // Then the media must not be downloaded and the failure should be reflected in the current item.
+        #expect(!mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(context.viewState.currentItem == .contentScan(.init(media: mediaItem, state: .failure(.notSafe))))
+        #expect(mediaItem.fileHandle == nil)
+    }
+    
+    @Test
+    mutating func failedScanItem() async throws {
+        // Given a view model with a content scanner that fails to scan the media.
+        let contentScannerService = ContentScannerServiceMock()
+        contentScannerService.loadScanResultFromSourceClosure = { _ in .failure(.failedScanning) }
+        setupViewModel(contentScannerService: contentScannerService)
+        guard case let .media(mediaItem) = context.viewState.currentItem else {
+            Issue.record("There should be a current item")
+            return
+        }
+        
+        // When the preview controller sets the current item.
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
+        try await failure.fulfill()
+        
+        // Then the media must not be downloaded and the failure should be reflected in the current item.
+        #expect(!mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(context.viewState.currentItem == .contentScan(.init(media: mediaItem, state: .failure(.notFound))))
+        #expect(mediaItem.fileHandle == nil)
+    }
+    
     // MARK: - Helpers
     
     private func loadInitialItem() async throws {
@@ -289,7 +347,9 @@ struct TimelineMediaPreviewViewModelTests {
         try await deferred.fulfill()
     }
     
-    private mutating func setupViewModel(initialItemIndex: Int = 0, photoLibraryAuthorizationDenied: Bool = false) {
+    private mutating func setupViewModel(initialItemIndex: Int = 0,
+                                         photoLibraryAuthorizationDenied: Bool = false,
+                                         contentScannerService: ContentScannerServiceProtocol? = nil) {
         let initialItems = makeItems()
         timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: initialItems))
         
@@ -298,7 +358,8 @@ struct TimelineMediaPreviewViewModelTests {
         
         viewModel = TimelineMediaPreviewViewModel(initialItem: initialItems[initialItemIndex],
                                                   timelineViewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen),
-                                                                                            timelineController: timelineController),
+                                                                                            timelineController: timelineController,
+                                                                                            contentScannerService: contentScannerService),
                                                   mediaProvider: mediaProvider,
                                                   photoLibraryManager: photoLibraryManager,
                                                   userIndicatorController: UserIndicatorControllerMock(),
