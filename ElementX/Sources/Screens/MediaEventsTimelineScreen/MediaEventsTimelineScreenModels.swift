@@ -28,6 +28,9 @@ struct MediaEventsTimelineScreenViewState: BindableState {
     var isBackPaginating = false
     var shouldShowEmptyState = false
     
+    /// The mode that `groups` were built for, so that the layout and its items always change
+    /// together. Updated through the ``MediaEventsTimelineScreenViewAction/changeScreenMode(_:)`` action.
+    var screenMode: MediaEventsTimelineScreenMode
     var groups = [MediaEventsTimelineGroup]()
     
     var activeTimelineContext: TimelineViewModel.Context
@@ -36,13 +39,12 @@ struct MediaEventsTimelineScreenViewState: BindableState {
 }
 
 struct MediaEventsTimelineScreenViewStateBindings {
-    var screenMode: MediaEventsTimelineScreenMode
     var mediaPreviewViewModel: TimelineMediaPreviewViewModel?
     var mediaPreviewSheetViewModel: TimelineMediaPreviewViewModel?
 }
 
 enum MediaEventsTimelineScreenViewAction {
-    case changedScreenMode
+    case changeScreenMode(MediaEventsTimelineScreenMode)
     case oldestItemDidAppear
     case oldestItemDidDisappear
     case tappedItem(item: RoomTimelineItemViewState)

@@ -21,7 +21,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private var isOldestItemVisible = false
     
     private var activeTimelineViewModel: TimelineViewModelProtocol {
-        switch state.bindings.screenMode {
+        switch state.screenMode {
         case .media:
             mediaTimelineViewModel
         case .files:
@@ -53,10 +53,13 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         case .files: filesTimelineViewModel.context
         }
         
-        super.init(initialViewState: .init(activeTimelineContext: activeTimelineContext, bindings: .init(screenMode: initialScreenMode)), mediaProvider: mediaProvider)
+        super.init(initialViewState: .init(screenMode: initialScreenMode,
+                                           activeTimelineContext: activeTimelineContext,
+                                           bindings: .init()),
+                   mediaProvider: mediaProvider)
         
         mediaTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
-            guard let self, state.bindings.screenMode == .media else {
+            guard let self, state.screenMode == .media else {
                 return
             }
             
@@ -81,7 +84,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         .store(in: &cancellables)
         
         filesTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
-            guard let self, state.bindings.screenMode == .files else {
+            guard let self, state.screenMode == .files else {
                 return
             }
             
@@ -114,13 +117,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .changedScreenMode:
-            switch state.bindings.screenMode {
-            case .media: state.activeTimelineContext = mediaTimelineViewModel.context
-            case .files: state.activeTimelineContext = filesTimelineViewModel.context
-            }
-            
-            updateWithTimelineViewState(activeTimelineViewModel.context.viewState)
+        case .changeScreenMode(let screenMode):
+            changeScreenMode(to: screenMode)
         case .oldestItemDidAppear:
             isOldestItemVisible = true
             backPaginateIfNecessary(backPaginationState: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
@@ -139,6 +137,19 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     }
     
     // MARK: - Private
+    
+    private func changeScreenMode(to screenMode: MediaEventsTimelineScreenMode) {
+        guard screenMode != state.screenMode else { return }
+        
+        state.screenMode = screenMode
+        
+        switch screenMode {
+        case .media: state.activeTimelineContext = mediaTimelineViewModel.context
+        case .files: state.activeTimelineContext = filesTimelineViewModel.context
+        }
+        
+        updateWithTimelineViewState(activeTimelineViewModel.context.viewState)
+    }
     
     private func displayMediaPreviewSheet(for item: EventBasedMessageTimelineItemProtocol) {
         let sheetModel = TimelineMediaPreviewViewModel(initialItem: item,
@@ -172,9 +183,9 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         timelineViewState.timelineState.itemViewStates.filter { itemViewState in
             switch itemViewState.type {
             case .image, .video:
-                state.bindings.screenMode == .media
+                state.screenMode == .media
             case .audio, .file, .voice:
-                state.bindings.screenMode == .files
+                state.screenMode == .files
             case .separator:
                 true
             default:
