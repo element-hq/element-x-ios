@@ -284,12 +284,11 @@ struct TimelineMediaPreviewViewModelTests {
         try await loadInitialItem()
         
         // Then the media should be downloaded as usual.
-        guard case let .media(mediaItem) = context.viewState.currentItem else {
-            Issue.record("There should be a current item")
+        guard case .media = context.viewState.currentItem else {
+            Issue.record("The item should be previewable")
             return
         }
         #expect(mediaProvider.loadFileFromSourceFilenameCalled)
-        #expect(mediaItem.contentScanningFailure == nil)
     }
     
     @Test
@@ -300,16 +299,15 @@ struct TimelineMediaPreviewViewModelTests {
             Issue.record("There should be a current item")
             return
         }
-        #expect(mediaItem.contentScanningFailure == nil)
         
         // When the preview controller sets the current item.
         let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
         try await failure.fulfill()
         
-        // Then the media must not be downloaded and the failure should be reflected in the item.
+        // Then the media must not be downloaded and the failure should be reflected in the current item.
         #expect(!mediaProvider.loadFileFromSourceFilenameCalled)
-        #expect(mediaItem.contentScanningFailure == .notSafe)
+        #expect(context.viewState.currentItem == .contentScan(.init(media: mediaItem, state: .failure(.notSafe))))
         #expect(mediaItem.fileHandle == nil)
     }
     
@@ -329,9 +327,9 @@ struct TimelineMediaPreviewViewModelTests {
         context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
         try await failure.fulfill()
         
-        // Then the media must not be downloaded and the failure should be reflected in the item.
+        // Then the media must not be downloaded and the failure should be reflected in the current item.
         #expect(!mediaProvider.loadFileFromSourceFilenameCalled)
-        #expect(mediaItem.contentScanningFailure == .notFound)
+        #expect(context.viewState.currentItem == .contentScan(.init(media: mediaItem, state: .failure(.notFound))))
         #expect(mediaItem.fileHandle == nil)
     }
     

@@ -22,7 +22,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var barButtonTimer: Timer?
     
-    private var pageScrollViewObservation: NSKeyValueObservation?
+    private var pageScrollViewObservation: AnyCancellable?
     /// The content offset that the page scroll view rests at when showing the current item.
     private var pageScrollViewRestingOffset: CGFloat = 0
     
@@ -190,12 +190,10 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func observePageScrollViewIfNeeded() {
         guard pageScrollViewObservation == nil, let pageScrollView else { return }
         
-        pageScrollViewObservation = pageScrollView.observe(\.contentOffset) { [weak self] _, _ in
-            // The observation is registered on the main thread so it always fires on the main actor.
-            MainActor.assumeIsolated {
+        pageScrollViewObservation = pageScrollView.publisher(for: \.contentOffset)
+            .sink { [weak self] _ in
                 self?.updateOverlayPosition()
             }
-        }
     }
     
     private func updateOverlayPosition() {
@@ -311,8 +309,7 @@ private struct HeaderView: View {
     }
     
     var body: some View {
-        switch currentItem {
-        case .media(let mediaItem):
+        if let mediaItem = currentItem.mediaItem {
             VStack(spacing: 0) {
                 Text(mediaItem.sender.displayName ?? mediaItem.sender.id)
                     .font(.compound.bodySMSemibold)
@@ -323,7 +320,7 @@ private struct HeaderView: View {
                     .textCase(.uppercase)
             }
             .fixedSize(horizontal: true, vertical: false)
-        case .loading:
+        } else {
             Text(L10n.commonLoadingMore)
                 .font(.compound.bodySMSemibold)
                 .foregroundStyle(.compound.textPrimary)
@@ -339,14 +336,11 @@ private struct DetailsButton: View {
     }
     
     var isHidden: Bool {
-        switch currentItem {
-        case .media: false
-        case .loading: true
-        }
+        currentItem.mediaItem == nil
     }
     
     var body: some View {
-        if case .media(let mediaItem) = currentItem {
+        if let mediaItem = currentItem.mediaItem {
             Button { context.send(viewAction: .showItemDetails(mediaItem)) } label: {
                 CompoundIcon(\.info)
             }
@@ -361,7 +355,7 @@ private struct CaptionView: View {
     }
     
     var body: some View {
-        if case let .media(mediaItem) = currentItem, mediaItem.hasCaption {
+        if let mediaItem = currentItem.mediaItem, mediaItem.hasCaption {
             CaptionScrollView(mediaItem: mediaItem)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         }
@@ -421,49 +415,61 @@ private struct DownloadIndicatorView: View {
         context.viewState.currentItem
     }
     
-    private var shouldShowDownloadIndicator: Bool {
+    var body: some View {
         switch currentItem {
-        case .media(let mediaItem): mediaItem.fileHandle == nil
-        case .loading(.paginatingBackwards), .loading(.paginatingForwards): true
-        case .loading: false
+        case .media(let mediaItem):
+            if mediaItem.downloadError != nil {
+                downloadErrorView
+            } else if mediaItem.fileHandle == nil {
+                loadingIndicator(isScanning: false)
+            }
+        case .contentScan(let scan):
+            switch scan.state {
+            case .scanning:
+                loadingIndicator(isScanning: true)
+            case .failure(let failure):
+                TimelineMediaContentScanningFailureView(failure: failure)
+            }
+        case .loading(.paginatingBackwards), .loading(.paginatingForwards):
+            loadingIndicator(isScanning: false)
+        case .loading:
+            EmptyView()
         }
     }
     
-    var body: some View {
-        if case let .media(mediaItem) = currentItem, let contentScanningFailure = mediaItem.contentScanningFailure {
-            TimelineMediaContentScanningFailureView(failure: contentScanningFailure)
-        } else if case let .media(mediaItem) = currentItem, mediaItem.downloadError != nil {
-            VStack(spacing: 24) {
-                CompoundIcon(\.errorSolid, size: .custom(48), relativeTo: .compound.headingLG)
-                    .foregroundStyle(.compound.iconCriticalPrimary)
-                    .padding(.vertical, 24.5)
-                    .padding(.horizontal, 28.5)
-                
-                VStack(spacing: 2) {
-                    Text(L10n.commonDownloadFailed)
-                        .font(.compound.headingMDBold)
-                        .foregroundStyle(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
-                    Text(L10n.screenMediaBrowserDownloadErrorMessage)
-                        .font(.compound.bodyMD)
-                        .foregroundStyle(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
-                }
+    private var downloadErrorView: some View {
+        VStack(spacing: 24) {
+            CompoundIcon(\.errorSolid, size: .custom(48), relativeTo: .compound.headingLG)
+                .foregroundStyle(.compound.iconCriticalPrimary)
+                .padding(.vertical, 24.5)
+                .padding(.horizontal, 28.5)
+            
+            VStack(spacing: 2) {
+                Text(L10n.commonDownloadFailed)
+                    .font(.compound.headingMDBold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
+                Text(L10n.screenMediaBrowserDownloadErrorMessage)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
             }
-            .padding(.horizontal, 24)
-            .padding(.vertical, 40)
-            .background(.compound.bgSubtlePrimary, in: RoundedRectangle(cornerRadius: 14))
-        } else if shouldShowDownloadIndicator {
-            VStack(spacing: 32) {
-                ProgressView()
-                    .controlSize(.large)
-                    .tint(.compound.iconPrimary)
-                
-                if case let .media(mediaItem) = currentItem, mediaItem.isBeingScanned {
-                    Text(L10n.contentScannerScanning)
-                        .font(.compound.bodyLGSemibold)
-                        .foregroundStyle(.compound.textPrimary)
-                }
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 40)
+        .background(.compound.bgSubtlePrimary, in: RoundedRectangle(cornerRadius: 14))
+    }
+    
+    private func loadingIndicator(isScanning: Bool) -> some View {
+        VStack(spacing: 32) {
+            ProgressView()
+                .controlSize(.large)
+                .tint(.compound.iconPrimary)
+            
+            if isScanning {
+                Text(L10n.contentScannerScanning)
+                    .font(.compound.bodyLGSemibold)
+                    .foregroundStyle(.compound.textPrimary)
             }
         }
     }

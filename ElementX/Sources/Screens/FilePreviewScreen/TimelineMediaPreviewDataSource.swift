@@ -144,7 +144,29 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
 
 enum TimelineMediaPreviewItem: Equatable {
     case media(Media)
+    case contentScan(Scan)
     case loading(Loading)
+    
+    /// The media item this preview is for, regardless of its content scanning state.
+    var mediaItem: Media? {
+        switch self {
+        case .media(let mediaItem): mediaItem
+        case .contentScan(let scan): scan.media
+        case .loading: nil
+        }
+    }
+    
+    /// A media item that is being processed by the content scanner, or that failed a scan
+    /// and therefore must not be downloaded or previewed.
+    struct Scan: Equatable {
+        enum State: Equatable {
+            case scanning
+            case failure(ContentScanningFailure)
+        }
+        
+        let media: Media
+        let state: State
+    }
     
     /// Wraps a media file and title to be previewed with QuickLook.
     @Observable class Media: NSObject, QLPreviewItem, Identifiable {
@@ -157,12 +179,6 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         var downloadError: Error?
-        
-        /// When set, the media failed content scanning and must not be downloaded or previewed.
-        var contentScanningFailure: ContentScanningFailure?
-        
-        /// Whether the media is currently being scanned by the content scanner.
-        var isBeingScanned = false
         
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
             self.timelineItem = timelineItem
