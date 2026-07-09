@@ -1,3 +1,51 @@
+## Changes in 26.07.3 (2026-07-09)
+
+### What's Changed
+
+✨ Features
+* Content Scanning View by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5831
+* Content scanning view for reply preview by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5842
+* Scanning states for the media events timeline screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5847
+* Media Preview content scanning by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5851
+
+🙌 Improvements
+* Don't keep re-prompting the user to migrate if they get spontaneously logged out. by @ara4n in https://github.com/element-hq/element-x-ios/pull/5844
+* New location request permission strings by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5854
+
+🐛 Bugfixes
+* Fix voice message recording crashes caused by an isolation assertion failure by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5820
+* Stop reserving space for the non-existant icon background in ListRowLabel on iOS 26. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5822
+* Fix for the media browser showing also images and videos in file mode by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5853
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5845
+
+🦻 Accessibility
+* Fix AccessibilityTests hang on previews expecting expired transient state by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5821
+* Remove the "unflip" of the timeline when in voice over mode by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5835
+
+🧱 Build
+* Remove Hyperion from the Compound Inspector app. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5828
+* Switch back to using the stable version of SwiftFormat. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5850
+* Introduce a build setting to detect Nightly builds. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5852
+
+🚧 In development 🚧
+* Make LinkNewDeviceScreen fall back to the App Lock PIN code when there's no passcode. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5794
+* Add the content scanner URL to the app settings by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5823
+* User Status preparation. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5825
+* Content Scanner Service by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5826
+* Add message support to the new search tab by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5829
+
+Others
+* Bump the RustSDK to a new "apple-release" profile build distribution by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5834
+* Update the readme to fix the unit tests shield and remove the SonarCloud ones by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5832
+* Fix various project warnings by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5833
+* Swift format enforce isEmpty rule by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5843
+* Update Project Dependencies by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5818
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.07.0...release/26.07.3
+
 ## Changes in 26.07.1 (2026-07-03)
 
 ### What's Changed
