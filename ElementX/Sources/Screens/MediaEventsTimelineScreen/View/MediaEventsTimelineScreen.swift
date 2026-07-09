@@ -22,9 +22,6 @@ struct MediaEventsTimelineScreen: View {
             .toolbar { toolbar }
             .environmentObject(context.viewState.activeTimelineContext)
             .environment(\.timelineContext, context.viewState.activeTimelineContext)
-            .onChange(of: context.screenMode) { _, _ in
-                context.send(viewAction: .changedScreenMode)
-            }
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .sheet(item: $context.mediaPreviewSheetViewModel) { sheet in
                 if case let .media(media) = sheet.state.currentItem {
@@ -59,7 +56,7 @@ struct MediaEventsTimelineScreen: View {
     private var scrollView: some View {
         ScrollView {
             Group {
-                switch context.viewState.bindings.screenMode {
+                switch context.viewState.screenMode {
                 case .media:
                     mediaContent
                 case .files:
@@ -82,7 +79,7 @@ struct MediaEventsTimelineScreen: View {
                         Button {
                             tappedItem(item)
                         } label: {
-                            viewForTimelineItem(item)
+                            viewForTimelineItem(item, screenMode: .media)
                                 .scaleEffect(CGSize(width: -1, height: -1))
                         }
                         .accessibleLongPress(named: L10n.actionOpenContextMenu) {
@@ -111,11 +108,11 @@ struct MediaEventsTimelineScreen: View {
                             Button {
                                 tappedItem(item)
                             } label: {
-                                viewForTimelineItem(item)
+                                viewForTimelineItem(item, screenMode: .files)
                                     .scaleEffect(CGSize(width: 1, height: -1))
                             }
                             .accessibilityRepresentation {
-                                viewForTimelineItem(item)
+                                viewForTimelineItem(item, screenMode: .files)
                             }
                             .accessibleLongPress(named: L10n.actionOpenContextMenu) {
                                 context.send(viewAction: .longPressedItem(item: item))
@@ -153,18 +150,19 @@ struct MediaEventsTimelineScreen: View {
         }
     }
     
+    /// The mode check makes sure that stale items from the other mode's layout are never rendered.
     @ViewBuilder
-    private func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
+    private func viewForTimelineItem(_ item: RoomTimelineItemViewState, screenMode: MediaEventsTimelineScreenMode) -> some View {
         switch item.type {
-        case .image(let timelineItem):
+        case .image(let timelineItem) where screenMode == .media:
             ImageMediaEventsTimelineView(timelineItem: timelineItem)
-        case .video(let timelineItem):
+        case .video(let timelineItem) where screenMode == .media:
             VideoMediaEventsTimelineView(timelineItem: timelineItem)
-        case .file(let timelineItem):
+        case .file(let timelineItem) where screenMode == .files:
             FileMediaEventsTimelineView(timelineItem: timelineItem)
-        case .audio(let timelineItem):
+        case .audio(let timelineItem) where screenMode == .files:
             AudioMediaEventsTimelineView(timelineItem: timelineItem)
-        case .voice(let timelineItem):
+        case .voice(let timelineItem) where screenMode == .files:
             let defaultPlayerState = AudioPlayerState(id: .timelineItemIdentifier(timelineItem.id), title: L10n.commonVoiceMessage, duration: 0)
             let playerState = context.viewState.activeTimelineContext.viewState.audioPlayerStateProvider?(timelineItem.id) ?? defaultPlayerState
             VoiceMessageMediaEventsTimelineView(timelineItem: timelineItem, playerState: playerState)
@@ -176,7 +174,7 @@ struct MediaEventsTimelineScreen: View {
     private var emptyState: some View {
         FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
             VStack(spacing: 16) {
-                switch context.screenMode {
+                switch context.viewState.screenMode {
                 case .media:
                     emptyMedia
                 case .files:
@@ -239,7 +237,8 @@ struct MediaEventsTimelineScreen: View {
     }
     
     private var screenModePicker: some View {
-        Picker("", selection: $context.screenMode) {
+        Picker("", selection: Binding(get: { context.viewState.screenMode },
+                                      set: { context.send(viewAction: .changeScreenMode($0)) })) {
             Text(L10n.screenMediaBrowserListModeMedia)
                 .padding()
                 .tag(MediaEventsTimelineScreenMode.media)
