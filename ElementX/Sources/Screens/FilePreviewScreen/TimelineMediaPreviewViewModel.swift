@@ -120,7 +120,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         if case let .media(mediaItem) = previewItem {
             guard mediaItem.fileHandle == nil, let source = mediaItem.mediaSource else { return }
             
-            guard await checkSourceSafetyIfNeeded(for: mediaItem, source: source) else { return }
+            guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
             
             switch await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) {
             case .success(let handle):
@@ -138,7 +138,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     /// Scans the media when a content scanner is configured, returning whether it's safe to be downloaded
     /// and previewed, reflecting the scan's progress and outcome in the current item.
-    private func checkSourceSafetyIfNeeded(for mediaItem: TimelineMediaPreviewItem.Media, source: MediaSourceProxy) async -> Bool {
+    private func checkSourceIsSafeIfNeeded(for mediaItem: TimelineMediaPreviewItem.Media, source: MediaSourceProxy) async -> Bool {
         guard let contentScannerService else { return true }
         
         // Only reflect the scanning state when there's no cached verdict, so that

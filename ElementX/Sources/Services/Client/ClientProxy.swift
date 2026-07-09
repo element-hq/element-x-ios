@@ -223,8 +223,7 @@ class ClientProxy: ClientProxyProtocol {
         
         // Route media downloads through a content scanner when one has been configured for the server,
         // and expose a proxy for the active scanning of content in the timeline.
-        // TODO: Testing only - revert to appSettings.contentScannerURL.publisher.value before merging.
-        if let contentScannerURL = URL(string: "http://0.0.0.0:8080"), let client = client as? Client {
+        if let contentScannerURL = appSettings.contentScannerURL.publisher.value, let client = client as? Client {
             let scanner = ContentScanner(scannerUrl: contentScannerURL.absoluteString)
             await client.setContentScanner(contentScanner: scanner)
             contentScanner = ContentScannerProxy(contentScanner: scanner, client: client)
