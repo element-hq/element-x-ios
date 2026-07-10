@@ -219,6 +219,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let avatar: RoomAvatar
     
+    let statusEmoji: Character?
+    
     let canonicalAlias: String?
     
     let isTombstoned: Bool
@@ -246,6 +248,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        lastMessage: placeholderLastMessage,
                        lastMessageState: nil,
                        avatar: .room(id: "", name: "", avatarURL: nil),
+                       statusEmoji: nil,
                        canonicalAlias: nil,
                        isTombstoned: false)
     }
@@ -298,6 +301,7 @@ extension HomeScreenRoom {
                   lastMessage: summary.lastMessage,
                   lastMessageState: summary.homeScreenLastMessageState,
                   avatar: summary.avatar,
+                  statusEmoji: summary.statusEmoji,
                   canonicalAlias: summary.canonicalAlias,
                   isTombstoned: summary.isTombstoned)
     }
