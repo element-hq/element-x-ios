@@ -11,10 +11,15 @@ import Compound
 import SwiftUI
 
 struct RoomHeaderView: View {
+    struct DMRecipientDetails {
+        var status: UserStatus?
+        var verification: UserIdentityVerificationState?
+    }
+    
     let roomName: String
     var roomSubtitle: String?
     let roomAvatar: RoomAvatar
-    var dmRecipientVerificationState: UserIdentityVerificationState?
+    var dmRecipientDetails = DMRecipientDetails()
     var roomHistorySharingState: RoomHistorySharingState?
     
     let mediaProvider: MediaProviderProtocol?
@@ -49,10 +54,20 @@ struct RoomHeaderView: View {
             
             HStack(spacing: 4) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(roomName)
-                        .lineLimit(1)
-                        .font(.compound.bodyMDSemibold)
-                        .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
+                    HStack(spacing: 8) {
+                        Text(roomName)
+                            .lineLimit(1)
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundStyle(.compound.textPrimary)
+                            .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
+                        
+                        if let statusEmoji = dmRecipientDetails.status?.displayed?.emoji {
+                            Text(String(statusEmoji))
+                                .font(.compound.bodyLG)
+                                .foregroundStyle(.compound.textPrimary)
+                        }
+                    }
+                    
                     if let roomSubtitle {
                         Text(roomSubtitle)
                             .lineLimit(1)
@@ -61,8 +76,8 @@ struct RoomHeaderView: View {
                     }
                 }
                 
-                if let dmRecipientVerificationState {
-                    VerificationBadge(verificationState: dmRecipientVerificationState, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
+                if let verificationState = dmRecipientDetails.verification {
+                    VerificationBadge(verificationState: verificationState, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
                 }
                 
                 if let historySharingIcon {
@@ -112,35 +127,61 @@ private extension View {
 
 struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            makeHeader(avatarURL: nil, verificationState: .notVerified)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verificationViolation)
-            makeHeader(avatarURL: .mockMXCAvatar,
-                       roomSubtitle: "Subtitle",
-                       verificationState: .verified)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, historySharingState: .shared)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified, historySharingState: .worldReadable)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified, historySharingState: .shared)
-            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verificationViolation, historySharingState: .worldReadable)
+        VStack(alignment: .leading, spacing: 32) {
+            VStack(alignment: .leading, spacing: 16) {
+                makeHeader(avatarURL: nil)
+                makeHeader(avatarURL: .mockMXCAvatar)
+                
+                makeHeader(avatarURL: .mockMXCAvatar, historySharingState: .shared)
+                makeHeader(avatarURL: .mockMXCAvatar, historySharingState: .worldReadable)
+            }
+            
+            VStack(alignment: .leading, spacing: 16) {
+                makeHeader(avatarURL: .mockMXCUserAvatar, verificationState: .verified)
+                makeHeader(avatarURL: .mockMXCUserAvatar, verificationState: .verificationViolation)
+                
+                makeHeader(avatarURL: .mockMXCUserAvatar,
+                           userStatus: .mockHoliday,
+                           verificationState: .notVerified)
+                makeHeader(avatarURL: .mockMXCUserAvatar,
+                           userStatus: .mockCall,
+                           verificationState: .verificationViolation)
+                makeHeader(avatarURL: .mockMXCUserAvatar,
+                           roomSubtitle: "Subtitle",
+                           userStatus: .mockFocussing,
+                           verificationState: .verified)
+                
+                makeHeader(avatarURL: .mockMXCUserAvatar,
+                           roomSubtitle: "Subtitle",
+                           verificationState: .verified)
+                
+                makeHeader(avatarURL: .mockMXCUserAvatar,
+                           userStatus: .mockHoliday,
+                           verificationState: .verified,
+                           historySharingState: .shared)
+                makeHeader(avatarURL: .mockMXCUserAvatar,
+                           verificationState: .verificationViolation,
+                           historySharingState: .worldReadable)
+            }
         }
         .previewLayout(.sizeThatFits)
     }
     
+    @ViewBuilder
     static func makeHeader(avatarURL: URL?,
                            roomSubtitle: String? = nil,
-                           verificationState: UserIdentityVerificationState,
+                           userStatus: UserStatus? = nil,
+                           verificationState: UserIdentityVerificationState? = nil,
                            historySharingState: RoomHistorySharingState? = nil) -> some View {
-        RoomHeaderView(roomName: "Some Room name",
+        let roomName = verificationState == nil ? "Some Room Name" : "Some User Name"
+        RoomHeaderView(roomName: roomName,
                        roomSubtitle: roomSubtitle,
                        roomAvatar: .room(id: "1",
-                                         name: "Some Room Name",
+                                         name: roomName,
                                          avatarURL: avatarURL),
-                       dmRecipientVerificationState: verificationState,
+                       dmRecipientDetails: .init(status: userStatus, verification: verificationState),
                        roomHistorySharingState: historySharingState,
                        
                        mediaProvider: MediaProviderMock(.init())) { }
-            .padding()
     }
 }
