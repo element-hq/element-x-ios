@@ -36,6 +36,10 @@ final nonisolated class RoomMemberProxy: RoomMemberProxyProtocol {
         member.avatarUrl.flatMap(URL.init(string:))
     }
     
+    var status: UserStatus {
+        UserStatus()
+    }
+    
     var membership: MembershipState {
         member.membership
     }

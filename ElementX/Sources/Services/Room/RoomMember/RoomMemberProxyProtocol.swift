@@ -15,8 +15,8 @@ nonisolated protocol RoomMemberProxyProtocol: AnyObject, Sendable {
     
     var displayName: String? { get }
     var disambiguatedDisplayName: String? { get }
-    
     var avatarURL: URL? { get }
+    var status: UserStatus { get }
     
     var membership: MembershipState { get }
     
