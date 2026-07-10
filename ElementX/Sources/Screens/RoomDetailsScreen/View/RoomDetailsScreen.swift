@@ -76,6 +76,7 @@ struct RoomDetailsScreen: View {
         } footer: {
             if !context.viewState.shortcuts.isEmpty {
                 headerSectionShortcuts
+                    .padding(.top, 8)
             }
         }
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
