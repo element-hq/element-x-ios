@@ -425,7 +425,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
         state.members = members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
-            dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
+            dictionary[member.userID] = RoomMemberState(displayName: member.displayName,
+                                                        avatarURL: member.avatarURL,
+                                                        status: member.status)
             if member.userID == roomProxy.ownUserID {
                 currentUserProxy = member
             }
@@ -1010,21 +1012,25 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case let .user(id):
             let isOwnMention = id == state.ownUserID
             if let profile = state.members[id] {
-                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id))
+                pillContext.viewState = .mention(isOwnMention: isOwnMention,
+                                                 displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id),
+                                                 statusEmoji: profile.status.displayed?.emoji)
             } else {
-                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: id)
+                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: id, statusEmoji: nil)
                 pillContext.cancellable = context.$viewState
                     .compactMap { $0.members[id] }
                     .sink { [weak pillContext] profile in
                         guard let pillContext else {
                             return
                         }
-                        pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id))
+                        pillContext.viewState = .mention(isOwnMention: isOwnMention,
+                                                         displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id),
+                                                         statusEmoji: profile.status.displayed?.emoji)
                         pillContext.cancellable = nil
                     }
             }
         case .allUsers:
-            pillContext.viewState = .mention(isOwnMention: true, displayText: PillUtilities.atRoom)
+            pillContext.viewState = .mention(isOwnMention: true, displayText: PillUtilities.atRoom, statusEmoji: nil)
         case .event(let room):
             let pillViewState: PillViewState
             switch room {

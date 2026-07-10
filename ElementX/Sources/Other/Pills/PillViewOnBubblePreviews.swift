@@ -48,6 +48,7 @@ struct PillViewOnBubble_Previews: PreviewProvider, TestablePreview {
     static func makeViewState(isOwnMention: Bool) -> PillViewState {
         .mention(isOwnMention: isOwnMention,
                  displayText: PillUtilities.userPillDisplayText(username: isOwnMention ? "Alice" : "Bob",
-                                                                userID: isOwnMention ? "@alice:matrix.org" : "@bob:matrix.org"))
+                                                                userID: isOwnMention ? "@alice:matrix.org" : "@bob:matrix.org"),
+                 statusEmoji: nil)
     }
 }
