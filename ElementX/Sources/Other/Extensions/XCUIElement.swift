@@ -40,7 +40,7 @@ extension XCUIApplication {
     /// app instance anyway, and some of our tests assert that a default focus has been set on the text field,
     /// so having a method that would set the focus and show the keyboard isn't always desirable.
     func showKeyboardIfNeeded() {
-        if UIDevice.current.userInterfaceIdiom == .pad, keyboards.isEmpty {
+        if UIDevice.current.userInterfaceIdiom == .pad, keyboards.count == 0 {
             buttons["Keyboard"].tap()
             buttons["Show Keyboard"].tap()
         }
