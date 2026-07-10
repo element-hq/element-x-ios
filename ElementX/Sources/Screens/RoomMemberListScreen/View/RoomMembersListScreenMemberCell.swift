@@ -28,10 +28,16 @@ struct RoomMembersListScreenMemberCell: View {
                 
                 HStack(alignment: .center, spacing: 4) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(title)
-                            .font(.compound.bodyLG)
-                            .foregroundColor(.compound.textPrimary)
-                            .lineLimit(1)
+                        HStack(spacing: 8) {
+                            Text(title)
+                                .lineLimit(1)
+                            
+                            if let statusEmoji {
+                                Text(String(statusEmoji))
+                            }
+                        }
+                        .font(.compound.bodyLG)
+                        .foregroundColor(.compound.textPrimary)
                         
                         if let subtitle {
                             Text(subtitle)
@@ -84,6 +90,10 @@ struct RoomMembersListScreenMemberCell: View {
         return listEntry.member.name ?? listEntry.member.id
     }
     
+    var statusEmoji: Character? {
+        listEntry.member.isBanned ? nil : listEntry.member.status.displayed?.emoji
+    }
+    
     var subtitle: String? {
         listEntry.member.isBanned ? nil : listEntry.member.id
     }
@@ -100,6 +110,8 @@ struct RoomMembersListScreenMemberCell: View {
 struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
     static let members: [RoomMemberListScreenEntry] = [
         .init(member: .init(withProxy: RoomMemberProxyMock.mockAlice),
+              verificationState: .notVerified),
+        .init(member: .init(withProxy: RoomMemberProxyMock.mockErin),
               verificationState: .notVerified),
         .init(member: .init(withProxy: RoomMemberProxyMock.mockAdmin),
               verificationState: .verified),
