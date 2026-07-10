@@ -644,6 +644,8 @@ internal nonisolated enum L10n {
   internal static var commonNotEncrypted: String { return L10n.tr("Localizable", "common_not_encrypted") }
   /// Offline
   internal static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
+  /// On a call
+  internal static var commonOnACall: String { return L10n.tr("Localizable", "common_on_a_call") }
   /// Open source licenses
   internal static var commonOpenSourceLicenses: String { return L10n.tr("Localizable", "common_open_source_licenses") }
   /// Optic ID

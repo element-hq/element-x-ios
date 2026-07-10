@@ -16,12 +16,18 @@ nonisolated struct TimelineItemSender: Identifiable, Hashable {
     let displayName: String?
     let isDisplayNameAmbiguous: Bool
     let avatarURL: URL?
+    let status: UserStatus
     
-    init(id: String, displayName: String? = nil, isDisplayNameAmbiguous: Bool = false, avatarURL: URL? = nil) {
+    init(id: String,
+         displayName: String? = nil,
+         isDisplayNameAmbiguous: Bool = false,
+         avatarURL: URL? = nil,
+         status: UserStatus = .init()) {
         self.id = id
         self.displayName = displayName
         self.isDisplayNameAmbiguous = isDisplayNameAmbiguous
         self.avatarURL = avatarURL
+        self.status = status
     }
     
     init(senderID: String, senderProfile: ProfileDetails) {

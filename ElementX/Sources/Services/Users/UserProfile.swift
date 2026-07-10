@@ -13,35 +13,41 @@ nonisolated struct UserProfile: Hashable, Identifiable {
     let id: String
     let displayName: String?
     let avatarURL: URL?
+    let status: UserStatus
     
-    init(userID: String, displayName: String? = nil, avatarURL: URL? = nil) {
+    init(userID: String, displayName: String? = nil, avatarURL: URL? = nil, status: UserStatus = .init()) {
         id = userID
         self.displayName = displayName
         self.avatarURL = avatarURL
+        self.status = status
     }
     
     init(member: RoomMemberDetails) {
         id = member.id
         displayName = member.isBanned ? nil : member.name
         avatarURL = member.isBanned ? nil : member.avatarURL
+        status = member.status
     }
     
     init(sender: TimelineItemSender) {
         id = sender.id
         displayName = sender.displayName
         avatarURL = sender.avatarURL
+        status = sender.status
     }
     
     init(sdkUserProfile: MatrixRustSDK.UserProfile) {
         id = sdkUserProfile.userId
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
+        status = .init()
     }
     
     init(sdkRoomHero: MatrixRustSDK.RoomHero) {
         id = sdkRoomHero.userId
         displayName = sdkRoomHero.displayName
         avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
+        status = .init()
     }
     
     init(member: RoomMemberProxyProtocol) {
@@ -52,6 +58,53 @@ nonisolated struct UserProfile: Hashable, Identifiable {
     /// If isn't we aren't sure that the related matrix id really exists.
     var isVerified: Bool {
         displayName != nil || avatarURL != nil
+    }
+}
+
+nonisolated struct UserStatus: Hashable {
+    /// The status manually set by the user (if any).
+    let userSet: UserSet?
+    /// The status automatically set by Element Call (while in a call).
+    let call: Call?
+    
+    /// The status that should be displayed on the user's profile.
+    var displayed: DisplayedStatus? {
+        // The user-set status takes precedence over the call indicator.
+        userSet.map { .userSet($0) } ?? call.map { .inCall($0) }
+    }
+    
+    nonisolated struct UserSet: Hashable {
+        let text: String
+        let emoji: Character
+    }
+    
+    nonisolated struct Call: Hashable {
+        let startDate: Date?
+    }
+    
+    nonisolated enum DisplayedStatus: Hashable {
+        case userSet(UserSet)
+        case inCall(Call)
+        
+        var text: String {
+            switch self {
+            case .userSet(let userSet): userSet.text
+            case .inCall: L10n.commonOnACall
+            }
+        }
+        
+        var emoji: Character {
+            switch self {
+            case .userSet(let userSet): userSet.emoji
+            case .inCall: "🎧"
+            }
+        }
+    }
+}
+
+nonisolated extension UserStatus {
+    init() {
+        self.init(userSet: nil, call: nil)
     }
 }
 

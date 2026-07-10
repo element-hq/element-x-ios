@@ -10045,6 +10045,11 @@ nonisolated class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Senda
     nonisolated(unsafe) var displayName: String?
     nonisolated(unsafe) var disambiguatedDisplayName: String?
     nonisolated(unsafe) var avatarURL: URL?
+    var status: UserStatus {
+        get { return underlyingStatus }
+        set(value) { underlyingStatus = value }
+    }
+    nonisolated(unsafe) var underlyingStatus: UserStatus!
     var membership: MembershipState {
         get { return underlyingMembership }
         set(value) { underlyingMembership = value }
