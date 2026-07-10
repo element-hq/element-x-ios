@@ -102,7 +102,7 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
         }
         
         let languageTag = "\(Locale.current.language.languageCode ?? "en")-\(Locale.current.language.region ?? "US")"
-        let theme = colorScheme == .light ? "light" : "dark"
+        let theme = "dark"
         
         let urlString: String
         do {

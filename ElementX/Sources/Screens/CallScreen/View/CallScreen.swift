@@ -26,6 +26,9 @@ struct CallScreen: View {
                 .toolbar { toolbar }
         }
         .alert(item: $context.alertInfo)
+        // Element Call is always presented using the dark theme.
+        // Force surrounding UI (status bar, header, etc.) to match it.
+        .preferredColorScheme(.dark)
     }
     
     @ViewBuilder
