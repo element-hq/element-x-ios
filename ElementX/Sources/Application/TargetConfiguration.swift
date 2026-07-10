@@ -8,7 +8,9 @@
 
 import Combine
 import Foundation
+#if IS_MAIN_APP
 import MapLibre
+#endif
 import MatrixRustSDK
 
 nonisolated enum Target: String {
@@ -63,6 +65,18 @@ nonisolated enum Target: String {
         
         MXLog.configure(currentTarget: rawValue)
         
+        configureMapLibreIfAvailable()
+        
+        let hookCancellable = rageshakeURL.publisher
+            .sink { _ in
+                appHooks.tracingHook.update(tracingConfiguration, with: rageshakeURL)
+            }
+        
+        return ConfigurationResult(hookCancellable: hookCancellable)
+    }
+    
+    private func configureMapLibreIfAvailable() {
+        #if IS_MAIN_APP
         MLNLoggingConfiguration.shared.loggingLevel = .debug
         MLNLoggingConfiguration.shared.handler = { loggingLevel, _, _, message in
             switch loggingLevel {
@@ -80,13 +94,7 @@ nonisolated enum Target: String {
                 break
             }
         }
-        
-        let hookCancellable = rageshakeURL.publisher
-            .sink { _ in
-                appHooks.tracingHook.update(tracingConfiguration, with: rageshakeURL)
-            }
-        
-        return ConfigurationResult(hookCancellable: hookCancellable)
+        #endif
     }
     
     /// The result of calling ``configure(logLevel:traceLogPacks:sentryURL:)``.
