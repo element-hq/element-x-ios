@@ -74,11 +74,17 @@ struct HomeScreenRoomCell: View {
     
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
-            Text(room.name)
-                .font(headerFont)
-                .foregroundColor(.compound.textPrimary)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: 4) {
+                Text(room.name)
+                    .lineLimit(1)
+                
+                if let statusEmoji = room.statusEmoji {
+                    Text(String(statusEmoji))
+                }
+            }
+            .font(headerFont)
+            .foregroundColor(.compound.textPrimary)
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
@@ -218,6 +224,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     
     static let lastMessageStateRooms = [makeRoom(lastMessageState: .sending), makeRoom(lastMessageState: .failed)]
     
+    static let roomHeroRooms = [makeRoom(heroes: [.mockDan]), makeRoom(heroes: [.mockErin])]
+    
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(genericRooms) { room in
@@ -244,6 +252,14 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         }
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Last Message State")
+        
+        VStack(spacing: 0) {
+            ForEach(roomHeroRooms) { room in
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
+            }
+        }
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Room Heroes")
     }
     
     static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
@@ -261,15 +277,21 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
                                    userIndicatorController: UserIndicatorControllerMock())
     }
     
-    static func makeRoom(lastMessageState: RoomSummary.LastMessageState) -> HomeScreenRoom {
+    static func makeRoom(lastMessageState: RoomSummary.LastMessageState? = nil,
+                         heroes: [UserProfile] = []) -> HomeScreenRoom {
+        let name = if heroes.count == 1 {
+            heroes[0].displayName ?? heroes[0].id
+        } else {
+            "Foundation and Empire"
+        }
         let summary = RoomSummary(room: RoomSDKMock(),
                                   id: UUID().uuidString,
                                   joinRequestType: nil,
-                                  name: "Foundation and Empire",
-                                  isDirect: false,
+                                  name: name,
+                                  isDirect: heroes.count == 1,
                                   isSpace: false,
-                                  avatarURL: .mockMXCAvatar,
-                                  heroes: [],
+                                  avatarURL: heroes.count == 1 ? nil : .mockMXCAvatar,
+                                  heroes: heroes,
                                   activeMembersCount: 0,
                                   lastMessage: AttributedString("How do you see the Emperor then? You think he keeps office hours?"),
                                   lastMessageDate: .mock,

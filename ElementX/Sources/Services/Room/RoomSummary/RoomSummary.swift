@@ -191,4 +191,9 @@ nonisolated extension RoomSummary {
             return .room(id: id, name: name, avatarURL: avatarURL)
         }
     }
+    
+    var statusEmoji: Character? {
+        guard isDirect, case let .heroes(heroes) = avatar, heroes.count == 1 else { return nil }
+        return heroes.first?.status.displayed?.emoji
+    }
 }
