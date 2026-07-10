@@ -19,7 +19,7 @@ enum TimelineFixtures {
                              isOutgoing: false,
                              isEditable: false,
                              canBeRepliedTo: true,
-                             sender: .init(id: "", displayName: "Jacob"),
+                             sender: .init(id: "", displayName: "Jacob", status: .mock(text: "Rowing", emoji: "🚣‍♂️")),
                              content: .init(body: "That looks so good!"),
                              properties: RoomTimelineItemProperties(isEdited: true)),
         TextRoomTimelineItem(id: .event(uniqueID: .init("TimelineFixtures.default.1"),

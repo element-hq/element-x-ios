@@ -54,7 +54,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
-            VStack(alignment: alignment, spacing: -12) {
+            VStack(alignment: alignment, spacing: -8) {
                 if !timelineItem.isOutgoing, !isDM {
                     header
                         .zIndex(1)
@@ -94,19 +94,26 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         if shouldShowSenderDetails {
             HStack(alignment: .top, spacing: 4) {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
+                
                 HStack(alignment: .center, spacing: 4) {
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                        .font(.compound.bodySMSemibold)
-                        .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
+                        .font(.compound.bodyMDSemibold)
+                        .foregroundStyle(.compound.decorativeColor(for: timelineItem.sender.id).text)
+                    
+                    if let statusEmoji = timelineItem.sender.status.displayed?.emoji {
+                        Text(String(statusEmoji))
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundStyle(.compound.textPrimary)
+                    }
                     
                     if timelineItem.sender.displayName != nil, timelineItem.sender.isDisplayNameAmbiguous {
                         Text(timelineItem.sender.id)
                             .font(.compound.bodyXS)
-                            .foregroundColor(.compound.textSecondary)
+                            .foregroundStyle(.compound.textSecondary)
                     }
                 }
                 .lineLimit(1)
-                .scaledPadding(.vertical, 3)
+                .scaledPadding(.top, 3)
             }
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)
