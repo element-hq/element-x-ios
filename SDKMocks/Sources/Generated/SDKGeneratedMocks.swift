@@ -8653,6 +8653,96 @@ open class OAuthAuthorizationDataSDKMock: MatrixRustSDK.OAuthAuthorizationData, 
         }
     }
 }
+open class PasswordStrengthEstimatorSDKMock: MatrixRustSDK.PasswordStrengthEstimator, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+    static func reset()
+    {
+    }
+
+    //MARK: - estimate
+
+    private let estimatePasswordUserInputsCallsCountLock = NSLock()
+    private var estimatePasswordUserInputsUnderlyingCallsCount = 0
+    open var estimatePasswordUserInputsCallsCount: Int {
+        get { estimatePasswordUserInputsCallsCountLock.withLock { estimatePasswordUserInputsUnderlyingCallsCount } }
+        set { estimatePasswordUserInputsCallsCountLock.withLock { estimatePasswordUserInputsUnderlyingCallsCount = newValue } }
+    }
+    open var estimatePasswordUserInputsCalled: Bool {
+        return estimatePasswordUserInputsCallsCount > 0
+    }
+    private let estimatePasswordUserInputsReceivedArgumentsLock = NSLock()
+    private var estimatePasswordUserInputsUnderlyingReceivedArguments: (password: String, userInputs: [String])?
+    open var estimatePasswordUserInputsReceivedArguments: (password: String, userInputs: [String])? {
+        get { estimatePasswordUserInputsReceivedArgumentsLock.withLock { estimatePasswordUserInputsUnderlyingReceivedArguments } }
+        set { estimatePasswordUserInputsReceivedArgumentsLock.withLock { estimatePasswordUserInputsUnderlyingReceivedArguments = newValue } }
+    }
+    private let estimatePasswordUserInputsReceivedInvocationsLock = NSLock()
+    private var estimatePasswordUserInputsUnderlyingReceivedInvocations: [(password: String, userInputs: [String])] = []
+    open var estimatePasswordUserInputsReceivedInvocations: [(password: String, userInputs: [String])] {
+        get { estimatePasswordUserInputsReceivedInvocationsLock.withLock { estimatePasswordUserInputsUnderlyingReceivedInvocations } }
+        set { estimatePasswordUserInputsReceivedInvocationsLock.withLock { estimatePasswordUserInputsUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let estimatePasswordUserInputsReturnValueLock = NSLock()
+    open var estimatePasswordUserInputsUnderlyingReturnValue: PasswordStrengthEstimate!
+    open var estimatePasswordUserInputsReturnValue: PasswordStrengthEstimate! {
+        get { estimatePasswordUserInputsReturnValueLock.withLock { estimatePasswordUserInputsUnderlyingReturnValue } }
+        set { estimatePasswordUserInputsReturnValueLock.withLock { estimatePasswordUserInputsUnderlyingReturnValue = newValue } }
+    }
+    open var estimatePasswordUserInputsClosure: ((String, [String]) -> PasswordStrengthEstimate)?
+
+    open override func estimate(password: String, userInputs: [String]) -> PasswordStrengthEstimate {
+        estimatePasswordUserInputsCallsCountLock.withLock { estimatePasswordUserInputsUnderlyingCallsCount += 1 }
+        estimatePasswordUserInputsReceivedArguments = (password: password, userInputs: userInputs)
+        estimatePasswordUserInputsReceivedInvocationsLock.withLock { estimatePasswordUserInputsUnderlyingReceivedInvocations.append((password: password, userInputs: userInputs)) }
+        if let estimatePasswordUserInputsClosure = estimatePasswordUserInputsClosure {
+            return estimatePasswordUserInputsClosure(password, userInputs)
+        } else {
+            return estimatePasswordUserInputsReturnValue
+        }
+    }
+
+    //MARK: - thresholds
+
+    private let thresholdsCallsCountLock = NSLock()
+    private var thresholdsUnderlyingCallsCount = 0
+    open var thresholdsCallsCount: Int {
+        get { thresholdsCallsCountLock.withLock { thresholdsUnderlyingCallsCount } }
+        set { thresholdsCallsCountLock.withLock { thresholdsUnderlyingCallsCount = newValue } }
+    }
+    open var thresholdsCalled: Bool {
+        return thresholdsCallsCount > 0
+    }
+
+    private let thresholdsReturnValueLock = NSLock()
+    open var thresholdsUnderlyingReturnValue: PasswordStrengthThresholds!
+    open var thresholdsReturnValue: PasswordStrengthThresholds! {
+        get { thresholdsReturnValueLock.withLock { thresholdsUnderlyingReturnValue } }
+        set { thresholdsReturnValueLock.withLock { thresholdsUnderlyingReturnValue = newValue } }
+    }
+    open var thresholdsClosure: (() -> PasswordStrengthThresholds)?
+
+    open override func thresholds() -> PasswordStrengthThresholds {
+        thresholdsCallsCountLock.withLock { thresholdsUnderlyingCallsCount += 1 }
+        if let thresholdsClosure = thresholdsClosure {
+            return thresholdsClosure()
+        } else {
+            return thresholdsReturnValue
+        }
+    }
+}
 open class PrivateStringSDKMock: MatrixRustSDK.PrivateString, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
