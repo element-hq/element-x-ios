@@ -43,6 +43,7 @@ struct UserProfileScreen: View {
                 context.send(viewAction: .displayAvatar(url))
             } footer: {
                 otherUserFooter
+                    .padding(.top, 8)
             }
         } else {
             AvatarHeaderView(user: UserProfile(userID: context.viewState.userID),

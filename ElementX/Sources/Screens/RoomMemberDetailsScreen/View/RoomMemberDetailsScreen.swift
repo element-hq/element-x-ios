@@ -55,6 +55,7 @@ struct RoomMemberDetailsScreen: View {
                     }
                     
                     otherUserFooter
+                        .padding(.top, 8)
                 }
             }
         } else {
