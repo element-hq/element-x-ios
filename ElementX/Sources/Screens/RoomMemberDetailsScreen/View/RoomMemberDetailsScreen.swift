@@ -56,7 +56,6 @@ struct RoomMemberDetailsScreen: View {
                     
                     otherUserFooter
                 }
-                .padding(.top, 24)
             }
         } else {
             AvatarHeaderView(user: UserProfile(userID: context.viewState.userID),

@@ -118,7 +118,6 @@ struct RoomDetailsScreen: View {
                 }
             }
         }
-        .padding(.top, 32)
     }
     
     @ViewBuilder
