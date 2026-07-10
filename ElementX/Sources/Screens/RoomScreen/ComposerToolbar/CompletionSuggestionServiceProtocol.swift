@@ -32,6 +32,7 @@ struct SuggestionItem: Identifiable, Equatable {
         let id: String
         let displayName: String?
         let avatarURL: URL?
+        var status = UserStatus()
     }
     
     struct Room: Equatable {
@@ -59,22 +60,31 @@ struct SuggestionItem: Identifiable, Equatable {
     var displayName: String {
         switch suggestionType {
         case .allUsers:
-            return PillUtilities.everyone
+            PillUtilities.everyone
         case .user(let user):
-            return user.displayName ?? user.id
+            user.displayName ?? user.id
         case .room(let room):
-            return room.name
+            room.name
+        }
+    }
+    
+    var statusEmoji: Character? {
+        switch suggestionType {
+        case .user(let user):
+            user.status.displayed?.emoji
+        case .allUsers, .room:
+            nil
         }
     }
     
     var subtitle: String? {
         switch suggestionType {
         case .allUsers:
-            return PillUtilities.atRoom
+            PillUtilities.atRoom
         case .user(let user):
-            return user.displayName == nil ? nil : user.id
+            user.displayName == nil ? nil : user.id
         case .room(let room):
-            return room.canonicalAlias
+            room.canonicalAlias
         }
     }
 }
