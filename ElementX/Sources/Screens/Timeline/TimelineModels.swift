@@ -228,6 +228,7 @@ enum TimelineAlertInfoType: Hashable {
 struct RoomMemberState {
     let displayName: String?
     let avatarURL: URL?
+    let status: UserStatus
 }
 
 /// Used as the state for the TimelineView, to avoid having the context continuously refresh the list of items on each small change.

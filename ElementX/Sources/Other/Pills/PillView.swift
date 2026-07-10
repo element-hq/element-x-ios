@@ -30,14 +30,20 @@ struct PillView: View {
     }
     
     private var mainContent: some View {
-        Text(context.viewState.displayText)
-            .font(.compound.bodyLGSemibold)
-            .foregroundColor(textColor)
-            .lineLimit(1)
-            .padding(.leading, 4)
-            .padding(.trailing, 6)
-            .padding(.vertical, 1)
-            .background { Capsule().foregroundColor(backgroundColor) }
+        HStack(spacing: 4) {
+            Text(context.viewState.displayText)
+                .lineLimit(1)
+            
+            if let emoji = context.viewState.statusEmoji {
+                Text(String(emoji))
+            }
+        }
+        .font(.compound.bodyLGSemibold)
+        .foregroundColor(textColor)
+        .padding(.leading, 4)
+        .padding(.trailing, 6)
+        .padding(.vertical, 1)
+        .background(backgroundColor, in: .capsule)
     }
 }
 
@@ -47,22 +53,38 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         PillView(context: PillContext.mock(viewState: .mention(isOwnMention: false,
                                                                displayText: PillUtilities.userPillDisplayText(username: "User",
-                                                                                                              userID: "@alice:matrix.org")))) { }
+                                                                                                              userID: "@alice:matrix.org"),
+                                                               statusEmoji: nil))) { }
             .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("User")
         PillView(context: PillContext.mock(viewState: .mention(isOwnMention: false,
                                                                displayText: PillUtilities.userPillDisplayText(username: "Alice but with a very long name",
-                                                                                                              userID: "@alice:matrix.org")))) { }
+                                                                                                              userID: "@alice:matrix.org"),
+                                                               statusEmoji: nil))) { }
             .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("User with a long name")
         PillView(context: PillContext.mock(viewState: .mention(isOwnMention: false,
-                                                               displayText: PillUtilities.userPillDisplayText(username: nil, userID: "@alice:matrix.org")))) { }
+                                                               displayText: PillUtilities.userPillDisplayText(username: nil, userID: "@alice:matrix.org"),
+                                                               statusEmoji: nil))) { }
             .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("User with missing name")
         PillView(context: PillContext.mock(viewState: .mention(isOwnMention: true,
-                                                               displayText: PillUtilities.userPillDisplayText(username: "Alice", userID: "@alice:matrix.org")))) { }
+                                                               displayText: PillUtilities.userPillDisplayText(username: "Alice", userID: "@alice:matrix.org"),
+                                                               statusEmoji: nil))) { }
             .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("Own user")
+        PillView(context: PillContext.mock(viewState: .mention(isOwnMention: false,
+                                                               displayText: PillUtilities.userPillDisplayText(username: "User",
+                                                                                                              userID: "@alice:matrix.org"),
+                                                               statusEmoji: "🎂"))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
+            .previewDisplayName("User with Status")
+        PillView(context: PillContext.mock(viewState: .mention(isOwnMention: false,
+                                                               displayText: PillUtilities.userPillDisplayText(username: "Alice but with a very long name",
+                                                                                                              userID: "@alice:matrix.org"),
+                                                               statusEmoji: "🚆"))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
+            .previewDisplayName("User with status and long name")
         PillView(context: PillContext.mock(viewState: .reference(displayText: PillUtilities.roomPillDisplayText(roomName: "Room",
                                                                                                                 rawRoomText: "#room:matrix.org")))) { }
             .frame(maxWidth: PillUtilities.mockMaxWidth)

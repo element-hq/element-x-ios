@@ -52,7 +52,8 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
             let context: PillContext
             if ProcessInfo.isXcodePreview || ProcessInfo.isRunningTests {
                 // The mock viewModel simulates the loading logic for testing purposes
-                context = PillContext.mock(viewState: .mention(isOwnMention: false, displayText: "Alice"), delay: .seconds(2))
+                context = PillContext.mock(viewState: .mention(isOwnMention: false, displayText: "Alice", statusEmoji: nil),
+                                           delay: .seconds(2))
             } else if let timelineContext = provider.delegate?.timelineContext {
                 context = PillContext(timelineContext: timelineContext, data: pillData)
             } else {
