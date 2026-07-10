@@ -25,6 +25,7 @@ struct AvatarHeaderView<Footer: View>: View {
     
     private let avatarInfo: AvatarInfo
     private let title: String
+    private let status: UserStatus?
     private let subtitle: String?
     private let badges: [Badge]
     
@@ -40,6 +41,7 @@ struct AvatarHeaderView<Footer: View>: View {
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .room(room.avatar)
         title = room.name ?? room.id
+        status = nil
         
         if let roomAlias = room.canonicalAlias {
             subtitle = roomAlias
@@ -74,6 +76,7 @@ struct AvatarHeaderView<Footer: View>: View {
         avatarInfo = .room(.heroes([dmRecipientProfile, UserProfile(member: accountOwner)]))
         title = dmRecipientProfile.displayName ?? dmRecipientProfile.id
         subtitle = dmRecipientProfile.displayName == nil ? nil : dmRecipientProfile.id
+        status = dmRecipientProfile.status
         
         avatarSize = .user(on: .dmDetails)
         self.mediaProvider = mediaProvider
@@ -107,6 +110,7 @@ struct AvatarHeaderView<Footer: View>: View {
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .user(user)
         title = user.displayName ?? user.id
+        status = user.status
         subtitle = user.displayName == nil ? nil : user.id
         
         self.avatarSize = avatarSize
@@ -131,6 +135,84 @@ struct AvatarHeaderView<Footer: View>: View {
                   mediaProvider: mediaProvider,
                   onAvatarTap: onAvatarTap,
                   footer: footer)
+    }
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            avatar
+            
+            VStack(spacing: 12) {
+                Text(title)
+                    .foregroundStyle(.compound.textPrimary)
+                    .font(.compound.headingMDBold)
+                    .multilineTextAlignment(.center)
+                    .textSelection(.enabled)
+                
+                if let displayedStatus = status?.displayed {
+                    HStack(spacing: 6) {
+                        Text(String(displayedStatus.emoji))
+                            .foregroundStyle(.compound.textPrimary)
+                        Text(displayedStatus.text)
+                            .foregroundStyle(.compound.textSecondary)
+                    }
+                    .font(.compound.bodyMDSemibold)
+                    .multilineTextAlignment(.center)
+                }
+                
+                if let subtitle {
+                    Text(subtitle)
+                        .foregroundStyle(.compound.textSecondary)
+                        .font(.compound.bodyLG)
+                        .multilineTextAlignment(.center)
+                        .textSelection(.enabled)
+                }
+                
+                if !badges.isEmpty {
+                    badgesStack
+                }
+            }
+            
+            footer()
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .listRowBackground(Color.clear)
+        .listRowInsets(EdgeInsets(top: 11,
+                                  leading: 0,
+                                  bottom: 11,
+                                  trailing: 0))
+    }
+    
+    @ViewBuilder
+    private var avatar: some View {
+        switch avatarInfo {
+        case .room(let roomAvatar):
+            RoomAvatarImage(avatar: roomAvatar,
+                            avatarSize: avatarSize,
+                            mediaProvider: mediaProvider,
+                            onAvatarTap: onAvatarTap)
+                .accessibilityLabel(avatarAccessibilityLabel)
+            
+        case .user(let userProfile):
+            LoadableAvatarImage(url: userProfile.avatarURL,
+                                name: userProfile.displayName,
+                                contentID: userProfile.id,
+                                avatarSize: avatarSize,
+                                mediaProvider: mediaProvider,
+                                onTap: onAvatarTap)
+                .accessibilityLabel(avatarAccessibilityLabel)
+        }
+    }
+    
+    private var avatarAccessibilityLabel: String {
+        guard onAvatarTap != nil else {
+            return L10n.a11yAvatar
+        }
+        switch avatarInfo {
+        case .room(let roomAvatar):
+            return roomAvatar.hasURL ? L10n.a11yViewAvatar : L10n.a11yAvatar
+        case .user(let userProfile):
+            return userProfile.avatarURL != nil ? L10n.a11yViewAvatar : L10n.a11yAvatar
+        }
     }
     
     private var badgesStack: some View {
@@ -172,74 +254,6 @@ struct AvatarHeaderView<Footer: View>: View {
             }
         }
     }
-    
-    private var avatarAccessibilityLabel: String {
-        guard onAvatarTap != nil else {
-            return L10n.a11yAvatar
-        }
-        switch avatarInfo {
-        case .room(let roomAvatar):
-            return roomAvatar.hasURL ? L10n.a11yViewAvatar : L10n.a11yAvatar
-        case .user(let userProfile):
-            return userProfile.avatarURL != nil ? L10n.a11yViewAvatar : L10n.a11yAvatar
-        }
-    }
-    
-    @ViewBuilder
-    private var avatar: some View {
-        switch avatarInfo {
-        case .room(let roomAvatar):
-            RoomAvatarImage(avatar: roomAvatar,
-                            avatarSize: avatarSize,
-                            mediaProvider: mediaProvider,
-                            onAvatarTap: onAvatarTap)
-                .accessibilityLabel(avatarAccessibilityLabel)
-            
-        case .user(let userProfile):
-            LoadableAvatarImage(url: userProfile.avatarURL,
-                                name: userProfile.displayName,
-                                contentID: userProfile.id,
-                                avatarSize: avatarSize,
-                                mediaProvider: mediaProvider,
-                                onTap: onAvatarTap)
-                .accessibilityLabel(avatarAccessibilityLabel)
-        }
-    }
-    
-    var body: some View {
-        VStack(spacing: 8.0) {
-            avatar
-            
-            Spacer()
-                .frame(height: 9)
-            
-            Text(title)
-                .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-                .textSelection(.enabled)
-            
-            if let subtitle {
-                Text(subtitle)
-                    .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodyLG)
-                    .multilineTextAlignment(.center)
-                    .textSelection(.enabled)
-            }
-            
-            if !badges.isEmpty {
-                badgesStack
-            }
-            
-            footer()
-        }
-        .frame(maxWidth: .infinity, alignment: .center)
-        .listRowBackground(Color.clear)
-        .listRowInsets(EdgeInsets(top: 11,
-                                  leading: 0,
-                                  bottom: 11,
-                                  trailing: 0))
-    }
 }
 
 struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
@@ -263,7 +277,6 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                     }
                     .buttonStyle(FormActionButtonStyle(title: "Test"))
                 }
-                .padding(.top, 32)
             }
         }
         .previewDisplayName("Room")
@@ -277,7 +290,6 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                     }
                     .buttonStyle(FormActionButtonStyle(title: "Test"))
                 }
-                .padding(.top, 32)
             }
         }
         .previewDisplayName("DM")
@@ -289,6 +301,16 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
             
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBob),
                              isVerified: true,
+                             avatarSize: .room(on: .details),
+                             mediaProvider: MediaProviderMock(.init())) { Text("") }
+            
+            AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockErin),
+                             isVerified: false,
+                             avatarSize: .room(on: .details),
+                             mediaProvider: MediaProviderMock(.init())) { Text("") }
+            
+            AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockFrank),
+                             isVerified: false,
                              avatarSize: .room(on: .details),
                              mediaProvider: MediaProviderMock(.init())) { Text("") }
             
@@ -326,7 +348,6 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                     }
                     .buttonStyle(FormActionButtonStyle(title: "Test"))
                 }
-                .padding(.top, 32)
             }
         }
     }

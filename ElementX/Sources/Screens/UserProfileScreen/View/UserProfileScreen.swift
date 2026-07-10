@@ -89,7 +89,6 @@ struct UserProfileScreen: View {
                 .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
             }
         }
-        .padding(.top, 32)
     }
     
     @ToolbarContentBuilder
