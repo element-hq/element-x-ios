@@ -292,7 +292,7 @@ struct RoomScreen: View {
         ToolbarItem(placement: .principal) {
             RoomHeaderView(roomName: context.viewState.roomTitle,
                            roomAvatar: context.viewState.roomAvatar,
-                           dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
+                           dmRecipientDetails: context.viewState.dmRecipientDetails,
                            roomHistorySharingState: context.viewState.roomHistorySharingState,
                            mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .displayRoomDetails)

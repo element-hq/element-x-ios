@@ -16,7 +16,7 @@ struct ThreadTimelineScreenViewState: BindableState {
     var roomTitle: String
     var roomAvatar: RoomAvatar
     var canSendMessage = true
-    var dmRecipientVerificationState: UserIdentityVerificationState?
+    var dmRecipientDetails = RoomHeaderView.DMRecipientDetails()
     var roomHistorySharingState: RoomHistorySharingState?
     
     var bindings = ThreadTimelineScreenViewStateBindings()
