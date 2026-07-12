@@ -410,8 +410,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineInteractionHandler.cancelRecordingVoiceMessage() }
         case .deleteRecording:
             Task { await timelineInteractionHandler.deleteCurrentVoiceMessage() }
-        case .send:
-            Task { await timelineInteractionHandler.sendCurrentVoiceMessage() }
+        case .send(let inReplyToEventID):
+            Task { await timelineInteractionHandler.sendCurrentVoiceMessage(inReplyToEventID: inReplyToEventID) }
         case .startPlayback:
             Task { await timelineInteractionHandler.startPlayingRecordedVoiceMessage() }
         case .pausePlayback:

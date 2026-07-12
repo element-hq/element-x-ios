@@ -12968,30 +12968,30 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
     }
     //MARK: - sendVoiceMessage
 
-    private let sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCountLock = NSLock()
-    private nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = 0
-    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount: Int {
-        get { sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount } }
-        set { sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = newValue } }
+    private let sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingCallsCount = 0
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCount: Int {
+        get { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingCallsCount } }
+        set { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingCallsCount = newValue } }
     }
-    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleCalled: Bool {
-        return sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount > 0
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCalled: Bool {
+        return sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCount > 0
     }
 
-    private let sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValueLock = NSLock()
-    private nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue: Result<Void, TimelineControllerError>!
-    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue: Result<Void, TimelineControllerError>! {
-        get { sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValueLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue } }
-        set { sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValueLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue = newValue } }
+    private let sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValue: Result<Void, TimelineControllerError>! {
+        get { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValueLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingReturnValue } }
+        set { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValueLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure: ((URL, AudioInfo, [Float], @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
+    nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure: ((URL, AudioInfo, [Float], String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>)?
 
-    @concurrent func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
-        sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount += 1 }
-        if let sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure {
-            return await sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure(url, audioInfo, waveform, requestHandle)
+    @concurrent func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], inReplyToEventID: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingCallsCount += 1 }
+        if let sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure(url, audioInfo, waveform, inReplyToEventID, requestHandle)
         } else {
-            return sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue
+            return sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValue
         }
     }
     //MARK: - createPoll
@@ -13723,30 +13723,30 @@ nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable 
     }
     //MARK: - sendVoiceMessage
 
-    private let sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCountLock = NSLock()
-    private nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = 0
-    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount: Int {
-        get { sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount } }
-        set { sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = newValue } }
+    private let sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingCallsCount = 0
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCount: Int {
+        get { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingCallsCount } }
+        set { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingCallsCount = newValue } }
     }
-    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleCalled: Bool {
-        return sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount > 0
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCalled: Bool {
+        return sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCount > 0
     }
 
-    private let sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValueLock = NSLock()
-    private nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
-        get { sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValueLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue } }
-        set { sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValueLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue = newValue } }
+    private let sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
+        get { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValueLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingReturnValue } }
+        set { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValueLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure: ((URL, AudioInfo, [Float], @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+    nonisolated(unsafe) var sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure: ((URL, AudioInfo, [Float], String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
 
-    @concurrent func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
-        sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount += 1 }
-        if let sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure {
-            return await sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure(url, audioInfo, waveform, requestHandle)
+    @concurrent func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [Float], inReplyToEventID: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleCallsCountLock.withLock { sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleUnderlyingCallsCount += 1 }
+        if let sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleClosure(url, audioInfo, waveform, inReplyToEventID, requestHandle)
         } else {
-            return sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue
+            return sendVoiceMessageUrlAudioInfoWaveformInReplyToEventIDRequestHandleReturnValue
         }
     }
     //MARK: - sendReadReceipt
@@ -15142,44 +15142,44 @@ nonisolated class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol, @unche
     }
     //MARK: - sendVoiceMessage
 
-    private let sendVoiceMessageTimelineControllerAudioConverterCallsCountLock = NSLock()
-    private nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount = 0
-    var sendVoiceMessageTimelineControllerAudioConverterCallsCount: Int {
-        get { sendVoiceMessageTimelineControllerAudioConverterCallsCountLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount } }
-        set { sendVoiceMessageTimelineControllerAudioConverterCallsCountLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount = newValue } }
+    private let sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingCallsCount = 0
+    var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDCallsCount: Int {
+        get { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDCallsCountLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingCallsCount } }
+        set { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDCallsCountLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingCallsCount = newValue } }
     }
-    var sendVoiceMessageTimelineControllerAudioConverterCalled: Bool {
-        return sendVoiceMessageTimelineControllerAudioConverterCallsCount > 0
+    var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDCalled: Bool {
+        return sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDCallsCount > 0
     }
-    private let sendVoiceMessageTimelineControllerAudioConverterReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterUnderlyingReceivedArguments: (timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol)?
-    var sendVoiceMessageTimelineControllerAudioConverterReceivedArguments: (timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol)? {
-        get { sendVoiceMessageTimelineControllerAudioConverterReceivedArgumentsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingReceivedArguments } }
-        set { sendVoiceMessageTimelineControllerAudioConverterReceivedArgumentsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingReceivedArguments = newValue } }
+    private let sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReceivedArguments: (timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol, inReplyToEventID: String?)?
+    var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedArguments: (timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol, inReplyToEventID: String?)? {
+        get { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedArgumentsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReceivedArguments } }
+        set { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedArgumentsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReceivedArguments = newValue } }
     }
-    private let sendVoiceMessageTimelineControllerAudioConverterReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterUnderlyingReceivedInvocations: [(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol)] = []
-    var sendVoiceMessageTimelineControllerAudioConverterReceivedInvocations: [(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol)] {
-        get { sendVoiceMessageTimelineControllerAudioConverterReceivedInvocationsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingReceivedInvocations } }
-        set { sendVoiceMessageTimelineControllerAudioConverterReceivedInvocationsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingReceivedInvocations = newValue } }
+    private let sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReceivedInvocations: [(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol, inReplyToEventID: String?)] = []
+    var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedInvocations: [(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol, inReplyToEventID: String?)] {
+        get { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedInvocationsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReceivedInvocations } }
+        set { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedInvocationsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let sendVoiceMessageTimelineControllerAudioConverterReturnValueLock = NSLock()
-    private nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterUnderlyingReturnValue: Result<Void, VoiceMessageRecorderError>!
-    var sendVoiceMessageTimelineControllerAudioConverterReturnValue: Result<Void, VoiceMessageRecorderError>! {
-        get { sendVoiceMessageTimelineControllerAudioConverterReturnValueLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingReturnValue } }
-        set { sendVoiceMessageTimelineControllerAudioConverterReturnValueLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingReturnValue = newValue } }
+    private let sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReturnValue: Result<Void, VoiceMessageRecorderError>! {
+        get { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReturnValueLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReturnValue } }
+        set { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReturnValueLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterClosure: ((TimelineControllerProtocol, AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError>)?
+    nonisolated(unsafe) var sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDClosure: ((TimelineControllerProtocol, AudioConverterProtocol, String?) async -> Result<Void, VoiceMessageRecorderError>)?
 
-    @concurrent func sendVoiceMessage(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
-        sendVoiceMessageTimelineControllerAudioConverterCallsCountLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount += 1 }
-        sendVoiceMessageTimelineControllerAudioConverterReceivedArguments = (timelineController: timelineController, audioConverter: audioConverter)
-        sendVoiceMessageTimelineControllerAudioConverterReceivedInvocationsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterUnderlyingReceivedInvocations.append((timelineController: timelineController, audioConverter: audioConverter)) }
-        if let sendVoiceMessageTimelineControllerAudioConverterClosure = sendVoiceMessageTimelineControllerAudioConverterClosure {
-            return await sendVoiceMessageTimelineControllerAudioConverterClosure(timelineController, audioConverter)
+    @concurrent func sendVoiceMessage(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol, inReplyToEventID: String?) async -> Result<Void, VoiceMessageRecorderError> {
+        sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDCallsCountLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingCallsCount += 1 }
+        sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedArguments = (timelineController: timelineController, audioConverter: audioConverter, inReplyToEventID: inReplyToEventID)
+        sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReceivedInvocationsLock.withLock { sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDUnderlyingReceivedInvocations.append((timelineController: timelineController, audioConverter: audioConverter, inReplyToEventID: inReplyToEventID)) }
+        if let sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDClosure = sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDClosure {
+            return await sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDClosure(timelineController, audioConverter, inReplyToEventID)
         } else {
-            return sendVoiceMessageTimelineControllerAudioConverterReturnValue
+            return sendVoiceMessageTimelineControllerAudioConverterInReplyToEventIDReturnValue
         }
     }
 }

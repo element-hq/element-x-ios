@@ -20,7 +20,7 @@ enum ComposerToolbarVoiceMessageAction {
     case pausePlayback
     case scrubPlayback(scrubbing: Bool)
     case seekPlayback(progress: Double)
-    case send
+    case send(inReplyToEventID: String?)
 }
 
 enum ComposerToolbarViewModelAction {
@@ -87,7 +87,7 @@ struct ComposerToolbarViewState: BindableState {
     
     var isUploading: Bool {
         switch composerMode {
-        case .previewVoiceMessage(_, _, let isUploading):
+        case .previewVoiceMessage(_, _, let isUploading, _):
             return isUploading
         default:
             return false
@@ -334,8 +334,16 @@ enum ComposerMode: Equatable {
     case `default`
     case reply(eventID: String, replyDetails: TimelineItemReplyDetails, isThread: Bool)
     case edit(originalEventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, type: EditType)
-    case recordVoiceMessage(state: AudioRecorderState)
-    case previewVoiceMessage(state: AudioPlayerState, waveform: WaveformSource, isUploading: Bool)
+    case recordVoiceMessage(state: AudioRecorderState, replyContext: ReplyContext?)
+    case previewVoiceMessage(state: AudioPlayerState, waveform: WaveformSource, isUploading: Bool, replyContext: ReplyContext?)
+    
+    /// The reply that a voice message is being recorded for, so that it survives
+    /// the composer switching out of `reply` mode during the recording.
+    struct ReplyContext: Equatable {
+        let eventID: String
+        let replyDetails: TimelineItemReplyDetails
+        let isThread: Bool
+    }
     
     var isEdit: Bool {
         switch self {
@@ -373,6 +381,16 @@ enum ComposerMode: Equatable {
         switch self {
         case .reply(let eventID, _, _):
             return eventID
+        default:
+            return nil
+        }
+    }
+    
+    /// The preserved reply when recording or previewing a voice message.
+    var voiceMessageReplyContext: ReplyContext? {
+        switch self {
+        case .recordVoiceMessage(_, let replyContext), .previewVoiceMessage(_, _, _, let replyContext):
+            return replyContext
         default:
             return nil
         }

@@ -190,8 +190,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             guard !state.sendButtonDisabled else { return }
             
             switch state.composerMode {
-            case .previewVoiceMessage:
-                actionsSubject.send(.voiceMessage(.send))
+            case .previewVoiceMessage(let playerState, let waveform, let isUploading, let replyContext):
+                // Capture the reply before sending: the composer resets to the default
+                // mode once the voice message is sent and must not restore the reply.
+                state.composerMode = .previewVoiceMessage(state: playerState, waveform: waveform, isUploading: isUploading, replyContext: nil)
+                actionsSubject.send(.voiceMessage(.send(inReplyToEventID: replyContext?.eventID)))
             default:
                 if context.composerFormattingEnabled {
                     actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
@@ -205,7 +208,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .editLastMessage:
             actionsSubject.send(.editLastMessage)
         case .cancelReply:
-            set(mode: .default)
+            switch state.composerMode {
+            case .recordVoiceMessage(let recorderState, .some):
+                state.composerMode = .recordVoiceMessage(state: recorderState, replyContext: nil)
+            case .previewVoiceMessage(let playerState, let waveform, let isUploading, .some):
+                state.composerMode = .previewVoiceMessage(state: playerState, waveform: waveform, isUploading: isUploading, replyContext: nil)
+            default:
+                set(mode: .default)
+            }
         case .cancelEdit:
             if let draft = draftService.loadVolatileDraft() {
                 handleLoadDraft(draft)
@@ -570,6 +580,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
     
     private func set(mode: ComposerMode) {
+        let mode = preservingReplyContext(mode)
+        
         if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID {
             replyLoadingTask?.cancel()
         }
@@ -580,13 +592,42 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         switch mode {
         case .default:
             break
-        case .recordVoiceMessage(let audioRecorderState):
+        case .recordVoiceMessage(let audioRecorderState, _):
             state.audioRecorderState = audioRecorderState
-        case .previewVoiceMessage(let audioPlayerState, _, _):
+        case .previewVoiceMessage(let audioPlayerState, _, _, _):
             state.audioPlayerState = audioPlayerState
         case .edit, .reply:
             // Focus composer when switching to reply/edit
             state.bindings.composerFocused = true
+        }
+    }
+    
+    /// Carries an in-progress reply into and out of the voice message modes, so that
+    /// recording a voice message while replying keeps the reply attached.
+    private func preservingReplyContext(_ mode: ComposerMode) -> ComposerMode {
+        let currentReplyContext: ComposerMode.ReplyContext? = switch state.composerMode {
+        case .reply(let eventID, let replyDetails, let isThread):
+            .init(eventID: eventID, replyDetails: replyDetails, isThread: isThread)
+        default:
+            state.composerMode.voiceMessageReplyContext
+        }
+        
+        guard let currentReplyContext else {
+            return mode
+        }
+        
+        switch mode {
+        case .recordVoiceMessage(let recorderState, nil):
+            return .recordVoiceMessage(state: recorderState, replyContext: currentReplyContext)
+        case .previewVoiceMessage(let playerState, let waveform, let isUploading, nil):
+            return .previewVoiceMessage(state: playerState, waveform: waveform, isUploading: isUploading, replyContext: currentReplyContext)
+        case .default where state.composerMode.voiceMessageReplyContext != nil:
+            // The recording was cancelled or deleted, restore the pending reply.
+            return .reply(eventID: currentReplyContext.eventID,
+                          replyDetails: currentReplyContext.replyDetails,
+                          isThread: currentReplyContext.isThread)
+        default:
+            return mode
         }
     }
     
@@ -800,7 +841,7 @@ private final class ComposerMentionReplacer: MentionReplacer {
 // MARK: - Mocks
 
 extension ComposerToolbarViewModel {
-    enum MockMode { case editing, recordVoiceMessage, previewVoiceMessage(isUploading: Bool), reply(isLoading: Bool) }
+    enum MockMode { case editing, recordVoiceMessage(replying: Bool), previewVoiceMessage(isUploading: Bool), reply(isLoading: Bool) }
     
     static func mock(focused: Bool = false,
                      message: String = "",
@@ -835,14 +876,24 @@ extension ComposerToolbarViewModel {
         switch mockMode {
         case .editing:
             viewModel.state.composerMode = .edit(originalEventOrTransactionID: .eventID(""), type: .default)
-        case .recordVoiceMessage:
-            viewModel.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
+        case .recordVoiceMessage(let replying):
+            let replyContext: ComposerMode.ReplyContext? = if replying {
+                .init(eventID: "",
+                      replyDetails: .loaded(sender: .init(id: "", displayName: "Test"),
+                                            eventID: "",
+                                            eventContent: .message(.text(.init(body: "Hello World!")))),
+                      isThread: false)
+            } else {
+                nil
+            }
+            viewModel.state.composerMode = .recordVoiceMessage(state: AudioRecorderState(), replyContext: replyContext)
         case .previewVoiceMessage(let isUploading):
             viewModel.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview,
                                                                                         title: L10n.commonVoiceMessage,
                                                                                         duration: 10.0),
                                                                 waveform: .data(Array(repeating: 1.0, count: 1000)),
-                                                                isUploading: isUploading)
+                                                                isUploading: isUploading,
+                                                                replyContext: nil)
         case .reply(let isLoading):
             let replyDetails: TimelineItemReplyDetails = if isLoading {
                 .loading(eventID: "")

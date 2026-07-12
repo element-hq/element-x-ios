@@ -308,9 +308,9 @@ class TimelineInteractionHandler {
         case .didStartRecording(let audioRecorder):
             let audioRecordState = AudioRecorderState()
             audioRecordState.attachAudioRecorder(audioRecorder)
-            actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState))))
+            actionsSubject.send(.composer(action: .setMode(mode: .recordVoiceMessage(state: audioRecordState, replyContext: nil))))
         case .didStopRecording(let previewAudioPlayerState, let url):
-            actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: previewAudioPlayerState, waveform: .url(url), isUploading: false))))
+            actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: previewAudioPlayerState, waveform: .url(url), isUploading: false, replyContext: nil))))
             voiceMessageRecorderObserver = nil
         case .didFailWithError(let error):
             switch error {
@@ -355,7 +355,7 @@ class TimelineInteractionHandler {
         actionsSubject.send(.composer(action: .setMode(mode: .default)))
     }
     
-    func sendCurrentVoiceMessage() async {
+    func sendCurrentVoiceMessage(inReplyToEventID: String?) async {
         guard let audioPlayerState = voiceMessageRecorder.previewAudioPlayerState, let recordingURL = voiceMessageRecorder.recordingURL else {
             actionsSubject.send(.displayErrorToast(L10n.errorFailedUploadingVoiceMessage))
             return
@@ -363,19 +363,21 @@ class TimelineInteractionHandler {
         
         analyticsService.trackComposer(inThread: false,
                                        isEditing: false,
-                                       isReply: false,
+                                       isReply: inReplyToEventID != nil,
                                        messageType: .VoiceMessage,
                                        startsThread: nil)
         
-        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true))))
+        actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true, replyContext: nil))))
         await voiceMessageRecorder.stopPlayback()
         
-        switch await voiceMessageRecorder.sendVoiceMessage(timelineController: timelineController, audioConverter: AudioConverter()) {
+        switch await voiceMessageRecorder.sendVoiceMessage(timelineController: timelineController,
+                                                           audioConverter: AudioConverter(),
+                                                           inReplyToEventID: inReplyToEventID) {
         case .success:
             await deleteCurrentVoiceMessage()
         case .failure(let error):
             MXLog.error("failed to send the voice message. \(error)")
-            actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: false))))
+            actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: false, replyContext: nil))))
             actionsSubject.send(.displayErrorToast(L10n.errorFailedUploadingVoiceMessage))
         }
     }
