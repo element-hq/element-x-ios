@@ -148,8 +148,14 @@ nonisolated class NotificationHandler {
                  .beacon:
                 return .unsupportedShouldDiscard
             }
-        case .state:
-            return .unsupportedShouldDiscard
+        case .state(let stateContent):
+            switch stateContent {
+            case .roomMemberContent(_, .knock):
+                // MSCxxxx: the homeserver pushes knocks to users who can act on them.
+                return .shouldDisplay
+            default:
+                return .unsupportedShouldDiscard
+            }
         case .none:
             return .unsupportedShouldDiscard
         }

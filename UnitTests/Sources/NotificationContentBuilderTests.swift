@@ -8,6 +8,7 @@
 import Dynamic
 @testable import ElementX
 import MatrixRustSDK
+import MatrixRustSDKMocks
 import Testing
 import UserNotifications
 
@@ -219,6 +220,57 @@ nonisolated struct NotificationContentBuilderTests {
         #expect(notificationContent.sound == nil)
         #expect(notificationContent.threadIdentifier == "bob:matrix.org!testroom:matrix.orgthread123")
         #expect(notificationContent.attachments == [])
+    }
+    
+    @Test
+    mutating func knockNotification() async {
+        let event = TimelineEventSDKMock()
+        event.eventIdReturnValue = UUID().uuidString
+        event.contentReturnValue = .state(content: .roomMemberContent(userId: "@charlie:matrix.org", membershipState: .knock))
+        
+        let notificationItem = NotificationItemProxyMock(.init(event: .timeline(event: event),
+                                                               roomID: "!test:matrix.org",
+                                                               receiverID: "@bob:matrix.org",
+                                                               senderDisplayName: "Charlie",
+                                                               roomDisplayName: "Secret Club",
+                                                               roomJoinedMembers: 2,
+                                                               isRoomDirect: false,
+                                                               isRoomPrivate: true,
+                                                               isNoisy: true))
+        
+        await notificationContentBuilder.process(notificationContent: &notificationContent,
+                                                 notificationItem: notificationItem,
+                                                 mediaProvider: mediaProvider)
+        
+        let communicationContext = Dynamic(notificationContent, memberName: "communicationContext")
+        #expect(communicationContext.sender.displayName == "Charlie")
+        #expect(notificationContent.body == UntranslatedL10n.notificationKnockRequestBody)
+        #expect(notificationContent.categoryIdentifier == NotificationConstants.Category.message)
+        #expect(notificationContent.sound != nil)
+    }
+    
+    @Test
+    mutating func otherMembershipStateEventNotification() async {
+        let event = TimelineEventSDKMock()
+        event.eventIdReturnValue = UUID().uuidString
+        event.contentReturnValue = .state(content: .roomMemberContent(userId: "@charlie:matrix.org", membershipState: .join))
+        
+        let notificationItem = NotificationItemProxyMock(.init(event: .timeline(event: event),
+                                                               roomID: "!test:matrix.org",
+                                                               receiverID: "@bob:matrix.org",
+                                                               senderDisplayName: "Charlie",
+                                                               roomDisplayName: "Secret Club",
+                                                               roomJoinedMembers: 2,
+                                                               isRoomDirect: false,
+                                                               isRoomPrivate: true,
+                                                               isNoisy: true))
+        
+        await notificationContentBuilder.process(notificationContent: &notificationContent,
+                                                 notificationItem: notificationItem,
+                                                 mediaProvider: mediaProvider)
+        
+        // Non-knock membership state events fall back to the generic notification.
+        #expect(notificationContent.body == L10n.notification)
     }
     
     @Test
