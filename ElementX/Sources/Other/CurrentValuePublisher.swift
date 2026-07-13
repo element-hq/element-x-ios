@@ -13,33 +13,44 @@ import Combine
 ///
 /// `CurrentValueSubject` is documented as thread-safe but is not formally `Sendable`, hence `@unchecked`.
 nonisolated struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @unchecked Sendable {
-    private let subject: CurrentValueSubject<Output, Failure>
-    /// Retains the upstream subscription feeding ``subject`` when this publisher is derived via ``map(_:)``.
-    private let cancellable: AnyCancellable?
-    
-    init(_ subject: CurrentValueSubject<Output, Failure>, cancellable: AnyCancellable? = nil) {
-        self.subject = subject
-        self.cancellable = cancellable
+    private let upstream: AnyPublisher<Output, Failure>
+    private let valueProvider: () -> Output
+
+    init(_ subject: CurrentValueSubject<Output, Failure>) {
+        upstream = subject.eraseToAnyPublisher()
+        valueProvider = { subject.value }
     }
-    
+
     init(_ value: Output) {
         self.init(CurrentValueSubject(value))
     }
-    
-    func receive<S: Subscriber>(subscriber: S) where Failure == S.Failure, Output == S.Input {
-        subject.receive(subscriber: subscriber)
+
+    private init(upstream: AnyPublisher<Output, Failure>, valueProvider: @escaping () -> Output) {
+        self.upstream = upstream
+        self.valueProvider = valueProvider
     }
-    
+
+    func receive<S: Subscriber>(subscriber: S) where Failure == S.Failure, Output == S.Input {
+        upstream.receive(subscriber: subscriber)
+    }
+
     var value: Output {
-        subject.value
+        valueProvider()
     }
 }
 
 nonisolated extension CurrentValuePublisher where Failure == Never {
+    /// Transform the published values (and ``value``), subscribing to the underlying subject
+    /// lazily, per subscriber.
+    ///
+    /// Bridging eagerly through a second subject doesn't work here: the subscription feeding it
+    /// would need to be retained by this struct, but Combine consumes publisher structs when
+    /// building a subscription, so chaining a mapped publisher inline dropped the feed and
+    /// downstream only ever received the initial value (e.g. the knock requests banner never
+    /// updated for a knock arriving while the room was open).
     func map<T>(_ transform: @escaping (Output) -> T) -> CurrentValuePublisher<T, Never> {
-        let subject = CurrentValueSubject<T, Never>(transform(value))
-        let cancellable = sink { subject.send(transform($0)) }
-        return .init(subject, cancellable: cancellable)
+        .init(upstream: upstream.map(transform).eraseToAnyPublisher(),
+              valueProvider: { transform(value) })
     }
 }
 
