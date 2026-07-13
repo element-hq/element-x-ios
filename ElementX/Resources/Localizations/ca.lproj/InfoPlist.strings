@@ -1,6 +1,6 @@
 "NSCameraUsageDescription" = "Per fer fotos o vídeos i enviar-los com a missatge, Element X necessita accés a la càmera.";
 "NSFaceIDUsageDescription" = "Face ID s'utilitza per accedir a l'aplicació.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X needs location access when the app is in the background.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your location live in chats, location access is needed when the app is in the background.";
 "NSLocationWhenInUseUsageDescription" = "Concedeix accés a la ubicació perquè Element X pugui compartir la teva ubicació.";
 "NSMicrophoneUsageDescription" = "Per gravar i enviar missatges amb àudio, Element X necessita accedir al micròfon.";
 "NSPhotoLibraryUsageDescription" = "Això permet desar imatges i vídeos a la biblioteca de fotos.";

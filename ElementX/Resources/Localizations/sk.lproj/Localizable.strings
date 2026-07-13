@@ -16,6 +16,7 @@
 "a11y_join_call" = "Pripojiť sa k hovoru";
 "a11y_jump_to_bottom" = "Prejsť na spodok";
 "a11y_jump_to_unread" = "Jump to unread";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Iba zmienky";
 "a11y_notifications_muted" = "Stlmené";
 "a11y_notifications_new_mentions" = "Nové zmienky";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Spravovať zariadenia";
 "action_manage_rooms" = "Spravovať miestnosti";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Poslať správu";
 "action_minimize" = "Minimalizovať";
 "action_next" = "Ďalej";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "Žiadny názov priestoru";
 "common_not_encrypted" = "Nešifrované";
 "common_offline" = "Offline";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Licencie s otvoreným zdrojom";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "alebo";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Nepodporovaný hovor";
 "common_unsupported_event" = "Nepodporovaná udalosť";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Používateľské meno";
 "common_verification_cancelled" = "Overovanie zrušené";
 "common_verification_complete" = "Overovanie je dokončené";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "Vaše úložisko kľúčov nie je synchronizované";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ zlyhal pri poslednom použití. Chcete zdieľať správu o páde s našim tímom?";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Tento účet bol deaktivovaný.";
 "screen_login_error_invalid_credentials" = "Nesprávne používateľské meno a/alebo heslo";
 "screen_login_error_invalid_user_id" = "Toto nie je platný identifikátor používateľa. Očakávaný formát: '@pouzivatel:homeserver.sk'";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Prebiehajúce";
 "screen_polls_history_filter_past" = "Minulé";
 "screen_polls_history_title" = "Ankety";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "História push oznámení";
 "screen_qr_code_login_connecting_subtitle" = "Nadväzovanie bezpečného spojenia";
 "screen_qr_code_login_connection_note_secure_state_description" = "K novému zariadeniu sa nepodarilo vytvoriť bezpečné pripojenie. Vaše existujúce zariadenia sú stále v bezpečí a nemusíte sa o ne obávať.";

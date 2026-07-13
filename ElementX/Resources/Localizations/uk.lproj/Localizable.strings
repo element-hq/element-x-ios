@@ -16,6 +16,7 @@
 "a11y_join_call" = "Приєднатися до виклику";
 "a11y_jump_to_bottom" = "Перейти вниз";
 "a11y_jump_to_unread" = "Перейти до непрочитаних";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Тільки згадки";
 "a11y_notifications_muted" = "Звук вимкнено";
 "a11y_notifications_new_mentions" = "Нові згадки";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Керування обліковим записом і пристроями";
 "action_manage_devices" = "Керування пристроями";
 "action_manage_rooms" = "Керувати кімнатами";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Написати";
 "action_minimize" = "Згорнути";
 "action_next" = "Далі";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "Без назви простору";
 "common_not_encrypted" = "Не зашифровано";
 "common_offline" = "Не в мережі";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Ліцензії відкритого коду";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "або";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Непідтриманий виклик";
 "common_unsupported_event" = "Непідтримувана подія";
 "common_user_started_a_call" = "%1$@ розпочинає виклик";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Ім'я користувача";
 "common_verification_cancelled" = "Звіряння скасовано";
 "common_verification_complete" = "Звіряння завершено";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "Ваше сховище ключів не синхронізовано";
 "content_scanner_not_found" = "Завантаження недоступне.";
 "content_scanner_not_found_title" = "Файл не знайдено";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Попередній перегляд і завантаження вимкнено.";
 "content_scanner_unsafe_title" = "Файл не є безпечним";
 "crash_detection_dialog_content" = "Стався збій %1$@ під час останнього користування. Хочете поділитися з нами звітом про збій?";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Ніхто не ділиться своєю геопозицією";
 "screen_live_location_sheet_sharing_live_location" = "Обмін геопозицією";
 "screen_live_location_sheet_title" = "На карті";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Цей обліковий запис було видалено.";
 "screen_login_error_invalid_credentials" = "Неправильне ім'я користувача та/або пароль";
 "screen_login_error_invalid_user_id" = "Це недійсний ідентифікатор користувача. Очікуваний формат: '@user:homeserver.org'";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Поточні";
 "screen_polls_history_filter_past" = "Минулі";
 "screen_polls_history_title" = "Опитування";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Історія push-сповіщень";
 "screen_qr_code_login_connecting_subtitle" = "Встановлення безпечного з'єднання";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не вдалося встановити безпечне з'єднання з новим пристроєм. Ваші наявні пристрої досі в безпеці, і вам не потрібно про них турбуватися.";

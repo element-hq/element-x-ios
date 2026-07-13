@@ -16,6 +16,7 @@
 "a11y_join_call" = "加入通話";
 "a11y_jump_to_bottom" = "跳至底部";
 "a11y_jump_to_unread" = "Jump to unread";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "僅限提及";
 "a11y_notifications_muted" = "已關閉通知";
 "a11y_notifications_new_mentions" = "新提及";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "管理帳號與裝置";
 "action_manage_devices" = "管理裝置";
 "action_manage_rooms" = "管理聊天室";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "聊天";
 "action_minimize" = "最小化";
 "action_next" = "下一步";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "沒有空間名稱";
 "common_not_encrypted" = "未加密";
 "common_offline" = "離線";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "開放原始碼授權條款";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "或";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "不支援的通話";
 "common_unsupported_event" = "不支援的事件";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "使用者名稱";
 "common_verification_cancelled" = "驗證已取消";
 "common_verification_complete" = "驗證完成";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "您的金鑰儲存空間並未同步";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ 上次使用時當機了。您想要與我們分享當機報告嗎？";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "這個帳號已被停用。";
 "screen_login_error_invalid_credentials" = "不正確的使用者名稱或密碼";
 "screen_login_error_invalid_user_id" = "此非有效的使用者識別字串。預期的格式：‘@user:homeserver.org’";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "進行中";
 "screen_polls_history_filter_past" = "已結束";
 "screen_polls_history_title" = "所有投票";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "推播通知歷史紀錄";
 "screen_qr_code_login_connecting_subtitle" = "建立安全連線";
 "screen_qr_code_login_connection_note_secure_state_description" = "無法與新裝置建立安全連線。您現有的裝置仍然安全，您不必擔心它們。";

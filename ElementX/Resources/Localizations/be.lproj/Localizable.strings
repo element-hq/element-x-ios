@@ -16,6 +16,7 @@
 "a11y_join_call" = "Далучыцца да выкліку";
 "a11y_jump_to_bottom" = "Перайсці ўніз";
 "a11y_jump_to_unread" = "Jump to unread";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Толькі згадкі";
 "a11y_notifications_muted" = "Гук адключаны";
 "a11y_notifications_new_mentions" = "Новыя згадкі";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Кіраванне прыладамі";
 "action_manage_rooms" = "Manage rooms";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Паведамленне";
 "action_minimize" = "Minimise";
 "action_next" = "Далей";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "No space name";
 "common_not_encrypted" = "Не зашыфравана";
 "common_offline" = "Па-за сеткай";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Ліцэнзіі з адкрытым зыходным кодам";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "або";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Падзея не падтрымліваецца";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Імя карыстальніка";
 "common_verification_cancelled" = "Праверка адменена";
 "common_verification_complete" = "Праверка завершана";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "Ваша сховішча ключоў не сінхранізавана";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "Пры апошнім выкарыстанні %1$@ адбыўся збой. Хочаце абагуліць справаздачу аб збоі?";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Гэты ўліковы запіс быў выдалены.";
 "screen_login_error_invalid_credentials" = "Няправільнае імя карыстальніка і/або пароль";
 "screen_login_error_invalid_user_id" = "Гэта несапраўдны ідэнтыфікатар карыстальніка. Чаканы фармат: ‘@user:homeserver.org’";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Бягучыя";
 "screen_polls_history_filter_past" = "Мінулыя";
 "screen_polls_history_title" = "Апытанні";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Ўсталяванне бяспечнага злучэння";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не атрымалася ўсталяваць бяспечнае злучэнне з новай прыладай. Існуючыя прылады па-ранейшаму ў бяспецы, і вам не трэба турбавацца пра іх.";

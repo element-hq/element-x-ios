@@ -1,6 +1,6 @@
 "NSCameraUsageDescription" = "要拍摄照片或视频并作为消息发送，Element X 需要访问相机。";
 "NSFaceIDUsageDescription" = "面容 ID 可用于访问你的账户时的防护。";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "要共享实时位置，Element X 在应用处于后台运行期间需要访问位置信息。";
-"NSLocationWhenInUseUsageDescription" = "授予位置访问权限，以便 Element X 可以共享你的位置。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "在聊天中共享实时位置并且 app 处于后台运行期间需要访问位置信息。";
+"NSLocationWhenInUseUsageDescription" = "这样你就可以在聊天中发送当前位置或附近地点。";
 "NSMicrophoneUsageDescription" = "要录制和发送音频消息，Element X 需要访问麦克风。";
 "NSPhotoLibraryUsageDescription" = "这将允许你将照片和视频保存到图库。";

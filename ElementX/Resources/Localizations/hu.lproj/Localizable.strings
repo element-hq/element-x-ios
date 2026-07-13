@@ -16,6 +16,7 @@
 "a11y_join_call" = "Csatlakozás a híváshoz";
 "a11y_jump_to_bottom" = "Ugrás az aljára";
 "a11y_jump_to_unread" = "Ugrás az olvasatlanhoz";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Csak megemlítések";
 "a11y_notifications_muted" = "Némítva";
 "a11y_notifications_new_mentions" = "Új említések";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Fiók és eszközök kezelése";
 "action_manage_devices" = "Eszközök kezelése";
 "action_manage_rooms" = "Szobák kezelése";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Üzenet";
 "action_minimize" = "Minimalizálás";
 "action_next" = "Következő";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "Nincs térnév";
 "common_not_encrypted" = "Nincs titkosítva";
 "common_offline" = "Kapcsolat nélkül";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Nyílt forráskódú licencek";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "vagy";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Nem támogatott hívás";
 "common_unsupported_event" = "Nem támogatott esemény";
 "common_user_started_a_call" = "%1$@ hívást indított";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Felhasználónév";
 "common_verification_cancelled" = "Az ellenőrzés megszakítva";
 "common_verification_complete" = "Az ellenőrzés befejeződött";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "A kulcstároló nincs szinkronizálva";
 "content_scanner_not_found" = "A letöltés nem érhető el.";
 "content_scanner_not_found_title" = "A fájl nem található";
+"content_scanner_scanning" = "Keresés...";
 "content_scanner_unsafe_message" = "Az előnézet és a letöltés le van tiltva.";
 "content_scanner_unsafe_title" = "A fájl nem biztonságos";
 "crash_detection_dialog_content" = "Az %1$@ összeomlott a legutóbbi használata óta. Megosztja velünk az összeomlás-jelentést?";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Senki sem osztja meg a tartózkodási helyét";
 "screen_live_location_sheet_sharing_live_location" = "Élő helymegosztás";
 "screen_live_location_sheet_title" = "A térképen";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Ez a fiók törölve lett.";
 "screen_login_error_invalid_credentials" = "Helytelen felhasználónév vagy jelszó";
 "screen_login_error_invalid_user_id" = "Ez nem érvényes felhasználóazonosító. A várt formátum: „@user:homeserver.org”";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Folyamatban";
 "screen_polls_history_filter_past" = "Korábbi";
 "screen_polls_history_title" = "Szavazások";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Leküldéses értesítések előzmények";
 "screen_qr_code_login_connecting_subtitle" = "Biztonságos kapcsolat létesítése";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nem sikerült biztonságos kapcsolatot létesíteni az új eszközzel. A meglévő eszközei továbbra is biztonságban vannak, és nem kell aggódnia miattuk.";

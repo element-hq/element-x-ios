@@ -16,6 +16,7 @@
 "a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "ბოლოში გადასვლა";
 "a11y_jump_to_unread" = "Jump to unread";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "მხოლოდ მოხსენიებები";
 "a11y_notifications_muted" = "დადუმებულია";
 "a11y_notifications_new_mentions" = "New mentions";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "მოწყობილობების მართვა";
 "action_manage_rooms" = "Manage rooms";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Message";
 "action_minimize" = "Minimise";
 "action_next" = "შემდეგი";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "No space name";
 "common_not_encrypted" = "Not encrypted";
 "common_offline" = "ხაზგარეშე";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Open source licenses";
 "common_optic_id_ios" = "ოპტიკური ID";
 "common_or" = "ან";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "მხარდაუჭერელი მოვლენა";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "მომხმარებლის სახელი";
 "common_verification_cancelled" = "დადასტურება გაუქმდა";
 "common_verification_complete" = "დადასტურება დასრულებულია";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "თქვენი გასაღების დამგროვებელი არაა სინქრონიზებული";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ ავარიულად გაითიშა ბოლოს გამოიყენებისას. გსურთ, გამოგვიგზავნოთ ავარიული გათიშვის ჟურნალი?";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "ეს ანგარიში დეაქტივირებულია.";
 "screen_login_error_invalid_credentials" = "არასწორი მომხმარებლის სახელი და/ან პაროლი";
 "screen_login_error_invalid_user_id" = "მოცემული მომხმარებლის იდენტიფიკატორი არასწორია. დასაშვები ფორმატი: ‘@user:homeserver.org’";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "მიმდინარე";
 "screen_polls_history_filter_past" = "წარსული";
 "screen_polls_history_title" = "გამოკითხვები";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Establishing a secure connection";
 "screen_qr_code_login_connection_note_secure_state_description" = "A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.";

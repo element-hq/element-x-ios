@@ -16,6 +16,7 @@
 "a11y_join_call" = "통화 참가";
 "a11y_jump_to_bottom" = "맨 아래로 이동";
 "a11y_jump_to_unread" = "읽지 않은 항목으로 이동";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "멘션만";
 "a11y_notifications_muted" = "음소거함";
 "a11y_notifications_new_mentions" = "새로운 언급";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "계정 및 기기 관리";
 "action_manage_devices" = "기기 관리";
 "action_manage_rooms" = "방 관리";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "메시지";
 "action_minimize" = "최소화";
 "action_next" = "다음";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "스페이스 이름 없음";
 "common_not_encrypted" = "암호화되지 않음";
 "common_offline" = "오프라인";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "오픈 소스 라이선스";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "또는";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "지원되지 않는 통화";
 "common_unsupported_event" = "지원되지 않는 이벤트";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "아이디";
 "common_verification_cancelled" = "인증 취소됨";
 "common_verification_complete" = "인증 완료";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "귀하의 키 저장소가 동기화되지 않았습니다";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@이(가) 이전에 마지막으로 사용할 때 충돌했습니다. 충돌 보고서를 공유해주실 수 있나요?";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "위치를 공유 중인 사용자가 없습니다.";
 "screen_live_location_sheet_sharing_live_location" = "실시간 위치 공유 중";
 "screen_live_location_sheet_title" = "지도 보기";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "삭제된 계정입니다.";
 "screen_login_error_invalid_credentials" = "잘못된 아이디/비밀번호";
 "screen_login_error_invalid_user_id" = "이 사용자 ID는 유효하지 않습니다. 예상 형식: ‘@user:homeserver.org’";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "진행 중";
 "screen_polls_history_filter_past" = "과거";
 "screen_polls_history_title" = "투표";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "푸시 기록";
 "screen_qr_code_login_connecting_subtitle" = "안전한 연결 설정";
 "screen_qr_code_login_connection_note_secure_state_description" = "새 장치에 안전하게 연결할 수 없습니다. 기존 장치는 여전히 안전하므로 걱정할 필요가 없습니다.";

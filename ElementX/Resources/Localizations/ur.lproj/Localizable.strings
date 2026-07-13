@@ -16,6 +16,7 @@
 "a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "نیچے چھلانگ لگائیں";
 "a11y_jump_to_unread" = "Jump to unread";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "صرف تذکرے";
 "a11y_notifications_muted" = "خاموش";
 "a11y_notifications_new_mentions" = "New mentions";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "آلات کا نظم کریں";
 "action_manage_rooms" = "Manage rooms";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "ارسال";
 "action_minimize" = "Minimise";
 "action_next" = "اگلا";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "No space name";
 "common_not_encrypted" = "Not encrypted";
 "common_offline" = "پرے خط";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "کھلا ماخذ رخصات";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "یا";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "غیر تعاون یافتہ واقعہ";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "صارف نام";
 "common_verification_cancelled" = "توثیق منسوخ کردہ";
 "common_verification_complete" = "توثیق مکمل";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "آپ کا کلید کا ذخیرہ غیر ہم وقت ساز ہے۔";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@آخری بار استعمال ہونے پر ٹکرا گیا۔ کیا آپ ہمارے ساتھ ٹکر کی گزارش (رپورٹ) کا اشتراک کرنا چاہیں گے؟";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "یہ کھاتہ غیر فعال کر دیا گیا ہے۔";
 "screen_login_error_invalid_credentials" = "غلط صارف نام اور/یا لفظ عبور";
 "screen_login_error_invalid_user_id" = "یہ صالح صارف شناسه نہیں ہے۔ متوقع شکل: @صارف:منزلی خادم";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "جاری";
 "screen_polls_history_filter_past" = "ماضی";
 "screen_polls_history_title" = "رائے شماری ہا";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "محفوظ اتصال قائم کر رہا ہے";
 "screen_qr_code_login_connection_note_secure_state_description" = "نئے آلے سے محفوظ اتصال نہیں بنایا جا سکا۔ آپ کے موجودہ آلات اب بھی محفوظ ہیں اور آپ کو ان کے بارے میں فکر کرنے کی ضرورت نہیں ہے۔";
