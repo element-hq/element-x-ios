@@ -166,6 +166,6 @@ extension ClientProxyMock {
         
         storeSizesReturnValue = .success(.init(cryptoStore: 1, stateStore: 9, eventCacheStore: 8, mediaStore: 6))
         
-        setPresenceSendImmediatelyReturnValue = .success(())
+        configurePresenceSendImmediatelyReturnValue = .success(())
     }
 }

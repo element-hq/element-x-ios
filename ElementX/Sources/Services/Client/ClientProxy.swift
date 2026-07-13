@@ -996,7 +996,7 @@ class ClientProxy: ClientProxyProtocol {
     
     // MARK: Presence
     
-    func setPresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError> {
+    func configurePresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setPresence(presence: presence.rustValue, immediate: sendImmediately)
             return .success(())

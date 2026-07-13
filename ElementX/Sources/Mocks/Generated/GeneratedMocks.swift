@@ -4281,46 +4281,46 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return setHideInviteAvatarsReturnValue
         }
     }
-    //MARK: - setPresence
+    //MARK: - configurePresence
 
-    private let setPresenceSendImmediatelyCallsCountLock = NSLock()
-    private nonisolated(unsafe) var setPresenceSendImmediatelyUnderlyingCallsCount = 0
-    var setPresenceSendImmediatelyCallsCount: Int {
-        get { setPresenceSendImmediatelyCallsCountLock.withLock { setPresenceSendImmediatelyUnderlyingCallsCount } }
-        set { setPresenceSendImmediatelyCallsCountLock.withLock { setPresenceSendImmediatelyUnderlyingCallsCount = newValue } }
+    private let configurePresenceSendImmediatelyCallsCountLock = NSLock()
+    private nonisolated(unsafe) var configurePresenceSendImmediatelyUnderlyingCallsCount = 0
+    var configurePresenceSendImmediatelyCallsCount: Int {
+        get { configurePresenceSendImmediatelyCallsCountLock.withLock { configurePresenceSendImmediatelyUnderlyingCallsCount } }
+        set { configurePresenceSendImmediatelyCallsCountLock.withLock { configurePresenceSendImmediatelyUnderlyingCallsCount = newValue } }
     }
-    var setPresenceSendImmediatelyCalled: Bool {
-        return setPresenceSendImmediatelyCallsCount > 0
+    var configurePresenceSendImmediatelyCalled: Bool {
+        return configurePresenceSendImmediatelyCallsCount > 0
     }
-    private let setPresenceSendImmediatelyReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var setPresenceSendImmediatelyUnderlyingReceivedArguments: (presence: ClientProxyPresence, sendImmediately: Bool)?
-    var setPresenceSendImmediatelyReceivedArguments: (presence: ClientProxyPresence, sendImmediately: Bool)? {
-        get { setPresenceSendImmediatelyReceivedArgumentsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedArguments } }
-        set { setPresenceSendImmediatelyReceivedArgumentsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedArguments = newValue } }
+    private let configurePresenceSendImmediatelyReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var configurePresenceSendImmediatelyUnderlyingReceivedArguments: (presence: ClientProxyPresence, sendImmediately: Bool)?
+    var configurePresenceSendImmediatelyReceivedArguments: (presence: ClientProxyPresence, sendImmediately: Bool)? {
+        get { configurePresenceSendImmediatelyReceivedArgumentsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedArguments } }
+        set { configurePresenceSendImmediatelyReceivedArgumentsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedArguments = newValue } }
     }
-    private let setPresenceSendImmediatelyReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var setPresenceSendImmediatelyUnderlyingReceivedInvocations: [(presence: ClientProxyPresence, sendImmediately: Bool)] = []
-    var setPresenceSendImmediatelyReceivedInvocations: [(presence: ClientProxyPresence, sendImmediately: Bool)] {
-        get { setPresenceSendImmediatelyReceivedInvocationsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedInvocations } }
-        set { setPresenceSendImmediatelyReceivedInvocationsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedInvocations = newValue } }
+    private let configurePresenceSendImmediatelyReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var configurePresenceSendImmediatelyUnderlyingReceivedInvocations: [(presence: ClientProxyPresence, sendImmediately: Bool)] = []
+    var configurePresenceSendImmediatelyReceivedInvocations: [(presence: ClientProxyPresence, sendImmediately: Bool)] {
+        get { configurePresenceSendImmediatelyReceivedInvocationsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedInvocations } }
+        set { configurePresenceSendImmediatelyReceivedInvocationsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let setPresenceSendImmediatelyReturnValueLock = NSLock()
-    private nonisolated(unsafe) var setPresenceSendImmediatelyUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var setPresenceSendImmediatelyReturnValue: Result<Void, ClientProxyError>! {
-        get { setPresenceSendImmediatelyReturnValueLock.withLock { setPresenceSendImmediatelyUnderlyingReturnValue } }
-        set { setPresenceSendImmediatelyReturnValueLock.withLock { setPresenceSendImmediatelyUnderlyingReturnValue = newValue } }
+    private let configurePresenceSendImmediatelyReturnValueLock = NSLock()
+    private nonisolated(unsafe) var configurePresenceSendImmediatelyUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var configurePresenceSendImmediatelyReturnValue: Result<Void, ClientProxyError>! {
+        get { configurePresenceSendImmediatelyReturnValueLock.withLock { configurePresenceSendImmediatelyUnderlyingReturnValue } }
+        set { configurePresenceSendImmediatelyReturnValueLock.withLock { configurePresenceSendImmediatelyUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var setPresenceSendImmediatelyClosure: ((ClientProxyPresence, Bool) async -> Result<Void, ClientProxyError>)?
+    nonisolated(unsafe) var configurePresenceSendImmediatelyClosure: ((ClientProxyPresence, Bool) async -> Result<Void, ClientProxyError>)?
 
-    @concurrent func setPresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError> {
-        setPresenceSendImmediatelyCallsCountLock.withLock { setPresenceSendImmediatelyUnderlyingCallsCount += 1 }
-        setPresenceSendImmediatelyReceivedArguments = (presence: presence, sendImmediately: sendImmediately)
-        setPresenceSendImmediatelyReceivedInvocationsLock.withLock { setPresenceSendImmediatelyUnderlyingReceivedInvocations.append((presence: presence, sendImmediately: sendImmediately)) }
-        if let setPresenceSendImmediatelyClosure = setPresenceSendImmediatelyClosure {
-            return await setPresenceSendImmediatelyClosure(presence, sendImmediately)
+    @concurrent func configurePresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError> {
+        configurePresenceSendImmediatelyCallsCountLock.withLock { configurePresenceSendImmediatelyUnderlyingCallsCount += 1 }
+        configurePresenceSendImmediatelyReceivedArguments = (presence: presence, sendImmediately: sendImmediately)
+        configurePresenceSendImmediatelyReceivedInvocationsLock.withLock { configurePresenceSendImmediatelyUnderlyingReceivedInvocations.append((presence: presence, sendImmediately: sendImmediately)) }
+        if let configurePresenceSendImmediatelyClosure = configurePresenceSendImmediatelyClosure {
+            return await configurePresenceSendImmediatelyClosure(presence, sendImmediately)
         } else {
-            return setPresenceSendImmediatelyReturnValue
+            return configurePresenceSendImmediatelyReturnValue
         }
     }
 }

@@ -42,8 +42,12 @@ struct CommonFlowParameters {
     var windowManager: WindowManagerProtocol {
         appMediator.windowManager
     }
-    
+
     var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
         elementCallService.ongoingCallRoomIDPublisher
+    }
+
+    var sharedPresenceStateStore: SharedPresenceStateStoreProtocol {
+        SharedPresenceStateStore(suiteName: AppSettings.suiteName)
     }
 }

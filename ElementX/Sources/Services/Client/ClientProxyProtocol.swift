@@ -292,7 +292,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     // MARK: - Presence
     
-    /// Updates the process presence that rides on every future sync request. When `sendImmediately` is `true` the SDK
-    /// also issues a direct presence update instead of waiting for the next sync request to carry the new value.
-    func setPresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError>
+    /// Configures the process presence used by future sync requests. When `sendImmediately` is `true` this also
+    /// asks the SDK to send a direct presence update.
+    func configurePresence(_ presence: ClientProxyPresence, sendImmediately: Bool) async -> Result<Void, ClientProxyError>
 }

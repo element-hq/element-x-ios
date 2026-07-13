@@ -64,6 +64,7 @@ actor NotificationServiceExtensionActor {
     private static let firstNotificationThreshold: TimeInterval = 15 * 60
     
     private let settings: CommonSettingsProtocol
+    private let sharedPresenceStateStore: SharedPresenceStateStoreProtocol
     private let appHooks: AppHooks
     
     /// This is nonisolated just because the expire function needs to be served ASAP so we should not call it from  a Task, however this is
@@ -83,6 +84,7 @@ actor NotificationServiceExtensionActor {
             fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
         }
         settings = AppSettings(store: userDefaults)
+        sharedPresenceStateStore = SharedPresenceStateStore(suiteName: AppSettings.suiteName)
         
         appHooks = AppHooks()
         appHooks.setUp()
@@ -178,7 +180,8 @@ actor NotificationServiceExtensionActor {
                                                        roomID: roomID,
                                                        clientSessionDelegate: keychainController,
                                                        appHooks: appHooks,
-                                                       appSettings: settings)
+                                                       appSettings: settings,
+                                                       sharedPresenceStateStore: sharedPresenceStateStore)
             
             notificationHandler = NotificationHandler(userSession: userSession,
                                                       settings: settings,
