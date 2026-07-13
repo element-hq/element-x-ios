@@ -160,9 +160,10 @@ struct RoomDetailsScreenViewModelTests {
         let recipient = RoomMemberProxyMock.mockDan
         
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
+        let clientProxy = ClientProxyMock(.init())
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
-                                               userSession: UserSessionMock(.init()),
+                                               userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
@@ -175,13 +176,22 @@ struct RoomDetailsScreenViewModelTests {
         
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
-        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
-                                                  transitionValues: [false, true, false])
+        // The request is in flight exactly while the closure runs, so assert the transient
+        // processing state in there — observing it from outside is racy as it can be cleared
+        // again before the observation is ever serviced.
+        clientProxy.ignoreUserClosure = { [context] _ in
+            await MainActor.run { #expect(context.viewState.isProcessingIgnoreRequest) }
+            return .success(())
+        }
+        
+        // Then wait for the durable outcome of the request.
+        let deferredIgnored = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0?.member.isIgnored == true }
         
         context.send(viewAction: .ignoreConfirmed)
         
-        try await deferredProcessing.fulfill()
+        try await deferredIgnored.fulfill()
         
+        #expect(!context.viewState.isProcessingIgnoreRequest)
         #expect(context.viewState.dmRecipientInfo?.member.isIgnored == true)
     }
     
@@ -190,7 +200,6 @@ struct RoomDetailsScreenViewModelTests {
         let recipient = RoomMemberProxyMock.mockDan
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.ignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
@@ -206,13 +215,22 @@ struct RoomDetailsScreenViewModelTests {
         
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
-        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
-                                                  transitionValues: [false, true, false])
+        // The request is in flight exactly while the closure runs, so assert the transient
+        // processing state in there — observing it from outside is racy as it can be cleared
+        // again before the observation is ever serviced.
+        clientProxy.ignoreUserClosure = { [context] _ in
+            await MainActor.run { #expect(context.viewState.isProcessingIgnoreRequest) }
+            return .failure(.sdkError(ClientProxyMockError.generic))
+        }
+        
+        // Then wait for the durable outcome of the request.
+        let deferredAlert = deferFulfillment(viewModel.context.observe(\.alertInfo)) { $0 != nil }
         
         context.send(viewAction: .ignoreConfirmed)
         
-        try await deferredProcessing.fulfill()
+        try await deferredAlert.fulfill()
         
+        #expect(!context.viewState.isProcessingIgnoreRequest)
         #expect(context.viewState.dmRecipientInfo?.member.isIgnored == false)
         #expect(context.alertInfo != nil)
     }
@@ -221,37 +239,7 @@ struct RoomDetailsScreenViewModelTests {
     mutating func unignoreSuccess() async throws {
         let recipient = RoomMemberProxyMock.mockIgnored
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
-        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
-        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
-                                               userSession: UserSessionMock(.init()),
-                                               analyticsService: AnalyticsServiceMock(.init()),
-                                               userIndicatorController: UserIndicatorControllerMock(),
-                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
-        
-        let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
-        
-        try await deferredRecipient.fulfill()
-        
-        #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
-        
-        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
-                                                  transitionValues: [false, true, false])
-        
-        context.send(viewAction: .unignoreConfirmed)
-        
-        try await deferredProcessing.fulfill()
-        
-        #expect(context.viewState.dmRecipientInfo?.member.isIgnored == false)
-    }
-    
-    @Test
-    mutating func unignoreFailure() async throws {
-        let recipient = RoomMemberProxyMock.mockIgnored
-        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.unignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
@@ -267,13 +255,61 @@ struct RoomDetailsScreenViewModelTests {
         
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
-        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
-                                                  transitionValues: [false, true, false])
+        // The request is in flight exactly while the closure runs, so assert the transient
+        // processing state in there — observing it from outside is racy as it can be cleared
+        // again before the observation is ever serviced.
+        clientProxy.unignoreUserClosure = { [context] _ in
+            await MainActor.run { #expect(context.viewState.isProcessingIgnoreRequest) }
+            return .success(())
+        }
+        
+        // Then wait for the durable outcome of the request.
+        let deferredUnignored = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0?.member.isIgnored == false }
         
         context.send(viewAction: .unignoreConfirmed)
         
-        try await deferredProcessing.fulfill()
+        try await deferredUnignored.fulfill()
         
+        #expect(!context.viewState.isProcessingIgnoreRequest)
+        #expect(context.viewState.dmRecipientInfo?.member.isIgnored == false)
+    }
+    
+    @Test
+    mutating func unignoreFailure() async throws {
+        let recipient = RoomMemberProxyMock.mockIgnored
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
+        let clientProxy = ClientProxyMock(.init())
+        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                               analyticsService: AnalyticsServiceMock(.init()),
+                                               userIndicatorController: UserIndicatorControllerMock(),
+                                               notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                               appSettings: .volatile())
+        
+        let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
+        
+        try await deferredRecipient.fulfill()
+        
+        #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
+        
+        // The request is in flight exactly while the closure runs, so assert the transient
+        // processing state in there — observing it from outside is racy as it can be cleared
+        // again before the observation is ever serviced.
+        clientProxy.unignoreUserClosure = { [context] _ in
+            await MainActor.run { #expect(context.viewState.isProcessingIgnoreRequest) }
+            return .failure(.sdkError(ClientProxyMockError.generic))
+        }
+        
+        // Then wait for the durable outcome of the request.
+        let deferredAlert = deferFulfillment(viewModel.context.observe(\.alertInfo)) { $0 != nil }
+        
+        context.send(viewAction: .unignoreConfirmed)
+        
+        try await deferredAlert.fulfill()
+        
+        #expect(!context.viewState.isProcessingIgnoreRequest)
         #expect(context.viewState.dmRecipientInfo?.member.isIgnored == true)
         #expect(context.alertInfo != nil)
     }

@@ -280,10 +280,18 @@ struct RoomNotificationSettingsScreenViewModelTests {
     @Test
     mutating func deleteCustomSettingTappedFailure() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
-        notificationSettingsProxyMock.restoreDefaultNotificationModeRoomIdThrowableError = NotificationSettingsError.Generic(msg: "error")
         let viewModel = RoomNotificationSettingsScreenViewModel(notificationSettingsProxy: notificationSettingsProxyMock,
                                                                 roomProxy: roomProxyMock,
                                                                 displayAsUserDefinedRoomSettings: true)
+        
+        // The request is in flight exactly while the closure runs, so assert the transient
+        // deleting state in there — observing it from outside is racy as it can be cleared
+        // again before the observation is ever serviced.
+        notificationSettingsProxyMock.restoreDefaultNotificationModeRoomIdClosure = { [context = viewModel.context] _ in
+            await MainActor.run { #expect(context.viewState.deletingCustomSetting) }
+            throw NotificationSettingsError.Generic(msg: "error")
+        }
+        
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState)) { state in
             state.notificationSettingsState.isLoaded
         }
@@ -298,13 +306,14 @@ struct RoomNotificationSettingsScreenViewModelTests {
             }
             .store(in: &cancellables)
         
-        let deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.deletingCustomSetting),
-                                                 transitionValues: [false, true, false])
+        // Then wait for the durable outcome of the request.
+        let deferredAlert = deferFulfillment(viewModel.context.observe(\.alertInfo)) { $0 != nil }
         
         viewModel.context.send(viewAction: .deleteCustomSettingTapped)
         
-        try await deferredViewState.fulfill()
+        try await deferredAlert.fulfill()
         
+        #expect(!viewModel.context.viewState.deletingCustomSetting)
         // an alert is expected
         #expect(viewModel.context.alertInfo?.id == .restoreDefaultFailed)
         // the `dismiss` action must not have been sent

@@ -101,7 +101,9 @@ struct UserSessionFlowCoordinatorTests {
         #expect((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
         #expect(detailCoordinator == nil)
         
-        try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
+        try await process(route: .room(roomID: "1", via: []),
+                          expectedUserSessionState: .tabBar,
+                          expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         #expect(tabCoordinator?.sheetCoordinator == nil)
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         #expect(detailCoordinator != nil)
@@ -147,6 +149,10 @@ struct UserSessionFlowCoordinatorTests {
         let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: "2", mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
         try await process(route: .share(sharePayload),
                           expectedChatsState: .roomList(detailState: .room(roomID: "2")))
+        
+        let splitCoordinator = try #require(chatsSplitCoordinator)
+        let deferredSheet = deferFulfillment(splitCoordinator.observe(\.sheetCoordinatorID)) { $0 != nil }
+        try await deferredSheet.fulfill()
         
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         #expect(tabCoordinator?.sheetCoordinator == nil)
@@ -240,21 +246,22 @@ struct UserSessionFlowCoordinatorTests {
     
     // MARK: - Helpers
     
-    private mutating func process(route: AppRoute,
-                                  expectedUserSessionState: UserSessionFlowCoordinator.State? = nil,
-                                  expectedChatsState: ChatsTabFlowCoordinatorStateMachine.State? = nil) async throws {
+    private func process(route: AppRoute,
+                         expectedUserSessionState: UserSessionFlowCoordinator.State? = nil,
+                         expectedChatsState: ChatsTabFlowCoordinatorStateMachine.State? = nil) async throws {
+        // Keep the previous root coordinator alive while waiting, otherwise a newly presented
+        // coordinator could be allocated at the same address and be mistaken for it below.
+        let previousDetailRootCoordinator = chatsSplitCoordinator?.detailRootCoordinator
+        let previousDetailRootCoordinatorID = previousDetailRootCoordinator.map { ObjectIdentifier($0) }
+        
         let deferredUserSession: DeferredFulfillment<UserSessionFlowCoordinator.State>? = if let expectedUserSessionState {
-            deferFulfillment(stateMachineFactory.userSessionFlowStatePublisher.delay(for: .milliseconds(100), scheduler: DispatchQueue.main)) {
-                $0 == expectedUserSessionState
-            }
+            deferFulfillment(stateMachineFactory.userSessionFlowStatePublisher) { $0 == expectedUserSessionState }
         } else {
             nil
         }
         
         let deferredChatsState: DeferredFulfillment<ChatsTabFlowCoordinatorStateMachine.State>? = if let expectedChatsState {
-            deferFulfillment(stateMachineFactory.chatsTabFlowStatePublisher.delay(for: .milliseconds(100), scheduler: DispatchQueue.main)) {
-                $0 == expectedChatsState
-            }
+            deferFulfillment(stateMachineFactory.chatsTabFlowStatePublisher) { $0 == expectedChatsState }
         } else {
             nil
         }
@@ -262,6 +269,36 @@ struct UserSessionFlowCoordinatorTests {
         userSessionFlowCoordinator.handleAppRoute(route, animated: true)
         try await deferredUserSession?.fulfill()
         try await deferredChatsState?.fulfill()
+        
+        // The state machines' states change before the coordinators have updated their stacks,
+        // so also wait for the navigation side effects implied by the expected states.
+        switch expectedUserSessionState {
+        case .settingsScreen:
+            let tabCoordinator = try #require(tabCoordinator)
+            let deferredSheet = deferFulfillment(tabCoordinator.observe(\.sheetCoordinatorID)) { $0 != nil }
+            try await deferredSheet.fulfill()
+        case .tabBar:
+            let tabCoordinator = try #require(tabCoordinator)
+            let deferredSheet = deferFulfillment(tabCoordinator.observe(\.sheetCoordinatorID)) { $0 == nil }
+            try await deferredSheet.fulfill()
+        default:
+            break
+        }
+        
+        switch expectedChatsState {
+        case .roomList(detailState: .some(.room)):
+            let splitCoordinator = try #require(chatsSplitCoordinator)
+            let deferredDetail = deferFulfillment(splitCoordinator.observe(\.detailRootCoordinatorID)) { $0 != nil && $0 != previousDetailRootCoordinatorID }
+            try await deferredDetail.fulfill()
+        case .shareExtensionRoomList:
+            let splitCoordinator = try #require(chatsSplitCoordinator)
+            let deferredSheet = deferFulfillment(splitCoordinator.observe(\.sheetCoordinatorID)) { $0 != nil }
+            try await deferredSheet.fulfill()
+        default:
+            break
+        }
+        
+        withExtendedLifetime(previousDetailRootCoordinator) { }
     }
     
     /// Other services retract indicators, so this filters based on the reachability ID.

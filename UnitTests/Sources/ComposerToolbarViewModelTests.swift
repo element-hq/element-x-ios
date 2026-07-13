@@ -760,11 +760,14 @@ final class ComposerToolbarViewModelTests {
                                              analyticsService: AnalyticsServiceMock(.init()),
                                              composerDraftService: draftServiceMock)
         
+        // Both violations come from the subject's initial value: wait for them to disable the composer.
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
-        mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation)])
         try await fulfillment.fulfill()
         
-        fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is still disabled") { $0.canSend == false }
+        // The view model consumes the changes through an AsyncPublisher which drops values sent
+        // while the previous ones are still being processed, so wait for each change's resulting
+        // view state update (skipping the replayed current value) before sending the next one.
+        fulfillment = deferFulfillment(viewModel.context.$viewState.dropFirst(), message: "Composer is still disabled") { $0.canSend == false }
         mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinned)])
         try await fulfillment.fulfill()
         

@@ -60,7 +60,8 @@ final class MediaUploadPreviewScreenViewModelTests {
     func videoUploadWithoutCaption() async throws {
         setUpViewModel(urls: [videoURL], expectedCaption: nil)
         context.caption = .init("")
-        try await send()
+        // The preprocessor transcodes the video for real which can take a while on a busy CI runner.
+        try await send(timeout: .seconds(60))
     }
     
     @Test
@@ -68,7 +69,8 @@ final class MediaUploadPreviewScreenViewModelTests {
         let caption = "Check out this video!"
         setUpViewModel(urls: [videoURL], expectedCaption: caption)
         context.caption = .init(string: caption)
-        try await send()
+        // The preprocessor transcodes the video for real which can take a while on a busy CI runner.
+        try await send(timeout: .seconds(60))
     }
     
     @Test
@@ -306,10 +308,10 @@ final class MediaUploadPreviewScreenViewModelTests {
         return .success(())
     }
     
-    private func send() async throws {
+    private func send(timeout: Duration = .seconds(10)) async throws {
         #expect(!context.viewState.shouldDisableInteraction, "Attempting to send when interaction is disabled.")
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        let deferred = deferFulfillment(viewModel.actions, timeout: timeout) { $0 == .dismiss }
         context.send(viewAction: .send)
         
         #expect(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")

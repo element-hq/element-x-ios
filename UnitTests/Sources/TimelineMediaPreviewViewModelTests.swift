@@ -181,7 +181,13 @@ struct TimelineMediaPreviewViewModelTests {
         
         // When confirming the redaction.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
-        context.send(viewAction: .redactConfirmation(item: mediaItem))
+        
+        // The redaction runs in an unstructured task that races against the dismiss action,
+        // so wait for the mock to be called instead of asserting right after the dismiss.
+        await waitForConfirmation { confirmation in
+            timelineController.redactClosure = { _ in confirmation() }
+            context.send(viewAction: .redactConfirmation(item: mediaItem))
+        }
         
         // Then the item should be redacted and the view should be dismissed.
         try await deferred.fulfill()

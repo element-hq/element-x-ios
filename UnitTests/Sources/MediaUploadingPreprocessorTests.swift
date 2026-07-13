@@ -74,8 +74,14 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(videoInfo.thumbnailInfo?.size ?? 0, 183_093, within: 100))
         #expect(videoInfo.thumbnailInfo?.width == 800)
         #expect(videoInfo.thumbnailInfo?.height == 450)
+    }
+    
+    // Split from landscapeMovVideoProcessing: each transcode is slow enough on a busy CI runner
+    // that running both in a single test can exceed the execution time allowance.
+    @Test
+    func landscapeMovVideoProcessingOptimized() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil), "Failed retrieving test asset")
         
-        // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
@@ -129,8 +135,14 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(videoInfo.thumbnailInfo?.size ?? 0, 40976, within: 100))
         #expect(videoInfo.thumbnailInfo?.width == 337)
         #expect(videoInfo.thumbnailInfo?.height == 600)
+    }
+    
+    // Split from portraitMp4VideoProcessing: each transcode is slow enough on a busy CI runner
+    // that running both in a single test can exceed the execution time allowance.
+    @Test
+    func portraitMp4VideoProcessingOptimized() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil), "Failed retrieving test asset")
         
-        // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
