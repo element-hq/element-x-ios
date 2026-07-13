@@ -12,6 +12,8 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Requested to join
   internal static var notificationKnockRequestBody: String { return UntranslatedL10n.tr("Untranslated", "notification_knock_request_body") }
+  /// Started sharing their live location
+  internal static var notificationLiveLocationStartedBody: String { return UntranslatedL10n.tr("Untranslated", "notification_live_location_started_body") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
   /// Search for chats and messages

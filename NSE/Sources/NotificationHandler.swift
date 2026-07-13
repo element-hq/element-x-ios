@@ -144,11 +144,14 @@ nonisolated class NotificationHandler {
                  .keyVerificationKey,
                  .keyVerificationMac,
                  .keyVerificationDone,
-                 .reactionContent:
+                 .reactionContent,
+                 .beacon:
                 return .unsupportedShouldDiscard
             }
         case .state(let stateContent):
             switch stateContent {
+            case .beaconInfo:
+                return .shouldDisplay
             case .roomMemberContent(_, .knock):
                 // MSCxxxx: the homeserver pushes knocks to users who can act on them.
                 return .shouldDisplay

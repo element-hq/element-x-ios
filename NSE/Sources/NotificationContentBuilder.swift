@@ -64,7 +64,7 @@ nonisolated struct NotificationContentBuilder {
                 await processMessageLike(notificationContent: &notificationContent,
                                          notificationItem: notificationItem,
                                          mediaProvider: mediaProvider)
-
+                
                 switch messageContent {
                 case .roomMessage(let messageType, _):
                     await processRoomMessage(notificationContent: &notificationContent,
@@ -82,6 +82,11 @@ nonisolated struct NotificationContentBuilder {
                 }
             case .state(let stateContent):
                 switch stateContent {
+                case .beaconInfo:
+                    await processMessageLike(notificationContent: &notificationContent,
+                                             notificationItem: notificationItem,
+                                             mediaProvider: mediaProvider)
+                    notificationContent.body = UntranslatedL10n.notificationLiveLocationStartedBody
                 case .roomMemberContent(_, .knock):
                     // MSCxxxx: the homeserver pushes knocks to users who can act on them.
                     await processMessageLike(notificationContent: &notificationContent,
