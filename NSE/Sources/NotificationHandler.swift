@@ -148,8 +148,13 @@ nonisolated class NotificationHandler {
                  .beacon:
                 return .unsupportedShouldDiscard
             }
-        case .state:
-            return .unsupportedShouldDiscard
+        case .state(let stateContent):
+            switch stateContent {
+            case .beaconInfo:
+                return .shouldDisplay
+            default:
+                return .unsupportedShouldDiscard
+            }
         case .none:
             return .unsupportedShouldDiscard
         }
