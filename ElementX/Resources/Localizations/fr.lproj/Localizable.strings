@@ -2,7 +2,7 @@
 "a11y_add_reaction" = "Ajouter une réaction: %1$@";
 "a11y_address" = "Adresse";
 "a11y_avatar" = "Avatar";
-"a11y_clear_search_field" = "Clear search field";
+"a11y_clear_search_field" = "Effacer le champ de recherche";
 "a11y_collapse_message_text_field" = "Réduire la taille du composeur";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
@@ -16,6 +16,7 @@
 "a11y_join_call" = "Rejoindre l’appel";
 "a11y_jump_to_bottom" = "Retourner à la fin de la conversation";
 "a11y_jump_to_unread" = "Aller aux messages non lus";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Mentions uniquement";
 "a11y_notifications_muted" = "En sourdine";
 "a11y_notifications_new_mentions" = "Nouvelles mentions";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Gérer le compte et les appareils";
 "action_manage_devices" = "Gérez les sessions";
 "action_manage_rooms" = "Gérer les salons";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Message";
 "action_minimize" = "Minimiser";
 "action_next" = "Suivant";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "Espace sans nom";
 "common_not_encrypted" = "Non chiffré";
 "common_offline" = "Hors ligne";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Licences open source";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ou";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Appel non pris en charge";
 "common_unsupported_event" = "Événement non pris en charge";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Nom d’utilisateur";
 "common_verification_cancelled" = "Vérification annulée";
 "common_verification_complete" = "Vérification terminée";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "Le stockage de vos clés n'est pas synchronisé";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ s’est arrêté la dernière fois qu’il a été utilisé. Souhaitez-vous partager un rapport d’incident avec nous ?";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Personne ne partage sa position";
 "screen_live_location_sheet_sharing_live_location" = "Partage de la position en direct";
 "screen_live_location_sheet_title" = "Sur la carte";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Ce compte a été supprimé.";
 "screen_login_error_invalid_credentials" = "Nom d’utilisateur et/ou mot de passe incorrects";
 "screen_login_error_invalid_user_id" = "Il ne s’agit pas d’un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "En cours";
 "screen_polls_history_filter_past" = "Terminés";
 "screen_polls_history_title" = "Sondages";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Historique des Push";
 "screen_qr_code_login_connecting_subtitle" = "Établissement d'une connexion sécurisée";
 "screen_qr_code_login_connection_note_secure_state_description" = "Aucune connexion sécurisée n'a pu être établie avec la nouvelle session. Vos sessions existantes sont toujours en sécurité et vous n'avez pas à vous en soucier.";

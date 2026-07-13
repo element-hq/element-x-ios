@@ -2,7 +2,7 @@
 "a11y_add_reaction" = "Reageeri: %1$@";
 "a11y_address" = "Aadress";
 "a11y_avatar" = "Tunnuspilt";
-"a11y_clear_search_field" = "Clear search field";
+"a11y_clear_search_field" = "Tühjenda otsinguväli";
 "a11y_collapse_message_text_field" = "Vähenda tekstivälja";
 "a11y_create_poll_votes_allowed_decrease" = "Vähenda kasutaja kohta lubatud hääletuskordi";
 "a11y_create_poll_votes_allowed_increase" = "Suurenda kasutaja kohta lubatud hääletuskordi";
@@ -16,6 +16,7 @@
 "a11y_join_call" = "Liitu kõnega";
 "a11y_jump_to_bottom" = "Mine lõppu";
 "a11y_jump_to_unread" = "Mine lugemata sõnumite juurde";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Ainult mainimised";
 "a11y_notifications_muted" = "Summutatud";
 "a11y_notifications_new_mentions" = "Uued mainimised";
@@ -37,8 +38,8 @@
 "a11y_qr_code" = "QR-kood";
 "a11y_react_with" = "Reageeri emotikoniga %1$@";
 "a11y_react_with_other_emojis" = "Reageeri mõne muu emotikoniga";
-"a11y_read_receipts_multiple" = "Seda lugesid %1$@ ja %2$@";
-"a11y_read_receipts_single" = "Seda luges %1$@";
+"a11y_read_receipts_multiple" = "Eelmist sõnumit lugesid %1$@ ja %2$@";
+"a11y_read_receipts_single" = "Eelmist sõnumit luges %1$@ inimest";
 "a11y_read_receipts_tap_to_show_all_ios" = "Vaata kõiki";
 "a11y_remove_reaction" = "Eemalda reageerimine %1$@ emotikoniga";
 "a11y_remove_reaction_with" = "Eemalda reageerimine: %1$@";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Halda kasutajakontosid ja seadmeid";
 "action_manage_devices" = "Halda seadmeid";
 "action_manage_rooms" = "Halda jututuba";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Saada sõnum";
 "action_minimize" = "Minimeeri";
 "action_next" = "Edasi";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "Kogukonnal pole nime";
 "common_not_encrypted" = "Krüptimata";
 "common_offline" = "Võrgust väljas";
+"common_on_a_call" = "Kõne on pooleli";
 "common_open_source_licenses" = "Avatud lähtekoodiga litsentsid";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "või";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "See kõne pole toetatud";
 "common_unsupported_event" = "Toetamata sündmus";
 "common_user_started_a_call" = "%1$@ helistas";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Kasutajanimi";
 "common_verification_cancelled" = "Verifitseerimine on katkestatud";
 "common_verification_complete" = "Verifitseerimine on tehtud";
@@ -409,10 +419,11 @@
 "confirm_recovery_key_banner_primary_button_title" = "Sisesta oma taastevõti";
 "confirm_recovery_key_banner_secondary_button_title" = "Kas unustasid oma taastevõtme?";
 "confirm_recovery_key_banner_title" = "Sinu võtmehoidla pole sünkroonis";
-"content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
-"content_scanner_unsafe_message" = "Preview and download have been disabled.";
-"content_scanner_unsafe_title" = "The file is not safe";
+"content_scanner_not_found" = "Allalaadimist pole saadaval.";
+"content_scanner_not_found_title" = "Faili ei leidu";
+"content_scanner_scanning" = "Skaneerin…";
+"content_scanner_unsafe_message" = "Eelvaade ja allalaadimine on lülitatud välja.";
+"content_scanner_unsafe_title" = "See fail pole ohutu";
 "crash_detection_dialog_content" = "%1$@ jooksis kokku viimati, kui seda kasutasid. Kas tahaksid selle kohta meile veateate saata?";
 "crypto_event_authenticity_mismatched_sender" = "Sündmuse saatja ja seadme omanik pole vastavuses.";
 "crypto_event_authenticity_not_guaranteed" = "Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud.";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Mitte keegi ei jaga oma asukohta";
 "screen_live_location_sheet_sharing_live_location" = "Asukoht on jagamisel reaalajas";
 "screen_live_location_sheet_title" = "Kaardil";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "See kasutajakonto on kustutatud.";
 "screen_login_error_invalid_credentials" = "Vigane kasutajanimi ja/või salasõna";
 "screen_login_error_invalid_user_id" = "See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Käimasolev küsitlus";
 "screen_polls_history_filter_past" = "Varasem küsitlus";
 "screen_polls_history_title" = "Küsitlused";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Tõuketeadete ajalugu";
 "screen_qr_code_login_connecting_subtitle" = "Loome turvalist ühendust";
 "screen_qr_code_login_connection_note_secure_state_description" = "Turvalise ühenduse loomine uue seadmega ei õnnestunud. Sinu olemasolevad seadmed on jätkuvalt turvatud ja sa ei pea nende pärast muretsema.";

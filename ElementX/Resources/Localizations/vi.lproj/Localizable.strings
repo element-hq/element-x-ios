@@ -16,6 +16,7 @@
 "a11y_join_call" = "Tham gia cuộc gọi";
 "a11y_jump_to_bottom" = "Xuống cuối";
 "a11y_jump_to_unread" = "Jump to unread";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Chỉ khi được đề cập tới";
 "a11y_notifications_muted" = "Tắt thông báo";
 "a11y_notifications_new_mentions" = "Đề cập mới";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Quản lý tài khoản và thiết bị";
 "action_manage_devices" = "Quản lý thiết bị";
 "action_manage_rooms" = "Quản lý phòng trò chuyện";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Tin nhắn";
 "action_minimize" = "Thu nhỏ";
 "action_next" = "Tiếp";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "Không có tên space";
 "common_not_encrypted" = "Không được mã hóa";
 "common_offline" = "Ngoại tuyến";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Giấy phép mã nguồn mở";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "hoặc";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Cuộc gọi không được hỗ trợ";
 "common_unsupported_event" = "Sự kiện không được hỗ trợ";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Tên người dùng";
 "common_verification_cancelled" = "Đã hủy xác thực";
 "common_verification_complete" = "Xác minh hoàn tất";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "Dữ liệu khóa của bạn không còn đồng bộ";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ đã bị lỗi ở lần sử dụng gần nhất. Bạn có muốn chia sẻ báo cáo lỗi với chúng tôi không?";
@@ -970,7 +981,9 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
-"screen_login_error_deactivated_account" = "Tài khoản này đã bị vô hiệu hóa.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
+"screen_login_error_deactivated_account" = "Tài khoản này đã bị xóa.";
 "screen_login_error_invalid_credentials" = "Tên người dùng và/hoặc mật khẩu không chính xác";
 "screen_login_error_invalid_user_id" = "Đây không phải là mã nhận dạng người dùng hợp lệ. Định dạng mong đợi: ‘@user:homeserver.org’";
 "screen_login_error_refresh_tokens" = "Máy chủ này được cấu hình sử dụng refresh token. Điều này không được hỗ trợ khi đăng nhập bằng mật khẩu.";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Đang diễn ra";
 "screen_polls_history_filter_past" = "Quá khứ";
 "screen_polls_history_title" = "Cuộc thăm dò ý kiến";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Establishing a secure connection";
 "screen_qr_code_login_connection_note_secure_state_description" = "A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.";

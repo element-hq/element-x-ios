@@ -56,6 +56,8 @@ internal nonisolated enum L10n {
   internal static var a11yJumpToBottom: String { return L10n.tr("Localizable", "a11y_jump_to_bottom") }
   /// Jump to unread
   internal static var a11yJumpToUnread: String { return L10n.tr("Localizable", "a11y_jump_to_unread") }
+  /// Jump to first unread message
+  internal static var a11yJumpToUnreadMessages: String { return L10n.tr("Localizable", "a11y_jump_to_unread_messages") }
   /// Mentions only
   internal static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
   /// Muted
@@ -306,6 +308,8 @@ internal nonisolated enum L10n {
   internal static var actionManageDevices: String { return L10n.tr("Localizable", "action_manage_devices") }
   /// Manage rooms
   internal static var actionManageRooms: String { return L10n.tr("Localizable", "action_manage_rooms") }
+  /// Mark as read
+  internal static var actionMarkAsRead: String { return L10n.tr("Localizable", "action_mark_as_read") }
   /// Message
   internal static var actionMessage: String { return L10n.tr("Localizable", "action_message") }
   /// Minimise
@@ -576,6 +580,14 @@ internal nonisolated enum L10n {
   internal static var commonFrequentlyUsed: String { return L10n.tr("Localizable", "common_frequently_used") }
   /// Gallery
   internal static var commonGallery: String { return L10n.tr("Localizable", "common_gallery") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func commonGalleryReplyAttachments(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_gallery_reply_attachments", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
+  internal static func commonGalleryReplyMediaItems(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_gallery_reply_media_items", p1)
+  }
   /// GIF
   internal static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Group call in progress
@@ -854,6 +866,20 @@ internal nonisolated enum L10n {
   internal static func commonUserStartedACall(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_user_started_a_call", String(describing: p1))
   }
+  /// Away
+  internal static var commonUserStatusAway: String { return L10n.tr("Localizable", "common_user_status_away") }
+  /// Be right back
+  internal static var commonUserStatusBeRightBack: String { return L10n.tr("Localizable", "common_user_status_be_right_back") }
+  /// Custom…
+  internal static var commonUserStatusCustom: String { return L10n.tr("Localizable", "common_user_status_custom") }
+  /// Focus time
+  internal static var commonUserStatusFocusTime: String { return L10n.tr("Localizable", "common_user_status_focus_time") }
+  /// In a meeting
+  internal static var commonUserStatusInAMeeting: String { return L10n.tr("Localizable", "common_user_status_in_a_meeting") }
+  /// On a call
+  internal static var commonUserStatusOnACall: String { return L10n.tr("Localizable", "common_user_status_on_a_call") }
+  /// On the road
+  internal static var commonUserStatusOnTheRoad: String { return L10n.tr("Localizable", "common_user_status_on_the_road") }
   /// Username
   internal static var commonUsername: String { return L10n.tr("Localizable", "common_username") }
   /// Verification cancelled
@@ -2268,6 +2294,10 @@ internal nonisolated enum L10n {
   }
   /// On the map
   internal static var screenLiveLocationSheetTitle: String { return L10n.tr("Localizable", "screen_live_location_sheet_title") }
+  /// Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.
+  internal static var screenLocalNetworkOptInSubtitle: String { return L10n.tr("Localizable", "screen_local_network_opt_in_subtitle") }
+  /// Allow access to local network
+  internal static var screenLocalNetworkOptInTitle: String { return L10n.tr("Localizable", "screen_local_network_opt_in_title") }
   /// This account has been deleted.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
@@ -2582,6 +2612,10 @@ internal nonisolated enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
+  /// Custom status…
+  internal static var screenPreferencesUserStatusCustomHint: String { return L10n.tr("Localizable", "screen_preferences_user_status_custom_hint") }
+  /// What's your status?
+  internal static var screenPreferencesUserStatusPlaceholder: String { return L10n.tr("Localizable", "screen_preferences_user_status_placeholder") }
   /// Push history
   internal static var screenPushHistoryTitle: String { return L10n.tr("Localizable", "screen_push_history_title") }
   /// Establishing a secure connection
@@ -4049,6 +4083,15 @@ internal nonisolated enum L10n {
     /// You're already logged in on this device as %1$@.
     internal static func accountAlreadyLoggedIn(_ p1: Any) -> String {
       return L10n.tr("Localizable", "error.account_already_logged_in", String(describing: p1))
+    }
+  }
+
+  internal enum Screen {
+    internal enum Room {
+      /// Plural format key: "%#@COUNT@"
+      internal static func timelineRedactedMessages(_ p1: Int) -> String {
+        return L10n.tr("Localizable", "screen.room.timeline_redacted_messages", p1)
+      }
     }
   }
 }

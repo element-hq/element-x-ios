@@ -43,9 +43,41 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ ja %2$d muu on lukenut viestin</string>
+			<string>%1$@ ja %2$d muu ovat lukeneet edellisen viestin</string>
 			<key>other</key>
-			<string>%1$@ ja %2$d muuta on lukenut viestin</string>
+			<string>%1$@ ja %2$d muuta ovat lukeneet edellisen viestin</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>common_gallery_reply_attachments</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d liite...</string>
+			<key>other</key>
+			<string>%1$d liitettä...</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>common_gallery_reply_media_items</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d mediakohde…</string>
+			<key>other</key>
+			<string>%1$d mediakohdetta…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -274,6 +306,22 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>screen.room.timeline_redacted_messages</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d removed message</string>
+			<key>other</key>
+			<string>%1$d removed messages</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>screen_advanced_settings_live_location_update_distance</key>
 	<dict>
 		<key>COUNT</key>
@@ -331,9 +379,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Minimum %1$d character. Do not use your account password</string>
+			<string>Vähintään %1$d merkki. Älä käytä tilisi salasanaa</string>
 			<key>other</key>
-			<string>Minimum %1$d characters. Do not use your account password</string>
+			<string>Vähintään %1$d merkkiä. Älä käytä tilisi salasanaa</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -562,7 +610,7 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>screen_timeline_active_call_extra_joined_count</key>
+	<key>screen_timeline_active_call_joined_count</key>
 	<dict>
 		<key>COUNT</key>
 		<dict>
@@ -571,9 +619,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>+ %1$d joined</string>
+			<string>%1$d osallistujaa</string>
 			<key>other</key>
-			<string>+ %1$d joined</string>
+			<string>%1$d osallistujaa</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

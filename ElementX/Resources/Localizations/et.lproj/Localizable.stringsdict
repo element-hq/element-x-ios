@@ -43,9 +43,41 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Seda lugesid %1$@ ja veel %2$d kasutaja</string>
+			<string>Eelmist sõnumit luges %1$@ ja veel %2$d kasutaja</string>
 			<key>other</key>
-			<string>Seda lugesid %1$@ ja veel %2$d kasutajat</string>
+			<string>Eelmist sõnumit lugesid %1$@ ja veel %2$d kasutajat</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>common_gallery_reply_attachments</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d manus…</string>
+			<key>other</key>
+			<string>%1$d manust…</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>common_gallery_reply_media_items</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d multimeediaobjekt…</string>
+			<key>other</key>
+			<string>%1$d multimeediaobjekti…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -270,6 +302,22 @@
 			<string>%d jututuba</string>
 			<key>other</key>
 			<string>%d jututuba</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen.room.timeline_redacted_messages</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d removed message</string>
+			<key>other</key>
+			<string>%1$d removed messages</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -562,7 +610,7 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>screen_timeline_active_call_extra_joined_count</key>
+	<key>screen_timeline_active_call_joined_count</key>
 	<dict>
 		<key>COUNT</key>
 		<dict>

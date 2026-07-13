@@ -16,6 +16,7 @@
 "a11y_join_call" = "Pridruži se pozivu";
 "a11y_jump_to_bottom" = "Idi na dno";
 "a11y_jump_to_unread" = "Skoči na nepročitano";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Samo spominjanja";
 "a11y_notifications_muted" = "Bez zvuka";
 "a11y_notifications_new_mentions" = "Nova spominjanja";
@@ -38,7 +39,7 @@
 "a11y_react_with" = "Reagiraj s %1$@";
 "a11y_react_with_other_emojis" = "Reagiraj s drugim emotikonima";
 "a11y_read_receipts_multiple" = "Pročitali %1$@ i %2$@";
-"a11y_read_receipts_single" = "Pročitao korisnik %1$@";
+"a11y_read_receipts_single" = "Prethodnu poruku pročitao/la %1$@";
 "a11y_read_receipts_tap_to_show_all_ios" = "Dodirnite za prikaz svih";
 "a11y_remove_reaction" = "Ukloni reakciju: %1$@";
 "a11y_remove_reaction_with" = "Ukloni reakciju s %1$@";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Upravljanje računom i uređajima";
 "action_manage_devices" = "Upravljanje uređajima";
 "action_manage_rooms" = "Upravljaj sobama";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Poruka";
 "action_minimize" = "Minimiziraj";
 "action_next" = "Dalje";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "Nema naziva prostora";
 "common_not_encrypted" = "Nije šifrirano";
 "common_offline" = "Izvan mreže";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Licencije otvorenog koda";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ili";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Nepodržani poziv";
 "common_unsupported_event" = "Nepodržani događaj";
 "common_user_started_a_call" = "%1$@ je započeo poziv";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Korisničko ime";
 "common_verification_cancelled" = "Provjera je otkazana";
 "common_verification_complete" = "Provjera je dovršena";
@@ -409,10 +419,11 @@
 "confirm_recovery_key_banner_primary_button_title" = "Unesite svoj ključ za oporavak";
 "confirm_recovery_key_banner_secondary_button_title" = "Zaboravili ste ključ za oporavak?";
 "confirm_recovery_key_banner_title" = "Vaša pohrana ključeva nije sinkronizirana";
-"content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
-"content_scanner_unsafe_message" = "Preview and download have been disabled.";
-"content_scanner_unsafe_title" = "The file is not safe";
+"content_scanner_not_found" = "Preuzimanje nije dostupno.";
+"content_scanner_not_found_title" = "Datoteka nije pronađena";
+"content_scanner_scanning" = "Skeniranje...";
+"content_scanner_unsafe_message" = "Pregled i preuzimanje su onemogućeni.";
+"content_scanner_unsafe_title" = "Datoteka nije sigurna";
 "crash_detection_dialog_content" = "%1$@ neočekivano je prestao s radom prilikom posljednjeg korištenja. Želite li s nama podijeliti izvješće o padu?";
 "crypto_event_authenticity_mismatched_sender" = "Pošiljatelj događaja ne podudara se s vlasnikom uređaja koji ga je poslao.";
 "crypto_event_authenticity_not_guaranteed" = "Autentičnost ove šifrirane poruke ne može se jamčiti na ovom uređaju";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nitko ne dijeli svoju lokaciju";
 "screen_live_location_sheet_sharing_live_location" = "Dijeljenje lokacije uživo";
 "screen_live_location_sheet_title" = "Na karti";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Ovaj je račun deaktiviran.";
 "screen_login_error_invalid_credentials" = "Netočno korisničko ime i/ili zaporka";
 "screen_login_error_invalid_user_id" = "To nije valjani identifikator korisnika. Očekivani oblik: ‘@korisnik:matičniposlužitelj.org’";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Tekuće";
 "screen_polls_history_filter_past" = "Prijašnje";
 "screen_polls_history_title" = "Ankete";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Povijest push obavijesti";
 "screen_qr_code_login_connecting_subtitle" = "Uspostavljanje sigurne veze";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nije moguće uspostaviti sigurnu vezu s novim uređajem. Vaši postojeći uređaji i dalje su sigurni i ne morate se brinuti zbog njih.";

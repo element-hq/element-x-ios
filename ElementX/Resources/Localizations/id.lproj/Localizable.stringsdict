@@ -39,7 +39,39 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Dibaca oleh %1$@ dan %2$d lainnya</string>
+			<string>Pesan sebelumnya telah dibaca oleh %1$@ dan %2$d orang lainnya</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>common_gallery_reply_attachments</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d attachment…</string>
+			<key>other</key>
+			<string>%1$d attachments…</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>common_gallery_reply_media_items</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d media item…</string>
+			<key>other</key>
+			<string>%1$d media items…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -108,10 +140,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Room</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>Ruangan %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -124,10 +154,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d selected</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d terpilih</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -140,10 +168,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Space</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>Ruang %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -184,10 +210,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>You have %d new message.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>Anda memiliki %d pesan baru.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -248,7 +272,7 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>screen_advanced_settings_live_location_update_distance</key>
+	<key>screen.room.timeline_redacted_messages</key>
 	<dict>
 		<key>COUNT</key>
 		<dict>
@@ -257,9 +281,23 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
+			<string>%1$d removed message</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>%1$d removed messages</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_advanced_settings_live_location_update_distance</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>Setiap %1$d meter</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -316,10 +354,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d degree</string>
 			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>%1$d derajat</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -332,10 +368,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Leave %1$d room and space</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Tinggalkan ruangan dan ruang %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -348,10 +382,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d person</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d orang</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -378,10 +410,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Banned</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d Dilarang</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -408,10 +438,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Invited</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d Diundang</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -508,15 +536,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>Hapus ruangan %1$d dari %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
-	<key>screen_timeline_active_call_extra_joined_count</key>
+	<key>screen_timeline_active_call_joined_count</key>
 	<dict>
 		<key>COUNT</key>
 		<dict>
@@ -525,9 +551,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>+ %1$d joined</string>
+			<string>%1$d joined</string>
 			<key>other</key>
-			<string>+ %1$d joined</string>
+			<string>%1$d joined</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -540,10 +566,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Anda telah memblokir pengguna %1$d. Anda tidak akan menerima notifikasi dari pengguna tersebut.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

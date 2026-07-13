@@ -2,7 +2,7 @@
 "a11y_add_reaction" = "Dodaj reakcję: %1$@";
 "a11y_address" = "Adres";
 "a11y_avatar" = "Awatar";
-"a11y_clear_search_field" = "Clear search field";
+"a11y_clear_search_field" = "Wyczyść pole wyszukiwania";
 "a11y_collapse_message_text_field" = "Zmniejsz pole tekstowe wiadomości";
 "a11y_create_poll_votes_allowed_decrease" = "Zmniejsz liczbę głosów dozwolonych na osobę";
 "a11y_create_poll_votes_allowed_increase" = "Zwiększ liczbę głosów dozwolonych na osobę";
@@ -16,6 +16,7 @@
 "a11y_join_call" = "Dołącz do połączenia";
 "a11y_jump_to_bottom" = "Przejdź na dół";
 "a11y_jump_to_unread" = "Skocz do nieprzeczytanych";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Tylko wzmianki";
 "a11y_notifications_muted" = "Wyciszone";
 "a11y_notifications_new_mentions" = "Nowe wzmianki";
@@ -37,8 +38,8 @@
 "a11y_qr_code" = "Kod QR";
 "a11y_react_with" = "Zareaguj z %1$@";
 "a11y_react_with_other_emojis" = "Zareaguj innym emoji";
-"a11y_read_receipts_multiple" = "Odczytane przez %1$@ i %2$@";
-"a11y_read_receipts_single" = "Odczytane przez %1$@";
+"a11y_read_receipts_multiple" = "Poprzednia wiadomość przeczytana przez %1$@ i %2$@";
+"a11y_read_receipts_single" = "Poprzednia wiadomość przeczytana przez %1$@";
 "a11y_read_receipts_tap_to_show_all_ios" = "Stuknij, aby pokazać wszystkich";
 "a11y_remove_reaction" = "Usuń reakcję %1$@";
 "a11y_remove_reaction_with" = "Usuń reakcję z %1$@";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Zarządzaj kontem i urządzeniami";
 "action_manage_devices" = "Zarządzaj urządzeniami";
 "action_manage_rooms" = "Zarządzaj pokojami";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Wiadomość";
 "action_minimize" = "Minimalizuj";
 "action_next" = "Dalej";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "Brak nazwy przestrzeni";
 "common_not_encrypted" = "Nieszyfrowane";
 "common_offline" = "Offline";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Licencje open-source";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "lub";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Nieobsługiwane połączenie";
 "common_unsupported_event" = "Nieobsługiwane zdarzenie";
 "common_user_started_a_call" = "%1$@ rozpoczął połączenie";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Nazwa użytkownika";
 "common_verification_cancelled" = "Weryfikacja anulowana";
 "common_verification_complete" = "Weryfikacja zakończona";
@@ -409,10 +419,11 @@
 "confirm_recovery_key_banner_primary_button_title" = "Wprowadź klucz przywracania";
 "confirm_recovery_key_banner_secondary_button_title" = "Zapomniałeś klucza przywracania?";
 "confirm_recovery_key_banner_title" = "Magazyn kluczy nie jest zsynchronizowany";
-"content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
-"content_scanner_unsafe_message" = "Preview and download have been disabled.";
-"content_scanner_unsafe_title" = "The file is not safe";
+"content_scanner_not_found" = "Pobieranie niedostępne.";
+"content_scanner_not_found_title" = "Nie znaleziono pliku";
+"content_scanner_scanning" = "Skanuję…";
+"content_scanner_unsafe_message" = "Podgląd i pobieranie zostały wyłączone.";
+"content_scanner_unsafe_title" = "Ten plik nie jest bezpieczny";
 "crash_detection_dialog_content" = "%1$@ uległ awarii podczas ostatniego użycia. Czy chcesz przesłać nam raport o awarii?";
 "crypto_event_authenticity_mismatched_sender" = "Nadawca zdarzenia nie pasuje do właściciela urządzenia, które je wysłał.";
 "crypto_event_authenticity_not_guaranteed" = "Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu.";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nikt nie udostępnia swojej lokalizacji";
 "screen_live_location_sheet_sharing_live_location" = "Udostępnianie lokalizacji na żywo";
 "screen_live_location_sheet_title" = "Na mapie";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "To konto zostało usunięte.";
 "screen_login_error_invalid_credentials" = "Nieprawidłowa nazwa użytkownika i/lub hasło";
 "screen_login_error_invalid_user_id" = "To nie jest prawidłowy identyfikator użytkownika. Oczekiwany format: '@user:homeserver.org'";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "W trakcie";
 "screen_polls_history_filter_past" = "Przeszłe";
 "screen_polls_history_title" = "Ankiety";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Historia powiadomień Push";
 "screen_qr_code_login_connecting_subtitle" = "Nawiązanie bezpiecznego połączenia";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nie udało się nawiązać bezpiecznego połączenia z nowym urządzeniem. Twoje istniejące urządzenia są nadal bezpieczne i nie musisz się o nie martwić.";

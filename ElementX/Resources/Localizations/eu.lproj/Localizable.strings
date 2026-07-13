@@ -16,6 +16,7 @@
 "a11y_join_call" = "Batu deira";
 "a11y_jump_to_bottom" = "Joan behera";
 "a11y_jump_to_unread" = "Jump to unread";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Aipamenak soilik";
 "a11y_notifications_muted" = "Mutututa";
 "a11y_notifications_new_mentions" = "Aipamen berriak";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Kudeatu gailuak";
 "action_manage_rooms" = "Manage rooms";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Bidali mezua";
 "action_minimize" = "Minimise";
 "action_next" = "Hurrengoa";
@@ -294,6 +296,7 @@
 "common_no_space_name" = "No space name";
 "common_not_encrypted" = "Zifratu gabe";
 "common_offline" = "Deskonektatuta";
+"common_on_a_call" = "On a call";
 "common_open_source_licenses" = "Kode irekiko lizentziak";
 "common_optic_id_ios" = "ID optikoa";
 "common_or" = "edo";
@@ -384,6 +387,13 @@
 "common_unsupported_call" = "Deia ez da bateragarria";
 "common_unsupported_event" = "Gertaera ez da bateragarria";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Erabiltzaile-izena";
 "common_verification_cancelled" = "Egiaztaketa ezeztatuta";
 "common_verification_complete" = "Egiaztaketa burututa";
@@ -411,6 +421,7 @@
 "confirm_recovery_key_banner_title" = "Your key storage is out of sync";
 "content_scanner_not_found" = "Download not available.";
 "content_scanner_not_found_title" = "File not found";
+"content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
 "crash_detection_dialog_content" = "%1$@ kraskatu zen azkenekoz erabili zenean. Gurekin partekatu nahi al duzu kraskatzearen txostena?";
@@ -970,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Kontu hau desaktibatuta dago.";
 "screen_login_error_invalid_credentials" = "Erabiltzaile-izena edo/eta pasahitza okerrak";
 "screen_login_error_invalid_user_id" = "This is not a valid user identifier. Expected format: ‘@user:homeserver.org’";
@@ -1112,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Abian direnak";
 "screen_polls_history_filter_past" = "Iraungitakoak";
 "screen_polls_history_title" = "Inkestak";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Konexio segurua ezartzen";
 "screen_qr_code_login_connection_note_secure_state_description" = "Ezin izan da konexio segururik ezarri gailu berriarekin. Lehendik dauden gailuak seguru daude oraindik ere eta ez duzu haietaz kezkatu beharrik.";

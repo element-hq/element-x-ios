@@ -16,6 +16,7 @@
 "a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Jump to bottom";
 "a11y_jump_to_unread" = "Jump to unread";
+"a11y_jump_to_unread_messages" = "Jump to first unread message";
 "a11y_notifications_mentions_only" = "Mentions only";
 "a11y_notifications_muted" = "Muted";
 "a11y_notifications_new_mentions" = "New mentions";
@@ -135,6 +136,7 @@
 "action_manage_account_and_devices" = "Manage account & devices";
 "action_manage_devices" = "Manage devices";
 "action_manage_rooms" = "Manage rooms";
+"action_mark_as_read" = "Mark as read";
 "action_message" = "Message";
 "action_minimize" = "Minimize";
 "action_next" = "Next";
@@ -385,6 +387,13 @@
 "common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Unsupported event";
 "common_user_started_a_call" = "%1$@ started a call";
+"common_user_status_away" = "Away";
+"common_user_status_be_right_back" = "Be right back";
+"common_user_status_custom" = "Custom…";
+"common_user_status_focus_time" = "Focus time";
+"common_user_status_in_a_meeting" = "In a meeting";
+"common_user_status_on_a_call" = "On a call";
+"common_user_status_on_the_road" = "On the road";
 "common_username" = "Username";
 "common_verification_cancelled" = "Verification cancelled";
 "common_verification_complete" = "Verification complete";
@@ -972,6 +981,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "This account has been deleted.";
 "screen_login_error_invalid_credentials" = "Incorrect username and/or password";
 "screen_login_error_invalid_user_id" = "This is not a valid user identifier. Expected format: ‘@user:homeserver.org’";
@@ -1114,6 +1125,8 @@
 "screen_polls_history_filter_ongoing" = "Ongoing";
 "screen_polls_history_filter_past" = "Past";
 "screen_polls_history_title" = "Polls";
+"screen_preferences_user_status_custom_hint" = "Custom status…";
+"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Establishing a secure connection";
 "screen_qr_code_login_connection_note_secure_state_description" = "A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.";

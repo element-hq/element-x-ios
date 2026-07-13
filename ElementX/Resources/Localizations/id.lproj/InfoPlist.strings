@@ -1,6 +1,6 @@
 "NSCameraUsageDescription" = "Untuk mengambil gambar atau video dan mengirimkannya sebagai pesan, Element X memerlukan akses ke kamera.";
-"NSFaceIDUsageDescription" = "Face ID digunakan untuk mengakses aplikasi Anda.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your live location, Element X needs location access when the app is in the background.";
-"NSLocationWhenInUseUsageDescription" = "Berikan akses lokasi supaya Element X dapat berbagi lokasi Anda.";
+"NSFaceIDUsageDescription" = "Face ID digunakan untuk melindungi akses ke akun Anda.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Untuk membagikan lokasi Anda secara langsung dalam obrolan, akses lokasi diperlukan saat aplikasi berada di latar belakang.";
+"NSLocationWhenInUseUsageDescription" = "Ini memungkinkan Anda mengirim lokasi Anda saat ini atau tempat-tempat terdekat dalam obrolan.";
 "NSMicrophoneUsageDescription" = "Untuk merekam dan mengirim pesan dengan audio, Element X perlu mengakses mikrofon.";
 "NSPhotoLibraryUsageDescription" = "Ini memungkinkan Anda menyimpan gambar dan video ke perpustakaan foto Anda.";
