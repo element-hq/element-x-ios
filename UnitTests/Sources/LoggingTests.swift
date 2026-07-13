@@ -331,6 +331,12 @@ final class LoggingTests {
     /// to start with a fresh state (as calling ``Tracing.deleteLogFiles`` would trigger the bug).
     private func setupTest(name: String = #function, redirectTracingFileWriter: Bool = true) throws {
         let testDirectory = URL.appGroupLogsDirectory.appending(component: name, directoryHint: .isDirectory)
+        
+        // CI re-runs failing tests on the same simulator (xcodebuild -retry-tests-on-failure),
+        // so a previous attempt may have left log files behind which would break the assertion
+        // below. No file writer points at the directory at this stage, so deleting it is safe.
+        try? FileManager.default.removeItem(at: testDirectory)
+        
         Tracing.logsDirectoryOverride = testDirectory
         try? FileManager.default.createDirectory(at: testDirectory, withIntermediateDirectories: true)
         
