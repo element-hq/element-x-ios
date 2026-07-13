@@ -405,29 +405,40 @@ final class RoomFlowCoordinatorTests {
     /// Handles the route and waits for the navigation stack's root coordinator to be replaced,
     /// which happens asynchronously after the route has been handled.
     private func processExpectingNewRootCoordinator(route: AppRoute) async throws {
-        let previousRootCoordinatorID = navigationStackCoordinator.rootCoordinatorID
+        // Keep the previous coordinator alive while waiting, otherwise a newly presented
+        // coordinator could be allocated at the same address and be mistaken for it below.
+        let previousRootCoordinator = navigationStackCoordinator.rootCoordinator
+        let previousRootCoordinatorID = previousRootCoordinator.map { ObjectIdentifier($0) }
         roomFlowCoordinator.handleAppRoute(route, animated: true)
         
         let deferred = deferFulfillment(navigationStackCoordinator.observe(\.rootCoordinatorID)) { $0 != nil && $0 != previousRootCoordinatorID }
         try await deferred.fulfill()
+        
+        withExtendedLifetime(previousRootCoordinator) { }
     }
     
     /// Handles the route and waits for the topmost coordinator on the stack to be replaced.
     private func processExpectingNewTopCoordinator(route: AppRoute) async throws {
-        let previousTopCoordinatorID = navigationStackCoordinator.topCoordinatorID
+        let previousTopCoordinator = navigationStackCoordinator.stackCoordinators.last
+        let previousTopCoordinatorID = previousTopCoordinator.map { ObjectIdentifier($0) }
         roomFlowCoordinator.handleAppRoute(route, animated: true)
         
         let deferred = deferFulfillment(navigationStackCoordinator.observe(\.topCoordinatorID)) { $0 != nil && $0 != previousTopCoordinatorID }
         try await deferred.fulfill()
+        
+        withExtendedLifetime(previousTopCoordinator) { }
     }
     
     /// Handles the route and waits for a new sheet to be presented.
     private func processExpectingSheet(route: AppRoute) async throws {
-        let previousSheetCoordinatorID = navigationStackCoordinator.sheetCoordinatorID
+        let previousSheetCoordinator = navigationStackCoordinator.sheetCoordinator
+        let previousSheetCoordinatorID = previousSheetCoordinator.map { ObjectIdentifier($0) }
         roomFlowCoordinator.handleAppRoute(route, animated: true)
         
         let deferred = deferFulfillment(navigationStackCoordinator.observe(\.sheetCoordinatorID)) { $0 != nil && $0 != previousSheetCoordinatorID }
         try await deferred.fulfill()
+        
+        withExtendedLifetime(previousSheetCoordinator) { }
     }
     
     /// Handles the route and waits for the navigation stack to reach the expected size.

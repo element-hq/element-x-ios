@@ -177,9 +177,8 @@ struct ChatsTabFlowCoordinatorTests {
         let deferredPush = deferFulfillment(detailStack.observe(\.stackCoordinators.count)) { $0 == 1 }
         try await deferredPush.fulfill()
         
-        #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect(detailNavigationStack?.stackCoordinators.first is RoomDetailsScreenCoordinator)
-        #expect(detailCoordinator != nil)
+        #expect(detailStack.rootCoordinator is RoomScreenCoordinator)
+        #expect(detailStack.stackCoordinators.first is RoomDetailsScreenCoordinator)
     }
     
     @Test
@@ -218,9 +217,8 @@ struct ChatsTabFlowCoordinatorTests {
         let deferredPush = deferFulfillment(detailStack.observe(\.stackCoordinators.count)) { $0 == 1 }
         try await deferredPush.fulfill()
         
-        #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect(detailNavigationStack?.stackCoordinators.first is RoomScreenCoordinator)
-        #expect(detailCoordinator != nil)
+        #expect(detailStack.rootCoordinator is RoomScreenCoordinator)
+        #expect(detailStack.stackCoordinators.first is RoomScreenCoordinator)
         
         try await process(route: .room(roomID: "3", via: []), expectedState: .roomList(detailState: .room(roomID: "3")))
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
@@ -244,10 +242,9 @@ struct ChatsTabFlowCoordinatorTests {
         let deferredPush = deferFulfillment(detailStack.observe(\.stackCoordinators.count)) { $0 == 1 }
         try await deferredPush.fulfill()
         
-        #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
-        #expect(detailNavigationStack?.stackCoordinators.count == 1)
-        #expect(detailNavigationStack?.stackCoordinators.first is RoomScreenCoordinator)
-        #expect(detailCoordinator != nil)
+        #expect(detailStack.rootCoordinator is RoomScreenCoordinator)
+        #expect(detailStack.stackCoordinators.count == 1)
+        #expect(detailStack.stackCoordinators.first is RoomScreenCoordinator)
         #expect(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderCallsCount == 2)
         #expect(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReceivedArguments?.initialFocussedEventID == "2")
         
@@ -301,7 +298,10 @@ struct ChatsTabFlowCoordinatorTests {
     // MARK: - Private
     
     private func process(route: AppRoute, expectedState: ChatsTabFlowCoordinatorStateMachine.State) async throws {
-        let previousDetailRootCoordinatorID = splitCoordinator.detailRootCoordinatorID
+        // Keep the previous root coordinator alive while waiting, otherwise a newly presented
+        // coordinator could be allocated at the same address and be mistaken for it below.
+        let previousDetailRootCoordinator = splitCoordinator.detailRootCoordinator
+        let previousDetailRootCoordinatorID = previousDetailRootCoordinator.map { ObjectIdentifier($0) }
         
         let deferred = deferFulfillment(stateMachineFactory.chatsTabFlowStatePublisher) { $0 == expectedState }
         chatsTabFlowCoordinator.handleAppRoute(route, animated: true)
@@ -325,6 +325,8 @@ struct ChatsTabFlowCoordinatorTests {
         default:
             break
         }
+        
+        withExtendedLifetime(previousDetailRootCoordinator) { }
     }
 }
 
@@ -335,9 +337,14 @@ private extension NavigationSplitCoordinator {
         detailCoordinator.map { ObjectIdentifier($0) }
     }
     
+    /// The root coordinator inside the detail navigation stack.
+    var detailRootCoordinator: (any CoordinatorProtocol)? {
+        (detailCoordinator as? NavigationStackCoordinator)?.rootCoordinator
+    }
+    
     /// The identity of the root coordinator inside the detail navigation stack.
     var detailRootCoordinatorID: ObjectIdentifier? {
-        ((detailCoordinator as? NavigationStackCoordinator)?.rootCoordinator).map { ObjectIdentifier($0) }
+        detailRootCoordinator.map { ObjectIdentifier($0) }
     }
     
     var sheetCoordinatorID: ObjectIdentifier? {
