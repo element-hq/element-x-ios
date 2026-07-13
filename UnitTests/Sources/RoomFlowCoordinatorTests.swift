@@ -29,34 +29,33 @@ final class RoomFlowCoordinatorTests {
     func roomPresentation() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        #expect(navigationStackCoordinator.rootCoordinator == nil)
+        try await waitForStackToClear()
     }
     
     @Test
     func roomDetailsPresentation() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .roomDetails(roomID: "1"))
+        try await processExpectingNewRootCoordinator(route: .roomDetails(roomID: "1"))
         #expect(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        #expect(navigationStackCoordinator.rootCoordinator == nil)
+        try await waitForStackToClear()
     }
     
     @Test
     func noOp() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .roomDetails(roomID: "1"))
+        try await processExpectingNewRootCoordinator(route: .roomDetails(roomID: "1"))
         #expect(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         let detailsCoordinator = navigationStackCoordinator.rootCoordinator
         
-        roomFlowCoordinator.handleAppRoute(.roomDetails(roomID: "1"), animated: true)
-        await Task.yield()
+        try await processNotExpectingNavigation(route: .roomDetails(roomID: "1"))
         
         #expect(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
         #expect(navigationStackCoordinator.rootCoordinator === detailsCoordinator)
@@ -66,13 +65,12 @@ final class RoomFlowCoordinatorTests {
     func pushDetails() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
-        try await process(route: .roomDetails(roomID: "1"))
+        try await process(route: .roomDetails(roomID: "1"), expectedStackCount: 1)
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomDetailsScreenCoordinator)
     }
     
@@ -80,22 +78,19 @@ final class RoomFlowCoordinatorTests {
     func childRoomFlow() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
-        try await process(route: .childRoom(roomID: "2", via: []))
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        try await process(route: .childRoom(roomID: "2", via: []), expectedStackCount: 1)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
-        try await process(route: .childRoom(roomID: "3", via: []))
-        #expect(navigationStackCoordinator.stackCoordinators.count == 2)
+        try await process(route: .childRoom(roomID: "3", via: []), expectedStackCount: 2)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        #expect(navigationStackCoordinator.rootCoordinator == nil)
-        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
+        try await waitForStackToClear()
     }
     
     /// Tests the child flow teardown in isolation of it's parent.
@@ -104,10 +99,9 @@ final class RoomFlowCoordinatorTests {
         setupRoomFlowCoordinator(asChildFlow: true)
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
-        try await process(route: .room(roomID: "1", via: []))
-        try await process(route: .roomDetails(roomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedStackCount: 1)
+        try await process(route: .roomDetails(roomID: "1"), expectedStackCount: 2)
         #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
-        #expect(navigationStackCoordinator.stackCoordinators.count == 2)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomDetailsScreenCoordinator)
         
@@ -122,16 +116,14 @@ final class RoomFlowCoordinatorTests {
     func childRoomMemberDetails() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
-        try await process(route: .childRoom(roomID: "2", via: []))
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        try await process(route: .childRoom(roomID: "2", via: []), expectedStackCount: 1)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
-        try await process(route: .roomMemberDetails(userID: RoomMemberProxyMock.mockMe.userID))
-        #expect(navigationStackCoordinator.stackCoordinators.count == 2)
+        try await process(route: .roomMemberDetails(userID: RoomMemberProxyMock.mockMe.userID), expectedStackCount: 2)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
     }
@@ -140,19 +132,18 @@ final class RoomFlowCoordinatorTests {
     func childRoomIgnoresDirectDuplicate() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
-        try await process(route: .childRoom(roomID: "1", via: []))
+        try await processNotExpectingNavigation(route: .childRoom(roomID: "1", via: []))
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty,
                 "A room flow shouldn't present a direct child for the same room.")
         
-        try await process(route: .childRoom(roomID: "2", via: []))
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        try await process(route: .childRoom(roomID: "2", via: []), expectedStackCount: 1)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
         
-        try await process(route: .childRoom(roomID: "1", via: []))
+        try await process(route: .childRoom(roomID: "1", via: []), expectedStackCount: 2)
         #expect(navigationStackCoordinator.stackCoordinators.count == 2,
                 "Presenting the same room multiple times should be allowed when it's not a direct child of itself.")
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
@@ -163,16 +154,16 @@ final class RoomFlowCoordinatorTests {
     func roomMembershipInvite() async throws {
         setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
-        try await process(route: .room(roomID: "InvitedRoomID", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         try await clearRoute(expectedActions: [.finished])
-        #expect(navigationStackCoordinator.rootCoordinator == nil)
+        try await waitForStackToClear()
         
         setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
-        try await process(route: .room(roomID: "InvitedRoomID", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
@@ -181,7 +172,7 @@ final class RoomFlowCoordinatorTests {
             .joined(JoinedRoomProxyMock(.init()))
         }
         
-        try await process(route: .room(roomID: "InvitedRoomID", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
     }
@@ -191,18 +182,20 @@ final class RoomFlowCoordinatorTests {
         setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
-        try await process(route: .room(roomID: "InvitedRoomID", via: []))
+        try await processExpectingNewTopCoordinator(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
         #expect(navigationStackCoordinator.stackCoordinators.count == 1)
         #expect(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
         
         try await clearRoute(expectedActions: [.finished])
-        #expect(navigationStackCoordinator.stackCoordinators.last == nil, "A child room flow should remove the join room scren on dismissal")
+        let deferredDismissal = deferFulfillment(navigationStackCoordinator.observe(\.stackCoordinators.count),
+                                                 message: "A child room flow should remove the join room screen on dismissal") { $0 == 0 }
+        try await deferredDismissal.fulfill()
         
         setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
-        try await process(route: .room(roomID: "InvitedRoomID", via: []))
+        try await processExpectingNewTopCoordinator(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
         #expect(navigationStackCoordinator.stackCoordinators.count == 1)
         #expect(navigationStackCoordinator.stackCoordinators.last is JoinRoomScreenCoordinator)
@@ -212,7 +205,7 @@ final class RoomFlowCoordinatorTests {
             .joined(JoinedRoomProxyMock(.init()))
         }
         
-        try await process(route: .room(roomID: "InvitedRoomID", via: []))
+        try await processExpectingNewTopCoordinator(route: .room(roomID: "InvitedRoomID", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is BlankFormCoordinator, "A child room flow should push onto the stack, leaving the root alone.")
         #expect(navigationStackCoordinator.stackCoordinators.count == 1)
         #expect(navigationStackCoordinator.stackCoordinators.last is RoomScreenCoordinator)
@@ -222,17 +215,16 @@ final class RoomFlowCoordinatorTests {
     func eventRoute() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .event(eventID: "1", roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .event(eventID: "1", roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
-        try await process(route: .childEvent(eventID: "2", roomID: "1", via: []))
+        try await processNotExpectingNavigation(route: .childEvent(eventID: "2", roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
-        try await process(route: .childEvent(eventID: "3", roomID: "2", via: []))
+        try await process(route: .childEvent(eventID: "3", roomID: "2", via: []), expectedStackCount: 1)
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
     }
     
@@ -256,14 +248,14 @@ final class RoomFlowCoordinatorTests {
             .joined(roomProxy)
         }
         
-        try await process(route: .event(eventID: "2", roomID: "1", via: []))
+        try await process(route: .event(eventID: "2", roomID: "1", via: []), expectedStackCount: 1)
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         try #require(navigationStackCoordinator.stackCoordinators.count == 1) // #require these counts so accessing by index is safe.
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
         
         // From the thread screen, navigate to another threaded event in the same room, and in the same thread.
         let threadCoordinator = navigationStackCoordinator.stackCoordinators[0] as? ThreadTimelineScreenCoordinator
-        try await process(route: .childEvent(eventID: "3", roomID: "1", via: []))
+        try await processNotExpectingNavigation(route: .childEvent(eventID: "3", roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         try #require(navigationStackCoordinator.stackCoordinators.count == 1)
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
@@ -274,7 +266,7 @@ final class RoomFlowCoordinatorTests {
         mockedEvent = TimelineEventSDKMock()
         mockedEvent.threadRootEventIdReturnValue = "4"
         roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
-        try await process(route: .childEvent(eventID: "5", roomID: "1", via: []))
+        try await process(route: .childEvent(eventID: "5", roomID: "1", via: []), expectedStackCount: 2)
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         try #require(navigationStackCoordinator.stackCoordinators.count == 2)
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
@@ -295,7 +287,7 @@ final class RoomFlowCoordinatorTests {
             .joined(roomProxy)
         }
         
-        try await process(route: .childEvent(eventID: "2", roomID: "2", via: []))
+        try await process(route: .childEvent(eventID: "2", roomID: "2", via: []), expectedStackCount: 4)
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         try #require(navigationStackCoordinator.stackCoordinators.count == 4)
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
@@ -308,7 +300,7 @@ final class RoomFlowCoordinatorTests {
         mockedEvent.threadRootEventIdReturnValue = nil
         roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
         
-        try await process(route: .childEvent(eventID: "3", roomID: "2", via: []))
+        try await process(route: .childEvent(eventID: "3", roomID: "2", via: []), expectedStackCount: 5)
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         try #require(navigationStackCoordinator.stackCoordinators.count == 5)
         #expect(navigationStackCoordinator.stackCoordinators[0] is ThreadTimelineScreenCoordinator)
@@ -322,25 +314,26 @@ final class RoomFlowCoordinatorTests {
     func shareMediaRoute() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: "1", mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
-        try await process(route: .share(sharePayload))
+        try await processExpectingSheet(route: .share(sharePayload))
         
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
         
-        try await process(route: .childRoom(roomID: "2", via: []))
-        #expect(navigationStackCoordinator.sheetCoordinator == nil)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
+        try await process(route: .childRoom(roomID: "2", via: []), expectedStackCount: 1)
+        let deferredSheetDismissal = deferFulfillment(navigationStackCoordinator.observe(\.sheetCoordinatorID)) { $0 == nil }
+        try await deferredSheetDismissal.fulfill()
         
-        try await process(route: .share(sharePayload))
+        try await processExpectingSheet(route: .share(sharePayload))
         
-        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
+        let deferredPop = deferFulfillment(navigationStackCoordinator.observe(\.stackCoordinators.count)) { $0 == 0 }
+        try await deferredPop.fulfill()
         #expect((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
@@ -348,25 +341,22 @@ final class RoomFlowCoordinatorTests {
     func shareTextRoute() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         let sharePayload: ShareExtensionPayload = .text(roomID: "1", text: "Important text")
-        try await process(route: .share(sharePayload))
+        try await processNotExpectingNavigation(route: .share(sharePayload))
         
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
         
         #expect(navigationStackCoordinator.sheetCoordinator == nil, "The media upload sheet shouldn't be shown when sharing text.")
         
-        try await process(route: .childRoom(roomID: "2", via: []))
+        try await process(route: .childRoom(roomID: "2", via: []), expectedStackCount: 1)
         #expect(navigationStackCoordinator.sheetCoordinator == nil)
-        #expect(navigationStackCoordinator.stackCoordinators.count == 1)
         
-        try await process(route: .share(sharePayload))
-        
-        #expect(navigationStackCoordinator.stackCoordinators.isEmpty)
+        try await process(route: .share(sharePayload), expectedStackCount: 0)
         #expect(navigationStackCoordinator.sheetCoordinator == nil, "The media upload sheet shouldn't be shown when sharing text.")
     }
     
@@ -384,7 +374,7 @@ final class RoomFlowCoordinatorTests {
             .joined(roomProxy)
         }
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         
         let fulfillment = deferFulfillment(roomFlowCoordinator.actions) { action in
             action == .finished
@@ -402,20 +392,79 @@ final class RoomFlowCoordinatorTests {
     func spacePermalink() async throws {
         setupRoomFlowCoordinator()
         
-        try await process(route: .room(roomID: "1", via: []))
+        try await processExpectingNewRootCoordinator(route: .room(roomID: "1", via: []))
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         
-        try await process(route: .childRoom(roomID: "space1", via: []))
+        try await process(route: .childRoom(roomID: "space1", via: []), expectedStackCount: 1)
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.first is SpaceScreenCoordinator)
     }
     
     // MARK: - Private
     
-    private func process(route: AppRoute) async throws {
+    /// Handles the route and waits for the navigation stack's root coordinator to be replaced,
+    /// which happens asynchronously after the route has been handled.
+    private func processExpectingNewRootCoordinator(route: AppRoute) async throws {
+        // Keep the previous coordinator alive while waiting, otherwise a newly presented
+        // coordinator could be allocated at the same address and be mistaken for it below.
+        let previousRootCoordinator = navigationStackCoordinator.rootCoordinator
+        let previousRootCoordinatorID = previousRootCoordinator.map { ObjectIdentifier($0) }
         roomFlowCoordinator.handleAppRoute(route, animated: true)
-        // A single yield isn't enough when creating the new flow coordinator.
-        try await Task.sleep(for: .milliseconds(100))
+        
+        let deferred = deferFulfillment(navigationStackCoordinator.observe(\.rootCoordinatorID)) { $0 != nil && $0 != previousRootCoordinatorID }
+        try await deferred.fulfill()
+        
+        withExtendedLifetime(previousRootCoordinator) { }
+    }
+    
+    /// Handles the route and waits for the topmost coordinator on the stack to be replaced.
+    private func processExpectingNewTopCoordinator(route: AppRoute) async throws {
+        let previousTopCoordinator = navigationStackCoordinator.stackCoordinators.last
+        let previousTopCoordinatorID = previousTopCoordinator.map { ObjectIdentifier($0) }
+        roomFlowCoordinator.handleAppRoute(route, animated: true)
+        
+        let deferred = deferFulfillment(navigationStackCoordinator.observe(\.topCoordinatorID)) { $0 != nil && $0 != previousTopCoordinatorID }
+        try await deferred.fulfill()
+        
+        withExtendedLifetime(previousTopCoordinator) { }
+    }
+    
+    /// Handles the route and waits for a new sheet to be presented.
+    private func processExpectingSheet(route: AppRoute) async throws {
+        let previousSheetCoordinator = navigationStackCoordinator.sheetCoordinator
+        let previousSheetCoordinatorID = previousSheetCoordinator.map { ObjectIdentifier($0) }
+        roomFlowCoordinator.handleAppRoute(route, animated: true)
+        
+        let deferred = deferFulfillment(navigationStackCoordinator.observe(\.sheetCoordinatorID)) { $0 != nil && $0 != previousSheetCoordinatorID }
+        try await deferred.fulfill()
+        
+        withExtendedLifetime(previousSheetCoordinator) { }
+    }
+    
+    /// Handles the route and waits for the navigation stack to reach the expected size.
+    private func process(route: AppRoute, expectedStackCount: Int) async throws {
+        roomFlowCoordinator.handleAppRoute(route, animated: true)
+        
+        let deferred = deferFulfillment(navigationStackCoordinator.observe(\.stackCoordinators.count)) { $0 == expectedStackCount }
+        try await deferred.fulfill()
+    }
+    
+    /// Handles a route that isn't expected to trigger any navigation.
+    private func processNotExpectingNavigation(route: AppRoute) async throws {
+        let currentStackCount = navigationStackCoordinator.stackCoordinators.count
+        let deferred = deferFailure(navigationStackCoordinator.observe(\.stackCoordinators.count), timeout: .seconds(1)) { $0 != currentStackCount }
+        
+        roomFlowCoordinator.handleAppRoute(route, animated: true)
+        try await deferred.fulfill()
+    }
+    
+    /// Waits for the navigation stack to be emptied after the flow has been cleared.
+    private func waitForStackToClear() async throws {
+        let deferredRoot = deferFulfillment(navigationStackCoordinator.observe(\.rootCoordinatorID)) { $0 == nil }
+        try await deferredRoot.fulfill()
+        
+        let deferredStack = deferFulfillment(navigationStackCoordinator.observe(\.stackCoordinators.count)) { $0 == 0 }
+        try await deferredStack.fulfill()
     }
     
     private func clearRoute(expectedActions: [RoomFlowCoordinatorAction]) async throws {
@@ -500,4 +549,21 @@ final class RoomFlowCoordinatorTests {
 
 private enum RoomType {
     case invited(roomID: String)
+}
+
+// Sendable projections of the stack coordinator's non-Sendable coordinator references,
+// allowing the tests to `observe` them and wait for navigation with `deferFulfillment`.
+private extension NavigationStackCoordinator {
+    var rootCoordinatorID: ObjectIdentifier? {
+        rootCoordinator.map { ObjectIdentifier($0) }
+    }
+    
+    /// The identity of the topmost coordinator on the stack.
+    var topCoordinatorID: ObjectIdentifier? {
+        stackCoordinators.last.map { ObjectIdentifier($0) }
+    }
+    
+    var sheetCoordinatorID: ObjectIdentifier? {
+        sheetCoordinator.map { ObjectIdentifier($0) }
+    }
 }
