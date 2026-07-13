@@ -26,6 +26,9 @@ struct CallScreen: View {
                 .toolbar { toolbar }
         }
         .alert(item: $context.alertInfo)
+        // Force dark mode for calls. Don't use .preferredColorScheme
+        // otherwise the whole app changes, visible when using the PiP.
+        .environment(\.colorScheme, .dark)
     }
     
     @ViewBuilder
