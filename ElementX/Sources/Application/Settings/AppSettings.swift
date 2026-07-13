@@ -24,6 +24,7 @@ nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     var traceLogPacks: Set<TraceLogPack> { get }
     var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
     var contentScannerURL: RemotePreference<URL?> { get }
+    var forceDisableE2EE: RemotePreference<Bool> { get }
     
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var threadsEnabled: Bool { get }
@@ -271,6 +272,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// The base URL of the content scanner server used to scan media before it is downloaded.
     /// `nil` when content scanning is disabled.
     let contentScannerURL: RemotePreference<URL?> = .init(nil)
+    
+    // MARK: - Encryption
+    
+    /// Whether the server forbids the use of E2EE: new rooms are created unencrypted and
+    /// enabling encryption on existing rooms is not offered.
+    let forceDisableE2EE: RemotePreference<Bool> = .init(false)
     
     // MARK: - Analytics
     

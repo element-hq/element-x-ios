@@ -482,7 +482,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let parameters = CreateRoomParameters(name: nil,
                                                   topic: nil,
-                                                  isEncrypted: true,
+                                                  isEncrypted: !appSettings.forceDisableE2EE.publisher.value,
                                                   isDirect: true,
                                                   visibility: .private,
                                                   preset: .trustedPrivateChat,
@@ -525,7 +525,7 @@ class ClientProxy: ClientProxyProtocol {
             
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
-                                                  isEncrypted: accessType.isEncrypted,
+                                                  isEncrypted: !appSettings.forceDisableE2EE.publisher.value && accessType.isEncrypted,
                                                   isDirect: false,
                                                   visibility: accessType.visibility,
                                                   preset: accessType.preset,
