@@ -73,9 +73,12 @@ include:
 packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
-    url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.07.08
-    # path: ../matrix-rust-sdk
+    # Local SDK carrying the MSCxxxx recipient_permission push condition (knock push, flow 10);
+    # run `cargo xtask swift build-framework --target aarch64-apple-ios-sim` in ../matrix-rust-sdk
+    # first. Revert to exactVersion once a release ships the condition.
+    # url: https://github.com/element-hq/matrix-rust-components-swift
+    # exactVersion: 26.07.08
+    path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
   BuildExtensions:
