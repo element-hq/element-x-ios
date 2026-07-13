@@ -1,13 +1,13 @@
 {
-  "originHash" : "b176ccc5aeb79a3bc3e26b224bb259b7fd4dd0ff8d124a2f4d17d9858b087aa0",
+  "originHash" : "89c566dd1386002d6eb972c1cd428caf08db40d80235fb7bc4c296139b11e7c7",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "6e33c5bf3cbb4c29dbe5fc063d24b375849c0fac",
-        "version" : "10.2.2"
+        "revision" : "bc390b74b53447f04bc0a7a07adaecbb90e02e25",
+        "version" : "10.2.3"
       }
     },
     {
