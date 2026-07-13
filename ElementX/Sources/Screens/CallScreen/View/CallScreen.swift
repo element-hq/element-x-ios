@@ -26,9 +26,9 @@ struct CallScreen: View {
                 .toolbar { toolbar }
         }
         .alert(item: $context.alertInfo)
-        // Element Call is always presented using the dark theme.
-        // Force surrounding UI (status bar, header, etc.) to match it.
-        .preferredColorScheme(.dark)
+        // Force dark mode for calls. Don't use .preferredColorScheme
+        // otherwise the whole app changes, visible when using the PiP.
+        .environment(\.colorScheme, .dark)
     }
     
     @ViewBuilder
