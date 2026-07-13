@@ -40,7 +40,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(audioInfo.size ?? 0, 194_811, within: 100))
     }
     
-    @Test
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func landscapeMovVideoProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil), "Failed retrieving test asset")
         
@@ -78,7 +78,7 @@ final class MediaUploadingPreprocessorTests {
     
     // Split from landscapeMovVideoProcessing: each transcode is slow enough on a busy CI runner
     // that running both in a single test can exceed the execution time allowance.
-    @Test
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func landscapeMovVideoProcessingOptimized() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil), "Failed retrieving test asset")
         
@@ -101,7 +101,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(optimizedVideoInfo.duration ?? 0, 30, within: 100))
     }
     
-    @Test
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func portraitMp4VideoProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil), "Failed retrieving test asset")
         
@@ -139,7 +139,7 @@ final class MediaUploadingPreprocessorTests {
     
     // Split from portraitMp4VideoProcessing: each transcode is slow enough on a busy CI runner
     // that running both in a single test can exceed the execution time allowance.
-    @Test
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func portraitMp4VideoProcessingOptimized() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil), "Failed retrieving test asset")
         

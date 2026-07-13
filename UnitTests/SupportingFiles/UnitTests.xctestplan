@@ -9,7 +9,7 @@
     }
   ],
   "defaultOptions" : {
-    "defaultTestExecutionTimeAllowance" : 120,
+    "defaultTestExecutionTimeAllowance" : 60,
     "environmentVariableEntries" : [
       {
         "key" : "IS_RUNNING_UNIT_TESTS",

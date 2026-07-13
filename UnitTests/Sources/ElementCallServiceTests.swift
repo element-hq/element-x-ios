@@ -11,6 +11,8 @@ import Clocks
 import PushKit
 import Testing
 
+// The TestClock advances by yielding to background tasks which can be starved on a busy CI runner.
+@Suite(.timeLimit(.minutes(2)))
 @MainActor
 final class ElementCallServiceTests {
     private var callProvider: CXProviderMock!

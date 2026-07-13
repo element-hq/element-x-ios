@@ -56,7 +56,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await send()
     }
     
-    @Test
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func videoUploadWithoutCaption() async throws {
         setUpViewModel(urls: [videoURL], expectedCaption: nil)
         context.caption = .init("")
@@ -64,7 +64,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         try await send(timeout: .seconds(60))
     }
     
-    @Test
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func videoUploadWithCaption() async throws {
         let caption = "Check out this video!"
         setUpViewModel(urls: [videoURL], expectedCaption: caption)
