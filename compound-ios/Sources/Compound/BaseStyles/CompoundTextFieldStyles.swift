@@ -138,7 +138,7 @@ public struct CompoundTextFieldStyle: @MainActor TextFieldStyle {
     
     /// The width of the text field's border.
     private var borderWidth: CGFloat {
-        isFocused || isError ? 1.0 : 0
+        isFocused || isError || kind.isRaised ? 1.0 : 0
     }
     
     private var accentColor: Color {
