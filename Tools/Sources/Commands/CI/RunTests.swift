@@ -39,6 +39,12 @@ struct RunTests: AsyncParsableCommand {
     @Option(help: "Only run a specific test (format: 'ClassName/testName').")
     var testName: String?
     
+    @Flag(help: "Run the tests on a saturated CPU to reproduce the flakiness of a busy CI runner.")
+    var constrained = false
+    
+    @Option(help: "The number of CPU hogging tasks to run when the tests are constrained.")
+    var constrainedTaskCount = 20
+    
     private var isCI: Bool {
         ProcessInfo.processInfo.environment["CI"] != nil
     }
@@ -72,6 +78,12 @@ struct RunTests: AsyncParsableCommand {
         // Ensure the output directory exists
         let outputDirectory = resultBundleURL.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
+        
+        let cpuConstraint = CPUConstraint()
+        if constrained {
+            cpuConstraint.start(taskCount: constrainedTaskCount)
+        }
+        defer { cpuConstraint.stop() }
         
         try await executeXcodeBuild()
         
