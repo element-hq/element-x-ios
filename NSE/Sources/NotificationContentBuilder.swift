@@ -88,7 +88,7 @@ nonisolated struct NotificationContentBuilder {
                                              mediaProvider: mediaProvider)
                     notificationContent.body = UntranslatedL10n.notificationLiveLocationStartedBody
                 case .roomMemberContent(_, .knock):
-                    // MSCxxxx: the homeserver pushes knocks to users who can act on them.
+                    // MSC4506: the homeserver pushes knocks to users who can act on them.
                     await processMessageLike(notificationContent: &notificationContent,
                                              notificationItem: notificationItem,
                                              mediaProvider: mediaProvider)
