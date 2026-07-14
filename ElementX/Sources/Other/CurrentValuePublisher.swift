@@ -15,25 +15,25 @@ import Combine
 nonisolated struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @unchecked Sendable {
     private let upstream: AnyPublisher<Output, Failure>
     private let valueProvider: () -> Output
-
+    
     init(_ subject: CurrentValueSubject<Output, Failure>) {
         upstream = subject.eraseToAnyPublisher()
         valueProvider = { subject.value }
     }
-
+    
     init(_ value: Output) {
         self.init(CurrentValueSubject(value))
     }
-
+    
     private init(upstream: AnyPublisher<Output, Failure>, valueProvider: @escaping () -> Output) {
         self.upstream = upstream
         self.valueProvider = valueProvider
     }
-
+    
     func receive<S: Subscriber>(subscriber: S) where Failure == S.Failure, Output == S.Input {
         upstream.receive(subscriber: subscriber)
     }
-
+    
     var value: Output {
         valueProvider()
     }

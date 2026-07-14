@@ -20,7 +20,7 @@ struct CurrentValuePublisherTests {
         #expect(received == [1, 2, 3])
         cancellable.cancel()
     }
-
+    
     @Test
     func mappedPublisherChainedInlineDeliversSubsequentValues() {
         let subject = CurrentValueSubject<Int, Never>(1)
@@ -38,7 +38,7 @@ struct CurrentValuePublisherTests {
         #expect(received == [2, 4, 6])
         cancellable.cancel()
     }
-
+    
     @Test
     func mappedPublisherValueStaysCurrent() {
         let subject = CurrentValueSubject<Int, Never>(1)
