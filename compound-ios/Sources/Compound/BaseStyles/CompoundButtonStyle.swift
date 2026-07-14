@@ -22,6 +22,7 @@ public struct CompoundButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityShowButtonShapes) private var accessibilityShowButtonShapes
+    @Environment(\.isFocused) private var isFocused
     
     var kind: Kind
     public enum Kind {
@@ -117,6 +118,11 @@ public struct CompoundButtonStyle: ButtonStyle {
                 makeBackground(configuration: configuration)
             }
             .contentShape(contentShape)
+            .overlay {
+                if isFocused {
+                    contentShape.stroke(.compound.borderInteractivePrimary, lineWidth: 2)
+                }
+            }
     }
     
     @ViewBuilder
