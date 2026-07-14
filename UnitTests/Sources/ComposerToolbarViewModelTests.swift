@@ -741,11 +741,7 @@ final class ComposerToolbarViewModelTests {
             }
         }
         
-        // There are 2 violations, ensure that resolving the first one is not enough
-        let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([
-            IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation),
-            IdentityStatusChange(userId: "@bob:localhost", changedTo: .verificationViolation)
-        ])
+        let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([])
         
         roomProxyMock.identityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
         
@@ -760,16 +756,19 @@ final class ComposerToolbarViewModelTests {
                                              analyticsService: AnalyticsServiceMock(.init()),
                                              composerDraftService: draftServiceMock)
         
-        // Both violations come from the subject's initial value: wait for them to disable the composer.
+        // The consuming AsyncPublisher drops changes sent while earlier ones are still being
+        // processed, so only send after observing the previous change's view state update.
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
+        mockSubject.send([
+            IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation),
+            IdentityStatusChange(userId: "@bob:localhost", changedTo: .verificationViolation)
+        ])
         try await fulfillment.fulfill()
         
-        // The view model consumes the changes through an AsyncPublisher which drops values sent
-        // while the previous ones are still being processed, so wait for each change's resulting
-        // view state update (skipping the replayed current value) before sending the next one.
-        fulfillment = deferFulfillment(viewModel.context.$viewState.dropFirst(), message: "Composer is still disabled") { $0.canSend == false }
+        // There are 2 violations, ensure that resolving the first one is not enough.
+        let failure = deferFailure(viewModel.context.$viewState, timeout: .seconds(1), message: "Composer should still be disabled") { $0.canSend == true }
         mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinned)])
-        try await fulfillment.fulfill()
+        try await failure.fulfill()
         
         fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is now enabled") { $0.canSend == true }
         mockSubject.send([IdentityStatusChange(userId: "@bob:localhost", changedTo: .pinned)])

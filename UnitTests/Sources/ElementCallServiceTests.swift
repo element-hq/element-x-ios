@@ -192,8 +192,7 @@ final class ElementCallServiceTests {
             }
         }
         
-        // Make sure the timer is actually sleeping on the clock, so that the cancellation
-        // below exercises a scheduled timer rather than one that never started.
+        // Make sure the cancellation below exercises a scheduled timer rather than one that never started.
         await waitForScheduledSleep()
         
         // Simulate the answer flow handing off to setupCallSession, which must cancel
@@ -242,11 +241,9 @@ final class ElementCallServiceTests {
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
     }
     
-    /// Waits until the service's unanswered-call timer has scheduled its sleep on the test clock.
-    ///
-    /// The timer runs in an unstructured task, so without this the clock could be advanced
-    /// before the task even started sleeping, leaving it asleep forever and the test hanging.
-    /// `checkSuspension()` throws when a sleep is scheduled, which is the state to wait for.
+    /// Waits until the unanswered-call timer is sleeping on the test clock — it runs in an
+    /// unstructured task, so advancing the clock before that would never wake it.
+    /// Note: `checkSuspension()` throws when a sleep is scheduled, which is the state we want.
     private func waitForScheduledSleep() async {
         while await (try? testClock.checkSuspension()) != nil {
             await Task.yield()

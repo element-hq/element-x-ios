@@ -8,8 +8,9 @@
 @testable import ElementX
 import Foundation
 
-// Sendable projections of the split coordinator's non-Sendable coordinator references,
+// Sendable projections of the navigation coordinators' non-Sendable coordinator references,
 // allowing the tests to `observe` them and wait for navigation with `deferFulfillment`.
+
 extension NavigationSplitCoordinator {
     var detailCoordinatorID: ObjectIdentifier? {
         detailCoordinator.map { ObjectIdentifier($0) }
@@ -25,6 +26,27 @@ extension NavigationSplitCoordinator {
         detailRootCoordinator.map { ObjectIdentifier($0) }
     }
     
+    var sheetCoordinatorID: ObjectIdentifier? {
+        sheetCoordinator.map { ObjectIdentifier($0) }
+    }
+}
+
+extension NavigationStackCoordinator {
+    var rootCoordinatorID: ObjectIdentifier? {
+        rootCoordinator.map { ObjectIdentifier($0) }
+    }
+    
+    /// The identity of the topmost coordinator on the stack.
+    var topCoordinatorID: ObjectIdentifier? {
+        stackCoordinators.last.map { ObjectIdentifier($0) }
+    }
+    
+    var sheetCoordinatorID: ObjectIdentifier? {
+        sheetCoordinator.map { ObjectIdentifier($0) }
+    }
+}
+
+extension NavigationTabCoordinator {
     var sheetCoordinatorID: ObjectIdentifier? {
         sheetCoordinator.map { ObjectIdentifier($0) }
     }

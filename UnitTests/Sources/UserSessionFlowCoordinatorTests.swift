@@ -156,7 +156,7 @@ struct UserSessionFlowCoordinatorTests {
         
         #expect(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         #expect(tabCoordinator?.sheetCoordinator == nil)
-        #expect((chatsSplitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+        #expect((splitCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
     }
     
     @Test
