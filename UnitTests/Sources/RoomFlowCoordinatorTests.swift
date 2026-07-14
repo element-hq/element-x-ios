@@ -550,20 +550,3 @@ final class RoomFlowCoordinatorTests {
 private enum RoomType {
     case invited(roomID: String)
 }
-
-// Sendable projections of the stack coordinator's non-Sendable coordinator references,
-// allowing the tests to `observe` them and wait for navigation with `deferFulfillment`.
-private extension NavigationStackCoordinator {
-    var rootCoordinatorID: ObjectIdentifier? {
-        rootCoordinator.map { ObjectIdentifier($0) }
-    }
-    
-    /// The identity of the topmost coordinator on the stack.
-    var topCoordinatorID: ObjectIdentifier? {
-        stackCoordinators.last.map { ObjectIdentifier($0) }
-    }
-    
-    var sheetCoordinatorID: ObjectIdentifier? {
-        sheetCoordinator.map { ObjectIdentifier($0) }
-    }
-}

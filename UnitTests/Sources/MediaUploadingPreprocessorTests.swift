@@ -40,7 +40,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(audioInfo.size ?? 0, 194_811, within: 100))
     }
     
-    @Test
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func landscapeMovVideoProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil), "Failed retrieving test asset")
         
@@ -74,8 +74,12 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(videoInfo.thumbnailInfo?.size ?? 0, 183_093, within: 100))
         #expect(videoInfo.thumbnailInfo?.width == 800)
         #expect(videoInfo.thumbnailInfo?.height == 450)
+    }
+    
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
+    func landscapeMovVideoOptimizedProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil), "Failed retrieving test asset")
         
-        // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
@@ -95,7 +99,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(optimizedVideoInfo.duration ?? 0, 30, within: 100))
     }
     
-    @Test
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
     func portraitMp4VideoProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil), "Failed retrieving test asset")
         
@@ -129,8 +133,12 @@ final class MediaUploadingPreprocessorTests {
         #expect(isEqual(videoInfo.thumbnailInfo?.size ?? 0, 40976, within: 100))
         #expect(videoInfo.thumbnailInfo?.width == 337)
         #expect(videoInfo.thumbnailInfo?.height == 600)
+    }
+    
+    @Test(.timeLimit(.minutes(2))) // Transcoding videos can be slow on a busy CI runner.
+    func portraitMp4VideoOptimizedProcessing() async throws {
+        let url = try #require(Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil), "Failed retrieving test asset")
         
-        // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),

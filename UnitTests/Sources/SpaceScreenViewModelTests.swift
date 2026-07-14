@@ -48,22 +48,15 @@ struct SpaceScreenViewModelTests {
         #expect(!response.isEmpty, "There should be some test rooms.")
         
         // When the pagination is triggered.
-        var deferred = deferFulfillment(spaceRoomListProxy.paginationStatePublisher) { $0 == .loading }
+        let deferredState = deferFulfillment(context.observe(\.viewState.paginationState), transitionValues: [.paginating, .endReached])
         paginationStateSubject.send(.idle(endReached: false)) // Invert the default to allow paginate to be called.
-        try await deferred.fulfill()
+        try await deferredState.fulfill()
         
-        // Then the screen should show a paginating indicator.
-        #expect(context.viewState.paginationState == .paginating)
+        // Then a single pagination should be made and the space rooms should be populated.
+        // The rooms arrive on a separate publisher to the pagination state, so wait for them too.
+        let deferredRooms = deferFulfillment(context.observe(\.viewState.rooms)) { [response] in $0.map(\.id) == response.map(\.id) }
+        try await deferredRooms.fulfill()
         #expect(spaceRoomListProxy.paginateCallsCount == 1)
-        
-        // When waiting for the pagination to finish.
-        deferred = deferFulfillment(spaceRoomListProxy.paginationStatePublisher) { $0 == .idle(endReached: true) }
-        try await deferred.fulfill()
-        
-        // Then no more pagination requests should be made the the space rooms should be populated.
-        #expect(context.viewState.paginationState == .endReached)
-        #expect(spaceRoomListProxy.paginateCallsCount == 1)
-        #expect(context.viewState.rooms.map(\.id) == response.map(\.id))
     }
     
     @Test
@@ -153,16 +146,18 @@ struct SpaceScreenViewModelTests {
         
         let selectedSpace = try #require(mockSpaceRooms.first { $0.isSpace && $0.state != .joined }, "There should be a space to select.")
         
-        let deferredState = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs), transitionValues: [[selectedSpace.id], []])
-        
-        try await confirmation("Join room") { confirm in
-            clientProxy.joinRoomViaClosure = { _, _ in
-                confirm()
+        // Assert the transient joining state inside the closure: it can be cleared again before an observer is serviced.
+        await waitForConfirmation("Join room") { confirmation in
+            clientProxy.joinRoomViaClosure = { [context] _, _ in
+                await MainActor.run { #expect(context.viewState.joiningRoomIDs == [selectedSpace.id]) }
+                confirmation()
                 return .success(())
             }
             viewModel.context.send(viewAction: .spaceAction(.join(selectedSpace)))
-            try await deferredState.fulfill()
         }
+        
+        let deferredJoined = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs)) { $0.isEmpty }
+        try await deferredJoined.fulfill()
     }
     
     @Test
@@ -171,16 +166,18 @@ struct SpaceScreenViewModelTests {
         
         let selectedRoom = try #require(mockSpaceRooms.first { !$0.isSpace }, "There should be a room to select.")
         
-        let deferredState = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs), transitionValues: [[selectedRoom.id], []])
-        
-        try await confirmation("Join room") { confirm in
-            clientProxy.joinRoomViaClosure = { _, _ in
-                confirm()
+        // Assert the transient joining state inside the closure: it can be cleared again before an observer is serviced.
+        await waitForConfirmation("Join room") { confirmation in
+            clientProxy.joinRoomViaClosure = { [context] _, _ in
+                await MainActor.run { #expect(context.viewState.joiningRoomIDs == [selectedRoom.id]) }
+                confirmation()
                 return .success(())
             }
             viewModel.context.send(viewAction: .spaceAction(.join(selectedRoom)))
-            try await deferredState.fulfill()
         }
+        
+        let deferredJoined = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs)) { $0.isEmpty }
+        try await deferredJoined.fulfill()
     }
     
     @Test

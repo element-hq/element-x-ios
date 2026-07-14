@@ -298,8 +298,9 @@ struct RoomNotificationSettingsScreenViewModelTests {
             }
             .store(in: &cancellables)
         
+        #expect(!viewModel.context.viewState.deletingCustomSetting)
         let deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.deletingCustomSetting),
-                                                 transitionValues: [false, true, false])
+                                                 transitionValues: [true, false])
         
         viewModel.context.send(viewAction: .deleteCustomSettingTapped)
         
