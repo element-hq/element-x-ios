@@ -25,10 +25,8 @@ struct CurrentValuePublisherTests {
     func mappedPublisherChainedInlineDeliversSubsequentValues() {
         let subject = CurrentValueSubject<Int, Never>(1)
         var received = [Int]()
-        // Regression test: chain the mapped publisher inline WITHOUT storing it. The eager
-        // subject-bridging implementation of map lost its feeding subscription here (nothing
-        // retained the returned struct's cancellable), so subscribers only ever saw the
-        // initial value — hiding e.g. live knock request updates in the room screen.
+        // The mapped publisher is intentionally chained without being stored: the struct is
+        // discarded mid-chain, which used to cancel an eager map's subscription and stop updates.
         let cancellable = subject.asCurrentValuePublisher()
             .map { $0 * 2 }
             .removeDuplicates()

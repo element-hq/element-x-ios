@@ -40,14 +40,11 @@ nonisolated struct CurrentValuePublisher<Output, Failure: Error>: Publisher, @un
 }
 
 nonisolated extension CurrentValuePublisher where Failure == Never {
-    /// Transform the published values (and ``value``), subscribing to the underlying subject
-    /// lazily, per subscriber.
+    /// Transforms the published values and ``value``.
     ///
-    /// Bridging eagerly through a second subject doesn't work here: the subscription feeding it
-    /// would need to be retained by this struct, but Combine consumes publisher structs when
-    /// building a subscription, so chaining a mapped publisher inline dropped the feed and
-    /// downstream only ever received the initial value (e.g. the knock requests banner never
-    /// updated for a knock arriving while the room was open).
+    /// The transform runs lazily, once per subscriber and per ``value`` read. It must stay lazy:
+    /// this struct is discarded when the mapped publisher is chained inline, so anything eager
+    /// (a live subscription feeding a second subject) would be cancelled and stop the updates.
     func map<T>(_ transform: @escaping (Output) -> T) -> CurrentValuePublisher<T, Never> {
         .init(upstream: upstream.map(transform).eraseToAnyPublisher(),
               valueProvider: { transform(value) })
