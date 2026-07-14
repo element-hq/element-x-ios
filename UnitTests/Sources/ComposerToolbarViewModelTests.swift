@@ -756,8 +756,6 @@ final class ComposerToolbarViewModelTests {
                                              analyticsService: AnalyticsServiceMock(.init()),
                                              composerDraftService: draftServiceMock)
         
-        // The consuming AsyncPublisher drops changes sent while earlier ones are still being
-        // processed, so only send after observing the previous change's view state update.
         var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
         mockSubject.send([
             IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation),
