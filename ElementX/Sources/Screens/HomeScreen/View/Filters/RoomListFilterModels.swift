@@ -17,6 +17,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     }
     
     case unreads
+    case mentions
     case people
     case rooms
     case favourites
@@ -35,6 +36,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return L10n.screenRoomlistFilterRooms
         case .unreads:
             return L10n.screenRoomlistFilterUnreads
+        case .mentions:
+            return UntranslatedL10n.screenRoomlistFilterMentions
         case .favourites:
             return L10n.screenRoomlistFilterFavourites
         case .invites:
@@ -52,10 +55,12 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return [.people, .invites]
         case .unreads:
             return [.invites]
+        case .mentions:
+            return [.invites]
         case .favourites:
             return [.invites, .lowPriority]
         case .invites:
-            return [.rooms, .people, .unreads, .favourites, .lowPriority]
+            return [.rooms, .people, .unreads, .mentions, .favourites, .lowPriority]
         case .lowPriority:
             return [.favourites, .invites]
         }
@@ -69,6 +74,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return .all(filters: [.category(expect: .group), .joined])
         case .unreads:
             return .all(filters: [.unread, .joined])
+        case .mentions:
+            return .all(filters: [.mentions, .joined])
         case .favourites:
             return .all(filters: [.favourite, .joined])
         case .invites:
