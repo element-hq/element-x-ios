@@ -713,9 +713,7 @@ class ClientProxy: ClientProxyProtocol {
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setDisplayName(name: name)
-            Task {
-                await self.loadUserProfile()
-            }
+            Task { await self.loadUserProfile() }
             return .success(())
         } catch {
             MXLog.error("Failed setting user display name with error: \(error)")
@@ -732,9 +730,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let data = try Data(contentsOf: imageURL)
             try await client.uploadAvatar(mimeType: mimeType, data: data)
-            Task {
-                await self.loadUserProfile()
-            }
+            Task { await self.loadUserProfile() }
             return .success(())
         } catch {
             MXLog.error("Failed setting user avatar with error: \(error)")
@@ -745,12 +741,32 @@ class ClientProxy: ClientProxyProtocol {
     func removeUserAvatar() async -> Result<Void, ClientProxyError> {
         do {
             try await client.removeAvatar()
-            Task {
-                await self.loadUserProfile()
-            }
+            Task { await self.loadUserProfile() }
             return .success(())
         } catch {
             MXLog.error("Failed removing user avatar with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func setUserStatus(_ status: UserStatus.UserSet) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.setUserStatus(status: status.rustValue)
+            Task { await self.loadUserProfile() }
+            return .success(())
+        } catch {
+            MXLog.error("Failed setting user status with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func removeUserStatus() async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.clearUserStatus()
+            Task { await self.loadUserProfile() }
+            return .success(())
+        } catch {
+            MXLog.error("Failed removing user status with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

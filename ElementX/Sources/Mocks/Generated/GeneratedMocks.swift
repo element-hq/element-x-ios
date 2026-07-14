@@ -3316,6 +3316,76 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return removeUserAvatarReturnValue
         }
     }
+    //MARK: - setUserStatus
+
+    private let setUserStatusCallsCountLock = NSLock()
+    private nonisolated(unsafe) var setUserStatusUnderlyingCallsCount = 0
+    var setUserStatusCallsCount: Int {
+        get { setUserStatusCallsCountLock.withLock { setUserStatusUnderlyingCallsCount } }
+        set { setUserStatusCallsCountLock.withLock { setUserStatusUnderlyingCallsCount = newValue } }
+    }
+    var setUserStatusCalled: Bool {
+        return setUserStatusCallsCount > 0
+    }
+    private let setUserStatusReceivedStatusLock = NSLock()
+    private nonisolated(unsafe) var setUserStatusUnderlyingReceivedStatus: UserStatus.Raw?
+    var setUserStatusReceivedStatus: UserStatus.Raw? {
+        get { setUserStatusReceivedStatusLock.withLock { setUserStatusUnderlyingReceivedStatus } }
+        set { setUserStatusReceivedStatusLock.withLock { setUserStatusUnderlyingReceivedStatus = newValue } }
+    }
+    private let setUserStatusReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var setUserStatusUnderlyingReceivedInvocations: [UserStatus.Raw] = []
+    var setUserStatusReceivedInvocations: [UserStatus.Raw] {
+        get { setUserStatusReceivedInvocationsLock.withLock { setUserStatusUnderlyingReceivedInvocations } }
+        set { setUserStatusReceivedInvocationsLock.withLock { setUserStatusUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let setUserStatusReturnValueLock = NSLock()
+    private nonisolated(unsafe) var setUserStatusUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var setUserStatusReturnValue: Result<Void, ClientProxyError>! {
+        get { setUserStatusReturnValueLock.withLock { setUserStatusUnderlyingReturnValue } }
+        set { setUserStatusReturnValueLock.withLock { setUserStatusUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var setUserStatusClosure: ((UserStatus.Raw) async -> Result<Void, ClientProxyError>)?
+
+    @concurrent func setUserStatus(_ status: UserStatus.Raw) async -> Result<Void, ClientProxyError> {
+        setUserStatusCallsCountLock.withLock { setUserStatusUnderlyingCallsCount += 1 }
+        setUserStatusReceivedStatus = status
+        setUserStatusReceivedInvocationsLock.withLock { setUserStatusUnderlyingReceivedInvocations.append(status) }
+        if let setUserStatusClosure = setUserStatusClosure {
+            return await setUserStatusClosure(status)
+        } else {
+            return setUserStatusReturnValue
+        }
+    }
+    //MARK: - removeUserStatus
+
+    private let removeUserStatusCallsCountLock = NSLock()
+    private nonisolated(unsafe) var removeUserStatusUnderlyingCallsCount = 0
+    var removeUserStatusCallsCount: Int {
+        get { removeUserStatusCallsCountLock.withLock { removeUserStatusUnderlyingCallsCount } }
+        set { removeUserStatusCallsCountLock.withLock { removeUserStatusUnderlyingCallsCount = newValue } }
+    }
+    var removeUserStatusCalled: Bool {
+        return removeUserStatusCallsCount > 0
+    }
+
+    private let removeUserStatusReturnValueLock = NSLock()
+    private nonisolated(unsafe) var removeUserStatusUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var removeUserStatusReturnValue: Result<Void, ClientProxyError>! {
+        get { removeUserStatusReturnValueLock.withLock { removeUserStatusUnderlyingReturnValue } }
+        set { removeUserStatusReturnValueLock.withLock { removeUserStatusUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var removeUserStatusClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    @concurrent func removeUserStatus() async -> Result<Void, ClientProxyError> {
+        removeUserStatusCallsCountLock.withLock { removeUserStatusUnderlyingCallsCount += 1 }
+        if let removeUserStatusClosure = removeUserStatusClosure {
+            return await removeUserStatusClosure()
+        } else {
+            return removeUserStatusReturnValue
+        }
+    }
     //MARK: - linkNewDeviceService
 
     private let linkNewDeviceServiceCallsCountLock = NSLock()
