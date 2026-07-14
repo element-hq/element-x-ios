@@ -12,6 +12,10 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Mentions
+  internal static var screenRoomlistFilterMentions: String { return UntranslatedL10n.tr("Untranslated", "screen_roomlist_filter_mentions") }
+  /// You don’t have any unread mentions
+  internal static var screenRoomlistFilterMentionsEmptyStateTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_roomlist_filter_mentions_empty_state_title") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...
