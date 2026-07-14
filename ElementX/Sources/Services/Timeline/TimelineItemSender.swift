@@ -32,11 +32,12 @@ nonisolated struct TimelineItemSender: Identifiable, Hashable {
     
     init(senderID: String, senderProfile: ProfileDetails) {
         switch senderProfile {
-        case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
+        case let .ready(displayName, isDisplayNameAmbiguous, avatarURL, status, call):
             self.init(id: senderID,
                       displayName: displayName,
                       isDisplayNameAmbiguous: isDisplayNameAmbiguous,
-                      avatarURL: avatarUrl.flatMap(URL.init(string:)))
+                      avatarURL: avatarURL.flatMap(URL.init(string:)),
+                      status: .init(rustStatus: status, rustCall: call))
         default:
             self.init(id: senderID,
                       displayName: nil,

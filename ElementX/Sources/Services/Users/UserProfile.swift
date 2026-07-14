@@ -36,18 +36,18 @@ nonisolated struct UserProfile: Hashable, Identifiable {
         status = sender.status
     }
     
-    init(sdkUserProfile: MatrixRustSDK.UserProfile) {
-        id = sdkUserProfile.userId
-        displayName = sdkUserProfile.displayName
-        avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
-        status = .init()
+    init(rustUserProfile: MatrixRustSDK.UserProfile) {
+        id = rustUserProfile.userId
+        displayName = rustUserProfile.displayName
+        avatarURL = rustUserProfile.avatarUrl.flatMap(URL.init(string:))
+        status = .init(rustStatus: rustUserProfile.status, rustCall: rustUserProfile.call)
     }
     
-    init(sdkRoomHero: MatrixRustSDK.RoomHero) {
-        id = sdkRoomHero.userId
-        displayName = sdkRoomHero.displayName
-        avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
-        status = .init()
+    init(rustRoomHero: MatrixRustSDK.RoomHero) {
+        id = rustRoomHero.userId
+        displayName = rustRoomHero.displayName
+        avatarURL = rustRoomHero.avatarUrl.flatMap(URL.init(string:))
+        status = .init() // Requires https://github.com/matrix-org/matrix-rust-sdk/pull/6733
     }
     
     init(member: RoomMemberProxyProtocol) {
@@ -61,29 +61,36 @@ nonisolated struct UserProfile: Hashable, Identifiable {
     }
 }
 
+// MARK: - Status
+
+/// A user's status, created from a combination of their manually set status along with the call status indicator.
 nonisolated struct UserStatus: Hashable {
-    /// The status manually set by the user (if any).
-    let userSet: UserSet?
-    /// The status automatically set by Element Call (while in a call).
+    /// The raw status that is manually set by the user (if any).
+    let raw: Raw?
+    /// The call status indicator automatically set by Element Call (while in a call).
     let call: Call?
     
     /// The status that should be displayed on the user's profile.
-    var displayed: DisplayedStatus? {
+    var displayed: Displayed? {
         // The user-set status takes precedence over the call indicator.
-        userSet.map { .userSet($0) } ?? call.map { .inCall($0) }
+        raw.map { .userSet($0) } ?? call.map { .inCall($0) }
     }
     
-    nonisolated struct UserSet: Hashable {
+    /// A status that is manually set by the user.
+    nonisolated struct Raw: Hashable {
         let text: String
         let emoji: Character
     }
     
+    /// The call status indicator automatically set by Element Call.
     nonisolated struct Call: Hashable {
-        let startDate: Date?
+        /// When the user joined the call, if known.
+        let joinedDate: Date?
     }
     
-    nonisolated enum DisplayedStatus: Hashable {
-        case userSet(UserSet)
+    /// The status displayed in the UI.
+    nonisolated enum Displayed: Hashable {
+        case userSet(Raw)
         case inCall(Call)
         
         var text: String {
@@ -104,9 +111,38 @@ nonisolated struct UserStatus: Hashable {
 
 nonisolated extension UserStatus {
     init() {
-        self.init(userSet: nil, call: nil)
+        raw = nil
+        call = nil
+    }
+    
+    init(rustStatus: MatrixRustSDK.UserStatus?, rustCall: MatrixRustSDK.UserCall?) {
+        raw = rustStatus.map(Raw.init)
+        call = rustCall.map(Call.init)
     }
 }
+
+nonisolated extension UserStatus.Raw {
+    init(rustStatus: MatrixRustSDK.UserStatus) {
+        text = rustStatus.text
+        emoji = Character(rustStatus.emoji)
+    }
+    
+    var rustValue: MatrixRustSDK.UserStatus {
+        .init(emoji: String(emoji), text: text)
+    }
+}
+
+nonisolated extension UserStatus.Call {
+    init(rustCall: MatrixRustSDK.UserCall) {
+        joinedDate = rustCall.callJoinedTs.map { Date(timeIntervalSince1970: Double($0)) }
+    }
+    
+    var rustValue: MatrixRustSDK.UserCall {
+        .init(callJoinedTs: joinedDate.map { UInt64($0.timeIntervalSince1970) })
+    }
+}
+
+// MARK: - Search Results
 
 struct SearchUsersResults {
     let results: [UserProfile]
@@ -114,8 +150,8 @@ struct SearchUsersResults {
 }
 
 extension SearchUsersResults {
-    init(sdkResults: MatrixRustSDK.SearchUsersResults) {
-        results = sdkResults.results.map(UserProfile.init)
-        limited = sdkResults.limited
+    init(rustResults: MatrixRustSDK.SearchUsersResults) {
+        results = rustResults.results.map(UserProfile.init)
+        limited = rustResults.limited
     }
 }

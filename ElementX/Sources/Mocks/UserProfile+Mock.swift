@@ -44,18 +44,18 @@ extension UserProfile {
 
 nonisolated extension UserStatus {
     static var mockCall: UserStatus {
-        .init(userSet: nil, call: .init(startDate: nil))
+        .init(raw: nil, call: .init(joinedDate: nil))
     }
     
     static var mockFocussing: UserStatus {
-        .init(userSet: .init(text: "Focussing", emoji: "🧑‍💻"), call: nil)
+        .init(raw: .init(text: "Focussing", emoji: "🧑‍💻"), call: nil)
     }
     
     static var mockHoliday: UserStatus {
-        .init(userSet: .init(text: "Holiday", emoji: "🏝️"), call: nil)
+        .init(raw: .init(text: "Holiday", emoji: "🏝️"), call: nil)
     }
     
     static func mock(text: String, emoji: Character) -> UserStatus {
-        .init(userSet: .init(text: text, emoji: emoji), call: nil)
+        .init(raw: .init(text: text, emoji: emoji), call: nil)
     }
 }

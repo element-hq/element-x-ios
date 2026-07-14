@@ -190,7 +190,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     fileprivate func didReceiveVerificationRequest(details: MatrixRustSDK.SessionVerificationRequestDetails) {
         MXLog.info("Received verification request \(details)")
         
-        let details = SessionVerificationRequestDetails(senderProfile: UserProfile(sdkUserProfile: details.senderProfile),
+        let details = SessionVerificationRequestDetails(senderProfile: UserProfile(rustUserProfile: details.senderProfile),
                                                         flowID: details.flowId,
                                                         deviceID: details.deviceId,
                                                         deviceDisplayName: details.deviceDisplayName,

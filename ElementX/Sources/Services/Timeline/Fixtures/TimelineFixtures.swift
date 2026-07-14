@@ -291,7 +291,11 @@ private extension TimelineItemProxy {
                                                                  threadRoot: nil,
                                                                  threadSummary: nil))
         let configuration = EventTimelineItemSDKMockConfiguration(sender: "@\(sender.lowercased()):matrix.org",
-                                                                  senderProfile: .ready(displayName: sender, displayNameAmbiguous: false, avatarUrl: nil),
+                                                                  senderProfile: .ready(displayName: sender,
+                                                                                        displayNameAmbiguous: false,
+                                                                                        avatarUrl: nil,
+                                                                                        status: nil,
+                                                                                        call: nil),
                                                                   isOwn: isOwn,
                                                                   canBeRepliedTo: true,
                                                                   content: content)
