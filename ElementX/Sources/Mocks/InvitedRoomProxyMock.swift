@@ -79,7 +79,7 @@ private extension RoomMember {
         self.init(userId: proxy.userID,
                   displayName: proxy.displayName,
                   avatarUrl: proxy.avatarURL?.absoluteString,
-                  status: proxy.status.userSet?.rustValue,
+                  status: proxy.status.raw?.rustValue,
                   call: proxy.status.call?.rustValue,
                   membership: proxy.membership,
                   isNameAmbiguous: proxy.disambiguatedDisplayName != proxy.displayName,

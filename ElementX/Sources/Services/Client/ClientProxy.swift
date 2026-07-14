@@ -749,7 +749,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func setUserStatus(_ status: UserStatus.UserSet) async -> Result<Void, ClientProxyError> {
+    func setUserStatus(_ status: UserStatus.Raw) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setUserStatus(status: status.rustValue)
             Task { await self.loadUserProfile() }

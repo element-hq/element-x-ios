@@ -61,29 +61,36 @@ nonisolated struct UserProfile: Hashable, Identifiable {
     }
 }
 
+// MARK: - Status
+
+/// A user's status, created from a combination of their manually set status along with the call status indicator.
 nonisolated struct UserStatus: Hashable {
-    /// The status manually set by the user (if any).
-    let userSet: UserSet?
-    /// The status automatically set by Element Call (while in a call).
+    /// The raw status that is manually set by the user (if any).
+    let raw: Raw?
+    /// The call status indicator automatically set by Element Call (while in a call).
     let call: Call?
     
     /// The status that should be displayed on the user's profile.
-    var displayed: DisplayedStatus? {
+    var displayed: Displayed? {
         // The user-set status takes precedence over the call indicator.
-        userSet.map { .userSet($0) } ?? call.map { .inCall($0) }
+        raw.map { .userSet($0) } ?? call.map { .inCall($0) }
     }
     
-    nonisolated struct UserSet: Hashable {
+    /// A status that is manually set by the user.
+    nonisolated struct Raw: Hashable {
         let text: String
         let emoji: Character
     }
     
+    /// The call status indicator automatically set by Element Call.
     nonisolated struct Call: Hashable {
-        let startDate: Date?
+        /// When the user joined the call, if known.
+        let joinedDate: Date?
     }
     
-    nonisolated enum DisplayedStatus: Hashable {
-        case userSet(UserSet)
+    /// The status displayed in the UI.
+    nonisolated enum Displayed: Hashable {
+        case userSet(Raw)
         case inCall(Call)
         
         var text: String {
@@ -104,17 +111,17 @@ nonisolated struct UserStatus: Hashable {
 
 nonisolated extension UserStatus {
     init() {
-        userSet = nil
+        raw = nil
         call = nil
     }
     
     init(rustStatus: MatrixRustSDK.UserStatus?, rustCall: MatrixRustSDK.UserCall?) {
-        userSet = rustStatus.map(UserSet.init)
+        raw = rustStatus.map(Raw.init)
         call = rustCall.map(Call.init)
     }
 }
 
-nonisolated extension UserStatus.UserSet {
+nonisolated extension UserStatus.Raw {
     init(rustStatus: MatrixRustSDK.UserStatus) {
         text = rustStatus.text
         emoji = Character(rustStatus.emoji)
@@ -127,13 +134,15 @@ nonisolated extension UserStatus.UserSet {
 
 nonisolated extension UserStatus.Call {
     init(rustCall: MatrixRustSDK.UserCall) {
-        startDate = rustCall.callJoinedTs.map { Date(timeIntervalSince1970: Double($0)) }
+        joinedDate = rustCall.callJoinedTs.map { Date(timeIntervalSince1970: Double($0)) }
     }
     
     var rustValue: MatrixRustSDK.UserCall {
-        .init(callJoinedTs: startDate.map { UInt64($0.timeIntervalSince1970) })
+        .init(callJoinedTs: joinedDate.map { UInt64($0.timeIntervalSince1970) })
     }
 }
+
+// MARK: - Search Results
 
 struct SearchUsersResults {
     let results: [UserProfile]

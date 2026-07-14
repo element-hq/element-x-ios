@@ -218,7 +218,7 @@ protocol ClientProxyProtocol: AnyObject {
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
     func removeUserAvatar() async -> Result<Void, ClientProxyError>
-    func setUserStatus(_ status: UserStatus.UserSet) async -> Result<Void, ClientProxyError>
+    func setUserStatus(_ status: UserStatus.Raw) async -> Result<Void, ClientProxyError>
     func removeUserStatus() async -> Result<Void, ClientProxyError>
     
     func linkNewDeviceService() -> LinkNewDeviceServiceProtocol
