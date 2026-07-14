@@ -151,7 +151,7 @@ nonisolated class NotificationHandler {
         case .state(let stateContent):
             switch stateContent {
             case .roomMemberContent(_, .knock):
-                // MSCxxxx: the homeserver pushes knocks to users who can act on them.
+                // MSC4506: the homeserver pushes knocks to users who can act on them.
                 return .shouldDisplay
             case .roomMemberContent(let userID, .invite) where userID == itemProxy.receiverID:
                 // An invite for us that resolved as a timeline member event (e.g. the room

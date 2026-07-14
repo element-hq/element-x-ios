@@ -83,7 +83,7 @@ nonisolated struct NotificationContentBuilder {
             case .state(let stateContent):
                 switch stateContent {
                 case .roomMemberContent(_, .knock):
-                    // MSCxxxx: the homeserver pushes knocks to users who can act on them.
+                    // MSC4506: the homeserver pushes knocks to users who can act on them.
                     await processMessageLike(notificationContent: &notificationContent,
                                              notificationItem: notificationItem,
                                              mediaProvider: mediaProvider)
