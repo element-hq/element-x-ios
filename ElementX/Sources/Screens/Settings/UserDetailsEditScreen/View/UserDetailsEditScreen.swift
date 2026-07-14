@@ -73,6 +73,7 @@ struct UserDetailsEditScreen: View {
         }
         .buttonStyle(EditAvatarButtonStyle())
         .disabled(!context.viewState.canEditAvatar)
+        .accessibilityLabel(L10n.a11yEditAvatar)
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
     }
