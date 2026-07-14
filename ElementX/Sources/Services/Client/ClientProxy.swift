@@ -421,12 +421,9 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        guard networkMonitor.reachabilityPublisher.value == .reachable else {
-            MXLog.warning("Ignoring request, network unreachable.")
-            return
-        }
+        let offline = networkMonitor.reachabilityPublisher.value != .reachable
         
-        await transitionServices(to: .running).value
+        await transitionServices(to: .running(offline: offline)).value
     }
     
     /// A stored task for restarting the sync after a failure. This is stored so that we can cancel
@@ -1052,7 +1049,7 @@ class ClientProxy: ClientProxyProtocol {
                 
                 // Don't restart the send queue unless the client is meant to be running; doing so while
                 // suspended would generate network activity in the window we paused to keep quiet.
-                if enabled == false, reachability == .reachable, self?.desiredServiceState == .running {
+                if enabled == false, reachability == .reachable, case .running = self?.desiredServiceState {
                     MXLog.info("Enabling all send queues")
                     Task {
                         await client.enableAllSendQueues(enable: true)
@@ -1072,7 +1069,7 @@ class ClientProxy: ClientProxyProtocol {
     
     // MARK: - Pausing and resuming
     
-    private enum ServiceState { case running, suspended }
+    private enum ServiceState { case running(offline: Bool), suspended }
     
     /// The state the sync service and client *should* be in, updated by ``resumeServices()`` and ``pauseServices()``.
     private var desiredServiceState: ServiceState = .suspended
@@ -1097,7 +1094,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private func reconcileServiceState() async {
         switch desiredServiceState {
-        case .running:
+        case .running(let offline):
             if appSettings.clientPausingAndResumingEnabled {
                 do {
                     MXLog.info("Resuming client")
@@ -1105,6 +1102,11 @@ class ClientProxy: ClientProxyProtocol {
                 } catch {
                     MXLog.error("Failed resuming client with error: \(error)")
                 }
+            }
+            
+            if offline {
+                MXLog.warning("Ignoring sync services, network unreachable.")
+                return
             }
             
             MXLog.info("Starting sync")
@@ -1213,7 +1215,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func updateHomeserverReachability() {
-        let reachability: HomeserverReachability = if desiredServiceState != .running {
+        let reachability: HomeserverReachability = if case .suspended = desiredServiceState {
             .suspended
         } else if syncServiceState == .offline {
             .unreachable
