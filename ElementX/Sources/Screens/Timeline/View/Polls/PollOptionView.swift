@@ -52,8 +52,10 @@ struct PollOptionView: View {
                 }
                 
                 PollProgressView(progress: progress)
+                    .accessibilityHidden(true)
             }
         }
+        .accessibilityElement(children: .combine)
     }
     
     // MARK: - Private
