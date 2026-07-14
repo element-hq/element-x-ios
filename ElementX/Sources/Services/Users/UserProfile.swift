@@ -36,17 +36,17 @@ nonisolated struct UserProfile: Hashable, Identifiable {
         status = sender.status
     }
     
-    init(sdkUserProfile: MatrixRustSDK.UserProfile) {
-        id = sdkUserProfile.userId
-        displayName = sdkUserProfile.displayName
-        avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
-        status = .init(rustStatus: sdkUserProfile.status, rustCall: sdkUserProfile.call)
+    init(rustUserProfile: MatrixRustSDK.UserProfile) {
+        id = rustUserProfile.userId
+        displayName = rustUserProfile.displayName
+        avatarURL = rustUserProfile.avatarUrl.flatMap(URL.init(string:))
+        status = .init(rustStatus: rustUserProfile.status, rustCall: rustUserProfile.call)
     }
     
-    init(sdkRoomHero: MatrixRustSDK.RoomHero) {
-        id = sdkRoomHero.userId
-        displayName = sdkRoomHero.displayName
-        avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
+    init(rustRoomHero: MatrixRustSDK.RoomHero) {
+        id = rustRoomHero.userId
+        displayName = rustRoomHero.displayName
+        avatarURL = rustRoomHero.avatarUrl.flatMap(URL.init(string:))
         status = .init() // Requires https://github.com/matrix-org/matrix-rust-sdk/pull/6733
     }
     
@@ -141,8 +141,8 @@ struct SearchUsersResults {
 }
 
 extension SearchUsersResults {
-    init(sdkResults: MatrixRustSDK.SearchUsersResults) {
-        results = sdkResults.results.map(UserProfile.init)
-        limited = sdkResults.limited
+    init(rustResults: MatrixRustSDK.SearchUsersResults) {
+        results = rustResults.results.map(UserProfile.init)
+        limited = rustResults.limited
     }
 }

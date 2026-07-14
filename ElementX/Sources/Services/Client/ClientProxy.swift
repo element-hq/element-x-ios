@@ -789,7 +789,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError> {
         do {
-            return try await .success(.init(sdkResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
+            return try await .success(.init(rustResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
         } catch {
             MXLog.error("Failed searching users with error: \(error)")
             return .failure(.sdkError(error))
@@ -798,7 +798,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func profile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
         do {
-            return try await .success(.init(sdkUserProfile: client.getProfile(userId: userID)))
+            return try await .success(.init(rustUserProfile: client.getProfile(userId: userID)))
         } catch {
             MXLog.error("Failed retrieving profile for userID: \(userID) with error: \(error)")
             return .failure(.sdkError(error))
