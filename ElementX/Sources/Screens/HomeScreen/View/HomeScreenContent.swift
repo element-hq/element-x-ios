@@ -54,6 +54,7 @@ struct HomeScreenContent: View {
                                     .frame(maxWidth: .infinity, minHeight: max(0, geometry.size.height - topSectionHeight))
                             } else {
                                 HomeScreenRoomList(context: context)
+                                    .accessibilityAddTraits(.updatesFrequently)
                             }
                         } header: {
                             topSection
