@@ -420,6 +420,28 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await clearCachesSyncServiceClosure?(syncService)
     }
 
+    //MARK: - clearUserStatus
+
+    open var clearUserStatusThrowableError: Error?
+    private let clearUserStatusCallsCountLock = NSLock()
+    private var clearUserStatusUnderlyingCallsCount = 0
+    open var clearUserStatusCallsCount: Int {
+        get { clearUserStatusCallsCountLock.withLock { clearUserStatusUnderlyingCallsCount } }
+        set { clearUserStatusCallsCountLock.withLock { clearUserStatusUnderlyingCallsCount = newValue } }
+    }
+    open var clearUserStatusCalled: Bool {
+        return clearUserStatusCallsCount > 0
+    }
+    open var clearUserStatusClosure: (() async throws -> Void)?
+
+    open override func clearUserStatus() async throws {
+        if let error = clearUserStatusThrowableError {
+            throw error
+        }
+        clearUserStatusCallsCountLock.withLock { clearUserStatusUnderlyingCallsCount += 1 }
+        try await clearUserStatusClosure?()
+    }
+
     //MARK: - contentScanner
 
     private let contentScannerCallsCountLock = NSLock()
@@ -3243,6 +3265,42 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendReceivedArguments = (identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang, append: append)
         setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendReceivedInvocationsLock.withLock { setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendUnderlyingReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang, append: append)) }
         try await setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangAppendClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang, append)
+    }
+
+    //MARK: - setUserStatus
+
+    open var setUserStatusStatusThrowableError: Error?
+    private let setUserStatusStatusCallsCountLock = NSLock()
+    private var setUserStatusStatusUnderlyingCallsCount = 0
+    open var setUserStatusStatusCallsCount: Int {
+        get { setUserStatusStatusCallsCountLock.withLock { setUserStatusStatusUnderlyingCallsCount } }
+        set { setUserStatusStatusCallsCountLock.withLock { setUserStatusStatusUnderlyingCallsCount = newValue } }
+    }
+    open var setUserStatusStatusCalled: Bool {
+        return setUserStatusStatusCallsCount > 0
+    }
+    private let setUserStatusStatusReceivedStatusLock = NSLock()
+    private var setUserStatusStatusUnderlyingReceivedStatus: UserStatus?
+    open var setUserStatusStatusReceivedStatus: UserStatus? {
+        get { setUserStatusStatusReceivedStatusLock.withLock { setUserStatusStatusUnderlyingReceivedStatus } }
+        set { setUserStatusStatusReceivedStatusLock.withLock { setUserStatusStatusUnderlyingReceivedStatus = newValue } }
+    }
+    private let setUserStatusStatusReceivedInvocationsLock = NSLock()
+    private var setUserStatusStatusUnderlyingReceivedInvocations: [UserStatus] = []
+    open var setUserStatusStatusReceivedInvocations: [UserStatus] {
+        get { setUserStatusStatusReceivedInvocationsLock.withLock { setUserStatusStatusUnderlyingReceivedInvocations } }
+        set { setUserStatusStatusReceivedInvocationsLock.withLock { setUserStatusStatusUnderlyingReceivedInvocations = newValue } }
+    }
+    open var setUserStatusStatusClosure: ((UserStatus) async throws -> Void)?
+
+    open override func setUserStatus(status: UserStatus) async throws {
+        if let error = setUserStatusStatusThrowableError {
+            throw error
+        }
+        setUserStatusStatusCallsCountLock.withLock { setUserStatusStatusUnderlyingCallsCount += 1 }
+        setUserStatusStatusReceivedStatus = status
+        setUserStatusStatusReceivedInvocationsLock.withLock { setUserStatusStatusUnderlyingReceivedInvocations.append(status) }
+        try await setUserStatusStatusClosure?(status)
     }
 
     //MARK: - setUtdDelegate
@@ -16310,6 +16368,35 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
             return withOfflineModeClosure()
         } else {
             return withOfflineModeReturnValue
+        }
+    }
+
+    //MARK: - withProfilesExtension
+
+    private let withProfilesExtensionCallsCountLock = NSLock()
+    private var withProfilesExtensionUnderlyingCallsCount = 0
+    open var withProfilesExtensionCallsCount: Int {
+        get { withProfilesExtensionCallsCountLock.withLock { withProfilesExtensionUnderlyingCallsCount } }
+        set { withProfilesExtensionCallsCountLock.withLock { withProfilesExtensionUnderlyingCallsCount = newValue } }
+    }
+    open var withProfilesExtensionCalled: Bool {
+        return withProfilesExtensionCallsCount > 0
+    }
+
+    private let withProfilesExtensionReturnValueLock = NSLock()
+    open var withProfilesExtensionUnderlyingReturnValue: SyncServiceBuilder!
+    open var withProfilesExtensionReturnValue: SyncServiceBuilder! {
+        get { withProfilesExtensionReturnValueLock.withLock { withProfilesExtensionUnderlyingReturnValue } }
+        set { withProfilesExtensionReturnValueLock.withLock { withProfilesExtensionUnderlyingReturnValue = newValue } }
+    }
+    open var withProfilesExtensionClosure: (() -> SyncServiceBuilder)?
+
+    open override func withProfilesExtension() -> SyncServiceBuilder {
+        withProfilesExtensionCallsCountLock.withLock { withProfilesExtensionUnderlyingCallsCount += 1 }
+        if let withProfilesExtensionClosure = withProfilesExtensionClosure {
+            return withProfilesExtensionClosure()
+        } else {
+            return withProfilesExtensionReturnValue
         }
     }
 

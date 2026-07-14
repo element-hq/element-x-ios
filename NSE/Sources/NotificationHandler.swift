@@ -144,7 +144,8 @@ nonisolated class NotificationHandler {
                  .keyVerificationKey,
                  .keyVerificationMac,
                  .keyVerificationDone,
-                 .reactionContent:
+                 .reactionContent,
+                 .beacon:
                 return .unsupportedShouldDiscard
             }
         case .state:

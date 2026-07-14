@@ -40,14 +40,14 @@ nonisolated struct UserProfile: Hashable, Identifiable {
         id = sdkUserProfile.userId
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
-        status = .init()
+        status = .init(rustStatus: sdkUserProfile.status, rustCall: sdkUserProfile.call)
     }
     
     init(sdkRoomHero: MatrixRustSDK.RoomHero) {
         id = sdkRoomHero.userId
         displayName = sdkRoomHero.displayName
         avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
-        status = .init()
+        status = .init() // Requires https://github.com/matrix-org/matrix-rust-sdk/pull/6733
     }
     
     init(member: RoomMemberProxyProtocol) {
@@ -104,7 +104,34 @@ nonisolated struct UserStatus: Hashable {
 
 nonisolated extension UserStatus {
     init() {
-        self.init(userSet: nil, call: nil)
+        userSet = nil
+        call = nil
+    }
+    
+    init(rustStatus: MatrixRustSDK.UserStatus?, rustCall: MatrixRustSDK.UserCall?) {
+        userSet = rustStatus.map(UserSet.init)
+        call = rustCall.map(Call.init)
+    }
+}
+
+nonisolated extension UserStatus.UserSet {
+    init(rustStatus: MatrixRustSDK.UserStatus) {
+        text = rustStatus.text
+        emoji = Character(rustStatus.emoji)
+    }
+    
+    var rustValue: MatrixRustSDK.UserStatus {
+        .init(emoji: String(emoji), text: text)
+    }
+}
+
+nonisolated extension UserStatus.Call {
+    init(rustCall: MatrixRustSDK.UserCall) {
+        startDate = rustCall.callJoinedTs.map { Date(timeIntervalSince1970: Double($0)) }
+    }
+    
+    var rustValue: MatrixRustSDK.UserCall {
+        .init(callJoinedTs: startDate.map { UInt64($0.timeIntervalSince1970) })
     }
 }
 

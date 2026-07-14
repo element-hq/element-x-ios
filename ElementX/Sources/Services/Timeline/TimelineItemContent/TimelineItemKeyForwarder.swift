@@ -19,7 +19,7 @@ nonisolated struct TimelineItemKeyForwarder: Identifiable, Hashable {
     
     init(forwarderID: String, forwarderProfile: ProfileDetails) {
         switch forwarderProfile {
-        case let .ready(displayName, _, _):
+        case let .ready(displayName, _, _, _, _):
             self.init(id: forwarderID,
                       displayName: displayName)
         default:
