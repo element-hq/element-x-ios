@@ -22,6 +22,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     private var room: RoomProxyType?
     private var isLoadingPreview = true
     private var membershipStateChangeCancellable: AnyCancellable?
+    private var hasSentJoinAction = false
     
     private let actionsSubject: PassthroughSubject<JoinRoomScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<JoinRoomScreenViewModelAction, Never> {
@@ -148,27 +149,16 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         case .invited(let invitedRoomProxy):
             inviter = invitedRoomProxy.inviter.map(RoomInviterDetails.init)
             roomInfo = invitedRoomProxy.info
+            watchForMembershipChange(from: .invited)
         case .knocked(let knockedRoomProxy):
             roomInfo = knockedRoomProxy.info
-            membershipStateChangeCancellable = clientProxy
-                .staticRoomSummaryProvider
-                .roomListPublisher
-                .compactMap { summaries -> Void? in
-                    guard let roomSummary = summaries.first(where: { $0.id == roomInfo?.id }),
-                          roomSummary.room.membership() != .knocked else {
-                        return nil
-                    }
-                    return ()
-                }
-                .sink { [weak self] in
-                    Task { await self?.loadRoomDetails() }
-                }
+            watchForMembershipChange(from: .knocked)
         case .banned(let bannedRoomProxy):
             roomInfo = bannedRoomProxy.info
         default:
             break
         }
-        
+
         switch source {
         case .generic(let roomID, _):
             await updateGenericRoomDetails(roomID: roomID, roomInfo: roomInfo, inviter: inviter)
@@ -176,6 +166,32 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             await updateSpaceRoomDetails(spaceServiceRoom: spaceServiceRoom, inviter: inviter)
         }
         await updateMode()
+
+        // The homeserver can join us to the room without a join request from this client:
+        // it auto-joined us after our knock was accepted
+        // (https://github.com/element-hq/synapse/issues/16307), or the invite was accepted
+        // on another of our devices. Advance into the room as if the join button had been
+        // tapped, matching Android's RoomFlowNode.
+        if case .joined = room {
+            await finishJoinAction()
+        }
+    }
+
+    private func watchForMembershipChange(from membership: Membership) {
+        let roomID = state.roomID
+        membershipStateChangeCancellable = clientProxy
+            .staticRoomSummaryProvider
+            .roomListPublisher
+            .compactMap { summaries -> Void? in
+                guard let roomSummary = summaries.first(where: { $0.id == roomID }),
+                      roomSummary.room.membership() != membership else {
+                    return nil
+                }
+                return ()
+            }
+            .sink { [weak self] in
+                Task { await self?.loadRoomDetails() }
+            }
     }
     
     private func updateGenericRoomDetails(roomID: String, roomInfo: BaseRoomInfoProxyProtocol?, inviter: RoomInviterDetails?) async {
@@ -329,16 +345,22 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func finishJoinAction() async {
+        // A user-initiated join and a server-side one can complete concurrently:
+        // only ever advance once.
+        guard !hasSentJoinAction else { return }
+
         let roomID = state.roomID
         appSettings.seenInvites.remove(roomID)
-        
+
         guard state.roomDetails?.isSpace == true else {
+            hasSentJoinAction = true
             actionsSubject.send(.joined(.roomID(roomID)))
             return
         }
-        
+
         switch await clientProxy.spaceService.spaceRoomList(spaceID: roomID) {
         case .success(let spaceRoomListProxy):
+            hasSentJoinAction = true
             actionsSubject.send(.joined(.space(spaceRoomListProxy)))
         case .failure(let error):
             MXLog.error("Failed to get the space room list after joining: \(error)")
