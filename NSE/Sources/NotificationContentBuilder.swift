@@ -93,6 +93,13 @@ nonisolated struct NotificationContentBuilder {
                                              notificationItem: notificationItem,
                                              mediaProvider: mediaProvider)
                     notificationContent.body = UntranslatedL10n.notificationKnockRequestBody
+                case .roomMemberContent(let userID, .invite) where userID == notificationItem.receiverID:
+                    // An invite for us can resolve as a timeline member event rather than a stripped
+                    // invite when the room has already advanced past the invited state — e.g. the
+                    // server auto-joined us because our knock was accepted (synapse#16307).
+                    await processInvited(notificationContent: &notificationContent,
+                                         notificationItem: notificationItem,
+                                         mediaProvider: mediaProvider)
                 default:
                     processEmpty(&notificationContent)
                 }

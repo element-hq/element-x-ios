@@ -155,6 +155,11 @@ nonisolated class NotificationHandler {
             case .roomMemberContent(_, .knock):
                 // MSCxxxx: the homeserver pushes knocks to users who can act on them.
                 return .shouldDisplay
+            case .roomMemberContent(let userID, .invite) where userID == itemProxy.receiverID:
+                // An invite for us that resolved as a timeline member event (e.g. the room
+                // already advanced past invited because the server auto-joined our accepted
+                // knock, synapse#16307) — rendered as a plain invite.
+                return .shouldDisplay
             default:
                 return .unsupportedShouldDiscard
             }
