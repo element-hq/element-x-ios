@@ -129,9 +129,6 @@ targets:
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../ElementX/Sources/Services/Media/Provider
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
-    - path: ../../ElementX/Sources/Services/Presence/MainAppActivityState.swift
-    - path: ../../ElementX/Sources/Services/Presence/NotificationExtensionPresencePolicy.swift
-    - path: ../../ElementX/Sources/Services/Presence/SharedPresenceStateStore.swift
     - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
     - path: ../../ElementX/Sources/Services/UserSession/SessionDirectories.swift

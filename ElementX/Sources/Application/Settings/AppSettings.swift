@@ -19,13 +19,12 @@ import SwiftUI
 nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     var lastNotificationBootTime: TimeInterval? { get set }
     var selectedNotificationTone: NotificationTone? { get set }
-    var sharePresence: Bool { get }
-
+    
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
     var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
     var contentScannerURL: RemotePreference<URL?> { get }
-
+    
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var threadsEnabled: Bool { get }
     var globalSearchEnabled: Bool { get }
@@ -374,7 +373,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     @UserPreference(defaultValue: true)
     var sharePresence: Bool
-
+    
     // MARK: - Feature Flags
     
     /// Others

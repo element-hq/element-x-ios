@@ -12,7 +12,6 @@ import UIKit
 final class PresenceService {
     private let clientProxy: ClientProxyProtocol
     private let appSettings: AppSettings
-    private let sharedPresenceStateStore: SharedPresenceStateStoreProtocol
     private let notificationCenter: NotificationCenter
     
     private var isForegroundActive: Bool
@@ -21,29 +20,23 @@ final class PresenceService {
     private var sendTask: Task<Void, Never>?
     
     private var cancellables = Set<AnyCancellable>()
-    private var foregroundActivityRefreshCancellable: AnyCancellable?
     
     init(clientProxy: ClientProxyProtocol,
          appSettings: AppSettings,
-         sharedPresenceStateStore: SharedPresenceStateStoreProtocol,
          notificationCenter: NotificationCenter = .default,
          initialApplicationState: UIApplication.State = UIApplication.shared.applicationState) {
         self.clientProxy = clientProxy
         self.appSettings = appSettings
-        self.sharedPresenceStateStore = sharedPresenceStateStore
         self.notificationCenter = notificationCenter
         isForegroundActive = initialApplicationState == .active
         
         observeApplicationState()
         observeSharePresence()
-        updateMainAppActivityState(for: initialApplicationState)
-        updateForegroundActivityRefresh()
         reportCurrentState()
     }
     
     isolated deinit {
         sendTask?.cancel()
-        foregroundActivityRefreshCancellable?.cancel()
         cancellables.forEach { $0.cancel() }
     }
     
@@ -85,39 +78,7 @@ final class PresenceService {
     
     private func apply(applicationState: UIApplication.State) {
         isForegroundActive = applicationState == .active
-        updateMainAppActivityState(for: applicationState)
-        updateForegroundActivityRefresh()
         reportCurrentState()
-    }
-    
-    private func updateMainAppActivityState(for applicationState: UIApplication.State) {
-        sharedPresenceStateStore.updateMainAppActivityState(applicationState.mainAppActivityState,
-                                                            systemUptime: ProcessInfo.processInfo.systemUptime)
-    }
-    
-    private func updateForegroundActivityRefresh() {
-        foregroundActivityRefreshCancellable?.cancel()
-        foregroundActivityRefreshCancellable = nil
-        
-        guard isForegroundActive else {
-            return
-        }
-        
-        foregroundActivityRefreshCancellable = Timer.publish(every: NotificationExtensionPresencePolicy.foregroundActiveRefreshInterval,
-                                                             on: .main,
-                                                             in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                self?.refreshForegroundActiveState()
-            }
-    }
-    
-    private func refreshForegroundActiveState() {
-        guard isForegroundActive else {
-            return
-        }
-        
-        updateMainAppActivityState(for: .active)
     }
     
     private func reportCurrentState() {

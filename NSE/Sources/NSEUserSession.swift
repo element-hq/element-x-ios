@@ -14,15 +14,20 @@ nonisolated protocol NSEUserSessionProtocol {
     var inviteAvatarsVisibility: InviteAvatars { get async }
     var mediaPreviewVisibility: MediaPreviews { get async }
     var threadsEnabled: Bool { get }
-
+    
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol?
     func roomForIdentifier(_ roomID: String) -> Room?
+}
+
+/// Testable seam for the offline presence seed. The NSE must never let a sync mark the user online or idle,
+/// so it only ever seeds `.offline`.
+nonisolated protocol NSEPresenceSetterProtocol {
+    func setOfflinePresence() async
 }
 
 final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     private let sessionDirectories: SessionDirectories
     private let appSettings: CommonSettingsProtocol
-    private let sharedPresenceStateStore: SharedPresenceStateStoreProtocol
     private let baseClient: Client
     private let notificationClient: NotificationClient
     private let userID: String
@@ -61,12 +66,10 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
          roomID: String,
          clientSessionDelegate: ClientSessionDelegate,
          appHooks: AppHooks,
-         appSettings: CommonSettingsProtocol,
-         sharedPresenceStateStore: SharedPresenceStateStoreProtocol) async throws {
+         appSettings: CommonSettingsProtocol) async throws {
         sessionDirectories = credentials.restorationToken.sessionDirectories
         userID = credentials.userID
         self.appSettings = appSettings
-        self.sharedPresenceStateStore = sharedPresenceStateStore
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         let clientBuilder = ClientBuilder
@@ -102,31 +105,8 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     }
     
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
-        await Self.notificationItemProxy(roomID: roomID,
-                                         eventID: eventID,
-                                         userID: userID,
-                                         appSettings: appSettings,
-                                         sharedPresenceStateStore: sharedPresenceStateStore,
-                                         forceOfflinePresence: { [baseClient] in
-                                             try await baseClient.setPresence(presence: .offline, immediate: true)
-                                         },
-                                         fetchNotification: { [notificationClient] in
-                                             try await notificationClient.getNotification(roomId: roomID, eventId: eventID)
-                                         })
-    }
-
-    static func notificationItemProxy(roomID: String,
-                                      eventID: String,
-                                      userID: String,
-                                      appSettings: CommonSettingsProtocol,
-                                      sharedPresenceStateStore: SharedPresenceStateStoreProtocol,
-                                      forceOfflinePresence: () async throws -> Void,
-                                      fetchNotification: () async throws -> NotificationStatus) async -> NotificationItemProxyProtocol? {
         do {
-            let notificationStatus = try await NotificationExtensionPresencePolicy(appSettings: appSettings,
-                                                                                   sharedPresenceStateStore: sharedPresenceStateStore)
-                .performBeforeNotificationFetch(forceOfflinePresence: forceOfflinePresence,
-                                                fetchNotification: fetchNotification)
+            let notificationStatus = try await notificationClient.getNotification(roomId: roomID, eventId: eventID)
             
             switch notificationStatus {
             case .event(let notification):
@@ -161,6 +141,18 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     
     deinit {
         delegateHandle?.cancel()
+    }
+}
+
+private nonisolated struct MatrixSDKNSEPresenceSetter: NSEPresenceSetterProtocol {
+    let client: Client
+    
+    func setOfflinePresence() async {
+        do {
+            try await client.setPresence(presence: .offline, immediate: true)
+        } catch {
+            MXLog.error("Failed seeding offline presence before notification processing with error: \(error)")
+        }
     }
 }
 

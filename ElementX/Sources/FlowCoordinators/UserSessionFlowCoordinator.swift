@@ -82,8 +82,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.appLockService = appLockService
         self.flowParameters = flowParameters
         presenceService = PresenceService(clientProxy: flowParameters.userSession.clientProxy,
-                                          appSettings: flowParameters.appSettings,
-                                          sharedPresenceStateStore: flowParameters.sharedPresenceStateStore)
+                                          appSettings: flowParameters.appSettings)
         
         navigationTabCoordinator = NavigationTabCoordinator()
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
