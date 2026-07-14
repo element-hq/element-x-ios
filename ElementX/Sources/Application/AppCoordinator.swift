@@ -1126,6 +1126,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func observeApplicationState() {
         NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationDidEnterBackground),
                                                name: UIApplication.didEnterBackgroundNotification,
                                                object: nil)
@@ -1134,6 +1139,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                selector: #selector(applicationWillEnterForeground),
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationWillTerminate),
                                                name: UIApplication.willTerminateNotification,
@@ -1163,6 +1173,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         scheduleBackgroundAppRefresh()
     }
     
+    @objc
+    private func applicationWillResignActive() {
+        MXLog.info("Application will resign active")
+    }
+    
     private func scheduleDelayedPauseServices() {
         guard backgroundTask == nil else {
             return
@@ -1188,6 +1203,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         Task {
             await resumeClientServices()
         }
+    }
+    
+    @objc
+    private func applicationDidBecomeActive() {
+        MXLog.info("Application did become active")
     }
     
     private func endActiveBackgroundTask() {
@@ -1260,8 +1280,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        // State-only (no HTTP): make the background-refresh sync carry set_presence=offline instead of the
-        // reporter's last value, so a push-driven refresh never marks the user online or idle.
+        // State-only (no HTTP): configure the background-refresh sync to carry set_presence=offline so it never
+        // reuses the client's foreground sync presence and marks the user online or idle.
         _ = await userSession.clientProxy.configurePresence(.offline, sendImmediately: false)
         
         await resumeClientServices()
