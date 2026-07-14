@@ -19,12 +19,6 @@ nonisolated protocol NSEUserSessionProtocol {
     func roomForIdentifier(_ roomID: String) -> Room?
 }
 
-/// Testable seam for the offline presence seed. The NSE must never let a sync mark the user online or idle,
-/// so it only ever seeds `.offline`.
-nonisolated protocol NSEPresenceSetterProtocol {
-    func setOfflinePresence() async
-}
-
 final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     private let sessionDirectories: SessionDirectories
     private let appSettings: CommonSettingsProtocol
@@ -141,18 +135,6 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     
     deinit {
         delegateHandle?.cancel()
-    }
-}
-
-private nonisolated struct MatrixSDKNSEPresenceSetter: NSEPresenceSetterProtocol {
-    let client: Client
-    
-    func setOfflinePresence() async {
-        do {
-            try await client.setPresence(presence: .offline, immediate: true)
-        } catch {
-            MXLog.error("Failed seeding offline presence before notification processing with error: \(error)")
-        }
     }
 }
 
