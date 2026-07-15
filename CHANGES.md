@@ -1,3 +1,41 @@
+## Changes in 26.07.4 (2026-07-15)
+
+### What's Changed
+
+✨ Features
+* Force Disable E2EE for Element Pro by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5866
+
+🙌 Improvements
+* Use dark theme for Element Call by @toger5 in https://github.com/element-hq/element-x-ios/pull/5860
+
+🐛 Bugfixes
+* Fix for NSE and ShareExtension individual builds by @mredig in https://github.com/element-hq/element-x-ios/pull/5856
+* Fix CurrentValuePublisher.map dropping updates when the mapped publisher is chained inline by @ara4n in https://github.com/element-hq/element-x-ios/pull/5870
+* Fix a bug where rooms couldn't be opened when returning to the foreground whilst offline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5867
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5865
+
+🧱 Build
+* Fix UI tests by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5862
+* Add CurrentValuePublisherTests to the UnitTests target by @ara4n in https://github.com/element-hq/element-x-ios/pull/5884
+
+🚧 In development 🚧
+* Display other users' User Status. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5859
+
+Others
+* Update the SDK and Compound tokens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5857
+* Use deferFulfillment in flow coordinator tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5861
+* Update the SDK and handle API breaks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5871
+* Fix for flaky tests by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5869
+* Constrained tests tool implementation + skill by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5873
+* Update dependency Mantis to v3 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5887
+* Update Project Dependencies by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5886
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5889
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.07.3...release/26.07.4
+
 ## Changes in 26.07.3 (2026-07-09)
 
 ### What's Changed
