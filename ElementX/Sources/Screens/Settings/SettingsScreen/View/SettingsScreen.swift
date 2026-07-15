@@ -59,9 +59,16 @@ struct SettingsScreen: View {
                             .accessibilityHidden(true)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(context.viewState.userProfile.displayName ?? "")
-                                .font(.compound.headingMD)
-                                .foregroundColor(.compound.textPrimary)
+                            HStack(spacing: 6) {
+                                Text(context.viewState.userProfile.displayName ?? "")
+                                
+                                if let statusEmoji = context.viewState.userProfile.status.displayed?.emoji {
+                                    Text(String(statusEmoji))
+                                }
+                            }
+                            .font(.compound.headingMD)
+                            .foregroundColor(.compound.textPrimary)
+                            
                             Text(context.viewState.userProfile.id)
                                 .font(.compound.bodySM)
                                 .foregroundColor(.compound.textSecondary)
@@ -276,10 +283,12 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(isBugReportServiceEnabled: Bool = true) -> SettingsScreenViewModel {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
-                                                                                   deviceID: "AAAAAAAAAAA"))))
+                                                                                   deviceID: "AAAAAAAAAAA",
+                                                                                   status: .mockFocussing))))
         return SettingsScreenViewModel(userSession: userSession,
                                        appSettings: .volatile(),
                                        isBugReportServiceEnabled: isBugReportServiceEnabled,
-                                       isInSecondaryWindow: false)
+                                       isInSecondaryWindow: false,
+                                       userIndicatorController: UserIndicatorControllerMock())
     }
 }
