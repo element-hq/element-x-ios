@@ -18,9 +18,9 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     
     case unreads
     case mentions
+    case favourites
     case people
     case rooms
-    case favourites
     case invites
     case lowPriority
     
