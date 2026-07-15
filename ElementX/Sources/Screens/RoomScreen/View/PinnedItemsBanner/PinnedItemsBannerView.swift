@@ -42,7 +42,7 @@ struct PinnedItemsBannerView: View {
         .disabled(state.isLoading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(state.displayedMessage))
-        .accessibilityValue(state.count > 1 ? Text(state.bannerIndicatorDescription) : Text(""))
+        .accessibilityValue(String(state.bannerIndicatorDescription.characters), isEnabled: state.count > 1)
     }
 
     private var viewAllButton: some View {
