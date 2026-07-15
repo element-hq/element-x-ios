@@ -40,9 +40,11 @@ struct PinnedItemsBannerView: View {
             }
         }
         .disabled(state.isLoading)
-        .accessibilityElement(children: .contain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(state.displayedMessage))
+        .accessibilityValue(state.count > 1 ? Text(state.bannerIndicatorDescription) : Text(""))
     }
-    
+
     private var viewAllButton: some View {
         Button { onViewAllButtonTap() } label: {
             Text(state.isLoading ? "" : L10n.screenRoomPinnedBannerViewAllButtonTitle)
@@ -58,6 +60,7 @@ struct PinnedItemsBannerView: View {
                 .padding(.vertical, 5)
         }
         .disabled(state.isLoading)
+        .accessibilityLabel(L10n.screenRoomPinnedBannerViewAllButtonTitle)
     }
     
     private var content: some View {
