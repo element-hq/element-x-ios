@@ -51,16 +51,12 @@ struct ActiveCallTimelineItemView: View {
         return Duration.seconds(elapsed).formatted(.time(pattern: .minuteSecond))
     }
     
-    private var extraGroupLabel: String? {
+    private var extraGroupLabel: String {
         if activeMembers.count == 1, activeMembers.first == sender.id {
             return L10n.commonUserStartedACall(sender.displayName ?? sender.id)
         } else {
-            let diff = activeMembers.count - ActiveCallTimelineItemView.maxAvatars
-            if diff > 0 {
-                return L10n.screenTimelineActiveCallExtraJoinedCount(diff)
-            }
+            return L10n.screenTimelineActiveCallJoinedCount(activeMembers.count)
         }
-        return nil
     }
     
     var body: some View {
@@ -108,12 +104,10 @@ struct ActiveCallTimelineItemView: View {
                                            mediaProvider: context?.mediaProvider)
                             .padding(-1)
                         
-                        if let text = extraGroupLabel {
-                            Text(text)
-                                .font(.compound.bodySM)
-                                .foregroundColor(.compound.textSecondary)
-                                .labelStyle(.custom(spacing: 4))
-                        }
+                        Text(extraGroupLabel)
+                            .font(.compound.bodySM)
+                            .foregroundColor(.compound.textSecondary)
+                            .labelStyle(.custom(spacing: 4))
                     }
                 }
             }
