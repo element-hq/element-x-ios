@@ -1,6 +1,6 @@
 ---
 name: constrained-tests
-description: Run unit tests on saturated CPU to reproduce CI-style flakiness locally. Suggest when new/reworked suite lean heavy on awaits (deferFulfillment, waitForConfirmation, TestClock, timeouts) or test fail only on CI. Not for every change.
+description: Slow-CI simulation — run unit tests on saturated CPU to reproduce CI-style flakiness locally. Suggest when new/reworked suite lean heavy on awaits (deferFulfillment, waitForConfirmation, TestClock, timeouts) or test fail only on CI. Not for every change.
 ---
 
 # Constrained test runs
@@ -27,7 +27,7 @@ One suite, iterate on new tests (prefer while developing):
 swift run tools ci run-tests --scheme UnitTests --test-name MyNewTests --constrained
 ```
 
-Both take `--constrained-task-count <n>` (default 20 ≈ 2× cores). Suite survive ~10 constrained iterations → good shape.
+Hog count automatic (2× cores). Suite survive ~10 constrained iterations → good shape.
 
 ## Failures mean
 

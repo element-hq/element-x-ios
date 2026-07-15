@@ -5,9 +5,10 @@ import Foundation
 final class CPUConstraint {
     private var processes = [Process]()
     
-    /// Starts the given number of CPU hogging tasks. 2× the machine's cores is
-    /// enough to keep the scheduler permanently oversubscribed.
-    func start(taskCount: Int) {
+    /// 2× the machine's cores is enough to keep the scheduler permanently oversubscribed.
+    private let taskCount = ProcessInfo.processInfo.processorCount * 2
+    
+    func start() {
         logger.info("\n🐌 Constraining the CPU with \(taskCount) tasks…\n")
         
         for _ in 0..<taskCount {

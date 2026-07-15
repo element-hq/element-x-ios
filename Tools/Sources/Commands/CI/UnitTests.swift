@@ -11,9 +11,6 @@ struct UnitTests: AsyncParsableCommand {
     @Flag(help: "Run the unit tests on a saturated CPU to reproduce the flakiness of a busy CI runner.")
     var constrained = false
     
-    @Option(help: "The number of CPU hogging tasks to run when the tests are constrained.")
-    var constrainedTaskCount = 20
-    
     private static let osVersion = CI.defaultOSVersion
     private static let device = "iPhone 17"
     
@@ -26,18 +23,17 @@ struct UnitTests: AsyncParsableCommand {
         do {
             logger.info("\n🧪 Running unit tests…\n")
             
-            let cpuConstraint = CPUConstraint()
-            if constrained {
-                cpuConstraint.start(taskCount: constrainedTaskCount)
-            }
-            defer { cpuConstraint.stop() }
-            
-            try await RunTests.parse([
+            var arguments = [
                 "--scheme", "UnitTests",
                 "--device", Self.device,
                 "--os-version", Self.osVersion,
                 "--retries", "3"
-            ]).run()
+            ]
+            if constrained {
+                arguments.append("--constrained")
+            }
+            
+            try await RunTests.parse(arguments).run()
         } catch {
             failures.append("UnitTests")
             logger.error("\n❌ Unit tests failed. \(error)\n")

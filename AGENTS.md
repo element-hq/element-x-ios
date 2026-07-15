@@ -81,7 +81,6 @@ Initial setup: `swift run tools setup-project`
 
 CI test commands:
 - Unit tests: `swift run tools ci unit-tests`
-- Slow-CI simulation: add `--constrained` (hog count: `--constrained-task-count`, default 20). Also on `ci run-tests` for one suite. New async-heavy suite? Use `constrained-tests` skill — not for every change.
 - CI help: `swift run tools ci --help`
 
 ### Targets & Layout
