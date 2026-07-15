@@ -1,5 +1,5 @@
 {
-  "originHash" : "b2bcfd4f704c144b36ac18bb17859627163be8018ed52c4ec3cbf11d3e3f4469",
+  "originHash" : "25b583bba526740b75c4ede29c7c1d25d7f9d2679fa8e9a795f995fd9f01ae5e",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -131,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/guoyingtao/Mantis",
       "state" : {
-        "revision" : "b3c237aff54b8307440157a2f5956bdea2e76791",
-        "version" : "2.31.2"
+        "revision" : "06d8fb068d693c0629d806bd19da902a85f4cc63",
+        "version" : "3.0.0"
       }
     },
     {

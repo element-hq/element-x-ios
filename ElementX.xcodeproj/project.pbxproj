@@ -10389,7 +10389,7 @@
 			repositoryURL = "https://github.com/guoyingtao/Mantis";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 2.31.2;
+				minimumVersion = 3.0.0;
 			};
 		};
 		8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */ = {
