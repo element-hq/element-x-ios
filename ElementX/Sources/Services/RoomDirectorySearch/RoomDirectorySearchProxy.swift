@@ -29,6 +29,7 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     /// main actor in FIFO order, guaranteeing one in-flight update at a time.
     private let updatesContinuation: AsyncStream<[RoomDirectorySearchEntryUpdate]>.Continuation
     
+    // periphery:ignore - required for instance retention in the rust codebase
     private var searchEntriesSubscription: TaskHandle?
     
     deinit {

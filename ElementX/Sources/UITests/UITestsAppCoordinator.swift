@@ -853,8 +853,7 @@ class MockScreen: Identifiable {
                                                         mediaProvider: MediaProviderMock(.init()),
                                                         appSettings: appSettings)
             
-            let flowCoordinator = ChatsTabFlowCoordinator(isNewLogin: false,
-                                                          navigationSplitCoordinator: navigationSplitCoordinator,
+            let flowCoordinator = ChatsTabFlowCoordinator(navigationSplitCoordinator: navigationSplitCoordinator,
                                                           flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                                                bugReportService: BugReportServiceMock(.init()),
                                                                                                elementCallService: ElementCallServiceMock(.init()),

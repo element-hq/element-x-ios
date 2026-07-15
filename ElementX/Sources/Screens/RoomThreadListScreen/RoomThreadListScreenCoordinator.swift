@@ -18,7 +18,6 @@ enum RoomThreadListScreenCoordinatorAction {
 }
 
 final class RoomThreadListScreenCoordinator: CoordinatorProtocol {
-    private let parameters: RoomThreadListScreenCoordinatorParameters
     private let viewModel: RoomThreadListScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -29,8 +28,6 @@ final class RoomThreadListScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomThreadListScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = RoomThreadListScreenViewModel(threadListServiceProxy: parameters.threadListServiceProxy,
                                                   mediaProvider: parameters.mediaProvider)
     }

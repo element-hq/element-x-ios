@@ -14,7 +14,6 @@ import Testing
 @MainActor
 final class SecurityAndPrivacyScreenViewModelTests {
     var viewModel: SecurityAndPrivacyScreenViewModelProtocol!
-    var spaceServiceProxy: SpaceServiceProxyMock!
     var roomProxy: JoinedRoomProxyMock!
     
     var context: SecurityAndPrivacyScreenViewModelType.Context {

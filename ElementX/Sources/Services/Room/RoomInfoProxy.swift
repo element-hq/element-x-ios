@@ -16,16 +16,8 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.id
     }
     
-    var creators: [String] {
-        roomInfo.creators ?? []
-    }
-    
     var displayName: String? {
         roomInfo.displayName
-    }
-    
-    var rawName: String? {
-        roomInfo.rawName
     }
     
     var topic: String? {
@@ -78,10 +70,6 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.membership
     }
     
-    var inviter: RoomMemberProxyProtocol? {
-        roomInfo.inviter.map(RoomMemberProxy.init)
-    }
-    
     var heroes: [RoomHero] {
         roomInfo.heroes
     }
@@ -90,24 +78,8 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
         Int(roomInfo.activeMembersCount)
     }
     
-    var invitedMembersCount: Int {
-        Int(roomInfo.invitedMembersCount)
-    }
-    
     var joinedMembersCount: Int {
         Int(roomInfo.joinedMembersCount)
-    }
-    
-    var highlightCount: Int {
-        Int(roomInfo.highlightCount)
-    }
-    
-    var notificationCount: Int {
-        Int(roomInfo.notificationCount)
-    }
-    
-    var cachedUserDefinedNotificationMode: RoomNotificationMode? {
-        roomInfo.cachedUserDefinedNotificationMode
     }
     
     var hasRoomCall: Bool {
@@ -127,22 +99,6 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
     
     var activeRoomCallParticipants: [String] {
         roomInfo.activeRoomCallParticipants
-    }
-    
-    var isMarkedUnread: Bool {
-        roomInfo.isMarkedUnread
-    }
-    
-    var unreadMessagesCount: UInt {
-        UInt(roomInfo.numUnreadMessages)
-    }
-    
-    var unreadNotificationsCount: UInt {
-        UInt(roomInfo.numUnreadNotifications)
-    }
-    
-    var unreadMentionsCount: UInt {
-        UInt(roomInfo.numUnreadMentions)
     }
     
     var fullyReadEventID: String? {

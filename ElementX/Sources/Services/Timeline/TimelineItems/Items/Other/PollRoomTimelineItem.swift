@@ -25,6 +25,7 @@ nonisolated struct Poll: Hashable {
     let kind: Kind
     let maxSelections: Int
     let options: [Option]
+    // periphery:ignore - used via the synthesized Hashable conformance
     let votes: [String: [String]]
     let endDate: Date?
     /// Whether the poll has been created by the account owner

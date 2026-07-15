@@ -9,11 +9,13 @@
 import Foundation
 
 nonisolated protocol RoomScreenHookProtocol: Sendable {
+    // periphery:ignore:parameters userSession - part of the hook signature
     @MainActor func configure(with userSession: UserSessionProtocol?) async
     @MainActor func update(_ viewState: RoomScreenViewState) -> RoomScreenViewState
 }
 
 struct DefaultRoomScreenHook: RoomScreenHookProtocol {
+    // periphery:ignore:parameters userSession - part of the hook signature
     func configure(with userSession: UserSessionProtocol?) async { }
     func update(_ viewState: RoomScreenViewState) -> RoomScreenViewState {
         viewState

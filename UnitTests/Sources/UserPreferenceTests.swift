@@ -159,7 +159,9 @@ private final class TestPreferences {
 }
 
 private struct CodableTestType: Equatable, Codable {
+    // periphery:ignore - used via the synthesized Codable conformance
     let a: String
+    // periphery:ignore - used via the synthesized Codable conformance
     let b: [Int]
 }
 

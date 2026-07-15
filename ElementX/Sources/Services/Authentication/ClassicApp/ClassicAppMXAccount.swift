@@ -82,8 +82,6 @@ final class ClassicAppMXAccount: NSObject, NSCoding {
         static let homeserverURL = "homeserverurl" // String?
         static let userID = "userid" // String?
         static let accessToken = "accesstoken" // String?
-        static let accessTokenExpiresAt = "accessTokenExpiresAt" // UInt64
-        static let refreshToken = "refreshToken" // String?
         static let identityServerURL = "identityserverurl" // String?
         static let identityServerAccessToken = "identityserveraccesstoken" // String?
         static let deviceID = "deviceId" // String?
@@ -97,8 +95,6 @@ final class ClassicAppMXAccount: NSObject, NSCoding {
         static let enableInAppNotifications = "enableInAppNotifications" // Bool
         static let isDisabled = "disabled" // Bool
         static let isSoftLogout = "isSoftLogout" // Bool
-        static let isWarnedAboutEncryption = "warnedAboutEncryption" // Bool
-        static let others = "others" // NSMutableDictionary
     }
     
     required init?(coder: NSCoder) {
@@ -127,6 +123,7 @@ final class ClassicAppMXAccount: NSObject, NSCoding {
 /// `MXUser` represents a user in Matrix.
 final class ClassicAppMXUser: NSObject, NSCoding {
     /// The user id.
+    // periphery:ignore - documents the schema, parsed but not consumed yet
     let userID: String
     /// The user display name.
     let displayName: String?
@@ -139,10 +136,6 @@ final class ClassicAppMXUser: NSObject, NSCoding {
         static let userID = "userId" // String
         static let displayName = "displayname" // String?
         static let avatarURL = "avatarUrl" // String?
-        static let statusMessage = "statusMsg" // String?
-        static let currentlyActive = "currentlyActive" // Bool
-        static let lastActiveLocalTimestamp = "lastActiveLocalTS" // UInt64
-        static let latestUpdateTimestamp = "latestUpdateTS" // UInt64
     }
     
     required init?(coder aDecoder: NSCoder) {

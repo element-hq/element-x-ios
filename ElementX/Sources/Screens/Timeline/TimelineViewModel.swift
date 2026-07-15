@@ -31,7 +31,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsServiceProtocol
     private let emojiProvider: EmojiProviderProtocol
-    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -68,7 +67,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
-        self.timelineControllerFactory = timelineControllerFactory
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         

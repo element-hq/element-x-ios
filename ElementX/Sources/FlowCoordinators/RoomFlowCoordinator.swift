@@ -1025,8 +1025,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                                    navigationStackCoordinator: stackCoordinator,
                                                                                    userIndicatorController: flowParameters.userIndicatorController,
-                                                                                   orientationManager: flowParameters.appMediator.windowManager,
-                                                                                   appSettings: flowParameters.appSettings)
+                                                                                   orientationManager: flowParameters.appMediator.windowManager)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
@@ -1123,7 +1122,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(mediaURLs: mediaURLs,
                                                                        caption: caption,
                                                                        title: title,
-                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                                        shouldShowCaptionWarning: flowParameters.appSettings.shouldShowMediaCaptionWarning,
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                        timelineController: timelineController,

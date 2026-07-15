@@ -8,7 +8,6 @@
 
 import Combine
 
-// periphery:ignore - markdown protocol
 protocol LegalInformationScreenViewModelProtocol {
     var context: LegalInformationScreenViewModelType.Context { get }
 }

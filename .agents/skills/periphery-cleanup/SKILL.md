@@ -41,7 +41,22 @@ Stored-never-read variable often alive ON PURPOSE: keep task / SDK object / coor
 | MVVM-C architecture | empty `ViewModelAction` enum from screen template | `required for the architecture` |
 | Property wrapper internals | `@propertyWrapper`, `@dynamicMemberLookup` subscript | `property wrappers generate false positives` / `subscript are seen as false positives` |
 | ObjC selector parameter | parameter only touched by runtime (`displayLink` etc.) | `ignore:parameters <name> - required for objc selector` |
-| Build-config-only code | compiled out in Debug | `only used in release builds` |
+| Hook signature parameter | unused param on AppHooks protocol requirement / default impl | `ignore:parameters <name> - part of the hook signature` |
+| Submodule-only usage | code referenced only from submodule sources (plain scan flag it) | `used in submodule` |
+| Hook signature parameter | unused param on AppHooks protocol requirement / default impl | `ignore:parameters <name> - part of the hook signature` |
+| Submodule-only usage | code referenced only from submodule sources (plain scan flag it) | `used in submodule` |
+| Unscanned-target usage | compound-ios code used only by its own `CompoundTests` or `Inspector` app — targets NOT in scanned schemes | skip finding, verify by grep in compound-ios/Tests + Inspector before any delete |
+| Underscored SwiftUI protocol | `_body` from `TextFieldStyle` etc. — called by SwiftUI, members inside resolve transitively | `called by SwiftUI via the TextFieldStyle protocol` |
+| SDK delegate requirement | method required by rust SDK delegate protocol (e.g. `didRefreshTokens`) | `required by the SDK's delegate protocol` |
+| Synthesized conformance | field only read via synthesized Hashable/Equatable/Codable (cache keys, diffing models) | `used via the synthesized Hashable conformance` |
+| Release-only code | compiled out in Debug scan (`#if !DEBUG` paths, nightly checks) | `only used in release builds` |
+| Unscanned-target usage | compound-ios code used only by its own `CompoundTests` or `Inspector` app — targets NOT in scanned schemes | skip finding, verify by grep in compound-ios/Tests + Inspector before any delete |
+| Underscored SwiftUI protocol | `_body` from `TextFieldStyle` etc. — called by SwiftUI, members inside resolve transitively | `called by SwiftUI via the TextFieldStyle protocol` |
+| SDK delegate requirement | method required by rust SDK delegate protocol (e.g. `didRefreshTokens`) | `required by the SDK's delegate protocol` |
+| Synthesized conformance | field only read via synthesized Hashable/Equatable/Codable (cache keys, diffing models) | `used via the synthesized Hashable conformance` |
+| Release-only code | compiled out in Debug scan (`#if !DEBUG` paths, nightly checks) | `only used in release builds` |
+| Public protocol requirement | 'Redundant public accessibility' on member required public by a public protocol conformance (e.g. `previews` in public PreviewProvider struct) | Swift refuse internal — skip finding or make the whole type internal |
+| Public protocol requirement | 'Redundant public accessibility' on member required public by a public protocol conformance (e.g. `previews` in public PreviewProvider struct) | Swift refuse internal — skip finding or make the whole type internal |
 | Hand-written mock file | whole file mock infra | `// periphery:ignore:all` at file top |
 | `TestablePreview` conformance | flagged "Redundant protocol conformance" on every preview | NO marker, NO removal — Sourcery read conformance, generate snapshot + a11y tests from it. Remove = tests silently vanish. Skip finding, bulk noise |
 
@@ -50,6 +65,14 @@ Stored-never-read variable often alive ON PURPOSE: keep task / SDK object / coor
 ## Future-use code
 
 Unused but look intentional — API pair completeness, feature half-landed, "team will need soon". No silent delete, no silent keep. Present to user: what, where, opinion keep-or-delete. User say keep → mark `// periphery:ignore - might be useful to have`.
+
+## Mock cascade after protocol deletions
+
+Delete protocol member → Sourcery regenerate mock WITHOUT its `fooReturnValue` / `fooClosure` helpers → hand-written mock `Configuration` inits and test set-up lines still assigning those helpers break the build. Those lines are inert setup for API nothing call — more dead code, not evidence of use. After protocol deletions: grep non-Generated `Mocks/` + `UnitTests/` for `<name>ReturnValue`, `<name>Closure`, direct assignments to deleted members — delete them too. Compiler walk you to the stragglers; that expected, not a false positive. Careful with same-name members: one mock file often configure SEVERAL protocols (proxy-level `inviter` vs info-level `inviter`). Strip only lines whose target member actually deleted — the wrong one compile fine (member still exist) but silently un-configure previews; snapshot tests catch it, so run them before calling done. Careful with same-name members: one mock file often configure SEVERAL protocols (proxy-level `inviter` vs info-level `inviter`). Strip only lines whose target member actually deleted — the wrong one compile fine (member still exist) but silently un-configure previews; snapshot tests catch it, so run them before calling done.
+
+## Mock cascade after protocol deletions
+
+Delete protocol member → Sourcery regenerate mock WITHOUT its `fooReturnValue` / `fooClosure` helpers → hand-written mock `Configuration` inits and test set-up lines still assigning those helpers break the build. Those lines are inert setup for API nothing call — more dead code, not evidence of use. After protocol deletions: grep non-Generated `Mocks/` + `UnitTests/` for `<name>ReturnValue`, `<name>Closure`, direct assignments to deleted members — delete them too. Compiler walk you to the stragglers; that expected, not a false positive. Careful with same-name members: one mock file often configure SEVERAL protocols (proxy-level `inviter` vs info-level `inviter`). Strip only lines whose target member actually deleted — the wrong one compile fine (member still exist) but silently un-configure previews; snapshot tests catch it, so run them before calling done. Careful with same-name members: one mock file often configure SEVERAL protocols (proxy-level `inviter` vs info-level `inviter`). Strip only lines whose target member actually deleted — the wrong one compile fine (member still exist) but silently un-configure previews; snapshot tests catch it, so run them before calling done.
 
 ## Verify
 

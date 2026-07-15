@@ -8,7 +8,7 @@
 
 import Foundation
 
-public nonisolated protocol UserDefaultsProtocol: AnyObject {
+nonisolated protocol UserDefaultsProtocol: AnyObject {
     func data(forKey key: String) -> Data?
     func object(forKey key: String) -> Any?
     func removeObject(forKey key: String)

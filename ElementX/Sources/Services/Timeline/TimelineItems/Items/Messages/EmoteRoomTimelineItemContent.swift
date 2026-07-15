@@ -12,5 +12,6 @@ nonisolated struct EmoteRoomTimelineItemContent: Hashable {
     let body: String
     var formattedBody: AttributedString?
     /// The original textual representation of the formatted body directly from the event (usually HTML code)
+    // periphery:ignore - used via the synthesized Hashable conformance
     var formattedBodyHTMLString: String?
 }

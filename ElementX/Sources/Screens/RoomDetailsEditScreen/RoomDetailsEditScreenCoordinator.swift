@@ -16,7 +16,6 @@ struct RoomDetailsEditScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol
     let orientationManager: OrientationManagerProtocol
-    let appSettings: AppSettings
 }
 
 enum RoomDetailsEditScreenCoordinatorAction {

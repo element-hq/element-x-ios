@@ -10,8 +10,6 @@ import Compound
 import SwiftUI
 
 struct SwipeToReplyView: View {
-    let timelineItem: RoomTimelineItemProtocol
-    
     var body: some View {
         CompoundIcon(\.reply)
             .foregroundColor(.compound.iconPrimary)
@@ -29,6 +27,6 @@ struct SwipeToReplyView_Previews: PreviewProvider, TestablePreview {
                                                    content: .init(body: ""))
     
     static var previews: some View {
-        SwipeToReplyView(timelineItem: timelineItem)
+        SwipeToReplyView()
     }
 }

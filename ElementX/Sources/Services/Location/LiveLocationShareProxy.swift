@@ -12,6 +12,7 @@ struct LiveLocationShare: Hashable, Identifiable {
     let userID: String
     let geoURI: GeoURI?
     let timestamp: Date
+    // periphery:ignore - used via the synthesized Hashable conformance
     let timeoutDate: Date
     
     var id: String {

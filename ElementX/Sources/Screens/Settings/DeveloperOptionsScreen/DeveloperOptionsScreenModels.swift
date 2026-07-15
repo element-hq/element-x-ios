@@ -13,7 +13,6 @@ enum DeveloperOptionsScreenViewModelAction {
 }
 
 struct DeveloperOptionsScreenViewState: BindableState {
-    let elementCallBaseURL: URL
     let appHooks: AppHooks
     var storeSizes: [StoreSize]?
     let shouldShowClearCache: Bool

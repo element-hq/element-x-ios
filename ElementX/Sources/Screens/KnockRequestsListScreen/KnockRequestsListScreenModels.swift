@@ -8,6 +8,7 @@
 
 import Foundation
 
+// periphery:ignore - required for the architecture
 enum KnockRequestsListScreenViewModelAction { }
 
 struct KnockRequestsListScreenViewState: BindableState {

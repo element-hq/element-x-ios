@@ -84,7 +84,7 @@ struct VideoMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
             .background(.black)
     }
     
-    private static func makeTimelineItem(caption: String? = nil, isEdited: Bool = false) -> VideoRoomTimelineItem {
+    private static func makeTimelineItem() -> VideoRoomTimelineItem {
         VideoRoomTimelineItem(id: .randomEvent,
                               timestamp: .mock,
                               isOutgoing: false,

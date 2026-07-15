@@ -196,7 +196,7 @@ public struct CompoundButtonStyle_Previews: PreviewProvider, TestablePreview {
     }
     
     @ViewBuilder
-    public static var states: some View {
+    static var states: some View {
         Section {
             buttons(.large)
         } header: {
@@ -235,7 +235,7 @@ public struct CompoundButtonStyle_Previews: PreviewProvider, TestablePreview {
         }
     }
     
-    public static func buttons(_ size: CompoundButtonStyle.Size) -> some View {
+    static func buttons(_ size: CompoundButtonStyle.Size) -> some View {
         VStack(spacing: 8) {
             Button("Super") { }
                 .buttonStyle(.compound(.super, size: size))

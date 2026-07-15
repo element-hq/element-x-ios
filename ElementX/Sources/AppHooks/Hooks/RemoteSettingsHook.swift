@@ -15,10 +15,14 @@ enum RemoteSettingsError: Error {
 
 protocol RemoteSettingsHookProtocol: Sendable {
     #if IS_MAIN_APP
+    // periphery:ignore:parameters appSettings - part of the hook signature
     @MainActor func initializeCache(using client: ClientProtocol, applyingTo appSettings: CommonSettingsProtocol) async -> Result<Void, RemoteSettingsError>
+    // periphery:ignore:parameters client - part of the hook signature
     func updateCache(using client: ClientProtocol) async
+    // periphery:ignore:parameters appSettings - part of the hook signature
     @MainActor func reset(_ appSettings: CommonSettingsProtocol)
     #endif
+    // periphery:ignore:parameters homeserver,appSettings - part of the hook signature
     @MainActor func loadCache(forHomeserver homeserver: String, applyingTo appSettings: CommonSettingsProtocol)
 }
 
@@ -27,6 +31,7 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
     /// A best effort implementation to let Element X advertise to users when they should be using
     /// Element Pro. In an ideal world the backend would be able to validate the client's requests
     /// instead of relying on it to check a well-known file for this.
+    // periphery:ignore:parameters appSettings - part of the hook signature
     func initializeCache(using client: ClientProtocol, applyingTo appSettings: CommonSettingsProtocol) async -> Result<Void, RemoteSettingsError> {
         guard case let .success(wellKnownData) = await client.elementWellKnown() else {
             // Nothing to check, carry on as normal.
@@ -48,14 +53,18 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
         }
     }
     
+    // periphery:ignore:parameters client - part of the hook signature
     func updateCache(using client: ClientProtocol) async { }
+    // periphery:ignore:parameters appSettings - part of the hook signature
     func reset(_ appSettings: any CommonSettingsProtocol) { }
     #endif
     
+    // periphery:ignore:parameters homeserver,appSettings - part of the hook signature
     func loadCache(forHomeserver homeserver: String, applyingTo appSettings: CommonSettingsProtocol) { }
 }
 
 private struct ElementWellKnown: Decodable {
+    // periphery:ignore - documents the schema, parsed but not consumed yet
     var version: Int?
     var enforceElementPro: Bool?
     

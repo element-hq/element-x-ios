@@ -48,13 +48,6 @@ struct InviteUsersScreenSelectedItem: View {
             avatarImage.overlayRemoveItemButton(action: dismissAction)
         }
     }
-    
-    var closeButtonLabel: some View {
-        CompoundIcon(\.close, size: .custom(12), relativeTo: .compound.bodySM)
-            .foregroundStyle(.compound.iconOnSolidPrimary)
-            .padding(2)
-            .background(.compound.iconPrimary, in: Circle())
-    }
 }
 
 struct InviteUsersScreenSelectedItem_Previews: PreviewProvider, TestablePreview {

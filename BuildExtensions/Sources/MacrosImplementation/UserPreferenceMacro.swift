@@ -14,7 +14,7 @@ import SwiftSyntaxMacros
 ///
 /// A `volatile` preference instead reads and writes through a generated in-memory store, so its
 /// value is never persisted and resets on each launch.
-public enum UserPreferenceMacro {
+enum UserPreferenceMacro {
     enum DiagnosticError: Error, CustomStringConvertible {
         case notAStoredProperty
         case missingTypeAnnotation
@@ -85,9 +85,9 @@ public enum UserPreferenceMacro {
 }
 
 extension UserPreferenceMacro: AccessorMacro {
-    public static func expansion(of node: AttributeSyntax,
-                                 providingAccessorsOf declaration: some DeclSyntaxProtocol,
-                                 in context: some MacroExpansionContext) throws -> [AccessorDeclSyntax] {
+    static func expansion(of node: AttributeSyntax,
+                          providingAccessorsOf declaration: some DeclSyntaxProtocol,
+                          in context: some MacroExpansionContext) throws -> [AccessorDeclSyntax] {
         let preference = try preference(for: declaration, node: node)
         
         if preference.isVolatile {
@@ -137,9 +137,9 @@ extension UserPreferenceMacro: AccessorMacro {
 }
 
 extension UserPreferenceMacro: PeerMacro {
-    public static func expansion(of node: AttributeSyntax,
-                                 providingPeersOf declaration: some DeclSyntaxProtocol,
-                                 in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+    static func expansion(of node: AttributeSyntax,
+                          providingPeersOf declaration: some DeclSyntaxProtocol,
+                          in context: some MacroExpansionContext) throws -> [DeclSyntax] {
         let preference = try preference(for: declaration, node: node)
         let type = preference.type
         let name = preference.name

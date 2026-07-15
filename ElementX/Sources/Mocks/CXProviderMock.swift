@@ -5,6 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+// periphery:ignore:all
+
 extension CXProviderMock {
     struct Configuration { }
     

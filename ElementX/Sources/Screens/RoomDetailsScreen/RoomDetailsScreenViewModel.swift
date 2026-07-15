@@ -18,7 +18,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
-    private let appSettings: AppSettings
     
     private var pinnedEventsTimelineItemProvider: TimelineItemProviderProtocol? {
         didSet {
@@ -57,7 +56,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         self.userIndicatorController = userIndicatorController
         self.notificationSettingsProxy = notificationSettingsProxy
         self.attributedStringBuilder = attributedStringBuilder
-        self.appSettings = appSettings
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
         

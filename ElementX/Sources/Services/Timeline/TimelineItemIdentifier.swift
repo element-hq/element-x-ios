@@ -22,6 +22,7 @@ nonisolated enum TimelineItemIdentifier: Hashable {
             self.value = value
         }
         
+        // periphery:ignore - might be useful to have
         init(rustValue: TimelineUniqueId) {
             self.init(rustValue.id)
         }
@@ -69,6 +70,7 @@ nonisolated enum TimelineItemIdentifier: Hashable {
         return eventID
     }
     
+    // periphery:ignore - might be useful to have
     var transactionID: String? {
         guard case let .event(_, .transactionID(transactionID)) = self else { return nil }
         return transactionID

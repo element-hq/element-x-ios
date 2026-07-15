@@ -13,12 +13,14 @@ import MatrixRustSDK
 class SpaceServiceProxy: SpaceServiceProxyProtocol {
     private let spaceService: SpaceServiceProtocol
     
+    // periphery:ignore - required for instance retention in the rust codebase
     private var topLevelSpacesHandle: TaskHandle?
     private let spacesSubject = CurrentValueSubject<[SpaceServiceRoom], Never>([])
     var topLevelSpacesPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never> {
         spacesSubject.asCurrentValuePublisher()
     }
     
+    // periphery:ignore - required for instance retention in the rust codebase
     private var spaceFilterHandle: TaskHandle?
     private let spaceFilterSubject = CurrentValueSubject<[SpaceServiceFilter], Never>([])
     var spaceFilterPublisher: CurrentValuePublisher<[SpaceServiceFilter], Never> {

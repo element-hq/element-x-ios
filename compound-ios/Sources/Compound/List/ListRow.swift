@@ -117,8 +117,7 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
             .padding(.trailing, ListRowPadding.horizontal)
             .accessibilityElement(children: .combine)
         case .inlinePicker(let selection, let items):
-            ListInlinePicker(title: label.title ?? "",
-                             selection: selection,
+            ListInlinePicker(selection: selection,
                              items: items,
                              isWaiting: details?.isWaiting ?? false)
         case .selection(let isSelected, let action):

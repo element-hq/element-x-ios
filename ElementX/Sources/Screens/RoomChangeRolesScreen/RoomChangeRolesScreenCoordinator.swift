@@ -22,7 +22,6 @@ enum RoomChangeRolesScreenCoordinatorAction {
 }
 
 final class RoomChangeRolesScreenCoordinator: CoordinatorProtocol {
-    private let parameters: RoomChangeRolesScreenCoordinatorParameters
     private let viewModel: RoomChangeRolesScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -33,8 +32,6 @@ final class RoomChangeRolesScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomChangeRolesScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = RoomChangeRolesScreenViewModel(mode: parameters.mode,
                                                    roomProxy: parameters.roomProxy,
                                                    mediaProvider: parameters.mediaProvider,

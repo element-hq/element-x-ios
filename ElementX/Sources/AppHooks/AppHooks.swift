@@ -20,6 +20,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _appSettingsHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerAppSettingsHook(_ hook: AppSettingsHookProtocol) {
         _appSettingsHook.withLock { $0 = hook }
     }
@@ -29,6 +30,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _compoundHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerCompoundHook(_ hook: CompoundHookProtocol) {
         _compoundHook.withLock { $0 = hook }
     }
@@ -38,6 +40,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _bugReportHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerBugReportHook(_ hook: BugReportHookProtocol) {
         _bugReportHook.withLock { $0 = hook }
     }
@@ -47,6 +50,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _oAuthPresenterHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerOAuthPresenterHook(_ hook: OAuthPresenterHookProtocol) {
         _oAuthPresenterHook.withLock { $0 = hook }
     }
@@ -56,6 +60,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _roomScreenHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerRoomScreenHook(_ hook: RoomScreenHookProtocol) {
         _roomScreenHook.withLock { $0 = hook }
     }
@@ -65,6 +70,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _developerOptionsScreenHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerDeveloperOptionsScreenHook(_ hook: DeveloperOptionsScreenHookProtocol) {
         _developerOptionsScreenHook.withLock { $0 = hook }
     }
@@ -74,6 +80,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _recoveryKeyScreenHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerRecoveryKeyScreenHook(_ hook: RecoveryKeyScreenHookProtocol) {
         _recoveryKeyScreenHook.withLock { $0 = hook }
     }
@@ -84,6 +91,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _tracingHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerTracingHook(_ hook: TracingHookProtocol) {
         _tracingHook.withLock { $0 = hook }
     }
@@ -93,6 +101,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _clientBuilderHook.withLock { $0 }
     }
     
+    // periphery:ignore - hook registration surface for the submodule
     func registerClientBuilderHook(_ hook: ClientBuilderHookProtocol) {
         _clientBuilderHook.withLock { $0 = hook }
     }
@@ -102,6 +111,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _remoteSettingsHook.withLock { $0 }
     }
     
+    // periphery:ignore - used in submodule
     func registerRemoteSettingsHook(_ hook: RemoteSettingsHookProtocol) {
         _remoteSettingsHook.withLock { $0 = hook }
     }

@@ -857,8 +857,6 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let isVoiceCall = callIntent == CallIntent.audio.rawValue
         return CallNotificationRoomTimelineItem(id: eventItemProxy.id,
                                                 timestamp: eventItemProxy.timestamp,
-                                                isEditable: eventItemProxy.isEditable,
-                                                canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                                 isDM: isDM,
                                                 isDeclinedByMe: declinedBy.contains(userID),
                                                 isDeclined: !declinedBy.isEmpty,

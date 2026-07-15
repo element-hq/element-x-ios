@@ -101,10 +101,6 @@ class Signposter {
         globalTags[tagName] = value
     }
     
-    func removeGlobalTag(_ tagName: TagName) {
-        globalTags[tagName] = nil
-    }
-    
     // MARK: - Private
     
     func sha512(_ string: String) -> String {

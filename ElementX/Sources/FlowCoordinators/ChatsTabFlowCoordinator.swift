@@ -54,8 +54,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(isNewLogin: Bool,
-         navigationSplitCoordinator: NavigationSplitCoordinator,
+    init(navigationSplitCoordinator: NavigationSplitCoordinator,
          flowParameters: CommonFlowParameters) {
         stateMachine = flowParameters.stateMachineFactory.makeChatsTabFlowStateMachine()
         self.navigationSplitCoordinator = navigationSplitCoordinator

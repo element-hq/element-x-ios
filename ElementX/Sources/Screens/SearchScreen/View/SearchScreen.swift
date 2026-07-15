@@ -144,7 +144,6 @@ struct SearchScreen: View {
             ForEach(context.viewState.rooms) { room in
                 SearchScreenRoomCell(room: room,
                                      context: context,
-                                     isLast: room == context.viewState.rooms.last,
                                      isSelected: isHardwareKeyboardConnected && selectedID == room.id)
                     .onAppear {
                         if room == context.viewState.rooms.first {
@@ -227,7 +226,6 @@ private extension View {
 private struct SearchScreenRoomCell: View {
     let room: SearchScreenRoom
     let context: SearchScreenViewModel.Context
-    let isLast: Bool
     let isSelected: Bool
     
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize

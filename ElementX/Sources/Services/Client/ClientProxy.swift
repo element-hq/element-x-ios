@@ -21,7 +21,6 @@ class ClientProxy: ClientProxyProtocol {
     
     let mediaLoader: MediaLoaderProtocol
     let contentScanner: ContentScannerProxyProtocol?
-    private let clientQueue: DispatchQueue
     
     private var roomListService: RoomListService
     // periphery: ignore - only for retain
@@ -217,8 +216,6 @@ class ClientProxy: ClientProxyProtocol {
             client.enableAutomaticBackpagination()
         }
         
-        clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
-        
         mediaLoader = MediaLoader(client: client)
         
         // Route media downloads through a content scanner when one has been configured for the server,
@@ -352,6 +349,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    // periphery:ignore - used in submodule
     var isLiveKitRTCSupported: Bool {
         get async {
             do {
@@ -746,6 +744,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    // periphery:ignore - might be useful to have
     func setUserStatus(_ status: UserStatus.Raw) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setUserStatus(status: status.rustValue)
@@ -757,6 +756,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    // periphery:ignore - might be useful to have
     func removeUserStatus() async -> Result<Void, ClientProxyError> {
         do {
             try await client.clearUserStatus()
@@ -1450,6 +1450,7 @@ private final class ClientDelegateWrapper: ClientDelegate {
         authErrorCallback(isSoftLogout)
     }
     
+    // periphery:ignore - required by the SDK's delegate protocol
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
     }

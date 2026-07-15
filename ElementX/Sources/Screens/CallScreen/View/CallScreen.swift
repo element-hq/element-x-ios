@@ -179,6 +179,7 @@ private struct CallView: UIViewRepresentable {
             }
         }
         
+        // periphery:ignore:parameters userContentController - delegate convention
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             guard let handlerID = CallScreenJavaScriptMessageName(rawValue: message.name) else {
                 return
@@ -290,10 +291,6 @@ private struct CallView: UIViewRepresentable {
             return .success(())
         }
         
-        func stopPictureInPicture() {
-            pictureInPictureController?.stopPictureInPicture()
-        }
-        
         nonisolated func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
             Task { @MainActor in
                 // We move the view via the delegate so it works when you background the app without calling requestPictureInPicture
@@ -351,6 +348,7 @@ private struct CallView: UIViewRepresentable {
         
         // MARK: - WKScriptMessageHandler
         
+        // periphery:ignore:parameters userContentController - delegate convention
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             coordinator?.userContentController(userContentController, didReceive: message)
         }

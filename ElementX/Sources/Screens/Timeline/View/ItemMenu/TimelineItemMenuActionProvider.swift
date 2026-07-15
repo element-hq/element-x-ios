@@ -15,7 +15,6 @@ struct TimelineItemMenuActionProvider {
     let canCurrentUserRedactOthers: Bool
     let canCurrentUserPin: Bool
     let pinnedEventIDs: Set<String>
-    let isDM: Bool
     let isViewSourceEnabled: Bool
     let areThreadsEnabled: Bool
     let timelineKind: TimelineKind

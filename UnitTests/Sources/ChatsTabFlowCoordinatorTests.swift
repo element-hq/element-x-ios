@@ -20,8 +20,6 @@ struct ChatsTabFlowCoordinatorTests {
     var notificationManager: NotificationManagerMock!
     let stateMachineFactory = PublishedStateMachineFactory()
     
-    var cancellables = Set<AnyCancellable>()
-    
     var detailCoordinator: CoordinatorProtocol? {
         splitCoordinator.detailCoordinator
     }
@@ -53,8 +51,7 @@ struct ChatsTabFlowCoordinatorTests {
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: notificationManager,
                                                   stateMachineFactory: stateMachineFactory)
-        chatsTabFlowCoordinator = ChatsTabFlowCoordinator(isNewLogin: false,
-                                                          navigationSplitCoordinator: splitCoordinator,
+        chatsTabFlowCoordinator = ChatsTabFlowCoordinator(navigationSplitCoordinator: splitCoordinator,
                                                           flowParameters: flowParameters)
         
         let deferred = deferFulfillment(stateMachineFactory.chatsTabFlowStatePublisher) { $0 == .roomList(detailState: nil) }

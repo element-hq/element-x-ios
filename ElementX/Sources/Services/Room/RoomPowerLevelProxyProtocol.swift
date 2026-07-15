@@ -24,17 +24,6 @@ protocol RoomPowerLevelsProxyProtocol: Sendable {
     func canOwnUserPinOrUnpin() -> Bool
     func canOwnUserJoinCall() -> Bool
     func canOwnUserEditRolesAndPermissions() -> Bool
-    
-    func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError>
-    func canUser(userID: String, sendStateEvent event: StateEventType) -> Result<Bool, RoomProxyError>
-    func canUserInvite(userID: String) -> Result<Bool, RoomProxyError>
-    func canUserRedactOther(userID: String) -> Result<Bool, RoomProxyError>
-    func canUserRedactOwn(userID: String) -> Result<Bool, RoomProxyError>
-    func canUserKick(userID: String) -> Result<Bool, RoomProxyError>
-    func canUserBan(userID: String) -> Result<Bool, RoomProxyError>
-    func canUserTriggerRoomNotification(userID: String) -> Result<Bool, RoomProxyError>
-    func canUserPinOrUnpin(userID: String) -> Result<Bool, RoomProxyError>
-    func canUserJoinCall(userID: String) -> Result<Bool, RoomProxyError>
 }
 
 // MARK: - Helpers

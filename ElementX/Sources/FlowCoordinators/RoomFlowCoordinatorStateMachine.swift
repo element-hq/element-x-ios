@@ -10,18 +10,6 @@ import Foundation
 import SwiftState
 
 extension RoomFlowCoordinator {
-    struct HashableRoomMemberWrapper: Hashable {
-        let value: RoomMemberProxyProtocol
-        
-        static func == (lhs: HashableRoomMemberWrapper, rhs: HashableRoomMemberWrapper) -> Bool {
-            lhs.value.userID == rhs.value.userID
-        }
-        
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(value.userID)
-        }
-    }
-    
     enum PresentationAction: Hashable {
         case eventFocus(FocusEvent)
         case share(ShareExtensionPayload)

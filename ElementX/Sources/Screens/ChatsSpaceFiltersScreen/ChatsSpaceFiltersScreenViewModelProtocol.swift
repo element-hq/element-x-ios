@@ -7,6 +7,7 @@
 
 import Combine
 
+// periphery:ignore - required for the architecture
 protocol ChatsSpaceFiltersScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<ChatsSpaceFiltersScreenViewModelAction, Never> { get }
     var context: ChatsSpaceFiltersScreenViewModelType.Context { get }

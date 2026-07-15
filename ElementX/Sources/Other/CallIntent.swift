@@ -13,7 +13,6 @@ nonisolated enum CallIntent: String, Codable, CaseIterable {
 }
 
 nonisolated extension CallIntent {
-    // periphery:ignore - Unused, but added to detect new cases when updating the SDK.
     init(rustCallIntent: MatrixRustSDK.RtcCallIntent) {
         switch rustCallIntent {
         case .audio: self = .audio
@@ -21,6 +20,7 @@ nonisolated extension CallIntent {
         }
     }
     
+    // periphery:ignore - might be useful to have
     var rustCallIntent: MatrixRustSDK.RtcCallIntent {
         switch self {
         case .audio: .audio

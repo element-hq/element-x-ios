@@ -62,7 +62,6 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         private var hasBeenPresented = false
         
         private var dismissalObserver: AnyCancellable?
-        private var cancellables: Set<AnyCancellable> = []
         
         init(viewModel: TimelineMediaPreviewViewModel,
              dismissalPublisher: PassthroughSubject<Void, Never>,

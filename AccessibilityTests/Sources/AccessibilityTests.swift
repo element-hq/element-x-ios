@@ -98,7 +98,6 @@ final class AccessibilityTests: XCTestCase {
     
     private static let partiallyUnsupportedDynamicTypeMessage = "Dynamic Type font sizes are partially unsupported"
     private static let notHumanReadableMessage = "Label not human-readable"
-    private static let elementHasNoDescription = "Element has no description"
     
     /// Use this array to filter add specific filters to ignore specific issues for certain elements
     private static let ignoredA11yIdentifiers: [String: [FilterType]] = [

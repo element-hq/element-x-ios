@@ -60,7 +60,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         case .settings:
             presentSettingsScreen(animated: animated)
         case .chatBackupSettings:
-            startEncryptionSettingsFlow(animated: animated)
+            startEncryptionSettingsFlow()
         default:
             break
         }
@@ -89,7 +89,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .logout:
                     actionsSubject.send(.runLogoutFlow)
                 case .secureBackup:
-                    startEncryptionSettingsFlow(animated: true)
+                    startEncryptionSettingsFlow()
                 case .userDetails:
                     presentUserDetailsEditScreen()
                 case .linkNewDevice:
@@ -141,7 +141,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
     
-    private func startEncryptionSettingsFlow(animated: Bool) {
+    private func startEncryptionSettingsFlow() {
         let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                               appSettings: flowParameters.appSettings,
                                                                               appHooks: flowParameters.appHooks,
@@ -165,8 +165,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                              userSession: flowParameters.userSession,
                                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                              navigationStackCoordinator: navigationStackCoordinator,
-                                                                             userIndicatorController: flowParameters.userIndicatorController,
-                                                                             appSettings: flowParameters.appSettings))
+                                                                             userIndicatorController: flowParameters.userIndicatorController))
         coordinator.actions
             .sink { [weak self] action in
                 switch action {

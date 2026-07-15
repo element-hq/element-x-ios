@@ -6,6 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+// periphery:ignore:all
+
 import LocalAuthentication
 
 /// A customised context that allows injecting a few mock values but otherwise behaves as expected.

@@ -16,7 +16,6 @@ enum IdentityConfirmedScreenCoordinatorAction {
 }
 
 final class IdentityConfirmedScreenCoordinator: CoordinatorProtocol {
-    private let parameters: IdentityConfirmedScreenCoordinatorParameters
     private let viewModel: IdentityConfirmedScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -27,8 +26,6 @@ final class IdentityConfirmedScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: IdentityConfirmedScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = IdentityConfirmedScreenViewModel()
     }
     

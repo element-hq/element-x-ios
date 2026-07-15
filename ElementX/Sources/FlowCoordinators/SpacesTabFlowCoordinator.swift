@@ -24,7 +24,9 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
     
+    // periphery:ignore - retaining purpose
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
+    // periphery:ignore - retaining purpose
     private var startChatFlowCoordinator: StartChatFlowCoordinator?
     
     enum State: StateType {

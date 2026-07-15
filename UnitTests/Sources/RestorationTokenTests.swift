@@ -157,7 +157,6 @@ struct SessionV1: Equatable {
 }
 
 enum SlidingSyncVersionV1: Equatable {
-    case none
     case proxy(url: String)
     case native
     

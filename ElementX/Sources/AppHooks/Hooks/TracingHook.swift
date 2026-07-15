@@ -9,9 +9,11 @@
 import MatrixRustSDK
 
 nonisolated protocol TracingHookProtocol: Sendable {
+    // periphery:ignore:parameters configuration,rageshakeURL - part of the hook signature
     func update(_ configuration: TracingConfiguration, with rageshakeURL: RemotePreference<RageshakeConfiguration>)
 }
 
 nonisolated struct DefaultTracingHook: TracingHookProtocol {
+    // periphery:ignore:parameters configuration,rageshakeURL - part of the hook signature
     func update(_ configuration: TracingConfiguration, with rageshakeURL: RemotePreference<RageshakeConfiguration>) { }
 }

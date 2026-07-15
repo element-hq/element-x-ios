@@ -126,11 +126,6 @@ enum TimelineFixtures {
         singleMessageChunkProxies.buildRoomTimelineItems()
     }
     
-    /// A single text item.
-    static var incomingMessage: RoomTimelineItemProtocol {
-        incomingMessageProxy.buildRoomTimelineItem()
-    }
-    
     /// A large chunk of events, containing 40 text items which should fill an iPad
     /// with enough items so that it won't perform another back pagination.
     static var largeChunk: [RoomTimelineItemProtocol] {

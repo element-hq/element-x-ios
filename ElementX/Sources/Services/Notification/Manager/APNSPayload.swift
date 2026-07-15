@@ -8,6 +8,7 @@
 
 import Foundation
 
+// periphery:ignore:all - encoded into the APNS payload
 struct APSAlert: Encodable {
     let locKey: String
     let locArgs: [String]

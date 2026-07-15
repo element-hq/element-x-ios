@@ -14,7 +14,6 @@ class StartChatTests: XCTestCase {
         static let startChat = 1
         static let startChatWithResults = 2
         static let createRoom = 3
-        static let createRoomAvatarPicker = 4
         static let createRoomFilled = 5
         static let inviteUsers = 6
         static let inviteUsersWithResults = 7

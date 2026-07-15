@@ -27,9 +27,7 @@ nonisolated protocol BaseRoomInfoProxyProtocol: Sendable {
 // sourcery: AutoMockable
 nonisolated protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var id: String { get }
-    var creators: [String] { get }
     var displayName: String? { get }
-    var rawName: String? { get }
     var topic: String? { get }
     /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
     var avatarURL: URL? { get }
@@ -43,21 +41,11 @@ nonisolated protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var canonicalAlias: String? { get }
     var alternativeAliases: [String] { get }
     var membership: Membership { get }
-    var inviter: RoomMemberProxyProtocol? { get }
-    
     var activeMembersCount: Int { get }
-    var invitedMembersCount: Int { get }
     var joinedMembersCount: Int { get }
-    var highlightCount: Int { get }
-    var notificationCount: Int { get }
-    var cachedUserDefinedNotificationMode: RoomNotificationMode? { get }
     var hasRoomCall: Bool { get }
     var activeRoomCallIntent: CallIntent? { get }
     var activeRoomCallParticipants: [String] { get }
-    var isMarkedUnread: Bool { get }
-    var unreadMessagesCount: UInt { get }
-    var unreadNotificationsCount: UInt { get }
-    var unreadMentionsCount: UInt { get }
     var fullyReadEventID: String? { get }
     var pinnedEventIDs: Set<String> { get }
     var joinRule: JoinRule? { get }

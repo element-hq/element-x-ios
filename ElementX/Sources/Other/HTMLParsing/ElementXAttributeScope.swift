@@ -43,6 +43,7 @@ enum RoomAliasAttribute: AttributedStringKey {
 enum EventOnRoomIDAttribute: AttributedStringKey {
     struct Value: Hashable {
         let roomID: String
+        // periphery:ignore - used via the synthesized Hashable conformance
         let eventID: String
     }
     
@@ -52,6 +53,7 @@ enum EventOnRoomIDAttribute: AttributedStringKey {
 enum EventOnRoomAliasAttribute: AttributedStringKey {
     struct Value: Hashable {
         let alias: String
+        // periphery:ignore - used via the synthesized Hashable conformance
         let eventID: String
     }
     

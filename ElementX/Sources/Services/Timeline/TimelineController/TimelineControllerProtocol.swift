@@ -44,7 +44,6 @@ enum TimelineControllerError: Error {
 /// timeline items, grouping together state events, donating intents to the larger system etc.
 @MainActor
 protocol TimelineControllerProtocol: Sendable {
-    var roomID: String { get }
     var timelineKind: TimelineKind { get }
     
     /// The currently known items, use only for setting up the intial state.

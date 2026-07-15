@@ -10,8 +10,6 @@ import Foundation
 import SwiftUI
 
 struct ReadMarkerRoomTimelineView: View {
-    let timelineItem: ReadMarkerRoomTimelineItem
-    
     var body: some View {
         VStack(alignment: .trailing, spacing: 2) {
             Text(L10n.screenRoomTimelineReadMarkerTitle)
@@ -43,7 +41,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     sender: .init(id: "1", displayName: "Bob"),
                                                                     content: .init(body: "This is another message"))), groupStyle: .single))
             
-            ReadMarkerRoomTimelineView(timelineItem: item)
+            ReadMarkerRoomTimelineView()
             
             RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .virtual(uniqueID: .init("Separator")), timestamp: .mock)), groupStyle: .single))
             RoomTimelineItemView(viewState: .init(type: .text(.init(id: .randomEvent,

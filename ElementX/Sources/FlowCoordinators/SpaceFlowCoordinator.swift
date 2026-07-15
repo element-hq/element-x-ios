@@ -45,6 +45,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
     private var settingsFlowCoordinator: SpaceSettingsFlowCoordinator?
     private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
+    // periphery:ignore - retaining purpose
     private var createChildRoomFlowCoordinator: StartChatFlowCoordinator?
     
     indirect enum State: StateType {

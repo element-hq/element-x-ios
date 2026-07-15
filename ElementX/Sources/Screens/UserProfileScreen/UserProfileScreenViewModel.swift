@@ -16,7 +16,6 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     private let userSession: UserSessionProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsServiceProtocol
-    private let appSettings: AppSettings
     
     private var actionsSubject: PassthroughSubject<UserProfileScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserProfileScreenViewModelAction, Never> {
@@ -32,7 +31,6 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
-        self.appSettings = appSettings
         
         let initialViewState = UserProfileScreenViewState(userID: userID,
                                                           isOwnUser: userID == userSession.clientProxy.userID,

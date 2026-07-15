@@ -45,7 +45,6 @@ struct TimelineControllerMockConfiguration {
         let timelineItemsTimestamps = configuration.timelineItemsTimestamps
         
         callbacks = PassthroughSubject()
-        roomID = roomProxy?.id ?? "MockRoomIdentifier"
         timelineKind = configuration.timelineKind
         paginationState = configuration.paginationState
         timelineItems = configuration.timelineItems

@@ -12,8 +12,6 @@ import SwiftUI
 struct JoinRoomByAddressView: View {
     @ObservedObject var context: StartChatScreenViewModel.Context
     
-    @Environment(\.dismiss) private var dismiss
-    
     @State private var sheetHeight: CGFloat = .zero
     @FocusState private var textFieldFocus
     private let topPadding: CGFloat = 22

@@ -9,7 +9,7 @@ import Foundation
 import MatrixRustSDK
 
 /// The rule used for users wishing to join a room.
-public nonisolated enum JoinRule: Equatable, Hashable, Sendable {
+nonisolated enum JoinRule: Equatable, Hashable, Sendable {
     /// Anyone can join the room without any prior action.
     case `public`
     /// A user who wishes to join the room must first receive an invite.

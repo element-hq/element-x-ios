@@ -41,7 +41,6 @@ protocol AnalyticsServiceProtocol: AnyObject {
     /// be called on sign-out to maintain opt-in status, whilst ensuring the next
     /// account used isn't associated with the previous one.
     /// Note: **MUST** be called before stopping PostHog or the reset is ignored.
-    func reset()
     
     /// Resets the consent state for analytics.
     func resetConsentState()

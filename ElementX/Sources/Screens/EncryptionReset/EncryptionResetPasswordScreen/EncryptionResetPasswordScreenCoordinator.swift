@@ -18,7 +18,6 @@ enum EncryptionResetPasswordScreenCoordinatorAction {
 }
 
 final class EncryptionResetPasswordScreenCoordinator: CoordinatorProtocol {
-    private let parameters: EncryptionResetPasswordScreenCoordinatorParameters
     private let viewModel: EncryptionResetPasswordScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -29,8 +28,6 @@ final class EncryptionResetPasswordScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: EncryptionResetPasswordScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = EncryptionResetPasswordScreenViewModel(passwordPublisher: parameters.passwordPublisher)
     }
     

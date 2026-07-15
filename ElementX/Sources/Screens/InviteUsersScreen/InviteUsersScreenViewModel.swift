@@ -17,7 +17,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let roomType: InviteUsersScreenRoomType
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let appSettings: AppSettings
     
     private var suggestedUsers = [UserProfile]()
     
@@ -36,7 +35,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
-        self.appSettings = appSettings
         
         let mandatoryInvitees: [UserProfile] = if case .draft(let invitees) = roomType {
             invitees

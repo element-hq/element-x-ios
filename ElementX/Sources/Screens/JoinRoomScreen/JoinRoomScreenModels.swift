@@ -48,6 +48,7 @@ struct JoinRoomScreenRoomDetails {
     let isDirect: Bool?
     
     let isSpace: Bool?
+    // periphery:ignore - might be useful to have
     let childrenCount: Int?
     let spaceVisibility: SpaceServiceRoomVisibility?
 }

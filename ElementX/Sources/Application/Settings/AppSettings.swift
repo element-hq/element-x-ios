@@ -23,12 +23,13 @@ nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
     var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
+    // periphery:ignore - used in submodule
     var contentScannerURL: RemotePreference<URL?> { get }
+    // periphery:ignore - used in submodule
     var forceDisableE2EE: RemotePreference<Bool> { get }
     
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var threadsEnabled: Bool { get }
-    var globalSearchEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
 }
 

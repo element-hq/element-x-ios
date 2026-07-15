@@ -21,8 +21,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private let mp4accMimeType = "audio/m4a"
-    
     var isRecording: Bool {
         audioRecorder.isRecording
     }

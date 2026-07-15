@@ -9,6 +9,7 @@
 import Combine
 
 protocol KnockRequestsListScreenViewModelProtocol {
+    // periphery:ignore - required for the architecture
     var actionsPublisher: AnyPublisher<KnockRequestsListScreenViewModelAction, Never> { get }
     var context: KnockRequestsListScreenViewModelType.Context { get }
 }

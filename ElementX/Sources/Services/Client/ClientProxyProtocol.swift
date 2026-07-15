@@ -35,7 +35,6 @@ enum ClientProxyError: Error {
     
     case invalidMedia
     case invalidServerName
-    case invalidResponse
     case failedUploadingMedia(ErrorKind)
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
@@ -161,6 +160,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     var isReportRoomSupported: Bool { get async }
     
+    // periphery:ignore - used in submodule
     var isLiveKitRTCSupported: Bool { get async }
     
     var isLoginWithQRCodeSupported: Bool { get async }
@@ -218,7 +218,9 @@ protocol ClientProxyProtocol: AnyObject {
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
     func removeUserAvatar() async -> Result<Void, ClientProxyError>
+    // periphery:ignore - might be useful to have
     func setUserStatus(_ status: UserStatus.Raw) async -> Result<Void, ClientProxyError>
+    // periphery:ignore - might be useful to have
     func removeUserStatus() async -> Result<Void, ClientProxyError>
     
     func linkNewDeviceService() -> LinkNewDeviceServiceProtocol

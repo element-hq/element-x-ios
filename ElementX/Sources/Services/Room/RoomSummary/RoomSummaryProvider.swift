@@ -26,7 +26,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var roomList: RoomListProtocol?
     
     private var cancellables = Set<AnyCancellable>()
-    private var roomListServiceStateCancellable: AnyCancellable?
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
     private var stateUpdatesTaskHandle: TaskHandle?
     

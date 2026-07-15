@@ -11,8 +11,6 @@ import Foundation
 import SwiftUI
 
 struct CallNotificationRoomTimelineView: View {
-    @Environment(\.timelineContext) private var context
-    
     let timelineItem: CallNotificationRoomTimelineItem
     
     var body: some View {
@@ -76,8 +74,6 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
         VStack(spacing: 0) {
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
-                                                                 isEditable: false,
-                                                                 canBeRepliedTo: false,
                                                                  isDM: false,
                                                                  isDeclinedByMe: false,
                                                                  isDeclined: false,
@@ -87,8 +83,6 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
-                                                                 isEditable: false,
-                                                                 canBeRepliedTo: false,
                                                                  isDM: true,
                                                                  isDeclinedByMe: false,
                                                                  isDeclined: false,
@@ -98,8 +92,6 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
-                                                                 isEditable: false,
-                                                                 canBeRepliedTo: false,
                                                                  isDM: false,
                                                                  isDeclinedByMe: true,
                                                                  isDeclined: true,
@@ -109,8 +101,6 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
-                                                                 isEditable: false,
-                                                                 canBeRepliedTo: false,
                                                                  isDM: true,
                                                                  isDeclinedByMe: false,
                                                                  isDeclined: true,
@@ -120,8 +110,6 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
-                                                                 isEditable: false,
-                                                                 canBeRepliedTo: false,
                                                                  isDM: true,
                                                                  isDeclinedByMe: true,
                                                                  isDeclined: true,
@@ -131,8 +119,6 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
-                                                                 isEditable: false,
-                                                                 canBeRepliedTo: false,
                                                                  isDM: true,
                                                                  isDeclinedByMe: false,
                                                                  isDeclined: true,
@@ -142,8 +128,6 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
-                                                                 isEditable: false,
-                                                                 canBeRepliedTo: false,
                                                                  isDM: true,
                                                                  isDeclinedByMe: true,
                                                                  isDeclined: true,

@@ -75,8 +75,6 @@ struct ComposerToolbarViewState: BindableState {
     /// Could be false if sending is disabled in the room
     var canSend = true
     var suggestions: [SuggestionItem] = []
-    var audioPlayerState: AudioPlayerState
-    var audioRecorderState: AudioRecorderState
     
     var isRoomEncrypted: Bool
     var isLocationSharingEnabled: Bool

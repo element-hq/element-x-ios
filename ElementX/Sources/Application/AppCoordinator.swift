@@ -19,6 +19,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
+    // periphery:ignore - retaining purpose
     private let targetConfiguration: Target.ConfigurationResult
     private let appMediator: AppMediator
     private let appSettings: AppSettings
@@ -431,6 +432,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
+    // periphery:ignore:parameters service - delegate convention
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
         MXLog.info("Handle notification reply")
         

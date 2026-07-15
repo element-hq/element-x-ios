@@ -1,8 +1,8 @@
 project: ElementX.xcodeproj
 # Periphery scans all targets built by these schemes. The ElementX scheme also
 # builds NSE, ShareExtension and MatrixRustSDKMocks as dependencies. When the
-# project is configured for Element Pro, the Enterprise sources are part of
-# these same targets and are scanned too.
+# project is configured with the submodule, its sources are part of these same
+# targets and are scanned too.
 schemes:
 - ElementX
 - UnitTests

@@ -13,7 +13,6 @@ typealias SpacesScreenViewModelType = StateStoreViewModelV2<SpacesScreenViewStat
 
 class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelProtocol {
     private let spaceServiceProxy: SpaceServiceProxyProtocol
-    private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<SpacesScreenViewModelAction, Never> = .init()
@@ -26,7 +25,6 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
          appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
         spaceServiceProxy = userSession.clientProxy.spaceService
-        self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpacesScreenViewState(userProfile: userSession.clientProxy.userProfilePublisher.value,

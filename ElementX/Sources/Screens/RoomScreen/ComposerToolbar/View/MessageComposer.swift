@@ -33,7 +33,6 @@ struct MessageComposer: View {
     let onAppearAction: () -> Void
     
     @State private var composerTranslation: CGFloat = 0
-    private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
     
     var body: some View {
         VStack(spacing: 0) {

@@ -9,9 +9,11 @@
 import Compound
 
 nonisolated protocol CompoundHookProtocol: Sendable {
+    // periphery:ignore:parameters colors,uiColors - part of the hook signature
     @MainActor func override(colors: CompoundColors, uiColors: CompoundUIColors)
 }
 
 struct DefaultCompoundHook: CompoundHookProtocol {
+    // periphery:ignore:parameters colors,uiColors - part of the hook signature
     func override(colors: CompoundColors, uiColors: CompoundUIColors) { }
 }

@@ -39,8 +39,6 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     enum Event: EventType {
-        case start
-        
         case presentRoomMembersList
         
         case presentRoomMemberDetails(userID: String)

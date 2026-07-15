@@ -83,7 +83,7 @@ public struct SendButton_Previews: PreviewProvider, TestablePreview {
         .cornerRadius(20)
     }
     
-    public static var states: some View {
+    static var states: some View {
         HStack(spacing: 30) {
             SendButton { }
                 .disabled(true)

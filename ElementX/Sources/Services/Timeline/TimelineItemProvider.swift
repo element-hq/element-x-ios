@@ -205,25 +205,6 @@ private nonisolated extension TimelineItemProxy {
     }
 }
 
-private extension VirtualTimelineItem {
-    var description: String {
-        switch self {
-        case .dateDivider(let timestamp):
-            return "DayDiviver(\(timestamp))"
-        case .readMarker:
-            return "ReadMarker"
-        case .timelineStart:
-            return "TimelineStart"
-        }
-    }
-}
-
-private extension Array where Element == TimelineDiff {
-    var debugDescription: String {
-        "[" + map(\.debugDescription).joined(separator: ",") + "]"
-    }
-}
-
 extension TimelineDiff: @retroactive CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {

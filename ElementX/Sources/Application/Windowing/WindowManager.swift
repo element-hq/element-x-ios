@@ -12,7 +12,6 @@ import SwiftUI
 class WindowManager: SecureWindowManagerProtocol {
     private let appDelegate: AppDelegate
     weak var mainScene: UIWindowScene?
-    weak var mainSession: UISceneSession?
     weak var delegate: SecureWindowManagerDelegate?
     
     private(set) var mainWindow: UIWindow!
@@ -62,7 +61,6 @@ class WindowManager: SecureWindowManagerProtocol {
         }
         
         mainScene = scene
-        mainSession = session
         
         // Restore the previous window size on macOS as this isn't automatic.
         if let previousSize = mainWindow?.frame.size {
@@ -94,7 +92,6 @@ class WindowManager: SecureWindowManagerProtocol {
     func handleSceneDisconnection(_ scene: UIWindowScene) {
         if scene == mainScene {
             mainScene = nil
-            mainSession = nil
             // Leave the mainWindow so we can reapply it's size on macOS.
         }
     }

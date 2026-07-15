@@ -84,8 +84,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
         
         let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.appSettings.hideBrandChrome))
-        chatsTabFlowCoordinator = ChatsTabFlowCoordinator(isNewLogin: isNewLogin,
-                                                          navigationSplitCoordinator: chatsSplitCoordinator,
+        chatsTabFlowCoordinator = ChatsTabFlowCoordinator(navigationSplitCoordinator: chatsSplitCoordinator,
                                                           flowParameters: flowParameters)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.navigationSplitCoordinator = chatsSplitCoordinator

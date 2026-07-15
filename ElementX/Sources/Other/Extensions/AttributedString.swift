@@ -45,18 +45,6 @@ nonisolated extension AttributedString {
         return components
     }
     
-    /// Replaces the specified placeholder with a string that links to the specified URL.
-    /// - Parameters:
-    ///   - linkPlaceholder: The text in the string that will be replaced. Make sure this is unique within the string.
-    ///   - string: The text for the link that will be substituted into the placeholder.
-    ///   - url: The URL that the link should open.
-    mutating func replace(_ linkPlaceholder: String, with string: String, asLinkTo url: URL) {
-        // Replace the placeholder with a link.
-        var replacement = AttributedString(string)
-        replacement.link = url
-        replace(linkPlaceholder, with: replacement)
-    }
-    
     /// Replaces the specified placeholder with the supplied attributed string.
     /// - Parameters:
     ///   - placeholder: The text in the string that will be replaced. Make sure this is unique within the string.

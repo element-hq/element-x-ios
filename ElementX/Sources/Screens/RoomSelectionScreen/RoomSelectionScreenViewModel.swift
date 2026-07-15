@@ -12,7 +12,6 @@ import SwiftUI
 typealias RoomSelectionScreenViewModelType = StateStoreViewModel<RoomSelectionScreenViewState, RoomSelectionScreenViewAction>
 
 class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelectionScreenViewModelProtocol {
-    private let clientProxy: ClientProxyProtocol
     private let roomSummaryProvider: RoomSummaryProviderProtocol
     
     private var actionsSubject: PassthroughSubject<RoomSelectionScreenViewModelAction, Never> = .init()
@@ -23,7 +22,6 @@ class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelect
     
     init(userSession: UserSessionProtocol,
          roomSummaryProvider: RoomSummaryProviderProtocol) {
-        clientProxy = userSession.clientProxy
         self.roomSummaryProvider = roomSummaryProvider
         
         super.init(initialViewState: RoomSelectionScreenViewState(), mediaProvider: userSession.mediaProvider)

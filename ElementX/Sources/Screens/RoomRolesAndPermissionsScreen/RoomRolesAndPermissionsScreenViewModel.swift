@@ -15,7 +15,6 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsServiceProtocol
-    private var ownUser: RoomMemberDetails?
     
     private var actionsSubject: PassthroughSubject<RoomRolesAndPermissionsScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomRolesAndPermissionsScreenViewModelAction, Never> {

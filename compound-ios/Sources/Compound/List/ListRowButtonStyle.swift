@@ -15,8 +15,8 @@ import SwiftUI
 ///
 /// The primitive style is needed to set the list row insets to `0`. The inner style is then needed
 /// to change the background colour depending on whether the button is currently pressed or not.
-public struct ListRowButtonStyle: PrimitiveButtonStyle {
-    public func makeBody(configuration: Configuration) -> some View {
+struct ListRowButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
         Button(role: configuration.role, action: configuration.trigger) {
             configuration.label
         }

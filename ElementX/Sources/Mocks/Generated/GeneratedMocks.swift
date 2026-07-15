@@ -248,23 +248,6 @@ nonisolated class AnalyticsServiceMock: AnalyticsServiceProtocol, @unchecked Sen
         startIfEnabledCallsCountLock.withLock { startIfEnabledUnderlyingCallsCount += 1 }
         startIfEnabledClosure?()
     }
-    //MARK: - reset
-
-    private let resetCallsCountLock = NSLock()
-    private nonisolated(unsafe) var resetUnderlyingCallsCount = 0
-    var resetCallsCount: Int {
-        get { resetCallsCountLock.withLock { resetUnderlyingCallsCount } }
-        set { resetCallsCountLock.withLock { resetUnderlyingCallsCount = newValue } }
-    }
-    var resetCalled: Bool {
-        return resetCallsCount > 0
-    }
-    nonisolated(unsafe) var resetClosure: (() -> Void)?
-
-    func reset() {
-        resetCallsCountLock.withLock { resetUnderlyingCallsCount += 1 }
-        resetClosure?()
-    }
     //MARK: - resetConsentState
 
     private let resetConsentStateCallsCountLock = NSLock()
@@ -1061,65 +1044,6 @@ nonisolated class AppMediatorMock: AppMediatorProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingAppState: UIApplication.State!
 
-    //MARK: - beginBackgroundTask
-
-    private let beginBackgroundTaskExpirationHandlerCallsCountLock = NSLock()
-    private nonisolated(unsafe) var beginBackgroundTaskExpirationHandlerUnderlyingCallsCount = 0
-    var beginBackgroundTaskExpirationHandlerCallsCount: Int {
-        get { beginBackgroundTaskExpirationHandlerCallsCountLock.withLock { beginBackgroundTaskExpirationHandlerUnderlyingCallsCount } }
-        set { beginBackgroundTaskExpirationHandlerCallsCountLock.withLock { beginBackgroundTaskExpirationHandlerUnderlyingCallsCount = newValue } }
-    }
-    var beginBackgroundTaskExpirationHandlerCalled: Bool {
-        return beginBackgroundTaskExpirationHandlerCallsCount > 0
-    }
-
-    private let beginBackgroundTaskExpirationHandlerReturnValueLock = NSLock()
-    private nonisolated(unsafe) var beginBackgroundTaskExpirationHandlerUnderlyingReturnValue: UIBackgroundTaskIdentifier!
-    var beginBackgroundTaskExpirationHandlerReturnValue: UIBackgroundTaskIdentifier! {
-        get { beginBackgroundTaskExpirationHandlerReturnValueLock.withLock { beginBackgroundTaskExpirationHandlerUnderlyingReturnValue } }
-        set { beginBackgroundTaskExpirationHandlerReturnValueLock.withLock { beginBackgroundTaskExpirationHandlerUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var beginBackgroundTaskExpirationHandlerClosure: (((@MainActor @Sendable () -> Void)?) -> UIBackgroundTaskIdentifier)?
-
-    func beginBackgroundTask(expirationHandler handler: (@MainActor @Sendable () -> Void)?) -> UIBackgroundTaskIdentifier {
-        beginBackgroundTaskExpirationHandlerCallsCountLock.withLock { beginBackgroundTaskExpirationHandlerUnderlyingCallsCount += 1 }
-        if let beginBackgroundTaskExpirationHandlerClosure = beginBackgroundTaskExpirationHandlerClosure {
-            return beginBackgroundTaskExpirationHandlerClosure(handler)
-        } else {
-            return beginBackgroundTaskExpirationHandlerReturnValue
-        }
-    }
-    //MARK: - endBackgroundTask
-
-    private let endBackgroundTaskCallsCountLock = NSLock()
-    private nonisolated(unsafe) var endBackgroundTaskUnderlyingCallsCount = 0
-    var endBackgroundTaskCallsCount: Int {
-        get { endBackgroundTaskCallsCountLock.withLock { endBackgroundTaskUnderlyingCallsCount } }
-        set { endBackgroundTaskCallsCountLock.withLock { endBackgroundTaskUnderlyingCallsCount = newValue } }
-    }
-    var endBackgroundTaskCalled: Bool {
-        return endBackgroundTaskCallsCount > 0
-    }
-    private let endBackgroundTaskReceivedIdentifierLock = NSLock()
-    private nonisolated(unsafe) var endBackgroundTaskUnderlyingReceivedIdentifier: UIBackgroundTaskIdentifier?
-    var endBackgroundTaskReceivedIdentifier: UIBackgroundTaskIdentifier? {
-        get { endBackgroundTaskReceivedIdentifierLock.withLock { endBackgroundTaskUnderlyingReceivedIdentifier } }
-        set { endBackgroundTaskReceivedIdentifierLock.withLock { endBackgroundTaskUnderlyingReceivedIdentifier = newValue } }
-    }
-    private let endBackgroundTaskReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var endBackgroundTaskUnderlyingReceivedInvocations: [UIBackgroundTaskIdentifier] = []
-    var endBackgroundTaskReceivedInvocations: [UIBackgroundTaskIdentifier] {
-        get { endBackgroundTaskReceivedInvocationsLock.withLock { endBackgroundTaskUnderlyingReceivedInvocations } }
-        set { endBackgroundTaskReceivedInvocationsLock.withLock { endBackgroundTaskUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var endBackgroundTaskClosure: ((UIBackgroundTaskIdentifier) -> Void)?
-
-    func endBackgroundTask(_ identifier: UIBackgroundTaskIdentifier) {
-        endBackgroundTaskCallsCountLock.withLock { endBackgroundTaskUnderlyingCallsCount += 1 }
-        endBackgroundTaskReceivedIdentifier = identifier
-        endBackgroundTaskReceivedInvocationsLock.withLock { endBackgroundTaskUnderlyingReceivedInvocations.append(identifier) }
-        endBackgroundTaskClosure?(identifier)
-    }
     //MARK: - open
 
     private let openCallsCountLock = NSLock()
@@ -1319,11 +1243,6 @@ nonisolated class AudioPlayerMock: AudioPlayerProtocol, @unchecked Sendable {
         set(value) { underlyingState = value }
     }
     nonisolated(unsafe) var underlyingState: MediaPlayerState!
-    var playbackSpeed: Float {
-        get { return underlyingPlaybackSpeed }
-        set(value) { underlyingPlaybackSpeed = value }
-    }
-    nonisolated(unsafe) var underlyingPlaybackSpeed: Float!
     var actions: AnyPublisher<AudioPlayerAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -5127,7 +5046,6 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
     }
     nonisolated(unsafe) var underlyingTimeline: TimelineProxyProtocol!
     nonisolated(unsafe) var predecessorRoom: PredecessorRoom?
-    nonisolated(unsafe) var successorRoom: SuccessorRoom?
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
@@ -5423,48 +5341,6 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
             return await enableEncryptionClosure()
         } else {
             return enableEncryptionReturnValue
-        }
-    }
-    //MARK: - redact
-
-    private let redactCallsCountLock = NSLock()
-    private nonisolated(unsafe) var redactUnderlyingCallsCount = 0
-    var redactCallsCount: Int {
-        get { redactCallsCountLock.withLock { redactUnderlyingCallsCount } }
-        set { redactCallsCountLock.withLock { redactUnderlyingCallsCount = newValue } }
-    }
-    var redactCalled: Bool {
-        return redactCallsCount > 0
-    }
-    private let redactReceivedEventIDLock = NSLock()
-    private nonisolated(unsafe) var redactUnderlyingReceivedEventID: String?
-    var redactReceivedEventID: String? {
-        get { redactReceivedEventIDLock.withLock { redactUnderlyingReceivedEventID } }
-        set { redactReceivedEventIDLock.withLock { redactUnderlyingReceivedEventID = newValue } }
-    }
-    private let redactReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var redactUnderlyingReceivedInvocations: [String] = []
-    var redactReceivedInvocations: [String] {
-        get { redactReceivedInvocationsLock.withLock { redactUnderlyingReceivedInvocations } }
-        set { redactReceivedInvocationsLock.withLock { redactUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let redactReturnValueLock = NSLock()
-    private nonisolated(unsafe) var redactUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var redactReturnValue: Result<Void, RoomProxyError>! {
-        get { redactReturnValueLock.withLock { redactUnderlyingReturnValue } }
-        set { redactReturnValueLock.withLock { redactUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var redactClosure: ((String) async -> Result<Void, RoomProxyError>)?
-
-    @concurrent func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
-        redactCallsCountLock.withLock { redactUnderlyingCallsCount += 1 }
-        redactReceivedEventID = eventID
-        redactReceivedInvocationsLock.withLock { redactUnderlyingReceivedInvocations.append(eventID) }
-        if let redactClosure = redactClosure {
-            return await redactClosure(eventID)
-        } else {
-            return redactReturnValue
         }
     }
     //MARK: - reportContent
@@ -5874,48 +5750,6 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
             return await markAsReadReceiptTypeClosure(receiptType)
         } else {
             return markAsReadReceiptTypeReturnValue
-        }
-    }
-    //MARK: - edit
-
-    private let editEventIDNewContentCallsCountLock = NSLock()
-    private nonisolated(unsafe) var editEventIDNewContentUnderlyingCallsCount = 0
-    var editEventIDNewContentCallsCount: Int {
-        get { editEventIDNewContentCallsCountLock.withLock { editEventIDNewContentUnderlyingCallsCount } }
-        set { editEventIDNewContentCallsCountLock.withLock { editEventIDNewContentUnderlyingCallsCount = newValue } }
-    }
-    var editEventIDNewContentCalled: Bool {
-        return editEventIDNewContentCallsCount > 0
-    }
-    private let editEventIDNewContentReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var editEventIDNewContentUnderlyingReceivedArguments: (eventID: String, newContent: RoomMessageEventContentWithoutRelation)?
-    var editEventIDNewContentReceivedArguments: (eventID: String, newContent: RoomMessageEventContentWithoutRelation)? {
-        get { editEventIDNewContentReceivedArgumentsLock.withLock { editEventIDNewContentUnderlyingReceivedArguments } }
-        set { editEventIDNewContentReceivedArgumentsLock.withLock { editEventIDNewContentUnderlyingReceivedArguments = newValue } }
-    }
-    private let editEventIDNewContentReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var editEventIDNewContentUnderlyingReceivedInvocations: [(eventID: String, newContent: RoomMessageEventContentWithoutRelation)] = []
-    var editEventIDNewContentReceivedInvocations: [(eventID: String, newContent: RoomMessageEventContentWithoutRelation)] {
-        get { editEventIDNewContentReceivedInvocationsLock.withLock { editEventIDNewContentUnderlyingReceivedInvocations } }
-        set { editEventIDNewContentReceivedInvocationsLock.withLock { editEventIDNewContentUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let editEventIDNewContentReturnValueLock = NSLock()
-    private nonisolated(unsafe) var editEventIDNewContentUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var editEventIDNewContentReturnValue: Result<Void, RoomProxyError>! {
-        get { editEventIDNewContentReturnValueLock.withLock { editEventIDNewContentUnderlyingReturnValue } }
-        set { editEventIDNewContentReturnValueLock.withLock { editEventIDNewContentUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var editEventIDNewContentClosure: ((String, RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError>)?
-
-    @concurrent func edit(eventID: String, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, RoomProxyError> {
-        editEventIDNewContentCallsCountLock.withLock { editEventIDNewContentUnderlyingCallsCount += 1 }
-        editEventIDNewContentReceivedArguments = (eventID: eventID, newContent: newContent)
-        editEventIDNewContentReceivedInvocationsLock.withLock { editEventIDNewContentUnderlyingReceivedInvocations.append((eventID: eventID, newContent: newContent)) }
-        if let editEventIDNewContentClosure = editEventIDNewContentClosure {
-            return await editEventIDNewContentClosure(eventID, newContent)
-        } else {
-            return editEventIDNewContentReturnValue
         }
     }
     //MARK: - sendTypingNotification
@@ -6409,34 +6243,6 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
             return flagAsFavouriteReturnValue
         }
     }
-    //MARK: - powerLevels
-
-    private let powerLevelsCallsCountLock = NSLock()
-    private nonisolated(unsafe) var powerLevelsUnderlyingCallsCount = 0
-    var powerLevelsCallsCount: Int {
-        get { powerLevelsCallsCountLock.withLock { powerLevelsUnderlyingCallsCount } }
-        set { powerLevelsCallsCountLock.withLock { powerLevelsUnderlyingCallsCount = newValue } }
-    }
-    var powerLevelsCalled: Bool {
-        return powerLevelsCallsCount > 0
-    }
-
-    private let powerLevelsReturnValueLock = NSLock()
-    private nonisolated(unsafe) var powerLevelsUnderlyingReturnValue: Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>!
-    var powerLevelsReturnValue: Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>! {
-        get { powerLevelsReturnValueLock.withLock { powerLevelsUnderlyingReturnValue } }
-        set { powerLevelsReturnValueLock.withLock { powerLevelsUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var powerLevelsClosure: (() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>)?
-
-    @concurrent func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError> {
-        powerLevelsCallsCountLock.withLock { powerLevelsUnderlyingCallsCount += 1 }
-        if let powerLevelsClosure = powerLevelsClosure {
-            return await powerLevelsClosure()
-        } else {
-            return powerLevelsReturnValue
-        }
-    }
     //MARK: - applyPowerLevelChanges
 
     private let applyPowerLevelChangesCallsCountLock = NSLock()
@@ -6505,48 +6311,6 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
             return await resetPowerLevelsClosure()
         } else {
             return resetPowerLevelsReturnValue
-        }
-    }
-    //MARK: - suggestedRole
-
-    private let suggestedRoleForCallsCountLock = NSLock()
-    private nonisolated(unsafe) var suggestedRoleForUnderlyingCallsCount = 0
-    var suggestedRoleForCallsCount: Int {
-        get { suggestedRoleForCallsCountLock.withLock { suggestedRoleForUnderlyingCallsCount } }
-        set { suggestedRoleForCallsCountLock.withLock { suggestedRoleForUnderlyingCallsCount = newValue } }
-    }
-    var suggestedRoleForCalled: Bool {
-        return suggestedRoleForCallsCount > 0
-    }
-    private let suggestedRoleForReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var suggestedRoleForUnderlyingReceivedUserID: String?
-    var suggestedRoleForReceivedUserID: String? {
-        get { suggestedRoleForReceivedUserIDLock.withLock { suggestedRoleForUnderlyingReceivedUserID } }
-        set { suggestedRoleForReceivedUserIDLock.withLock { suggestedRoleForUnderlyingReceivedUserID = newValue } }
-    }
-    private let suggestedRoleForReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var suggestedRoleForUnderlyingReceivedInvocations: [String] = []
-    var suggestedRoleForReceivedInvocations: [String] {
-        get { suggestedRoleForReceivedInvocationsLock.withLock { suggestedRoleForUnderlyingReceivedInvocations } }
-        set { suggestedRoleForReceivedInvocationsLock.withLock { suggestedRoleForUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let suggestedRoleForReturnValueLock = NSLock()
-    private nonisolated(unsafe) var suggestedRoleForUnderlyingReturnValue: Result<RoomMemberRole, RoomProxyError>!
-    var suggestedRoleForReturnValue: Result<RoomMemberRole, RoomProxyError>! {
-        get { suggestedRoleForReturnValueLock.withLock { suggestedRoleForUnderlyingReturnValue } }
-        set { suggestedRoleForReturnValueLock.withLock { suggestedRoleForUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var suggestedRoleForClosure: ((String) async -> Result<RoomMemberRole, RoomProxyError>)?
-
-    @concurrent func suggestedRole(for userID: String) async -> Result<RoomMemberRole, RoomProxyError> {
-        suggestedRoleForCallsCountLock.withLock { suggestedRoleForUnderlyingCallsCount += 1 }
-        suggestedRoleForReceivedUserID = userID
-        suggestedRoleForReceivedInvocationsLock.withLock { suggestedRoleForUnderlyingReceivedInvocations.append(userID) }
-        if let suggestedRoleForClosure = suggestedRoleForClosure {
-            return await suggestedRoleForClosure(userID)
-        } else {
-            return suggestedRoleForReturnValue
         }
     }
     //MARK: - updatePowerLevelsForUsers
@@ -8201,48 +7965,6 @@ nonisolated class MediaProviderMock: MediaProviderProtocol, @unchecked Sendable 
             return imageFromSourceSizeReturnValue
         }
     }
-    //MARK: - loadImageFromSource
-
-    private let loadImageFromSourceSizeCallsCountLock = NSLock()
-    private nonisolated(unsafe) var loadImageFromSourceSizeUnderlyingCallsCount = 0
-    var loadImageFromSourceSizeCallsCount: Int {
-        get { loadImageFromSourceSizeCallsCountLock.withLock { loadImageFromSourceSizeUnderlyingCallsCount } }
-        set { loadImageFromSourceSizeCallsCountLock.withLock { loadImageFromSourceSizeUnderlyingCallsCount = newValue } }
-    }
-    var loadImageFromSourceSizeCalled: Bool {
-        return loadImageFromSourceSizeCallsCount > 0
-    }
-    private let loadImageFromSourceSizeReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var loadImageFromSourceSizeUnderlyingReceivedArguments: (source: MediaSourceProxy, size: CGSize?)?
-    var loadImageFromSourceSizeReceivedArguments: (source: MediaSourceProxy, size: CGSize?)? {
-        get { loadImageFromSourceSizeReceivedArgumentsLock.withLock { loadImageFromSourceSizeUnderlyingReceivedArguments } }
-        set { loadImageFromSourceSizeReceivedArgumentsLock.withLock { loadImageFromSourceSizeUnderlyingReceivedArguments = newValue } }
-    }
-    private let loadImageFromSourceSizeReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var loadImageFromSourceSizeUnderlyingReceivedInvocations: [(source: MediaSourceProxy, size: CGSize?)] = []
-    var loadImageFromSourceSizeReceivedInvocations: [(source: MediaSourceProxy, size: CGSize?)] {
-        get { loadImageFromSourceSizeReceivedInvocationsLock.withLock { loadImageFromSourceSizeUnderlyingReceivedInvocations } }
-        set { loadImageFromSourceSizeReceivedInvocationsLock.withLock { loadImageFromSourceSizeUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let loadImageFromSourceSizeReturnValueLock = NSLock()
-    private nonisolated(unsafe) var loadImageFromSourceSizeUnderlyingReturnValue: Result<UIImage, MediaProviderError>!
-    var loadImageFromSourceSizeReturnValue: Result<UIImage, MediaProviderError>! {
-        get { loadImageFromSourceSizeReturnValueLock.withLock { loadImageFromSourceSizeUnderlyingReturnValue } }
-        set { loadImageFromSourceSizeReturnValueLock.withLock { loadImageFromSourceSizeUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var loadImageFromSourceSizeClosure: ((MediaSourceProxy, CGSize?) async -> Result<UIImage, MediaProviderError>)?
-
-    @concurrent func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
-        loadImageFromSourceSizeCallsCountLock.withLock { loadImageFromSourceSizeUnderlyingCallsCount += 1 }
-        loadImageFromSourceSizeReceivedArguments = (source: source, size: size)
-        loadImageFromSourceSizeReceivedInvocationsLock.withLock { loadImageFromSourceSizeUnderlyingReceivedInvocations.append((source: source, size: size)) }
-        if let loadImageFromSourceSizeClosure = loadImageFromSourceSizeClosure {
-            return await loadImageFromSourceSizeClosure(source, size)
-        } else {
-            return loadImageFromSourceSizeReturnValue
-        }
-    }
     //MARK: - loadImageDataFromSource
 
     private let loadImageDataFromSourceCallsCountLock = NSLock()
@@ -8571,21 +8293,11 @@ nonisolated class NotificationItemProxyMock: NotificationItemProxyProtocol, @unc
     }
     nonisolated(unsafe) var underlyingRoomDisplayName: String!
     nonisolated(unsafe) var roomAvatarMediaSource: MediaSourceProxy?
-    var roomJoinedMembers: Int {
-        get { return underlyingRoomJoinedMembers }
-        set(value) { underlyingRoomJoinedMembers = value }
-    }
-    nonisolated(unsafe) var underlyingRoomJoinedMembers: Int!
     var isRoomSpace: Bool {
         get { return underlyingIsRoomSpace }
         set(value) { underlyingIsRoomSpace = value }
     }
     nonisolated(unsafe) var underlyingIsRoomSpace: Bool!
-    var isRoomDirect: Bool {
-        get { return underlyingIsRoomDirect }
-        set(value) { underlyingIsRoomDirect = value }
-    }
-    nonisolated(unsafe) var underlyingIsRoomDirect: Bool!
     var isRoomPrivate: Bool {
         get { return underlyingIsRoomPrivate }
         set(value) { underlyingIsRoomPrivate = value }
@@ -9990,9 +9702,7 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
         set(value) { underlyingId = value }
     }
     nonisolated(unsafe) var underlyingId: String!
-    nonisolated(unsafe) var creators: [String] = []
     nonisolated(unsafe) var displayName: String?
-    nonisolated(unsafe) var rawName: String?
     nonisolated(unsafe) var topic: String?
     nonisolated(unsafe) var avatarURL: URL?
     var isEncrypted: Bool {
@@ -10027,33 +9737,16 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
         set(value) { underlyingMembership = value }
     }
     nonisolated(unsafe) var underlyingMembership: Membership!
-    nonisolated(unsafe) var inviter: RoomMemberProxyProtocol?
     var activeMembersCount: Int {
         get { return underlyingActiveMembersCount }
         set(value) { underlyingActiveMembersCount = value }
     }
     nonisolated(unsafe) var underlyingActiveMembersCount: Int!
-    var invitedMembersCount: Int {
-        get { return underlyingInvitedMembersCount }
-        set(value) { underlyingInvitedMembersCount = value }
-    }
-    nonisolated(unsafe) var underlyingInvitedMembersCount: Int!
     var joinedMembersCount: Int {
         get { return underlyingJoinedMembersCount }
         set(value) { underlyingJoinedMembersCount = value }
     }
     nonisolated(unsafe) var underlyingJoinedMembersCount: Int!
-    var highlightCount: Int {
-        get { return underlyingHighlightCount }
-        set(value) { underlyingHighlightCount = value }
-    }
-    nonisolated(unsafe) var underlyingHighlightCount: Int!
-    var notificationCount: Int {
-        get { return underlyingNotificationCount }
-        set(value) { underlyingNotificationCount = value }
-    }
-    nonisolated(unsafe) var underlyingNotificationCount: Int!
-    nonisolated(unsafe) var cachedUserDefinedNotificationMode: RoomNotificationMode?
     var hasRoomCall: Bool {
         get { return underlyingHasRoomCall }
         set(value) { underlyingHasRoomCall = value }
@@ -10061,26 +9754,6 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
     nonisolated(unsafe) var underlyingHasRoomCall: Bool!
     nonisolated(unsafe) var activeRoomCallIntent: CallIntent?
     nonisolated(unsafe) var activeRoomCallParticipants: [String] = []
-    var isMarkedUnread: Bool {
-        get { return underlyingIsMarkedUnread }
-        set(value) { underlyingIsMarkedUnread = value }
-    }
-    nonisolated(unsafe) var underlyingIsMarkedUnread: Bool!
-    var unreadMessagesCount: UInt {
-        get { return underlyingUnreadMessagesCount }
-        set(value) { underlyingUnreadMessagesCount = value }
-    }
-    nonisolated(unsafe) var underlyingUnreadMessagesCount: UInt!
-    var unreadNotificationsCount: UInt {
-        get { return underlyingUnreadNotificationsCount }
-        set(value) { underlyingUnreadNotificationsCount = value }
-    }
-    nonisolated(unsafe) var underlyingUnreadNotificationsCount: UInt!
-    var unreadMentionsCount: UInt {
-        get { return underlyingUnreadMentionsCount }
-        set(value) { underlyingUnreadMentionsCount = value }
-    }
-    nonisolated(unsafe) var underlyingUnreadMentionsCount: UInt!
     nonisolated(unsafe) var fullyReadEventID: String?
     var pinnedEventIDs: Set<String> {
         get { return underlyingPinnedEventIDs }
@@ -10507,426 +10180,6 @@ nonisolated class RoomPowerLevelsProxyMock: RoomPowerLevelsProxyProtocol, @unche
             return canOwnUserEditRolesAndPermissionsClosure()
         } else {
             return canOwnUserEditRolesAndPermissionsReturnValue
-        }
-    }
-    //MARK: - canUser
-
-    private let canUserUserIDSendMessageCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserUserIDSendMessageUnderlyingCallsCount = 0
-    var canUserUserIDSendMessageCallsCount: Int {
-        get { canUserUserIDSendMessageCallsCountLock.withLock { canUserUserIDSendMessageUnderlyingCallsCount } }
-        set { canUserUserIDSendMessageCallsCountLock.withLock { canUserUserIDSendMessageUnderlyingCallsCount = newValue } }
-    }
-    var canUserUserIDSendMessageCalled: Bool {
-        return canUserUserIDSendMessageCallsCount > 0
-    }
-    private let canUserUserIDSendMessageReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var canUserUserIDSendMessageUnderlyingReceivedArguments: (userID: String, messageType: MessageLikeEventType)?
-    var canUserUserIDSendMessageReceivedArguments: (userID: String, messageType: MessageLikeEventType)? {
-        get { canUserUserIDSendMessageReceivedArgumentsLock.withLock { canUserUserIDSendMessageUnderlyingReceivedArguments } }
-        set { canUserUserIDSendMessageReceivedArgumentsLock.withLock { canUserUserIDSendMessageUnderlyingReceivedArguments = newValue } }
-    }
-    private let canUserUserIDSendMessageReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserUserIDSendMessageUnderlyingReceivedInvocations: [(userID: String, messageType: MessageLikeEventType)] = []
-    var canUserUserIDSendMessageReceivedInvocations: [(userID: String, messageType: MessageLikeEventType)] {
-        get { canUserUserIDSendMessageReceivedInvocationsLock.withLock { canUserUserIDSendMessageUnderlyingReceivedInvocations } }
-        set { canUserUserIDSendMessageReceivedInvocationsLock.withLock { canUserUserIDSendMessageUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserUserIDSendMessageReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserUserIDSendMessageUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserUserIDSendMessageReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserUserIDSendMessageReturnValueLock.withLock { canUserUserIDSendMessageUnderlyingReturnValue } }
-        set { canUserUserIDSendMessageReturnValueLock.withLock { canUserUserIDSendMessageUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserUserIDSendMessageClosure: ((String, MessageLikeEventType) -> Result<Bool, RoomProxyError>)?
-
-    func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError> {
-        canUserUserIDSendMessageCallsCountLock.withLock { canUserUserIDSendMessageUnderlyingCallsCount += 1 }
-        canUserUserIDSendMessageReceivedArguments = (userID: userID, messageType: messageType)
-        canUserUserIDSendMessageReceivedInvocationsLock.withLock { canUserUserIDSendMessageUnderlyingReceivedInvocations.append((userID: userID, messageType: messageType)) }
-        if let canUserUserIDSendMessageClosure = canUserUserIDSendMessageClosure {
-            return canUserUserIDSendMessageClosure(userID, messageType)
-        } else {
-            return canUserUserIDSendMessageReturnValue
-        }
-    }
-    //MARK: - canUser
-
-    private let canUserUserIDSendStateEventCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserUserIDSendStateEventUnderlyingCallsCount = 0
-    var canUserUserIDSendStateEventCallsCount: Int {
-        get { canUserUserIDSendStateEventCallsCountLock.withLock { canUserUserIDSendStateEventUnderlyingCallsCount } }
-        set { canUserUserIDSendStateEventCallsCountLock.withLock { canUserUserIDSendStateEventUnderlyingCallsCount = newValue } }
-    }
-    var canUserUserIDSendStateEventCalled: Bool {
-        return canUserUserIDSendStateEventCallsCount > 0
-    }
-    private let canUserUserIDSendStateEventReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var canUserUserIDSendStateEventUnderlyingReceivedArguments: (userID: String, event: StateEventType)?
-    var canUserUserIDSendStateEventReceivedArguments: (userID: String, event: StateEventType)? {
-        get { canUserUserIDSendStateEventReceivedArgumentsLock.withLock { canUserUserIDSendStateEventUnderlyingReceivedArguments } }
-        set { canUserUserIDSendStateEventReceivedArgumentsLock.withLock { canUserUserIDSendStateEventUnderlyingReceivedArguments = newValue } }
-    }
-    private let canUserUserIDSendStateEventReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserUserIDSendStateEventUnderlyingReceivedInvocations: [(userID: String, event: StateEventType)] = []
-    var canUserUserIDSendStateEventReceivedInvocations: [(userID: String, event: StateEventType)] {
-        get { canUserUserIDSendStateEventReceivedInvocationsLock.withLock { canUserUserIDSendStateEventUnderlyingReceivedInvocations } }
-        set { canUserUserIDSendStateEventReceivedInvocationsLock.withLock { canUserUserIDSendStateEventUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserUserIDSendStateEventReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserUserIDSendStateEventUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserUserIDSendStateEventReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserUserIDSendStateEventReturnValueLock.withLock { canUserUserIDSendStateEventUnderlyingReturnValue } }
-        set { canUserUserIDSendStateEventReturnValueLock.withLock { canUserUserIDSendStateEventUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserUserIDSendStateEventClosure: ((String, StateEventType) -> Result<Bool, RoomProxyError>)?
-
-    func canUser(userID: String, sendStateEvent event: StateEventType) -> Result<Bool, RoomProxyError> {
-        canUserUserIDSendStateEventCallsCountLock.withLock { canUserUserIDSendStateEventUnderlyingCallsCount += 1 }
-        canUserUserIDSendStateEventReceivedArguments = (userID: userID, event: event)
-        canUserUserIDSendStateEventReceivedInvocationsLock.withLock { canUserUserIDSendStateEventUnderlyingReceivedInvocations.append((userID: userID, event: event)) }
-        if let canUserUserIDSendStateEventClosure = canUserUserIDSendStateEventClosure {
-            return canUserUserIDSendStateEventClosure(userID, event)
-        } else {
-            return canUserUserIDSendStateEventReturnValue
-        }
-    }
-    //MARK: - canUserInvite
-
-    private let canUserInviteUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserInviteUserIDUnderlyingCallsCount = 0
-    var canUserInviteUserIDCallsCount: Int {
-        get { canUserInviteUserIDCallsCountLock.withLock { canUserInviteUserIDUnderlyingCallsCount } }
-        set { canUserInviteUserIDCallsCountLock.withLock { canUserInviteUserIDUnderlyingCallsCount = newValue } }
-    }
-    var canUserInviteUserIDCalled: Bool {
-        return canUserInviteUserIDCallsCount > 0
-    }
-    private let canUserInviteUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var canUserInviteUserIDUnderlyingReceivedUserID: String?
-    var canUserInviteUserIDReceivedUserID: String? {
-        get { canUserInviteUserIDReceivedUserIDLock.withLock { canUserInviteUserIDUnderlyingReceivedUserID } }
-        set { canUserInviteUserIDReceivedUserIDLock.withLock { canUserInviteUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let canUserInviteUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserInviteUserIDUnderlyingReceivedInvocations: [String] = []
-    var canUserInviteUserIDReceivedInvocations: [String] {
-        get { canUserInviteUserIDReceivedInvocationsLock.withLock { canUserInviteUserIDUnderlyingReceivedInvocations } }
-        set { canUserInviteUserIDReceivedInvocationsLock.withLock { canUserInviteUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserInviteUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserInviteUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserInviteUserIDReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserInviteUserIDReturnValueLock.withLock { canUserInviteUserIDUnderlyingReturnValue } }
-        set { canUserInviteUserIDReturnValueLock.withLock { canUserInviteUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserInviteUserIDClosure: ((String) -> Result<Bool, RoomProxyError>)?
-
-    func canUserInvite(userID: String) -> Result<Bool, RoomProxyError> {
-        canUserInviteUserIDCallsCountLock.withLock { canUserInviteUserIDUnderlyingCallsCount += 1 }
-        canUserInviteUserIDReceivedUserID = userID
-        canUserInviteUserIDReceivedInvocationsLock.withLock { canUserInviteUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let canUserInviteUserIDClosure = canUserInviteUserIDClosure {
-            return canUserInviteUserIDClosure(userID)
-        } else {
-            return canUserInviteUserIDReturnValue
-        }
-    }
-    //MARK: - canUserRedactOther
-
-    private let canUserRedactOtherUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserRedactOtherUserIDUnderlyingCallsCount = 0
-    var canUserRedactOtherUserIDCallsCount: Int {
-        get { canUserRedactOtherUserIDCallsCountLock.withLock { canUserRedactOtherUserIDUnderlyingCallsCount } }
-        set { canUserRedactOtherUserIDCallsCountLock.withLock { canUserRedactOtherUserIDUnderlyingCallsCount = newValue } }
-    }
-    var canUserRedactOtherUserIDCalled: Bool {
-        return canUserRedactOtherUserIDCallsCount > 0
-    }
-    private let canUserRedactOtherUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var canUserRedactOtherUserIDUnderlyingReceivedUserID: String?
-    var canUserRedactOtherUserIDReceivedUserID: String? {
-        get { canUserRedactOtherUserIDReceivedUserIDLock.withLock { canUserRedactOtherUserIDUnderlyingReceivedUserID } }
-        set { canUserRedactOtherUserIDReceivedUserIDLock.withLock { canUserRedactOtherUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let canUserRedactOtherUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserRedactOtherUserIDUnderlyingReceivedInvocations: [String] = []
-    var canUserRedactOtherUserIDReceivedInvocations: [String] {
-        get { canUserRedactOtherUserIDReceivedInvocationsLock.withLock { canUserRedactOtherUserIDUnderlyingReceivedInvocations } }
-        set { canUserRedactOtherUserIDReceivedInvocationsLock.withLock { canUserRedactOtherUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserRedactOtherUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserRedactOtherUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserRedactOtherUserIDReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserRedactOtherUserIDReturnValueLock.withLock { canUserRedactOtherUserIDUnderlyingReturnValue } }
-        set { canUserRedactOtherUserIDReturnValueLock.withLock { canUserRedactOtherUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserRedactOtherUserIDClosure: ((String) -> Result<Bool, RoomProxyError>)?
-
-    func canUserRedactOther(userID: String) -> Result<Bool, RoomProxyError> {
-        canUserRedactOtherUserIDCallsCountLock.withLock { canUserRedactOtherUserIDUnderlyingCallsCount += 1 }
-        canUserRedactOtherUserIDReceivedUserID = userID
-        canUserRedactOtherUserIDReceivedInvocationsLock.withLock { canUserRedactOtherUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let canUserRedactOtherUserIDClosure = canUserRedactOtherUserIDClosure {
-            return canUserRedactOtherUserIDClosure(userID)
-        } else {
-            return canUserRedactOtherUserIDReturnValue
-        }
-    }
-    //MARK: - canUserRedactOwn
-
-    private let canUserRedactOwnUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserRedactOwnUserIDUnderlyingCallsCount = 0
-    var canUserRedactOwnUserIDCallsCount: Int {
-        get { canUserRedactOwnUserIDCallsCountLock.withLock { canUserRedactOwnUserIDUnderlyingCallsCount } }
-        set { canUserRedactOwnUserIDCallsCountLock.withLock { canUserRedactOwnUserIDUnderlyingCallsCount = newValue } }
-    }
-    var canUserRedactOwnUserIDCalled: Bool {
-        return canUserRedactOwnUserIDCallsCount > 0
-    }
-    private let canUserRedactOwnUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var canUserRedactOwnUserIDUnderlyingReceivedUserID: String?
-    var canUserRedactOwnUserIDReceivedUserID: String? {
-        get { canUserRedactOwnUserIDReceivedUserIDLock.withLock { canUserRedactOwnUserIDUnderlyingReceivedUserID } }
-        set { canUserRedactOwnUserIDReceivedUserIDLock.withLock { canUserRedactOwnUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let canUserRedactOwnUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserRedactOwnUserIDUnderlyingReceivedInvocations: [String] = []
-    var canUserRedactOwnUserIDReceivedInvocations: [String] {
-        get { canUserRedactOwnUserIDReceivedInvocationsLock.withLock { canUserRedactOwnUserIDUnderlyingReceivedInvocations } }
-        set { canUserRedactOwnUserIDReceivedInvocationsLock.withLock { canUserRedactOwnUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserRedactOwnUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserRedactOwnUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserRedactOwnUserIDReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserRedactOwnUserIDReturnValueLock.withLock { canUserRedactOwnUserIDUnderlyingReturnValue } }
-        set { canUserRedactOwnUserIDReturnValueLock.withLock { canUserRedactOwnUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserRedactOwnUserIDClosure: ((String) -> Result<Bool, RoomProxyError>)?
-
-    func canUserRedactOwn(userID: String) -> Result<Bool, RoomProxyError> {
-        canUserRedactOwnUserIDCallsCountLock.withLock { canUserRedactOwnUserIDUnderlyingCallsCount += 1 }
-        canUserRedactOwnUserIDReceivedUserID = userID
-        canUserRedactOwnUserIDReceivedInvocationsLock.withLock { canUserRedactOwnUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let canUserRedactOwnUserIDClosure = canUserRedactOwnUserIDClosure {
-            return canUserRedactOwnUserIDClosure(userID)
-        } else {
-            return canUserRedactOwnUserIDReturnValue
-        }
-    }
-    //MARK: - canUserKick
-
-    private let canUserKickUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserKickUserIDUnderlyingCallsCount = 0
-    var canUserKickUserIDCallsCount: Int {
-        get { canUserKickUserIDCallsCountLock.withLock { canUserKickUserIDUnderlyingCallsCount } }
-        set { canUserKickUserIDCallsCountLock.withLock { canUserKickUserIDUnderlyingCallsCount = newValue } }
-    }
-    var canUserKickUserIDCalled: Bool {
-        return canUserKickUserIDCallsCount > 0
-    }
-    private let canUserKickUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var canUserKickUserIDUnderlyingReceivedUserID: String?
-    var canUserKickUserIDReceivedUserID: String? {
-        get { canUserKickUserIDReceivedUserIDLock.withLock { canUserKickUserIDUnderlyingReceivedUserID } }
-        set { canUserKickUserIDReceivedUserIDLock.withLock { canUserKickUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let canUserKickUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserKickUserIDUnderlyingReceivedInvocations: [String] = []
-    var canUserKickUserIDReceivedInvocations: [String] {
-        get { canUserKickUserIDReceivedInvocationsLock.withLock { canUserKickUserIDUnderlyingReceivedInvocations } }
-        set { canUserKickUserIDReceivedInvocationsLock.withLock { canUserKickUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserKickUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserKickUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserKickUserIDReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserKickUserIDReturnValueLock.withLock { canUserKickUserIDUnderlyingReturnValue } }
-        set { canUserKickUserIDReturnValueLock.withLock { canUserKickUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserKickUserIDClosure: ((String) -> Result<Bool, RoomProxyError>)?
-
-    func canUserKick(userID: String) -> Result<Bool, RoomProxyError> {
-        canUserKickUserIDCallsCountLock.withLock { canUserKickUserIDUnderlyingCallsCount += 1 }
-        canUserKickUserIDReceivedUserID = userID
-        canUserKickUserIDReceivedInvocationsLock.withLock { canUserKickUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let canUserKickUserIDClosure = canUserKickUserIDClosure {
-            return canUserKickUserIDClosure(userID)
-        } else {
-            return canUserKickUserIDReturnValue
-        }
-    }
-    //MARK: - canUserBan
-
-    private let canUserBanUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserBanUserIDUnderlyingCallsCount = 0
-    var canUserBanUserIDCallsCount: Int {
-        get { canUserBanUserIDCallsCountLock.withLock { canUserBanUserIDUnderlyingCallsCount } }
-        set { canUserBanUserIDCallsCountLock.withLock { canUserBanUserIDUnderlyingCallsCount = newValue } }
-    }
-    var canUserBanUserIDCalled: Bool {
-        return canUserBanUserIDCallsCount > 0
-    }
-    private let canUserBanUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var canUserBanUserIDUnderlyingReceivedUserID: String?
-    var canUserBanUserIDReceivedUserID: String? {
-        get { canUserBanUserIDReceivedUserIDLock.withLock { canUserBanUserIDUnderlyingReceivedUserID } }
-        set { canUserBanUserIDReceivedUserIDLock.withLock { canUserBanUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let canUserBanUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserBanUserIDUnderlyingReceivedInvocations: [String] = []
-    var canUserBanUserIDReceivedInvocations: [String] {
-        get { canUserBanUserIDReceivedInvocationsLock.withLock { canUserBanUserIDUnderlyingReceivedInvocations } }
-        set { canUserBanUserIDReceivedInvocationsLock.withLock { canUserBanUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserBanUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserBanUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserBanUserIDReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserBanUserIDReturnValueLock.withLock { canUserBanUserIDUnderlyingReturnValue } }
-        set { canUserBanUserIDReturnValueLock.withLock { canUserBanUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserBanUserIDClosure: ((String) -> Result<Bool, RoomProxyError>)?
-
-    func canUserBan(userID: String) -> Result<Bool, RoomProxyError> {
-        canUserBanUserIDCallsCountLock.withLock { canUserBanUserIDUnderlyingCallsCount += 1 }
-        canUserBanUserIDReceivedUserID = userID
-        canUserBanUserIDReceivedInvocationsLock.withLock { canUserBanUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let canUserBanUserIDClosure = canUserBanUserIDClosure {
-            return canUserBanUserIDClosure(userID)
-        } else {
-            return canUserBanUserIDReturnValue
-        }
-    }
-    //MARK: - canUserTriggerRoomNotification
-
-    private let canUserTriggerRoomNotificationUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserTriggerRoomNotificationUserIDUnderlyingCallsCount = 0
-    var canUserTriggerRoomNotificationUserIDCallsCount: Int {
-        get { canUserTriggerRoomNotificationUserIDCallsCountLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingCallsCount } }
-        set { canUserTriggerRoomNotificationUserIDCallsCountLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingCallsCount = newValue } }
-    }
-    var canUserTriggerRoomNotificationUserIDCalled: Bool {
-        return canUserTriggerRoomNotificationUserIDCallsCount > 0
-    }
-    private let canUserTriggerRoomNotificationUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var canUserTriggerRoomNotificationUserIDUnderlyingReceivedUserID: String?
-    var canUserTriggerRoomNotificationUserIDReceivedUserID: String? {
-        get { canUserTriggerRoomNotificationUserIDReceivedUserIDLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingReceivedUserID } }
-        set { canUserTriggerRoomNotificationUserIDReceivedUserIDLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let canUserTriggerRoomNotificationUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserTriggerRoomNotificationUserIDUnderlyingReceivedInvocations: [String] = []
-    var canUserTriggerRoomNotificationUserIDReceivedInvocations: [String] {
-        get { canUserTriggerRoomNotificationUserIDReceivedInvocationsLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingReceivedInvocations } }
-        set { canUserTriggerRoomNotificationUserIDReceivedInvocationsLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserTriggerRoomNotificationUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserTriggerRoomNotificationUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserTriggerRoomNotificationUserIDReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserTriggerRoomNotificationUserIDReturnValueLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingReturnValue } }
-        set { canUserTriggerRoomNotificationUserIDReturnValueLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserTriggerRoomNotificationUserIDClosure: ((String) -> Result<Bool, RoomProxyError>)?
-
-    func canUserTriggerRoomNotification(userID: String) -> Result<Bool, RoomProxyError> {
-        canUserTriggerRoomNotificationUserIDCallsCountLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingCallsCount += 1 }
-        canUserTriggerRoomNotificationUserIDReceivedUserID = userID
-        canUserTriggerRoomNotificationUserIDReceivedInvocationsLock.withLock { canUserTriggerRoomNotificationUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let canUserTriggerRoomNotificationUserIDClosure = canUserTriggerRoomNotificationUserIDClosure {
-            return canUserTriggerRoomNotificationUserIDClosure(userID)
-        } else {
-            return canUserTriggerRoomNotificationUserIDReturnValue
-        }
-    }
-    //MARK: - canUserPinOrUnpin
-
-    private let canUserPinOrUnpinUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserPinOrUnpinUserIDUnderlyingCallsCount = 0
-    var canUserPinOrUnpinUserIDCallsCount: Int {
-        get { canUserPinOrUnpinUserIDCallsCountLock.withLock { canUserPinOrUnpinUserIDUnderlyingCallsCount } }
-        set { canUserPinOrUnpinUserIDCallsCountLock.withLock { canUserPinOrUnpinUserIDUnderlyingCallsCount = newValue } }
-    }
-    var canUserPinOrUnpinUserIDCalled: Bool {
-        return canUserPinOrUnpinUserIDCallsCount > 0
-    }
-    private let canUserPinOrUnpinUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var canUserPinOrUnpinUserIDUnderlyingReceivedUserID: String?
-    var canUserPinOrUnpinUserIDReceivedUserID: String? {
-        get { canUserPinOrUnpinUserIDReceivedUserIDLock.withLock { canUserPinOrUnpinUserIDUnderlyingReceivedUserID } }
-        set { canUserPinOrUnpinUserIDReceivedUserIDLock.withLock { canUserPinOrUnpinUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let canUserPinOrUnpinUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserPinOrUnpinUserIDUnderlyingReceivedInvocations: [String] = []
-    var canUserPinOrUnpinUserIDReceivedInvocations: [String] {
-        get { canUserPinOrUnpinUserIDReceivedInvocationsLock.withLock { canUserPinOrUnpinUserIDUnderlyingReceivedInvocations } }
-        set { canUserPinOrUnpinUserIDReceivedInvocationsLock.withLock { canUserPinOrUnpinUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserPinOrUnpinUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserPinOrUnpinUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserPinOrUnpinUserIDReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserPinOrUnpinUserIDReturnValueLock.withLock { canUserPinOrUnpinUserIDUnderlyingReturnValue } }
-        set { canUserPinOrUnpinUserIDReturnValueLock.withLock { canUserPinOrUnpinUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserPinOrUnpinUserIDClosure: ((String) -> Result<Bool, RoomProxyError>)?
-
-    func canUserPinOrUnpin(userID: String) -> Result<Bool, RoomProxyError> {
-        canUserPinOrUnpinUserIDCallsCountLock.withLock { canUserPinOrUnpinUserIDUnderlyingCallsCount += 1 }
-        canUserPinOrUnpinUserIDReceivedUserID = userID
-        canUserPinOrUnpinUserIDReceivedInvocationsLock.withLock { canUserPinOrUnpinUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let canUserPinOrUnpinUserIDClosure = canUserPinOrUnpinUserIDClosure {
-            return canUserPinOrUnpinUserIDClosure(userID)
-        } else {
-            return canUserPinOrUnpinUserIDReturnValue
-        }
-    }
-    //MARK: - canUserJoinCall
-
-    private let canUserJoinCallUserIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var canUserJoinCallUserIDUnderlyingCallsCount = 0
-    var canUserJoinCallUserIDCallsCount: Int {
-        get { canUserJoinCallUserIDCallsCountLock.withLock { canUserJoinCallUserIDUnderlyingCallsCount } }
-        set { canUserJoinCallUserIDCallsCountLock.withLock { canUserJoinCallUserIDUnderlyingCallsCount = newValue } }
-    }
-    var canUserJoinCallUserIDCalled: Bool {
-        return canUserJoinCallUserIDCallsCount > 0
-    }
-    private let canUserJoinCallUserIDReceivedUserIDLock = NSLock()
-    private nonisolated(unsafe) var canUserJoinCallUserIDUnderlyingReceivedUserID: String?
-    var canUserJoinCallUserIDReceivedUserID: String? {
-        get { canUserJoinCallUserIDReceivedUserIDLock.withLock { canUserJoinCallUserIDUnderlyingReceivedUserID } }
-        set { canUserJoinCallUserIDReceivedUserIDLock.withLock { canUserJoinCallUserIDUnderlyingReceivedUserID = newValue } }
-    }
-    private let canUserJoinCallUserIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var canUserJoinCallUserIDUnderlyingReceivedInvocations: [String] = []
-    var canUserJoinCallUserIDReceivedInvocations: [String] {
-        get { canUserJoinCallUserIDReceivedInvocationsLock.withLock { canUserJoinCallUserIDUnderlyingReceivedInvocations } }
-        set { canUserJoinCallUserIDReceivedInvocationsLock.withLock { canUserJoinCallUserIDUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let canUserJoinCallUserIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var canUserJoinCallUserIDUnderlyingReturnValue: Result<Bool, RoomProxyError>!
-    var canUserJoinCallUserIDReturnValue: Result<Bool, RoomProxyError>! {
-        get { canUserJoinCallUserIDReturnValueLock.withLock { canUserJoinCallUserIDUnderlyingReturnValue } }
-        set { canUserJoinCallUserIDReturnValueLock.withLock { canUserJoinCallUserIDUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var canUserJoinCallUserIDClosure: ((String) -> Result<Bool, RoomProxyError>)?
-
-    func canUserJoinCall(userID: String) -> Result<Bool, RoomProxyError> {
-        canUserJoinCallUserIDCallsCountLock.withLock { canUserJoinCallUserIDUnderlyingCallsCount += 1 }
-        canUserJoinCallUserIDReceivedUserID = userID
-        canUserJoinCallUserIDReceivedInvocationsLock.withLock { canUserJoinCallUserIDUnderlyingReceivedInvocations.append(userID) }
-        if let canUserJoinCallUserIDClosure = canUserJoinCallUserIDClosure {
-            return canUserJoinCallUserIDClosure(userID)
-        } else {
-            return canUserJoinCallUserIDReturnValue
         }
     }
 }
@@ -12208,11 +11461,6 @@ nonisolated class TimelineControllerFactoryMock: TimelineControllerFactoryProtoc
     }
 }
 nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked Sendable {
-    var roomID: String {
-        get { return underlyingRoomID }
-        set(value) { underlyingRoomID = value }
-    }
-    nonisolated(unsafe) var underlyingRoomID: String!
     var timelineKind: TimelineKind {
         get { return underlyingTimelineKind }
         set(value) { underlyingTimelineKind = value }

@@ -6,6 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+// periphery:ignore:all
+
 import SwiftUI
 
 extension MediaProviderMock {
@@ -43,14 +45,6 @@ extension MediaProviderMock {
             }
             
             return UIImage(systemName: "photo")
-        }
-        
-        loadImageFromSourceSizeClosure = { _, _ in
-            guard let image = UIImage(systemName: "photo") else {
-                fatalError()
-            }
-            
-            return .success(image)
         }
         
         loadImageDataFromSourceClosure = { _ in

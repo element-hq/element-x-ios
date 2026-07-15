@@ -257,6 +257,7 @@ extension NotificationManagerTests: @MainActor NotificationManagerDelegate {
         notificationTappedDelegateCalled = true
     }
     
+    // periphery:ignore:parameters service - delegate convention
     func handleInlineReply(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
         handleInlineReplyDelegateCalled = true
     }

@@ -36,6 +36,7 @@ struct ElementCallWidgetMessage: Codable {
     let action: Action
     var data: Data = .init()
     
+    // periphery:ignore - part of the encoded payload
     let widgetId: String
     var requestId = "widgetapi-\(UUID())"
     

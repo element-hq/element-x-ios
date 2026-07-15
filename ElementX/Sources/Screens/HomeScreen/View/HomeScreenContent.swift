@@ -11,8 +11,6 @@ import SentrySwiftUI
 import SwiftUI
 
 struct HomeScreenContent: View {
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
-    
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     

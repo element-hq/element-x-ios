@@ -17,7 +17,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
-    private let appSettings: AppSettings
     
     private var suggestedUsers = [UserProfile]()
     
@@ -35,7 +34,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
-        self.appSettings = appSettings
         
         super.init(initialViewState: StartChatScreenViewState(userID: userSession.clientProxy.userID), mediaProvider: userSession.mediaProvider)
         

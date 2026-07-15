@@ -11,7 +11,6 @@ import Testing
 
 @MainActor
 struct RoomMemberDetailsViewModelTests {
-    var clientProxy: ClientProxy!
     var viewModel: RoomMemberDetailsScreenViewModelProtocol!
     var roomProxyMock: JoinedRoomProxyMock!
     var roomMemberProxyMock: RoomMemberProxyMock!

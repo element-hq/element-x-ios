@@ -8,6 +8,7 @@
 
 import Combine
 
+// periphery:ignore - required for the architecture
 protocol ManageRoomMemberSheetViewModelProtocol {
     var actions: AnyPublisher<ManageRoomMemberSheetViewModelAction, Never> { get }
     var context: ManageRoomMemberSheetViewModelType.Context { get }

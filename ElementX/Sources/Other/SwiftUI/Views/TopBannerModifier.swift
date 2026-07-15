@@ -41,12 +41,6 @@ struct TopBannerLayer {
 }
 
 extension View {
-    /// Overlays the given banner view at the top edge of this view, using a
-    /// slide from the top edge when `isVisible` is toggled.
-    func topBanner(_ banner: some View, isVisible: Bool, footer: some View = EmptyView()) -> some View {
-        topBanners([TopBannerLayer(banner, isVisible: isVisible)], footer: footer)
-    }
-    
     /// Overlays the given Z-axis banner slots at the top edge of this view.
     /// Later items in the array are overlayed on top of earlier ones. Within
     /// each slot, visible vertical banners are stacked in a VStack and slide

@@ -18,7 +18,6 @@ struct EncryptionResetPasswordScreenViewState: BindableState {
 
 struct EncryptionResetPasswordScreenViewStateBindings {
     var password: String
-    var alertInfo: AlertInfo<UUID>?
 }
 
 enum EncryptionResetPasswordScreenViewAction {

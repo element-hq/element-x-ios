@@ -17,11 +17,9 @@ class LeaveSpaceViewModel: LeaveSpaceViewModelType {
     }
     
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let mediaProvider: MediaProviderProtocol
     
     init(spaceName: String, canEditRolesAndPermissions: Bool, leaveHandle: LeaveSpaceHandleProxy, userIndicatorController: UserIndicatorControllerProtocol, mediaProvider: MediaProviderProtocol) {
         self.userIndicatorController = userIndicatorController
-        self.mediaProvider = mediaProvider
         super.init(initialViewState: LeaveSpaceViewState(spaceName: spaceName, canEditRolesAndPermissions: canEditRolesAndPermissions, leaveHandle: leaveHandle), mediaProvider: mediaProvider)
     }
     

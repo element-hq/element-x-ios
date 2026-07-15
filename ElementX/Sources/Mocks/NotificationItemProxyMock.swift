@@ -5,6 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+// periphery:ignore:all
+
 import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
@@ -46,8 +48,6 @@ extension NotificationItemProxyMock {
         senderDisplayName = configuration.senderDisplayName
         roomAvatarMediaSource = configuration.roomAvatarMediaSource
         roomDisplayName = configuration.roomDisplayName
-        roomJoinedMembers = configuration.roomJoinedMembers
-        isRoomDirect = configuration.isRoomDirect
         isRoomPrivate = configuration.isRoomPrivate
         isNoisy = configuration.isNoisy
         hasMention = configuration.hasMention

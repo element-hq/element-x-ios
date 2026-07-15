@@ -236,8 +236,11 @@ nonisolated struct SendHandleProxy: Hashable {
 nonisolated struct VideoInfoProxy: Hashable {
     let source: MediaSourceProxy
     private(set) var duration: TimeInterval
+    // periphery:ignore - used via the synthesized Hashable conformance
     private(set) var size: CGSize?
+    // periphery:ignore - used via the synthesized Hashable conformance
     private(set) var aspectRatio: CGFloat?
+    // periphery:ignore - used via the synthesized Hashable conformance
     private(set) var mimeType: String?
     private(set) var fileSize: UInt?
     
@@ -281,6 +284,7 @@ nonisolated struct ImageInfoProxy: Hashable {
     let source: MediaSourceProxy
     private(set) var size: CGSize?
     private(set) var aspectRatio: CGFloat?
+    // periphery:ignore - used via the synthesized Hashable conformance
     private(set) var mimeType: String?
     private(set) var fileSize: UInt?
     

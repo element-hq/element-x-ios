@@ -95,6 +95,7 @@ nonisolated struct InfoPlistReader {
     }
     
     /// Whether or not the build is from the Nightly stream.
+    // periphery:ignore - only used in release builds
     var isNightlyBuild: Bool {
         infoPlistValue(forKey: Keys.isNightlyBuild)
     }
@@ -103,10 +104,6 @@ nonisolated struct InfoPlistReader {
     
     var appScheme: String {
         customSchemeForName("Application")
-    }
-    
-    var elementCallScheme: String {
-        customSchemeForName("Element Call")
     }
     
     // MARK: - Mention Pills

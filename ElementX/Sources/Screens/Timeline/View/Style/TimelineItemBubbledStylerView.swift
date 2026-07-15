@@ -166,7 +166,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
             .swipeRightAction {
-                SwipeToReplyView(timelineItem: timelineItem)
+                SwipeToReplyView()
             } shouldStartAction: {
                 timelineItem.canBeRepliedTo
             } action: {
@@ -180,7 +180,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                               canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
                                                               canCurrentUserPin: context.viewState.canCurrentUserPin,
                                                               pinnedEventIDs: context.viewState.pinnedEventIDs,
-                                                              isDM: context.viewState.isDM,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled,
                                                               areThreadsEnabled: context.viewState.areThreadsEnabled,
                                                               timelineKind: context.viewState.timelineKind,

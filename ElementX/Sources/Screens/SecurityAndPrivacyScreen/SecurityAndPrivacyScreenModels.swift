@@ -15,8 +15,6 @@ enum SecurityAndPrivacyScreenViewModelAction {
 }
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
-    let serverName: String
-    
     var currentSettings: SecurityAndPrivacySettings
     var bindings: SecurityAndPrivacyScreenViewStateBindings
     let strings: SecurityAndPrivacyScreenStrings
@@ -153,14 +151,12 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         }
     }
     
-    init(serverName: String,
-         accessType: SecurityAndPrivacyRoomAccessType,
+    init(accessType: SecurityAndPrivacyRoomAccessType,
          isEncryptionEnabled: Bool,
          historyVisibility: SecurityAndPrivacyHistoryVisibility,
          isSpace: Bool,
          isKnockingEnabled: Bool,
          historySharingDetailsURL: URL) {
-        self.serverName = serverName
         self.isKnockingEnabled = isKnockingEnabled
         self.isSpace = isSpace
         

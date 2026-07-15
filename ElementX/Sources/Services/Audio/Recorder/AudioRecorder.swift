@@ -84,11 +84,6 @@ nonisolated class AudioRecorder: AudioRecorderProtocol, @unchecked Sendable {
         }
     }
     
-    func cancelRecording() async {
-        await stopRecording()
-        await deleteRecording()
-    }
-    
     func deleteRecording() async {
         await withCheckedContinuation { continuation in
             deleteRecording {
