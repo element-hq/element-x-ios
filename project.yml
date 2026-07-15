@@ -143,7 +143,7 @@ packages:
     minorVersion: 1.2.1
   Mantis:
     url: https://github.com/guoyingtao/Mantis
-    minorVersion: 2.31.2
+    minorVersion: 3.0.0
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
     minorVersion: 6.27.0
