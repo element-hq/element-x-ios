@@ -32,7 +32,7 @@ final class RoomListFiltersStateTests {
         state.activateFilter(.unreads)
         #expect(state.isFiltering)
         #expect(state.activeFilters == [.unreads])
-        #expect(state.availableFilters == [.mentions, .people, .rooms, .favourites])
+        #expect(state.availableFilters == [.mentions, .favourites, .people, .rooms])
         state.deactivateFilter(.unreads)
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
