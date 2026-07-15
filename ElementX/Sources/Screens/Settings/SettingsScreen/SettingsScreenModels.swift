@@ -35,6 +35,7 @@ enum SettingsScreenSecuritySectionMode {
 struct SettingsScreenViewState: BindableState {
     var deviceID: String?
     var userProfile: UserProfile
+    var showUserStatus: Bool
     var showLinkNewDeviceButton: Bool
     var accountProfileURL: URL?
     var showAccountDeactivation: Bool
@@ -51,15 +52,28 @@ struct SettingsScreenViewState: BindableState {
     let navigationBarVisibility: Visibility
     
     var bindings = SettingsScreenViewStateBindings()
+    
+    var userStatusRowMode: SettingsScreenUserStatusRow.Mode {
+        if bindings.isShowingCustomStatusField {
+            .custom
+        } else if let rawStatus = userProfile.status.raw {
+            .show(rawStatus)
+        } else {
+            .pick
+        }
+    }
 }
 
 struct SettingsScreenViewStateBindings {
+    var isPresentingStatusPicker = false
+    var isShowingCustomStatusField = false
     var isPresentingAccountDeactivationConfirmation = false
 }
 
 enum SettingsScreenViewAction {
     case close
     case userDetails
+    case userStatus(UserStatusAction)
     case analytics
     case appLock
     case reportBug
@@ -75,4 +89,11 @@ enum SettingsScreenViewAction {
     case labs
     case logout
     case deactivateAccount
+    
+    enum UserStatusAction {
+        case pickStatus
+        case customStatus
+        case set(UserStatus.Raw?)
+        case cancel
+    }
 }

@@ -13,6 +13,8 @@ typealias SettingsScreenViewModelType = StateStoreViewModelV2<SettingsScreenView
 
 class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewModelProtocol {
     private let appSettings: AppSettings
+    private let clientProxy: ClientProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<SettingsScreenViewModelAction, Never> = .init()
     
@@ -20,11 +22,14 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, appSettings: AppSettings, isBugReportServiceEnabled: Bool, isInSecondaryWindow: Bool) {
+    init(userSession: UserSessionProtocol, appSettings: AppSettings, isBugReportServiceEnabled: Bool, isInSecondaryWindow: Bool, userIndicatorController: UserIndicatorControllerProtocol) {
         self.appSettings = appSettings
+        clientProxy = userSession.clientProxy
+        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userProfile: userSession.clientProxy.userProfilePublisher.value,
+                                           showUserStatus: appSettings.userStatusEnabled,
                                            showLinkNewDeviceButton: appSettings.linkNewDeviceEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: appSettings.developerOptionsEnabled,
@@ -92,6 +97,16 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.close)
         case .userDetails:
             actionsSubject.send(.userDetails)
+        case .userStatus(.pickStatus):
+            state.bindings.isPresentingStatusPicker = true
+        case .userStatus(.customStatus):
+            state.bindings.isPresentingStatusPicker = false
+            state.bindings.isShowingCustomStatusField = true
+        case .userStatus(.set(let status)):
+            Task { await setUserStatus(status) }
+        case .userStatus(.cancel):
+            state.bindings.isPresentingStatusPicker = false
+            state.bindings.isShowingCustomStatusField = false
         case .linkNewDevice:
             actionsSubject.send(.linkNewDevice)
         case let .manageAccount(url):
@@ -122,6 +137,30 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.developerOptions)
         case .deactivateAccount:
             actionsSubject.send(.deactivateAccount)
+        }
+    }
+    
+    // MARK: - Private
+    
+    func setUserStatus(_ status: UserStatus.Raw?) async {
+        // Loading state tbc
+        state.bindings.isPresentingStatusPicker = false
+        state.bindings.isShowingCustomStatusField = false
+        
+        let result = if let status {
+            await clientProxy.setUserStatus(status)
+        } else {
+            await clientProxy.removeUserStatus()
+        }
+        
+        switch result {
+        case .success:
+            break // Loading/error state tbc
+        case .failure:
+            userIndicatorController.submitIndicator(.init(id: UUID().uuidString,
+                                                          type: .toast,
+                                                          title: L10n.errorUnknown,
+                                                          icon: \.close))
         }
     }
 }

@@ -164,6 +164,8 @@ enum TestablePreviewsDictionary {
             "ServerConfirmationScreen_Previews" : ServerConfirmationScreen_Previews.self,
             "SessionVerificationRequestDetailsView_Previews" : SessionVerificationRequestDetailsView_Previews.self,
             "SessionVerification_Previews" : SessionVerification_Previews.self,
+            "SettingsScreenUserStatusPickerView_Previews" : SettingsScreenUserStatusPickerView_Previews.self,
+            "SettingsScreenUserStatusRow_Previews" : SettingsScreenUserStatusRow_Previews.self,
             "ShimmerOverlay_Previews" : ShimmerOverlay_Previews.self,
             "SoftLogoutScreen_Previews" : SoftLogoutScreen_Previews.self,
             "SpaceAddRoomsScreenSelectedItem_Previews" : SpaceAddRoomsScreenSelectedItem_Previews.self,
