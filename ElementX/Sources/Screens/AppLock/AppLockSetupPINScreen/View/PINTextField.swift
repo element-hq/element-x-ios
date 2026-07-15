@@ -58,6 +58,7 @@ private struct PINTextFieldStyle: TextFieldStyle {
     let maxLength: Int
     let size: PINDigitField.Size
     
+    // periphery:ignore - called by SwiftUI via the TextFieldStyle protocol
     func _body(configuration: TextField<_Label>) -> some View {
         HStack(spacing: 8) {
             ForEach(0..<maxLength, id: \.self) { index in

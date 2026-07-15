@@ -15,7 +15,6 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     private let authenticationService: AuthenticationServiceProtocol
     private let provisioningParameters: AccountProvisioningParameters?
     private let appMediator: AppMediatorProtocol
-    private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let canReportProblem: Bool
@@ -37,7 +36,6 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         self.authenticationService = authenticationService
         self.provisioningParameters = provisioningParameters
         self.appMediator = appMediator
-        self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         canReportProblem = isBugReportServiceEnabled
         

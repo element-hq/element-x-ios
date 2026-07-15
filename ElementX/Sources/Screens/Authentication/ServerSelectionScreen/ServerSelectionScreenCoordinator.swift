@@ -25,11 +25,7 @@ enum ServerSelectionScreenCoordinatorAction {
 /// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
 final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     private let parameters: ServerSelectionScreenCoordinatorParameters
-    private let userIndicatorController: UserIndicatorControllerProtocol
     private var viewModel: ServerSelectionScreenViewModelProtocol
-    private var authenticationService: AuthenticationServiceProtocol {
-        parameters.authenticationService
-    }
     
     private let actionsSubject: PassthroughSubject<ServerSelectionScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -44,7 +40,6 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
                                                    authenticationFlow: parameters.authenticationFlow,
                                                    appSettings: parameters.appSettings,
                                                    userIndicatorController: parameters.userIndicatorController)
-        userIndicatorController = parameters.userIndicatorController
     }
     
     // MARK: - Public

@@ -443,8 +443,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService,
                                                           loginHint: loginHint,
                                                           userIndicatorController: userIndicatorController,
-                                                          appSettings: appSettings,
-                                                          analytics: analytics)
+                                                          appSettings: appSettings)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
         coordinator.actions

@@ -40,8 +40,7 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
                                                      roomProxy: parameters.roomProxy,
                                                      userSession: parameters.userSession,
                                                      userIndicatorController: parameters.userIndicatorController,
-                                                     analytics: parameters.analytics,
-                                                     appSettings: parameters.appSettings)
+                                                     analytics: parameters.analytics)
     }
     
     func start() {

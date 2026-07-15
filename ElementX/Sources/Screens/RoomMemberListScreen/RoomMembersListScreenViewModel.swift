@@ -218,22 +218,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private func hideLoadingIndicator(_ identifier: String) {
         userIndicatorController.retractIndicatorWithId(identifier)
     }
-    
-    private func showManageMemberIndicator(title: String) {
-        userIndicatorController.submitIndicator(UserIndicator(id: title,
-                                                              type: .toast(progress: .indeterminate),
-                                                              title: title,
-                                                              persistent: true))
-    }
-    
-    private func hideManageMemberIndicator(title: String) {
-        userIndicatorController.retractIndicatorWithId(title)
-    }
-    
-    private func showManageMemberFailure(title: String) {
-        userIndicatorController.retractIndicatorWithId(title)
-        userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonFailed, icon: \.close))
-    }
 }
 
 private nonisolated struct RoomMembersDetails {

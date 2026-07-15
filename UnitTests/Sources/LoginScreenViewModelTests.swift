@@ -246,7 +246,6 @@ struct LoginScreenViewModelTests {
         viewModel = LoginScreenViewModel(authenticationService: service,
                                          loginHint: loginHint,
                                          userIndicatorController: UserIndicatorControllerMock(),
-                                         appSettings: appSettings,
-                                         analytics: AnalyticsServiceMock(.init()))
+                                         appSettings: appSettings)
     }
 }
