@@ -353,6 +353,7 @@
 		386720B603F87D156DB01FB2 /* VoiceMessageMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40076C770A5FB83325252973 /* VoiceMessageMediaManager.swift */; };
 		388D39ED9FE1122EA6D76BF2 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1BC84BA0AF11C2128D58ABD /* Common.swift */; };
 		3895969759E68FAB90C63EF7 /* ElementCallServiceConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406C90AF8C3E98DF5D4E5430 /* ElementCallServiceConstants.swift */; };
+		38DE3B3FF9EB8661FD3844CC /* CurrentValuePublisherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA393404F96DFB505B86E913 /* CurrentValuePublisherTests.swift */; };
 		38E0F9A4CB5237F039A2EEE6 /* RoomHistorySharingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722013E20EEED73553EC6F8D /* RoomHistorySharingState.swift */; };
 		38E8F5CC90DC0D716B799DE1 /* RoomThreadListServiceProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396A6491DEC64FCB66F60A1 /* RoomThreadListServiceProxyMock.swift */; };
 		3982C505960006B341CFD0C6 /* UserDetailsEditScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D0EA07BD545CC9F234DB8D /* UserDetailsEditScreenModels.swift */; };
@@ -3092,6 +3093,7 @@
 		F968FDB68F9D4CB9010FED70 /* TimelineStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStateTests.swift; sourceTree = "<group>"; };
 		F9E543072DE58E751F028998 /* TimelineProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProxy.swift; sourceTree = "<group>"; };
 		FA2397174D0DC3918A7A8A7B /* AnalyticsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsConfiguration.swift; sourceTree = "<group>"; };
+		FA393404F96DFB505B86E913 /* CurrentValuePublisherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentValuePublisherTests.swift; sourceTree = "<group>"; };
 		FA3EB5B1848CF4F64E63C6B7 /* PermalinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermalinkTests.swift; sourceTree = "<group>"; };
 		FA723686F23EF45E2B398FBC /* TestablePreviewsDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestablePreviewsDictionary.swift; sourceTree = "<group>"; };
 		FA74F57B0DA3B9A9DD51F691 /* CoordinateAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateAnimator.swift; sourceTree = "<group>"; };
@@ -5027,6 +5029,7 @@
 				CA29952595B804DA221A0C1D /* ComposerToolbarViewModelTests.swift */,
 				C5AB83F3B94569DD1720EE97 /* ContentScannerServiceTests.swift */,
 				69D42EE0102D2857933625DD /* CreateRoomViewModelTests.swift */,
+				FA393404F96DFB505B86E913 /* CurrentValuePublisherTests.swift */,
 				3B5E97E9615A158C76B2AB77 /* DateTests.swift */,
 				D77F75B3E9F99864048A422A /* DeactivateAccountScreenViewModelTests.swift */,
 				2ADF12A50186B75C68017B61 /* DeclineAndBlockScreenViewModelTests.swift */,
@@ -8014,6 +8017,7 @@
 				0C932A5158C1D0604DFC5750 /* ComposerToolbarViewModelTests.swift in Sources */,
 				C655EFDC8905CBD17A481801 /* ContentScannerServiceTests.swift in Sources */,
 				D3FD96913D2B1AAA3149DAC7 /* CreateRoomViewModelTests.swift in Sources */,
+				38DE3B3FF9EB8661FD3844CC /* CurrentValuePublisherTests.swift in Sources */,
 				CD0088B763CD970CF1CBF8CB /* DateTests.swift in Sources */,
 				80F6C8EFCA4564B67F0D34B0 /* DeactivateAccountScreenViewModelTests.swift in Sources */,
 				34390DAE0C574DAD30CCA7D9 /* DeclineAndBlockScreenViewModelTests.swift in Sources */,
@@ -10321,7 +10325,7 @@
 			repositoryURL = "https://github.com/apple/swift-async-algorithms";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.1.4;
+				minimumVersion = 1.1.5;
 			};
 		};
 		4BDA7F6042968E8422470F3F /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
@@ -10393,7 +10397,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 0.20.2;
+				version = 0.21.0;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
@@ -10417,7 +10421,7 @@
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 3.61.1;
+				minimumVersion = 3.64.1;
 			};
 		};
 		A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
@@ -10425,7 +10429,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 9.18.0;
+				minimumVersion = 9.20.0;
 			};
 		};
 		AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -10433,7 +10437,7 @@
 			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 2.13.5;
+				minimumVersion = 2.13.6;
 			};
 		};
 		AC3475112CA40C2C6E78D1EB /* XCRemoteSwiftPackageReference "matrix-analytics-events" */ = {
