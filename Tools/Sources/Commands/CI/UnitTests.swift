@@ -8,6 +8,9 @@ struct UnitTests: AsyncParsableCommand {
     @Flag(help: "Skip preview tests")
     var skipPreviews = false
     
+    @Flag(help: "Run the unit tests on a saturated CPU to reproduce the flakiness of a busy CI runner.")
+    var constrained = false
+    
     private static let osVersion = CI.defaultOSVersion
     private static let device = "iPhone 17"
     
@@ -19,12 +22,18 @@ struct UnitTests: AsyncParsableCommand {
         // Run unit tests
         do {
             logger.info("\n🧪 Running unit tests…\n")
-            try await RunTests.parse([
+            
+            var arguments = [
                 "--scheme", "UnitTests",
                 "--device", Self.device,
                 "--os-version", Self.osVersion,
                 "--retries", "3"
-            ]).run()
+            ]
+            if constrained {
+                arguments.append("--constrained")
+            }
+            
+            try await RunTests.parse(arguments).run()
         } catch {
             failures.append("UnitTests")
             logger.error("\n❌ Unit tests failed. \(error)\n")
