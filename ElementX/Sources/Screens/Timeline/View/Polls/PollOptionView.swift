@@ -37,7 +37,7 @@ struct PollOptionView: View {
                                 CompoundIcon(asset: Asset.Images.pollWinner)
                                     .foregroundColor(.compound.iconAccentTertiary)
                                     .accessibilityLabel(L10n.a11yPollsWinningAnswer)
-
+                                
                                 Text(L10n.commonPollVotesCount(pollOption.votes))
                                     .font(.compound.bodySMSemibold)
                                     .foregroundColor(.compound.textPrimary)
