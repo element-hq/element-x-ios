@@ -135,7 +135,7 @@ struct MessageComposer: View {
     }
 }
 
-private struct MessageComposerReplyHeader: View {
+struct MessageComposerReplyHeader: View {
     let replyDetails: TimelineItemReplyDetails
     let action: () -> Void
     

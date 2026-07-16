@@ -357,7 +357,8 @@ final class ComposerToolbarViewModelTests {
         viewModel.context.plainComposerText = .init(string: "Hello world!")
         viewModel.process(timelineAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: "", duration: 10.0),
                                                                               waveform: .data(waveformData),
-                                                                              isUploading: false)))
+                                                                              isUploading: false,
+                                                                              replyContext: nil)))
         
         await waitForConfirmation("Clear draft") { confirmation in
             draftServiceMock.clearDraftClosure = {
@@ -370,6 +371,86 @@ final class ComposerToolbarViewModelTests {
         #expect(!draftServiceMock.saveDraftCalled)
         #expect(draftServiceMock.clearDraftCallsCount == 1)
         #expect(!draftServiceMock.loadDraftCalled)
+    }
+    
+    // MARK: - Voice message replies
+    
+    @Test
+    func voiceMessageRecordingPreservesReply() {
+        viewModel.process(timelineAction: .setMode(mode: .reply(eventID: "testID", replyDetails: .loaded(sender: .init(id: "bob"),
+                                                                                                         eventID: "testID",
+                                                                                                         eventContent: .message(.text(.init(body: "Hello")))),
+            isThread: false)))
+        
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState(), replyContext: nil)))
+        #expect(viewModel.state.composerMode.voiceMessageReplyContext?.eventID == "testID")
+        
+        // The reply survives the transition from recording to previewing.
+        viewModel.process(timelineAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: "", duration: 10.0),
+                                                                              waveform: .data([]),
+                                                                              isUploading: false,
+                                                                              replyContext: nil)))
+        #expect(viewModel.state.composerMode.voiceMessageReplyContext?.eventID == "testID")
+    }
+    
+    @Test
+    func cancellingVoiceMessageRestoresReply() {
+        viewModel.process(timelineAction: .setMode(mode: .reply(eventID: "testID", replyDetails: .loaded(sender: .init(id: "bob"),
+                                                                                                         eventID: "testID",
+                                                                                                         eventContent: .message(.text(.init(body: "Hello")))),
+            isThread: false)))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState(), replyContext: nil)))
+        
+        // Deleting the recording restores the reply in the composer.
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode.replyEventID == "testID")
+    }
+    
+    @Test
+    func cancellingReplyDuringRecordingKeepsRecording() {
+        viewModel.process(timelineAction: .setMode(mode: .reply(eventID: "testID", replyDetails: .loaded(sender: .init(id: "bob"),
+                                                                                                         eventID: "testID",
+                                                                                                         eventContent: .message(.text(.init(body: "Hello")))),
+            isThread: false)))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState(), replyContext: nil)))
+        
+        viewModel.process(viewAction: .cancelReply)
+        
+        guard case .recordVoiceMessage(_, nil) = viewModel.state.composerMode else {
+            Issue.record("The composer should still be recording, with the reply detached")
+            return
+        }
+        
+        // With the reply detached, ending the recording no longer restores it.
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode == .default)
+    }
+    
+    @Test
+    func sendingVoiceMessagePassesReplyEventID() async throws {
+        viewModel.process(timelineAction: .setMode(mode: .reply(eventID: "testID", replyDetails: .loaded(sender: .init(id: "bob"),
+                                                                                                         eventID: "testID",
+                                                                                                         eventContent: .message(.text(.init(body: "Hello")))),
+            isThread: false)))
+        viewModel.process(timelineAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: "", duration: 10.0),
+                                                                              waveform: .data([]),
+                                                                              isUploading: false,
+                                                                              replyContext: nil)))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .voiceMessage(.send(let inReplyToEventID)):
+                return inReplyToEventID == "testID"
+            default:
+                return false
+            }
+        }
+        viewModel.context.send(viewAction: .sendMessage)
+        try await deferred.fulfill()
+        
+        // The reply was captured for sending and must not be restored once the composer resets.
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode == .default)
     }
     
     @Test

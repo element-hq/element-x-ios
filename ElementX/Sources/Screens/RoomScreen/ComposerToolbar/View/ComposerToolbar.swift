@@ -143,8 +143,16 @@ struct ComposerToolbar: View {
             .opacity(context.viewState.isVoiceMessageModeActivated ? 0 : 1)
             
             if context.viewState.isVoiceMessageModeActivated {
-                voiceMessageContent
-                    .fixedSize(horizontal: false, vertical: true)
+                VStack(spacing: 8) {
+                    if let replyContext = context.viewState.composerMode.voiceMessageReplyContext {
+                        MessageComposerReplyHeader(replyDetails: replyContext.replyDetails) {
+                            context.send(viewAction: .cancelReply)
+                        }
+                    }
+                    
+                    voiceMessageContent
+                }
+                .fixedSize(horizontal: false, vertical: true)
             }
         }
     }
@@ -277,13 +285,13 @@ struct ComposerToolbar: View {
     private var voiceMessageContent: some View {
         // Display the voice message composer above to keep the focus and keep the keyboard open if it's already open.
         switch context.viewState.composerMode {
-        case .recordVoiceMessage(let state):
+        case .recordVoiceMessage(let state, _):
             topBarLayout {
                 voiceMessageTrashButton
                     .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
                 VoiceMessageRecordingComposer(recorderState: state)
             }
-        case .previewVoiceMessage(let state, let waveform, let isUploading):
+        case .previewVoiceMessage(let state, let waveform, let isUploading, _):
             topBarLayout {
                 voiceMessageTrashButton
                     .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
@@ -384,7 +392,8 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let viewModel = ComposerToolbarViewModel.mock()
     static let editingViewModel = ComposerToolbarViewModel.mock(message: "Hello, Wrold!", mockMode: .editing)
     static let multiLineViewModel = ComposerToolbarViewModel.mock(message: "Hello, World! This is a loooong message that wraps onto multiple lines.")
-    static let voiceMessageRecordingViewModel = ComposerToolbarViewModel.mock(mockMode: .recordVoiceMessage)
+    static let voiceMessageRecordingViewModel = ComposerToolbarViewModel.mock(mockMode: .recordVoiceMessage(replying: false))
+    static let voiceMessageRecordingWithReplyViewModel = ComposerToolbarViewModel.mock(mockMode: .recordVoiceMessage(replying: true))
     static let voiceMessagePreviewViewModel = ComposerToolbarViewModel.mock(mockMode: .previewVoiceMessage(isUploading: false))
     static let voiceMessageUploadingViewModel = ComposerToolbarViewModel.mock(mockMode: .previewVoiceMessage(isUploading: true))
     static let replyLoadingViewModel = ComposerToolbarViewModel.mock(mockMode: .reply(isLoading: true))
@@ -416,6 +425,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 8) {
             ComposerToolbar(context: replyLoadingViewModel.context)
             ComposerToolbar(context: replyLoadedViewModel.context)
+            ComposerToolbar(context: voiceMessageRecordingWithReplyViewModel.context)
         }
         .environmentObject(timelineViewModel.context)
         .previewDisplayName("Reply")
