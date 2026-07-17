@@ -3,32 +3,66 @@ changelog:
     - title: ✨ Features
       labels:
         - pr-feature
+      exclude:
+        labels:
+          - element-pro
     - title: 🙌 Improvements
       labels:
         - pr-change
+      exclude:
+        labels:
+          - element-pro
     - title: 🐛 Bugfixes
       labels:
         - pr-bugfix
+      exclude:
+        labels:
+          - element-pro
     - title: ⚠️ API Changes
       labels:
         - pr-api
+      exclude:
+        labels:
+          - element-pro
     - title: 🗣 Translations
       labels:
         - pr-i18n
+      exclude:
+        labels:
+          - element-pro
     - title: 🦻 Accessibility
       labels:
         - pr-a11y
+      exclude:
+        labels:
+          - element-pro
     - title: 🧱 Build
       labels:
         - pr-build
+      exclude:
+        labels:
+          - element-pro
     - title: 📄 Documentation
       labels:
         - pr-doc
+      exclude:
+        labels:
+          - element-pro
     - title: 🚧 In development 🚧
       labels:
         - pr-wip
+      exclude:
+        labels:
+          - element-pro
 
     - title: Others
       labels:
         - pr-misc
         - "*"
+      exclude:
+        labels:
+          - element-pro
+
+    - title: 💎 Element Pro
+      labels:
+        - element-pro
