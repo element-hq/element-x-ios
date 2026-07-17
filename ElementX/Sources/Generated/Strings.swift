@@ -28,6 +28,8 @@ internal nonisolated enum L10n {
   internal static var a11yCreatePollVotesAllowedDecrease: String { return L10n.tr("Localizable", "a11y_create_poll_votes_allowed_decrease") }
   /// Increase votes allowed per person
   internal static var a11yCreatePollVotesAllowedIncrease: String { return L10n.tr("Localizable", "a11y_create_poll_votes_allowed_increase") }
+  /// Custom emoji
+  internal static var a11yCustomEmoji: String { return L10n.tr("Localizable", "a11y_custom_emoji") }
   /// Delete
   internal static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Plural format key: "%#@COUNT@"
@@ -150,6 +152,8 @@ internal nonisolated enum L10n {
   internal static var a11yStartVideoCall: String { return L10n.tr("Localizable", "a11y_start_video_call") }
   /// Start a voice call
   internal static var a11yStartVoiceCall: String { return L10n.tr("Localizable", "a11y_start_voice_call") }
+  /// Status
+  internal static var a11yStatus: String { return L10n.tr("Localizable", "a11y_status") }
   /// Tombstoned room
   internal static var a11yTombstonedRoom: String { return L10n.tr("Localizable", "a11y_tombstoned_room") }
   /// User menu
@@ -866,20 +870,6 @@ internal nonisolated enum L10n {
   internal static func commonUserStartedACall(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_user_started_a_call", String(describing: p1))
   }
-  /// Away
-  internal static var commonUserStatusAway: String { return L10n.tr("Localizable", "common_user_status_away") }
-  /// Be right back
-  internal static var commonUserStatusBeRightBack: String { return L10n.tr("Localizable", "common_user_status_be_right_back") }
-  /// Custom…
-  internal static var commonUserStatusCustom: String { return L10n.tr("Localizable", "common_user_status_custom") }
-  /// Focus time
-  internal static var commonUserStatusFocusTime: String { return L10n.tr("Localizable", "common_user_status_focus_time") }
-  /// In a meeting
-  internal static var commonUserStatusInAMeeting: String { return L10n.tr("Localizable", "common_user_status_in_a_meeting") }
-  /// On a call
-  internal static var commonUserStatusOnACall: String { return L10n.tr("Localizable", "common_user_status_on_a_call") }
-  /// On the road
-  internal static var commonUserStatusOnTheRoad: String { return L10n.tr("Localizable", "common_user_status_on_the_road") }
   /// Username
   internal static var commonUsername: String { return L10n.tr("Localizable", "common_username") }
   /// Verification cancelled
@@ -2612,10 +2602,6 @@ internal nonisolated enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
-  /// Custom status…
-  internal static var screenPreferencesUserStatusCustomHint: String { return L10n.tr("Localizable", "screen_preferences_user_status_custom_hint") }
-  /// What's your status?
-  internal static var screenPreferencesUserStatusPlaceholder: String { return L10n.tr("Localizable", "screen_preferences_user_status_placeholder") }
   /// Push history
   internal static var screenPushHistoryTitle: String { return L10n.tr("Localizable", "screen_push_history_title") }
   /// Establishing a secure connection
@@ -3499,6 +3485,22 @@ internal nonisolated enum L10n {
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   internal static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
+  /// Away
+  internal static var screenSettingsUserStatusAway: String { return L10n.tr("Localizable", "screen_settings_user_status_away") }
+  /// Be right back
+  internal static var screenSettingsUserStatusBeRightBack: String { return L10n.tr("Localizable", "screen_settings_user_status_be_right_back") }
+  /// Custom…
+  internal static var screenSettingsUserStatusCustom: String { return L10n.tr("Localizable", "screen_settings_user_status_custom") }
+  /// Custom status…
+  internal static var screenSettingsUserStatusCustomHint: String { return L10n.tr("Localizable", "screen_settings_user_status_custom_hint") }
+  /// Focus time
+  internal static var screenSettingsUserStatusFocusTime: String { return L10n.tr("Localizable", "screen_settings_user_status_focus_time") }
+  /// In a meeting
+  internal static var screenSettingsUserStatusInAMeeting: String { return L10n.tr("Localizable", "screen_settings_user_status_in_a_meeting") }
+  /// On the road
+  internal static var screenSettingsUserStatusOnTheRoad: String { return L10n.tr("Localizable", "screen_settings_user_status_on_the_road") }
+  /// What's your status?
+  internal static var screenSettingsUserStatusPlaceholder: String { return L10n.tr("Localizable", "screen_settings_user_status_placeholder") }
   /// Your live location history will be stored in the room and visible to members after the session ends.
   internal static var screenShareLocationLiveLocationDisclaimerTitle: String { return L10n.tr("Localizable", "screen_share_location_live_location_disclaimer_title") }
   /// Choose how long to share your live location.
