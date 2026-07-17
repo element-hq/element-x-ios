@@ -28,7 +28,7 @@ private struct ListRowDetailsLabelStyle: LabelStyle {
 
 /// The view shown to the right of the `ListRowLabel` inside of a `ListRow`.
 /// This consists of both the `ListRowDetails` and the `ListRowAccessory`.
-struct ListRowTrailingSection<Icon: View>: View {
+public struct ListRowTrailingSection<Icon: View>: View {
     @Environment(\.isEnabled) private var isEnabled
     
     private var title: String?
@@ -50,7 +50,7 @@ struct ListRowTrailingSection<Icon: View>: View {
         self.accessory = accessory
     }
     
-    var body: some View {
+    public var body: some View {
         HStack(spacing: ListRowTrailingSectionSpacing.horizontal) {
             if isWaiting {
                 ProgressView()

@@ -296,7 +296,7 @@ public struct CompoundTextFieldStyle_Previews: PreviewProvider, TestablePreview 
     }
     
     @ViewBuilder
-    static var states: some View {
+    public static var states: some View {
         Section {
             textFields()
         } header: {

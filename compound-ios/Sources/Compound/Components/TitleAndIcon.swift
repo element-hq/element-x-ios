@@ -79,7 +79,7 @@ public struct TitleAndIcon_Previews: PreviewProvider, TestablePreview {
         states
     }
     
-    static var states: some View {
+    public static var states: some View {
         VStack(spacing: 84) {
             TitleAndIcon(title: "Headline",
                          icon: \.circle,

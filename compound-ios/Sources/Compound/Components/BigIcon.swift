@@ -104,7 +104,7 @@ public struct BigIcon_Previews: PreviewProvider, TestablePreview {
         }
     }
     
-    static var states: some View {
+    public static var states: some View {
         VStack(spacing: 20) {
             HStack(spacing: 20) {
                 BigIcon(icon: \.helpSolid)

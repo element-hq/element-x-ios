@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ListInlinePicker<SelectedValue: Hashable>: View {
+    let title: String?
     @Binding var selection: SelectedValue
     let items: [(title: String, tag: SelectedValue)]
     let isWaiting: Bool
@@ -43,13 +44,15 @@ struct ListInlinePicker_Previews: PreviewProvider, TestablePreview {
         var body: some View {
             Form {
                 Section("Compound") {
-                    ListInlinePicker(selection: $selection,
+                    ListInlinePicker(title: "Title",
+                                     selection: $selection,
                                      items: items.map { (title: $0, tag: $0) },
                                      isWaiting: false)
                 }
                 
                 Section("Compound with loader") {
-                    ListInlinePicker(selection: $selection,
+                    ListInlinePicker(title: "Title",
+                                     selection: $selection,
                                      items: items.map { (title: $0, tag: $0) },
                                      isWaiting: true)
                 }

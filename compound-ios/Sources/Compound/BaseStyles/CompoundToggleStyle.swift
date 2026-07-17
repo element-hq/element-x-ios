@@ -36,7 +36,7 @@ public struct CompoundToggleStyle_Previews: PreviewProvider, TestablePreview {
     }
     
     @ViewBuilder
-    static var states: some View {
+    public static var states: some View {
         VStack(spacing: 16) {
             Toggle("Title", isOn: .constant(false))
                 .toggleStyle(.compound)
