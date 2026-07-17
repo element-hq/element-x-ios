@@ -71,8 +71,8 @@ struct RoomTimelineItemView: View {
                                                                                                         title: L10n.commonVoiceMessage,
                                                                                                         duration: 0)
             VoiceMessageRoomTimelineView(timelineItem: item, playerState: playerState)
-        case .callInvite(let item):
-            CallInviteRoomTimelineView(timelineItem: item)
+        case .callInvite:
+            CallInviteRoomTimelineView()
         case .callNotification(let item):
             CallNotificationRoomTimelineView(timelineItem: item)
         case .liveLocation(let item):

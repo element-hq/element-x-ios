@@ -42,7 +42,6 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     
     private let audioSession = AVAudioSession.sharedInstance()
     
-    // periphery:ignore - when set to nil is automatically cancelled
     @CancellableTask private var releaseAudioSessionTask: Task<Void, Never>?
     
     private let releaseAudioSessionTimeoutInterval = 5.0

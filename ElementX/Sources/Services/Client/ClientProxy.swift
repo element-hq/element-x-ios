@@ -244,7 +244,6 @@ class ClientProxy: ClientProxyProtocol {
         capabilities = HomeserverCapabilitiesProxy(underlyingCapabilities: client.homeserverCapabilities())
         
         let configuredAppService = try await ClientProxyServices(client: client,
-                                                                 actionsSubject: actionsSubject,
                                                                  notificationSettings: notificationSettings,
                                                                  appSettings: appSettings)
         
@@ -349,7 +348,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    // periphery:ignore - used in submodule
     var isLiveKitRTCSupported: Bool {
         get async {
             do {
@@ -1481,7 +1479,6 @@ private struct ClientProxyServices {
     let eventStringBuilder: RoomEventStringBuilder
     
     init(client: ClientProtocol,
-         actionsSubject: PassthroughSubject<ClientProxyAction, Never>,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings) async throws {
         let syncService = try await client

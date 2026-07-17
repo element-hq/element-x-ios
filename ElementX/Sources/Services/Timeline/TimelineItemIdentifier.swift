@@ -22,11 +22,11 @@ nonisolated enum TimelineItemIdentifier: Hashable {
             self.value = value
         }
         
-        // periphery:ignore - might be useful to have
         init(rustValue: TimelineUniqueId) {
             self.init(rustValue.id)
         }
         
+        // periphery:ignore - might be useful to have
         var rustValue: TimelineUniqueId {
             .init(id: value)
         }

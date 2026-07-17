@@ -28,8 +28,6 @@ struct ReadMarkerRoomTimelineView: View {
 struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
-    static let item = ReadMarkerRoomTimelineItem(id: .randomVirtual)
-    
     static var previews: some View {
         VStack(alignment: .leading, spacing: 0) {
             RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .virtual(uniqueID: .init("Separator")), timestamp: .mock)), groupStyle: .single))

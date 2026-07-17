@@ -148,7 +148,6 @@ class SpacesTabFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSpacesScreen() {
         let parameters = SpacesScreenCoordinatorParameters(userSession: userSession,
                                                            selectedSpacePublisher: selectedSpaceSubject.asCurrentValuePublisher(),
-                                                           appSettings: flowParameters.appSettings,
                                                            userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpacesScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher

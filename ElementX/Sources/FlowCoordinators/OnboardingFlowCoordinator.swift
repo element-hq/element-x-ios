@@ -349,7 +349,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentIdentityConfirmedScreen() {
-        let coordinator = IdentityConfirmedScreenCoordinator(parameters: .init())
+        let coordinator = IdentityConfirmedScreenCoordinator()
         coordinator.actionsPublisher
             .sink { [weak self] action in
                 guard let self else { return }

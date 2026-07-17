@@ -197,7 +197,6 @@ public struct CompoundTextFieldStyle: @MainActor TextFieldStyle {
     }
     
     @MainActor
-    // periphery:ignore - called by SwiftUI via the TextFieldStyle protocol
     public func _body(configuration: TextField<_Label>) -> some View {
         let shape = Compound.supportsGlass ? AnyShape(Capsule()) : AnyShape(RoundedRectangle(cornerRadius: 14.0))
         

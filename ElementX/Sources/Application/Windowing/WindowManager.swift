@@ -33,7 +33,6 @@ class WindowManager: SecureWindowManagerProtocol {
         [mainWindow, overlayWindow, alternateWindow]
     }
     
-    // periphery:ignore - auto cancels when reassigned
     /// The task used to switch windows, so that we don't get stuck in the wrong state with a quick switch.
     @CancellableTask private var switchTask: Task<Void, Error>?
     /// A duration that allows window switching to wait a couple of frames to avoid a transition through black.

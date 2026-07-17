@@ -28,8 +28,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     init(userSession: UserSessionProtocol,
          analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userDiscoveryService: UserDiscoveryServiceProtocol,
-         appSettings: AppSettings) {
+         userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
@@ -90,7 +89,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     
     // MARK: - Private
     
-    // periphery:ignore - auto cancels when reassigned
     @CancellableTask private var resolveAliasTask: Task<Void, Never>?
     private var internalRoomAddressState: JoinByAddressState = .example
     
@@ -160,7 +158,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         }
     }
     
-    // periphery:ignore - auto cancels when reassigned
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
     

@@ -33,8 +33,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
     }
     
     @Test
@@ -46,8 +45,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.leaveRoomAlertItem)) { $0 != nil }
         
         context.send(viewAction: .processTapLeave)
@@ -66,8 +64,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.leaveRoomAlertItem)) { $0 != nil }
         
         context.send(viewAction: .processTapLeave)
@@ -87,8 +84,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         context.send(viewAction: .processTapLeave)
         #expect(context.leaveRoomAlertItem?.state == .empty)
@@ -145,8 +141,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -166,8 +161,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -198,8 +192,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -229,8 +222,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -261,8 +253,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
@@ -294,8 +285,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -311,8 +301,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -359,8 +348,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -394,8 +382,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -429,8 +416,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -449,8 +435,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -469,8 +454,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
@@ -487,8 +471,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         var deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isError }
         
@@ -695,8 +678,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 && state.canSeeKnockingRequests
@@ -716,8 +698,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 0 && state.canSeeKnockingRequests
@@ -739,8 +720,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 &&
@@ -762,8 +742,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 &&
@@ -789,8 +768,7 @@ struct RoomDetailsScreenViewModelTests {
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
                                                notificationSettingsProxy: notificationSettingsProxyMock,
-                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appSettings: .volatile())
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()))
         
         let deferredShared = deferFulfillment(context.observe(\.viewState),
                                               message: "The pill should be shown for rooms with shared history visibility") { state in

@@ -185,7 +185,6 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = StartChatScreenCoordinatorParameters(userSession: flowParameters.userSession,
                                                               userDiscoveryService: userDiscoveryService,
                                                               userIndicatorController: flowParameters.userIndicatorController,
-                                                              appSettings: flowParameters.appSettings,
                                                               analytics: flowParameters.analytics)
         
         let coordinator = StartChatScreenCoordinator(parameters: parameters)
@@ -273,8 +272,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
                                                                       roomType: .existingRoom(roomProxy: roomProxy),
                                                                       isSkippable: true,
                                                                       userDiscoveryService: userDiscoveryService,
-                                                                      userIndicatorController: flowParameters.userIndicatorController,
-                                                                      appSettings: flowParameters.appSettings)
+                                                                      userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

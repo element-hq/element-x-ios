@@ -159,8 +159,6 @@ protocol ClientProxyProtocol: AnyObject {
     var capabilities: HomeserverCapabilitiesProxyProtocol { get }
     
     var isReportRoomSupported: Bool { get async }
-    
-    // periphery:ignore - used in submodule
     var isLiveKitRTCSupported: Bool { get async }
     
     var isLoginWithQRCodeSupported: Bool { get async }

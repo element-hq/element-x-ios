@@ -52,7 +52,7 @@ nonisolated enum JoinRule: Equatable, Hashable, Sendable {
 }
 
 /// An allow rule which defines a condition that allows joining a room.
-public nonisolated enum AllowRule: Equatable, Hashable, Sendable {
+nonisolated enum AllowRule: Equatable, Hashable, Sendable {
     /// Only a member of the `room_id` Room can join the one this rule is used in.
     case roomMembership(roomID: String)
     /// A custom allow rule implementation, containing its JSON representation as a `String`.

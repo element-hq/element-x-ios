@@ -48,8 +48,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
          analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
-         attributedStringBuilder: AttributedStringBuilderProtocol,
-         appSettings: AppSettings) {
+         attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.roomProxy = roomProxy
         self.userSession = userSession
         self.analyticsService = analyticsService

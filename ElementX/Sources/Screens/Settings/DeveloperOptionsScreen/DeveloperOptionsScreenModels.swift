@@ -30,7 +30,6 @@ struct DeveloperOptionsScreenViewState: BindableState {
     }
 }
 
-// periphery: ignore - subscripts are seen as false positive
 @dynamicMemberLookup
 struct DeveloperOptionsScreenViewStateBindings {
     private let developerOptions: DeveloperOptionsProtocol

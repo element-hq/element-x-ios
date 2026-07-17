@@ -15,7 +15,6 @@ struct InviteUsersScreenCoordinatorParameters {
     let isSkippable: Bool
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let appSettings: AppSettings
 }
 
 enum InviteUsersScreenCoordinatorAction {
@@ -37,8 +36,7 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
                                                roomType: parameters.roomType,
                                                isSkippable: parameters.isSkippable,
                                                userDiscoveryService: parameters.userDiscoveryService,
-                                               userIndicatorController: parameters.userIndicatorController,
-                                               appSettings: parameters.appSettings)
+                                               userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

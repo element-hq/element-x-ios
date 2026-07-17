@@ -13,7 +13,6 @@ struct StartChatScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let appSettings: AppSettings
     let analytics: AnalyticsServiceProtocol
 }
 
@@ -37,8 +36,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         viewModel = StartChatScreenViewModel(userSession: parameters.userSession,
                                              analytics: parameters.analytics,
                                              userIndicatorController: parameters.userIndicatorController,
-                                             userDiscoveryService: parameters.userDiscoveryService,
-                                             appSettings: parameters.appSettings)
+                                             userDiscoveryService: parameters.userDiscoveryService)
     }
     
     func start() {

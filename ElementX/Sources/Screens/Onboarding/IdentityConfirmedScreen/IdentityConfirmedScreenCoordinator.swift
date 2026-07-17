@@ -9,8 +9,6 @@
 import Combine
 import SwiftUI
 
-struct IdentityConfirmedScreenCoordinatorParameters { }
-
 enum IdentityConfirmedScreenCoordinatorAction {
     case done
 }
@@ -25,7 +23,7 @@ final class IdentityConfirmedScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: IdentityConfirmedScreenCoordinatorParameters) {
+    init() {
         viewModel = IdentityConfirmedScreenViewModel()
     }
     

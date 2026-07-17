@@ -26,7 +26,6 @@ nonisolated protocol RoomMemberProxyProtocol: AnyObject, Sendable {
     
     var powerLevel: RoomPowerLevel { get }
     
-    // periphery:ignore - might be useful to have
     var isServiceMember: Bool { get }
 }
 

@@ -18,14 +18,6 @@ struct SwipeToReplyView: View {
 }
 
 struct SwipeToReplyView_Previews: PreviewProvider, TestablePreview {
-    static let timelineItem = TextRoomTimelineItem(id: .randomEvent,
-                                                   timestamp: .mock,
-                                                   isOutgoing: true,
-                                                   isEditable: true,
-                                                   canBeRepliedTo: true,
-                                                   sender: .init(id: ""),
-                                                   content: .init(body: ""))
-    
     static var previews: some View {
         SwipeToReplyView()
     }

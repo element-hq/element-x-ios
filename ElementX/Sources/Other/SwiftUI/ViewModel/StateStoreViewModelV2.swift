@@ -71,6 +71,7 @@ class StateStoreViewModelV2<State: BindableState, ViewAction> {
         /// An optional content scanning service so that views can validate media themselves.
         /// `nil` when no content scanner is configured for the server, or when the screen
         /// intentionally doesn't provide one because it has no media to scan.
+        // periphery:ignore - might be useful to have
         let contentScannerService: ContentScannerServiceProtocol?
         
         /// Set-able access to the bindable state.

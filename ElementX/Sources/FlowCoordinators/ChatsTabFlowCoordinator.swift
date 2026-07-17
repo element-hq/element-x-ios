@@ -31,12 +31,10 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: ChatsTabFlowCoordinatorStateMachine
     
-    // periphery:ignore - retaining purpose
     private var roomFlowCoordinator: RoomFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
     
-    // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var encryptionResetFlowCoordinator: EncryptionResetFlowCoordinator?
@@ -753,8 +751,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                                                                 isPresentedModally: true,
                                                                 userSession: userSession,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
-                                                                analytics: flowParameters.analytics,
-                                                                appSettings: flowParameters.appSettings)
+                                                                analytics: flowParameters.analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

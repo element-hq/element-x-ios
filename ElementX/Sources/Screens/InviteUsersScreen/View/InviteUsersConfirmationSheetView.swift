@@ -64,8 +64,7 @@ struct InviteUsersConfirmationSheetView_Previews: PreviewProvider, TestablePrevi
                                                    roomType: .existingRoom(roomProxy: JoinedRoomProxyMock(.init(members: []))),
                                                    isSkippable: true,
                                                    userDiscoveryService: UserDiscoveryServiceMock(),
-                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                   appSettings: .volatile())
+                                                   userIndicatorController: UserIndicatorControllerMock())
         
         viewModel.state.usersToConfirm = [.mockAlice, .mockCharlie, .mockBob, .mockDan]
         

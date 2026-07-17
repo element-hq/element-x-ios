@@ -26,8 +26,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
          isPresentedModally: Bool,
          userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         analytics: AnalyticsServiceProtocol,
-         appSettings: AppSettings) {
+         analytics: AnalyticsServiceProtocol) {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics

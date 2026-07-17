@@ -22,7 +22,6 @@ class SpacesScreenViewModel: SpacesScreenViewModelType, SpacesScreenViewModelPro
     
     init(userSession: UserSessionProtocol,
          selectedSpacePublisher: CurrentValuePublisher<String?, Never>,
-         appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
         spaceServiceProxy = userSession.clientProxy.spaceService
         self.userIndicatorController = userIndicatorController

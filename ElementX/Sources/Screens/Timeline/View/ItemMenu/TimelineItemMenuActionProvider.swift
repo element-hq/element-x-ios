@@ -32,8 +32,8 @@ struct TimelineItemMenuActionProvider {
             return nil
         }
         
-        if let encryptedItem = timelineItem as? EncryptedRoomTimelineItem {
-            return makeEncryptedItemActions(encryptedItem)
+        if timelineItem is EncryptedRoomTimelineItem {
+            return makeEncryptedItemActions()
         }
         
         var actions: [TimelineItemMenuAction] = []
@@ -147,7 +147,7 @@ struct TimelineItemMenuActionProvider {
         return .init(isReactable: isReactable, actions: actions, secondaryActions: secondaryActions, emojiProvider: emojiProvider)
     }
     
-    private func makeEncryptedItemActions(_ encryptedItem: EncryptedRoomTimelineItem) -> TimelineItemMenuActions? {
+    private func makeEncryptedItemActions() -> TimelineItemMenuActions? {
         var actions: [TimelineItemMenuAction] = [.copyPermalink]
         
         if isViewSourceEnabled {

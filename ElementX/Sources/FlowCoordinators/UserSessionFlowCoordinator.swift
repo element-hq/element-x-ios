@@ -42,7 +42,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let searchTabNavigationStackCoordinator: NavigationStackCoordinator?
     private let searchTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails?
     
-    // periphery:ignore - retaining purpose
     private var settingsFlowCoordinator: SettingsFlowCoordinator?
     
     enum State: StateType {

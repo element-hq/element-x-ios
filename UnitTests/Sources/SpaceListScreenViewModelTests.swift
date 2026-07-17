@@ -42,7 +42,6 @@ final class SpacesScreenViewModelTests {
         
         viewModel = SpacesScreenViewModel(userSession: userSession,
                                           selectedSpacePublisher: .init(nil),
-                                          appSettings: appSettings,
                                           userIndicatorController: UserIndicatorControllerMock())
     }
     

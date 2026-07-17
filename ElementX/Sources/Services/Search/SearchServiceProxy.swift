@@ -12,7 +12,6 @@ class SearchServiceProxy: SearchServiceProxyProtocol {
     private let searchService: SearchServiceProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     
-    // periphery:ignore - required for instance retention in the rust codebase
     private var resultsHandle: TaskHandle?
     
     private let resultsSubject = CurrentValueSubject<[SearchServiceResult], Never>([])

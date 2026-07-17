@@ -15,7 +15,6 @@ struct RoomMemberDetailsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsServiceProtocol
-    let appSettings: AppSettings
 }
 
 enum RoomMemberDetailsScreenCoordinatorAction {

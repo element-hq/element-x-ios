@@ -178,7 +178,6 @@ class MockScreen: Identifiable {
                                                                 appMediator: AppMediatorMock(.init()),
                                                                 appSettings: appSettings,
                                                                 appHooks: AppHooks(),
-                                                                analytics: analytics,
                                                                 userIndicatorController: userIndicatorController)
             flowCoordinator.start()
             retainedState.append(flowCoordinator)

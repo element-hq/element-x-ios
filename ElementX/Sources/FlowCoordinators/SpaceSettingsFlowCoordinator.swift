@@ -214,8 +214,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                          analyticsService: flowParameters.analytics,
                                                                          userIndicatorController: flowParameters.userIndicatorController,
                                                                          notificationSettings: flowParameters.userSession.clientProxy.notificationSettings,
-                                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                                         appSettings: flowParameters.appSettings))
+                                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder())))
         
         var leftRoom = false
         coordinator.actions.sink { [weak self] action in

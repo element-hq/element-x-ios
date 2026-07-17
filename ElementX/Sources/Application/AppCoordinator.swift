@@ -432,7 +432,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    // periphery:ignore:parameters service - delegate convention
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
         MXLog.info("Handle notification reply")
         
@@ -682,7 +681,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                         appMediator: appMediator,
                                                         appSettings: appSettings,
                                                         appHooks: appHooks,
-                                                        analytics: analyticsService,
                                                         userIndicatorController: userIndicatorController)
         coordinator.delegate = self
         

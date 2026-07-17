@@ -170,8 +170,7 @@ final class InviteUsersScreenViewModelTests {
                                                roomType: .draft(mandatoryInvitees: [.mockAlice]),
                                                isSkippable: false,
                                                userDiscoveryService: userDiscoveryService,
-                                               userIndicatorController: UserIndicatorControllerMock(),
-                                               appSettings: .volatile())
+                                               userIndicatorController: UserIndicatorControllerMock())
         
         // The locked invitee starts pre-selected and locked.
         #expect(context.viewState.selectedUsers.map(\.id) == [UserProfile.mockAlice.id])
@@ -235,8 +234,7 @@ final class InviteUsersScreenViewModelTests {
                                                    roomType: .existingRoom(roomProxy: roomProxy),
                                                    isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
-                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                   appSettings: .volatile())
+                                                   userIndicatorController: UserIndicatorControllerMock())
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
     }

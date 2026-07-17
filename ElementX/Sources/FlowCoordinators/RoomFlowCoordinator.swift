@@ -90,11 +90,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var pinnedEventsTimelineFlowCoordinator: PinnedEventsTimelineFlowCoordinator?
     // periphery:ignore - used to avoid deallocation
     private var mediaEventsTimelineFlowCoordinator: MediaEventsTimelineFlowCoordinator?
-    // periphery:ignore - used to avoid deallocation
     private var childRoomFlowCoordinator: RoomFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
-    // periphery:ignore - retaining purpose
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
@@ -438,8 +436,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 presentEmojiPicker(for: itemID,
                                    selectedEmoji: selectedEmoji,
-                                   timelineController: timelineController,
-                                   animated: animated)
+                                   timelineController: timelineController)
                 
             case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
                 presentMessageForwarding(with: forwardingItem)
@@ -448,7 +445,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
                     fatalError("Missing required TimelineController")
                 }
-                presentMapNavigator(interactionMode: mode, timelineController: timelineController, animated: animated)
+                presentMapNavigator(interactionMode: mode, timelineController: timelineController)
                 
             case (_, .presentPollForm(let mode), .pollForm):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
@@ -946,8 +943,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             analyticsService: flowParameters.analytics,
                                                             userIndicatorController: flowParameters.userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
-                                                            attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
-                                                            appSettings: flowParameters.appSettings)
+                                                            attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()))
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -1150,8 +1146,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentEmojiPicker(for itemID: TimelineItemIdentifier,
                                     selectedEmoji: Set<String>,
-                                    timelineController: TimelineControllerProtocol,
-                                    animated: Bool) {
+                                    timelineController: TimelineControllerProtocol) {
         let params = EmojiPickerScreenCoordinatorParameters(itemID: itemID,
                                                             selectedEmojis: selectedEmoji,
                                                             emojiProvider: flowParameters.emojiProvider,
@@ -1174,8 +1169,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentMapNavigator(interactionMode: LocationSharingInteractionMode,
-                                     timelineController: TimelineControllerProtocol,
-                                     animated: Bool) {
+                                     timelineController: TimelineControllerProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
@@ -1349,8 +1343,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                       roomType: roomType,
                                                                       isSkippable: false,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
-                                                                      userIndicatorController: flowParameters.userIndicatorController,
-                                                                      appSettings: flowParameters.appSettings)
+                                                                      userIndicatorController: flowParameters.userIndicatorController)
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         stackCoordinator.setRootCoordinator(coordinator)

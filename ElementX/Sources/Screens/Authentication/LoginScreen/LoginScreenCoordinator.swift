@@ -27,7 +27,6 @@ enum LoginScreenCoordinatorAction {
 
 /// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
 final class LoginScreenCoordinator: CoordinatorProtocol {
-    private let parameters: LoginScreenCoordinatorParameters
     private var viewModel: LoginScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<LoginScreenCoordinatorAction, Never> = .init()
@@ -40,8 +39,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
     // MARK: - Setup
     
     init(parameters: LoginScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = LoginScreenViewModel(authenticationService: parameters.authenticationService,
                                          loginHint: parameters.loginHint,
                                          userIndicatorController: parameters.userIndicatorController,

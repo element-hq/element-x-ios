@@ -56,7 +56,6 @@ final nonisolated class RoomMemberProxy: RoomMemberProxyProtocol {
         .init(rustPowerLevel: member.powerLevel)
     }
     
-    // periphery:ignore - might be useful to have
     var isServiceMember: Bool {
         member.isServiceMember
     }

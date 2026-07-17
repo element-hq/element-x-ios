@@ -348,7 +348,6 @@ private struct CallView: UIViewRepresentable {
         
         // MARK: - WKScriptMessageHandler
         
-        // periphery:ignore:parameters userContentController - delegate convention
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             coordinator?.userContentController(userContentController, didReceive: message)
         }

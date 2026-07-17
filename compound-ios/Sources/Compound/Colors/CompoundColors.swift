@@ -42,7 +42,6 @@ public class CompoundColors {
     
     /// Customise the colour at the specified key path with the supplied colour.
     /// Supplying `nil` as the colour will remove any existing customisation.
-    // periphery:ignore - used in submodule
     public func override(_ keyPath: KeyPath<CompoundColorTokens, Color>, with color: Color?) {
         overrides[keyPath] = color
     }

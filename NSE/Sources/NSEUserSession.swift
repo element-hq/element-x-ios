@@ -14,9 +14,6 @@ nonisolated protocol NSEUserSessionProtocol {
     var inviteAvatarsVisibility: InviteAvatars { get async }
     var mediaPreviewVisibility: MediaPreviews { get async }
     var threadsEnabled: Bool { get }
-    
-    func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol?
-    func roomForIdentifier(_ roomID: String) -> Room?
 }
 
 final nonisolated class NSEUserSession: NSEUserSessionProtocol {

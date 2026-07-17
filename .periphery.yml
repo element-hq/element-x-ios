@@ -1,8 +1,8 @@
 project: ElementX.xcodeproj
 # Periphery scans all targets built by these schemes. The ElementX scheme also
-# builds NSE, ShareExtension and MatrixRustSDKMocks as dependencies. When the
-# project is configured with the submodule, its sources are part of these same
-# targets and are scanned too.
+# builds NSE, ShareExtension and MatrixRustSDKMocks as dependencies. Always run
+# the scan with the project configured for the Pro variant so that all of the
+# sources are analysed (see the periphery-cleanup skill).
 schemes:
 - ElementX
 - UnitTests
@@ -10,6 +10,15 @@ schemes:
 - UITests
 - IntegrationTests
 - AccessibilityTests
+# Compound is excluded: its Inspector app and package tests aren't part of any
+# scheme in this project, so usage from them is invisible to the analysis.
+index_exclude:
+- "**/*?.build/**/*"
+- "**/SourcePackages/checkouts/**"
+- "compound-ios/**"
 report_exclude:
 - "**/Generated/**"
 retain_swift_ui_previews: true
+# Protocol signatures are contracts (hooks, delegates) — parameters unused in
+# every current conformance are still part of the interface's design.
+retain_unused_protocol_func_params: true

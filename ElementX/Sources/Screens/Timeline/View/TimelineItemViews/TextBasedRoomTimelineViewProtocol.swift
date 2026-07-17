@@ -6,7 +6,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-// periphery: ignore - markdown protocol
 protocol TextBasedRoomTimelineViewProtocol {
     associatedtype TimelineItemType: TextBasedRoomTimelineItem
     

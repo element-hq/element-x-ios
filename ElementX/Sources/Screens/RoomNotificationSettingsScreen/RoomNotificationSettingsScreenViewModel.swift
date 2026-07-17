@@ -16,7 +16,6 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     
-    // periphery:ignore - cancellable tasks cancel when reassigned
     @CancellableTask private var fetchNotificationSettingsTask: Task<Void, Error>?
     
     var actions: AnyPublisher<RoomNotificationSettingsScreenViewModelAction, Never> {

@@ -176,7 +176,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
             text.wrappedValue = textView.attributedText
         }
         
-        // periphery:ignore:parameters textView - delegate convention
         func textViewDidReceiveKeyPress(_ textView: UITextView, key: UIKeyboardHIDUsage) {
             keyHandler(key)
         }
@@ -185,7 +184,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
             textView.insertText("\n")
         }
         
-        // periphery:ignore:parameters textView - delegate convention
         func textView(_ textView: UITextView, didReceivePasteWith providers: [NSItemProvider]) {
             pasteHandler(providers)
         }
@@ -201,11 +199,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
 }
 
 private protocol ElementTextViewDelegate: AnyObject {
-    // periphery:ignore:parameters textView - delegate convention
     func textViewDidReceiveShiftEnterKeyPress(_ textView: UITextView)
-    // periphery:ignore:parameters textView - delegate convention
     func textViewDidReceiveKeyPress(_ textView: UITextView, key: UIKeyboardHIDUsage)
-    // periphery:ignore:parameters textView - delegate convention
     func textView(_ textView: UITextView, didReceivePasteWith providers: [NSItemProvider])
 }
 

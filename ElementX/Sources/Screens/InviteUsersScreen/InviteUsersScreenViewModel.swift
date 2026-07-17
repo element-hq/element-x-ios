@@ -29,8 +29,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
          roomType: InviteUsersScreenRoomType,
          isSkippable: Bool,
          userDiscoveryService: UserDiscoveryServiceProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appSettings: AppSettings) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         clientProxy = userSession.clientProxy
         self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
@@ -192,7 +191,6 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         }
     }
     
-    // periphery:ignore - automatically cancelled when set to nil
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
     

@@ -82,17 +82,6 @@ final class ClassicAppMXAccount: NSObject, NSCoding {
         static let homeserverURL = "homeserverurl" // String?
         static let userID = "userid" // String?
         static let accessToken = "accesstoken" // String?
-        static let identityServerURL = "identityserverurl" // String?
-        static let identityServerAccessToken = "identityserveraccesstoken" // String?
-        static let deviceID = "deviceId" // String?
-        static let allowedCertificate = "allowedCertificate" // Data?
-        static let threePIDs = "threePIDs" // [MXThirdPartyIdentifier]?
-        static let device = "device" // MXDevice?
-        static let antivirusServerURL = "antivirusserverurl" // String?
-        static let pushGatewayURL = "pushgatewayurl" // String?
-        static let hasPusherForPushNotifications = "_enablePushNotifications" // Bool
-        static let hasPusherForPushKitNotifications = "enablePushKitNotifications" // Bool
-        static let enableInAppNotifications = "enableInAppNotifications" // Bool
         static let isDisabled = "disabled" // Bool
         static let isSoftLogout = "isSoftLogout" // Bool
     }
@@ -122,8 +111,8 @@ final class ClassicAppMXAccount: NSObject, NSCoding {
 
 /// `MXUser` represents a user in Matrix.
 final class ClassicAppMXUser: NSObject, NSCoding {
-    /// The user id.
     // periphery:ignore - documents the schema, parsed but not consumed yet
+    /// The user id.
     let userID: String
     /// The user display name.
     let displayName: String?
