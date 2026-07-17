@@ -18,6 +18,11 @@ index_exclude:
 - "compound-ios/**"
 report_exclude:
 - "**/Generated/**"
+# Hand-written mocks: configuration surface is deliberately broader than any test uses.
+- "**/Mocks/**"
+- "ElementX/Sources/Services/AppLock/LAContextMock.swift"
+# Pure payload schema, fields exist to be encoded.
+- "ElementX/Sources/Services/Notification/Manager/APNSPayload.swift"
 retain_swift_ui_previews: true
 # Protocol signatures are contracts (hooks, delegates) — parameters unused in
 # every current conformance are still part of the interface's design.

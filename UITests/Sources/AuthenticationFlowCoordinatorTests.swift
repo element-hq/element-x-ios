@@ -111,9 +111,9 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         try await app.assertScreenshot()
     }
     
+    // periphery:ignore - might be useful to have
     /// Disabled for now as the looping isn't 100% fool-proof and we have OAuth on the integration tests
     /// so this mock version doesn't really add anything to the tests as a whole.
-    // periphery:ignore - might be useful to have
     func disabled_testSelectingOAuthServer() {
         // Allow this test to run for longer to help with the loop whilst waiting to resolve the
         // webcredentials for the Web Authentication Session (see below).

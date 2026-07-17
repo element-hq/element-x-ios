@@ -94,8 +94,8 @@ nonisolated struct InfoPlistReader {
         infoPlistValue(forKey: Keys.productionAppName)
     }
     
-    /// Whether or not the build is from the Nightly stream.
     // periphery:ignore - only used in release builds
+    /// Whether or not the build is from the Nightly stream.
     var isNightlyBuild: Bool {
         infoPlistValue(forKey: Keys.isNightlyBuild)
     }

@@ -48,7 +48,7 @@ Never touch `Generated/` directories, never edit `Localizable.strings`. Delete b
 
 ## False positives — mark, no delete
 
-Stored-never-read variable often alive ON PURPOSE: keep task / SDK object / coordinator alive past declaration scope. Delete = app break silent (observation stop, flow deallocate, rust handle drop). Mark instead: `// periphery:ignore - <reason>` line above declaration. Reuse existing reasons from codebase:
+Stored-never-read variable often alive ON PURPOSE: keep task / SDK object / coordinator alive past declaration scope. Delete = app break silent (observation stop, flow deallocate, rust handle drop). Mark instead: `// periphery:ignore - <reason>` line above declaration (NEVER `periphery:ignore:all` — whole files that shouldn't be reported, like hand-written mocks, belong in `report_exclude` in `.periphery.yml` instead). Comment go ABOVE any doc comment, never between doc and declaration. Reuse existing reasons from codebase:
 
 | Pattern | How recognise | Reason string |
 |---|---|---|
@@ -64,7 +64,6 @@ Stored-never-read variable often alive ON PURPOSE: keep task / SDK object / coor
 | Synthesized conformance | field only read via synthesized Hashable/Equatable/Codable (cache keys, diffing models) | `used via the synthesized Hashable conformance` |
 | Encoded/decoded schema field | Codable field parsed or serialized but not consumed yet | `documents the schema, parsed but not consumed yet` / `part of the encoded payload` |
 | Release-only code | compiled out in Debug scan (`#if !DEBUG` paths, nightly checks) | `only used in release builds` |
-| Hand-written mock file | whole file mock infra | `// periphery:ignore:all` at file top |
 | `TestablePreview` conformance | flagged "Redundant protocol conformance" on every preview | NO marker, NO removal — Sourcery read conformance, generate snapshot + a11y tests from it. Remove = tests silently vanish. Skip finding, bulk noise |
 
 **Unsure if keep-alive?** Property type Task / AnyCancellable / TaskHandle / coordinator / SDK proxy, assigned inside async or stream setup → smell like keep-alive. ASK USER before delete. Show declaration, where assigned, your read on it.
