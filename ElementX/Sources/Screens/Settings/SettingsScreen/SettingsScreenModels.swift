@@ -8,9 +8,10 @@
 
 import SwiftUI
 
-enum SettingsScreenViewModelAction: Equatable {
+enum SettingsScreenViewModelAction {
     case close
     case userDetails
+    case userStatusEmojiPicker(EmojiPickerScreenContinuation)
     case linkNewDevice
     case manageAccount(url: URL)
     case analytics
@@ -55,7 +56,7 @@ struct SettingsScreenViewState: BindableState {
     
     var userStatusRowMode: SettingsScreenUserStatusRow.Mode {
         if bindings.isShowingCustomStatusField {
-            .custom
+            .custom(emoji: bindings.customStatusEmoji)
         } else if let rawStatus = userProfile.status.raw {
             .show(rawStatus)
         } else {
@@ -66,7 +67,15 @@ struct SettingsScreenViewState: BindableState {
 
 struct SettingsScreenViewStateBindings {
     var isPresentingStatusPicker = false
-    var isShowingCustomStatusField = false
+    var customStatusEmoji: Character = "😄"
+    var isShowingCustomStatusField = false {
+        didSet {
+            if !isShowingCustomStatusField {
+                customStatusEmoji = "😄" // Reset the emoji.
+            }
+        }
+    }
+    
     var isPresentingAccountDeactivationConfirmation = false
 }
 

@@ -103,7 +103,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             state.bindings.isPresentingStatusPicker = false
             state.bindings.isShowingCustomStatusField = true
         case .userStatus(.pickCustomEmoji):
-            break // Hook-up the emoji picker here.
+            pickCustomEmoji()
         case .userStatus(.set(let status)):
             Task { await setUserStatus(status) }
         case .userStatus(.cancel):
@@ -143,6 +143,19 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     }
     
     // MARK: - Private
+    
+    private var pickCustomEmojiCancellable: AnyCancellable?
+    private func pickCustomEmoji() {
+        let (stream, continuation) = AsyncStream<String>.makeStream()
+        actionsSubject.send(.userStatusEmojiPicker(continuation))
+        
+        pickCustomEmojiCancellable = Task { [weak self] in
+            for await emoji in stream {
+                self?.state.bindings.customStatusEmoji = Character(emoji)
+            }
+        }
+        .asCancellable()
+    }
     
     func setUserStatus(_ status: UserStatus.Raw?) async {
         // Loading state tbc
