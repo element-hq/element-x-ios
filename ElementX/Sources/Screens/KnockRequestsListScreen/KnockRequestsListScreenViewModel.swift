@@ -15,9 +15,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    // periphery:ignore - required for the architecture
     private let actionsSubject: PassthroughSubject<KnockRequestsListScreenViewModelAction, Never> = .init()
-    // periphery:ignore - required for the architecture
     var actionsPublisher: AnyPublisher<KnockRequestsListScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }

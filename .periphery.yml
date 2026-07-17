@@ -23,6 +23,8 @@ report_exclude:
 - "ElementX/Sources/Services/AppLock/LAContextMock.swift"
 # Pure payload schema, fields exist to be encoded.
 - "ElementX/Sources/Services/Notification/Manager/APNSPayload.swift"
+# Backports: everything gated on #available, cleaned up with each OS drop.
+- "ElementX/Sources/Other/SwiftUI/Backports.swift"
 retain_swift_ui_previews: true
 # Protocol signatures are contracts (hooks, delegates) — parameters unused in
 # every current conformance are still part of the interface's design.

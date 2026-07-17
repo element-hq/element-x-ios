@@ -51,16 +51,14 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
     func updateCache(using client: ClientProtocol) async { }
     func reset(_ appSettings: any CommonSettingsProtocol) { }
     #endif
+    
     func loadCache(forHomeserver homeserver: String, applyingTo appSettings: CommonSettingsProtocol) { }
 }
 
 private struct ElementWellKnown: Decodable {
-    // periphery:ignore - documents the schema, parsed but not consumed yet
-    var version: Int?
     var enforceElementPro: Bool?
     
     enum CodingKeys: String, CodingKey {
-        case version
         case enforceElementPro = "enforce_element_pro"
     }
 }

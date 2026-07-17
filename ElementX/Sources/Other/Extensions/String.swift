@@ -10,6 +10,22 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 nonisolated extension String {
+    // periphery:ignore - might be useful to have
+    /// Returns the string as an `AttributedString` with the specified character tinted in a different color.
+    /// - Parameters:
+    ///   - character: The character to be tinted.
+    ///   - color: The color to tint the character. Defaults to the accent color.
+    /// - Returns: An `AttributedString`.
+    func tinting(_ character: Character, color: Color = .accentColor) -> AttributedString {
+        var string = AttributedString(self)
+        let characterView = string.characters
+        for index in characterView.indices where characterView[index] == character {
+            string[index..<characterView.index(after: index)].foregroundColor = color
+        }
+        
+        return string
+    }
+    
     var isASCII: Bool {
         allSatisfy(\.isASCII)
     }

@@ -21,7 +21,6 @@ enum KnockRequestsListScreenCoordinatorAction { }
 final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
     private let viewModel: KnockRequestsListScreenViewModelProtocol
     
-    // periphery:ignore - required for the architecture
     private var cancellables = Set<AnyCancellable>()
     
     // periphery:ignore - required for the architecture
@@ -37,7 +36,11 @@ final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
                                                      userIndicatorController: parameters.userIndicatorController)
     }
     
-    func start() { }
+    func start() {
+        viewModel.actionsPublisher
+            .sink { _ in }
+            .store(in: &cancellables)
+    }
     
     func toPresentable() -> AnyView {
         AnyView(KnockRequestsListScreen(context: viewModel.context))

@@ -40,7 +40,6 @@ extension View {
         }
     }
     
-    // periphery:ignore - might be useful to have
     @ViewBuilder func backportButtonStyleGlass() -> some View {
         if #available(iOS 26, *) {
             buttonStyle(.glass)

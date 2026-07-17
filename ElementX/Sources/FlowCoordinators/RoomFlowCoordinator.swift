@@ -436,7 +436,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 presentEmojiPicker(for: itemID,
                                    selectedEmoji: selectedEmoji,
-                                   timelineController: timelineController)
+                                   timelineController: timelineController,
+                                   animated: animated)
                 
             case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
                 presentMessageForwarding(with: forwardingItem)
@@ -445,7 +446,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
                     fatalError("Missing required TimelineController")
                 }
-                presentMapNavigator(interactionMode: mode, timelineController: timelineController)
+                presentMapNavigator(interactionMode: mode, timelineController: timelineController, animated: animated)
                 
             case (_, .presentPollForm(let mode), .pollForm):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
@@ -1146,7 +1147,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentEmojiPicker(for itemID: TimelineItemIdentifier,
                                     selectedEmoji: Set<String>,
-                                    timelineController: TimelineControllerProtocol) {
+                                    timelineController: TimelineControllerProtocol,
+                                    animated: Bool) {
         let params = EmojiPickerScreenCoordinatorParameters(itemID: itemID,
                                                             selectedEmojis: selectedEmoji,
                                                             emojiProvider: flowParameters.emojiProvider,
@@ -1163,13 +1165,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(coordinator, animated: animated) { [weak self] in
             self?.stateMachine.tryEvent(.dismissEmojiPicker)
         }
     }
     
     private func presentMapNavigator(interactionMode: LocationSharingInteractionMode,
-                                     timelineController: TimelineControllerProtocol) {
+                                     timelineController: TimelineControllerProtocol,
+                                     animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
@@ -1195,7 +1198,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         stackCoordinator.setRootCoordinator(coordinator)
         
-        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMapNavigator)
         }
     }

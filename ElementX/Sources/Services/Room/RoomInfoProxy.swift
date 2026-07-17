@@ -16,8 +16,20 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.id
     }
     
+    // periphery:ignore - might be useful to have
+    
+    var creators: [String] {
+        roomInfo.creators ?? []
+    }
+    
     var displayName: String? {
         roomInfo.displayName
+    }
+    
+    // periphery:ignore - might be useful to have
+    
+    var rawName: String? {
+        roomInfo.rawName
     }
     
     var topic: String? {
@@ -70,6 +82,12 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
         roomInfo.membership
     }
     
+    // periphery:ignore - might be useful to have
+    
+    var inviter: RoomMemberProxyProtocol? {
+        roomInfo.inviter.map(RoomMemberProxy.init)
+    }
+    
     var heroes: [RoomHero] {
         roomInfo.heroes
     }
@@ -78,8 +96,32 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
         Int(roomInfo.activeMembersCount)
     }
     
+    // periphery:ignore - might be useful to have
+    
+    var invitedMembersCount: Int {
+        Int(roomInfo.invitedMembersCount)
+    }
+    
     var joinedMembersCount: Int {
         Int(roomInfo.joinedMembersCount)
+    }
+    
+    // periphery:ignore - might be useful to have
+    
+    var highlightCount: Int {
+        Int(roomInfo.highlightCount)
+    }
+    
+    // periphery:ignore - might be useful to have
+    
+    var notificationCount: Int {
+        Int(roomInfo.notificationCount)
+    }
+    
+    // periphery:ignore - might be useful to have
+    
+    var cachedUserDefinedNotificationMode: RoomNotificationMode? {
+        roomInfo.cachedUserDefinedNotificationMode
     }
     
     var hasRoomCall: Bool {
@@ -99,6 +141,30 @@ nonisolated struct RoomInfoProxy: RoomInfoProxyProtocol {
     
     var activeRoomCallParticipants: [String] {
         roomInfo.activeRoomCallParticipants
+    }
+    
+    // periphery:ignore - might be useful to have
+    
+    var isMarkedUnread: Bool {
+        roomInfo.isMarkedUnread
+    }
+    
+    // periphery:ignore - might be useful to have
+    
+    var unreadMessagesCount: UInt {
+        UInt(roomInfo.numUnreadMessages)
+    }
+    
+    // periphery:ignore - might be useful to have
+    
+    var unreadNotificationsCount: UInt {
+        UInt(roomInfo.numUnreadNotifications)
+    }
+    
+    // periphery:ignore - might be useful to have
+    
+    var unreadMentionsCount: UInt {
+        UInt(roomInfo.numUnreadMentions)
     }
     
     var fullyReadEventID: String? {

@@ -9618,7 +9618,9 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
         set(value) { underlyingId = value }
     }
     nonisolated(unsafe) var underlyingId: String!
+    nonisolated(unsafe) var creators: [String] = []
     nonisolated(unsafe) var displayName: String?
+    nonisolated(unsafe) var rawName: String?
     nonisolated(unsafe) var topic: String?
     nonisolated(unsafe) var avatarURL: URL?
     var isEncrypted: Bool {
@@ -9653,16 +9655,33 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
         set(value) { underlyingMembership = value }
     }
     nonisolated(unsafe) var underlyingMembership: Membership!
+    nonisolated(unsafe) var inviter: RoomMemberProxyProtocol?
     var activeMembersCount: Int {
         get { return underlyingActiveMembersCount }
         set(value) { underlyingActiveMembersCount = value }
     }
     nonisolated(unsafe) var underlyingActiveMembersCount: Int!
+    var invitedMembersCount: Int {
+        get { return underlyingInvitedMembersCount }
+        set(value) { underlyingInvitedMembersCount = value }
+    }
+    nonisolated(unsafe) var underlyingInvitedMembersCount: Int!
     var joinedMembersCount: Int {
         get { return underlyingJoinedMembersCount }
         set(value) { underlyingJoinedMembersCount = value }
     }
     nonisolated(unsafe) var underlyingJoinedMembersCount: Int!
+    var highlightCount: Int {
+        get { return underlyingHighlightCount }
+        set(value) { underlyingHighlightCount = value }
+    }
+    nonisolated(unsafe) var underlyingHighlightCount: Int!
+    var notificationCount: Int {
+        get { return underlyingNotificationCount }
+        set(value) { underlyingNotificationCount = value }
+    }
+    nonisolated(unsafe) var underlyingNotificationCount: Int!
+    nonisolated(unsafe) var cachedUserDefinedNotificationMode: RoomNotificationMode?
     var hasRoomCall: Bool {
         get { return underlyingHasRoomCall }
         set(value) { underlyingHasRoomCall = value }
@@ -9670,6 +9689,26 @@ nonisolated class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable 
     nonisolated(unsafe) var underlyingHasRoomCall: Bool!
     nonisolated(unsafe) var activeRoomCallIntent: CallIntent?
     nonisolated(unsafe) var activeRoomCallParticipants: [String] = []
+    var isMarkedUnread: Bool {
+        get { return underlyingIsMarkedUnread }
+        set(value) { underlyingIsMarkedUnread = value }
+    }
+    nonisolated(unsafe) var underlyingIsMarkedUnread: Bool!
+    var unreadMessagesCount: UInt {
+        get { return underlyingUnreadMessagesCount }
+        set(value) { underlyingUnreadMessagesCount = value }
+    }
+    nonisolated(unsafe) var underlyingUnreadMessagesCount: UInt!
+    var unreadNotificationsCount: UInt {
+        get { return underlyingUnreadNotificationsCount }
+        set(value) { underlyingUnreadNotificationsCount = value }
+    }
+    nonisolated(unsafe) var underlyingUnreadNotificationsCount: UInt!
+    var unreadMentionsCount: UInt {
+        get { return underlyingUnreadMentionsCount }
+        set(value) { underlyingUnreadMentionsCount = value }
+    }
+    nonisolated(unsafe) var underlyingUnreadMentionsCount: UInt!
     nonisolated(unsafe) var fullyReadEventID: String?
     var pinnedEventIDs: Set<String> {
         get { return underlyingPinnedEventIDs }

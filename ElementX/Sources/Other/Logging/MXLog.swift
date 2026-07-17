@@ -95,9 +95,8 @@ nonisolated enum MXLog {
     }
     
     #if DEBUG
-    // periphery:ignore - might be useful to have
     private static let devPrefix = URL.documentsDirectory.pathComponents[2].uppercased()
-    // periphery:ignore - might be useful to have
+    // periphery:ignore - used for debugging
     /// A helper method for print debugging, only available on debug builds.
     ///
     /// When running on the simulator this will log `[USERNAME] message` so that

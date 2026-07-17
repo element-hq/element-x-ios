@@ -166,7 +166,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
             .swipeRightAction {
-                SwipeToReplyView()
+                CompoundIcon(\.reply)
+                    .foregroundColor(.compound.iconPrimary)
+                    .accessibilityHidden(true)
             } shouldStartAction: {
                 timelineItem.canBeRepliedTo
             } action: {
