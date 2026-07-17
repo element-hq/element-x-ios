@@ -11,7 +11,7 @@ import Testing
 
 @MainActor
 struct EmojiPickerScreenViewModelTests {
-    var timelineProxy: TimelineProxyMock!
+    var emojiPickerStream: AsyncStream<String>!
     
     var viewModel: EmojiPickerScreenViewModel!
     var context: EmojiPickerScreenViewModel.Context {
@@ -19,33 +19,43 @@ struct EmojiPickerScreenViewModelTests {
     }
     
     @Test
-    mutating func toggleReaction() async throws {
+    mutating func selectEmoji() async throws {
+        // Given a freshly presented emoji picker.
         setupViewModel()
         let reaction = "👋"
         
+        // When the user taps an emoji.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        context.send(viewAction: .emojiTapped(emoji: .init(id: "wave", value: reaction)))
         
-        await waitForConfirmation(timeout: .seconds(5)) { confirmation in
-            timelineProxy.toggleReactionToClosure = { toggledReaction, _ in
-                defer { confirmation() }
-                #expect(toggledReaction == reaction)
-                return .success(())
-            }
-            
-            context.send(viewAction: .emojiTapped(emoji: .init(id: "wave", value: reaction)))
-        }
-        
+        // Then the screen should dismiss and yield the emoji before finishing the stream.
         try await deferred.fulfill()
+        var iterator = emojiPickerStream.makeAsyncIterator()
+        #expect(await iterator.next() == reaction)
+        #expect(await iterator.next() == nil)
+    }
+    
+    @Test
+    mutating func stopFinishesTheStream() async {
+        // Given a freshly presented emoji picker.
+        setupViewModel()
+        
+        // When it is stopped without a selection (e.g. the picker is dismissed).
+        viewModel.stop()
+        
+        // Then the stream should finish without yielding an emoji.
+        var iterator = emojiPickerStream.makeAsyncIterator()
+        #expect(await iterator.next() == nil)
     }
     
     // MARK: - Helpers
     
     private mutating func setupViewModel(selectedEmojis: Set<String> = []) {
-        timelineProxy = TimelineProxyMock(.init())
+        let (stream, continuation) = AsyncStream<String>.makeStream()
+        emojiPickerStream = stream
         
-        viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,
-                                               selectedEmojis: selectedEmojis,
+        viewModel = EmojiPickerScreenViewModel(selectedEmojis: selectedEmojis,
                                                emojiProvider: EmojiProvider(appSettings: .volatile()),
-                                               timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)))
+                                               continuation: continuation)
     }
 }

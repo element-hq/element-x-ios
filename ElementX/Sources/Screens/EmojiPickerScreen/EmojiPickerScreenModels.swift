@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias EmojiPickerScreenContinuation = AsyncStream<String>.Continuation
+
 enum EmojiPickerScreenViewModelAction {
     case dismiss
 }

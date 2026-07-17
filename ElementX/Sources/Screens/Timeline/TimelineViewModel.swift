@@ -511,8 +511,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     displayAlert(.audioRecodingPermissionError)
                 case .displayErrorToast(let title):
                     displayErrorToast(title)
-                case .displayEmojiPicker(let itemID, let selectedEmojis):
-                    actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+                case .displayEmojiPicker(let selectedEmojis, let continuation):
+                    actionsSubject.send(.displayEmojiPicker(selectedEmojis: selectedEmojis, continuation: continuation))
                 case .displayMessageForwarding(let itemID):
                     Task { await self.forwardMessage(itemID: itemID) }
                 case .displayEditPollForm(let eventID, let poll):

@@ -41,7 +41,7 @@ enum RoomScreenCoordinatorAction {
     case presentPollForm(mode: PollFormMode)
     case presentLocationViewer(StaticLocationData)
     case presentLiveLocationViewer(sender: TimelineItemSender?, initialLiveLocationShare: LiveLocationShare?)
-    case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
+    case presentEmojiPicker(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
     case presentRoomMemberDetails(userID: String)
     case presentMessageForwarding(forwardingItem: MessageForwardingItem)
     case presentCallScreen(isVoiceCall: Bool)
@@ -117,8 +117,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .displayEmojiPicker(let itemID, let selectedEmojis):
-                    actionsSubject.send(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+                case .displayEmojiPicker(let selectedEmojis, let continuation):
+                    actionsSubject.send(.presentEmojiPicker(selectedEmojis: selectedEmojis, continuation: continuation))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .displayCameraPicker:

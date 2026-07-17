@@ -102,10 +102,9 @@ struct EmojiPickerScreen: View {
 
 @available(iOS 26.0, *)
 struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,
-                                                      selectedEmojis: ["😀", "😄"],
+    static let viewModel = EmojiPickerScreenViewModel(selectedEmojis: ["😀", "😄"],
                                                       emojiProvider: EmojiProvider(appSettings: .volatile()),
-                                                      timelineController: TimelineControllerMock(.init()))
+                                                      continuation: AsyncStream<String>.makeStream().continuation)
     
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context)
@@ -115,10 +114,9 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
 }
 
 struct EmojiPickerScreenSheet_Previews: PreviewProvider {
-    static let viewModel = EmojiPickerScreenViewModel(itemID: .randomEvent,
-                                                      selectedEmojis: ["😀", "😄"],
+    static let viewModel = EmojiPickerScreenViewModel(selectedEmojis: ["😀", "😄"],
                                                       emojiProvider: EmojiProvider(appSettings: .volatile()),
-                                                      timelineController: TimelineControllerMock(.init()))
+                                                      continuation: AsyncStream<String>.makeStream().continuation)
     
     static var previews: some View {
         Text("Timeline view")
