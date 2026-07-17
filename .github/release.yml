@@ -28,6 +28,10 @@ changelog:
       labels:
         - pr-wip
 
+    - title: 💼 Element Pro
+      labels:
+        - pr-element-pro
+
     - title: Others
       labels:
         - pr-misc
