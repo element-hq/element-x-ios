@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Delete";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Edit avatar";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Start a call";
 "a11y_start_video_call" = "Start a video call";
 "a11y_start_voice_call" = "Start a voice call";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "User menu";
 "a11y_video_preview" = "Video preview";

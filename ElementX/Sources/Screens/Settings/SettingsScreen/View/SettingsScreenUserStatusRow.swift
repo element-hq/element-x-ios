@@ -24,15 +24,18 @@ struct SettingsScreenUserStatusRow: View {
         case .custom:
             ListRow(kind: .custom {
                 HStack(spacing: ListRowPadding.labelIconSpacing) {
-                    Button { } label: {
+                    Button { action(.pickCustomEmoji) } label: {
                         Text(customEmoji)
                             .font(.compound.headingSM)
                             .foregroundStyle(.compound.textPrimary)
+                            .accessibilityLabel(L10n.a11yCustomEmoji)
+                            .accessibilityValue(customEmoji)
                     }
                     .buttonStyle(EditEmojiButtonStyle())
                     
                     TextField(L10n.screenSettingsUserStatusCustomHint, text: $customText)
                         .textFieldStyle(.compound(.raised))
+                        .accessibilityLabel(L10n.screenSettingsUserStatusCustomHint)
                         .padding(.vertical, 3)
                     
                     ZStack { // ZStack to stop the text field from resizing.
@@ -65,6 +68,8 @@ struct SettingsScreenUserStatusRow: View {
                         }
                         .contentShape(Rectangle())
                     }
+                    .accessibilityLabel(L10n.a11yStatus)
+                    .accessibilityValue(Text(String(status.emoji)) + Text(status.text))
                     .buttonStyle(.plain)
                     
                     Button(L10n.actionClear) { action(.set(nil)) }

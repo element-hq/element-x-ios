@@ -28,6 +28,8 @@ internal nonisolated enum L10n {
   internal static var a11yCreatePollVotesAllowedDecrease: String { return L10n.tr("Localizable", "a11y_create_poll_votes_allowed_decrease") }
   /// Increase votes allowed per person
   internal static var a11yCreatePollVotesAllowedIncrease: String { return L10n.tr("Localizable", "a11y_create_poll_votes_allowed_increase") }
+  /// Custom emoji
+  internal static var a11yCustomEmoji: String { return L10n.tr("Localizable", "a11y_custom_emoji") }
   /// Delete
   internal static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Plural format key: "%#@COUNT@"
@@ -150,6 +152,8 @@ internal nonisolated enum L10n {
   internal static var a11yStartVideoCall: String { return L10n.tr("Localizable", "a11y_start_video_call") }
   /// Start a voice call
   internal static var a11yStartVoiceCall: String { return L10n.tr("Localizable", "a11y_start_voice_call") }
+  /// Status
+  internal static var a11yStatus: String { return L10n.tr("Localizable", "a11y_status") }
   /// Tombstoned room
   internal static var a11yTombstonedRoom: String { return L10n.tr("Localizable", "a11y_tombstoned_room") }
   /// User menu

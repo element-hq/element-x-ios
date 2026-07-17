@@ -91,9 +91,15 @@ enum SettingsScreenViewAction {
     case deactivateAccount
     
     enum UserStatusAction {
+        /// Show status picker sheet to select a preset status.
         case pickStatus
+        /// Dismiss the picker sheet and show the custom status input.
         case customStatus
+        /// Show the emoji picker to select the emoji for the custom status.
+        case pickCustomEmoji
+        /// Set the user's status to the provided value.
         case set(UserStatus.Raw?)
+        /// Cancel user status picking/input.
         case cancel
     }
 }

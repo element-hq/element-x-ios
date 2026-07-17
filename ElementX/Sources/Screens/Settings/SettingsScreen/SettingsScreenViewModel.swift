@@ -102,6 +102,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         case .userStatus(.customStatus):
             state.bindings.isPresentingStatusPicker = false
             state.bindings.isShowingCustomStatusField = true
+        case .userStatus(.pickCustomEmoji):
+            break // Hook-up the emoji picker here.
         case .userStatus(.set(let status)):
             Task { await setUserStatus(status) }
         case .userStatus(.cancel):
