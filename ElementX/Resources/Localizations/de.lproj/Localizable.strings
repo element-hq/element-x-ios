@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Nachrichtentextfeld minimieren";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Löschen";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Avatar bearbeiten";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Anruf starten";
 "a11y_start_video_call" = "Start a video call";
 "a11y_start_voice_call" = "Sprachanruf starten";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Stillgelegter Chat";
 "a11y_user_menu" = "Nutzer-Menü";
 "a11y_video_preview" = "Video preview";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Anruf nicht unterstützt";
 "common_unsupported_event" = "Nicht unterstütztes Ereignis";
 "common_user_started_a_call" = "%1$@ started a call";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Nutzername";
 "common_verification_cancelled" = "Verifizierung abgebrochen";
 "common_verification_complete" = "Verifizierung abgeschlossen";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Laufend";
 "screen_polls_history_filter_past" = "Beendet";
 "screen_polls_history_title" = "Umfragen";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Verlauf pushen";
 "screen_qr_code_login_connecting_subtitle" = "Sichere Verbindung aufbauen";
 "screen_qr_code_login_connection_note_secure_state_description" = "Es konnte keine sichere Verbindung zu dem neuen Gerät hergestellt werden.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Nach der Bestätigung kannst du mit der Verifizierung fortfahren.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Akzeptiere die Anfrage für die Verifizierung in deiner anderen Sitzung um fortzufahren.";
 "screen_session_verification_waiting_to_accept_title" = "Warten auf die Annahme der Anfrage";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Wie lange soll der Live-Standort geteilt werden?";
 "screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";

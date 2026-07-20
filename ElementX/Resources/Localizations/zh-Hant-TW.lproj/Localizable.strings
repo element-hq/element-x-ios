@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "最小化訊息文字欄位";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "刪除";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "編輯大頭照";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "開始通話";
 "a11y_start_video_call" = "開始視訊通話";
 "a11y_start_voice_call" = "開始語音通話";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "墓碑聊天室";
 "a11y_user_menu" = "使用者選單";
 "a11y_video_preview" = "Video preview";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "不支援的通話";
 "common_unsupported_event" = "不支援的事件";
 "common_user_started_a_call" = "%1$@ started a call";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "使用者名稱";
 "common_verification_cancelled" = "驗證已取消";
 "common_verification_complete" = "驗證完成";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "進行中";
 "screen_polls_history_filter_past" = "已結束";
 "screen_polls_history_title" = "所有投票";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "推播通知歷史紀錄";
 "screen_qr_code_login_connecting_subtitle" = "建立安全連線";
 "screen_qr_code_login_connection_note_secure_state_description" = "無法與新裝置建立安全連線。您現有的裝置仍然安全，您不必擔心它們。";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "接受後，您就可以繼續進行驗證。";
 "screen_session_verification_waiting_to_accept_subtitle" = "準備開始驗證，請到您的其他工作階段接受請求。";
 "screen_session_verification_waiting_to_accept_title" = "等待接受請求";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "您的即時位置歷史將儲存於聊天室中，並在工作階段結束後對其他成員可見。";
 "screen_share_location_live_location_duration_picker_title" = "選擇分享即時位置的時間長度。";
 "screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";

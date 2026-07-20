@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Üzenet szövegmezőjének minimalizálása";
 "a11y_create_poll_votes_allowed_decrease" = "Személyenként engedélyezett szavazatok számának csökkentése";
 "a11y_create_poll_votes_allowed_increase" = "Személyenként engedélyezett szavazatok számának növelése";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Törlés";
 "a11y_duration" = "Időtartam: %1$@";
 "a11y_edit_avatar" = "Profilkép szerkesztése";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Hanghívás indítása";
 "a11y_start_video_call" = "Videohívás indítása";
 "a11y_start_voice_call" = "Hanghívás indítása";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Elévült szoba";
 "a11y_user_menu" = "Felhasználói menü";
 "a11y_video_preview" = "Videó előnézete";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Nem támogatott hívás";
 "common_unsupported_event" = "Nem támogatott esemény";
 "common_user_started_a_call" = "%1$@ hívást indított";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Felhasználónév";
 "common_verification_cancelled" = "Az ellenőrzés megszakítva";
 "common_verification_complete" = "Az ellenőrzés befejeződött";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Folyamatban";
 "screen_polls_history_filter_past" = "Korábbi";
 "screen_polls_history_title" = "Szavazások";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Leküldéses értesítések előzmények";
 "screen_qr_code_login_connecting_subtitle" = "Biztonságos kapcsolat létesítése";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nem sikerült biztonságos kapcsolatot létesíteni az új eszközzel. A meglévő eszközei továbbra is biztonságban vannak, és nem kell aggódnia miattuk.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Az elfogadása után folytathatja az ellenőrzést.";
 "screen_session_verification_waiting_to_accept_subtitle" = "A folytatáshoz fogadja el az ellenőrzési folyamat indítási kérését a másik munkamenetében.";
 "screen_session_verification_waiting_to_accept_title" = "Várakozás a kérés elfogadására";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Az élő helymeghatározás története a szobában lesz tárolva, és a munkamenet befejezése után is látható marad a tagok számára.";
 "screen_share_location_live_location_duration_picker_title" = "Válassza ki, mennyi ideig szeretné megosztani az aktuális tartózkodási helyét.";
 "screen_share_location_live_location_missing_permissions" = "Nincs jogosultsága az élő tartózkodási helyének megosztására ebben a szobában.";

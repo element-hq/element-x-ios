@@ -64,10 +64,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d załączniki…</string>
+			<key>many</key>
+			<string>%1$d załączników…</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
-			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d załącznik…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -80,10 +82,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d przedmioty medialne…</string>
+			<key>many</key>
+			<string>%1$d przedmiotów medialnych…</string>
 			<key>one</key>
-			<string>%1$d media item…</string>
-			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$d przedmiot medialny…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -348,10 +352,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d usunięte wiadomości</string>
+			<key>many</key>
+			<string>%1$d usuniętych wiadomości</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
-			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d usunięta wiadomość</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

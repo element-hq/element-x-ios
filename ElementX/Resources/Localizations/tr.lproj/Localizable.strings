@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Mesaj metin alanını küçült";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Sil";
 "a11y_duration" = "Süre: %1$@";
 "a11y_edit_avatar" = "Fotoğrafı düzenle";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Bir arama başlatın";
 "a11y_start_video_call" = "Start a video call";
 "a11y_start_voice_call" = "Start a voice call";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Kullanıcı menüsü";
 "a11y_video_preview" = "Video preview";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Desteklenmeyen çağrı";
 "common_unsupported_event" = "Desteklenmeyen etkinlik";
 "common_user_started_a_call" = "%1$@ started a call";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Kullanıcı adı";
 "common_verification_cancelled" = "Doğrulama iptal edildi";
 "common_verification_complete" = "Doğrulama tamamlandı";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Devam ediyor";
 "screen_polls_history_filter_past" = "Geçmiş";
 "screen_polls_history_title" = "Anketler";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push history";
 "screen_qr_code_login_connecting_subtitle" = "Güvenli bir bağlantı kuruluyor";
 "screen_qr_code_login_connection_note_secure_state_description" = "Yeni cihaza güvenli bir bağlantı kurulamadı. Mevcut cihazlarınız hala güvende ve onlar için endişelenmenize gerek yok.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Kabul edildikten sonra doğrulama işlemine devam edebileceksiniz.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Devam etmek için diğer oturumunuzda doğrulama işlemini başlatma isteğini kabul edin.";
 "screen_session_verification_waiting_to_accept_title" = "İsteğin kabul edilmesi bekleniyor";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Your live location history will be stored in the room and visible to members after the session ends.";
 "screen_share_location_live_location_duration_picker_title" = "Choose how long to share your live location.";
 "screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";

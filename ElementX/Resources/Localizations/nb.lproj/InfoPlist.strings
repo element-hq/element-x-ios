@@ -1,6 +1,6 @@
 "NSCameraUsageDescription" = "For å ta bilder eller videoer og sende dem som en melding, trenger Element X tilgang til kameraet.";
 "NSFaceIDUsageDescription" = "Face ID brukes til å beskytte tilgangen til kontoen din.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "To share your location live in chats, location access is needed when the app is in the background.";
-"NSLocationWhenInUseUsageDescription" = "Gi posisjonstilgang slik at Element X kan dele posisjonen din.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "For å dele lokasjonen din live i chatter, må appen ha tilgang til lokasjonsdata når den kjører i bakgrunnen.";
+"NSLocationWhenInUseUsageDescription" = "Dette lar deg sende din nåværende lokasjon eller steder i nærheten i chatter.";
 "NSMicrophoneUsageDescription" = "For å ta opp og sende meldinger med lyd, må Element X ha tilgang til mikrofonen.";
 "NSPhotoLibraryUsageDescription" = "Dette lar deg lagre bilder og videoer i bildebiblioteket ditt.";

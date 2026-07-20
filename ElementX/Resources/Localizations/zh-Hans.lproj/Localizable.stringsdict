@@ -276,10 +276,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d removed message</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d 个已移除的消息</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

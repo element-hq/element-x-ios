@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Pienennä viestin tekstikenttä";
 "a11y_create_poll_votes_allowed_decrease" = "Vähennä sallittujen äänien määrää per henkilö";
 "a11y_create_poll_votes_allowed_increase" = "Lisää sallittujen äänien määrää per henkilö";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Poista";
 "a11y_duration" = "Kesto: %1$@";
 "a11y_edit_avatar" = "Muokkaa avataria";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Aloita puhelu";
 "a11y_start_video_call" = "Aloita videopuhelu";
 "a11y_start_voice_call" = "Aloita äänipuhelu";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Haudattu huone";
 "a11y_user_menu" = "Käyttäjävalikko";
 "a11y_video_preview" = "Videon esikatselu";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Puhelu, jota ei tueta";
 "common_unsupported_event" = "Tapahtumaa ei tueta";
 "common_user_started_a_call" = "%1$@ aloitti puhelun";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Käyttäjänimi";
 "common_verification_cancelled" = "Vahvistus peruttu";
 "common_verification_complete" = "Vahvistus suoritettu";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Meneillään olevat";
 "screen_polls_history_filter_past" = "Aiemmat";
 "screen_polls_history_title" = "Kyselyt";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push-historia";
 "screen_qr_code_login_connecting_subtitle" = "Muodostetaan turvallista yhteyttä";
 "screen_qr_code_login_connection_note_secure_state_description" = "Turvallista yhteyttä uuteen laitteeseen ei voitu muodostaa. Olemassa olevat laitteesi ovat edelleen turvassa, eikä sinun tarvitse huolehtia niistä.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Kun pyyntö on hyväksytty, voit jatkaa vahvistusta.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Hyväksy vahvistuspyyntö toisella laitteella jatkaaksesi.";
 "screen_session_verification_waiting_to_accept_title" = "Odotetaan pyynnön hyväksymistä";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Reaaliaikainen sijaintihistoriasi tallennetaan huoneeseen ja on jäsenten nähtävissä istunnon päätyttyä.";
 "screen_share_location_live_location_duration_picker_title" = "Valitse, kuinka kauan haluat jakaa reaaliaikaisen sijaintisi.";
 "screen_share_location_live_location_missing_permissions" = "Sinulla ei ole oikeuksia jakaa reaaliaikaista sijaintiasi tässä huoneessa";

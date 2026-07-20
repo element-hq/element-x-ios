@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Свернуть поле ввода";
 "a11y_create_poll_votes_allowed_decrease" = "Уменьшить количество голосов, разрешенных на одного человека";
 "a11y_create_poll_votes_allowed_increase" = "Увеличь количество голосов, разрешенных на одного человека";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Удалить";
 "a11y_duration" = "Продолжительность: %1$@";
 "a11y_edit_avatar" = "Изменить аватар";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Начать звонок";
 "a11y_start_video_call" = "Начать видеозвонок";
 "a11y_start_voice_call" = "Начать голосовой вызов";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Брошенная комната";
 "a11y_user_menu" = "Меню пользователя";
 "a11y_video_preview" = "Видео-превью";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Неподдерживаемый вызов";
 "common_unsupported_event" = "Неподдерживаемое событие";
 "common_user_started_a_call" = "%1$@ начал звонок";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Имя пользователя";
 "common_verification_cancelled" = "Подтверждение отменено";
 "common_verification_complete" = "Подтверждение завершено";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Текущие";
 "screen_polls_history_filter_past" = "Прошлые";
 "screen_polls_history_title" = "Опросы";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "История уведомлений";
 "screen_qr_code_login_connecting_subtitle" = "Установление безопасного соединения";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не удалось установить безопасное соединение с новым устройством. Не беспокойтесь, существующие устройства в безопасности.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "После принятия запроса вы сможете продолжить проверку.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Чтобы продолжить, примите запрос на запуск процесса подтверждения в другом сеансе.";
 "screen_session_verification_waiting_to_accept_title" = "Ожидание принятия запроса";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "История вашего местоположения в режиме реального времени будет сохранена в комнате и станет доступна участникам после окончания сессии.";
 "screen_share_location_live_location_duration_picker_title" = "Выберите, как долго вы будете делиться своим местоположением в режиме реального времени.";
 "screen_share_location_live_location_missing_permissions" = "У тебя нет прав на то, чтобы делиться своим текущим местоположением в этой комнате";

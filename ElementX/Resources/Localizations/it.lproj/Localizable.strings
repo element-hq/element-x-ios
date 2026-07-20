@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Riduci al minimo il campo di testo del messaggio";
 "a11y_create_poll_votes_allowed_decrease" = "Riduci il numero di voti consentiti per persona";
 "a11y_create_poll_votes_allowed_increase" = "Aumenta il numero di voti consentiti per persona";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Elimina";
 "a11y_duration" = "Durata: %1$@";
 "a11y_edit_avatar" = "Modifica avatar";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Avvia una chiamata";
 "a11y_start_video_call" = "Avvia una videochiamata";
 "a11y_start_voice_call" = "Avvia una chiamata vocale";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Stanza obsoleta";
 "a11y_user_menu" = "Menu utente";
 "a11y_video_preview" = "Anteprima video";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Chiamata non supportata";
 "common_unsupported_event" = "Evento non supportato";
 "common_user_started_a_call" = "%1$@ ha avviato una chiamata";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Nome utente";
 "common_verification_cancelled" = "Verifica annullata";
 "common_verification_complete" = "Verifica completata";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "In corso";
 "screen_polls_history_filter_past" = "Passato";
 "screen_polls_history_title" = "Sondaggi";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Cronologia push";
 "screen_qr_code_login_connecting_subtitle" = "Stabilendo la connessione";
 "screen_qr_code_login_connection_note_secure_state_description" = "Non è stato possibile stabilire una connessione sicura con il nuovo dispositivo. I tuoi dispositivi esistenti sono ancora al sicuro e non devi preoccuparti di loro.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Una volta accettata, potrai proseguire con la verifica.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accetta la richiesta di avviare il processo di verifica nell'altra sessione per continuare.";
 "screen_session_verification_waiting_to_accept_title" = "In attesa di accettare la richiesta";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "La cronologia delle tue posizioni in tempo reale verrà archiviata nella stanza e sarà visibile ai membri al termine della sessione.";
 "screen_share_location_live_location_duration_picker_title" = "Scegli per quanto tempo condividere la tua posizione in tempo reale.";
 "screen_share_location_live_location_missing_permissions" = "Non hai l'autorizzazione per condividere la tua posizione in tempo reale in questa stanza";

@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "入力欄を縮小";
 "a11y_create_poll_votes_allowed_decrease" = "一人あたりの投票権を減らす";
 "a11y_create_poll_votes_allowed_increase" = "一人あたりの投票権を増やす";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "削除";
 "a11y_duration" = "長さ: %1$@";
 "a11y_edit_avatar" = "アバターを編集";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "通話を開始";
 "a11y_start_video_call" = "ビデオ通話を開始";
 "a11y_start_voice_call" = "音声通話を開始";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "埋没したルーム";
 "a11y_user_menu" = "ユーザーメニュー";
 "a11y_video_preview" = "動画のプレビュー";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "非対応の通話";
 "common_unsupported_event" = "非対応のイベント";
 "common_user_started_a_call" = "%1$@ が通話を開始";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "ユーザー名";
 "common_verification_cancelled" = "検証がキャンセルされました";
 "common_verification_complete" = "検証完了";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "進行中";
 "screen_polls_history_filter_past" = "過去";
 "screen_polls_history_title" = "投票";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "プッシュ履歴";
 "screen_qr_code_login_connecting_subtitle" = "安全な通信を確立しています";
 "screen_qr_code_login_connection_note_secure_state_description" = "新しい端末で安全な通信を確立できませんでした。既存の端末は安全な状態を維持しています。";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "検証を承認することで続行できます。";
 "screen_session_verification_waiting_to_accept_subtitle" = "他の端末で検証リクエストを承認してください。";
 "screen_session_verification_waiting_to_accept_title" = "リクエストの承認を待機中";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "ライブ位置情報の履歴はルームに保管され、メンバーは後から確認することもできます。";
 "screen_share_location_live_location_duration_picker_title" = "ライブ位置情報を共有する期間を選択してください。";
 "screen_share_location_live_location_missing_permissions" = "このルームでライブ位置情報を共有する権限がありません。";

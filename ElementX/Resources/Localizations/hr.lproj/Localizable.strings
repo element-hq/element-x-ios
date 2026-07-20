@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Minimiziraj tekstno polje poruke";
 "a11y_create_poll_votes_allowed_decrease" = "Smanjenje dopuštenih glasova po osobi";
 "a11y_create_poll_votes_allowed_increase" = "Povećanje broja dopuštenih glasova po osobi";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Izbriši";
 "a11y_duration" = "Trajanje: %1$@";
 "a11y_edit_avatar" = "Uredi avatar";
@@ -16,7 +17,7 @@
 "a11y_join_call" = "Pridruži se pozivu";
 "a11y_jump_to_bottom" = "Idi na dno";
 "a11y_jump_to_unread" = "Skoči na nepročitano";
-"a11y_jump_to_unread_messages" = "Jump to first unread message";
+"a11y_jump_to_unread_messages" = "Skoči na prvu nepročitanu poruku.";
 "a11y_notifications_mentions_only" = "Samo spominjanja";
 "a11y_notifications_muted" = "Bez zvuka";
 "a11y_notifications_new_mentions" = "Nova spominjanja";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Započni poziv";
 "a11y_start_video_call" = "Započni videopoziv";
 "a11y_start_voice_call" = "Započni glasovni poziv";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Soba označena za uklanjanje";
 "a11y_user_menu" = "Korisnički izbornik";
 "a11y_video_preview" = "Pretpregled videozapisa";
@@ -136,7 +138,7 @@
 "action_manage_account_and_devices" = "Upravljanje računom i uređajima";
 "action_manage_devices" = "Upravljanje uređajima";
 "action_manage_rooms" = "Upravljaj sobama";
-"action_mark_as_read" = "Mark as read";
+"action_mark_as_read" = "Označi kao pročitano";
 "action_message" = "Poruka";
 "action_minimize" = "Minimiziraj";
 "action_next" = "Dalje";
@@ -296,7 +298,7 @@
 "common_no_space_name" = "Nema naziva prostora";
 "common_not_encrypted" = "Nije šifrirano";
 "common_offline" = "Izvan mreže";
-"common_on_a_call" = "On a call";
+"common_on_a_call" = "Na pozivu";
 "common_open_source_licenses" = "Licencije otvorenog koda";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ili";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Nepodržani poziv";
 "common_unsupported_event" = "Nepodržani događaj";
 "common_user_started_a_call" = "%1$@ je započeo poziv";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Korisničko ime";
 "common_verification_cancelled" = "Provjera je otkazana";
 "common_verification_complete" = "Provjera je dovršena";
@@ -981,8 +976,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nitko ne dijeli svoju lokaciju";
 "screen_live_location_sheet_sharing_live_location" = "Dijeljenje lokacije uživo";
 "screen_live_location_sheet_title" = "Na karti";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
-"screen_local_network_opt_in_title" = "Allow access to local network";
+"screen_local_network_opt_in_subtitle" = "Vaš kućni poslužitelj je na vašoj lokalnoj mreži. Za povezivanje, Elementu je potrebno dopuštenje za pristup uređajima na ovoj mreži.";
+"screen_local_network_opt_in_title" = "Dopusti pristup lokalnoj mreži";
 "screen_login_error_deactivated_account" = "Ovaj je račun deaktiviran.";
 "screen_login_error_invalid_credentials" = "Netočno korisničko ime i/ili zaporka";
 "screen_login_error_invalid_user_id" = "To nije valjani identifikator korisnika. Očekivani oblik: ‘@korisnik:matičniposlužitelj.org’";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Tekuće";
 "screen_polls_history_filter_past" = "Prijašnje";
 "screen_polls_history_title" = "Ankete";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Povijest push obavijesti";
 "screen_qr_code_login_connecting_subtitle" = "Uspostavljanje sigurne veze";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nije moguće uspostaviti sigurnu vezu s novim uređajem. Vaši postojeći uređaji i dalje su sigurni i ne morate se brinuti zbog njih.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Nakon prihvaćanja moći ćete nastaviti s potvrđivanjem.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Prihvatite zahtjev za pokretanje postupka provjere u drugoj sesiji kako biste nastavili.";
 "screen_session_verification_waiting_to_accept_title" = "Čekanje na prihvaćanje zahtjeva";
+"screen_settings_user_status_away" = "Odsutan/na";
+"screen_settings_user_status_be_right_back" = "Odmah se vraćam";
+"screen_settings_user_status_custom" = "Prilagođeno";
+"screen_settings_user_status_custom_hint" = "Prilagođeni status…";
+"screen_settings_user_status_focus_time" = "Vrijeme za fokusiranje";
+"screen_settings_user_status_in_a_meeting" = "Na sastanku";
+"screen_settings_user_status_on_the_road" = "Na putu";
+"screen_settings_user_status_placeholder" = "Kakav je tvoj status?";
 "screen_share_location_live_location_disclaimer_title" = "Vaša povijest lokacije uživo bit će pohranjena u sobi i vidljiva članovima nakon završetka sesije.";
 "screen_share_location_live_location_duration_picker_title" = "Odaberite koliko dugo želite dijeliti svoju lokaciju uživo.";
 "screen_share_location_live_location_missing_permissions" = "Nemate dopuštenja za dijeljenje svoje lokacije uživo u ovoj sobi";
