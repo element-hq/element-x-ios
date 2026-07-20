@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "最小化消息文本框";
 "a11y_create_poll_votes_allowed_decrease" = "减少每人允许的投票数";
 "a11y_create_poll_votes_allowed_increase" = "增加每人允许的投票数";
+"a11y_custom_emoji" = "自定义 Emoji";
 "a11y_delete" = "删除";
 "a11y_duration" = "持续时间：%1$@";
 "a11y_edit_avatar" = "编辑头像";
@@ -16,7 +17,7 @@
 "a11y_join_call" = "加入通话";
 "a11y_jump_to_bottom" = "跳转到底部";
 "a11y_jump_to_unread" = "跳转到未读";
-"a11y_jump_to_unread_messages" = "Jump to first unread message";
+"a11y_jump_to_unread_messages" = "跳转到首个未读消息";
 "a11y_notifications_mentions_only" = "仅提及";
 "a11y_notifications_muted" = "通知已关闭";
 "a11y_notifications_new_mentions" = "新提及";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "开始通话";
 "a11y_start_video_call" = "开始视频通话";
 "a11y_start_voice_call" = "开始语音通话";
+"a11y_status" = "状态";
 "a11y_tombstoned_room" = "已封存的房间";
 "a11y_user_menu" = "用户菜单";
 "a11y_video_preview" = "视频预览";
@@ -136,7 +138,7 @@
 "action_manage_account_and_devices" = "管理账户与设备";
 "action_manage_devices" = "管理设备";
 "action_manage_rooms" = "管理房间";
-"action_mark_as_read" = "Mark as read";
+"action_mark_as_read" = "设为已读";
 "action_message" = "发送消息";
 "action_minimize" = "最小化";
 "action_next" = "下一步";
@@ -354,7 +356,7 @@
 "common_settings" = "设置";
 "common_share_space" = "共享空间";
 "common_shared_history" = "新成员可以看到历史";
-"common_shared_live_location" = "共享实时位置";
+"common_shared_live_location" = "已共享实时位置";
 "common_shared_location" = "共享位置";
 "common_shared_space" = "已共享的空间";
 "common_signing_out" = "正在移除设备";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "不受支持的通话";
 "common_unsupported_event" = "不支持的事件";
 "common_user_started_a_call" = "%1$@ 已开始通话";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "用户名";
 "common_verification_cancelled" = "验证已取消";
 "common_verification_complete" = "验证完成";
@@ -979,10 +974,10 @@
 "screen_link_new_device_wrong_number_subtitle" = "请重试，并确保已正确输入两位数字的代码。如果数字仍然不匹配，请联系账户提供者。";
 "screen_link_new_device_wrong_number_title" = "数字不匹配";
 "screen_live_location_sheet_nobody_sharing" = "目前无人分享其位置";
-"screen_live_location_sheet_sharing_live_location" = "共享实时位置";
+"screen_live_location_sheet_sharing_live_location" = "正在共享实时位置";
 "screen_live_location_sheet_title" = "在地图上";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
-"screen_local_network_opt_in_title" = "Allow access to local network";
+"screen_local_network_opt_in_subtitle" = "你的主服务器位于本地网络。Element 需要获得此网络上设备的访问权才能连接。";
+"screen_local_network_opt_in_title" = "允许访问本地网络";
 "screen_login_error_deactivated_account" = "此账户已被删除。";
 "screen_login_error_invalid_credentials" = "用户名与（或）密码不正确";
 "screen_login_error_invalid_user_id" = "这不是合法的用户 ID。预期格式：“@user:homeserver.org”。";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "正在进行";
 "screen_polls_history_filter_past" = "历史";
 "screen_polls_history_title" = "投票";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "推送历史";
 "screen_qr_code_login_connecting_subtitle" = "建立安全连接";
 "screen_qr_code_login_connection_note_secure_state_description" = "无法与新设备建立安全连接。你的现有设备仍然安全，无需担心。";
@@ -1315,7 +1308,7 @@
 "screen_room_grouped_state_events_reduce" = "折叠";
 "screen_room_invite_again_alert_message" = "你想邀请他们回来吗？";
 "screen_room_invite_again_alert_title" = "此聊天中只有你一人";
-"screen_room_live_location_banner" = "共享实时位置";
+"screen_room_live_location_banner" = "正在共享实时位置";
 "screen_room_member_details_block_alert_action" = "屏蔽";
 "screen_room_member_details_block_alert_description" = "被屏蔽的用户无法给你发消息，并且他们的消息会被隐藏。你可以随时解除屏蔽。";
 "screen_room_member_details_block_user" = "屏蔽用户";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "一旦被接受，你将能够继续进行验证。";
 "screen_session_verification_waiting_to_accept_subtitle" = "接受此请求以在另一会话中开始验证流程以继续操作。";
 "screen_session_verification_waiting_to_accept_title" = "等待接受请求";
+"screen_settings_user_status_away" = "离开";
+"screen_settings_user_status_be_right_back" = "马上回来";
+"screen_settings_user_status_custom" = "自定义…";
+"screen_settings_user_status_custom_hint" = "自定义状态…";
+"screen_settings_user_status_focus_time" = "专注时间";
+"screen_settings_user_status_in_a_meeting" = "正在开会";
+"screen_settings_user_status_on_the_road" = "在路上";
+"screen_settings_user_status_placeholder" = "你的当前状态？";
 "screen_share_location_live_location_disclaimer_title" = "你的实时位置历史将存储在房间中，并于会话结束后对其他成员可见。";
 "screen_share_location_live_location_duration_picker_title" = "选择共享实时位置的时长。";
 "screen_share_location_live_location_missing_permissions" = "你无权在此房内共享实时位置。";

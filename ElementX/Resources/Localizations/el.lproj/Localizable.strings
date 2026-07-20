@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Ελαχιστοποίηση πεδίου κειμένου μηνύματος";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Διαγραφή";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Επεξεργασία Άβαταρ";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Ξεκίνησε μια κλήση";
 "a11y_start_video_call" = "Ξεκινήστε μια βιντεοκλήση";
 "a11y_start_voice_call" = "Έναρξη φωνητικής κλήσης";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Θαμένη αίθουσα";
 "a11y_user_menu" = "Μενού χρήστη";
 "a11y_video_preview" = "Video preview";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Μη υποστηριζόμενη κλήση";
 "common_unsupported_event" = "Μη υποστηριζόμενο συμβάν";
 "common_user_started_a_call" = "%1$@ started a call";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Όνομα χρήστη";
 "common_verification_cancelled" = "Η επαλήθευση ακυρώθηκε";
 "common_verification_complete" = "Η επαλήθευση ολοκληρώθηκε";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Σε εξέλιξη";
 "screen_polls_history_filter_past" = "Παρελθόν";
 "screen_polls_history_title" = "Δημοσκοπήσεις";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Ιστορικό push";
 "screen_qr_code_login_connecting_subtitle" = "Εγκαθίδρυση ασφαλούς σύνδεσης";
 "screen_qr_code_login_connection_note_secure_state_description" = "Δεν ήταν δυνατή η πραγματοποίηση ασφαλούς σύνδεσης στη νέα συσκευή. Οι υπάρχουσες συσκευές σας εξακολουθούν να είναι ασφαλείς και δεν χρειάζεται να ανησυχείς για αυτές.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Μόλις γίνει αποδεκτό, θα μπορείτε να συνεχίσετε με την επαλήθευση.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Αποδέξου το αίτημα για να ξεκινήσεις τη διαδικασία επαλήθευσης στην άλλη συνεδρία σου για να συνεχίσεις.";
 "screen_session_verification_waiting_to_accept_title" = "Αναμονή για αποδοχή αιτήματος";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Το ιστορικό ζωντανής τοποθεσίας σας θα αποθηκευτεί στην αίθουσα και θα είναι ορατό στα μέλη μετά το τέλος της συνεδρίας.";
 "screen_share_location_live_location_duration_picker_title" = "Επιλέξτε για πόσο χρονικό διάστημα θα κοινοποιείτε την τρέχουσα τοποθεσία σας.";
 "screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";

@@ -315,9 +315,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
+			<string>%1$d eemaldas sõnumi</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d eemaldas sõnumid</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

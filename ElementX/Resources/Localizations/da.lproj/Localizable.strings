@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Minimér tekstfeltet for beskeder";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Slet";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Redigér avatar";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Start et opkald";
 "a11y_start_video_call" = "Start et videoopkald";
 "a11y_start_voice_call" = "Start et taleopkald";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Deaktiveret rum";
 "a11y_user_menu" = "Brugermenu";
 "a11y_video_preview" = "Video preview";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Ikke-understøttet opkald";
 "common_unsupported_event" = "Ikke-understøttet begivenhed";
 "common_user_started_a_call" = "%1$@ started a call";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Brugernavn";
 "common_verification_cancelled" = "Bekræftelse annulleret";
 "common_verification_complete" = "Bekræftelse fuldført";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Igangværende";
 "screen_polls_history_filter_past" = "Tidligere";
 "screen_polls_history_title" = "Afstemninger";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Push-historik";
 "screen_qr_code_login_connecting_subtitle" = "Etablerer en sikker forbindelse";
 "screen_qr_code_login_connection_note_secure_state_description" = "Der kunne ikke oprettes en sikker forbindelse til den nye enhed. Dine eksisterende enheder er stadig sikre, og du behøver ikke bekymre dig om dem.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Når du er blevet accepteret, kan du fortsætte med verifikationen.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accepter anmodningen om at starte bekræftelsesprocessen i din anden session for at fortsætte.";
 "screen_session_verification_waiting_to_accept_title" = "Venter på at acceptere anmodningen";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Din live-positionshistorik gemmes i rummet og er synlig for medlemmerne, når sessionen er afsluttet.";
 "screen_share_location_live_location_duration_picker_title" = "Vælg, hvor længe du vil dele din aktuelle position.";
 "screen_share_location_live_location_missing_permissions" = "You do not have permissions to share your live location in this room";

@@ -64,10 +64,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
+			<string>%1$d prilog…</string>
 			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d prilozi…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -80,10 +82,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>%1$d media item…</string>
+			<string>%1$d medijska stavka…</string>
 			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$d medijske stavke…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -348,10 +352,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>%1$d removed message</string>
+			<string>%1$d uklonjena poruka</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d uklonjene poruke</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

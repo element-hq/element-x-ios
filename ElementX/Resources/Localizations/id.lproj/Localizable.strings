@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Minimalkan bidang teks message";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Hapus";
 "a11y_duration" = "Durasi: %1$@";
 "a11y_edit_avatar" = "Sunting Avatar";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Mulai panggilan";
 "a11y_start_video_call" = "Mulai panggilan video";
 "a11y_start_voice_call" = "Mulai panggilan suara";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Ruangan yang ditandai";
 "a11y_user_menu" = "Menu pengguna";
 "a11y_video_preview" = "Video preview";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Panggilan tidak didukung";
 "common_unsupported_event" = "Peristiwa tidak didukung";
 "common_user_started_a_call" = "%1$@ started a call";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Nama pengguna";
 "common_verification_cancelled" = "Verifikasi dibatalkan";
 "common_verification_complete" = "Verifikasi selesai";
@@ -454,7 +449,7 @@
 "dialog_permission_camera" = "Supaya aplikasinya dapat menggunakan kamera, berikan izin dalam pengaturan sistem.";
 "dialog_permission_generic" = "Silakan memberikan izin dalam pengaturan sistem.";
 "dialog_permission_live_location_description_ios" = "Untuk membagikan lokasi Anda secara langsung, %1$@ memerlukan akses lokasi saat aplikasi berada di latar belakang. Buka Pengaturan &gt; Lokasi, lalu pilih Selalu";
-"dialog_permission_location_description_ios" = "To share your current location, %1$@ needs location access. Go to Settings > Location.";
+"dialog_permission_location_description_ios" = "Untuk membagikan lokasi kamu saat ini, %1$@ memerlukan akses lokasi. Buka Pengaturan > Lokasi.";
 "dialog_permission_location_title_ios" = "%1$@ tidak memiliki akses ke lokasi Anda.";
 "dialog_permission_microphone" = "Supaya aplikasinya dapat menggunakan mikrofon, berikan izin dalam pengaturan sistem.";
 "dialog_permission_microphone_description_ios" = "Berikan akses supaya Anda dapat merekam dan mengirim pesan dengan audio.";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Sedang berlangsung";
 "screen_polls_history_filter_past" = "Masa lalu";
 "screen_polls_history_title" = "Jajak pendapat";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Riwayat dorongan";
 "screen_qr_code_login_connecting_subtitle" = "Membuat koneksi aman";
 "screen_qr_code_login_connection_note_secure_state_description" = "Koneksi aman tidak dapat dibuat ke perangkat baru. Perangkat Anda yang ada masih aman dan Anda tidak perlu khawatir tentang mereka.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Setelah diterima, Anda akan dapat melanjutkan verifikasi.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Terima permintaan untuk memulai proses verifikasi di sesi Anda yang lain untuk melanjutkan.";
 "screen_session_verification_waiting_to_accept_title" = "Menunggu untuk menerima permintaan";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Riwayat lokasi langsung Anda akan disimpan di ruang obrolan dan dapat dilihat oleh anggota setelah sesi berakhir.";
 "screen_share_location_live_location_duration_picker_title" = "Pilih berapa lama Anda ingin membagikan lokasi langsung Anda.";
 "screen_share_location_live_location_missing_permissions" = "Anda tidak memiliki izin untuk membagikan lokasi real-time Anda di ruang ini";

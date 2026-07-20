@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Згорнути поле тексту повідомлення";
 "a11y_create_poll_votes_allowed_decrease" = "Зменшити кількість голосів, дозволених на одну особу";
 "a11y_create_poll_votes_allowed_increase" = "Збільшити кількість голосів, дозволених на одну особу";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Видалити";
 "a11y_duration" = "Тривалість: %1$@";
 "a11y_edit_avatar" = "Редагувати аватар";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Розпочати виклик";
 "a11y_start_video_call" = "Розпочати відеовиклик";
 "a11y_start_voice_call" = "Розпочати голосовий виклик";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Кімната більше не використовується";
 "a11y_user_menu" = "Меню користувача";
 "a11y_video_preview" = "Попередній перегляд відео";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Непідтриманий виклик";
 "common_unsupported_event" = "Непідтримувана подія";
 "common_user_started_a_call" = "%1$@ розпочинає виклик";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Ім'я користувача";
 "common_verification_cancelled" = "Звіряння скасовано";
 "common_verification_complete" = "Звіряння завершено";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Поточні";
 "screen_polls_history_filter_past" = "Минулі";
 "screen_polls_history_title" = "Опитування";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Історія push-сповіщень";
 "screen_qr_code_login_connecting_subtitle" = "Встановлення безпечного з'єднання";
 "screen_qr_code_login_connection_note_secure_state_description" = "Не вдалося встановити безпечне з'єднання з новим пристроєм. Ваші наявні пристрої досі в безпеці, і вам не потрібно про них турбуватися.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Після схвалення ви зможете продовжити звіряння.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Прийміть запит, щоб розпочати процес звіряння в іншому сеансі та продовжити роботу.";
 "screen_session_verification_waiting_to_accept_title" = "Очікування на прийняття запиту";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Ваша історія поточного місцезнаходження зберігатиметься у кімнаті та буде доступна учасникам після завершення сеансу.";
 "screen_share_location_live_location_duration_picker_title" = "Виберіть, як довго ділитися своїм місцезнаходженням.";
 "screen_share_location_live_location_missing_permissions" = "У вас немає дозволу ділитися своїм місцезнаходженням у реальному часі в цій кімнаті";

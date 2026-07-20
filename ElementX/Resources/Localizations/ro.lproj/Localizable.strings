@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Micșorați câmpul mesajului";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Ștergere";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Editați avatarul";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Începeți un apel";
 "a11y_start_video_call" = "Inițiați un apel video";
 "a11y_start_voice_call" = "Inițiați un apel vocal";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Cameră terminată";
 "a11y_user_menu" = "Meniu utilizator";
 "a11y_video_preview" = "Video preview";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Apel incompatibil";
 "common_unsupported_event" = "Eveniment neacceptat";
 "common_user_started_a_call" = "%1$@ started a call";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Utilizator";
 "common_verification_cancelled" = "Verificare anulată";
 "common_verification_complete" = "Verificare completă";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "În desfășurare";
 "screen_polls_history_filter_past" = "Trecut";
 "screen_polls_history_title" = "Sondaje";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Istoricul notificărilor";
 "screen_qr_code_login_connecting_subtitle" = "Se stabilește o conexiune securizată";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nu a putut fi făcută o conexiune sigură la noul dispozitiv. Dispozitivele existente sunt încă în siguranță și nu trebuie să vă faceți griji cu privire la ele.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "După acceptare, veți putea continua verificarea.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Acceptați cererea de a începe procesul de verificare în cealaltă sesiune pentru a continua.";
 "screen_session_verification_waiting_to_accept_title" = "Se așteptă acceptarea cererii";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Istoricul locațiilor dumneavoastră va fi stocat în cameră și va fi vizibil pentru membri după încheierea sesiunii.";
 "screen_share_location_live_location_duration_picker_title" = "Alegeți cât timp doriți să vă partajați locația în timp real.";
 "screen_share_location_live_location_missing_permissions" = "Nu aveți permisiunea de a vă partaja locația în această cameră.";

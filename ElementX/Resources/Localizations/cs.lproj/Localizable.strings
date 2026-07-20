@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Minimalizovat textové pole zprávy";
 "a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
 "a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Smazat";
 "a11y_duration" = "Duration: %1$@";
 "a11y_edit_avatar" = "Upravit avatar";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Zahájit hovor";
 "a11y_start_video_call" = "Zahájit videohovor";
 "a11y_start_voice_call" = "Zahájit hlasový hovor";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Místnost s náhrobkem";
 "a11y_user_menu" = "Uživatelské menu";
 "a11y_video_preview" = "Video preview";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Nepodporované volání";
 "common_unsupported_event" = "Nepodporovaná událost";
 "common_user_started_a_call" = "%1$@ started a call";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Uživatelské jméno";
 "common_verification_cancelled" = "Ověření zrušeno";
 "common_verification_complete" = "Ověření dokončeno";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Probíhající";
 "screen_polls_history_filter_past" = "Minulé";
 "screen_polls_history_title" = "Hlasování";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Historie push oznámení";
 "screen_qr_code_login_connecting_subtitle" = "Navazování zabezpečeného spojení";
 "screen_qr_code_login_connection_note_secure_state_description" = "K novému zařízení se nepodařilo navázat bezpečné připojení. Vaše stávající zařízení jsou stále v bezpečí a nemusíte se o ně obávat.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Po přijetí budete moci pokračovat v ověřování.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Pro pokračování přijměte požadavek na zahájení ověření v jiné relaci.";
 "screen_session_verification_waiting_to_accept_title" = "Čekání na přijetí žádosti";
+"screen_settings_user_status_away" = "Away";
+"screen_settings_user_status_be_right_back" = "Be right back";
+"screen_settings_user_status_custom" = "Custom…";
+"screen_settings_user_status_custom_hint" = "Custom status…";
+"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_in_a_meeting" = "In a meeting";
+"screen_settings_user_status_on_the_road" = "On the road";
+"screen_settings_user_status_placeholder" = "What's your status?";
 "screen_share_location_live_location_disclaimer_title" = "Vaše historie aktuální polohy bude uložena v místnosti a bude viditelná pro členy i po skončení relace.";
 "screen_share_location_live_location_duration_picker_title" = "Zvolte, jak dlouho chcete sdílet svou aktuální polohu.";
 "screen_share_location_live_location_missing_permissions" = "Nemáte oprávnění sdílet svou aktuální polohu v této místnosti.";

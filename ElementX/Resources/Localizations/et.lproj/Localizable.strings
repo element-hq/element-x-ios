@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Vähenda tekstivälja";
 "a11y_create_poll_votes_allowed_decrease" = "Vähenda kasutaja kohta lubatud hääletuskordi";
 "a11y_create_poll_votes_allowed_increase" = "Suurenda kasutaja kohta lubatud hääletuskordi";
+"a11y_custom_emoji" = "Sinu lisatud emoji";
 "a11y_delete" = "Kustuta";
 "a11y_duration" = "Kestus: %1$@";
 "a11y_edit_avatar" = "Muuda tunnuspilti";
@@ -16,7 +17,7 @@
 "a11y_join_call" = "Liitu kõnega";
 "a11y_jump_to_bottom" = "Mine lõppu";
 "a11y_jump_to_unread" = "Mine lugemata sõnumite juurde";
-"a11y_jump_to_unread_messages" = "Jump to first unread message";
+"a11y_jump_to_unread_messages" = "Suundu esimese lugemata sõnumi juurde";
 "a11y_notifications_mentions_only" = "Ainult mainimised";
 "a11y_notifications_muted" = "Summutatud";
 "a11y_notifications_new_mentions" = "Uued mainimised";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Helista";
 "a11y_start_video_call" = "Alusta videokõnet";
 "a11y_start_voice_call" = "Helista";
+"a11y_status" = "Olek";
 "a11y_tombstoned_room" = "Lõpetatuks märgitud jututuba";
 "a11y_user_menu" = "Kasutajamenüü";
 "a11y_video_preview" = "Video eelvaade";
@@ -136,7 +138,7 @@
 "action_manage_account_and_devices" = "Halda kasutajakontosid ja seadmeid";
 "action_manage_devices" = "Halda seadmeid";
 "action_manage_rooms" = "Halda jututuba";
-"action_mark_as_read" = "Mark as read";
+"action_mark_as_read" = "Märgi loetuks";
 "action_message" = "Saada sõnum";
 "action_minimize" = "Minimeeri";
 "action_next" = "Edasi";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "See kõne pole toetatud";
 "common_unsupported_event" = "Toetamata sündmus";
 "common_user_started_a_call" = "%1$@ helistas";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Kasutajanimi";
 "common_verification_cancelled" = "Verifitseerimine on katkestatud";
 "common_verification_complete" = "Verifitseerimine on tehtud";
@@ -981,8 +976,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Mitte keegi ei jaga oma asukohta";
 "screen_live_location_sheet_sharing_live_location" = "Asukoht on jagamisel reaalajas";
 "screen_live_location_sheet_title" = "Kaardil";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
-"screen_local_network_opt_in_title" = "Allow access to local network";
+"screen_local_network_opt_in_subtitle" = "Sinu koduserver asub sinu kohalikus võrgus. Ühendamiseks vajab Element luba selle võrgu seadmetega ühenduse loomiseks.";
+"screen_local_network_opt_in_title" = "Luba juurdepääs kohtvõrgule";
 "screen_login_error_deactivated_account" = "See kasutajakonto on kustutatud.";
 "screen_login_error_invalid_credentials" = "Vigane kasutajanimi ja/või salasõna";
 "screen_login_error_invalid_user_id" = "See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "Käimasolev küsitlus";
 "screen_polls_history_filter_past" = "Varasem küsitlus";
 "screen_polls_history_title" = "Küsitlused";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Tõuketeadete ajalugu";
 "screen_qr_code_login_connecting_subtitle" = "Loome turvalist ühendust";
 "screen_qr_code_login_connection_note_secure_state_description" = "Turvalise ühenduse loomine uue seadmega ei õnnestunud. Sinu olemasolevad seadmed on jätkuvalt turvatud ja sa ei pea nende pärast muretsema.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Kui oled nõustunud, siis saad sa verifitseerimist jätkata.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Jätkamaks nõustu verifitseerimisprotsessi alustamisega oma teises sessioonis.";
 "screen_session_verification_waiting_to_accept_title" = "Ootame nõustumist verifitseerimispäringuga";
+"screen_settings_user_status_away" = "Eemal";
+"screen_settings_user_status_be_right_back" = "Tulen kohe tagasi";
+"screen_settings_user_status_custom" = "Kohandatud…";
+"screen_settings_user_status_custom_hint" = "Kohandatud olek…";
+"screen_settings_user_status_focus_time" = "Keskendumisaeg";
+"screen_settings_user_status_in_a_meeting" = "Koosolekul";
+"screen_settings_user_status_on_the_road" = "Olen liikumises";
+"screen_settings_user_status_placeholder" = "Mis on sinu olek võrgus?";
 "screen_share_location_live_location_disclaimer_title" = "Sinu reaalajas jagatud asukoha ajalugu salvestub siin jututoas ja see on liikmetele nähtav ka pärast jagamissessiooni lõppu.";
 "screen_share_location_live_location_duration_picker_title" = "Vali, kui kaua tahad oma reaalajas jagada.";
 "screen_share_location_live_location_missing_permissions" = "Sul pole õigust jagada selles jututoas oma asukohta reaalajas";

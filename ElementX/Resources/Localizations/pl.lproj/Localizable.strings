@@ -6,6 +6,7 @@
 "a11y_collapse_message_text_field" = "Zmniejsz pole tekstowe wiadomości";
 "a11y_create_poll_votes_allowed_decrease" = "Zmniejsz liczbę głosów dozwolonych na osobę";
 "a11y_create_poll_votes_allowed_increase" = "Zwiększ liczbę głosów dozwolonych na osobę";
+"a11y_custom_emoji" = "Własne emoji";
 "a11y_delete" = "Usuń";
 "a11y_duration" = "Czas trwania: %1$@";
 "a11y_edit_avatar" = "Edytuj awatar";
@@ -16,7 +17,7 @@
 "a11y_join_call" = "Dołącz do połączenia";
 "a11y_jump_to_bottom" = "Przejdź na dół";
 "a11y_jump_to_unread" = "Skocz do nieprzeczytanych";
-"a11y_jump_to_unread_messages" = "Jump to first unread message";
+"a11y_jump_to_unread_messages" = "Skocz do pierwszej nieprzeczytanej wiadomości";
 "a11y_notifications_mentions_only" = "Tylko wzmianki";
 "a11y_notifications_muted" = "Wyciszone";
 "a11y_notifications_new_mentions" = "Nowe wzmianki";
@@ -51,6 +52,7 @@
 "a11y_start_call" = "Rozpocznij rozmowę";
 "a11y_start_video_call" = "Rozpocznij rozmowę wideo";
 "a11y_start_voice_call" = "Rozpocznij połączenie głosowe";
+"a11y_status" = "Status";
 "a11y_tombstoned_room" = "Pokój nagrobkowy";
 "a11y_user_menu" = "Menu użytkownika";
 "a11y_video_preview" = "Podgląd wideo";
@@ -136,7 +138,7 @@
 "action_manage_account_and_devices" = "Zarządzaj kontem i urządzeniami";
 "action_manage_devices" = "Zarządzaj urządzeniami";
 "action_manage_rooms" = "Zarządzaj pokojami";
-"action_mark_as_read" = "Mark as read";
+"action_mark_as_read" = "Oznacz jako przeczytane";
 "action_message" = "Wiadomość";
 "action_minimize" = "Minimalizuj";
 "action_next" = "Dalej";
@@ -296,7 +298,7 @@
 "common_no_space_name" = "Brak nazwy przestrzeni";
 "common_not_encrypted" = "Nieszyfrowane";
 "common_offline" = "Offline";
-"common_on_a_call" = "On a call";
+"common_on_a_call" = "W trakcie rozmowy";
 "common_open_source_licenses" = "Licencje open-source";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "lub";
@@ -387,13 +389,6 @@
 "common_unsupported_call" = "Nieobsługiwane połączenie";
 "common_unsupported_event" = "Nieobsługiwane zdarzenie";
 "common_user_started_a_call" = "%1$@ rozpoczął połączenie";
-"common_user_status_away" = "Away";
-"common_user_status_be_right_back" = "Be right back";
-"common_user_status_custom" = "Custom…";
-"common_user_status_focus_time" = "Focus time";
-"common_user_status_in_a_meeting" = "In a meeting";
-"common_user_status_on_a_call" = "On a call";
-"common_user_status_on_the_road" = "On the road";
 "common_username" = "Nazwa użytkownika";
 "common_verification_cancelled" = "Weryfikacja anulowana";
 "common_verification_complete" = "Weryfikacja zakończona";
@@ -981,8 +976,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Nikt nie udostępnia swojej lokalizacji";
 "screen_live_location_sheet_sharing_live_location" = "Udostępnianie lokalizacji na żywo";
 "screen_live_location_sheet_title" = "Na mapie";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
-"screen_local_network_opt_in_title" = "Allow access to local network";
+"screen_local_network_opt_in_subtitle" = "Twój serwer domowy znajduje się w sieci lokalnej. Aby się połączyć, Element potrzebuje uprawnień dostępu do urządzeń w tej sieci.";
+"screen_local_network_opt_in_title" = "Zezwól na dostęp do sieci lokalnej";
 "screen_login_error_deactivated_account" = "To konto zostało usunięte.";
 "screen_login_error_invalid_credentials" = "Nieprawidłowa nazwa użytkownika i/lub hasło";
 "screen_login_error_invalid_user_id" = "To nie jest prawidłowy identyfikator użytkownika. Oczekiwany format: '@user:homeserver.org'";
@@ -1125,8 +1120,6 @@
 "screen_polls_history_filter_ongoing" = "W trakcie";
 "screen_polls_history_filter_past" = "Przeszłe";
 "screen_polls_history_title" = "Ankiety";
-"screen_preferences_user_status_custom_hint" = "Custom status…";
-"screen_preferences_user_status_placeholder" = "What's your status?";
 "screen_push_history_title" = "Historia powiadomień Push";
 "screen_qr_code_login_connecting_subtitle" = "Nawiązanie bezpiecznego połączenia";
 "screen_qr_code_login_connection_note_secure_state_description" = "Nie udało się nawiązać bezpiecznego połączenia z nowym urządzeniem. Twoje istniejące urządzenia są nadal bezpieczne i nie musisz się o nie martwić.";
@@ -1515,6 +1508,14 @@
 "screen_session_verification_waiting_subtitle" = "Po zaakceptowaniu będziesz mógł kontynuować weryfikację.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Zaakceptuj prośbę o rozpoczęcie procesu weryfikacji w innej sesji, aby kontynuować.";
 "screen_session_verification_waiting_to_accept_title" = "Oczekiwanie na zaakceptowanie prośby";
+"screen_settings_user_status_away" = "Z dala od urządzenia";
+"screen_settings_user_status_be_right_back" = "Zaraz wracam";
+"screen_settings_user_status_custom" = "Własny";
+"screen_settings_user_status_custom_hint" = "Własny status…";
+"screen_settings_user_status_focus_time" = "Skupia się";
+"screen_settings_user_status_in_a_meeting" = "Na spotkaniu";
+"screen_settings_user_status_on_the_road" = "W trasie";
+"screen_settings_user_status_placeholder" = "Jaki jest Twój status?";
 "screen_share_location_live_location_disclaimer_title" = "Twoja historia lokalizacji na żywo zostanie zapisana w pokoju i będzie widoczna dla członków po zakończeniu sesji.";
 "screen_share_location_live_location_duration_picker_title" = "Wybierz, jak długo chcesz udostępniać swoją lokalizację na żywo.";
 "screen_share_location_live_location_missing_permissions" = "Nie masz uprawnień do udostępniania swojej lokalizacji na żywo w tym pokoju";
