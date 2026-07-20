@@ -40,6 +40,8 @@ struct GalleryTileView: View {
                 }
                 .contentShape(Rectangle())
                 .onTapGesture { onTap() }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(item.filename)
         } scanningContent: {
             ScanningMediaEventsTimelineView()
         } unsafeContent: { failure in

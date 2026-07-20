@@ -10,16 +10,8 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
-  /// Plural format key: "%#@count@"
-  internal static func commonAttachmentsCount(_ p1: Int) -> String {
-    return UntranslatedL10n.tr("Untranslated", "common_attachments_count", p1)
-  }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
-  /// %1$d of %2$d
-  internal static func screenMediaUploadPreviewCount(_ p1: Int, _ p2: Int) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_media_upload_preview_count", p1, p2)
-  }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...

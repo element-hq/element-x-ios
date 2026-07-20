@@ -51,8 +51,6 @@ struct GalleryRoomTimelineView: View {
                     caption
                 }
             }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(UntranslatedL10n.commonAttachmentsCount(timelineItem.content.items.count))
             .frame(width: GalleryGridView.groupWidth, alignment: .leading)
         }
     }
@@ -201,8 +199,16 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     private nonisolated static let mixedVerdicts: [ScanVerdict] = [.safe, .unsafe, .scanning, .safe, .unsafe]
     
     private nonisolated static func mixedSource(index: Int) -> MediaSourceProxy {
-        // swiftlint:disable:next force_try force_unwrapping
-        try! MediaSourceProxy(url: URL(string: "mxc://preview.element.io/mixed-scan-\(index)")!, mimeType: "image/jpeg")
+        // Safe tiles use the loadable mock image so they render a real thumbnail. Scanning/unsafe
+        // tiles show a spinner or error instead of the image, so a synthetic source is fine — and
+        // it gives the mock scanner a distinct URL to key its per-tile verdict off.
+        switch mixedVerdicts[index] {
+        case .safe:
+            return ImageInfoProxy.mockImage.source
+        case .unsafe, .scanning:
+            // swiftlint:disable:next force_try force_unwrapping
+            return try! MediaSourceProxy(url: URL(string: "mxc://preview.element.io/mixed-scan-\(index)")!, mimeType: "image/jpeg")
+        }
     }
     
     private nonisolated static func mixedVerdict(for source: MediaSourceProxy) -> ScanVerdict {

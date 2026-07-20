@@ -68,7 +68,7 @@ struct MediaUploadPreviewScreen: View {
     @ViewBuilder
     private var galleryBadge: some View {
         if context.viewState.mediaURLs.count > 1 {
-            Text(UntranslatedL10n.screenMediaUploadPreviewCount(currentIndex + 1, context.viewState.mediaURLs.count))
+            Text(L10n.screenMediaUploadPreviewItemCount(currentIndex + 1, context.viewState.mediaURLs.count))
                 .font(.compound.bodySMSemibold)
                 .foregroundStyle(.compound.textPrimary)
                 .padding(.horizontal, 12)
@@ -76,7 +76,6 @@ struct MediaUploadPreviewScreen: View {
                 .background(Color.compound.bgCanvasDefault.opacity(0.85),
                             in: Capsule())
                 .padding(.top, 12)
-                .accessibilityLabel(UntranslatedL10n.commonAttachmentsCount(context.viewState.mediaURLs.count))
         }
     }
     
