@@ -532,7 +532,8 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: .volatile()),
                                                              timelineController: TimelineControllerMock(.init()),
                                                              clientProxy: ClientProxyMock(.init()),
-                                                             userIndicatorController: UserIndicatorControllerMock())
+                                                             userIndicatorController: UserIndicatorControllerMock(),
+                                                             galleryEnabled: true)
     static var previews: some View {
         ElementNavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)

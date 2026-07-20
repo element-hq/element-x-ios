@@ -269,7 +269,8 @@ final class MediaUploadPreviewScreenViewModelTests {
     private func setUpViewModel(urls: [URL],
                                 expectedCaption: String?,
                                 maxUploadSizeResult: Result<UInt, ClientProxyError>? = nil,
-                                simulateGallerySendFailure: Bool = false) {
+                                simulateGallerySendFailure: Bool = false,
+                                galleryEnabled: Bool = true) {
         timelineProxy = TimelineProxyMock(.init())
         timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
@@ -300,7 +301,8 @@ final class MediaUploadPreviewScreenViewModelTests {
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                       timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),
                                                       clientProxy: clientProxy,
-                                                      userIndicatorController: userIndicatorController)
+                                                      userIndicatorController: userIndicatorController,
+                                                      galleryEnabled: galleryEnabled)
     }
     
     private func verifyCaption(_ caption: String?, expectedCaption: String?) -> Result<Void, TimelineProxyError> {
