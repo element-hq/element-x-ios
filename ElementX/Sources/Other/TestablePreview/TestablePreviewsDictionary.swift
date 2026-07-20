@@ -53,6 +53,7 @@ enum TestablePreviewsDictionary {
             "FormattedBodyText_Previews" : FormattedBodyText_Previews.self,
             "FormattingToolbar_Previews" : FormattingToolbar_Previews.self,
             "FullscreenDialog_Previews" : FullscreenDialog_Previews.self,
+            "GalleryRoomTimelineView_Previews" : GalleryRoomTimelineView_Previews.self,
             "HighlightedTimelineItemModifier_Previews" : HighlightedTimelineItemModifier_Previews.self,
             "HomeScreenEmptyStateView_Previews" : HomeScreenEmptyStateView_Previews.self,
             "HomeScreenInviteCell_Previews" : HomeScreenInviteCell_Previews.self,

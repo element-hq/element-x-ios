@@ -95,7 +95,7 @@ struct SearchScreenMessage: Identifiable, Equatable {
                 content.formattedBody ?? AttributedString(content.body)
             case .emote(let content):
                 content.formattedBody ?? AttributedString(content.body)
-            case .audio, .file, .image, .video:
+            case .audio, .file, .image, .video, .gallery:
                 nil
             case .voice:
                 AttributedString(L10n.commonVoiceMessage)
@@ -130,7 +130,7 @@ struct SearchScreenMessage: Identifiable, Equatable {
             return .init(title: content.caption ?? content.filename,
                          details: mediaDetails(filename: content.filename, fileSize: content.videoInfo.fileSize),
                          kind: .video(thumbnail: content.thumbnailInfo, blurhash: content.blurhash))
-        case .text, .notice, .emote, .voice, .location:
+        case .text, .notice, .emote, .voice, .location, .gallery:
             return nil
         }
     }

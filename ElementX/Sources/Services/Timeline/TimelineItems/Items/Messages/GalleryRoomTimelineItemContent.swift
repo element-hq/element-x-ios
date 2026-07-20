@@ -9,7 +9,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-struct GalleryRoomTimelineItemContent: Hashable {
+nonisolated struct GalleryRoomTimelineItemContent: Hashable {
     let body: String
     var caption: String?
     var formattedCaption: AttributedString?
@@ -18,7 +18,7 @@ struct GalleryRoomTimelineItemContent: Hashable {
     let items: [GalleryItem]
 }
 
-struct GalleryItem: Hashable, Identifiable {
+nonisolated struct GalleryItem: Hashable, Identifiable {
     enum Kind: Hashable {
         case image
         case video

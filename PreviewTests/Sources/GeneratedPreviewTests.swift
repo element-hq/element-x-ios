@@ -320,6 +320,13 @@ extension PreviewTests {
     }
 
     @Test
+    func galleryRoomTimelineView() async throws {
+        for (index, preview) in GalleryRoomTimelineView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func highlightedTimelineItemModifier() async throws {
         for (index, preview) in HighlightedTimelineItemModifier_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

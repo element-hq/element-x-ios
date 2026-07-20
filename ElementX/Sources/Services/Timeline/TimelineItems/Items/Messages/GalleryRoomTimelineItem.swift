@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct GalleryRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
+nonisolated struct GalleryRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
     let isOutgoing: Bool

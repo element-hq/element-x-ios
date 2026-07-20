@@ -58,11 +58,11 @@ struct GalleryRoomTimelineView: View {
     private var caption: some View {
         if let attributedCaption = timelineItem.content.formattedCaption {
             FormattedBodyText(attributedString: attributedCaption,
-                              additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                              trailingReservedSize: timelineItem.trailingReservedSize,
                               boostFontSize: timelineItem.shouldBoost)
         } else if let caption = timelineItem.content.caption {
             FormattedBodyText(text: caption,
-                              additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                              trailingReservedSize: timelineItem.trailingReservedSize,
                               boostFontSize: timelineItem.shouldBoost)
         }
     }
