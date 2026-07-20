@@ -30,6 +30,42 @@ struct TimelineMediaPreviewDataSourceTests {
     }
     
     @Test
+    func galleryPreview() throws {
+        // Given a gallery message with three previewable attachments.
+        let items = (0..<3).map { index in
+            GalleryItem(id: "item-\(index)",
+                        filename: "image-\(index).jpg",
+                        kind: .image,
+                        mediaSource: ImageInfoProxy.mockImage.source,
+                        thumbnailSource: ImageInfoProxy.mockThumbnail.source,
+                        size: nil,
+                        blurhash: nil,
+                        duration: nil,
+                        contentType: nil)
+        }
+        let gallery = GalleryRoomTimelineItem(id: .randomEvent,
+                                              timestamp: .mock,
+                                              isOutgoing: false,
+                                              isEditable: false,
+                                              canBeRepliedTo: true,
+                                              sender: .init(id: "Bob"),
+                                              content: .init(body: "Gallery", caption: nil, items: items),
+                                              properties: .init())
+        
+        // When opening the preview scoped to that gallery on the second attachment.
+        let dataSource = TimelineMediaPreviewDataSource(galleryItem: gallery, initialIndex: 1, paginationState: .initial)
+        
+        // Then it contains exactly the gallery's attachments with no surrounding pagination…
+        #expect(dataSource.previewItems.count == 3)
+        #expect(dataSource.numberOfPreviewItems(in: previewController) == 3)
+        #expect(dataSource.initialItemIndex == 1)
+        
+        // …and the initial item is the tapped attachment.
+        let media = try #require(dataSource.currentItem.mediaItem, "The current item should be a media item.")
+        #expect(media.id == "gallery:\(items[1].id)")
+    }
+    
+    @Test
     func currentUpdateItem() throws {
         // Given a data source built with the initial items.
         let dataSource = TimelineMediaPreviewDataSource(itemViewStates: initialMediaViewStates,
