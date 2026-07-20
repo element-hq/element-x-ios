@@ -15,7 +15,6 @@ struct UserDetailsEditScreenCoordinatorParameters {
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol
-    let appSettings: AppSettings
 }
 
 enum UserDetailsEditScreenCoordinatorAction {
@@ -27,8 +26,8 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     private var viewModel: UserDetailsEditScreenViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    private let actionsSubject: PassthroughSubject<RoomDetailsEditScreenCoordinatorAction, Never> = .init()
-    var actions: AnyPublisher<RoomDetailsEditScreenCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<UserDetailsEditScreenCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<UserDetailsEditScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     

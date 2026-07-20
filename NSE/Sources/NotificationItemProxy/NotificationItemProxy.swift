@@ -12,7 +12,6 @@ import UserNotifications
 
 nonisolated struct NotificationItemProxy: NotificationItemProxyProtocol {
     let notificationItem: NotificationItem
-    let eventID: String
     let receiverID: String
     let roomID: String
     
@@ -41,10 +40,6 @@ nonisolated struct NotificationItemProxy: NotificationItemProxyProtocol {
         notificationItem.roomInfo.isSpace
     }
     
-    var isRoomDirect: Bool {
-        notificationItem.roomInfo.isDirect
-    }
-    
     var isDM: Bool {
         notificationItem.roomInfo.isDm
     }
@@ -56,10 +51,6 @@ nonisolated struct NotificationItemProxy: NotificationItemProxyProtocol {
         default:
             false
         }
-    }
-    
-    var roomJoinedMembers: Int {
-        Int(notificationItem.roomInfo.joinedMembersCount)
     }
     
     var isNoisy: Bool {
@@ -92,8 +83,6 @@ nonisolated struct NotificationItemProxy: NotificationItemProxyProtocol {
 }
 
 nonisolated struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
-    let eventID: String
-    
     var event: NotificationEvent? {
         nil
     }
@@ -122,10 +111,6 @@ nonisolated struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
         false
     }
     
-    var isRoomDirect: Bool {
-        false
-    }
-    
     var isDM: Bool {
         false
     }
@@ -140,10 +125,6 @@ nonisolated struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     
     var roomAvatarMediaSource: MediaSourceProxy? {
         nil
-    }
-    
-    var roomJoinedMembers: Int {
-        0
     }
     
     var hasMention: Bool {

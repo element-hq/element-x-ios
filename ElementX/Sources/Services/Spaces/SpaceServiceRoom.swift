@@ -19,6 +19,7 @@ enum SpaceServiceRoomVisibility: Equatable {
 struct SpaceServiceRoom {
     var id: String
     var name: String
+    // periphery:ignore - might be useful to have
     var rawName: String?
     var avatarURL: URL?
     
@@ -33,7 +34,9 @@ struct SpaceServiceRoom {
     var canonicalAlias: String?
     
     var joinRule: JoinRule?
+    // periphery:ignore - might be useful to have
     var worldReadable: Bool?
+    // periphery:ignore - might be useful to have
     var guestCanJoin: Bool
     var state: Membership?
     var via: [String]

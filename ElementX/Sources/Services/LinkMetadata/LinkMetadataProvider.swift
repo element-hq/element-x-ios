@@ -18,7 +18,7 @@ class LinkMetadataProvider: LinkMetadataProviderProtocol {
         
         do {
             let metadata = try await LPMetadataProvider().startFetchingMetadata(for: url)
-            let item = LinkMetadataProviderItem(url: url, metadata: metadata)
+            let item = LinkMetadataProviderItem(metadata: metadata)
             metadataItems[url] = item
             return .success(item)
         } catch {

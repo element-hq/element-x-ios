@@ -11,8 +11,6 @@ import SwiftUI
 typealias ChatsSpaceFiltersScreenViewModelType = StateStoreViewModelV2<ChatsSpaceFiltersScreenViewState, ChatsSpaceFiltersScreenViewAction>
 
 class ChatsSpaceFiltersScreenViewModel: ChatsSpaceFiltersScreenViewModelType, ChatsSpaceFiltersScreenViewModelProtocol, Identifiable {
-    private let spaceService: SpaceServiceProxyProtocol
-    
     private let actionsSubject: PassthroughSubject<ChatsSpaceFiltersScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ChatsSpaceFiltersScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -22,8 +20,6 @@ class ChatsSpaceFiltersScreenViewModel: ChatsSpaceFiltersScreenViewModelType, Ch
     
     init(spaceService: SpaceServiceProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
-        self.spaceService = spaceService
-        
         super.init(initialViewState: ChatsSpaceFiltersScreenViewState(bindings: .init()),
                    mediaProvider: mediaProvider)
         

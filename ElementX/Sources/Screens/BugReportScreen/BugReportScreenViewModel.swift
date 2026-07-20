@@ -18,7 +18,6 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     private let logFiles: [URL]
     
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
-    // periphery:ignore - when set to nil this is automatically cancelled
     @CancellableTask private var uploadTask: Task<Void, Never>?
     
     var actions: AnyPublisher<BugReportScreenViewModelAction, Never> {

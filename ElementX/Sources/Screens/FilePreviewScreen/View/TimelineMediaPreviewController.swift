@@ -335,10 +335,6 @@ private struct DetailsButton: View {
         context.viewState.currentItem
     }
     
-    var isHidden: Bool {
-        currentItem.mediaItem == nil
-    }
-    
     var body: some View {
         if let mediaItem = currentItem.mediaItem {
             Button { context.send(viewAction: .showItemDetails(mediaItem)) } label: {

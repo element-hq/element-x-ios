@@ -1,19 +1,31 @@
 project: ElementX.xcodeproj
+# Periphery scans all targets built by these schemes. The ElementX scheme also
+# builds NSE, ShareExtension and MatrixRustSDKMocks as dependencies. Always run
+# the scan with the project configured for the Pro variant so that all of the
+# sources are analysed (see the periphery-cleanup skill).
 schemes:
 - ElementX
 - UnitTests
 - PreviewTests
 - UITests
 - IntegrationTests
-targets:
-- ElementX
-- NSE
-- ShareExtension
-- UnitTests
-- PreviewTests
-- UITests
-- IntegrationTests
+- AccessibilityTests
+# Compound is excluded: its Inspector app and package tests aren't part of any
+# scheme in this project, so usage from them is invisible to the analysis.
+index_exclude:
+- "**/*?.build/**/*"
+- "**/SourcePackages/checkouts/**"
+- "compound-ios/**"
 report_exclude:
-  - ElementX/Sources/Mocks/Generated/GeneratedMocks.swift
-  - ElementX/Sources/Mocks/Generated/SDKGeneratedMocks.swift
+- "**/Generated/**"
+# Hand-written mocks: configuration surface is deliberately broader than any test uses.
+- "**/Mocks/**"
+- "ElementX/Sources/Services/AppLock/LAContextMock.swift"
+# Pure payload schema, fields exist to be encoded.
+- "ElementX/Sources/Services/Notification/Manager/APNSPayload.swift"
+# Backports: everything gated on #available, cleaned up with each OS drop.
+- "ElementX/Sources/Other/SwiftUI/Backports.swift"
 retain_swift_ui_previews: true
+# Protocol signatures are contracts (hooks, delegates) — parameters unused in
+# every current conformance are still part of the interface's design.
+retain_unused_protocol_func_params: true

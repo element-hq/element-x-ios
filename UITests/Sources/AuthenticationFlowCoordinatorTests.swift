@@ -111,6 +111,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         try await app.assertScreenshot()
     }
     
+    // periphery:ignore - might be useful to have
     /// Disabled for now as the looping isn't 100% fool-proof and we have OAuth on the integration tests
     /// so this mock version doesn't really add anything to the tests as a whole.
     func disabled_testSelectingOAuthServer() {

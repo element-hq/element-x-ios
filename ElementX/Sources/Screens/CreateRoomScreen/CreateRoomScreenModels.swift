@@ -53,16 +53,6 @@ struct CreateRoomScreenViewState: BindableState {
     }
     
     var aliasErrors: Set<CreateRoomScreenAliasErrorState> = []
-    var aliasErrorDescription: String? {
-        if aliasErrors.contains(.alreadyExists) {
-            L10n.errorRoomAddressAlreadyExists
-        } else if aliasErrors.contains(.invalidSymbols) {
-            L10n.errorRoomAddressInvalidSymbols
-        } else {
-            nil
-        }
-    }
-    
     var availableAccessTypes: [CreateRoomScreenAccessType] {
         var availableAccessTypes: [CreateRoomScreenAccessType] = []
         if isSpace {

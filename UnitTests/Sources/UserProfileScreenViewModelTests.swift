@@ -23,8 +23,7 @@ struct UserProfileScreenViewModelTests {
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                    userIndicatorController: userIndicatorController,
-                                                   analytics: AnalyticsServiceMock(.init()),
-                                                   appSettings: .volatile())
+                                                   analytics: AnalyticsServiceMock(.init()))
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
@@ -47,8 +46,7 @@ struct UserProfileScreenViewModelTests {
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                    userIndicatorController: userIndicatorController,
-                                                   analytics: AnalyticsServiceMock(.init()),
-                                                   appSettings: .volatile())
+                                                   analytics: AnalyticsServiceMock(.init()))
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
@@ -73,8 +71,7 @@ struct UserProfileScreenViewModelTests {
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                    userIndicatorController: userIndicatorController,
-                                                   analytics: AnalyticsServiceMock(.init()),
-                                                   appSettings: .volatile())
+                                                   analytics: AnalyticsServiceMock(.init()))
         
         let context = viewModel.context
         

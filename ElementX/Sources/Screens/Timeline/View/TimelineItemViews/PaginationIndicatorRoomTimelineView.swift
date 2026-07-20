@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct PaginationIndicatorRoomTimelineView: View {
-    let timelineItem: PaginationIndicatorRoomTimelineItem
-    
     var body: some View {
         ProgressView()
             .frame(maxWidth: .infinity)
@@ -20,7 +18,6 @@ struct PaginationIndicatorRoomTimelineView: View {
 
 struct PaginationIndicatorRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let item = PaginationIndicatorRoomTimelineItem(position: .start)
-        PaginationIndicatorRoomTimelineView(timelineItem: item)
+        PaginationIndicatorRoomTimelineView()
     }
 }

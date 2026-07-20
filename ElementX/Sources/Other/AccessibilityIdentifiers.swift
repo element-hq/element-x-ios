@@ -195,7 +195,6 @@ enum A11yIdentifiers {
     struct RoomDetailsScreen {
         let addTopic = "room_details-add_topic"
         let avatar = "room_details-avatar"
-        let dmAvatar = "room_details-dm_avatar"
         let people = "room_details-people"
         let notifications = "room_details-notifications"
         let pollsHistory = "room_details-polls_history"
@@ -333,8 +332,6 @@ enum A11yIdentifiers {
     }
     
     struct SpacesScreen {
-        let userAvatar = "spaces_screen-user_avatar"
-        
         let roomNamePrefix = "spaces_screen-room_name"
         func spaceRoomName(_ name: String) -> String {
             "\(roomNamePrefix):\(name)"

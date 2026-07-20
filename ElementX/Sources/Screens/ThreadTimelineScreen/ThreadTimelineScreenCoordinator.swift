@@ -43,7 +43,6 @@ enum ThreadTimelineScreenCoordinatorAction {
 }
 
 final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
-    private let parameters: ThreadTimelineScreenCoordinatorParameters
     private let viewModel: ThreadTimelineScreenViewModelProtocol
     private let timelineViewModel: TimelineViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModelProtocol
@@ -56,8 +55,6 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: ThreadTimelineScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = ThreadTimelineScreenViewModel(roomProxy: parameters.roomProxy, userSession: parameters.userSession)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,

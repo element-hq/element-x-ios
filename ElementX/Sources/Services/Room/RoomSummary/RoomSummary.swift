@@ -21,13 +21,6 @@ nonisolated struct RoomSummary {
             default: false
             }
         }
-        
-        var isKnock: Bool {
-            switch self {
-            case .knock: true
-            default: false
-            }
-        }
     }
     
     enum LastMessageState { case sending, failed }

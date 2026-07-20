@@ -11,9 +11,6 @@ import Foundation
 nonisolated struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
-    let isEditable: Bool
-    let canBeRepliedTo: Bool
-    
     let isDM: Bool
     let isDeclinedByMe: Bool
     let isDeclined: Bool

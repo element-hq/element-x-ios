@@ -72,7 +72,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     // MARK: - Private
     
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
-        if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
+        if let powerLevels = roomInfo.powerLevels {
             canMentionAllUsers = powerLevels.canOwnUserTriggerRoomNotification()
         }
     }

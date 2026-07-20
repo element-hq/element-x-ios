@@ -10,7 +10,6 @@ import Foundation
 
 enum StartChatScreenErrorType: Error {
     case failedCreatingRoom
-    case unknown
 }
 
 enum StartChatScreenViewModelAction: Equatable {

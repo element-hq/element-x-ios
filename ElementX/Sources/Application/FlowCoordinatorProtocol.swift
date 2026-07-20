@@ -8,7 +8,6 @@
 
 import Foundation
 
-// periphery:ignore - markdown protocol
 protocol FlowCoordinatorProtocol {
     func start(animated: Bool)
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool)

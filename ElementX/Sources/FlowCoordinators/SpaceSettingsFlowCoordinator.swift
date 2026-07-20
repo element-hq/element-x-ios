@@ -40,8 +40,6 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     enum Event: EventType {
-        case start
-        
         case presentSpaceSettings
         
         case presentEditDetailsScreen
@@ -74,9 +72,6 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
-    
-    private var membersFlowCoordinator: RoomMembersFlowCoordinator?
-    private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
     
     private var childFlowCoordinator: FlowCoordinatorProtocol?
     
@@ -219,8 +214,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                          analyticsService: flowParameters.analytics,
                                                                          userIndicatorController: flowParameters.userIndicatorController,
                                                                          notificationSettings: flowParameters.userSession.clientProxy.notificationSettings,
-                                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                                         appSettings: flowParameters.appSettings))
+                                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder())))
         
         var leftRoom = false
         coordinator.actions.sink { [weak self] action in
@@ -259,8 +253,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                     mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                     navigationStackCoordinator: stackCoordinator,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
-                                                                    orientationManager: flowParameters.appMediator.windowManager,
-                                                                    appSettings: flowParameters.appSettings)
+                                                                    orientationManager: flowParameters.appMediator.windowManager)
         
         let coordinator = RoomDetailsEditScreenCoordinator(parameters: parameters)
         

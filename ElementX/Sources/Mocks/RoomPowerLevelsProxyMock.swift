@@ -39,17 +39,6 @@ import MatrixRustSDK
         canOwnUserPinOrUnpinReturnValue = configuration.canUserPin
         canOwnUserJoinCallReturnValue = configuration.canUserJoinCall
         canOwnUserEditRolesAndPermissionsReturnValue = configuration.canUserEditRoomsAndPermissions
-        
-        canUserUserIDSendMessageReturnValue = .success(configuration.canUserSendMessage)
-        canUserUserIDSendStateEventReturnValue = .success(configuration.canUserSendState)
-        canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
-        canUserRedactOtherUserIDReturnValue = .success(configuration.canUserRedactOther)
-        canUserRedactOwnUserIDReturnValue = .success(configuration.canUserRedactOwn)
-        canUserKickUserIDReturnValue = .success(configuration.canUserKick)
-        canUserBanUserIDReturnValue = .success(configuration.canUserBan)
-        canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
-        canUserPinOrUnpinUserIDReturnValue = .success(configuration.canUserPin)
-        canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
     }
 }
 

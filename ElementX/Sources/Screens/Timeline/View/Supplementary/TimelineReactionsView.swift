@@ -138,8 +138,6 @@ struct TimelineCollapseButtonLabel: View {
 }
 
 struct TimelineReactionButton: View {
-    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
-    
     let reaction: AggregatedReaction
     let toggleReaction: (String) -> Void
     let showReactionSummary: (String) -> Void

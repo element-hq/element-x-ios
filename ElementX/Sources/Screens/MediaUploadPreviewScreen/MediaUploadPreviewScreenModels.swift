@@ -17,7 +17,6 @@ struct MediaUploadPreviewScreenViewState: BindableState {
     let mediaURLs: [URL]
     let title: String?
     let shouldShowCaptionWarning: Bool
-    let isRoomEncrypted: Bool
     var shouldDisableInteraction = false
     
     var mediaEditVersion = 0

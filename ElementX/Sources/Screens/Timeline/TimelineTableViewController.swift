@@ -17,7 +17,6 @@ import SwiftUI
 class TimelineItemCell: UITableViewCell {
     static let reuseIdentifier = "TimelineItemCell"
     
-    // periphery:ignore - retaining purpose
     var item: RoomTimelineItemViewState?
     
     override func prepareForReuse() {

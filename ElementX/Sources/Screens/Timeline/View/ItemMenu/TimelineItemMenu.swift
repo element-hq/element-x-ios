@@ -337,7 +337,6 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
                                                       canCurrentUserRedactOthers: false,
                                                       canCurrentUserPin: true,
                                                       pinnedEventIDs: [],
-                                                      isDM: true,
                                                       isViewSourceEnabled: true,
                                                       areThreadsEnabled: true,
                                                       timelineKind: .live,

@@ -8,7 +8,6 @@
 
 import Foundation
 
-// periphery:ignore - property wrappers generate false positives
 @propertyWrapper
 struct CancellableTask<S: Sendable, F: Error> {
     private var storedValue: Task<S, F>?

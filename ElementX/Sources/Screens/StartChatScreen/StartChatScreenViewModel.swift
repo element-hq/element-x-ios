@@ -17,7 +17,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
-    private let appSettings: AppSettings
     
     private var suggestedUsers = [UserProfile]()
     
@@ -29,13 +28,11 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     init(userSession: UserSessionProtocol,
          analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userDiscoveryService: UserDiscoveryServiceProtocol,
-         appSettings: AppSettings) {
+         userDiscoveryService: UserDiscoveryServiceProtocol) {
         self.userSession = userSession
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
-        self.appSettings = appSettings
         
         super.init(initialViewState: StartChatScreenViewState(userID: userSession.clientProxy.userID), mediaProvider: userSession.mediaProvider)
         
@@ -92,7 +89,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     
     // MARK: - Private
     
-    // periphery:ignore - auto cancels when reassigned
     @CancellableTask private var resolveAliasTask: Task<Void, Never>?
     private var internalRoomAddressState: JoinByAddressState = .example
     
@@ -162,7 +158,6 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         }
     }
     
-    // periphery:ignore - auto cancels when reassigned
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
     

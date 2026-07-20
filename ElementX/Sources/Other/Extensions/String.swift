@@ -10,6 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 nonisolated extension String {
+    // periphery:ignore - might be useful to have
     /// Returns the string as an `AttributedString` with the specified character tinted in a different color.
     /// - Parameters:
     ///   - character: The character to be tinted.

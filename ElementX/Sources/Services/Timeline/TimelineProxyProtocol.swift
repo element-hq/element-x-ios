@@ -46,8 +46,6 @@ enum TimelineAllowedMessageType {
 
 enum TimelineProxyError: Error {
     case sdkError(Error)
-    
-    case failedRedacting
 }
 
 /// Element X proxies generally wrap the counterpart RustSDK objects while providing platform specific

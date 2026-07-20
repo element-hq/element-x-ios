@@ -10,6 +10,7 @@ import Combine
 import Foundation
 
 public extension Task where Success == Never, Failure == Never {
+    // periphery:ignore - might be useful to have
     /// Dispatches the given closure onto the given queue, wrapped within
     /// a continuation to make it non-blocking and awaitable.
     ///

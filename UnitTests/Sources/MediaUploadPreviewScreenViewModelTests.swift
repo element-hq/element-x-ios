@@ -292,7 +292,6 @@ final class MediaUploadPreviewScreenViewModelTests {
         viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: urls,
                                                       caption: nil,
                                                       title: "Some File",
-                                                      isRoomEncrypted: true,
                                                       shouldShowCaptionWarning: true,
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                       timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),

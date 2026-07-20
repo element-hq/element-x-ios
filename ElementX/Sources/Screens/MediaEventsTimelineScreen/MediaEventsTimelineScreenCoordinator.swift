@@ -30,7 +30,6 @@ enum MediaEventsTimelineScreenCoordinatorAction {
 }
 
 final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
-    private let parameters: MediaEventsTimelineScreenCoordinatorParameters
     private let viewModel: MediaEventsTimelineScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -41,8 +40,6 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: MediaEventsTimelineScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         let mediaTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.mediaTimelineController,
                                                        userSession: parameters.userSession,

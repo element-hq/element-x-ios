@@ -19,7 +19,6 @@ enum DeactivateAccountScreenCoordinatorAction {
 }
 
 final class DeactivateAccountScreenCoordinator: CoordinatorProtocol {
-    private let parameters: DeactivateAccountScreenCoordinatorParameters
     private let viewModel: DeactivateAccountScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -30,8 +29,6 @@ final class DeactivateAccountScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: DeactivateAccountScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = DeactivateAccountScreenViewModel(clientProxy: parameters.clientProxy,
                                                      userIndicatorController: parameters.userIndicatorController)
     }

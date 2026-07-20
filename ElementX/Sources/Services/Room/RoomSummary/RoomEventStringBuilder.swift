@@ -106,6 +106,7 @@ nonisolated struct RoomEventStringBuilder {
                                shouldPrefixSenderName: false)
     }
     
+    // periphery:ignore - might be useful to have
     static func threadListEventStringBuilder(userID: String) -> Self {
         RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID),
                                messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "threadList", mentionBuilder: PlainMentionBuilder()),

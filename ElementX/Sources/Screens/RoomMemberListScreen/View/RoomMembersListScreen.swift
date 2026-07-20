@@ -216,8 +216,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(withInvites: Bool = false,
                               withBanned: Bool = true,
                               isAdmin: Bool = false,
-                              initialMode: RoomMembersListScreenMode = .members,
-                              searchQuery: String = "") -> RoomMembersListScreenViewModel {
+                              initialMode: RoomMembersListScreenMode = .members) -> RoomMembersListScreenViewModel {
         let mockAdmin = RoomMemberProxyMock.mockAdmin
         
         let ownUserID = isAdmin ? mockAdmin.userID : RoomMemberProxyMock.mockMe.userID

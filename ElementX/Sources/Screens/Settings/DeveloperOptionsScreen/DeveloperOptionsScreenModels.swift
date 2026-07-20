@@ -13,7 +13,6 @@ enum DeveloperOptionsScreenViewModelAction {
 }
 
 struct DeveloperOptionsScreenViewState: BindableState {
-    let elementCallBaseURL: URL
     let appHooks: AppHooks
     var storeSizes: [StoreSize]?
     let shouldShowClearCache: Bool
@@ -31,7 +30,6 @@ struct DeveloperOptionsScreenViewState: BindableState {
     }
 }
 
-// periphery: ignore - subscripts are seen as false positive
 @dynamicMemberLookup
 struct DeveloperOptionsScreenViewStateBindings {
     private let developerOptions: DeveloperOptionsProtocol

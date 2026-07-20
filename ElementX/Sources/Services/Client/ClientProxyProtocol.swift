@@ -35,7 +35,6 @@ enum ClientProxyError: Error {
     
     case invalidMedia
     case invalidServerName
-    case invalidResponse
     case failedUploadingMedia(ErrorKind)
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
@@ -160,7 +159,6 @@ protocol ClientProxyProtocol: AnyObject {
     var capabilities: HomeserverCapabilitiesProxyProtocol { get }
     
     var isReportRoomSupported: Bool { get async }
-    
     var isLiveKitRTCSupported: Bool { get async }
     
     var isLoginWithQRCodeSupported: Bool { get async }

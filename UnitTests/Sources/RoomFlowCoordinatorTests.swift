@@ -471,10 +471,6 @@ final class RoomFlowCoordinatorTests {
         try await processRouteOrClear(route: nil, expectedActions: expectedActions)
     }
     
-    private func process(route: AppRoute, expectedActions: [RoomFlowCoordinatorAction]) async throws {
-        try await processRouteOrClear(route: route, expectedActions: expectedActions)
-    }
-    
     private func processRouteOrClear(route: AppRoute?, expectedActions: [RoomFlowCoordinatorAction]) async throws {
         guard !expectedActions.isEmpty else {
             return

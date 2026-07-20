@@ -74,10 +74,6 @@ struct TimelineMediaPreviewViewStateBindings {
     var redactConfirmationItem: TimelineMediaPreviewItem.Media?
 }
 
-enum TimelineMediaPreviewAlertType {
-    case authorizationRequired
-}
-
 enum TimelineMediaPreviewViewAction {
     case updateCurrentItem(TimelineMediaPreviewItem)
     case showItemDetails(TimelineMediaPreviewItem.Media)

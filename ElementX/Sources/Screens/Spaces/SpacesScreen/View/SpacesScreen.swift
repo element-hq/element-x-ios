@@ -151,7 +151,6 @@ struct SpacesScreen_Previews: PreviewProvider, TestablePreview {
         
         return SpacesScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                      selectedSpacePublisher: .init(nil),
-                                     appSettings: appSettings,
                                      userIndicatorController: UserIndicatorControllerMock())
     }
 }

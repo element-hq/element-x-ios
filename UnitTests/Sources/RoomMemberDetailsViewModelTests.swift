@@ -11,7 +11,6 @@ import Testing
 
 @MainActor
 struct RoomMemberDetailsViewModelTests {
-    var clientProxy: ClientProxy!
     var viewModel: RoomMemberDetailsScreenViewModelProtocol!
     var roomProxyMock: JoinedRoomProxyMock!
     var roomMemberProxyMock: RoomMemberProxyMock!
@@ -212,7 +211,6 @@ struct RoomMemberDetailsViewModelTests {
                                                      roomProxy: roomProxyMock,
                                                      userSession: userSession,
                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                     analytics: AnalyticsServiceMock(.init()),
-                                                     appSettings: .volatile())
+                                                     analytics: AnalyticsServiceMock(.init()))
     }
 }

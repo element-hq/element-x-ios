@@ -15,7 +15,6 @@ struct UserProfileScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsServiceProtocol
-    let appSettings: AppSettings
 }
 
 enum UserProfileScreenCoordinatorAction {
@@ -39,8 +38,7 @@ final class UserProfileScreenCoordinator: CoordinatorProtocol {
                                                isPresentedModally: parameters.isPresentedModally,
                                                userSession: parameters.userSession,
                                                userIndicatorController: parameters.userIndicatorController,
-                                               analytics: parameters.analytics,
-                                               appSettings: parameters.appSettings)
+                                               analytics: parameters.analytics)
     }
     
     func start() {

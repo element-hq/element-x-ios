@@ -212,8 +212,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
                                                    roomType: roomType ?? .existingRoom(roomProxy: JoinedRoomProxyMock(.init(members: []))),
                                                    isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
-                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                   appSettings: .volatile())
+                                                   userIndicatorController: UserIndicatorControllerMock())
         
         if let searchQuery {
             viewModel.context.searchQuery = searchQuery

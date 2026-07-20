@@ -24,7 +24,6 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     private(set) var previewItems: [TimelineMediaPreviewItem.Media]
     let previewItemsPaginationPublisher = PassthroughSubject<Void, Never>()
     
-    private let initialItem: EventBasedMessageTimelineItemProtocol
     /// The index of the initial item inside of `previewItems` that is to be shown.
     let initialItemIndex: Int
     
@@ -41,7 +40,6 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
          initialPadding: Int = 100,
          paginationState: TimelinePaginationState) {
         previewItems = itemViewStates.compactMap(TimelineMediaPreviewItem.Media.init)
-        self.initialItem = initialItem
         
         if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialItem.id.eventOrTransactionID }) {
             initialItemIndex = initialItemArrayIndex + initialPadding

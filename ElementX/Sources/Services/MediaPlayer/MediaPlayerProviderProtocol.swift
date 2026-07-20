@@ -8,10 +8,6 @@
 
 import Foundation
 
-enum MediaPlayerProviderError: Error {
-    case unsupportedMediaType
-}
-
 protocol MediaPlayerProviderProtocol {
     var player: AudioPlayerProtocol { get }
     

@@ -127,6 +127,7 @@ nonisolated extension UserStatus.Raw {
         emoji = Character(rustStatus.emoji)
     }
     
+    // periphery:ignore - might be useful to have
     var rustValue: MatrixRustSDK.UserStatus {
         .init(emoji: String(emoji), text: text)
     }
@@ -137,6 +138,7 @@ nonisolated extension UserStatus.Call {
         joinedDate = rustCall.callJoinedTs.map { Date(timeIntervalSince1970: Double($0)) }
     }
     
+    // periphery:ignore - might be useful to have
     var rustValue: MatrixRustSDK.UserCall {
         .init(callJoinedTs: joinedDate.map { UInt64($0.timeIntervalSince1970) })
     }
@@ -146,6 +148,7 @@ nonisolated extension UserStatus.Call {
 
 struct SearchUsersResults {
     let results: [UserProfile]
+    // periphery:ignore - documents the schema, parsed but not consumed yet
     let limited: Bool
 }
 

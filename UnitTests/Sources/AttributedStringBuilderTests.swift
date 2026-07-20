@@ -12,7 +12,6 @@ import Testing
 
 struct AttributedStringBuilderTests {
     private let attributedStringBuilder: AttributedStringBuilder
-    private let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
     init() async throws {
         attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())

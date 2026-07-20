@@ -125,6 +125,7 @@ func waitForConfirmation<R>(_ comment: Comment? = nil,
     }
 }
 
+// periphery:ignore:parameters isolation - inherits the caller's actor isolation
 /// Runs the body on the given actor, so that it can safely touch the caller's isolated state.
 ///
 /// Swift Testing's `confirmation` runs its closure on the concurrent executor regardless of the

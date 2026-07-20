@@ -25,7 +25,6 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
     
     init(appSettings: AppSettings, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
         viewModel = DeveloperOptionsScreenViewModel(developerOptions: appSettings,
-                                                    elementCallBaseURL: appSettings.elementCallBaseURL,
                                                     appHooks: appHooks,
                                                     clientProxy: clientProxy)
         

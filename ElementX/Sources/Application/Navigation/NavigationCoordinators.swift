@@ -85,7 +85,6 @@ import SwiftUI
         }
     }
     
-    // periphery:ignore - might be useful to have
     /// The currently displayed fullscreen cover coordinator
     var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
         fullScreenCoverModule?.coordinator
@@ -626,7 +625,6 @@ private struct NavigationSplitCoordinatorView: View {
         }
     }
     
-    // periphery:ignore - might be useful to have
     /// Present a fullscreen cover on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
     /// then the presentation will be proxied to the split
     /// - Parameters:

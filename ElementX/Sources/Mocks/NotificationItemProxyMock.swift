@@ -46,8 +46,6 @@ extension NotificationItemProxyMock {
         senderDisplayName = configuration.senderDisplayName
         roomAvatarMediaSource = configuration.roomAvatarMediaSource
         roomDisplayName = configuration.roomDisplayName
-        roomJoinedMembers = configuration.roomJoinedMembers
-        isRoomDirect = configuration.isRoomDirect
         isRoomPrivate = configuration.isRoomPrivate
         isNoisy = configuration.isNoisy
         hasMention = configuration.hasMention

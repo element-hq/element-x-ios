@@ -24,8 +24,6 @@ class ShareExtensionViewController: UIViewController {
     private let keychainController = KeychainController(service: .sessions,
                                                         accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     
-    private var cancellables: Set<AnyCancellable> = []
-    
     private let hostingController = UIHostingController(rootView: ShareExtensionView())
     
     override func viewDidLoad() {

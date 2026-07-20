@@ -22,7 +22,6 @@ struct EncryptionResetScreenCoordinatorParameters {
 }
 
 final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
-    private let parameters: EncryptionResetScreenCoordinatorParameters
     private let viewModel: EncryptionResetScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -33,7 +32,6 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: EncryptionResetScreenCoordinatorParameters) {
-        self.parameters = parameters
         viewModel = EncryptionResetScreenViewModel(clientProxy: parameters.clientProxy,
                                                    userIndicatorController: parameters.userIndicatorController)
     }

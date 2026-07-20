@@ -157,6 +157,7 @@ struct SessionV1: Equatable {
 }
 
 enum SlidingSyncVersionV1: Equatable {
+    // periphery:ignore - documents a structure the app used to write
     case none
     case proxy(url: String)
     case native

@@ -97,10 +97,6 @@ private nonisolated extension [Bit] {
         try takeBits(8)
     }
     
-    mutating func takeUInt16() throws(BitError) -> UInt16 {
-        try takeBits16(16)
-    }
-    
     mutating func takeBinarySegment(_ version: Int) throws(BitError) -> [UInt8] {
         let characterCountLength = version > 9 ? 16 : 8
         let charactersCount = try takeBits16(characterCountLength)

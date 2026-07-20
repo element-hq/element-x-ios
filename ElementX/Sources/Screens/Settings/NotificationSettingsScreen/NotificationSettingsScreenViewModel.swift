@@ -17,7 +17,6 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
     private let userNotificationCenter: UserNotificationCenterProtocol
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    // periphery:ignore - cancellable tasks get cancelled when reassigned
     @CancellableTask private var fetchSettingsTask: Task<Void, Error>?
     private let notificationTonePreviewer: AudioPlayerProtocol
     private let notificationToneManager: NotificationToneManagerProtocol

@@ -29,8 +29,7 @@ struct StartChatScreenViewModelTests {
         viewModel = StartChatScreenViewModel(userSession: userSession,
                                              analytics: AnalyticsServiceMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock(),
-                                             userDiscoveryService: userDiscoveryService,
-                                             appSettings: appSettings)
+                                             userDiscoveryService: userDiscoveryService)
     }
     
     @Test

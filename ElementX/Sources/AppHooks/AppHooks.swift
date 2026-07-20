@@ -93,6 +93,7 @@ final nonisolated class AppHooks: AppHooksProtocol {
         _clientBuilderHook.withLock { $0 }
     }
     
+    // periphery:ignore - might be useful to have
     func registerClientBuilderHook(_ hook: ClientBuilderHookProtocol) {
         _clientBuilderHook.withLock { $0 = hook }
     }
@@ -108,9 +109,11 @@ final nonisolated class AppHooks: AppHooksProtocol {
 }
 
 nonisolated protocol AppHooksProtocol: Sendable {
+    // periphery:ignore - required for the architecture
     func setUp()
 }
 
 nonisolated extension AppHooksProtocol {
+    // periphery:ignore - required for the architecture
     func setUp() { }
 }

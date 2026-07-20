@@ -12,7 +12,6 @@ import SwiftUI
 struct SpacesScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let selectedSpacePublisher: CurrentValuePublisher<String?, Never>
-    let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -23,7 +22,6 @@ enum SpacesScreenCoordinatorAction {
 }
 
 final class SpacesScreenCoordinator: CoordinatorProtocol {
-    private let parameters: SpacesScreenCoordinatorParameters
     private let viewModel: SpacesScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -34,11 +32,8 @@ final class SpacesScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: SpacesScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = SpacesScreenViewModel(userSession: parameters.userSession,
                                           selectedSpacePublisher: parameters.selectedSpacePublisher,
-                                          appSettings: parameters.appSettings,
                                           userIndicatorController: parameters.userIndicatorController)
     }
     

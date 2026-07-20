@@ -14,13 +14,9 @@ nonisolated protocol NSEUserSessionProtocol {
     var inviteAvatarsVisibility: InviteAvatars { get async }
     var mediaPreviewVisibility: MediaPreviews { get async }
     var threadsEnabled: Bool { get }
-    
-    func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol?
-    func roomForIdentifier(_ roomID: String) -> Room?
 }
 
 final nonisolated class NSEUserSession: NSEUserSessionProtocol {
-    private let sessionDirectories: SessionDirectories
     private let appSettings: CommonSettingsProtocol
     private let baseClient: Client
     private let notificationClient: NotificationClient
@@ -61,7 +57,6 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
          clientSessionDelegate: ClientSessionDelegate,
          appHooks: AppHooks,
          appSettings: CommonSettingsProtocol) async throws {
-        sessionDirectories = credentials.restorationToken.sessionDirectories
         userID = credentials.userID
         self.appSettings = appSettings
         
@@ -99,7 +94,6 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
             switch notificationStatus {
             case .event(let notification):
                 return NotificationItemProxy(notificationItem: notification,
-                                             eventID: eventID,
                                              receiverID: userID,
                                              roomID: roomID)
             case .eventNotFound:
@@ -114,7 +108,7 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
             }
         } catch {
             MXLog.error("Could not get notification's content creating an empty notification instead, error: \(error)")
-            return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
+            return EmptyNotificationItemProxy(roomID: roomID, receiverID: userID)
         }
     }
     
@@ -139,6 +133,7 @@ private final nonisolated class ClientDelegateWrapper: ClientDelegate {
         MXLog.error("Received authentication error, the NSE can't handle this.")
     }
     
+    // periphery:ignore - required by the SDK's delegate protocol
     func didRefreshTokens() {
         MXLog.info("Delegating session updates to the ClientSessionDelegate.")
     }

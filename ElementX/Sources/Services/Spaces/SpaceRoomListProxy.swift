@@ -16,18 +16,21 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
     
     private let spaceRoomList: SpaceRoomListProtocol
     
+    // periphery:ignore - required for instance retention in the rust codebase
     private var spaceServiceRoomHandle: TaskHandle?
     private let spaceServiceRoomSubject: CurrentValueSubject<SpaceServiceRoom, Never>
     var spaceServiceRoomPublisher: CurrentValuePublisher<SpaceServiceRoom, Never> {
         spaceServiceRoomSubject.asCurrentValuePublisher()
     }
     
+    // periphery:ignore - required for instance retention in the rust codebase
     private var spaceRoomsHandle: TaskHandle?
     private let spaceRoomsSubject = CurrentValueSubject<[SpaceServiceRoom], Never>([])
     var spaceRoomsPublisher: CurrentValuePublisher<[SpaceServiceRoom], Never> {
         spaceRoomsSubject.asCurrentValuePublisher()
     }
     
+    // periphery:ignore - required for instance retention in the rust codebase
     private var paginationStateHandle: TaskHandle?
     private let paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never>
     var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> {

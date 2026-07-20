@@ -9,14 +9,11 @@
 import Combine
 import SwiftUI
 
-struct IdentityConfirmedScreenCoordinatorParameters { }
-
 enum IdentityConfirmedScreenCoordinatorAction {
     case done
 }
 
 final class IdentityConfirmedScreenCoordinator: CoordinatorProtocol {
-    private let parameters: IdentityConfirmedScreenCoordinatorParameters
     private let viewModel: IdentityConfirmedScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -26,9 +23,7 @@ final class IdentityConfirmedScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: IdentityConfirmedScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
+    init() {
         viewModel = IdentityConfirmedScreenViewModel()
     }
     

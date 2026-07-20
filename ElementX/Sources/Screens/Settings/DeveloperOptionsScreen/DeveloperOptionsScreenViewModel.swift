@@ -20,10 +20,9 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     
     private let clientProxy: ClientProxyProtocol?
     
-    init(developerOptions: DeveloperOptionsProtocol, elementCallBaseURL: URL, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
+    init(developerOptions: DeveloperOptionsProtocol, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
         self.clientProxy = clientProxy
-        super.init(initialViewState: .init(elementCallBaseURL: elementCallBaseURL,
-                                           appHooks: appHooks,
+        super.init(initialViewState: .init(appHooks: appHooks,
                                            shouldShowClearCache: clientProxy != nil,
                                            isPresentedModally: clientProxy == nil,
                                            bindings: .init(developerOptions: developerOptions)))

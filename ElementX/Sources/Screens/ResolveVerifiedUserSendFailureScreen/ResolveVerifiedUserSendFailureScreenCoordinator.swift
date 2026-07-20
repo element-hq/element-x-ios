@@ -21,7 +21,6 @@ enum ResolveVerifiedUserSendFailureScreenCoordinatorAction {
 }
 
 final class ResolveVerifiedUserSendFailureScreenCoordinator: CoordinatorProtocol {
-    private let parameters: ResolveVerifiedUserSendFailureScreenCoordinatorParameters
     private let viewModel: ResolveVerifiedUserSendFailureScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -32,8 +31,6 @@ final class ResolveVerifiedUserSendFailureScreenCoordinator: CoordinatorProtocol
     }
     
     init(parameters: ResolveVerifiedUserSendFailureScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = ResolveVerifiedUserSendFailureScreenViewModel(failure: parameters.failure,
                                                                   sendHandle: parameters.sendHandle,
                                                                   roomProxy: parameters.roomProxy,

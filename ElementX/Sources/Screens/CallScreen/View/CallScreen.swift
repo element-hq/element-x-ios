@@ -179,6 +179,7 @@ private struct CallView: UIViewRepresentable {
             }
         }
         
+        // periphery:ignore:parameters userContentController - delegate convention
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             guard let handlerID = CallScreenJavaScriptMessageName(rawValue: message.name) else {
                 return
@@ -288,10 +289,6 @@ private struct CallView: UIViewRepresentable {
             
             pictureInPictureController.startPictureInPicture()
             return .success(())
-        }
-        
-        func stopPictureInPicture() {
-            pictureInPictureController?.stopPictureInPicture()
         }
         
         nonisolated func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {

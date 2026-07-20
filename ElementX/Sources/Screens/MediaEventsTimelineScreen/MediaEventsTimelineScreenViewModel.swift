@@ -29,8 +29,6 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
     }
     
-    private var mediaPreviewCancellable: AnyCancellable?
-    
     private let actionsSubject: PassthroughSubject<MediaEventsTimelineScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<MediaEventsTimelineScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()

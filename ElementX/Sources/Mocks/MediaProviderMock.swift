@@ -45,14 +45,6 @@ extension MediaProviderMock {
             return UIImage(systemName: "photo")
         }
         
-        loadImageFromSourceSizeClosure = { _, _ in
-            guard let image = UIImage(systemName: "photo") else {
-                fatalError()
-            }
-            
-            return .success(image)
-        }
-        
         loadImageDataFromSourceClosure = { _ in
             guard let image = UIImage(systemName: "photo"),
                   let data = image.pngData() else {

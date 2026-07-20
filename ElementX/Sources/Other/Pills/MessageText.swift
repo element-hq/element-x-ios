@@ -78,7 +78,9 @@ struct MessageText: UIViewRepresentable {
     /// Cache key for `sizeThatFits`. Keyed on the reserved trailing size as well as the proposed
     /// width to account for any changes on the send info label that happen after the first rendering.
     private struct SizeCacheKey: Hashable {
+        // periphery:ignore - used via the synthesized Hashable conformance
         let width: Double
+        // periphery:ignore - used via the synthesized Hashable conformance
         let reservedSize: CGSize
     }
     

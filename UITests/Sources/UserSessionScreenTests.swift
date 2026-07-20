@@ -20,7 +20,6 @@ class UserSessionScreenTests: XCTestCase {
     enum Step {
         static let homeScreen = 1
         static let roomScreen = 2
-        static let composerAttachments = 3
         static let homeScreenWithTabBar = 4
         static let spacesScreen = 5
         static let spaceScreen = 6

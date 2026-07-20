@@ -412,7 +412,6 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
             mediaProvider.imageFromSourceSizeClosure = { _, _ in nil }
             mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
             mediaProvider.loadImageDataFromSourceClosure = { _ in .failure(.failedRetrievingImage) }
-            mediaProvider.loadImageFromSourceSizeClosure = { _, _ in .failure(.failedRetrievingImage) }
             mediaProvider.loadThumbnailForSourceSourceSizeClosure = { _, _ in .failure(.failedRetrievingThumbnail) }
             mediaProvider.loadImageRetryingOnReconnectionSizeClosure = { _, _ in
                 Task { throw MediaProviderError.failedRetrievingImage }

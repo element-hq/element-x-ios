@@ -7,39 +7,39 @@
 
 import Foundation
 
-public final nonisolated class VolatileUserDefaults: UserDefaultsProtocol, Sendable {
+final nonisolated class VolatileUserDefaults: UserDefaultsProtocol, Sendable {
     private let lock = NSLock()
     
     private nonisolated(unsafe) var _storage: [String: Any]
-    public private(set) var storage: [String: Any] {
+    private(set) var storage: [String: Any] {
         get { lock.withLock { _storage } }
         set { lock.withLock { _storage = newValue } }
     }
     
-    public init(initialValues: [String: Any] = [:]) {
+    init(initialValues: [String: Any] = [:]) {
         lock.lock()
         defer { lock.unlock() }
         
         _storage = initialValues
     }
     
-    public func data(forKey key: String) -> Data? {
+    func data(forKey key: String) -> Data? {
         storage[key] as? Data
     }
     
-    public func object(forKey key: String) -> Any? {
+    func object(forKey key: String) -> Any? {
         storage[key]
     }
     
-    public func removeObject(forKey key: String) {
+    func removeObject(forKey key: String) {
         storage.removeValue(forKey: key)
     }
     
-    public func set(_ value: Any?, forKey key: String) {
+    func set(_ value: Any?, forKey key: String) {
         storage[key] = value
     }
     
-    public func reset() {
+    func reset() {
         storage = [:]
     }
 }

@@ -151,7 +151,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
                     selectedRange: $selectedRange,
-                    maxHeight: maxHeight,
                     keyHandler: keyHandler,
                     pasteHandler: pasteHandler)
     }
@@ -160,19 +159,15 @@ private struct UITextViewWrapper: UIViewRepresentable {
         private var text: Binding<NSAttributedString>
         private var selectedRange: Binding<NSRange>
         
-        private let maxHeight: CGFloat
-        
         private let keyHandler: GenericKeyHandler
         private let pasteHandler: PasteHandler
         
         init(text: Binding<NSAttributedString>,
              selectedRange: Binding<NSRange>,
-             maxHeight: CGFloat,
              keyHandler: @escaping GenericKeyHandler,
              pasteHandler: @escaping PasteHandler) {
             self.text = text
             self.selectedRange = selectedRange
-            self.maxHeight = maxHeight
             self.keyHandler = keyHandler
             self.pasteHandler = pasteHandler
         }
@@ -211,7 +206,6 @@ private protocol ElementTextViewDelegate: AnyObject {
 
 private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     private(set) var timelineContext: TimelineViewModel.Context?
-    private var presendCallback: Binding<(() -> Void)?>
     private var pillViews = NSHashTable<UIView>.weakObjects()
     
     weak var elementDelegate: ElementTextViewDelegate?
@@ -219,7 +213,6 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     init(timelineContext: TimelineViewModel.Context?,
          presendCallback: Binding<(() -> Void)?>) {
         self.timelineContext = timelineContext
-        self.presendCallback = presendCallback
         
         super.init(frame: .zero, textContainer: nil)
         
@@ -241,10 +234,12 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
          UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(enterKeyPressed))]
     }
     
+    // periphery:ignore:parameters sender - required for objc selector
     @objc func shiftEnterKeyPressed(sender: UIKeyCommand) {
         elementDelegate?.textViewDidReceiveShiftEnterKeyPress(self)
     }
     
+    // periphery:ignore:parameters sender - required for objc selector
     @objc func enterKeyPressed(sender: UIKeyCommand) {
         elementDelegate?.textViewDidReceiveKeyPress(self, key: .keyboardReturnOrEnter)
     }
@@ -316,14 +311,6 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     
     func registerPillView(_ pillView: UIView) {
         pillViews.add(pillView)
-    }
-    
-    func flushPills() {
-        for view in pillViews.allObjects {
-            view.alpha = 0.0
-            view.removeFromSuperview()
-        }
-        pillViews.removeAllObjects()
     }
     
     // MARK: - Private

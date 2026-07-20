@@ -28,7 +28,6 @@ nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var threadsEnabled: Bool { get }
-    var globalSearchEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
 }
 

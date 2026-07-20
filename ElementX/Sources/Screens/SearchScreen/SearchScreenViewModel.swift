@@ -14,7 +14,6 @@ typealias SearchScreenViewModelType = StateStoreViewModelV2<SearchScreenViewStat
 class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelProtocol {
     private let roomSummaryProvider: RoomSummaryProviderProtocol
     private let searchService: SearchServiceProxyProtocol
-    private let clientProxy: ClientProxyProtocol
     private var searchQueryObservationTask: Task<Void, Never>?
     private var loadingObservationTask: Task<Void, Never>?
     private var setQueryTask: Task<Void, Never>?
@@ -30,7 +29,6 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
          initialSearchQuery: String = "",
          initialSearchMode: SearchScreenMode = .rooms) {
         self.roomSummaryProvider = roomSummaryProvider
-        self.clientProxy = clientProxy
         searchService = clientProxy.searchService
         
         super.init(initialViewState: SearchScreenViewState(bindings: .init(searchQuery: initialSearchQuery, searchMode: initialSearchMode)),

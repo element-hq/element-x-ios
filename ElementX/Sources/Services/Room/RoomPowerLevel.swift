@@ -20,10 +20,6 @@ nonisolated enum RoomPowerLevel: Hashable, Comparable {
         self = .value(value)
     }
     
-    init(value: Int64) {
-        self = .value(Int(value))
-    }
-    
     var rustPowerLevel: PowerLevel {
         switch self {
         case .infinite: .infinite

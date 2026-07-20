@@ -13,7 +13,6 @@ struct MediaUploadPreviewScreenCoordinatorParameters {
     let mediaURLs: [URL]
     let caption: NSAttributedString?
     let title: String?
-    let isRoomEncrypted: Bool
     let shouldShowCaptionWarning: Bool
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let timelineController: TimelineControllerProtocol
@@ -38,7 +37,6 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
         viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: parameters.mediaURLs,
                                                       caption: parameters.caption,
                                                       title: parameters.title,
-                                                      isRoomEncrypted: parameters.isRoomEncrypted,
                                                       shouldShowCaptionWarning: parameters.shouldShowCaptionWarning,
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                       timelineController: parameters.timelineController,

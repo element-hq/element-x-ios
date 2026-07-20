@@ -34,7 +34,6 @@ struct AdvancedSettingsScreenViewState: BindableState {
     var bindings: AdvancedSettingsScreenViewStateBindings
 }
 
-// periphery:ignore - subscript are seen as false positives
 @dynamicMemberLookup
 struct AdvancedSettingsScreenViewStateBindings {
     private let advancedSettings: AdvancedSettingsProtocol

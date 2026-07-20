@@ -23,8 +23,6 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
         /// The source file could not be accessed due to sandbox restrictions.
         case couldNotAccessSandboxedResource
         
-        /// `AVAudioConverter` could not be initialised for the given format pair.
-        case converterSetupFailed
         /// A tone with the same filename already exists in the library.
         case fileAlreadyExists
         /// An `AVAudioPCMBuffer` could not be allocated.

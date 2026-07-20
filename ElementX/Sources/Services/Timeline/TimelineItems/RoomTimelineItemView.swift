@@ -48,10 +48,10 @@ struct RoomTimelineItemView: View {
             RedactedRoomTimelineView(timelineItem: item)
         case .encrypted(let item):
             EncryptedRoomTimelineView(timelineItem: item)
-        case .readMarker(let item):
-            ReadMarkerRoomTimelineView(timelineItem: item)
-        case .paginationIndicator(let item):
-            PaginationIndicatorRoomTimelineView(timelineItem: item)
+        case .readMarker:
+            ReadMarkerRoomTimelineView()
+        case .paginationIndicator:
+            PaginationIndicatorRoomTimelineView()
         case .sticker(let item):
             StickerRoomTimelineView(timelineItem: item)
         case .unsupported(let item):
@@ -71,8 +71,8 @@ struct RoomTimelineItemView: View {
                                                                                                         title: L10n.commonVoiceMessage,
                                                                                                         duration: 0)
             VoiceMessageRoomTimelineView(timelineItem: item, playerState: playerState)
-        case .callInvite(let item):
-            CallInviteRoomTimelineView(timelineItem: item)
+        case .callInvite:
+            CallInviteRoomTimelineView()
         case .callNotification(let item):
             CallNotificationRoomTimelineView(timelineItem: item)
         case .liveLocation(let item):
@@ -86,7 +86,7 @@ struct RoomTimelineItemView: View {
             if let item = context?.viewState.linkMetadataProvider?.metadataItems[url] {
                 linkMetadata[url] = item
             } else {
-                linkMetadata[url] = LinkMetadataProviderItem(url: url, metadata: nil)
+                linkMetadata[url] = LinkMetadataProviderItem(metadata: nil)
             }
         }
         return linkMetadata

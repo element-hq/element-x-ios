@@ -16,7 +16,6 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     private let userSession: UserSessionProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsServiceProtocol
-    private let appSettings: AppSettings
     
     private var actionsSubject: PassthroughSubject<RoomMemberDetailsScreenViewModelAction, Never> = .init()
     
@@ -30,13 +29,11 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
          roomProxy: JoinedRoomProxyProtocol,
          userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         analytics: AnalyticsServiceProtocol,
-         appSettings: AppSettings) {
+         analytics: AnalyticsServiceProtocol) {
         self.roomProxy = roomProxy
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
-        self.appSettings = appSettings
         
         let initialViewState = RoomMemberDetailsScreenViewState(userID: userID, bindings: .init())
         

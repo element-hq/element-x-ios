@@ -43,6 +43,7 @@ enum RoomAliasAttribute: AttributedStringKey {
 enum EventOnRoomIDAttribute: AttributedStringKey {
     struct Value: Hashable {
         let roomID: String
+        // periphery:ignore - used via the synthesized Hashable conformance
         let eventID: String
     }
     
@@ -52,6 +53,7 @@ enum EventOnRoomIDAttribute: AttributedStringKey {
 enum EventOnRoomAliasAttribute: AttributedStringKey {
     struct Value: Hashable {
         let alias: String
+        // periphery:ignore - used via the synthesized Hashable conformance
         let eventID: String
     }
     
@@ -73,25 +75,32 @@ enum InlineCodeAttribute: AttributedStringKey {
     static let name = "MXInlineCodeAttribute"
 }
 
-// periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
 nonisolated extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
         let blockquote: BlockquoteAttribute
         
         let userID: UserIDAttribute
+        // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
         let userDisplayName: UserDisplayNameAttribute
+        // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
         let roomDisplayName: RoomDisplayNameAttribute
         let roomID: RoomIDAttribute
         let roomAlias: RoomAliasAttribute
         let eventOnRoomID: EventOnRoomIDAttribute
         let eventOnRoomAlias: EventOnRoomAliasAttribute
         
+        // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
+        
         let allUsersMention: AllUsersMentionAttribute
         
         let codeBlock: CodeBlockAttribute
+        // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
         let inlineCode: InlineCodeAttribute
         
+        // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
+        
         let swiftUI: SwiftUIAttributes
+        // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
         let uiKit: UIKitAttributes
     }
     

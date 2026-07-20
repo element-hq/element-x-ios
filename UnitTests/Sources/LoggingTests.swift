@@ -14,10 +14,6 @@ import Testing
 
 @MainActor
 final class LoggingTests {
-    private enum Constants {
-        static let genericFailure = "Test failed"
-    }
-    
     deinit {
         Tracing.logsDirectoryOverride = nil
         do {

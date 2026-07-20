@@ -19,7 +19,9 @@ struct SetupProject: ParsableCommand {
     func brewInstall() throws {
         // Uninstall SwiftFormat from HEAD first if it is installed.
         try Zsh.run(command: "if brew list --versions swiftformat | grep -q HEAD; then brew uninstall swiftformat; fi")
-        try Zsh.run(command: "brew install xcodegen swiftgen swiftformat git-lfs sourcery mint pkl kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery")
+        // Uninstall Periphery from the deprecated tap first if it is installed (superseded by the homebrew-core formula).
+        try Zsh.run(command: "if brew list --cask --versions periphery &> /dev/null; then brew uninstall --cask periphery; fi")
+        try Zsh.run(command: "brew install xcodegen swiftgen swiftformat git-lfs sourcery mint pkl kiliankoe/formulae/swift-outdated localazy/tools/localazy periphery")
     }
     
     func mintPackagesInstall() throws {

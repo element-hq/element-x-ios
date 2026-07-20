@@ -63,14 +63,10 @@ enum LoginScreenViewAction {
 }
 
 enum LoginScreenErrorType: Hashable {
-    /// A specific error message shown in an alert.
-    case alert(String)
     /// An alert that informs the user to check their username/password.
     case credentialsAlert
     /// An alert that informs the user that their account has been deactivated.
     case deactivatedAlert
-    /// An alert that informs the user about a bad well-known file.
-    case invalidWellKnownAlert(String)
     /// An alert that allows the user to learn about sliding sync.
     case slidingSyncAlert
     /// An alert that informs the user that Element Pro should be used for a particular server.

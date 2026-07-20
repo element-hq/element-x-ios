@@ -9,6 +9,7 @@
 import SwiftUI
 
 class UnitTestsAppCoordinator: AppCoordinatorProtocol {
+    // periphery:ignore - retaining purpose
     private let targetConfiguration: Target.ConfigurationResult
     static let targetRageshakeURL = RemotePreference<RageshakeConfiguration>(.url("bugs.example.com/submit"))
     static let targetAppHooks = AppHooks()

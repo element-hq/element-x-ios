@@ -10,7 +10,6 @@ import Foundation
 import LinkPresentation
 
 struct LinkMetadataProviderItem {
-    let url: URL
     let metadata: LPLinkMetadata?
 }
 

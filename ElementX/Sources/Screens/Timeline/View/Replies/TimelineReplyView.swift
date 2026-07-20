@@ -17,6 +17,7 @@ enum TimelineReplyViewPlacement {
 struct TimelineReplyView: View {
     @Environment(\.timelineContext) private var timelineContext
     
+    // periphery:ignore - might be useful to have
     let placement: TimelineReplyViewPlacement
     let timelineItemReplyDetails: TimelineItemReplyDetails?
     var maxWidth: CGFloat?

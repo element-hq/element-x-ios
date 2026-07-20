@@ -13,19 +13,21 @@ class RoomThreadListProxy: RoomThreadListServiceProxyProtocol {
     private let threadListService: ThreadListServiceProtocol
     private let eventStringBuilder: RoomEventStringBuilder
     
+    // periphery:ignore - required for instance retention in the rust codebase
     private var itemUpdatesHandle: TaskHandle?
     private let itemsSubject = CurrentValueSubject<[RoomThreadListItem], Never>([])
     var itemsPublisher: CurrentValuePublisher<[RoomThreadListItem], Never> {
         itemsSubject.asCurrentValuePublisher()
     }
     
+    // periphery:ignore - required for instance retention in the rust codebase
     private var paginationStateHandle: TaskHandle?
     private let paginationStateSubject: CurrentValueSubject<RoomThreadListPaginationState, Never>
     var paginationStatePublisher: CurrentValuePublisher<RoomThreadListPaginationState, Never> {
         paginationStateSubject.asCurrentValuePublisher()
     }
     
-    init(threadListService: ThreadListServiceProtocol, eventStringBuilder: RoomEventStringBuilder, paginationToken: String? = nil) {
+    init(threadListService: ThreadListServiceProtocol, eventStringBuilder: RoomEventStringBuilder) {
         self.threadListService = threadListService
         self.eventStringBuilder = eventStringBuilder
         

@@ -21,7 +21,6 @@ enum EmojiPickerScreenCoordinatorAction {
 }
 
 final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
-    private let parameters: EmojiPickerScreenCoordinatorParameters
     private var viewModel: EmojiPickerScreenViewModelProtocol
     
     private let actionsSubject: PassthroughSubject<EmojiPickerScreenCoordinatorAction, Never> = .init()
@@ -32,8 +31,6 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: EmojiPickerScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
         viewModel = EmojiPickerScreenViewModel(itemID: parameters.itemID,
                                                selectedEmojis: parameters.selectedEmojis,
                                                emojiProvider: parameters.emojiProvider,

@@ -13,10 +13,8 @@ struct LiveLocationRoomTimelineView: View {
     @Environment(\.timelineContext) private var context: TimelineViewModel.Context!
     @State private var hasExpired: Bool
     let timelineItem: LiveLocationRoomTimelineItem
-    private let currentDate: Date
     
     init(currentDate: Date = .now, timelineItem: LiveLocationRoomTimelineItem, isStopped: Bool = false) {
-        self.currentDate = currentDate
         self.timelineItem = timelineItem
         _hasExpired = State(initialValue: isStopped || currentDate >= timelineItem.content.timeoutDate)
     }

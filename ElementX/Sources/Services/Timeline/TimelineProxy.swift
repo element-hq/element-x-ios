@@ -653,16 +653,4 @@ extension Array where Element == TimelineItemProxy {
         
         return nil
     }
-    
-    func firstEventTimelineItemUsingEventOrTransactionID(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) -> EventTimelineItem? {
-        for item in self {
-            if case let .event(eventTimelineItem) = item,
-               case let .event(_, identifier) = eventTimelineItem.id,
-               identifier == eventOrTransactionID {
-                return eventTimelineItem.item
-            }
-        }
-        
-        return nil
-    }
 }

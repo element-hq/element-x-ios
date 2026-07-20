@@ -35,7 +35,6 @@ enum AuthenticationServiceError: Error, Equatable {
     case accountDeactivated
     case failedLoggingIn
     case sessionTokenRefreshNotSupported
-    case failedUsingWebCredentials
 }
 
 protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
