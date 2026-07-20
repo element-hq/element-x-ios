@@ -58,7 +58,7 @@ class AnalyticsService: AnalyticsServiceProtocol {
     }
     
     /// Resets any IDs and event queues in the analytics client. This method should
-    /// be called on sign-out to maintain opt-in status, whilst ensuring the next
+    /// be called on sign-out to ensure the next
     /// account used isn't associated with the previous one.
     /// Note: **MUST** be called before stopping PostHog or the reset is ignored.
     private func reset() {
