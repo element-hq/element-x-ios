@@ -16,6 +16,7 @@ struct GalleryListView: View {
     let items: [GalleryItem]
     let uniqueID: TimelineItemIdentifier.UniqueID
     let mediaProvider: MediaProviderProtocol?
+    let contentScannerService: ContentScannerServiceProtocol?
     let onTap: (Int) -> Void
     
     var body: some View {
@@ -27,9 +28,10 @@ struct GalleryListView: View {
                 
                 GalleryListRow(item: item,
                                uniqueID: uniqueID,
-                               mediaProvider: mediaProvider)
-                    .contentShape(Rectangle())
-                    .onTapGesture { onTap(index) }
+                               mediaProvider: mediaProvider,
+                               contentScannerService: contentScannerService) {
+                    onTap(index)
+                }
             }
         }
     }
@@ -49,6 +51,8 @@ private struct GalleryListRow: View {
     let item: GalleryItem
     let uniqueID: TimelineItemIdentifier.UniqueID
     let mediaProvider: MediaProviderProtocol?
+    let contentScannerService: ContentScannerServiceProtocol?
+    let onTap: () -> Void
     
     private var fileDescription: String {
         ".\(item.filename.validatedFileExtension.uppercased())"
@@ -59,6 +63,22 @@ private struct GalleryListRow: View {
     }
     
     var body: some View {
+        // The whole row is gated on its scan state. `containerShowsFailure` is false so an unsafe
+        // item only turns its own row critical rather than the whole gallery bubble.
+        ContentScanningView(contentScannerService: contentScannerService,
+                            mediaSource: item.mediaSource,
+                            containerShowsFailure: false) {
+            row(accessory: leadingAccessory)
+                .contentShape(Rectangle())
+                .onTapGesture { onTap() }
+        } scanningContent: {
+            row(accessory: scanningAccessory)
+        } unsafeContent: { failure in
+            failureRow(failure)
+        }
+    }
+    
+    private func row(accessory: some View) -> some View {
         Label {
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.filename)
@@ -70,10 +90,25 @@ private struct GalleryListRow: View {
             }
             .lineLimit(2)
         } icon: {
-            leadingAccessory
+            accessory
         }
         .labelStyle(.custom(spacing: 8, alignment: .center))
         .padding(.vertical, 12)
+    }
+    
+    /// The critical row shown when an item fails content scanning. Reuses ``ContentScanningFailureView``
+    /// (icon + title + message) inside its own critical container as the surrounding bubble stays regular.
+    private func failureRow(_ failure: ContentScanningFailure) -> some View {
+        ContentScanningFailureView(failure: failure)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 4)
+            .background(Color.compound.bgCriticalSubtle, in: RoundedRectangle(cornerRadius: 6))
+            .overlay {
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(Color.compound.borderCriticalSubtle)
+            }
+            .padding(.vertical, 8)
     }
     
     @ViewBuilder
@@ -98,5 +133,13 @@ private struct GalleryListRow: View {
                 .background(.compound.iconOnSolidPrimary,
                             in: RoundedRectangle(cornerRadius: 4, style: .continuous))
         }
+    }
+    
+    private var scanningAccessory: some View {
+        ProgressView()
+            .scaledFrame(size: CompoundIcon.Size.medium.value, relativeTo: .body)
+            .scaledPadding(6)
+            .background(.compound.iconOnSolidPrimary,
+                        in: RoundedRectangle(cornerRadius: 4, style: .continuous))
     }
 }

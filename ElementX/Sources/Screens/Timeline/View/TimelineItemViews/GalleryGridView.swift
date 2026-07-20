@@ -13,6 +13,7 @@ struct GalleryGridView: View {
     let items: [GalleryItem]
     let uniqueID: TimelineItemIdentifier.UniqueID
     let mediaProvider: MediaProviderProtocol?
+    let contentScannerService: ContentScannerServiceProtocol?
     let onTap: (Int) -> Void
     
     static let spacing: CGFloat = 4
@@ -77,11 +78,12 @@ struct GalleryGridView: View {
             GalleryTileView(item: items[index],
                             uniqueID: uniqueID,
                             mediaProvider: mediaProvider,
-                            overflowCount: overflow)
-                .frame(width: size.width, height: size.height)
-                .clipped()
-                .contentShape(Rectangle())
-                .onTapGesture { onTap(index) }
+                            contentScannerService: contentScannerService,
+                            overflowCount: overflow) {
+                onTap(index)
+            }
+            .frame(width: size.width, height: size.height)
+            .clipped()
         }
     }
 }

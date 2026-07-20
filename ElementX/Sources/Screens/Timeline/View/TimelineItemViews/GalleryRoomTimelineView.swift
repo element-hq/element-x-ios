@@ -8,6 +8,7 @@
 
 import Compound
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct GalleryRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
@@ -30,13 +31,15 @@ struct GalleryRoomTimelineView: View {
                 if usesListLayout {
                     GalleryListView(items: timelineItem.content.items,
                                     uniqueID: timelineItem.id.uniqueID,
-                                    mediaProvider: context?.mediaProvider) { index in
+                                    mediaProvider: context?.mediaProvider,
+                                    contentScannerService: context?.contentScannerService) { index in
                         tap(index: index)
                     }
                 } else {
                     GalleryGridView(items: timelineItem.content.items,
                                     uniqueID: timelineItem.id.uniqueID,
-                                    mediaProvider: context?.mediaProvider) { index in
+                                    mediaProvider: context?.mediaProvider,
+                                    contentScannerService: context?.contentScannerService) { index in
                         tap(index: index)
                     }
                 }
@@ -77,21 +80,48 @@ struct GalleryRoomTimelineView: View {
 struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
-    static var previews: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 1))
-                GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 2))
-                GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 3))
-                GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 4))
-                GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 5))
-                GalleryRoomTimelineView(timelineItem: makeItem(itemCount: 7, caption: "A trip to remember 🌅"))
-                GalleryRoomTimelineView(timelineItem: makeFileListItem(caption: "Quarterly reports"))
+    // A dedicated view model whose content scanner reports a different verdict per item, so a
+    // single gallery can show safe, scanning and unsafe tiles side by side.
+    static let mixedScanViewModel: TimelineViewModel = {
+        let service = ContentScannerServiceMock()
+        service.scanResultFromSourceClosure = { source in
+            switch mixedVerdict(for: source) {
+            case .safe: return true
+            case .unsafe: return false
+            case .scanning: return nil
             }
-            .padding(.vertical, 20)
         }
-        .environmentObject(viewModel.context)
-        .environment(\.timelineContext, viewModel.context)
+        service.loadScanResultFromSourceClosure = { source in
+            switch mixedVerdict(for: source) {
+            case .safe:
+                return .success(true)
+            case .unsafe:
+                return .success(false)
+            case .scanning:
+                try? await Task.sleep(for: .seconds(3600)) // Never resolves, so the scanning state stays visible.
+                return .failure(.failedScanning)
+            }
+        }
+        return TimelineViewModel.mock(contentScannerService: service)
+    }()
+    
+    static var previews: some View {
+        preview(makeItem(itemCount: 1), viewModel).previewDisplayName("1 image")
+        preview(makeItem(itemCount: 2), viewModel).previewDisplayName("2 images")
+        preview(makeItem(itemCount: 3), viewModel).previewDisplayName("3 images")
+        preview(makeItem(itemCount: 4), viewModel).previewDisplayName("4 images")
+        preview(makeItem(itemCount: 5), viewModel).previewDisplayName("5 images")
+        preview(makeItem(itemCount: 9, caption: "A trip to remember 🌅"), viewModel).previewDisplayName("6+ images with caption")
+        preview(makeFileListItem(caption: "Quarterly reports"), viewModel).previewDisplayName("File list")
+        preview(makeMixedScanItem(), mixedScanViewModel).previewDisplayName("Mixed content scan")
+        preview(makeMixedScanFileListItem(), mixedScanViewModel).previewDisplayName("Mixed content scan (files)")
+    }
+    
+    static func preview(_ item: GalleryRoomTimelineItem, _ viewModel: TimelineViewModel) -> some View {
+        GalleryRoomTimelineView(timelineItem: item)
+            .padding(20)
+            .environmentObject(viewModel.context)
+            .environment(\.timelineContext, viewModel.context)
     }
     
     private static func makeItem(itemCount: Int, caption: String? = nil) -> GalleryRoomTimelineItem {
@@ -159,6 +189,77 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                        sender: .init(id: "Bob"),
                                        content: .init(body: "Mixed gallery",
                                                       caption: caption,
+                                                      items: items),
+                                       properties: .init())
+    }
+    
+    // MARK: Mixed content-scanner fixtures
+    
+    private nonisolated enum ScanVerdict { case safe, unsafe, scanning }
+    
+    /// The verdict for each tile of the mixed-scan gallery, keyed by position.
+    private nonisolated static let mixedVerdicts: [ScanVerdict] = [.safe, .unsafe, .scanning, .safe, .unsafe]
+    
+    private nonisolated static func mixedSource(index: Int) -> MediaSourceProxy {
+        // swiftlint:disable:next force_try force_unwrapping
+        try! MediaSourceProxy(url: URL(string: "mxc://preview.element.io/mixed-scan-\(index)")!, mimeType: "image/jpeg")
+    }
+    
+    private nonisolated static func mixedVerdict(for source: MediaSourceProxy) -> ScanVerdict {
+        guard let index = mixedVerdicts.indices.first(where: { mixedSource(index: $0).url == source.url }) else {
+            return .safe
+        }
+        return mixedVerdicts[index]
+    }
+    
+    private static func makeMixedScanItem() -> GalleryRoomTimelineItem {
+        let items: [GalleryItem] = mixedVerdicts.indices.map { index in
+            GalleryItem(id: "mixed-\(index)",
+                        filename: "image-\(index).jpg",
+                        kind: .image,
+                        mediaSource: mixedSource(index: index),
+                        thumbnailSource: mixedSource(index: index),
+                        size: .init(width: 1920, height: 1080),
+                        blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
+                        duration: nil,
+                        contentType: .jpeg)
+        }
+        
+        return GalleryRoomTimelineItem(id: .randomEvent,
+                                       timestamp: .mock,
+                                       isOutgoing: false,
+                                       isEditable: false,
+                                       canBeRepliedTo: true,
+                                       sender: .init(id: "Bob"),
+                                       content: .init(body: "Gallery (5 items)",
+                                                      caption: "Mixed scan states",
+                                                      items: items),
+                                       properties: .init())
+    }
+    
+    /// A file list (no thumbnails) exercising a normal, an unsafe and a scanning row via the
+    /// mixed-scan view model (indices 0/1/2 → safe/unsafe/scanning).
+    private static func makeMixedScanFileListItem() -> GalleryRoomTimelineItem {
+        let items: [GalleryItem] = [
+            GalleryItem(id: "mixed-file-0", filename: "report.zip", kind: .file,
+                        mediaSource: mixedSource(index: 0), thumbnailSource: nil,
+                        size: nil, blurhash: nil, duration: nil, contentType: .zip),
+            GalleryItem(id: "mixed-file-1", filename: "contract.pdf", kind: .file,
+                        mediaSource: mixedSource(index: 1), thumbnailSource: nil,
+                        size: nil, blurhash: nil, duration: nil, contentType: .pdf),
+            GalleryItem(id: "mixed-file-2", filename: "meeting.m4a", kind: .audio,
+                        mediaSource: mixedSource(index: 2), thumbnailSource: nil,
+                        size: nil, blurhash: nil, duration: nil, contentType: .mpeg4Audio)
+        ]
+        
+        return GalleryRoomTimelineItem(id: .randomEvent,
+                                       timestamp: .mock,
+                                       isOutgoing: false,
+                                       isEditable: false,
+                                       canBeRepliedTo: true,
+                                       sender: .init(id: "Bob"),
+                                       content: .init(body: "Files",
+                                                      caption: "Mixed scan states",
                                                       items: items),
                                        properties: .init())
     }
