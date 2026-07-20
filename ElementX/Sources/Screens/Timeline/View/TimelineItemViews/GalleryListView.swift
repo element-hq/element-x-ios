@@ -36,8 +36,8 @@ struct GalleryListView: View {
     
     static var galleryDivider: some View {
         Rectangle()
-            .fill(ListRowColor.separatorTint)
-            .frame(height: 1 / UIScreen.main.scale)
+            .fill(Color.compound.borderInteractiveSecondary)
+            .frame(height: 0.5)
     }
     
     private var galleryDivider: some View {
@@ -51,7 +51,7 @@ private struct GalleryListRow: View {
     let mediaProvider: MediaProviderProtocol?
     
     private var fileDescription: String {
-        item.filename.validatedFileExtension.uppercased()
+        ".\(item.filename.validatedFileExtension.uppercased())"
     }
     
     private var iconKeyPath: KeyPath<CompoundIcons, Image> {
@@ -73,7 +73,7 @@ private struct GalleryListRow: View {
             leadingAccessory
         }
         .labelStyle(.custom(spacing: 8, alignment: .center))
-        .padding(.vertical, 8)
+        .padding(.vertical, 12)
     }
     
     @ViewBuilder
