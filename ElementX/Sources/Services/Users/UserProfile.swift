@@ -47,7 +47,7 @@ nonisolated struct UserProfile: Hashable, Identifiable {
         id = rustRoomHero.userId
         displayName = rustRoomHero.displayName
         avatarURL = rustRoomHero.avatarUrl.flatMap(URL.init(string:))
-        status = .init() // Requires https://github.com/matrix-org/matrix-rust-sdk/pull/6733
+        status = .init(rustStatus: rustRoomHero.status, rustCall: rustRoomHero.call)
     }
     
     init(member: RoomMemberProxyProtocol) {

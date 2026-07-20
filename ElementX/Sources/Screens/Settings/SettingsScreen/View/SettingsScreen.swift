@@ -98,6 +98,8 @@ struct SettingsScreen: View {
                 SettingsScreenUserStatusPickerView { action in
                     context.send(viewAction: .userStatus(action))
                 }
+                .presentationDetents([.medium]) // Stop using a List and calculate the exact height?
+                .presentationBackground(.compound.bgCanvasDefault)
             }
         }
     }

@@ -693,7 +693,8 @@ class ClientProxy: ClientProxyProtocol {
             
             let profile = try await UserProfile(userID: userID,
                                                 displayName: displayName,
-                                                avatarURL: avatarURLString.flatMap(URL.init))
+                                                avatarURL: avatarURLString.flatMap(URL.init),
+                                                status: userProfileSubject.value.status)
             loadCachedAvatarURLTask?.cancel()
             userProfileSubject.send(profile)
             return .success(())
@@ -1481,11 +1482,14 @@ private struct ClientProxyServices {
     init(client: ClientProtocol,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings) async throws {
-        let syncService = try await client
+        var syncServiceBuilder = client
             .syncService()
             .withOfflineMode()
             .withSharePos(enable: true)
-            .finish()
+        if appSettings.userStatusEnabled {
+            syncServiceBuilder = syncServiceBuilder.withProfilesExtension()
+        }
+        let syncService = try await syncServiceBuilder.finish()
         
         let roomListService = syncService.roomListService()
         
