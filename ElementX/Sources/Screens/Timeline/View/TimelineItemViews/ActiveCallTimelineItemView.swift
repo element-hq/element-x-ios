@@ -23,9 +23,6 @@ struct ActiveCallTimelineItemView: View {
     
     static let maxAvatars = 3
     
-    @State private var currentTime = Date()
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
     private var avatars: [StackedAvatarInfo] {
         activeMembers
             .prefix(ActiveCallTimelineItemView.maxAvatars)
@@ -34,21 +31,6 @@ struct ActiveCallTimelineItemView: View {
                                   name: context?.viewState.members[userID]?.displayName,
                                   contentID: userID)
             }
-    }
-    
-    private var elapsedTimeText: String {
-        guard let startTime = callStartTimestamp else {
-            return ""
-        }
-        
-        let elapsed = currentTime.timeIntervalSince(startTime)
-        
-        // Protect against invalid dates (future, NaN, infinity)
-        guard !elapsed.isNaN, elapsed.isFinite, elapsed >= 0 else {
-            return ""
-        }
-        
-        return Duration.seconds(elapsed).formatted(.time(pattern: .minuteSecond))
     }
     
     private var extraGroupLabel: String {
@@ -125,8 +107,8 @@ struct ActiveCallTimelineItemView: View {
                     .buttonStyle(.compound(.primary, size: .small))
                 }
                 
-                if callStartTimestamp != nil {
-                    Text(elapsedTimeText)
+                if let callStartTimestamp {
+                    Text(callStartTimestamp, style: .timer)
                         .font(.compound.bodyXS)
                         .foregroundColor(.compound.textSecondary)
                         .monospacedDigit()
@@ -137,9 +119,6 @@ struct ActiveCallTimelineItemView: View {
         .overlay(RoundedRectangle(cornerRadius: 8)
             .stroke(.compound.borderInteractivePrimary, lineWidth: 1))
         .padding(16)
-        .onReceive(timer) { _ in
-            currentTime = Date()
-        }
     }
 }
 
@@ -163,11 +142,6 @@ struct ActiveCallTimelineItemView_Previews: PreviewProvider, TestablePreview {
     ]
     
     static var previews: some View {
-        body
-            .environmentObject(viewModel.context)
-    }
-    
-    static var body: some View {
         VStack(spacing: 0) {
             // Single member
             ActiveCallTimelineItemView(isDM: false,
@@ -218,5 +192,6 @@ struct ActiveCallTimelineItemView_Previews: PreviewProvider, TestablePreview {
                                        callStartTimestamp: nil)
         }
         .padding()
+        .environmentObject(viewModel.context)
     }
 }

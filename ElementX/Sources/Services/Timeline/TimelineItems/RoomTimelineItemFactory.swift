@@ -77,7 +77,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                      callIntent: callIntent,
                                                      declinedBy: declinedBy,
                                                      activeMembers: activeMembers,
-                                                     callStartTs: callStartMillis,
+                                                     callStartTimestampMillis: callStartMillis,
                                                      isJoined: isJoined)
         }
     }
@@ -861,12 +861,11 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    callIntent: String?,
                                                    declinedBy: [String],
                                                    activeMembers: [String],
-                                                   callStartTs: UInt64?,
+                                                   callStartTimestampMillis: UInt64?,
                                                    isJoined: Bool) -> RoomTimelineItemProtocol {
         let isVoiceCall = callIntent == CallIntent.audio.rawValue
-        let callStartTimestamp = callStartTs.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) }
+        let callStartTimestamp = callStartTimestampMillis.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) }
         
-        // Active call
         return CallNotificationRoomTimelineItem(id: eventItemProxy.id,
                                                 timestamp: eventItemProxy.timestamp,
                                                 isDM: isDM,
