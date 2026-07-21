@@ -178,7 +178,7 @@ private extension TimelineItemSendInfo {
                 liveLocationTimelineItem.layout
             case let message as EventBasedMessageTimelineItemProtocol:
                 switch message {
-                case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
+                case is ImageRoomTimelineItem, is VideoRoomTimelineItem, is GalleryRoomTimelineItem:
                     .overlay(capsuleStyle: !message.hasMediaCaption)
                 case is AudioRoomTimelineItem, is FileRoomTimelineItem:
                     // swiftlint:disable:next void_function_in_ternary

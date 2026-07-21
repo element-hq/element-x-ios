@@ -41,7 +41,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
          paginationState: TimelinePaginationState) {
         previewItems = itemViewStates.compactMap(TimelineMediaPreviewItem.Media.init)
         
-        if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialItem.id.eventOrTransactionID }) {
+        let initialPreviewID = TimelineMediaPreviewItem.Media(timelineItem: initialItem).id
+        if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialPreviewID }) {
             initialItemIndex = initialItemArrayIndex + initialPadding
             currentItem = .media(previewItems[initialItemArrayIndex])
         } else {
@@ -55,6 +56,34 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         backwardPadding = initialPadding
         forwardPadding = initialPadding
         
+        self.paginationState = paginationState
+    }
+    
+    /// Builds a data source scoped to a single gallery's previewable attachments.
+    /// Used when the user taps a tile inside a gallery message — paging is local to that
+    /// gallery and there's no timeline pagination to drive.
+    init(galleryItem: GalleryRoomTimelineItem,
+         initialIndex: Int,
+         paginationState: TimelinePaginationState) {
+        let media = galleryItem.content.items.compactMap { item in
+            TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: item)
+        }
+        
+        let clampedIndex = max(0, min(initialIndex, max(media.count - 1, 0)))
+        if media.indices.contains(clampedIndex) {
+            previewItems = media
+            initialItemIndex = clampedIndex
+            currentItem = .media(media[clampedIndex])
+        } else {
+            // Fall back to a synthetic placeholder for empty galleries — shouldn't happen in practice.
+            previewItems = [.init(timelineItem: galleryItem)]
+            initialItemIndex = 0
+            currentItem = .media(previewItems[0])
+        }
+        
+        // No surrounding pagination — the gallery is the whole world.
+        backwardPadding = 0
+        forwardPadding = 0
         self.paginationState = paginationState
     }
     
@@ -172,41 +201,73 @@ enum TimelineMediaPreviewItem: Equatable {
             didSet { updatePreviewItemValues() }
         }
         
+        /// When non-nil, this preview item represents a single attachment from a gallery message.
+        /// Property accessors (mediaSource, filename, …) read from the gallery item instead of the
+        /// parent timeline item — but `timelineItem.id` still points at the parent event so menu
+        /// actions (redact, reply, …) target the gallery as a whole.
+        let galleryItem: GalleryItem?
+        
         var fileHandle: MediaFileHandleProxy? {
             didSet { updatePreviewItemValues() }
         }
         
         var downloadError: Error?
         
+        private let previewID: String
+        
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
             self.timelineItem = timelineItem
+            galleryItem = nil
+            previewID = Media.derivedID(for: timelineItem)
         }
         
         init?(roomTimelineItemViewState: RoomTimelineItemViewState) {
+            let resolved: EventBasedMessageTimelineItemProtocol
             switch roomTimelineItemViewState.type {
             case .audio(let audioRoomTimelineItem):
-                timelineItem = audioRoomTimelineItem
+                resolved = audioRoomTimelineItem
             case .file(let fileRoomTimelineItem):
-                timelineItem = fileRoomTimelineItem
+                resolved = fileRoomTimelineItem
             case .image(let imageRoomTimelineItem):
-                timelineItem = imageRoomTimelineItem
+                resolved = imageRoomTimelineItem
             case .video(let videoRoomTimelineItem):
-                timelineItem = videoRoomTimelineItem
+                resolved = videoRoomTimelineItem
             default:
                 return nil
             }
+            timelineItem = resolved
+            galleryItem = nil
+            previewID = Media.derivedID(for: resolved)
+        }
+        
+        /// Wraps a single attachment of a gallery message. `.other` items have no media source,
+        /// so there's nothing to preview and the initialiser fails.
+        init?(galleryParent: GalleryRoomTimelineItem, item: GalleryItem) {
+            guard item.kind != .other else { return nil }
+            timelineItem = galleryParent
+            galleryItem = item
+            previewID = "gallery:\(item.id)"
         }
         
         // MARK: Identifiable
         
-        /// The timeline item's event or transaction ID.
+        /// A stable identifier that's unique per preview item — including individual gallery
+        /// attachments that would otherwise share their parent event's ID.
+        var id: String {
+            previewID
+        }
+        
+        /// Derives a stable identifier from the timeline item's event or transaction ID.
         ///
-        /// We're identifying items by this to ensure that all matching is made using only this part of the identifier. This is
+        /// We identify items by this to ensure that all matching is made using only this part of the identifier. This is
         /// because the unique ID will be different across timelines so when the initial item comes from a regular timeline and
         /// we build a filtered timeline to fetch the other media items, it is impossible to match by the `TimelineItemIdentifier`.
-        var id: TimelineItemIdentifier.EventOrTransactionID {
+        private static func derivedID(for timelineItem: EventBasedMessageTimelineItemProtocol) -> String {
             guard let id = timelineItem.id.eventOrTransactionID else { fatalError("Virtual items cannot be previewed.") }
-            return id
+            switch id {
+            case .eventID(let value): return "event:\(value)"
+            case .transactionID(let value): return "txn:\(value)"
+            }
         }
         
         // MARK: QLPreviewItem
@@ -242,45 +303,54 @@ enum TimelineMediaPreviewItem: Equatable {
         // MARK: Media details
         
         var mediaSource: MediaSourceProxy? {
+            if let galleryItem {
+                return galleryItem.mediaSource
+            }
             switch timelineItem {
             case let audioItem as AudioRoomTimelineItem:
-                audioItem.content.source
+                return audioItem.content.source
             case let fileItem as FileRoomTimelineItem:
-                fileItem.content.source
+                return fileItem.content.source
             case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.imageInfo.source
+                return imageItem.content.imageInfo.source
             case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.videoInfo.source
+                return videoItem.content.videoInfo.source
             default:
-                nil
+                return nil
             }
         }
         
         var thumbnailMediaSource: MediaSourceProxy? {
+            if let galleryItem {
+                return galleryItem.thumbnailSource
+            }
             switch timelineItem {
             case let fileItem as FileRoomTimelineItem:
-                fileItem.content.thumbnailSource
+                return fileItem.content.thumbnailSource
             case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.thumbnailInfo?.source
+                return imageItem.content.thumbnailInfo?.source
             case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.thumbnailInfo?.source
+                return videoItem.content.thumbnailInfo?.source
             default:
-                nil
+                return nil
             }
         }
         
         var filename: String? {
+            if let galleryItem {
+                return galleryItem.filename
+            }
             switch timelineItem {
             case let audioItem as AudioRoomTimelineItem:
-                audioItem.content.filename
+                return audioItem.content.filename
             case let fileItem as FileRoomTimelineItem:
-                fileItem.content.filename
+                return fileItem.content.filename
             case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.filename
+                return imageItem.content.filename
             case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.filename
+                return videoItem.content.filename
             default:
-                nil
+                return nil
             }
         }
         
@@ -289,21 +359,25 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         private var expectedFileSize: UInt? {
+            if galleryItem != nil {
+                return nil
+            } // The SDK doesn't surface individual gallery item sizes.
             switch timelineItem {
             case let audioItem as AudioRoomTimelineItem:
-                audioItem.content.fileSize
+                return audioItem.content.fileSize
             case let fileItem as FileRoomTimelineItem:
-                fileItem.content.fileSize
+                return fileItem.content.fileSize
             case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.imageInfo.fileSize
+                return imageItem.content.imageInfo.fileSize
             case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.videoInfo.fileSize
+                return videoItem.content.videoInfo.fileSize
             default:
-                nil
+                return nil
             }
         }
         
         var hasCaption: Bool {
+            // Captions live on the gallery itself, not on individual items.
             timelineItem.hasMediaCaption
         }
         
@@ -316,28 +390,34 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         var contentType: String? {
+            if let galleryItem {
+                return galleryItem.contentType?.localizedDescription
+            }
             switch timelineItem {
             case let audioItem as AudioRoomTimelineItem:
-                audioItem.content.contentType?.localizedDescription
+                return audioItem.content.contentType?.localizedDescription
             case let fileItem as FileRoomTimelineItem:
-                fileItem.content.contentType?.localizedDescription
+                return fileItem.content.contentType?.localizedDescription
             case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.contentType?.localizedDescription
+                return imageItem.content.contentType?.localizedDescription
             case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.contentType?.localizedDescription
+                return videoItem.content.contentType?.localizedDescription
             default:
-                nil
+                return nil
             }
         }
         
         var blurhash: String? {
+            if let galleryItem {
+                return galleryItem.blurhash
+            }
             switch timelineItem {
             case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.blurhash
+                return imageItem.content.blurhash
             case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.blurhash
+                return videoItem.content.blurhash
             default:
-                nil
+                return nil
             }
         }
     }

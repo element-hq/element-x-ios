@@ -41,7 +41,7 @@ enum TimelineFocus {
 }
 
 enum TimelineAllowedMessageType {
-    case audio, file, image, video
+    case audio, file, image, video, gallery
 }
 
 enum TimelineProxyError: Error {

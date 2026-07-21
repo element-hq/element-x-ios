@@ -191,6 +191,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "FullscreenDialog_Previews")
     }
 
+    func testGalleryRoomTimelineView() async throws {
+        try await performAccessibilityAudit(named: "GalleryRoomTimelineView_Previews")
+    }
+
     func testHighlightedTimelineItemModifier() async throws {
         try await performAccessibilityAudit(named: "HighlightedTimelineItemModifier_Previews")
     }
