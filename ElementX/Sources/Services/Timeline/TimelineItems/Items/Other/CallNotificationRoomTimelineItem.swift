@@ -11,6 +11,7 @@ import Foundation
 nonisolated struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
+    let sender: TimelineItemSender
     let isDM: Bool
     let isVoiceCall: Bool
     

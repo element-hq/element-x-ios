@@ -91,6 +91,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             // Tombstoned call previews
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
+                                                                 sender: .init(id: "@sender:localhost"),
                                                                  isDM: false,
                                                                  isVoiceCall: false,
                                                                  callState: .tombstoned(isDeclinedByMe: false, isDeclined: false)))
@@ -99,6 +100,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
+                                                                 sender: .init(id: "@sender:localhost"),
                                                                  isDM: true,
                                                                  isVoiceCall: true,
                                                                  callState: .tombstoned(isDeclinedByMe: false, isDeclined: false)))
@@ -107,6 +109,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
+                                                                 sender: .init(id: "@sender:localhost"),
                                                                  isDM: false,
                                                                  isVoiceCall: false,
                                                                  callState: .tombstoned(isDeclinedByMe: true, isDeclined: true)))
@@ -115,6 +118,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
+                                                                 sender: .init(id: "@sender:localhost"),
                                                                  isDM: true,
                                                                  isVoiceCall: true,
                                                                  callState: .tombstoned(isDeclinedByMe: false, isDeclined: true)))
@@ -123,6 +127,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
+                                                                 sender: .init(id: "@sender:localhost"),
                                                                  isDM: true,
                                                                  isVoiceCall: false,
                                                                  callState: .tombstoned(isDeclinedByMe: false, isDeclined: true)))
@@ -131,6 +136,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
+                                                                 sender: .init(id: "@sender:localhost"),
                                                                  isDM: true,
                                                                  isVoiceCall: false,
                                                                  callState: .tombstoned(isDeclinedByMe: true, isDeclined: true)))
@@ -140,6 +146,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
             // Active call previews
             CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                                  timestamp: .mock,
+                                                                 sender: .init(id: "@sender:localhost", displayName: "John"),
                                                                  isDM: false,
                                                                  isVoiceCall: false,
                                                                  callState: .active(activeMembers: ["@alice:example.org"],

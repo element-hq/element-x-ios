@@ -868,6 +868,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         
         return CallNotificationRoomTimelineItem(id: eventItemProxy.id,
                                                 timestamp: eventItemProxy.timestamp,
+                                                sender: eventItemProxy.sender,
                                                 isDM: isDM,
                                                 isVoiceCall: isVoiceCall,
                                                 callState: activeMembers.count > 0 ?
