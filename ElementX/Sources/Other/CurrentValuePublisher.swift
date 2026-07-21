@@ -46,8 +46,9 @@ nonisolated extension CurrentValuePublisher where Failure == Never {
     /// this struct is discarded when the mapped publisher is chained inline, so anything eager
     /// (a live subscription feeding a second subject) would be cancelled and stop the updates.
     func map<T>(_ transform: @escaping (Output) -> T) -> CurrentValuePublisher<T, Never> {
-        .init(upstream: upstream.map(transform).eraseToAnyPublisher(),
-              valueProvider: { transform(value) })
+        .init(upstream: upstream.map(transform).eraseToAnyPublisher()) {
+            transform(value)
+        }
     }
 }
 
