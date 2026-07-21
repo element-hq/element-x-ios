@@ -88,6 +88,7 @@ struct MediaUploadPreviewScreen: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if context.viewState.mediaURLs.count > 1 {
             UploadMediaPeekCarousel(mediaURLs: context.viewState.mediaURLs,
+                                    mediaEditVersion: context.viewState.mediaEditVersion,
                                     currentIndex: $currentIndex)
         } else {
             PreviewView(mediaURLs: context.viewState.mediaURLs,
@@ -224,6 +225,7 @@ struct MediaUploadPreviewScreen: View {
 
 private struct UploadMediaPeekCarousel: View {
     let mediaURLs: [URL]
+    let mediaEditVersion: Int
     @Binding var currentIndex: Int
     
     @State private var scrolledID: Int?
@@ -232,7 +234,7 @@ private struct UploadMediaPeekCarousel: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 8) {
                 ForEach(Array(mediaURLs.enumerated()), id: \.offset) { index, url in
-                    UploadMediaThumbnail(url: url)
+                    UploadMediaThumbnail(url: url, mediaEditVersion: mediaEditVersion)
                         .containerRelativeFrame(.horizontal)
                         .id(index)
                 }
@@ -257,6 +259,7 @@ private struct UploadMediaPeekCarousel: View {
 
 private struct UploadMediaThumbnail: View {
     let url: URL
+    let mediaEditVersion: Int
     
     private var contentType: UTType? {
         UTType(filenameExtension: url.pathExtension)
@@ -270,7 +273,7 @@ private struct UploadMediaThumbnail: View {
     var body: some View {
         Group {
             if isImageOrVideo {
-                UploadMediaImageThumbnail(url: url)
+                UploadMediaImageThumbnail(url: url, mediaEditVersion: mediaEditVersion)
             } else {
                 UploadMediaFilePreview(url: url, title: url.lastPathComponent)
             }
@@ -281,6 +284,7 @@ private struct UploadMediaThumbnail: View {
 
 private struct UploadMediaImageThumbnail: View {
     let url: URL
+    let mediaEditVersion: Int
     @State private var image: UIImage?
     
     var body: some View {
@@ -294,7 +298,8 @@ private struct UploadMediaImageThumbnail: View {
                 ProgressView().tint(.white)
             }
         }
-        .task(id: url) { await load() }
+        // Reload when the file is edited in place, since the URL itself doesn't change.
+        .task(id: "\(url.path(percentEncoded: false))-\(mediaEditVersion)") { await load() }
     }
     
     private func load() async {
