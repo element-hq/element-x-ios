@@ -15,7 +15,8 @@ struct VideoMediaEventsTimelineView: View {
     
     var body: some View {
         ContentScanningView(contentScannerService: context?.contentScannerService,
-                            mediaSource: timelineItem.content.videoInfo.source) {
+                            mediaSource: timelineItem.content.videoInfo.source,
+                            thumbnailSource: timelineItem.content.thumbnailInfo?.source) {
             Color.clear // Let the image aspect fill in place
                 .aspectRatio(1, contentMode: .fill)
                 .overlay {

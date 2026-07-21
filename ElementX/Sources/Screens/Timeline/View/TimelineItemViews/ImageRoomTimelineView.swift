@@ -24,7 +24,8 @@ struct ImageRoomTimelineView: View {
             // The caption sits 8pts below the content scanner failure placeholder, 4pts below the media.
             VStack(alignment: .leading, spacing: contentScanningFailure == nil ? 4 : 8) {
                 ContentScanningView(contentScannerService: context?.contentScannerService,
-                                    mediaSource: timelineItem.content.imageInfo.source) {
+                                    mediaSource: timelineItem.content.imageInfo.source,
+                                    thumbnailSource: timelineItem.content.thumbnailInfo?.source) {
                     loadableImage
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(L10n.commonImage)

@@ -101,6 +101,66 @@ struct ContentScannerServiceTests {
         #expect(proxy.scanMediaSourceCallsCount == 1, "Concurrent loads for the same source should share a single scan.")
     }
     
+    // MARK: - Multiple sources
+    
+    @Test
+    func multipleSourcesAreSafeWhenAllSafe() async throws {
+        let proxy = ContentScannerProxyMock()
+        proxy.scanMediaSourceReturnValue = .success(true)
+        let service = ContentScannerService(contentScannerProxy: proxy)
+        
+        let result = await service.loadScanResultFromSources([makeSource("media"), makeSource("thumbnail")])
+        
+        #expect(try result.get() == true)
+    }
+    
+    @Test
+    func multipleSourcesAreUnsafeWhenAnySourceIsUnsafe() async throws {
+        let proxy = ContentScannerProxyMock()
+        let unsafeSource = makeSource("thumbnail")
+        proxy.scanMediaSourceClosure = { source in
+            source == unsafeSource ? .success(false) : .success(true)
+        }
+        let service = ContentScannerService(contentScannerProxy: proxy)
+        
+        // The media is safe but its thumbnail is unsafe, which is enough to flag the whole item.
+        let result = await service.loadScanResultFromSources([makeSource("media"), unsafeSource])
+        
+        #expect(try result.get() == false)
+    }
+    
+    @Test
+    func multipleSourcesFailWhenAnySourceFails() async {
+        let proxy = ContentScannerProxyMock()
+        let failingSource = makeSource("thumbnail")
+        proxy.scanMediaSourceClosure = { source in
+            source == failingSource ? .failure(.missingClient) : .success(true)
+        }
+        let service = ContentScannerService(contentScannerProxy: proxy)
+        
+        let result = await service.loadScanResultFromSources([makeSource("media"), failingSource])
+        
+        guard case .failure(.failedScanning) = result else {
+            Issue.record("A failure of any source should fail the combined scan.")
+            return
+        }
+    }
+    
+    @Test
+    func multipleSourcesSyncLookupCombinesVerdicts() async {
+        let proxy = ContentScannerProxyMock()
+        let service = ContentScannerService(contentScannerProxy: proxy)
+        
+        proxy.scanMediaSourceReturnValue = .success(true)
+        await service.loadScanResultFromSource(makeSource("safe"))
+        proxy.scanMediaSourceReturnValue = .success(false)
+        await service.loadScanResultFromSource(makeSource("unsafe"))
+        
+        #expect(service.scanResultFromSources([makeSource("safe")]) == true)
+        #expect(service.scanResultFromSources([makeSource("safe"), makeSource("unsafe")]) == false)
+        #expect(service.scanResultFromSources([makeSource("safe"), makeSource("unscanned")]) == nil)
+    }
+    
     // MARK: - Helpers
     
     private func makeSource(_ id: String) -> MediaSourceProxy {

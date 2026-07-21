@@ -42,7 +42,7 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     }
     
     private let contentScannerService: ContentScannerServiceProtocol?
-    private let mediaSource: MediaSourceProxy?
+    private let mediaSources: [MediaSourceProxy]
     private let containerShowsFailure: Bool
     private let safeContent: () -> SafeContent
     private let scanningContent: () -> ScanningContent
@@ -55,6 +55,8 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     ///     scanning and the content is always rendered.
     ///   - mediaSource: The media source to scan. Passing `nil` renders the content, this
     ///     makes it convenient to wrap items whose media source is optional.
+    ///   - thumbnailSource: The thumbnail source to scan alongside the media source when the item
+    ///     also downloads a thumbnail. The content is flagged if either source is unsafe or fails.
     ///   - containerShowsFailure: Whether a failure is reported up the view hierarchy through
     ///     ``ContentScanningFailurePreferenceKey`` so that the surrounding container (such as the
     ///     message bubble) adopts the critical styling. Pass `false` when the failure should only
@@ -64,12 +66,13 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     ///   - unsafeContent: The presentation of the media when it can't be shown.
     init(contentScannerService: ContentScannerServiceProtocol?,
          mediaSource: MediaSourceProxy?,
+         thumbnailSource: MediaSourceProxy? = nil,
          containerShowsFailure: Bool = true,
          @ViewBuilder safeContent: @escaping () -> SafeContent,
          @ViewBuilder scanningContent: @escaping () -> ScanningContent,
          @ViewBuilder unsafeContent: @escaping (ContentScanningFailure) -> UnsafeContent) {
         self.contentScannerService = contentScannerService
-        self.mediaSource = mediaSource
+        mediaSources = [mediaSource, thumbnailSource].compactMap { $0 }
         self.containerShowsFailure = containerShowsFailure
         self.safeContent = safeContent
         self.scanningContent = scanningContent
@@ -79,7 +82,7 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     var body: some View {
         content
             .preference(key: ContentScanningFailurePreferenceKey.self, value: containerShowsFailure ? scanFailure : nil)
-            .task(id: mediaSource?.url.absoluteString) {
+            .task(id: mediaSources.map(\.url.absoluteString).joined(separator: "|")) {
                 await scan()
             }
     }
@@ -104,7 +107,7 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     }
     
     private var resolvedScanState: ScanState {
-        guard let contentScannerService, let mediaSource else {
+        guard let contentScannerService, !mediaSources.isEmpty else {
             return .safe
         }
         
@@ -113,7 +116,7 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
         }
         
         // Until the scan triggered by this view resolves, reflect any verdict already in the cache.
-        switch contentScannerService.scanResultFromSource(mediaSource) {
+        switch contentScannerService.scanResultFromSources(mediaSources) {
         case true: return .safe
         case false: return .unsafe(.notSafe)
         default: return .scanning
@@ -121,11 +124,11 @@ struct ContentScanningView<SafeContent: View, ScanningContent: View, UnsafeConte
     }
     
     private func scan() async {
-        guard let contentScannerService, let mediaSource else {
+        guard let contentScannerService, !mediaSources.isEmpty else {
             return
         }
         
-        switch await contentScannerService.loadScanResultFromSource(mediaSource) {
+        switch await contentScannerService.loadScanResultFromSources(mediaSources) {
         case .success(true):
             scanState = .safe
         case .success(false):

@@ -25,7 +25,8 @@ struct FileMediaEventsTimelineView: View {
                                      formattedCaption: timelineItem.content.formattedCaption,
                                      trailingReservedSize: timelineItem.trailingReservedSize,
                                      contentScannerService: context?.contentScannerService,
-                                     mediaSource: timelineItem.content.source)
+                                     mediaSource: timelineItem.content.source,
+                                     thumbnailSource: timelineItem.content.thumbnailSource)
             .accessibilityLabel(L10n.commonFile)
             .frame(maxWidth: .infinity, alignment: .leading)
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,

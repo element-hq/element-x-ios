@@ -24,7 +24,8 @@ struct VideoRoomTimelineView: View {
             // The caption sits 8pts below the content scanner failure placeholder, 4pts below the media.
             VStack(alignment: .leading, spacing: contentScanningFailure == nil ? 4 : 8) {
                 ContentScanningView(contentScannerService: context?.contentScannerService,
-                                    mediaSource: timelineItem.content.videoInfo.source) {
+                                    mediaSource: timelineItem.content.videoInfo.source,
+                                    thumbnailSource: timelineItem.content.thumbnailInfo?.source) {
                     thumbnail
                         .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
                         .accessibilityElement(children: .ignore)
