@@ -380,12 +380,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Sending gallery with \(itemInfos.count) items")
         
         do {
-            let params = GalleryUploadParameters(caption: caption,
-                                                 formattedCaption: nil, // Rust will build this from the caption's markdown.
-                                                 mentions: nil,
-                                                 inReplyTo: inReplyToEventID)
-            
-            let handle = try timeline.sendGallery(params: params, itemInfos: itemInfos)
+            let handle = try timeline.sendGallery(params: .init(caption: caption,
+                                                                formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                                                mentions: nil,
+                                                                inReplyTo: inReplyToEventID),
+                                                  itemInfos: itemInfos)
             try await handle.join()
             MXLog.info("Finished sending gallery")
         } catch {
