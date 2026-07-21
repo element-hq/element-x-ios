@@ -110,11 +110,6 @@ protocol TimelineProxyProtocol: Sendable {
                           waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
-    func sendGallery(itemInfos: [GalleryItemInfo],
-                     caption: String?,
-                     formattedCaption: String?,
-                     inReplyToEventID: String?) async -> Result<Void, TimelineProxyError>
-    
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError>
     func markAsRead(receiptType: ReceiptType) async -> Result<Void, TimelineProxyError>
     
