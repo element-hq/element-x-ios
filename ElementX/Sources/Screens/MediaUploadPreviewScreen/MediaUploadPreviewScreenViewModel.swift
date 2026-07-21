@@ -34,11 +34,11 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          caption: NSAttributedString?,
          title: String?,
          shouldShowCaptionWarning: Bool,
+         galleryEnabled: Bool,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          timelineController: TimelineControllerProtocol,
          clientProxy: ClientProxyProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         galleryEnabled: Bool) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.mediaURLs = mediaURLs
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.timelineController = timelineController
@@ -125,33 +125,32 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         let itemInfos: [GalleryItemInfo] = mediaInfos.map { mediaInfo in
             switch mediaInfo {
             case let .image(imageURL, thumbnailURL, imageInfo):
-                return .image(imageInfo: imageInfo,
-                              source: .file(filename: imageURL.path(percentEncoded: false)),
-                              caption: nil,
-                              formattedCaption: nil,
-                              thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)))
+                .image(imageInfo: imageInfo,
+                       source: .file(filename: imageURL.path(percentEncoded: false)),
+                       caption: nil,
+                       formattedCaption: nil,
+                       thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)))
             case let .video(videoURL, thumbnailURL, videoInfo):
-                return .video(videoInfo: videoInfo,
-                              source: .file(filename: videoURL.path(percentEncoded: false)),
-                              caption: nil,
-                              formattedCaption: nil,
-                              thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)))
+                .video(videoInfo: videoInfo,
+                       source: .file(filename: videoURL.path(percentEncoded: false)),
+                       caption: nil,
+                       formattedCaption: nil,
+                       thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)))
             case let .audio(audioURL, audioInfo):
-                return .audio(audioInfo: audioInfo,
-                              source: .file(filename: audioURL.path(percentEncoded: false)),
-                              caption: nil,
-                              formattedCaption: nil)
+                .audio(audioInfo: audioInfo,
+                       source: .file(filename: audioURL.path(percentEncoded: false)),
+                       caption: nil,
+                       formattedCaption: nil)
             case let .file(fileURL, fileInfo):
-                return .file(fileInfo: fileInfo,
-                             source: .file(filename: fileURL.path(percentEncoded: false)),
-                             caption: nil,
-                             formattedCaption: nil)
+                .file(fileInfo: fileInfo,
+                      source: .file(filename: fileURL.path(percentEncoded: false)),
+                      caption: nil,
+                      formattedCaption: nil)
             }
         }
         
         return await timelineController.sendGallery(itemInfos: itemInfos,
                                                     caption: caption,
-                                                    formattedCaption: nil,
                                                     inReplyToEventID: nil)
     }
     

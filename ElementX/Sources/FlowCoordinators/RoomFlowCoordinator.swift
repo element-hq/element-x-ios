@@ -1120,11 +1120,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                        caption: caption,
                                                                        title: title,
                                                                        shouldShowCaptionWarning: flowParameters.appSettings.shouldShowMediaCaptionWarning,
+                                                                       galleryEnabled: flowParameters.appSettings.galleryEnabled,
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                        timelineController: timelineController,
                                                                        clientProxy: userSession.clientProxy,
-                                                                       userIndicatorController: flowParameters.userIndicatorController,
-                                                                       galleryEnabled: flowParameters.appSettings.galleryEnabled)
+                                                                       userIndicatorController: flowParameters.userIndicatorController)
         
         let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
         

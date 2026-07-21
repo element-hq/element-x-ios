@@ -177,7 +177,7 @@ final class MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    func multipleFiles() async throws {
+    func gallery() async throws {
         // Given an upload screen with multiple media files.
         setUpViewModel(urls: [fileURL, imageURL, fileURL], expectedCaption: nil)
         #expect(!context.viewState.shouldDisableInteraction)
@@ -192,15 +192,15 @@ final class MediaUploadPreviewScreenViewModelTests {
         
         // Then the screen should be dismissed once the gallery has been sent in a single request.
         try await deferredDismiss.fulfill()
-        #expect(timelineProxy.sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount == 1)
-        #expect(timelineProxy.sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArguments?.itemInfos.count == 3)
+        #expect(timelineProxy.sendGalleryItemInfosCaptionInReplyToEventIDCallsCount == 1)
+        #expect(timelineProxy.sendGalleryItemInfosCaptionInReplyToEventIDReceivedArguments?.itemInfos.count == 3)
         #expect(timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount == 0)
         #expect(timelineProxy.sendFileUrlFileInfoCaptionRequestHandleCallsCount == 0)
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1, "Only a loading indicator should be shown.")
     }
     
     @Test
-    func multipleFilesWithProcessingFailure() async throws {
+    func galleryWithProcessingFailure() async throws {
         // Given an upload screen for a non-existent file.
         setUpViewModel(urls: [imageURL, fileURL, badImageURL], expectedCaption: nil)
         #expect(!context.viewState.shouldDisableInteraction)
@@ -219,7 +219,7 @@ final class MediaUploadPreviewScreenViewModelTests {
     }
     
     @Test
-    func multipleFilesWithSendFailure() async throws {
+    func galleryWithSendFailure() async throws {
         // Given an upload screen with multiple media files where the gallery send fails.
         setUpViewModel(urls: [fileURL, imageURL, imageURL, fileURL], expectedCaption: nil, simulateGallerySendFailure: true)
         #expect(!context.viewState.shouldDisableInteraction)
@@ -234,8 +234,25 @@ final class MediaUploadPreviewScreenViewModelTests {
         
         // Then the screen should still be dismissed and an error indicator surfaced.
         try await deferredDismiss.fulfill()
-        #expect(timelineProxy.sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount == 1)
+        #expect(timelineProxy.sendGalleryItemInfosCaptionInReplyToEventIDCallsCount == 1)
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 2, "An error indicator should be shown.")
+    }
+    
+    @Test
+    func galleryDisabledSendsIndividualMessages() async throws {
+        // Given an upload screen with multiple media files and gallery sending disabled.
+        setUpViewModel(urls: [fileURL, imageURL, fileURL], expectedCaption: nil, galleryEnabled: false)
+        #expect(!context.viewState.shouldDisableInteraction)
+        
+        // When attempting to send the files.
+        let deferredDismiss = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        context.send(viewAction: .send)
+        
+        // Then each file should be sent as an individual message rather than a single gallery.
+        try await deferredDismiss.fulfill()
+        #expect(timelineProxy.sendGalleryItemInfosCaptionInReplyToEventIDCallsCount == 0)
+        #expect(timelineProxy.sendFileUrlFileInfoCaptionRequestHandleCallsCount == 2)
+        #expect(timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount == 1)
     }
     
     // MARK: - Helpers
@@ -284,7 +301,7 @@ final class MediaUploadPreviewScreenViewModelTests {
         timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure = { [weak self] _, caption, _, _ in
+        timelineProxy.sendGalleryItemInfosCaptionInReplyToEventIDClosure = { [weak self] _, caption, _ in
             guard !simulateGallerySendFailure else { return .failure(.sdkError(TestError.unknown)) }
             return self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
@@ -298,11 +315,11 @@ final class MediaUploadPreviewScreenViewModelTests {
                                                       caption: nil,
                                                       title: "Some File",
                                                       shouldShowCaptionWarning: true,
+                                                      galleryEnabled: galleryEnabled,
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                       timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),
                                                       clientProxy: clientProxy,
-                                                      userIndicatorController: userIndicatorController,
-                                                      galleryEnabled: galleryEnabled)
+                                                      userIndicatorController: userIndicatorController)
     }
     
     private func verifyCaption(_ caption: String?, expectedCaption: String?) -> Result<Void, TimelineProxyError> {

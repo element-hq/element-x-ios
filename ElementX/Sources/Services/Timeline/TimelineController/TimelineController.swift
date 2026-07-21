@@ -404,11 +404,9 @@ class TimelineController: TimelineControllerProtocol {
     
     func sendGallery(itemInfos: [GalleryItemInfo],
                      caption: String?,
-                     formattedCaption: String?,
                      inReplyToEventID: String?) async -> Result<Void, TimelineControllerError> {
         await activeTimeline.sendGallery(itemInfos: itemInfos,
                                          caption: caption,
-                                         formattedCaption: formattedCaption,
                                          inReplyToEventID: inReplyToEventID).mapError(TimelineControllerError.timelineProxyError)
     }
     

@@ -136,7 +136,6 @@ protocol TimelineControllerProtocol: Sendable {
     
     func sendGallery(itemInfos: [GalleryItemInfo],
                      caption: String?,
-                     formattedCaption: String?,
                      inReplyToEventID: String?) async -> Result<Void, TimelineControllerError>
     
     // MARK: - Poll

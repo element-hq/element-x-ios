@@ -376,14 +376,12 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendGallery(itemInfos: [GalleryItemInfo],
                      caption: String?,
-                     formattedCaption: String?,
                      inReplyToEventID: String?) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending gallery with \(itemInfos.count) items")
         
         do {
-            let formatted = formattedCaption.map { FormattedBody(format: .html, body: $0) }
             let params = GalleryUploadParameters(caption: caption,
-                                                 formattedCaption: formatted,
+                                                 formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                  mentions: nil,
                                                  inReplyTo: inReplyToEventID)
             

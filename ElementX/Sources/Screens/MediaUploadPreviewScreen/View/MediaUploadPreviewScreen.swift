@@ -73,8 +73,7 @@ struct MediaUploadPreviewScreen: View {
                 .foregroundStyle(.compound.textPrimary)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(Color.compound.bgCanvasDefault.opacity(0.85),
-                            in: Capsule())
+                .background(.compound.bgCanvasDefault.opacity(0.85), in: .capsule)
                 .padding(.top, 12)
         }
     }
@@ -86,10 +85,6 @@ struct MediaUploadPreviewScreen: View {
                 .font(.compound.headingMD)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if context.viewState.mediaURLs.count > 1 {
-            UploadMediaPeekCarousel(mediaURLs: context.viewState.mediaURLs,
-                                    mediaEditVersion: context.viewState.mediaEditVersion,
-                                    currentIndex: $currentIndex)
         } else {
             PreviewView(mediaURLs: context.viewState.mediaURLs,
                         title: context.viewState.title,
@@ -220,137 +215,6 @@ struct MediaUploadPreviewScreen: View {
             isComposerFocussed = true
         }
         #endif
-    }
-}
-
-private struct UploadMediaPeekCarousel: View {
-    let mediaURLs: [URL]
-    let mediaEditVersion: Int
-    @Binding var currentIndex: Int
-    
-    @State private var scrolledID: Int?
-    
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 8) {
-                ForEach(Array(mediaURLs.enumerated()), id: \.offset) { index, url in
-                    UploadMediaThumbnail(url: url, mediaEditVersion: mediaEditVersion)
-                        .containerRelativeFrame(.horizontal)
-                        .id(index)
-                }
-            }
-            .scrollTargetLayout()
-        }
-        .contentMargins(.horizontal, 24, for: .scrollContent)
-        .scrollTargetBehavior(.viewAligned)
-        .scrollPosition(id: $scrolledID)
-        .onAppear {
-            if scrolledID == nil {
-                scrolledID = currentIndex
-            }
-        }
-        .onChange(of: scrolledID) { _, newValue in
-            if let newValue, newValue != currentIndex {
-                currentIndex = newValue
-            }
-        }
-    }
-}
-
-private struct UploadMediaThumbnail: View {
-    let url: URL
-    let mediaEditVersion: Int
-    
-    private var contentType: UTType? {
-        UTType(filenameExtension: url.pathExtension)
-    }
-    
-    private var isImageOrVideo: Bool {
-        guard let contentType else { return false }
-        return contentType.conforms(to: .image) || contentType.conforms(to: .movie) || contentType.conforms(to: .audiovisualContent)
-    }
-    
-    var body: some View {
-        Group {
-            if isImageOrVideo {
-                UploadMediaImageThumbnail(url: url, mediaEditVersion: mediaEditVersion)
-            } else {
-                UploadMediaFilePreview(url: url, title: url.lastPathComponent)
-            }
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-private struct UploadMediaImageThumbnail: View {
-    let url: URL
-    let mediaEditVersion: Int
-    @State private var image: UIImage?
-    
-    var body: some View {
-        ZStack {
-            Color.black
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-            } else {
-                ProgressView().tint(.white)
-            }
-        }
-        // Reload when the file is edited in place, since the URL itself doesn't change.
-        .task(id: "\(url.path(percentEncoded: false))-\(mediaEditVersion)") { await load() }
-    }
-    
-    private func load() async {
-        if let image = UIImage(contentsOfFile: url.path(percentEncoded: false)) {
-            self.image = image
-            return
-        }
-        
-        // Fall back to a video frame thumbnail.
-        let asset = AVURLAsset(url: url)
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-        do {
-            let cgImage = try await generator.image(at: .zero).image
-            image = UIImage(cgImage: cgImage)
-        } catch {
-            image = nil
-        }
-    }
-}
-
-private struct UploadMediaFilePreview: UIViewControllerRepresentable {
-    let url: URL
-    let title: String
-    
-    func makeUIViewController(context: Context) -> QLPreviewController {
-        let controller = QLPreviewController()
-        controller.dataSource = context.coordinator
-        return controller
-    }
-    
-    func updateUIViewController(_ uiViewController: QLPreviewController, context: Context) { }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(url: url, title: title)
-    }
-    
-    final class Coordinator: NSObject, QLPreviewControllerDataSource {
-        private let item: PreviewItem
-        
-        init(url: URL, title: String) {
-            item = PreviewItem(previewItemURL: url, previewItemTitle: title)
-        }
-        
-        func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-            1
-        }
-        
-        func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            item
-        }
     }
 }
 
@@ -533,11 +397,11 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              caption: nil,
                                                              title: "App Icon.png",
                                                              shouldShowCaptionWarning: true,
+                                                             galleryEnabled: true,
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: .volatile()),
                                                              timelineController: TimelineControllerMock(.init()),
                                                              clientProxy: ClientProxyMock(.init()),
-                                                             userIndicatorController: UserIndicatorControllerMock(),
-                                                             galleryEnabled: true)
+                                                             userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {
         ElementNavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)

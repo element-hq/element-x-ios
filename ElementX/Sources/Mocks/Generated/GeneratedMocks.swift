@@ -12269,44 +12269,44 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
     }
     //MARK: - sendGallery
 
-    private let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount = 0
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount: Int {
-        get { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount } }
-        set { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount = newValue } }
+    private let sendGalleryItemInfosCaptionInReplyToEventIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingCallsCount = 0
+    var sendGalleryItemInfosCaptionInReplyToEventIDCallsCount: Int {
+        get { sendGalleryItemInfosCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingCallsCount } }
+        set { sendGalleryItemInfosCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingCallsCount = newValue } }
     }
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCalled: Bool {
-        return sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount > 0
+    var sendGalleryItemInfosCaptionInReplyToEventIDCalled: Bool {
+        return sendGalleryItemInfosCaptionInReplyToEventIDCallsCount > 0
     }
-    private let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)?
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)? {
-        get { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArgumentsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedArguments } }
-        set { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArgumentsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedArguments = newValue } }
+    private let sendGalleryItemInfosCaptionInReplyToEventIDReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?)?
+    var sendGalleryItemInfosCaptionInReplyToEventIDReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?)? {
+        get { sendGalleryItemInfosCaptionInReplyToEventIDReceivedArgumentsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedArguments } }
+        set { sendGalleryItemInfosCaptionInReplyToEventIDReceivedArgumentsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedArguments = newValue } }
     }
-    private let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)] = []
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)] {
-        get { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedInvocations } }
-        set { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedInvocations = newValue } }
+    private let sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?)] = []
+    var sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?)] {
+        get { sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedInvocations } }
+        set { sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue: Result<Void, TimelineControllerError>!
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValue: Result<Void, TimelineControllerError>! {
-        get { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValueLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue } }
-        set { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValueLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue = newValue } }
+    private let sendGalleryItemInfosCaptionInReplyToEventIDReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReturnValue: Result<Void, TimelineControllerError>!
+    var sendGalleryItemInfosCaptionInReplyToEventIDReturnValue: Result<Void, TimelineControllerError>! {
+        get { sendGalleryItemInfosCaptionInReplyToEventIDReturnValueLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReturnValue } }
+        set { sendGalleryItemInfosCaptionInReplyToEventIDReturnValueLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure: (([GalleryItemInfo], String?, String?, String?) async -> Result<Void, TimelineControllerError>)?
+    nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDClosure: (([GalleryItemInfo], String?, String?) async -> Result<Void, TimelineControllerError>)?
 
-    @concurrent func sendGallery(itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?) async -> Result<Void, TimelineControllerError> {
-        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount += 1 }
-        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArguments = (itemInfos: itemInfos, caption: caption, formattedCaption: formattedCaption, inReplyToEventID: inReplyToEventID)
-        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedInvocations.append((itemInfos: itemInfos, caption: caption, formattedCaption: formattedCaption, inReplyToEventID: inReplyToEventID)) }
-        if let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure = sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure {
-            return await sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure(itemInfos, caption, formattedCaption, inReplyToEventID)
+    @concurrent func sendGallery(itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?) async -> Result<Void, TimelineControllerError> {
+        sendGalleryItemInfosCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingCallsCount += 1 }
+        sendGalleryItemInfosCaptionInReplyToEventIDReceivedArguments = (itemInfos: itemInfos, caption: caption, inReplyToEventID: inReplyToEventID)
+        sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedInvocations.append((itemInfos: itemInfos, caption: caption, inReplyToEventID: inReplyToEventID)) }
+        if let sendGalleryItemInfosCaptionInReplyToEventIDClosure = sendGalleryItemInfosCaptionInReplyToEventIDClosure {
+            return await sendGalleryItemInfosCaptionInReplyToEventIDClosure(itemInfos, caption, inReplyToEventID)
         } else {
-            return sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValue
+            return sendGalleryItemInfosCaptionInReplyToEventIDReturnValue
         }
     }
     //MARK: - createPoll
@@ -13066,44 +13066,44 @@ nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable 
     }
     //MARK: - sendGallery
 
-    private let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount = 0
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount: Int {
-        get { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount } }
-        set { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount = newValue } }
+    private let sendGalleryItemInfosCaptionInReplyToEventIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingCallsCount = 0
+    var sendGalleryItemInfosCaptionInReplyToEventIDCallsCount: Int {
+        get { sendGalleryItemInfosCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingCallsCount } }
+        set { sendGalleryItemInfosCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingCallsCount = newValue } }
     }
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCalled: Bool {
-        return sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCount > 0
+    var sendGalleryItemInfosCaptionInReplyToEventIDCalled: Bool {
+        return sendGalleryItemInfosCaptionInReplyToEventIDCallsCount > 0
     }
-    private let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)?
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)? {
-        get { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArgumentsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedArguments } }
-        set { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArgumentsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedArguments = newValue } }
+    private let sendGalleryItemInfosCaptionInReplyToEventIDReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?)?
+    var sendGalleryItemInfosCaptionInReplyToEventIDReceivedArguments: (itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?)? {
+        get { sendGalleryItemInfosCaptionInReplyToEventIDReceivedArgumentsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedArguments } }
+        set { sendGalleryItemInfosCaptionInReplyToEventIDReceivedArgumentsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedArguments = newValue } }
     }
-    private let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)] = []
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?)] {
-        get { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedInvocations } }
-        set { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedInvocations = newValue } }
+    private let sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?)] = []
+    var sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocations: [(itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?)] {
+        get { sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedInvocations } }
+        set { sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValueLock = NSLock()
-    private nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValue: Result<Void, TimelineProxyError>! {
-        get { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValueLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue } }
-        set { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValueLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReturnValue = newValue } }
+    private let sendGalleryItemInfosCaptionInReplyToEventIDReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendGalleryItemInfosCaptionInReplyToEventIDReturnValue: Result<Void, TimelineProxyError>! {
+        get { sendGalleryItemInfosCaptionInReplyToEventIDReturnValueLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReturnValue } }
+        set { sendGalleryItemInfosCaptionInReplyToEventIDReturnValueLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure: (([GalleryItemInfo], String?, String?, String?) async -> Result<Void, TimelineProxyError>)?
+    nonisolated(unsafe) var sendGalleryItemInfosCaptionInReplyToEventIDClosure: (([GalleryItemInfo], String?, String?) async -> Result<Void, TimelineProxyError>)?
 
-    @concurrent func sendGallery(itemInfos: [GalleryItemInfo], caption: String?, formattedCaption: String?, inReplyToEventID: String?) async -> Result<Void, TimelineProxyError> {
-        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingCallsCount += 1 }
-        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedArguments = (itemInfos: itemInfos, caption: caption, formattedCaption: formattedCaption, inReplyToEventID: inReplyToEventID)
-        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDUnderlyingReceivedInvocations.append((itemInfos: itemInfos, caption: caption, formattedCaption: formattedCaption, inReplyToEventID: inReplyToEventID)) }
-        if let sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure = sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure {
-            return await sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure(itemInfos, caption, formattedCaption, inReplyToEventID)
+    @concurrent func sendGallery(itemInfos: [GalleryItemInfo], caption: String?, inReplyToEventID: String?) async -> Result<Void, TimelineProxyError> {
+        sendGalleryItemInfosCaptionInReplyToEventIDCallsCountLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingCallsCount += 1 }
+        sendGalleryItemInfosCaptionInReplyToEventIDReceivedArguments = (itemInfos: itemInfos, caption: caption, inReplyToEventID: inReplyToEventID)
+        sendGalleryItemInfosCaptionInReplyToEventIDReceivedInvocationsLock.withLock { sendGalleryItemInfosCaptionInReplyToEventIDUnderlyingReceivedInvocations.append((itemInfos: itemInfos, caption: caption, inReplyToEventID: inReplyToEventID)) }
+        if let sendGalleryItemInfosCaptionInReplyToEventIDClosure = sendGalleryItemInfosCaptionInReplyToEventIDClosure {
+            return await sendGalleryItemInfosCaptionInReplyToEventIDClosure(itemInfos, caption, inReplyToEventID)
         } else {
-            return sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDReturnValue
+            return sendGalleryItemInfosCaptionInReplyToEventIDReturnValue
         }
     }
     //MARK: - sendReadReceipt

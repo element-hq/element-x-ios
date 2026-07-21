@@ -112,7 +112,6 @@ protocol TimelineProxyProtocol: Sendable {
     
     func sendGallery(itemInfos: [GalleryItemInfo],
                      caption: String?,
-                     formattedCaption: String?,
                      inReplyToEventID: String?) async -> Result<Void, TimelineProxyError>
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError>

@@ -162,12 +162,11 @@ struct TimelineControllerMockConfiguration {
             return .success(())
         }
         
-        sendGalleryItemInfosCaptionFormattedCaptionInReplyToEventIDClosure = { [weak self, timelineProxy] itemInfos, caption, formattedCaption, inReplyToEventID in
+        sendGalleryItemInfosCaptionInReplyToEventIDClosure = { [weak self, timelineProxy] itemInfos, caption, inReplyToEventID in
             self?.callbacks.send(.messageSentOrEdited)
             if let timelineProxy {
                 return await timelineProxy.sendGallery(itemInfos: itemInfos,
                                                        caption: caption,
-                                                       formattedCaption: formattedCaption,
                                                        inReplyToEventID: inReplyToEventID).mapError(TimelineControllerError.timelineProxyError)
             }
             return .success(())
