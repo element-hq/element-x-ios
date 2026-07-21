@@ -467,23 +467,28 @@ private final class KeyNavigatingSearchTextField: UISearchTextField {
 struct SearchScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                       clientProxy: makeClientProxy(),
-                                                      mediaProvider: MediaProviderMock(.init()))
+                                                      mediaProvider: MediaProviderMock(.init()),
+                                                      userIndicatorController: UserIndicatorControllerMock())
     static let noResultsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                           clientProxy: makeClientProxy(),
                                                           mediaProvider: MediaProviderMock(.init()),
+                                                          userIndicatorController: UserIndicatorControllerMock(),
                                                           initialSearchQuery: "John Doe")
     static let roomsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()),
+                                                      userIndicatorController: UserIndicatorControllerMock(),
                                                       initialSearchQuery: "Foundation")
     static let messagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                          clientProxy: makeClientProxy(searchService: makeSearchService(results: .mockResults)),
                                                          mediaProvider: MediaProviderMock(.init()),
+                                                         userIndicatorController: UserIndicatorControllerMock(),
                                                          initialSearchQuery: "Foundation",
                                                          initialSearchMode: .messages)
     static let loadingMessagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                                 clientProxy: makeClientProxy(searchService: makeSearchService(paginationState: .loading)),
                                                                 mediaProvider: MediaProviderMock(.init()),
+                                                                userIndicatorController: UserIndicatorControllerMock(),
                                                                 initialSearchQuery: "Foundation",
                                                                 initialSearchMode: .messages)
     

@@ -12,6 +12,7 @@ struct SearchScreenCoordinatorParameters {
     let roomSummaryProvider: RoomSummaryProviderProtocol
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum SearchScreenCoordinatorAction {
@@ -32,7 +33,8 @@ final class SearchScreenCoordinator: CoordinatorProtocol {
     init(parameters: SearchScreenCoordinatorParameters) {
         viewModel = SearchScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
                                           clientProxy: parameters.clientProxy,
-                                          mediaProvider: parameters.mediaProvider)
+                                          mediaProvider: parameters.mediaProvider,
+                                          userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

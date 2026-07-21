@@ -27,7 +27,8 @@ struct SearchScreenViewModelTests {
         
         viewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                           clientProxy: clientProxy,
-                                          mediaProvider: MediaProviderMock(.init()))
+                                          mediaProvider: MediaProviderMock(.init()),
+                                          userIndicatorController: UserIndicatorControllerMock())
     }
     
     @Test
