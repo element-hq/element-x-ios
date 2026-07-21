@@ -18,6 +18,9 @@ struct MediaUploadPreviewScreenCoordinatorParameters {
     let timelineController: TimelineControllerProtocol
     let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    /// Whether sending as a gallery is enabled. When `false`, multiple attachments are sent as
+    /// individual messages (the previous behaviour).
+    let galleryEnabled: Bool
 }
 
 enum MediaUploadPreviewScreenCoordinatorAction {
@@ -41,7 +44,8 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                       timelineController: parameters.timelineController,
                                                       clientProxy: parameters.clientProxy,
-                                                      userIndicatorController: parameters.userIndicatorController)
+                                                      userIndicatorController: parameters.userIndicatorController,
+                                                      galleryEnabled: parameters.galleryEnabled)
     }
     
     func start() {
