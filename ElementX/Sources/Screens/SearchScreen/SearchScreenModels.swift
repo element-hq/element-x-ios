@@ -22,7 +22,7 @@ enum SearchScreenMode: CaseIterable, Identifiable {
     
     var title: String {
         switch self {
-        case .rooms: UntranslatedL10n.screenSearchTabRooms
+        case .rooms: UntranslatedL10n.screenSearchTabChats
         case .messages: UntranslatedL10n.screenSearchTabMessages
         }
     }
