@@ -1,10 +1,13 @@
+---
 name: ElementX
 attributes:
   ORGANIZATIONNAME: Element
   LastUpgradeCheck: "1620"
+  
 fileGroups:
 - project.yml
 - app.yml
+
 options:
   groupSortPosition: bottom
   createIntermediateGroups: true
@@ -42,8 +45,9 @@ options:
     - AccessibilityTests
   fileTypes:
     icon:
-      file: true
+      file: true # https://github.com/yonaskolb/XcodeGen/issues/1556
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
+
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true
   ENABLE_BITCODE: false
@@ -52,6 +56,7 @@ settings:
   MARKETING_VERSION: 26.07.5
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
+
 include:
 - path: app.yml
 - path: ElementX/SupportingFiles/target.yml
@@ -63,7 +68,10 @@ include:
 - path: UITests/SupportingFiles/target.yml
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: AccessibilityTests/SupportingFiles/target.yml
+# - path: MyAppVariant/override.yml
+
 packages:
+  # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
     exactVersion: 26.07.15
@@ -81,13 +89,19 @@ packages:
     exactVersion: 0.21.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
-    revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2
+    revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
+    # minorVersion: 1.5.0
+    # path: ../emojibase-bindings
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
     minorVersion: 0.0.4
+    # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
     exactVersion: 2.42.0
+    # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
+  
+  # External dependencies
   Algorithms:
     url: https://github.com/apple/swift-algorithms
     minorVersion: 1.2.1
@@ -154,6 +168,7 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.2.1
+
 aggregateTargets:
   Periphery:
     buildScripts:
@@ -162,3 +177,4 @@ aggregateTargets:
         export PATH="$PATH:/opt/homebrew/bin"
         periphery scan --format xcode
       basedOnDependencyAnalysis: false
+
