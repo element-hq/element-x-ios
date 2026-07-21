@@ -14,6 +14,7 @@ typealias SearchScreenViewModelType = StateStoreViewModelV2<SearchScreenViewStat
 class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelProtocol {
     private let roomSummaryProvider: RoomSummaryProviderProtocol
     private let searchService: SearchServiceProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private var searchQueryObservationTask: Task<Void, Never>?
     private var loadingObservationTask: Task<Void, Never>?
     private var setQueryTask: Task<Void, Never>?
@@ -26,10 +27,12 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     init(roomSummaryProvider: RoomSummaryProviderProtocol,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
          initialSearchQuery: String = "",
          initialSearchMode: SearchScreenMode = .rooms) {
         self.roomSummaryProvider = roomSummaryProvider
         searchService = clientProxy.searchService
+        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SearchScreenViewState(bindings: .init(searchQuery: initialSearchQuery, searchMode: initialSearchMode)),
                    mediaProvider: mediaProvider)
@@ -133,8 +136,10 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         } else {
             roomSummaryProvider.setFilter(.search(query: searchQuery))
             setQueryTask = Task { [weak self] in
-                // TODO: @stefanceriu Surface set query errors
-                _ = await self?.searchService.setQuery(searchQuery)
+                guard let self else { return }
+                if case .failure = await searchService.setQuery(searchQuery), !Task.isCancelled {
+                    userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                }
             }
         }
     }

@@ -97,7 +97,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         if flowParameters.appSettings.globalSearchEnabled, #available(iOS 26.0, *) {
             let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
                                                                               clientProxy: flowParameters.userSession.clientProxy,
-                                                                              mediaProvider: flowParameters.userSession.mediaProvider))
+                                                                              mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                              userIndicatorController: flowParameters.userIndicatorController))
             let searchStackCoordinator = NavigationStackCoordinator()
             searchStackCoordinator.setRootCoordinator(searchCoordinator)
             
