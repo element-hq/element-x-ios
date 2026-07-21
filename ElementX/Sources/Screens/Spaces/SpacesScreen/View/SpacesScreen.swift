@@ -144,8 +144,6 @@ struct SpacesScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(isEmpty: Bool = false) -> SpacesScreenViewModel {
-        let appSettings = AppSettings.volatile()
-        
         let clientProxy = ClientProxyMock(.init())
         clientProxy.spaceService = SpaceServiceProxyMock(.init(topLevelSpaces: isEmpty ? [] : .mockJoinedSpaces))
         
