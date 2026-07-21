@@ -20,10 +20,10 @@ internal nonisolated enum UntranslatedL10n {
   internal static func screenSearchNoResultsMessage(_ p1: Any) -> String {
     return UntranslatedL10n.tr("Untranslated", "screen_search_no_results_message", String(describing: p1))
   }
+  /// Chats
+  internal static var screenSearchTabChats: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_chats") }
   /// Messages
   internal static var screenSearchTabMessages: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_messages") }
-  /// Rooms
-  internal static var screenSearchTabRooms: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_rooms") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
