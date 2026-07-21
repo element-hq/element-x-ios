@@ -162,6 +162,16 @@ struct TimelineControllerMockConfiguration {
             return .success(())
         }
         
+        sendGalleryItemInfosCaptionInReplyToEventIDClosure = { [weak self, timelineProxy] itemInfos, caption, inReplyToEventID in
+            self?.callbacks.send(.messageSentOrEdited)
+            if let timelineProxy {
+                return await timelineProxy.sendGallery(itemInfos: itemInfos,
+                                                       caption: caption,
+                                                       inReplyToEventID: inReplyToEventID).mapError(TimelineControllerError.timelineProxyError)
+            }
+            return .success(())
+        }
+        
         sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = { [weak self, timelineProxy] url, audioInfo, waveform, requestHandle in
             self?.callbacks.send(.messageSentOrEdited)
             if let timelineProxy {

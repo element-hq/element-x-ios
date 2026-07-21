@@ -374,6 +374,27 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
+    func sendGallery(itemInfos: [GalleryItemInfo],
+                     caption: String?,
+                     inReplyToEventID: String?) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Sending gallery with \(itemInfos.count) items")
+        
+        do {
+            let handle = try timeline.sendGallery(params: .init(caption: caption,
+                                                                formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                                                mentions: nil,
+                                                                inReplyTo: inReplyToEventID),
+                                                  itemInfos: itemInfos)
+            try await handle.join()
+            MXLog.info("Finished sending gallery")
+        } catch {
+            MXLog.error("Failed sending gallery with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+        
+        return .success(())
+    }
+    
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [Float],

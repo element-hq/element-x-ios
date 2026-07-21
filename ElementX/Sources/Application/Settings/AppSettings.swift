@@ -416,6 +416,11 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var linkPreviewsEnabled: Bool
     
+    /// Enables *sending* gallery messages (multiple media in a single message).
+    /// Received galleries are always rendered regardless of this flag.
+    @UserPreference(defaultValue: false)
+    var galleryEnabled: Bool
+    
     @UserPreference(defaultValue: false)
     var jumpToReadMarkerEnabled: Bool
     

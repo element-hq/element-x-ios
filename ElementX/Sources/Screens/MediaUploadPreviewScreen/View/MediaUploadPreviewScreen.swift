@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AVFoundation
 import Combine
 import Compound
 import GameController
@@ -35,17 +36,7 @@ struct MediaUploadPreviewScreen: View {
         mainContent
             .id(context.viewState.mediaURLs)
             .ignoresSafeArea(edges: [.horizontal])
-            .safeAreaInset(edge: .top) {
-                if context.viewState.mediaURLs.count > 1 {
-                    Text(L10n.screenMediaUploadPreviewItemCount(currentIndex + 1, context.viewState.mediaURLs.count))
-                        .font(.compound.bodyMD)
-                        .foregroundColor(.compound.textPrimary)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(.compound.bgBadgeDefault)
-                        .clipShape(.capsule)
-                }
-            }
+            .overlay(alignment: .top) { galleryBadge }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
                     .padding(.horizontal, 12)
@@ -72,6 +63,19 @@ struct MediaUploadPreviewScreen: View {
                 // Make sure out of bound error alerts are shown even if the sheet is presented
                 .alert(item: $context.alertInfo)
             }
+    }
+    
+    @ViewBuilder
+    private var galleryBadge: some View {
+        if context.viewState.mediaURLs.count > 1 {
+            Text(L10n.screenMediaUploadPreviewItemCount(currentIndex + 1, context.viewState.mediaURLs.count))
+                .font(.compound.bodySMSemibold)
+                .foregroundStyle(.compound.textPrimary)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(.compound.bgCanvasDefault.opacity(0.85), in: .capsule)
+                .padding(.top, 12)
+        }
     }
     
     @ViewBuilder
@@ -393,6 +397,7 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              caption: nil,
                                                              title: "App Icon.png",
                                                              shouldShowCaptionWarning: true,
+                                                             galleryEnabled: true,
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: .volatile()),
                                                              timelineController: TimelineControllerMock(.init()),
                                                              clientProxy: ClientProxyMock(.init()),
