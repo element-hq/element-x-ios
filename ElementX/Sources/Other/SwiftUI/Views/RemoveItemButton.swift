@@ -19,18 +19,12 @@ private struct RemoveItemButtonViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .mask {
-                Rectangle()
-                    .fill(.white)
-                    .overlay(alignment: .topTrailing) {
-                        closeButtonLabel
-                            .hidden()
-                            .padding(2)
-                            .overlay { Circle().fill(.black) }
-                            .offset(x: 2, y: -2)
-                    }
-                    .compositingGroup()
-                    .luminanceToAlpha()
+            .inverseMask(alignment: .topTrailing) {
+                closeButtonLabel
+                    .hidden()
+                    .padding(2)
+                    .overlay { Circle() }
+                    .offset(x: 2, y: -2)
             }
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {

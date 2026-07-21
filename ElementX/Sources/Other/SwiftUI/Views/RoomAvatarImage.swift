@@ -88,18 +88,11 @@ struct RoomAvatarImage: View {
                                         avatarSize: avatarSize,
                                         mediaProvider: mediaProvider,
                                         onTap: onAvatarTap)
-                        .mask {
-                            Rectangle()
-                                .fill(Color.white)
-                                .overlay {
-                                    Circle()
-                                        .inset(by: -4)
-                                        .fill(Color.black)
-                                        .scaledOffset(x: clusterSize - avatarSize.value,
-                                                      y: -clusterSize + avatarSize.value)
-                                }
-                                .compositingGroup()
-                                .luminanceToAlpha()
+                        .inverseMask {
+                            Circle()
+                                .inset(by: -4)
+                                .scaledOffset(x: clusterSize - avatarSize.value,
+                                              y: -clusterSize + avatarSize.value)
                         }
                         .scaledFrame(size: clusterSize, alignment: .bottomLeading)
                 }

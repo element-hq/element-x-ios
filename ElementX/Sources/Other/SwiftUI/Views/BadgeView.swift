@@ -23,21 +23,15 @@ struct BadgeViewModifier: ViewModifier {
     let size: Double
     
     func body(content: Content) -> some View {
-        content.mask {
-            Rectangle()
-                .fill(.white)
-                .overlay(alignment: .topTrailing) {
-                    Circle()
-                        .fill(.black)
-                        .frame(width: maskSize, height: maskSize)
-                        .offset(maskOffset)
-                }
-                .compositingGroup()
-                .luminanceToAlpha()
-        }
-        .overlay(alignment: .topTrailing) {
-            BadgeView(size: size)
-        }
+        content
+            .inverseMask(alignment: .topTrailing) {
+                Circle()
+                    .frame(width: maskSize, height: maskSize)
+                    .offset(maskOffset)
+            }
+            .overlay(alignment: .topTrailing) {
+                BadgeView(size: size)
+            }
     }
     
     private var maskSize: Double {
