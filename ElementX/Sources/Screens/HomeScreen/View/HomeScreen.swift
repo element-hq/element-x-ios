@@ -85,15 +85,9 @@ struct HomeScreen: View {
         Button {
             context.send(viewAction: .showSettings)
         } label: {
-            LoadableAvatarImage(url: context.viewState.userProfile.avatarURL,
-                                name: context.viewState.userProfile.displayName,
-                                contentID: context.viewState.userProfile.id,
-                                avatarSize: .user(on: .chats),
-                                mediaProvider: context.mediaProvider)
-                .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-                .clipShape(.circle)
-                .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
-                .compositingGroup()
+            AvatarSettingsButtonLabel(userProfile: context.viewState.userProfile,
+                                      requiresExtraAccountSetup: context.viewState.requiresExtraAccountSetup,
+                                      mediaProvider: context.mediaProvider)
         }
         .accessibilityLabel(L10n.commonSettings)
     }
