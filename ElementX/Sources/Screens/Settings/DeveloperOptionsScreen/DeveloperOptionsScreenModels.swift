@@ -67,8 +67,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     
     var linkPreviewsEnabled: Bool { get set }
     
-    var galleryEnabled: Bool { get set }
-    
     var jumpToReadMarkerEnabled: Bool { get set }
     
     var linkNewDeviceEnabled: Bool { get set }
