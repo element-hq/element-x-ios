@@ -3094,33 +3094,33 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return reportRoomForIdentifierReasonReturnValue
         }
     }
-    //MARK: - loadUserProfile
+    //MARK: - loadUserProfileIfNeeded
 
-    private let loadUserProfileCallsCountLock = NSLock()
-    private nonisolated(unsafe) var loadUserProfileUnderlyingCallsCount = 0
-    var loadUserProfileCallsCount: Int {
-        get { loadUserProfileCallsCountLock.withLock { loadUserProfileUnderlyingCallsCount } }
-        set { loadUserProfileCallsCountLock.withLock { loadUserProfileUnderlyingCallsCount = newValue } }
+    private let loadUserProfileIfNeededCallsCountLock = NSLock()
+    private nonisolated(unsafe) var loadUserProfileIfNeededUnderlyingCallsCount = 0
+    var loadUserProfileIfNeededCallsCount: Int {
+        get { loadUserProfileIfNeededCallsCountLock.withLock { loadUserProfileIfNeededUnderlyingCallsCount } }
+        set { loadUserProfileIfNeededCallsCountLock.withLock { loadUserProfileIfNeededUnderlyingCallsCount = newValue } }
     }
-    var loadUserProfileCalled: Bool {
-        return loadUserProfileCallsCount > 0
+    var loadUserProfileIfNeededCalled: Bool {
+        return loadUserProfileIfNeededCallsCount > 0
     }
 
-    private let loadUserProfileReturnValueLock = NSLock()
-    private nonisolated(unsafe) var loadUserProfileUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var loadUserProfileReturnValue: Result<Void, ClientProxyError>! {
-        get { loadUserProfileReturnValueLock.withLock { loadUserProfileUnderlyingReturnValue } }
-        set { loadUserProfileReturnValueLock.withLock { loadUserProfileUnderlyingReturnValue = newValue } }
+    private let loadUserProfileIfNeededReturnValueLock = NSLock()
+    private nonisolated(unsafe) var loadUserProfileIfNeededUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var loadUserProfileIfNeededReturnValue: Result<Void, ClientProxyError>! {
+        get { loadUserProfileIfNeededReturnValueLock.withLock { loadUserProfileIfNeededUnderlyingReturnValue } }
+        set { loadUserProfileIfNeededReturnValueLock.withLock { loadUserProfileIfNeededUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var loadUserProfileClosure: (() async -> Result<Void, ClientProxyError>)?
+    nonisolated(unsafe) var loadUserProfileIfNeededClosure: (() async -> Result<Void, ClientProxyError>)?
 
     @discardableResult
-    @concurrent func loadUserProfile() async -> Result<Void, ClientProxyError> {
-        loadUserProfileCallsCountLock.withLock { loadUserProfileUnderlyingCallsCount += 1 }
-        if let loadUserProfileClosure = loadUserProfileClosure {
-            return await loadUserProfileClosure()
+    @concurrent func loadUserProfileIfNeeded() async -> Result<Void, ClientProxyError> {
+        loadUserProfileIfNeededCallsCountLock.withLock { loadUserProfileIfNeededUnderlyingCallsCount += 1 }
+        if let loadUserProfileIfNeededClosure = loadUserProfileIfNeededClosure {
+            return await loadUserProfileIfNeededClosure()
         } else {
-            return loadUserProfileReturnValue
+            return loadUserProfileIfNeededReturnValue
         }
     }
     //MARK: - setUserDisplayName

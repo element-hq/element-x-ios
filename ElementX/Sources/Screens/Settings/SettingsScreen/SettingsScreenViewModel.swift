@@ -86,7 +86,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .store(in: &cancellables)
         
         Task {
-            await userSession.clientProxy.loadUserProfile()
+            await userSession.clientProxy.loadUserProfileIfNeeded()
             await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
         }
     }

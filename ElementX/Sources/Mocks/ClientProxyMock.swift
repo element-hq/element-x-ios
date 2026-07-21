@@ -88,7 +88,7 @@ extension ClientProxyMock {
         }
         joinRoomAliasReturnValue = .success(())
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        loadUserProfileReturnValue = .success(())
+        loadUserProfileIfNeededReturnValue = .success(())
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserAvatarMediaReturnValue = .success(())
         removeUserAvatarReturnValue = .success(())

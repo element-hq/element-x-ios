@@ -116,6 +116,12 @@ nonisolated extension SDKListener: VerificationStateListener where T == Verifica
     }
 }
 
+nonisolated extension SDKListener: ProfileListener where T == MatrixRustSDK.UserProfile {
+    func onUpdate(profile: MatrixRustSDK.UserProfile) {
+        onUpdateClosure(profile)
+    }
+}
+
 nonisolated extension SDKListener: IgnoredUsersListener where T == [String] {
     func call(ignoredUserIds: [String]) {
         onUpdateClosure(ignoredUserIds)
