@@ -238,11 +238,7 @@ class ClientProxy: ClientProxyProtocol {
         spaceService = await SpaceServiceProxy(spaceService: client.spaceService())
         
         let searchUserID = try client.userId()
-        searchService = SearchServiceProxy(searchService: client.searchService(),
-                                           timelineItemFactory: RoomTimelineItemFactory(userID: searchUserID,
-                                                                                        attributedStringBuilder: AttributedStringBuilder(cacheKey: "search",
-                                                                                                                                         mentionBuilder: PlainMentionBuilder()),
-                                                                                        stateEventStringBuilder: RoomStateEventStringBuilder(userID: searchUserID)))
+        searchService = Self.makeSearchService(client: client, userID: searchUserID, roomID: nil)
         
         capabilities = HomeserverCapabilitiesProxy(underlyingCapabilities: client.homeserverCapabilities())
         
@@ -311,6 +307,19 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         liveLocationOwnInfoUpdatesListenerTaskHandle = createLiveLocationOwnInfoUpdatesObserver()
+    }
+    
+    func makeSearchService(roomID: String?) -> SearchServiceProxyProtocol {
+        Self.makeSearchService(client: client, userID: userID, roomID: roomID)
+    }
+    
+    private static func makeSearchService(client: ClientProtocol, userID: String, roomID: String?) -> SearchServiceProxy {
+        SearchServiceProxy(searchService: client.searchService(),
+                           timelineItemFactory: RoomTimelineItemFactory(userID: userID,
+                                                                        attributedStringBuilder: AttributedStringBuilder(cacheKey: "search",
+                                                                                                                         mentionBuilder: PlainMentionBuilder()),
+                                                                        stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)),
+                           roomID: roomID)
     }
     
     var userID: String {

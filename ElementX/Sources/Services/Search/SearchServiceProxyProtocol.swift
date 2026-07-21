@@ -21,7 +21,8 @@ protocol SearchServiceProxyProtocol {
     func setQuery(_ query: String) async -> Result<Void, SearchServiceProxyError>
     
     /// Loads the next page of results. No-ops if a page is already loading or the end has been reached.
-    func paginate() async
+    @discardableResult
+    func paginate() async -> Result<Void, SearchServiceProxyError>
 }
 
 struct SearchServiceResult {

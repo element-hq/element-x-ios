@@ -162,6 +162,10 @@ protocol ClientProxyProtocol: AnyObject {
     
     var searchService: SearchServiceProxyProtocol { get }
     
+    /// Creates an independent search cursor. The underlying SDK service is stateful, running one
+    /// query at a time, so create one per screen. Pass a `roomID` to scope the results to a room.
+    func makeSearchService(roomID: String?) -> SearchServiceProxyProtocol
+    
     var capabilities: HomeserverCapabilitiesProxyProtocol { get }
     
     var isReportRoomSupported: Bool { get async }

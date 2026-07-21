@@ -2357,6 +2357,48 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingLiveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never>!
 
+    //MARK: - makeSearchService
+
+    private let makeSearchServiceRoomIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var makeSearchServiceRoomIDUnderlyingCallsCount = 0
+    var makeSearchServiceRoomIDCallsCount: Int {
+        get { makeSearchServiceRoomIDCallsCountLock.withLock { makeSearchServiceRoomIDUnderlyingCallsCount } }
+        set { makeSearchServiceRoomIDCallsCountLock.withLock { makeSearchServiceRoomIDUnderlyingCallsCount = newValue } }
+    }
+    var makeSearchServiceRoomIDCalled: Bool {
+        return makeSearchServiceRoomIDCallsCount > 0
+    }
+    private let makeSearchServiceRoomIDReceivedRoomIDLock = NSLock()
+    private nonisolated(unsafe) var makeSearchServiceRoomIDUnderlyingReceivedRoomID: String?
+    var makeSearchServiceRoomIDReceivedRoomID: String? {
+        get { makeSearchServiceRoomIDReceivedRoomIDLock.withLock { makeSearchServiceRoomIDUnderlyingReceivedRoomID } }
+        set { makeSearchServiceRoomIDReceivedRoomIDLock.withLock { makeSearchServiceRoomIDUnderlyingReceivedRoomID = newValue } }
+    }
+    private let makeSearchServiceRoomIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var makeSearchServiceRoomIDUnderlyingReceivedInvocations: [String?] = []
+    var makeSearchServiceRoomIDReceivedInvocations: [String?] {
+        get { makeSearchServiceRoomIDReceivedInvocationsLock.withLock { makeSearchServiceRoomIDUnderlyingReceivedInvocations } }
+        set { makeSearchServiceRoomIDReceivedInvocationsLock.withLock { makeSearchServiceRoomIDUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let makeSearchServiceRoomIDReturnValueLock = NSLock()
+    private nonisolated(unsafe) var makeSearchServiceRoomIDUnderlyingReturnValue: SearchServiceProxyProtocol!
+    var makeSearchServiceRoomIDReturnValue: SearchServiceProxyProtocol! {
+        get { makeSearchServiceRoomIDReturnValueLock.withLock { makeSearchServiceRoomIDUnderlyingReturnValue } }
+        set { makeSearchServiceRoomIDReturnValueLock.withLock { makeSearchServiceRoomIDUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var makeSearchServiceRoomIDClosure: ((String?) -> SearchServiceProxyProtocol)?
+
+    func makeSearchService(roomID: String?) -> SearchServiceProxyProtocol {
+        makeSearchServiceRoomIDCallsCountLock.withLock { makeSearchServiceRoomIDUnderlyingCallsCount += 1 }
+        makeSearchServiceRoomIDReceivedRoomID = roomID
+        makeSearchServiceRoomIDReceivedInvocationsLock.withLock { makeSearchServiceRoomIDUnderlyingReceivedInvocations.append(roomID) }
+        if let makeSearchServiceRoomIDClosure = makeSearchServiceRoomIDClosure {
+            return makeSearchServiceRoomIDClosure(roomID)
+        } else {
+            return makeSearchServiceRoomIDReturnValue
+        }
+    }
     //MARK: - isOnlyDeviceLeft
 
     private let isOnlyDeviceLeftCallsCountLock = NSLock()
@@ -10458,11 +10500,23 @@ nonisolated class SearchServiceProxyMock: SearchServiceProxyProtocol, @unchecked
     var paginateCalled: Bool {
         return paginateCallsCount > 0
     }
-    nonisolated(unsafe) var paginateClosure: (() async -> Void)?
 
-    @concurrent func paginate() async {
+    private let paginateReturnValueLock = NSLock()
+    private nonisolated(unsafe) var paginateUnderlyingReturnValue: Result<Void, SearchServiceProxyError>!
+    var paginateReturnValue: Result<Void, SearchServiceProxyError>! {
+        get { paginateReturnValueLock.withLock { paginateUnderlyingReturnValue } }
+        set { paginateReturnValueLock.withLock { paginateUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var paginateClosure: (() async -> Result<Void, SearchServiceProxyError>)?
+
+    @discardableResult
+    @concurrent func paginate() async -> Result<Void, SearchServiceProxyError> {
         paginateCallsCountLock.withLock { paginateUnderlyingCallsCount += 1 }
-        await paginateClosure?()
+        if let paginateClosure = paginateClosure {
+            return await paginateClosure()
+        } else {
+            return paginateReturnValue
+        }
     }
 }
 nonisolated class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sendable {
