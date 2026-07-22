@@ -202,20 +202,18 @@ final class HomeScreenViewModelTests {
         #expect(context.viewState.securityBannerMode == .none)
         
         // When the recovery state comes through as disabled.
-        var deferred = deferFulfillment(context.$viewState) { $0.requiresExtraAccountSetup == true }
+        var deferred = deferFulfillment(context.$viewState) { $0.securityBannerMode == .show(.setUpRecovery) }
         securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .disabled))
-        try await deferred.fulfill()
         
         // Then the banner should be shown to set up recovery.
-        #expect(context.viewState.securityBannerMode == .show(.setUpRecovery))
-        
-        // When the recovery is enabled.
-        deferred = deferFulfillment(context.$viewState) { $0.requiresExtraAccountSetup == false }
-        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
         try await deferred.fulfill()
         
+        // When the recovery is enabled.
+        deferred = deferFulfillment(context.$viewState) { $0.securityBannerMode == .none }
+        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
+        
         // Then the banner should no longer be shown.
-        #expect(context.viewState.securityBannerMode == .none)
+        try await deferred.fulfill()
     }
     
     @Test
@@ -248,20 +246,18 @@ final class HomeScreenViewModelTests {
         #expect(context.viewState.securityBannerMode == .none)
         
         // When the recovery state comes through as incomplete.
-        var deferred = deferFulfillment(context.$viewState) { $0.requiresExtraAccountSetup == true }
+        var deferred = deferFulfillment(context.$viewState) { $0.securityBannerMode == .show(.recoveryOutOfSync) }
         securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .incomplete))
-        try await deferred.fulfill()
         
         // Then the banner should be shown for out of sync recovery.
-        #expect(context.viewState.securityBannerMode == .show(.recoveryOutOfSync))
-        
-        // When the recovery is enabled.
-        deferred = deferFulfillment(context.$viewState) { $0.requiresExtraAccountSetup == false }
-        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
         try await deferred.fulfill()
         
+        // When the recovery is enabled.
+        deferred = deferFulfillment(context.$viewState) { $0.securityBannerMode == .none }
+        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
+        
         // Then the banner should no longer be shown.
-        #expect(context.viewState.securityBannerMode == .none)
+        try await deferred.fulfill()
     }
     
     @Test
