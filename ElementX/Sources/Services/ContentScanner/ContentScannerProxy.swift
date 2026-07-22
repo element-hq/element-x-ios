@@ -26,6 +26,10 @@ nonisolated struct ContentScannerProxy: ContentScannerProxyProtocol {
         do {
             let response = try await contentScanner.scan(client: client, mediaSource: mediaSource.underlyingSource)
             return .success(response.clean)
+        } catch ClientError.ContentScanner(.mcsMimeTypeForbidden, _), ClientError.ContentScanner(.mcsMediaNotClean, _) {
+            // The server flagged the media as unsafe (dangerous content or a forbidden mime type),
+            // which we treat as an unsafe verdict rather than a scan failure.
+            return .success(false)
         } catch {
             MXLog.error("Failed scanning media content: \(error)")
             return .failure(.sdkError(error))

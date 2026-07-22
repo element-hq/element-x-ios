@@ -25,6 +25,7 @@ struct TimelineReplyView: View {
     var body: some View {
         ContentScanningView(contentScannerService: timelineContext?.contentScannerService,
                             mediaSource: scannedMediaSource,
+                            thumbnailSource: scannedThumbnailSource,
                             containerShowsFailure: false) {
             content
                 .roundedContainer(padding: 4,
@@ -59,6 +60,21 @@ struct TimelineReplyView: View {
         case .image(let content): return content.imageInfo.source
         case .video(let content): return content.videoInfo.source
         case .voice(let content): return content.source
+        default: return nil
+        }
+    }
+    
+    /// The thumbnail source validated alongside ``scannedMediaSource`` when the replied to message has one.
+    private var scannedThumbnailSource: MediaSourceProxy? {
+        guard case .loaded(_, _, let eventContent) = timelineItemReplyDetails,
+              case .message(let message) = eventContent else {
+            return nil
+        }
+        
+        switch message {
+        case .file(let content): return content.thumbnailSource
+        case .image(let content): return content.thumbnailInfo?.source
+        case .video(let content): return content.thumbnailInfo?.source
         default: return nil
         }
     }

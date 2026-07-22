@@ -22,7 +22,8 @@ struct FileRoomTimelineView: View {
                                          trailingReservedSize: timelineItem.trailingReservedSize,
                                          shouldBoost: timelineItem.shouldBoost,
                                          contentScannerService: context?.contentScannerService,
-                                         mediaSource: timelineItem.content.source) {
+                                         mediaSource: timelineItem.content.source,
+                                         thumbnailSource: timelineItem.content.thumbnailSource) {
                 context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
             }
             .accessibilityLabel(L10n.commonFile)
@@ -42,6 +43,7 @@ struct MediaFileRoomTimelineContent: View {
     var isAudioFile = false
     var contentScannerService: ContentScannerServiceProtocol?
     var mediaSource: MediaSourceProxy?
+    var thumbnailSource: MediaSourceProxy?
     
     private var fileDescription: String {
         var fileDescription = "\(filename.validatedFileExtension.uppercased())"
@@ -60,7 +62,8 @@ struct MediaFileRoomTimelineContent: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             ContentScanningView(contentScannerService: contentScannerService,
-                                mediaSource: mediaSource) {
+                                mediaSource: mediaSource,
+                                thumbnailSource: thumbnailSource) {
                 if let onMediaTap {
                     filePreview(isScanning: false)
                         .onTapGesture(perform: onMediaTap)

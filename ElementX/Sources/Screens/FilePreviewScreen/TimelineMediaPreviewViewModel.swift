@@ -137,17 +137,20 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     /// Scans the media when a content scanner is configured, returning whether it's safe to be downloaded
-    /// and previewed, reflecting the scan's progress and outcome in the current item.
+    /// and previewed, reflecting the scan's progress and outcome in the current item. Both the media and
+    /// its thumbnail are scanned as either being downloaded through the scanner can flag the media.
     private func checkSourceIsSafeIfNeeded(for mediaItem: TimelineMediaPreviewItem.Media, source: MediaSourceProxy) async -> Bool {
         guard let contentScannerService else { return true }
         
+        let sources = [source, mediaItem.thumbnailMediaSource].compactMap { $0 }
+        
         // Only reflect the scanning state when there's no cached verdict, so that
         // scanned items don't flash the scanning indicator when they're revisited.
-        if contentScannerService.scanResultFromSource(source) == nil {
+        if contentScannerService.scanResultFromSources(sources) == nil {
             setCurrentItem(.contentScan(.init(media: mediaItem, state: .scanning)))
         }
         
-        switch await contentScannerService.loadScanResultFromSource(source) {
+        switch await contentScannerService.loadScanResultFromSources(sources) {
         case .success(true):
             finishScan(with: .media(mediaItem), for: mediaItem)
             return true
