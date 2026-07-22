@@ -50,20 +50,28 @@ struct ServerSelectionScreen: View {
         .padding(.horizontal, 16)
     }
     
-    /// The text field and confirm button where the user enters a server URL.
+    /// The main input and confirm button.
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
-            TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
-                .textFieldStyle(.compound(labelText: Text(L10n.screenChangeServerFormHeader),
-                                          footerText: Text(context.viewState.footerMessage),
-                                          state: context.viewState.isShowingFooterError ? .error : .default,
-                                          accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
-                .keyboardType(.URL)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                .onChange(of: context.homeserverAddress) { context.send(viewAction: .clearFooterError) }
-                .submitLabel(.done)
-                .onSubmit(submit)
+            switch context.viewState.mode {
+            case .confirmation:
+                TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
+                    .textFieldStyle(.compound(labelText: Text(L10n.screenChangeServerFormHeader),
+                                              footerText: Text(context.viewState.footerMessage),
+                                              state: context.viewState.isShowingFooterError ? .error : .default,
+                                              accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
+                    .keyboardType(.URL)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .onChange(of: context.homeserverAddress) { context.send(viewAction: .clearFooterError) }
+                    .submitLabel(.done)
+                    .onSubmit(submit)
+            case .picker(let providers):
+                FakeInlinePicker(items: providers,
+                                 icon: \.host,
+                                 selection: $context.pickerSelection)
+                    .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.serverPicker)
+            }
             
             Button(action: submit) {
                 Text(L10n.actionContinue)
@@ -81,6 +89,34 @@ struct ServerSelectionScreen: View {
     }
 }
 
+// MARK: - Private
+
+private struct FakeInlinePicker: View {
+    let items: [String]
+    let icon: KeyPath<CompoundIcons, Image>
+    @Binding var selection: String?
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(items, id: \.self) { item in
+                ListRow(label: .default(title: item, icon: icon),
+                        kind: .selection(isSelected: selection == item) {
+                            selection = item
+                        })
+                        .overlay(alignment: .bottom) {
+                            if item != items.last {
+                                Divider()
+                                    .hidden()
+                                    .overlay(Color.compound._borderInteractiveSecondaryAlpha)
+                                    .padding(.leading, 54)
+                            }
+                        }
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
+
 // MARK: - Previews
 
 @available(iOS 26.0, *)
@@ -88,26 +124,36 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
     static let matrixViewModel = makeViewModel(for: "https://matrix.org")
     static let emptyViewModel = makeViewModel(for: "")
     static let invalidViewModel = makeViewModel(for: "thisisbad")
+    static let pickerViewModel = makeViewModel(for: "https://foo.bar", mode: .picker(["matrix.org", "foo.bar", "baz.me"]))
     
     static var previews: some View {
         ElementNavigationStack {
             ServerSelectionScreen(context: matrixViewModel.context)
         }
+        .previewDisplayName("Matrix.org")
         
         ElementNavigationStack {
             ServerSelectionScreen(context: emptyViewModel.context)
         }
+        .previewDisplayName("Empty")
         
         ElementNavigationStack {
             ServerSelectionScreen(context: invalidViewModel.context)
         }
         .snapshotPreferences(expect: invalidViewModel.context.observe(\.viewState.hasValidationError))
+        .previewDisplayName("Error")
+        
+        ElementNavigationStack {
+            ServerSelectionScreen(context: pickerViewModel.context)
+        }
+        .previewDisplayName("Picker")
     }
     
-    static func makeViewModel(for homeserverAddress: String) -> ServerSelectionScreenViewModel {
+    static func makeViewModel(for homeserverAddress: String, mode: ServerConfirmationScreenMode = .confirmation("")) -> ServerSelectionScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
         let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
+                                                       mode: mode,
                                                        authenticationFlow: .login,
                                                        appSettings: .volatile(),
                                                        userIndicatorController: UserIndicatorControllerMock())

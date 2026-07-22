@@ -24,6 +24,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     }
     
     init(authenticationService: AuthenticationServiceProtocol,
+         mode: ServerConfirmationScreenMode,
          authenticationFlow: AuthenticationFlow,
          appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
@@ -32,8 +33,13 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
-        let bindings = ServerSelectionScreenBindings(homeserverAddress: authenticationService.homeserver.value.address)
-        super.init(initialViewState: ServerSelectionScreenViewState(bindings: bindings))
+        let pickerSelection: String? = switch mode {
+        case .picker(let providers): providers[0]
+        case .confirmation: nil
+        }
+        let bindings = ServerSelectionScreenBindings(homeserverAddress: authenticationService.homeserver.value.address,
+                                                     pickerSelection: pickerSelection)
+        super.init(initialViewState: ServerSelectionScreenViewState(mode: mode, bindings: bindings))
     }
     
     override func process(viewAction: ServerSelectionScreenViewAction) {
@@ -42,7 +48,12 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             guard state.window != window else { return } // stop the infinite loop
             state.window = window
         case .confirm:
-            configureHomeserver()
+            switch state.mode {
+            case .confirmation:
+                Task { await configureHomeserver() }
+            case .picker:
+                Task { await pickServer() }
+            }
         case .dismiss:
             actionsSubject.send(.dismiss)
         case .clearFooterError:
@@ -52,22 +63,44 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     
     // MARK: - Private
     
+    private func pickServer() async {
+        guard let accountProvider = state.bindings.pickerSelection else {
+            fatalError("It shouldn't be possible to confirm without a selection.")
+        }
+        
+        startLoading()
+        
+        let homeserver = authenticationService.homeserver.value
+        guard homeserver.loginMode == .unknown || homeserver.address != accountProvider else {
+            await fetchLoginURLIfNeededAndContinue()
+            stopLoading()
+            return
+        }
+        
+        switch await authenticationService.configure(for: accountProvider, flow: authenticationFlow) {
+        case .success:
+            await fetchLoginURLIfNeededAndContinue()
+            stopLoading()
+        case .failure:
+            stopLoading()
+            state.bindings.alertInfo = AlertInfo(id: .unknownError)
+        }
+    }
+    
     /// Updates the login flow using the supplied homeserver address, or shows an error when this isn't possible.
-    private func configureHomeserver() {
+    private func configureHomeserver() async {
         let homeserverAddress = state.bindings.homeserverAddress
         startLoading()
         
-        Task {
-            switch await authenticationService.configure(for: homeserverAddress, flow: authenticationFlow) {
-            case .success:
-                MXLog.info("Selected homeserver: \(homeserverAddress)")
-                await fetchLoginURLIfNeededAndContinue()
-                stopLoading()
-            case .failure(let error):
-                MXLog.info("Invalid homeserver: \(homeserverAddress)")
-                stopLoading()
-                handleError(error)
-            }
+        switch await authenticationService.configure(for: homeserverAddress, flow: authenticationFlow) {
+        case .success:
+            MXLog.info("Selected homeserver: \(homeserverAddress)")
+            await fetchLoginURLIfNeededAndContinue()
+            stopLoading()
+        case .failure(let error):
+            MXLog.info("Invalid homeserver: \(homeserverAddress)")
+            stopLoading()
+            handleError(error)
         }
     }
     
