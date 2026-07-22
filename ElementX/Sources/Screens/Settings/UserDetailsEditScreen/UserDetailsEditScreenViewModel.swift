@@ -46,7 +46,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             .store(in: &cancellables)
         
         Task {
-            await self.clientProxy.loadUserProfile()
+            await self.clientProxy.loadUserProfileIfNeeded()
             state.canEditAvatar = await clientProxy.capabilities.canChangeAvatar()
             state.canEditDisplayName = await clientProxy.capabilities.canChangeDisplayName()
         }

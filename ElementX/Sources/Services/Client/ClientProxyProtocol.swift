@@ -212,7 +212,11 @@ protocol ClientProxyProtocol: AnyObject {
     /// Will only work for rooms that are in our room list/local store
     func reportRoomForIdentifier(_ identifier: String, reason: String) async -> Result<Void, ClientProxyError>
     
-    @discardableResult func loadUserProfile() async -> Result<Void, ClientProxyError>
+    /// Loads the user's own profile when the server doesn't support MSC4262 and both returns the profile
+    /// as well as publishing it via ``userProfilePublisher``.
+    ///
+    /// When the server does support the MSC, then the client automatically publishes profile and keeps it up to date.
+    @discardableResult func loadUserProfileIfNeeded() async -> Result<Void, ClientProxyError>
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
     func removeUserAvatar() async -> Result<Void, ClientProxyError>

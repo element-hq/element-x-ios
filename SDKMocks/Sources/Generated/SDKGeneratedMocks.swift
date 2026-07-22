@@ -3624,6 +3624,53 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - subscribeToOwnProfile
+
+    open var subscribeToOwnProfileListenerThrowableError: Error?
+    private let subscribeToOwnProfileListenerCallsCountLock = NSLock()
+    private var subscribeToOwnProfileListenerUnderlyingCallsCount = 0
+    open var subscribeToOwnProfileListenerCallsCount: Int {
+        get { subscribeToOwnProfileListenerCallsCountLock.withLock { subscribeToOwnProfileListenerUnderlyingCallsCount } }
+        set { subscribeToOwnProfileListenerCallsCountLock.withLock { subscribeToOwnProfileListenerUnderlyingCallsCount = newValue } }
+    }
+    open var subscribeToOwnProfileListenerCalled: Bool {
+        return subscribeToOwnProfileListenerCallsCount > 0
+    }
+    private let subscribeToOwnProfileListenerReceivedListenerLock = NSLock()
+    private var subscribeToOwnProfileListenerUnderlyingReceivedListener: ProfileListener?
+    open var subscribeToOwnProfileListenerReceivedListener: ProfileListener? {
+        get { subscribeToOwnProfileListenerReceivedListenerLock.withLock { subscribeToOwnProfileListenerUnderlyingReceivedListener } }
+        set { subscribeToOwnProfileListenerReceivedListenerLock.withLock { subscribeToOwnProfileListenerUnderlyingReceivedListener = newValue } }
+    }
+    private let subscribeToOwnProfileListenerReceivedInvocationsLock = NSLock()
+    private var subscribeToOwnProfileListenerUnderlyingReceivedInvocations: [ProfileListener] = []
+    open var subscribeToOwnProfileListenerReceivedInvocations: [ProfileListener] {
+        get { subscribeToOwnProfileListenerReceivedInvocationsLock.withLock { subscribeToOwnProfileListenerUnderlyingReceivedInvocations } }
+        set { subscribeToOwnProfileListenerReceivedInvocationsLock.withLock { subscribeToOwnProfileListenerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let subscribeToOwnProfileListenerReturnValueLock = NSLock()
+    open var subscribeToOwnProfileListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToOwnProfileListenerReturnValue: TaskHandle! {
+        get { subscribeToOwnProfileListenerReturnValueLock.withLock { subscribeToOwnProfileListenerUnderlyingReturnValue } }
+        set { subscribeToOwnProfileListenerReturnValueLock.withLock { subscribeToOwnProfileListenerUnderlyingReturnValue = newValue } }
+    }
+    open var subscribeToOwnProfileListenerClosure: ((ProfileListener) throws -> TaskHandle)?
+
+    open override func subscribeToOwnProfile(listener: ProfileListener) throws -> TaskHandle {
+        if let error = subscribeToOwnProfileListenerThrowableError {
+            throw error
+        }
+        subscribeToOwnProfileListenerCallsCountLock.withLock { subscribeToOwnProfileListenerUnderlyingCallsCount += 1 }
+        subscribeToOwnProfileListenerReceivedListener = listener
+        subscribeToOwnProfileListenerReceivedInvocationsLock.withLock { subscribeToOwnProfileListenerUnderlyingReceivedInvocations.append(listener) }
+        if let subscribeToOwnProfileListenerClosure = subscribeToOwnProfileListenerClosure {
+            return try subscribeToOwnProfileListenerClosure(listener)
+        } else {
+            return subscribeToOwnProfileListenerReturnValue
+        }
+    }
+
     //MARK: - subscribeToRoomInfo
 
     open var subscribeToRoomInfoRoomIdListenerThrowableError: Error?
@@ -9606,12 +9653,12 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         get { heroesReturnValueLock.withLock { heroesUnderlyingReturnValue } }
         set { heroesReturnValueLock.withLock { heroesUnderlyingReturnValue = newValue } }
     }
-    open var heroesClosure: (() -> [RoomHero])?
+    open var heroesClosure: (() async -> [RoomHero])?
 
-    open override func heroes() -> [RoomHero] {
+    open override func heroes() async -> [RoomHero] {
         heroesCallsCountLock.withLock { heroesUnderlyingCallsCount += 1 }
         if let heroesClosure = heroesClosure {
-            return heroesClosure()
+            return await heroesClosure()
         } else {
             return heroesReturnValue
         }

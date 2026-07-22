@@ -186,7 +186,7 @@ nonisolated extension RoomSummary {
     }
     
     var statusEmoji: Character? {
-        guard isDirect, case let .heroes(heroes) = avatar, heroes.count == 1 else { return nil }
+        guard case let .heroes(heroes) = avatar else { return nil }
         return heroes.first?.status.displayed?.emoji
     }
 }

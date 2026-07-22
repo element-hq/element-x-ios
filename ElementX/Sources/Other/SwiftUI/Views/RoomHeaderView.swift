@@ -12,7 +12,7 @@ import SwiftUI
 
 struct RoomHeaderView: View {
     struct DMRecipientDetails {
-        var status: UserStatus?
+        var statusEmoji: Character?
         var verification: UserIdentityVerificationState?
     }
     
@@ -61,7 +61,7 @@ struct RoomHeaderView: View {
                             .foregroundStyle(.compound.textPrimary)
                             .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
                         
-                        if let statusEmoji = dmRecipientDetails.status?.displayed?.emoji {
+                        if let statusEmoji = dmRecipientDetails.statusEmoji {
                             Text(String(statusEmoji))
                                 .font(.compound.bodyLG)
                                 .foregroundStyle(.compound.textPrimary)
@@ -179,7 +179,8 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: roomName,
                                          avatarURL: avatarURL),
-                       dmRecipientDetails: .init(status: userStatus, verification: verificationState),
+                       dmRecipientDetails: .init(statusEmoji: userStatus?.displayed?.emoji,
+                                                 verification: verificationState),
                        roomHistorySharingState: historySharingState,
                        
                        mediaProvider: MediaProviderMock(.init())) { }

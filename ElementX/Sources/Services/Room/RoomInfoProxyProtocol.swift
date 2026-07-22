@@ -94,6 +94,11 @@ extension BaseRoomInfoProxyProtocol {
         
         return .room(id: id, name: displayName, avatarURL: avatarURL)
     }
+    
+    var statusEmoji: Character? {
+        guard case let .heroes(heroes) = avatar else { return nil }
+        return heroes.first?.status.displayed?.emoji
+    }
 }
 
 extension RoomInfoProxyProtocol {

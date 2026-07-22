@@ -176,7 +176,9 @@ private extension RoomHero {
     init(from memberProxy: RoomMemberProxyMock) {
         self.init(userId: memberProxy.userID,
                   displayName: memberProxy.displayName,
-                  avatarUrl: memberProxy.avatarURL?.absoluteString)
+                  avatarUrl: memberProxy.avatarURL?.absoluteString,
+                  status: memberProxy.status.raw?.rustValue,
+                  call: memberProxy.status.call?.rustValue)
     }
 }
 
