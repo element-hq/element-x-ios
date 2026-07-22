@@ -2218,6 +2218,8 @@ internal nonisolated enum L10n {
   internal static func screenLinkNewDeviceDesktopTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_link_new_device_desktop_title", String(describing: p1))
   }
+  /// Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.
+  internal static var screenLinkNewDeviceDesktopWarning: String { return L10n.tr("Localizable", "screen_link_new_device_desktop_warning") }
   /// The numbers don’t match
   internal static var screenLinkNewDeviceEnterNumberErrorNumbersDoNotMatch: String { return L10n.tr("Localizable", "screen_link_new_device_enter_number_error_numbers_do_not_match") }
   /// Enter 2-digit code
