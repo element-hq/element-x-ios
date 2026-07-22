@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Scan the QR code with this device";
 "screen_link_new_device_desktop_submit" = "Ready to scan";
 "screen_link_new_device_desktop_title" = "Open %1$@ on a desktop computer to get the QR code";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "The numbers don’t match";
 "screen_link_new_device_enter_number_notice" = "Enter 2-digit code";
 "screen_link_new_device_enter_number_subtitle" = "This will verify that the connection to your other device is secure.";
