@@ -79,6 +79,12 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
             .homeserverUrl(url: homeserverURL)
         
         baseClient = try await clientBuilder.build()
+        
+        do {
+            try await baseClient.setPresence(presence: .offline, immediate: false)
+        } catch {
+            MXLog.error("Failed configuring offline presence before notification processing with error: \(error)")
+        }
         delegateHandle = try baseClient.setDelegate(delegate: ClientDelegateWrapper())
         
         try await baseClient.restoreSessionWith(session: credentials.restorationToken.session,

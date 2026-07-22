@@ -167,5 +167,7 @@ extension ClientProxyMock {
         underlyingMaxMediaUploadSize = .success(configuration.maxMediaUploadSize)
         
         storeSizesReturnValue = .success(.init(cryptoStore: 1, stateStore: 9, eventCacheStore: 8, mediaStore: 6))
+        
+        configurePresenceSendImmediatelyReturnValue = .success(())
     }
 }
