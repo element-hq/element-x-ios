@@ -230,6 +230,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
             let serverNames = roomProxy.knownServerNames(maxCount: 50) // Limit to the same number used by ClientProxy.resolveRoomAlias(_:)
             actionsSubject.send(.displayRoom(roomID: predecessorID, via: Array(serverNames)))
+        case .joinActiveCall(let isVoiceCall):
+            actionsSubject.send(.presentCallScreen(isVoiceCall: isVoiceCall))
         }
     }
     

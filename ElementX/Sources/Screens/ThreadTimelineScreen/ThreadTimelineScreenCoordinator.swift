@@ -137,7 +137,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                 case .displayResolveSendFailure(let failure, let sendHandle):
                     actionsSubject.send(.presentResolveSendFailure(failure: failure,
                                                                    sendHandle: sendHandle))
-                case .hasScrolled, .displayRoom, .displayMediaDetails:
+                case .hasScrolled, .displayRoom, .displayMediaDetails, .presentCallScreen:
                     break
                 case .composer(let action):
                     composerViewModel.process(timelineAction: action)
