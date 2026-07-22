@@ -64,8 +64,7 @@ struct TimelineReplyView: View {
         }
     }
     
-    /// The thumbnail source validated alongside ``scannedMediaSource`` when the reply also downloads
-    /// one for its icon (images and videos).
+    /// The thumbnail source validated alongside ``scannedMediaSource`` when the replied to message has one.
     private var scannedThumbnailSource: MediaSourceProxy? {
         guard case .loaded(_, _, let eventContent) = timelineItemReplyDetails,
               case .message(let message) = eventContent else {
@@ -73,6 +72,7 @@ struct TimelineReplyView: View {
         }
         
         switch message {
+        case .file(let content): return content.thumbnailSource
         case .image(let content): return content.thumbnailInfo?.source
         case .video(let content): return content.thumbnailInfo?.source
         default: return nil
