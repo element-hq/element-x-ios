@@ -1835,6 +1835,39 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - isUserStatusSupported
+
+    open var isUserStatusSupportedThrowableError: Error?
+    private let isUserStatusSupportedCallsCountLock = NSLock()
+    private var isUserStatusSupportedUnderlyingCallsCount = 0
+    open var isUserStatusSupportedCallsCount: Int {
+        get { isUserStatusSupportedCallsCountLock.withLock { isUserStatusSupportedUnderlyingCallsCount } }
+        set { isUserStatusSupportedCallsCountLock.withLock { isUserStatusSupportedUnderlyingCallsCount = newValue } }
+    }
+    open var isUserStatusSupportedCalled: Bool {
+        return isUserStatusSupportedCallsCount > 0
+    }
+
+    private let isUserStatusSupportedReturnValueLock = NSLock()
+    open var isUserStatusSupportedUnderlyingReturnValue: Bool!
+    open var isUserStatusSupportedReturnValue: Bool! {
+        get { isUserStatusSupportedReturnValueLock.withLock { isUserStatusSupportedUnderlyingReturnValue } }
+        set { isUserStatusSupportedReturnValueLock.withLock { isUserStatusSupportedUnderlyingReturnValue = newValue } }
+    }
+    open var isUserStatusSupportedClosure: (() async throws -> Bool)?
+
+    open override func isUserStatusSupported() async throws -> Bool {
+        if let error = isUserStatusSupportedThrowableError {
+            throw error
+        }
+        isUserStatusSupportedCallsCountLock.withLock { isUserStatusSupportedUnderlyingCallsCount += 1 }
+        if let isUserStatusSupportedClosure = isUserStatusSupportedClosure {
+            return try await isUserStatusSupportedClosure()
+        } else {
+            return isUserStatusSupportedReturnValue
+        }
+    }
+
     //MARK: - joinRoomById
 
     open var joinRoomByIdRoomIdThrowableError: Error?

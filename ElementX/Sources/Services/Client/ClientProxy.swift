@@ -281,7 +281,11 @@ class ClientProxy: ClientProxyProtocol {
         
         try await client.setUtdDelegate(utdDelegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
         
-        let canSubscribeToUserProfile = appSettings.userStatusEnabled // TODO: @pixlwave to add a /versions check too.
+        let canSubscribeToUserProfile = if appSettings.userStatusEnabled, case .success(true) = await isUserStatusSupported() {
+            true
+        } else {
+            false
+        }
         
         if !canSubscribeToUserProfile {
             loadUserAvatarURLFromCache()
@@ -749,6 +753,15 @@ class ClientProxy: ClientProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed removing user avatar with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func isUserStatusSupported() async -> Result<Bool, ClientProxyError> {
+        do {
+            return try await .success(client.isUserStatusSupported())
+        } catch {
+            MXLog.error("Failed detecting user status support with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

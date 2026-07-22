@@ -29,7 +29,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userProfile: userSession.clientProxy.userProfilePublisher.value,
-                                           showUserStatus: appSettings.userStatusEnabled,
+                                           showUserStatus: false,
                                            showLinkNewDeviceButton: appSettings.linkNewDeviceEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: appSettings.developerOptionsEnabled,
@@ -86,9 +86,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .store(in: &cancellables)
         
         Task {
+            if appSettings.userStatusEnabled, case .success(true) = await userSession.clientProxy.isUserStatusSupported() {
+                state.showUserStatus = true
+            }
             await userSession.clientProxy.loadUserProfileIfNeeded()
-            await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
         }
+        Task { await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile) }
     }
     
     override func process(viewAction: SettingsScreenViewAction) {
