@@ -25,9 +25,7 @@ struct ServerSelectionScreen: View {
             .padding(.horizontal, 16)
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .toolbar { toolbar }
         .alert(item: $context.alertInfo)
-        .interactiveDismissDisabled()
     }
     
     /// The title, message and icon at the top of the screen.
@@ -70,15 +68,6 @@ struct ServerSelectionScreen: View {
             .buttonStyle(.compound(.primary))
             .disabled(context.viewState.hasValidationError)
             .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.continue)
-        }
-    }
-    
-    var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button { context.send(viewAction: .dismiss) } label: {
-                Text(L10n.actionCancel)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
         }
     }
     
