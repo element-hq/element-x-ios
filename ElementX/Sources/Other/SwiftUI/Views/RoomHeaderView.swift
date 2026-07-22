@@ -52,38 +52,41 @@ struct RoomHeaderView: View {
             avatarImage
                 .accessibilityHidden(true)
             
-            HStack(spacing: 4) {
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack(spacing: 8) {
-                        Text(roomName)
-                            .lineLimit(1)
-                            .font(.compound.bodyMDSemibold)
-                            .foregroundStyle(.compound.textPrimary)
-                            .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
-                        
-                        if let statusEmoji = dmRecipientDetails.statusEmoji {
-                            Text(String(statusEmoji))
-                                .font(.compound.bodyLG)
-                                .foregroundStyle(.compound.textPrimary)
-                        }
-                    }
-                    
-                    if let roomSubtitle {
-                        Text(roomSubtitle)
-                            .lineLimit(1)
-                            .font(.compound.bodyXS)
-                            .foregroundStyle(.compound.textSecondary)
-                    }
-                }
+            VStack(alignment: .leading, spacing: 0) {
+                roomDetails
                 
-                if let verificationState = dmRecipientDetails.verification {
-                    VerificationBadge(verificationState: verificationState, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
+                if let roomSubtitle {
+                    Text(roomSubtitle)
+                        .lineLimit(1)
+                        .font(.compound.bodyXS)
+                        .foregroundStyle(.compound.textSecondary)
                 }
+            }
+        }
+    }
+    
+    private var roomDetails: some View {
+        HStack(spacing: 4) {
+            HStack(spacing: 8) {
+                Text(roomName)
+                    .lineLimit(1)
+                    .font(.compound.bodyMDSemibold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
                 
-                if let historySharingIcon {
-                    CompoundIcon(historySharingIcon, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
-                        .foregroundStyle(.compound.iconInfoPrimary)
+                if let statusEmoji = dmRecipientDetails.statusEmoji {
+                    Text(String(statusEmoji))
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
                 }
+            }
+            if let verificationState = dmRecipientDetails.verification {
+                VerificationBadge(verificationState: verificationState, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
+            }
+            
+            if let historySharingIcon {
+                CompoundIcon(historySharingIcon, size: .xSmall, relativeTo: .compound.bodyMDSemibold)
+                    .foregroundStyle(.compound.iconInfoPrimary)
             }
         }
     }

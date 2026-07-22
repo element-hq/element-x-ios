@@ -49,19 +49,12 @@ struct JoinedMembersBadgeView: View {
                                     contentID: hero.id,
                                     avatarSize: .user(on: .spaceHeader),
                                     mediaProvider: mediaProvider)
-                    .mask {
-                        Circle()
-                            .fill(Color.white)
-                            .overlay {
-                                if hero != heroes.first {
-                                    Circle()
-                                        .inset(by: -2)
-                                        .fill(Color.black)
-                                        .offset(x: 12)
-                                }
-                            }
-                            .compositingGroup()
-                            .luminanceToAlpha()
+                    .inverseMask {
+                        if hero != heroes.first {
+                            Circle()
+                                .inset(by: -2)
+                                .offset(x: 12)
+                        }
                     }
             }
         }
