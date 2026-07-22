@@ -60,7 +60,7 @@ struct DeveloperOptionsScreen: View {
                 
                 context.viewState.appHooks
                     .developerOptionsScreenHook
-                    .generalSectionRows()
+                    .generalSectionRows(isSignedIn: context.viewState.isSignedIn)
             }
             
             Section("Room List") {
@@ -214,7 +214,7 @@ struct DeveloperOptionsScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if context.viewState.isPresentedModally {
+        if !context.viewState.isSignedIn {
             ToolbarItem(placement: .primaryAction) {
                 if #available(iOS 26.0, *) {
                     Button(role: .close, action: dismiss.callAsFunction)

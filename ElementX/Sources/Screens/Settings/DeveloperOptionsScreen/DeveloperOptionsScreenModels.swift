@@ -16,7 +16,7 @@ struct DeveloperOptionsScreenViewState: BindableState {
     let appHooks: AppHooks
     var storeSizes: [StoreSize]?
     let shouldShowClearCache: Bool
-    let isPresentedModally: Bool
+    let isSignedIn: Bool
     
     var bindings: DeveloperOptionsScreenViewStateBindings
     
