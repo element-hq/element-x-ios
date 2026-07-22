@@ -26,6 +26,9 @@ struct ServerSelectionScreen: View {
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .alert(item: $context.alertInfo)
+        .introspect(.window, on: .supportedVersions) { window in
+            context.send(viewAction: .updateWindow(window))
+        }
     }
     
     /// The title, message and icon at the top of the screen.

@@ -6,16 +6,21 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import SwiftUI
 
 enum ServerSelectionScreenViewModelAction {
-    /// The homeserver selection has been updated.
-    case updated
+    /// Continue the flow using the provided OAuth parameters.
+    case continueWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
+    /// Continue the flow using password authentication.
+    case continueWithPassword
     /// Dismiss the view without using the entered address.
     case dismiss
 }
 
 struct ServerSelectionScreenViewState: BindableState {
+    /// The presentation anchor used for OAuth authentication.
+    var window: UIWindow?
+    
     /// The message to be shown in the text field footer when no error has occurred.
     private let regularFooterMessage = L10n.screenChangeServerFormNotice
     
@@ -48,6 +53,8 @@ struct ServerSelectionScreenBindings {
 }
 
 enum ServerSelectionScreenViewAction {
+    /// Updates the window used as the OAuth presentation anchor.
+    case updateWindow(UIWindow)
     /// The user would like to use the homeserver at the input address.
     case confirm
     /// Dismiss the view without using the entered address.

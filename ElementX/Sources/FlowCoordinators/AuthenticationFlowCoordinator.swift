@@ -351,20 +351,10 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .updated:
-                    let loginMode = authenticationService.homeserver.value.loginMode
-                    guard loginMode.supportsOAuthFlow else {
-                        stateMachine.tryEvent(.continueWithPassword)
-                        return
-                    }
-                    Task {
-                        switch await authenticationService.urlForOAuthLogin(loginHint: nil) {
-                        case .success(let oAuthData):
-                            showOAuthAuthentication(oAuthData: oAuthData, presentationAnchor: appMediator.windowManager.mainWindow)
-                        case .failure:
-                            break
-                        }
-                    }
+                case .continueWithOAuth(let oAuthData, let window):
+                    showOAuthAuthentication(oAuthData: oAuthData, presentationAnchor: window)
+                case .continueWithPassword:
+                    stateMachine.tryEvent(.continueWithPassword)
                 case .dismiss:
                     navigationStackCoordinator.pop()
                 }

@@ -18,7 +18,8 @@ struct ServerSelectionScreenCoordinatorParameters {
 }
 
 enum ServerSelectionScreenCoordinatorAction {
-    case updated
+    case continueWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
+    case continueWithPassword
     case dismiss
 }
 
@@ -50,8 +51,10 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .updated:
-                    actionsSubject.send(.updated)
+                case .continueWithOAuth(let oAuthData, let window):
+                    actionsSubject.send(.continueWithOAuth(data: oAuthData, window: window))
+                case .continueWithPassword:
+                    actionsSubject.send(.continueWithPassword)
                 case .dismiss:
                     actionsSubject.send(.dismiss)
                 }

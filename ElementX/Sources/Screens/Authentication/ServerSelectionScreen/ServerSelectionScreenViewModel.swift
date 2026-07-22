@@ -38,6 +38,9 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     
     override func process(viewAction: ServerSelectionScreenViewAction) {
         switch viewAction {
+        case .updateWindow(let window):
+            guard state.window != window else { return } // stop the infinite loop
+            state.window = window
         case .confirm:
             configureHomeserver()
         case .dismiss:
@@ -58,13 +61,32 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             switch await authenticationService.configure(for: homeserverAddress, flow: authenticationFlow) {
             case .success:
                 MXLog.info("Selected homeserver: \(homeserverAddress)")
-                actionsSubject.send(.updated)
+                await fetchLoginURLIfNeededAndContinue()
                 stopLoading()
             case .failure(let error):
                 MXLog.info("Invalid homeserver: \(homeserverAddress)")
                 stopLoading()
                 handleError(error)
             }
+        }
+    }
+    
+    private func fetchLoginURLIfNeededAndContinue() async {
+        guard authenticationService.homeserver.value.loginMode.supportsOAuthFlow else {
+            actionsSubject.send(.continueWithPassword)
+            return
+        }
+        
+        guard let window = state.window else {
+            showFooterMessage(L10n.errorUnknown)
+            return
+        }
+        
+        switch await authenticationService.urlForOAuthLogin(loginHint: nil) {
+        case .success(let oAuthData):
+            actionsSubject.send(.continueWithOAuth(data: oAuthData, window: window))
+        case .failure:
+            showFooterMessage(L10n.errorUnknown)
         }
     }
     
