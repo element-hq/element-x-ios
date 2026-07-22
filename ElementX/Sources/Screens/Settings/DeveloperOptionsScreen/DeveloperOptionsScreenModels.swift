@@ -15,7 +15,6 @@ enum DeveloperOptionsScreenViewModelAction {
 struct DeveloperOptionsScreenViewState: BindableState {
     let appHooks: AppHooks
     var storeSizes: [StoreSize]?
-    let shouldShowClearCache: Bool
     let isSignedIn: Bool
     
     var bindings: DeveloperOptionsScreenViewStateBindings

@@ -175,7 +175,7 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            if context.viewState.shouldShowClearCache {
+            if context.viewState.isSignedIn {
                 Section {
                     Button(role: .destructive) {
                         context.send(viewAction: .clearCache)
