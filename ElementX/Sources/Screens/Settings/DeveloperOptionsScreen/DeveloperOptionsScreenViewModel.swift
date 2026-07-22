@@ -24,7 +24,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         self.clientProxy = clientProxy
         super.init(initialViewState: .init(appHooks: appHooks,
                                            shouldShowClearCache: clientProxy != nil,
-                                           isPresentedModally: clientProxy == nil,
+                                           isSignedIn: clientProxy != nil,
                                            bindings: .init(developerOptions: developerOptions)))
         
         Task {
