@@ -1285,8 +1285,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        // State-only (no HTTP): configure the background-refresh sync to carry set_presence=offline so it never
-        // reuses the client's foreground sync presence and marks the user online or idle.
+        // Configure the background-refresh sync to carry set_presence=offline so it doesn't mark the
+        // user online or idle. Note: If already online/idle then setting offline shouldn't override that.
         _ = await userSession.clientProxy.configurePresence(.offline, sendImmediately: false)
         
         await resumeClientServices()
