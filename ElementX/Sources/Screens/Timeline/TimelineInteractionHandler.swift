@@ -12,7 +12,7 @@ import UIKit
 enum TimelineInteractionHandlerAction {
     case composer(action: TimelineComposerAction)
     
-    case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
+    case displayEmojiPicker(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayMediaUploadPreviewScreen(mediaURLs: [URL])
@@ -58,6 +58,8 @@ class TimelineInteractionHandler {
     }
     
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
+    
+    private var emojiPickerCancellable: AnyCancellable?
     
     init(roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
@@ -518,11 +520,21 @@ class TimelineInteractionHandler {
     func displayEmojiPicker(for itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               timelineItem.isReactable,
-              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
+              let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol,
+              case let .event(_, eventOrTransactionID) = itemID else {
             return
         }
         let selectedEmojis = Set(eventTimelineItem.properties.reactions.compactMap { $0.isHighlighted ? $0.key : nil })
-        actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+        
+        let (stream, continuation) = AsyncStream<String>.makeStream()
+        actionsSubject.send(.displayEmojiPicker(selectedEmojis: selectedEmojis, continuation: continuation))
+        
+        emojiPickerCancellable = Task { [weak self] in
+            for await emoji in stream {
+                await self?.timelineController.toggleReaction(emoji, to: eventOrTransactionID)
+            }
+        }
+        .asCancellable()
     }
     
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> TimelineControllerAction {

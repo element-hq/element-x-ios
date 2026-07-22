@@ -12,25 +12,27 @@ import SwiftUI
 typealias EmojiPickerScreenViewModelType = StateStoreViewModelV2<EmojiPickerScreenViewState, EmojiPickerScreenViewAction>
 
 class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScreenViewModelProtocol {
-    private let itemID: TimelineItemIdentifier
     private let emojiProvider: EmojiProviderProtocol
-    private let timelineController: TimelineControllerProtocol
+    private let continuation: EmojiPickerScreenContinuation
     
     private var actionsSubject: PassthroughSubject<EmojiPickerScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<EmojiPickerScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>, emojiProvider: EmojiProviderProtocol, timelineController: TimelineControllerProtocol) {
+    init(selectedEmojis: Set<String>, emojiProvider: EmojiProviderProtocol, continuation: EmojiPickerScreenContinuation) {
         let initialViewState = EmojiPickerScreenViewState(categories: [], selectedEmojis: selectedEmojis)
-        self.itemID = itemID
         self.emojiProvider = emojiProvider
-        self.timelineController = timelineController
+        self.continuation = continuation
         super.init(initialViewState: initialViewState)
         loadEmojis()
     }
     
     // MARK: - Public
+    
+    func stop() {
+        continuation.finish() // Ensure the continuation always finishes even without a selection.
+    }
     
     override func process(viewAction: EmojiPickerScreenViewAction) {
         switch viewAction {
@@ -40,7 +42,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
                 state.categories = convert(emojiCategories: categories)
             }
         case let .emojiTapped(emoji: emoji):
-            Task { await selectEmoji(emoji) }
+            selectEmoji(emoji)
         case .dismiss:
             actionsSubject.send(.dismiss)
         }
@@ -66,16 +68,12 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
         }
     }
     
-    private func selectEmoji(_ emoji: EmojiPickerEmojiViewData) async {
-        MXLog.debug("Selected \(emoji) for \(itemID)")
+    private func selectEmoji(_ emoji: EmojiPickerEmojiViewData) {
         emojiProvider.markEmojiAsFrequentlyUsed(emoji.value)
         
-        guard case let .event(_, eventOrTransactionID) = itemID else { fatalError("Attempted to react to a virtual item.") }
+        continuation.yield(emoji.value)
+        continuation.finish()
         
-        // There aren't any local echoes when the toggle redacts, so dismiss the screen early
-        // until we have them: https://github.com/matrix-org/matrix-rust-sdk/issues/4162
         actionsSubject.send(.dismiss)
-        
-        await timelineController.toggleReaction(emoji.value, to: eventOrTransactionID)
     }
 }

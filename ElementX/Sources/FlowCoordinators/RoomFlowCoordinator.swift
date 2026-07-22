@@ -430,13 +430,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 presentMediaUploadPickerWithMode(mode, caption: caption, timelineController: timelineController, animated: animated)
                 
-            case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
-                guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
-                    fatalError("Missing required TimelineController")
+            case (_, .presentEmojiPicker, .emojiPicker(let selectedEmojis, _)):
+                guard let continuation = (context.userInfo as? EventUserInfo)?.emojiPickerContinuation else {
+                    fatalError("Missing required emoji continuation")
                 }
-                presentEmojiPicker(for: itemID,
-                                   selectedEmoji: selectedEmoji,
-                                   timelineController: timelineController,
+                presentEmojiPicker(selectedEmojis: selectedEmojis,
+                                   emojiPickerContinuation: continuation,
                                    animated: animated)
                 
             case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
@@ -706,9 +705,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentMediaUploadPreviewScreen(let url, let caption):
                     stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: url, caption: caption),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-                case .presentEmojiPicker(let itemID, let selectedEmojis):
-                    stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis),
-                                          userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
+                case .presentEmojiPicker(let selectedEmojis, let continuation):
+                    stateMachine.tryEvent(.presentEmojiPicker(selectedEmojis: selectedEmojis),
+                                          userInfo: EventUserInfo(animated: animated, emojiPickerContinuation: continuation))
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker(shouldShowLiveLocationOption: true)),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
@@ -831,9 +830,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewStatic(location)),
                                       userInfo: EventUserInfo(animated: animated,
                                                               timelineController: timelineController))
-            case .presentEmojiPicker(let itemID, let selectedEmojis):
-                stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis),
-                                      userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
+            case .presentEmojiPicker(let selectedEmojis, let continuation):
+                stateMachine.tryEvent(.presentEmojiPicker(selectedEmojis: selectedEmojis),
+                                      userInfo: EventUserInfo(animated: animated, emojiPickerContinuation: continuation))
             case .presentRoomMemberDetails(let userID):
                 stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
             case .presentMessageForwarding(let forwardingItem):
@@ -1146,14 +1145,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentEmojiPicker(for itemID: TimelineItemIdentifier,
-                                    selectedEmoji: Set<String>,
-                                    timelineController: TimelineControllerProtocol,
+    private func presentEmojiPicker(selectedEmojis: Set<String>,
+                                    emojiPickerContinuation: EmojiPickerScreenContinuation,
                                     animated: Bool) {
-        let params = EmojiPickerScreenCoordinatorParameters(itemID: itemID,
-                                                            selectedEmojis: selectedEmoji,
+        let params = EmojiPickerScreenCoordinatorParameters(selectedEmojis: selectedEmojis,
                                                             emojiProvider: flowParameters.emojiProvider,
-                                                            timelineController: timelineController)
+                                                            continuation: emojiPickerContinuation)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in

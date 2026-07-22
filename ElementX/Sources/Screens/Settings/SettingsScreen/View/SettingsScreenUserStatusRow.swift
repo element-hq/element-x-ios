@@ -9,11 +9,10 @@ import Compound
 import SwiftUI
 
 struct SettingsScreenUserStatusRow: View {
-    enum Mode: Equatable { case pick, custom, show(UserStatus.Raw) }
+    enum Mode: Equatable { case pick, custom(emoji: Character), show(UserStatus.Raw) }
     let mode: Mode
     let action: (SettingsScreenViewAction.UserStatusAction) -> Void
     
-    @State private var customEmoji = "😄"
     @State private var customText = ""
     
     var body: some View {
@@ -21,15 +20,15 @@ struct SettingsScreenUserStatusRow: View {
         case .pick:
             ListRow(label: .default(title: L10n.screenSettingsUserStatusPlaceholder, icon: \.reaction),
                     kind: .button { action(.pickStatus) })
-        case .custom:
+        case .custom(let emoji):
             ListRow(kind: .custom {
                 HStack(spacing: ListRowPadding.labelIconSpacing) {
                     Button { action(.pickCustomEmoji) } label: {
-                        Text(customEmoji)
+                        Text(String(emoji))
                             .font(.compound.headingSM)
                             .foregroundStyle(.compound.textPrimary)
                             .accessibilityLabel(L10n.a11yCustomEmoji)
-                            .accessibilityValue(customEmoji)
+                            .accessibilityValue(String(emoji))
                     }
                     .buttonStyle(EditEmojiButtonStyle())
                     
@@ -81,7 +80,7 @@ struct SettingsScreenUserStatusRow: View {
     }
     
     private func saveCustomStatus() {
-        guard let emoji = customEmoji.first else { return }
+        guard case let .custom(emoji) = mode else { return }
         action(.set(.init(text: customText, emoji: emoji)))
     }
     
@@ -109,7 +108,7 @@ struct SettingsScreenUserStatusRow_Previews: PreviewProvider, TestablePreview {
             }
             
             Section {
-                SettingsScreenUserStatusRow(mode: .custom) { _ in }
+                SettingsScreenUserStatusRow(mode: .custom(emoji: "😄")) { _ in }
             }
             
             Section {

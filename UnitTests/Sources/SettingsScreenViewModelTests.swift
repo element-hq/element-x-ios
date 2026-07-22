@@ -42,7 +42,7 @@ struct SettingsScreenViewModelTests {
         // Then the picker should be dismissed and the custom status field shown.
         #expect(!context.viewState.bindings.isPresentingStatusPicker)
         #expect(context.viewState.bindings.isShowingCustomStatusField)
-        #expect(context.viewState.userStatusRowMode == .custom)
+        #expect(context.viewState.userStatusRowMode == .custom(emoji: "😄"))
         
         // When cancelling.
         context.send(viewAction: .userStatus(.cancel))
@@ -102,10 +102,31 @@ struct SettingsScreenViewModelTests {
     }
     
     @Test
+    mutating func selectingCustomStatusEmoji() async throws {
+        // Given a custom status field showing the default emoji.
+        setupViewModel()
+        context.send(viewAction: .userStatus(.customStatus))
+        #expect(context.viewState.userStatusRowMode == .custom(emoji: "😄"))
+        
+        // When selecting an emoji from the picker.
+        try await selectCustomStatusEmoji("🎉")
+        
+        // Then the custom status field should show the selected emoji.
+        #expect(context.viewState.userStatusRowMode == .custom(emoji: "🎉"))
+        
+        // When cancelling and returning to the custom status field.
+        context.send(viewAction: .userStatus(.cancel))
+        context.send(viewAction: .userStatus(.customStatus))
+        
+        // Then the emoji should have been reset to the default.
+        #expect(context.viewState.userStatusRowMode == .custom(emoji: "😄"))
+    }
+    
+    @Test
     mutating func reportBug() async throws {
         setupViewModel()
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .reportBug }
+        let deferred = deferFulfillment(viewModel.actions) { $0.isReportBug }
         context.send(viewAction: .reportBug)
         try await deferred.fulfill()
     }
@@ -114,7 +135,7 @@ struct SettingsScreenViewModelTests {
     mutating func analytics() async throws {
         setupViewModel()
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .analytics }
+        let deferred = deferFulfillment(viewModel.actions) { $0.isAnalytics }
         context.send(viewAction: .analytics)
         try await deferred.fulfill()
     }
@@ -123,7 +144,7 @@ struct SettingsScreenViewModelTests {
     mutating func logout() async throws {
         setupViewModel()
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .logout }
+        let deferred = deferFulfillment(viewModel.actions) { $0.isLogout }
         context.send(viewAction: .logout)
         try await deferred.fulfill()
     }
@@ -137,5 +158,49 @@ struct SettingsScreenViewModelTests {
                                             isBugReportServiceEnabled: true,
                                             isInSecondaryWindow: false,
                                             userIndicatorController: UserIndicatorControllerMock())
+    }
+    
+    /// Shows the emoji picker and selects the provided emoji through its continuation.
+    private func selectCustomStatusEmoji(_ emoji: String) async throws {
+        let pickerPresented = deferFulfillment(viewModel.actions) { $0.isUserStatusEmojiPicker }
+        context.send(viewAction: .userStatus(.pickCustomEmoji))
+        guard case let .userStatusEmojiPicker(continuation) = try await pickerPresented.fulfill() else {
+            Issue.record("Expected the emoji picker to be presented.")
+            return
+        }
+        
+        let emojiUpdated = deferFulfillment(context.observe(\.viewState.bindings.customStatusEmoji)) { $0 == Character(emoji) }
+        continuation.yield(emoji)
+        try await emojiUpdated.fulfill()
+    }
+}
+
+private extension SettingsScreenViewModelAction {
+    var isUserStatusEmojiPicker: Bool {
+        switch self {
+        case .userStatusEmojiPicker: true
+        default: false
+        }
+    }
+    
+    var isReportBug: Bool {
+        switch self {
+        case .reportBug: true
+        default: false
+        }
+    }
+    
+    var isAnalytics: Bool {
+        switch self {
+        case .analytics: true
+        default: false
+        }
+    }
+    
+    var isLogout: Bool {
+        switch self {
+        case .logout: true
+        default: false
+        }
     }
 }
