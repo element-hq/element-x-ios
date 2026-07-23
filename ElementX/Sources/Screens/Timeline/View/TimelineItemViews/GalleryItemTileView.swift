@@ -20,6 +20,7 @@ struct GalleryItemTileView: View {
         // unsafe item only turns its own tile critical rather than the whole gallery bubble.
         ContentScanningView(contentScannerService: contentScannerService,
                             mediaSource: item.mediaSource,
+                            thumbnailSource: item.thumbnailSource,
                             containerShowsFailure: false) {
             // Clear base so the image fills/clips to the grid's tile size, not its own.
             Color.clear

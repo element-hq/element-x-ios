@@ -62,6 +62,7 @@ private struct GalleryListRow: View {
     var body: some View {
         ContentScanningView(contentScannerService: contentScannerService,
                             mediaSource: item.mediaSource,
+                            thumbnailSource: item.thumbnailSource,
                             containerShowsFailure: false) {
             row(icon: icon)
                 .contentShape(Rectangle())
