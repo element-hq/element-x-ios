@@ -92,8 +92,10 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 switch action {
                 case .callEnded:
                     actionsSubject.send(.dismiss)
-                case .mediaStateChanged(let audioEnabled, _):
+                case .mediaStateChanged(let audioEnabled, let videoEnabled):
                     elementCallService.setAudioEnabled(audioEnabled, roomID: configuration.callRoomID)
+                    appSettings.elementCallLastAudioEnabled = audioEnabled
+                    appSettings.elementCallLastVideoEnabled = videoEnabled
                 }
             }
             .store(in: &cancellables)
@@ -147,6 +149,12 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
            decodedMessage.hasLoaded {
             // This means that the call room was joined succesfully, we can stop the timeout task
             timeoutTask = nil
+
+            // Restore the microphone and camera to how the user left them in their last call.
+            await setAudioEnabled(appSettings.elementCallLastAudioEnabled)
+            if !configuration.voiceOnly {
+                await setVideoEnabled(appSettings.elementCallLastVideoEnabled)
+            }
         }
         await widgetDriver.handleMessage(message)
     }
@@ -238,6 +246,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         let message = ElementCallWidgetMessage(direction: .toWidget,
                                                action: .mediaState,
                                                data: .init(audioEnabled: enabled),
+                                               widgetId: widgetDriver.widgetID)
+        await postMessageToWidget(message)
+    }
+
+    private func setVideoEnabled(_ enabled: Bool) async {
+        let message = ElementCallWidgetMessage(direction: .toWidget,
+                                               action: .mediaState,
+                                               data: .init(videoEnabled: enabled),
                                                widgetId: widgetDriver.widgetID)
         await postMessageToWidget(message)
     }

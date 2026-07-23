@@ -361,7 +361,15 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     @UserPreference
     var elementCallBaseURLOverride: URL?
-    
+
+    /// Whether the camera should be enabled when joining an Element Call, based on how the user left it in their last call.
+    @UserPreference(defaultValue: true)
+    var elementCallLastVideoEnabled: Bool
+
+    /// Whether the microphone should be enabled when joining an Element Call, based on how the user left it in their last call.
+    @UserPreference(defaultValue: true)
+    var elementCallLastAudioEnabled: Bool
+
     // MARK: - Users
     
     /// Whether to hide the display name and avatar of ignored users as these may contain objectionable content.
