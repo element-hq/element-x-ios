@@ -95,8 +95,6 @@ struct HomeScreenViewState: BindableState {
     var securityBannerMode = HomeScreenSecurityBannerMode.none
     var shouldShowNewSoundBanner = false
     
-    var requiresExtraAccountSetup = false
-    
     var rooms: [HomeScreenRoom] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
     

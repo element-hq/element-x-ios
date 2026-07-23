@@ -65,16 +65,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 switch securityState.recoveryState {
                 case .disabled:
-                    state.requiresExtraAccountSetup = true
                     if !state.securityBannerMode.isDismissed {
                         state.securityBannerMode = .show(.setUpRecovery)
                     }
                 case .incomplete:
-                    state.requiresExtraAccountSetup = true
                     state.securityBannerMode = .show(.recoveryOutOfSync)
                 default:
                     state.securityBannerMode = .none
-                    state.requiresExtraAccountSetup = false
                 }
             }
             .store(in: &cancellables)

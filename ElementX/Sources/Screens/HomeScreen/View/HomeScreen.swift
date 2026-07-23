@@ -86,7 +86,6 @@ struct HomeScreen: View {
             context.send(viewAction: .showSettings)
         } label: {
             AvatarSettingsButtonLabel(userProfile: context.viewState.userProfile,
-                                      requiresExtraAccountSetup: context.viewState.requiresExtraAccountSetup,
                                       mediaProvider: context.mediaProvider)
         }
         .accessibilityLabel(L10n.commonSettings)
