@@ -33,12 +33,13 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
-        let pickerSelection: String? = switch mode {
-        case .picker(let providers): providers[0]
-        case .confirmation: nil
+        let homeserverAddress: String
+        if case .picker(let providers) = mode {
+            homeserverAddress = providers[0]
+        } else {
+            homeserverAddress = authenticationService.homeserver.value.address
         }
-        let bindings = ServerSelectionScreenBindings(homeserverAddress: authenticationService.homeserver.value.address,
-                                                     pickerSelection: pickerSelection)
+        let bindings = ServerSelectionScreenBindings(homeserverAddress: homeserverAddress)
         super.init(initialViewState: ServerSelectionScreenViewState(mode: mode, bindings: bindings))
     }
     
@@ -64,7 +65,8 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     // MARK: - Private
     
     private func pickServer() async {
-        guard let accountProvider = state.bindings.pickerSelection else {
+        let accountProvider = state.bindings.homeserverAddress
+        guard accountProvider.isEmpty == false else {
             fatalError("It shouldn't be possible to confirm without a selection.")
         }
         

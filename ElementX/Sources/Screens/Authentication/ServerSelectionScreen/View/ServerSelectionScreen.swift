@@ -69,7 +69,7 @@ struct ServerSelectionScreen: View {
             case .picker(let providers):
                 FakeInlinePicker(items: providers,
                                  icon: \.host,
-                                 selection: $context.pickerSelection)
+                                 selection: $context.homeserverAddress)
                     .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.serverPicker)
             }
             
@@ -94,7 +94,7 @@ struct ServerSelectionScreen: View {
 private struct FakeInlinePicker: View {
     let items: [String]
     let icon: KeyPath<CompoundIcons, Image>
-    @Binding var selection: String?
+    @Binding var selection: String
     
     var body: some View {
         VStack(spacing: 0) {

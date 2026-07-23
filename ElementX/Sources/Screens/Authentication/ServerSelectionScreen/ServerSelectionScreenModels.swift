@@ -46,17 +46,15 @@ struct ServerSelectionScreenViewState: BindableState {
         switch mode {
         case .confirmation:
             bindings.homeserverAddress.isEmpty || isShowingFooterError
-        case .picker:
-            bindings.pickerSelection == nil
+        case .picker(let options):
+            !options.contains(bindings.homeserverAddress) || isShowingFooterError
         }
     }
 }
 
 struct ServerSelectionScreenBindings {
-    /// The homeserver address input by the user.
+    /// The homeserver address input or chosen by the user.
     var homeserverAddress: String
-    /// The chosen server when in `.picker` mode, otherwise `nil`.
-    var pickerSelection: String?
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<ServerSelectionScreenErrorType>?
 }
