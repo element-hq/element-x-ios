@@ -98,7 +98,7 @@ struct ActiveCallTimelineItemView: View {
             
             VStack(spacing: 4) {
                 if !isJoined {
-                    Button(action: { context?.send(viewAction: .joinActiveCall(isVoiceCall: isVoiceCall)) }) {
+                    Button { context?.send(viewAction: .joinActiveCall(isVoiceCall: isVoiceCall)) } label: {
                         Text(L10n.actionJoin)
                             .font(.compound.bodyMDSemibold)
                             .padding(.horizontal, 6)
@@ -107,18 +107,27 @@ struct ActiveCallTimelineItemView: View {
                     .buttonStyle(.compound(.primary, size: .small))
                 }
                 
-                if let callStartTimestamp {
-                    Text(callStartTimestamp, style: .timer)
-                        .font(.compound.bodyXS)
-                        .foregroundColor(.compound.textSecondary)
-                        .monospacedDigit()
-                }
+                callTimer
+                    .font(.compound.bodyXS)
+                    .foregroundColor(.compound.textSecondary)
+                    .monospacedDigit()
             }
         }
         .padding(12)
         .overlay(RoundedRectangle(cornerRadius: 8)
             .stroke(.compound.borderInteractivePrimary, lineWidth: 1))
         .padding(16)
+    }
+    
+    @ViewBuilder
+    private var callTimer: some View {
+        if let callStartTimestamp {
+            if ProcessInfo.isRunningTests {
+                Text("0:00") // A slow runner can take more than a second to record the snapshot 🤦‍♂️
+            } else {
+                Text(callStartTimestamp, style: .timer)
+            }
+        }
     }
 }
 
