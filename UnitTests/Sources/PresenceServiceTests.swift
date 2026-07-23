@@ -175,12 +175,12 @@ struct PresenceServiceTests {
     func newerTransitionWinsWhenAnEarlierSendIsInFlight() async throws {
         appSettings.sharePresence = true
         
-        let onlineStarted = PassthroughSubject<Void, Never>()
-        let gate = AsyncStream<Void>.makeStream()
-        clientProxy.configurePresenceSendImmediatelyClosure = { [sendsSubject, onlineStarted] presence, sendImmediately in
+        let (onlineStartedStream, onlineStartedContinuation) = AsyncStream<Void>.makeStream()
+        let (resumeOnlineSendStream, resumeOnlineSendContinuation) = AsyncStream<Void>.makeStream()
+        clientProxy.configurePresenceSendImmediatelyClosure = { [sendsSubject] presence, sendImmediately in
             if presence == .online {
-                onlineStarted.send(())
-                var iterator = gate.stream.makeAsyncIterator()
+                onlineStartedContinuation.yield()
+                var iterator = resumeOnlineSendStream.makeAsyncIterator()
                 _ = await iterator.next()
             }
             
@@ -188,15 +188,15 @@ struct PresenceServiceTests {
             return .success(())
         }
         
-        let onlineStartedDeferred = deferFulfillment(onlineStarted) { _ in true }
+        let onlineStartedDeferred = deferFulfillment(onlineStartedStream) { _ in true }
         let service = makeService(initialApplicationState: .active)
         try await onlineStartedDeferred.fulfill()
         
         let unavailableDeferred = deferFulfillment(sendsSubject) { $0.presence == .unavailable }
         notificationCenter.post(name: UIApplication.willResignActiveNotification, object: nil)
         
-        gate.continuation.yield()
-        gate.continuation.finish()
+        resumeOnlineSendContinuation.yield()
+        resumeOnlineSendContinuation.finish()
         try await unavailableDeferred.fulfill()
         
         let applied = clientProxy.configurePresenceSendImmediatelyReceivedInvocations.map(\.presence)
@@ -208,47 +208,29 @@ struct PresenceServiceTests {
     func deinitCancelsPendingSend() async throws {
         appSettings.sharePresence = true
         
-        let onlineStarted = AsyncStream.makeStream(of: Void.self)
-        let onlineCancelled = AsyncStream.makeStream(of: Void.self)
-        let onlineCompleted = AsyncStream.makeStream(of: Void.self)
-        let gate = AsyncStream.makeStream(of: Void.self)
-        let gateContinuation = gate.continuation
-        let onlineCancelledContinuation = onlineCancelled.continuation
-        let onlineCompletedContinuation = onlineCompleted.continuation
-        
+        let (onlineStartedStream, onlineStartedContinuation) = AsyncStream.makeStream(of: Void.self)
+        let (onlineFinishedStream, onlineFinishedContinuation) = AsyncStream.makeStream(of: Void.self)
         clientProxy.configurePresenceSendImmediatelyClosure = { presence, _ in
-            guard presence == .online else {
-                return .success(())
+            if presence == .online {
+                onlineStartedContinuation.yield()
+                try? await Task.sleep(for: .seconds(3600)) // Interrupted by the service's deinit cancelling the send task.
+                onlineFinishedContinuation.yield()
             }
             
-            onlineStarted.continuation.yield()
-            let result: Result<Void, ClientProxyError> = await withTaskCancellationHandler {
-                var iterator = gate.stream.makeAsyncIterator()
-                _ = await iterator.next()
-                return .success(())
-            } onCancel: {
-                gateContinuation.finish()
-                onlineCancelledContinuation.yield()
-                onlineCancelledContinuation.finish()
-            }
-            onlineCompletedContinuation.yield()
-            onlineCompletedContinuation.finish()
-            
-            return result
+            return .success(())
         }
         
-        let onlineStartedDeferred = deferFulfillment(onlineStarted.stream) { _ in true }
+        let onlineStartedDeferred = deferFulfillment(onlineStartedStream) { _ in true }
         var service: PresenceService? = makeService(initialApplicationState: .active)
         #expect(service != nil)
         try await onlineStartedDeferred.fulfill()
         
+        // Queue an unavailable send behind the in-flight online one.
         notificationCenter.post(name: UIApplication.willResignActiveNotification, object: nil)
         
-        let onlineCancelledDeferred = deferFulfillment(onlineCancelled.stream) { _ in true }
-        let onlineCompletedDeferred = deferFulfillment(onlineCompleted.stream) { _ in true }
+        let onlineFinishedDeferred = deferFulfillment(onlineFinishedStream) { _ in true }
         service = nil
-        try await onlineCancelledDeferred.fulfill()
-        try await onlineCompletedDeferred.fulfill()
+        try await onlineFinishedDeferred.fulfill()
         
         let applied = clientProxy.configurePresenceSendImmediatelyReceivedInvocations.map(\.presence)
         #expect(applied == [.online], "Expected deinit to cancel the queued unavailable send, got \(applied)")

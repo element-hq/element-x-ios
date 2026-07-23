@@ -100,10 +100,9 @@ final class PresenceService {
             return
         }
         
-        let clientProxy = clientProxy
         sendTask = Task { [weak self, clientProxy] in
             while !Task.isCancelled {
-                guard let presence = await self?.nextPendingPresence() else {
+                guard let presence = self?.nextPendingPresence() else {
                     break
                 }
                 
@@ -113,10 +112,10 @@ final class PresenceService {
                     break
                 }
                 
-                await self?.finishSending(presence)
+                self?.finishSending(presence)
             }
             
-            await self?.finishSendTask()
+            self?.finishSendTask()
         }
     }
     
