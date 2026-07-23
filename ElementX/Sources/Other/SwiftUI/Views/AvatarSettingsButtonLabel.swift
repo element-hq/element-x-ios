@@ -10,7 +10,6 @@ import SwiftUI
 
 struct AvatarSettingsButtonLabel: View {
     let userProfile: UserProfile
-    var requiresExtraAccountSetup = false
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
@@ -20,7 +19,6 @@ struct AvatarSettingsButtonLabel: View {
                             avatarSize: .user(on: .chats),
                             mediaProvider: mediaProvider)
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-            .overlayBadge(10, isBadged: requiresExtraAccountSetup)
             .modifier(StatusEmojiModifier(statusEmoji: userProfile.status.displayed?.emoji))
             .geometryGroup()
     }
@@ -61,23 +59,11 @@ struct AvatarSettingsButtonLabel_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         HStack(spacing: 16) {
             AvatarSettingsButtonLabel(userProfile: .mockAlice,
-                                      requiresExtraAccountSetup: false,
-                                      mediaProvider: MediaProviderMock(.init()))
-            
-            AvatarSettingsButtonLabel(userProfile: .mockAlice,
-                                      requiresExtraAccountSetup: true,
                                       mediaProvider: MediaProviderMock(.init()))
             
             AvatarSettingsButtonLabel(userProfile: .init(userID: "",
                                                          avatarURL: .mockMXCUserAvatar,
                                                          status: .mock(text: "", emoji: "🌴")),
-                                      requiresExtraAccountSetup: false,
-                                      mediaProvider: MediaProviderMock(.init()))
-            
-            AvatarSettingsButtonLabel(userProfile: .init(userID: "",
-                                                         avatarURL: .mockMXCUserAvatar,
-                                                         status: .mock(text: "", emoji: "🌴")),
-                                      requiresExtraAccountSetup: true,
                                       mediaProvider: MediaProviderMock(.init()))
         }
         .padding(16)
