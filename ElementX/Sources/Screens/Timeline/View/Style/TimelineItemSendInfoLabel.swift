@@ -178,8 +178,12 @@ private extension TimelineItemSendInfo {
                 liveLocationTimelineItem.layout
             case let message as EventBasedMessageTimelineItemProtocol:
                 switch message {
-                case is ImageRoomTimelineItem, is VideoRoomTimelineItem, is GalleryRoomTimelineItem:
+                case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
                     .overlay(capsuleStyle: !message.hasMediaCaption)
+                case is GalleryRoomTimelineItem:
+                    // Without a caption, append the send info below the grid rather than overlaying
+                    // a capsule on top of the media.
+                    message.hasMediaCaption ? .overlay(capsuleStyle: false) : .vertical()
                 case is AudioRoomTimelineItem, is FileRoomTimelineItem:
                     // swiftlint:disable:next void_function_in_ternary
                     message.hasMediaCaption ? .overlay(capsuleStyle: false) : .horizontal(spacing: 0) // No spacing as the content already contains it.

@@ -15,7 +15,7 @@ struct GalleryRoomTimelineView: View {
     let timelineItem: GalleryRoomTimelineItem
     
     private var hasMediaCaption: Bool {
-        timelineItem.content.caption != nil
+        timelineItem.content.caption?.isBlank == false
     }
     
     /// A gallery falls back to a vertical file-list layout when any of its items lacks a thumbnail
