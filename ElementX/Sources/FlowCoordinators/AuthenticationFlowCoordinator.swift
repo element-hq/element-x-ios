@@ -336,7 +336,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Manual Authentication
     
-    
     private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
         authenticationService.reset()
         
