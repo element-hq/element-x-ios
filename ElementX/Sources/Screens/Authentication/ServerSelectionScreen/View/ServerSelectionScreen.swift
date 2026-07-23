@@ -121,10 +121,10 @@ private struct FakeInlinePicker: View {
 
 @available(iOS 26.0, *)
 struct ServerSelection_Previews: PreviewProvider, TestablePreview {
-    static let matrixViewModel = makeViewModel(for: "https://matrix.org")
-    static let emptyViewModel = makeViewModel(for: "")
-    static let invalidViewModel = makeViewModel(for: "thisisbad")
-    static let pickerViewModel = makeViewModel(for: "https://foo.bar", mode: .picker(["matrix.org", "foo.bar", "baz.me"]))
+    static let matrixViewModel = makeViewModel(mode: .confirmation("https://matrix.org"))
+    static let emptyViewModel = makeViewModel(mode: .confirmation(""))
+    static let invalidViewModel = makeViewModel(mode: .confirmation("thisisbad"))
+    static let pickerViewModel = makeViewModel(mode: .picker(["matrix.org", "foo.bar", "baz.me"]))
     
     static var previews: some View {
         ElementNavigationStack {
@@ -149,7 +149,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Picker")
     }
     
-    static func makeViewModel(for homeserverAddress: String, mode: ServerConfirmationScreenMode = .confirmation("")) -> ServerSelectionScreenViewModel {
+    static func makeViewModel(mode: ServerSelectionScreenMode = .confirmation("")) -> ServerSelectionScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
         let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
@@ -157,8 +157,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
                                                        authenticationFlow: .login,
                                                        appSettings: .volatile(),
                                                        userIndicatorController: UserIndicatorControllerMock())
-        viewModel.context.homeserverAddress = homeserverAddress
-        if homeserverAddress == "thisisbad" {
+        if case .confirmation(let homeserverAddress) = mode, homeserverAddress == "thisisbad" {
             viewModel.context.send(viewAction: .confirm)
         }
         return viewModel

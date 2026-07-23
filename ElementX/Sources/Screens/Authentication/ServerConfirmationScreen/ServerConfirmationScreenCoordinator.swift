@@ -33,9 +33,9 @@ final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: ServerConfirmationScreenCoordinatorParameters) {
         let mode = if parameters.appSettings.allowOtherAccountProviders {
-            ServerConfirmationScreenMode.confirmation(parameters.authenticationService.homeserver.value.address)
+            ServerSelectionScreenMode.confirmation(parameters.authenticationService.homeserver.value.address)
         } else {
-            ServerConfirmationScreenMode.picker(parameters.appSettings.accountProviders)
+            ServerSelectionScreenMode.picker(parameters.appSettings.accountProviders)
         }
         
         viewModel = ServerConfirmationScreenViewModel(authenticationService: parameters.authenticationService,

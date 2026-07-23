@@ -159,7 +159,7 @@ struct ServerConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Picker")
     }
     
-    static func makeViewModel(mode: ServerConfirmationScreenMode, flow: AuthenticationFlow) -> ServerConfirmationScreenViewModel {
+    static func makeViewModel(mode: ServerSelectionScreenMode, flow: AuthenticationFlow) -> ServerConfirmationScreenViewModel {
         ServerConfirmationScreenViewModel(authenticationService: AuthenticationService.mock,
                                           mode: mode,
                                           authenticationFlow: flow,

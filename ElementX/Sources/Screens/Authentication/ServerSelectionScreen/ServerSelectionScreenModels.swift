@@ -17,9 +17,16 @@ enum ServerSelectionScreenViewModelAction {
     case dismiss
 }
 
+enum ServerSelectionScreenMode: Equatable {
+    /// The user is confirming the displayed account provider (or can enter their own).
+    case confirmation(String)
+    /// The user is only allowed to pick from a list of account providers.
+    case picker([String])
+}
+
 struct ServerSelectionScreenViewState: BindableState {
     /// Whether the screen is configured to confirm a single account provider or pick one from a list of many.
-    var mode: ServerConfirmationScreenMode
+    var mode: ServerSelectionScreenMode
     /// The presentation anchor used for OAuth authentication.
     var window: UIWindow?
     

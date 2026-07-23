@@ -38,7 +38,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     init(parameters: ServerSelectionScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        let mode: ServerConfirmationScreenMode = if parameters.appSettings.allowOtherAccountProviders {
+        let mode: ServerSelectionScreenMode = if parameters.appSettings.allowOtherAccountProviders {
             .confirmation(parameters.authenticationService.homeserver.value.address)
         } else {
             .picker(parameters.appSettings.accountProviders)

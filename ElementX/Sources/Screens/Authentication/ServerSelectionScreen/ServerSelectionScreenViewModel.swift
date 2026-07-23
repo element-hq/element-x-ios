@@ -24,7 +24,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     }
     
     init(authenticationService: AuthenticationServiceProtocol,
-         mode: ServerConfirmationScreenMode,
+         mode: ServerSelectionScreenMode,
          authenticationFlow: AuthenticationFlow,
          appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {

@@ -318,7 +318,7 @@ final class ServerConfirmationScreenViewModelTests {
                                 supportsPasswordLogin: Bool = true,
                                 restrictedFlow: Bool = false,
                                 requiresElementPro: Bool = false) {
-        var mode = ServerConfirmationScreenMode.confirmation("matrix.org")
+        var mode = ServerSelectionScreenMode.confirmation("matrix.org")
         if restrictedFlow {
             appSettings.override(accountProviders: ["matrix.org", "beta.matrix.org"],
                                  allowOtherAccountProviders: false,

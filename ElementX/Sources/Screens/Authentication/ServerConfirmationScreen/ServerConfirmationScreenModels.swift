@@ -17,16 +17,9 @@ enum ServerConfirmationScreenViewModelAction {
     case changeServer
 }
 
-enum ServerConfirmationScreenMode: Equatable {
-    /// The user is confirming the displayed account provider (or can enter their own).
-    case confirmation(String)
-    /// The user is only allowed to pick from a list of account providers.
-    case picker([String])
-}
-
 struct ServerConfirmationScreenViewState: BindableState {
     /// Whether the screen is configured to confirm a single account provider or pick one from a list of many.
-    var mode: ServerConfirmationScreenMode
+    var mode: ServerSelectionScreenMode
     /// The flow being attempted on the selected homeserver.
     let authenticationFlow: AuthenticationFlow
     /// The presentation anchor used for OAuth authentication.
