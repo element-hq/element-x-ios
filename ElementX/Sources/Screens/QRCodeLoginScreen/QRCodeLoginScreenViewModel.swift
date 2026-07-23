@@ -181,8 +181,16 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     break // Nothing to do, the state was set above.
                 case .establishingSecureChannel(let checkCodeString):
                     state.state = .displayCode(.deviceCode(checkCodeString))
-                case .waitingForAuthorisation(let url):
-                    requestOAuthAuthorization(url: url)
+                case .waitingForAuthorisation(let verificationURL, let continuationSender):
+                    // TODO: comment as to why we can confirm it immediately
+                    Task {
+                        do {
+                            try await continuationSender.confirm()
+                        } catch {
+                            // TODO:
+                        }
+                    }
+                    requestOAuthAuthorization(url: verificationURL)
                 case .syncingSecrets:
                     break // Nothing to do.
                 case .done:
@@ -221,7 +229,15 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     break // Nothing to do, we are already showing the code by the time this method is called.
                 case .qrScanned(let checkCodeSender):
                     state.state = .confirmCode(.inputCode(checkCodeSender))
-                case .waitingForAuthorisation(let url):
+                case .waitingForAuthorisation(let url, let continuationSender):
+                    // TODO: comment as to why we can confirm it immediately
+                    Task {
+                        do {
+                            try await continuationSender.confirm()
+                        } catch {
+                            // TODO:
+                        }
+                    }
                     requestOAuthAuthorization(url: url)
                 case .syncingSecrets:
                     break // Nothing to do.
