@@ -213,7 +213,7 @@ enum TimelineMediaPreviewItem: Equatable {
         
         var downloadError: Error?
         
-        private let previewID: String
+        private let previewID: MediaPreviewItemID
         
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
             self.timelineItem = timelineItem
@@ -243,17 +243,19 @@ enum TimelineMediaPreviewItem: Equatable {
         /// Wraps a single attachment of a gallery message. `.other` items have no media source,
         /// so there's nothing to preview and the initialiser fails.
         init?(galleryParent: GalleryRoomTimelineItem, item: GalleryItem) {
-            guard item.kind != .other else { return nil }
+            if case .other = item {
+                return nil
+            } // No media source, so there's nothing to preview.
             timelineItem = galleryParent
             galleryItem = item
-            previewID = "gallery:\(item.id)"
+            previewID = .galleryItem(item.id)
         }
         
         // MARK: Identifiable
         
         /// A stable identifier that's unique per preview item — including individual gallery
         /// attachments that would otherwise share their parent event's ID.
-        var id: String {
+        var id: MediaPreviewItemID {
             previewID
         }
         
@@ -262,12 +264,9 @@ enum TimelineMediaPreviewItem: Equatable {
         /// We identify items by this to ensure that all matching is made using only this part of the identifier. This is
         /// because the unique ID will be different across timelines so when the initial item comes from a regular timeline and
         /// we build a filtered timeline to fetch the other media items, it is impossible to match by the `TimelineItemIdentifier`.
-        private static func derivedID(for timelineItem: EventBasedMessageTimelineItemProtocol) -> String {
+        private static func derivedID(for timelineItem: EventBasedMessageTimelineItemProtocol) -> MediaPreviewItemID {
             guard let id = timelineItem.id.eventOrTransactionID else { fatalError("Virtual items cannot be previewed.") }
-            switch id {
-            case .eventID(let value): return "event:\(value)"
-            case .transactionID(let value): return "txn:\(value)"
-            }
+            return .timelineItem(id)
         }
         
         // MARK: QLPreviewItem
@@ -306,17 +305,12 @@ enum TimelineMediaPreviewItem: Equatable {
             if let galleryItem {
                 return galleryItem.mediaSource
             }
-            switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem:
-                return audioItem.content.source
-            case let fileItem as FileRoomTimelineItem:
-                return fileItem.content.source
-            case let imageItem as ImageRoomTimelineItem:
-                return imageItem.content.imageInfo.source
-            case let videoItem as VideoRoomTimelineItem:
-                return videoItem.content.videoInfo.source
-            default:
-                return nil
+            return switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem: audioItem.content.source
+            case let fileItem as FileRoomTimelineItem: fileItem.content.source
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.source
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.source
+            default: nil
             }
         }
         
@@ -324,15 +318,11 @@ enum TimelineMediaPreviewItem: Equatable {
             if let galleryItem {
                 return galleryItem.thumbnailSource
             }
-            switch timelineItem {
-            case let fileItem as FileRoomTimelineItem:
-                return fileItem.content.thumbnailSource
-            case let imageItem as ImageRoomTimelineItem:
-                return imageItem.content.thumbnailInfo?.source
-            case let videoItem as VideoRoomTimelineItem:
-                return videoItem.content.thumbnailInfo?.source
-            default:
-                return nil
+            return switch timelineItem {
+            case let fileItem as FileRoomTimelineItem: fileItem.content.thumbnailSource
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.thumbnailInfo?.source
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.thumbnailInfo?.source
+            default: nil
             }
         }
         
@@ -340,17 +330,12 @@ enum TimelineMediaPreviewItem: Equatable {
             if let galleryItem {
                 return galleryItem.filename
             }
-            switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem:
-                return audioItem.content.filename
-            case let fileItem as FileRoomTimelineItem:
-                return fileItem.content.filename
-            case let imageItem as ImageRoomTimelineItem:
-                return imageItem.content.filename
-            case let videoItem as VideoRoomTimelineItem:
-                return videoItem.content.filename
-            default:
-                return nil
+            return switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem: audioItem.content.filename
+            case let fileItem as FileRoomTimelineItem: fileItem.content.filename
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.filename
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.filename
+            default: nil
             }
         }
         
@@ -362,17 +347,12 @@ enum TimelineMediaPreviewItem: Equatable {
             if galleryItem != nil {
                 return nil
             } // The SDK doesn't surface individual gallery item sizes.
-            switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem:
-                return audioItem.content.fileSize
-            case let fileItem as FileRoomTimelineItem:
-                return fileItem.content.fileSize
-            case let imageItem as ImageRoomTimelineItem:
-                return imageItem.content.imageInfo.fileSize
-            case let videoItem as VideoRoomTimelineItem:
-                return videoItem.content.videoInfo.fileSize
-            default:
-                return nil
+            return switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem: audioItem.content.fileSize
+            case let fileItem as FileRoomTimelineItem: fileItem.content.fileSize
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.fileSize
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.fileSize
+            default: nil
             }
         }
         
@@ -393,17 +373,12 @@ enum TimelineMediaPreviewItem: Equatable {
             if let galleryItem {
                 return galleryItem.contentType?.localizedDescription
             }
-            switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem:
-                return audioItem.content.contentType?.localizedDescription
-            case let fileItem as FileRoomTimelineItem:
-                return fileItem.content.contentType?.localizedDescription
-            case let imageItem as ImageRoomTimelineItem:
-                return imageItem.content.contentType?.localizedDescription
-            case let videoItem as VideoRoomTimelineItem:
-                return videoItem.content.contentType?.localizedDescription
-            default:
-                return nil
+            return switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem: audioItem.content.contentType?.localizedDescription
+            case let fileItem as FileRoomTimelineItem: fileItem.content.contentType?.localizedDescription
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.contentType?.localizedDescription
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.contentType?.localizedDescription
+            default: nil
             }
         }
         
@@ -411,13 +386,10 @@ enum TimelineMediaPreviewItem: Equatable {
             if let galleryItem {
                 return galleryItem.blurhash
             }
-            switch timelineItem {
-            case let imageItem as ImageRoomTimelineItem:
-                return imageItem.content.blurhash
-            case let videoItem as VideoRoomTimelineItem:
-                return videoItem.content.blurhash
-            default:
-                return nil
+            return switch timelineItem {
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.blurhash
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.blurhash
+            default: nil
             }
         }
     }

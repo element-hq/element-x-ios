@@ -251,7 +251,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         }
     }
     
-    private func handleFileLoaded(itemID: String) {
+    private func handleFileLoaded(itemID: MediaPreviewItemID) {
         guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
         
         // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController

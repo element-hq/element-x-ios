@@ -1,6 +1,5 @@
 //
-// Copyright 2025 Element Creations Ltd.
-// Copyright 2025 New Vector Ltd.
+// Copyright 2026 Element Creations Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
@@ -14,48 +13,46 @@ import SwiftUI
 /// individually recognisable — the grid layout doesn't read well for non-visual content.
 struct GalleryListView: View {
     let items: [GalleryItem]
-    let uniqueID: TimelineItemIdentifier.UniqueID
     let mediaProvider: MediaProviderProtocol?
     let contentScannerService: ContentScannerServiceProtocol?
-    let onTap: (Int) -> Void
+    let onItemTap: (Int) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 if index > 0 {
-                    galleryDivider
+                    GalleryDivider()
                 }
                 
                 GalleryListRow(item: item,
-                               uniqueID: uniqueID,
                                mediaProvider: mediaProvider,
                                contentScannerService: contentScannerService) {
-                    onTap(index)
+                    onItemTap(index)
                 }
             }
         }
     }
+}
+
+/// A hairline divider used between gallery file-list rows (and above the caption).
+struct GalleryDivider: View {
+    @Environment(\.pixelLength) private var pixelLength
     
-    static var galleryDivider: some View {
+    var body: some View {
         Rectangle()
             .fill(Color.compound.borderInteractiveSecondary)
-            .frame(height: 0.5)
-    }
-    
-    private var galleryDivider: some View {
-        Self.galleryDivider
+            .frame(height: pixelLength)
     }
 }
 
 private struct GalleryListRow: View {
     let item: GalleryItem
-    let uniqueID: TimelineItemIdentifier.UniqueID
     let mediaProvider: MediaProviderProtocol?
     let contentScannerService: ContentScannerServiceProtocol?
     let onTap: () -> Void
     
     private var fileDescription: String {
-        ".\(item.filename.validatedFileExtension.uppercased())"
+        item.filename.validatedFileExtension.uppercased()
     }
     
     private var iconKeyPath: KeyPath<CompoundIcons, Image> {
@@ -63,22 +60,20 @@ private struct GalleryListRow: View {
     }
     
     var body: some View {
-        // The whole row is gated on its scan state. `containerShowsFailure` is false so an unsafe
-        // item only turns its own row critical rather than the whole gallery bubble.
         ContentScanningView(contentScannerService: contentScannerService,
                             mediaSource: item.mediaSource,
                             containerShowsFailure: false) {
-            row(accessory: leadingAccessory)
+            row(icon: icon)
                 .contentShape(Rectangle())
                 .onTapGesture { onTap() }
         } scanningContent: {
-            row(accessory: scanningAccessory)
+            row(icon: scanningIcon)
         } unsafeContent: { failure in
             failureRow(failure)
         }
     }
     
-    private func row(accessory: some View) -> some View {
+    private func row(icon: some View) -> some View {
         Label {
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.filename)
@@ -90,7 +85,7 @@ private struct GalleryListRow: View {
             }
             .lineLimit(2)
         } icon: {
-            accessory
+            icon
         }
         .labelStyle(.custom(spacing: 8, alignment: .center))
         .padding(.vertical, 12)
@@ -112,10 +107,10 @@ private struct GalleryListRow: View {
     }
     
     @ViewBuilder
-    private var leadingAccessory: some View {
+    private var icon: some View {
         if item.hasThumbnail, let source = item.thumbnailSource ?? item.mediaSource {
             LoadableImage(mediaSource: source,
-                          mediaType: .timelineItem(uniqueID: uniqueID),
+                          mediaType: .timelineItem(uniqueID: item.id.timelineItemUniqueID),
                           blurhash: item.blurhash,
                           size: item.size,
                           mediaProvider: mediaProvider) { imageView in
@@ -127,19 +122,11 @@ private struct GalleryListRow: View {
             .frame(width: 36, height: 36)
             .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
         } else {
-            CompoundIcon(iconKeyPath, size: .medium, relativeTo: .body)
-                .foregroundColor(.compound.iconPrimary)
-                .scaledPadding(6)
-                .background(.compound.iconOnSolidPrimary,
-                            in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+            FileTypeIconView(icon: iconKeyPath)
         }
     }
     
-    private var scanningAccessory: some View {
-        ProgressView()
-            .scaledFrame(size: CompoundIcon.Size.medium.value, relativeTo: .body)
-            .scaledPadding(6)
-            .background(.compound.iconOnSolidPrimary,
-                        in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+    private var scanningIcon: some View {
+        FileTypeIconView(icon: iconKeyPath, isScanning: true)
     }
 }

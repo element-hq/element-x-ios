@@ -278,6 +278,15 @@ nonisolated struct VideoInfoProxy: Hashable {
                      mimeType: nil,
                      fileSize: 45_167_000)
     }
+    
+    static func mockVideo(duration: TimeInterval) -> VideoInfoProxy {
+        .init(source: mockVideo.source,
+              duration: duration,
+              size: .init(width: 1920, height: 1080),
+              aspectRatio: 1.78,
+              mimeType: nil,
+              fileSize: 45_167_000)
+    }
 }
 
 nonisolated struct ImageInfoProxy: Hashable {

@@ -15,8 +15,14 @@ enum TimelineMediaPreviewViewModelAction: Equatable {
     case dismiss
 }
 
+/// Identifies a media preview item — either a whole timeline item or a single gallery attachment.
+enum MediaPreviewItemID: Hashable {
+    case timelineItem(TimelineItemIdentifier.EventOrTransactionID)
+    case galleryItem(GalleryItemID)
+}
+
 enum TimelineMediaPreviewDriverAction {
-    case itemLoaded(String)
+    case itemLoaded(MediaPreviewItemID)
     case showItemDetails(TimelineMediaPreviewItem.Media)
     case exportFile(TimelineMediaPreviewFileExportPicker.File)
     case authorizationRequired(appMediator: AppMediatorProtocol)

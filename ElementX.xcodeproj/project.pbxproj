@@ -113,7 +113,7 @@
 		109AEB7D33C4497727AFB87F /* TimelineInteractionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA894BC09972DC45E497D37 /* TimelineInteractionHandler.swift */; };
 		10D60D287025B71F4743A425 /* RoomDirectorySearchProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471BB7276C97AF60B3A5463B /* RoomDirectorySearchProxy.swift */; };
 		112C6F1C493B3F26AB22716A /* LinkMetadataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6885D1340AA9C76063E26868 /* LinkMetadataProviderProtocol.swift */; };
-		1137040B75BB1EB8EB555172 /* GalleryTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A626DB614D43E70C9C02D7 /* GalleryTileView.swift */; };
+		1137040B75BB1EB8EB555172 /* GalleryItemTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A626DB614D43E70C9C02D7 /* GalleryItemTileView.swift */; };
 		1146E9EDCF8344F7D6E0D553 /* MockCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0376C429FAB1687C3D905F3E /* MockCoder.swift */; };
 		114A8280D83146A26639C2A7 /* AnalyticsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2397174D0DC3918A7A8A7B /* AnalyticsConfiguration.swift */; };
 		119AE9A3FC6E0606C1146528 /* NotificationSettingsEditScreenRoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97F8963B14EB0AF3940DDBF /* NotificationSettingsEditScreenRoomCell.swift */; };
@@ -2454,7 +2454,7 @@
 		86C8CE2630F54D5FE1591786 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86D7CD5CA270BFC3EBB450CA /* PinnedEventsTimelineScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedEventsTimelineScreenViewModel.swift; sourceTree = "<group>"; };
 		86E1BAA7232081635662A83F /* CXProviderMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXProviderMock.swift; sourceTree = "<group>"; };
-		87A626DB614D43E70C9C02D7 /* GalleryTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTileView.swift; sourceTree = "<group>"; };
+		87A626DB614D43E70C9C02D7 /* GalleryItemTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryItemTileView.swift; sourceTree = "<group>"; };
 		87FC42213E86E8182CFD3A49 /* preview_avatar_user.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = preview_avatar_user.jpg; sourceTree = "<group>"; };
 		88410BD213FDF9B28E8B671F /* UserDetailsEditScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsEditScreen.swift; sourceTree = "<group>"; };
 		8896CDD20CA2D87EA3B848A1 /* RoomNotificationSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomNotificationSettingsScreen.swift; sourceTree = "<group>"; };
@@ -6589,7 +6589,7 @@
 				EEE0273EC14A781BBF715E37 /* GalleryGridView.swift */,
 				19FF46006358DF7E6F47A61A /* GalleryListView.swift */,
 				A04EFA0E3139C01E1CFDC93B /* GalleryRoomTimelineView.swift */,
-				87A626DB614D43E70C9C02D7 /* GalleryTileView.swift */,
+				87A626DB614D43E70C9C02D7 /* GalleryItemTileView.swift */,
 				59B7CC77B82C6C67DE3AD869 /* HighlightedTimelineItemModifier.swift */,
 				C5599255A6C98EBDA77B76E6 /* ImageRoomTimelineView.swift */,
 				52947F8F356F0BA5B1F50912 /* LiveLocationRoomTimelineView.swift */,
@@ -8567,7 +8567,7 @@
 				E08DFC18E97623B5C91C5025 /* GalleryRoomTimelineItem.swift in Sources */,
 				1CA6E1843E1B3680544EB584 /* GalleryRoomTimelineItemContent.swift in Sources */,
 				30DA1A668482E5B95E8F1F2B /* GalleryRoomTimelineView.swift in Sources */,
-				1137040B75BB1EB8EB555172 /* GalleryTileView.swift in Sources */,
+				1137040B75BB1EB8EB555172 /* GalleryItemTileView.swift in Sources */,
 				F18CA61A58C77C84F551B8E7 /* GeneratedMocks.swift in Sources */,
 				4295E5F850897710A51AE114 /* GeoURI.swift in Sources */,
 				F3C9CAD26FD4D7D6EBACF501 /* HTMLFixtures.swift in Sources */,

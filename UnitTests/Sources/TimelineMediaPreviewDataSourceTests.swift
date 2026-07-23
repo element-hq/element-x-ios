@@ -33,15 +33,7 @@ struct TimelineMediaPreviewDataSourceTests {
     func galleryPreview() throws {
         // Given a gallery message with three previewable attachments.
         let items = (0..<3).map { index in
-            GalleryItem(id: "item-\(index)",
-                        filename: "image-\(index).jpg",
-                        kind: .image,
-                        mediaSource: ImageInfoProxy.mockImage.source,
-                        thumbnailSource: ImageInfoProxy.mockThumbnail.source,
-                        size: nil,
-                        blurhash: nil,
-                        duration: nil,
-                        contentType: nil)
+            GalleryItem.mockImage(index: index, filename: "image-\(index).jpg")
         }
         let gallery = GalleryRoomTimelineItem(id: .randomEvent,
                                               timestamp: .mock,
@@ -62,7 +54,7 @@ struct TimelineMediaPreviewDataSourceTests {
         
         // …and the initial item is the tapped attachment.
         let media = try #require(dataSource.currentItem.mediaItem, "The current item should be a media item.")
-        #expect(media.id == "gallery:\(items[1].id)")
+        #expect(media.id == .galleryItem(items[1].id))
     }
     
     @Test
@@ -306,7 +298,7 @@ struct TimelineMediaPreviewDataSourceTests {
 }
 
 private extension TimelineMediaPreviewDataSource {
-    var currentMediaItemID: String? {
+    var currentMediaItemID: MediaPreviewItemID? {
         currentItem.mediaItem?.id
     }
 }
@@ -314,7 +306,7 @@ private extension TimelineMediaPreviewDataSource {
 private extension EventBasedMessageTimelineItemProtocol {
     /// Test helper that derives the same preview ID used by `TimelineMediaPreviewItem.Media` —
     /// avoids reaching into the private encoding from the tests.
-    var previewID: String {
+    var previewID: MediaPreviewItemID {
         TimelineMediaPreviewItem.Media(timelineItem: self).id
     }
 }

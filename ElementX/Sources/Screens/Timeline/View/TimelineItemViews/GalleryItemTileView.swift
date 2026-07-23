@@ -1,6 +1,5 @@
 //
-// Copyright 2025 Element Creations Ltd.
-// Copyright 2025 New Vector Ltd.
+// Copyright 2026 Element Creations Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
@@ -9,9 +8,8 @@
 import Compound
 import SwiftUI
 
-struct GalleryTileView: View {
+struct GalleryItemTileView: View {
     let item: GalleryItem
-    let uniqueID: TimelineItemIdentifier.UniqueID
     let mediaProvider: MediaProviderProtocol?
     let contentScannerService: ContentScannerServiceProtocol?
     let overflowCount: Int
@@ -23,8 +21,7 @@ struct GalleryTileView: View {
         ContentScanningView(contentScannerService: contentScannerService,
                             mediaSource: item.mediaSource,
                             containerShowsFailure: false) {
-            // `Color.clear` adopts the tile size set by the grid so the image fills and clips to it,
-            // and the overlays align to the tile bounds rather than the image's larger filled size.
+            // Clear base so the image fills/clips to the grid's tile size, not its own.
             Color.clear
                 .overlay { content }
                 .clipped()
@@ -53,7 +50,7 @@ struct GalleryTileView: View {
     private var content: some View {
         if let source = item.thumbnailSource ?? item.mediaSource {
             LoadableImage(mediaSource: source,
-                          mediaType: .timelineItem(uniqueID: uniqueID),
+                          mediaType: .timelineItem(uniqueID: item.id.timelineItemUniqueID),
                           blurhash: item.blurhash,
                           size: item.size,
                           mediaProvider: mediaProvider) { imageView in
@@ -74,9 +71,7 @@ struct GalleryTileView: View {
     private var iconFallback: some View {
         ZStack {
             Color.compound.bgSubtleSecondary
-            CompoundIcon(item.isAudio ? \.audio : \.attachment,
-                         size: .medium,
-                         relativeTo: .compound.bodyLG)
+            CompoundIcon(item.isAudio ? \.audio : \.attachment)
                 .foregroundStyle(.compound.iconPrimary)
         }
     }
@@ -113,12 +108,8 @@ struct GalleryTileView: View {
     }
     
     private func formatted(duration: TimeInterval) -> String {
-        let totalSeconds = max(0, Int(duration))
-        let hours = totalSeconds / 3600
-        let minutes = (totalSeconds % 3600) / 60
-        let seconds = totalSeconds % 60
-        return hours > 0
-            ? String(format: "%d:%02d:%02d", hours, minutes, seconds)
-            : String(format: "%d:%02d", minutes, seconds)
+        let duration = Duration.seconds(duration)
+        let pattern: Duration.TimeFormatStyle.Pattern = duration >= .seconds(3600) ? .hourMinuteSecond : .minuteSecond
+        return duration.formatted(.time(pattern: pattern))
     }
 }

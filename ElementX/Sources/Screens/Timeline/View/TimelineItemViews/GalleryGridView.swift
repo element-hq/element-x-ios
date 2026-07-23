@@ -1,6 +1,5 @@
 //
-// Copyright 2025 Element Creations Ltd.
-// Copyright 2025 New Vector Ltd.
+// Copyright 2026 Element Creations Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
@@ -11,10 +10,9 @@ import SwiftUI
 
 struct GalleryGridView: View {
     let items: [GalleryItem]
-    let uniqueID: TimelineItemIdentifier.UniqueID
     let mediaProvider: MediaProviderProtocol?
     let contentScannerService: ContentScannerServiceProtocol?
-    let onTap: (Int) -> Void
+    let onItemTap: (Int) -> Void
     
     static let spacing: CGFloat = 4
     static let groupWidth: CGFloat = 264
@@ -24,10 +22,9 @@ struct GalleryGridView: View {
         min(items.count, Self.maxVisible)
     }
     
-    /// Number to show on the overflow tile when items.count > maxVisible.
-    /// The last visible tile becomes the overflow indicator, so it represents
-    /// itself + every hidden item.
+    /// Number shown on the overflow tile when items.count > maxVisible.
     private var overflowCount: Int {
+        // Represents the last visible item + the rest.
         items.count > Self.maxVisible ? items.count - Self.maxVisible + 1 : 0
     }
     
@@ -65,7 +62,6 @@ struct GalleryGridView: View {
                 }
             }
         }
-        .frame(width: Self.groupWidth)
         .clipShape(RoundedRectangle(cornerRadius: 6))
     }
     
@@ -75,15 +71,13 @@ struct GalleryGridView: View {
             let isLastVisible = index == visibleCount - 1
             let overflow = (overflowCount > 0 && isLastVisible) ? overflowCount : 0
             
-            GalleryTileView(item: items[index],
-                            uniqueID: uniqueID,
-                            mediaProvider: mediaProvider,
-                            contentScannerService: contentScannerService,
-                            overflowCount: overflow) {
-                onTap(index)
+            GalleryItemTileView(item: items[index],
+                                mediaProvider: mediaProvider,
+                                contentScannerService: contentScannerService,
+                                overflowCount: overflow) {
+                onItemTap(index)
             }
             .frame(width: size.width, height: size.height)
-            .clipped()
         }
     }
 }

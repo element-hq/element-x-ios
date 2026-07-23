@@ -1,6 +1,5 @@
 //
-// Copyright 2025 Element Creations Ltd.
-// Copyright 2025 New Vector Ltd.
+// Copyright 2026 Element Creations Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
@@ -18,11 +17,10 @@ struct GalleryRoomTimelineView: View {
         timelineItem.content.caption?.isBlank == false
     }
     
-    /// A gallery falls back to a vertical file-list layout when any of its items lacks a thumbnail
-    /// (typically audio or generic files). Mixed galleries (image/video + file) also use the list
-    /// — a grid of mostly-icons looks worse than a tidy list.
+    /// A gallery uses a vertical file-list layout when it contains any non-visual attachment
+    /// (file or audio). A grid reads well for images/videos but not for documents.
     private var usesListLayout: Bool {
-        timelineItem.content.items.contains { !$0.hasThumbnail }
+        timelineItem.content.items.contains { !$0.isImage && !$0.isVideo }
     }
     
     var body: some View {
@@ -30,23 +28,19 @@ struct GalleryRoomTimelineView: View {
             VStack(alignment: .leading, spacing: 8) {
                 if usesListLayout {
                     GalleryListView(items: timelineItem.content.items,
-                                    uniqueID: timelineItem.id.uniqueID,
                                     mediaProvider: context?.mediaProvider,
-                                    contentScannerService: context?.contentScannerService) { index in
-                        tap(index: index)
-                    }
+                                    contentScannerService: context?.contentScannerService,
+                                    onItemTap: tap)
                 } else {
                     GalleryGridView(items: timelineItem.content.items,
-                                    uniqueID: timelineItem.id.uniqueID,
                                     mediaProvider: context?.mediaProvider,
-                                    contentScannerService: context?.contentScannerService) { index in
-                        tap(index: index)
-                    }
+                                    contentScannerService: context?.contentScannerService,
+                                    onItemTap: tap)
                 }
                 
                 if hasMediaCaption {
                     if usesListLayout {
-                        GalleryListView.galleryDivider
+                        GalleryDivider()
                     }
                     caption
                 }
@@ -80,28 +74,13 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     // A dedicated view model whose content scanner reports a different verdict per item, so a
     // single gallery can show safe, scanning and unsafe tiles side by side.
-    static let mixedScanViewModel: TimelineViewModel = {
-        let service = ContentScannerServiceMock()
-        service.scanResultFromSourceClosure = { source in
-            switch mixedVerdict(for: source) {
-            case .safe: return true
-            case .unsafe: return false
-            case .scanning: return nil
-            }
+    static let mixedScanViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(perSourceScanResult: { source in
+        switch mixedVerdict(for: source) {
+        case .safe: true
+        case .unsafe: false
+        case .scanning: nil
         }
-        service.loadScanResultFromSourceClosure = { source in
-            switch mixedVerdict(for: source) {
-            case .safe:
-                return .success(true)
-            case .unsafe:
-                return .success(false)
-            case .scanning:
-                try? await Task.sleep(for: .seconds(3600)) // Never resolves, so the scanning state stays visible.
-                return .failure(.failedScanning)
-            }
-        }
-        return TimelineViewModel.mock(contentScannerService: service)
-    }()
+    })))
     
     static var previews: some View {
         preview(makeItem(itemCount: 1), viewModel).previewDisplayName("1 image")
@@ -124,16 +103,9 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     private static func makeItem(itemCount: Int, caption: String? = nil) -> GalleryRoomTimelineItem {
         let items: [GalleryItem] = (0..<itemCount).map { index in
-            let isVideo = index.isMultiple(of: 3)
-            return GalleryItem(id: "preview-\(index)",
-                               filename: isVideo ? "clip-\(index).mp4" : "image-\(index).jpg",
-                               kind: isVideo ? .video : .image,
-                               mediaSource: ImageInfoProxy.mockImage.source,
-                               thumbnailSource: ImageInfoProxy.mockThumbnail.source,
-                               size: .init(width: 1920, height: 1080),
-                               blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
-                               duration: isVideo ? 42 : nil,
-                               contentType: isVideo ? .mpeg4Movie : .jpeg)
+            index.isMultiple(of: 3)
+                ? .mockVideo(index: index, filename: "clip-\(index).mp4")
+                : .mockImage(index: index, filename: "image-\(index).jpg")
         }
         
         return GalleryRoomTimelineItem(id: .randomEvent,
@@ -150,33 +122,9 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     private static func makeFileListItem(caption: String?) -> GalleryRoomTimelineItem {
         let items: [GalleryItem] = [
-            GalleryItem(id: "preview-image",
-                        filename: "photo.jpg",
-                        kind: .image,
-                        mediaSource: ImageInfoProxy.mockImage.source,
-                        thumbnailSource: ImageInfoProxy.mockThumbnail.source,
-                        size: .init(width: 1920, height: 1080),
-                        blurhash: nil,
-                        duration: nil,
-                        contentType: .jpeg),
-            GalleryItem(id: "preview-pdf",
-                        filename: "report.pdf",
-                        kind: .file,
-                        mediaSource: nil,
-                        thumbnailSource: nil,
-                        size: nil,
-                        blurhash: nil,
-                        duration: nil,
-                        contentType: .pdf),
-            GalleryItem(id: "preview-audio",
-                        filename: "meeting.m4a",
-                        kind: .audio,
-                        mediaSource: nil,
-                        thumbnailSource: nil,
-                        size: nil,
-                        blurhash: nil,
-                        duration: 65,
-                        contentType: .mpeg4Audio)
+            .mockImage(index: 0, filename: "photo.jpg"),
+            .mockFile(index: 1, filename: "report.pdf"),
+            .mockAudio(index: 2, filename: "meeting.m4a")
         ]
         
         return GalleryRoomTimelineItem(id: .randomEvent,
@@ -220,15 +168,10 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     private static func makeMixedScanItem() -> GalleryRoomTimelineItem {
         let items: [GalleryItem] = mixedVerdicts.indices.map { index in
-            GalleryItem(id: "mixed-\(index)",
-                        filename: "image-\(index).jpg",
-                        kind: .image,
-                        mediaSource: mixedSource(index: index),
-                        thumbnailSource: mixedSource(index: index),
-                        size: .init(width: 1920, height: 1080),
-                        blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
-                        duration: nil,
-                        contentType: .jpeg)
+            .mockImage(index: index,
+                       filename: "image-\(index).jpg",
+                       source: mixedSource(index: index),
+                       thumbnailSource: mixedSource(index: index))
         }
         
         return GalleryRoomTimelineItem(id: .randomEvent,
@@ -247,15 +190,9 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     /// mixed-scan view model (indices 0/1/2 → safe/unsafe/scanning).
     private static func makeMixedScanFileListItem() -> GalleryRoomTimelineItem {
         let items: [GalleryItem] = [
-            GalleryItem(id: "mixed-file-0", filename: "report.zip", kind: .file,
-                        mediaSource: mixedSource(index: 0), thumbnailSource: nil,
-                        size: nil, blurhash: nil, duration: nil, contentType: .zip),
-            GalleryItem(id: "mixed-file-1", filename: "contract.pdf", kind: .file,
-                        mediaSource: mixedSource(index: 1), thumbnailSource: nil,
-                        size: nil, blurhash: nil, duration: nil, contentType: .pdf),
-            GalleryItem(id: "mixed-file-2", filename: "meeting.m4a", kind: .audio,
-                        mediaSource: mixedSource(index: 2), thumbnailSource: nil,
-                        size: nil, blurhash: nil, duration: nil, contentType: .mpeg4Audio)
+            .mockFile(index: 0, filename: "report.zip", source: mixedSource(index: 0), contentType: .zip),
+            .mockFile(index: 1, filename: "contract.pdf", source: mixedSource(index: 1)),
+            .mockAudio(index: 2, filename: "meeting.m4a", source: mixedSource(index: 2))
         ]
         
         return GalleryRoomTimelineItem(id: .randomEvent,
