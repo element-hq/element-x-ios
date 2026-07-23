@@ -90,6 +90,12 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
         try await baseClient.restoreSessionWith(session: credentials.restorationToken.session,
                                                 roomLoadSettings: .one(roomId: roomID))
         
+        // Inject the content scanner so the SDK gates the media it downloads whilst building the notification.
+        if let contentScannerURL = appSettings.contentScannerURL.publisher.value {
+            let contentScanner = ContentScanner(scannerUrl: contentScannerURL.absoluteString)
+            await baseClient.setContentScanner(contentScanner: contentScanner)
+        }
+        
         notificationClient = try await baseClient.notificationClient(processSetup: .multipleProcesses)
     }
     
