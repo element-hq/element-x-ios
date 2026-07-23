@@ -29,7 +29,7 @@ class LinkNewDeviceService: LinkNewDeviceServiceProtocol {
         case starting
         case qrReady(UIImage)
         case qrScanned(CheckCodeSenderProxy)
-        case waitingForAuthorisation(verificationURL: URL)
+        case waitingForAuthorisation(verificationURL: URL, continuationSender: ContinuationMessageSenderProxy)
         case syncingSecrets
         case done
     }
@@ -38,7 +38,7 @@ class LinkNewDeviceService: LinkNewDeviceServiceProtocol {
     enum LinkDesktopProgress: Equatable {
         case starting
         case establishingSecureChannel(checkCodeString: String)
-        case waitingForAuthorisation(verificationURL: URL)
+        case waitingForAuthorisation(verificationURL: URL, continuationSender: ContinuationMessageSenderProxy)
         case syncingSecrets
         case done
     }
@@ -163,10 +163,10 @@ extension LinkNewDeviceService.LinkMobileProgress: CustomStringConvertible {
                 throw Error.invalidQRCodeData
             }
         case .qrScanned(let checkCodeSender): .qrScanned(.init(underlyingSender: checkCodeSender))
-        case .waitingForAuth(let verificationURI, _):
+        case .waitingForAuth(let verificationURI, let continuationSender):
             // verificationURI is a String; ASWebAuthenticationSession requires a URL.
             if let url = URL(string: verificationURI) {
-                .waitingForAuthorisation(verificationURL: url)
+                .waitingForAuthorisation(verificationURL: url, continuationSender: .init(underlyingSender: continuationSender))
             } else {
                 throw Error.invalidVerificationURI(verificationURI)
             }
@@ -194,10 +194,10 @@ extension LinkNewDeviceService.LinkDesktopProgress: CustomStringConvertible {
         self = switch rustProgress {
         case .starting: .starting
         case .establishingSecureChannel(_, let checkCodeString): .establishingSecureChannel(checkCodeString: checkCodeString)
-        case .waitingForAuth(let verificationURI, _):
+        case .waitingForAuth(let verificationURI, let continuationSender):
             // verificationURI is a String; ASWebAuthenticationSession requires a URL.
             if let url = URL(string: verificationURI) {
-                .waitingForAuthorisation(verificationURL: url)
+                .waitingForAuthorisation(verificationURL: url, continuationSender: .init(underlyingSender: continuationSender))
             } else {
                 throw Error.invalidVerificationURI(verificationURI)
             }
@@ -253,6 +253,34 @@ nonisolated class CheckCodeSenderProxy: Equatable {
     
     func send(code: UInt8) async throws {
         try await underlyingSender.send(code: code)
+    }
+}
+
+class ContinuationMessageSenderProxy: Equatable {
+    static func == (lhs: ContinuationMessageSenderProxy, rhs: ContinuationMessageSenderProxy) -> Bool {
+        lhs.underlyingSender === rhs.underlyingSender
+    }
+    
+    let underlyingSender: ContinuationMessageSenderProtocol
+    
+    init(underlyingSender: ContinuationMessageSenderProtocol) {
+        self.underlyingSender = underlyingSender
+    }
+    
+    func confirm() async {
+        do {
+            try await underlyingSender.confirm()
+        } catch {
+            MXLog.error("Failed to confirm the continuation of the login grant: \(error)")
+        }
+    }
+    
+    func cancel() async {
+        do {
+            try await underlyingSender.cancel()
+        } catch {
+            MXLog.error("Failed to cancel the login grant: \(error)")
+        }
     }
 }
 

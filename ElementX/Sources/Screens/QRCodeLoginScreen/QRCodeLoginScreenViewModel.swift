@@ -181,8 +181,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     break // Nothing to do, the state was set above.
                 case .establishingSecureChannel(let checkCodeString):
                     state.state = .displayCode(.deviceCode(checkCodeString))
-                case .waitingForAuthorisation(let url):
-                    requestOAuthAuthorization(url: url)
+                case .waitingForAuthorisation(let verificationURL, let continuationSender):
+                    requestOAuthAuthorization(url: verificationURL, continuationSender: continuationSender)
                 case .syncingSecrets:
                     break // Nothing to do.
                 case .done:
@@ -221,8 +221,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     break // Nothing to do, we are already showing the code by the time this method is called.
                 case .qrScanned(let checkCodeSender):
                     state.state = .confirmCode(.inputCode(checkCodeSender))
-                case .waitingForAuthorisation(let url):
-                    requestOAuthAuthorization(url: url)
+                case .waitingForAuthorisation(let url, let continuationSender):
+                    requestOAuthAuthorization(url: url, continuationSender: continuationSender)
                 case .syncingSecrets:
                     break // Nothing to do.
                 case .done:
@@ -284,7 +284,13 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         }
     }
     
-    private func requestOAuthAuthorization(url: URL) {
+    private func requestOAuthAuthorization(url: URL, continuationSender: ContinuationMessageSenderProxy) {
+        // We're meant to use the continuationSender to confirm when the URL has been opened or if the user decided
+        // against it (by cancelling the system's WAS prompt). Unfortunately the WAS only gives us a signal for
+        // success or failure (and we don't get success as there isn't a redirect at the end of the flow).
+        // Failure could be the user cancelling the prompt or closing the web view when they're done.
+        Task { await continuationSender.confirm() }
+        
         let (stream, continuation) = AsyncStream<Result<Void, OAuthError>>.makeStream()
         actionsSubject.send(.requestOAuthAuthorisation(url, continuation))
         

@@ -5556,6 +5556,65 @@ open class ContentScannerSDKMock: MatrixRustSDK.ContentScanner, @unchecked Senda
         }
     }
 }
+open class ContinuationMessageSenderSDKMock: MatrixRustSDK.ContinuationMessageSender, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - cancel
+
+    open var cancelThrowableError: Error?
+    private let cancelCallsCountLock = NSLock()
+    private var cancelUnderlyingCallsCount = 0
+    open var cancelCallsCount: Int {
+        get { cancelCallsCountLock.withLock { cancelUnderlyingCallsCount } }
+        set { cancelCallsCountLock.withLock { cancelUnderlyingCallsCount = newValue } }
+    }
+    open var cancelCalled: Bool {
+        return cancelCallsCount > 0
+    }
+    open var cancelClosure: (() async throws -> Void)?
+
+    open override func cancel() async throws {
+        if let error = cancelThrowableError {
+            throw error
+        }
+        cancelCallsCountLock.withLock { cancelUnderlyingCallsCount += 1 }
+        try await cancelClosure?()
+    }
+
+    //MARK: - confirm
+
+    open var confirmThrowableError: Error?
+    private let confirmCallsCountLock = NSLock()
+    private var confirmUnderlyingCallsCount = 0
+    open var confirmCallsCount: Int {
+        get { confirmCallsCountLock.withLock { confirmUnderlyingCallsCount } }
+        set { confirmCallsCountLock.withLock { confirmUnderlyingCallsCount = newValue } }
+    }
+    open var confirmCalled: Bool {
+        return confirmCallsCount > 0
+    }
+    open var confirmClosure: (() async throws -> Void)?
+
+    open override func confirm() async throws {
+        if let error = confirmThrowableError {
+            throw error
+        }
+        confirmCallsCountLock.withLock { confirmUnderlyingCallsCount += 1 }
+        try await confirmClosure?()
+    }
+}
 open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -10332,6 +10391,53 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return try await loadOrFetchEventEventIdClosure(eventId)
         } else {
             return loadOrFetchEventEventIdReturnValue
+        }
+    }
+
+    //MARK: - loadUserReceipt
+
+    open var loadUserReceiptReceiptTypeThreadUserIdThrowableError: Error?
+    private let loadUserReceiptReceiptTypeThreadUserIdCallsCountLock = NSLock()
+    private var loadUserReceiptReceiptTypeThreadUserIdUnderlyingCallsCount = 0
+    open var loadUserReceiptReceiptTypeThreadUserIdCallsCount: Int {
+        get { loadUserReceiptReceiptTypeThreadUserIdCallsCountLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingCallsCount } }
+        set { loadUserReceiptReceiptTypeThreadUserIdCallsCountLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingCallsCount = newValue } }
+    }
+    open var loadUserReceiptReceiptTypeThreadUserIdCalled: Bool {
+        return loadUserReceiptReceiptTypeThreadUserIdCallsCount > 0
+    }
+    private let loadUserReceiptReceiptTypeThreadUserIdReceivedArgumentsLock = NSLock()
+    private var loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedArguments: (receiptType: ReceiptType, thread: ReceiptThread, userId: String)?
+    open var loadUserReceiptReceiptTypeThreadUserIdReceivedArguments: (receiptType: ReceiptType, thread: ReceiptThread, userId: String)? {
+        get { loadUserReceiptReceiptTypeThreadUserIdReceivedArgumentsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedArguments } }
+        set { loadUserReceiptReceiptTypeThreadUserIdReceivedArgumentsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedArguments = newValue } }
+    }
+    private let loadUserReceiptReceiptTypeThreadUserIdReceivedInvocationsLock = NSLock()
+    private var loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedInvocations: [(receiptType: ReceiptType, thread: ReceiptThread, userId: String)] = []
+    open var loadUserReceiptReceiptTypeThreadUserIdReceivedInvocations: [(receiptType: ReceiptType, thread: ReceiptThread, userId: String)] {
+        get { loadUserReceiptReceiptTypeThreadUserIdReceivedInvocationsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedInvocations } }
+        set { loadUserReceiptReceiptTypeThreadUserIdReceivedInvocationsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let loadUserReceiptReceiptTypeThreadUserIdReturnValueLock = NSLock()
+    open var loadUserReceiptReceiptTypeThreadUserIdUnderlyingReturnValue: UserReceipt?
+    open var loadUserReceiptReceiptTypeThreadUserIdReturnValue: UserReceipt? {
+        get { loadUserReceiptReceiptTypeThreadUserIdReturnValueLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReturnValue } }
+        set { loadUserReceiptReceiptTypeThreadUserIdReturnValueLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReturnValue = newValue } }
+    }
+    open var loadUserReceiptReceiptTypeThreadUserIdClosure: ((ReceiptType, ReceiptThread, String) async throws -> UserReceipt?)?
+
+    open override func loadUserReceipt(receiptType: ReceiptType, thread: ReceiptThread, userId: String) async throws -> UserReceipt? {
+        if let error = loadUserReceiptReceiptTypeThreadUserIdThrowableError {
+            throw error
+        }
+        loadUserReceiptReceiptTypeThreadUserIdCallsCountLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingCallsCount += 1 }
+        loadUserReceiptReceiptTypeThreadUserIdReceivedArguments = (receiptType: receiptType, thread: thread, userId: userId)
+        loadUserReceiptReceiptTypeThreadUserIdReceivedInvocationsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedInvocations.append((receiptType: receiptType, thread: thread, userId: userId)) }
+        if let loadUserReceiptReceiptTypeThreadUserIdClosure = loadUserReceiptReceiptTypeThreadUserIdClosure {
+            return try await loadUserReceiptReceiptTypeThreadUserIdClosure(receiptType, thread, userId)
+        } else {
+            return loadUserReceiptReceiptTypeThreadUserIdReturnValue
         }
     }
 

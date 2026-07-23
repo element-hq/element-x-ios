@@ -152,7 +152,8 @@ struct QRCodeLoginScreenViewModelTests {
             guard case .requestOAuthAuthorisation = action else { return false }
             return true
         }
-        linkDesktopProgressSubject.send(.waitingForAuthorisation(verificationURL: .homeDirectory))
+        linkDesktopProgressSubject.send(.waitingForAuthorisation(verificationURL: .homeDirectory,
+                                                                 continuationSender: .init(underlyingSender: ContinuationMessageSenderSDKMock())))
         try await deferredAction.fulfill()
         
         let currentState = context.viewState.state
@@ -188,7 +189,8 @@ struct QRCodeLoginScreenViewModelTests {
             guard case .requestOAuthAuthorisation = action else { return false }
             return true
         }
-        linkMobileProgressSubject.send(.waitingForAuthorisation(verificationURL: .homeDirectory))
+        linkMobileProgressSubject.send(.waitingForAuthorisation(verificationURL: .homeDirectory,
+                                                                continuationSender: .init(underlyingSender: ContinuationMessageSenderSDKMock())))
         try await deferredAction.fulfill()
         
         let currentState = context.viewState.state
