@@ -19,7 +19,7 @@ enum ServerSelectionScreenViewModelAction {
 
 enum ServerSelectionScreenMode: Equatable {
     /// The user is confirming the displayed account provider (or can enter their own).
-    case confirmation(String)
+    case userInput(defaultValue: String)
     /// The user is only allowed to pick from a list of account providers.
     case picker([String])
 }
@@ -51,7 +51,7 @@ struct ServerSelectionScreenViewState: BindableState {
     /// Whether it is possible to continue when tapping the confirmation button.
     var hasValidationError: Bool {
         switch mode {
-        case .confirmation:
+        case .userInput:
             bindings.homeserverAddress.isEmpty || isShowingFooterError
         case .picker(let options):
             !options.contains(bindings.homeserverAddress) || isShowingFooterError

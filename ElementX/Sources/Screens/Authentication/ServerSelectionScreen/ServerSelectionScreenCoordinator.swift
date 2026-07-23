@@ -39,7 +39,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         let mode: ServerSelectionScreenMode = if parameters.appSettings.allowOtherAccountProviders {
-            .confirmation(parameters.authenticationService.homeserver.value.address)
+            .userInput(defaultValue: parameters.authenticationService.homeserver.value.address)
         } else {
             .picker(parameters.appSettings.accountProviders)
         }

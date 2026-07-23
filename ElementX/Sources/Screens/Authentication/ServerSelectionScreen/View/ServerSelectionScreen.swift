@@ -54,7 +54,7 @@ struct ServerSelectionScreen: View {
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
             switch context.viewState.mode {
-            case .confirmation:
+            case .userInput:
                 TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
                     .textFieldStyle(.compound(labelText: Text(L10n.screenChangeServerFormHeader),
                                               footerText: Text(context.viewState.footerMessage),
@@ -121,9 +121,9 @@ private struct FakeInlinePicker: View {
 
 @available(iOS 26.0, *)
 struct ServerSelection_Previews: PreviewProvider, TestablePreview {
-    static let matrixViewModel = makeViewModel(mode: .confirmation("https://matrix.org"))
-    static let emptyViewModel = makeViewModel(mode: .confirmation(""))
-    static let invalidViewModel = makeViewModel(mode: .confirmation("thisisbad"))
+    static let matrixViewModel = makeViewModel(mode: .userInput(defaultValue: "https://matrix.org"))
+    static let emptyViewModel = makeViewModel(mode: .userInput(defaultValue: ""))
+    static let invalidViewModel = makeViewModel(mode: .userInput(defaultValue: "thisisbad"))
     static let pickerViewModel = makeViewModel(mode: .picker(["matrix.org", "foo.bar", "baz.me"]))
     
     static var previews: some View {
@@ -149,7 +149,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Picker")
     }
     
-    static func makeViewModel(mode: ServerSelectionScreenMode = .confirmation("")) -> ServerSelectionScreenViewModel {
+    static func makeViewModel(mode: ServerSelectionScreenMode = .userInput(defaultValue: "")) -> ServerSelectionScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
         let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
@@ -157,7 +157,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
                                                        authenticationFlow: .login,
                                                        appSettings: .volatile(),
                                                        userIndicatorController: UserIndicatorControllerMock())
-        if case .confirmation(let homeserverAddress) = mode, homeserverAddress == "thisisbad" {
+        if case .userInput(let homeserverAddress) = mode, homeserverAddress == "thisisbad" {
             viewModel.context.send(viewAction: .confirm)
         }
         return viewModel

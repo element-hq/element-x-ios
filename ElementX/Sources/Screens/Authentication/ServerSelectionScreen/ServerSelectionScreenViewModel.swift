@@ -50,7 +50,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             state.window = window
         case .confirm:
             switch state.mode {
-            case .confirmation:
+            case .userInput:
                 Task { await configureHomeserver() }
             case .picker:
                 Task { await pickServer() }
