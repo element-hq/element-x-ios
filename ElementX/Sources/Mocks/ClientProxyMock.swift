@@ -46,6 +46,7 @@ enum ClientProxyMockError: Error {
 }
 
 extension ClientProxyMock {
+    // swiftlint:disable:next function_body_length
     convenience init(_ configuration: ClientProxyMockConfiguration) {
         self.init()
         
@@ -91,6 +92,8 @@ extension ClientProxyMock {
         loadUserProfileIfNeededReturnValue = .success(())
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserAvatarMediaReturnValue = .success(())
+        isUserStatusSupportedReturnValue = .success(false)
+        setUserStatusReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         removeUserAvatarReturnValue = .success(())
         isAliasAvailableReturnValue = .success(true)
         searchUsersSearchTermLimitReturnValue = .success(.init(results: [], limited: false))

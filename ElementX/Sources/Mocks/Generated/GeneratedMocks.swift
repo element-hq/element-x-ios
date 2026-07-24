@@ -3235,6 +3235,34 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return removeUserAvatarReturnValue
         }
     }
+    //MARK: - isUserStatusSupported
+
+    private let isUserStatusSupportedCallsCountLock = NSLock()
+    private nonisolated(unsafe) var isUserStatusSupportedUnderlyingCallsCount = 0
+    var isUserStatusSupportedCallsCount: Int {
+        get { isUserStatusSupportedCallsCountLock.withLock { isUserStatusSupportedUnderlyingCallsCount } }
+        set { isUserStatusSupportedCallsCountLock.withLock { isUserStatusSupportedUnderlyingCallsCount = newValue } }
+    }
+    var isUserStatusSupportedCalled: Bool {
+        return isUserStatusSupportedCallsCount > 0
+    }
+
+    private let isUserStatusSupportedReturnValueLock = NSLock()
+    private nonisolated(unsafe) var isUserStatusSupportedUnderlyingReturnValue: Result<Bool, ClientProxyError>!
+    var isUserStatusSupportedReturnValue: Result<Bool, ClientProxyError>! {
+        get { isUserStatusSupportedReturnValueLock.withLock { isUserStatusSupportedUnderlyingReturnValue } }
+        set { isUserStatusSupportedReturnValueLock.withLock { isUserStatusSupportedUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var isUserStatusSupportedClosure: (() async -> Result<Bool, ClientProxyError>)?
+
+    @concurrent func isUserStatusSupported() async -> Result<Bool, ClientProxyError> {
+        isUserStatusSupportedCallsCountLock.withLock { isUserStatusSupportedUnderlyingCallsCount += 1 }
+        if let isUserStatusSupportedClosure = isUserStatusSupportedClosure {
+            return await isUserStatusSupportedClosure()
+        } else {
+            return isUserStatusSupportedReturnValue
+        }
+    }
     //MARK: - setUserStatus
 
     private let setUserStatusCallsCountLock = NSLock()
