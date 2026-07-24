@@ -167,7 +167,7 @@ nonisolated extension GalleryItem {
     
     static func mockVideo(index: Int = 0,
                           filename: String = "clip.mp4",
-                          thumbnailSource: MediaSourceProxy? = ImageInfoProxy.mockThumbnail.source,
+                          thumbnailSource: MediaSourceProxy? = ImageInfoProxy.mockVideoThumbnail.source,
                           duration: TimeInterval = 42,
                           blurhash: String? = "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
                           contentType: UTType? = .mpeg4Movie) -> GalleryItem {

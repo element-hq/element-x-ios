@@ -53,11 +53,11 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
     // Fixed sources keyed by the mock scanner below. Safe is loadable (real thumbnail); others just need a distinct URL.
-    static let safeSource = ImageInfoProxy.mockImage.source
-    // swiftlint:disable force_try force_unwrapping
-    static let unsafeSource = try! MediaSourceProxy(url: URL(string: "mxc://preview.element.io/unsafe")!, mimeType: "image/jpeg")
-    static let scanningSource = try! MediaSourceProxy(url: URL(string: "mxc://preview.element.io/scanning")!, mimeType: "image/jpeg")
-    // swiftlint:enable force_try force_unwrapping
+    nonisolated static let safeSource = ImageInfoProxy.mockImage.source
+    // swiftlint:disable force_try
+    nonisolated static let unsafeSource = try! MediaSourceProxy(url: .mockMXCUnsafe, mimeType: "image/jpeg")
+    nonisolated static let scanningSource = try! MediaSourceProxy(url: .mockMXCScanning, mimeType: "image/jpeg")
+    // swiftlint:enable force_try
     
     static let mixedScanViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(perSourceScanResult: { source in
         if source.url == unsafeSource.url {
@@ -70,16 +70,16 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     })))
     
     static var previews: some View {
-        preview(makeItem(itemCount: 1), viewModel).previewDisplayName("1 image")
-        preview(makeItem(itemCount: 2), viewModel).previewDisplayName("2 images")
-        preview(makeItem(itemCount: 3), viewModel).previewDisplayName("3 images")
-        preview(makeItem(itemCount: 4), viewModel).previewDisplayName("4 images")
-        preview(makeItem(itemCount: 5), viewModel).previewDisplayName("5 images")
-        preview(makeItem(itemCount: 9, caption: "A trip to remember 🌅"), viewModel).previewDisplayName("6+ images with caption")
-        preview(makeMixedScanItem(), mixedScanViewModel).previewDisplayName("Mixed content scan")
+        makeView(makeItem(itemCount: 1), viewModel).previewDisplayName("1 image")
+        makeView(makeItem(itemCount: 2), viewModel).previewDisplayName("2 images")
+        makeView(makeItem(itemCount: 3), viewModel).previewDisplayName("3 images")
+        makeView(makeItem(itemCount: 4), viewModel).previewDisplayName("4 images")
+        makeView(makeItem(itemCount: 5), viewModel).previewDisplayName("5 images")
+        makeView(makeItem(itemCount: 9, caption: "A trip to remember 🌅"), viewModel).previewDisplayName("6+ images with caption")
+        makeView(makeMixedScanItem(), mixedScanViewModel).previewDisplayName("Mixed content scan")
     }
     
-    static func preview(_ item: GalleryRoomTimelineItem, _ viewModel: TimelineViewModel) -> some View {
+    static func makeView(_ item: GalleryRoomTimelineItem, _ viewModel: TimelineViewModel) -> some View {
         GalleryRoomTimelineView(timelineItem: item)
             .padding(20)
             .environmentObject(viewModel.context)
