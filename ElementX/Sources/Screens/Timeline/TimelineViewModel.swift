@@ -711,9 +711,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayGalleryPreview(let galleryItem, let initialIndex):
-            actionsSubject.send(.composer(action: .removeFocus))
-            let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem, initialIndex: initialIndex)
-            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
+            displayGalleryPreview(galleryItem: galleryItem, initialIndex: initialIndex)
         case .displayLocation(let location):
             actionsSubject.send(.displayLocation(location))
         case .displayLiveLocation(let sender, let initialLiveLocationShare):
@@ -725,12 +723,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func handleGalleryItemTapped(itemID: TimelineItemIdentifier, index: Int) {
-        let action = timelineInteractionHandler.processGalleryItemTap(itemID: itemID, index: index)
-        if case let .displayGalleryPreview(galleryItem, initialIndex) = action {
-            actionsSubject.send(.composer(action: .removeFocus))
-            let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem, initialIndex: initialIndex)
-            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
+        if case let .displayGalleryPreview(galleryItem, initialIndex) = timelineInteractionHandler.processGalleryItemTap(itemID: itemID, index: index) {
+            displayGalleryPreview(galleryItem: galleryItem, initialIndex: initialIndex)
         }
+    }
+    
+    private func displayGalleryPreview(galleryItem: GalleryRoomTimelineItem, initialIndex: Int) {
+        actionsSubject.send(.composer(action: .removeFocus))
+        let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem, initialIndex: initialIndex)
+        actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
     }
     
     private func handleItemSendInfoTapped(itemID: TimelineItemIdentifier) {

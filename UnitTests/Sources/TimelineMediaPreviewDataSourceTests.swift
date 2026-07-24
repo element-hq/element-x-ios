@@ -58,6 +58,32 @@ struct TimelineMediaPreviewDataSourceTests {
     }
     
     @Test
+    func galleryPreviewSkipsNonPreviewableItems() throws {
+        // Given a gallery whose first attachment can't be previewed (an unknown type).
+        let items: [GalleryItem] = [
+            .other(id: .mock(0), filename: "unknown.bin"),
+            .mockImage(index: 1, filename: "image-1.jpg"),
+            .mockImage(index: 2, filename: "image-2.jpg")
+        ]
+        let gallery = GalleryRoomTimelineItem(id: .randomEvent,
+                                              timestamp: .mock,
+                                              isOutgoing: false,
+                                              isEditable: false,
+                                              canBeRepliedTo: true,
+                                              sender: .init(id: "Bob"),
+                                              content: .init(body: "Gallery", caption: nil, items: items),
+                                              properties: .init())
+        
+        // When tapping the first image (index 1 in the full items array).
+        let dataSource = TimelineMediaPreviewDataSource(galleryItem: gallery, initialIndex: 1, paginationState: .initial)
+        
+        // Then the non-previewable item is dropped and the tapped image is opened (not shifted by the drop).
+        #expect(dataSource.previewItems.count == 2)
+        let media = try #require(dataSource.currentItem.mediaItem, "The current item should be a media item.")
+        #expect(media.id == .galleryItem(items[1].id))
+    }
+    
+    @Test
     func currentUpdateItem() throws {
         // Given a data source built with the initial items.
         let dataSource = TimelineMediaPreviewDataSource(itemViewStates: initialMediaViewStates,

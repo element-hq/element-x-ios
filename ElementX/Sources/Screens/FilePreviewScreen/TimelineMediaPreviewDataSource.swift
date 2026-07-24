@@ -65,15 +65,21 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     init(galleryItem: GalleryRoomTimelineItem,
          initialIndex: Int,
          paginationState: TimelinePaginationState) {
-        let media = galleryItem.content.items.compactMap { item in
+        let items = galleryItem.content.items
+        let media = items.compactMap { item in
             TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: item)
         }
         
-        let clampedIndex = max(0, min(initialIndex, max(media.count - 1, 0)))
-        if media.indices.contains(clampedIndex) {
+        // `initialIndex` is an index into the full items array, but non-previewable items (`.other`)
+        // are dropped from `media`, so map it across by identity to avoid opening the wrong attachment.
+        let mediaIndex = items.indices.contains(initialIndex)
+            ? (media.firstIndex { $0.id == .galleryItem(items[initialIndex].id) } ?? 0)
+            : 0
+        
+        if media.indices.contains(mediaIndex) {
             previewItems = media
-            initialItemIndex = clampedIndex
-            currentItem = .media(media[clampedIndex])
+            initialItemIndex = mediaIndex
+            currentItem = .media(media[mediaIndex])
         } else {
             // Fall back to a synthetic placeholder for empty galleries — shouldn't happen in practice.
             previewItems = [.init(timelineItem: galleryItem)]
