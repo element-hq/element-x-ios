@@ -59,28 +59,46 @@ nonisolated struct NotificationContentBuilder {
                                  notificationItem: notificationItem,
                                  mediaProvider: mediaProvider)
         case .timeline(let event):
-            guard case let .messageLike(messageContent) = try? event.content() else {
-                processEmpty(&notificationContent)
-                return
-            }
-            
-            await processMessageLike(notificationContent: &notificationContent,
-                                     notificationItem: notificationItem,
-                                     mediaProvider: mediaProvider)
-            
-            switch messageContent {
-            case .roomMessage(let messageType, _):
-                await processRoomMessage(notificationContent: &notificationContent,
+            switch try? event.content() {
+            case .messageLike(let messageContent):
+                await processMessageLike(notificationContent: &notificationContent,
                                          notificationItem: notificationItem,
-                                         messageType: messageType,
                                          mediaProvider: mediaProvider)
-            case .poll(let question):
-                notificationContent.body = L10n.commonPollSummary(question)
-            case .callInvite:
-                notificationContent.body = L10n.commonUnsupportedCall
-            case .rtcNotification:
-                notificationContent.body = L10n.notificationIncomingCall
-            default:
+
+                switch messageContent {
+                case .roomMessage(let messageType, _):
+                    await processRoomMessage(notificationContent: &notificationContent,
+                                             notificationItem: notificationItem,
+                                             messageType: messageType,
+                                             mediaProvider: mediaProvider)
+                case .poll(let question):
+                    notificationContent.body = L10n.commonPollSummary(question)
+                case .callInvite:
+                    notificationContent.body = L10n.commonUnsupportedCall
+                case .rtcNotification:
+                    notificationContent.body = L10n.notificationIncomingCall
+                default:
+                    processEmpty(&notificationContent)
+                }
+            case .state(let stateContent):
+                switch stateContent {
+                case .roomMemberContent(_, .knock):
+                    // MSC4506: the homeserver pushes knocks to users who can act on them.
+                    await processMessageLike(notificationContent: &notificationContent,
+                                             notificationItem: notificationItem,
+                                             mediaProvider: mediaProvider)
+                    notificationContent.body = UntranslatedL10n.notificationKnockRequestBody
+                case .roomMemberContent(let userID, .invite) where userID == notificationItem.receiverID:
+                    // An invite for us can resolve as a timeline member event rather than a stripped
+                    // invite when the room has already advanced past the invited state — e.g. the
+                    // server auto-joined us because our knock was accepted (synapse#16307).
+                    await processInvited(notificationContent: &notificationContent,
+                                         notificationItem: notificationItem,
+                                         mediaProvider: mediaProvider)
+                default:
+                    processEmpty(&notificationContent)
+                }
+            case .none:
                 processEmpty(&notificationContent)
             }
         }
