@@ -52,13 +52,20 @@ struct GalleryRoomTimelineView: View {
 struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
-    // A dedicated view model whose content scanner reports a different verdict per item, so a
-    // single gallery can show safe, scanning and unsafe tiles side by side.
+    // Fixed sources keyed by the mock scanner below. Safe is loadable (real thumbnail); others just need a distinct URL.
+    static let safeSource = ImageInfoProxy.mockImage.source
+    // swiftlint:disable force_try force_unwrapping
+    static let unsafeSource = try! MediaSourceProxy(url: URL(string: "mxc://preview.element.io/unsafe")!, mimeType: "image/jpeg")
+    static let scanningSource = try! MediaSourceProxy(url: URL(string: "mxc://preview.element.io/scanning")!, mimeType: "image/jpeg")
+    // swiftlint:enable force_try force_unwrapping
+    
     static let mixedScanViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(perSourceScanResult: { source in
-        switch mixedVerdict(for: source) {
-        case .safe: true
-        case .unsafe: false
-        case .scanning: nil
+        if source.url == unsafeSource.url {
+            false
+        } else if source.url == scanningSource.url {
+            nil
+        } else {
+            true
         }
     })))
     
@@ -98,39 +105,11 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                        properties: .init())
     }
     
-    // MARK: Mixed content-scanner fixtures
-    
-    private nonisolated enum ScanVerdict { case safe, unsafe, scanning }
-    
-    /// The verdict for each tile of the mixed-scan gallery, keyed by position.
-    private nonisolated static let mixedVerdicts: [ScanVerdict] = [.safe, .unsafe, .scanning, .safe, .unsafe]
-    
-    private nonisolated static func mixedSource(index: Int) -> MediaSourceProxy {
-        // Safe tiles use the loadable mock image so they render a real thumbnail. Scanning/unsafe
-        // tiles show a spinner or error instead of the image, so a synthetic source is fine — and
-        // it gives the mock scanner a distinct URL to key its per-tile verdict off.
-        switch mixedVerdicts[index] {
-        case .safe:
-            return ImageInfoProxy.mockImage.source
-        case .unsafe, .scanning:
-            // swiftlint:disable:next force_try force_unwrapping
-            return try! MediaSourceProxy(url: URL(string: "mxc://preview.element.io/mixed-scan-\(index)")!, mimeType: "image/jpeg")
-        }
-    }
-    
-    private nonisolated static func mixedVerdict(for source: MediaSourceProxy) -> ScanVerdict {
-        guard let index = mixedVerdicts.indices.first(where: { mixedSource(index: $0).url == source.url }) else {
-            return .safe
-        }
-        return mixedVerdicts[index]
-    }
-    
     private static func makeMixedScanItem() -> GalleryRoomTimelineItem {
-        let items: [GalleryItem] = mixedVerdicts.indices.map { index in
-            .mockImage(index: index,
-                       filename: "image-\(index).jpg",
-                       source: mixedSource(index: index),
-                       thumbnailSource: mixedSource(index: index))
+        // >maxVisible items with the overflow tile (index 4) unsafe, to show "+N" over a failed scan.
+        let sources = [safeSource, unsafeSource, scanningSource, safeSource, unsafeSource, safeSource, safeSource]
+        let items: [GalleryItem] = sources.enumerated().map { index, source in
+            .mockImage(index: index, filename: "image-\(index).jpg", source: source, thumbnailSource: source)
         }
         
         return GalleryRoomTimelineItem(id: .randomEvent,
@@ -139,7 +118,7 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                        isEditable: false,
                                        canBeRepliedTo: true,
                                        sender: .init(id: "Bob"),
-                                       content: .init(body: "Gallery (5 items)",
+                                       content: .init(body: "Gallery (\(sources.count) items)",
                                                       caption: "Mixed scan states",
                                                       items: items),
                                        properties: .init())

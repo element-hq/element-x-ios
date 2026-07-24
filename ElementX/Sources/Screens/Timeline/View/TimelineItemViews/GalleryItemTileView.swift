@@ -16,34 +16,35 @@ struct GalleryItemTileView: View {
     let onTap: () -> Void
     
     var body: some View {
-        // Each tile is gated on its own scan state. `containerShowsFailure` is false so that an
-        // unsafe item only turns its own tile critical rather than the whole gallery bubble.
-        ContentScanningView(contentScannerService: contentScannerService,
-                            mediaSource: item.mediaSource,
-                            thumbnailSource: item.thumbnailSource,
-                            containerShowsFailure: false) {
-            // Clear base so the image fills/clips to the grid's tile size, not its own.
-            Color.clear
-                .overlay { content }
-                .clipped()
-                .overlay(alignment: .bottom) {
-                    if item.isVideo {
-                        videoOverlay
+        // Overflow above the scanner: shows on any scan state, survives content updates.
+        ZStack {
+            // containerShowsFailure: false keeps an unsafe tile local, not the whole bubble.
+            ContentScanningView(contentScannerService: contentScannerService,
+                                mediaSource: item.mediaSource,
+                                thumbnailSource: item.thumbnailSource,
+                                containerShowsFailure: false) {
+                // Clear base so the image fills/clips to the grid's tile size, not its own.
+                Color.clear
+                    .overlay { content }
+                    .clipped()
+                    .overlay(alignment: .bottom) {
+                        if item.isVideo {
+                            videoOverlay
+                        }
                     }
-                }
-                .overlay {
-                    if overflowCount > 0 {
-                        overflowOverlay
-                    }
-                }
-                .contentShape(Rectangle())
-                .onTapGesture { onTap() }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(item.filename)
-        } scanningContent: {
-            ScanningMediaEventsTimelineView()
-        } unsafeContent: { failure in
-            UnsafeMediaEventsTimelineView(failure: failure)
+                    .contentShape(Rectangle())
+                    .onTapGesture { onTap() }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(item.filename)
+            } scanningContent: {
+                ScanningMediaEventsTimelineView()
+            } unsafeContent: { failure in
+                UnsafeMediaEventsTimelineView(failure: failure)
+            }
+            
+            if overflowCount > 0 {
+                overflowOverlay
+            }
         }
     }
     
