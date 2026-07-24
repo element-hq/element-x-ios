@@ -59,7 +59,7 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     nonisolated static let scanningSource = try! MediaSourceProxy(url: .mockMXCScanning, mimeType: "image/jpeg")
     // swiftlint:enable force_try
     
-    static let mixedScanViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(perSourceScanResult: { source in
+    static let mixedScanViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init { source in
         if source.url == unsafeSource.url {
             false
         } else if source.url == scanningSource.url {
@@ -67,7 +67,7 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         } else {
             true
         }
-    })))
+    }))
     
     static var previews: some View {
         makeView(makeItem(itemCount: 1), viewModel).previewDisplayName("1 image")
