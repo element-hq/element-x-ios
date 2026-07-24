@@ -40,7 +40,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             homeserverAddress = authenticationService.homeserver.value.address
         }
         let bindings = ServerSelectionScreenBindings(homeserverAddress: homeserverAddress)
-        super.init(initialViewState: ServerSelectionScreenViewState(mode: mode, bindings: bindings))
+        super.init(initialViewState: ServerSelectionScreenViewState(mode: mode, authenticationFlow: authenticationFlow, bindings: bindings))
     }
     
     override func process(viewAction: ServerSelectionScreenViewAction) {

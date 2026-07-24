@@ -13,3 +13,10 @@
 "soft_logout_signin_notice" = "Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).";
 "soft_logout_signin_title" = "Sign in";
 "untranslated" = "Untranslated";
+
+
+"screen_select_server_title_register" = "Choose an account provider";
+"screen_select_server_title_login" = "Enter your account provider";
+"screen_select_server_textfield_header" = "Account provider";
+"screen_select_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_select_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";

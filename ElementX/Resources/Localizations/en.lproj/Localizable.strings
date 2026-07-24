@@ -708,10 +708,6 @@
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
-"screen_change_server_form_header" = "Homeserver URL";
-"screen_change_server_form_notice" = "Enter a domain address.";
-"screen_change_server_subtitle" = "What is the address of your server?";
-"screen_change_server_title" = "Select your server";
 "screen_chat_backup_key_backup_action_disable" = "Delete key storage";
 "screen_chat_backup_key_backup_action_enable" = "Turn on backup";
 "screen_chat_backup_key_backup_description" = "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity. %1$@.";

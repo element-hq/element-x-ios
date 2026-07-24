@@ -27,14 +27,34 @@ enum ServerSelectionScreenMode: Equatable {
 struct ServerSelectionScreenViewState: BindableState {
     /// Whether the screen is configured to confirm a single account provider or pick one from a list of many.
     var mode: ServerSelectionScreenMode
+    /// Whether the screen is configured for registration or existing account login
+    var authenticationFlow: AuthenticationFlow
     /// The presentation anchor used for OAuth authentication.
     var window: UIWindow?
     
-    /// The message to be shown in the text field footer when no error has occurred.
-    private let regularFooterMessage = L10n.screenChangeServerFormNotice
-    
     /// View state that can be bound to from SwiftUI.
     var bindings: ServerSelectionScreenBindings
+    
+    /// The header text for the screen
+    var screenHeader: String {
+        switch authenticationFlow {
+        case .login:
+            UntranslatedL10n.screenSelectServerTitleLogin
+        case .register:
+            UntranslatedL10n.screenSelectServerTitleRegister
+        }
+    }
+    
+    /// The message to be shown in the text field footer when no error has occurred.
+    var regularFooterMessage: String {
+        switch authenticationFlow {
+        case .login:
+            UntranslatedL10n.screenSelectServerTextfieldFooterLogin
+        case .register:
+            UntranslatedL10n.screenSelectServerTextfieldFooterRegister
+        }
+    }
+    
     /// An error message to be shown in the text field footer.
     var footerErrorMessage: String?
     

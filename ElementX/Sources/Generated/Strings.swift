@@ -1663,14 +1663,6 @@ internal nonisolated enum L10n {
   internal static func screenChangeServerErrorUnauthorizedHomeserverTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver_title", String(describing: p1))
   }
-  /// Homeserver URL
-  internal static var screenChangeServerFormHeader: String { return L10n.tr("Localizable", "screen_change_server_form_header") }
-  /// Enter a domain address.
-  internal static var screenChangeServerFormNotice: String { return L10n.tr("Localizable", "screen_change_server_form_notice") }
-  /// What is the address of your server?
-  internal static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
-  /// Select your server
-  internal static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
   /// Delete key storage
   internal static var screenChatBackupKeyBackupActionDisable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_disable") }
   /// Turn on backup

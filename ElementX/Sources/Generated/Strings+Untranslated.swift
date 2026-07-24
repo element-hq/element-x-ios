@@ -24,6 +24,16 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenSearchTabChats: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_chats") }
   /// Messages
   internal static var screenSearchTabMessages: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_messages") }
+  /// If your account is provided by your company or a community, then change the account provider (example: companyname.com).
+  internal static var screenSelectServerTextfieldFooterLogin: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_textfield_footer_login") }
+  /// Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).
+  internal static var screenSelectServerTextfieldFooterRegister: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_textfield_footer_register") }
+  /// Account provider
+  internal static var screenSelectServerTextfieldHeader: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_textfield_header") }
+  /// Enter your account provider
+  internal static var screenSelectServerTitleLogin: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_title_login") }
+  /// Choose an account provider
+  internal static var screenSelectServerTitleRegister: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_title_register") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

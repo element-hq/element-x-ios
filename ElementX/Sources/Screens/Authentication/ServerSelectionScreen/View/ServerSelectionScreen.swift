@@ -13,7 +13,7 @@ struct ServerSelectionScreen: View {
     @Bindable var context: ServerSelectionScreenViewModel.Context
     
     var body: some View {
-        ScrollView {
+        FullscreenDialog {
             VStack(spacing: 0) {
                 header
                     .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
@@ -22,7 +22,8 @@ struct ServerSelectionScreen: View {
                 serverForm
             }
             .readableFrame()
-            .padding(.horizontal, 16)
+        } bottomContent: {
+            continueButton
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .alert(item: $context.alertInfo)
@@ -34,18 +35,13 @@ struct ServerSelectionScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(spacing: 8) {
-            BigIcon(icon: \.host)
+            BigIcon(icon: \.userProfileSolid)
                 .padding(.bottom, 8)
             
-            Text(L10n.screenChangeServerTitle)
+            Text(context.viewState.screenHeader)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
-            
-            Text(L10n.screenChangeServerSubtitle)
-                .font(.compound.bodyMD)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textSecondary)
         }
         .padding(.horizontal, 16)
     }
@@ -56,7 +52,7 @@ struct ServerSelectionScreen: View {
             switch context.viewState.mode {
             case .userInput:
                 TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
-                    .textFieldStyle(.compound(labelText: Text(L10n.screenChangeServerFormHeader),
+                    .textFieldStyle(.compound(labelText: Text(UntranslatedL10n.screenSelectServerTextfieldHeader),
                                               footerText: Text(context.viewState.footerMessage),
                                               state: context.viewState.isShowingFooterError ? .error : .default,
                                               accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
@@ -72,14 +68,16 @@ struct ServerSelectionScreen: View {
                                  selection: $context.homeserverAddress)
                     .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.serverPicker)
             }
-            
-            Button(action: submit) {
-                Text(L10n.actionContinue)
-            }
-            .buttonStyle(.compound(.primary))
-            .disabled(context.viewState.hasValidationError)
-            .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.continue)
         }
+    }
+    
+    private var continueButton: some View {
+        Button(action: submit) {
+            Text(L10n.actionContinue)
+        }
+        .buttonStyle(.compound(.primary))
+        .disabled(context.viewState.hasValidationError)
+        .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.continue)
     }
     
     /// Sends the `confirm` view action so long as the text field input is valid.
