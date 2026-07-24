@@ -36,7 +36,7 @@ enum SettingsScreenSecuritySectionMode {
 struct SettingsScreenViewState: BindableState {
     var deviceID: String?
     var userProfile: UserProfile
-    var showUserStatus: Bool
+    var showUserStatus = false
     var showLinkNewDeviceButton: Bool
     var accountProfileURL: URL?
     var showAccountDeactivation: Bool
