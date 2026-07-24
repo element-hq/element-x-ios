@@ -143,3 +143,36 @@ nonisolated enum GalleryItem: Hashable, Identifiable {
         isImage || thumbnailSource != nil
     }
 }
+
+// MARK: - Mocks
+
+nonisolated extension GalleryItemID {
+    static func mock(_ index: Int) -> GalleryItemID {
+        .init(timelineItemUniqueID: .init("gallery-mock"), mediaIndex: index)
+    }
+}
+
+nonisolated extension GalleryItem {
+    static func mockImage(index: Int = 0,
+                          filename: String = "image.jpg",
+                          source: MediaSourceProxy = ImageInfoProxy.mockImage.source,
+                          thumbnailSource: MediaSourceProxy? = ImageInfoProxy.mockThumbnail.source,
+                          blurhash: String? = "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
+                          contentType: UTType? = .jpeg) -> GalleryItem {
+        let imageInfo = ImageInfoProxy(source: source, width: 1920, height: 1080, mimeType: nil, fileSize: nil)
+        let thumbnailInfo = thumbnailSource.map { ImageInfoProxy(source: $0, width: 1920, height: 1080, mimeType: nil, fileSize: nil) }
+        return .image(id: .mock(index),
+                      .init(filename: filename, imageInfo: imageInfo, thumbnailInfo: thumbnailInfo, blurhash: blurhash, contentType: contentType))
+    }
+    
+    static func mockVideo(index: Int = 0,
+                          filename: String = "clip.mp4",
+                          thumbnailSource: MediaSourceProxy? = ImageInfoProxy.mockThumbnail.source,
+                          duration: TimeInterval = 42,
+                          blurhash: String? = "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
+                          contentType: UTType? = .mpeg4Movie) -> GalleryItem {
+        let thumbnailInfo = thumbnailSource.map { ImageInfoProxy(source: $0, width: 1920, height: 1080, mimeType: nil, fileSize: nil) }
+        return .video(id: .mock(index),
+                      .init(filename: filename, videoInfo: .mockVideo(duration: duration), thumbnailInfo: thumbnailInfo, blurhash: blurhash, contentType: contentType))
+    }
+}
