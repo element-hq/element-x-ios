@@ -210,7 +210,7 @@
 "banner_set_up_recovery_content" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "banner_set_up_recovery_submit" = "Get recovery key";
 "banner_set_up_recovery_title" = "Back up your chats";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "RICC Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_add_account" = "Add an account";
@@ -579,8 +579,8 @@
 "screen_account_provider_signup_title" = "You’re about to create an account on %@";
 "screen_advanced_settings_developer_mode" = "Developer mode";
 "screen_advanced_settings_developer_mode_description" = "Enable to have access to features and functionality for developers.";
-"screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
-"screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
+"screen_advanced_settings_element_call_base_url" = "Custom RICC Call base URL";
+"screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for RICC Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
@@ -699,8 +699,8 @@
 "screen_change_account_provider_subtitle" = "Use a different account provider, such as your own private server or a work account.";
 "screen_change_account_provider_title" = "Change account provider";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The RICC Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "RICC Pro required";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -976,7 +976,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, RICC needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "This account has been deleted.";
 "screen_login_error_invalid_credentials" = "Incorrect username and/or password";
@@ -1025,8 +1025,8 @@
 "screen_media_upload_preview_title" = "Add media";
 "screen_migration_message" = "This is a one time process, thanks for waiting.";
 "screen_migration_title" = "Setting up your account.";
-"screen_missing_key_backup_open_element_classic" = "Open Element Classic";
-"screen_missing_key_backup_step_1" = "Open Element Classic on your device";
+"screen_missing_key_backup_open_element_classic" = "Open RICC Classic";
+"screen_missing_key_backup_step_1" = "Open RICC Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
 "screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
@@ -1063,8 +1063,8 @@
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
-"screen_notification_settings_sound_element_default" = "Element Default";
-"screen_notification_settings_sound_element_fade" = "Element Fade";
+"screen_notification_settings_sound_element_default" = "RICC Default";
+"screen_notification_settings_sound_element_fade" = "RICC Fade";
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
 "screen_notification_settings_sound_section_title" = "Sound";
@@ -1111,7 +1111,7 @@
 "screen_onboarding_welcome_back" = "Welcome back";
 "screen_onboarding_welcome_message" = "Welcome to the fastest %1$@ ever. Supercharged for speed and simplicity.";
 "screen_onboarding_welcome_subtitle" = "Welcome to %1$@. Supercharged, for speed and simplicity.";
-"screen_onboarding_welcome_title" = "Be in your element";
+"screen_onboarding_welcome_title" = "Be in your RICC";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_pinned_timeline_screen_title_empty" = "Pinned messages";
@@ -1380,7 +1380,7 @@
 "screen_room_timeline_add_reaction" = "Add a reaction";
 "screen_room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new RICC X app.";
 "screen_room_timeline_less_reactions" = "Show less";
 "screen_room_timeline_message_copied" = "Message copied";
 "screen_room_timeline_no_permission_to_post" = "You do not have permission to post to this room";
@@ -1462,7 +1462,7 @@
 "screen_security_and_privacy_room_visibility_section_header" = "Visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
 "screen_server_confirmation_change_server" = "Change account provider";
-"screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
+"screen_server_confirmation_message_login_element_dot_io" = "A private server for RICC employees.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is an open network for secure, decentralized communication.";
 "screen_server_confirmation_message_register" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_server_confirmation_title_login" = "You’re about to sign in to %1$@";

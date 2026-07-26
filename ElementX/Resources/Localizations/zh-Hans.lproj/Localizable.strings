@@ -208,7 +208,7 @@
 "banner_set_up_recovery_content" = "你的聊天已被端到端加密自动备份。如果你无法访问所有设备，则需要使用恢复密钥并保留数字身份。";
 "banner_set_up_recovery_submit" = "获取恢复密钥";
 "banner_set_up_recovery_title" = "备份聊天";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call 不支持在此 Android 版本中使用蓝牙音频设备。请选择其它音频设备。";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "RICC Call 不支持在此 Android 版本中使用蓝牙音频设备。请选择其它音频设备。";
 "common_about" = "关于";
 "common_acceptable_use_policy" = "可接受的使用政策";
 "common_add_account" = "添加账户";
@@ -584,8 +584,8 @@
 "screen_account_provider_signup_title" = "你即将在 %@ 上创建账户";
 "screen_advanced_settings_developer_mode" = "开发者模式";
 "screen_advanced_settings_developer_mode_description" = "启用以访问适用于开发者的功能与特性。";
-"screen_advanced_settings_element_call_base_url" = "自定义 Element Call 基础 URL";
-"screen_advanced_settings_element_call_base_url_description" = "为 Element Call 设置基础 URL。";
+"screen_advanced_settings_element_call_base_url" = "自定义 RICC Call 基础 URL";
+"screen_advanced_settings_element_call_base_url_description" = "为 RICC Call 设置基础 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL 无效，请确保包含协议（http/https）和正确的地址。";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "在房间邀请请求中隐藏头像";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "在时间线上隐藏媒体预览";
@@ -704,8 +704,8 @@
 "screen_change_account_provider_subtitle" = "使用其它账户提供者，例如你自己的私有服务器或工作账户。";
 "screen_change_account_provider_title" = "更改账户提供者";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "%1$@ 要求 Element Pro。请从应用商店下载。";
-"screen_change_server_error_element_pro_required_title" = "需要 Element Pro";
+"screen_change_server_error_element_pro_required_message" = "%1$@ 要求 RICC Pro。请从应用商店下载。";
+"screen_change_server_error_element_pro_required_title" = "需要 RICC Pro";
 "screen_change_server_error_invalid_homeserver" = "我们无法访问此服务器。请检查输入的服务器 URL 是否正确。如果 URL 正确，请联系服务器管理员寻求进一步帮助。";
 "screen_change_server_error_invalid_well_known" = "由于 .well-known 文件存在问题，服务器不可用：\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "所选账户提供者不支持滑动同步。需要升级服务器才能使用 %1$@。";
@@ -981,7 +981,7 @@
 "screen_live_location_sheet_nobody_sharing" = "目前无人分享其位置";
 "screen_live_location_sheet_sharing_live_location" = "共享实时位置";
 "screen_live_location_sheet_title" = "在地图上";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, RICC needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "此账户已被删除。";
 "screen_login_error_invalid_credentials" = "用户名与（或）密码不正确";
@@ -1030,8 +1030,8 @@
 "screen_media_upload_preview_title" = "添加媒体";
 "screen_migration_message" = "此为一次性流程，感谢等待。";
 "screen_migration_title" = "设置账户。";
-"screen_missing_key_backup_open_element_classic" = "打开 Element Classic";
-"screen_missing_key_backup_step_1" = "在你的设备上打开 Element Classic";
+"screen_missing_key_backup_open_element_classic" = "打开 RICC Classic";
+"screen_missing_key_backup_step_1" = "在你的设备上打开 RICC Classic";
 "screen_missing_key_backup_step_2_ios" = "前往“用户设置” > “安全”";
 "screen_missing_key_backup_step_3_ios" = "向下滚动到“安全备份”并点击“设置”。";
 "screen_missing_key_backup_step_4" = "按指示启用密钥存储";
@@ -1068,8 +1068,8 @@
 "screen_notification_settings_sound_custom_fallback" = "自定义";
 "screen_notification_settings_sound_custom_sound_button_title" = "自定义提示音…";
 "screen_notification_settings_sound_delete_sound_error_title" = "删除文件时出错";
-"screen_notification_settings_sound_element_default" = "Element 默认";
-"screen_notification_settings_sound_element_fade" = "Element 淡入";
+"screen_notification_settings_sound_element_default" = "RICC 默认";
+"screen_notification_settings_sound_element_fade" = "RICC 淡入";
 "screen_notification_settings_sound_import_sound_error_title" = "导入文件时出错";
 "screen_notification_settings_sound_preview_sound_error_title" = "预览提示音时出现问题";
 "screen_notification_settings_sound_section_title" = "提示音";
@@ -1116,7 +1116,7 @@
 "screen_onboarding_welcome_back" = "欢迎回来";
 "screen_onboarding_welcome_message" = "欢迎使用迄今最快的 %1$@，速度与简洁的极致。";
 "screen_onboarding_welcome_subtitle" = "欢迎使用 %1$@，速度与简洁的极致。";
-"screen_onboarding_welcome_title" = "融入 Element";
+"screen_onboarding_welcome_title" = "融入 RICC";
 "screen_pinned_timeline_empty_state_description" = "按下消息并选择 “%1$@” 将其包含在此处。";
 "screen_pinned_timeline_empty_state_headline" = "置顶重要的消息以便于发现";
 "screen_pinned_timeline_screen_title_empty" = "已置顶的消息";
@@ -1387,7 +1387,7 @@
 "screen_room_timeline_add_reaction" = "添加反应";
 "screen_room_timeline_beginning_of_room" = "这是房间 %1$@ 的开头。";
 "screen_room_timeline_beginning_of_room_no_name" = "这是本对话的开始。";
-"screen_room_timeline_legacy_call" = "不受支持的通话。询问呼叫方是否可以使用新的 Element X app。";
+"screen_room_timeline_legacy_call" = "不受支持的通话。询问呼叫方是否可以使用新的 RICC app。";
 "screen_room_timeline_less_reactions" = "折叠";
 "screen_room_timeline_message_copied" = "消息已复制";
 "screen_room_timeline_no_permission_to_post" = "你无权在此房间发言";
@@ -1469,7 +1469,7 @@
 "screen_security_and_privacy_room_visibility_section_header" = "可见性";
 "screen_security_and_privacy_title" = "安全与隐私";
 "screen_server_confirmation_change_server" = "更改账户提供者";
-"screen_server_confirmation_message_login_element_dot_io" = "专为 Element 员工提供的私人服务器。";
+"screen_server_confirmation_message_login_element_dot_io" = "专为 RICC 员工提供的私人服务器。";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_server_confirmation_message_register" = "这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。";
 "screen_server_confirmation_title_login" = "即将登录 %1$@";

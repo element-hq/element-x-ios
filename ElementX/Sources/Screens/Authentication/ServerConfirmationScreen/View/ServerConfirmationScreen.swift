@@ -53,21 +53,21 @@ struct ServerConfirmationScreen: View {
     /// The main content of the view to be shown in a scroll view.
     var header: some View {
         VStack(spacing: 8) {
-            BigIcon(icon: headerIcon, style: headerIconStyle)
-                .padding(.bottom, 8)
-            
-            Text(context.viewState.title)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-            
-            if let message = context.viewState.message {
-                Text(message)
-                    .font(.compound.bodyMD)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.compound.textSecondary)
-            }
+//            BigIcon(icon: headerIcon, style: headerIconStyle)
+//                .padding(.bottom, 8)
+//            
+//            Text(context.viewState.title)
+//                .font(.compound.headingMDBold)
+//                .multilineTextAlignment(.center)
+//                .foregroundColor(.compound.textPrimary)
+//                .fixedSize(horizontal: false, vertical: true)
+//            
+//            if let message = context.viewState.message {
+//                Text(message)
+//                    .font(.compound.bodyMD)
+//                    .multilineTextAlignment(.center)
+//                    .foregroundColor(.compound.textSecondary)
+//            }
         }
         .padding(.horizontal, 16)
     }
@@ -91,15 +91,20 @@ struct ServerConfirmationScreen: View {
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.continue)
             
-            if case .confirmation = context.viewState.mode {
-                Button { context.send(viewAction: .changeServer) } label: {
-                    Text(L10n.screenServerConfirmationChangeServer)
-                        .font(.compound.bodyLGSemibold)
-                        .padding(14)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.changeServer)
-            }
+//            if case .confirmation = context.viewState.mode {
+//                Button { context.send(viewAction: .changeServer) } label: {
+//                    Text(L10n.screenServerConfirmationChangeServer)
+//                        .font(.compound.bodyLGSemibold)
+//                        .padding(14)
+//                }
+//                .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.changeServer)
+//            }
         }
+//        .task {
+//            // Waits 5 seconds, then executes
+//            try? await Task.sleep(for: .seconds(1))
+//            context.send(viewAction: .confirm)
+//        }
     }
 }
 

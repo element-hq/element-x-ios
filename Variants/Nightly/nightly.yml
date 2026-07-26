@@ -1,6 +1,6 @@
 settings:
-  APP_GROUP_IDENTIFIER: group.io.element.nightly
-  BASE_BUNDLE_IDENTIFIER: io.element.elementx.nightly
+  APP_GROUP_IDENTIFIER: group.io.ricc.nightly
+  BASE_BUNDLE_IDENTIFIER: io.ricc.chat.nightly
   IS_NIGHTLY_BUILD: true
 
 targets:
