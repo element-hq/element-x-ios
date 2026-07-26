@@ -532,6 +532,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     }
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
+                case .showTextSelection(let content):
+                    state.bindings.textSelectionContent = content
                 case .viewInRoomTimeline(let eventID):
                     Task { await self.viewInRoomTimeline(eventID: eventID) }
                 case .displayThread(let itemID):

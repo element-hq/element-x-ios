@@ -92,11 +92,16 @@ struct TimelineItemMenuActionProvider {
             
             if !ProcessInfo.processInfo.isiOSAppOnMac {
                 // As of macOS 26.2, the sheet isn't presented, but it is easy enough
-                // to select some text and right click on Mac anyway so hide this one.
+                // to select some text and right click on Mac anyway so hide these.
+                actions.append(.selectText)
                 actions.append(.translate)
             }
         } else if item.hasMediaCaption {
             actions.append(.copyCaption)
+
+            if !ProcessInfo.processInfo.isiOSAppOnMac {
+                actions.append(.selectText)
+            }
         }
         
         if item.isEditable, item.hasMediaCaption {

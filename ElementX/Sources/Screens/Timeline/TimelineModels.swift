@@ -179,6 +179,7 @@ struct TimelineViewStateBindings {
     var debugInfo: TimelineItemDebugInfo?
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
+    var textSelectionContent: TimelineTextSelectionContent?
     
     var reactionSummaryInfo: ReactionSummaryInfo?
     
@@ -188,6 +189,11 @@ struct TimelineViewStateBindings {
     
     var showTranslation = false
     var textToBeTranslated: String?
+}
+
+struct TimelineTextSelectionContent: Identifiable {
+    let id = UUID()
+    let attributedString: AttributedString
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {

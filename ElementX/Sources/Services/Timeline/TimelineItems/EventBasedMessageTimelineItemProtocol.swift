@@ -72,4 +72,19 @@ nonisolated extension EventBasedMessageTimelineItemProtocol {
             nil
         }
     }
+
+    var selectableText: AttributedString? {
+        switch contentType {
+        case .text(let content):
+            content.formattedBody ?? AttributedString(content.body)
+        case .emote(let content):
+            content.formattedBody ?? AttributedString(content.body)
+        case .notice(let content):
+            content.formattedBody ?? AttributedString(content.body)
+        case .audio, .file, .image, .video, .gallery:
+            formattedMediaCaption ?? mediaCaption.map { AttributedString($0) }
+        case .location, .voice:
+            nil
+        }
+    }
 }
