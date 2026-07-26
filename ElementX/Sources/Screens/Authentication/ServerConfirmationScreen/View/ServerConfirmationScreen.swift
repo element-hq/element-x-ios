@@ -100,11 +100,11 @@ struct ServerConfirmationScreen: View {
 //                .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.changeServer)
 //            }
         }
-//        .task {
-//            // Waits 5 seconds, then executes
-//            try? await Task.sleep(for: .seconds(1))
-//            context.send(viewAction: .confirm)
-//        }
+        .task {
+            // Waits 5 seconds, then executes
+            try? await Task.sleep(for: .seconds(1))
+            context.send(viewAction: .confirm)
+        }
     }
 }
 
