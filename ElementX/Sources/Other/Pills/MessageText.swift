@@ -181,7 +181,7 @@ struct MessageText: UIViewRepresentable {
             }
         }
         textView.isEditable = false
-        textView.isScrollEnabled = false
+        textView.isScrollEnabled = selectionMode == .enabled
         textView.adjustsFontForContentSizeCategory = true
         
         // Required to allow tapping links
@@ -220,12 +220,17 @@ struct MessageText: UIViewRepresentable {
         context.coordinator.openURLAction = openURLAction
         context.coordinator.selectionMode = selectionMode
         uiView.selectionMode = selectionMode
+        uiView.isScrollEnabled = selectionMode == .enabled
         if selectionMode == .disabled {
             uiView.selectedTextRange = nil
         }
     }
     
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: MessageTextView, context: Context) -> CGSize? {
+        guard selectionMode == .disabled else {
+            return nil
+        }
+
         let proposalWidth = proposal.width ?? UIView.layoutFittingExpandedSize.width
         let key = SizeCacheKey(width: proposalWidth, reservedSize: trailingReservedSize)
         
@@ -261,6 +266,10 @@ struct MessageText: UIViewRepresentable {
         }
         
         func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem, defaultAction: UIAction) -> UIAction? {
+            guard selectionMode == .disabled else {
+                return nil
+            }
+
             if case .link(let url) = textItem.content {
                 return .init(title: defaultAction.title,
                              image: defaultAction.image,
@@ -274,6 +283,10 @@ struct MessageText: UIViewRepresentable {
         }
         
         func textView(_ textView: UITextView, menuConfigurationFor textItem: UITextItem, defaultMenu: UIMenu) -> UITextItem.MenuConfiguration? {
+            guard selectionMode == .disabled else {
+                return nil
+            }
+
             switch textItem.content {
             case let .link(url):
                 guard !url.requiresConfirmation else {

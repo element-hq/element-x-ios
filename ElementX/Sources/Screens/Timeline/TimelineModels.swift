@@ -194,6 +194,118 @@ struct TimelineViewStateBindings {
 struct TimelineTextSelectionContent: Identifiable {
     let id = UUID()
     let attributedString: AttributedString
+
+    init(attributedString: AttributedString,
+         userDisplayNameForID: (String) -> String? = { _ in nil },
+         roomNameForID: (String) -> String? = { _ in nil },
+         roomNameForAlias: (String) -> String? = { _ in nil }) {
+        self.attributedString = MatrixPillTextTransformer.transform(attributedString,
+                                                                   userDisplayNameForID: userDisplayNameForID,
+                                                                   roomNameForID: roomNameForID,
+                                                                   roomNameForAlias: roomNameForAlias)
+    }
+}
+
+enum MatrixPillTextTransformer {
+    static func transform(_ attributedString: AttributedString,
+                          userDisplayNameForID: (String) -> String?,
+                          roomNameForID: (String) -> String?,
+                          roomNameForAlias: (String) -> String?) -> AttributedString {
+        guard let mutableAttributedString = try? NSMutableAttributedString(attributedString, including: \.elementX) else {
+            return AttributedString(String(attributedString.characters).replacingOccurrences(of: "\u{fffc}", with: ""))
+        }
+
+        let fullRange = NSRange(location: 0, length: mutableAttributedString.length)
+        var replacements = [(range: NSRange, text: String, attributes: [NSAttributedString.Key: Any])]()
+        mutableAttributedString.enumerateAttributes(in: fullRange) { attributes, range, _ in
+            guard let text = replacementText(for: attributes,
+                                             userDisplayNameForID: userDisplayNameForID,
+                                             roomNameForID: roomNameForID,
+                                             roomNameForAlias: roomNameForAlias) else {
+                return
+            }
+
+            var replacementAttributes = attributes
+            replacementAttributes[.attachment] = nil
+            replacementAttributes[.link] = nil
+            replacements.append((range, text, replacementAttributes))
+        }
+
+        for replacement in replacements.reversed() {
+            mutableAttributedString.replaceCharacters(in: replacement.range,
+                                                       with: NSAttributedString(string: replacement.text,
+                                                                                attributes: replacement.attributes))
+        }
+        mutableAttributedString.removeAttribute(.link,
+                                                range: NSRange(location: 0, length: mutableAttributedString.length))
+
+        guard let result = try? AttributedString(mutableAttributedString, including: \.elementX) else {
+            return AttributedString(mutableAttributedString.string)
+        }
+        return result
+    }
+
+    private static func replacementText(for attributes: [NSAttributedString.Key: Any],
+                                        userDisplayNameForID: (String) -> String?,
+                                        roomNameForID: (String) -> String?,
+                                        roomNameForAlias: (String) -> String?) -> String? {
+        if let userID = attributes[.MatrixUserID] as? String {
+            let embeddedDisplayName = attributes[.MatrixUserDisplayName] as? String
+            return PillUtilities.userPillDisplayText(username: userDisplayNameForID(userID) ?? embeddedDisplayName,
+                                                     userID: userID)
+        }
+
+        if attributes[.MatrixAllUsersMention] as? Bool == true {
+            return PillUtilities.atRoom
+        }
+
+        if let roomAlias = attributes[.MatrixRoomAlias] as? String {
+            let embeddedDisplayName = attributes[.MatrixRoomDisplayName] as? String
+            return PillUtilities.roomPillDisplayText(roomName: roomNameForAlias(roomAlias) ?? embeddedDisplayName,
+                                                     rawRoomText: roomAlias)
+        }
+
+        if let roomID = attributes[.MatrixRoomID] as? String {
+            return PillUtilities.roomPillDisplayText(roomName: roomNameForID(roomID), rawRoomText: roomID)
+        }
+
+        if let eventOnRoomID = attributes[.MatrixEventOnRoomID] as? EventOnRoomIDAttribute.Value {
+            return PillUtilities.eventPillDisplayText(roomName: roomNameForID(eventOnRoomID.roomID),
+                                                      rawRoomText: eventOnRoomID.roomID)
+        }
+
+        if let eventOnRoomAlias = attributes[.MatrixEventOnRoomAlias] as? EventOnRoomAliasAttribute.Value {
+            return PillUtilities.eventPillDisplayText(roomName: roomNameForAlias(eventOnRoomAlias.alias),
+                                                      rawRoomText: eventOnRoomAlias.alias)
+        }
+
+        guard let attachment = attributes[.attachment] as? PillTextAttachment,
+              let pillData = attachment.pillData else {
+            return nil
+        }
+
+        switch pillData.type {
+        case .user(let userID):
+            let embeddedDisplayName = attributes[.MatrixUserDisplayName] as? String
+            return PillUtilities.userPillDisplayText(username: userDisplayNameForID(userID) ?? embeddedDisplayName,
+                                                     userID: userID)
+        case .allUsers:
+            return PillUtilities.atRoom
+        case .roomAlias(let roomAlias):
+            let embeddedDisplayName = attributes[.MatrixRoomDisplayName] as? String
+            return PillUtilities.roomPillDisplayText(roomName: roomNameForAlias(roomAlias) ?? embeddedDisplayName,
+                                                     rawRoomText: roomAlias)
+        case .roomID(let roomID):
+            return PillUtilities.roomPillDisplayText(roomName: roomNameForID(roomID), rawRoomText: roomID)
+        case .event(let room):
+            switch room {
+            case .roomAlias(let roomAlias):
+                return PillUtilities.eventPillDisplayText(roomName: roomNameForAlias(roomAlias), rawRoomText: roomAlias)
+            case .roomID(let roomID):
+                return PillUtilities.eventPillDisplayText(roomName: roomNameForID(roomID), rawRoomText: roomID)
+            }
+        }
+    }
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {
@@ -352,48 +464,13 @@ extension TimelineViewState {
     /// and render with a consistent font size. This conversion is done to avoid
     /// showing markdown characters in the preview for messages with formatting.
     func buildMessagePreview(formattedBody: AttributedString?, plainBody: String) -> String {
-        guard let formattedBody,
-              let attributedString = try? NSMutableAttributedString(formattedBody, including: \.elementX) else {
+        guard let formattedBody else {
             return plainBody
         }
-        
-        let range = NSRange(location: 0, length: attributedString.length)
-        attributedString.enumerateAttributes(in: range) { attributes, range, _ in
-            if let userID = attributes[.MatrixUserID] as? String {
-                if let displayName = members[userID]?.displayName {
-                    attributedString.replaceCharacters(in: range, with: "@\(displayName)")
-                } else {
-                    attributedString.replaceCharacters(in: range, with: userID)
-                }
-            }
-            
-            if attributes[.MatrixAllUsersMention] as? Bool == true {
-                attributedString.replaceCharacters(in: range, with: PillUtilities.atRoom)
-            }
-            
-            if let roomAlias = attributes[.MatrixRoomAlias] as? String {
-                let roomName = roomNameForAliasResolver?(roomAlias)
-                attributedString.replaceCharacters(in: range, with: PillUtilities.roomPillDisplayText(roomName: roomName, rawRoomText: roomAlias))
-            }
-            
-            if let roomID = attributes[.MatrixRoomID] as? String {
-                let roomName = roomNameForIDResolver?(roomID)
-                attributedString.replaceCharacters(in: range, with: PillUtilities.roomPillDisplayText(roomName: roomName, rawRoomText: roomID))
-            }
-            
-            if let eventOnRoomID = attributes[.MatrixEventOnRoomID] as? EventOnRoomIDAttribute.Value {
-                let roomID = eventOnRoomID.roomID
-                let roomName = roomNameForIDResolver?(roomID)
-                attributedString.replaceCharacters(in: range, with: PillUtilities.eventPillDisplayText(roomName: roomName, rawRoomText: roomID))
-            }
-            
-            if let eventOnRoomAlias = attributes[.MatrixEventOnRoomAlias] as? EventOnRoomAliasAttribute.Value {
-                let roomAlias = eventOnRoomAlias.alias
-                let roomName = roomNameForAliasResolver?(roomAlias)
-                attributedString.replaceCharacters(in: range, with: PillUtilities.eventPillDisplayText(roomName: roomName, rawRoomText: eventOnRoomAlias.alias))
-            }
-        }
-        
-        return attributedString.string
+
+        return String(MatrixPillTextTransformer.transform(formattedBody,
+                                                          userDisplayNameForID: { members[$0]?.displayName },
+                                                          roomNameForID: { roomNameForIDResolver?($0) },
+                                                          roomNameForAlias: { roomNameForAliasResolver?($0) }).characters)
     }
 }

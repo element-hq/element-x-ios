@@ -10,24 +10,21 @@ import SwiftUI
 struct TimelineTextSelectionView: View {
     @Environment(\.dismiss) private var dismiss
 
-    let attributedString: AttributedString
+    let content: TimelineTextSelectionContent
 
     var body: some View {
         ElementNavigationStack {
-            ScrollView {
-                FormattedBodyText(attributedString: attributedString, selectionMode: .enabled)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
-            }
-            .navigationTitle(UntranslatedL10n.actionSelectText)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    ToolbarButton(role: .close) {
-                        dismiss()
+            FormattedBodyText(attributedString: content.attributedString, selectionMode: .enabled)
+                .padding(16)
+                .navigationTitle(UntranslatedL10n.actionSelectText)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        ToolbarButton(role: .close) {
+                            dismiss()
+                        }
                     }
                 }
-            }
         }
     }
 }
@@ -43,7 +40,7 @@ struct TimelineTextSelectionView_Previews: PreviewProvider, TestablePreview {
         <blockquote>A quoted message with right-to-left text: مرحبا بالعالم</blockquote>
         <pre><code>let message = "Hello, Matrix!"</code></pre>
         """) {
-            TimelineTextSelectionView(attributedString: attributedString)
+            TimelineTextSelectionView(content: .init(attributedString: attributedString))
                 .environmentObject(TimelineViewModel.mock.context)
         }
     }

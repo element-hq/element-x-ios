@@ -66,7 +66,7 @@ struct FormattedBodyText: View {
         if selectionMode == .enabled {
             MessageText(attributedString: adjustedAttributedString, selectionMode: .enabled)
                 .tint(.compound.textLinkExternal)
-                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         } else {
             layout
                 .tint(.compound.textLinkExternal)
