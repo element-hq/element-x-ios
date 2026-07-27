@@ -36,7 +36,7 @@ nonisolated extension EventBasedMessageTimelineItemProtocol {
     }
     
     var hasMediaCaption: Bool {
-        mediaCaption != nil
+        mediaCaption?.isBlank == false
     }
     
     var mediaCaption: String? {

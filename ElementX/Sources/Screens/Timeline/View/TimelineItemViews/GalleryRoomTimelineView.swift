@@ -27,15 +27,13 @@ struct GalleryRoomTimelineView: View {
                 if usesListLayout {
                     GalleryListView(items: timelineItem.content.items,
                                     mediaProvider: context?.mediaProvider,
-                                    contentScannerService: context?.contentScannerService) { _ in
-                        // Tapping to open the full-screen preview lands in a follow-up.
-                    }
+                                    contentScannerService: context?.contentScannerService,
+                                    onItemTap: tap)
                 } else {
                     GalleryGridView(items: timelineItem.content.items,
                                     mediaProvider: context?.mediaProvider,
-                                    contentScannerService: context?.contentScannerService) { _ in
-                        // Tapping to open the full-screen preview lands in a follow-up.
-                    }
+                                    contentScannerService: context?.contentScannerService,
+                                    onItemTap: tap)
                 }
                 
                 if hasMediaCaption {
@@ -60,6 +58,10 @@ struct GalleryRoomTimelineView: View {
                               trailingReservedSize: timelineItem.trailingReservedSize,
                               boostFontSize: timelineItem.shouldBoost)
         }
+    }
+    
+    private func tap(index: Int) {
+        context?.send(viewAction: .galleryItemTapped(itemID: timelineItem.id, index: index))
     }
 }
 

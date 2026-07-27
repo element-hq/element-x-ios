@@ -107,6 +107,7 @@ struct GalleryItemTileView: View {
                 .font(.compound.headingSMSemibold)
                 .foregroundStyle(.compound.textPrimary)
         }
+        .allowsHitTesting(false) // Let the tap fall through to the tile below.
     }
     
     private func formatted(duration: TimeInterval) -> String {

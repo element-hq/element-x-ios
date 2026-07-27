@@ -239,6 +239,10 @@ class TimelineInteractionHandler {
             text = content.caption ?? ""
             htmlText = content.formattedCaptionHTMLString
             editType = text.isEmpty ? .addCaption : .editCaption
+        case .gallery(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
         default:
             text = messageTimelineItem.body
         }
@@ -567,6 +571,16 @@ class TimelineInteractionHandler {
         default:
             return .none
         }
+    }
+    
+    /// Opens a media preview scoped to a single gallery's attachments. The preview pages
+    /// only between the items of that one gallery — siblings in the wider timeline aren't
+    /// reachable from this entry point (use the regular media tap for that).
+    func processGalleryItemTap(itemID: TimelineItemIdentifier, index: Int) -> TimelineControllerAction {
+        guard let galleryItem = timelineController.timelineItems.firstUsingStableID(itemID) as? GalleryRoomTimelineItem else {
+            return .none
+        }
+        return .displayGalleryPreview(galleryItem: galleryItem, initialIndex: index)
     }
     
     // MARK: - Private

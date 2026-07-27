@@ -111,6 +111,16 @@ nonisolated enum GalleryItem: Hashable, Identifiable {
         }
     }
     
+    var fileSize: UInt? {
+        switch self {
+        case .image(_, let content): content.imageInfo.fileSize
+        case .video(_, let content): content.videoInfo.fileSize
+        case .audio(_, let content): content.fileSize
+        case .file(_, let content): content.fileSize
+        case .other: nil
+        }
+    }
+    
     var blurhash: String? {
         switch self {
         case .image(_, let content): content.blurhash

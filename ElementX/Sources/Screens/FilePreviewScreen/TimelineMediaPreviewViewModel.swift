@@ -22,6 +22,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     
+    /// Overrides the timeline kind used to build the context menu. Gallery previews use `.media` so the
+    /// standard download/forward/delete actions appear, since their underlying room timeline is `.live`.
+    private let menuTimelineKind: TimelineKind?
+    
     private var contentScannerService: ContentScannerServiceProtocol? {
         timelineViewModel.context.contentScannerService
     }
@@ -31,6 +35,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    /// Initialises a preview spanning the whole timeline's media, staying in sync with it as it paginates.
     init(initialItem: EventBasedMessageTimelineItemProtocol,
          timelineViewModel: TimelineViewModelProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -42,6 +47,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        menuTimelineKind = nil
         
         let timelineState = timelineViewModel.context.viewState.timelineState
         
@@ -75,6 +81,35 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 state.dataSource.paginationState = paginationState
                 paginateIfNeeded()
             }
+            .store(in: &cancellables)
+    }
+    
+    /// Initialises the preview scoped to a single gallery's attachments. The data source is
+    /// built from the gallery's items directly and isn't kept in sync with the underlying
+    /// timeline — gallery contents don't change without the event being replaced or redacted.
+    init(galleryItem: GalleryRoomTimelineItem,
+         initialIndex: Int,
+         timelineViewModel: TimelineViewModelProtocol,
+         mediaProvider: MediaProviderProtocol,
+         photoLibraryManager: PhotoLibraryManagerProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appMediator: AppMediatorProtocol) {
+        self.timelineViewModel = timelineViewModel
+        self.mediaProvider = mediaProvider
+        self.photoLibraryManager = photoLibraryManager
+        self.userIndicatorController = userIndicatorController
+        self.appMediator = appMediator
+        menuTimelineKind = .media(.roomScreenLive)
+        
+        super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(galleryItem: galleryItem,
+                                                                                     initialIndex: initialIndex)),
+                   mediaProvider: mediaProvider)
+        
+        rebuildCurrentItemActions()
+        
+        timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
+            .merge(with: timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers))
+            .sink { [weak self] _ in self?.rebuildCurrentItemActions() }
             .store(in: &cancellables)
     }
     
@@ -201,7 +236,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                            pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                            isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
                                            areThreadsEnabled: timelineContext.viewState.areThreadsEnabled,
-                                           timelineKind: timelineContext.viewState.timelineKind,
+                                           timelineKind: menuTimelineKind ?? timelineContext.viewState.timelineKind,
                                            emojiProvider: timelineContext.viewState.emojiProvider)
                 .makeActions()
         }
@@ -217,16 +252,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         state.previewControllerDriver.send(.dismissDetailsSheet)
         
         do {
-            switch mediaItem.timelineItem {
-            case is AudioRoomTimelineItem, is FileRoomTimelineItem:
+            switch mediaItem.kind {
+            case .file:
                 state.previewControllerDriver.send(.exportFile(.init(url: fileURL)))
                 return // Don't show the indicator.
-            case is ImageRoomTimelineItem:
+            case .image:
                 try await photoLibraryManager.addResource(.photo, at: fileURL).get()
-            case is VideoRoomTimelineItem:
+            case .video:
                 try await photoLibraryManager.addResource(.video, at: fileURL).get()
-            default:
-                break
             }
             
             showSavedIndicator()
