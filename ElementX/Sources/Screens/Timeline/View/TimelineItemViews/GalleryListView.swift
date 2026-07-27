@@ -8,9 +8,8 @@
 import Compound
 import SwiftUI
 
-/// Used for gallery messages that contain at least one attachment without a thumbnail
-/// (typically a document or audio). Renders a vertical list of file rows so each item is
-/// individually recognisable — the grid layout doesn't read well for non-visual content.
+/// A vertical list of file rows for a gallery message. Used when a gallery has a non-visual
+/// attachment (file/audio), where the grid layout doesn't read well.
 struct GalleryListView: View {
     let items: [GalleryItem]
     let mediaProvider: MediaProviderProtocol?

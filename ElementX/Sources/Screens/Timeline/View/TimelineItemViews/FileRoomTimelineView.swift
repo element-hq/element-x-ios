@@ -119,15 +119,15 @@ struct FileTypeIconView: View {
         Group {
             if isScanning {
                 ProgressView()
-                    .scaledFrame(size: CompoundIcon.Size.medium.value, relativeTo: .body)
+                    .scaledFrame(size: CompoundIcon.Size.medium.value, relativeTo: .compound.bodyLG)
             } else {
-                CompoundIcon(icon, size: .medium, relativeTo: .body)
+                CompoundIcon(icon)
                     .foregroundColor(.compound.iconPrimary)
             }
         }
         .scaledPadding(6)
         .background(.compound.iconOnSolidPrimary,
-                    in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+                    in: RoundedRectangle(cornerRadius: 4))
     }
 }
 
