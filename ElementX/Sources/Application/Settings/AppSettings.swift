@@ -80,6 +80,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
                   hideBrandChrome: Bool,
                   pushGatewayBaseURL: URL,
                   oAuthRedirectURL: URL,
+                  oAuthClientURIPath: String?,
                   websiteURL: URL,
                   logoURL: URL,
                   copyrightURL: URL,
@@ -100,6 +101,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
         self.hideBrandChrome = hideBrandChrome
         self.pushGatewayBaseURL = pushGatewayBaseURL
         self.oAuthRedirectURL = oAuthRedirectURL
+        self.oAuthClientURIPath = oAuthClientURIPath
         self.websiteURL = websiteURL
         self.logoURL = logoURL
         self.copyrightURL = copyrightURL
@@ -198,11 +200,15 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// The redirect URL used for OAuth. For the normal case we don't actually need the bundle ID as the web authentication session handles the redirect internally.
     /// However in the case where MAS sends the user to an external app, we need to make sure that the system will open the correct variant of the app (e.g. Nightly).
     private(set) nonisolated(unsafe) var oAuthRedirectURL: URL! = URL(string: "https://element.io/oauth/ios/\(InfoPlistReader.main.bundleIdentifier)")
+    /// A path that is appended to `websiteURL` to form the OAuth `clientURI`. MAS uses `clientURI` as the identifier for a specific app, allowing us to
+    /// distinguish the various clients we have for Android, iOS and Web from each other.
+    /// Intentionally a distinct property so it can be easily overridden without having to manipulate the website URL.
+    private(set) var oAuthClientURIPath: String? // = "app/ios"
     
     var oAuthConfiguration: OAuthConfiguration {
         OAuthConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,
                            redirectURI: oAuthRedirectURL,
-                           clientURI: websiteURL,
+                           clientURI: oAuthClientURIPath.map { websiteURL.appending(path: $0) } ?? websiteURL,
                            logoURI: logoURL,
                            tosURI: acceptableUseURL,
                            policyURI: privacyURL,

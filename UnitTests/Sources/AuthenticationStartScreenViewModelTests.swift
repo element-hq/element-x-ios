@@ -336,6 +336,7 @@ final class AuthenticationStartScreenViewModelTests {
                              hideBrandChrome: false,
                              pushGatewayBaseURL: appSettings.pushGatewayBaseURL,
                              oAuthRedirectURL: appSettings.oAuthRedirectURL,
+                             oAuthClientURIPath: appSettings.oAuthClientURIPath,
                              websiteURL: appSettings.websiteURL,
                              logoURL: appSettings.logoURL,
                              copyrightURL: appSettings.copyrightURL,
