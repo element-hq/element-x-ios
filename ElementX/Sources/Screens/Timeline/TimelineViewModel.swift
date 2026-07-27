@@ -159,6 +159,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineController.processItemDisappearance(id) }
         case .mediaTapped(let id):
             Task { await handleMediaTapped(with: id) }
+        case .galleryItemTapped(let id, let index):
+            handleGalleryItemTapped(itemID: id, index: index)
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):
@@ -708,6 +710,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             
             let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
+        case .displayGalleryPreview:
+            fatalError("Galleries open through the dedicated galleryItemTapped path, which carries the tapped index.")
         case .displayLocation(let location):
             actionsSubject.send(.displayLocation(location))
         case .displayLiveLocation(let sender, let initialLiveLocationShare):
@@ -716,6 +720,18 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             break
         }
         state.showLoading = false
+    }
+    
+    private func handleGalleryItemTapped(itemID: TimelineItemIdentifier, index: Int) {
+        if case let .displayGalleryPreview(galleryItem, initialIndex) = timelineInteractionHandler.processGalleryItemTap(itemID: itemID, index: index) {
+            displayGalleryPreview(galleryItem: galleryItem, initialIndex: initialIndex)
+        }
+    }
+    
+    private func displayGalleryPreview(galleryItem: GalleryRoomTimelineItem, initialIndex: Int) {
+        actionsSubject.send(.composer(action: .removeFocus))
+        let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem, initialIndex: initialIndex)
+        actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
     }
     
     private func handleItemSendInfoTapped(itemID: TimelineItemIdentifier) {
@@ -831,6 +847,17 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              photoLibraryManager: PhotoLibraryManager(),
                                              userIndicatorController: userIndicatorController,
                                              appMediator: appMediator)
+    }
+    
+    private func makeGalleryPreviewViewModel(galleryItem: GalleryRoomTimelineItem,
+                                             initialIndex: Int) -> TimelineMediaPreviewViewModel {
+        TimelineMediaPreviewViewModel(galleryItem: galleryItem,
+                                      initialIndex: initialIndex,
+                                      timelineViewModel: self,
+                                      mediaProvider: userSession.mediaProvider,
+                                      photoLibraryManager: PhotoLibraryManager(),
+                                      userIndicatorController: userIndicatorController,
+                                      appMediator: appMediator)
     }
     
     // MARK: - Timeline Item Building

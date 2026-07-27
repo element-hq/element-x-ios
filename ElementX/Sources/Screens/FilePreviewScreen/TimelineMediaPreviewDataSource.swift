@@ -35,13 +35,16 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     var paginationState: TimelinePaginationState
     
+    /// Builds a data source spanning every previewable attachment in the timeline, paginating
+    /// as the user swipes past the loaded range. Used when tapping a standalone media message.
     init(itemViewStates: [RoomTimelineItemViewState],
          initialItem: EventBasedMessageTimelineItemProtocol,
          initialPadding: Int = 100,
          paginationState: TimelinePaginationState) {
         previewItems = itemViewStates.compactMap(TimelineMediaPreviewItem.Media.init)
         
-        if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialItem.id.eventOrTransactionID }) {
+        let initialPreviewID = TimelineMediaPreviewItem.Media(timelineItem: initialItem).id
+        if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialPreviewID }) {
             initialItemIndex = initialItemArrayIndex + initialPadding
             currentItem = .media(previewItems[initialItemArrayIndex])
         } else {
@@ -58,6 +61,33 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         self.paginationState = paginationState
     }
     
+    /// Builds a data source scoped to a single gallery's previewable attachments.
+    /// Used when the user taps a tile inside a gallery message — paging is local to that
+    /// gallery and there's no timeline pagination to drive.
+    init(galleryItem: GalleryRoomTimelineItem,
+         initialIndex: Int) {
+        let media = galleryItem.content.items.map { item in
+            TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: item)
+        }
+        
+        if media.indices.contains(initialIndex) {
+            // We set the entire gallery here up front.
+            previewItems = media
+            initialItemIndex = initialIndex
+            currentItem = .media(media[initialIndex])
+        } else {
+            // Fall back to a synthetic placeholder for empty galleries — shouldn't happen in practice.
+            previewItems = [.init(timelineItem: galleryItem)]
+            initialItemIndex = 0
+            currentItem = .media(previewItems[0])
+        }
+        
+        // And we disable any use of the timeline by configuring the data source as though everything has paginated.
+        backwardPadding = 0
+        forwardPadding = 0
+        paginationState = .init(backward: .endReached, forward: .endReached)
+    }
+    
     func updateCurrentItem(_ item: TimelineMediaPreviewItem) {
         currentItem = item
     }
@@ -68,7 +98,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             
             // If an item already exists use that instead to preserve the file handle, download error etc.
             if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
-                oldItem.timelineItem = newItem.timelineItem
+                oldItem.content = newItem.content
                 return oldItem
             }
             
@@ -168,8 +198,29 @@ enum TimelineMediaPreviewItem: Equatable {
     
     /// Wraps a media file and title to be previewed with QuickLook.
     @Observable class Media: NSObject, QLPreviewItem, Identifiable {
-        fileprivate(set) var timelineItem: EventBasedMessageTimelineItemProtocol {
+        /// A standalone timeline message, or a single gallery attachment with its parent event.
+        fileprivate enum Content {
+            case timelineItem(EventBasedMessageTimelineItemProtocol)
+            case galleryItem(parent: EventBasedMessageTimelineItemProtocol, item: GalleryItem)
+        }
+        
+        fileprivate var content: Content {
             didSet { updatePreviewItemValues() }
+        }
+        
+        /// The parent event, so menu actions (redact, reply, …) target the gallery as a whole.
+        var timelineItem: EventBasedMessageTimelineItemProtocol {
+            switch content {
+            case .timelineItem(let timelineItem): timelineItem
+            case .galleryItem(let parent, _): parent
+            }
+        }
+        
+        var galleryItem: GalleryItem? {
+            switch content {
+            case .timelineItem: nil
+            case .galleryItem(_, let item): item
+            }
         }
         
         var fileHandle: MediaFileHandleProxy? {
@@ -178,11 +229,17 @@ enum TimelineMediaPreviewItem: Equatable {
         
         var downloadError: Error?
         
+        /// A stable identifier that's unique per preview item — including individual gallery
+        /// attachments that would otherwise share their parent event's ID.
+        let id: MediaPreviewItemID
+        
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
-            self.timelineItem = timelineItem
+            content = .timelineItem(timelineItem)
+            id = MediaPreviewItemID(timelineItem: timelineItem)
         }
         
         init?(roomTimelineItemViewState: RoomTimelineItemViewState) {
+            let timelineItem: EventBasedMessageTimelineItemProtocol
             switch roomTimelineItemViewState.type {
             case .audio(let audioRoomTimelineItem):
                 timelineItem = audioRoomTimelineItem
@@ -195,18 +252,15 @@ enum TimelineMediaPreviewItem: Equatable {
             default:
                 return nil
             }
+            content = .timelineItem(timelineItem)
+            id = MediaPreviewItemID(timelineItem: timelineItem)
         }
         
-        // MARK: Identifiable
-        
-        /// The timeline item's event or transaction ID.
-        ///
-        /// We're identifying items by this to ensure that all matching is made using only this part of the identifier. This is
-        /// because the unique ID will be different across timelines so when the initial item comes from a regular timeline and
-        /// we build a filtered timeline to fetch the other media items, it is impossible to match by the `TimelineItemIdentifier`.
-        var id: TimelineItemIdentifier.EventOrTransactionID {
-            guard let id = timelineItem.id.eventOrTransactionID else { fatalError("Virtual items cannot be previewed.") }
-            return id
+        /// Wraps a single attachment of a gallery message. `.other` items have no media source,
+        /// so QuickLook falls back to its default unsupported-item screen.
+        init(galleryParent: GalleryRoomTimelineItem, item: GalleryItem) {
+            content = .galleryItem(parent: galleryParent, item: item)
+            id = .galleryItem(item.id)
         }
         
         // MARK: QLPreviewItem
@@ -241,46 +295,59 @@ enum TimelineMediaPreviewItem: Equatable {
         
         // MARK: Media details
         
+        /// The kind of media, used to decide how it should be saved.
+        enum Kind { case image, video, file }
+        
+        var kind: Kind {
+            if let galleryItem {
+                switch galleryItem {
+                case .image: return .image
+                case .video: return .video
+                case .audio, .file, .other: return .file
+                }
+            }
+            return switch timelineItem {
+            case is ImageRoomTimelineItem: .image
+            case is VideoRoomTimelineItem: .video
+            default: .file
+            }
+        }
+        
         var mediaSource: MediaSourceProxy? {
-            switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem:
-                audioItem.content.source
-            case let fileItem as FileRoomTimelineItem:
-                fileItem.content.source
-            case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.imageInfo.source
-            case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.videoInfo.source
-            default:
-                nil
+            if let galleryItem {
+                return galleryItem.mediaSource
+            }
+            return switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem: audioItem.content.source
+            case let fileItem as FileRoomTimelineItem: fileItem.content.source
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.source
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.source
+            default: nil
             }
         }
         
         var thumbnailMediaSource: MediaSourceProxy? {
-            switch timelineItem {
-            case let fileItem as FileRoomTimelineItem:
-                fileItem.content.thumbnailSource
-            case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.thumbnailInfo?.source
-            case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.thumbnailInfo?.source
-            default:
-                nil
+            if let galleryItem {
+                return galleryItem.thumbnailSource
+            }
+            return switch timelineItem {
+            case let fileItem as FileRoomTimelineItem: fileItem.content.thumbnailSource
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.thumbnailInfo?.source
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.thumbnailInfo?.source
+            default: nil
             }
         }
         
         var filename: String? {
-            switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem:
-                audioItem.content.filename
-            case let fileItem as FileRoomTimelineItem:
-                fileItem.content.filename
-            case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.filename
-            case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.filename
-            default:
-                nil
+            if let galleryItem {
+                return galleryItem.filename
+            }
+            return switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem: audioItem.content.filename
+            case let fileItem as FileRoomTimelineItem: fileItem.content.filename
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.filename
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.filename
+            default: nil
             }
         }
         
@@ -289,21 +356,20 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         private var expectedFileSize: UInt? {
-            switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem:
-                audioItem.content.fileSize
-            case let fileItem as FileRoomTimelineItem:
-                fileItem.content.fileSize
-            case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.imageInfo.fileSize
-            case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.videoInfo.fileSize
-            default:
-                nil
+            if let galleryItem {
+                return galleryItem.fileSize
+            }
+            return switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem: audioItem.content.fileSize
+            case let fileItem as FileRoomTimelineItem: fileItem.content.fileSize
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.fileSize
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.fileSize
+            default: nil
             }
         }
         
         var hasCaption: Bool {
+            // No need to special-case gallery items here, captions live on the gallery event itself
             timelineItem.hasMediaCaption
         }
         
@@ -316,28 +382,26 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         var contentType: String? {
-            switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem:
-                audioItem.content.contentType?.localizedDescription
-            case let fileItem as FileRoomTimelineItem:
-                fileItem.content.contentType?.localizedDescription
-            case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.contentType?.localizedDescription
-            case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.contentType?.localizedDescription
-            default:
-                nil
+            if let galleryItem {
+                return galleryItem.contentType?.localizedDescription
+            }
+            return switch timelineItem {
+            case let audioItem as AudioRoomTimelineItem: audioItem.content.contentType?.localizedDescription
+            case let fileItem as FileRoomTimelineItem: fileItem.content.contentType?.localizedDescription
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.contentType?.localizedDescription
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.contentType?.localizedDescription
+            default: nil
             }
         }
         
         var blurhash: String? {
-            switch timelineItem {
-            case let imageItem as ImageRoomTimelineItem:
-                imageItem.content.blurhash
-            case let videoItem as VideoRoomTimelineItem:
-                videoItem.content.blurhash
-            default:
-                nil
+            if let galleryItem {
+                return galleryItem.blurhash
+            }
+            return switch timelineItem {
+            case let imageItem as ImageRoomTimelineItem: imageItem.content.blurhash
+            case let videoItem as VideoRoomTimelineItem: videoItem.content.blurhash
+            default: nil
             }
         }
     }
