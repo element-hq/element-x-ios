@@ -61,9 +61,9 @@ nonisolated struct NotificationContentBuilder {
         case .timeline(let event):
             switch try? event.content() {
             case .messageLike(let messageContent):
-                await processMessageLike(notificationContent: &notificationContent,
-                                         notificationItem: notificationItem,
-                                         mediaProvider: mediaProvider)
+                await processAsMessage(notificationContent: &notificationContent,
+                                       notificationItem: notificationItem,
+                                       mediaProvider: mediaProvider)
                 
                 switch messageContent {
                 case .roomMessage(let messageType, _):
@@ -83,9 +83,9 @@ nonisolated struct NotificationContentBuilder {
             case .state(let stateContent):
                 switch stateContent {
                 case .beaconInfo:
-                    await processMessageLike(notificationContent: &notificationContent,
-                                             notificationItem: notificationItem,
-                                             mediaProvider: mediaProvider)
+                    await processAsMessage(notificationContent: &notificationContent,
+                                           notificationItem: notificationItem,
+                                           mediaProvider: mediaProvider)
                     notificationContent.body = L10n.notificationLiveLocationStartedBody
                 default:
                     processEmpty(&notificationContent)
@@ -127,9 +127,9 @@ nonisolated struct NotificationContentBuilder {
                                       mediaProvider: mediaProvider)
     }
     
-    private func processMessageLike(notificationContent: inout UNMutableNotificationContent,
-                                    notificationItem: NotificationItemProxyProtocol,
-                                    mediaProvider: MediaProviderProtocol) async {
+    private func processAsMessage(notificationContent: inout UNMutableNotificationContent,
+                                  notificationItem: NotificationItemProxyProtocol,
+                                  mediaProvider: MediaProviderProtocol) async {
         notificationContent.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         if notificationContent.title != notificationItem.roomDisplayName {
             notificationContent.subtitle = notificationItem.roomDisplayName
