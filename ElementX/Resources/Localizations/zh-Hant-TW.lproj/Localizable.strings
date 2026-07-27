@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "忘記了您的復原金鑰？";
 "confirm_recovery_key_banner_title" = "您的金鑰儲存空間並未同步";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "使用此裝置掃描 QR code";
 "screen_link_new_device_desktop_submit" = "準備掃描";
 "screen_link_new_device_desktop_title" = "在桌上型電腦上開啟 %1$@ 以取得 QR code";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "數字不符";
 "screen_link_new_device_enter_number_notice" = "輸入兩位數代碼";
 "screen_link_new_device_enter_number_subtitle" = "這將確認您與另一台裝置之間的連線是否安全。";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "這個帳號已被停用。";
 "screen_login_error_invalid_credentials" = "不正確的使用者名稱或密碼";

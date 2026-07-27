@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Scansiona il codice QR con questo dispositivo";
 "screen_link_new_device_desktop_submit" = "Pronto per la scansione";
 "screen_link_new_device_desktop_title" = "Apri %1$@ su un computer desktop per ottenere il codice QR";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "I numeri non corrispondono";
 "screen_link_new_device_enter_number_notice" = "Inserisci il codice a 2 cifre";
 "screen_link_new_device_enter_number_subtitle" = "Questo verificherà che la connessione con l'altro dispositivo sia sicura.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Nessuno sta condividendo la propria posizione";
 "screen_live_location_sheet_sharing_live_location" = "Condivisione posizione in tempo reale";
 "screen_live_location_sheet_title" = "Sulla mappa";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Questo account è stato eliminato.";
 "screen_login_error_invalid_credentials" = "Nome utente e/o password errati";
@@ -1222,7 +1223,7 @@
 "screen_room_attachment_source_camera_photo" = "Scatta foto";
 "screen_room_attachment_source_camera_video" = "Registra video";
 "screen_room_attachment_source_files" = "Allegato";
-"screen_room_attachment_source_gallery" = "Libreria di foto e video";
+"screen_room_attachment_source_gallery" = "Libreria foto e video";
 "screen_room_attachment_source_location" = "Condividi posizione";
 "screen_room_attachment_source_poll" = "Sondaggio";
 "screen_room_attachment_text_formatting" = "Formattazione del testo";

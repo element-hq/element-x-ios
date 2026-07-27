@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Ξέχασες το κλειδί ανάκτησης;";
 "confirm_recovery_key_banner_title" = "Ο χώρος αποθήκευσης κλειδιών σου δεν είναι συγχρονισμένος";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Σάρωσε τον κωδικό QR με αυτήν τη συσκευή";
 "screen_link_new_device_desktop_submit" = "Έτοιμο για σάρωση";
 "screen_link_new_device_desktop_title" = "Ανοίξτε το %1$@ σε έναν επιτραπέζιο υπολογιστή για να λάβετε τον κωδικό QR";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Οι αριθμοί δεν ταιριάζουν";
 "screen_link_new_device_enter_number_notice" = "Εισαγάγετε έναν 2ψήφιο κωδικό";
 "screen_link_new_device_enter_number_subtitle" = "Αυτό θα επαληθεύσει ότι η σύνδεση με την άλλη συσκευή σας είναι ασφαλής.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Κανείς δεν μοιράζεται την τοποθεσία του";
 "screen_live_location_sheet_sharing_live_location" = "Κοινοποιείς την τοποθεσία σε πραγματικό χρόνο";
 "screen_live_location_sheet_title" = "Στον χάρτη";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Αυτός ο λογαριασμός έχει διαγραφεί.";
 "screen_login_error_invalid_credentials" = "Λανθασμένο όνομα χρήστη ή κωδικός πρόσβασης";

@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Has oblidat la clau de recuperació?";
 "confirm_recovery_key_banner_title" = "L'emmagatzematge de claus no està sincronitzat";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Escaneja el codi QR amb aquest dispositiu";
 "screen_link_new_device_desktop_submit" = "Preparat per escanejar";
 "screen_link_new_device_desktop_title" = "Open %1$@ on a desktop computer to get the QR code";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "The numbers don’t match";
 "screen_link_new_device_enter_number_notice" = "Enter 2-digit code";
 "screen_link_new_device_enter_number_subtitle" = "This will verify that the connection to your other device is secure.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Aquest compte s'ha desactivat.";
 "screen_login_error_invalid_credentials" = "Usuari i/o contrasenya incorrectes";

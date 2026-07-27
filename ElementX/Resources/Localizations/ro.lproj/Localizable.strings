@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Ați uitat cheia de recuperare?";
 "confirm_recovery_key_banner_title" = "Backup-ul nu este sincronizat";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Scanați codul QR cu acest dispozitiv";
 "screen_link_new_device_desktop_submit" = "Gata de scanare";
 "screen_link_new_device_desktop_title" = "Deschide %1$@ pe un computer desktop pentru a obține codul QR";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Numerele nu se potrivesc";
 "screen_link_new_device_enter_number_notice" = "Introduceți codul de 2 cifre";
 "screen_link_new_device_enter_number_subtitle" = "Aceasta va verifica dacă conexiunea cu celălalt dispozitiv este sigură.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Nimeni nu își partajează locația";
 "screen_live_location_sheet_sharing_live_location" = "Se partajează locația în timp real";
 "screen_live_location_sheet_title" = "Pe hartă";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Acest cont a fost șters.";
 "screen_login_error_invalid_credentials" = "Utilizator și/sau parolă incorecte";
