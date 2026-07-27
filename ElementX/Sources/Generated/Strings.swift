@@ -1192,6 +1192,8 @@ internal nonisolated enum L10n {
   internal static func notificationInviteBodyWithSender(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_invite_body_with_sender", String(describing: p1))
   }
+  /// Started sharing their live location
+  internal static var notificationLiveLocationStartedBody: String { return L10n.tr("Localizable", "notification_live_location_started_body") }
   /// Mentioned you: %1$@
   internal static func notificationMentionedYouBody(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_mentioned_you_body", String(describing: p1))

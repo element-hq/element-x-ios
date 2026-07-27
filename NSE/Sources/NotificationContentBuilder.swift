@@ -59,28 +59,38 @@ nonisolated struct NotificationContentBuilder {
                                  notificationItem: notificationItem,
                                  mediaProvider: mediaProvider)
         case .timeline(let event):
-            guard case let .messageLike(messageContent) = try? event.content() else {
-                processEmpty(&notificationContent)
-                return
-            }
-            
-            await processMessageLike(notificationContent: &notificationContent,
-                                     notificationItem: notificationItem,
-                                     mediaProvider: mediaProvider)
-            
-            switch messageContent {
-            case .roomMessage(let messageType, _):
-                await processRoomMessage(notificationContent: &notificationContent,
-                                         notificationItem: notificationItem,
-                                         messageType: messageType,
-                                         mediaProvider: mediaProvider)
-            case .poll(let question):
-                notificationContent.body = L10n.commonPollSummary(question)
-            case .callInvite:
-                notificationContent.body = L10n.commonUnsupportedCall
-            case .rtcNotification:
-                notificationContent.body = L10n.notificationIncomingCall
-            default:
+            switch try? event.content() {
+            case .messageLike(let messageContent):
+                await processAsMessage(notificationContent: &notificationContent,
+                                       notificationItem: notificationItem,
+                                       mediaProvider: mediaProvider)
+                
+                switch messageContent {
+                case .roomMessage(let messageType, _):
+                    await processRoomMessage(notificationContent: &notificationContent,
+                                             notificationItem: notificationItem,
+                                             messageType: messageType,
+                                             mediaProvider: mediaProvider)
+                case .poll(let question):
+                    notificationContent.body = L10n.commonPollSummary(question)
+                case .callInvite:
+                    notificationContent.body = L10n.commonUnsupportedCall
+                case .rtcNotification:
+                    notificationContent.body = L10n.notificationIncomingCall
+                default:
+                    processEmpty(&notificationContent)
+                }
+            case .state(let stateContent):
+                switch stateContent {
+                case .beaconInfo:
+                    await processAsMessage(notificationContent: &notificationContent,
+                                           notificationItem: notificationItem,
+                                           mediaProvider: mediaProvider)
+                    notificationContent.body = L10n.notificationLiveLocationStartedBody
+                default:
+                    processEmpty(&notificationContent)
+                }
+            case .none:
                 processEmpty(&notificationContent)
             }
         }
@@ -117,9 +127,9 @@ nonisolated struct NotificationContentBuilder {
                                       mediaProvider: mediaProvider)
     }
     
-    private func processMessageLike(notificationContent: inout UNMutableNotificationContent,
-                                    notificationItem: NotificationItemProxyProtocol,
-                                    mediaProvider: MediaProviderProtocol) async {
+    private func processAsMessage(notificationContent: inout UNMutableNotificationContent,
+                                  notificationItem: NotificationItemProxyProtocol,
+                                  mediaProvider: MediaProviderProtocol) async {
         notificationContent.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         if notificationContent.title != notificationItem.roomDisplayName {
             notificationContent.subtitle = notificationItem.roomDisplayName
