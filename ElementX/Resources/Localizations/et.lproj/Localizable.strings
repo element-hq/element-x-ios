@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Skaneeri QR-koodi selle seadmega";
 "screen_link_new_device_desktop_submit" = "Skaneerimiseks valmis";
 "screen_link_new_device_desktop_title" = "QR-koodi laadimiseks ava %1$@ süle- või lauaarvutis";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Numbrid ei klapi";
 "screen_link_new_device_enter_number_notice" = "Sisesta kahekohaline kood";
 "screen_link_new_device_enter_number_subtitle" = "Sellega verifitseerime, et ühendus sinu teise seadmega on turvaline.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Mitte keegi ei jaga oma asukohta";
 "screen_live_location_sheet_sharing_live_location" = "Asukoht on jagamisel reaalajas";
 "screen_live_location_sheet_title" = "Kaardil";
-"screen_local_network_opt_in_subtitle" = "Sinu koduserver asub sinu kohalikus võrgus. Ühendamiseks vajab Element luba selle võrgu seadmetega ühenduse loomiseks.";
+"screen_local_network_opt_in_subtitle" = "Sinu koduserver asub sinu kohalikus võrgus. Ühendamiseks vajab %1$@ luba selle võrgu seadmetega ühenduse loomiseks.";
 "screen_local_network_opt_in_title" = "Luba juurdepääs kohtvõrgule";
 "screen_login_error_deactivated_account" = "See kasutajakonto on kustutatud.";
 "screen_login_error_invalid_credentials" = "Vigane kasutajanimi ja/või salasõna";

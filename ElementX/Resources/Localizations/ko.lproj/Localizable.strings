@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "복구 키를 잊으셨나요?";
 "confirm_recovery_key_banner_title" = "귀하의 키 저장소가 동기화되지 않았습니다";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "이 기기로 QR 코드를 스캔하세요.";
 "screen_link_new_device_desktop_submit" = "스캔 준비 완료";
 "screen_link_new_device_desktop_title" = "QR 코드를 확인하려면 데스크톱 컴퓨터에서 %1$@을(를) 여세요.";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "숫자가 일치하지 않습니다";
 "screen_link_new_device_enter_number_notice" = "2자리 코드를 입력하세요";
 "screen_link_new_device_enter_number_subtitle" = "이 절차를 통해 다른 기기와의 연결이 안전한지 확인합니다.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "위치를 공유 중인 사용자가 없습니다.";
 "screen_live_location_sheet_sharing_live_location" = "실시간 위치 공유 중";
 "screen_live_location_sheet_title" = "지도 보기";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "삭제된 계정입니다.";
 "screen_login_error_invalid_credentials" = "잘못된 아이디/비밀번호";

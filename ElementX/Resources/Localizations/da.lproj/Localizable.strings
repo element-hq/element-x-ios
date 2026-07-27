@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Har du glemt din gendannelsesnøgle?";
 "confirm_recovery_key_banner_title" = "Dit nøglelager er ikke synkroniseret";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Scan QR-koden med denne enhed";
 "screen_link_new_device_desktop_submit" = "Klar til at scanne";
 "screen_link_new_device_desktop_title" = "Åbn %1$@ på en stationær computer for at få QR-koden";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Tallene stemmer ikke overens";
 "screen_link_new_device_enter_number_notice" = "Indtast 2-cifret kode";
 "screen_link_new_device_enter_number_subtitle" = "Dette vil bekræfte, at forbindelsen til din anden enhed er sikker.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Ingen deler deres placering";
 "screen_live_location_sheet_sharing_live_location" = "Deler placering live";
 "screen_live_location_sheet_title" = "På kortet";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Denne konto er blevet slettet.";
 "screen_login_error_invalid_credentials" = "Forkert brugernavn og/eller adgangskode";

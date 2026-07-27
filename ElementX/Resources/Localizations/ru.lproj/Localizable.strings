@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Отсканируйте QR-код с помощью этого устройства";
 "screen_link_new_device_desktop_submit" = "Готово к сканированию";
 "screen_link_new_device_desktop_title" = "Откройте %1$@ на компьютере, чтобы получить QR-код";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Цифры не совпадают";
 "screen_link_new_device_enter_number_notice" = "Введите 2-значный код";
 "screen_link_new_device_enter_number_subtitle" = "Это позволит убедиться в безопасности соединения с другим вашим устройством.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Никто не делится своим местоположением";
 "screen_live_location_sheet_sharing_live_location" = "Местоположение отправляется в реальном времени";
 "screen_live_location_sheet_title" = "На карте";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Эта учетная запись была удалена.";
 "screen_login_error_invalid_credentials" = "Неверное имя пользователя и/или пароль";

@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Lupa kunci pemulihan Anda?";
 "confirm_recovery_key_banner_title" = "Penyimpanan kunci Anda tidak sinkron";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Pindai kode QR dengan perangkat ini";
 "screen_link_new_device_desktop_submit" = "Siap untuk memindai";
 "screen_link_new_device_desktop_title" = "Buka %1$@ di komputer desktop untuk mendapatkan kode QR.";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Angkanya tidak cocok";
 "screen_link_new_device_enter_number_notice" = "Masukkan kode 2 digit";
 "screen_link_new_device_enter_number_subtitle" = "Ini akan memverifikasi bahwa koneksi ke perangkat Anda yang lain aman.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Tidak ada yang membagikan lokasinya";
 "screen_live_location_sheet_sharing_live_location" = "Berbagi lokasi secara langsung";
 "screen_live_location_sheet_title" = "Di peta";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Akun ini telah dinonaktifkan.";
 "screen_login_error_invalid_credentials" = "Nama pengguna dan/atau kata sandi salah";
@@ -1067,9 +1068,9 @@
 "screen_notification_settings_sound_element_fade" = "Element Fade";
 "screen_notification_settings_sound_import_sound_error_title" = "Error importing file";
 "screen_notification_settings_sound_preview_sound_error_title" = "Problem previewing alert sound";
-"screen_notification_settings_sound_section_title" = "Sound";
+"screen_notification_settings_sound_section_title" = "Suara";
 "screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
-"screen_notification_settings_sound_set_sound_error_title" = "Problem setting alert sound";
+"screen_notification_settings_sound_set_sound_error_title" = "Masalah pengaturan suara peringatan";
 "screen_notification_settings_sound_silent" = "Silent";
 "screen_notification_settings_sound_system_alert_ios" = "Waspada";
 "screen_notification_settings_sound_system_anticipate_ios" = "Antisipasi";

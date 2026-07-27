@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Zeskanuj kod QR za pomocą tego urządzenia";
 "screen_link_new_device_desktop_submit" = "Gotowy do skanowania";
 "screen_link_new_device_desktop_title" = "Otwórz %1$@ na komputerze stacjonarnym, aby uzyskać kod QR";
+"screen_link_new_device_desktop_warning" = "Zeskanuj kod QR dopiero po wykonaniu powyższych kroków na swoim urządzeniu. Nigdy nie skanuj kodu przesłanego przez inną osobę.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Liczby nie pasują do siebie";
 "screen_link_new_device_enter_number_notice" = "Wprowadź 2-cyfrowy kod";
 "screen_link_new_device_enter_number_subtitle" = "Pozwoli to sprawdzić, czy połączenie z drugim urządzeniem jest bezpieczne.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Nikt nie udostępnia swojej lokalizacji";
 "screen_live_location_sheet_sharing_live_location" = "Udostępnianie lokalizacji na żywo";
 "screen_live_location_sheet_title" = "Na mapie";
-"screen_local_network_opt_in_subtitle" = "Twój serwer domowy znajduje się w sieci lokalnej. Aby się połączyć, Element potrzebuje uprawnień dostępu do urządzeń w tej sieci.";
+"screen_local_network_opt_in_subtitle" = "Twój serwer domowy znajduje się w sieci lokalnej. Aby się połączyć, %1$@ potrzebuje uprawnień dostępu do urządzeń w tej sieci.";
 "screen_local_network_opt_in_title" = "Zezwól na dostęp do sieci lokalnej";
 "screen_login_error_deactivated_account" = "To konto zostało usunięte.";
 "screen_login_error_invalid_credentials" = "Nieprawidłowa nazwa użytkownika i/lub hasło";

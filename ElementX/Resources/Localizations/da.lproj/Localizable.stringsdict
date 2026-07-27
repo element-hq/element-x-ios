@@ -27,7 +27,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d% af de samlede stemmer</string>
+			<string>%1$d%% af de samlede stemmer</string>
 			<key>other</key>
 			<string>%1$d procent af det samlede antal stemmer</string>
 		</dict>

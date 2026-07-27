@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Clé de récupération oubliée ?";
 "confirm_recovery_key_banner_title" = "Le stockage de vos clés n'est pas synchronisé";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Scanner le code QR avec cet appareil";
 "screen_link_new_device_desktop_submit" = "Prêt à scanner";
 "screen_link_new_device_desktop_title" = "Ouvrir %1$@ sur un ordinateur pour obtenir le code QR";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Les nombres ne correspondent pas";
 "screen_link_new_device_enter_number_notice" = "Saisissez le code à 2 chiffres";
 "screen_link_new_device_enter_number_subtitle" = "Cela permettra de vérifier que la connexion à votre autre appareil est sécurisée.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Personne ne partage sa position";
 "screen_live_location_sheet_sharing_live_location" = "Partage de la position en direct";
 "screen_live_location_sheet_title" = "Sur la carte";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Ce compte a été supprimé.";
 "screen_login_error_invalid_credentials" = "Nom d’utilisateur et/ou mot de passe incorrects";

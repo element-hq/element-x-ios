@@ -415,7 +415,7 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Hast du deinen Wiederherstellungsschlüssel vergessen?";
 "confirm_recovery_key_banner_title" = "Dein Schlüsselspeicher ist nicht synchronisiert";
 "content_scanner_not_found" = "Download not available.";
-"content_scanner_not_found_title" = "File not found";
+"content_scanner_not_found_title" = "Something went wrong";
 "content_scanner_scanning" = "Scanning…";
 "content_scanner_unsafe_message" = "Preview and download have been disabled.";
 "content_scanner_unsafe_title" = "The file is not safe";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Scanne den QR-Code mit diesem Gerät";
 "screen_link_new_device_desktop_submit" = "Bereit zum Scannen";
 "screen_link_new_device_desktop_title" = "Öffne %1$@ auf einem Desktop-Computer, um den QR-Code zu erhalten";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Die Zahlen stimmen nicht überein";
 "screen_link_new_device_enter_number_notice" = "Gib den 2-stelligen Code ein";
 "screen_link_new_device_enter_number_subtitle" = "Dadurch wird überprüft, ob die Verbindung zu deinem anderen Gerät sicher ist.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Nobody is sharing their location";
 "screen_live_location_sheet_sharing_live_location" = "Sharing live location";
 "screen_live_location_sheet_title" = "On the map";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Dieses Konto wurde gelöscht.";
 "screen_login_error_invalid_credentials" = "Falscher Nutzername und/oder Passwort";

@@ -6,7 +6,7 @@
 "a11y_collapse_message_text_field" = "Згорнути поле тексту повідомлення";
 "a11y_create_poll_votes_allowed_decrease" = "Зменшити кількість голосів, дозволених на одну особу";
 "a11y_create_poll_votes_allowed_increase" = "Збільшити кількість голосів, дозволених на одну особу";
-"a11y_custom_emoji" = "Custom emoji";
+"a11y_custom_emoji" = "Власні емоджі";
 "a11y_delete" = "Видалити";
 "a11y_duration" = "Тривалість: %1$@";
 "a11y_edit_avatar" = "Редагувати аватар";
@@ -17,7 +17,7 @@
 "a11y_join_call" = "Приєднатися до виклику";
 "a11y_jump_to_bottom" = "Перейти вниз";
 "a11y_jump_to_unread" = "Перейти до непрочитаних";
-"a11y_jump_to_unread_messages" = "Jump to first unread message";
+"a11y_jump_to_unread_messages" = "Перейти до першого непрочитаного повідомлення";
 "a11y_notifications_mentions_only" = "Тільки згадки";
 "a11y_notifications_muted" = "Звук вимкнено";
 "a11y_notifications_new_mentions" = "Нові згадки";
@@ -52,7 +52,7 @@
 "a11y_start_call" = "Розпочати виклик";
 "a11y_start_video_call" = "Розпочати відеовиклик";
 "a11y_start_voice_call" = "Розпочати голосовий виклик";
-"a11y_status" = "Status";
+"a11y_status" = "Статус";
 "a11y_tombstoned_room" = "Кімната більше не використовується";
 "a11y_user_menu" = "Меню користувача";
 "a11y_video_preview" = "Попередній перегляд відео";
@@ -138,7 +138,7 @@
 "action_manage_account_and_devices" = "Керування обліковим записом і пристроями";
 "action_manage_devices" = "Керування пристроями";
 "action_manage_rooms" = "Керувати кімнатами";
-"action_mark_as_read" = "Mark as read";
+"action_mark_as_read" = "Позначити прочитаним";
 "action_message" = "Написати";
 "action_minimize" = "Згорнути";
 "action_next" = "Далі";
@@ -298,7 +298,7 @@
 "common_no_space_name" = "Без назви простору";
 "common_not_encrypted" = "Не зашифровано";
 "common_offline" = "Не в мережі";
-"common_on_a_call" = "On a call";
+"common_on_a_call" = "Розмовляє";
 "common_open_source_licenses" = "Ліцензії відкритого коду";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "або";
@@ -416,7 +416,7 @@
 "confirm_recovery_key_banner_title" = "Ваше сховище ключів не синхронізовано";
 "content_scanner_not_found" = "Завантаження недоступне.";
 "content_scanner_not_found_title" = "Файл не знайдено";
-"content_scanner_scanning" = "Scanning…";
+"content_scanner_scanning" = "Сканування...";
 "content_scanner_unsafe_message" = "Попередній перегляд і завантаження вимкнено.";
 "content_scanner_unsafe_title" = "Файл не є безпечним";
 "crash_detection_dialog_content" = "Стався збій %1$@ під час останнього користування. Хочете поділитися з нами звітом про збій?";
@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Зіскануйте QR-код цим пристроєм";
 "screen_link_new_device_desktop_submit" = "Готовий до сканування";
 "screen_link_new_device_desktop_title" = "Відкрийте %1$@ на комп'ютері, щоб отримати QR-код";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Цифри не збігаються";
 "screen_link_new_device_enter_number_notice" = "Введіть 2-значний код";
 "screen_link_new_device_enter_number_subtitle" = "Це підтвердить, що з'єднання з іншим пристроєм захищене.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Ніхто не ділиться своєю геопозицією";
 "screen_live_location_sheet_sharing_live_location" = "Обмін геопозицією";
 "screen_live_location_sheet_title" = "На карті";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
 "screen_login_error_deactivated_account" = "Цей обліковий запис було видалено.";
 "screen_login_error_invalid_credentials" = "Неправильне ім'я користувача та/або пароль";
@@ -1513,9 +1514,9 @@
 "screen_settings_user_status_custom" = "Custom…";
 "screen_settings_user_status_custom_hint" = "Custom status…";
 "screen_settings_user_status_focus_time" = "Focus time";
-"screen_settings_user_status_in_a_meeting" = "In a meeting";
-"screen_settings_user_status_on_the_road" = "On the road";
-"screen_settings_user_status_placeholder" = "What's your status?";
+"screen_settings_user_status_in_a_meeting" = "На зустрічі";
+"screen_settings_user_status_on_the_road" = "У дорозі";
+"screen_settings_user_status_placeholder" = "Який у вас статус?";
 "screen_share_location_live_location_disclaimer_title" = "Ваша історія поточного місцезнаходження зберігатиметься у кімнаті та буде доступна учасникам після завершення сеансу.";
 "screen_share_location_live_location_duration_picker_title" = "Виберіть, як довго ділитися своїм місцезнаходженням.";
 "screen_share_location_live_location_missing_permissions" = "У вас немає дозволу ділитися своїм місцезнаходженням у реальному часі в цій кімнаті";

@@ -922,7 +922,7 @@ internal nonisolated enum L10n {
   internal static var confirmRecoveryKeyBannerTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_title") }
   /// Download not available.
   internal static var contentScannerNotFound: String { return L10n.tr("Localizable", "content_scanner_not_found") }
-  /// File not found
+  /// Something went wrong
   internal static var contentScannerNotFoundTitle: String { return L10n.tr("Localizable", "content_scanner_not_found_title") }
   /// Scanning…
   internal static var contentScannerScanning: String { return L10n.tr("Localizable", "content_scanner_scanning") }
@@ -2286,8 +2286,10 @@ internal nonisolated enum L10n {
   }
   /// On the map
   internal static var screenLiveLocationSheetTitle: String { return L10n.tr("Localizable", "screen_live_location_sheet_title") }
-  /// Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.
-  internal static var screenLocalNetworkOptInSubtitle: String { return L10n.tr("Localizable", "screen_local_network_opt_in_subtitle") }
+  /// Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.
+  internal static func screenLocalNetworkOptInSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_local_network_opt_in_subtitle", String(describing: p1))
+  }
   /// Allow access to local network
   internal static var screenLocalNetworkOptInTitle: String { return L10n.tr("Localizable", "screen_local_network_opt_in_title") }
   /// This account has been deleted.

@@ -950,6 +950,7 @@
 "screen_link_new_device_desktop_step3" = "Skann QR-koden med denne enheten";
 "screen_link_new_device_desktop_submit" = "Klar til å skanne";
 "screen_link_new_device_desktop_title" = "Åpne %1$@ på en datamaskin for å få QR-koden";
+"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Tallene stemmer ikke overens";
 "screen_link_new_device_enter_number_notice" = "Skriv inn 2-sifret kode";
 "screen_link_new_device_enter_number_subtitle" = "Dette vil bekrefte at forbindelsen til den andre enheten din er sikker.";
@@ -976,7 +977,7 @@
 "screen_live_location_sheet_nobody_sharing" = "Ingen deler lokasjonen sin";
 "screen_live_location_sheet_sharing_live_location" = "Deler lokasjon i sanntid";
 "screen_live_location_sheet_title" = "På kartet";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network.";
+"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Gi tilgang til det lokale nettverket";
 "screen_login_error_deactivated_account" = "Denne kontoen er slettet.";
 "screen_login_error_invalid_credentials" = "Feil brukernavn og/eller passord";
