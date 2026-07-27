@@ -16,16 +16,32 @@ struct GalleryRoomTimelineView: View {
         timelineItem.content.caption?.isBlank == false
     }
     
+    // List layout when any item is non-visual (file/audio); a grid reads badly for documents.
+    private var usesListLayout: Bool {
+        timelineItem.content.items.contains { !$0.isImage && !$0.isVideo }
+    }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 8) {
-                GalleryGridView(items: timelineItem.content.items,
-                                mediaProvider: context?.mediaProvider,
-                                contentScannerService: context?.contentScannerService) { _ in
-                    // Tapping to open the full-screen preview lands in a follow-up.
+                if usesListLayout {
+                    GalleryListView(items: timelineItem.content.items,
+                                    mediaProvider: context?.mediaProvider,
+                                    contentScannerService: context?.contentScannerService) { _ in
+                        // Tapping to open the full-screen preview lands in a follow-up.
+                    }
+                } else {
+                    GalleryGridView(items: timelineItem.content.items,
+                                    mediaProvider: context?.mediaProvider,
+                                    contentScannerService: context?.contentScannerService) { _ in
+                        // Tapping to open the full-screen preview lands in a follow-up.
+                    }
                 }
                 
                 if hasMediaCaption {
+                    if usesListLayout {
+                        GalleryDivider()
+                    }
                     caption
                 }
             }
@@ -60,12 +76,10 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     // swiftlint:enable force_try
     
     static let mixedScanViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init { source in
-        if source.url == unsafeSource.url {
-            false
-        } else if source.url == scanningSource.url {
-            nil
-        } else {
-            true
+        switch source.url {
+        case .mockMXCUnsafe: false
+        case .mockMXCScanning: nil
+        default: true
         }
     }))
     
@@ -77,6 +91,8 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         makeView(makeItem(itemCount: 5), viewModel).previewDisplayName("5 images")
         makeView(makeItem(itemCount: 9, caption: "A trip to remember 🌅"), viewModel).previewDisplayName("6+ images with caption")
         makeView(makeMixedScanItem(), mixedScanViewModel).previewDisplayName("Mixed content scan")
+        makeView(makeFileListItem(caption: "Quarterly reports"), viewModel).previewDisplayName("File list")
+        makeView(makeMixedScanFileListItem(), mixedScanViewModel).previewDisplayName("Mixed content scan (files)")
     }
     
     static func makeView(_ item: GalleryRoomTimelineItem, _ viewModel: TimelineViewModel) -> some View {
@@ -119,6 +135,45 @@ struct GalleryRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                        canBeRepliedTo: true,
                                        sender: .init(id: "Bob"),
                                        content: .init(body: "Gallery (\(sources.count) items)",
+                                                      caption: "Mixed scan states",
+                                                      items: items),
+                                       properties: .init())
+    }
+    
+    private static func makeFileListItem(caption: String?) -> GalleryRoomTimelineItem {
+        let items: [GalleryItem] = [
+            .mockImage(index: 0, filename: "photo.jpg"),
+            .mockFile(index: 1, filename: "report.pdf"),
+            .mockAudio(index: 2, filename: "meeting.m4a")
+        ]
+        
+        return GalleryRoomTimelineItem(id: .randomEvent,
+                                       timestamp: .mock,
+                                       isOutgoing: false,
+                                       isEditable: false,
+                                       canBeRepliedTo: true,
+                                       sender: .init(id: "Bob"),
+                                       content: .init(body: "Mixed gallery",
+                                                      caption: caption,
+                                                      items: items),
+                                       properties: .init())
+    }
+    
+    private static func makeMixedScanFileListItem() -> GalleryRoomTimelineItem {
+        // Safe/unsafe/scanning rows via the mixed-scan sources.
+        let items: [GalleryItem] = [
+            .mockFile(index: 0, filename: "report.zip", source: safeSource, contentType: .zip),
+            .mockFile(index: 1, filename: "contract.pdf", source: unsafeSource),
+            .mockAudio(index: 2, filename: "meeting.m4a", source: scanningSource)
+        ]
+        
+        return GalleryRoomTimelineItem(id: .randomEvent,
+                                       timestamp: .mock,
+                                       isOutgoing: false,
+                                       isEditable: false,
+                                       canBeRepliedTo: true,
+                                       sender: .init(id: "Bob"),
+                                       content: .init(body: "Files",
                                                       caption: "Mixed scan states",
                                                       items: items),
                                        properties: .init())

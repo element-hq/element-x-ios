@@ -175,4 +175,22 @@ nonisolated extension GalleryItem {
         return .video(id: .mock(index),
                       .init(filename: filename, videoInfo: .mockVideo(duration: duration), thumbnailInfo: thumbnailInfo, blurhash: blurhash, contentType: contentType))
     }
+    
+    static func mockFile(index: Int = 0,
+                         filename: String = "document.pdf",
+                         source: MediaSourceProxy? = nil,
+                         thumbnailSource: MediaSourceProxy? = nil,
+                         contentType: UTType? = .pdf) -> GalleryItem {
+        .file(id: .mock(index),
+              .init(filename: filename, source: source, fileSize: nil, thumbnailSource: thumbnailSource, contentType: contentType))
+    }
+    
+    static func mockAudio(index: Int = 0,
+                          filename: String = "audio.m4a",
+                          source: MediaSourceProxy? = nil,
+                          duration: TimeInterval = 65,
+                          contentType: UTType? = .mpeg4Audio) -> GalleryItem {
+        .audio(id: .mock(index),
+               .init(filename: filename, duration: duration, waveform: nil, source: source, fileSize: nil, contentType: contentType))
+    }
 }

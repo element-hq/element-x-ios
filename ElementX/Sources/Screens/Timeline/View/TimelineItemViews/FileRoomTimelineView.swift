@@ -102,21 +102,32 @@ struct MediaFileRoomTimelineContent: View {
             .foregroundStyle(.compound.textPrimary)
             .lineLimit(2)
         } icon: {
-            Group {
-                if isScanning {
-                    ProgressView()
-                        .scaledFrame(size: CompoundIcon.Size.medium.value, relativeTo: .body)
-                } else {
-                    CompoundIcon(icon, size: .medium, relativeTo: .body)
-                        .foregroundColor(.compound.iconPrimary)
-                }
-            }
-            .scaledPadding(6)
-            .background(.compound.iconOnSolidPrimary,
-                        in: RoundedRectangle(cornerRadius: 4, style: .continuous))
+            FileTypeIconView(icon: icon, isScanning: isScanning)
         }
         .labelStyle(.custom(spacing: 8, alignment: .center))
         .padding(.horizontal, 4) // Add to the styler's padding of 8, as we use the default insets for the caption.
+    }
+}
+
+/// The rounded icon badge used as the leading accessory of a file/audio row, either showing the
+/// file-type icon or a scanning spinner.
+struct FileTypeIconView: View {
+    let icon: KeyPath<CompoundIcons, Image>
+    var isScanning = false
+    
+    var body: some View {
+        Group {
+            if isScanning {
+                ProgressView()
+                    .scaledFrame(size: CompoundIcon.Size.medium.value, relativeTo: .body)
+            } else {
+                CompoundIcon(icon, size: .medium, relativeTo: .body)
+                    .foregroundColor(.compound.iconPrimary)
+            }
+        }
+        .scaledPadding(6)
+        .background(.compound.iconOnSolidPrimary,
+                    in: RoundedRectangle(cornerRadius: 4, style: .continuous))
     }
 }
 
