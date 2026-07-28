@@ -81,66 +81,12 @@ struct SearchScreenMessage: Identifiable, Equatable {
     }
     
     var preview: AttributedString? {
-        guard let messageBody else { return nil }
+        guard let messageBody = content.searchPreviewBody else { return nil }
         return AttributedString("\(senderName): ") + messageBody
     }
     
-    private var messageBody: AttributedString? {
-        switch content {
-        case .message(let content):
-            switch content {
-            case .text(let content):
-                content.formattedBody ?? AttributedString(content.body)
-            case .notice(let content):
-                content.formattedBody ?? AttributedString(content.body)
-            case .emote(let content):
-                content.formattedBody ?? AttributedString(content.body)
-            case .audio, .file, .image, .video, .gallery:
-                nil
-            case .voice:
-                AttributedString(L10n.commonVoiceMessage)
-            case .location:
-                AttributedString(L10n.commonSharedLocation)
-            }
-        case .poll(let question):
-            AttributedString(question)
-        case .liveLocation:
-            AttributedString(L10n.commonSharedLiveLocation)
-        case .redacted:
-            AttributedString(L10n.commonMessageRemoved)
-        }
-    }
-    
     var mediaPreview: SearchScreenMediaPreview? {
-        guard case .message(let content) = content else { return nil }
-        switch content {
-        case .file(let content):
-            return .init(title: content.caption ?? content.filename,
-                         details: mediaDetails(filename: content.filename, fileSize: content.fileSize),
-                         kind: .file)
-        case .audio(let content):
-            return .init(title: content.caption ?? content.filename,
-                         details: mediaDetails(filename: content.filename, fileSize: content.fileSize),
-                         kind: .audio)
-        case .image(let content):
-            return .init(title: content.caption ?? content.filename,
-                         details: mediaDetails(filename: content.filename, fileSize: content.imageInfo.fileSize),
-                         kind: .image(thumbnail: content.thumbnailInfo ?? content.imageInfo, blurhash: content.blurhash))
-        case .video(let content):
-            return .init(title: content.caption ?? content.filename,
-                         details: mediaDetails(filename: content.filename, fileSize: content.videoInfo.fileSize),
-                         kind: .video(thumbnail: content.thumbnailInfo, blurhash: content.blurhash))
-        case .text, .notice, .emote, .voice, .location, .gallery:
-            return nil
-        }
-    }
-    
-    private func mediaDetails(filename: String, fileSize: UInt?) -> String {
-        var details = filename.validatedFileExtension.uppercased()
-        if let fileSize {
-            details += " (\(fileSize.formatted(.byteCount(style: .file))))"
-        }
-        return details
+        content.searchMediaPreview
     }
 }
 
@@ -155,4 +101,40 @@ struct SearchScreenMediaPreview: Equatable {
     let title: String
     let details: String
     let kind: Kind
+}
+
+extension TimelineEventContent {
+    /// A media-preview descriptor for image/video/audio/file search hits.
+    /// `nil` for text-like content, which renders `searchPreviewBody` instead.
+    var searchMediaPreview: SearchScreenMediaPreview? {
+        guard case .message(let content) = self else { return nil }
+        switch content {
+        case .file(let content):
+            return .init(title: content.caption ?? content.filename,
+                         details: Self.searchMediaDetails(filename: content.filename, fileSize: content.fileSize),
+                         kind: .file)
+        case .audio(let content):
+            return .init(title: content.caption ?? content.filename,
+                         details: Self.searchMediaDetails(filename: content.filename, fileSize: content.fileSize),
+                         kind: .audio)
+        case .image(let content):
+            return .init(title: content.caption ?? content.filename,
+                         details: Self.searchMediaDetails(filename: content.filename, fileSize: content.imageInfo.fileSize),
+                         kind: .image(thumbnail: content.thumbnailInfo ?? content.imageInfo, blurhash: content.blurhash))
+        case .video(let content):
+            return .init(title: content.caption ?? content.filename,
+                         details: Self.searchMediaDetails(filename: content.filename, fileSize: content.videoInfo.fileSize),
+                         kind: .video(thumbnail: content.thumbnailInfo, blurhash: content.blurhash))
+        case .text, .notice, .emote, .voice, .location, .gallery:
+            return nil
+        }
+    }
+    
+    private static func searchMediaDetails(filename: String, fileSize: UInt?) -> String {
+        var details = filename.validatedFileExtension.uppercased()
+        if let fileSize {
+            details += " (\(fileSize.formatted(.byteCount(style: .file))))"
+        }
+        return details
+    }
 }

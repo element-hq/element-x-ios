@@ -116,6 +116,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayRoom(roomID: successorID, via: Array(serverNames)))
         case .displayThreadList:
             actionsSubject.send(.displayThreadList)
+        case .displayMessageSearch:
+            actionsSubject.send(.displayMessageSearch)
         case .tappedStopLiveLocation:
             actionsSubject.send(.stopLiveLocationSharing)
         case .tappedOpenLiveLocation:
@@ -165,6 +167,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
         appSettings.roomThreadListEnabledPublisher
             .weakAssign(to: \.state.roomThreadListEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.roomMessageSearchEnabledPublisher
+            .weakAssign(to: \.state.canSearchMessages, on: self)
             .store(in: &cancellables)
         
         appSettings.liveLocationSharingSessionsByRoomIDPublisher

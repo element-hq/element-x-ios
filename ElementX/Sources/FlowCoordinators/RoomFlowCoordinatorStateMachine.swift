@@ -48,6 +48,7 @@ extension RoomFlowCoordinator {
         case joinRoomScreen
         case room
         case threadList
+        case messageSearch
         case thread(threadRootEventID: String, previousState: State)
         case roomDetails(isRoot: Bool)
         case roomDetailsEditScreen
@@ -106,6 +107,9 @@ extension RoomFlowCoordinator {
         
         case presentThreadList
         case dismissThreadList
+        
+        case presentMessageSearch
+        case dismissMessageSearch
         
         case startSpaceFlow
         case finishedSpaceFlow
@@ -236,6 +240,14 @@ extension RoomFlowCoordinator {
                 return .room
             case (.threadList, .presentThread(let threadRootEventID, _)):
                 return .thread(threadRootEventID: threadRootEventID, previousState: fromState)
+                
+            // Message Search
+            // Note: no `(.messageSearch, .presentRoom)` mapping — the `(_, .presentRoom)` wildcard
+            // at the top of this switch already routes a result tap back to `.room`.
+            case (.room, .presentMessageSearch):
+                return .messageSearch
+            case (.messageSearch, .dismissMessageSearch):
+                return .room
                 
             // Thread
             case (.room, .presentThread(let threadRootEventID, _)):

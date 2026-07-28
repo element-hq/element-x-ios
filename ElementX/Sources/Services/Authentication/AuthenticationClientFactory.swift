@@ -41,6 +41,8 @@ struct AuthenticationClientFactory: AuthenticationClientFactoryProtocol {
                          threadsEnabled: appSettings.threadsEnabled)
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
                 .passphrase(passphrase: passphrase))
+            .withSearchIndexStore(path: sessionDirectories.dataPath,
+                                  password: passphrase)
             .serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress)
             .build()
     }

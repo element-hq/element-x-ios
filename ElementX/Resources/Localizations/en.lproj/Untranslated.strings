@@ -1,4 +1,6 @@
 "screen_home_tab_search" = "Search";
+"screen_message_search_error" = "Something went wrong while searching. Please try again.";
+"screen_message_search_title" = "Search messages";
 "screen_search_empty_state_message" = "Search for chats and messages";
 "screen_search_empty_state_title" = "Start searching...";
 "screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";

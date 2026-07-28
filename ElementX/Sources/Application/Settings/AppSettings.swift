@@ -427,6 +427,11 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var galleryEnabled: Bool
     
+    /// Adds a search button to the room screen that searches the local message index,
+    /// scoped to that room. The index itself is always attached; this only gates the entry point.
+    @UserPreference(defaultValue: false)
+    var roomMessageSearchEnabled: Bool
+    
     @UserPreference(defaultValue: false)
     var jumpToReadMarkerEnabled: Bool
     

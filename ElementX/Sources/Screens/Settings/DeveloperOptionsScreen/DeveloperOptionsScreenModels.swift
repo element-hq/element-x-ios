@@ -69,6 +69,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     
     var galleryEnabled: Bool { get set }
     
+    var roomMessageSearchEnabled: Bool { get set }
+    
     var jumpToReadMarkerEnabled: Bool { get set }
     
     var linkNewDeviceEnabled: Bool { get set }

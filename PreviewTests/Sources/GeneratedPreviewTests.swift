@@ -1013,6 +1013,13 @@ extension PreviewTests {
     }
 
     @Test
+    func roomMessageSearchScreen() async throws {
+        for (index, preview) in RoomMessageSearchScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func roomNotificationSettingsCustomSectionView() async throws {
         for (index, preview) in RoomNotificationSettingsCustomSectionView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

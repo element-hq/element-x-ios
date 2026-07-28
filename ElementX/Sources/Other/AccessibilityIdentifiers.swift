@@ -165,6 +165,7 @@ enum A11yIdentifiers {
         
         let messageComposer = "room-message_composer"
         let sendButton = "room-send_button"
+        let messageSearch = "room-message_search"
         
         let composerToolbar = ComposerToolbar()
         

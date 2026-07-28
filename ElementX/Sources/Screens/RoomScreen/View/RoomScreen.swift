@@ -320,6 +320,22 @@ struct RoomScreen: View {
                 }
             }
         }
+        
+        if context.viewState.canSearchMessages {
+            if #available(iOS 26, *) {
+                ToolbarSpacer(.fixed, placement: .primaryAction)
+            }
+            
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    context.send(viewAction: .displayMessageSearch)
+                } label: {
+                    CompoundIcon(\.search)
+                }
+                .accessibilityLabel(L10n.actionSearch)
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.messageSearch)
+            }
+        }
     }
 }
 

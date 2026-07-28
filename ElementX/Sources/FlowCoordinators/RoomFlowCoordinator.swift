@@ -406,6 +406,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.room, .presentThreadList, .threadList):
                 Task { await self.presentThreadList(animated: animated) }
                 
+            // Message Search
+            // A result tap fires `.presentRoom`, handled by the `(_, .presentRoom, .room)` case
+            // above (pops back and focuses the event) — no dedicated handler needed here.
+            case (.room, .presentMessageSearch, .messageSearch):
+                presentMessageSearch(animated: animated)
+                
             // Thread
                 
             case (_, .presentThread(let threadRootEventID, let focusEventID), .thread):
@@ -736,6 +742,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
                 case .presentThreadList:
                     stateMachine.tryEvent(.presentThreadList, userInfo: EventUserInfo(animated: animated))
+                case .presentMessageSearch:
+                    stateMachine.tryEvent(.presentMessageSearch, userInfo: EventUserInfo(animated: animated))
                 case .presentThread(let threadRootEventID, let focussedEventID):
                     stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focussedEventID))
                 case .presentRoom(let roomID, let via):
@@ -764,6 +772,32 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             guard let self else { return }
             stateMachine.tryEvent(.dismissThreadList)
+        }
+    }
+    
+    private func presentMessageSearch(animated: Bool) {
+        let coordinator = RoomMessageSearchScreenCoordinator(parameters: .init(searchService: userSession.clientProxy.makeSearchService(roomID: roomProxy.id),
+                                                                               userID: userSession.clientProxy.userID,
+                                                                               mediaProvider: userSession.mediaProvider))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .presentEvent(let eventID):
+                // Pop the search screen first — its dismissal callback transitions the state machine
+                // back to `.room` — then focus the event in the room timeline, mirroring
+                // MediaEventsTimelineFlowCoordinator's "view in timeline". Going through `.presentRoom`
+                // instead runs while that dismissal is still pending, which in a child flow leaves the
+                // search screen on the stack (pushing a duplicate room) and otherwise logs a spurious
+                // equal-states transition error.
+                navigationStackCoordinator.pop(animated: false)
+                roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
+            }
+        }.store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
+            guard let self else { return }
+            stateMachine.tryEvent(.dismissMessageSearch)
         }
     }
     

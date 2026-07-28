@@ -12,6 +12,10 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Something went wrong while searching. Please try again.
+  internal static var screenMessageSearchError: String { return UntranslatedL10n.tr("Untranslated", "screen_message_search_error") }
+  /// Search messages
+  internal static var screenMessageSearchTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_message_search_title") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...
