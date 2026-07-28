@@ -1,3 +1,69 @@
+## Changes in 26.08.0 (2026-07-28)
+
+### What's Changed
+
+✨ Features
+* Add support for active call item rendering in timeline by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/5775
+* Add content scanner to the NSE Client by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5926
+* Render image and video in galleries as a grid by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5929
+* Render galleries with non-visual attachments as a list by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5932
+* Open a full-screen preview when tapping a gallery item by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5936
+
+🙌 Improvements
+* Report user presence on app lifecycle transitions by @lhjt in https://github.com/element-hq/element-x-ios/pull/5838
+* Content scanner also checks for thumbnails by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5911
+* Remove the requiresExtraAccountSetup badge. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5921
+* Implements push notifications for LLS via MSC4505 by @ara4n in https://github.com/element-hq/element-x-ios/pull/5872
+
+🐛 Bugfixes
+* Enable client pausing and resuming for all builds by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5904
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5901
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5931
+
+🧱 Build
+* Re-run xcodegen. by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5907
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5937
+
+📄 Documentation
+* Group Element Pro changes into a dedicated release notes section by @manuroe in https://github.com/element-hq/element-x-ios/pull/5899
+
+🚧 In development 🚧
+* Add the UI for your own user status in the Settings screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5888
+* Support sending gallery messages behind a feature flag by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5909
+* Update the SDK and hook up the status from Room Heroes. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5905
+* Hook up the emoji picker to the custom status row. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5902
+* Search tab tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5910
+* Add support for showing the user's own status over their avatar on the app's Settings button. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5912
+* Add a warning to the Link New Device instructions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5916
+* Add the gallery timeline item rendered as a placeholder by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5928
+* Gate user status behind server support as well as the feature flag. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5920
+
+Others
+* Update dependency pointfreeco/swift-snapshot-testing to v1.19.3 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5892
+* Update enterprise by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5894
+* Update dependency Sentry to v9.21.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5891
+* Update actions/stale action to v10.4.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5898
+* Several small, independent accessibility fixes (VoiceOver labels/traits, contrast) by @unclejay80 in https://github.com/element-hq/element-x-ios/pull/5890
+* Periphery cleanup by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5893
+* Various project warning fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5908
+* Add signed in flag to the developer options screen hook by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5914
+* Update zizmorcore/zizmor-action action to v0.6.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5917
+* Update SDK to 26.07.22 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5919
+* Small tweaks to the Presence feature. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5918
+* Fix call timeline item snapshots. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5923
+* Bump the RustSDK to v26.07.23 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5925
+* Update actions/checkout action to v7.0.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5935
+* Add an `oAuthClientURIPath` option to AppSettings. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5934
+* update sdk to 26-7-28 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5938
+
+### New Contributors
+* @unclejay80 made their first contribution in https://github.com/element-hq/element-x-ios/pull/5890
+* @lhjt made their first contribution in https://github.com/element-hq/element-x-ios/pull/5838
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.07.4...release/26.08.0
+
 ## Changes in 26.07.4 (2026-07-15)
 
 ### What's Changed
