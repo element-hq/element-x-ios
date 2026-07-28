@@ -94,9 +94,106 @@ struct SessionDirectoriesTests {
         // The tests are done, tidy up these useless directories 🧹
         sessionDirectories.delete()
     }
+    
+    @Test
+    func deleteEventCacheData() throws {
+        // Given a set of session directories with all of the databases, plus something in the caches
+        // directory that isn't the event cache — without it, dropping the prefix filter and wiping the
+        // whole directory would still pass.
+        let sessionDirectories = try SessionDirectories.makeForTesting()
+        sessionDirectories.generateMockData()
+        let bystanderPath = sessionDirectories.cacheDirectory.appending(component: "media.sqlite3").path(percentEncoded: false)
+        fileManager.createFile(atPath: bystanderPath, contents: nil)
+        
+        // When deleting the event cache data.
+        try sessionDirectories.deleteEventCacheData()
+        
+        // Then the event cache and its sidecars should be gone, and every other store left alone.
+        #expect(fileManager.fileExists(atPath: bystanderPath))
+        #expect(try fileManager.numberOfItems(at: sessionDirectories.cacheDirectory) == 1)
+        #expect(try fileManager.numberOfItems(at: sessionDirectories.dataDirectory) == 6)
+        #expect(fileManager.fileExists(atPath: sessionDirectories.mockStateStorePath))
+        #expect(fileManager.fileExists(atPath: sessionDirectories.mockCryptoStorePath))
+        
+        sessionDirectories.delete()
+    }
+    
+    @Test
+    func deleteEventCacheDataWithoutACachesDirectory() throws {
+        // Given a session whose caches directory has never been created.
+        let sessionDirectories = SessionDirectories()
+        try fileManager.createDirectory(at: sessionDirectories.dataDirectory, withIntermediateDirectories: true)
+        #expect(!fileManager.directoryExists(at: sessionDirectories.cacheDirectory))
+        
+        // When deleting the event cache data, then it should succeed rather than throw, otherwise a
+        // session with nothing to delete could never be recorded as covered.
+        #expect(throws: Never.self) {
+            try sessionDirectories.deleteEventCacheData()
+        }
+        
+        sessionDirectories.delete()
+    }
+    
+    @Test
+    func eventCacheStoreDetection() throws {
+        // Given a session with empty directories.
+        let sessionDirectories = try SessionDirectories.makeForTesting()
+        #expect(!sessionDirectories.hasEventCacheStore)
+        
+        // When the event cache store is created.
+        sessionDirectories.generateMockData()
+        
+        // Then it should be detected.
+        #expect(sessionDirectories.hasEventCacheStore)
+        
+        sessionDirectories.delete()
+    }
+    
+    @Test
+    func searchIndexCoverageMarker() throws {
+        // Given a session that has never had its coverage recorded.
+        let sessionDirectories = try SessionDirectories.makeForTesting()
+        #expect(!sessionDirectories.hasSearchIndexCoverageMarker)
+        
+        // When writing the marker.
+        try sessionDirectories.writeSearchIndexCoverageMarker()
+        
+        // Then it should be readable back, and writing it again shouldn't throw.
+        #expect(sessionDirectories.hasSearchIndexCoverageMarker)
+        #expect(throws: Never.self) {
+            try sessionDirectories.writeSearchIndexCoverageMarker()
+        }
+        
+        sessionDirectories.delete()
+    }
+    
+    @Test
+    func searchIndexCoverageMarkerSurvivesClearingTheCaches() throws {
+        // Given a session that is recorded as covered.
+        let sessionDirectories = try SessionDirectories.makeForTesting()
+        sessionDirectories.generateMockData()
+        try sessionDirectories.writeSearchIndexCoverageMarker()
+        
+        // When the user clears the caches.
+        sessionDirectories.deleteTransientUserData()
+        
+        // Then the marker should survive: it is named to dodge the prefixes that sweeps, otherwise
+        // clearing the caches would silently re-arm the repair on every launch that followed.
+        #expect(sessionDirectories.hasSearchIndexCoverageMarker)
+        
+        sessionDirectories.delete()
+    }
 }
 
-private extension SessionDirectories {
+extension SessionDirectories {
+    /// Creates a fresh set of session directories on disk for a test to work in.
+    static func makeForTesting() throws -> SessionDirectories {
+        let sessionDirectories = SessionDirectories()
+        try FileManager.default.createDirectory(at: sessionDirectories.dataDirectory, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: sessionDirectories.cacheDirectory, withIntermediateDirectories: true)
+        return sessionDirectories
+    }
+    
     var mockStateStorePath: String {
         dataDirectory.appending(component: "matrix-sdk-state.sqlite3").path(percentEncoded: false)
     }

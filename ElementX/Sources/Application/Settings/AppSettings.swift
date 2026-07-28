@@ -460,6 +460,16 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var searchBackfillEnabled: Bool
     
+    /// Deletes a session's event cache store once, when the search index cannot be shown to have seen
+    /// what that cache holds, so the history re-enters over the network — the only path the indexer
+    /// observes.
+    ///
+    /// Off by default because it is destructive and costs a one-off re-download of room history. The
+    /// non-destructive half of the bookkeeping runs regardless, so turning this on later still repairs
+    /// exactly the sessions that need it.
+    @UserPreference(defaultValue: false)
+    var searchIndexCoverageHealEnabled: Bool
+    
     @UserPreference(defaultValue: AppBuildType.current != .release)
     var developerOptionsEnabled: Bool
     

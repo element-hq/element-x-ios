@@ -20,6 +20,9 @@ nonisolated struct SessionDirectories: Hashable, Codable {
         cacheDirectory.path(percentEncoded: false)
     }
     
+    /// The file name prefix shared by the event cache store and its write-ahead log sidecars.
+    private static let eventCacheStorePrefix = "matrix-sdk-event-cache"
+    
     // MARK: Data Management
     
     /// Removes the directories from disk if they have been created.
@@ -50,11 +53,62 @@ nonisolated struct SessionDirectories: Hashable, Codable {
             MXLog.failure("Failed clearing state store: \(error)")
         }
         do {
-            let prefix = "matrix-sdk-event-cache"
-            try deleteFiles(at: cacheDirectory, with: prefix)
+            try deleteFiles(at: cacheDirectory, with: Self.eventCacheStorePrefix)
         } catch {
             MXLog.failure("Failed clearing event cache store: \(error)")
         }
+    }
+    
+    /// Deletes the Rust event cache store and its write-ahead log sidecars, leaving every other store
+    /// in place — including the state store, which `deleteTransientUserData()` also clears.
+    ///
+    /// Throws rather than logging, because the caller has to know: a search index coverage marker
+    /// written over a failed deletion would claim coverage that doesn't exist.
+    func deleteEventCacheData() throws {
+        guard FileManager.default.directoryExists(at: cacheDirectory) else { return }
+        
+        let storeFiles = try FileManager.default.contentsOfDirectory(at: cacheDirectory, includingPropertiesForKeys: nil)
+            .filter { $0.lastPathComponent.hasPrefix(Self.eventCacheStorePrefix) }
+        
+        // Sidecars first, so an interrupted deletion leaves a merely stale database behind rather than
+        // a fresh one next to a replayable write-ahead log.
+        for url in storeFiles.filter(\.isSQLiteSidecar) + storeFiles.filter({ !$0.isSQLiteSidecar }) {
+            try FileManager.default.removeItem(at: url)
+        }
+    }
+    
+    // MARK: Search Index Coverage
+    
+    /// Whether the event cache store has been created yet. A session without one cannot be holding
+    /// history that the search index failed to see.
+    ///
+    /// Matches exactly what `deleteEventCacheData()` deletes, so that an interrupted deletion — which
+    /// leaves the sidecars behind by design — still reads as a store to be swept rather than as a
+    /// session with nothing to repair.
+    var hasEventCacheStore: Bool {
+        guard let contents = try? FileManager.default.contentsOfDirectory(atPath: cachePath) else { return false }
+        return contents.contains { $0.hasPrefix(Self.eventCacheStorePrefix) }
+    }
+    
+    /// Whether the search index has been recorded as covering everything the event cache holds.
+    var hasSearchIndexCoverageMarker: Bool {
+        FileManager.default.fileExists(atPath: searchIndexCoverageMarkerURL.path(percentEncoded: false))
+    }
+    
+    /// Records that the search index covers everything the event cache holds.
+    func writeSearchIndexCoverageMarker() throws {
+        // Accessible after first unlock, matching the other files the app writes here, so that a
+        // background launch can read it while the device is locked.
+        try Data().write(to: searchIndexCoverageMarkerURL, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
+    }
+    
+    /// An empty marker file, sibling of the SDK's index rather than inside it — the SDK owns that layout.
+    ///
+    /// The name deliberately matches neither `matrix-sdk-state` nor `matrix-sdk-event-cache`, the
+    /// prefixes `deleteTransientUserData()` sweeps: a marker caught by those would silently re-arm the
+    /// heal every time the user cleared the cache.
+    private var searchIndexCoverageMarkerURL: URL {
+        dataDirectory.appending(component: "search-index.covered")
     }
     
     /// Check that mission critical files (the crypto db) are still in the right place when restoring a session
@@ -91,5 +145,12 @@ nonisolated extension SessionDirectories {
 nonisolated extension SessionDirectories: CustomStringConvertible {
     var description: String {
         "Data: \(dataPath) Caches: \(cachePath)"
+    }
+}
+
+private nonisolated extension URL {
+    /// Whether this is one of SQLite's auxiliary files rather than the database itself.
+    var isSQLiteSidecar: Bool {
+        lastPathComponent.hasSuffix("-wal") || lastPathComponent.hasSuffix("-shm")
     }
 }

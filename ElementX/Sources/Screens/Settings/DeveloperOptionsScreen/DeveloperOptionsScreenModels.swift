@@ -71,6 +71,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     
     var roomMessageSearchEnabled: Bool { get set }
     var searchBackfillEnabled: Bool { get set }
+    var searchIndexCoverageHealEnabled: Bool { get set }
     
     var jumpToReadMarkerEnabled: Bool { get set }
     

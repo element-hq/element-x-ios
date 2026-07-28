@@ -1131,6 +1131,7 @@
 		B46727C9A79D8D846FF17C45 /* SpaceAddRoomsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FCAA90142DFBFA1E3E4216 /* SpaceAddRoomsScreenCoordinator.swift */; };
 		B47213F07A67CE3A8D49CEC9 /* TimelineControllerFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC1E3FE9B59EA094867863E /* TimelineControllerFactoryProtocol.swift */; };
 		B4A0C69370E6008A971463E7 /* BugReportScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C89820BB2B88D4EA28131C /* BugReportScreenViewModelProtocol.swift */; };
+		B4A36C91AEC82147ADCCBF6F /* SearchIndexCoverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC54E244F1542D542FEEB01 /* SearchIndexCoverageTests.swift */; };
 		B4AAB3257A83B73F53FB2689 /* StateStoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE5B444F131648066F05 /* StateStoreViewModel.swift */; };
 		B5321A1F5B26A0F3EC54909E /* CollapsibleFlowLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5F5209279A752D98AAC4B2 /* CollapsibleFlowLayoutTests.swift */; };
 		B5479997ECC516C121E6625E /* LocationMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFECCE59967018204876D0A5 /* LocationMarkerView.swift */; };
@@ -1548,6 +1549,7 @@
 		F7BC744FFA7FE248FAE7F570 /* UserIndicatorToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57C8022B8A871A1DCD1750A /* UserIndicatorToastView.swift */; };
 		F7D709D7ECABE46641BB8B6B /* PHGPostHogProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEEAE1BFAACD6C96B6DB731 /* PHGPostHogProtocol.swift */; };
 		F7DA19B5122AD8FA8F91B753 /* DeclineAndBlockScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951F277E0585E50AC91987C8 /* DeclineAndBlockScreenViewModelProtocol.swift */; };
+		F8304E54CEBBBBDD054F07E2 /* SearchIndexCoverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA803EE9F1065580A6E02ADE /* SearchIndexCoverage.swift */; };
 		F833D5B5BE6707F961FA88DB /* SecureBackupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1119E9C63AE530252640D2 /* SecureBackupController.swift */; };
 		F86102DC2C68BBBB0521BAAE /* SoftLogoutScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB385E148DE55C85C0A02D6 /* SoftLogoutScreenModels.swift */; };
 		F8B2F5CBCF2A0E0798E8D646 /* TimelineViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5B00A014307CE37B2812CD /* TimelineViewModelProtocol.swift */; };
@@ -2406,6 +2408,7 @@
 		7B3D16709ADD4F4BCC710B1E /* SecureBackupScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupScreenModels.swift; sourceTree = "<group>"; };
 		7B9FCA1CFD07B8CF9BD21266 /* FlowCoordinatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowCoordinatorProtocol.swift; sourceTree = "<group>"; };
 		7BBADF8010C813D905C172CE /* SecurityAndPrivacyScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityAndPrivacyScreenModels.swift; sourceTree = "<group>"; };
+		7BC54E244F1542D542FEEB01 /* SearchIndexCoverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchIndexCoverageTests.swift; sourceTree = "<group>"; };
 		7BD5523BDEDB247E29228476 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		7C1AF829F12FDC99717082D9 /* RoomRolesAndPermissionsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomRolesAndPermissionsScreenViewModel.swift; sourceTree = "<group>"; };
 		7C28B70BEFD3676F11D5D51F /* RoomRolesAndPermissionsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomRolesAndPermissionsScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -3158,6 +3161,7 @@
 		FA723686F23EF45E2B398FBC /* TestablePreviewsDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestablePreviewsDictionary.swift; sourceTree = "<group>"; };
 		FA74F57B0DA3B9A9DD51F691 /* CoordinateAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateAnimator.swift; sourceTree = "<group>"; };
 		FA7BB497B2F539C17E88F6B7 /* NotificationSettingsEditScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsEditScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		FA803EE9F1065580A6E02ADE /* SearchIndexCoverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchIndexCoverage.swift; sourceTree = "<group>"; };
 		FABAC5C4373B0EC24D399663 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/SAS.strings"; sourceTree = "<group>"; };
 		FB7BAD55A4E2B8E5828CD64C /* SoftLogoutScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutScreenViewModel.swift; sourceTree = "<group>"; };
 		FB9CD3A0A39BC063438E12D4 /* ManageAuthorizedSpacesScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageAuthorizedSpacesScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -5190,6 +5194,7 @@
 				35C1558C50053D21BC2B71B8 /* SearchBackfillPlannerTests.swift */,
 				5C168FB00DE5A0D2001F9B3C /* SearchBackfillRunnerTests.swift */,
 				2D3E11766CC1461687BBAB5F /* SearchBackfillStoreTests.swift */,
+				7BC54E244F1542D542FEEB01 /* SearchIndexCoverageTests.swift */,
 				5413213B56FB76C1071E2BFB /* SearchScreenViewModelTests.swift */,
 				A0174C7E1B30E2AB729FF840 /* SearchServiceProxyTests.swift */,
 				848F69921527D31CAACB93AF /* SecureBackupLogoutConfirmationScreenViewModelTests.swift */,
@@ -6450,6 +6455,7 @@
 		BF73FE1790E737263F0F504A /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				FA803EE9F1065580A6E02ADE /* SearchIndexCoverage.swift */,
 				7AD6FFE581238BD30B53BA0A /* SearchServiceProxy.swift */,
 				9F3E4640982CE98C6ADD7896 /* SearchServiceProxyProtocol.swift */,
 				D7DFD5E5CA1F081B59DDCA11 /* String+TantivyEscaping.swift */,
@@ -8227,6 +8233,7 @@
 				0ED3EE9B757D7E7C5185C031 /* SearchBackfillPlannerTests.swift in Sources */,
 				0B5D669B6F25206871212445 /* SearchBackfillRunnerTests.swift in Sources */,
 				F188912591ED005EEFE24E39 /* SearchBackfillStoreTests.swift in Sources */,
+				B4A36C91AEC82147ADCCBF6F /* SearchIndexCoverageTests.swift in Sources */,
 				D69CCEC785E6C819551B402F /* SearchScreenViewModelTests.swift in Sources */,
 				BFFC5974061B4A9CAE32EB80 /* SearchServiceProxyTests.swift in Sources */,
 				EB87DF90CF6F8D5D12404C6E /* SecureBackupLogoutConfirmationScreenViewModelTests.swift in Sources */,
@@ -9155,6 +9162,7 @@
 				8932BEDE4C1221E7AA3E211A /* SearchBackfillRunner.swift in Sources */,
 				54F88415422269102FAEE000 /* SearchBackfillScheduler.swift in Sources */,
 				FAD037EBFF190CF450FC1AE9 /* SearchBackfillStore.swift in Sources */,
+				F8304E54CEBBBBDD054F07E2 /* SearchIndexCoverage.swift in Sources */,
 				2A4B7856611589DD7B1B36CA /* SearchScreen.swift in Sources */,
 				592A5B88471676D6F50B9798 /* SearchScreenCoordinator.swift in Sources */,
 				0CEC693809AF627F3EDFDBE1 /* SearchScreenMediaPreviewView.swift in Sources */,

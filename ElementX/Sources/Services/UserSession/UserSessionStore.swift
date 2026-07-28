@@ -84,6 +84,11 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             MXLog.info("Set up session for user \(userID) at: \(sessionDirectories)")
             
+            // The client this session was built with carries the search index, so its event cache
+            // cannot hold anything the indexer missed. Recording that now is what stops the next
+            // launch from repairing a session that was never broken.
+            await SearchIndexCoverage(sessionDirectories: sessionDirectories).markCoveredByConstruction()
+            
             return await .success(buildUserSessionWithClient(clientProxy, sessionDirectories: sessionDirectories))
         } catch {
             MXLog.error("Failed creating user session with error: \(error)")
@@ -130,6 +135,11 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
+        
+        // Runs before this client is built, so it can't pull the store from under it. An outgoing
+        // client can still be alive on the clear-cache path — the same bounded window as the NSE's.
+        await SearchIndexCoverage(sessionDirectories: credentials.restorationToken.sessionDirectories)
+            .restoreCoverage(isHealEnabled: appSettings.searchIndexCoverageHealEnabled)
         
         let builder = ClientBuilder
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
