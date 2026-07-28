@@ -459,5 +459,14 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func userHasSignedIn(userSession: UserSessionProtocol) {
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
+        
+        // track server in previous servers, maintaining uniqueness and sorting by most recent
+        guard let newServer = userSession.clientProxy.userIDServerName?.lowercased() else { return }
+        var previousServers = appSettings.previousServers
+        previousServers.removeAll { $0 == newServer }
+        
+        previousServers.insert(newServer, at: 0)
+        
+        appSettings.previousServers = previousServers
     }
 }

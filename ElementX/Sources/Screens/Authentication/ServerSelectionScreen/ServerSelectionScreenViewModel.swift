@@ -18,7 +18,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     /// Debounces autocompletion from user input
-    private var debouncedKeystrokeTask: Task<Void, Never>?
+    private var debouncedAutocompleteTask: Task<Void, Never>?
     
     private var actionsSubject: PassthroughSubject<ServerSelectionScreenViewModelAction, Never> = .init()
     
@@ -195,13 +195,6 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         withElementAnimation { state.footerErrorMessage = nil }
     }
     
-    /// temporary, sample matches for user server input
-    private let matches = [
-        "matrix.org",
-        "foo.bar",
-        "elemental.codes"
-    ]
-    
     /// Given the textfield's complete text from the user's latest keystroke, evaluate if it matches any historical
     /// server prefixes. If there's a match, update the text value with the complete server, highlighting the portion
     /// that was appended.
@@ -209,20 +202,22 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         let new = userProvidedString
         let lowerNew = new.lowercased()
         
+        let matches = appSettings.previousServers.isEmpty ? appSettings.accountProviders : appSettings.previousServers
+        
         guard
             lowerNew.isEmpty == false,
             let expectedMatch = matches.first(where: { $0.hasPrefix(lowerNew) }),
             lowerNew != expectedMatch
         else { return }
         
-        let appendage = expectedMatch[lowerNew.endIndex..<expectedMatch.endIndex]
+        let appendage = expectedMatch.dropFirst(new.count)
         let newInput = "\(new)\(appendage)"
         
         let selectionRange = newInput.index(newInput.startIndex, offsetBy: new.count)..<newInput.endIndex
         
         // debounce a delay to assure that we are not in the same swiftui update cycle
-        debouncedKeystrokeTask?.cancel()
-        debouncedKeystrokeTask = Task { @MainActor in
+        debouncedAutocompleteTask?.cancel()
+        debouncedAutocompleteTask = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(10))
             guard Task.isCancelled == false else { return }
             context.homeserverAddress = newInput

@@ -181,6 +181,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: AppAppearance.system)
     var appAppearance: AppAppearance
     
+    /// Tracks previous servers the user connected to for autocompletion purposes. The matching algorithm requires that all entries remain lowercased.
+    @UserPreference(defaultValue: [])
+    var previousServers: [String]
+    
     // MARK: - Security
     
     /// The app must be locked with a PIN code as part of the authentication flow.
