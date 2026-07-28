@@ -51,7 +51,7 @@ struct ServerSelectionScreen: View {
         VStack(alignment: .leading, spacing: 24) {
             switch context.viewState.mode {
             case .userInput:
-                TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
+                TextField(L10n.commonServerUrl, text: $context.homeserverAddress, selection: $context.homeserverSelection)
                     .textFieldStyle(.compound(labelText: Text(UntranslatedL10n.screenSelectServerTextfieldHeader),
                                               footerText: Text(context.viewState.footerMessage),
                                               state: context.viewState.isShowingFooterError ? .error : .default,
@@ -59,6 +59,9 @@ struct ServerSelectionScreen: View {
                     .keyboardType(.URL)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
+                    .introspect(.textField, on: .supportedVersions) {
+                        context.send(viewAction: .updateTextField($0))
+                    }
                     .onChange(of: context.homeserverAddress) { context.send(viewAction: .clearFooterError) }
                     .submitLabel(.done)
                     .onSubmit(submit)

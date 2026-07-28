@@ -17,6 +17,9 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    /// Debounces autocompletion from user input
+    private var debouncedKeystrokeTask: Task<Void, Never>?
+    
     private var actionsSubject: PassthroughSubject<ServerSelectionScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<ServerSelectionScreenViewModelAction, Never> {
@@ -41,6 +44,12 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         }
         let bindings = ServerSelectionScreenBindings(homeserverAddress: homeserverAddress)
         super.init(initialViewState: ServerSelectionScreenViewState(mode: mode, authenticationFlow: authenticationFlow, bindings: bindings))
+        
+        context.viewState.adapter.keystrokePublisher
+            .sink { [weak self] in
+                self?.didUpdateTextFromKeystroke(userProvidedString: $0)
+            }
+            .store(in: &cancellables)
     }
     
     override func process(viewAction: ServerSelectionScreenViewAction) {
@@ -48,6 +57,9 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         case .updateWindow(let window):
             guard state.window != window else { return } // stop the infinite loop
             state.window = window
+        case .updateTextField(let textField):
+            guard state.textField != textField else { return } // stop the infinite loop
+            state.textField = textField
         case .confirm:
             switch state.mode {
             case .userInput:
@@ -181,5 +193,41 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     private func clearFooterError() {
         guard state.footerErrorMessage != nil else { return }
         withElementAnimation { state.footerErrorMessage = nil }
+    }
+    
+    /// temporary, sample matches for user server input
+    private let matches = [
+        "matrix.org",
+        "foo.bar",
+        "elemental.codes"
+    ]
+    
+    /// Given the textfield's complete text from the user's latest keystroke, evaluate if it matches any historical
+    /// server prefixes. If there's a match, update the text value with the complete server, highlighting the portion
+    /// that was appended.
+    private func didUpdateTextFromKeystroke(userProvidedString: String) {
+        let new = userProvidedString
+        let lowerNew = new.lowercased()
+        
+        guard
+            lowerNew.isEmpty == false,
+            let expectedMatch = matches.first(where: { $0.hasPrefix(lowerNew) }),
+            lowerNew != expectedMatch
+        else { return }
+        
+        let appendage = expectedMatch[lowerNew.endIndex..<expectedMatch.endIndex]
+        let newInput = "\(new)\(appendage)"
+        
+        let selectionRange = newInput.index(newInput.startIndex, offsetBy: new.count)..<newInput.endIndex
+        
+        // debounce a delay to assure that we are not in the same swiftui update cycle
+        debouncedKeystrokeTask?.cancel()
+        debouncedKeystrokeTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(10))
+            guard Task.isCancelled == false else { return }
+            context.homeserverAddress = newInput
+            context.viewState.textField?.text = newInput
+            context.homeserverSelection = TextSelection(range: selectionRange)
+        }
     }
 }

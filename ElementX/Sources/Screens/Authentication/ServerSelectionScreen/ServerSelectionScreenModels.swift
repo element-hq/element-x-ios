@@ -35,6 +35,15 @@ struct ServerSelectionScreenViewState: BindableState {
     /// View state that can be bound to from SwiftUI.
     var bindings: ServerSelectionScreenBindings
     
+    /// Upon introspection, this is the UITextField backing the TextField for server input
+    var textField: UITextField? {
+        get { adapter.textField }
+        set { adapter.textField = newValue }
+    }
+    
+    /// Adapts the text field for custom functionality beyond what's available in SwiftUI
+    let adapter = TextFieldAdapter()
+    
     /// The header text for the screen
     var screenHeader: String {
         switch authenticationFlow {
@@ -82,6 +91,9 @@ struct ServerSelectionScreenViewState: BindableState {
 struct ServerSelectionScreenBindings {
     /// The homeserver address input or chosen by the user.
     var homeserverAddress: String
+    /// The selection range in `homeserverAddress`
+    var homeserverSelection: TextSelection?
+    
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<ServerSelectionScreenErrorType>?
 }
@@ -89,6 +101,8 @@ struct ServerSelectionScreenBindings {
 enum ServerSelectionScreenViewAction {
     /// Updates the window used as the OAuth presentation anchor.
     case updateWindow(UIWindow)
+    /// Updates the textfield from introspection
+    case updateTextField(UITextField)
     /// The user would like to use the homeserver at the input address.
     case confirm
     /// Dismiss the view without using the entered address.
