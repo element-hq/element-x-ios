@@ -216,13 +216,6 @@ enum TimelineMediaPreviewItem: Equatable {
             }
         }
         
-        var galleryItem: GalleryItem? {
-            switch content {
-            case .timelineItem: nil
-            case .galleryItem(_, let item): item
-            }
-        }
-        
         var fileHandle: MediaFileHandleProxy? {
             didSet { updatePreviewItemValues() }
         }
@@ -299,55 +292,63 @@ enum TimelineMediaPreviewItem: Equatable {
         enum Kind { case image, video, file }
         
         var kind: Kind {
-            if let galleryItem {
-                switch galleryItem {
-                case .image: return .image
-                case .video: return .video
-                case .audio, .file, .other: return .file
+            switch content {
+            case .galleryItem(_, let item):
+                switch item {
+                case .image: .image
+                case .video: .video
+                case .audio, .file, .other: .file
                 }
-            }
-            return switch timelineItem {
-            case is ImageRoomTimelineItem: .image
-            case is VideoRoomTimelineItem: .video
-            default: .file
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case is ImageRoomTimelineItem: .image
+                case is VideoRoomTimelineItem: .video
+                default: .file
+                }
             }
         }
         
         var mediaSource: MediaSourceProxy? {
-            if let galleryItem {
-                return galleryItem.mediaSource
-            }
-            return switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem: audioItem.content.source
-            case let fileItem as FileRoomTimelineItem: fileItem.content.source
-            case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.source
-            case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.source
-            default: nil
+            switch content {
+            case .galleryItem(_, let item):
+                item.mediaSource
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let audioItem as AudioRoomTimelineItem: audioItem.content.source
+                case let fileItem as FileRoomTimelineItem: fileItem.content.source
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.source
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.source
+                default: nil
+                }
             }
         }
         
         var thumbnailMediaSource: MediaSourceProxy? {
-            if let galleryItem {
-                return galleryItem.thumbnailSource
-            }
-            return switch timelineItem {
-            case let fileItem as FileRoomTimelineItem: fileItem.content.thumbnailSource
-            case let imageItem as ImageRoomTimelineItem: imageItem.content.thumbnailInfo?.source
-            case let videoItem as VideoRoomTimelineItem: videoItem.content.thumbnailInfo?.source
-            default: nil
+            switch content {
+            case .galleryItem(_, let item):
+                item.thumbnailSource
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let fileItem as FileRoomTimelineItem: fileItem.content.thumbnailSource
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.thumbnailInfo?.source
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.thumbnailInfo?.source
+                default: nil
+                }
             }
         }
         
         var filename: String? {
-            if let galleryItem {
-                return galleryItem.filename
-            }
-            return switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem: audioItem.content.filename
-            case let fileItem as FileRoomTimelineItem: fileItem.content.filename
-            case let imageItem as ImageRoomTimelineItem: imageItem.content.filename
-            case let videoItem as VideoRoomTimelineItem: videoItem.content.filename
-            default: nil
+            switch content {
+            case .galleryItem(_, let item):
+                item.filename
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let audioItem as AudioRoomTimelineItem: audioItem.content.filename
+                case let fileItem as FileRoomTimelineItem: fileItem.content.filename
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.filename
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.filename
+                default: nil
+                }
             }
         }
         
@@ -356,15 +357,17 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         private var expectedFileSize: UInt? {
-            if let galleryItem {
-                return galleryItem.fileSize
-            }
-            return switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem: audioItem.content.fileSize
-            case let fileItem as FileRoomTimelineItem: fileItem.content.fileSize
-            case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.fileSize
-            case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.fileSize
-            default: nil
+            switch content {
+            case .galleryItem(_, let item):
+                item.fileSize
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let audioItem as AudioRoomTimelineItem: audioItem.content.fileSize
+                case let fileItem as FileRoomTimelineItem: fileItem.content.fileSize
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.fileSize
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.fileSize
+                default: nil
+                }
             }
         }
         
@@ -382,26 +385,30 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         var contentType: String? {
-            if let galleryItem {
-                return galleryItem.contentType?.localizedDescription
-            }
-            return switch timelineItem {
-            case let audioItem as AudioRoomTimelineItem: audioItem.content.contentType?.localizedDescription
-            case let fileItem as FileRoomTimelineItem: fileItem.content.contentType?.localizedDescription
-            case let imageItem as ImageRoomTimelineItem: imageItem.content.contentType?.localizedDescription
-            case let videoItem as VideoRoomTimelineItem: videoItem.content.contentType?.localizedDescription
-            default: nil
+            switch content {
+            case .galleryItem(_, let item):
+                item.contentType?.localizedDescription
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let audioItem as AudioRoomTimelineItem: audioItem.content.contentType?.localizedDescription
+                case let fileItem as FileRoomTimelineItem: fileItem.content.contentType?.localizedDescription
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.contentType?.localizedDescription
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.contentType?.localizedDescription
+                default: nil
+                }
             }
         }
         
         var blurhash: String? {
-            if let galleryItem {
-                return galleryItem.blurhash
-            }
-            return switch timelineItem {
-            case let imageItem as ImageRoomTimelineItem: imageItem.content.blurhash
-            case let videoItem as VideoRoomTimelineItem: videoItem.content.blurhash
-            default: nil
+            switch content {
+            case .galleryItem(_, let item):
+                item.blurhash
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.blurhash
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.blurhash
+                default: nil
+                }
             }
         }
     }

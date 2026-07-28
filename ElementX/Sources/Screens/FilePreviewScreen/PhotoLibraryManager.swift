@@ -21,7 +21,8 @@ protocol PhotoLibraryManagerProtocol {
 struct PhotoLibraryManager: PhotoLibraryManagerProtocol {
     func addResource(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryManagerError> {
         do {
-            try await PHPhotoLibrary.shared().performChanges {
+            // @Sendable as PhotoKit runs the block on its own queue, so it must not inherit MainActor isolation.
+            try await PHPhotoLibrary.shared().performChanges { @Sendable in
                 let request = PHAssetCreationRequest.forAsset()
                 let options = PHAssetResourceCreationOptions()
                 request.addResource(with: type, fileURL: url, options: options)
