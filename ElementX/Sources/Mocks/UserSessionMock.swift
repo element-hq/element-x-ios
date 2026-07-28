@@ -26,5 +26,9 @@ struct UserSessionMockConfiguration {
         sessionSecurityStatePublisher = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .enabled)).asCurrentValuePublisher()
         
         liveLocationManager = LiveLocationManagerMock(.init())
+        
+        // A throwaway directory: the no-argument initialiser mints a UUID under the real app group
+        // container and creates it on disk, which no test should be doing.
+        sessionDirectories = SessionDirectories(dataDirectory: URL.temporaryDirectory.appending(component: UUID().uuidString))
     }
 }

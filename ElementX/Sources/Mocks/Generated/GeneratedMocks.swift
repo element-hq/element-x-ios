@@ -10435,6 +10435,131 @@ nonisolated class RoomThreadListServiceProxyMock: RoomThreadListServiceProxyProt
         }
     }
 }
+nonisolated class SearchBackfillRunnerMock: SearchBackfillRunnerProtocol, @unchecked Sendable {
+
+    //MARK: - runOnce
+
+    private let runOnceExcludedRoomIDsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var runOnceExcludedRoomIDsUnderlyingCallsCount = 0
+    var runOnceExcludedRoomIDsCallsCount: Int {
+        get { runOnceExcludedRoomIDsCallsCountLock.withLock { runOnceExcludedRoomIDsUnderlyingCallsCount } }
+        set { runOnceExcludedRoomIDsCallsCountLock.withLock { runOnceExcludedRoomIDsUnderlyingCallsCount = newValue } }
+    }
+    var runOnceExcludedRoomIDsCalled: Bool {
+        return runOnceExcludedRoomIDsCallsCount > 0
+    }
+    private let runOnceExcludedRoomIDsReceivedExcludedRoomIDsLock = NSLock()
+    private nonisolated(unsafe) var runOnceExcludedRoomIDsUnderlyingReceivedExcludedRoomIDs: Set<String>?
+    var runOnceExcludedRoomIDsReceivedExcludedRoomIDs: Set<String>? {
+        get { runOnceExcludedRoomIDsReceivedExcludedRoomIDsLock.withLock { runOnceExcludedRoomIDsUnderlyingReceivedExcludedRoomIDs } }
+        set { runOnceExcludedRoomIDsReceivedExcludedRoomIDsLock.withLock { runOnceExcludedRoomIDsUnderlyingReceivedExcludedRoomIDs = newValue } }
+    }
+    private let runOnceExcludedRoomIDsReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var runOnceExcludedRoomIDsUnderlyingReceivedInvocations: [Set<String>] = []
+    var runOnceExcludedRoomIDsReceivedInvocations: [Set<String>] {
+        get { runOnceExcludedRoomIDsReceivedInvocationsLock.withLock { runOnceExcludedRoomIDsUnderlyingReceivedInvocations } }
+        set { runOnceExcludedRoomIDsReceivedInvocationsLock.withLock { runOnceExcludedRoomIDsUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let runOnceExcludedRoomIDsReturnValueLock = NSLock()
+    private nonisolated(unsafe) var runOnceExcludedRoomIDsUnderlyingReturnValue: SearchBackfillCursor!
+    var runOnceExcludedRoomIDsReturnValue: SearchBackfillCursor! {
+        get { runOnceExcludedRoomIDsReturnValueLock.withLock { runOnceExcludedRoomIDsUnderlyingReturnValue } }
+        set { runOnceExcludedRoomIDsReturnValueLock.withLock { runOnceExcludedRoomIDsUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var runOnceExcludedRoomIDsClosure: ((Set<String>) async -> SearchBackfillCursor)?
+
+    @discardableResult
+    @concurrent func runOnce(excludedRoomIDs: Set<String>) async -> SearchBackfillCursor {
+        runOnceExcludedRoomIDsCallsCountLock.withLock { runOnceExcludedRoomIDsUnderlyingCallsCount += 1 }
+        runOnceExcludedRoomIDsReceivedExcludedRoomIDs = excludedRoomIDs
+        runOnceExcludedRoomIDsReceivedInvocationsLock.withLock { runOnceExcludedRoomIDsUnderlyingReceivedInvocations.append(excludedRoomIDs) }
+        if let runOnceExcludedRoomIDsClosure = runOnceExcludedRoomIDsClosure {
+            return await runOnceExcludedRoomIDsClosure(excludedRoomIDs)
+        } else {
+            return runOnceExcludedRoomIDsReturnValue
+        }
+    }
+}
+nonisolated class SearchBackfillStoreMock: SearchBackfillStoreProtocol, @unchecked Sendable {
+
+    //MARK: - cursor
+
+    private let cursorCallsCountLock = NSLock()
+    private nonisolated(unsafe) var cursorUnderlyingCallsCount = 0
+    var cursorCallsCount: Int {
+        get { cursorCallsCountLock.withLock { cursorUnderlyingCallsCount } }
+        set { cursorCallsCountLock.withLock { cursorUnderlyingCallsCount = newValue } }
+    }
+    var cursorCalled: Bool {
+        return cursorCallsCount > 0
+    }
+
+    private let cursorReturnValueLock = NSLock()
+    private nonisolated(unsafe) var cursorUnderlyingReturnValue: SearchBackfillCursor?
+    var cursorReturnValue: SearchBackfillCursor? {
+        get { cursorReturnValueLock.withLock { cursorUnderlyingReturnValue } }
+        set { cursorReturnValueLock.withLock { cursorUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var cursorClosure: (() async -> SearchBackfillCursor?)?
+
+    @concurrent func cursor() async -> SearchBackfillCursor? {
+        cursorCallsCountLock.withLock { cursorUnderlyingCallsCount += 1 }
+        if let cursorClosure = cursorClosure {
+            return await cursorClosure()
+        } else {
+            return cursorReturnValue
+        }
+    }
+    //MARK: - save
+
+    private let saveCallsCountLock = NSLock()
+    private nonisolated(unsafe) var saveUnderlyingCallsCount = 0
+    var saveCallsCount: Int {
+        get { saveCallsCountLock.withLock { saveUnderlyingCallsCount } }
+        set { saveCallsCountLock.withLock { saveUnderlyingCallsCount = newValue } }
+    }
+    var saveCalled: Bool {
+        return saveCallsCount > 0
+    }
+    private let saveReceivedCursorLock = NSLock()
+    private nonisolated(unsafe) var saveUnderlyingReceivedCursor: SearchBackfillCursor?
+    var saveReceivedCursor: SearchBackfillCursor? {
+        get { saveReceivedCursorLock.withLock { saveUnderlyingReceivedCursor } }
+        set { saveReceivedCursorLock.withLock { saveUnderlyingReceivedCursor = newValue } }
+    }
+    private let saveReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var saveUnderlyingReceivedInvocations: [SearchBackfillCursor] = []
+    var saveReceivedInvocations: [SearchBackfillCursor] {
+        get { saveReceivedInvocationsLock.withLock { saveUnderlyingReceivedInvocations } }
+        set { saveReceivedInvocationsLock.withLock { saveUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var saveClosure: ((SearchBackfillCursor) async -> Void)?
+
+    @concurrent func save(_ cursor: SearchBackfillCursor) async {
+        saveCallsCountLock.withLock { saveUnderlyingCallsCount += 1 }
+        saveReceivedCursor = cursor
+        saveReceivedInvocationsLock.withLock { saveUnderlyingReceivedInvocations.append(cursor) }
+        await saveClosure?(cursor)
+    }
+    //MARK: - clear
+
+    private let clearCallsCountLock = NSLock()
+    private nonisolated(unsafe) var clearUnderlyingCallsCount = 0
+    var clearCallsCount: Int {
+        get { clearCallsCountLock.withLock { clearUnderlyingCallsCount } }
+        set { clearCallsCountLock.withLock { clearUnderlyingCallsCount = newValue } }
+    }
+    var clearCalled: Bool {
+        return clearCallsCount > 0
+    }
+    nonisolated(unsafe) var clearClosure: (() async -> Void)?
+
+    @concurrent func clear() async {
+        clearCallsCountLock.withLock { clearUnderlyingCallsCount += 1 }
+        await clearClosure?()
+    }
+}
 nonisolated class SearchServiceProxyMock: SearchServiceProxyProtocol, @unchecked Sendable {
     var resultsPublisher: CurrentValuePublisher<[SearchServiceResult], Never> {
         get { return underlyingResultsPublisher }
@@ -12779,14 +12904,14 @@ nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable 
     }
 
     private let paginateBackwardsRequestSizeReturnValueLock = NSLock()
-    private nonisolated(unsafe) var paginateBackwardsRequestSizeUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var paginateBackwardsRequestSizeReturnValue: Result<Void, TimelineProxyError>! {
+    private nonisolated(unsafe) var paginateBackwardsRequestSizeUnderlyingReturnValue: Result<Bool, TimelineProxyError>!
+    var paginateBackwardsRequestSizeReturnValue: Result<Bool, TimelineProxyError>! {
         get { paginateBackwardsRequestSizeReturnValueLock.withLock { paginateBackwardsRequestSizeUnderlyingReturnValue } }
         set { paginateBackwardsRequestSizeReturnValueLock.withLock { paginateBackwardsRequestSizeUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var paginateBackwardsRequestSizeClosure: ((UInt16) async -> Result<Void, TimelineProxyError>)?
+    nonisolated(unsafe) var paginateBackwardsRequestSizeClosure: ((UInt16) async -> Result<Bool, TimelineProxyError>)?
 
-    @concurrent func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+    @concurrent func paginateBackwards(requestSize: UInt16) async -> Result<Bool, TimelineProxyError> {
         paginateBackwardsRequestSizeCallsCountLock.withLock { paginateBackwardsRequestSizeUnderlyingCallsCount += 1 }
         paginateBackwardsRequestSizeReceivedRequestSize = requestSize
         paginateBackwardsRequestSizeReceivedInvocationsLock.withLock { paginateBackwardsRequestSizeUnderlyingReceivedInvocations.append(requestSize) }
@@ -14143,6 +14268,11 @@ nonisolated class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
         set(value) { underlyingLiveLocationManager = value }
     }
     nonisolated(unsafe) var underlyingLiveLocationManager: LiveLocationManagerProtocol!
+    var sessionDirectories: SessionDirectories {
+        get { return underlyingSessionDirectories }
+        set(value) { underlyingSessionDirectories = value }
+    }
+    nonisolated(unsafe) var underlyingSessionDirectories: SessionDirectories!
     nonisolated(unsafe) var contentScannerService: ContentScannerServiceProtocol?
     var sessionSecurityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never> {
         get { return underlyingSessionSecurityStatePublisher }

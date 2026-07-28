@@ -37,6 +37,10 @@ struct CommonFlowParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let notificationManager: NotificationManagerProtocol
     let stateMachineFactory: StateMachineFactoryProtocol
+    /// Lets a flow kick an opportunistic history sweep when the user opens search, which
+    /// `element-meta#3252` asks for and which matters on iOS because the background task is
+    /// best-effort and may never run on a given device.
+    let searchBackfillScheduler: SearchBackfillScheduler
     
     var windowManager: WindowManagerProtocol {
         appMediator.windowManager

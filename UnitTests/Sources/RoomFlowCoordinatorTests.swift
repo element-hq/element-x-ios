@@ -534,7 +534,8 @@ final class RoomFlowCoordinatorTests {
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: NotificationManagerMock(),
-                                                  stateMachineFactory: StateMachineFactory())
+                                                  stateMachineFactory: StateMachineFactory(),
+                                                  searchBackfillScheduler: SearchBackfillScheduler(appSettings: appSettings) { nil })
         
         roomFlowCoordinator = RoomFlowCoordinator(roomID: roomID,
                                                   isChildFlow: asChildFlow,

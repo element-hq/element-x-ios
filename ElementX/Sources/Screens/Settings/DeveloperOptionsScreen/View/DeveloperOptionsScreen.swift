@@ -107,6 +107,11 @@ struct DeveloperOptionsScreen: View {
                     Text("Adds a search button to the room screen, searching the local message index within that room.")
                 }
                 
+                Toggle(isOn: $context.searchBackfillEnabled) {
+                    Text("Search history backfill")
+                    Text("Fetches older room history in the background so message search covers more than what arrived since the index was created. Runs on power and network, and when opening search.")
+                }
+                
                 Toggle(isOn: $context.jumpToReadMarkerEnabled) {
                     Text("Jump to unread")
                     Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")

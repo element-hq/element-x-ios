@@ -62,7 +62,8 @@ struct UserSessionFlowCoordinatorTests {
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: userIndicatorController,
                                                   notificationManager: NotificationManagerMock(),
-                                                  stateMachineFactory: stateMachineFactory)
+                                                  stateMachineFactory: stateMachineFactory,
+                                                  searchBackfillScheduler: SearchBackfillScheduler(appSettings: appSettings) { nil })
         
         userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                                 navigationRootCoordinator: rootCoordinator,

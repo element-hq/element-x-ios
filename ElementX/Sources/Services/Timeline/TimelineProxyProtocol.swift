@@ -62,7 +62,12 @@ protocol TimelineProxyProtocol: Sendable {
     
     func retryDecryption(sessionIDs: [String]?)
     
-    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
+    /// Paginates backwards, returning whether the start of the timeline was reached.
+    ///
+    /// The flag matters to callers that walk a room to its beginning without subscribing for
+    /// updates, since `PaginationState.endReached` is otherwise the only signal and it is published
+    /// exclusively through a subscription.
+    func paginateBackwards(requestSize: UInt16) async -> Result<Bool, TimelineProxyError>
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,

@@ -776,6 +776,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentMessageSearch(animated: Bool) {
+        // The index only holds what arrived since it was attached, so opening search is the moment
+        // it is most worth spending network on older history. No-ops unless the sweep is enabled.
+        // The room being searched is excluded: paginating it from here would fight the live timeline
+        // the user is looking at.
+        flowParameters.searchBackfillScheduler.runInForeground(excludedRoomIDs: [roomProxy.id])
+        
         let coordinator = RoomMessageSearchScreenCoordinator(parameters: .init(searchService: userSession.clientProxy.makeSearchService(roomID: roomProxy.id),
                                                                                userID: userSession.clientProxy.userID,
                                                                                mediaProvider: userSession.mediaProvider))

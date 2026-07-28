@@ -58,7 +58,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         switch await restorePreviousLogin(credentials) {
         case .success(let clientProxy):
-            return await .success(buildUserSessionWithClient(clientProxy))
+            return await .success(buildUserSessionWithClient(clientProxy, sessionDirectories: credentials.restorationToken.sessionDirectories))
         case .failure(let error):
             MXLog.error("Failed restoring login with error: \(error)")
             
@@ -84,7 +84,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             MXLog.info("Set up session for user \(userID) at: \(sessionDirectories)")
             
-            return await .success(buildUserSessionWithClient(clientProxy))
+            return await .success(buildUserSessionWithClient(clientProxy, sessionDirectories: sessionDirectories))
         } catch {
             MXLog.error("Failed creating user session with error: \(error)")
             return .failure(.failedSettingUpSession)
@@ -103,7 +103,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     // MARK: - Private
     
-    private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) async -> UserSessionProtocol {
+    private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol, sessionDirectories: SessionDirectories) async -> UserSessionProtocol {
         let mediaProvider = MediaProvider(mediaLoader: clientProxy.mediaLoader,
                                           imageCache: .onlyInMemory,
                                           homeserverReachabilityPublisher: clientProxy.homeserverReachabilityPublisher)
@@ -118,7 +118,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         return UserSession(clientProxy: clientProxy,
                            mediaProvider: mediaProvider,
                            voiceMessageMediaManager: voiceMessageMediaManager,
-                           liveLocationManager: liveLocationManager)
+                           liveLocationManager: liveLocationManager,
+                           sessionDirectories: sessionDirectories)
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {

@@ -148,6 +148,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
+    /// Must match the entry in `BGTaskSchedulerPermittedIdentifiers`, which is generated into
+    /// Info.plist from `ElementX/SupportingFiles/target.yml`. A mismatch makes registration fail
+    /// silently at runtime.
+    let backgroundSearchBackfillTaskIdentifier = "io.element.elementx.background.searchbackfill"
     
     /// A URL where users can go read more about the app.
     private(set) var websiteURL: URL = "https://element.io"
@@ -446,6 +450,15 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     @UserPreference(defaultValue: false)
     var userStatusEnabled: Bool
+    
+    /// Back-paginates room history in the background so older messages reach the local search index,
+    /// which otherwise only ever sees events arriving after it was attached.
+    ///
+    /// Deliberately its own flag rather than riding on `globalSearchEnabled` or
+    /// `roomMessageSearchEnabled`: those gate UI entry points, while this one spends network and
+    /// battery. The index it feeds serves both of those surfaces, so neither is the right owner.
+    @UserPreference(defaultValue: false)
+    var searchBackfillEnabled: Bool
     
     @UserPreference(defaultValue: AppBuildType.current != .release)
     var developerOptionsEnabled: Bool

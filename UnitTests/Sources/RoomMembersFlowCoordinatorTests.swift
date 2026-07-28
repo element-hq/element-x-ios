@@ -65,7 +65,8 @@ struct RoomMembersFlowCoordinatorTests {
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: NotificationManagerMock(),
-                                                  stateMachineFactory: stateMachineFactory)
+                                                  stateMachineFactory: stateMachineFactory,
+                                                  searchBackfillScheduler: SearchBackfillScheduler(appSettings: appSettings) { nil })
         
         let roomProxy = JoinedRoomProxyMock(.init())
         roomProxy.getMemberUserIDClosure = { _ in

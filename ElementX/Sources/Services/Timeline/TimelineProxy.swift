@@ -108,7 +108,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+    func paginateBackwards(requestSize: UInt16) async -> Result<Bool, TimelineProxyError> {
         // We can't subscribe to back pagination on detached timelines and as live timelines
         // can be shared between multiple instances of the same room on the stack, it is
         // safer to still use the subscription logic for back pagination when live.
@@ -117,8 +117,10 @@ final class TimelineProxy: TimelineProxyProtocol {
             return await paginateBackwardsOnLive(requestSize: requestSize)
         case .detached, .media, .thread:
             return await focussedPaginate(.backwards, requestSize: requestSize)
+                .map { _ in backPaginationStateSubject.value == .endReached }
         case .pinned:
-            return .success(())
+            // A pinned timeline is loaded in full, so there is never anything before it to fetch.
+            return .success(true)
         }
     }
     
@@ -130,14 +132,14 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     /// Paginate backwards using the subscription from Rust to drive the pagination state.
-    private func paginateBackwardsOnLive(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+    private func paginateBackwardsOnLive(requestSize: UInt16) async -> Result<Bool, TimelineProxyError> {
         MXLog.info("Paginating backwards")
         
         do {
-            let _ = try await timeline.paginateBackwards(numEvents: requestSize)
+            let reachedStart = try await timeline.paginateBackwards(numEvents: requestSize)
             MXLog.info("Finished paginating backwards")
             
-            return .success(())
+            return .success(reachedStart)
         } catch {
             MXLog.error("Failed paginating backwards with error: \(error)")
             return .failure(.sdkError(error))

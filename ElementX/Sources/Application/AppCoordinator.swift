@@ -34,6 +34,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
     
+    private var searchBackfillScheduler: SearchBackfillScheduler!
+    
     private var userSessionMigrationsOldVersion: Version?
     private var userSession: UserSessionProtocol? {
         didSet {
@@ -170,6 +172,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         observeAppLockChanges()
         
         registerBackgroundAppRefresh()
+        
+        // Registration has to happen before the app finishes launching, so the scheduler resolves the
+        // user session lazily rather than being handed one it cannot have yet.
+        searchBackfillScheduler = SearchBackfillScheduler(appSettings: appSettings) { [weak self] in self?.userSession }
+        searchBackfillScheduler.register()
         
         appSettings.analyticsConsentStatePublisher
             .dropFirst() // Sentry is configured during init; only reconfigure when consent state actually changes
@@ -784,7 +791,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                   analytics: analyticsService,
                                                   userIndicatorController: userIndicatorController,
                                                   notificationManager: notificationManager,
-                                                  stateMachineFactory: StateMachineFactory())
+                                                  stateMachineFactory: StateMachineFactory(),
+                                                  searchBackfillScheduler: searchBackfillScheduler)
         
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: isNewLogin,
                                                                     navigationRootCoordinator: navigationRootCoordinator,
@@ -826,6 +834,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
+        // Ahead of the soft-logout early return, which would otherwise leave the sweep running and
+        // the background task armed against a session that is going away.
+        searchBackfillScheduler.stop()
         
         guard !isSoft else {
             stateMachine.processEvent(.showSoftLogout)
@@ -863,6 +874,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func tearDownUserSession() {
+        // Left running, the sweep would keep downloading a signed-out user's history.
+        searchBackfillScheduler.stop()
+        
         userIndicatorController.retractAllIndicators()
         
         userSession = nil
@@ -956,6 +970,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
+        // The client is about to be torn down and rebuilt; a sweep paginating across that would be
+        // working against a deliberately unstable client.
+        searchBackfillScheduler.stop()
         
         // Allow for everything to deallocate properly
         Task {
@@ -1176,6 +1193,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         scheduleDelayedPauseServices()
         scheduleBackgroundAppRefresh()
+        searchBackfillScheduler.schedule()
     }
     
     @objc

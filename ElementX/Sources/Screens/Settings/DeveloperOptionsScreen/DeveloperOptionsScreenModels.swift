@@ -70,6 +70,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var galleryEnabled: Bool { get set }
     
     var roomMessageSearchEnabled: Bool { get set }
+    var searchBackfillEnabled: Bool { get set }
     
     var jumpToReadMarkerEnabled: Bool { get set }
     

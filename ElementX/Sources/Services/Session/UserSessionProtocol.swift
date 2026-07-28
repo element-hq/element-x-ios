@@ -25,6 +25,10 @@ protocol UserSessionProtocol: Sendable {
     var voiceMessageMediaManager: VoiceMessageMediaManagerProtocol { get }
     var liveLocationManager: LiveLocationManagerProtocol { get }
     
+    /// Where this session's data and caches live on disk. Exposed so app-owned state can be written
+    /// alongside the SDK's, and torn down with it when the session ends.
+    var sessionDirectories: SessionDirectories { get }
+    
     /// Scans media content, `nil` when no content scanner is configured for the server.
     var contentScannerService: ContentScannerServiceProtocol? { get }
     

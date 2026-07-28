@@ -26,7 +26,7 @@ extension TimelineProxyMock {
         sendMessageHtmlInReplyToEventIDIntentionalMentionsReturnValue = .success(())
         editNewContentReturnValue = .success(())
         buildMessageContentForHtmlIntentionalMentionsReturnValue = RoomMessageEventContentWithoutRelationSDKMock()
-        paginateBackwardsRequestSizeReturnValue = .success(())
+        paginateBackwardsRequestSizeReturnValue = .success(configuration.timelineStartReached)
         paginateForwardsRequestSizeReturnValue = .success(())
         sendReadReceiptForTypeReturnValue = .success(())
         createPollQuestionAnswersMaxSelectionsPollKindReturnValue = .success(())

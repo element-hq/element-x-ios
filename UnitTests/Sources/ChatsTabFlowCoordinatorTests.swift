@@ -50,7 +50,8 @@ struct ChatsTabFlowCoordinatorTests {
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   notificationManager: notificationManager,
-                                                  stateMachineFactory: stateMachineFactory)
+                                                  stateMachineFactory: stateMachineFactory,
+                                                  searchBackfillScheduler: SearchBackfillScheduler(appSettings: appSettings) { nil })
         chatsTabFlowCoordinator = ChatsTabFlowCoordinator(navigationSplitCoordinator: splitCoordinator,
                                                           flowParameters: flowParameters)
         
