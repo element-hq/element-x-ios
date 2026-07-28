@@ -31,7 +31,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: singleRoom, joinRule: .public)
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 1 }
+        let deferred = deferScreenLoaded { $0.selectableJoinedSpaces.count == 1 }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType == .anyone)
@@ -63,7 +63,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: singleRoom, joinRule: .public)
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 1 }
+        let deferred = deferScreenLoaded { $0.selectableJoinedSpaces.count == 1 }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType == .anyone)
@@ -95,7 +95,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         let space = singleRoom[0]
         setupViewModel(joinedParentSpaces: [], joinRule: .restricted(rules: [.roomMembership(roomID: space.id)]))
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.isEmpty }
+        let deferred = deferScreenLoaded { $0.selectableJoinedSpaces.isEmpty }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType == .spaceMembers(spaceIDs: [space.id]))
@@ -127,7 +127,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         setupViewModel(joinedParentSpaces: spaces, joinRule: .public)
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 3 }
+        let deferred = deferScreenLoaded { $0.selectableJoinedSpaces.count == 3 }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType == .anyone)
@@ -172,7 +172,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         setupViewModel(joinedParentSpaces: spaces, joinRule: .public)
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableJoinedSpaces.count == 3 }
+        let deferred = deferScreenLoaded { $0.selectableJoinedSpaces.count == 3 }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType == .anyone)
@@ -218,7 +218,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         setupViewModel(joinedParentSpaces: spaces,
                        joinRule: .restricted(rules: [.roomMembership(roomID: "unknownSpaceID")]))
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 4 }
+        let deferred = deferScreenLoaded { $0.selectableSpacesCount == 4 }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType.isSpaceMembers)
@@ -270,7 +270,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
                        joinRule: .restricted(rules: [.roomMembership(roomID: space.id),
                                                      .roomMembership(roomID: "unknownSpaceID")]))
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 5 }
+        let deferred = deferScreenLoaded { $0.selectableSpacesCount == 5 }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType.isSpaceMembers)
@@ -309,7 +309,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         setupViewModel(joinedParentSpaces: [],
                        joinRule: .restricted(rules: []))
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 0 }
+        let deferred = deferScreenLoaded { $0.selectableSpacesCount == 0 }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType.isSpaceMembers)
@@ -330,7 +330,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
         setupViewModel(joinedParentSpaces: singleRoom,
                        joinRule: .restricted(rules: []))
         
-        let deferred = deferFulfillment(context.$viewState) { $0.selectableSpacesCount == 1 }
+        let deferred = deferScreenLoaded { $0.selectableSpacesCount == 1 }
         try await deferred.fulfill()
         
         #expect(context.viewState.currentSettings.accessType.isSpaceMembers)
@@ -443,6 +443,15 @@ final class SecurityAndPrivacyScreenViewModelTests {
     }
     
     // MARK: - Helpers
+    
+    /// Waits for `condition` **and** for the screen to have finished loading.
+    ///
+    /// The view model fetches its parent spaces and its room directory visibility in two independent tasks.
+    /// Waiting on the spaces alone leaves `isSaveDisabled` reading `true` whilst the visibility is unknown,
+    /// so every wait needs to gate on both having landed.
+    private func deferScreenLoaded(until condition: @escaping (SecurityAndPrivacyScreenViewState) -> Bool) -> DeferredFulfillment<SecurityAndPrivacyScreenViewState> {
+        deferFulfillment(context.$viewState) { condition($0) && $0.currentSettings.isVisibileInRoomDirectory != nil }
+    }
     
     private func setupViewModel(joinedParentSpaces: [SpaceServiceRoom],
                                 topLevelSpaces: [SpaceServiceRoom] = [],

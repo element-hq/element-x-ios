@@ -254,22 +254,16 @@ struct RoomNotificationSettingsScreenViewModelTests {
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
-        var actionSent: RoomNotificationSettingsScreenViewModelAction?
-        viewModel.actions
-            .sink { action in
-                actionSent = action
-            }
-            .store(in: &cancellables)
-        
-        let deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.deletingCustomSetting),
-                                                 transitionValues: [false, true, false])
+        // The `deletingCustomSetting` flag is only raised for the duration of the call, which is short enough
+        // that the observation can coalesce it away. Wait on the outcome instead.
+        let deferredDismiss = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         
         viewModel.context.send(viewAction: .deleteCustomSettingTapped)
         
-        try await deferredViewState.fulfill()
-        
         // the `dismiss` action must have been sent
-        #expect(actionSent == .dismiss)
+        try await deferredDismiss.fulfill()
+        
+        #expect(!viewModel.context.viewState.deletingCustomSetting)
         // `restoreDefaultNotificationMode` should have been called
         #expect(notificationSettingsProxyMock.restoreDefaultNotificationModeRoomIdCalled)
         #expect(notificationSettingsProxyMock.restoreDefaultNotificationModeRoomIdReceivedInvocations == [roomProxyMock.id])
@@ -299,15 +293,17 @@ struct RoomNotificationSettingsScreenViewModelTests {
             .store(in: &cancellables)
         
         #expect(!viewModel.context.viewState.deletingCustomSetting)
-        let deferredViewState = deferFulfillment(viewModel.context.observe(\.viewState.deletingCustomSetting),
-                                                 transitionValues: [true, false])
+        // The `deletingCustomSetting` flag is only raised for the duration of the call, which is short enough
+        // that the observation can coalesce it away. Wait on the alert instead, it is raised before the flag
+        // is lowered again.
+        let deferredAlert = deferFulfillment(viewModel.context.observe(\.viewState.bindings.alertInfo)) { $0?.id == .restoreDefaultFailed }
         
         viewModel.context.send(viewAction: .deleteCustomSettingTapped)
         
-        try await deferredViewState.fulfill()
-        
         // an alert is expected
-        #expect(viewModel.context.alertInfo?.id == .restoreDefaultFailed)
+        try await deferredAlert.fulfill()
+        
+        #expect(!viewModel.context.viewState.deletingCustomSetting)
         // the `dismiss` action must not have been sent
         #expect(actionSent == nil)
     }

@@ -117,8 +117,11 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1) // Loading indicator
         
         // Then the failure should occur preventing the screen from being dismissed.
+        // The interaction being re-enabled is what marks the end of the send, the timeout above only proves
+        // that no dismissal happened within it — processing may still be in flight when it elapses.
+        let deferredInteraction = deferFulfillment(context.observe(\.viewState.shouldDisableInteraction)) { !$0 }
         try await deferredFailure.fulfill()
-        #expect(!context.viewState.shouldDisableInteraction)
+        try await deferredInteraction.fulfill()
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 2, "An error indicator should be shown.")
     }
     
@@ -213,8 +216,11 @@ final class MediaUploadPreviewScreenViewModelTests {
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1) // Loading indicator
         
         // Then the failure should occur preventing the screen from being dismissed.
+        // Preprocessing the valid files can outlast the timeout above, so wait for the interaction to be
+        // re-enabled rather than assuming the send has finished by the time it elapses.
+        let deferredInteraction = deferFulfillment(context.observe(\.viewState.shouldDisableInteraction)) { !$0 }
         try await deferredFailure.fulfill()
-        #expect(!context.viewState.shouldDisableInteraction)
+        try await deferredInteraction.fulfill()
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 2, "An error indicator should be shown.")
     }
     
