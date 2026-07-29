@@ -461,12 +461,16 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
         
         // track server in previous servers, maintaining uniqueness and sorting by most recent
-        guard let newServer = userSession.clientProxy.userIDServerName?.lowercased() else { return }
+        guard let newServer = userSession.clientProxy.userIDServerName?.lowercased() else {
+            MXLog.error("Failed to retrieve server name from user session for previous servers tracking")
+            return
+        }
         var previousServers = appSettings.previousServers
         previousServers.removeAll { $0 == newServer }
         
         previousServers.insert(newServer, at: 0)
         
+        MXLog.info("Tracking server in previous servers: \(newServer)")
         appSettings.previousServers = previousServers
     }
 }

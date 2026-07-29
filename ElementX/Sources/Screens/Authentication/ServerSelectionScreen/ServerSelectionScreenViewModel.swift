@@ -93,9 +93,11 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         
         switch await authenticationService.configure(for: accountProvider, flow: authenticationFlow) {
         case .success:
+            MXLog.info("Selected server: \(accountProvider)")
             await fetchLoginURLIfNeededAndContinue()
             stopLoading()
         case .failure:
+            MXLog.info("Invalid server: \(accountProvider)")
             stopLoading()
             state.bindings.alertInfo = AlertInfo(id: .unknownError)
         }
@@ -125,6 +127,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         }
         
         guard let window = state.window else {
+            MXLog.error("No window available for OAuth presentation")
             showFooterMessage(L10n.errorUnknown)
             return
         }
@@ -132,7 +135,8 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         switch await authenticationService.urlForOAuthLogin(loginHint: nil) {
         case .success(let oAuthData):
             actionsSubject.send(.continueWithOAuth(data: oAuthData, window: window))
-        case .failure:
+        case .failure(let error):
+            MXLog.error("Failed to get OAuth login URL: \(error)")
             showFooterMessage(L10n.errorUnknown)
         }
     }
