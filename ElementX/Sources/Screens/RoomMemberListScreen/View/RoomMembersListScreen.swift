@@ -250,19 +250,9 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
             members.append(.mockInvited)
         }
         
-        if withInCall {
-            members = members.map { member in
-                switch member.userID {
-                case RoomMemberProxyMock.mockAlice.userID,
-                     RoomMemberProxyMock.mockOwner.userID,
-                     mockAdmin.userID:
-                    member.status = .mockCall
-                default:
-                    ()
-                }
-                return member
-            }
-        }
+        let activeRoomCallParticipants = withInCall ? [RoomMemberProxyMock.mockAlice.userID,
+                                                       RoomMemberProxyMock.mockOwner.userID,
+                                                       mockAdmin.userID] : []
         
         let clientProxyMock = ClientProxyMock(.init())
         clientProxyMock.userIdentityForFallBackToServerClosure = { userID, _ in
@@ -281,6 +271,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         return RoomMembersListScreenViewModel(initialMode: initialMode,
                                               userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                               roomProxy: JoinedRoomProxyMock(.init(name: "Some room",
+                                                                                   activeRoomCallParticipants: activeRoomCallParticipants,
                                                                                    members: members,
                                                                                    ownUserID: ownUserID,
                                                                                    powerLevelsConfiguration: .init(canUserInvite: false))),

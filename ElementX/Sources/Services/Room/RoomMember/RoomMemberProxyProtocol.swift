@@ -46,20 +46,13 @@ nonisolated extension RoomMemberProxyProtocol {
         // If there isn't a displayname we sort by the userID without the @.
         (displayName ?? String(userID.dropFirst())).lowercased()
     }
-    
-    /// Whether the member is currently joined to an active MatrixRTC call (e.g. Element Call).
-    var isInCall: Bool {
-        status.call != nil
-    }
 }
 
 nonisolated extension [RoomMemberProxyProtocol] {
-    /// The members, sorted with call participants first, then by power-level, and then alphabetically within each power-level.
+    /// The members, sorted first by power-level, and then alphabetically within each power-level.
     func sorted() -> Self {
         sorted { lhs, rhs in
-            if lhs.isInCall != rhs.isInCall {
-                lhs.isInCall
-            } else if lhs.powerLevel != rhs.powerLevel {
+            if lhs.powerLevel != rhs.powerLevel {
                 lhs.powerLevel > rhs.powerLevel
             } else {
                 lhs.sortingName.localizedStandardCompare(rhs.sortingName) == .orderedAscending
