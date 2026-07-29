@@ -32,8 +32,8 @@
       onlyGenerateCoverageForSpecifiedTargets = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:UnitTests/SupportingFiles/UnitTests.xctestplan"
-            default = "YES">
+            default = "YES"
+            reference = "container:UnitTests/SupportingFiles/UnitTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <MacroExpansion>
