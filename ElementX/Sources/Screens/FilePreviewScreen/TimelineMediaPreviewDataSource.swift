@@ -35,13 +35,19 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     var paginationState: TimelinePaginationState
     
+    /// The gallery attachments to include, so that a gallery only contributes the media being browsed.
+    private let galleryFilters: [GalleryFilter]?
+    
     /// Builds a data source spanning every previewable attachment in the timeline, paginating
     /// as the user swipes past the loaded range. Used when tapping a standalone media message.
     init(itemViewStates: [RoomTimelineItemViewState],
          initialItem: EventBasedMessageTimelineItemProtocol,
          initialPadding: Int = 100,
-         paginationState: TimelinePaginationState) {
-        previewItems = itemViewStates.compactMap(TimelineMediaPreviewItem.Media.init)
+         paginationState: TimelinePaginationState,
+         galleryFilters: [GalleryFilter]? = nil) {
+        self.galleryFilters = galleryFilters
+        
+        previewItems = itemViewStates.flatMap { TimelineMediaPreviewItem.Media.items(from: $0, galleryFilters: galleryFilters) }
         
         let initialPreviewID = TimelineMediaPreviewItem.Media(timelineItem: initialItem).id
         if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialPreviewID }) {
@@ -66,6 +72,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     /// gallery and there's no timeline pagination to drive.
     init(galleryItem: GalleryRoomTimelineItem,
          initialIndex: Int) {
+        galleryFilters = nil // All of the gallery's attachments are shown.
+        
         let media = galleryItem.content.items.map { item in
             TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: item)
         }
@@ -93,17 +101,17 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     }
     
     func updatePreviewItems(itemViewStates: [RoomTimelineItemViewState]) {
-        let newItems: [TimelineMediaPreviewItem.Media] = itemViewStates.compactMap { itemViewState in
-            guard let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: itemViewState) else { return nil }
-            
-            // If an item already exists use that instead to preserve the file handle, download error etc.
-            if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
-                oldItem.content = newItem.content
-                return oldItem
+        let newItems: [TimelineMediaPreviewItem.Media] = itemViewStates
+            .flatMap { TimelineMediaPreviewItem.Media.items(from: $0, galleryFilters: galleryFilters) }
+            .map { newItem in
+                // If an item already exists use that instead to preserve the file handle, download error etc.
+                if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
+                    oldItem.content = newItem.content
+                    return oldItem
+                }
+                
+                return newItem
             }
-            
-            return newItem
-        }
         
         var hasPaginated = false
         if let range = newItems.map(\.id).firstRange(of: previewItems.map(\.id)) {
@@ -247,6 +255,24 @@ enum TimelineMediaPreviewItem: Equatable {
             }
             content = .timelineItem(timelineItem)
             id = MediaPreviewItemID(timelineItem: timelineItem)
+        }
+        
+        /// The previewable media of a timeline item, flattening a gallery message into its individual
+        /// attachments so that they can be browsed alongside the timeline's other media.
+        /// - Parameter galleryFilters: Restricts a gallery's attachments to the media being browsed, as
+        ///   the SDK can only filter the gallery event as a whole.
+        static func items(from itemViewState: RoomTimelineItemViewState, galleryFilters: [GalleryFilter]?) -> [Media] {
+            guard case .gallery(let galleryItem) = itemViewState.type else {
+                return [Media(roomTimelineItemViewState: itemViewState)].compactMap { $0 }
+            }
+            
+            return galleryItem.content.items.filter { item in
+                guard let filter = item.filter else {
+                    return false // Nothing to preview, and unlike a tile there's no index to line up with.
+                }
+                
+                return galleryFilters?.contains(filter) ?? true
+            }.map { Media(galleryParent: galleryItem, item: $0) }
         }
         
         /// Wraps a single attachment of a gallery message. `.other` items have no media source,

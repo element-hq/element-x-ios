@@ -42,6 +42,27 @@ enum TimelineFocus {
 
 enum TimelineAllowedMessageType {
     case audio, file, image, video, gallery
+    
+    /// The gallery attachments this type allows, so that a gallery event's attachments can be
+    /// filtered client side to match. A gallery can't contain another gallery, hence the `nil`.
+    var galleryFilter: GalleryFilter? {
+        switch self {
+        case .audio: .audio
+        case .file: .file
+        case .image: .image
+        case .video: .video
+        case .gallery: nil
+        }
+    }
+}
+
+extension [TimelineAllowedMessageType] {
+    /// The gallery attachments these types allow, or `nil` when they place no restriction on them,
+    /// which is the case for a timeline made up of galleries alone.
+    var galleryFilters: [GalleryFilter]? {
+        let filters = compactMap(\.galleryFilter)
+        return filters.isEmpty ? nil : filters
+    }
 }
 
 enum TimelineProxyError: Error {

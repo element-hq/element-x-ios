@@ -560,14 +560,15 @@ class TimelineInteractionHandler {
                                                              timestamp: item.timestamp,
                                                              timeoutDate: item.content.timeoutDate)
             return .displayLiveLocation(sender: item.sender, initialLiveLocationShare: initialLiveLocationShare)
+        // Galleries are included so that their attachments can be browsed as individual media.
         case let item as ImageRoomTimelineItem:
-            return await mediaPreviewAction(for: item, messageTypes: [.image, .video])
+            return await mediaPreviewAction(for: item, messageTypes: [.image, .video, .gallery])
         case let item as VideoRoomTimelineItem:
-            return await mediaPreviewAction(for: item, messageTypes: [.image, .video])
+            return await mediaPreviewAction(for: item, messageTypes: [.image, .video, .gallery])
         case let item as AudioRoomTimelineItem:
-            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
+            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file, .gallery])
         case let item as FileRoomTimelineItem:
-            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
+            return await mediaPreviewAction(for: item, messageTypes: [.audio, .file, .gallery])
         case let item as GalleryRoomTimelineItem:
             // Only galleries are needed as the preview is scoped to the attachments of the tapped one.
             return await mediaPreviewAction(for: item, messageTypes: [.gallery])

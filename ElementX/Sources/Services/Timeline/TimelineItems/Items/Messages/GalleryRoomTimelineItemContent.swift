@@ -25,6 +25,16 @@ nonisolated struct GalleryItemID: Hashable {
     let mediaIndex: Int
 }
 
+/// The kinds of gallery attachment that a screen includes, mirroring the message types its timeline is
+/// filtered to. The SDK can only filter whole events, so a gallery's attachments are filtered by these
+/// client side. Unlike a message type there's no gallery case, as a gallery can't contain another one.
+nonisolated enum GalleryFilter {
+    case image
+    case video
+    case audio
+    case file
+}
+
 /// A single attachment of a gallery message. The SDK hands back the same content types it uses for
 /// individual messages, so we reuse them here rather than duplicating their fields.
 nonisolated enum GalleryItem: Hashable, Identifiable {
@@ -151,6 +161,17 @@ nonisolated enum GalleryItem: Hashable, Identifiable {
     /// IS the image); for everything else we need an explicit thumbnail source.
     var hasThumbnail: Bool {
         isImage || thumbnailSource != nil
+    }
+    
+    /// The filter this attachment is matched by, or `nil` when its type is unknown.
+    var filter: GalleryFilter? {
+        switch self {
+        case .image: .image
+        case .video: .video
+        case .audio: .audio
+        case .file: .file
+        case .other: nil
+        }
     }
 }
 

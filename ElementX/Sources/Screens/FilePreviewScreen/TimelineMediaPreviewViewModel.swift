@@ -48,7 +48,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(itemViewStates: timelineState.itemViewStates,
                                                                                      initialItem: initialItem,
-                                                                                     paginationState: timelineState.paginationState)),
+                                                                                     paginationState: timelineState.paginationState,
+                                                                                     galleryFilters: timelineViewModel.context.viewState.galleryFilters)),
                    mediaProvider: mediaProvider)
         
         rebuildCurrentItemActions()

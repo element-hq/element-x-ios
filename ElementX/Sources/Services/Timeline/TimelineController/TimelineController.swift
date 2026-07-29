@@ -44,12 +44,16 @@ class TimelineController: TimelineControllerProtocol {
         activeTimelineItemProvider.kind
     }
     
+    let galleryFilters: [GalleryFilter]?
+    
     init(roomProxy: JoinedRoomProxyProtocol,
          timelineProxy: TimelineProxyProtocol,
          initialFocussedEventID: String?,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         galleryFilters: [GalleryFilter]? = nil) {
+        self.galleryFilters = galleryFilters
         self.roomProxy = roomProxy
         liveTimelineItemProvider = timelineProxy.timelineItemProvider
         self.timelineItemFactory = timelineItemFactory
