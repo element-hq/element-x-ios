@@ -37,7 +37,7 @@ final nonisolated class RoomMemberProxy: RoomMemberProxyProtocol {
     }
     
     var status: UserStatus {
-        .init(rustStatus: member.status, rustCall: member.call)
+        UserStatus()
     }
     
     var membership: MembershipState {
