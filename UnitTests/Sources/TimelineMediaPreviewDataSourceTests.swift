@@ -340,6 +340,7 @@ struct TimelineMediaPreviewDataSourceTests {
         TimelineFixtures.mediaChunk
             .compactMap { $0 as? EventBasedMessageTimelineItemProtocol }
             .filter(\.supportsMediaCaption) // Voice messages can't be previewed (and don't support captions).
+            .filter { !($0 is GalleryRoomTimelineItem) } // Galleries are previewed through their own data source.
     }
     
     @discardableResult

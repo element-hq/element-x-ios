@@ -165,7 +165,15 @@ enum TimelineFixtures {
             VideoRoomTimelineItem(isOutgoing: false, caption: "Woah, it was incredible!"),
             VideoRoomTimelineItem(isOutgoing: true),
             VoiceMessageRoomTimelineItem(isOutgoing: false),
-            VoiceMessageRoomTimelineItem(isOutgoing: true)
+            VoiceMessageRoomTimelineItem(isOutgoing: true),
+            GalleryRoomTimelineItem(isOutgoing: false,
+                                    items: [.mockImage(index: 0), .mockVideo(index: 1), .mockImage(index: 2)]),
+            GalleryRoomTimelineItem(isOutgoing: true,
+                                    items: [.mockImage(index: 0),
+                                            .mockVideo(index: 1),
+                                            .mockFile(index: 2, source: try? .init(url: .mockMXCFile, mimeType: nil)),
+                                            .mockAudio(index: 3, source: try? .init(url: .mockMXCAudio, mimeType: nil))],
+                                    caption: "Everything from the trip!")
         ]
     }
     
@@ -355,6 +363,18 @@ private extension FileRoomTimelineItem {
                                  fileSize: nil,
                                  thumbnailSource: nil,
                                  contentType: .pdf))
+    }
+}
+
+private extension GalleryRoomTimelineItem {
+    init(isOutgoing: Bool, items: [GalleryItem], caption: String? = nil) {
+        self.init(id: .randomEvent,
+                  timestamp: .mock,
+                  isOutgoing: isOutgoing,
+                  isEditable: isOutgoing,
+                  canBeRepliedTo: true,
+                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
+                  content: .init(body: "Gallery", caption: caption, items: items))
     }
 }
 
