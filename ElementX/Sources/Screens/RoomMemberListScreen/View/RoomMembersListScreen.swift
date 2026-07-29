@@ -171,6 +171,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
     static let adminViewModel = makeViewModel(isAdmin: true, initialMode: .members)
     static let bannedViewModel = makeViewModel(isAdmin: true, initialMode: .banned)
     static let emptyBannedViewModel = makeViewModel(withBanned: false, isAdmin: false, initialMode: .members)
+    static let adminInCallViewModel = makeViewModel(withInCall: true, isAdmin: true)
     
     static var previews: some View {
         ElementNavigationStack {
@@ -206,6 +207,14 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Admin: Banned")
         
         ElementNavigationStack {
+            RoomMembersListScreen(context: adminInCallViewModel.context)
+        }
+        .snapshotPreferences(expect: adminInCallViewModel.context.$viewState.map { state in
+            state.canBanUsers == true
+        })
+        .previewDisplayName("Admin: In-Call")
+        
+        ElementNavigationStack {
             RoomMembersListScreen(context: emptyBannedViewModel.context)
                 .onAppear { emptyBannedViewModel.context.searchQuery = "Dan" }
         }
@@ -215,6 +224,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(withInvites: Bool = false,
                               withBanned: Bool = true,
+                              withInCall: Bool = false,
                               isAdmin: Bool = false,
                               initialMode: RoomMembersListScreenMode = .members) -> RoomMembersListScreenViewModel {
         let mockAdmin = RoomMemberProxyMock.mockAdmin
@@ -228,7 +238,8 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
             mockAdmin,
             .mockCreator,
             .mockOwner,
-            .mockModerator
+            .mockModerator,
+            .mockFrank
         ]
         
         if withBanned {
@@ -237,6 +248,20 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         
         if withInvites {
             members.append(.mockInvited)
+        }
+        
+        if withInCall {
+            members = members.map { member in
+                switch member.userID {
+                case RoomMemberProxyMock.mockAlice.userID,
+                     RoomMemberProxyMock.mockOwner.userID,
+                     mockAdmin.userID:
+                    member.status = .mockCall
+                default:
+                    ()
+                }
+                return member
+            }
         }
         
         let clientProxyMock = ClientProxyMock(.init())

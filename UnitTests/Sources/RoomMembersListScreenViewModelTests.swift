@@ -55,6 +55,28 @@ struct RoomMembersListScreenViewModelTests {
     }
     
     @Test
+    mutating func sortingCallParticipants() async throws {
+        setup(members: [.mockAdmin, .mockFrank, .mockAlice])
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.visibleJoinedMembers.count == 3
+        }
+        try await deferred.fulfill()
+        
+        // Frank is in a call, so he should be sorted to the top despite having the lowest power level.
+        let sortedMembers: [RoomMemberListScreenEntry] = [
+            .init(member: .init(withProxy: RoomMemberProxyMock.mockFrank),
+                  verificationState: .notVerified),
+            .init(member: .init(withProxy: RoomMemberProxyMock.mockAdmin),
+                  verificationState: .notVerified),
+            .init(member: .init(withProxy: RoomMemberProxyMock.mockAlice),
+                  verificationState: .notVerified)
+        ]
+        
+        #expect(viewModel.state.visibleJoinedMembers == sortedMembers)
+    }
+    
+    @Test
     mutating func search() async throws {
         setup(members: [.mockAlice, .mockBob])
         
