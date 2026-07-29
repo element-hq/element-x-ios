@@ -22,10 +22,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     
-    /// Overrides the timeline kind used to build the context menu. Gallery previews use `.media` so the
-    /// standard download/forward/delete actions appear, since their underlying room timeline is `.live`.
-    private let menuTimelineKind: TimelineKind?
-    
     private var contentScannerService: ContentScannerServiceProtocol? {
         timelineViewModel.context.contentScannerService
     }
@@ -47,7 +43,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
-        menuTimelineKind = nil
         
         let timelineState = timelineViewModel.context.viewState.timelineState
         
@@ -99,7 +94,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
-        menuTimelineKind = .media(.roomScreenLive)
         
         super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(galleryItem: galleryItem,
                                                                                      initialIndex: initialIndex)),
@@ -236,7 +230,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                            pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                            isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
                                            areThreadsEnabled: timelineContext.viewState.areThreadsEnabled,
-                                           timelineKind: menuTimelineKind ?? timelineContext.viewState.timelineKind,
+                                           timelineKind: timelineContext.viewState.timelineKind,
                                            emojiProvider: timelineContext.viewState.emojiProvider)
                 .makeActions()
         }

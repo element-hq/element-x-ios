@@ -568,19 +568,12 @@ class TimelineInteractionHandler {
             return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
         case let item as FileRoomTimelineItem:
             return await mediaPreviewAction(for: item, messageTypes: [.audio, .file])
+        case let item as GalleryRoomTimelineItem:
+            // Only galleries are needed as the preview is scoped to the attachments of the tapped one.
+            return await mediaPreviewAction(for: item, messageTypes: [.gallery])
         default:
             return .none
         }
-    }
-    
-    /// Opens a media preview scoped to a single gallery's attachments. The preview pages
-    /// only between the items of that one gallery — siblings in the wider timeline aren't
-    /// reachable from this entry point (use the regular media tap for that).
-    func processGalleryItemTap(itemID: TimelineItemIdentifier, index: Int) -> TimelineControllerAction {
-        guard let galleryItem = timelineController.timelineItems.firstUsingStableID(itemID) as? GalleryRoomTimelineItem else {
-            return .none
-        }
-        return .displayGalleryPreview(galleryItem: galleryItem, initialIndex: index)
     }
     
     // MARK: - Private
@@ -644,10 +637,20 @@ class TimelineInteractionHandler {
                                                       linkMetadataProvider: linkMetadataProvider,
                                                       timelineControllerFactory: timelineControllerFactory)
             
-            return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
+            return previewAction(for: item, timelineViewModel: .new(timelineViewModel))
         } else {
-            return .displayMediaPreview(item: item, timelineViewModel: .active)
+            return previewAction(for: item, timelineViewModel: .active)
         }
+    }
+    
+    /// A gallery is previewed scoped to its own attachments rather than the wider timeline's media.
+    private func previewAction(for item: EventBasedMessageTimelineItemProtocol,
+                               timelineViewModel: TimelineControllerAction.TimelineViewModelKind) -> TimelineControllerAction {
+        guard let galleryItem = item as? GalleryRoomTimelineItem else {
+            return .displayMediaPreview(item: item, timelineViewModel: timelineViewModel)
+        }
+        
+        return .displayGalleryPreview(galleryItem: galleryItem, timelineViewModel: timelineViewModel)
     }
 }
 
