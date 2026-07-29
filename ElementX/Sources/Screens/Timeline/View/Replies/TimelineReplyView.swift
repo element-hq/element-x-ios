@@ -60,6 +60,8 @@ struct TimelineReplyView: View {
         case .image(let content): return content.imageInfo.source
         case .video(let content): return content.videoInfo.source
         case .voice(let content): return content.source
+        // Only the first item is scanned as it's the only one the reply previews.
+        case .gallery(let content): return content.items.first?.mediaSource
         default: return nil
         }
     }
@@ -75,6 +77,7 @@ struct TimelineReplyView: View {
         case .file(let content): return content.thumbnailSource
         case .image(let content): return content.thumbnailInfo?.source
         case .video(let content): return content.thumbnailInfo?.source
+        case .gallery(let content): return content.items.first?.thumbnailSource
         default: return nil
         }
     }
@@ -130,12 +133,7 @@ struct TimelineReplyView: View {
                                   formattedBody: nil,
                                   icon: .init(kind: .icon(\.locationPin)))
                     case .gallery(let content):
-                        ReplyView(sender: sender,
-                                  plainBody: content.caption ?? content.body,
-                                  formattedBody: content.formattedCaption,
-                                  icon: content.items.first?.thumbnailSource.map { .init(kind: .mediaSource($0)) }
-                                      ?? content.items.first?.mediaSource.map { .init(kind: .mediaSource($0)) }
-                                      ?? .init(kind: .icon(\.attachment)))
+                        GalleryReplyView(sender: sender, content: content)
                     }
                 case .poll(let question):
                     ReplyView(sender: sender,
@@ -156,6 +154,48 @@ struct TimelineReplyView: View {
             default:
                 LoadingReplyView()
             }
+        }
+    }
+    
+    /// A gallery of only images/videos previews the first item's thumbnail and counts its media, whilst
+    /// one containing other attachments shows a file icon and counts attachments instead.
+    private struct GalleryReplyView: View {
+        let sender: TimelineItemSender
+        let content: GalleryRoomTimelineItemContent
+        
+        private var caption: String? {
+            content.caption?.isBlank == false ? content.caption : nil
+        }
+        
+        private var isMediaGallery: Bool {
+            content.items.allSatisfy { $0.isImage || $0.isVideo }
+        }
+        
+        private var placeholder: String {
+            if isMediaGallery {
+                L10n.commonGalleryReplyMediaItems(content.items.count)
+            } else {
+                L10n.commonGalleryReplyAttachments(content.items.count)
+            }
+        }
+        
+        private var icon: ReplyView.Icon? {
+            guard isMediaGallery, let item = content.items.first else {
+                return .init(kind: .icon(\.attachment))
+            }
+            
+            return switch item {
+            case .image(_, let itemContent): .init(kind: .mediaSource(itemContent.thumbnailInfo?.source ?? itemContent.imageInfo.source))
+            case .video(_, let itemContent): itemContent.thumbnailInfo.map { .init(kind: .mediaSource($0.source)) }
+            case .audio, .file, .other: nil
+            }
+        }
+        
+        var body: some View {
+            ReplyView(sender: sender,
+                      plainBody: caption ?? placeholder,
+                      formattedBody: caption == nil ? nil : content.formattedCaption,
+                      icon: icon)
         }
     }
     
@@ -402,6 +442,22 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
                                                                 eventID: "123",
                                                                 eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithEventOnRoomAliasMention))))),
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
+                                                                eventContent: .message(.gallery(.init(body: "Gallery",
+                                                                                                      items: [.mockImage(index: 0),
+                                                                                                              .mockVideo(index: 1)]))))),
+            
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                eventID: "123",
+                                                                eventContent: .message(.gallery(.init(body: "Gallery",
+                                                                                                      caption: "A trip to remember 🌅",
+                                                                                                      items: [.mockImage(index: 0),
+                                                                                                              .mockVideo(index: 1),
+                                                                                                              .mockImage(index: 2)]))))),
+            
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
                                                                 eventID: "123",
