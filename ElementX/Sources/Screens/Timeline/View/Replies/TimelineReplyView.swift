@@ -157,8 +157,8 @@ struct TimelineReplyView: View {
         }
     }
     
-    /// A gallery of only images/videos previews the first item's thumbnail and counts its media, whilst
-    /// one containing other attachments shows a file icon and counts attachments instead.
+    /// A gallery previews its first attachment as though it had been sent on its own, counting its
+    /// media when they're all images/videos and its attachments otherwise.
     private struct GalleryReplyView: View {
         let sender: TimelineItemSender
         let content: GalleryRoomTimelineItemContent
@@ -180,14 +180,13 @@ struct TimelineReplyView: View {
         }
         
         private var icon: ReplyView.Icon? {
-            guard isMediaGallery, let item = content.items.first else {
-                return .init(kind: .icon(\.attachment))
-            }
+            guard let item = content.items.first else { return nil }
             
             return switch item {
             case .image(_, let itemContent): .init(kind: .mediaSource(itemContent.thumbnailInfo?.source ?? itemContent.imageInfo.source))
             case .video(_, let itemContent): itemContent.thumbnailInfo.map { .init(kind: .mediaSource($0.source)) }
-            case .audio, .file, .other: nil
+            case .audio: .init(kind: .icon(\.audio))
+            case .file, .other: .init(kind: .icon(\.attachment))
             }
         }
         
