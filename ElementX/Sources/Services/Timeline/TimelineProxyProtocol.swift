@@ -16,7 +16,7 @@ enum TimelineKind: Equatable {
     case pinned
     case thread(rootEventID: String)
     
-    enum MediaPresentation { case roomScreenLive, roomScreenDetached, pinnedEventsScreen, mediaFilesScreen }
+    enum MediaPresentation { case roomScreenLive, roomScreenDetached, roomScreenThread, pinnedEventsScreen, mediaFilesScreen }
     case media(MediaPresentation)
     
     var isThread: Bool {

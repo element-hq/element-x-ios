@@ -94,7 +94,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
-        guard let content = timelineItemProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content,
+        guard let content = timelineItemProvider.itemProxies.firstEventTimelineItem(matching: timelineItemID)?.content,
               case let .msgLike(messageLikeContent) = content,
               case let .message(messageContent) = messageLikeContent.kind else {
             return nil
@@ -663,15 +663,19 @@ private extension MatrixRustSDK.PollKind {
 }
 
 extension Array where Element == TimelineItemProxy {
-    func firstEventTimelineItemUsingStableID(_ id: TimelineItemIdentifier) -> EventTimelineItem? {
-        for item in self {
-            if case let .event(eventTimelineItem) = item {
-                if eventTimelineItem.id.uniqueID == id.uniqueID {
-                    return eventTimelineItem.item
-                }
-            }
+    /// The event matching the given identifier, found by the event itself as that is the only part of
+    /// the identifier that can be compared across timelines. Identifiers that don't represent an event
+    /// fall back to the unique ID.
+    func firstEventTimelineItem(matching id: TimelineItemIdentifier) -> EventTimelineItem? {
+        let eventTimelineItems = compactMap { item -> EventTimelineItemProxy? in
+            guard case let .event(eventTimelineItem) = item else { return nil }
+            return eventTimelineItem
         }
         
-        return nil
+        guard let eventOrTransactionID = id.eventOrTransactionID else {
+            return eventTimelineItems.first { $0.id.uniqueID == id.uniqueID }?.item
+        }
+        
+        return eventTimelineItems.first { $0.id.eventOrTransactionID == eventOrTransactionID }?.item
     }
 }

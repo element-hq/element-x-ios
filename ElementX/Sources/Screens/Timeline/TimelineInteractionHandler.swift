@@ -107,6 +107,14 @@ class TimelineInteractionHandler {
     
     // swiftlint:disable:next cyclomatic_complexity
     func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
+        // Redacting needs the event alone, so it works even when the item isn't part of this timeline,
+        // such as one held by a media preview that was built from a different one.
+        if case .redact = action {
+            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
+            Task { await timelineController.redact(eventOrTransactionID) }
+            return
+        }
+        
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
             return
@@ -156,8 +164,7 @@ class TimelineInteractionHandler {
                 UIPasteboard.general.url = permalinkURL
             }
         case .redact:
-            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
-            Task { await timelineController.redact(eventOrTransactionID) }
+            break // Handled above, before the timeline item is looked up.
         case .reply:
             guard let eventID = eventTimelineItem.id.eventID else { return }
             
@@ -607,7 +614,10 @@ class TimelineInteractionHandler {
         case .pinned:
             newTimelineFocus = .pinned
             newTimelinePresentation = .pinnedEventsScreen
-        case .media, .thread:
+        case .thread(let rootEventID):
+            newTimelineFocus = .thread(eventID: rootEventID)
+            newTimelinePresentation = .roomScreenThread
+        case .media:
             break // We don't need to create a new timeline as it is already filtered.
         }
         
