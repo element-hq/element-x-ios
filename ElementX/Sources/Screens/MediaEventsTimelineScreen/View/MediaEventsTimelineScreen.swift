@@ -54,7 +54,7 @@ struct MediaEventsTimelineScreen: View {
     }
     
     private var scrollView: some View {
-        ScrollView {
+        PreviewScrollView {
             Group {
                 switch context.viewState.screenMode {
                 case .media:
@@ -269,15 +269,13 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyFilesViewModel = makeViewModel(empty: true, screenMode: .files)
     
     static var previews: some View {
-        ElementNavigationStack {
-            MediaEventsTimelineScreen(context: mediaViewModel.context)
-        }
-        .previewDisplayName("Media")
+        MediaEventsTimelineScreen(context: mediaViewModel.context)
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("Media")
         
-        ElementNavigationStack {
-            MediaEventsTimelineScreen(context: filesViewModel.context)
-        }
-        .previewDisplayName("Files")
+        MediaEventsTimelineScreen(context: filesViewModel.context)
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("Files")
         
         ElementNavigationStack {
             MediaEventsTimelineScreen(context: emptyMediaViewModel.context)
