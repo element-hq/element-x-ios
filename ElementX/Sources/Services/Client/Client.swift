@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-extension ClientProtocol {
+nonisolated extension ClientProtocol {
     func elementWellKnown() async -> Result<Data, ClientProxyError> {
         let serverNameURLString = if let userIDServerName = try? userIdServerName() {
             "https://\(userIDServerName)"

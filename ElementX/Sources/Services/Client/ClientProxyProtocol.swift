@@ -41,6 +41,7 @@ enum ClientProxyError: Error {
     
     case invalidMedia
     case invalidServerName
+    case invalidHomeserverURL
     case failedUploadingMedia(ErrorKind)
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
