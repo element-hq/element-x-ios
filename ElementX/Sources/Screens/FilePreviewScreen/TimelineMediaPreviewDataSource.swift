@@ -449,12 +449,8 @@ private extension RoomTimelineItemViewState {
             return [TimelineMediaPreviewItem.Media(roomTimelineItemViewState: self)].compactMap { $0 }
         }
         
-        return galleryItem.content.items.filter { item in
-            guard let allowedItemType = item.allowedItemType else {
-                return false // Nothing to preview, and unlike a tile there's no index to line up with.
-            }
-            
-            return allowedGalleryItemTypes?.contains(allowedItemType) ?? true
-        }.map { TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: $0) }
+        return galleryItem.content.attachments(allowedTypes: allowedGalleryItemTypes).map {
+            TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: $0.item)
+        }
     }
 }

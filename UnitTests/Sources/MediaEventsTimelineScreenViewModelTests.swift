@@ -12,8 +12,8 @@ import Testing
 struct MediaEventsTimelineScreenViewModelTests {
     @Test
     func changingScreenModeSwitchesTimelines() {
-        let mediaTimelineViewModel = makeTimelineViewModel()
-        let filesTimelineViewModel = makeTimelineViewModel()
+        let mediaTimelineViewModel = makeTimelineViewModel(allowedGalleryItemTypes: [.image, .video])
+        let filesTimelineViewModel = makeTimelineViewModel(allowedGalleryItemTypes: [.file, .audio])
         
         let viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                            filesTimelineViewModel: filesTimelineViewModel,
@@ -45,10 +45,12 @@ struct MediaEventsTimelineScreenViewModelTests {
     
     // MARK: - Helpers
     
-    // Both timelines are given the same mixed chunk of items so that the mode based filtering is what's under test.
-    private func makeTimelineViewModel() -> TimelineViewModel {
+    // Both timelines are given the same mixed chunk of items, filtered as they are in the app, so that
+    // the filtering of the items is what's under test.
+    private func makeTimelineViewModel(allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]) -> TimelineViewModel {
         let timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen),
-                                                              timelineItems: [TimelineFixtures.separator] + TimelineFixtures.mediaChunk))
+                                                              timelineItems: [TimelineFixtures.separator] + TimelineFixtures.mediaChunk,
+                                                              allowedGalleryItemTypes: allowedGalleryItemTypes))
         return TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen), timelineController: timelineController)
     }
     

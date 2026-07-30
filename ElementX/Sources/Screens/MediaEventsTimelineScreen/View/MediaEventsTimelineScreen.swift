@@ -361,7 +361,15 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
             timelineItems.append(contentsOf: [makeFileItem(url: .mockMXCScanning), makeFileItem(url: .mockMXCUnsafe)])
         }
         
-        return TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: timelineItems))
+        // Mirrors the message types that the flow coordinator filters each timeline to.
+        let allowedGalleryItemTypes: [TimelineAllowedGalleryItemType] = switch screenMode {
+        case .media: [.image, .video]
+        case .files: [.file, .audio]
+        }
+        
+        return TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen),
+                                            timelineItems: timelineItems,
+                                            allowedGalleryItemTypes: allowedGalleryItemTypes))
     }
     
     private static func makeImageItem(url: URL) -> ImageRoomTimelineItem {

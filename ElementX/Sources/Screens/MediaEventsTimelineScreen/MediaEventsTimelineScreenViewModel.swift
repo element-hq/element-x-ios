@@ -204,7 +204,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                 return [itemViewState]
             case .gallery(let galleryItem):
                 // A gallery's attachments are displayed flattened, listed individually.
-                let flattenedItems = galleryItem.itemsAsIndividualMessages(for: state.screenMode)
+                let flattenedItems = galleryItem.itemsAsIndividualMessages(allowedTypes: timelineViewState.allowedGalleryItemTypes)
                 for (mediaIndex, item) in flattenedItems {
                     newGalleryItemLookup[item.id.uniqueID] = .init(parentID: galleryItem.id, mediaIndex: mediaIndex)
                 }
@@ -285,32 +285,31 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
 }
 
 private extension GalleryRoomTimelineItem {
-    /// Represents the gallery's attachments as though each had been sent as an individual message, so
-    /// that the screen can list them alongside the room's other media, keeping only those that belong
-    /// in the given mode. Each one keeps the gallery's event ID but is given its own unique ID so that
-    /// the attachments remain distinct within the list.
-    func itemsAsIndividualMessages(for screenMode: MediaEventsTimelineScreenMode) -> [(mediaIndex: Int, item: EventBasedMessageTimelineItemProtocol)] {
+    /// Represents the gallery's attachments of the given types as though each had been sent as an
+    /// individual message, so that the screen can list them alongside the room's other media. Each one
+    /// keeps the gallery's event ID but is given its own unique ID so that they remain distinct.
+    func itemsAsIndividualMessages(allowedTypes: [TimelineAllowedGalleryItemType]?) -> [(mediaIndex: Int, item: EventBasedMessageTimelineItemProtocol)] {
         guard let eventOrTransactionID = id.eventOrTransactionID else { return [] }
         
-        return content.items.enumerated().compactMap { mediaIndex, galleryItem in
+        return content.attachments(allowedTypes: allowedTypes).compactMap { mediaIndex, galleryItem in
             let itemID = TimelineItemIdentifier.event(uniqueID: .init("\(id.uniqueID.value)-\(mediaIndex)"),
                                                       eventOrTransactionID: eventOrTransactionID)
             
             let item: EventBasedMessageTimelineItemProtocol? = switch galleryItem {
-            case .image(_, let content) where screenMode == .media:
+            case .image(_, let content):
                 ImageRoomTimelineItem(id: itemID, timestamp: timestamp, isOutgoing: isOutgoing, isEditable: isEditable,
                                       canBeRepliedTo: canBeRepliedTo, sender: sender, content: content, properties: properties)
-            case .video(_, let content) where screenMode == .media:
+            case .video(_, let content):
                 VideoRoomTimelineItem(id: itemID, timestamp: timestamp, isOutgoing: isOutgoing, isEditable: isEditable,
                                       canBeRepliedTo: canBeRepliedTo, sender: sender, content: content, properties: properties)
-            case .audio(_, let content) where screenMode == .files:
+            case .audio(_, let content):
                 AudioRoomTimelineItem(id: itemID, timestamp: timestamp, isOutgoing: isOutgoing, isEditable: isEditable,
                                       canBeRepliedTo: canBeRepliedTo, sender: sender, content: content, properties: properties)
-            case .file(_, let content) where screenMode == .files:
+            case .file(_, let content):
                 FileRoomTimelineItem(id: itemID, timestamp: timestamp, isOutgoing: isOutgoing, isEditable: isEditable,
                                      canBeRepliedTo: canBeRepliedTo, sender: sender, content: content, properties: properties)
-            default:
-                nil // Attachments of an unknown type, or that belong in the other mode.
+            case .other:
+                nil // Filtered out above, as there's nothing to show for it.
             }
             
             guard let item else { return nil }
