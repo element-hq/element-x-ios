@@ -1172,6 +1172,10 @@ internal nonisolated enum L10n {
   internal static func notificationFallbackNContent(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_fallback_n_content", p1)
   }
+  /// Plural format key: "%#@COUNT@"
+  internal static func notificationGalleryBody(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_gallery_body", p1)
+  }
   /// 📞 Incoming call
   internal static var notificationIncomingAudioCall: String { return L10n.tr("Localizable", "notification_incoming_audio_call") }
   /// 📹 Incoming call
