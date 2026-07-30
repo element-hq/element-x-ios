@@ -20,14 +20,9 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     
     private var isOldestItemVisible = false
     
-    /// The gallery attachment that a listed item was built from, keyed by that item's unique ID.
-    /// Interactions are forwarded using the gallery's own identifier, which is the one the timeline knows.
-    private struct GalleryItemLocation {
-        let parentID: TimelineItemIdentifier
-        let mediaIndex: Int
-    }
-    
-    private var galleryItemLookup = [TimelineItemIdentifier.UniqueID: GalleryItemLocation]()
+    /// The gallery item that a listed item was built from, so that interactions can be forwarded
+    /// using the gallery's identifier rather than the listed item's.
+    private var galleryItemIDs = [TimelineItemIdentifier.UniqueID: GalleryItemID]()
     
     private var activeTimelineViewModel: TimelineViewModelProtocol {
         switch state.screenMode {
@@ -132,14 +127,14 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         case .oldestItemDidDisappear:
             isOldestItemVisible = false
         case .tappedItem(let item):
-            if let location = galleryItemLookup[item.id] {
-                activeTimelineViewModel.context.send(viewAction: .galleryItemTapped(itemID: location.parentID, index: location.mediaIndex))
+            if let galleryItemID = galleryItemIDs[item.id] {
+                activeTimelineViewModel.context.send(viewAction: .galleryItemTapped(galleryItemID))
             } else {
                 activeTimelineViewModel.context.send(viewAction: .mediaTapped(itemID: item.identifier))
             }
         case .longPressedItem(let item):
-            // The menu acts on the gallery as a whole, as its actions can't apply to a single attachment.
-            let itemID = galleryItemLookup[item.id]?.parentID ?? item.identifier
+            // The menu acts on the gallery as a whole, as its actions can't apply to a single item.
+            let itemID = galleryItemIDs[item.id]?.timelineItemID ?? item.identifier
             activeTimelineViewModel.context.send(viewAction: .displayTimelineItemMenu(itemID: itemID))
         }
     }
@@ -192,7 +187,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
         var newGroups = [MediaEventsTimelineGroup]()
         var currentItems = [RoomTimelineItemViewState]()
-        var newGalleryItemLookup = [TimelineItemIdentifier.UniqueID: GalleryItemLocation]()
+        var newGalleryItemIDs = [TimelineItemIdentifier.UniqueID: GalleryItemID]()
         
         timelineViewState.timelineState.itemViewStates.flatMap { itemViewState -> [RoomTimelineItemViewState] in
             switch itemViewState.type {
@@ -203,10 +198,9 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             case .separator:
                 return [itemViewState]
             case .gallery(let galleryItem):
-                // A gallery's attachments are displayed flattened, listed individually.
                 let flattenedItems = galleryItem.itemsAsIndividualMessages(allowedTypes: timelineViewState.allowedGalleryItemTypes)
                 for (mediaIndex, item) in flattenedItems {
-                    newGalleryItemLookup[item.id.uniqueID] = .init(parentID: galleryItem.id, mediaIndex: mediaIndex)
+                    newGalleryItemIDs[item.id.uniqueID] = .init(timelineItemID: galleryItem.id, mediaIndex: mediaIndex)
                 }
                 return flattenedItems.map { .init(item: $0.item, groupStyle: .single) }
             default:
@@ -235,7 +229,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
         
         state.groups = newGroups
-        galleryItemLookup = newGalleryItemLookup
+        galleryItemIDs = newGalleryItemIDs
         
         state.isBackPaginating = timelineViewState.timelineState.paginationState.backward == .paginating
         state.shouldShowEmptyState = newGroups.isEmpty && timelineViewState.timelineState.paginationState.backward == .endReached
@@ -291,7 +285,7 @@ private extension GalleryRoomTimelineItem {
     func itemsAsIndividualMessages(allowedTypes: [TimelineAllowedGalleryItemType]?) -> [(mediaIndex: Int, item: EventBasedMessageTimelineItemProtocol)] {
         guard let eventOrTransactionID = id.eventOrTransactionID else { return [] }
         
-        return content.attachments(allowedTypes: allowedTypes).compactMap { mediaIndex, galleryItem in
+        return content.items(matching: allowedTypes).compactMap { mediaIndex, galleryItem in
             let itemID = TimelineItemIdentifier.event(uniqueID: .init("\(id.uniqueID.value)-\(mediaIndex)"),
                                                       eventOrTransactionID: eventOrTransactionID)
             

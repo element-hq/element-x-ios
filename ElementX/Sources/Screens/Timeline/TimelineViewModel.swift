@@ -160,8 +160,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineController.processItemDisappearance(id) }
         case .mediaTapped(let id):
             Task { await handleMediaTapped(with: id) }
-        case .galleryItemTapped(let id, let index):
-            Task { await handleMediaTapped(with: id, galleryIndex: index) }
+        case .galleryItemTapped(let galleryItemID):
+            Task { await handleMediaTapped(with: galleryItemID.timelineItemID, galleryIndex: galleryItemID.mediaIndex) }
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):

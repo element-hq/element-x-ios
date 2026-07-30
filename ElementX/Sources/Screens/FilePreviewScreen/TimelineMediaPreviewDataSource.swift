@@ -449,7 +449,7 @@ private extension RoomTimelineItemViewState {
             return [TimelineMediaPreviewItem.Media(roomTimelineItemViewState: self)].compactMap { $0 }
         }
         
-        return galleryItem.content.attachments(allowedTypes: allowedGalleryItemTypes).map {
+        return galleryItem.content.items(matching: allowedGalleryItemTypes).map {
             TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: $0.item)
         }
     }
