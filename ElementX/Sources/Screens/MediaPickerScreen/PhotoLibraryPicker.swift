@@ -39,8 +39,8 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         configuration.selectionLimit = switch selectionType {
         case .single:
             1
-        case .multiple:
-            10
+        case .multiple(let limit):
+            limit
         }
         
         let pickerViewController = PHPickerViewController(configuration: configuration)

@@ -20,9 +20,21 @@ enum MediaPickerScreenSource: Hashable {
     case documents(types: [UTType] = [.data])
 }
 
-enum MediaPickerScreenSelectionType {
+enum MediaPickerScreenSelectionType: Hashable {
     case single
-    case multiple
+    /// Multiple items, up to the given limit.
+    case multiple(limit: Int)
+    
+    /// The number of attachments a gallery may contain, as recommended by
+    /// [MSC4274](https://github.com/matrix-org/matrix-spec-proposals/pull/4274).
+    static let galleryLimit = 60
+    /// The number of items to allow when each is sent as an individual message.
+    static let individualUploadLimit = 10
+    
+    /// Multiple items, capped for a gallery when they're sent as one, or for individual uploads when not.
+    static func multiple(galleryEnabled: Bool) -> Self {
+        .multiple(limit: galleryEnabled ? galleryLimit : individualUploadLimit)
+    }
 }
 
 enum MediaPickerScreenCoordinatorAction {
