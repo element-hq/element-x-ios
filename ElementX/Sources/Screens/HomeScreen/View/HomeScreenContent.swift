@@ -146,6 +146,8 @@ struct HomeScreenContent: View {
         }
         
         guard scrollView.contentSize.height > scrollView.bounds.height else {
+            // This list never scrolls, publish the range manually.
+            context.send(viewAction: .updateVisibleItemRange(0..<context.viewState.visibleRooms.count))
             return
         }
         
