@@ -16,11 +16,10 @@ nonisolated struct GalleryRoomTimelineItemContent: Hashable {
     var formattedCaptionHTMLString: String?
     let items: [GalleryItem]
     
-    /// The attachments of the given types, paired with their position in the gallery so that they remain
-    /// identifiable once separated from it. Attachments of an unknown type are never included as there's
-    /// nothing to show for them.
+    /// The items of the given types, paired with their position in the gallery so that they remain
+    /// identifiable once separated from it. Items of an unknown type are never included.
     /// - Parameter allowedTypes: The types to include, or `nil` to include them all.
-    func attachments(allowedTypes: [TimelineAllowedGalleryItemType]?) -> [(mediaIndex: Int, item: GalleryItem)] {
+    func items(matching allowedTypes: [TimelineAllowedGalleryItemType]?) -> [(mediaIndex: Int, item: GalleryItem)] {
         items.enumerated().compactMap { mediaIndex, item in
             guard let allowedItemType = item.allowedItemType,
                   allowedTypes?.contains(allowedItemType) ?? true else {

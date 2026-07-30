@@ -61,7 +61,7 @@ struct GalleryRoomTimelineView: View {
     }
     
     private func tap(index: Int) {
-        context?.send(viewAction: .galleryItemTapped(itemID: timelineItem.id, index: index))
+        context?.send(viewAction: .galleryItemTapped(.init(timelineItemID: timelineItem.id, mediaIndex: index)))
     }
 }
 
