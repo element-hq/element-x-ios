@@ -82,12 +82,36 @@ struct SettingsScreenViewModelTests {
             return .success(())
         }
         let statusRemoved = deferFulfillment(removeStream) { _ in true }
-        context.send(viewAction: .userStatus(.set(nil)))
+        context.send(viewAction: .userStatus(.clear(.userSet(status))))
+        
+        // Then only the remove user status endpoint should be called.
+        try await statusRemoved.fulfill()
+        #expect(clientProxy.removeUserStatusCallsCount == 1)
+        #expect(!clientProxy.removeCallStatusCalled)
+        #expect(clientProxy.setUserStatusCallsCount == 1)
+    }
+    
+    @Test
+    mutating func clearCallStatus() async throws {
+        // Given a screen where the user has a call status set.
+        let callStatus = UserStatus.mockCall
+        setupViewModel(status: callStatus)
+        let displayedStatus = try #require(callStatus.displayed)
+        
+        // When clearing the status.
+        let (removeStream, removeContinuation) = AsyncStream<Void>.makeStream()
+        clientProxy.removeCallStatusClosure = {
+            removeContinuation.yield()
+            return .success(())
+        }
+        let statusRemoved = deferFulfillment(removeStream) { _ in true }
+        context.send(viewAction: .userStatus(.clear(displayedStatus)))
         
         // Then only the remove endpoint should be called, leaving the set call untouched.
         try await statusRemoved.fulfill()
-        #expect(clientProxy.removeUserStatusCallsCount == 1)
-        #expect(clientProxy.setUserStatusCallsCount == 1)
+        #expect(clientProxy.removeCallStatusCallsCount == 1)
+        #expect(!clientProxy.removeUserStatusCalled)
+        #expect(!clientProxy.setUserStatusCalled)
     }
     
     @Test
@@ -97,8 +121,8 @@ struct SettingsScreenViewModelTests {
         setupViewModel(status: status)
         
         // Then that status should be shown.
-        let rawStatus = try #require(status.raw)
-        #expect(context.viewState.userStatusRowMode == .show(rawStatus))
+        let displayedStatus = try #require(status.displayed)
+        #expect(context.viewState.userStatusRowMode == .show(displayedStatus))
     }
     
     @Test

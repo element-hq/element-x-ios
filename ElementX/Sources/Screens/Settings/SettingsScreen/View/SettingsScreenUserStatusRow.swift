@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct SettingsScreenUserStatusRow: View {
-    enum Mode: Equatable { case pick, custom(emoji: Character), show(UserStatus.Raw) }
+    enum Mode: Equatable { case pick, custom(emoji: Character), show(UserStatus.Displayed) }
     let mode: Mode
     let action: (SettingsScreenViewAction.UserStatusAction) -> Void
     
@@ -71,7 +71,7 @@ struct SettingsScreenUserStatusRow: View {
                     .accessibilityValue(Text(String(status.emoji)) + Text(status.text))
                     .buttonStyle(.plain)
                     
-                    Button(L10n.actionClear) { action(.set(nil)) }
+                    Button(L10n.actionClear) { action(.clear(status)) }
                         .buttonStyle(.compound(.textLink))
                 }
                 .padding(ListRowPadding.insets)
@@ -112,7 +112,11 @@ struct SettingsScreenUserStatusRow_Previews: PreviewProvider, TestablePreview {
             }
             
             Section {
-                SettingsScreenUserStatusRow(mode: .show(.init(text: "Away", emoji: "🌴"))) { _ in }
+                SettingsScreenUserStatusRow(mode: .show(.userSet(.init(text: "Away", emoji: "🌴")))) { _ in }
+            }
+            
+            Section {
+                SettingsScreenUserStatusRow(mode: .show(.inCall(.init(joinedDate: nil)))) { _ in }
             }
         }
         .compoundList()
