@@ -207,6 +207,13 @@ nonisolated struct NotificationContentBuilder {
                                      using: mediaProvider,
                                      mediaSource: .init(source: content.source,
                                                         mimeType: content.info?.mimetype))
+        case .gallery(content: let content):
+            // A notification can only show one attachment, so the gallery is represented by its first.
+            if let mediaSource = content.itemtypes.firstPreviewableMediaSource {
+                await addMediaAttachment(notificationContent: &notificationContent,
+                                         using: mediaProvider,
+                                         mediaSource: mediaSource)
+            }
         default:
             break
         }
@@ -360,5 +367,26 @@ private nonisolated struct NotificationIcon {
     
     var shouldDisplayAsGroup: Bool {
         groupInfo != nil
+    }
+}
+
+private nonisolated extension [GalleryItemType] {
+    /// The media source of the first attachment that a notification is able to show, skipping the
+    /// types that it can't such as documents.
+    var firstPreviewableMediaSource: MediaSourceProxy? {
+        for itemType in self {
+            switch itemType {
+            case .image(let content):
+                return .init(source: content.source, mimeType: content.info?.mimetype)
+            case .video(let content):
+                return .init(source: content.source, mimeType: content.info?.mimetype)
+            case .audio(let content):
+                return .init(source: content.source, mimeType: content.info?.mimetype)
+            case .file, .other:
+                continue
+            }
+        }
+        
+        return nil
     }
 }

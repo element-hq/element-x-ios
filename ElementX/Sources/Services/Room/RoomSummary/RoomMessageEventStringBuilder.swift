@@ -66,7 +66,7 @@ nonisolated struct RoomMessageEventStringBuilder {
                 message = AttributedString(content.body)
             }
         case .gallery(let content):
-            message = AttributedString(content.body)
+            message = buildGalleryMessage(for: style, content: content)
         case .other(_, let body):
             message = AttributedString(body)
         }
@@ -88,6 +88,21 @@ nonisolated struct RoomMessageEventStringBuilder {
             return prefix(message, with: isOutgoing ? L10n.commonYou : senderDisplayName)
         } else {
             return message
+        }
+    }
+    
+    /// A gallery's body is its caption. Notifications fall back to counting the attachments when
+    /// there isn't one, whilst elsewhere it is treated as any other media's caption.
+    private func buildGalleryMessage(for style: Style, content: GalleryMessageContent) -> AttributedString {
+        switch style {
+        case .plain:
+            if content.body.isBlank {
+                AttributedString(L10n.notificationGalleryBody(content.itemtypes.count))
+            } else {
+                AttributedString(content.body)
+            }
+        case .senderPrefixed, .typeBolded:
+            buildMessage(for: style, caption: content.body, type: L10n.commonGallery)
         }
     }
     
