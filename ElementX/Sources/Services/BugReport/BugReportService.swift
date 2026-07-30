@@ -296,7 +296,7 @@ nonisolated extension BugReportService: URLSessionTaskDelegate {
     /// where the service lives.
     func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
         Task { @MainActor [weak self] in
-            for await value in task.progress.publisher(for: \.fractionCompleted).values {
+            for await value in task.progress.publisher(for: \.fractionCompleted).buffer(size: 1, prefetch: .byRequest, whenFull: .dropOldest).values {
                 self?.progressSubject.send(value)
             }
         }
