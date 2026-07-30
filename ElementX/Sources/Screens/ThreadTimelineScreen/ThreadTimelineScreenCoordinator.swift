@@ -46,6 +46,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     private let viewModel: ThreadTimelineScreenViewModelProtocol
     private let timelineViewModel: TimelineViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModelProtocol
+    private let appSettings: AppSettings
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -55,6 +56,8 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: ThreadTimelineScreenCoordinatorParameters) {
+        appSettings = parameters.appSettings
+        
         viewModel = ThreadTimelineScreenViewModel(roomProxy: parameters.roomProxy, userSession: parameters.userSession)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
@@ -107,13 +110,13 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .displayCameraPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .multiple),
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .multiple(galleryEnabled: appSettings.galleryEnabled)),
                                                                   caption: composerViewModel.context.plainComposerText))
                 case .displayMediaPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple),
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple(galleryEnabled: appSettings.galleryEnabled)),
                                                                   caption: composerViewModel.context.plainComposerText))
                 case .displayDocumentPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents(), selectionType: .multiple),
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents(), selectionType: .multiple(galleryEnabled: appSettings.galleryEnabled)),
                                                                   caption: composerViewModel.context.plainComposerText))
                 case .displayMediaPreview(let mediaPreviewViewModel):
                     viewModel.displayMediaPreview(mediaPreviewViewModel)
