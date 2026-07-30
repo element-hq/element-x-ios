@@ -19,8 +19,9 @@ nonisolated struct GalleryRoomTimelineItemContent: Hashable {
 
 /// Identifies a single attachment within a gallery message.
 nonisolated struct GalleryItemID: Hashable {
-    /// The unique ID of the parent gallery timeline item.
-    let timelineItemUniqueID: TimelineItemIdentifier.UniqueID
+    /// The identifier of the parent gallery timeline item. The whole identifier is used so that an
+    /// attachment remains identifiable across timelines, where the unique ID alone wouldn't be.
+    let timelineItemID: TimelineItemIdentifier
     /// The item's position within the gallery.
     let mediaIndex: Int
 }
@@ -152,13 +153,24 @@ nonisolated enum GalleryItem: Hashable, Identifiable {
     var hasThumbnail: Bool {
         isImage || thumbnailSource != nil
     }
+    
+    /// The type this attachment is allowed by, or `nil` when its type is unknown.
+    var allowedItemType: TimelineAllowedGalleryItemType? {
+        switch self {
+        case .image: .image
+        case .video: .video
+        case .audio: .audio
+        case .file: .file
+        case .other: nil
+        }
+    }
 }
 
 // MARK: - Mocks
 
 nonisolated extension GalleryItemID {
     static func mock(_ index: Int) -> GalleryItemID {
-        .init(timelineItemUniqueID: .init("gallery-mock"), mediaIndex: index)
+        .init(timelineItemID: .randomEvent, mediaIndex: index)
     }
 }
 

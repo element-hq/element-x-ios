@@ -149,7 +149,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .location(let content):
             .location(buildLocationTimelineItemContent(content))
         case .gallery(let content):
-            .gallery(buildGalleryTimelineItemContent(content, uniqueID: .init(senderID)))
+            .gallery(buildGalleryTimelineItemContent(content, timelineItemID: .randomEvent))
         case .other(_, let body):
             .text(.init(body: body))
         case .none:
@@ -417,7 +417,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                 canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                 shouldBoost: eventItemProxy.shouldBoost,
                                 sender: eventItemProxy.sender,
-                                content: buildGalleryTimelineItemContent(galleryMessageContent, uniqueID: eventItemProxy.id.uniqueID),
+                                content: buildGalleryTimelineItemContent(galleryMessageContent, timelineItemID: eventItemProxy.id),
                                 properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
                                                   isThreaded: messageLikeContent.threadRoot != nil,
                                                   threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
@@ -429,13 +429,13 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                   encryptionForwarder: eventItemProxy.forwarder))
     }
     
-    private func buildGalleryTimelineItemContent(_ messageContent: GalleryMessageContent, uniqueID: TimelineItemIdentifier.UniqueID) -> GalleryRoomTimelineItemContent {
+    private func buildGalleryTimelineItemContent(_ messageContent: GalleryMessageContent, timelineItemID: TimelineItemIdentifier) -> GalleryRoomTimelineItemContent {
         let htmlCaption = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
         let plainCaption = messageContent.formatted?.format != .html ? messageContent.formatted?.body : nil
         let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : (plainCaption.flatMap(attributedStringBuilder.fromPlain))
         
         let items = messageContent.itemtypes.enumerated().map { index, itemType in
-            buildGalleryItem(itemType, id: GalleryItemID(timelineItemUniqueID: uniqueID, mediaIndex: index))
+            buildGalleryItem(itemType, id: GalleryItemID(timelineItemID: timelineItemID, mediaIndex: index))
         }
         
         return GalleryRoomTimelineItemContent(body: messageContent.body,

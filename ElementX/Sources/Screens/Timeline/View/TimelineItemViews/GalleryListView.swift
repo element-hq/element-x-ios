@@ -110,7 +110,7 @@ private struct GalleryListRow: View {
     private var icon: some View {
         if item.hasThumbnail, let source = item.thumbnailSource ?? item.mediaSource {
             LoadableImage(mediaSource: source,
-                          mediaType: .timelineItem(uniqueID: item.id.timelineItemUniqueID),
+                          mediaType: .timelineItem(uniqueID: item.id.timelineItemID.uniqueID),
                           blurhash: item.blurhash,
                           size: item.size,
                           mediaProvider: mediaProvider) { imageView in

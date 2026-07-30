@@ -104,6 +104,8 @@ enum TimelineComposerAction {
 
 struct TimelineViewState: BindableState {
     let timelineKind: TimelineKind
+    /// The gallery attachments the timeline includes, or `nil` when it isn't filtered.
+    let allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?
     var roomID: String
     var members: [String: RoomMemberState] = [:]
     var typingMembers: [String] = []

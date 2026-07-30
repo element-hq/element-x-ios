@@ -30,26 +30,57 @@ struct TimelineMediaPreviewDataSourceTests {
     }
     
     @Test
+    func timelinePreviewFlattensGalleries() throws {
+        // Given a timeline containing an image, a gallery of 2 attachments and a gallery of 3, one of
+        // which is a file that belongs in the other timeline.
+        let image = ImageRoomTimelineItem(id: .randomEvent,
+                                          timestamp: .mock,
+                                          isOutgoing: false,
+                                          isEditable: false,
+                                          canBeRepliedTo: true,
+                                          sender: .init(id: "Bob"),
+                                          content: .init(filename: "image.jpg", imageInfo: .mockImage, thumbnailInfo: nil, blurhash: nil))
+        let firstGalleryItems: [GalleryItem] = [.mockImage(index: 0), .mockVideo(index: 1)]
+        let secondGalleryItems: [GalleryItem] = [.mockImage(index: 0), .mockFile(index: 1), .mockImage(index: 2)]
+        let timelineItems: [RoomTimelineItemProtocol] = [image,
+                                                         makeGallery(items: firstGalleryItems),
+                                                         makeGallery(items: secondGalleryItems)]
+        let itemViewStates = timelineItems.map { RoomTimelineItemViewState(item: $0, groupStyle: .single) }
+        
+        // When opening the preview from the image, which isn't part of a gallery.
+        let dataSource = TimelineMediaPreviewDataSource(itemViewStates: itemViewStates,
+                                                        initialItem: image,
+                                                        paginationState: .initial,
+                                                        allowedGalleryItemTypes: [.image, .video])
+        
+        // Then the galleries' visual attachments are browsable as though they were individual messages,
+        // whilst the file is left to the timeline that shows those.
+        let imageID = try #require(image.id.eventOrTransactionID)
+        let expectedIDs: [MediaPreviewItemID] = [.timelineItem(imageID),
+                                                 .galleryItem(firstGalleryItems[0].id),
+                                                 .galleryItem(firstGalleryItems[1].id),
+                                                 .galleryItem(secondGalleryItems[0].id),
+                                                 .galleryItem(secondGalleryItems[2].id)]
+        #expect(dataSource.previewItems.map(\.id) == expectedIDs)
+        
+        // …starting from the tapped image.
+        #expect(dataSource.currentMediaItemID == .timelineItem(imageID))
+    }
+    
+    @Test
     func galleryPreview() throws {
-        // Given a gallery message with three previewable attachments.
-        let items = (0..<3).map { index in
-            GalleryItem.mockImage(index: index, filename: "image-\(index).jpg")
-        }
-        let gallery = GalleryRoomTimelineItem(id: .randomEvent,
-                                              timestamp: .mock,
-                                              isOutgoing: false,
-                                              isEditable: false,
-                                              canBeRepliedTo: true,
-                                              sender: .init(id: "Bob"),
-                                              content: .init(body: "Gallery", caption: nil, items: items),
-                                              properties: .init())
+        // Given a gallery message whose attachments are a mix of media types.
+        let items: [GalleryItem] = [.mockImage(index: 0), .mockFile(index: 1), .mockVideo(index: 2), .mockAudio(index: 3)]
+        let gallery = makeGallery(items: items)
         
         // When opening the preview scoped to that gallery on the second attachment.
         let dataSource = TimelineMediaPreviewDataSource(galleryItem: gallery, initialIndex: 1)
         
-        // Then it contains exactly the gallery's attachments with no surrounding pagination…
-        #expect(dataSource.previewItems.count == 3)
-        #expect(dataSource.numberOfPreviewItems(in: previewController) == 3)
+        // Then it is self contained, holding every one of the attachments without filtering any of
+        // them out and with no surrounding pagination…
+        let expectedIDs: [MediaPreviewItemID] = items.map { .galleryItem($0.id) }
+        #expect(dataSource.previewItems.map(\.id) == expectedIDs)
+        #expect(dataSource.numberOfPreviewItems(in: previewController) == items.count)
         #expect(dataSource.initialItemIndex == 1)
         
         // …and the initial item is the tapped attachment.
@@ -293,6 +324,17 @@ struct TimelineMediaPreviewDataSourceTests {
     }
     
     // MARK: Helpers
+    
+    private func makeGallery(items: [GalleryItem]) -> GalleryRoomTimelineItem {
+        .init(id: .randomEvent,
+              timestamp: .mock,
+              isOutgoing: false,
+              isEditable: false,
+              canBeRepliedTo: true,
+              sender: .init(id: "Bob"),
+              content: .init(body: "Gallery", caption: nil, items: items),
+              properties: .init())
+    }
     
     func newChunk() -> [EventBasedMessageTimelineItemProtocol] {
         TimelineFixtures.mediaChunk

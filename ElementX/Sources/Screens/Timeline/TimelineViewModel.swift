@@ -92,6 +92,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             true
         }
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
+                                                       allowedGalleryItemTypes: timelineController.allowedGalleryItemTypes,
                                                        roomID: roomProxy.id,
                                                        isDM: roomProxy.infoPublisher.value.isDM,
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
@@ -160,7 +161,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .mediaTapped(let id):
             Task { await handleMediaTapped(with: id) }
         case .galleryItemTapped(let id, let index):
-            handleGalleryItemTapped(itemID: id, index: index)
+            Task { await handleMediaTapped(with: id, galleryIndex: index) }
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):
@@ -700,7 +701,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         await timelineController.sendReadReceipt(for: lastVisibleItemID)
     }
     
-    private func handleMediaTapped(with itemID: TimelineItemIdentifier) async {
+    private func handleMediaTapped(with itemID: TimelineItemIdentifier, galleryIndex: Int? = nil) async {
         state.showLoading = true
         let action = await timelineInteractionHandler.processItemTap(itemID)
         
@@ -710,8 +711,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             
             let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
-        case .displayGalleryPreview:
-            fatalError("Galleries open through the dedicated galleryItemTapped path, which carries the tapped index.")
+        case .displayGalleryPreview(let galleryItem, let timelineViewModelKind):
+            actionsSubject.send(.composer(action: .removeFocus))
+            
+            let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem,
+                                                                    timelineViewModelKind: timelineViewModelKind,
+                                                                    initialIndex: galleryIndex ?? 0)
+            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayLocation(let location):
             actionsSubject.send(.displayLocation(location))
         case .displayLiveLocation(let sender, let initialLiveLocationShare):
@@ -720,18 +726,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             break
         }
         state.showLoading = false
-    }
-    
-    private func handleGalleryItemTapped(itemID: TimelineItemIdentifier, index: Int) {
-        if case let .displayGalleryPreview(galleryItem, initialIndex) = timelineInteractionHandler.processGalleryItemTap(itemID: itemID, index: index) {
-            displayGalleryPreview(galleryItem: galleryItem, initialIndex: initialIndex)
-        }
-    }
-    
-    private func displayGalleryPreview(galleryItem: GalleryRoomTimelineItem, initialIndex: Int) {
-        actionsSubject.send(.composer(action: .removeFocus))
-        let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem, initialIndex: initialIndex)
-        actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
     }
     
     private func handleItemSendInfoTapped(itemID: TimelineItemIdentifier) {
@@ -836,28 +830,31 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private func makeMediaPreviewViewModel(item: EventBasedMessageTimelineItemProtocol,
                                            timelineViewModelKind: TimelineControllerAction.TimelineViewModelKind) -> TimelineMediaPreviewViewModel {
-        let timelineViewModel = switch timelineViewModelKind {
-        case .active: self
-        case .new(let newViewModel): newViewModel
-        }
-        
-        return TimelineMediaPreviewViewModel(initialItem: item,
-                                             timelineViewModel: timelineViewModel,
-                                             mediaProvider: userSession.mediaProvider,
-                                             photoLibraryManager: PhotoLibraryManager(),
-                                             userIndicatorController: userIndicatorController,
-                                             appMediator: appMediator)
-    }
-    
-    private func makeGalleryPreviewViewModel(galleryItem: GalleryRoomTimelineItem,
-                                             initialIndex: Int) -> TimelineMediaPreviewViewModel {
-        TimelineMediaPreviewViewModel(galleryItem: galleryItem,
-                                      initialIndex: initialIndex,
-                                      timelineViewModel: self,
+        TimelineMediaPreviewViewModel(initialItem: item,
+                                      timelineViewModel: timelineViewModel(for: timelineViewModelKind),
                                       mediaProvider: userSession.mediaProvider,
                                       photoLibraryManager: PhotoLibraryManager(),
                                       userIndicatorController: userIndicatorController,
                                       appMediator: appMediator)
+    }
+    
+    private func makeGalleryPreviewViewModel(galleryItem: GalleryRoomTimelineItem,
+                                             timelineViewModelKind: TimelineControllerAction.TimelineViewModelKind,
+                                             initialIndex: Int) -> TimelineMediaPreviewViewModel {
+        TimelineMediaPreviewViewModel(galleryItem: galleryItem,
+                                      initialIndex: initialIndex,
+                                      timelineViewModel: timelineViewModel(for: timelineViewModelKind),
+                                      mediaProvider: userSession.mediaProvider,
+                                      photoLibraryManager: PhotoLibraryManager(),
+                                      userIndicatorController: userIndicatorController,
+                                      appMediator: appMediator)
+    }
+    
+    private func timelineViewModel(for kind: TimelineControllerAction.TimelineViewModelKind) -> TimelineViewModel {
+        switch kind {
+        case .active: self
+        case .new(let newViewModel): newViewModel
+        }
     }
     
     // MARK: - Timeline Item Building

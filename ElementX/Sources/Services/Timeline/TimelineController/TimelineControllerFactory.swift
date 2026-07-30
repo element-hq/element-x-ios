@@ -71,7 +71,8 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                                                initialFocussedEventID: nil,
                                                timelineItemFactory: timelineItemFactory,
                                                mediaProvider: mediaProvider,
-                                               appSettings: appSettings))
+                                               appSettings: appSettings,
+                                               allowedGalleryItemTypes: allowedMessageTypes.allowedGalleryItemTypes))
         case .failure(let error):
             return .failure(.roomProxyError(error))
         }
