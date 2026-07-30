@@ -149,7 +149,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .location(let content):
             .location(buildLocationTimelineItemContent(content))
         case .gallery(let content):
-            .gallery(buildGalleryTimelineItemContent(content, timelineItemID: .virtual(uniqueID: .init(senderID))))
+            .gallery(buildGalleryTimelineItemContent(content, timelineItemID: .randomEvent))
         case .other(_, let body):
             .text(.init(body: body))
         case .none:

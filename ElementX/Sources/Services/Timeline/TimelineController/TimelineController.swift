@@ -44,7 +44,7 @@ class TimelineController: TimelineControllerProtocol {
         activeTimelineItemProvider.kind
     }
     
-    let galleryFilters: [GalleryFilter]?
+    let allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?
     
     init(roomProxy: JoinedRoomProxyProtocol,
          timelineProxy: TimelineProxyProtocol,
@@ -52,8 +52,8 @@ class TimelineController: TimelineControllerProtocol {
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          appSettings: AppSettings,
-         galleryFilters: [GalleryFilter]? = nil) {
-        self.galleryFilters = galleryFilters
+         allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]? = nil) {
+        self.allowedGalleryItemTypes = allowedGalleryItemTypes
         self.roomProxy = roomProxy
         liveTimelineItemProvider = timelineProxy.timelineItemProvider
         self.timelineItemFactory = timelineItemFactory

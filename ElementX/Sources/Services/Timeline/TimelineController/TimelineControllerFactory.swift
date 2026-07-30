@@ -72,7 +72,7 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                                                timelineItemFactory: timelineItemFactory,
                                                mediaProvider: mediaProvider,
                                                appSettings: appSettings,
-                                               galleryFilters: allowedMessageTypes.galleryFilters))
+                                               allowedGalleryItemTypes: allowedMessageTypes.allowedGalleryItemTypes))
         case .failure(let error):
             return .failure(.roomProxyError(error))
         }

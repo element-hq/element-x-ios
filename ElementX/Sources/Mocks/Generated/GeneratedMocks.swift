@@ -11491,7 +11491,7 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
         set(value) { underlyingTimelineKind = value }
     }
     nonisolated(unsafe) var underlyingTimelineKind: TimelineKind!
-    nonisolated(unsafe) var galleryFilters: [GalleryFilter]?
+    nonisolated(unsafe) var allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?
     nonisolated(unsafe) var timelineItems: [RoomTimelineItemProtocol] = []
     var paginationState: TimelinePaginationState {
         get { return underlyingPaginationState }

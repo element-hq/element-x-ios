@@ -36,7 +36,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     var paginationState: TimelinePaginationState
     
     /// The gallery attachments to include, so that a gallery only contributes the media being browsed.
-    private let galleryFilters: [GalleryFilter]?
+    private let allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?
     
     /// Builds a data source spanning every previewable attachment in the timeline, paginating
     /// as the user swipes past the loaded range. Used when tapping a standalone media message.
@@ -44,10 +44,10 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
          initialItem: EventBasedMessageTimelineItemProtocol,
          initialPadding: Int = 100,
          paginationState: TimelinePaginationState,
-         galleryFilters: [GalleryFilter]? = nil) {
-        self.galleryFilters = galleryFilters
+         allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]? = nil) {
+        self.allowedGalleryItemTypes = allowedGalleryItemTypes
         
-        previewItems = itemViewStates.flatMap { TimelineMediaPreviewItem.Media.items(from: $0, galleryFilters: galleryFilters) }
+        previewItems = itemViewStates.flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
         
         let initialPreviewID = TimelineMediaPreviewItem.Media(timelineItem: initialItem).id
         if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialPreviewID }) {
@@ -72,7 +72,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     /// gallery and there's no timeline pagination to drive.
     init(galleryItem: GalleryRoomTimelineItem,
          initialIndex: Int) {
-        galleryFilters = nil // All of the gallery's attachments are shown.
+        allowedGalleryItemTypes = nil // All of the gallery's attachments are shown.
         
         let media = galleryItem.content.items.map { item in
             TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: item)
@@ -102,7 +102,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     func updatePreviewItems(itemViewStates: [RoomTimelineItemViewState]) {
         let newItems: [TimelineMediaPreviewItem.Media] = itemViewStates
-            .flatMap { TimelineMediaPreviewItem.Media.items(from: $0, galleryFilters: galleryFilters) }
+            .flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
             .map { newItem in
                 // If an item already exists use that instead to preserve the file handle, download error etc.
                 if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
@@ -255,24 +255,6 @@ enum TimelineMediaPreviewItem: Equatable {
             }
             content = .timelineItem(timelineItem)
             id = MediaPreviewItemID(timelineItem: timelineItem)
-        }
-        
-        /// The previewable media of a timeline item, flattening a gallery message into its individual
-        /// attachments so that they can be browsed alongside the timeline's other media.
-        /// - Parameter galleryFilters: Restricts a gallery's attachments to the media being browsed, as
-        ///   the SDK can only filter the gallery event as a whole.
-        static func items(from itemViewState: RoomTimelineItemViewState, galleryFilters: [GalleryFilter]?) -> [Media] {
-            guard case .gallery(let galleryItem) = itemViewState.type else {
-                return [Media(roomTimelineItemViewState: itemViewState)].compactMap { $0 }
-            }
-            
-            return galleryItem.content.items.filter { item in
-                guard let filter = item.filter else {
-                    return false // Nothing to preview, and unlike a tile there's no index to line up with.
-                }
-                
-                return galleryFilters?.contains(filter) ?? true
-            }.map { Media(galleryParent: galleryItem, item: $0) }
         }
         
         /// Wraps a single attachment of a gallery message. `.other` items have no media source,
@@ -454,5 +436,25 @@ enum TimelineMediaPreviewItem: Equatable {
         init(state: State) {
             self.state = state
         }
+    }
+}
+
+private extension RoomTimelineItemViewState {
+    /// The media of this item that can be previewed, flattening a gallery message into its individual
+    /// attachments so that they can be browsed alongside the timeline's other media.
+    /// - Parameter allowedGalleryItemTypes: Restricts a gallery's attachments to the media being
+    ///   browsed, as the SDK can only filter the gallery event as a whole.
+    func previewableMedia(allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?) -> [TimelineMediaPreviewItem.Media] {
+        guard case .gallery(let galleryItem) = type else {
+            return [TimelineMediaPreviewItem.Media(roomTimelineItemViewState: self)].compactMap { $0 }
+        }
+        
+        return galleryItem.content.items.filter { item in
+            guard let allowedItemType = item.allowedItemType else {
+                return false // Nothing to preview, and unlike a tile there's no index to line up with.
+            }
+            
+            return allowedGalleryItemTypes?.contains(allowedItemType) ?? true
+        }.map { TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: $0) }
     }
 }

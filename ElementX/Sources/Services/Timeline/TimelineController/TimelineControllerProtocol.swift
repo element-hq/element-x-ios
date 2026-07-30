@@ -48,7 +48,7 @@ protocol TimelineControllerProtocol: Sendable {
     var timelineKind: TimelineKind { get }
     
     /// The gallery attachments this timeline includes, or `nil` when it isn't filtered.
-    var galleryFilters: [GalleryFilter]? { get }
+    var allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]? { get }
     
     /// The currently known items, use only for setting up the intial state.
     var timelineItems: [RoomTimelineItemProtocol] { get }

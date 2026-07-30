@@ -18,7 +18,7 @@ struct TimelineControllerMockConfiguration {
     var timelineProxy: TimelineProxyProtocol?
     var timelineItemsTimestamps: [TimelineItemIdentifier: Date] = [:]
     var paginationState: TimelinePaginationState = .initial
-    var galleryFilters: [GalleryFilter]?
+    var allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?
 }
 
 @MainActor extension TimelineControllerMock {
@@ -45,7 +45,7 @@ struct TimelineControllerMockConfiguration {
         
         callbacks = PassthroughSubject()
         timelineKind = configuration.timelineKind
-        galleryFilters = configuration.galleryFilters
+        allowedGalleryItemTypes = configuration.allowedGalleryItemTypes
         paginationState = configuration.paginationState
         timelineItems = configuration.timelineItems
         

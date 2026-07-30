@@ -51,7 +51,7 @@ struct TimelineMediaPreviewDataSourceTests {
         let dataSource = TimelineMediaPreviewDataSource(itemViewStates: itemViewStates,
                                                         initialItem: image,
                                                         paginationState: .initial,
-                                                        galleryFilters: [.image, .video])
+                                                        allowedGalleryItemTypes: [.image, .video])
         
         // Then the galleries' visual attachments are browsable as though they were individual messages,
         // whilst the file is left to the timeline that shows those.
