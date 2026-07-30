@@ -13,7 +13,7 @@ enum MediaEventsTimelineScreenViewModelAction {
     case viewInRoomTimeline(TimelineItemIdentifier)
 }
 
-nonisolated enum MediaEventsTimelineScreenMode {
+enum MediaEventsTimelineScreenMode {
     case media
     case files
 }
