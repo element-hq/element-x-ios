@@ -14,7 +14,6 @@ struct PreviewScrollView<Content: View>: View {
     var content: () -> Content
     
     var body: some View {
-        #if DEBUG
         if ProcessInfo.isRunningTests {
             content()
         } else {
@@ -22,10 +21,5 @@ struct PreviewScrollView<Content: View>: View {
                 content()
             }
         }
-        #else
-        ScrollView {
-            content()
-        }
-        #endif
     }
 }
