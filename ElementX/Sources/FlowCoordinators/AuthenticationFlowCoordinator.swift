@@ -34,7 +34,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// The screen used for the whole QR Code flow.
         case qrCodeLoginScreen
         
+        /// The screen used to choose a server
         case serverSelectionScreen
+        
         /// The screen to login with a password.
         case loginScreen
         
@@ -57,12 +59,12 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         /// The user would like to login with a QR code.
         case loginWithQR
         /// Show the server confirmation screen.
-        case confirmServer(AuthenticationFlow)
+        case selectServer(AuthenticationFlow)
         
         /// The QR login flow was aborted.
         case cancelledLoginWithQR
         /// The user aborted manual login.
-        case cancelledServerConfirmation
+        case cancelledServerSelection
         
         /// Show the screen to login with password (with the optional login hint in the `userInfo`).
         case continueWithPassword
@@ -191,13 +193,13 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         // Manual Authentication
         
-        stateMachine.addRoutes(event: .confirmServer(.login), transitions: [.startScreen => .serverSelectionScreen]) { [weak self] _ in
+        stateMachine.addRoutes(event: .selectServer(.login), transitions: [.startScreen => .serverSelectionScreen]) { [weak self] _ in
             self?.showServerSelectionScreen(authenticationFlow: .login)
         }
-        stateMachine.addRoutes(event: .confirmServer(.register), transitions: [.startScreen => .serverSelectionScreen]) { [weak self] _ in
+        stateMachine.addRoutes(event: .selectServer(.register), transitions: [.startScreen => .serverSelectionScreen]) { [weak self] _ in
             self?.showServerSelectionScreen(authenticationFlow: .register)
         }
-        stateMachine.addRoutes(event: .cancelledServerConfirmation, transitions: [.serverSelectionScreen => .startScreen])
+        stateMachine.addRoutes(event: .cancelledServerSelection, transitions: [.serverSelectionScreen => .startScreen])
         
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverSelectionScreen => .loginScreen,
                                                                            .startScreen => .loginScreen]) { [weak self] context in
@@ -273,9 +275,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 case .loginWithQR:
                     stateMachine.tryEvent(.loginWithQR)
                 case .login:
-                    stateMachine.tryEvent(.confirmServer(.login))
+                    stateMachine.tryEvent(.selectServer(.login))
                 case .register:
-                    stateMachine.tryEvent(.confirmServer(.register))
+                    stateMachine.tryEvent(.selectServer(.register))
                     
                 case .loginDirectlyWithOAuth(let oAuthData, let window):
                     showOAuthAuthentication(oAuthData: oAuthData, presentationAnchor: window)
@@ -317,7 +319,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             case .signInManually:
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.cancelledLoginWithQR)
-                stateMachine.tryEvent(.confirmServer(.login))
+                stateMachine.tryEvent(.selectServer(.login))
             case .signedIn(let userSession):
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 DispatchQueue.main.async {
@@ -337,6 +339,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Manual Authentication
     
     private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
+        // Reset the service back to the default homeserver before continuing. This ensures
+        // we check that registration is supported if it was previously configured for login.
         authenticationService.reset()
         
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
@@ -354,14 +358,12 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     showOAuthAuthentication(oAuthData: oAuthData, presentationAnchor: window)
                 case .continueWithPassword:
                     stateMachine.tryEvent(.continueWithPassword)
-                case .dismiss:
-                    navigationStackCoordinator.pop()
                 }
             }
             .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.cancelledServerConfirmation)
+            self?.stateMachine.tryEvent(.cancelledServerSelection)
         }
     }
     

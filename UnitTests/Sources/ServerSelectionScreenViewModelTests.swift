@@ -13,7 +13,8 @@ import Testing
 
 @MainActor
 struct ServerSelectionScreenViewModelTests {
-    let pickerProviders = ["matrix.org", "beta.matrix.org"]
+    private static let passwordOnlyServer = "example.com" // password only, no OAuth
+    private static let pickerProviders = ["matrix.org", "beta.matrix.org", passwordOnlyServer]
     
     var appSettings: AppSettings!
     var client: ClientSDKMock!
@@ -154,96 +155,12 @@ struct ServerSelectionScreenViewModelTests {
     // MARK: - userInput mode
     
     @Test
-    mutating func userInputLoginWithoutConfiguration() async throws {
-        // Given a view model for login using a service that hasn't been configured.
-        try setup(authenticationFlow: .login)
-        #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
-        
-        // When confirming from the server selection screen.
-        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
-        context.send(viewAction: .confirm)
-        try await deferred.fulfill()
-        
-        // Then the service should be configured and the OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
-        #expect(service.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: true))
-    }
-    
-    @Test
-    mutating func userInputLoginAfterConfiguration() async throws {
-        // Given a view model for login using a service that has already been configured.
-        try setup(authenticationFlow: .login)
-        guard case .success = await service.configure(for: context.homeserverAddress, flow: .login) else {
-            Issue.record("The configuration should succeed.")
-            return
-        }
-        #expect(service.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: true))
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
-        
-        // When confirming from the server selection screen.
-        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
-        context.send(viewAction: .confirm)
-        try await deferred.fulfill()
-        
-        // Then the service should be re-configured (no skip-if-already-configured optimisation here) and the OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
-    }
-    
-    @Test
-    mutating func userInputRegisterWithoutConfiguration() async throws {
-        // Given a view model for registration using a service that hasn't been configured.
-        try setup(authenticationFlow: .register)
-        #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
-        
-        // When confirming from the server selection screen.
-        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
-        context.send(viewAction: .confirm)
-        try await deferred.fulfill()
-        
-        // Then the service should be configured and the OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-        #expect(service.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: true))
-    }
-    
-    @Test
-    mutating func userInputRegisterAfterConfiguration() async throws {
-        // Given a view model for registration using a service that has already been configured.
-        try setup(authenticationFlow: .register)
-        guard case .success = await service.configure(for: context.homeserverAddress, flow: .register) else {
-            Issue.record("The configuration should succeed.")
-            return
-        }
-        #expect(service.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: true))
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
-        
-        // When confirming from the server selection screen.
-        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
-        context.send(viewAction: .confirm)
-        try await deferred.fulfill()
-        
-        // Then the service should be re-configured and the OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-    }
-    
-    @Test
     mutating func userInputPasswordLoginWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured against a server that doesn't support OAuth.
-        try setup(authenticationFlow: .login, supportsOAuth: false)
+        try setup(authenticationFlow: .login)
+        context.homeserverAddress = Self.passwordOnlyServer
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When confirming from the server selection screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -252,21 +169,20 @@ struct ServerSelectionScreenViewModelTests {
         
         // Then the service should be configured but no OAuth URL fetched.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         #expect(service.homeserver.value.loginMode == .password)
     }
     
     @Test
     mutating func userInputPasswordLoginAfterConfiguration() async throws {
         // Given a view model for login using a service that has already been configured against a server that doesn't support OAuth.
-        try setup(authenticationFlow: .login, supportsOAuth: false)
+        try setup(authenticationFlow: .login)
+        context.homeserverAddress = Self.passwordOnlyServer
         guard case .success = await service.configure(for: context.homeserverAddress, flow: .login) else {
             Issue.record("The configuration should succeed.")
             return
         }
         #expect(service.homeserver.value.loginMode == .password)
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When confirming from the server selection screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -275,7 +191,6 @@ struct ServerSelectionScreenViewModelTests {
         
         // Then the service should be re-configured but no OAuth URL fetched.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
     }
     
     // MARK: - Picker mode
@@ -283,9 +198,9 @@ struct ServerSelectionScreenViewModelTests {
     @Test
     mutating func pickerWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured.
-        try setup(authenticationFlow: .login, mode: .picker(pickerProviders))
+        try setup(authenticationFlow: .login, mode: .picker(Self.pickerProviders))
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(context.viewState.mode == .picker(pickerProviders))
+        #expect(context.viewState.mode == .picker(Self.pickerProviders))
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
@@ -302,36 +217,12 @@ struct ServerSelectionScreenViewModelTests {
     }
     
     @Test
-    mutating func pickerAfterConfiguration() async throws {
-        // Given a view model for login using a service that has already been configured.
-        try setup(authenticationFlow: .login, mode: .picker(pickerProviders))
-        guard case .success = await service.configure(for: context.homeserverAddress, flow: .login) else {
-            Issue.record("The configuration should succeed.")
-            return
-        }
-        #expect(service.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: true))
-        #expect(context.viewState.mode == .picker(pickerProviders))
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
-        
-        // When confirming from the picker.
-        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
-        context.send(viewAction: .confirm)
-        try await deferred.fulfill()
-        
-        // Then the already-configured homeserver should be used without re-configuring.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
-    }
-    
-    @Test
     mutating func pickerForPasswordLoginWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured against a server that doesn't support OAuth.
-        try setup(authenticationFlow: .login, mode: .picker(pickerProviders), supportsOAuth: false)
+        try setup(authenticationFlow: .login, mode: .picker(Self.pickerProviders))
+        context.homeserverAddress = Self.passwordOnlyServer
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When confirming from the picker.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -340,30 +231,7 @@ struct ServerSelectionScreenViewModelTests {
         
         // Then the service should be configured but no OAuth URL fetched.
         #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         #expect(service.homeserver.value.loginMode == .password)
-    }
-    
-    @Test
-    mutating func pickerForPasswordLoginAfterConfiguration() async throws {
-        // Given a view model for login using a service that has already been configured against a server that doesn't support OAuth.
-        try setup(authenticationFlow: .login, mode: .picker(pickerProviders), supportsOAuth: false)
-        guard case .success = await service.configure(for: context.homeserverAddress, flow: .login) else {
-            Issue.record("The configuration should succeed.")
-            return
-        }
-        #expect(service.homeserver.value.loginMode == .password)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
-        
-        // When confirming from the picker.
-        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
-        context.send(viewAction: .confirm)
-        try await deferred.fulfill()
-        
-        // Then the already-configured homeserver should be used without re-configuring.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
     }
     
     // MARK: - Autocomplete
@@ -379,12 +247,12 @@ struct ServerSelectionScreenViewModelTests {
         
         // When the user types a prefix that matches the previous server.
         let typedSoFar = "my"
-        let nextChar = "s"
-        let typed = typedSoFar + nextChar
+        let nextCharacter = "s"
+        let typed = typedSoFar + nextCharacter
         let expectedAddress = "myserver.com"
         textField.text = typedSoFar
         let deferred = deferFulfillment(context.observe(\.homeserverAddress)) { $0 == expectedAddress }
-        _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: typedSoFar.count, length: 0), replacementString: nextChar)
+        _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: typedSoFar.count, length: 0), replacementString: nextCharacter)
         try await deferred.fulfill()
         
         // Then the address should be completed and the appended portion selected.
@@ -404,12 +272,12 @@ struct ServerSelectionScreenViewModelTests {
         
         // When the user types a prefix that matches an account provider.
         let typedSoFar = "ma"
-        let nextChar = "t"
-        let typed = typedSoFar + nextChar
+        let nextCharacter = "t"
+        let typed = typedSoFar + nextCharacter
         let expectedAddress = "matrix.org"
         textField.text = typedSoFar
         let deferred = deferFulfillment(context.observe(\.homeserverAddress)) { $0 == expectedAddress }
-        _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: typedSoFar.count, length: 0), replacementString: nextChar)
+        _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: typedSoFar.count, length: 0), replacementString: nextCharacter)
         try await deferred.fulfill()
         
         // Then the address should be completed and the appended portion selected.
@@ -470,18 +338,12 @@ struct ServerSelectionScreenViewModelTests {
     // MARK: - Helpers
     
     private mutating func setup(authenticationFlow: AuthenticationFlow,
-                                mode: ServerSelectionScreenMode = .userInput(defaultValue: ""),
-                                supportsOAuth: Bool = true,
-                                supportsOAuthCreatePrompt: Bool = true,
-                                supportsPasswordLogin: Bool = true) throws {
+                                mode: ServerSelectionScreenMode = .userInput) throws {
         appSettings = AppSettings.volatile()
         
-        client = ClientSDKMock(.init(oAuthLoginURL: supportsOAuth ? "https://account.matrix.org/authorize" : nil,
-                                     supportsOAuthCreatePrompt: supportsOAuthCreatePrompt,
-                                     supportsPasswordLogin: supportsPasswordLogin))
-        var factoryConfig = AuthenticationClientFactoryMock.Configuration()
-        factoryConfig.homeserverClients["matrix.org"] = client
-        factoryConfig.homeserverClients["https://matrix-client.matrix.org"] = client
+        let factoryConfig = AuthenticationClientFactoryMock.Configuration()
+        // matrix.org: OAuth. example.com: password only. server.net: no login. secure.gov: OAuth + Element Pro required.
+        client = factoryConfig.homeserverClients["matrix.org"]!
         clientFactory = AuthenticationClientFactoryMock(factoryConfig)
         
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),

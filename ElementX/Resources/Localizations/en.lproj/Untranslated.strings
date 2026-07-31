@@ -15,6 +15,8 @@
 "untranslated" = "Untranslated";
 
 
+"screen_select_server_navigation_title_login" = "Sign in";
+"screen_select_server_navigation_title_register" = "Create account";
 "screen_select_server_title_register" = "Choose an account provider";
 "screen_select_server_title_login" = "Enter your account provider";
 "screen_select_server_textfield_header" = "Account provider";

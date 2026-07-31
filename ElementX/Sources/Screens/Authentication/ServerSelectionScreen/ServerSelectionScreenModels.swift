@@ -13,13 +13,11 @@ enum ServerSelectionScreenViewModelAction {
     case continueWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
     /// Continue the flow using password authentication.
     case continueWithPassword
-    /// Dismiss the view without using the entered address.
-    case dismiss
 }
 
 enum ServerSelectionScreenMode: Equatable {
     /// The user is confirming the displayed account provider (or can enter their own).
-    case userInput(defaultValue: String)
+    case userInput
     /// The user is only allowed to pick from a list of account providers.
     case picker([String])
 }
@@ -37,12 +35,21 @@ struct ServerSelectionScreenViewState: BindableState {
     
     /// Upon introspection, this is the UITextField backing the TextField for server input
     var textField: UITextField? {
-        get { adapter.textField }
-        set { adapter.textField = newValue }
+        get { textFieldAdapter.textField }
+        set { textFieldAdapter.textField = newValue }
     }
     
     /// Adapts the text field for custom functionality beyond what's available in SwiftUI
-    let adapter = TextFieldAdapter()
+    let textFieldAdapter = TextFieldAdapter()
+    
+    var screenTitle: String {
+        switch authenticationFlow {
+        case .login:
+            UntranslatedL10n.screenSelectServerNavigationTitleLogin
+        case .register:
+            UntranslatedL10n.screenSelectServerNavigationTitleRegister
+        }
+    }
     
     /// The header text for the screen
     var screenHeader: String {
@@ -105,8 +112,6 @@ enum ServerSelectionScreenViewAction {
     case updateTextField(UITextField)
     /// The user would like to use the homeserver at the input address.
     case confirm
-    /// Dismiss the view without using the entered address.
-    case dismiss
     /// Clear any errors shown in the text field footer.
     case clearFooterError
 }

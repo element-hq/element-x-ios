@@ -189,6 +189,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
         set { _previousServers = newValue.map { $0.lowercased() } }
     }
     
+    var defaultServer: String {
+        previousServers.first ?? accountProviders[0]
+    }
+    
     // MARK: - Security
     
     /// The app must be locked with a PIN code as part of the authentication flow.

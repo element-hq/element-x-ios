@@ -12,6 +12,20 @@ import SwiftUI
 struct ServerSelectionScreen: View {
     @Bindable var context: ServerSelectionScreenViewModel.Context
     
+    private var backgroundColor: Color {
+        switch context.viewState.mode {
+        case .userInput: .compound.bgCanvasDefault
+        case .picker: .compound.bgSubtleSecondaryLevel0
+        }
+    }
+    
+    private var headerIconStyle: BigIcon.Style {
+        switch context.viewState.mode {
+        case .userInput: .defaultSolid
+        case .picker: .default
+        }
+    }
+    
     var body: some View {
         FullscreenDialog {
             VStack(spacing: 0) {
@@ -25,7 +39,9 @@ struct ServerSelectionScreen: View {
         } bottomContent: {
             continueButton
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background(backgroundColor)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(context.viewState.screenTitle)
         .alert(item: $context.alertInfo)
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
@@ -35,7 +51,7 @@ struct ServerSelectionScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(spacing: 8) {
-            BigIcon(icon: \.userProfileSolid)
+            BigIcon(icon: \.userProfileSolid, style: headerIconStyle)
                 .padding(.bottom, 8)
             
             Text(context.viewState.screenHeader)
@@ -122,10 +138,10 @@ private struct FakeInlinePicker: View {
 
 @available(iOS 26.0, *)
 struct ServerSelection_Previews: PreviewProvider, TestablePreview {
-    static let matrixViewModel = makeViewModel(mode: .userInput(defaultValue: "https://matrix.org"))
-    static let emptyViewModel = makeViewModel(mode: .userInput(defaultValue: ""))
-    static let invalidViewModel = makeViewModel(mode: .userInput(defaultValue: "thisisbad"))
-    static let pickerViewModel = makeViewModel(mode: .picker(["matrix.org", "foo.bar", "baz.me"]))
+    static let matrixViewModel = makeViewModel(mode: .userInput, server: "matrix.org")
+    static let emptyViewModel = makeViewModel(mode: .userInput, server: "")
+    static let invalidViewModel = makeViewModel(mode: .userInput, server: "thisisbad")
+    static let pickerViewModel = makeViewModel(mode: .picker(["matrix.org", "foo.bar", "baz.me"]), server: "foo.bar")
     
     static var previews: some View {
         ElementNavigationStack {
@@ -150,7 +166,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Picker")
     }
     
-    static func makeViewModel(mode: ServerSelectionScreenMode = .userInput(defaultValue: "")) -> ServerSelectionScreenViewModel {
+    static func makeViewModel(mode: ServerSelectionScreenMode = .userInput, server: String) -> ServerSelectionScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
         let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
@@ -158,7 +174,8 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
                                                        authenticationFlow: .login,
                                                        appSettings: .volatile(),
                                                        userIndicatorController: UserIndicatorControllerMock())
-        if case .userInput(let homeserverAddress) = mode, homeserverAddress == "thisisbad" {
+        viewModel.context.homeserverAddress = server
+        if case .userInput = mode, server == "thisisbad" {
             viewModel.context.send(viewAction: .confirm)
         }
         return viewModel

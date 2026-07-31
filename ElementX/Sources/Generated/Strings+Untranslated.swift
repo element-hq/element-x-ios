@@ -24,6 +24,10 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenSearchTabChats: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_chats") }
   /// Messages
   internal static var screenSearchTabMessages: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_messages") }
+  /// Sign in
+  internal static var screenSelectServerNavigationTitleLogin: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_navigation_title_login") }
+  /// Create account
+  internal static var screenSelectServerNavigationTitleRegister: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_navigation_title_register") }
   /// If your account is provided by your company or a community, then change the account provider (example: companyname.com).
   internal static var screenSelectServerTextfieldFooterLogin: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_textfield_footer_login") }
   /// Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).

@@ -20,7 +20,6 @@ struct ServerSelectionScreenCoordinatorParameters {
 enum ServerSelectionScreenCoordinatorAction {
     case continueWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
     case continueWithPassword
-    case dismiss
 }
 
 /// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
@@ -39,7 +38,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         let mode: ServerSelectionScreenMode = if parameters.appSettings.allowOtherAccountProviders {
-            .userInput(defaultValue: parameters.authenticationService.homeserver.value.address)
+            .userInput
         } else {
             .picker(parameters.appSettings.accountProviders)
         }
@@ -63,8 +62,6 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.continueWithOAuth(data: oAuthData, window: window))
                 case .continueWithPassword:
                     actionsSubject.send(.continueWithPassword)
-                case .dismiss:
-                    actionsSubject.send(.dismiss)
                 }
             }
             .store(in: &cancellables)

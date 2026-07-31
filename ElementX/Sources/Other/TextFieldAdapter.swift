@@ -27,6 +27,24 @@ class TextFieldAdapter: NSObject, UITextFieldDelegate {
         keystrokeSubject.eraseToAnyPublisher()
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersInRanges ranges: [NSValue], replacementString string: String) -> Bool {
+        guard let range = ranges.first?.rangeValue else { return true }
+        if string.isEmpty == false { // don't fire for backspaces
+            let previousText = textField.text ?? ""
+            
+            let completeString = (previousText as NSString).replacingCharacters(in: range, with: string)
+            
+            keystrokeSubject.send(completeString)
+        }
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.textField(textField, shouldChangeCharactersInRanges: [NSValue(range: range)], replacementString: string)
+    }
+    
+    // MARK: - Passthrough
+    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         passthroughDelegate?.textFieldShouldBeginEditing?(textField) ?? true
     }
@@ -45,22 +63,6 @@ class TextFieldAdapter: NSObject, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         passthroughDelegate?.textFieldDidEndEditing?(textField)
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersInRanges ranges: [NSValue], replacementString string: String) -> Bool {
-        guard let range = ranges.first?.rangeValue else { return true }
-        if string.isEmpty == false { // don't fire for backspaces
-            let previousText = textField.text ?? ""
-            
-            let completeString = (previousText as NSString).replacingCharacters(in: range, with: string)
-            
-            keystrokeSubject.send(completeString)
-        }
-        return true
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        self.textField(textField, shouldChangeCharactersInRanges: [NSValue(range: range)], replacementString: string)
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {

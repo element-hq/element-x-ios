@@ -45,7 +45,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         let bindings = ServerSelectionScreenBindings(homeserverAddress: homeserverAddress)
         super.init(initialViewState: ServerSelectionScreenViewState(mode: mode, authenticationFlow: authenticationFlow, bindings: bindings))
         
-        context.viewState.adapter.keystrokePublisher
+        context.viewState.textFieldAdapter.keystrokePublisher
             .sink { [weak self] in
                 self?.didUpdateTextFromKeystroke(userProvidedString: $0)
             }
@@ -67,8 +67,6 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
             case .picker:
                 Task { await pickServer() }
             }
-        case .dismiss:
-            actionsSubject.send(.dismiss)
         case .clearFooterError:
             clearFooterError()
         }
@@ -84,13 +82,6 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         
         startLoading()
         
-        let homeserver = authenticationService.homeserver.value
-        guard homeserver.loginMode == .unknown || homeserver.address != accountProvider else {
-            await fetchLoginURLIfNeededAndContinue()
-            stopLoading()
-            return
-        }
-        
         switch await authenticationService.configure(for: accountProvider, flow: authenticationFlow) {
         case .success:
             MXLog.info("Selected server: \(accountProvider)")
@@ -99,6 +90,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         case .failure:
             MXLog.info("Invalid server: \(accountProvider)")
             stopLoading()
+            // When the servers are hard-coded they should have a valid configuration, so show a generic error.
             state.bindings.alertInfo = AlertInfo(id: .unknownError)
         }
     }

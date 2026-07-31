@@ -64,7 +64,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
         
         // When updating these, don't forget to update the reset method too.
-        homeserverSubject = .init(LoginHomeserver(address: Self.defaultServer(from: appSettings), loginMode: .unknown))
+        homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultServer, loginMode: .unknown))
         flow = .login
     }
     
@@ -240,7 +240,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     func reset() {
-        homeserverSubject.send(LoginHomeserver(address: Self.defaultServer(from: appSettings), loginMode: .unknown))
+        homeserverSubject.send(LoginHomeserver(address: appSettings.defaultServer, loginMode: .unknown))
         flow = .login
         client = nil
     }
@@ -276,10 +276,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
         case .failure:
             return .failure(.failedLoggingIn)
         }
-    }
-    
-    private static func defaultServer(from appSettings: AppSettings) -> String {
-        appSettings.previousServers.first ?? appSettings.accountProviders[0]
     }
     
     // MARK: - Classic App
