@@ -32,8 +32,6 @@ struct GalleryItemTileView: View {
                             videoOverlay
                         }
                     }
-                    .contentShape(Rectangle())
-                    .onTapGesture { onTap() }
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(item.filename)
             } scanningContent: {
@@ -46,6 +44,9 @@ struct GalleryItemTileView: View {
                 overflowOverlay
             }
         }
+        // Tappable in every scan state, so that an unsafe item can't hide the rest of the gallery.
+        .contentShape(Rectangle())
+        .onTapGesture { onTap() }
     }
     
     @ViewBuilder

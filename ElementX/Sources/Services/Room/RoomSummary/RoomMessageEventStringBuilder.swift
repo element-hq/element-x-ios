@@ -107,7 +107,7 @@ nonisolated struct RoomMessageEventStringBuilder {
     }
     
     private func buildMessage(for style: Style, caption: String?, type: String) -> AttributedString {
-        guard let caption else {
+        guard let caption, !caption.isBlank else {
             return AttributedString(type)
         }
         
