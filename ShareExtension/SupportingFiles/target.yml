@@ -56,9 +56,9 @@ targets:
           NSExtensionAttributes:
             IntentsSupported: [INSendMessageIntent]
             NSExtensionActivationRule:
-              NSExtensionActivationSupportsFileWithMaxCount: 10
-              NSExtensionActivationSupportsImageWithMaxCount: 10
-              NSExtensionActivationSupportsMovieWithMaxCount: 10
+              NSExtensionActivationSupportsFileWithMaxCount: 60
+              NSExtensionActivationSupportsImageWithMaxCount: 60
+              NSExtensionActivationSupportsMovieWithMaxCount: 60
               NSExtensionActivationSupportsText: true
               NSExtensionActivationSupportsWebURLWithMaxCount: 10
 
