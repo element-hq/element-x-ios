@@ -33,7 +33,14 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     private var backwardPadding: Int
     private var forwardPadding: Int
     
-    var paginationState: TimelinePaginationState
+    /// Reaching the end of the timeline changes which placeholder an index shows, so a change
+    /// needs to be published too, not only the arrival of new items.
+    var paginationState: TimelinePaginationState {
+        didSet {
+            guard paginationState != oldValue else { return }
+            previewItemsPaginationPublisher.send()
+        }
+    }
     
     /// The gallery attachments to include, so that a gallery only contributes the media being browsed.
     private let allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?
