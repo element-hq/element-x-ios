@@ -335,7 +335,7 @@ extension EnvironmentValues {
 }
 
 private struct NavigationSplitCoordinatorView: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.tabViewHorizontalSizeClass) private var horizontalSizeClass
     @Environment(\.scenePhase) private var scenePhase
     
     @Bindable var navigationSplitCoordinator: NavigationSplitCoordinator

@@ -297,6 +297,16 @@ import SwiftUI
     }
 }
 
+extension EnvironmentValues {
+    /// The horizontal size class of the ``NavigationTabCoordinatorView`` that contains this view.
+    /// This provides a stable value regardless of whether the ``TabRailView`` is in the layout hierarchy.
+    ///
+    /// The rail consumes width and can cause a layout loop with the ``NavigationSplitCoordinatorView``
+    /// when the split becomes compact, hides the rail but then has enough space to become regular and so
+    /// attempts to show the rail etc.
+    @Entry var tabViewHorizontalSizeClass: UserInterfaceSizeClass?
+}
+
 private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
@@ -308,6 +318,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     
     var body: some View {
         tabView
+            .environment(\.tabViewHorizontalSizeClass, horizontalSizeClass)
             .sheet(item: $navigationTabCoordinator.sheetModule) { module in
                 module.coordinator?.toPresentable()
                     .id(module.id)
