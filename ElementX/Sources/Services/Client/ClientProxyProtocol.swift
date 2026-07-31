@@ -230,6 +230,7 @@ protocol ClientProxyProtocol: AnyObject {
     func isUserStatusSupported() async -> Result<Bool, ClientProxyError>
     func setUserStatus(_ status: UserStatus.Raw) async -> Result<Void, ClientProxyError>
     func removeUserStatus() async -> Result<Void, ClientProxyError>
+    func removeCallStatus() async -> Result<Void, ClientProxyError>
     
     func linkNewDeviceService() -> LinkNewDeviceServiceProtocol
     

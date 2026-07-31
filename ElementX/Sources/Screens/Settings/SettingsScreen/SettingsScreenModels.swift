@@ -56,11 +56,11 @@ struct SettingsScreenViewState: BindableState {
     
     var userStatusRowMode: SettingsScreenUserStatusRow.Mode {
         if bindings.isShowingCustomStatusField {
-            .custom(emoji: bindings.customStatusEmoji)
-        } else if let rawStatus = userProfile.status.raw {
-            .show(rawStatus)
+            .customStatusInput(emoji: bindings.customStatusEmoji)
+        } else if let displayedStatus = userProfile.status.displayed {
+            .showingStatus(displayedStatus)
         } else {
-            .pick
+            .pickStatusButton
         }
     }
 }
@@ -107,7 +107,9 @@ enum SettingsScreenViewAction {
         /// Show the emoji picker to select the emoji for the custom status.
         case pickCustomEmoji
         /// Set the user's status to the provided value.
-        case set(UserStatus.Raw?)
+        case set(UserStatus.Raw)
+        /// Clears the user's currently displayed status.
+        case clear(UserStatus.Displayed)
         /// Cancel user status picking/input.
         case cancel
     }

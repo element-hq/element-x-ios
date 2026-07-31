@@ -108,6 +108,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             pickCustomEmoji()
         case .userStatus(.set(let status)):
             Task { await setUserStatus(status) }
+        case .userStatus(.clear(let status)):
+            Task { await clearUserStatus(status) }
         case .userStatus(.cancel):
             state.bindings.isPresentingStatusPicker = false
             state.bindings.isShowingCustomStatusField = false
@@ -159,15 +161,32 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         .asCancellable()
     }
     
-    func setUserStatus(_ status: UserStatus.Raw?) async {
+    func setUserStatus(_ status: UserStatus.Raw) async {
         // Loading state tbc
         state.bindings.isPresentingStatusPicker = false
         state.bindings.isShowingCustomStatusField = false
         
-        let result = if let status {
-            await clientProxy.setUserStatus(status)
-        } else {
+        switch await clientProxy.setUserStatus(status) {
+        case .success:
+            break // Loading/error state tbc
+        case .failure:
+            userIndicatorController.submitIndicator(.init(id: UUID().uuidString,
+                                                          type: .toast,
+                                                          title: L10n.errorUnknown,
+                                                          icon: \.close))
+        }
+    }
+    
+    func clearUserStatus(_ status: UserStatus.Displayed) async {
+        // Loading state tbc
+        state.bindings.isPresentingStatusPicker = false
+        state.bindings.isShowingCustomStatusField = false
+        
+        let result = switch status {
+        case .userSet:
             await clientProxy.removeUserStatus()
+        case .inCall:
+            await clientProxy.removeCallStatus()
         }
         
         switch result {

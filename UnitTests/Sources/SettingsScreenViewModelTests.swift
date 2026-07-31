@@ -26,7 +26,7 @@ struct SettingsScreenViewModelTests {
         setupViewModel()
         #expect(!context.viewState.bindings.isPresentingStatusPicker)
         #expect(!context.viewState.bindings.isShowingCustomStatusField)
-        #expect(context.viewState.userStatusRowMode == .pick)
+        #expect(context.viewState.userStatusRowMode == .pickStatusButton)
         
         // When choosing to pick a status.
         context.send(viewAction: .userStatus(.pickStatus))
@@ -34,7 +34,7 @@ struct SettingsScreenViewModelTests {
         // Then the status picker should be presented.
         #expect(context.viewState.bindings.isPresentingStatusPicker)
         #expect(!context.viewState.bindings.isShowingCustomStatusField)
-        #expect(context.viewState.userStatusRowMode == .pick)
+        #expect(context.viewState.userStatusRowMode == .pickStatusButton)
         
         // When choosing to enter a custom status.
         context.send(viewAction: .userStatus(.customStatus))
@@ -42,7 +42,7 @@ struct SettingsScreenViewModelTests {
         // Then the picker should be dismissed and the custom status field shown.
         #expect(!context.viewState.bindings.isPresentingStatusPicker)
         #expect(context.viewState.bindings.isShowingCustomStatusField)
-        #expect(context.viewState.userStatusRowMode == .custom(emoji: "😄"))
+        #expect(context.viewState.userStatusRowMode == .customStatusInput(emoji: "😄"))
         
         // When cancelling.
         context.send(viewAction: .userStatus(.cancel))
@@ -50,7 +50,7 @@ struct SettingsScreenViewModelTests {
         // Then all status editing should be dismissed.
         #expect(!context.viewState.bindings.isPresentingStatusPicker)
         #expect(!context.viewState.bindings.isShowingCustomStatusField)
-        #expect(context.viewState.userStatusRowMode == .pick)
+        #expect(context.viewState.userStatusRowMode == .pickStatusButton)
     }
     
     @Test
@@ -82,12 +82,36 @@ struct SettingsScreenViewModelTests {
             return .success(())
         }
         let statusRemoved = deferFulfillment(removeStream) { _ in true }
-        context.send(viewAction: .userStatus(.set(nil)))
+        context.send(viewAction: .userStatus(.clear(.userSet(status))))
+        
+        // Then only the remove user status endpoint should be called.
+        try await statusRemoved.fulfill()
+        #expect(clientProxy.removeUserStatusCallsCount == 1)
+        #expect(!clientProxy.removeCallStatusCalled)
+        #expect(clientProxy.setUserStatusCallsCount == 1)
+    }
+    
+    @Test
+    mutating func clearCallStatus() async throws {
+        // Given a screen where the user has a call status set.
+        let callStatus = UserStatus.mockCall
+        setupViewModel(status: callStatus)
+        let displayedStatus = try #require(callStatus.displayed)
+        
+        // When clearing the status.
+        let (removeStream, removeContinuation) = AsyncStream<Void>.makeStream()
+        clientProxy.removeCallStatusClosure = {
+            removeContinuation.yield()
+            return .success(())
+        }
+        let statusRemoved = deferFulfillment(removeStream) { _ in true }
+        context.send(viewAction: .userStatus(.clear(displayedStatus)))
         
         // Then only the remove endpoint should be called, leaving the set call untouched.
         try await statusRemoved.fulfill()
-        #expect(clientProxy.removeUserStatusCallsCount == 1)
-        #expect(clientProxy.setUserStatusCallsCount == 1)
+        #expect(clientProxy.removeCallStatusCallsCount == 1)
+        #expect(!clientProxy.removeUserStatusCalled)
+        #expect(!clientProxy.setUserStatusCalled)
     }
     
     @Test
@@ -97,8 +121,8 @@ struct SettingsScreenViewModelTests {
         setupViewModel(status: status)
         
         // Then that status should be shown.
-        let rawStatus = try #require(status.raw)
-        #expect(context.viewState.userStatusRowMode == .show(rawStatus))
+        let displayedStatus = try #require(status.displayed)
+        #expect(context.viewState.userStatusRowMode == .showingStatus(displayedStatus))
     }
     
     @Test
@@ -106,20 +130,20 @@ struct SettingsScreenViewModelTests {
         // Given a custom status field showing the default emoji.
         setupViewModel()
         context.send(viewAction: .userStatus(.customStatus))
-        #expect(context.viewState.userStatusRowMode == .custom(emoji: "😄"))
+        #expect(context.viewState.userStatusRowMode == .customStatusInput(emoji: "😄"))
         
         // When selecting an emoji from the picker.
         try await selectCustomStatusEmoji("🎉")
         
         // Then the custom status field should show the selected emoji.
-        #expect(context.viewState.userStatusRowMode == .custom(emoji: "🎉"))
+        #expect(context.viewState.userStatusRowMode == .customStatusInput(emoji: "🎉"))
         
         // When cancelling and returning to the custom status field.
         context.send(viewAction: .userStatus(.cancel))
         context.send(viewAction: .userStatus(.customStatus))
         
         // Then the emoji should have been reset to the default.
-        #expect(context.viewState.userStatusRowMode == .custom(emoji: "😄"))
+        #expect(context.viewState.userStatusRowMode == .customStatusInput(emoji: "😄"))
     }
     
     @Test
