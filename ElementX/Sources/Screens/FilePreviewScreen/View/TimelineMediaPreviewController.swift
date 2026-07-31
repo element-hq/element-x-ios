@@ -243,11 +243,13 @@ class TimelineMediaPreviewController: QLPreviewController {
     }
     
     private func handleUpdatedItems() {
-        if currentPreviewItem is TimelineMediaPreviewItem.Loading {
-            let dataSource = context.viewState.dataSource
-            if dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
-                refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
-            }
+        guard let displayedItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading else { return }
+        
+        // The index may now hold a media, or a different placeholder having reached the end of
+        // the timeline, in which case what's on display is stale.
+        let dataSource = context.viewState.dataSource
+        if dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) as AnyObject !== displayedItem {
+            refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
         }
     }
     
