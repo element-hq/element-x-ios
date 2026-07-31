@@ -86,7 +86,7 @@ packages:
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.21.0
+    exactVersion: 0.22.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
@@ -131,7 +131,7 @@ packages:
     minorVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    minorVersion: 8.10.0
+    minorVersion: 8.11.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     minorVersion: 1.2.0
@@ -143,19 +143,19 @@ packages:
     minorVersion: 1.2.1
   Mantis:
     url: https://github.com/guoyingtao/Mantis
-    minorVersion: 3.0.0
+    minorVersion: 3.1.0
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
     minorVersion: 6.27.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.64.1
+    minorVersion: 3.67.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 9.21.0
+    minorVersion: 9.22.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.19.2
+    minorVersion: 1.19.3
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
     minorVersion: 3.4.0
