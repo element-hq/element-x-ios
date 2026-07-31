@@ -56,11 +56,11 @@ struct SettingsScreenViewState: BindableState {
     
     var userStatusRowMode: SettingsScreenUserStatusRow.Mode {
         if bindings.isShowingCustomStatusField {
-            .custom(emoji: bindings.customStatusEmoji)
+            .customStatusInput(emoji: bindings.customStatusEmoji)
         } else if let displayedStatus = userProfile.status.displayed {
-            .show(displayedStatus)
+            .showingStatus(displayedStatus)
         } else {
-            .pick
+            .pickStatusButton
         }
     }
 }

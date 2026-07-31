@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct SettingsScreenUserStatusRow: View {
-    enum Mode: Equatable { case pick, custom(emoji: Character), show(UserStatus.Displayed) }
+    enum Mode: Equatable { case pickStatusButton, customStatusInput(emoji: Character), showingStatus(UserStatus.Displayed) }
     let mode: Mode
     let action: (SettingsScreenViewAction.UserStatusAction) -> Void
     
@@ -17,10 +17,10 @@ struct SettingsScreenUserStatusRow: View {
     
     var body: some View {
         switch mode {
-        case .pick:
+        case .pickStatusButton:
             ListRow(label: .default(title: L10n.screenSettingsUserStatusPlaceholder, icon: \.reaction),
                     kind: .button { action(.pickStatus) })
-        case .custom(let emoji):
+        case .customStatusInput(let emoji):
             ListRow(kind: .custom {
                 HStack(spacing: ListRowPadding.labelIconSpacing) {
                     Button { action(.pickCustomEmoji) } label: {
@@ -47,7 +47,7 @@ struct SettingsScreenUserStatusRow: View {
                 }
                 .listRowBackground(Color.clear)
             })
-        case .show(let status):
+        case .showingStatus(let status):
             ListRow(kind: .custom {
                 HStack(spacing: ListRowPadding.labelIconSpacing) {
                     Button { action(.pickStatus) } label: {
@@ -80,7 +80,7 @@ struct SettingsScreenUserStatusRow: View {
     }
     
     private func saveCustomStatus() {
-        guard case let .custom(emoji) = mode else { return }
+        guard case let .customStatusInput(emoji) = mode else { return }
         action(.set(.init(text: customText, emoji: emoji)))
     }
     
@@ -104,19 +104,19 @@ struct SettingsScreenUserStatusRow_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         Form {
             Section {
-                SettingsScreenUserStatusRow(mode: .pick) { _ in }
+                SettingsScreenUserStatusRow(mode: .pickStatusButton) { _ in }
             }
             
             Section {
-                SettingsScreenUserStatusRow(mode: .custom(emoji: "😄")) { _ in }
+                SettingsScreenUserStatusRow(mode: .customStatusInput(emoji: "😄")) { _ in }
             }
             
             Section {
-                SettingsScreenUserStatusRow(mode: .show(.userSet(.init(text: "Away", emoji: "🌴")))) { _ in }
+                SettingsScreenUserStatusRow(mode: .showingStatus(.userSet(.init(text: "Away", emoji: "🌴")))) { _ in }
             }
             
             Section {
-                SettingsScreenUserStatusRow(mode: .show(.inCall(.init(joinedDate: nil)))) { _ in }
+                SettingsScreenUserStatusRow(mode: .showingStatus(.inCall(.init(joinedDate: nil)))) { _ in }
             }
         }
         .compoundList()
