@@ -315,6 +315,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @State private var standardAppearance = UITabBarAppearance()
     @State private var window: UIWindow?
     @State private var isFullScreen = true
+    @State private var isRailVisible = true
     
     var body: some View {
         tabView
@@ -357,10 +358,6 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         return selectedTabDetails?.navigationSplitCoordinator?.columnVisibility ?? .all
     }
     
-    private var isRailVisible: Bool {
-        selectedTabSplitColumnVisibility != .detailOnly
-    }
-    
     var tabRailLayout: some View {
         HStack(spacing: 0) {
             if isRailVisible {
@@ -388,6 +385,14 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
             if newValue != isFullScreen {
                 isFullScreen = newValue
             }
+        }
+        .onChange(of: selectedTabSplitColumnVisibility, initial: true) {
+            // The rail consumes width, which feeds back into the split's column visibility (not the
+            // same as flattening everything into the single stack), creating an observation tracking
+            // feedback loop that locks up the app while resizing.
+            //
+            // Use a stored value (instead of a computed value) that is updated on the next run loop to break the loop.
+            DispatchQueue.main.async { isRailVisible = selectedTabSplitColumnVisibility != .detailOnly }
         }
     }
     
