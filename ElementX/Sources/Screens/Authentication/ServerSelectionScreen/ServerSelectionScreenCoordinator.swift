@@ -14,6 +14,7 @@ struct ServerSelectionScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProtocol
     let authenticationFlow: AuthenticationFlow
     let appSettings: AppSettings
+    let homeserverHistoryManager: HomeserverHistoryManager
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -46,7 +47,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
         viewModel = ServerSelectionScreenViewModel(authenticationService: parameters.authenticationService,
                                                    mode: mode,
                                                    authenticationFlow: parameters.authenticationFlow,
-                                                   appSettings: parameters.appSettings,
+                                                   appSettings: parameters.appSettings, homeserverHistoryManager: parameters.homeserverHistoryManager,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     

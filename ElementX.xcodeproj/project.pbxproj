@@ -322,6 +322,7 @@
 		33CAC1226DFB8B5D8447D286 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 67E7A6F388D3BF85767609D9 /* Sentry */; };
 		33F1FB19F222BA9930AB1A00 /* RoomListFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6372DD10DED30E7AD7BCE21 /* RoomListFiltersView.swift */; };
 		340D39DB87F3800D53A6A621 /* EmojiPickerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00245D40CD90FD71D6A05239 /* EmojiPickerScreen.swift */; };
+		34320DB3C585FD34F4DEC5C8 /* HomeserverHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2BBDB7E80E119D5C906285 /* HomeserverHistoryManager.swift */; };
 		34357B287357BC0B9715DD51 /* UserAgentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2529D434C750ED78ADF1ED /* UserAgentBuilder.swift */; };
 		34390DAE0C574DAD30CCA7D9 /* DeclineAndBlockScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ADF12A50186B75C68017B61 /* DeclineAndBlockScreenViewModelTests.swift */; };
 		34ADC506C929D10B138EBA51 /* AdvancedSettingsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C58159916ABD7F454CE689 /* AdvancedSettingsScreenCoordinator.swift */; };
@@ -2279,6 +2280,7 @@
 		6C9651CD1066F239C7739240 /* NSEUserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSEUserSession.swift; sourceTree = "<group>"; };
 		6CD4823EAB4B4E8BAB4F6B8C /* TimelineStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStyle.swift; sourceTree = "<group>"; };
 		6CEBE5EA91E8691EDF364EC2 /* UITestsScreenIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestsScreenIdentifier.swift; sourceTree = "<group>"; };
+		6D2BBDB7E80E119D5C906285 /* HomeserverHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeserverHistoryManager.swift; sourceTree = "<group>"; };
 		6DB53055CB130F0651C70763 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6DF438EAFC732D2D95D34BF6 /* StartChatViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartChatViewModelTests.swift; sourceTree = "<group>"; };
 		6E5E9C044BEB7C70B1378E91 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
@@ -5387,6 +5389,7 @@
 				0724EBDFE8BB4C9E5547C57D /* Client.swift */,
 				18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */,
 				6033779EB37259F27F938937 /* ClientProxyProtocol.swift */,
+				6D2BBDB7E80E119D5C906285 /* HomeserverHistoryManager.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -8552,6 +8555,7 @@
 				56F0A22972A3BB519DA2261C /* HomeScreenViewModelProtocol.swift in Sources */,
 				C0A845AAFEB7E1BEAE04306E /* HomeserverCapabilitiesProxy.swift in Sources */,
 				97550ECE8A1D28FEF74FBACC /* HomeserverCapabilitiesProxyProtocol.swift in Sources */,
+				34320DB3C585FD34F4DEC5C8 /* HomeserverHistoryManager.swift in Sources */,
 				277FD4394EAFF323DA34997E /* HorizontalHighlightGradient.swift in Sources */,
 				2BBE320EE426A347AAE5C7DA /* IdentityConfirmationScreen.swift in Sources */,
 				C3BB6887CF13B19182E81F87 /* IdentityConfirmationScreenCoordinator.swift in Sources */,

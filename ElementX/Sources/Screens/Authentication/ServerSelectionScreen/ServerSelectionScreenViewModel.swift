@@ -26,15 +26,19 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private let homeserverHistoryManager: HomeserverHistoryManager
+    
     init(authenticationService: AuthenticationServiceProtocol,
          mode: ServerSelectionScreenMode,
          authenticationFlow: AuthenticationFlow,
          appSettings: AppSettings,
+         homeserverHistoryManager: HomeserverHistoryManager,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.authenticationFlow = authenticationFlow
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
+        self.homeserverHistoryManager = homeserverHistoryManager
         
         let homeserverAddress: String
         if case .picker(let providers) = mode {
@@ -198,11 +202,9 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         let new = userProvidedString
         let lowerNew = new.lowercased()
         
-        let matches = appSettings.previousServers.isEmpty ? appSettings.accountProviders : appSettings.previousServers
-        
         guard
             lowerNew.isEmpty == false,
-            let expectedMatch = matches.first(where: { $0.hasPrefix(lowerNew) }),
+            let expectedMatch = homeserverHistoryManager.server(matchingPrefix: lowerNew),
             lowerNew != expectedMatch
         else { return }
         

@@ -142,6 +142,7 @@ class MockScreen: Identifiable {
             let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: AuthenticationService.mock,
                                                                                  authenticationFlow: .login,
                                                                                  appSettings: appSettings,
+                                                                                 homeserverHistoryManager: HomeserverHistoryManager(appSettings: appSettings),
                                                                                  userIndicatorController: userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator

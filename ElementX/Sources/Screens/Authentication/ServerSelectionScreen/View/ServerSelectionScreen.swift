@@ -169,10 +169,13 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(mode: ServerSelectionScreenMode = .userInput, server: String) -> ServerSelectionScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
+        let appSettings = AppSettings.volatile()
+        
         let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
                                                        mode: mode,
                                                        authenticationFlow: .login,
-                                                       appSettings: .volatile(),
+                                                       appSettings: appSettings,
+                                                       homeserverHistoryManager: HomeserverHistoryManager(appSettings: appSettings),
                                                        userIndicatorController: UserIndicatorControllerMock())
         viewModel.context.homeserverAddress = server
         if case .userInput = mode, server == "thisisbad" {

@@ -181,13 +181,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: AppAppearance.system)
     var appAppearance: AppAppearance
     
-    @UserPreference(key: "previousServers", defaultValue: [])
-    private var _previousServers: [String]
     /// Tracks previous servers the user connected to for autocompletion purposes. Entries are made lowercase on write.
-    var previousServers: [String] {
-        get { _previousServers }
-        set { _previousServers = newValue.map { $0.lowercased() } }
-    }
+    @UserPreference(key: "previousServers", defaultValue: [])
+    var previousServers: [String]
     
     var defaultServer: String {
         previousServers.first ?? accountProviders[0]

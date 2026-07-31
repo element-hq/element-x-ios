@@ -21,6 +21,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
+    private let homeserverHistoryManager: HomeserverHistoryManager
     private let appHooks: AppHooks
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -107,6 +108,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.appMediator = appMediator
         self.appSettings = appSettings
+        homeserverHistoryManager = HomeserverHistoryManager(appSettings: appSettings)
         self.appHooks = appHooks
         self.userIndicatorController = userIndicatorController
         
@@ -346,6 +348,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                     authenticationFlow: authenticationFlow,
                                                                     appSettings: appSettings,
+                                                                    homeserverHistoryManager: homeserverHistoryManager,
                                                                     userIndicatorController: userIndicatorController)
         let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
         
@@ -462,17 +465,10 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private func userHasSignedIn(userSession: UserSessionProtocol) {
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
         
-        // track server in previous servers, maintaining uniqueness and sorting by most recent
-        guard let newServer = userSession.clientProxy.userIDServerName?.lowercased() else {
+        guard let newServer = userSession.clientProxy.userIDServerName else {
             MXLog.error("Failed to retrieve server name from user session for previous servers tracking")
             return
         }
-        var previousServers = appSettings.previousServers
-        previousServers.removeAll { $0 == newServer }
-        
-        previousServers.insert(newServer, at: 0)
-        
-        MXLog.info("Tracking server in previous servers: \(newServer)")
-        appSettings.previousServers = previousServers
+        homeserverHistoryManager.addServerToList(newServer)
     }
 }
