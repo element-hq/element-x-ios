@@ -259,7 +259,9 @@ nonisolated struct NotificationContentBuilder {
            let mediaSource = icon.mediaSource {
             switch await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
             case .success(let data):
-                fetchedImage = INImage(imageData: data)
+                if let squareData = Avatars.squareAvatarImageData(from: data) {
+                    fetchedImage = INImage(imageData: squareData)
+                }
             case .failure(let error):
                 MXLog.error("Couldn't add sender icon: \(error)")
             }
