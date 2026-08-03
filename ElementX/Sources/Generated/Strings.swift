@@ -48,6 +48,30 @@ internal nonisolated enum L10n {
   }
   /// Expand message text field
   internal static var a11yExpandMessageTextField: String { return L10n.tr("Localizable", "a11y_expand_message_text_field") }
+  /// Gallery, attachment %1$d
+  internal static func a11yGalleryAttachment(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_gallery_attachment", p1)
+  }
+  /// Gallery, failed scan %1$d
+  internal static func a11yGalleryFailedScan(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_gallery_failed_scan", p1)
+  }
+  /// Gallery, image %1$d
+  internal static func a11yGalleryImage(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_gallery_image", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
+  internal static func a11yGalleryMoreMedia(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_gallery_more_media", p1)
+  }
+  /// Gallery, scanning %1$d
+  internal static func a11yGalleryScanning(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_gallery_scanning", p1)
+  }
+  /// Gallery, video %1$d
+  internal static func a11yGalleryVideo(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_gallery_video", p1)
+  }
   /// Hide password
   internal static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Info

@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Edit avatar";
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_expand_message_text_field" = "Expand message text field";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Hide password";
 "a11y_info" = "Info";
 "a11y_join_call" = "Join call";

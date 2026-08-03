@@ -18,6 +18,8 @@ extension View {
         modifier(TimelineItemSendInfoModifier(sendInfo: .init(timelineItem: timelineItem,
                                                               adjustedDeliveryStatus: adjustedDeliveryStatus,
                                                               hasContentScanningFailure: hasContentScanningFailure),
+                                              // A gallery announces this when entering it instead.
+                                              isAccessibilityHidden: timelineItem is GalleryRoomTimelineItem,
                                               context: context))
     }
 }
@@ -25,6 +27,7 @@ extension View {
 /// Adds the send info to a view with the correct layout.
 private struct TimelineItemSendInfoModifier: ViewModifier {
     let sendInfo: TimelineItemSendInfo
+    let isAccessibilityHidden: Bool
     let context: TimelineViewModel.Context
     
     var layout: AnyLayout {
@@ -43,6 +46,7 @@ private struct TimelineItemSendInfoModifier: ViewModifier {
             content
             
             TimelineItemSendInfoLabel(sendInfo: sendInfo)
+                .accessibilityHidden(isAccessibilityHidden)
                 .contentShape(.rect)
                 // Tap gesture to avoid the message being detected as a button by VoiceOver
                 // (and the action shows a description that is already read to the user).

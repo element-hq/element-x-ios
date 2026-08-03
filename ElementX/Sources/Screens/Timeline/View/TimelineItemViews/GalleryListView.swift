@@ -24,6 +24,7 @@ struct GalleryListView: View {
                 }
                 
                 GalleryListRow(item: item,
+                               position: index + 1,
                                mediaProvider: mediaProvider,
                                contentScannerService: contentScannerService) {
                     onItemTap(index)
@@ -46,6 +47,8 @@ struct GalleryDivider: View {
 
 private struct GalleryListRow: View {
     let item: GalleryItem
+    /// The item's position within the gallery, prepended to the row's own description.
+    let position: Int
     let mediaProvider: MediaProviderProtocol?
     let contentScannerService: ContentScannerServiceProtocol?
     let onTap: () -> Void
@@ -70,6 +73,13 @@ private struct GalleryListRow: View {
             row(icon: scanningIcon)
         } unsafeContent: { failure in
             failureRow(failure)
+        }
+        // One element per row, so that each attachment is focussed on its own, with its position
+        // prepended to the description that the row already provides.
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel { label in
+            Text(L10n.a11yGalleryAttachment(position))
+            label
         }
     }
     

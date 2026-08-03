@@ -72,6 +72,7 @@ struct GalleryGridView: View {
             let overflow = (overflowCount > 0 && isLastVisible) ? overflowCount : 0
             
             GalleryItemTileView(item: items[index],
+                                position: index + 1,
                                 mediaProvider: mediaProvider,
                                 contentScannerService: contentScannerService,
                                 overflowCount: overflow) {
