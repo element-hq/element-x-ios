@@ -650,9 +650,14 @@ class TimelineController: TimelineControllerProtocol {
         }
         
         if let avatarURL, let mediaSource = try? MediaSourceProxy(url: avatarURL, mimeType: nil) {
-            if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)),
-               let squareAvatarData = Avatars.squareAvatarImageData(from: avatarData) {
-                sendMessageIntent.setImage(INImage(imageData: squareAvatarData), forParameterNamed: \.speakableGroupName)
+            // Request a generous size so the square crop of a non-square avatar keeps enough resolution.
+            if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 256, height: 256)) {
+                if let squareAvatarData = Avatars.squareAvatarImageData(from: avatarData) {
+                    sendMessageIntent.setImage(INImage(imageData: squareAvatarData), forParameterNamed: \.speakableGroupName)
+                } else {
+                    MXLog.error("Failed processing the room avatar for the send message intent, using a placeholder.")
+                    addPlacehoder()
+                }
             } else {
                 addPlacehoder()
             }
