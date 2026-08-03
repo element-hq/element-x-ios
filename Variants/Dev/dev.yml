@@ -1,0 +1,32 @@
+# Dev-environment app variant: a SECOND installable app that talks to the dev
+# backend, so the shipping app (global.gua) can be a real production build.
+#
+# Applied by `fastlane config_dev` (appends this file to project.yml's include
+# list, then regenerates), mirroring the upstream Nightly variant.
+#
+# Why a separate bundle id rather than a build configuration: two apps must be
+# installable side by side and must register DIFFERENT custom URL schemes (iOS
+# routes a scheme to one app only). MAS's client-registration policy reverses
+# the redirect scheme and requires it to match the client_uri host as a prefix,
+# so `global.gua.dev:/oidc` still pairs with client_uri `https://gua.global`
+# and needs no new domain and no server-side change.
+settings:
+  APP_GROUP_IDENTIFIER: group.global.gua.dev
+  BASE_BUNDLE_IDENTIFIER: global.gua.dev
+  OIDC_REDIRECT_URL: global.gua.dev:/oidc
+
+targets:
+  ElementX:
+    settings:
+      base:
+        # APP_DISPLAY_NAME has to be overridden per target, not in the settings
+        # block above: project.yml defines it directly and an including file wins
+        # over its includes, so a top-level override here would be ignored.
+        # It also becomes the OIDC client_name MAS sees, which usefully
+        # distinguishes the two apps in the consent/session UI.
+        APP_DISPLAY_NAME: Gua Dev
+      configs:
+        Release:
+          # Point Release archives of this variant back at the dev backend. The
+          # dev hosts are not committed; CI injects them into Secrets/Secrets.swift.
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) GUA_DEVELOPMENT"

@@ -49,6 +49,7 @@
 		04076DE3D131E6A610D63EFF /* EmojiPickerScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8932029B95DAA6DFB5CA9F5F /* EmojiPickerScreenModels.swift */; };
 		045A384AFD7DC0CF64890659 /* AnalyticsEvents in Frameworks */ = {isa = PBXBuildFile; productRef = AB6235BB7A564EB0EECF678A /* AnalyticsEvents */; };
 		04CA15FFFAEFFBBE2C7C3DB9 /* QRCodeLoginScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF62A290423637B41D8A857 /* QRCodeLoginScreenCoordinator.swift */; };
+		04E411EE378A4F5B909D28A6 /* GuaIDPLocaleURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0537010E8E892D432522327D /* GuaIDPLocaleURL.swift */; };
 		051104A2FD718FAA10818567 /* SecureBackupLogoutConfirmationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126DFE76B5775F2517F9C29B /* SecureBackupLogoutConfirmationScreenCoordinator.swift */; };
 		0524FFA88B79193223DA2BF3 /* AuthenticationClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650F103092DD1FDCF44F6CDE /* AuthenticationClientFactory.swift */; };
 		052F2CF4C0C3D3616795CF16 /* ServerConfigurationScreenViewStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575E50C78D436F6C9629C4FA /* ServerConfigurationScreenViewStateTests.swift */; };
@@ -461,7 +462,6 @@
 		4C528871C8A30FDABC11CBA6 /* ScreenTrackerViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286863655754A6A7DA32B0CA /* ScreenTrackerViewModifier.swift */; };
 		4C68AF2514D99484A8678245 /* ResolveVerifiedUserSendFailureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86DD78320B036670DA850008 /* ResolveVerifiedUserSendFailureScreen.swift */; };
 		4C7BB1DB40B3F332435E1C4D /* GuaWelcomeLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090DB54C3770F18D3F4F9CB3 /* GuaWelcomeLogo.swift */; };
-		F59F7CB40FD46B9FE73F6216 /* GuaIDPLocaleURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947E54F13490AEBCA43CE11E /* GuaIDPLocaleURL.swift */; };
 		4C91D87D26A2B18622325CFB /* RoomDirectorySearchScreenScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DB7340B36931AFC212A772 /* RoomDirectorySearchScreenScreenViewModelTests.swift */; };
 		4CBD82B14BD5C1F53A1F29C0 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6368CA0794FB4B5325AC8038 /* Observable.swift */; };
 		4CD5E8C68E4AF29C887B1A42 /* CertificateValidatorHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCFF51E07AD70C12580E876 /* CertificateValidatorHook.swift */; };
@@ -1549,6 +1549,7 @@
 		046E998813345664EF7E485D /* MediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProvider.swift; sourceTree = "<group>"; };
 		04C8AB83E020E24BC9D86B30 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		04EB01006D741317E6C860CE /* EmojiPickerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerScreen.swift; sourceTree = "<group>"; };
+		0537010E8E892D432522327D /* GuaIDPLocaleURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuaIDPLocaleURL.swift; sourceTree = "<group>"; };
 		054C3A783CCB7A849DFCF023 /* target.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = target.yml; sourceTree = "<group>"; };
 		057A40D9D0EB8F5873F938B2 /* UserFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFlowTests.swift; sourceTree = "<group>"; };
 		05A34A4E3358B1A33854F36D /* ComposerToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerToolbar.swift; sourceTree = "<group>"; };
@@ -1570,7 +1571,6 @@
 		0899295491A70DB9867DE272 /* SessionVerificationControllerProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationControllerProxy.swift; sourceTree = "<group>"; };
 		08DBD0F5C87C6D7ADF78A4B4 /* DeveloperOptionsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsScreenViewModel.swift; sourceTree = "<group>"; };
 		090DB54C3770F18D3F4F9CB3 /* GuaWelcomeLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuaWelcomeLogo.swift; sourceTree = "<group>"; };
-		947E54F13490AEBCA43CE11E /* GuaIDPLocaleURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuaIDPLocaleURL.swift; sourceTree = "<group>"; };
 		0985305B69117680601ACD17 /* ClientBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientBuilder.swift; sourceTree = "<group>"; };
 		09925443569A99D74E05730D /* TimelineReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineReplyView.swift; sourceTree = "<group>"; };
 		09B49F7FAB8D8F43E695255A /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
@@ -3082,9 +3082,9 @@
 		081808AF2CD0EBF6C47FF94A /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				0537010E8E892D432522327D /* GuaIDPLocaleURL.swift */,
 				A226FAA776D24DAF77198141 /* GuaUserLink.swift */,
 				090DB54C3770F18D3F4F9CB3 /* GuaWelcomeLogo.swift */,
-				947E54F13490AEBCA43CE11E /* GuaIDPLocaleURL.swift */,
 				D29AEA97EDCB19FCCCD8A926 /* PasskeyEnrollmentPresenter.swift */,
 				CA1F2CE7AABD621B1F8ADAEE /* PinBubbleField.swift */,
 			);
@@ -7732,9 +7732,9 @@
 				0775DFDFFF6C7A17C1C22422 /* GlobalSearchScreenViewModel.swift in Sources */,
 				214CCC5EAD7360DD69161748 /* GlobalSearchScreenViewModelProtocol.swift in Sources */,
 				EBC86B3460CBE83FFD9C2A01 /* GuaDeployment.swift in Sources */,
+				04E411EE378A4F5B909D28A6 /* GuaIDPLocaleURL.swift in Sources */,
 				061DE6519952CA0E992189BD /* GuaUserLink.swift in Sources */,
 				4C7BB1DB40B3F332435E1C4D /* GuaWelcomeLogo.swift in Sources */,
-				F59F7CB40FD46B9FE73F6216 /* GuaIDPLocaleURL.swift in Sources */,
 				4BC2F5C81530E3570917578A /* HTMLFixtures.swift in Sources */,
 				4A16EC04997ED0D89B196F9C /* HTMLParserStyle.swift in Sources */,
 				5580A76BE96A3AFAE520B196 /* HighlightedTimelineItemModifier.swift in Sources */,
@@ -9426,7 +9426,6 @@
 				PRODUCT_MODULE_NAME = ElementX;
 				PRODUCT_NAME = "$(APP_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) GUA_DEVELOPMENT";
 				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/SupportingFiles/ElementX-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "GeneratedInterface-Swift.h";
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -15,6 +15,7 @@ name: TestFlight
 #   ASC_ISSUER_ID   App Store Connect API issuer id (UUID)
 #   ASC_KEY_ID      App Store Connect API key id
 #   ASC_PRIVATE_KEY Contents of the AuthKey_<KEY_ID>.p8 file (full PEM, multi-line)
+#   ASC_APP_ID_DEV  The dev app record's numeric Apple ID (only for environment=dev).
 #   ASC_APP_ID      The app's numeric Apple ID (so the upload targets the right
 #                   app record on multi-app accounts)
 # See docs/TESTFLIGHT.md for setup details.
@@ -22,6 +23,12 @@ name: TestFlight
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        description: "Which app to build: prod (global.gua, gua.global backend) or dev (global.gua.dev, dev backend)"
+        required: true
+        type: choice
+        options: [prod, dev]
+        default: prod
       whats_new:
         description: "Optional 'What to Test' note for this TestFlight build"
         required: false
@@ -47,6 +54,10 @@ jobs:
       # Each run gets a unique, monotonically increasing build number (the workflow
       # run number) so every upload is accepted by TestFlight.
       BUILD_NUMBER: ${{ github.run_number }}
+      # Which app record this run targets. prod is the shipping app on the committed
+      # gua.global endpoints; dev is the side-by-side variant on the dev backend.
+      TARGET_ENV: ${{ inputs.environment }}
+      BUNDLE_ID: ${{ inputs.environment == 'dev' && 'global.gua.dev' || 'global.gua' }}
 
     steps:
       - name: Checkout
@@ -108,6 +119,10 @@ jobs:
           command -v xcbeautify >/dev/null 2>&1 || brew install xcbeautify
 
       - name: Inject dev backend endpoints
+        # Dev builds only: prod endpoints (resolver/identity/account provider on
+        # gua.global) are committed in GuaDeployment.swift, so a prod archive needs
+        # no injected secrets at all.
+        if: inputs.environment == 'dev'
         # The committed Secrets/Secrets.swift holds localhost placeholders, which only
         # resolve on the simulator (localhost == the Mac). A TestFlight build runs on
         # real devices, where localhost is the phone itself, so it MUST point at the
@@ -149,9 +164,17 @@ jobs:
           EOF
           echo "Wrote Secrets.swift with dev backend endpoints (values masked by Actions)."
 
+      - name: Apply the Dev app variant
+        # Switches bundle id / app group / OIDC redirect scheme to the dev app and
+        # re-adds GUA_DEVELOPMENT on Release, so both apps install side by side.
+        if: inputs.environment == 'dev'
+        run: bundle exec fastlane config_dev
+
       - name: Generate Xcode project
-        # The .xcodeproj is generated from project.yml. Secrets/Secrets.swift was just
-        # populated with the dev backend endpoints by the previous step.
+        # The .xcodeproj is generated from project.yml. For a dev build the previous
+        # steps populated Secrets/Secrets.swift and applied the Dev variant; a prod
+        # build generates straight from the committed spec.
+        if: inputs.environment != 'dev'
         run: xcodegen generate
 
       - name: Read marketing version
@@ -259,11 +282,12 @@ jobs:
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-          ASC_APP_ID: ${{ secrets.ASC_APP_ID }}
+          # Per-app record: prod uploads to ASC_APP_ID, dev to ASC_APP_ID_DEV.
+          ASC_APP_ID: ${{ inputs.environment == 'dev' && secrets.ASC_APP_ID_DEV || secrets.ASC_APP_ID }}
         run: |
           set -euo pipefail
           if [ -z "${ASC_APP_ID:-}" ]; then
-            echo "::error::ASC_APP_ID secret is not set (the app's numeric Apple ID). See docs/TESTFLIGHT.md"
+            echo "::error::No App Store Connect app id for environment '$TARGET_ENV' (set ASC_APP_ID for prod, ASC_APP_ID_DEV for dev). See docs/TESTFLIGHT.md"
             exit 1
           fi
           echo "Uploading $IPA_PATH (build $BUILD_NUMBER) to TestFlight"
@@ -277,7 +301,7 @@ jobs:
             --apiIssuer "$ASC_ISSUER_ID" \
             --apiKeyPath "$ASC_KEY_PATH" \
             --apple-id "$ASC_APP_ID" \
-            --bundle-id global.gua \
+            --bundle-id "$BUNDLE_ID" \
             --bundle-version "$BUILD_NUMBER" \
             --bundle-short-version-string "$MARKETING_VERSION" \
             2>&1 | tee altool-upload.log

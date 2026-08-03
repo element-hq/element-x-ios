@@ -132,6 +132,22 @@ lane :config_production do
   xcodegen(spec: "project.yml")
 end
 
+lane :config_dev do
+  # Switch the generated project to the Dev-environment app (own bundle id, own
+  # app group, own OIDC redirect scheme, GUA_DEVELOPMENT on Release) so it can be
+  # installed alongside the production app. See Variants/Dev/dev.yml.
+  target_file_path = "../project.yml"
+  data = YAML.load_file target_file_path
+
+  if !data["include"].any? { |item| item["path"] == "Variants/Dev/dev.yml" }
+    data["include"].append({ "path" => "Variants/Dev/dev.yml" })
+  end
+
+  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
+
+  xcodegen(spec: "project.yml")
+end
+
 lane :config_nightly do |options|
   build_number = options[:build_number]
   UI.user_error!("Invalid build number.") unless !build_number.to_s.empty?

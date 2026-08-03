@@ -153,10 +153,10 @@ targets:
           APNS_ENVIRONMENT: development
         Release:
           APNS_ENVIRONMENT: production
-          # TestFlight against the DEV backend: GUA_DEVELOPMENT routes GuaDeployment.current to .development
-          # (dev resolver/identity from Secrets) for Release archives. Remove this — or split out a dedicated
-          # Release-Prod config — once prod (gua.global) is live and you want prod TestFlight builds.
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) GUA_DEVELOPMENT"
+          # Release archives target PROD: GuaDeployment.current resolves to .production, whose
+          # resolver / identity / account-provider hosts are committed in GuaDeployment.swift, so
+          # a prod build needs no injected secrets. Dev TestFlight builds come from the Dev
+          # variant (Variants/Dev/dev.yml), which re-adds GUA_DEVELOPMENT and its own bundle id.
 
     preBuildScripts:
       - name: 🛠 SwiftGen

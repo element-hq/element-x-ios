@@ -46,10 +46,38 @@ feedback bot.
 | `ASC_ISSUER_ID` | App Store Connect API **issuer id** (a UUID) | App Store Connect -> Users and Access -> Integrations -> App Store Connect API -> the "Issuer ID" shown at the top |
 | `ASC_KEY_ID` | The API **key id** (~10 chars) | Same page, the "Key ID" column for your key |
 | `ASC_PRIVATE_KEY` | The full contents of the `AuthKey_<KEY_ID>.p8` file | Downloaded once when the key was created. Paste the whole PEM block, `-----BEGIN PRIVATE KEY-----` through `-----END PRIVATE KEY-----`, including newlines. |
+| `ASC_APP_ID_DEV` | The **dev** app record's numeric Apple ID (only needed for `environment=dev`) | Same place, on the `Gua Dev` app record. |
 | `ASC_APP_ID` | The app's **numeric Apple ID** | App Store Connect -> Apps -> (the Gua app) -> App Information -> "Apple ID". The upload pins this so the build can't be routed to the wrong app record on a multi-app account. |
 | `GUA_DEV_RESOLVER_BASE_URL` | **HTTPS** base URL of the dev **resolver** (phone → homeserver routing) | The dev cluster's resolver ingress, e.g. `https://resolver.dev.gua.<dev-zone>` |
 | `GUA_DEV_IDENTITY_SERVICE_BASE_URL` | **HTTPS** base URL of the dev **identity-service** (phone/OTP IdP) | The dev cluster's identity ingress, e.g. `https://identity.dev.gua.<dev-zone>` |
 | `GUA_DEV_ACCOUNT_PROVIDER` | The dev **homeserver server-name** offered at login (host, no scheme) | The `serverName` the resolver returns, e.g. `dev.gua.<dev-zone>` |
+
+## Two apps: prod and dev
+
+The workflow takes an `environment` input and builds one of two apps:
+
+| | `prod` (default) | `dev` |
+|---|---|---|
+| Bundle id | `global.gua` | `global.gua.dev` |
+| App name | Gua | Gua Dev |
+| Backend | `gua.global` (committed in `GuaDeployment.swift`) | dev cluster (injected from `GUA_DEV_*` secrets) |
+| OIDC redirect | `global.gua:/oidc` | `global.gua.dev:/oidc` |
+| App record | `ASC_APP_ID` | `ASC_APP_ID_DEV` |
+
+They install side by side (different bundle ids, and deliberately different URL
+schemes since iOS routes a scheme to a single app). The dev app comes from the
+XcodeGen overlay `Variants/Dev/dev.yml`, applied by `fastlane config_dev`;
+`Release` on its own means production.
+
+The dev redirect scheme still pairs with client_uri `https://gua.global`: MAS
+reverses the scheme and requires it to match the client_uri host as a *prefix*,
+so `global.gua.dev` satisfies `gua.global` and no new domain or server change is
+needed.
+
+Before the first `environment=dev` run, the Apple Developer account needs the
+`global.gua.dev`, `global.gua.dev.nse` and `global.gua.dev.shareextension`
+identifiers plus the `group.global.gua.dev` App Group, and an App Store Connect
+record for the dev app (see the identifier caveats below, which apply equally).
 
 The `GUA_DEV_*` secrets point the **TestFlight build** at the network-reachable
 **dev backend** instead of the committed `localhost` placeholders in
@@ -92,7 +120,7 @@ checkout (with LFS)
   -> xcodebuild archive  -allowProvisioningUpdates  CURRENT_PROJECT_VERSION=<run #>
   -> xcodebuild -exportArchive  (fastlane/exportOptions.plist, method app-store-connect)
   -> xcrun altool --validate-app  (fail fast on signing/entitlement/plist rejects)
-  -> xcrun altool --upload-package <ipa> --apple-id ASC_APP_ID --bundle-id global.gua
+  -> xcrun altool --upload-package <ipa> --apple-id ASC_APP_ID --bundle-id <prod|dev bundle id>
        (output grepped for "No errors uploading"; altool can exit 0 on failure)
   -> upload the .xcarchive as a run artifact (5-day retention)
   -> always: shred the AuthKey_<id>.p8 from disk
