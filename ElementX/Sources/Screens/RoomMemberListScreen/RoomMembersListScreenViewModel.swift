@@ -99,7 +99,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 hideLoadingIndicator(Self.updateStateLoadingIndicatorIdentifier)
             }
             
-            let members = members.sorted()
+            let members = members.sorted(prioritisingRoomCallParticipants: roomProxy.infoPublisher.value.activeRoomCallParticipants)
             let roomMembersDetails = await buildMembersDetails(members: members)
             self.members = members
             self.currentUserProxy = members.first { $0.userID == roomProxy.ownUserID }
@@ -127,7 +127,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         let isEncrypted = roomProxy.infoPublisher.value.isEncrypted
         let activeRoomCallParticipants = Set(roomProxy.infoPublisher.value.activeRoomCallParticipants)
         
-        let membersDetails: RoomMembersDetails = await Task.detached { [weak self] in
+        return await Task.detached { [weak self] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
             var invitedMembers: [RoomMemberListScreenEntry] = .init()
             var joinedMembers: [RoomMemberListScreenEntry] = .init()
@@ -138,15 +138,15 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 if isEncrypted, let fetchedState = await self?.userIdentityVerificationState(for: member.userID) {
                     verificationState = fetchedState
                 }
-                let isInCall = activeRoomCallParticipants.contains(member.userID)
+                let isActiveRoomCallParticipant = activeRoomCallParticipants.contains(member.userID)
                 
                 switch member.membership {
                 case .invite:
-                    invitedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isInCall: isInCall))
+                    invitedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isActiveRoomCallParticipant: isActiveRoomCallParticipant))
                 case .join:
-                    joinedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isInCall: isInCall))
+                    joinedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isActiveRoomCallParticipant: isActiveRoomCallParticipant))
                 case .ban:
-                    bannedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isInCall: isInCall))
+                    bannedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isActiveRoomCallParticipant: isActiveRoomCallParticipant))
                 default:
                     continue
                 }
@@ -157,10 +157,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                          bannedMembers: bannedMembers.sorted { $0.member.id.localizedStandardCompare($1.member.id) == .orderedAscending }) // Re-sort ignoring display name.
         }
         .value
-        
-        return .init(invitedMembers: membersDetails.invitedMembers,
-                     joinedMembers: membersDetails.joinedMembers.filter(\.isInCall) + membersDetails.joinedMembers.filter { !$0.isInCall },
-                     bannedMembers: membersDetails.bannedMembers)
     }
     
     /// The client proxy isn't Sendable, fetch identities through this helper so

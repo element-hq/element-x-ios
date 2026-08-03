@@ -68,7 +68,7 @@ struct RoomMembersListScreenViewModelTests {
         let sortedMembers: [RoomMemberListScreenEntry] = [
             .init(member: .init(withProxy: RoomMemberProxyMock.mockFrank),
                   verificationState: .notVerified,
-                  isInCall: true),
+                  isActiveRoomCallParticipant: true),
             .init(member: .init(withProxy: RoomMemberProxyMock.mockAdmin),
                   verificationState: .notVerified),
             .init(member: .init(withProxy: RoomMemberProxyMock.mockAlice),
