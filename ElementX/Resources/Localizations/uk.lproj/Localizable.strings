@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Відхилити";
 "notification_invite_body" = "Запрошує вас до бесіди";
 "notification_invite_body_with_sender" = "%1$@ запрошує вас до бесіди";
+"notification_live_location_started_body" = "Починає ділитися своїм поточним місцем розташування";
 "notification_mentioned_you_body" = "Вас згадує: %1$@";
 "notification_new_messages" = "Нові повідомлення";
 "notification_reaction_body" = "Реагує з %1$@";
@@ -950,7 +951,7 @@
 "screen_link_new_device_desktop_step3" = "Зіскануйте QR-код цим пристроєм";
 "screen_link_new_device_desktop_submit" = "Готовий до сканування";
 "screen_link_new_device_desktop_title" = "Відкрийте %1$@ на комп'ютері, щоб отримати QR-код";
-"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
+"screen_link_new_device_desktop_warning" = "Скануйте QR-код лише після виконання наведених вище кроків на своєму власному пристрої. Ніколи не скануйте код, надісланий іншою особою.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Цифри не збігаються";
 "screen_link_new_device_enter_number_notice" = "Введіть 2-значний код";
 "screen_link_new_device_enter_number_subtitle" = "Це підтвердить, що з'єднання з іншим пристроєм захищене.";
@@ -977,8 +978,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Ніхто не ділиться своєю геопозицією";
 "screen_live_location_sheet_sharing_live_location" = "Обмін геопозицією";
 "screen_live_location_sheet_title" = "На карті";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
-"screen_local_network_opt_in_title" = "Allow access to local network";
+"screen_local_network_opt_in_subtitle" = "Ваш домашній сервер перебуває у вашій локальній мережі. Щоб приєднатися, %1$@ повинен мати право доступу до пристроїв у цій мережі.";
+"screen_local_network_opt_in_title" = "Дозволити доступ до локальної мережі";
 "screen_login_error_deactivated_account" = "Цей обліковий запис було видалено.";
 "screen_login_error_invalid_credentials" = "Неправильне ім'я користувача та/або пароль";
 "screen_login_error_invalid_user_id" = "Це недійсний ідентифікатор користувача. Очікуваний формат: '@user:homeserver.org'";
@@ -1069,7 +1070,7 @@
 "screen_notification_settings_sound_import_sound_error_title" = "Помилка імпорту файлу";
 "screen_notification_settings_sound_preview_sound_error_title" = "Проблема з попереднім прослуховуванням звуку сповіщення";
 "screen_notification_settings_sound_section_title" = "Звук";
-"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Dismiss alert sound error";
+"screen_notification_settings_sound_set_sound_error_dismiss_a11y" = "Відхилити помилку звукового сповіщення";
 "screen_notification_settings_sound_set_sound_error_title" = "Проблема налаштовування звуку сповіщення";
 "screen_notification_settings_sound_silent" = "Без звуку";
 "screen_notification_settings_sound_system_alert_ios" = "Тривога";
@@ -1509,11 +1510,11 @@
 "screen_session_verification_waiting_subtitle" = "Після схвалення ви зможете продовжити звіряння.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Прийміть запит, щоб розпочати процес звіряння в іншому сеансі та продовжити роботу.";
 "screen_session_verification_waiting_to_accept_title" = "Очікування на прийняття запиту";
-"screen_settings_user_status_away" = "Away";
-"screen_settings_user_status_be_right_back" = "Be right back";
-"screen_settings_user_status_custom" = "Custom…";
-"screen_settings_user_status_custom_hint" = "Custom status…";
-"screen_settings_user_status_focus_time" = "Focus time";
+"screen_settings_user_status_away" = "Не на місці";
+"screen_settings_user_status_be_right_back" = "Зараз повернуся";
+"screen_settings_user_status_custom" = "Власний...";
+"screen_settings_user_status_custom_hint" = "Власний статус...";
+"screen_settings_user_status_focus_time" = "Зосереджений(а)";
 "screen_settings_user_status_in_a_meeting" = "На зустрічі";
 "screen_settings_user_status_on_the_road" = "У дорозі";
 "screen_settings_user_status_placeholder" = "Який у вас статус?";

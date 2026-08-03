@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Afvis";
 "notification_invite_body" = "Inviterede dig til at samtale";
 "notification_invite_body_with_sender" = "%1$@ inviterede dig til at samtale";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nævnte dig: %1$@";
 "notification_new_messages" = "Nye beskeder";
 "notification_reaction_body" = "Reagerede med%1$@";

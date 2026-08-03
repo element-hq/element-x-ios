@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Odmietnuť";
 "notification_invite_body" = "Vás pozval/a na konverzáciu";
 "notification_invite_body_with_sender" = "%1$@ vás pozval/a na rozhovor";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Spomenul/a vás: %1$@";
 "notification_new_messages" = "Nové správy";
 "notification_reaction_body" = "Reagoval/a s %1$@";

@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Avvisa";
 "notification_invite_body" = "Bjöd in dig att chatta";
 "notification_invite_body_with_sender" = "%1$@ bjöd in dig att chatta";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nämnde dig: %1$@";
 "notification_new_messages" = "Nya meddelanden";
 "notification_reaction_body" = "Reagerade med %1$@";

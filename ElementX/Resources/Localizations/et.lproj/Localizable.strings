@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Keeldu";
 "notification_invite_body" = "Kutse osalema vestluses";
 "notification_invite_body_with_sender" = "%1$@ saatus sulle vestluskutse";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mainis sind: %1$@";
 "notification_new_messages" = "Uued sõnumid";
 "notification_reaction_body" = "Reageeris nii: %1$@";

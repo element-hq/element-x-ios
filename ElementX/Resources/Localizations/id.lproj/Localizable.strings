@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Tolak";
 "notification_invite_body" = "Mengundang Anda untuk mengobrol";
 "notification_invite_body_with_sender" = "%1$@ mengundang Anda untuk mengobrol";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Menyebutkan Anda: %1$@";
 "notification_new_messages" = "Pesan Baru";
 "notification_reaction_body" = "Menghapus dengan %1$@";

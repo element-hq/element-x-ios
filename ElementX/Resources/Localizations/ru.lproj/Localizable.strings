@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Отклонить";
 "notification_invite_body" = "Пригласил(а) Вас в чат";
 "notification_invite_body_with_sender" = "%1$@ пригласил(а) Вас в чат";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Упомянул(а) вас: %1$@";
 "notification_new_messages" = "Новые сообщения";
 "notification_reaction_body" = "Отреагировал(а) на %1$@";

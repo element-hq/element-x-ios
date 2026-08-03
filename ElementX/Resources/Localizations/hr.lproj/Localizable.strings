@@ -6,7 +6,7 @@
 "a11y_collapse_message_text_field" = "Minimiziraj tekstno polje poruke";
 "a11y_create_poll_votes_allowed_decrease" = "Smanjenje dopuštenih glasova po osobi";
 "a11y_create_poll_votes_allowed_increase" = "Povećanje broja dopuštenih glasova po osobi";
-"a11y_custom_emoji" = "Custom emoji";
+"a11y_custom_emoji" = "Prilagođeni Emoji";
 "a11y_delete" = "Izbriši";
 "a11y_duration" = "Trajanje: %1$@";
 "a11y_edit_avatar" = "Uredi avatar";
@@ -52,7 +52,7 @@
 "a11y_start_call" = "Započni poziv";
 "a11y_start_video_call" = "Započni videopoziv";
 "a11y_start_voice_call" = "Započni glasovni poziv";
-"a11y_status" = "Status";
+"a11y_status" = "Stanje";
 "a11y_tombstoned_room" = "Soba označena za uklanjanje";
 "a11y_user_menu" = "Korisnički izbornik";
 "a11y_video_preview" = "Pretpregled videozapisa";
@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Odbij";
 "notification_invite_body" = "Pozvao/la te na razgovor";
 "notification_invite_body_with_sender" = "%1$@ pozvao/la te na razgovor";
+"notification_live_location_started_body" = "Počeli su dijeliti svoju lokaciju uživo";
 "notification_mentioned_you_body" = "Korisnik vas je spomenuo: %1$@";
 "notification_new_messages" = "Nove poruke";
 "notification_reaction_body" = "Reagirao/la je s %1$@";
@@ -950,7 +951,7 @@
 "screen_link_new_device_desktop_step3" = "Skenirajte QR kod ovim uređajem";
 "screen_link_new_device_desktop_submit" = "Spremno za skeniranje";
 "screen_link_new_device_desktop_title" = "Otvorite %1$@ na stolnom računalu kako biste dobili QR kod";
-"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
+"screen_link_new_device_desktop_warning" = "QR kod skenirajte tek nakon što ste na vlastitom uređaju slijedili gore navedene korake. Nikada ne skenirajte kod koji vam je poslala druga osoba.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Brojevi se ne podudaraju";
 "screen_link_new_device_enter_number_notice" = "Unesite dvoznamenkasti kod";
 "screen_link_new_device_enter_number_subtitle" = "Time ćete potvrditi da je veza s vašim drugim uređajem sigurna.";

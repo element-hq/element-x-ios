@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "رد کردن";
 "notification_invite_body" = "به گپ دعوتتان کرد";
 "notification_invite_body_with_sender" = "%1$@ به گپ دعوتتان کرد";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "به شما اشاره کرد: %1$@";
 "notification_new_messages" = "پیام جدید";
 "notification_reaction_body" = "با %1$@ واکنش داد";
