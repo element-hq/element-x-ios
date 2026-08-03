@@ -21,6 +21,24 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
                         action()
                     }
                 }
+        // A gallery is a container so that each of its attachments can be focussed on its own.
+        // Everything that isn't an attachment is announced when entering it, as the caption and
+        // the send info are hidden where they're shown to avoid being read twice.
+        case let timelineItem as GalleryRoomTimelineItem:
+            content
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel { _ in
+                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                    if let caption = timelineItem.content.caption, !caption.isBlank {
+                        Text(caption)
+                    }
+                    Text(timelineItem.localizedSendInfo)
+                }
+                .accessibilityActions {
+                    Button(L10n.commonMessageActions) {
+                        action()
+                    }
+                }
         case let timelineItem as EventBasedTimelineItemProtocol:
             content
                 .accessibilityRepresentation {

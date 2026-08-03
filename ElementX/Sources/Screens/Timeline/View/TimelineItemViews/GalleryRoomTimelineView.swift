@@ -41,6 +41,7 @@ struct GalleryRoomTimelineView: View {
                         GalleryDivider()
                     }
                     caption
+                        .accessibilityHidden(true) // Announced when entering the gallery, so not a stop of its own.
                 }
             }
             .frame(width: GalleryGridView.groupWidth, alignment: .leading)

@@ -10,10 +10,24 @@ import SwiftUI
 
 struct GalleryItemTileView: View {
     let item: GalleryItem
+    /// The item's position within the gallery, announced instead of its filename.
+    let position: Int
     let mediaProvider: MediaProviderProtocol?
     let contentScannerService: ContentScannerServiceProtocol?
     let overflowCount: Int
     let onTap: () -> Void
+    
+    private var accessibilityLabel: String {
+        if overflowCount > 0 {
+            L10n.a11yGalleryMoreMedia(overflowCount)
+        } else if item.isVideo {
+            L10n.a11yGalleryVideo(position)
+        } else if item.isImage {
+            L10n.a11yGalleryImage(position)
+        } else {
+            L10n.a11yGalleryAttachment(position)
+        }
+    }
     
     var body: some View {
         // Overflow above the scanner: shows on any scan state, survives content updates.
@@ -33,11 +47,15 @@ struct GalleryItemTileView: View {
                         }
                     }
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(item.filename)
+                    .accessibilityLabel(accessibilityLabel)
             } scanningContent: {
                 ScanningMediaEventsTimelineView()
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(L10n.a11yGalleryScanning(position))
             } unsafeContent: { failure in
                 UnsafeMediaEventsTimelineView(failure: failure)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(L10n.a11yGalleryFailedScan(position))
             }
             
             if overflowCount > 0 {
@@ -47,6 +65,9 @@ struct GalleryItemTileView: View {
         // Tappable in every scan state, so that an unsafe item can't hide the rest of the gallery.
         .contentShape(Rectangle())
         .onTapGesture { onTap() }
+        // One element per tile, labelled by whichever state is on show.
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
     }
     
     @ViewBuilder
@@ -109,6 +130,7 @@ struct GalleryItemTileView: View {
                 .foregroundStyle(.compound.textPrimary)
         }
         .allowsHitTesting(false) // Let the tap fall through to the tile below.
+        .accessibilityHidden(true) // The count is already announced by the tile's label.
     }
     
     private func formatted(duration: TimeInterval) -> String {
