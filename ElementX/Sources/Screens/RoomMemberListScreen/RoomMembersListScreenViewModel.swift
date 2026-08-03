@@ -125,8 +125,9 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     private func buildMembersDetails(members: [RoomMemberProxyProtocol]) async -> RoomMembersDetails {
         // We don't care about identity statuses on non-encrypted rooms
         let isEncrypted = roomProxy.infoPublisher.value.isEncrypted
+        let activeRoomCallParticipants = Set(roomProxy.infoPublisher.value.activeRoomCallParticipants)
         
-        return await Task.detached { [weak self] in
+        let membersDetails: RoomMembersDetails = await Task.detached { [weak self] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
             var invitedMembers: [RoomMemberListScreenEntry] = .init()
             var joinedMembers: [RoomMemberListScreenEntry] = .init()
@@ -137,14 +138,15 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 if isEncrypted, let fetchedState = await self?.userIdentityVerificationState(for: member.userID) {
                     verificationState = fetchedState
                 }
+                let isInCall = activeRoomCallParticipants.contains(member.userID)
                 
                 switch member.membership {
                 case .invite:
-                    invitedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState))
+                    invitedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isInCall: isInCall))
                 case .join:
-                    joinedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState))
+                    joinedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isInCall: isInCall))
                 case .ban:
-                    bannedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState))
+                    bannedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState, isInCall: isInCall))
                 default:
                     continue
                 }
@@ -155,6 +157,10 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                          bannedMembers: bannedMembers.sorted { $0.member.id.localizedStandardCompare($1.member.id) == .orderedAscending }) // Re-sort ignoring display name.
         }
         .value
+        
+        return .init(invitedMembers: membersDetails.invitedMembers,
+                     joinedMembers: membersDetails.joinedMembers.filter(\.isInCall) + membersDetails.joinedMembers.filter { !$0.isInCall },
+                     bannedMembers: membersDetails.bannedMembers)
     }
     
     /// The client proxy isn't Sendable, fetch identities through this helper so

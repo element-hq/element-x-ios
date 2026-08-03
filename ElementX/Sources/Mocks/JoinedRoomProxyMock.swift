@@ -24,6 +24,7 @@ struct JoinedRoomProxyMockConfiguration {
     var isSpace = false
     var isEncrypted = true
     var hasOngoingCall = true
+    var activeRoomCallParticipants: [String] = []
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var pinnedEventIDs: Set<String> = []
@@ -163,7 +164,7 @@ extension RoomInfoProxyMock {
         joinedMembersCount = configuration.members.filter { $0.membership == .join }.count
         isDM = isDirect && activeMembersCount <= 2
         hasRoomCall = configuration.hasOngoingCall
-        activeRoomCallParticipants = []
+        activeRoomCallParticipants = configuration.activeRoomCallParticipants
         pinnedEventIDs = configuration.pinnedEventIDs
         joinRule = configuration.joinRule
         historyVisibility = configuration.historyVisibility
