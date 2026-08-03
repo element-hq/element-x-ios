@@ -650,8 +650,9 @@ class TimelineController: TimelineControllerProtocol {
         }
         
         if let avatarURL, let mediaSource = try? MediaSourceProxy(url: avatarURL, mimeType: nil) {
-            if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
-                sendMessageIntent.setImage(INImage(imageData: avatarData), forParameterNamed: \.speakableGroupName)
+            if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)),
+               let squareAvatarData = Avatars.squareAvatarImageData(from: avatarData) {
+                sendMessageIntent.setImage(INImage(imageData: squareAvatarData), forParameterNamed: \.speakableGroupName)
             } else {
                 addPlacehoder()
             }
