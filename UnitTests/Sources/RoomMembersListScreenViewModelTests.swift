@@ -55,6 +55,30 @@ struct RoomMembersListScreenViewModelTests {
     }
     
     @Test
+    mutating func sortingCallParticipants() async throws {
+        setup(members: [.mockAdmin, .mockFrank, .mockAlice],
+              activeRoomCallParticipants: [RoomMemberProxyMock.mockFrank.userID])
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.visibleJoinedMembers.count == 3
+        }
+        try await deferred.fulfill()
+        
+        // Frank is in the call, so he should be sorted to the top despite having the lowest power level.
+        let sortedMembers: [RoomMemberListScreenEntry] = [
+            .init(member: .init(withProxy: RoomMemberProxyMock.mockFrank),
+                  verificationState: .notVerified,
+                  isInCall: true),
+            .init(member: .init(withProxy: RoomMemberProxyMock.mockAdmin),
+                  verificationState: .notVerified),
+            .init(member: .init(withProxy: RoomMemberProxyMock.mockAlice),
+                  verificationState: .notVerified)
+        ]
+        
+        #expect(viewModel.state.visibleJoinedMembers == sortedMembers)
+    }
+    
+    @Test
     mutating func search() async throws {
         setup(members: [.mockAlice, .mockBob])
         
@@ -293,8 +317,8 @@ struct RoomMembersListScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private mutating func setup(members: [RoomMemberProxyMock]) {
-        roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
+    private mutating func setup(members: [RoomMemberProxyMock], activeRoomCallParticipants: [String] = []) {
+        roomProxy = JoinedRoomProxyMock(.init(name: "test", activeRoomCallParticipants: activeRoomCallParticipants, members: members))
         viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),

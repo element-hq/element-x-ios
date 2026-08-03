@@ -33,6 +33,8 @@ enum RoomMembersListScreenMode {
 nonisolated struct RoomMemberListScreenEntry: Equatable {
     let member: RoomMemberDetails
     let verificationState: UserIdentityVerificationState
+    /// Whether the member is currently joined to the room's active MatrixRTC call (e.g. Element Call).
+    var isInCall = false
 }
 
 struct RoomMembersListScreenViewState: BindableState {
