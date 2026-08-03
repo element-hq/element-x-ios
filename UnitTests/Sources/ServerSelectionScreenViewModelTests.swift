@@ -341,10 +341,10 @@ struct ServerSelectionScreenViewModelTests {
                                 mode: ServerSelectionScreenMode = .userInput) throws {
         appSettings = AppSettings.volatile()
         
-        let factoryConfig = AuthenticationClientFactoryMock.Configuration()
+        let factoryConfiguration = AuthenticationClientFactoryMock.Configuration()
         // matrix.org: OAuth. example.com: password only. server.net: no login. secure.gov: OAuth + Element Pro required.
-        client = factoryConfig.homeserverClients["matrix.org"]!
-        clientFactory = AuthenticationClientFactoryMock(factoryConfig)
+        client = factoryConfiguration.homeserverClients["matrix.org"]
+        clientFactory = AuthenticationClientFactoryMock(factoryConfiguration)
         
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
@@ -357,6 +357,7 @@ struct ServerSelectionScreenViewModelTests {
                                                    mode: mode,
                                                    authenticationFlow: authenticationFlow,
                                                    appSettings: appSettings,
+                                                   homeserverHistoryManager: HomeserverHistoryManager(appSettings: appSettings),
                                                    userIndicatorController: UserIndicatorControllerMock())
         
         let scene = try #require(UIApplication.shared.connectedScenes.first as? UIWindowScene)

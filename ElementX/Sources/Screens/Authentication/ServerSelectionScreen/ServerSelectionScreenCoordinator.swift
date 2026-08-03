@@ -47,7 +47,8 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
         viewModel = ServerSelectionScreenViewModel(authenticationService: parameters.authenticationService,
                                                    mode: mode,
                                                    authenticationFlow: parameters.authenticationFlow,
-                                                   appSettings: parameters.appSettings, homeserverHistoryManager: parameters.homeserverHistoryManager,
+                                                   appSettings: parameters.appSettings,
+                                                   homeserverHistoryManager: parameters.homeserverHistoryManager,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     

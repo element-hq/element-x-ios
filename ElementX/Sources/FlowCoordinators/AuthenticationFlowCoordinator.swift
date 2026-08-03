@@ -465,10 +465,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private func userHasSignedIn(userSession: UserSessionProtocol) {
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
         
-        guard let newServer = userSession.clientProxy.userIDServerName else {
-            MXLog.error("Failed to retrieve server name from user session for previous servers tracking")
-            return
-        }
+        let newServer = authenticationService.homeserver.value.address
         homeserverHistoryManager.addServerToList(newServer)
     }
 }

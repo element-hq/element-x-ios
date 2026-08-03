@@ -34,6 +34,8 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenSelectServerTextfieldFooterRegister: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_textfield_footer_register") }
   /// Account provider
   internal static var screenSelectServerTextfieldHeader: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_textfield_header") }
+  /// example.com
+  internal static var screenSelectServerTextfieldPlaceholder: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_textfield_placeholder") }
   /// Enter your account provider
   internal static var screenSelectServerTitleLogin: String { return UntranslatedL10n.tr("Untranslated", "screen_select_server_title_login") }
   /// Choose an account provider

@@ -39,7 +39,8 @@ struct ServerSelectionScreen: View {
         } bottomContent: {
             continueButton
         }
-        .background(backgroundColor)
+        .background()
+        .backgroundStyle(backgroundColor)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(context.viewState.screenTitle)
         .alert(item: $context.alertInfo)
@@ -67,7 +68,7 @@ struct ServerSelectionScreen: View {
         VStack(alignment: .leading, spacing: 24) {
             switch context.viewState.mode {
             case .userInput:
-                TextField(L10n.commonServerUrl, text: $context.homeserverAddress, selection: $context.homeserverSelection)
+                TextField(UntranslatedL10n.screenSelectServerTextfieldPlaceholder, text: $context.homeserverAddress, selection: $context.homeserverSelection)
                     .textFieldStyle(.compound(labelText: Text(UntranslatedL10n.screenSelectServerTextfieldHeader),
                                               footerText: Text(context.viewState.footerMessage),
                                               state: context.viewState.isShowingFooterError ? .error : .default,
@@ -138,10 +139,10 @@ private struct FakeInlinePicker: View {
 
 @available(iOS 26.0, *)
 struct ServerSelection_Previews: PreviewProvider, TestablePreview {
-    static let matrixViewModel = makeViewModel(mode: .userInput, server: "matrix.org")
-    static let emptyViewModel = makeViewModel(mode: .userInput, server: "")
-    static let invalidViewModel = makeViewModel(mode: .userInput, server: "thisisbad")
-    static let pickerViewModel = makeViewModel(mode: .picker(["matrix.org", "foo.bar", "baz.me"]), server: "foo.bar")
+    static let matrixViewModel = makeViewModel(mode: .userInput, homeserverAddress: "matrix.org")
+    static let emptyViewModel = makeViewModel(mode: .userInput, homeserverAddress: "")
+    static let invalidViewModel = makeViewModel(mode: .userInput, homeserverAddress: "thisisbad")
+    static let pickerViewModel = makeViewModel(mode: .picker(["matrix.org", "foo.bar", "baz.me"]), homeserverAddress: "foo.bar")
     
     static var previews: some View {
         ElementNavigationStack {
@@ -166,7 +167,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Picker")
     }
     
-    static func makeViewModel(mode: ServerSelectionScreenMode = .userInput, server: String) -> ServerSelectionScreenViewModel {
+    static func makeViewModel(mode: ServerSelectionScreenMode = .userInput, homeserverAddress: String) -> ServerSelectionScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
         let appSettings = AppSettings.volatile()
@@ -177,8 +178,8 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
                                                        appSettings: appSettings,
                                                        homeserverHistoryManager: HomeserverHistoryManager(appSettings: appSettings),
                                                        userIndicatorController: UserIndicatorControllerMock())
-        viewModel.context.homeserverAddress = server
-        if case .userInput = mode, server == "thisisbad" {
+        viewModel.context.homeserverAddress = homeserverAddress
+        if case .userInput = mode, homeserverAddress == "thisisbad" {
             viewModel.context.send(viewAction: .confirm)
         }
         return viewModel

@@ -44,11 +44,14 @@ class HomeserverHistoryManager {
     
     /// Removes `server` from the tracking history of `AppSettings.previousServers`
     func removeServerFromList(_ server: String) {
-        appSettings.previousServers = _removeServerFromList(server)
+        let lowercaseServer = server.lowercased()
+        appSettings.previousServers = _removeServerFromList(lowercaseServer)
     }
     
-    private func _removeServerFromList(_ server: String) -> [String] {
-        let lowercaseServer = server.lowercased()
+    /// Removes `lowercaseServer` from `appSettings.previousServers`
+    /// - Parameter lowercaseServer: the server string. It MUST be passed in with all lowercased letters.
+    /// - Returns: a new copy of the list without `lowercaseServer`
+    private func _removeServerFromList(_ lowercaseServer: String) -> [String] {
         var newList = appSettings.previousServers
         newList.removeAll { $0.lowercased() == lowercaseServer }
         return newList
