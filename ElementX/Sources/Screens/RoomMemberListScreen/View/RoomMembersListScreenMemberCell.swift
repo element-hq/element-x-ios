@@ -56,7 +56,7 @@ struct RoomMembersListScreenMemberCell: View {
                             .foregroundStyle(.compound.textSecondary)
                     }
                     
-                    if listEntry.isInCall {
+                    if listEntry.isActiveRoomCallParticipant {
                         CompoundIcon(\.videoCallSolid, size: .small, relativeTo: .compound.bodyLG)
                             .foregroundStyle(.compound.iconAccentPrimary)
                             .accessibilityLabel(L10n.commonOnACall)
@@ -125,7 +125,7 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
               verificationState: .verificationViolation),
         .init(member: .init(withProxy: RoomMemberProxyMock.mockFrank),
               verificationState: .notVerified,
-              isInCall: true),
+              isActiveRoomCallParticipant: true),
         .init(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@nodisplayname:matrix.org",
                                                                        membership: .join))),
         verificationState: .notVerified),

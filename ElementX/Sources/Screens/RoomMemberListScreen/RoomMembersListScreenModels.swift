@@ -34,7 +34,7 @@ nonisolated struct RoomMemberListScreenEntry: Equatable {
     let member: RoomMemberDetails
     let verificationState: UserIdentityVerificationState
     /// Whether the member is currently joined to the room's active MatrixRTC call (e.g. Element Call).
-    var isInCall = false
+    var isActiveRoomCallParticipant = false
 }
 
 struct RoomMembersListScreenViewState: BindableState {
