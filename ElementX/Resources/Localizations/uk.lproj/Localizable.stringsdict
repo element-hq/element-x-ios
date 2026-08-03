@@ -64,10 +64,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d вкладення…</string>
+			<key>many</key>
+			<string>%1$d вкладень…</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
-			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d вкладення…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -80,10 +82,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d медіаелементи…</string>
+			<key>many</key>
+			<string>%1$d медіаелементів…</string>
 			<key>one</key>
-			<string>%1$d media item…</string>
-			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$d медіаелемент…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -268,6 +272,22 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>notification_gallery_body</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Shared %1$d attachment</string>
+			<key>other</key>
+			<string>Shared %1$d attachments</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>notification_invitations</key>
 	<dict>
 		<key>COUNT</key>
@@ -348,10 +368,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d вилучені повідомлення</string>
+			<key>many</key>
+			<string>%1$d вилучених повідомлень</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
-			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d вилучене повідомлення</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -688,10 +710,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d приєдналися</string>
+			<key>many</key>
+			<string>%1$d приєдналися</string>
 			<key>one</key>
-			<string>%1$d joined</string>
-			<key>other</key>
-			<string>%1$d joined</string>
+			<string>%1$d приєднується</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

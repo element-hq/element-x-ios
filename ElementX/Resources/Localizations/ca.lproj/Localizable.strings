@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Rebutja";
 "notification_invite_body" = "T'ha convidat a xatejar";
 "notification_invite_body_with_sender" = "%1$@ t'ha convidat a xatejar";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "T'ha mencionat: %1$@";
 "notification_new_messages" = "Missatges nous";
 "notification_reaction_body" = "Ha reaccionat amb %1$@";

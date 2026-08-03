@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Ablehnen";
 "notification_invite_body" = "Du wurdest zu einem Chat eingeladen";
 "notification_invite_body_with_sender" = "%1$@ hat dich zum Chatten eingeladen";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Hat Dich erwähnt: %1$@";
 "notification_new_messages" = "Neue Nachrichten";
 "notification_reaction_body" = "Reagiert mit %1$@";

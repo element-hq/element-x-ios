@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Từ chối";
 "notification_invite_body" = "Đã mời bạn trò chuyện";
 "notification_invite_body_with_sender" = "%1$@ đã mời bạn trò chuyện";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Đã nhắc đến bạn: %1$@";
 "notification_new_messages" = "Tin nhắn mới";
 "notification_reaction_body" = "Đã thả %1$@ vào tin nhắn";

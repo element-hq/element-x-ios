@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Απόρριψη";
 "notification_invite_body" = "Σε προσκάλεσε να συνομιλήσετε";
 "notification_invite_body_with_sender" = "Ο χρήστης %1$@ σε προσκάλεσε σε συνομιλία";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Σέ ανέφερε: %1$@";
 "notification_new_messages" = "Νέα Μηνύματα";
 "notification_reaction_body" = "Αντέδρασε με %1$@";

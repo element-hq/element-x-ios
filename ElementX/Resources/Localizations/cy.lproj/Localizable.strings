@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Gwrthod";
 "notification_invite_body" = "Wedi eich gwahodd i sgwrsio";
 "notification_invite_body_with_sender" = "Mae %1$@ wedi eich gwahodd i sgwrsio";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Wedi eich crybwyll: %1$@";
 "notification_new_messages" = "Negeseuon Newydd";
 "notification_reaction_body" = "Wedi ymateb gyda %1$@";

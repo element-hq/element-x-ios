@@ -1,6 +1,6 @@
 "NSCameraUsageDescription" = "Щоб зробити фото або відео і відправити їх як повідомлення, Element X потрібен доступ до камери.";
 "NSFaceIDUsageDescription" = "Для захисту доступу до вашого облікового запису використовується Face ID.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Щоб ділитися розташуванням у реальному часі, Element X потребує доступу до даних геолокації, коли застосунок працює у фоновому режимі.";
-"NSLocationWhenInUseUsageDescription" = "Надайте доступ до місцеперебування, щоб Element X міг поділитися ним.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Щоб ділитися своїм місцем перебування у бесідах у реальному часі, застосунку потрібен доступ до геоданих, коли він працює у фоновому режимі.";
+"NSLocationWhenInUseUsageDescription" = "Це дає змогу надсилати у бесіди своє поточне місце перебування або місця поблизу.";
 "NSMicrophoneUsageDescription" = "Щоб записувати та надсилати повідомлення зі звуком, Element X потрібен доступ до мікрофона.";
 "NSPhotoLibraryUsageDescription" = "Дає змогу зберігати світлини та відео у вашій бібліотеці.";

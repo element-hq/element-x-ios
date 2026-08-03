@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Rejeter";
 "notification_invite_body" = "Vous a invité(e) à discuter";
 "notification_invite_body_with_sender" = "%1$@ vous a invité à discuter";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mentionné(e) : %1$@";
 "notification_new_messages" = "Nouveaux messages";
 "notification_reaction_body" = "A réagi avec %1$@";

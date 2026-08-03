@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "拒绝";
 "notification_invite_body" = "已邀请你聊天";
 "notification_invite_body_with_sender" = "%1$@ 已邀请你聊天";
+"notification_live_location_started_body" = "已开始共享其实时位置";
 "notification_mentioned_you_body" = "提到了你：%1$@";
 "notification_new_messages" = "新消息";
 "notification_reaction_body" = "已使用 %1$@ 反应";

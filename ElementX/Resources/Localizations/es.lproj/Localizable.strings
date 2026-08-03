@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Rechazar";
 "notification_invite_body" = "Te invitó a chatear";
 "notification_invite_body_with_sender" = "%1$@ te invitó a chatear";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Te mencionó: %1$@";
 "notification_new_messages" = "Mensajes nuevos";
 "notification_reaction_body" = "Reaccionó con %1$@";

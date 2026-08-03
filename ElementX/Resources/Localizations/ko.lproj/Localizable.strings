@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "거부";
 "notification_invite_body" = "채팅에 초대됨";
 "notification_invite_body_with_sender" = "%1$@ 가 채팅에 초대했습니다";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "당신을 언급했습니다: %1$@";
 "notification_new_messages" = "새 메시지";
 "notification_reaction_body" = "%1$@로 반응함";

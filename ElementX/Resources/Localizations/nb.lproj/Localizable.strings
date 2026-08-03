@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Avvis";
 "notification_invite_body" = "Inviterte deg til å chatte";
 "notification_invite_body_with_sender" = "%1$@ inviterte deg til å chatte";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nevnte deg: %1$@";
 "notification_new_messages" = "Nye meldinger";
 "notification_reaction_body" = "Reagerte med %1$@";
@@ -1023,7 +1024,7 @@
 "screen_media_upload_preview_item_count" = "Fil %1$d av %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimaliser bildekvaliteten";
 "screen_media_upload_preview_processing" = "Behandler…";
-"screen_media_upload_preview_title" = "Legg til media";
+"screen_media_upload_preview_title" = "Legg til medier";
 "screen_migration_message" = "Dette er en engangsprosess, takk for at du venter.";
 "screen_migration_title" = "Setter opp kontoen din.";
 "screen_missing_key_backup_open_element_classic" = "Åpne Element Classic";

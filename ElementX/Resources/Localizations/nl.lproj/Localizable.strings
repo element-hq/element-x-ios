@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Weiger";
 "notification_invite_body" = "Nodigde je uit om te chatten";
 "notification_invite_body_with_sender" = "%1$@ nodigde je uit om te chatten";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Heeft je genoemd: %1$@";
 "notification_new_messages" = "Nieuwe berichten";
 "notification_reaction_body" = "Reageerde met %1$@";

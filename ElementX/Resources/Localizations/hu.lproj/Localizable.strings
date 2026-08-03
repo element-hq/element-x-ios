@@ -6,7 +6,7 @@
 "a11y_collapse_message_text_field" = "Üzenet szövegmezőjének minimalizálása";
 "a11y_create_poll_votes_allowed_decrease" = "Személyenként engedélyezett szavazatok számának csökkentése";
 "a11y_create_poll_votes_allowed_increase" = "Személyenként engedélyezett szavazatok számának növelése";
-"a11y_custom_emoji" = "Custom emoji";
+"a11y_custom_emoji" = "Egyéni emoji";
 "a11y_delete" = "Törlés";
 "a11y_duration" = "Időtartam: %1$@";
 "a11y_edit_avatar" = "Profilkép szerkesztése";
@@ -17,7 +17,7 @@
 "a11y_join_call" = "Csatlakozás a híváshoz";
 "a11y_jump_to_bottom" = "Ugrás az aljára";
 "a11y_jump_to_unread" = "Ugrás az olvasatlanhoz";
-"a11y_jump_to_unread_messages" = "Jump to first unread message";
+"a11y_jump_to_unread_messages" = "Ugrás az első olvasatlan üzenetre";
 "a11y_notifications_mentions_only" = "Csak megemlítések";
 "a11y_notifications_muted" = "Némítva";
 "a11y_notifications_new_mentions" = "Új említések";
@@ -52,7 +52,7 @@
 "a11y_start_call" = "Hanghívás indítása";
 "a11y_start_video_call" = "Videohívás indítása";
 "a11y_start_voice_call" = "Hanghívás indítása";
-"a11y_status" = "Status";
+"a11y_status" = "Állapot";
 "a11y_tombstoned_room" = "Elévült szoba";
 "a11y_user_menu" = "Felhasználói menü";
 "a11y_video_preview" = "Videó előnézete";
@@ -138,7 +138,7 @@
 "action_manage_account_and_devices" = "Fiók és eszközök kezelése";
 "action_manage_devices" = "Eszközök kezelése";
 "action_manage_rooms" = "Szobák kezelése";
-"action_mark_as_read" = "Mark as read";
+"action_mark_as_read" = "Megjelölés olvasottként";
 "action_message" = "Üzenet";
 "action_minimize" = "Minimalizálás";
 "action_next" = "Következő";
@@ -298,7 +298,7 @@
 "common_no_space_name" = "Nincs térnév";
 "common_not_encrypted" = "Nincs titkosítva";
 "common_offline" = "Kapcsolat nélkül";
-"common_on_a_call" = "On a call";
+"common_on_a_call" = "Hívásban";
 "common_open_source_licenses" = "Nyílt forráskódú licencek";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "vagy";
@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "Elutasítás";
 "notification_invite_body" = "Meghívta, hogy csevegjen";
 "notification_invite_body_with_sender" = "%1$@ meghívta egy csevegésre";
+"notification_live_location_started_body" = "Elkezdték megosztani az élő helyzetüket";
 "notification_mentioned_you_body" = "Megemlítette Önt: %1$@";
 "notification_new_messages" = "Új üzenetek";
 "notification_reaction_body" = "Ezzel reagált: %1$@";
@@ -950,7 +951,7 @@
 "screen_link_new_device_desktop_step3" = "Olvassa be a QR-kódot ezzel az eszközzel";
 "screen_link_new_device_desktop_submit" = "Készen áll a beolvasásra";
 "screen_link_new_device_desktop_title" = "Nyissa meg az asztali %1$@ alkalmazást, hogy megkapja a QR-kódot";
-"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
+"screen_link_new_device_desktop_warning" = "Csak a fenti lépések végrehajtása után olvass be QR-kódot a saját eszközén. Soha ne olvasson be más által küldött kódot.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "A számok nem egyeznek";
 "screen_link_new_device_enter_number_notice" = "Írja be a kétjegyű kódot";
 "screen_link_new_device_enter_number_subtitle" = "Ezzel ellenőrizni fogja, hogy a másik eszközzel való kapcsolat biztonságos-e.";
@@ -977,8 +978,8 @@
 "screen_live_location_sheet_nobody_sharing" = "Senki sem osztja meg a tartózkodási helyét";
 "screen_live_location_sheet_sharing_live_location" = "Élő helymegosztás";
 "screen_live_location_sheet_title" = "A térképen";
-"screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
-"screen_local_network_opt_in_title" = "Allow access to local network";
+"screen_local_network_opt_in_subtitle" = "A Matrix-kiszolgáló helyi hálózaton található. A csatlakozáshoz engedélyre van szüksége ennek: %1$@ , hogy elérje a hálózaton lévő eszközöket.";
+"screen_local_network_opt_in_title" = "Hozzáférés engedélyezése a helyi hálózathoz";
 "screen_login_error_deactivated_account" = "Ez a fiók törölve lett.";
 "screen_login_error_invalid_credentials" = "Helytelen felhasználónév vagy jelszó";
 "screen_login_error_invalid_user_id" = "Ez nem érvényes felhasználóazonosító. A várt formátum: „@user:homeserver.org”";
@@ -1509,14 +1510,14 @@
 "screen_session_verification_waiting_subtitle" = "Az elfogadása után folytathatja az ellenőrzést.";
 "screen_session_verification_waiting_to_accept_subtitle" = "A folytatáshoz fogadja el az ellenőrzési folyamat indítási kérését a másik munkamenetében.";
 "screen_session_verification_waiting_to_accept_title" = "Várakozás a kérés elfogadására";
-"screen_settings_user_status_away" = "Away";
-"screen_settings_user_status_be_right_back" = "Be right back";
-"screen_settings_user_status_custom" = "Custom…";
-"screen_settings_user_status_custom_hint" = "Custom status…";
-"screen_settings_user_status_focus_time" = "Focus time";
-"screen_settings_user_status_in_a_meeting" = "In a meeting";
-"screen_settings_user_status_on_the_road" = "On the road";
-"screen_settings_user_status_placeholder" = "What's your status?";
+"screen_settings_user_status_away" = "Távol";
+"screen_settings_user_status_be_right_back" = "Rögtön visszajövök";
+"screen_settings_user_status_custom" = "Egyedi…";
+"screen_settings_user_status_custom_hint" = "Egyéni állapot…";
+"screen_settings_user_status_focus_time" = "Feladatra koncentrál";
+"screen_settings_user_status_in_a_meeting" = "Értekezleten";
+"screen_settings_user_status_on_the_road" = "Úton";
+"screen_settings_user_status_placeholder" = "Mi az állapota?";
 "screen_share_location_live_location_disclaimer_title" = "Az élő helymeghatározás története a szobában lesz tárolva, és a munkamenet befejezése után is látható marad a tagok számára.";
 "screen_share_location_live_location_duration_picker_title" = "Válassza ki, mennyi ideig szeretné megosztani az aktuális tartózkodási helyét.";
 "screen_share_location_live_location_missing_permissions" = "Nincs jogosultsága az élő tartózkodási helyének megosztására ebben a szobában.";

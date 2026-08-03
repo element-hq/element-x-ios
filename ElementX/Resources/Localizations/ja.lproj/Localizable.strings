@@ -519,6 +519,7 @@
 "notification_invitation_action_reject" = "拒否";
 "notification_invite_body" = "チャットにあなたを招待しました";
 "notification_invite_body_with_sender" = "%1$@があなたをチャットに招待しました";
+"notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "%1$@ があなたをメンションしました";
 "notification_new_messages" = "新着メッセージ";
 "notification_reaction_body" = "%1$@へのリアクション";
