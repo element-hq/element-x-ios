@@ -13,6 +13,11 @@ typealias QRCodeLoginScreenViewModelType = StateStoreViewModel<QRCodeLoginScreen
 
 class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScreenViewModelProtocol {
     private let appMediator: AppMediatorProtocol
+    /// The time allowed between verifying the device's owner (on the previous screen), to having
+    /// scanned a QR code and established a secure channel for the `linkDesktopComputer` flow.
+    ///
+    /// The generated QR code handles this automatically when linking a mobile device and QR login doesn't need it.
+    private let linkDesktopTimeout: Duration
     
     private let actionsSubject: PassthroughSubject<QRCodeLoginScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<QRCodeLoginScreenViewModelAction, Never> {
@@ -21,11 +26,14 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     
     private var currentTask: AnyCancellable?
     private var oAuthResultTask: AnyCancellable?
+    private var expirationTask: AnyCancellable?
     
     init(mode: QRCodeLoginScreenMode,
          canSignInManually: Bool,
-         appMediator: AppMediatorProtocol) {
+         appMediator: AppMediatorProtocol,
+         linkDesktopTimeout: Duration = .seconds(120)) {
         self.appMediator = appMediator
+        self.linkDesktopTimeout = linkDesktopTimeout
         
         let initialViewState: QRCodeLoginState = switch mode {
         case .login: .loginInstructions
@@ -40,8 +48,13 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         super.init(initialViewState: .init(state: initialViewState, mode: mode, canSignInManually: canSignInManually))
         setupSubscriptions()
         
-        if case .linkMobile(let progressPublisher) = mode {
+        switch mode {
+        case .linkDesktop:
+            scheduleLinkDesktopExpiration()
+        case .linkMobile(let progressPublisher):
             listenToDisplayQRProgress(progressPublisher: progressPublisher)
+        case .login:
+            break
         }
     }
     
@@ -180,6 +193,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                 case .starting:
                     break // Nothing to do, the state was set above.
                 case .establishingSecureChannel(let checkCodeString):
+                    expirationTask?.cancel()
                     state.state = .displayCode(.deviceCode(checkCodeString))
                 case .waitingForAuthorisation(let verificationURL, let continuationSender):
                     requestOAuthAuthorization(url: verificationURL, continuationSender: continuationSender)
@@ -230,6 +244,30 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
                     actionsSubject.send(.linkedDevice)
                 }
             }
+    }
+    
+    /// Starts the timeout for scanning a desktop's QR code. The flow will expire (cancelling the scan)
+    /// if the secure channel isn't established within the timeout period.
+    private func scheduleLinkDesktopExpiration() {
+        guard case .linkDesktop = state.mode else { fatalError("Expiration requested on an unexpected flow") }
+        
+        expirationTask = Task { [weak self, linkDesktopTimeout] in
+            try? await Task.sleep(for: linkDesktopTimeout, tolerance: .zero)
+            guard !Task.isCancelled else { return }
+            self?.handleExpiration()
+        }
+        .asCancellable()
+    }
+    
+    private func handleExpiration() {
+        // Don't override an error that's already being shown.
+        if case .error = state.state {
+            return
+        }
+        
+        MXLog.info("Timed out establishing a secure channel, expiring.")
+        currentTask = nil // Cancel the scan.
+        state.state = .error(.expired)
     }
     
     private func sendCheckCode() async {
@@ -311,6 +349,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     /// Only for mocking initial states
     fileprivate init(state: QRCodeLoginState, mode: QRCodeLoginScreenMode, canSignInManually: Bool, checkCodeInput: String) {
         appMediator = AppMediatorMock(.init())
+        linkDesktopTimeout = .seconds(3600)
         super.init(initialViewState: .init(state: state,
                                            mode: mode,
                                            canSignInManually: canSignInManually,

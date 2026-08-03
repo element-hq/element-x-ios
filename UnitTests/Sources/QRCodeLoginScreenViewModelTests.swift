@@ -168,6 +168,25 @@ struct QRCodeLoginScreenViewModelTests {
     }
     
     @Test
+    mutating func linkDesktopExpiresWithoutSecureChannel() async throws {
+        setup(mode: .linkDesktop, linkDesktopTimeout: .zero)
+        #expect(context.viewState.state == .linkDesktopInstructions)
+        
+        // The timeout begins as soon as the screen appears, so the flow expires before a channel is established.
+        let deferred = deferFulfillment(context.$viewState) { $0.state == .error(.expired) }
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    mutating func loginDoesNotExpire() async throws {
+        setup(mode: .login, linkDesktopTimeout: .zero)
+        
+        // The timeout only applies when linking a desktop, so signing in must never expire.
+        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.state == .error(.expired) }
+        try await deferredFailure.fulfill()
+    }
+    
+    @Test
     mutating func linkMobileDevice() async throws {
         setup(mode: .linkMobile)
         #expect(context.viewState.state.isDisplayQR)
@@ -206,7 +225,7 @@ struct QRCodeLoginScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private mutating func setup(mode: Mode) {
+    private mutating func setup(mode: Mode, linkDesktopTimeout: Duration = .seconds(120)) {
         qrLoginProgressSubject = .init(.starting)
         qrCodeLoginService = QRCodeLoginServiceMock()
         qrCodeLoginService.loginWithQRCodeDataReturnValue = qrLoginProgressSubject.asCurrentValuePublisher()
@@ -229,6 +248,7 @@ struct QRCodeLoginScreenViewModelTests {
         appMediator = AppMediatorMock(.init())
         viewModel = QRCodeLoginScreenViewModel(mode: screenMode,
                                                canSignInManually: true,
-                                               appMediator: appMediator)
+                                               appMediator: appMediator,
+                                               linkDesktopTimeout: linkDesktopTimeout)
     }
 }
