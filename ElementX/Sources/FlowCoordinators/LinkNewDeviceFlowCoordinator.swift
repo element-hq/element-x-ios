@@ -57,7 +57,7 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .linkMobileDevice(let progressPublisher):
-                    presentQRCodeScreen(mode: .linkMobile(progressPublisher, flowParameters.userSession.clientProxy))
+                    presentQRCodeScreen(mode: .linkMobile(progressPublisher))
                 case .linkDesktopComputer:
                     presentQRCodeScreen(mode: .linkDesktop(flowParameters.userSession.clientProxy.linkNewDeviceService()))
                 case .verifyWithAppLockPIN(let continuation):
