@@ -303,79 +303,69 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
 
-    private nonisolated static func fetchRoomDetails(from room: Room) async -> (roomInfo: RoomInfo?, latestEvent: LatestEventValue?) {
-        do {
-            let latestEvent = await room.latestEvent()
-            let roomInfo = try await room.roomInfo()
-            return (roomInfo, latestEvent)
-        } catch {
-            MXLog.error("Failed fetching room info with error: \(error)")
-            return (nil, nil)
-        }
-    }
-    
     private nonisolated static func buildRoomSummary(from room: Room, eventStringBuilder: RoomEventStringBuilder) async -> RoomSummary {
-        let roomDetails = await fetchRoomDetails(from: room)
-        
-        guard let roomInfo = roomDetails.roomInfo else {
+        let details: RoomSummaryDetails
+        do {
+            // A single slim FFI call with everything a room-list entry renders; unlike
+            // `room.roomInfo()` it doesn't query the store for data the list never shows.
+            details = try await room.roomSummaryDetails()
+        } catch {
             // The room info can be momentarily unavailable while the client tears down (e.g. on logout),
-            // where the SDK still delivers a diff but `room.roomInfo()` throws. Return a placeholder to
+            // where the SDK still delivers a diff but the room details throw. Return a placeholder to
             // keep the diff indices aligned with the SDK instead of crashing.
-            MXLog.error("Missing room info for \(room.id())")
+            MXLog.error("Missing room summary details for \(room.id()): \(error)")
             return .placeholder(room: room)
         }
-        
+
         var attributedLastMessage: AttributedString?
         var lastMessageDate: Date?
         var lastMessageState: RoomSummary.LastMessageState?
-        
-        if let latestRoomMessage = roomDetails.latestEvent {
-            switch latestRoomMessage {
-            case .local(let timestamp, let senderID, let profile, let content, let state):
-                let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
-                attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: true)
-                lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-                
-                switch state {
-                case .isSending:
-                    lastMessageState = .sending
-                case .cannotBeSent:
-                    lastMessageState = .failed
-                case .hasBeenSent:
-                    lastMessageState = nil
-                }
-            case .remote(let timestamp, let senderID, let isOwn, let profile, let content):
-                let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
-                attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
-                lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-            case .remoteInvite(let timestamp, let senderID, let profile):
-                lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-                
-                if let senderID {
-                    let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
-                    let senderDisplayName = sender.displayName ?? sender.id
-                    let invitedYouString = eventStringBuilder.stateEventStringBuilder.buildInvitedYouString(senderDisplayName)
-                    attributedLastMessage = AttributedString(invitedYouString)
-                }
-            case .none:
-                break
+
+        switch details.latestEvent {
+        case .local(let timestamp, let senderID, let profile, let content, let state):
+            let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+            attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: true)
+            lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+
+            switch state {
+            case .isSending:
+                lastMessageState = .sending
+            case .cannotBeSent:
+                lastMessageState = .failed
+            case .hasBeenSent:
+                lastMessageState = nil
             }
+        case .remote(let timestamp, let senderID, let isOwn, let profile, let content):
+            let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+            attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
+            lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+        case .remoteInvite(let timestamp, let senderID, let profile):
+            lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+
+            if let senderID {
+                let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
+                let senderDisplayName = sender.displayName ?? sender.id
+                let invitedYouString = eventStringBuilder.stateEventStringBuilder.buildInvitedYouString(senderDisplayName)
+                attributedLastMessage = AttributedString(invitedYouString)
+            }
+        case .none:
+            break
         }
-        
+
         var inviterProxy: RoomMemberProxyProtocol?
-        if let inviter = roomInfo.inviter {
+        if let inviter = details.inviter {
             inviterProxy = RoomMemberProxy(member: inviter)
         }
-        
-        let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
-        
-        let joinRequestType: RoomSummary.JoinRequestType? = switch roomInfo.membership {
+
+        let notificationMode = details.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
+
+        let joinRequestType: RoomSummary.JoinRequestType? = switch details.membership {
         case .invited: .invite(inviter: inviterProxy)
         case .knocked: .knock
         default: nil
         }
-        
-        let activeCallIntent: RtcCallIntent? = switch roomInfo.activeRoomCallConsensusIntent {
+
+        let activeCallIntent: RtcCallIntent? = switch details.activeRoomCallConsensusIntent {
         case .full(let intent):
             intent
         case .partial(intent: let intent, _, _):
@@ -383,30 +373,30 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         case .none:
             nil
         }
-        
+
         return RoomSummary(room: room,
-                           id: roomInfo.id,
+                           id: details.id,
                            joinRequestType: joinRequestType,
-                           name: roomInfo.displayName ?? roomInfo.id,
-                           isDirect: roomInfo.isDirect,
-                           isSpace: roomInfo.isSpace,
-                           avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
-                           heroes: roomInfo.heroes.map(UserProfile.init),
-                           activeMembersCount: UInt(roomInfo.activeMembersCount),
+                           name: details.displayName ?? details.id,
+                           isDirect: details.isDirect,
+                           isSpace: details.isSpace,
+                           avatarURL: details.avatarUrl.flatMap(URL.init(string:)),
+                           heroes: details.heroes.map(UserProfile.init),
+                           activeMembersCount: UInt(details.activeMembersCount),
                            lastMessage: attributedLastMessage,
                            lastMessageDate: lastMessageDate,
                            lastMessageState: lastMessageState,
-                           unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
-                           unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
-                           unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
+                           unreadMessagesCount: UInt(details.numUnreadMessages),
+                           unreadMentionsCount: UInt(details.numUnreadMentions),
+                           unreadNotificationsCount: UInt(details.numUnreadNotifications),
                            notificationMode: notificationMode,
-                           canonicalAlias: roomInfo.canonicalAlias,
-                           alternativeAliases: .init(roomInfo.alternativeAliases),
-                           hasOngoingCall: roomInfo.hasRoomCall,
+                           canonicalAlias: details.canonicalAlias,
+                           alternativeAliases: .init(details.alternativeAliases),
+                           hasOngoingCall: details.hasRoomCall,
                            activeCallIntent: activeCallIntent.map { .init(rustCallIntent: $0) },
-                           isMarkedUnread: roomInfo.isMarkedUnread,
-                           isFavourite: roomInfo.isFavourite,
-                           isTombstoned: roomInfo.successorRoom != nil)
+                           isMarkedUnread: details.isMarkedUnread,
+                           isFavourite: details.isFavourite,
+                           isTombstoned: details.successorRoom != nil)
     }
     
     private nonisolated static func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary], eventStringBuilder: RoomEventStringBuilder) async -> CollectionDifference<RoomSummary>? {
