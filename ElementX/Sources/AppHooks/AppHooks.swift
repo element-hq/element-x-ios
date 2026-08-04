@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Macros
 import Synchronization
 
 final nonisolated class AppHooks: AppHooksProtocol {
@@ -18,124 +19,45 @@ final nonisolated class AppHooks: AppHooksProtocol {
         await userProfileScreenHook.configure(with: userSession)
     }
     
-    private let _appSettingsHook: Mutex<AppSettingsHookProtocol> = Mutex(DefaultAppSettingsHook())
-    var appSettingsHook: AppSettingsHookProtocol {
-        _appSettingsHook.withLock { $0 }
-    }
+    @AppHook(default: DefaultAppSettingsHook())
+    var appSettingsHook: AppSettingsHookProtocol
     
-    func registerAppSettingsHook(_ hook: AppSettingsHookProtocol) {
-        _appSettingsHook.withLock { $0 = hook }
-    }
+    @AppHook(default: DefaultCompoundHook())
+    var compoundHook: CompoundHookProtocol
     
-    private let _compoundHook: Mutex<CompoundHookProtocol> = Mutex(DefaultCompoundHook())
-    var compoundHook: CompoundHookProtocol {
-        _compoundHook.withLock { $0 }
-    }
+    @AppHook(default: DefaultBugReportHook())
+    var bugReportHook: BugReportHookProtocol
     
-    func registerCompoundHook(_ hook: CompoundHookProtocol) {
-        _compoundHook.withLock { $0 = hook }
-    }
+    @AppHook(default: DefaultOAuthPresenterHook())
+    var oAuthPresenterHook: OAuthPresenterHookProtocol
     
-    private let _bugReportHook: Mutex<BugReportHookProtocol> = Mutex(DefaultBugReportHook())
-    var bugReportHook: BugReportHookProtocol {
-        _bugReportHook.withLock { $0 }
-    }
+    @AppHook(default: DefaultRoomScreenHook())
+    var roomScreenHook: RoomScreenHookProtocol
     
-    func registerBugReportHook(_ hook: BugReportHookProtocol) {
-        _bugReportHook.withLock { $0 = hook }
-    }
+    @AppHook(default: DefaultRoomDetailsScreenHook())
+    var roomDetailsScreenHook: RoomDetailsScreenHookProtocol
     
-    private let _oAuthPresenterHook: Mutex<OAuthPresenterHookProtocol> = Mutex(DefaultOAuthPresenterHook())
-    var oAuthPresenterHook: OAuthPresenterHookProtocol {
-        _oAuthPresenterHook.withLock { $0 }
-    }
+    @AppHook(default: DefaultRoomMemberDetailsScreenHook())
+    var roomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol
     
-    func registerOAuthPresenterHook(_ hook: OAuthPresenterHookProtocol) {
-        _oAuthPresenterHook.withLock { $0 = hook }
-    }
+    @AppHook(default: DefaultUserProfileScreenHook())
+    var userProfileScreenHook: UserProfileScreenHookProtocol
     
-    private let _roomScreenHook: Mutex<RoomScreenHookProtocol> = Mutex(DefaultRoomScreenHook())
-    var roomScreenHook: RoomScreenHookProtocol {
-        _roomScreenHook.withLock { $0 }
-    }
+    @AppHook(default: DefaultDeveloperOptionsScreenHook())
+    var developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol
     
-    func registerRoomScreenHook(_ hook: RoomScreenHookProtocol) {
-        _roomScreenHook.withLock { $0 = hook }
-    }
-    
-    private let _roomDetailsScreenHook: Mutex<RoomDetailsScreenHookProtocol> = Mutex(DefaultRoomDetailsScreenHook())
-    var roomDetailsScreenHook: RoomDetailsScreenHookProtocol {
-        _roomDetailsScreenHook.withLock { $0 }
-    }
-    
-    func registerRoomDetailsScreenHook(_ hook: RoomDetailsScreenHookProtocol) {
-        _roomDetailsScreenHook.withLock { $0 = hook }
-    }
-    
-    private let _roomMemberDetailsScreenHook: Mutex<RoomMemberDetailsScreenHookProtocol> = Mutex(DefaultRoomMemberDetailsScreenHook())
-    var roomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol {
-        _roomMemberDetailsScreenHook.withLock { $0 }
-    }
-    
-    func registerRoomMemberDetailsScreenHook(_ hook: RoomMemberDetailsScreenHookProtocol) {
-        _roomMemberDetailsScreenHook.withLock { $0 = hook }
-    }
-    
-    private let _userProfileScreenHook: Mutex<UserProfileScreenHookProtocol> = Mutex(DefaultUserProfileScreenHook())
-    var userProfileScreenHook: UserProfileScreenHookProtocol {
-        _userProfileScreenHook.withLock { $0 }
-    }
-    
-    func registerUserProfileScreenHook(_ hook: UserProfileScreenHookProtocol) {
-        _userProfileScreenHook.withLock { $0 = hook }
-    }
-    
-    private let _developerOptionsScreenHook: Mutex<DeveloperOptionsScreenHookProtocol> = Mutex(DefaultDeveloperOptionsScreenHook())
-    var developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol {
-        _developerOptionsScreenHook.withLock { $0 }
-    }
-    
-    func registerDeveloperOptionsScreenHook(_ hook: DeveloperOptionsScreenHookProtocol) {
-        _developerOptionsScreenHook.withLock { $0 = hook }
-    }
-    
-    private let _recoveryKeyScreenHook: Mutex<RecoveryKeyScreenHookProtocol> = Mutex(DefaultRecoveryKeyScreenHook())
-    var recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol {
-        _recoveryKeyScreenHook.withLock { $0 }
-    }
-    
-    func registerRecoveryKeyScreenHook(_ hook: RecoveryKeyScreenHookProtocol) {
-        _recoveryKeyScreenHook.withLock { $0 = hook }
-    }
+    @AppHook(default: DefaultRecoveryKeyScreenHook())
+    var recoveryKeyScreenHook: RecoveryKeyScreenHookProtocol
     #endif
     
-    private let _tracingHook: Mutex<TracingHookProtocol> = Mutex(DefaultTracingHook())
-    var tracingHook: TracingHookProtocol {
-        _tracingHook.withLock { $0 }
-    }
+    @AppHook(default: DefaultTracingHook())
+    var tracingHook: TracingHookProtocol
     
-    func registerTracingHook(_ hook: TracingHookProtocol) {
-        _tracingHook.withLock { $0 = hook }
-    }
+    @AppHook(default: DefaultClientBuilderHook())
+    var clientBuilderHook: ClientBuilderHookProtocol
     
-    private let _clientBuilderHook: Mutex<ClientBuilderHookProtocol> = Mutex(DefaultClientBuilderHook())
-    var clientBuilderHook: ClientBuilderHookProtocol {
-        _clientBuilderHook.withLock { $0 }
-    }
-    
-    // periphery:ignore - might be useful to have
-    func registerClientBuilderHook(_ hook: ClientBuilderHookProtocol) {
-        _clientBuilderHook.withLock { $0 = hook }
-    }
-    
-    private let _remoteSettingsHook: Mutex<RemoteSettingsHookProtocol> = Mutex(DefaultRemoteSettingsHook())
-    var remoteSettingsHook: RemoteSettingsHookProtocol {
-        _remoteSettingsHook.withLock { $0 }
-    }
-    
-    func registerRemoteSettingsHook(_ hook: RemoteSettingsHookProtocol) {
-        _remoteSettingsHook.withLock { $0 = hook }
-    }
+    @AppHook(default: DefaultRemoteSettingsHook())
+    var remoteSettingsHook: RemoteSettingsHookProtocol
 }
 
 nonisolated protocol AppHooksProtocol: Sendable {
