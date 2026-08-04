@@ -139,7 +139,10 @@ class UserSessionStore: UserSessionStoreProtocol {
                          threadsEnabled: appSettings.threadsEnabled)
             .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)
-                    .passphrase(passphrase: credentials.restorationToken.passphrase))
+                    // The store passphrase is a randomly generated 256-bit key (EncryptionKeyProvider),
+                    // so the stores can cache a fast-open copy of their cipher and skip the
+                    // brute-force-resistant KDF (4 stores x ~200ms of pure CPU) on every launch.
+                    .highEntropyPassphrase(passphrase: credentials.restorationToken.passphrase))
             .withSearchIndexStore(path: credentials.restorationToken.sessionDirectories.dataPath,
                                   password: credentials.restorationToken.passphrase)
             .username(username: credentials.userID)

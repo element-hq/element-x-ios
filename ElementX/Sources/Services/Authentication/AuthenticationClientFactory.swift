@@ -40,7 +40,8 @@ struct AuthenticationClientFactory: AuthenticationClientFactoryProtocol {
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
                          threadsEnabled: appSettings.threadsEnabled)
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
-                .passphrase(passphrase: passphrase))
+                // Randomly generated 256-bit key (EncryptionKeyProvider): see UserSessionStore.
+                .highEntropyPassphrase(passphrase: passphrase))
             .serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress)
             .build()
     }
