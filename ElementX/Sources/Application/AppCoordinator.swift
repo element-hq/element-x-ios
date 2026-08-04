@@ -134,7 +134,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: appLockService,
                                                         navigationCoordinator: appLockNavigationCoordinator,
                                                         appSettings: appSettings)
-        
+
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
                                                   appSettings: appSettings)
         
@@ -143,19 +143,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                             sdkGitSHA: sdkGitSha(),
                                             appHooks: appHooks)
         
-        Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
-        
-        analyticsService.startIfEnabled()
-        
-        windowManager.delegate = self
-        
-        notificationManager.delegate = self
-        notificationManager.start()
-        
+        // The version check (and potential fresh-install wipe - the keychain outlives app
+        // deletion) must precede any session access, so run it as soon as all stored
+        // properties are initialised, then start restoring the session immediately:
+        // everything below (Sentry, analytics, notifications, observers) is independent of
+        // it and used to serialise in front of the restore.
         guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
             fatalError("The app's version number **must** use semver for migration purposes.")
         }
-        
+
         if let previousVersion = appSettings.lastVersionLaunched.flatMap(Version.init) {
             performMigrationsIfNecessary(from: previousVersion, to: currentVersion)
         } else {
@@ -163,6 +159,21 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             wipeUserData(includingSettings: true)
         }
         appSettings.lastVersionLaunched = currentVersion.description
+
+        if userSessionStore.hasSessions {
+            eagerRestoreTask = Task { [userSessionStore] in
+                await userSessionStore.restoreUserSession()
+            }
+        }
+
+        Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
+
+        analyticsService.startIfEnabled()
+        
+        windowManager.delegate = self
+        
+        notificationManager.delegate = self
+        notificationManager.start()
         
         setupStateMachine()
         
@@ -651,9 +662,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
+    /// The session restore started eagerly during `init`, so that it overlaps the rest of
+    /// the app's launch work instead of waiting for the state machine to request it.
+    private var eagerRestoreTask: Task<Result<UserSessionProtocol, UserSessionStoreError>, Never>?
+
     private func restoreUserSession() {
         Task {
-            switch await userSessionStore.restoreUserSession() {
+            let restoreTask = eagerRestoreTask ?? Task { [userSessionStore] in
+                await userSessionStore.restoreUserSession()
+            }
+            eagerRestoreTask = nil
+            switch await restoreTask.value {
             case .success(let userSession):
                 await self.performUserSessionMigrations(userSession)
                 self.userSession = userSession
