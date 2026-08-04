@@ -28,6 +28,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
     private var stateUpdatesTaskHandle: TaskHandle?
+    private var appliedFilter: RoomSummaryProviderFilter?
     
     private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
     private let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
@@ -136,10 +137,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
+        // Re-applying the same filter would make the SDK re-emit a full reset
+        // for an identical list, e.g. at startup where the home screen's initial
+        // filter matches the one applied in `setRoomList`.
+        guard filter != appliedFilter else {
+            return
+        }
+        appliedFilter = filter
+
         let baseFilter: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
                                                                              .all(filters: [.space, .invite])]),
                                                               .deduplicateVersions]
-        
+
         switch filter {
         case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .none)
