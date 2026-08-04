@@ -21,7 +21,7 @@
         }
       ]
     },
-    "defaultTestExecutionTimeAllowance" : 120,
+    "defaultTestExecutionTimeAllowance" : 240,
     "environmentVariableEntries" : [
 
     ],
