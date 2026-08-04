@@ -22,6 +22,7 @@ struct RoomMemberDetailsScreenViewState: BindableState {
     var isOwnMemberDetails = false
     var isProcessingIgnoreRequest = false
     var dmRoomID: String?
+    var isCallingEnabled = true
     
     var bindings: RoomMemberDetailsScreenViewStateBindings
     

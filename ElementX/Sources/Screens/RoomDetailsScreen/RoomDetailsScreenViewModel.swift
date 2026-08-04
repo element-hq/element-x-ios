@@ -45,6 +45,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     init(roomProxy: JoinedRoomProxyProtocol,
          userSession: UserSessionProtocol,
+         appHooks: AppHooks,
          analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          notificationSettingsProxy: NotificationSettingsProxyProtocol,
@@ -58,14 +59,15 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
         
-        super.init(initialViewState: .init(details: roomProxy.details,
-                                           isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
-                                           isDirect: roomProxy.infoPublisher.value.isDirect,
-                                           topic: topic,
-                                           topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
-                                           joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
-                                           notificationSettingsState: .loading,
-                                           bindings: .init()),
+        let viewState = RoomDetailsScreenViewState(details: roomProxy.details,
+                                                   isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
+                                                   isDirect: roomProxy.infoPublisher.value.isDirect,
+                                                   topic: topic,
+                                                   topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
+                                                   joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
+                                                   notificationSettingsState: .loading,
+                                                   bindings: .init())
+        super.init(initialViewState: appHooks.roomDetailsScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)
         
         Task {

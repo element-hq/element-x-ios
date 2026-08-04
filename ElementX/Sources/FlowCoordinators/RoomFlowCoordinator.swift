@@ -940,6 +940,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentRoomDetails(isRoot: Bool, animated: Bool) async {
         let params = RoomDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
                                                             userSession: userSession,
+                                                            appHooks: flowParameters.appHooks,
                                                             analyticsService: flowParameters.analytics,
                                                             userIndicatorController: flowParameters.userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
