@@ -91,11 +91,15 @@ Git LFS is used to store UI and Preview test snapshots. `swift run tools setup-p
 git lfs install
 ```
 
-### Snapshot Tests
+### Snapshot (Preview) Tests
 
 If you make changes to the UI you may cause existing UI and Preview test snapshots to fail. The UITests run user flows and record snapshots while doing so using the settings defined under [checkEnvironments](https://github.com/element-hq/element-x-ios/blob/c29175d1f924e58b9646a200dbab0301fce3c258/UITests/Sources/Application.swift#L35-L37) while the PreviewTests use the settings defined in [PreviewTests.swift](https://github.com/element-hq/element-x-ios/blob/c29175d1f924e58b9646a200dbab0301fce3c258/PreviewTests/Sources/PreviewTests.swift#L18-L20). The snapshots are stored under `Sources/__Snapshots__` in their respective target's folder. 
 
-To run snapshot tests, select the `PreviewTests` scheme with an iPhone SE running iOS 26.5 in xcode and run tests (` - U`). Newly created screens will automatically have their screenshots added based off their `TestablePreview` Swift previews. If you are modifying an existing screen, you will first need to delete the old snapshots for that screen before running the tests.
+To run preview tests, select the `PreviewTests` scheme with an iPhone SE running iOS 26.5 in Xcode and run tests (` - U`). Language and region must be set to `en-US`. Newly created screens will automatically have their screenshots added based off their `TestablePreview` Swift previews. If you are modifying an existing screen, you will first need to delete the old snapshots for that screen before running the tests. Alternatively, if you enable `RECORD_FAILURES` in the preview test plans's environment variables (`PreviewTests/SupportingFiles/Previewtests.xctestplan`), it will overwrite snapshot failures with the updated screenshot.
+
+Language and region settings screenshot:
+
+![Language and region screenshot](docs/PreviewTestsRegion.png)
 
 ### Githooks
 
