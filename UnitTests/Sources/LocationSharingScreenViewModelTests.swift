@@ -420,7 +420,7 @@ struct LocationSharingScreenViewModelTests {
         let appSettings = AppSettings.volatile()
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
-                                                   mapURLBuilder: appSettings.mapTilerSettings.publisher.value,
+                                                   mapURLBuilder: appSettings.mapTilerConfiguration.publisher.value,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: TimelineControllerMock(.init(timelineProxy: TimelineProxyMock(.init()))),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
@@ -633,7 +633,7 @@ struct LocationSharingScreenViewModelTests {
         appSettings = AppSettings.volatile()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
-                                                   mapURLBuilder: appSettings.mapTilerSettings.publisher.value,
+                                                   mapURLBuilder: appSettings.mapTilerConfiguration.publisher.value,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),
                                                    liveLocationManager: liveLocationManagerMock,
@@ -661,7 +661,7 @@ struct LocationSharingScreenViewModelTests {
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialShare),
-                                                   mapURLBuilder: appSettings.mapTilerSettings.publisher.value,
+                                                   mapURLBuilder: appSettings.mapTilerConfiguration.publisher.value,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: TimelineControllerMock(.init(timelineProxy: TimelineProxyMock(.init()))),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),

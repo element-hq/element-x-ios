@@ -259,7 +259,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                                         appSettings: appSettings,
                                                         appHooks: appHooks)
         try await appHooks.remoteSettingsHook.initializeCache(using: client, applyingTo: appSettings).get()
-        await client.updateMapTilerSettings(in: appSettings)
         
         return client
     }

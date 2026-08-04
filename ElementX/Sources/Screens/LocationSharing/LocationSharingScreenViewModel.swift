@@ -435,7 +435,7 @@ extension LocationSharingScreenViewModel {
         let appSettings = AppSettings.volatile()
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
-                                              mapURLBuilder: appSettings.mapTilerSettings.publisher.value,
+                                              mapURLBuilder: appSettings.mapTilerConfiguration.publisher.value,
                                               roomProxy: roomProxy,
                                               timelineController: TimelineControllerMock(.init()),
                                               liveLocationManager: LiveLocationManagerMock(),
