@@ -8,12 +8,10 @@
 import Foundation
 
 nonisolated protocol UserProfileScreenHookProtocol: Sendable {
-    @MainActor func configure(with userSession: UserSessionProtocol?) async
     @MainActor func update(_ viewState: UserProfileScreenViewState) -> UserProfileScreenViewState
 }
 
 struct DefaultUserProfileScreenHook: UserProfileScreenHookProtocol {
-    func configure(with userSession: UserSessionProtocol?) async { }
     func update(_ viewState: UserProfileScreenViewState) -> UserProfileScreenViewState {
         viewState
     }

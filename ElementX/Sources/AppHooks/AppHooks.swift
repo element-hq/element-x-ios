@@ -13,10 +13,7 @@ import Synchronization
 final nonisolated class AppHooks: AppHooksProtocol {
     #if IS_MAIN_APP
     func configure(with userSession: UserSessionProtocol?) async {
-        await roomScreenHook.configure(with: userSession)
-        await roomDetailsScreenHook.configure(with: userSession)
-        await roomMemberDetailsScreenHook.configure(with: userSession)
-        await userProfileScreenHook.configure(with: userSession)
+        await userSessionHook.configure(with: userSession)
     }
     
     @AppHook(default: DefaultAppSettingsHook())
@@ -30,6 +27,9 @@ final nonisolated class AppHooks: AppHooksProtocol {
     
     @AppHook(default: DefaultOAuthPresenterHook())
     var oAuthPresenterHook: OAuthPresenterHookProtocol
+    
+    @AppHook(default: DefaultUserSessionHook())
+    var userSessionHook: UserSessionHookProtocol
     
     @AppHook(default: DefaultRoomScreenHook())
     var roomScreenHook: RoomScreenHookProtocol
