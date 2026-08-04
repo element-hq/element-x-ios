@@ -13,6 +13,9 @@ final nonisolated class AppHooks: AppHooksProtocol {
     #if IS_MAIN_APP
     func configure(with userSession: UserSessionProtocol?) async {
         await roomScreenHook.configure(with: userSession)
+        await roomDetailsScreenHook.configure(with: userSession)
+        await roomMemberDetailsScreenHook.configure(with: userSession)
+        await userProfileScreenHook.configure(with: userSession)
     }
     
     private let _appSettingsHook: Mutex<AppSettingsHookProtocol> = Mutex(DefaultAppSettingsHook())
@@ -58,6 +61,33 @@ final nonisolated class AppHooks: AppHooksProtocol {
     
     func registerRoomScreenHook(_ hook: RoomScreenHookProtocol) {
         _roomScreenHook.withLock { $0 = hook }
+    }
+    
+    private let _roomDetailsScreenHook: Mutex<RoomDetailsScreenHookProtocol> = Mutex(DefaultRoomDetailsScreenHook())
+    var roomDetailsScreenHook: RoomDetailsScreenHookProtocol {
+        _roomDetailsScreenHook.withLock { $0 }
+    }
+    
+    func registerRoomDetailsScreenHook(_ hook: RoomDetailsScreenHookProtocol) {
+        _roomDetailsScreenHook.withLock { $0 = hook }
+    }
+    
+    private let _roomMemberDetailsScreenHook: Mutex<RoomMemberDetailsScreenHookProtocol> = Mutex(DefaultRoomMemberDetailsScreenHook())
+    var roomMemberDetailsScreenHook: RoomMemberDetailsScreenHookProtocol {
+        _roomMemberDetailsScreenHook.withLock { $0 }
+    }
+    
+    func registerRoomMemberDetailsScreenHook(_ hook: RoomMemberDetailsScreenHookProtocol) {
+        _roomMemberDetailsScreenHook.withLock { $0 = hook }
+    }
+    
+    private let _userProfileScreenHook: Mutex<UserProfileScreenHookProtocol> = Mutex(DefaultUserProfileScreenHook())
+    var userProfileScreenHook: UserProfileScreenHookProtocol {
+        _userProfileScreenHook.withLock { $0 }
+    }
+    
+    func registerUserProfileScreenHook(_ hook: UserProfileScreenHookProtocol) {
+        _userProfileScreenHook.withLock { $0 = hook }
     }
     
     private let _developerOptionsScreenHook: Mutex<DeveloperOptionsScreenHookProtocol> = Mutex(DefaultDeveloperOptionsScreenHook())
