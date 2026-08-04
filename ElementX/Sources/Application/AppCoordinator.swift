@@ -849,7 +849,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             tearDownUserSession()
             
             appSettings.resetSessionSpecificSettings()
-            appSettings.mapTilerSettings.reset()
             appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics

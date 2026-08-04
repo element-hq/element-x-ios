@@ -21,7 +21,6 @@ nonisolated extension ClientSDKMock {
         var supportsOAuthCreatePrompt = true
         var supportsPasswordLogin = true
         var elementWellKnown: String?
-        var tileServerMapStyleURL: String?
         var validCredentials = (username: "alice", password: "12345678")
         
         // MARK: Session
@@ -69,7 +68,6 @@ nonisolated extension ClientSDKMock {
                 throw MockError.generic
             }
         }
-        tileServerReturnValue = configuration.tileServerMapStyleURL.map { TileServerInfo(mapStyleUrl: $0) }
     }
 }
 
