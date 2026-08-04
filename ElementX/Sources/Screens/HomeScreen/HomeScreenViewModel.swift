@@ -162,8 +162,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         setupRoomListSubscriptions()
-        
+
         updateRooms()
+
+        // On a warm launch the provider has usually already published the cached room list
+        // before this screen exists. The subscriptions above only deliver the current state
+        // via an async main-queue hop, which can end up queued behind the first full
+        // SwiftUI render and leave the skeletons up for the whole duration - consume the
+        // current state synchronously instead.
+        if let roomSummaryProvider {
+            updateRoomListMode(with: roomSummaryProvider.statePublisher.value)
+        }
     }
     
     // MARK: - Public
