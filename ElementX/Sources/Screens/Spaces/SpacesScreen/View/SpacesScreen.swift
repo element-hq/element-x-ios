@@ -101,6 +101,7 @@ struct SpacesScreen: View {
             }
             .buttonStyle(.borderless)
             .accessibilityLabel(L10n.commonSettings)
+            .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
         }
         
         ToolbarItem(placement: .principal) {

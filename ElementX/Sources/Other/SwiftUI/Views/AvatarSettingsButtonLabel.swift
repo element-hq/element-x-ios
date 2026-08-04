@@ -18,9 +18,9 @@ struct AvatarSettingsButtonLabel: View {
                             contentID: userProfile.id,
                             avatarSize: .user(on: .chats),
                             mediaProvider: mediaProvider)
-            .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
             .modifier(StatusEmojiModifier(statusEmoji: userProfile.status.displayed?.emoji))
             .geometryGroup()
+            .accessibilityHidden(true) // Decorative, the enclosing button provides the description.
     }
 }
 
