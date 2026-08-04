@@ -7021,17 +7021,17 @@
 						ProvisioningStyle = Automatic;
 					};
 					1DD4CE8EE9A055AF4B9B6C1F = {
-						DevelopmentTeam = 3HD49L7PSA;
+						DevelopmentTeam = BSLR4D6L28;
 					};
 					206D2E4EBBD08B70378F4DB6 = {
-						DevelopmentTeam = 3HD49L7PSA;
+						DevelopmentTeam = BSLR4D6L28;
 						TestTargetID = 4B70733CD7C13746395196E0;
 					};
 					2258C8F8431C19C279635833 = {
-						DevelopmentTeam = 3HD49L7PSA;
+						DevelopmentTeam = BSLR4D6L28;
 					};
 					33A96E673B477BBCBEDA109B = {
-						DevelopmentTeam = 3HD49L7PSA;
+						DevelopmentTeam = BSLR4D6L28;
 						TestTargetID = 4B70733CD7C13746395196E0;
 					};
 					4B70733CD7C13746395196E0 = {
@@ -7039,10 +7039,10 @@
 						ProvisioningStyle = Automatic;
 					};
 					74FFB3F0D79C704D9546D989 = {
-						DevelopmentTeam = 3HD49L7PSA;
+						DevelopmentTeam = BSLR4D6L28;
 					};
 					8863612E3FD57A5CF487B420 = {
-						DevelopmentTeam = 3HD49L7PSA;
+						DevelopmentTeam = BSLR4D6L28;
 						TestTargetID = 4B70733CD7C13746395196E0;
 					};
 					8AED4F2700EABEE6F106305A = {
@@ -9164,7 +9164,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFAULT_ACCOUNT_PROVIDER = "";
-				DEVELOPMENT_TEAM = 3HD49L7PSA;
+				DEVELOPMENT_TEAM = BSLR4D6L28;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -9344,7 +9344,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFAULT_ACCOUNT_PROVIDER = "";
-				DEVELOPMENT_TEAM = 3HD49L7PSA;
+				DEVELOPMENT_TEAM = BSLR4D6L28;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

@@ -4,7 +4,9 @@ settings:
   APP_GROUP_IDENTIFIER: group.global.gua
   BASE_BUNDLE_IDENTIFIER: global.gua
   ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "colors/accent-color"
-  DEVELOPMENT_TEAM: 3HD49L7PSA
+  # Must match the team that owns the App Store Connect record for global.gua,
+  # since it also prefixes KEYCHAIN_ACCESS_GROUP_IDENTIFIER and the App ID.
+  DEVELOPMENT_TEAM: BSLR4D6L28
   # Injected, not committed: empty here so no host is baked into the generated project.
   # Dev builds resolve the provider from the Secrets pipeline (GuaDeployment.defaultAccountProvider);
   # CI/local may still override via this build setting -> Info.plist (GuaDefaultAccountProvider).

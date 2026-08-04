@@ -21,7 +21,7 @@ and monotonically increasing — TestFlight never rejects a duplicate.
 
 The app and both app extensions (`global.gua`, `global.gua.nse`,
 `global.gua.shareextension`) all use `CODE_SIGN_STYLE = Automatic` with team
-`3HD49L7PSA` (set in `project.yml` / `app.yml` / each target's `target.yml`).
+`BSLR4D6L28` (set in `app.yml` as `DEVELOPMENT_TEAM`, inherited by every signed target).
 
 The workflow hands an **App Store Connect API key** to `xcodebuild` via
 `-allowProvisioningUpdates -authenticationKeyPath/-authenticationKeyID/-authenticationKeyIssuerID`.
