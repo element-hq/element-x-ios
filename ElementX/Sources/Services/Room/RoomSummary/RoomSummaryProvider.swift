@@ -340,7 +340,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
             lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
         case .remoteInvite(let timestamp, let senderID, let profile):
-            lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+            // Stripped invites carry no origin_server_ts; the room still sorts correctly
+            // via its recency stamp, the row just shows no date.
+            lastMessageDate = timestamp.map { Date(timeIntervalSince1970: TimeInterval($0 / 1000)) }
 
             if let senderID {
                 let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)

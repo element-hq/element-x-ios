@@ -206,7 +206,8 @@ class ClientProxy: ClientProxyProtocol {
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsServiceProtocol) async throws {
+         analyticsService: AnalyticsServiceProtocol,
+         prebuiltSyncService: SyncService? = nil) async throws {
         self.client = client
         self.networkMonitor = networkMonitor
         self.appSettings = appSettings
@@ -248,7 +249,8 @@ class ClientProxy: ClientProxyProtocol {
         
         let configuredAppService = try await ClientProxyServices(client: client,
                                                                  notificationSettings: notificationSettings,
-                                                                 appSettings: appSettings)
+                                                                 appSettings: appSettings,
+                                                                 prebuiltSyncService: prebuiltSyncService)
         
         syncService = configuredAppService.syncService
         roomListService = configuredAppService.roomListService
@@ -1532,16 +1534,24 @@ private struct ClientProxyServices {
     
     init(client: ClientProtocol,
          notificationSettings: NotificationSettingsProxyProtocol,
-         appSettings: AppSettings) async throws {
-        var syncServiceBuilder = client
-            .syncService()
-            .withOfflineMode()
-            .withSharePos(enable: true)
-        if appSettings.userStatusEnabled {
-            syncServiceBuilder = syncServiceBuilder.withProfilesExtension()
+         appSettings: AppSettings,
+         prebuiltSyncService: SyncService? = nil) async throws {
+        let syncService: SyncService
+        if let prebuiltSyncService {
+            // Built (and started) on the eager-restore task with this same
+            // configuration - see UserSessionStore.buildAndRestoreClient.
+            syncService = prebuiltSyncService
+        } else {
+            var syncServiceBuilder = client
+                .syncService()
+                .withOfflineMode()
+                .withSharePos(enable: true)
+            if appSettings.userStatusEnabled {
+                syncServiceBuilder = syncServiceBuilder.withProfilesExtension()
+            }
+            syncService = try await syncServiceBuilder.finish()
         }
-        let syncService = try await syncServiceBuilder.finish()
-        
+
         let roomListService = syncService.roomListService()
         
         let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
