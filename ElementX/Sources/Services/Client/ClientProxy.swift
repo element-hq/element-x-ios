@@ -1565,16 +1565,40 @@ private struct ClientProxyServices {
                                                            name: "AlternateAllRooms",
                                                            notificationSettings: notificationSettings,
                                                            appSettings: appSettings)
-        try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
-        
+
         staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "StaticAllRooms",
                                                         roomListPageSize: .max,
                                                         notificationSettings: notificationSettings,
                                                         appSettings: appSettings)
-        try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
-        
+
+        // Nothing consumes the alternate (search and room-selection flows) or static
+        // (room lookups, notification cleanup) providers before the home screen is up,
+        // but subscribing them here would triple the O(rooms) summary building - and the
+        // static provider's page size covers the whole account - all in front of the
+        // first paint of the cached room list. Subscribe them once the primary provider
+        // has delivered its first list instead.
+        Task { [roomSummaryProvider, alternateRoomSummaryProvider, staticRoomSummaryProvider] in
+            // Wait for actual content (or a loaded-but-empty account): the loading state
+            // alone reports loaded straight from the cache, before the first summaries
+            // have been built and published.
+            for await rooms in roomSummaryProvider.roomListPublisher.values {
+                if !rooms.isEmpty {
+                    break
+                }
+                if case .loaded(0) = roomSummaryProvider.statePublisher.value {
+                    break
+                }
+            }
+            do {
+                try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
+                try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
+            } catch {
+                MXLog.error("Failed setting up the deferred room summary providers: \(error)")
+            }
+        }
+
         self.syncService = syncService
         self.roomListService = roomListService
     }
