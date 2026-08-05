@@ -171,10 +171,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
 
         // Sentry, analytics and the notification manager don't gate the first frame or the
-        // session restore: start them from a task queued behind the eager restore (created
-        // above), so the restore gets the main actor as soon as init returns instead of
-        // serialising behind them.
-        Task { [bugReportService, appSettings, analyticsService, notificationManager] in
+        // session restore: hold them until the launch critical path is over (room list
+        // rendered, or a signed-out screen presented) at background priority, so they
+        // can't compete with it for the main actor or CPU at all. The timeout is
+        // insurance for paths that hit neither signal.
+        Task(priority: .background) { [bugReportService, appSettings, analyticsService, notificationManager] in
+            await FirstRenderGate.waitForRender(timeout: .seconds(1.5))
             Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
             analyticsService.startIfEnabled()
             notificationManager.start()
@@ -633,7 +635,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
-            
+
+            // Any signed-out destination means the launch critical path is over: open the
+            // gate so the deferred services (Sentry et al) start immediately rather than
+            // waiting out the fallback timeout.
+            if case .signedOut = context.toState {
+                FirstRenderGate.markRendered()
+            }
+
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
                 startAuthentication()
@@ -1340,5 +1349,25 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     task.setTaskCompleted(success: true)
                 }
             }
+    }
+}
+
+/// One-shot gate the deferred (non-critical) launch work awaits: it opens when the room
+/// list has rendered or a signed-out screen has been presented, or immediately if that
+/// already happened. Sessions that reach neither rely on the waiter's timeout instead.
+nonisolated enum FirstRenderGate {
+    private static let (stream, continuation) = AsyncStream.makeStream(of: Void.self)
+
+    static func markRendered() {
+        continuation.finish()
+    }
+
+    static func waitForRender(timeout: Duration) async {
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { for await _ in stream { } }
+            group.addTask { try? await Task.sleep(for: timeout) }
+            await group.next()
+            group.cancelAll()
+        }
     }
 }

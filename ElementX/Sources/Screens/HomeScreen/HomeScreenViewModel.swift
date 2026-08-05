@@ -322,7 +322,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.updateRooms()
+                guard let self else { return }
+                updateRooms()
+                // The first summary batch may land after the provider reported loaded;
+                // re-evaluate so the skeletons->rooms flip isn't missed.
+                if state.roomListMode == .skeletons {
+                    updateRoomListMode(with: roomSummaryProvider.statePublisher.value)
+                }
             }
             .store(in: &cancellables)
     }
@@ -330,14 +336,19 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState) {
         let isLoadingData = !roomSummaryProviderState.isLoaded
         let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0
-        
+        // The state can report loaded before the first summary batch has published; showing
+        // .rooms then would flash an empty list, so hold the skeletons until rooms exist.
+        let hasPublishedRooms = roomSummaryProvider?.roomListPublisher.value.isEmpty == false
+
         var roomListMode = state.roomListMode
         if isLoadingData {
             roomListMode = .skeletons
         } else if hasNoRooms {
             roomListMode = .empty
-        } else {
+        } else if hasPublishedRooms {
             roomListMode = .rooms
+        } else {
+            roomListMode = .skeletons
         }
         
         guard roomListMode != state.roomListMode else {
@@ -349,7 +360,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         state.roomListMode = roomListMode
-        
+
+        if roomListMode != .skeletons {
+            FirstRenderGate.markRendered()
+        }
+
         MXLog.info("Received room summary provider update, setting view room list mode to \"\(state.roomListMode)\"")
         // Delay user profile detail loading until after the initial room list loads
         if roomListMode == .rooms {
