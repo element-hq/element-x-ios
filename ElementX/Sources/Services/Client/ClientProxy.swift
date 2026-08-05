@@ -1557,21 +1557,16 @@ private struct ClientProxyServices {
                                                         messageEventStringBuilder: roomMessageEventStringBuilder,
                                                         shouldPrefixSenderName: true)
         
-        // Visible rooms are fetched through the dedicated viewport sliding sync connection:
-        // one immediate round per viewport change, independent of the main long-poll loop
-        // (whose in-flight round previously had to be cancelled and restarted, delaying
-        // previews by many seconds during a catch-up).
-        let visibleRoomsPrioritizer: (([String]) async throws -> Void)? = { [roomListService] in
-            try await roomListService.subscribeToVisibleRooms(roomIds: $0)
-        }
-
+        // Staged list growth experiment: the SDK proactively syncs the whole list in
+        // blocks of 20 rooms with a timeline limit of 10, so previews and ordering are
+        // expected to be settled before the user scrolls. Visible-range changes use the
+        // default subscription path on the main connection (no viewport prioritizer).
         roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                   eventStringBuilder: eventStringBuilder,
                                                   name: "AllRooms",
                                                   shouldUpdateVisibleRange: true,
                                                   notificationSettings: notificationSettings,
-                                                  appSettings: appSettings,
-                                                  visibleRoomsPrioritizer: visibleRoomsPrioritizer)
+                                                  appSettings: appSettings)
         try await roomSummaryProvider.setRoomList(roomListService.allRooms())
         
         alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
