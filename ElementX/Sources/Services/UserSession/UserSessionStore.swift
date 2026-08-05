@@ -223,7 +223,8 @@ class UserSessionStore: UserSessionStoreProtocol {
                          sessionDelegate: sessionDelegate,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         threadsEnabled: appSettings.threadsEnabled)
+                         threadsEnabled: appSettings.threadsEnabled,
+                         automaticBackPaginationEnabled: appSettings.automaticBackPaginationEnabled)
             .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)
                     // The store passphrase is a randomly generated 256-bit key (EncryptionKeyProvider),
@@ -246,11 +247,6 @@ class UserSessionStore: UserSessionStoreProtocol {
         // established failure semantics.
         var eagerSyncService: SyncService?
         do {
-            if appSettings.automaticBackPaginationEnabled {
-                // Must be called before creating the sync service (see ClientProxy.init,
-                // where the repeat call is a harmless flag re-set).
-                client.enableAutomaticBackpagination()
-            }
             var syncServiceBuilder = client
                 .syncService()
                 .withOfflineMode()

@@ -19,12 +19,14 @@ nonisolated extension ClientBuilder {
                             enableOnlySignedDeviceIsolationMode: Bool,
                             requestTimeout: UInt64? = 30000,
                             maxRequestRetryTime: UInt64? = nil,
-                            threadsEnabled: Bool) -> ClientBuilder {
+                            threadsEnabled: Bool,
+                            automaticBackPaginationEnabled: Bool = false) -> ClientBuilder {
         var builder = ClientBuilder()
             .crossProcessLockConfig(crossProcessLockConfig: .multiProcess(holderName: InfoPlistReader.main.bundleIdentifier))
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .threadsEnabled(enabled: threadsEnabled, threadSubscriptions: threadsEnabled)
+            .enableAutomaticBackPagination(enableAutomaticBackPagination: automaticBackPaginationEnabled)
             .requestConfig(config: .init(retryLimit: 3, // Must be non-zero for the SDK to retry API calls when rate-limited.
                                          timeout: requestTimeout,
                                          maxConcurrentRequests: nil,

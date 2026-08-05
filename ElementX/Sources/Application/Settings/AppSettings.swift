@@ -433,7 +433,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var linkNewDeviceEnabled: Bool
     
-    @UserPreference(defaultValue: false)
+    // Rig branch: default ON so dogfood builds exercise the back-pagination queue
+    // (latest-event backfill + viewport preload) without a Developer Options visit.
+    @UserPreference(defaultValue: true)
     var automaticBackPaginationEnabled: Bool
     
     @UserPreference(key: "clientPausingAndResumingEnabledV2", defaultValue: false, volatile: true)

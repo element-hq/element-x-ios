@@ -215,11 +215,6 @@ class ClientProxy: ClientProxyProtocol {
         
         userProfileSubject = .init(UserProfile(userID: (try? client.userId()) ?? ""))
         
-        if appSettings.automaticBackPaginationEnabled {
-            // Must be called before creating the sync service, timelines etc.
-            client.enableAutomaticBackpagination()
-        }
-        
         mediaLoader = MediaLoader(client: client)
         
         // Route media downloads through a content scanner when one has been configured for the server,
@@ -1562,12 +1557,22 @@ private struct ClientProxyServices {
                                                         messageEventStringBuilder: roomMessageEventStringBuilder,
                                                         shouldPrefixSenderName: true)
         
+        // With automatic back-pagination enabled, visible rooms are preloaded through the
+        // back-pagination queue (a prioritized /messages per needy room) instead of Sliding
+        // Sync room subscriptions, which are serialized behind the in-flight sync round.
+        let visibleRoomsPrioritizer: (([String]) async throws -> Void)? = if appSettings.automaticBackPaginationEnabled {
+            { try await client.prioritizeVisibleRooms(roomIds: $0, numberOfVisibleEvents: 10) }
+        } else {
+            nil
+        }
+
         roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                   eventStringBuilder: eventStringBuilder,
                                                   name: "AllRooms",
                                                   shouldUpdateVisibleRange: true,
                                                   notificationSettings: notificationSettings,
-                                                  appSettings: appSettings)
+                                                  appSettings: appSettings,
+                                                  visibleRoomsPrioritizer: visibleRoomsPrioritizer)
         try await roomSummaryProvider.setRoomList(roomListService.allRooms())
         
         alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,

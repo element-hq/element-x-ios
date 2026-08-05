@@ -724,24 +724,6 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         await enableAllSendQueuesEnableClosure?(enable)
     }
 
-    //MARK: - enableAutomaticBackpagination
-
-    private let enableAutomaticBackpaginationCallsCountLock = NSLock()
-    private var enableAutomaticBackpaginationUnderlyingCallsCount = 0
-    open var enableAutomaticBackpaginationCallsCount: Int {
-        get { enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount } }
-        set { enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount = newValue } }
-    }
-    open var enableAutomaticBackpaginationCalled: Bool {
-        return enableAutomaticBackpaginationCallsCount > 0
-    }
-    open var enableAutomaticBackpaginationClosure: (() -> Void)?
-
-    open override func enableAutomaticBackpagination() {
-        enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount += 1 }
-        enableAutomaticBackpaginationClosure?()
-    }
-
     //MARK: - enableSendQueueUploadProgress
 
     private let enableSendQueueUploadProgressEnableCallsCountLock = NSLock()

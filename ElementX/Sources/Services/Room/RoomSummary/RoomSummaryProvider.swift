@@ -17,7 +17,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let appSettings: AppSettings
-    
+    private let visibleRoomsPrioritizer: (([String]) async throws -> Void)?
+
     private let roomListPageSize: UInt32
     
     private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
@@ -60,13 +61,17 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     ///   - shouldUpdateVisibleRange: whether this summary provider should forward visible ranges
     ///   to the room list service through the `applyInput(input: .viewport(ranges` api. Only useful for
     ///   lists that need to update the visible range on Sliding Sync
+    ///   - visibleRoomsPrioritizer: when set, visible-range changes are forwarded here (the
+    ///   back-pagination queue preload) INSTEAD of subscribing to the rooms on Sliding Sync: a
+    ///   /messages request per needy room beats waiting for the sync loop to restart its round.
     init(roomListService: RoomListServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          shouldUpdateVisibleRange: Bool = false,
          roomListPageSize: UInt32 = 100,
          notificationSettings: NotificationSettingsProxyProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         visibleRoomsPrioritizer: (([String]) async throws -> Void)? = nil) {
         self.roomListService = roomListService
         self.eventStringBuilder = eventStringBuilder
         self.name = name
@@ -74,6 +79,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
         self.roomListPageSize = roomListPageSize
+        self.visibleRoomsPrioritizer = visibleRoomsPrioritizer
         
         let (diffsStream, diffsContinuation) = AsyncStream<[RoomListEntriesUpdate]>.makeStream()
         self.diffsContinuation = diffsContinuation
@@ -223,10 +229,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .removeDuplicates()
             .sink { [weak self] roomIDs in
                 guard let self else { return }
-                
+
                 Task { [weak self] in
                     do {
-                        try await self?.roomListService.subscribeToRooms(roomIds: roomIDs)
+                        if let prioritizer = self?.visibleRoomsPrioritizer {
+                            try await prioritizer(roomIDs)
+                        } else {
+                            try await self?.roomListService.subscribeToRooms(roomIds: roomIDs)
+                        }
                     } catch {
                         MXLog.error("Failed subscribing to rooms with error: \(error)")
                     }
