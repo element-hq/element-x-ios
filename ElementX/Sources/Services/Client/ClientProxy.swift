@@ -1561,7 +1561,7 @@ private struct ClientProxyServices {
         // back-pagination queue (a prioritized /messages per needy room) instead of Sliding
         // Sync room subscriptions, which are serialized behind the in-flight sync round.
         let visibleRoomsPrioritizer: (([String]) async throws -> Void)? = if appSettings.automaticBackPaginationEnabled {
-            { try await client.prioritizeVisibleRooms(roomIds: $0, numberOfVisibleEvents: 10) }
+            { try await client.prioritizeVisibleRooms(roomIds: $0, numberOfVisibleEvents: 1) }
         } else {
             nil
         }
