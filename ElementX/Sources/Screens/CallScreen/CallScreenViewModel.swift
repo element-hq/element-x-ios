@@ -52,6 +52,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         
         super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript))
         
+        state.swiftUICallViewCoordinator = .init(viewModelContext: context)
+        
         elementCallService.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in

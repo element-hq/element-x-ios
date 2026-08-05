@@ -53,7 +53,7 @@ struct CallScreen: View {
     }
 }
 
-private struct CallView: UIViewRepresentable {
+struct CallView: UIViewRepresentable {
     /// The top-level view this representable displays. It wraps the web view when picture in picture isn't running.
     typealias WebViewWrapper = UIView
     
@@ -65,7 +65,13 @@ private struct CallView: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(viewModelContext: viewModelContext)
+        if let existing = viewModelContext.viewState.swiftUICallViewCoordinator {
+            return existing
+        }
+        // When the screen is rotated, the pro max models regenerate the swiftui view tree, destroying and
+        // rebuilding this view. For that reason, we need to create and store the coordinator in the view model
+        // (and by extension the UIView) to persist between rotations to retain state
+        fatalError("CallView.Coordinator must be initialized in the context view state")
     }
     
     func updateUIView(_ callWebView: WebViewWrapper, context: Context) {
@@ -151,6 +157,7 @@ private struct CallView: UIViewRepresentable {
         }
         
         func load(_ url: URL) {
+            guard self.url != url else { return }
             self.url = url
             // The only file URL we allow is the one coming from our own local ElementCall bundle, so it's okay to allow read permission only to our local EC bundle
             if url.isFileURL {
