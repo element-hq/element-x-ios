@@ -1557,13 +1557,12 @@ private struct ClientProxyServices {
                                                         messageEventStringBuilder: roomMessageEventStringBuilder,
                                                         shouldPrefixSenderName: true)
         
-        // With automatic back-pagination enabled, visible rooms are preloaded through the
-        // back-pagination queue (a prioritized /messages per needy room) instead of Sliding
-        // Sync room subscriptions, which are serialized behind the in-flight sync round.
-        let visibleRoomsPrioritizer: (([String]) async throws -> Void)? = if appSettings.automaticBackPaginationEnabled {
-            { try await client.prioritizeVisibleRooms(roomIds: $0, numberOfVisibleEvents: 1) }
-        } else {
-            nil
+        // Visible rooms are fetched through the dedicated viewport sliding sync connection:
+        // one immediate round per viewport change, independent of the main long-poll loop
+        // (whose in-flight round previously had to be cancelled and restarted, delaying
+        // previews by many seconds during a catch-up).
+        let visibleRoomsPrioritizer: (([String]) async throws -> Void)? = { [roomListService] in
+            try await roomListService.subscribeToVisibleRooms(roomIds: $0)
         }
 
         roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
