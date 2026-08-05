@@ -166,20 +166,27 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
         }
 
-        Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
+        // Sentry, analytics and the notification manager don't gate the first frame or the
+        // session restore: start them from a task queued behind the eager restore (created
+        // above), so the restore gets the main actor as soon as init returns instead of
+        // serialising behind them.
+        Task { [bugReportService, appSettings, analyticsService, notificationManager] in
+            Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings, analytics: analyticsService)
+            analyticsService.startIfEnabled()
+            notificationManager.start()
+        }
 
-        analyticsService.startIfEnabled()
-        
         windowManager.delegate = self
         
         notificationManager.delegate = self
-        notificationManager.start()
         
         setupStateMachine()
         
         observeApplicationState()
         observeAppLockChanges()
         
+        // Must stay synchronous: BGTaskScheduler requires launch handlers to be registered
+        // before the application finishes launching.
         registerBackgroundAppRefresh()
         
         appSettings.analyticsConsentStatePublisher
