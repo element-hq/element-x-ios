@@ -535,6 +535,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     }
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
+                case .showTextSelection(let attributedString):
+                    state.bindings.textSelectionContent = .init(attributedString: attributedString,
+                                                                userDisplayNameForID: { self.state.members[$0]?.displayName },
+                                                                roomNameForID: { self.state.roomNameForIDResolver?($0) },
+                                                                roomNameForAlias: { self.state.roomNameForAliasResolver?($0) })
                 case .viewInRoomTimeline(let eventID):
                     Task { await self.viewInRoomTimeline(eventID: eventID) }
                 case .displayThread(let itemID):

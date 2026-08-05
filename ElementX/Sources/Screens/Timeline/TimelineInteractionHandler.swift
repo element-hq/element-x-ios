@@ -20,6 +20,7 @@ enum TimelineInteractionHandlerAction {
     
     case showActionMenu(TimelineItemActionMenuInfo)
     case showDebugInfo(TimelineItemDebugInfo)
+    case showTextSelection(AttributedString)
     
     case displayAudioRecorderPermissionError
     case displayErrorToast(String)
@@ -124,6 +125,12 @@ class TimelineInteractionHandler {
         case .copy:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
             UIPasteboard.general.string = messageTimelineItem.body
+        case .selectText:
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
+                  let attributedString = messageTimelineItem.selectableText else {
+                return
+            }
+            actionsSubject.send(.showTextSelection(attributedString))
         case .copyCaption:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
                   let caption = messageTimelineItem.mediaCaption else {

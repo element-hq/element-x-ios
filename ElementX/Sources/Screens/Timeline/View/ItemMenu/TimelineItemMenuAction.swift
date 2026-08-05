@@ -56,6 +56,7 @@ struct TimelineItemMenuReaction: Hashable {
 
 enum TimelineItemMenuAction: Identifiable, Hashable {
     case copy
+    case selectText
     case translate
     case copyCaption
     case edit
@@ -95,7 +96,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the action should be shown for an item that failed to send.
     var canAppearInFailedEcho: Bool {
         switch self {
-        case .copy, .edit, .redact, .viewSource, .editPoll:
+        case .copy, .selectText, .edit, .redact, .viewSource, .editPoll:
             true
         default:
             false
@@ -146,6 +147,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         switch self {
         case .copy:
             Label(L10n.actionCopyText, icon: \.copy)
+        case .selectText:
+            Label(UntranslatedL10n.actionSelectText, icon: \.textFormatting)
         case .translate:
             Label(L10n.actionTranslate, icon: \.translate)
         case .copyCaption:

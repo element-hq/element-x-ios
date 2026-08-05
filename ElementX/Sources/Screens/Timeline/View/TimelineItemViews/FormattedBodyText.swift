@@ -12,6 +12,7 @@ struct FormattedBodyText: View {
     private let attributedString: AttributedString
     private let trailingReservedSize: CGSize
     private let boostFontSize: Bool
+    private let selectionMode: MessageText.SelectionMode
     
     private let defaultAttributesContainer: AttributeContainer = {
         var container = AttributeContainer()
@@ -21,7 +22,7 @@ struct FormattedBodyText: View {
         return container
     }()
     
-    private var attributedComponents: [AttributedStringBuilderComponent] {
+    private var adjustedAttributedString: AttributedString {
         var adjustedAttributedString = attributedString
         
         // Required to allow the underlying TextView to use  body font when no font is specified in the AttributedString.
@@ -32,29 +33,46 @@ struct FormattedBodyText: View {
         if boostFontSize, let range = adjustedAttributedString.range(of: string) {
             adjustedAttributedString[range].font = UIFont.systemFont(ofSize: 48.0)
         }
-        
-        return adjustedAttributedString.formattedComponents
+
+        return adjustedAttributedString
+    }
+
+    private var attributedComponents: [AttributedStringBuilderComponent] {
+        adjustedAttributedString.formattedComponents
     }
     
     init(attributedString: AttributedString,
          trailingReservedSize: CGSize = .zero,
-         boostFontSize: Bool = false) {
+         boostFontSize: Bool = false,
+         selectionMode: MessageText.SelectionMode = .disabled) {
         self.attributedString = attributedString
         self.trailingReservedSize = trailingReservedSize
         self.boostFontSize = boostFontSize
+        self.selectionMode = selectionMode
     }
     
-    init(text: String, trailingReservedSize: CGSize = .zero, boostFontSize: Bool = false) {
+    init(text: String,
+         trailingReservedSize: CGSize = .zero,
+         boostFontSize: Bool = false,
+         selectionMode: MessageText.SelectionMode = .disabled) {
         self.init(attributedString: AttributedString(text),
                   trailingReservedSize: trailingReservedSize,
-                  boostFontSize: boostFontSize)
+                  boostFontSize: boostFontSize,
+                  selectionMode: selectionMode)
     }
     
+    @ViewBuilder
     var body: some View {
-        layout
-            .tint(.compound.textLinkExternal)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(attributedString))
+        if selectionMode == .enabled {
+            MessageText(attributedString: adjustedAttributedString, selectionMode: .enabled)
+                .tint(.compound.textLinkExternal)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        } else {
+            layout
+                .tint(.compound.textLinkExternal)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(attributedString))
+        }
     }
     
     /// The attributed components laid out for the bubbles timeline style.

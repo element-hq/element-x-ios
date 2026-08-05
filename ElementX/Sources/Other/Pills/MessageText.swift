@@ -12,6 +12,7 @@ import SwiftUI
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIGestureRecognizerDelegate {
     var timelineContext: TimelineViewModel.Context?
     var updateClosure: (() -> Void)?
+    var selectionMode = MessageText.SelectionMode.disabled
     private var pillViews = NSHashTable<UIView>.weakObjects()
     
     override func addGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
@@ -24,7 +25,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
     
     /// This prevents the magnifying glass from showing up
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if otherGestureRecognizer is UILongPressGestureRecognizer {
+        if selectionMode == .disabled, otherGestureRecognizer is UILongPressGestureRecognizer {
             return false
         }
         return true
@@ -71,6 +72,11 @@ private final nonisolated class TransparentTextAttachment: NSTextAttachment {
 }
 
 struct MessageText: UIViewRepresentable {
+    enum SelectionMode {
+        case disabled
+        case enabled
+    }
+
     @Environment(\.openURL) private var openURLAction
     @Environment(\.timelineContext) private var viewModel
     @Environment(\.layoutDirection) private var layoutDirection
@@ -98,6 +104,7 @@ struct MessageText: UIViewRepresentable {
     /// the reserved region fits on the last line (timestamp tucks) or wraps to a new
     /// line (timestamp drops below the text).
     var trailingReservedSize: CGSize = .zero
+    var selectionMode = SelectionMode.disabled
     
     private func makeAttributedText() -> NSAttributedString? {
         guard let baseText = try? NSAttributedString(attributedString, including: \.elementX) else {
@@ -163,6 +170,7 @@ struct MessageText: UIViewRepresentable {
         // Need to use TextKit 1 for mentions
         let textView = MessageTextView(usingTextLayoutManager: false)
         textView.timelineContext = viewModel
+        textView.selectionMode = selectionMode
         textView.updateClosure = { [weak textView] in
             guard let textView else { return }
             do {
@@ -173,7 +181,7 @@ struct MessageText: UIViewRepresentable {
             }
         }
         textView.isEditable = false
-        textView.isScrollEnabled = false
+        textView.isScrollEnabled = selectionMode == .enabled
         textView.adjustsFontForContentSizeCategory = true
         
         // Required to allow tapping links
@@ -210,9 +218,19 @@ struct MessageText: UIViewRepresentable {
             computedSizes.removeAll()
         }
         context.coordinator.openURLAction = openURLAction
+        context.coordinator.selectionMode = selectionMode
+        uiView.selectionMode = selectionMode
+        uiView.isScrollEnabled = selectionMode == .enabled
+        if selectionMode == .disabled {
+            uiView.selectedTextRange = nil
+        }
     }
     
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: MessageTextView, context: Context) -> CGSize? {
+        guard selectionMode == .disabled else {
+            return nil
+        }
+
         let proposalWidth = proposal.width ?? UIView.layoutFittingExpandedSize.width
         let key = SizeCacheKey(width: proposalWidth, reservedSize: trailingReservedSize)
         
@@ -228,24 +246,30 @@ struct MessageText: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(openURLAction: openURLAction)
+        Coordinator(openURLAction: openURLAction, selectionMode: selectionMode)
     }
     
     final class Coordinator: NSObject, UITextViewDelegate {
         var openURLAction: OpenURLAction
+        var selectionMode: SelectionMode
         
-        init(openURLAction: OpenURLAction) {
+        init(openURLAction: OpenURLAction, selectionMode: SelectionMode) {
             self.openURLAction = openURLAction
+            self.selectionMode = selectionMode
         }
         
         func textViewDidChangeSelection(_ textView: UITextView) {
-            guard !ProcessInfo.processInfo.isiOSAppOnMac else {
+            guard selectionMode == .disabled, !ProcessInfo.processInfo.isiOSAppOnMac else {
                 return
             }
             textView.selectedTextRange = nil
         }
         
         func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem, defaultAction: UIAction) -> UIAction? {
+            guard selectionMode == .disabled else {
+                return nil
+            }
+
             if case .link(let url) = textItem.content {
                 return .init(title: defaultAction.title,
                              image: defaultAction.image,
@@ -259,6 +283,10 @@ struct MessageText: UIViewRepresentable {
         }
         
         func textView(_ textView: UITextView, menuConfigurationFor textItem: UITextItem, defaultMenu: UIMenu) -> UITextItem.MenuConfiguration? {
+            guard selectionMode == .disabled else {
+                return nil
+            }
+
             switch textItem.content {
             case let .link(url):
                 guard !url.requiresConfirmation else {
