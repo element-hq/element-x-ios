@@ -271,6 +271,38 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return updatedItems
     }
     
+    /// Builds summaries for a batch of rooms, preserving order. Each summary costs
+    /// several store reads through the FFI; building a whole account's reset batch
+    /// one room at a time serialises all of them in front of the room list's first
+    /// paint, so build a bounded number concurrently instead.
+    private nonisolated static func buildRoomSummaries(from rooms: [Room], eventStringBuilder: RoomEventStringBuilder) async -> [RoomSummary] {
+        await withTaskGroup(of: (Int, RoomSummary).self) { group in
+            let maxConcurrency = 8
+            var summaries = [RoomSummary?](repeating: nil, count: rooms.count)
+            var submitted = 0
+
+            func submitNext() {
+                guard submitted < rooms.count else { return }
+                let index = submitted
+                let room = rooms[index]
+                submitted += 1
+                group.addTask {
+                    await (index, buildRoomSummary(from: room, eventStringBuilder: eventStringBuilder))
+                }
+            }
+
+            for _ in 0..<min(maxConcurrency, rooms.count) {
+                submitNext()
+            }
+            while let (index, summary) = await group.next() {
+                summaries[index] = summary
+                submitNext()
+            }
+
+            return summaries.compactMap(\.self)
+        }
+    }
+
     private nonisolated static func fetchRoomDetails(from room: Room) async -> (roomInfo: RoomInfo?, latestEvent: LatestEventValue?) {
         do {
             let latestEvent = await room.latestEvent()
@@ -382,8 +414,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         switch diff {
         case .append(let values):
-            for (index, value) in values.enumerated() {
-                let summary = await buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder)
+            for (index, summary) in await buildRoomSummaries(from: values, eventStringBuilder: eventStringBuilder).enumerated() {
                 changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
             }
         case .clear:
@@ -415,9 +446,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }
-            
-            for (index, value) in values.enumerated() {
-                await changes.append(.insert(offset: index, element: buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder), associatedWith: nil))
+
+            for (index, summary) in await buildRoomSummaries(from: values, eventStringBuilder: eventStringBuilder).enumerated() {
+                changes.append(.insert(offset: index, element: summary, associatedWith: nil))
             }
         case .set(let index, let value):
             let summary = await buildRoomSummary(from: value, eventStringBuilder: eventStringBuilder)
