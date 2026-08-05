@@ -161,6 +161,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         appSettings.lastVersionLaunched = currentVersion.description
 
         if userSessionStore.hasSessions {
+            // Starts the store opens + session restore on a detached task immediately:
+            // a plain Task would be main-actor-isolated and couldn't run a single step
+            // until scene bring-up finishes (measured at ~300ms after init returns).
+            userSessionStore.beginEagerRestore()
             eagerRestoreTask = Task { [userSessionStore] in
                 await userSessionStore.restoreUserSession()
             }

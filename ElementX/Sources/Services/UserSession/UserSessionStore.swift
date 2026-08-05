@@ -42,6 +42,35 @@ class UserSessionStore: UserSessionStoreProtocol {
         self.networkMonitor = networkMonitor
     }
     
+    /// The client being built and restored eagerly by [`beginEagerRestore`], consumed
+    /// by the next `restoreUserSession()` call.
+    private var eagerClientTask: Task<ClientProtocol, Error>?
+
+    /// Kick off the expensive prefix of a session restore (store opens + session
+    /// restore) on a detached task, so that it runs concurrently with the rest of the
+    /// app's launch instead of queueing behind scene bring-up on the main actor.
+    /// `restoreUserSession()` picks up the result.
+    func beginEagerRestore() {
+        guard eagerClientTask == nil,
+              let credentials = keychainController.restorationTokens().first else { return }
+
+        // Main-actor-isolated, and must precede the builder configuration reading
+        // `appSettings` - so it runs here rather than on the detached task.
+        appHooks.remoteSettingsHook.loadCache(forHomeserver: credentials.restorationToken.session.homeserverUrl,
+                                              applyingTo: appSettings)
+
+        let sessionDelegate = clientSessionDelegate
+        let appSettings = appSettings
+        let appHooks = appHooks
+
+        eagerClientTask = Task.detached(priority: .userInitiated) {
+            try await Self.buildAndRestoreClient(credentials: credentials,
+                                                 sessionDelegate: sessionDelegate,
+                                                 appSettings: appSettings,
+                                                 appHooks: appHooks)
+        }
+    }
+
     /// Deletes all data stored in the shared container and keychain
     func reset() {
         MXLog.warning("Resetting the UserSessionStore. All accounts will be affected.")
@@ -122,18 +151,66 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
-        guard credentials.restorationToken.sessionDirectories.isNonTransientUserDataValid() else {
-            MXLog.error("Failed restoring login, missing non-transient user data")
+        if eagerClientTask == nil {
+            appHooks.remoteSettingsHook.loadCache(forHomeserver: credentials.restorationToken.session.homeserverUrl,
+                                                  applyingTo: appSettings)
+        }
+        let clientTask = eagerClientTask ?? Task.detached { [sessionDelegate = clientSessionDelegate, appSettings, appHooks] in
+            try await Self.buildAndRestoreClient(credentials: credentials,
+                                                 sessionDelegate: sessionDelegate,
+                                                 appSettings: appSettings,
+                                                 appHooks: appHooks)
+        }
+        eagerClientTask = nil
+
+        let client: ClientProtocol
+        do {
+            client = try await clientTask.value
+        } catch {
+            MXLog.error("Failed restoring login with error: \(error)")
             return .failure(.failedRestoringLogin)
         }
-        
+
+        MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
+
+        Task(priority: .low) { await appHooks.remoteSettingsHook.updateCache(using: client) }
+        Task(priority: .low) { await client.updateMapTilerSettings(in: appSettings) }
+
+        do {
+            return try await .success(setupProxyForClient(client))
+        } catch UserSessionStoreError.failedSettingUpClientProxy(let error) {
+            // If this has failed, there is likely something wrong with the creation of the sync service
+            // There is nothing we can do, but at the same time we don't want the user to the get logged out
+            // So it's better to crash here and let the app restart
+            fatalError("Failed setting up the client proxy with error: \(error)")
+        } catch {
+            MXLog.error("Failed restoring login with error: \(error)")
+            return .failure(.failedRestoringLogin)
+        }
+    }
+
+    /// The expensive prefix of a session restore: opening the stores and restoring the
+    /// session, everything up to (but not including) the `ClientProxy`. Deliberately
+    /// `nonisolated` so that it runs off the main actor: at launch the main actor is
+    /// busy with scene bring-up for hundreds of milliseconds after the eager restore
+    /// starts, and a main-actor-isolated restore cannot run a single step until then.
+    private nonisolated static func buildAndRestoreClient(credentials: KeychainCredentials,
+                                                          sessionDelegate: ClientSessionDelegate,
+                                                          appSettings: AppSettings,
+                                                          appHooks: AppHooks) async throws -> ClientProtocol {
+        guard credentials.restorationToken.sessionDirectories.isNonTransientUserDataValid() else {
+            MXLog.error("Failed restoring login, missing non-transient user data")
+            throw UserSessionStoreError.failedRestoringLogin
+        }
+
+        // NB: the caller runs `appHooks.remoteSettingsHook.loadCache` (main-actor
+        // isolated) before handing over to this function.
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
-        
+
         let builder = ClientBuilder
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
                          slidingSync: .restored,
-                         sessionDelegate: keychainController,
+                         sessionDelegate: sessionDelegate,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
                          threadsEnabled: appSettings.threadsEnabled)
@@ -147,26 +224,11 @@ class UserSessionStore: UserSessionStoreProtocol {
                                   password: credentials.restorationToken.passphrase)
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
-        
-        do {
-            let client = try await builder.build()
-            try await client.restoreSession(session: credentials.restorationToken.session)
-            
-            MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
-            
-            Task(priority: .low) { await appHooks.remoteSettingsHook.updateCache(using: client) }
-            Task(priority: .low) { await client.updateMapTilerSettings(in: appSettings) }
-            
-            return try await .success(setupProxyForClient(client))
-        } catch UserSessionStoreError.failedSettingUpClientProxy(let error) {
-            // If this has failed, there is likely something wrong with the creation of the sync service
-            // There is nothing we can do, but at the same time we don't want the user to the get logged out
-            // So it's better to crash here and let the app restart
-            fatalError("Failed setting up the client proxy with error: \(error)")
-        } catch {
-            MXLog.error("Failed restoring login with error: \(error)")
-            return .failure(.failedRestoringLogin)
-        }
+
+        let client = try await builder.build()
+        try await client.restoreSession(session: credentials.restorationToken.session)
+
+        return client
     }
     
     private func setupProxyForClient(_ client: ClientProtocol) async throws -> ClientProxyProtocol {

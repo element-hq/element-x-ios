@@ -30,6 +30,11 @@ protocol UserSessionStoreProtocol {
     /// Returns the delegate that should handle any changes to a `Client`'s `Session`.
     var clientSessionDelegate: ClientSessionDelegate { get }
     
+    /// Kicks off the expensive prefix of a session restore (store opens + session
+    /// restore) on a detached task so it overlaps the rest of the app's launch;
+    /// `restoreUserSession()` picks up the result.
+    func beginEagerRestore()
+
     /// Restores an existing user session.
     func restoreUserSession() async -> Result<UserSessionProtocol, UserSessionStoreError>
     

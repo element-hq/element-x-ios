@@ -14161,6 +14161,23 @@ nonisolated class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sen
         resetCallsCountLock.withLock { resetUnderlyingCallsCount += 1 }
         resetClosure?()
     }
+    //MARK: - beginEagerRestore
+
+    private let beginEagerRestoreCallsCountLock = NSLock()
+    private nonisolated(unsafe) var beginEagerRestoreUnderlyingCallsCount = 0
+    var beginEagerRestoreCallsCount: Int {
+        get { beginEagerRestoreCallsCountLock.withLock { beginEagerRestoreUnderlyingCallsCount } }
+        set { beginEagerRestoreCallsCountLock.withLock { beginEagerRestoreUnderlyingCallsCount = newValue } }
+    }
+    var beginEagerRestoreCalled: Bool {
+        return beginEagerRestoreCallsCount > 0
+    }
+    nonisolated(unsafe) var beginEagerRestoreClosure: (() -> Void)?
+
+    func beginEagerRestore() {
+        beginEagerRestoreCallsCountLock.withLock { beginEagerRestoreUnderlyingCallsCount += 1 }
+        beginEagerRestoreClosure?()
+    }
     //MARK: - restoreUserSession
 
     private let restoreUserSessionCallsCountLock = NSLock()
