@@ -79,8 +79,11 @@ class SecureBackupController: SecureBackupControllerProtocol {
             
             MXLog.info("Recovery state changed to: \(state), setting local state to \(recoveryStateSubject.value)")
         })
-        
-        updateBackupStateFromRemote()
+
+        // No unconditional remote check here: the backup state listener above fires with
+        // the current state on registration and its `.unknown` branch already triggers
+        // `updateBackupStateFromRemote()`, so an extra check at init only duplicated the
+        // /room_keys/version request on every startup.
     }
     
     func enable() async -> Result<Void, SecureBackupControllerError> {
