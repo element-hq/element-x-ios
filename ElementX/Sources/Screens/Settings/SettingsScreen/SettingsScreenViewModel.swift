@@ -108,8 +108,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             pickCustomEmoji()
         case .userStatus(.set(let status)):
             Task { await setUserStatus(status) }
-        case .userStatus(.clear(let status)):
-            Task { await clearUserStatus(status) }
+        case .userStatus(.clear):
+            Task { await clearUserStatus() }
         case .userStatus(.cancel):
             state.bindings.isPresentingStatusPicker = false
             state.bindings.isShowingCustomStatusField = false
@@ -161,7 +161,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         .asCancellable()
     }
     
-    func setUserStatus(_ status: UserStatus.Raw) async {
+    private func setUserStatus(_ status: UserStatus.Raw) async {
         // Loading state tbc
         state.bindings.isPresentingStatusPicker = false
         state.bindings.isShowingCustomStatusField = false
@@ -177,19 +177,13 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         }
     }
     
-    func clearUserStatus(_ status: UserStatus.Displayed) async {
+    /// Clears both the `UserStatus.Raw` and `UserStatus.Call` values simultaneously.
+    private func clearUserStatus() async {
         // Loading state tbc
         state.bindings.isPresentingStatusPicker = false
         state.bindings.isShowingCustomStatusField = false
         
-        let result = switch status {
-        case .userSet:
-            await clientProxy.removeUserStatus()
-        case .inCall:
-            await clientProxy.removeCallStatus()
-        }
-        
-        switch result {
+        switch await clientProxy.clearUserStatus() {
         case .success:
             break // Loading/error state tbc
         case .failure:

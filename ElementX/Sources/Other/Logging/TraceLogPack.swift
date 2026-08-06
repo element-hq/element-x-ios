@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 nonisolated enum TraceLogPack: Codable, CaseIterable {
-    case eventCache, sendQueue, timeline, notificationClient, syncProfiling, latestEvents
+    case eventCache, sendQueue, timeline, notificationClient, syncProfiling, latestEvents, search
     
     var title: String {
         switch self {
@@ -20,6 +20,7 @@ nonisolated enum TraceLogPack: Codable, CaseIterable {
         case .notificationClient: "Notification client"
         case .syncProfiling: "Sync profiling"
         case .latestEvents: "Latest events"
+        case .search: "Search"
         }
     }
 }
@@ -27,13 +28,14 @@ nonisolated enum TraceLogPack: Codable, CaseIterable {
 nonisolated extension TraceLogPack {
     // periphery:ignore - Unused, but added to detect new cases when updating the SDK.
     init(rustLogPack: MatrixRustSDK.TraceLogPacks) {
-        switch rustLogPack {
-        case .eventCache: self = .eventCache
-        case .sendQueue: self = .sendQueue
-        case .timeline: self = .timeline
-        case .notificationClient: self = .notificationClient
-        case .syncProfiling: self = .syncProfiling
-        case .latestEvents: self = .latestEvents
+        self = switch rustLogPack {
+        case .eventCache: .eventCache
+        case .sendQueue: .sendQueue
+        case .timeline: .timeline
+        case .notificationClient: .notificationClient
+        case .syncProfiling: .syncProfiling
+        case .latestEvents: .latestEvents
+        case .search: .search
         }
     }
     
@@ -45,6 +47,7 @@ nonisolated extension TraceLogPack {
         case .notificationClient: .notificationClient
         case .syncProfiling: .syncProfiling
         case .latestEvents: .latestEvents
+        case .search: .search
         }
     }
 }

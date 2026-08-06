@@ -777,24 +777,13 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func removeUserStatus() async -> Result<Void, ClientProxyError> {
+    func clearUserStatus() async -> Result<Void, ClientProxyError> {
         do {
             try await client.clearUserStatus()
             // No need to refresh the profile, we only support user status with the profiles /sync extension.
             return .success(())
         } catch {
             MXLog.error("Failed removing user status with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func removeCallStatus() async -> Result<Void, ClientProxyError> {
-        do {
-            try await client.clearCallStatus()
-            // No need to refresh the profile, we only support user status with the profiles /sync extension.
-            return .success(())
-        } catch {
-            MXLog.error("Failed removing call status with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

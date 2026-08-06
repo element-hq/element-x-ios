@@ -71,7 +71,7 @@ struct SettingsScreenUserStatusRow: View {
                     .accessibilityValue(Text(String(status.emoji)) + Text(status.text))
                     .buttonStyle(.plain)
                     
-                    Button(L10n.actionClear) { action(.clear(status)) }
+                    Button(L10n.actionClear) { action(.clear) }
                         .buttonStyle(.compound(.textLink))
                 }
                 .padding(ListRowPadding.insets)

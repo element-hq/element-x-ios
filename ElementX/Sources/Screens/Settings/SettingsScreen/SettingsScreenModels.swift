@@ -109,7 +109,7 @@ enum SettingsScreenViewAction {
         /// Set the user's status to the provided value.
         case set(UserStatus.Raw)
         /// Clears the user's currently displayed status.
-        case clear(UserStatus.Displayed)
+        case clear
         /// Cancel user status picking/input.
         case cancel
     }
