@@ -83,6 +83,11 @@ struct DeveloperOptionsScreen: View {
                     Text("Automatic back pagination")
                     Text("Requires app reboot")
                 }
+
+                Toggle(isOn: $context.paginatedSyncEnabled) {
+                    Text("Paginated sync")
+                    Text("Requires a server with org.matrix.paginated_sync and an app reboot")
+                }
             }
             
             Section("Room") {

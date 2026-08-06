@@ -57,6 +57,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var hideQuietNotificationAlerts: Bool { get set }
     var focusEventOnNotificationTap: Bool { get set }
     var automaticBackPaginationEnabled: Bool { get set }
+    var paginatedSyncEnabled: Bool { get set }
     
     var roomListActivityVisibility: RoomListActivityVisibility { get set }
     var elementCallBaseURLOverride: URL? { get set }

@@ -1544,6 +1544,9 @@ private struct ClientProxyServices {
             if appSettings.userStatusEnabled {
                 syncServiceBuilder = syncServiceBuilder.withProfilesExtension()
             }
+            if appSettings.paginatedSyncEnabled {
+                syncServiceBuilder = syncServiceBuilder.withPaginatedSync()
+            }
             syncService = try await syncServiceBuilder.finish()
         }
 

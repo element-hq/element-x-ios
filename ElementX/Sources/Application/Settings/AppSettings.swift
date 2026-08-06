@@ -437,6 +437,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     // (latest-event backfill + viewport preload) without a Developer Options visit.
     @UserPreference(defaultValue: true)
     var automaticBackPaginationEnabled: Bool
+
+    // Paginated Sync experiment (MSC TBD): drive the room list with the
+    // org.matrix.paginated_sync endpoint instead of Simplified Sliding Sync.
+    // Requires a server implementing the unstable endpoint.
+    @UserPreference(defaultValue: false)
+    var paginatedSyncEnabled: Bool
     
     @UserPreference(key: "clientPausingAndResumingEnabledV2", defaultValue: false, volatile: true)
     var clientPausingAndResumingEnabled: Bool

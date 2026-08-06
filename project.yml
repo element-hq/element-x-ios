@@ -73,9 +73,11 @@ include:
 packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
-    url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.07.28
-    # path: ../matrix-rust-sdk
+    # Paginated Sync experiment: requires the local SDK branch
+    # (matthew/paginated-sync, checked out in ../matrix-rust-sdk-paginated-sync).
+    # url: https://github.com/element-hq/matrix-rust-components-swift
+    # exactVersion: 26.07.28
+    path: ../matrix-rust-sdk-paginated-sync
   Compound:
     path: compound-ios
   BuildExtensions:

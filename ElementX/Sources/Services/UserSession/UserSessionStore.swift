@@ -254,6 +254,9 @@ class UserSessionStore: UserSessionStoreProtocol {
             if appSettings.userStatusEnabled {
                 syncServiceBuilder = syncServiceBuilder.withProfilesExtension()
             }
+            if appSettings.paginatedSyncEnabled {
+                syncServiceBuilder = syncServiceBuilder.withPaginatedSync()
+            }
             let syncService = try await syncServiceBuilder.finish()
             await syncService.start()
             eagerSyncService = syncService
