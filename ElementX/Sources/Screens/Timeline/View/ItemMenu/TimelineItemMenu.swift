@@ -262,7 +262,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let (backupItem, _) = makeActions(authenticity: .notGuaranteed(color: .gray))
     static let (unsignedItem, _) = makeActions(authenticity: .unsignedDevice(color: .red))
     static let (unencryptedItem, _) = makeActions(authenticity: .sentInClear(color: .red))
-    static let (unknownFailureItem, _) = makeActions(deliveryStatus: .sendingFailed(.unknown))
+    static let (unknownFailureItem, _) = makeActions(deliveryStatus: .sendingFailed(.unknown(reason: nil)))
     static let (identityChangedItem, _) = makeActions(deliveryStatus: .sendingFailed(.verifiedUser(.changedIdentity(users: [
         "@alice:matrix.org"
     ]))))
