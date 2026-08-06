@@ -74,6 +74,7 @@ struct RoomMembersListScreenMemberCell: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
         }
+        .accessibilityIdentifier(A11yIdentifiers.roomMembersListScreen.member(listEntry.member.id))
     }
     
     var role: String? {
