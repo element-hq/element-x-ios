@@ -48,6 +48,7 @@ private struct TimelineItemSendInfoModifier: ViewModifier {
             TimelineItemSendInfoLabel(sendInfo: sendInfo)
                 .accessibilityHidden(isAccessibilityHidden)
                 .contentShape(.rect)
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.sendInfo)
                 // Tap gesture to avoid the message being detected as a button by VoiceOver
                 // (and the action shows a description that is already read to the user).
                 .onTapGesture {
