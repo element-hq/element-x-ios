@@ -83,6 +83,8 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
             dismissalObserver = dismissalPublisher.sink { [weak self] _ in
                 // Dispatching on main.async with weak self we avoid doing an extra dismiss if the view is presented on top of another modal
                 DispatchQueue.main.async { [weak self] in
+                    // Only dismiss a preview we still have up, UIKit forwards dismiss() to an ancestor otherwise.
+                    guard self?.presentedViewController != nil else { return }
                     self?.dismiss(animated: true)
                 }
             }
