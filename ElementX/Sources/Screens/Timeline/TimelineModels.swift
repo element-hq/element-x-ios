@@ -222,7 +222,7 @@ struct ReadReceiptSummaryInfo: Identifiable {
 enum TimelineAlertInfoType: Hashable {
     case audioRecodingPermissionError
     case pollEndConfirmation(String)
-    case sendingFailed(reason: String?, itemID: TimelineItemIdentifier)
+    case sendingFailed(reason: String?, sendHandle: SendHandleProxy)
     case encryptionAuthenticity(String)
     case encryptionForwarder(String)
     case inviteAgain
