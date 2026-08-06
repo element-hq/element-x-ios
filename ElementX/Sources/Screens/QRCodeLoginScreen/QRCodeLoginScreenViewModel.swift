@@ -262,12 +262,13 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     private func handleExpiration() {
         // Don't override an error that's already being shown.
         if case .error = state.state {
+            currentTask = nil // Cancel the scan (just in case).
             return
         }
         
         MXLog.info("Timed out establishing a secure channel, expiring.")
         currentTask = nil // Cancel the scan.
-        state.state = .error(.expired)
+        handleError(.expired)
     }
     
     private func sendCheckCode() async {
@@ -290,10 +291,8 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
     
     private func requestOAuthAuthorization(url: URL, continuationSender: ContinuationMessageSenderProxy) {
-        // We're meant to use the continuationSender to confirm when the URL has been opened or if the user decided
-        // against it (by cancelling the system's WAS prompt). Unfortunately the WAS only gives us a signal for
-        // success or failure (and we don't get success as there isn't a redirect at the end of the flow).
-        // Failure could be the user cancelling the prompt or closing the web view when they're done.
+        // There's no OAuth redirect, so the WAS always returns a cancellation failure (both for a declined system prompt and
+        // when closing after successful authorisation). We can't use the continuation as intended, so confirm it and continue.
         Task { await continuationSender.confirm() }
         
         let (stream, continuation) = AsyncStream<Result<Void, OAuthError>>.makeStream()

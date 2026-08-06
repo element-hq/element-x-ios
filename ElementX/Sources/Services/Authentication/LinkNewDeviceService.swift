@@ -240,8 +240,9 @@ private extension QRCodeLoginError {
     }
 }
 
-nonisolated class CheckCodeSenderProxy: Equatable {
+final nonisolated class CheckCodeSenderProxy: Equatable, Sendable {
     static func == (lhs: CheckCodeSenderProxy, rhs: CheckCodeSenderProxy) -> Bool {
+        // Not ideal but good enough as the equality check is purely for removing duplicates from the progress stream.
         lhs.underlyingSender === rhs.underlyingSender
     }
     
@@ -256,8 +257,9 @@ nonisolated class CheckCodeSenderProxy: Equatable {
     }
 }
 
-class ContinuationMessageSenderProxy: Equatable {
+final nonisolated class ContinuationMessageSenderProxy: Equatable, Sendable {
     static func == (lhs: ContinuationMessageSenderProxy, rhs: ContinuationMessageSenderProxy) -> Bool {
+        // Not ideal but good enough as the equality check is purely for removing duplicates from the progress stream.
         lhs.underlyingSender === rhs.underlyingSender
     }
     
