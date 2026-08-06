@@ -739,7 +739,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         if case let .sendingFailed(.unknown(reason)) = eventTimelineItem.properties.deliveryStatus {
-            displayAlert(.sendingFailed(reason: reason, itemID: itemID))
+            guard let sendHandle = timelineController.sendHandle(for: itemID) else {
+                MXLog.error("Cannot find send handle for \(itemID).")
+                return
+            }
+            
+            displayAlert(.sendingFailed(reason: reason, sendHandle: sendHandle))
         } else if case let .sendingFailed(.verifiedUser(failure)) = eventTimelineItem.properties.deliveryStatus {
             guard let sendHandle = timelineController.sendHandle(for: itemID) else {
                 MXLog.error("Cannot find send handle for \(itemID).")
@@ -755,26 +760,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
         }
     }
-
-    private func retrySending(itemID: TimelineItemIdentifier) {
-        guard let sendHandle = timelineController.sendHandle(for: itemID) else {
-            MXLog.error("Cannot find send handle for \(itemID).")
-            return
-        }
-
+    
+    private func retrySending(_ sendHandle: SendHandleProxy) {
         Task {
             if case .failure(let error) = await sendHandle.resend() {
-                MXLog.error("Failed retrying to send \(itemID): \(error)")
+                MXLog.error("Failed retrying to send \(sendHandle.itemID): \(error)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             }
         }
-    }
-
-    private func removeFailedMessage(itemID: TimelineItemIdentifier) {
-        guard case let .event(_, eventOrTransactionID) = itemID else {
-            fatalError("Only events can fail to send.")
-        }
-
-        Task { await timelineController.redact(eventOrTransactionID) }
     }
     
     private func slashCommand(message: String) -> SlashCommand? {
@@ -1124,13 +1117,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              message: L10n.commonPollEndConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                              secondaryButton: .init(title: L10n.actionOk) { self.timelineInteractionHandler.endPoll(pollStartID: pollStartID) })
-        case .sendingFailed(let reason, let itemID):
+        case .sendingFailed(let reason, let sendHandle):
             state.bindings.alertInfo = .init(id: type,
                                              title: L10n.commonSendingFailed,
                                              message: reason,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                             verticalButtons: [.init(title: L10n.actionRetry) { [weak self] in self?.retrySending(itemID: itemID) },
-                                                               .init(title: L10n.actionRemoveMessage, role: .destructive) { [weak self] in self?.removeFailedMessage(itemID: itemID) }])
+                                             verticalButtons: [.init(title: L10n.actionRetry) { [weak self] in self?.retrySending(sendHandle) },
+                                                               .init(title: L10n.actionRemoveMessage, role: .destructive) { [weak self] in
+                                                                   self?.timelineInteractionHandler.handleTimelineItemMenuAction(.redact(isMedia: false), itemID: sendHandle.itemID)
+                                                               }])
         case .encryptionAuthenticity(let message):
             state.bindings.alertInfo = .init(id: type,
                                              title: message,
