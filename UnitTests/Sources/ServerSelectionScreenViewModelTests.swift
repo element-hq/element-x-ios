@@ -125,7 +125,7 @@ struct ServerSelectionScreenViewModelTests {
         try setup(authenticationFlow: .login)
         #expect(!context.viewState.isShowingFooterError, "There should not be an error message for a new view model.")
         #expect(context.viewState.footerErrorMessage == nil, "There should not be an error message for a new view model.")
-        #expect(String(context.viewState.footerMessage) == UntranslatedL10n.screenSelectServerTextfieldFooterLogin,
+        #expect(String(context.viewState.footerMessage) == L10n.screenChangeServerTextfieldFooterLogin,
                 "The standard footer message should be shown.")
         
         // When attempting to discover an invalid server
@@ -137,7 +137,7 @@ struct ServerSelectionScreenViewModelTests {
         // Then the footer should now be showing an error.
         #expect(context.viewState.isShowingFooterError, "The error message should be stored.")
         #expect(context.viewState.footerErrorMessage != nil, "The error message should be stored.")
-        #expect(String(context.viewState.footerMessage) != UntranslatedL10n.screenSelectServerTextfieldFooterLogin,
+        #expect(String(context.viewState.footerMessage) != L10n.screenChangeServerTextfieldFooterLogin,
                 "The error message should be shown.")
         
         // And when clearing the error.
@@ -148,7 +148,7 @@ struct ServerSelectionScreenViewModelTests {
         
         // Then the error message should now be removed.
         #expect(context.viewState.footerErrorMessage == nil, "The error message should have been cleared.")
-        #expect(String(context.viewState.footerMessage) == UntranslatedL10n.screenSelectServerTextfieldFooterLogin,
+        #expect(String(context.viewState.footerMessage) == L10n.screenChangeServerTextfieldFooterLogin,
                 "The standard footer message should be shown again.")
     }
     

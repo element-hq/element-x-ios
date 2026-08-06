@@ -1663,6 +1663,30 @@ internal nonisolated enum L10n {
   internal static func screenChangeServerErrorUnauthorizedHomeserverTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver_title", String(describing: p1))
   }
+  /// Homeserver URL
+  internal static var screenChangeServerFormHeader: String { return L10n.tr("Localizable", "screen_change_server_form_header") }
+  /// Enter a domain address.
+  internal static var screenChangeServerFormNotice: String { return L10n.tr("Localizable", "screen_change_server_form_notice") }
+  /// Sign in
+  internal static var screenChangeServerNavigationTitleLogin: String { return L10n.tr("Localizable", "screen_change_server_navigation_title_login") }
+  /// Create account
+  internal static var screenChangeServerNavigationTitleRegister: String { return L10n.tr("Localizable", "screen_change_server_navigation_title_register") }
+  /// What is the address of your server?
+  internal static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
+  /// If your account is provided by your company or a community, then change the account provider (example: companyname.com).
+  internal static var screenChangeServerTextfieldFooterLogin: String { return L10n.tr("Localizable", "screen_change_server_textfield_footer_login") }
+  /// Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).
+  internal static var screenChangeServerTextfieldFooterRegister: String { return L10n.tr("Localizable", "screen_change_server_textfield_footer_register") }
+  /// Account provider
+  internal static var screenChangeServerTextfieldHeader: String { return L10n.tr("Localizable", "screen_change_server_textfield_header") }
+  /// example.com
+  internal static var screenChangeServerTextfieldPlaceholder: String { return L10n.tr("Localizable", "screen_change_server_textfield_placeholder") }
+  /// Select your server
+  internal static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
+  /// Enter your account provider
+  internal static var screenChangeServerTitleLogin: String { return L10n.tr("Localizable", "screen_change_server_title_login") }
+  /// Choose an account provider
+  internal static var screenChangeServerTitleRegister: String { return L10n.tr("Localizable", "screen_change_server_title_register") }
   /// Delete key storage
   internal static var screenChatBackupKeyBackupActionDisable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_disable") }
   /// Turn on backup

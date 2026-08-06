@@ -27,10 +27,9 @@ struct ServerSelectionScreen: View {
     }
     
     var body: some View {
-        FullscreenDialog {
+        FullscreenDialog(topPadding: 24) {
             VStack(spacing: 0) {
                 header
-                    .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
                     .padding(.bottom, 36)
                 
                 serverForm
@@ -68,8 +67,8 @@ struct ServerSelectionScreen: View {
         VStack(alignment: .leading, spacing: 24) {
             switch context.viewState.mode {
             case .userInput:
-                TextField(UntranslatedL10n.screenSelectServerTextfieldPlaceholder, text: $context.homeserverAddress, selection: $context.homeserverSelection)
-                    .textFieldStyle(.compound(labelText: Text(UntranslatedL10n.screenSelectServerTextfieldHeader),
+                TextField(L10n.screenChangeServerTextfieldPlaceholder, text: $context.homeserverAddress, selection: $context.homeserverSelection)
+                    .textFieldStyle(.compound(labelText: Text(L10n.screenChangeServerTextfieldHeader),
                                               footerText: Text(context.viewState.footerMessage),
                                               state: context.viewState.isShowingFooterError ? .error : .default,
                                               accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
@@ -121,6 +120,8 @@ private struct FakeInlinePicker: View {
                         kind: .selection(isSelected: selection == item) {
                             selection = item
                         })
+                        .accessibilityLabel(item)
+                        .accessibilityIdentifier(item)
                         .overlay(alignment: .bottom) {
                             if item != items.last {
                                 Divider()

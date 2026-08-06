@@ -45,9 +45,9 @@ struct ServerSelectionScreenViewState: BindableState {
     var screenTitle: String {
         switch authenticationFlow {
         case .login:
-            UntranslatedL10n.screenSelectServerNavigationTitleLogin
+            L10n.screenChangeServerNavigationTitleLogin
         case .register:
-            UntranslatedL10n.screenSelectServerNavigationTitleRegister
+            L10n.screenChangeServerNavigationTitleRegister
         }
     }
     
@@ -55,9 +55,9 @@ struct ServerSelectionScreenViewState: BindableState {
     var screenHeader: String {
         switch authenticationFlow {
         case .login:
-            UntranslatedL10n.screenSelectServerTitleLogin
+            L10n.screenChangeServerTitleLogin
         case .register:
-            UntranslatedL10n.screenSelectServerTitleRegister
+            L10n.screenChangeServerTitleRegister
         }
     }
     
@@ -65,9 +65,9 @@ struct ServerSelectionScreenViewState: BindableState {
     var regularFooterMessage: String {
         switch authenticationFlow {
         case .login:
-            UntranslatedL10n.screenSelectServerTextfieldFooterLogin
+            L10n.screenChangeServerTextfieldFooterLogin
         case .register:
-            UntranslatedL10n.screenSelectServerTextfieldFooterRegister
+            L10n.screenChangeServerTextfieldFooterRegister
         }
     }
     
