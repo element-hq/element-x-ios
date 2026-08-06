@@ -8,7 +8,7 @@
 import XCTest
 
 /// Paginated Sync experiment smoke test: logs into a plain synapse (password
-/// login, no MAS) whose experimental `org.matrix.paginated_sync` endpoint
+/// login, no MAS) whose experimental `org.matrix.msc4525` endpoint
 /// drives the room list (the app setting defaults to on for this branch), and
 /// checks the room list populates.
 ///

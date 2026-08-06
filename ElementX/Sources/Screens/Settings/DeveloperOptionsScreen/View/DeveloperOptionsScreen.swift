@@ -86,7 +86,7 @@ struct DeveloperOptionsScreen: View {
 
                 Toggle(isOn: $context.paginatedSyncEnabled) {
                     Text("Paginated sync")
-                    Text("Requires a server with org.matrix.paginated_sync and an app reboot")
+                    Text("Requires a server with org.matrix.msc4525 and an app reboot")
                 }
             }
             

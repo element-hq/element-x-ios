@@ -438,8 +438,8 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var automaticBackPaginationEnabled: Bool
 
-    // Paginated Sync experiment (MSC TBD): drive the room list with the
-    // org.matrix.paginated_sync endpoint instead of Simplified Sliding Sync.
+    // Paginated Sync experiment (MSC4525): drive the room list with the
+    // org.matrix.msc4525 endpoint instead of Simplified Sliding Sync.
     // Requires a server implementing the unstable endpoint. Experiment
     // branch: default ON (toggle off in Developer Options for A/B).
     @UserPreference(defaultValue: true)
