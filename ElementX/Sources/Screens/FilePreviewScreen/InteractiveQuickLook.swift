@@ -163,6 +163,16 @@ class MediaPreviewItem: NSObject, QLPreviewItem {
         self.file = file
         previewItemTitle = title
     }
+    
+    /// Loads the media at the given URL, guessing at a JPEG for callers such as avatars that don't know the real mime type.
+    static func load(from url: URL, title: String?, mimeType: String = "image/jpeg", using mediaProvider: MediaProviderProtocol) async -> MediaPreviewItem? {
+        guard let mediaSource = try? MediaSourceProxy(url: url, mimeType: mimeType),
+              case let .success(file) = await mediaProvider.loadFileFromSource(mediaSource) else {
+            return nil
+        }
+        
+        return MediaPreviewItem(file: file, title: title)
+    }
 }
 
 // MARK: - Previews
