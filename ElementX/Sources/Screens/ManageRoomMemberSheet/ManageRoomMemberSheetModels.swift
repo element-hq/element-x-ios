@@ -6,6 +6,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Foundation
+
 enum ManageRoomMemberSheetViewModelAction: Equatable {
     case dismiss(shouldShowDetails: Bool)
 }
@@ -46,6 +48,7 @@ struct ManageRoomMemberSheetViewState: BindableState {
 
 struct ManageRoomMemberSheetViewStateBindings {
     var alertInfo: AlertInfo<ManageRoomMemberSheetViewAlertType>?
+    var mediaPreviewItem: MediaPreviewItem?
 }
 
 enum ManageRoomMemberSheetViewAlertType {
@@ -59,6 +62,7 @@ enum ManageRoomMemberSheetViewAction {
     case ban
     case unban
     case displayDetails
+    case displayAvatar(URL)
 }
 
 enum ManageRoomMemberDetails {
