@@ -440,8 +440,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
 
     // Paginated Sync experiment (MSC TBD): drive the room list with the
     // org.matrix.paginated_sync endpoint instead of Simplified Sliding Sync.
-    // Requires a server implementing the unstable endpoint.
-    @UserPreference(defaultValue: false)
+    // Requires a server implementing the unstable endpoint. Experiment
+    // branch: default ON (toggle off in Developer Options for A/B).
+    @UserPreference(defaultValue: true)
     var paginatedSyncEnabled: Bool
     
     @UserPreference(key: "clientPausingAndResumingEnabledV2", defaultValue: false, volatile: true)
