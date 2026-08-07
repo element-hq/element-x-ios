@@ -3305,60 +3305,32 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return setUserStatusReturnValue
         }
     }
-    //MARK: - removeUserStatus
+    //MARK: - clearUserStatus
 
-    private let removeUserStatusCallsCountLock = NSLock()
-    private nonisolated(unsafe) var removeUserStatusUnderlyingCallsCount = 0
-    var removeUserStatusCallsCount: Int {
-        get { removeUserStatusCallsCountLock.withLock { removeUserStatusUnderlyingCallsCount } }
-        set { removeUserStatusCallsCountLock.withLock { removeUserStatusUnderlyingCallsCount = newValue } }
+    private let clearUserStatusCallsCountLock = NSLock()
+    private nonisolated(unsafe) var clearUserStatusUnderlyingCallsCount = 0
+    var clearUserStatusCallsCount: Int {
+        get { clearUserStatusCallsCountLock.withLock { clearUserStatusUnderlyingCallsCount } }
+        set { clearUserStatusCallsCountLock.withLock { clearUserStatusUnderlyingCallsCount = newValue } }
     }
-    var removeUserStatusCalled: Bool {
-        return removeUserStatusCallsCount > 0
+    var clearUserStatusCalled: Bool {
+        return clearUserStatusCallsCount > 0
     }
 
-    private let removeUserStatusReturnValueLock = NSLock()
-    private nonisolated(unsafe) var removeUserStatusUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var removeUserStatusReturnValue: Result<Void, ClientProxyError>! {
-        get { removeUserStatusReturnValueLock.withLock { removeUserStatusUnderlyingReturnValue } }
-        set { removeUserStatusReturnValueLock.withLock { removeUserStatusUnderlyingReturnValue = newValue } }
+    private let clearUserStatusReturnValueLock = NSLock()
+    private nonisolated(unsafe) var clearUserStatusUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var clearUserStatusReturnValue: Result<Void, ClientProxyError>! {
+        get { clearUserStatusReturnValueLock.withLock { clearUserStatusUnderlyingReturnValue } }
+        set { clearUserStatusReturnValueLock.withLock { clearUserStatusUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var removeUserStatusClosure: (() async -> Result<Void, ClientProxyError>)?
+    nonisolated(unsafe) var clearUserStatusClosure: (() async -> Result<Void, ClientProxyError>)?
 
-    @concurrent func removeUserStatus() async -> Result<Void, ClientProxyError> {
-        removeUserStatusCallsCountLock.withLock { removeUserStatusUnderlyingCallsCount += 1 }
-        if let removeUserStatusClosure = removeUserStatusClosure {
-            return await removeUserStatusClosure()
+    @concurrent func clearUserStatus() async -> Result<Void, ClientProxyError> {
+        clearUserStatusCallsCountLock.withLock { clearUserStatusUnderlyingCallsCount += 1 }
+        if let clearUserStatusClosure = clearUserStatusClosure {
+            return await clearUserStatusClosure()
         } else {
-            return removeUserStatusReturnValue
-        }
-    }
-    //MARK: - removeCallStatus
-
-    private let removeCallStatusCallsCountLock = NSLock()
-    private nonisolated(unsafe) var removeCallStatusUnderlyingCallsCount = 0
-    var removeCallStatusCallsCount: Int {
-        get { removeCallStatusCallsCountLock.withLock { removeCallStatusUnderlyingCallsCount } }
-        set { removeCallStatusCallsCountLock.withLock { removeCallStatusUnderlyingCallsCount = newValue } }
-    }
-    var removeCallStatusCalled: Bool {
-        return removeCallStatusCallsCount > 0
-    }
-
-    private let removeCallStatusReturnValueLock = NSLock()
-    private nonisolated(unsafe) var removeCallStatusUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var removeCallStatusReturnValue: Result<Void, ClientProxyError>! {
-        get { removeCallStatusReturnValueLock.withLock { removeCallStatusUnderlyingReturnValue } }
-        set { removeCallStatusReturnValueLock.withLock { removeCallStatusUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var removeCallStatusClosure: (() async -> Result<Void, ClientProxyError>)?
-
-    @concurrent func removeCallStatus() async -> Result<Void, ClientProxyError> {
-        removeCallStatusCallsCountLock.withLock { removeCallStatusUnderlyingCallsCount += 1 }
-        if let removeCallStatusClosure = removeCallStatusClosure {
-            return await removeCallStatusClosure()
-        } else {
-            return removeCallStatusReturnValue
+            return clearUserStatusReturnValue
         }
     }
     //MARK: - linkNewDeviceService

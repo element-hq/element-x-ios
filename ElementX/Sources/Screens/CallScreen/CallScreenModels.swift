@@ -21,6 +21,8 @@ struct CallScreenViewState: BindableState {
     var url: URL?
     
     var bindings = Bindings()
+    
+    var swiftUICallViewCoordinator: CallView.Coordinator?
 }
 
 struct Bindings {

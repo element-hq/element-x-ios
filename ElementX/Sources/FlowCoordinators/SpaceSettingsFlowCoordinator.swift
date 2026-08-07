@@ -211,6 +211,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSpaceSettings(animated: Bool) {
         let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                          userSession: flowParameters.userSession,
+                                                                         appHooks: flowParameters.appHooks,
                                                                          analyticsService: flowParameters.analytics,
                                                                          userIndicatorController: flowParameters.userIndicatorController,
                                                                          notificationSettings: flowParameters.userSession.clientProxy.notificationSettings,

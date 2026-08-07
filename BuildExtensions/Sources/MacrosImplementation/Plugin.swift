@@ -10,5 +10,5 @@ import SwiftSyntaxMacros
 
 @main
 struct BuildExtensionsPlugin: CompilerPlugin {
-    let providingMacros: [Macro.Type] = [UserPreferenceMacro.self]
+    let providingMacros: [Macro.Type] = [UserPreferenceMacro.self, AppHookMacro.self]
 }

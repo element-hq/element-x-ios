@@ -18,13 +18,17 @@ struct ManageRoomMemberSheetView: View {
             case .memberDetails(let member):
                 AvatarHeaderView(member: member,
                                  avatarSize: .user(on: .memberDetails),
-                                 mediaProvider: context.mediaProvider) {
+                                 mediaProvider: context.mediaProvider) { url in
+                    context.send(viewAction: .displayAvatar(url))
+                } footer: {
                     EmptyView()
                 }
             case .loadingMemberDetails(let sender):
                 AvatarHeaderView(sender: sender,
                                  avatarSize: .user(on: .memberDetails),
-                                 mediaProvider: context.mediaProvider) {
+                                 mediaProvider: context.mediaProvider) { url in
+                    context.send(viewAction: .displayAvatar(url))
+                } footer: {
                     EmptyView()
                 }
             }
@@ -76,6 +80,7 @@ struct ManageRoomMemberSheetView: View {
         .presentationDragIndicator(.visible)
         .presentationDetents([.large, .fraction(0.67)]) // Maybe find a way to use the ideal height somehow?
         .alert(item: $context.alertInfo)
+        .interactiveQuickLook(item: $context.mediaPreviewItem, allowEditing: false)
     }
 }
 

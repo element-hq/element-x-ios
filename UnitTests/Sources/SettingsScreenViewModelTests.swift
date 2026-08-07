@@ -58,7 +58,7 @@ struct SettingsScreenViewModelTests {
         // Given a screen where no status has been set or removed yet.
         setupViewModel()
         #expect(clientProxy.setUserStatusCallsCount == 0)
-        #expect(clientProxy.removeUserStatusCallsCount == 0)
+        #expect(clientProxy.clearUserStatusCallsCount == 0)
         
         // When setting a status.
         let status = UserStatus.Raw(text: "Away", emoji: "🌴")
@@ -73,21 +73,20 @@ struct SettingsScreenViewModelTests {
         // Then only the set endpoint should be called, with the chosen status.
         #expect(try await statusSet.fulfill() == status)
         #expect(clientProxy.setUserStatusCallsCount == 1)
-        #expect(clientProxy.removeUserStatusCallsCount == 0)
+        #expect(clientProxy.clearUserStatusCallsCount == 0)
         
         // When clearing the status.
         let (removeStream, removeContinuation) = AsyncStream<Void>.makeStream()
-        clientProxy.removeUserStatusClosure = {
+        clientProxy.clearUserStatusClosure = {
             removeContinuation.yield()
             return .success(())
         }
         let statusRemoved = deferFulfillment(removeStream) { _ in true }
-        context.send(viewAction: .userStatus(.clear(.userSet(status))))
+        context.send(viewAction: .userStatus(.clear))
         
-        // Then only the remove user status endpoint should be called.
+        // Then the clear user status endpoint should be called.
         try await statusRemoved.fulfill()
-        #expect(clientProxy.removeUserStatusCallsCount == 1)
-        #expect(!clientProxy.removeCallStatusCalled)
+        #expect(clientProxy.clearUserStatusCallsCount == 1)
         #expect(clientProxy.setUserStatusCallsCount == 1)
     }
     
@@ -96,21 +95,21 @@ struct SettingsScreenViewModelTests {
         // Given a screen where the user has a call status set.
         let callStatus = UserStatus.mockCall
         setupViewModel(status: callStatus)
-        let displayedStatus = try #require(callStatus.displayed)
+        #expect(!clientProxy.clearUserStatusCalled)
+        #expect(!clientProxy.setUserStatusCalled)
         
         // When clearing the status.
         let (removeStream, removeContinuation) = AsyncStream<Void>.makeStream()
-        clientProxy.removeCallStatusClosure = {
+        clientProxy.clearUserStatusClosure = {
             removeContinuation.yield()
             return .success(())
         }
         let statusRemoved = deferFulfillment(removeStream) { _ in true }
-        context.send(viewAction: .userStatus(.clear(displayedStatus)))
+        context.send(viewAction: .userStatus(.clear))
         
-        // Then only the remove endpoint should be called, leaving the set call untouched.
+        // Then the clear user status endpoint should be called.
         try await statusRemoved.fulfill()
-        #expect(clientProxy.removeCallStatusCallsCount == 1)
-        #expect(!clientProxy.removeUserStatusCalled)
+        #expect(clientProxy.clearUserStatusCallsCount == 1)
         #expect(!clientProxy.setUserStatusCalled)
     }
     

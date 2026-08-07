@@ -132,6 +132,7 @@ struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                         canonicalAlias: "#space:matrix.org",
                                                                         members: members)),
                                    userSession: UserSessionMock(.init()),
+                                   appHooks: AppHooks(),
                                    analyticsService: AnalyticsServiceMock(.init()),
                                    userIndicatorController: UserIndicatorControllerMock(),
                                    notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
