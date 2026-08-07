@@ -249,7 +249,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         // Building the room summaries (SDK fetches + string building) and applying the
         // CollectionDifference can be expensive, so compute off the main actor and only
         // hop back to publish the result.
+        let visibleBefore = Self.visibleSignature(of: rooms)
         rooms = await Self.updatedRooms(from: diffs, on: rooms, eventStringBuilder: eventStringBuilder, name: name)
+        // Launch instrumentation: track when the top of the home list stops changing.
+        if shouldUpdateVisibleRange, Self.visibleSignature(of: rooms) != visibleBefore {
+            LaunchMetrics.noteVisibleChurn()
+        }
+    }
+
+    /// What a user actually sees at the top of the list: room identity, ordering and
+    /// preview content (hashValue is process-stable, which is all change detection needs).
+    private nonisolated static func visibleSignature(of rooms: [RoomSummary]) -> [String] {
+        rooms.prefix(12).map { "\($0.id)|\($0.lastMessageDate?.timeIntervalSince1970 ?? 0)|\($0.lastMessage?.description.hashValue ?? 0)" }
     }
     
     @concurrent

@@ -212,7 +212,14 @@ class ClientProxy: ClientProxyProtocol {
         self.networkMonitor = networkMonitor
         self.appSettings = appSettings
         self.analyticsService = analyticsService
-        
+
+        LaunchMetrics.setTrafficProvider { [weak client] in
+            guard let stats = client?.trafficStats() else { return nil }
+            return .init(uploadedBytes: stats.uploadedBytes,
+                         downloadedBytes: stats.downloadedBytes,
+                         requestCount: stats.requestCount)
+        }
+
         userProfileSubject = .init(UserProfile(userID: (try? client.userId()) ?? ""))
         
         mediaLoader = MediaLoader(client: client)
@@ -1174,7 +1181,9 @@ class ClientProxy: ClientProxyProtocol {
             
             // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
-            await cacheAccountURL()
+            // Fire-and-forget: it fetches auth_metadata over the network, and awaiting it here serialises
+            // every subsequent pause/resume transition behind that request (measured 47s offline).
+            Task { await self.cacheAccountURL() }
             
             // Nudge the send queue listener to re-evaluate now that we're running; a resume doesn't otherwise
             // emit, and the SDK only re-enables queues when client.resume() runs (gated behind the flag).
@@ -1330,6 +1339,7 @@ class ClientProxy: ClientProxyProtocol {
             case .initial, .settingUp, .recovering:
                 break // Don't do anything until we're actually running.
             case .running:
+                LaunchMetrics.noteRoomListRunning()
                 // Hide the sync spinner as soon as we get any update back
                 actionsSubject.send(.receivedSyncUpdate)
                 

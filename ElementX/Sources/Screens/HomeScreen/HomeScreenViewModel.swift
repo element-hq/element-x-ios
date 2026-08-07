@@ -357,6 +357,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         if roomListMode == .rooms, state.roomListMode == .skeletons {
             analyticsService.signpost.finishTransaction(.cachedRoomList)
+            LaunchMetrics.noteRoomsShown()
         }
         
         state.roomListMode = roomListMode
