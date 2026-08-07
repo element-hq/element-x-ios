@@ -310,6 +310,13 @@ class ClientProxy: ClientProxyProtocol {
             mediaPreviewConfigListenerTaskHandle = await createMediaPreviewConfigObserver()
         }
         
+        if appSettings.userStatusEnabled {
+            Task {
+                guard case .success(true) = await isUserStatusSupported() else { return }
+                client.enableAutomaticCallStatus(enabled: true)
+            }
+        }
+        
         liveLocationOwnInfoUpdatesListenerTaskHandle = createLiveLocationOwnInfoUpdatesObserver()
     }
     
