@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import UIKit
 
 enum Avatars {
     enum Size {
@@ -37,33 +36,6 @@ enum Avatars {
         @MainActor var scaledSize: CGSize {
             CGSize(width: scaledValue, height: scaledValue)
         }
-    }
-    
-    /// Media repo thumbnails are scaled, not cropped, so they keep the source's aspect
-    /// ratio. System UI (share sheet suggestions, notifications) stretches non-square
-    /// images to fill its circle, so centre-crop to a square before donating them.
-    nonisolated static func squareAvatarImageData(from data: Data) -> Data? {
-        guard let image = UIImage(data: data) else { return nil }
-        
-        let side = min(image.size.width, image.size.height)
-        guard side > 0 else { return nil }
-        
-        if image.size.width == image.size.height {
-            return data
-        }
-        
-        let format = UIGraphicsImageRendererFormat()
-        // UIImage(data:) decodes at scale 1; pin the renderer to that so the
-        // output isn't silently multiplied by the device's screen scale.
-        format.scale = image.scale
-        
-        return UIGraphicsImageRenderer(size: CGSize(width: side, height: side), format: format)
-            .pngData { _ in
-                // Round the offsets to pixel boundaries so the crop is a straight
-                // copy rather than resampling (and softening) the whole image.
-                image.draw(at: CGPoint(x: ((side - image.size.width) / 2).rounded(),
-                                       y: ((side - image.size.height) / 2).rounded()))
-            }
     }
     
     @MainActor

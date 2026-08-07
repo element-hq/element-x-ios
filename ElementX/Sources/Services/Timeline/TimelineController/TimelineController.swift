@@ -652,7 +652,7 @@ class TimelineController: TimelineControllerProtocol {
         if let avatarURL, let mediaSource = try? MediaSourceProxy(url: avatarURL, mimeType: nil) {
             // Request a generous size so the square crop of a non-square avatar keeps enough resolution.
             if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 256, height: 256)) {
-                if let squareAvatarData = Avatars.squareAvatarImageData(from: avatarData) {
+                if let squareAvatarData = Self.squareAvatarImageData(from: avatarData) {
                     sendMessageIntent.setImage(INImage(imageData: squareAvatarData), forParameterNamed: \.speakableGroupName)
                 } else {
                     MXLog.error("Failed processing the room avatar for the send message intent, using a placeholder.")
@@ -672,6 +672,35 @@ class TimelineController: TimelineControllerProtocol {
         } catch {
             MXLog.error("Failed donating send message intent with error: \(error)")
         }
+    }
+}
+
+private extension TimelineController {
+    /// Media repo thumbnails are scaled, not cropped, so they keep the source's aspect
+    /// ratio. The share sheet's conversation suggestions stretch the donated image to fill
+    /// their circle, so centre-crop it to a square first.
+    static func squareAvatarImageData(from data: Data) -> Data? {
+        guard let image = UIImage(data: data) else { return nil }
+        
+        let side = min(image.size.width, image.size.height)
+        guard side > 0 else { return nil }
+        
+        if image.size.width == image.size.height {
+            return data
+        }
+        
+        let format = UIGraphicsImageRendererFormat()
+        // UIImage(data:) decodes at scale 1; pin the renderer to that so the
+        // output isn't silently multiplied by the device's screen scale.
+        format.scale = image.scale
+        
+        return UIGraphicsImageRenderer(size: CGSize(width: side, height: side), format: format)
+            .pngData { _ in
+                // Round the offsets to pixel boundaries so the crop is a straight
+                // copy rather than resampling (and softening) the whole image.
+                image.draw(at: CGPoint(x: ((side - image.size.width) / 2).rounded(),
+                                       y: ((side - image.size.height) / 2).rounded()))
+            }
     }
 }
 
