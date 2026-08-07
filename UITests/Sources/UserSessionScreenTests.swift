@@ -126,10 +126,10 @@ class UserSessionScreenTests: XCTestCase {
         // Open the room members list.
         app.buttons[A11yIdentifiers.roomDetailsScreen.people].tap()
         
-        // Open the first member's details. Loading members for big rooms can take a while.
-        let firstRoomMember = app.scrollViews.buttons.firstMatch
-        XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 1000.0))
-        firstRoomMember.tap(.center)
+        // Open a member's details.
+        let roomMember = app.buttons[A11yIdentifiers.roomMembersListScreen.member("@alice:matrix.org")]
+        XCTAssertTrue(roomMember.waitForExistence(timeout: 10.0))
+        roomMember.tap(.center)
         
         // Open the profile from the bottom sheet
         let viewProfileButton = app.buttons[A11yIdentifiers.manageRoomMemberSheet.viewProfile]

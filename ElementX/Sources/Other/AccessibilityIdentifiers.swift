@@ -325,6 +325,11 @@ enum A11yIdentifiers {
     
     struct RoomMembersListScreen {
         let invite = "room_members_list_screen-invite"
+        
+        let roomMemberPrefix = "room_members_list_screen-member"
+        func member(_ userID: String) -> String {
+            "\(roomMemberPrefix):\(userID)"
+        }
     }
     
     struct ManageRoomMemberSheet {

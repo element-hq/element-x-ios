@@ -14,8 +14,8 @@ typealias UserProfileScreenViewModelType = StateStoreViewModelV2<UserProfileScre
 
 class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsServiceProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<UserProfileScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserProfileScreenViewModelAction, Never> {
@@ -25,18 +25,20 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     init(userID: String,
          isPresentedModally: Bool,
          userSession: UserSessionProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         analytics: AnalyticsServiceProtocol) {
+         appHooks: AppHooks,
+         analytics: AnalyticsServiceProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
-        self.userIndicatorController = userIndicatorController
         self.analytics = analytics
+        self.userIndicatorController = userIndicatorController
         
         let initialViewState = UserProfileScreenViewState(userID: userID,
                                                           isOwnUser: userID == userSession.clientProxy.userID,
                                                           isPresentedModally: isPresentedModally,
                                                           bindings: .init())
         
-        super.init(initialViewState: initialViewState, mediaProvider: userSession.mediaProvider)
+        super.init(initialViewState: appHooks.userProfileScreenHook.update(initialViewState),
+                   mediaProvider: userSession.mediaProvider)
         
         showLoadingIndicator(allowsInteraction: true)
         Task {
@@ -117,11 +119,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
-        // We don't actually know the mime type here, assume it's an image.
-        if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
-           case let .success(file) = await userSession.mediaProvider.loadFileFromSource(mediaSource) {
-            state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: userProfile.displayName)
-        }
+        state.bindings.mediaPreviewItem = await MediaPreviewItem.load(from: url, title: userProfile.displayName, using: userSession.mediaProvider)
     }
     
     private func openDirectChat() {

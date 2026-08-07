@@ -22,8 +22,9 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.id,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   userIndicatorController: userIndicatorController,
-                                                   analytics: AnalyticsServiceMock(.init()))
+                                                   appHooks: AppHooks(),
+                                                   analytics: AnalyticsServiceMock(.init()),
+                                                   userIndicatorController: userIndicatorController)
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
@@ -45,8 +46,9 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.id,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   userIndicatorController: userIndicatorController,
-                                                   analytics: AnalyticsServiceMock(.init()))
+                                                   appHooks: AppHooks(),
+                                                   analytics: AnalyticsServiceMock(.init()),
+                                                   userIndicatorController: userIndicatorController)
         let context = viewModel.context
         
         let waitForMemberToLoad = deferFulfillment(context.observe(\.viewState.userProfile)) { $0 != nil }
@@ -70,8 +72,9 @@ struct UserProfileScreenViewModelTests {
         let viewModel = UserProfileScreenViewModel(userID: profile.id,
                                                    isPresentedModally: false,
                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                   userIndicatorController: userIndicatorController,
-                                                   analytics: AnalyticsServiceMock(.init()))
+                                                   appHooks: AppHooks(),
+                                                   analytics: AnalyticsServiceMock(.init()),
+                                                   userIndicatorController: userIndicatorController)
         
         let context = viewModel.context
         

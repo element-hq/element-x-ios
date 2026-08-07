@@ -229,8 +229,8 @@ protocol ClientProxyProtocol: AnyObject {
     func removeUserAvatar() async -> Result<Void, ClientProxyError>
     func isUserStatusSupported() async -> Result<Bool, ClientProxyError>
     func setUserStatus(_ status: UserStatus.Raw) async -> Result<Void, ClientProxyError>
-    func removeUserStatus() async -> Result<Void, ClientProxyError>
-    func removeCallStatus() async -> Result<Void, ClientProxyError>
+    /// Removes both the `m.status` and `m.call` fields from the user's profile.
+    func clearUserStatus() async -> Result<Void, ClientProxyError>
     
     func linkNewDeviceService() -> LinkNewDeviceServiceProtocol
     
