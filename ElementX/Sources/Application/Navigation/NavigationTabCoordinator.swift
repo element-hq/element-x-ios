@@ -369,6 +369,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     .id(module.id)
             }
         }
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .introspect(.window, on: .supportedVersions) { window in
             guard self.window !== window else { return }
             
