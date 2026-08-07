@@ -18,15 +18,19 @@ struct ManageRoomMemberSheetView: View {
             case .memberDetails(let member):
                 AvatarHeaderView(member: member,
                                  avatarSize: .user(on: .memberDetails),
-                                 mediaProvider: context.mediaProvider,
-                                 onAvatarTap: { context.send(viewAction: .displayAvatar($0)) },
-                                 footer: { EmptyView() })
+                                 mediaProvider: context.mediaProvider) { url in
+                    context.send(viewAction: .displayAvatar(url))
+                } footer: {
+                    EmptyView()
+                }
             case .loadingMemberDetails(let sender):
                 AvatarHeaderView(sender: sender,
                                  avatarSize: .user(on: .memberDetails),
-                                 mediaProvider: context.mediaProvider,
-                                 onAvatarTap: { context.send(viewAction: .displayAvatar($0)) },
-                                 footer: { EmptyView() })
+                                 mediaProvider: context.mediaProvider) { url in
+                    context.send(viewAction: .displayAvatar(url))
+                } footer: {
+                    EmptyView()
+                }
             }
             
             Section {
