@@ -257,14 +257,9 @@ nonisolated struct NotificationContentBuilder {
         let image: INImage
         if !forcePlaceholder,
            let mediaSource = icon.mediaSource {
-            // Request a generous size so the square crop of a non-square avatar keeps enough resolution.
-            switch await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 256, height: 256)) {
+            switch await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
             case .success(let data):
-                if let squareData = Avatars.squareAvatarImageData(from: data) {
-                    fetchedImage = INImage(imageData: squareData)
-                } else {
-                    MXLog.error("Couldn't decode the fetched sender icon, using a placeholder.")
-                }
+                fetchedImage = INImage(imageData: data)
             case .failure(let error):
                 MXLog.error("Couldn't add sender icon: \(error)")
             }
