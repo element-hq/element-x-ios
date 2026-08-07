@@ -176,11 +176,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
-        // We don't actually know the mime type here, assume it's an image.
-        if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
-           case let .success(file) = await userSession.mediaProvider.loadFileFromSource(mediaSource) {
-            state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
-        }
+        state.bindings.mediaPreviewItem = await MediaPreviewItem.load(from: url, title: roomMemberProxy.displayName, using: userSession.mediaProvider)
     }
     
     private func openDirectChat() {

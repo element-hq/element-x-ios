@@ -119,11 +119,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
-        // We don't actually know the mime type here, assume it's an image.
-        if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
-           case let .success(file) = await userSession.mediaProvider.loadFileFromSource(mediaSource) {
-            state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: userProfile.displayName)
-        }
+        state.bindings.mediaPreviewItem = await MediaPreviewItem.load(from: url, title: userProfile.displayName, using: userSession.mediaProvider)
     }
     
     private func openDirectChat() {
