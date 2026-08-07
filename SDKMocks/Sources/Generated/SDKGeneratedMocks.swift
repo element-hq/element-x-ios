@@ -1723,34 +1723,48 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - isLivekitRtcSupported
 
-    open var isLivekitRtcSupportedThrowableError: Error?
-    private let isLivekitRtcSupportedCallsCountLock = NSLock()
-    private var isLivekitRtcSupportedUnderlyingCallsCount = 0
-    open var isLivekitRtcSupportedCallsCount: Int {
-        get { isLivekitRtcSupportedCallsCountLock.withLock { isLivekitRtcSupportedUnderlyingCallsCount } }
-        set { isLivekitRtcSupportedCallsCountLock.withLock { isLivekitRtcSupportedUnderlyingCallsCount = newValue } }
+    open var isLivekitRtcSupportedFallbackToWellKnownThrowableError: Error?
+    private let isLivekitRtcSupportedFallbackToWellKnownCallsCountLock = NSLock()
+    private var isLivekitRtcSupportedFallbackToWellKnownUnderlyingCallsCount = 0
+    open var isLivekitRtcSupportedFallbackToWellKnownCallsCount: Int {
+        get { isLivekitRtcSupportedFallbackToWellKnownCallsCountLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingCallsCount } }
+        set { isLivekitRtcSupportedFallbackToWellKnownCallsCountLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingCallsCount = newValue } }
     }
-    open var isLivekitRtcSupportedCalled: Bool {
-        return isLivekitRtcSupportedCallsCount > 0
+    open var isLivekitRtcSupportedFallbackToWellKnownCalled: Bool {
+        return isLivekitRtcSupportedFallbackToWellKnownCallsCount > 0
+    }
+    private let isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnownLock = NSLock()
+    private var isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedFallbackToWellKnown: Bool?
+    open var isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnown: Bool? {
+        get { isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnownLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedFallbackToWellKnown } }
+        set { isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnownLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedFallbackToWellKnown = newValue } }
+    }
+    private let isLivekitRtcSupportedFallbackToWellKnownReceivedInvocationsLock = NSLock()
+    private var isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedInvocations: [Bool] = []
+    open var isLivekitRtcSupportedFallbackToWellKnownReceivedInvocations: [Bool] {
+        get { isLivekitRtcSupportedFallbackToWellKnownReceivedInvocationsLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedInvocations } }
+        set { isLivekitRtcSupportedFallbackToWellKnownReceivedInvocationsLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let isLivekitRtcSupportedReturnValueLock = NSLock()
-    open var isLivekitRtcSupportedUnderlyingReturnValue: Bool!
-    open var isLivekitRtcSupportedReturnValue: Bool! {
-        get { isLivekitRtcSupportedReturnValueLock.withLock { isLivekitRtcSupportedUnderlyingReturnValue } }
-        set { isLivekitRtcSupportedReturnValueLock.withLock { isLivekitRtcSupportedUnderlyingReturnValue = newValue } }
+    private let isLivekitRtcSupportedFallbackToWellKnownReturnValueLock = NSLock()
+    open var isLivekitRtcSupportedFallbackToWellKnownUnderlyingReturnValue: Bool!
+    open var isLivekitRtcSupportedFallbackToWellKnownReturnValue: Bool! {
+        get { isLivekitRtcSupportedFallbackToWellKnownReturnValueLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReturnValue } }
+        set { isLivekitRtcSupportedFallbackToWellKnownReturnValueLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReturnValue = newValue } }
     }
-    open var isLivekitRtcSupportedClosure: (() async throws -> Bool)?
+    open var isLivekitRtcSupportedFallbackToWellKnownClosure: ((Bool) async throws -> Bool)?
 
-    open override func isLivekitRtcSupported() async throws -> Bool {
-        if let error = isLivekitRtcSupportedThrowableError {
+    open override func isLivekitRtcSupported(fallbackToWellKnown: Bool = false) async throws -> Bool {
+        if let error = isLivekitRtcSupportedFallbackToWellKnownThrowableError {
             throw error
         }
-        isLivekitRtcSupportedCallsCountLock.withLock { isLivekitRtcSupportedUnderlyingCallsCount += 1 }
-        if let isLivekitRtcSupportedClosure = isLivekitRtcSupportedClosure {
-            return try await isLivekitRtcSupportedClosure()
+        isLivekitRtcSupportedFallbackToWellKnownCallsCountLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingCallsCount += 1 }
+        isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnown = fallbackToWellKnown
+        isLivekitRtcSupportedFallbackToWellKnownReceivedInvocationsLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedInvocations.append(fallbackToWellKnown) }
+        if let isLivekitRtcSupportedFallbackToWellKnownClosure = isLivekitRtcSupportedFallbackToWellKnownClosure {
+            return try await isLivekitRtcSupportedFallbackToWellKnownClosure(fallbackToWellKnown)
         } else {
-            return isLivekitRtcSupportedReturnValue
+            return isLivekitRtcSupportedFallbackToWellKnownReturnValue
         }
     }
 

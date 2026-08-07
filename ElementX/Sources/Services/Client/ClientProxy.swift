@@ -362,7 +362,7 @@ class ClientProxy: ClientProxyProtocol {
     var isLiveKitRTCSupported: Bool {
         get async {
             do {
-                return try await client.isLivekitRtcSupported()
+                return try await client.isLivekitRtcSupported(fallbackToWellKnown: true)
             } catch {
                 MXLog.error("Failed checking LiveKit RTC support with error: \(error)")
                 return false

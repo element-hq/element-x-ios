@@ -11,6 +11,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
+import Synchronization
 import Testing
 
 @MainActor
@@ -305,10 +306,13 @@ final class RoomScreenViewModelTests {
     
     @Test
     func roomFullyRead() async {
-        await waitForConfirmation("Wait for fully read") { confirm in
+        let expectedReceipts: [ReceiptType] = [.read, .fullyRead]
+        let receivedReceipts = Mutex<[ReceiptType]>([])
+        
+        await waitForConfirmation("Wait for fully read", expectedCount: expectedReceipts.count) { confirm in
             let roomProxyMock = JoinedRoomProxyMock(.init(id: "MyRoomID"))
             roomProxyMock.markAsReadReceiptTypeClosure = { readReceiptType in
-                #expect(readReceiptType == .fullyRead)
+                receivedReceipts.withLock { $0.append(readReceiptType) }
                 confirm()
                 return .success(())
             }
@@ -322,6 +326,8 @@ final class RoomScreenViewModelTests {
                                                 userIndicatorController: UserIndicatorControllerMock())
             viewModel.stop()
         }
+        
+        #expect(receivedReceipts.withLock { $0 } == expectedReceipts)
     }
     
     // MARK: - Knock Requests
