@@ -162,35 +162,55 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     }
     
     private func setUserStatus(_ status: UserStatus.Raw) async {
-        // Loading state tbc
+        showSavingIndicator()
+        defer { hideSavingIndicator() }
+        
         state.bindings.isPresentingStatusPicker = false
         state.bindings.isShowingCustomStatusField = false
         
-        switch await clientProxy.setUserStatus(status) {
-        case .success:
-            break // Loading/error state tbc
-        case .failure:
-            userIndicatorController.submitIndicator(.init(id: UUID().uuidString,
-                                                          type: .toast,
-                                                          title: L10n.errorUnknown,
-                                                          icon: \.close))
+        if case .failure = await clientProxy.setUserStatus(status) {
+            showFailureIndicator()
         }
     }
     
     /// Clears both the `UserStatus.Raw` and `UserStatus.Call` values simultaneously.
     private func clearUserStatus() async {
-        // Loading state tbc
+        showSavingIndicator()
+        defer { hideSavingIndicator() }
+        
         state.bindings.isPresentingStatusPicker = false
         state.bindings.isShowingCustomStatusField = false
         
-        switch await clientProxy.clearUserStatus() {
-        case .success:
-            break // Loading/error state tbc
-        case .failure:
-            userIndicatorController.submitIndicator(.init(id: UUID().uuidString,
-                                                          type: .toast,
-                                                          title: L10n.errorUnknown,
-                                                          icon: \.close))
+        if case .failure = await clientProxy.clearUserStatus() {
+            showFailureIndicator()
         }
+    }
+    
+    // MARK: - Indicators
+    
+    private static var savingIndicatorID: String {
+        "\(Self.self)-Saving"
+    }
+    
+    private static var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
+    
+    private func showSavingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.savingIndicatorID,
+                                                              type: .toast(progress: .indeterminate),
+                                                              title: L10n.commonSaving,
+                                                              persistent: true))
+    }
+    
+    private func hideSavingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.savingIndicatorID)
+    }
+    
+    private func showFailureIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,
+                                                              type: .toast,
+                                                              title: L10n.commonFailed,
+                                                              icon: \.close))
     }
 }
