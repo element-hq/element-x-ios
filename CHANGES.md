@@ -1,3 +1,47 @@
+## Changes in 26.08.1 (2026-08-04)
+
+### What's Changed
+
+✨ Features
+* Render replies to gallery items by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5942
+* Render gallery items in the media browser/gallery by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5955
+
+🙌 Improvements
+* Allow previews in the timeline to include filtered galleries by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5943
+* Set gallery sending limit to 60 when the gallery ff is on by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5960
+* Add a custom TabRail on iPad instead of the top tab bar. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5964
+* Small gallery tweaks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5957
+* Add call icon next to members in call by @nankeen by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5968
+
+🐛 Bugfixes
+* Fix rageshake upload progress bar by @danderson-cont in https://github.com/element-hq/element-x-ios/pull/5950
+* Fix for pagination getting stuck loading when swiping media previews in the timeline by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5963
+* Manually publish room list range updates when the content isn't scrollable by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5956
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5965
+
+🦻 Accessibility
+* A11y for Galleries by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5969
+
+🚧 In development 🚧
+* Fix a couple of missing `UserStatus` values. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5944
+* Allow clearing your own call status. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5959
+
+Others
+* Fix for some flaky tests part 2 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5939
+* Update the Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5953
+* Update zizmorcore/zizmor-action action to v0.6.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5961
+* Update Project Dependencies by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5940
+* Update actions/stale action to v11 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5971
+* Accessibility tests fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5976
+* Disable the store pausing feature as we encountered cases in which it doesn't work properly by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5977
+* Fix various UI test snapshots by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5975
+* Tweak the stalebot configuration by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5978
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.08.0...release/26.08.1
+
 ## Changes in 26.08.0 (2026-07-28)
 
 ### What's Changed

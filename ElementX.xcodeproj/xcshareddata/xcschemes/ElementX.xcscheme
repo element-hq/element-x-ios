@@ -88,6 +88,11 @@
             isEnabled = "NO">
          </EnvironmentVariable>
          <EnvironmentVariable
+            key = "HTTP_PROXY"
+            value = "localhost:9090"
+            isEnabled = "NO">
+         </EnvironmentVariable>
+         <EnvironmentVariable
             key = "UI_TESTS_SCREEN"
             value = ""
             isEnabled = "NO">

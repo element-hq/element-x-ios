@@ -22,6 +22,9 @@ schemes:
         - variable: HTTPS_PROXY
           value: localhost:9090
           isEnabled: false
+        - variable: HTTP_PROXY
+          value: localhost:9090
+          isEnabled: false
         - variable: UI_TESTS_SCREEN
           value: ""
           isEnabled: false

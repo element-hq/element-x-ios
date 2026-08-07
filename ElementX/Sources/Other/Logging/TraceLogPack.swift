@@ -10,8 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 nonisolated enum TraceLogPack: Codable, CaseIterable {
-    // RIG accommodation: `search` exists in the local rust-sdk (current main) but not yet in the
-    // pinned release this file tracked — added to keep the exhaustive switches compiling.
+    // `backPagination` only exists in the local rust-sdk branch (matthew/preview-prefill).
     case eventCache, backPagination, sendQueue, timeline, notificationClient, syncProfiling, latestEvents, search
 
     var title: String {
@@ -31,15 +30,15 @@ nonisolated enum TraceLogPack: Codable, CaseIterable {
 nonisolated extension TraceLogPack {
     // periphery:ignore - Unused, but added to detect new cases when updating the SDK.
     init(rustLogPack: MatrixRustSDK.TraceLogPacks) {
-        switch rustLogPack {
-        case .eventCache: self = .eventCache
-        case .backPagination: self = .backPagination
-        case .sendQueue: self = .sendQueue
-        case .timeline: self = .timeline
-        case .notificationClient: self = .notificationClient
-        case .syncProfiling: self = .syncProfiling
-        case .latestEvents: self = .latestEvents
-        case .search: self = .search
+        self = switch rustLogPack {
+        case .eventCache: .eventCache
+        case .backPagination: .backPagination
+        case .sendQueue: .sendQueue
+        case .timeline: .timeline
+        case .notificationClient: .notificationClient
+        case .syncProfiling: .syncProfiling
+        case .latestEvents: .latestEvents
+        case .search: .search
         }
     }
     

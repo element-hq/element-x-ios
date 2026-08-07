@@ -16,6 +16,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analyticsService: AnalyticsServiceProtocol
+    private let mediaProvider: MediaProviderProtocol
     
     private var actionsSubject: PassthroughSubject<ManageRoomMemberSheetViewModelAction, Never> = .init()
     
@@ -32,6 +33,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.analyticsService = analyticsService
+        self.mediaProvider = mediaProvider
         super.init(initialViewState: .init(memberDetails: memberDetails, permissions: permissions), mediaProvider: mediaProvider)
     }
     
@@ -45,6 +47,8 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
             actionsSubject.send(.dismiss(shouldShowDetails: true))
         case .unban:
             displayAlert(.unban)
+        case .displayAvatar(let url):
+            Task { await displayFullScreenAvatar(url) }
         }
     }
     
@@ -125,6 +129,14 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         case .failure:
             showManageMemberFailure(title: indicatorTitle)
         }
+    }
+    
+    private func displayFullScreenAvatar(_ url: URL) async {
+        let loadingIndicatorIdentifier = "manageRoomMemberAvatarLoadingIndicator"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+        defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
+        
+        state.bindings.mediaPreviewItem = await MediaPreviewItem.load(from: url, title: state.memberDetails.name, using: mediaProvider)
     }
     
     private func showManageMemberIndicator(title: String) {
