@@ -101,7 +101,7 @@ struct RoomMemberDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
             }
             
-            if let roomID = context.viewState.dmRoomID {
+            if let roomID = context.viewState.dmRoomID, context.viewState.isCallingEnabled {
                 Button {
                     context.send(viewAction: .startCall(roomID: roomID, isVoiceCall: true))
                 } label: {
@@ -239,7 +239,8 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         return RoomMemberDetailsScreenViewModel(userID: member.userID,
                                                 roomProxy: roomProxyMock,
                                                 userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                                                userIndicatorController: UserIndicatorControllerMock(),
-                                                analytics: AnalyticsServiceMock(.init()))
+                                                appHooks: AppHooks(),
+                                                analytics: AnalyticsServiceMock(.init()),
+                                                userIndicatorController: UserIndicatorControllerMock())
     }
 }

@@ -62,6 +62,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var canKickUsers = false
     var canBanUsers = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
+    var isCallingEnabled = true
     var canJoinCall = false
     var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
     
@@ -93,7 +94,7 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var shortcuts: [RoomDetailsScreenViewShortcut] {
         var shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
-        if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
+        if !ProcessInfo.processInfo.isiOSAppOnMac, isCallingEnabled, canJoinCall {
             if isDirect {
                 shortcuts.append(.voiceCall)
             }

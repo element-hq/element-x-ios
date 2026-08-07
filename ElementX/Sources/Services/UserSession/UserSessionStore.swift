@@ -184,7 +184,6 @@ class UserSessionStore: UserSessionStoreProtocol {
         MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
 
         Task(priority: .low) { await appHooks.remoteSettingsHook.updateCache(using: client) }
-        Task(priority: .low) { await client.updateMapTilerSettings(in: appSettings) }
 
         do {
             return try await .success(setupProxyForClient(client, prebuiltSyncService: session.syncService))

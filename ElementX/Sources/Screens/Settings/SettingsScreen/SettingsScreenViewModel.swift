@@ -108,8 +108,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             pickCustomEmoji()
         case .userStatus(.set(let status)):
             Task { await setUserStatus(status) }
-        case .userStatus(.clear(let status)):
-            Task { await clearUserStatus(status) }
+        case .userStatus(.clear):
+            Task { await clearUserStatus() }
         case .userStatus(.cancel):
             state.bindings.isPresentingStatusPicker = false
             state.bindings.isShowingCustomStatusField = false
@@ -161,42 +161,56 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         .asCancellable()
     }
     
-    func setUserStatus(_ status: UserStatus.Raw) async {
-        // Loading state tbc
+    private func setUserStatus(_ status: UserStatus.Raw) async {
+        showSavingIndicator()
+        defer { hideSavingIndicator() }
+        
         state.bindings.isPresentingStatusPicker = false
         state.bindings.isShowingCustomStatusField = false
         
-        switch await clientProxy.setUserStatus(status) {
-        case .success:
-            break // Loading/error state tbc
-        case .failure:
-            userIndicatorController.submitIndicator(.init(id: UUID().uuidString,
-                                                          type: .toast,
-                                                          title: L10n.errorUnknown,
-                                                          icon: \.close))
+        if case .failure = await clientProxy.setUserStatus(status) {
+            showFailureIndicator()
         }
     }
     
-    func clearUserStatus(_ status: UserStatus.Displayed) async {
-        // Loading state tbc
+    /// Clears both the `UserStatus.Raw` and `UserStatus.Call` values simultaneously.
+    private func clearUserStatus() async {
+        showSavingIndicator()
+        defer { hideSavingIndicator() }
+        
         state.bindings.isPresentingStatusPicker = false
         state.bindings.isShowingCustomStatusField = false
         
-        let result = switch status {
-        case .userSet:
-            await clientProxy.removeUserStatus()
-        case .inCall:
-            await clientProxy.removeCallStatus()
+        if case .failure = await clientProxy.clearUserStatus() {
+            showFailureIndicator()
         }
-        
-        switch result {
-        case .success:
-            break // Loading/error state tbc
-        case .failure:
-            userIndicatorController.submitIndicator(.init(id: UUID().uuidString,
-                                                          type: .toast,
-                                                          title: L10n.errorUnknown,
-                                                          icon: \.close))
-        }
+    }
+    
+    // MARK: - Indicators
+    
+    private static var savingIndicatorID: String {
+        "\(Self.self)-Saving"
+    }
+    
+    private static var failureIndicatorID: String {
+        "\(Self.self)-Failure"
+    }
+    
+    private func showSavingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.savingIndicatorID,
+                                                              type: .toast(progress: .indeterminate),
+                                                              title: L10n.commonSaving,
+                                                              persistent: true))
+    }
+    
+    private func hideSavingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.savingIndicatorID)
+    }
+    
+    private func showFailureIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,
+                                                              type: .toast,
+                                                              title: L10n.commonFailed,
+                                                              icon: \.close))
     }
 }

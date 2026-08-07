@@ -724,6 +724,56 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         await enableAllSendQueuesEnableClosure?(enable)
     }
 
+    //MARK: - enableAutomaticBackpagination
+
+    private let enableAutomaticBackpaginationCallsCountLock = NSLock()
+    private var enableAutomaticBackpaginationUnderlyingCallsCount = 0
+    open var enableAutomaticBackpaginationCallsCount: Int {
+        get { enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount } }
+        set { enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount = newValue } }
+    }
+    open var enableAutomaticBackpaginationCalled: Bool {
+        return enableAutomaticBackpaginationCallsCount > 0
+    }
+    open var enableAutomaticBackpaginationClosure: (() -> Void)?
+
+    open override func enableAutomaticBackpagination() {
+        enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount += 1 }
+        enableAutomaticBackpaginationClosure?()
+    }
+
+    //MARK: - enableAutomaticCallStatus
+
+    private let enableAutomaticCallStatusEnabledCallsCountLock = NSLock()
+    private var enableAutomaticCallStatusEnabledUnderlyingCallsCount = 0
+    open var enableAutomaticCallStatusEnabledCallsCount: Int {
+        get { enableAutomaticCallStatusEnabledCallsCountLock.withLock { enableAutomaticCallStatusEnabledUnderlyingCallsCount } }
+        set { enableAutomaticCallStatusEnabledCallsCountLock.withLock { enableAutomaticCallStatusEnabledUnderlyingCallsCount = newValue } }
+    }
+    open var enableAutomaticCallStatusEnabledCalled: Bool {
+        return enableAutomaticCallStatusEnabledCallsCount > 0
+    }
+    private let enableAutomaticCallStatusEnabledReceivedEnabledLock = NSLock()
+    private var enableAutomaticCallStatusEnabledUnderlyingReceivedEnabled: Bool?
+    open var enableAutomaticCallStatusEnabledReceivedEnabled: Bool? {
+        get { enableAutomaticCallStatusEnabledReceivedEnabledLock.withLock { enableAutomaticCallStatusEnabledUnderlyingReceivedEnabled } }
+        set { enableAutomaticCallStatusEnabledReceivedEnabledLock.withLock { enableAutomaticCallStatusEnabledUnderlyingReceivedEnabled = newValue } }
+    }
+    private let enableAutomaticCallStatusEnabledReceivedInvocationsLock = NSLock()
+    private var enableAutomaticCallStatusEnabledUnderlyingReceivedInvocations: [Bool] = []
+    open var enableAutomaticCallStatusEnabledReceivedInvocations: [Bool] {
+        get { enableAutomaticCallStatusEnabledReceivedInvocationsLock.withLock { enableAutomaticCallStatusEnabledUnderlyingReceivedInvocations } }
+        set { enableAutomaticCallStatusEnabledReceivedInvocationsLock.withLock { enableAutomaticCallStatusEnabledUnderlyingReceivedInvocations = newValue } }
+    }
+    open var enableAutomaticCallStatusEnabledClosure: ((Bool) -> Void)?
+
+    open override func enableAutomaticCallStatus(enabled: Bool) {
+        enableAutomaticCallStatusEnabledCallsCountLock.withLock { enableAutomaticCallStatusEnabledUnderlyingCallsCount += 1 }
+        enableAutomaticCallStatusEnabledReceivedEnabled = enabled
+        enableAutomaticCallStatusEnabledReceivedInvocationsLock.withLock { enableAutomaticCallStatusEnabledUnderlyingReceivedInvocations.append(enabled) }
+        enableAutomaticCallStatusEnabledClosure?(enabled)
+    }
+
     //MARK: - enableSendQueueUploadProgress
 
     private let enableSendQueueUploadProgressEnableCallsCountLock = NSLock()
@@ -1673,34 +1723,48 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - isLivekitRtcSupported
 
-    open var isLivekitRtcSupportedThrowableError: Error?
-    private let isLivekitRtcSupportedCallsCountLock = NSLock()
-    private var isLivekitRtcSupportedUnderlyingCallsCount = 0
-    open var isLivekitRtcSupportedCallsCount: Int {
-        get { isLivekitRtcSupportedCallsCountLock.withLock { isLivekitRtcSupportedUnderlyingCallsCount } }
-        set { isLivekitRtcSupportedCallsCountLock.withLock { isLivekitRtcSupportedUnderlyingCallsCount = newValue } }
+    open var isLivekitRtcSupportedFallbackToWellKnownThrowableError: Error?
+    private let isLivekitRtcSupportedFallbackToWellKnownCallsCountLock = NSLock()
+    private var isLivekitRtcSupportedFallbackToWellKnownUnderlyingCallsCount = 0
+    open var isLivekitRtcSupportedFallbackToWellKnownCallsCount: Int {
+        get { isLivekitRtcSupportedFallbackToWellKnownCallsCountLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingCallsCount } }
+        set { isLivekitRtcSupportedFallbackToWellKnownCallsCountLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingCallsCount = newValue } }
     }
-    open var isLivekitRtcSupportedCalled: Bool {
-        return isLivekitRtcSupportedCallsCount > 0
+    open var isLivekitRtcSupportedFallbackToWellKnownCalled: Bool {
+        return isLivekitRtcSupportedFallbackToWellKnownCallsCount > 0
+    }
+    private let isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnownLock = NSLock()
+    private var isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedFallbackToWellKnown: Bool?
+    open var isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnown: Bool? {
+        get { isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnownLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedFallbackToWellKnown } }
+        set { isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnownLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedFallbackToWellKnown = newValue } }
+    }
+    private let isLivekitRtcSupportedFallbackToWellKnownReceivedInvocationsLock = NSLock()
+    private var isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedInvocations: [Bool] = []
+    open var isLivekitRtcSupportedFallbackToWellKnownReceivedInvocations: [Bool] {
+        get { isLivekitRtcSupportedFallbackToWellKnownReceivedInvocationsLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedInvocations } }
+        set { isLivekitRtcSupportedFallbackToWellKnownReceivedInvocationsLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let isLivekitRtcSupportedReturnValueLock = NSLock()
-    open var isLivekitRtcSupportedUnderlyingReturnValue: Bool!
-    open var isLivekitRtcSupportedReturnValue: Bool! {
-        get { isLivekitRtcSupportedReturnValueLock.withLock { isLivekitRtcSupportedUnderlyingReturnValue } }
-        set { isLivekitRtcSupportedReturnValueLock.withLock { isLivekitRtcSupportedUnderlyingReturnValue = newValue } }
+    private let isLivekitRtcSupportedFallbackToWellKnownReturnValueLock = NSLock()
+    open var isLivekitRtcSupportedFallbackToWellKnownUnderlyingReturnValue: Bool!
+    open var isLivekitRtcSupportedFallbackToWellKnownReturnValue: Bool! {
+        get { isLivekitRtcSupportedFallbackToWellKnownReturnValueLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReturnValue } }
+        set { isLivekitRtcSupportedFallbackToWellKnownReturnValueLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReturnValue = newValue } }
     }
-    open var isLivekitRtcSupportedClosure: (() async throws -> Bool)?
+    open var isLivekitRtcSupportedFallbackToWellKnownClosure: ((Bool) async throws -> Bool)?
 
-    open override func isLivekitRtcSupported() async throws -> Bool {
-        if let error = isLivekitRtcSupportedThrowableError {
+    open override func isLivekitRtcSupported(fallbackToWellKnown: Bool = false) async throws -> Bool {
+        if let error = isLivekitRtcSupportedFallbackToWellKnownThrowableError {
             throw error
         }
-        isLivekitRtcSupportedCallsCountLock.withLock { isLivekitRtcSupportedUnderlyingCallsCount += 1 }
-        if let isLivekitRtcSupportedClosure = isLivekitRtcSupportedClosure {
-            return try await isLivekitRtcSupportedClosure()
+        isLivekitRtcSupportedFallbackToWellKnownCallsCountLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingCallsCount += 1 }
+        isLivekitRtcSupportedFallbackToWellKnownReceivedFallbackToWellKnown = fallbackToWellKnown
+        isLivekitRtcSupportedFallbackToWellKnownReceivedInvocationsLock.withLock { isLivekitRtcSupportedFallbackToWellKnownUnderlyingReceivedInvocations.append(fallbackToWellKnown) }
+        if let isLivekitRtcSupportedFallbackToWellKnownClosure = isLivekitRtcSupportedFallbackToWellKnownClosure {
+            return try await isLivekitRtcSupportedFallbackToWellKnownClosure(fallbackToWellKnown)
         } else {
-            return isLivekitRtcSupportedReturnValue
+            return isLivekitRtcSupportedFallbackToWellKnownReturnValue
         }
     }
 
@@ -5538,6 +5602,65 @@ open class ContentScannerSDKMock: MatrixRustSDK.ContentScanner, @unchecked Senda
         }
     }
 }
+open class ContinuationMessageSenderSDKMock: MatrixRustSDK.ContinuationMessageSender, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - cancel
+
+    open var cancelThrowableError: Error?
+    private let cancelCallsCountLock = NSLock()
+    private var cancelUnderlyingCallsCount = 0
+    open var cancelCallsCount: Int {
+        get { cancelCallsCountLock.withLock { cancelUnderlyingCallsCount } }
+        set { cancelCallsCountLock.withLock { cancelUnderlyingCallsCount = newValue } }
+    }
+    open var cancelCalled: Bool {
+        return cancelCallsCount > 0
+    }
+    open var cancelClosure: (() async throws -> Void)?
+
+    open override func cancel() async throws {
+        if let error = cancelThrowableError {
+            throw error
+        }
+        cancelCallsCountLock.withLock { cancelUnderlyingCallsCount += 1 }
+        try await cancelClosure?()
+    }
+
+    //MARK: - confirm
+
+    open var confirmThrowableError: Error?
+    private let confirmCallsCountLock = NSLock()
+    private var confirmUnderlyingCallsCount = 0
+    open var confirmCallsCount: Int {
+        get { confirmCallsCountLock.withLock { confirmUnderlyingCallsCount } }
+        set { confirmCallsCountLock.withLock { confirmUnderlyingCallsCount = newValue } }
+    }
+    open var confirmCalled: Bool {
+        return confirmCallsCount > 0
+    }
+    open var confirmClosure: (() async throws -> Void)?
+
+    open override func confirm() async throws {
+        if let error = confirmThrowableError {
+            throw error
+        }
+        confirmCallsCountLock.withLock { confirmUnderlyingCallsCount += 1 }
+        try await confirmClosure?()
+    }
+}
 open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -5673,6 +5796,53 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         }
     }
 
+    //MARK: - createDehydratedDevice
+
+    open var createDehydratedDeviceDisplayNamePickleKeyThrowableError: Error?
+    private let createDehydratedDeviceDisplayNamePickleKeyCallsCountLock = NSLock()
+    private var createDehydratedDeviceDisplayNamePickleKeyUnderlyingCallsCount = 0
+    open var createDehydratedDeviceDisplayNamePickleKeyCallsCount: Int {
+        get { createDehydratedDeviceDisplayNamePickleKeyCallsCountLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingCallsCount } }
+        set { createDehydratedDeviceDisplayNamePickleKeyCallsCountLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingCallsCount = newValue } }
+    }
+    open var createDehydratedDeviceDisplayNamePickleKeyCalled: Bool {
+        return createDehydratedDeviceDisplayNamePickleKeyCallsCount > 0
+    }
+    private let createDehydratedDeviceDisplayNamePickleKeyReceivedArgumentsLock = NSLock()
+    private var createDehydratedDeviceDisplayNamePickleKeyUnderlyingReceivedArguments: (displayName: String?, pickleKey: String)?
+    open var createDehydratedDeviceDisplayNamePickleKeyReceivedArguments: (displayName: String?, pickleKey: String)? {
+        get { createDehydratedDeviceDisplayNamePickleKeyReceivedArgumentsLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingReceivedArguments } }
+        set { createDehydratedDeviceDisplayNamePickleKeyReceivedArgumentsLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingReceivedArguments = newValue } }
+    }
+    private let createDehydratedDeviceDisplayNamePickleKeyReceivedInvocationsLock = NSLock()
+    private var createDehydratedDeviceDisplayNamePickleKeyUnderlyingReceivedInvocations: [(displayName: String?, pickleKey: String)] = []
+    open var createDehydratedDeviceDisplayNamePickleKeyReceivedInvocations: [(displayName: String?, pickleKey: String)] {
+        get { createDehydratedDeviceDisplayNamePickleKeyReceivedInvocationsLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingReceivedInvocations } }
+        set { createDehydratedDeviceDisplayNamePickleKeyReceivedInvocationsLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let createDehydratedDeviceDisplayNamePickleKeyReturnValueLock = NSLock()
+    open var createDehydratedDeviceDisplayNamePickleKeyUnderlyingReturnValue: String!
+    open var createDehydratedDeviceDisplayNamePickleKeyReturnValue: String! {
+        get { createDehydratedDeviceDisplayNamePickleKeyReturnValueLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingReturnValue } }
+        set { createDehydratedDeviceDisplayNamePickleKeyReturnValueLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingReturnValue = newValue } }
+    }
+    open var createDehydratedDeviceDisplayNamePickleKeyClosure: ((String?, String) async throws -> String)?
+
+    open override func createDehydratedDevice(displayName: String?, pickleKey: String) async throws -> String {
+        if let error = createDehydratedDeviceDisplayNamePickleKeyThrowableError {
+            throw error
+        }
+        createDehydratedDeviceDisplayNamePickleKeyCallsCountLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingCallsCount += 1 }
+        createDehydratedDeviceDisplayNamePickleKeyReceivedArguments = (displayName: displayName, pickleKey: pickleKey)
+        createDehydratedDeviceDisplayNamePickleKeyReceivedInvocationsLock.withLock { createDehydratedDeviceDisplayNamePickleKeyUnderlyingReceivedInvocations.append((displayName: displayName, pickleKey: pickleKey)) }
+        if let createDehydratedDeviceDisplayNamePickleKeyClosure = createDehydratedDeviceDisplayNamePickleKeyClosure {
+            return try await createDehydratedDeviceDisplayNamePickleKeyClosure(displayName, pickleKey)
+        } else {
+            return createDehydratedDeviceDisplayNamePickleKeyReturnValue
+        }
+    }
+
     //MARK: - curve25519Key
 
     private let curve25519KeyCallsCountLock = NSLock()
@@ -5700,6 +5870,71 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         } else {
             return curve25519KeyReturnValue
         }
+    }
+
+    //MARK: - dehydratedDeviceEventListener
+
+    private let dehydratedDeviceEventListenerListenerCallsCountLock = NSLock()
+    private var dehydratedDeviceEventListenerListenerUnderlyingCallsCount = 0
+    open var dehydratedDeviceEventListenerListenerCallsCount: Int {
+        get { dehydratedDeviceEventListenerListenerCallsCountLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingCallsCount } }
+        set { dehydratedDeviceEventListenerListenerCallsCountLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingCallsCount = newValue } }
+    }
+    open var dehydratedDeviceEventListenerListenerCalled: Bool {
+        return dehydratedDeviceEventListenerListenerCallsCount > 0
+    }
+    private let dehydratedDeviceEventListenerListenerReceivedListenerLock = NSLock()
+    private var dehydratedDeviceEventListenerListenerUnderlyingReceivedListener: DehydratedDeviceEventListener?
+    open var dehydratedDeviceEventListenerListenerReceivedListener: DehydratedDeviceEventListener? {
+        get { dehydratedDeviceEventListenerListenerReceivedListenerLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingReceivedListener } }
+        set { dehydratedDeviceEventListenerListenerReceivedListenerLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingReceivedListener = newValue } }
+    }
+    private let dehydratedDeviceEventListenerListenerReceivedInvocationsLock = NSLock()
+    private var dehydratedDeviceEventListenerListenerUnderlyingReceivedInvocations: [DehydratedDeviceEventListener] = []
+    open var dehydratedDeviceEventListenerListenerReceivedInvocations: [DehydratedDeviceEventListener] {
+        get { dehydratedDeviceEventListenerListenerReceivedInvocationsLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingReceivedInvocations } }
+        set { dehydratedDeviceEventListenerListenerReceivedInvocationsLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let dehydratedDeviceEventListenerListenerReturnValueLock = NSLock()
+    open var dehydratedDeviceEventListenerListenerUnderlyingReturnValue: TaskHandle!
+    open var dehydratedDeviceEventListenerListenerReturnValue: TaskHandle! {
+        get { dehydratedDeviceEventListenerListenerReturnValueLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingReturnValue } }
+        set { dehydratedDeviceEventListenerListenerReturnValueLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingReturnValue = newValue } }
+    }
+    open var dehydratedDeviceEventListenerListenerClosure: ((DehydratedDeviceEventListener) -> TaskHandle)?
+
+    open override func dehydratedDeviceEventListener(listener: DehydratedDeviceEventListener) -> TaskHandle {
+        dehydratedDeviceEventListenerListenerCallsCountLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingCallsCount += 1 }
+        dehydratedDeviceEventListenerListenerReceivedListener = listener
+        dehydratedDeviceEventListenerListenerReceivedInvocationsLock.withLock { dehydratedDeviceEventListenerListenerUnderlyingReceivedInvocations.append(listener) }
+        if let dehydratedDeviceEventListenerListenerClosure = dehydratedDeviceEventListenerListenerClosure {
+            return dehydratedDeviceEventListenerListenerClosure(listener)
+        } else {
+            return dehydratedDeviceEventListenerListenerReturnValue
+        }
+    }
+
+    //MARK: - deleteDehydratedDevice
+
+    open var deleteDehydratedDeviceThrowableError: Error?
+    private let deleteDehydratedDeviceCallsCountLock = NSLock()
+    private var deleteDehydratedDeviceUnderlyingCallsCount = 0
+    open var deleteDehydratedDeviceCallsCount: Int {
+        get { deleteDehydratedDeviceCallsCountLock.withLock { deleteDehydratedDeviceUnderlyingCallsCount } }
+        set { deleteDehydratedDeviceCallsCountLock.withLock { deleteDehydratedDeviceUnderlyingCallsCount = newValue } }
+    }
+    open var deleteDehydratedDeviceCalled: Bool {
+        return deleteDehydratedDeviceCallsCount > 0
+    }
+    open var deleteDehydratedDeviceClosure: (() async throws -> Void)?
+
+    open override func deleteDehydratedDevice() async throws {
+        if let error = deleteDehydratedDeviceThrowableError {
+            throw error
+        }
+        deleteDehydratedDeviceCallsCountLock.withLock { deleteDehydratedDeviceUnderlyingCallsCount += 1 }
+        try await deleteDehydratedDeviceClosure?()
     }
 
     //MARK: - disableRecovery
@@ -5889,6 +6124,39 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         importSecretsBundleSecretsBundleReceivedSecretsBundle = secretsBundle
         importSecretsBundleSecretsBundleReceivedInvocationsLock.withLock { importSecretsBundleSecretsBundleUnderlyingReceivedInvocations.append(secretsBundle) }
         try await importSecretsBundleSecretsBundleClosure?(secretsBundle)
+    }
+
+    //MARK: - isDehydratedDeviceSupported
+
+    open var isDehydratedDeviceSupportedThrowableError: Error?
+    private let isDehydratedDeviceSupportedCallsCountLock = NSLock()
+    private var isDehydratedDeviceSupportedUnderlyingCallsCount = 0
+    open var isDehydratedDeviceSupportedCallsCount: Int {
+        get { isDehydratedDeviceSupportedCallsCountLock.withLock { isDehydratedDeviceSupportedUnderlyingCallsCount } }
+        set { isDehydratedDeviceSupportedCallsCountLock.withLock { isDehydratedDeviceSupportedUnderlyingCallsCount = newValue } }
+    }
+    open var isDehydratedDeviceSupportedCalled: Bool {
+        return isDehydratedDeviceSupportedCallsCount > 0
+    }
+
+    private let isDehydratedDeviceSupportedReturnValueLock = NSLock()
+    open var isDehydratedDeviceSupportedUnderlyingReturnValue: Bool!
+    open var isDehydratedDeviceSupportedReturnValue: Bool! {
+        get { isDehydratedDeviceSupportedReturnValueLock.withLock { isDehydratedDeviceSupportedUnderlyingReturnValue } }
+        set { isDehydratedDeviceSupportedReturnValueLock.withLock { isDehydratedDeviceSupportedUnderlyingReturnValue = newValue } }
+    }
+    open var isDehydratedDeviceSupportedClosure: (() async throws -> Bool)?
+
+    open override func isDehydratedDeviceSupported() async throws -> Bool {
+        if let error = isDehydratedDeviceSupportedThrowableError {
+            throw error
+        }
+        isDehydratedDeviceSupportedCallsCountLock.withLock { isDehydratedDeviceSupportedUnderlyingCallsCount += 1 }
+        if let isDehydratedDeviceSupportedClosure = isDehydratedDeviceSupportedClosure {
+            return try await isDehydratedDeviceSupportedClosure()
+        } else {
+            return isDehydratedDeviceSupportedReturnValue
+        }
     }
 
     //MARK: - isLastDevice
@@ -6115,6 +6383,53 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         }
     }
 
+    //MARK: - rehydrateDehydratedDevice
+
+    open var rehydrateDehydratedDevicePickleKeyThrowableError: Error?
+    private let rehydrateDehydratedDevicePickleKeyCallsCountLock = NSLock()
+    private var rehydrateDehydratedDevicePickleKeyUnderlyingCallsCount = 0
+    open var rehydrateDehydratedDevicePickleKeyCallsCount: Int {
+        get { rehydrateDehydratedDevicePickleKeyCallsCountLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingCallsCount } }
+        set { rehydrateDehydratedDevicePickleKeyCallsCountLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingCallsCount = newValue } }
+    }
+    open var rehydrateDehydratedDevicePickleKeyCalled: Bool {
+        return rehydrateDehydratedDevicePickleKeyCallsCount > 0
+    }
+    private let rehydrateDehydratedDevicePickleKeyReceivedPickleKeyLock = NSLock()
+    private var rehydrateDehydratedDevicePickleKeyUnderlyingReceivedPickleKey: String?
+    open var rehydrateDehydratedDevicePickleKeyReceivedPickleKey: String? {
+        get { rehydrateDehydratedDevicePickleKeyReceivedPickleKeyLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingReceivedPickleKey } }
+        set { rehydrateDehydratedDevicePickleKeyReceivedPickleKeyLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingReceivedPickleKey = newValue } }
+    }
+    private let rehydrateDehydratedDevicePickleKeyReceivedInvocationsLock = NSLock()
+    private var rehydrateDehydratedDevicePickleKeyUnderlyingReceivedInvocations: [String] = []
+    open var rehydrateDehydratedDevicePickleKeyReceivedInvocations: [String] {
+        get { rehydrateDehydratedDevicePickleKeyReceivedInvocationsLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingReceivedInvocations } }
+        set { rehydrateDehydratedDevicePickleKeyReceivedInvocationsLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let rehydrateDehydratedDevicePickleKeyReturnValueLock = NSLock()
+    open var rehydrateDehydratedDevicePickleKeyUnderlyingReturnValue: Bool!
+    open var rehydrateDehydratedDevicePickleKeyReturnValue: Bool! {
+        get { rehydrateDehydratedDevicePickleKeyReturnValueLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingReturnValue } }
+        set { rehydrateDehydratedDevicePickleKeyReturnValueLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingReturnValue = newValue } }
+    }
+    open var rehydrateDehydratedDevicePickleKeyClosure: ((String) async throws -> Bool)?
+
+    open override func rehydrateDehydratedDevice(pickleKey: String) async throws -> Bool {
+        if let error = rehydrateDehydratedDevicePickleKeyThrowableError {
+            throw error
+        }
+        rehydrateDehydratedDevicePickleKeyCallsCountLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingCallsCount += 1 }
+        rehydrateDehydratedDevicePickleKeyReceivedPickleKey = pickleKey
+        rehydrateDehydratedDevicePickleKeyReceivedInvocationsLock.withLock { rehydrateDehydratedDevicePickleKeyUnderlyingReceivedInvocations.append(pickleKey) }
+        if let rehydrateDehydratedDevicePickleKeyClosure = rehydrateDehydratedDevicePickleKeyClosure {
+            return try await rehydrateDehydratedDevicePickleKeyClosure(pickleKey)
+        } else {
+            return rehydrateDehydratedDevicePickleKeyReturnValue
+        }
+    }
+
     //MARK: - resetIdentity
 
     open var resetIdentityThrowableError: Error?
@@ -6179,6 +6494,60 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         } else {
             return resetRecoveryKeyReturnValue
         }
+    }
+
+    //MARK: - startDehydratedDevices
+
+    open var startDehydratedDevicesRecoveryKeySettingsThrowableError: Error?
+    private let startDehydratedDevicesRecoveryKeySettingsCallsCountLock = NSLock()
+    private var startDehydratedDevicesRecoveryKeySettingsUnderlyingCallsCount = 0
+    open var startDehydratedDevicesRecoveryKeySettingsCallsCount: Int {
+        get { startDehydratedDevicesRecoveryKeySettingsCallsCountLock.withLock { startDehydratedDevicesRecoveryKeySettingsUnderlyingCallsCount } }
+        set { startDehydratedDevicesRecoveryKeySettingsCallsCountLock.withLock { startDehydratedDevicesRecoveryKeySettingsUnderlyingCallsCount = newValue } }
+    }
+    open var startDehydratedDevicesRecoveryKeySettingsCalled: Bool {
+        return startDehydratedDevicesRecoveryKeySettingsCallsCount > 0
+    }
+    private let startDehydratedDevicesRecoveryKeySettingsReceivedArgumentsLock = NSLock()
+    private var startDehydratedDevicesRecoveryKeySettingsUnderlyingReceivedArguments: (recoveryKey: String, settings: StartDehydratedDevicesSettings)?
+    open var startDehydratedDevicesRecoveryKeySettingsReceivedArguments: (recoveryKey: String, settings: StartDehydratedDevicesSettings)? {
+        get { startDehydratedDevicesRecoveryKeySettingsReceivedArgumentsLock.withLock { startDehydratedDevicesRecoveryKeySettingsUnderlyingReceivedArguments } }
+        set { startDehydratedDevicesRecoveryKeySettingsReceivedArgumentsLock.withLock { startDehydratedDevicesRecoveryKeySettingsUnderlyingReceivedArguments = newValue } }
+    }
+    private let startDehydratedDevicesRecoveryKeySettingsReceivedInvocationsLock = NSLock()
+    private var startDehydratedDevicesRecoveryKeySettingsUnderlyingReceivedInvocations: [(recoveryKey: String, settings: StartDehydratedDevicesSettings)] = []
+    open var startDehydratedDevicesRecoveryKeySettingsReceivedInvocations: [(recoveryKey: String, settings: StartDehydratedDevicesSettings)] {
+        get { startDehydratedDevicesRecoveryKeySettingsReceivedInvocationsLock.withLock { startDehydratedDevicesRecoveryKeySettingsUnderlyingReceivedInvocations } }
+        set { startDehydratedDevicesRecoveryKeySettingsReceivedInvocationsLock.withLock { startDehydratedDevicesRecoveryKeySettingsUnderlyingReceivedInvocations = newValue } }
+    }
+    open var startDehydratedDevicesRecoveryKeySettingsClosure: ((String, StartDehydratedDevicesSettings) async throws -> Void)?
+
+    open override func startDehydratedDevices(recoveryKey: String, settings: StartDehydratedDevicesSettings) async throws {
+        if let error = startDehydratedDevicesRecoveryKeySettingsThrowableError {
+            throw error
+        }
+        startDehydratedDevicesRecoveryKeySettingsCallsCountLock.withLock { startDehydratedDevicesRecoveryKeySettingsUnderlyingCallsCount += 1 }
+        startDehydratedDevicesRecoveryKeySettingsReceivedArguments = (recoveryKey: recoveryKey, settings: settings)
+        startDehydratedDevicesRecoveryKeySettingsReceivedInvocationsLock.withLock { startDehydratedDevicesRecoveryKeySettingsUnderlyingReceivedInvocations.append((recoveryKey: recoveryKey, settings: settings)) }
+        try await startDehydratedDevicesRecoveryKeySettingsClosure?(recoveryKey, settings)
+    }
+
+    //MARK: - stopDehydratedDevices
+
+    private let stopDehydratedDevicesCallsCountLock = NSLock()
+    private var stopDehydratedDevicesUnderlyingCallsCount = 0
+    open var stopDehydratedDevicesCallsCount: Int {
+        get { stopDehydratedDevicesCallsCountLock.withLock { stopDehydratedDevicesUnderlyingCallsCount } }
+        set { stopDehydratedDevicesCallsCountLock.withLock { stopDehydratedDevicesUnderlyingCallsCount = newValue } }
+    }
+    open var stopDehydratedDevicesCalled: Bool {
+        return stopDehydratedDevicesCallsCount > 0
+    }
+    open var stopDehydratedDevicesClosure: (() -> Void)?
+
+    open override func stopDehydratedDevices() {
+        stopDehydratedDevicesCallsCountLock.withLock { stopDehydratedDevicesUnderlyingCallsCount += 1 }
+        stopDehydratedDevicesClosure?()
     }
 
     //MARK: - userIdentity
@@ -10317,6 +10686,53 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - loadUserReceipt
+
+    open var loadUserReceiptReceiptTypeThreadUserIdThrowableError: Error?
+    private let loadUserReceiptReceiptTypeThreadUserIdCallsCountLock = NSLock()
+    private var loadUserReceiptReceiptTypeThreadUserIdUnderlyingCallsCount = 0
+    open var loadUserReceiptReceiptTypeThreadUserIdCallsCount: Int {
+        get { loadUserReceiptReceiptTypeThreadUserIdCallsCountLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingCallsCount } }
+        set { loadUserReceiptReceiptTypeThreadUserIdCallsCountLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingCallsCount = newValue } }
+    }
+    open var loadUserReceiptReceiptTypeThreadUserIdCalled: Bool {
+        return loadUserReceiptReceiptTypeThreadUserIdCallsCount > 0
+    }
+    private let loadUserReceiptReceiptTypeThreadUserIdReceivedArgumentsLock = NSLock()
+    private var loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedArguments: (receiptType: ReceiptType, thread: ReceiptThread, userId: String)?
+    open var loadUserReceiptReceiptTypeThreadUserIdReceivedArguments: (receiptType: ReceiptType, thread: ReceiptThread, userId: String)? {
+        get { loadUserReceiptReceiptTypeThreadUserIdReceivedArgumentsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedArguments } }
+        set { loadUserReceiptReceiptTypeThreadUserIdReceivedArgumentsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedArguments = newValue } }
+    }
+    private let loadUserReceiptReceiptTypeThreadUserIdReceivedInvocationsLock = NSLock()
+    private var loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedInvocations: [(receiptType: ReceiptType, thread: ReceiptThread, userId: String)] = []
+    open var loadUserReceiptReceiptTypeThreadUserIdReceivedInvocations: [(receiptType: ReceiptType, thread: ReceiptThread, userId: String)] {
+        get { loadUserReceiptReceiptTypeThreadUserIdReceivedInvocationsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedInvocations } }
+        set { loadUserReceiptReceiptTypeThreadUserIdReceivedInvocationsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let loadUserReceiptReceiptTypeThreadUserIdReturnValueLock = NSLock()
+    open var loadUserReceiptReceiptTypeThreadUserIdUnderlyingReturnValue: UserReceipt?
+    open var loadUserReceiptReceiptTypeThreadUserIdReturnValue: UserReceipt? {
+        get { loadUserReceiptReceiptTypeThreadUserIdReturnValueLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReturnValue } }
+        set { loadUserReceiptReceiptTypeThreadUserIdReturnValueLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReturnValue = newValue } }
+    }
+    open var loadUserReceiptReceiptTypeThreadUserIdClosure: ((ReceiptType, ReceiptThread, String) async throws -> UserReceipt?)?
+
+    open override func loadUserReceipt(receiptType: ReceiptType, thread: ReceiptThread, userId: String) async throws -> UserReceipt? {
+        if let error = loadUserReceiptReceiptTypeThreadUserIdThrowableError {
+            throw error
+        }
+        loadUserReceiptReceiptTypeThreadUserIdCallsCountLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingCallsCount += 1 }
+        loadUserReceiptReceiptTypeThreadUserIdReceivedArguments = (receiptType: receiptType, thread: thread, userId: userId)
+        loadUserReceiptReceiptTypeThreadUserIdReceivedInvocationsLock.withLock { loadUserReceiptReceiptTypeThreadUserIdUnderlyingReceivedInvocations.append((receiptType: receiptType, thread: thread, userId: userId)) }
+        if let loadUserReceiptReceiptTypeThreadUserIdClosure = loadUserReceiptReceiptTypeThreadUserIdClosure {
+            return try await loadUserReceiptReceiptTypeThreadUserIdClosure(receiptType, thread, userId)
+        } else {
+            return loadUserReceiptReceiptTypeThreadUserIdReturnValue
+        }
+    }
+
     //MARK: - markAsFullyReadUnchecked
 
     open var markAsFullyReadUncheckedEventIdThrowableError: Error?
@@ -11315,6 +11731,42 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         sendRawEventTypeContentReceivedArguments = (eventType: eventType, content: content)
         sendRawEventTypeContentReceivedInvocationsLock.withLock { sendRawEventTypeContentUnderlyingReceivedInvocations.append((eventType: eventType, content: content)) }
         try await sendRawEventTypeContentClosure?(eventType, content)
+    }
+
+    //MARK: - sendSingleReceipt
+
+    open var sendSingleReceiptReceiptTypeThreadEventIdThrowableError: Error?
+    private let sendSingleReceiptReceiptTypeThreadEventIdCallsCountLock = NSLock()
+    private var sendSingleReceiptReceiptTypeThreadEventIdUnderlyingCallsCount = 0
+    open var sendSingleReceiptReceiptTypeThreadEventIdCallsCount: Int {
+        get { sendSingleReceiptReceiptTypeThreadEventIdCallsCountLock.withLock { sendSingleReceiptReceiptTypeThreadEventIdUnderlyingCallsCount } }
+        set { sendSingleReceiptReceiptTypeThreadEventIdCallsCountLock.withLock { sendSingleReceiptReceiptTypeThreadEventIdUnderlyingCallsCount = newValue } }
+    }
+    open var sendSingleReceiptReceiptTypeThreadEventIdCalled: Bool {
+        return sendSingleReceiptReceiptTypeThreadEventIdCallsCount > 0
+    }
+    private let sendSingleReceiptReceiptTypeThreadEventIdReceivedArgumentsLock = NSLock()
+    private var sendSingleReceiptReceiptTypeThreadEventIdUnderlyingReceivedArguments: (receiptType: ReceiptType, thread: ReceiptThread, eventId: String)?
+    open var sendSingleReceiptReceiptTypeThreadEventIdReceivedArguments: (receiptType: ReceiptType, thread: ReceiptThread, eventId: String)? {
+        get { sendSingleReceiptReceiptTypeThreadEventIdReceivedArgumentsLock.withLock { sendSingleReceiptReceiptTypeThreadEventIdUnderlyingReceivedArguments } }
+        set { sendSingleReceiptReceiptTypeThreadEventIdReceivedArgumentsLock.withLock { sendSingleReceiptReceiptTypeThreadEventIdUnderlyingReceivedArguments = newValue } }
+    }
+    private let sendSingleReceiptReceiptTypeThreadEventIdReceivedInvocationsLock = NSLock()
+    private var sendSingleReceiptReceiptTypeThreadEventIdUnderlyingReceivedInvocations: [(receiptType: ReceiptType, thread: ReceiptThread, eventId: String)] = []
+    open var sendSingleReceiptReceiptTypeThreadEventIdReceivedInvocations: [(receiptType: ReceiptType, thread: ReceiptThread, eventId: String)] {
+        get { sendSingleReceiptReceiptTypeThreadEventIdReceivedInvocationsLock.withLock { sendSingleReceiptReceiptTypeThreadEventIdUnderlyingReceivedInvocations } }
+        set { sendSingleReceiptReceiptTypeThreadEventIdReceivedInvocationsLock.withLock { sendSingleReceiptReceiptTypeThreadEventIdUnderlyingReceivedInvocations = newValue } }
+    }
+    open var sendSingleReceiptReceiptTypeThreadEventIdClosure: ((ReceiptType, ReceiptThread, String) async throws -> Void)?
+
+    open override func sendSingleReceipt(receiptType: ReceiptType, thread: ReceiptThread, eventId: String) async throws {
+        if let error = sendSingleReceiptReceiptTypeThreadEventIdThrowableError {
+            throw error
+        }
+        sendSingleReceiptReceiptTypeThreadEventIdCallsCountLock.withLock { sendSingleReceiptReceiptTypeThreadEventIdUnderlyingCallsCount += 1 }
+        sendSingleReceiptReceiptTypeThreadEventIdReceivedArguments = (receiptType: receiptType, thread: thread, eventId: eventId)
+        sendSingleReceiptReceiptTypeThreadEventIdReceivedInvocationsLock.withLock { sendSingleReceiptReceiptTypeThreadEventIdUnderlyingReceivedInvocations.append((receiptType: receiptType, thread: thread, eventId: eventId)) }
+        try await sendSingleReceiptReceiptTypeThreadEventIdClosure?(receiptType, thread, eventId)
     }
 
     //MARK: - sendStateEventRaw
@@ -16433,6 +16885,49 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
         }
     }
 
+    //MARK: - withParentSpan
+
+    private let withParentSpanSpanCallsCountLock = NSLock()
+    private var withParentSpanSpanUnderlyingCallsCount = 0
+    open var withParentSpanSpanCallsCount: Int {
+        get { withParentSpanSpanCallsCountLock.withLock { withParentSpanSpanUnderlyingCallsCount } }
+        set { withParentSpanSpanCallsCountLock.withLock { withParentSpanSpanUnderlyingCallsCount = newValue } }
+    }
+    open var withParentSpanSpanCalled: Bool {
+        return withParentSpanSpanCallsCount > 0
+    }
+    private let withParentSpanSpanReceivedSpanLock = NSLock()
+    private var withParentSpanSpanUnderlyingReceivedSpan: Span?
+    open var withParentSpanSpanReceivedSpan: Span? {
+        get { withParentSpanSpanReceivedSpanLock.withLock { withParentSpanSpanUnderlyingReceivedSpan } }
+        set { withParentSpanSpanReceivedSpanLock.withLock { withParentSpanSpanUnderlyingReceivedSpan = newValue } }
+    }
+    private let withParentSpanSpanReceivedInvocationsLock = NSLock()
+    private var withParentSpanSpanUnderlyingReceivedInvocations: [Span] = []
+    open var withParentSpanSpanReceivedInvocations: [Span] {
+        get { withParentSpanSpanReceivedInvocationsLock.withLock { withParentSpanSpanUnderlyingReceivedInvocations } }
+        set { withParentSpanSpanReceivedInvocationsLock.withLock { withParentSpanSpanUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let withParentSpanSpanReturnValueLock = NSLock()
+    open var withParentSpanSpanUnderlyingReturnValue: SyncServiceBuilder!
+    open var withParentSpanSpanReturnValue: SyncServiceBuilder! {
+        get { withParentSpanSpanReturnValueLock.withLock { withParentSpanSpanUnderlyingReturnValue } }
+        set { withParentSpanSpanReturnValueLock.withLock { withParentSpanSpanUnderlyingReturnValue = newValue } }
+    }
+    open var withParentSpanSpanClosure: ((Span) -> SyncServiceBuilder)?
+
+    open override func withParentSpan(span: Span) -> SyncServiceBuilder {
+        withParentSpanSpanCallsCountLock.withLock { withParentSpanSpanUnderlyingCallsCount += 1 }
+        withParentSpanSpanReceivedSpan = span
+        withParentSpanSpanReceivedInvocationsLock.withLock { withParentSpanSpanUnderlyingReceivedInvocations.append(span) }
+        if let withParentSpanSpanClosure = withParentSpanSpanClosure {
+            return withParentSpanSpanClosure(span)
+        } else {
+            return withParentSpanSpanReturnValue
+        }
+    }
+
     //MARK: - withProfilesExtension
 
     private let withProfilesExtensionCallsCountLock = NSLock()
@@ -17979,6 +18474,53 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             return try sendVoiceMessageParamsAudioInfoWaveformClosure(params, audioInfo, waveform)
         } else {
             return sendVoiceMessageParamsAudioInfoWaveformReturnValue
+        }
+    }
+
+    //MARK: - sendWithExtraContent
+
+    open var sendWithExtraContentMsgExtraContentJsonThrowableError: Error?
+    private let sendWithExtraContentMsgExtraContentJsonCallsCountLock = NSLock()
+    private var sendWithExtraContentMsgExtraContentJsonUnderlyingCallsCount = 0
+    open var sendWithExtraContentMsgExtraContentJsonCallsCount: Int {
+        get { sendWithExtraContentMsgExtraContentJsonCallsCountLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingCallsCount } }
+        set { sendWithExtraContentMsgExtraContentJsonCallsCountLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingCallsCount = newValue } }
+    }
+    open var sendWithExtraContentMsgExtraContentJsonCalled: Bool {
+        return sendWithExtraContentMsgExtraContentJsonCallsCount > 0
+    }
+    private let sendWithExtraContentMsgExtraContentJsonReceivedArgumentsLock = NSLock()
+    private var sendWithExtraContentMsgExtraContentJsonUnderlyingReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, extraContentJson: String?)?
+    open var sendWithExtraContentMsgExtraContentJsonReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, extraContentJson: String?)? {
+        get { sendWithExtraContentMsgExtraContentJsonReceivedArgumentsLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingReceivedArguments } }
+        set { sendWithExtraContentMsgExtraContentJsonReceivedArgumentsLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingReceivedArguments = newValue } }
+    }
+    private let sendWithExtraContentMsgExtraContentJsonReceivedInvocationsLock = NSLock()
+    private var sendWithExtraContentMsgExtraContentJsonUnderlyingReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, extraContentJson: String?)] = []
+    open var sendWithExtraContentMsgExtraContentJsonReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, extraContentJson: String?)] {
+        get { sendWithExtraContentMsgExtraContentJsonReceivedInvocationsLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingReceivedInvocations } }
+        set { sendWithExtraContentMsgExtraContentJsonReceivedInvocationsLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendWithExtraContentMsgExtraContentJsonReturnValueLock = NSLock()
+    open var sendWithExtraContentMsgExtraContentJsonUnderlyingReturnValue: SendHandle!
+    open var sendWithExtraContentMsgExtraContentJsonReturnValue: SendHandle! {
+        get { sendWithExtraContentMsgExtraContentJsonReturnValueLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingReturnValue } }
+        set { sendWithExtraContentMsgExtraContentJsonReturnValueLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingReturnValue = newValue } }
+    }
+    open var sendWithExtraContentMsgExtraContentJsonClosure: ((RoomMessageEventContentWithoutRelation, String?) async throws -> SendHandle)?
+
+    open override func sendWithExtraContent(msg: RoomMessageEventContentWithoutRelation, extraContentJson: String?) async throws -> SendHandle {
+        if let error = sendWithExtraContentMsgExtraContentJsonThrowableError {
+            throw error
+        }
+        sendWithExtraContentMsgExtraContentJsonCallsCountLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingCallsCount += 1 }
+        sendWithExtraContentMsgExtraContentJsonReceivedArguments = (msg: msg, extraContentJson: extraContentJson)
+        sendWithExtraContentMsgExtraContentJsonReceivedInvocationsLock.withLock { sendWithExtraContentMsgExtraContentJsonUnderlyingReceivedInvocations.append((msg: msg, extraContentJson: extraContentJson)) }
+        if let sendWithExtraContentMsgExtraContentJsonClosure = sendWithExtraContentMsgExtraContentJsonClosure {
+            return try await sendWithExtraContentMsgExtraContentJsonClosure(msg, extraContentJson)
+        } else {
+            return sendWithExtraContentMsgExtraContentJsonReturnValue
         }
     }
 

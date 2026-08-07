@@ -259,7 +259,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
                                                         appSettings: appSettings,
                                                         appHooks: appHooks)
         try await appHooks.remoteSettingsHook.initializeCache(using: client, applyingTo: appSettings).get()
-        await client.updateMapTilerSettings(in: appSettings)
         
         return client
     }
@@ -378,7 +377,7 @@ private extension HumanQrLoginError {
             .qrCodeError(.deviceNotSignedIn)
         case .UnsupportedQrCodeType:
             .qrCodeError(.invalidQRCode)
-        case .Unknown, .OAuthMetadataInvalid, .CheckCodeAlreadySent, .CheckCodeCannotBeSent, .ContinuationCannotBeSent, .ContinuationAlreadySent:
+        case .Unknown, .OAuthMetadataInvalid, .CheckCodeAlreadySent, .CheckCodeCannotBeSent, .ContinuationAlreadySent, .ContinuationCannotBeSent:
             .qrCodeError(.unknown)
         }
     }

@@ -65,7 +65,7 @@ struct UserProfileScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
             }
             
-            if let roomID = context.viewState.dmRoomID {
+            if let roomID = context.viewState.dmRoomID, context.viewState.isCallingEnabled {
                 Button {
                     context.send(viewAction: .startCall(roomID: roomID, isVoiceCall: true))
                 } label: {
@@ -147,7 +147,8 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
         return UserProfileScreenViewModel(userID: userID,
                                           isPresentedModally: false,
                                           userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                                          userIndicatorController: UserIndicatorControllerMock(),
-                                          analytics: AnalyticsServiceMock(.init()))
+                                          appHooks: AppHooks(),
+                                          analytics: AnalyticsServiceMock(.init()),
+                                          userIndicatorController: UserIndicatorControllerMock())
     }
 }

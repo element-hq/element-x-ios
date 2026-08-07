@@ -97,4 +97,22 @@ struct ManageRoomMemberSheetViewModelTests {
         try await deferredAction.fulfill()
         #expect(context.alertInfo == nil)
     }
+    
+    @Test
+    mutating func displayAvatar() async throws {
+        let member = RoomMemberDetails(withProxy: RoomMemberProxyMock.mockDan)
+        viewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
+                                                   permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
+                                                   roomProxy: JoinedRoomProxyMock(.init()),
+                                                   userIndicatorController: UserIndicatorControllerMock(),
+                                                   analyticsService: AnalyticsServiceMock(.init()),
+                                                   mediaProvider: MediaProviderMock(.init()))
+        
+        let avatarURL = try #require(member.avatarURL)
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.mediaPreviewItem)) { $0 != nil }
+        context.send(viewAction: .displayAvatar(avatarURL))
+        try await deferred.fulfill()
+        
+        #expect(context.mediaPreviewItem?.previewItemTitle == member.name)
+    }
 }
