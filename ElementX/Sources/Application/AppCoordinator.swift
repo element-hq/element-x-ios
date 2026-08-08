@@ -1356,9 +1356,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
         }
         
+        // When iOS relaunches a terminated app for the task, the session restores
+        // asynchronously and used to lose this race, silently no-oping the refresh.
+        // Give it a bounded window to finish before giving up.
+        if userSession == nil {
+            let deadline = Date(timeIntervalSinceNow: 5)
+            while userSession == nil, Date() < deadline {
+                try? await Task.sleep(for: .milliseconds(100))
+            }
+        }
+
         guard let userSession else {
-            // Happens when iOS relaunches a terminated app for the task: the session
-            // restores asynchronously and loses the race, making the refresh a no-op.
             MXLog.error("Background app refresh has no user session, skipping")
             task.setTaskCompleted(success: false)
             return

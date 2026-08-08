@@ -415,7 +415,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: ProcessInfo().isiOSAppOnMac)
     var globalSearchEnabled: Bool
     
-    @UserPreference(defaultValue: false)
+    // The SDK serves focused timelines from the persisted event cache when the
+    // event is there (e.g. ingested by the NSE), so tapping a notification can
+    // land on the exact message without a network round-trip.
+    @UserPreference(defaultValue: true)
     var focusEventOnNotificationTap: Bool
     
     @UserPreference(defaultValue: false)
