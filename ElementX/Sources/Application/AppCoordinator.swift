@@ -1026,19 +1026,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard let userSession else {
             fatalError("User session not setup")
         }
-        
-        showLoadingIndicator()
-        
+
+        // No loading indicator: the placeholder splash below is all the user
+        // needs to see until the session is restored, a modal on top of it is
+        // just noise.
         navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
-        
+
         Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
-        
+
         // Allow for everything to deallocate properly
         Task {
             await userSession.clientProxy.clearCaches()
             stateMachine.processEvent(.startWithExistingSession)
-            hideLoadingIndicator()
         }
     }
     
