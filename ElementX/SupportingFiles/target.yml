@@ -155,6 +155,24 @@ targets:
         - "-DIS_MAIN_APP"
 
     preBuildScripts:
+    - name: 🔖 Record app git SHA
+      runOnlyWhenInstalling: false
+      # Always runs; only rewrites the file when the sha actually changed so
+      # the post-build stamp mutator (which has it as an input) isn't retriggered
+      # on every build.
+      basedOnDependencyAnalysis: false
+      shell: /bin/sh
+      script: |
+        sha=$(git -C "$PROJECT_DIR" rev-parse --short HEAD 2>/dev/null || echo unknown)
+        # The local-SDK flip dirties project files on every dogfood build - ignore them.
+        git -C "$PROJECT_DIR" diff --quiet HEAD -- ':!project.yml' ':!*.pbxproj' ':!*Package.resolved' 2>/dev/null || sha="$sha-dirty"
+        mkdir -p "$DERIVED_FILE_DIR"
+        printf '%s' "$sha" > "$DERIVED_FILE_DIR/app-git-sha.txt.tmp"
+        if ! cmp -s "$DERIVED_FILE_DIR/app-git-sha.txt.tmp" "$DERIVED_FILE_DIR/app-git-sha.txt" 2>/dev/null; then
+            mv "$DERIVED_FILE_DIR/app-git-sha.txt.tmp" "$DERIVED_FILE_DIR/app-git-sha.txt"
+        else
+            rm "$DERIVED_FILE_DIR/app-git-sha.txt.tmp"
+        fi
     - name: 🛠 SwiftGen
       runOnlyWhenInstalling: false
       basedOnDependencyAnalysis: false
@@ -204,6 +222,27 @@ targets:
         fi
 
     postBuildScripts:
+    - name: 🔖 Stamp app git SHA
+      runOnlyWhenInstalling: false
+      # The processed Info.plist as both input and output makes this a mutator
+      # task, ordered after ProcessInfoPlistFile and before code signing (plus
+      # the extra marker output node the build system requires for mutators).
+      # The sha file recorded by the pre-build phase is an input, so a new
+      # commit re-runs the stamp even when the plist itself didn't change.
+      basedOnDependencyAnalysis: true
+      shell: /bin/sh
+      inputFiles:
+      - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
+      - $(DERIVED_FILE_DIR)/app-git-sha.txt
+      outputFiles:
+      - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
+      - $(DERIVED_FILE_DIR)/app-git-sha.stamp
+      script: |
+        sha=$(cat "$DERIVED_FILE_DIR/app-git-sha.txt" 2>/dev/null || echo unknown)
+        plist="$TARGET_BUILD_DIR/$INFOPLIST_PATH"
+        /usr/libexec/PlistBuddy -c "Delete :AppGitSHA" "$plist" 2>/dev/null || true
+        /usr/libexec/PlistBuddy -c "Add :AppGitSHA string $sha" "$plist"
+        cp "$DERIVED_FILE_DIR/app-git-sha.txt" "$DERIVED_FILE_DIR/app-git-sha.stamp"
     - name: ⚠️ SwiftLint
       runOnlyWhenInstalling: false
       basedOnDependencyAnalysis: false

@@ -17,6 +17,7 @@ nonisolated struct InfoPlistReader {
         static let bundleDisplayName = "CFBundleDisplayName"
         static let productionAppName = "productionAppName"
         static let isNightlyBuild = "isNightlyBuild"
+        static let appGitSHA = "AppGitSHA"
         static let utExportedTypeDeclarationsKey = "UTExportedTypeDeclarations"
         static let utTypeIdentifierKey = "UTTypeIdentifier"
         static let utDescriptionKey = "UTTypeDescription"
@@ -87,6 +88,12 @@ nonisolated struct InfoPlistReader {
     /// Bundle display name of the target
     var bundleDisplayName: String {
         infoPlistValue(forKey: Keys.bundleDisplayName)
+    }
+
+    /// Git SHA of the app checkout this build was made from, stamped by the
+    /// build script phase. Absent on builds that don't stamp it (e.g. CI).
+    var appGitSHA: String? {
+        infoPlistValue(forKey: Keys.appGitSHA)
     }
     
     /// The name of the non-X app when it becomes production ready.

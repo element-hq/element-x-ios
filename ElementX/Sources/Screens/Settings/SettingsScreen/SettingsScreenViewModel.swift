@@ -7,6 +7,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias SettingsScreenViewModelType = StateStoreViewModelV2<SettingsScreenViewState, SettingsScreenViewAction>
@@ -28,6 +29,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
+                                           gitSHAs: "EXI \(InfoPlistReader.main.appGitSHA ?? "unknown") · SDK \(sdkGitSha().prefix(9))",
                                            userProfile: userSession.clientProxy.userProfilePublisher.value,
                                            showLinkNewDeviceButton: appSettings.linkNewDeviceEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,

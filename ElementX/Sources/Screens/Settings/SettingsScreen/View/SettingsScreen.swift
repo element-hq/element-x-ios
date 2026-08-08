@@ -247,7 +247,11 @@ struct SettingsScreen: View {
         VStack(spacing: 0) {
             versionText
                 .frame(maxWidth: .infinity)
-            
+
+            if let gitSHAs = context.viewState.gitSHAs {
+                Text(gitSHAs)
+            }
+
             if let deviceID = context.viewState.deviceID {
                 Text(deviceID)
             }

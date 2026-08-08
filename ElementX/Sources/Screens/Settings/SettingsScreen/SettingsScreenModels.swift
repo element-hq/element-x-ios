@@ -35,6 +35,7 @@ enum SettingsScreenSecuritySectionMode {
 
 struct SettingsScreenViewState: BindableState {
     var deviceID: String?
+    var gitSHAs: String?
     var userProfile: UserProfile
     var showUserStatus = false
     var showLinkNewDeviceButton: Bool
