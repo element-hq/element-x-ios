@@ -724,24 +724,6 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         await enableAllSendQueuesEnableClosure?(enable)
     }
 
-    //MARK: - enableAutomaticBackpagination
-
-    private let enableAutomaticBackpaginationCallsCountLock = NSLock()
-    private var enableAutomaticBackpaginationUnderlyingCallsCount = 0
-    open var enableAutomaticBackpaginationCallsCount: Int {
-        get { enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount } }
-        set { enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount = newValue } }
-    }
-    open var enableAutomaticBackpaginationCalled: Bool {
-        return enableAutomaticBackpaginationCallsCount > 0
-    }
-    open var enableAutomaticBackpaginationClosure: (() -> Void)?
-
-    open override func enableAutomaticBackpagination() {
-        enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount += 1 }
-        enableAutomaticBackpaginationClosure?()
-    }
-
     //MARK: - enableAutomaticCallStatus
 
     private let enableAutomaticCallStatusEnabledCallsCountLock = NSLock()
@@ -2460,6 +2442,42 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await pauseClosure?()
     }
 
+    //MARK: - prioritizeVisibleRooms
+
+    open var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsThrowableError: Error?
+    private let prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsCallsCountLock = NSLock()
+    private var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingCallsCount = 0
+    open var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsCallsCount: Int {
+        get { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsCallsCountLock.withLock { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingCallsCount } }
+        set { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsCallsCountLock.withLock { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingCallsCount = newValue } }
+    }
+    open var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsCalled: Bool {
+        return prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsCallsCount > 0
+    }
+    private let prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedArgumentsLock = NSLock()
+    private var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingReceivedArguments: (roomIds: [String], numberOfVisibleEvents: UInt32)?
+    open var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedArguments: (roomIds: [String], numberOfVisibleEvents: UInt32)? {
+        get { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedArgumentsLock.withLock { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingReceivedArguments } }
+        set { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedArgumentsLock.withLock { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingReceivedArguments = newValue } }
+    }
+    private let prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedInvocationsLock = NSLock()
+    private var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingReceivedInvocations: [(roomIds: [String], numberOfVisibleEvents: UInt32)] = []
+    open var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedInvocations: [(roomIds: [String], numberOfVisibleEvents: UInt32)] {
+        get { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedInvocationsLock.withLock { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingReceivedInvocations } }
+        set { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedInvocationsLock.withLock { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingReceivedInvocations = newValue } }
+    }
+    open var prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsClosure: (([String], UInt32) async throws -> Void)?
+
+    open override func prioritizeVisibleRooms(roomIds: [String], numberOfVisibleEvents: UInt32) async throws {
+        if let error = prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsThrowableError {
+            throw error
+        }
+        prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsCallsCountLock.withLock { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingCallsCount += 1 }
+        prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedArguments = (roomIds: roomIds, numberOfVisibleEvents: numberOfVisibleEvents)
+        prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsReceivedInvocationsLock.withLock { prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsUnderlyingReceivedInvocations.append((roomIds: roomIds, numberOfVisibleEvents: numberOfVisibleEvents)) }
+        try await prioritizeVisibleRoomsRoomIdsNumberOfVisibleEventsClosure?(roomIds, numberOfVisibleEvents)
+    }
+
     //MARK: - registerNotificationHandler
 
     private let registerNotificationHandlerListenerCallsCountLock = NSLock()
@@ -2834,6 +2852,49 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return roomsClosure()
         } else {
             return roomsReturnValue
+        }
+    }
+
+    //MARK: - runSearchBackfill
+
+    private let runSearchBackfillStrategyCallsCountLock = NSLock()
+    private var runSearchBackfillStrategyUnderlyingCallsCount = 0
+    open var runSearchBackfillStrategyCallsCount: Int {
+        get { runSearchBackfillStrategyCallsCountLock.withLock { runSearchBackfillStrategyUnderlyingCallsCount } }
+        set { runSearchBackfillStrategyCallsCountLock.withLock { runSearchBackfillStrategyUnderlyingCallsCount = newValue } }
+    }
+    open var runSearchBackfillStrategyCalled: Bool {
+        return runSearchBackfillStrategyCallsCount > 0
+    }
+    private let runSearchBackfillStrategyReceivedStrategyLock = NSLock()
+    private var runSearchBackfillStrategyUnderlyingReceivedStrategy: BackPaginationStrategy?
+    open var runSearchBackfillStrategyReceivedStrategy: BackPaginationStrategy? {
+        get { runSearchBackfillStrategyReceivedStrategyLock.withLock { runSearchBackfillStrategyUnderlyingReceivedStrategy } }
+        set { runSearchBackfillStrategyReceivedStrategyLock.withLock { runSearchBackfillStrategyUnderlyingReceivedStrategy = newValue } }
+    }
+    private let runSearchBackfillStrategyReceivedInvocationsLock = NSLock()
+    private var runSearchBackfillStrategyUnderlyingReceivedInvocations: [BackPaginationStrategy] = []
+    open var runSearchBackfillStrategyReceivedInvocations: [BackPaginationStrategy] {
+        get { runSearchBackfillStrategyReceivedInvocationsLock.withLock { runSearchBackfillStrategyUnderlyingReceivedInvocations } }
+        set { runSearchBackfillStrategyReceivedInvocationsLock.withLock { runSearchBackfillStrategyUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let runSearchBackfillStrategyReturnValueLock = NSLock()
+    open var runSearchBackfillStrategyUnderlyingReturnValue: TaskHandle!
+    open var runSearchBackfillStrategyReturnValue: TaskHandle! {
+        get { runSearchBackfillStrategyReturnValueLock.withLock { runSearchBackfillStrategyUnderlyingReturnValue } }
+        set { runSearchBackfillStrategyReturnValueLock.withLock { runSearchBackfillStrategyUnderlyingReturnValue = newValue } }
+    }
+    open var runSearchBackfillStrategyClosure: ((BackPaginationStrategy) -> TaskHandle)?
+
+    open override func runSearchBackfill(strategy: BackPaginationStrategy) -> TaskHandle {
+        runSearchBackfillStrategyCallsCountLock.withLock { runSearchBackfillStrategyUnderlyingCallsCount += 1 }
+        runSearchBackfillStrategyReceivedStrategy = strategy
+        runSearchBackfillStrategyReceivedInvocationsLock.withLock { runSearchBackfillStrategyUnderlyingReceivedInvocations.append(strategy) }
+        if let runSearchBackfillStrategyClosure = runSearchBackfillStrategyClosure {
+            return runSearchBackfillStrategyClosure(strategy)
+        } else {
+            return runSearchBackfillStrategyReturnValue
         }
     }
 
@@ -4071,6 +4132,35 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await trackRecentlyVisitedRoomRoomClosure?(room)
     }
 
+    //MARK: - trafficStats
+
+    private let trafficStatsCallsCountLock = NSLock()
+    private var trafficStatsUnderlyingCallsCount = 0
+    open var trafficStatsCallsCount: Int {
+        get { trafficStatsCallsCountLock.withLock { trafficStatsUnderlyingCallsCount } }
+        set { trafficStatsCallsCountLock.withLock { trafficStatsUnderlyingCallsCount = newValue } }
+    }
+    open var trafficStatsCalled: Bool {
+        return trafficStatsCallsCount > 0
+    }
+
+    private let trafficStatsReturnValueLock = NSLock()
+    open var trafficStatsUnderlyingReturnValue: TrafficStats!
+    open var trafficStatsReturnValue: TrafficStats! {
+        get { trafficStatsReturnValueLock.withLock { trafficStatsUnderlyingReturnValue } }
+        set { trafficStatsReturnValueLock.withLock { trafficStatsUnderlyingReturnValue = newValue } }
+    }
+    open var trafficStatsClosure: (() -> TrafficStats)?
+
+    open override func trafficStats() -> TrafficStats {
+        trafficStatsCallsCountLock.withLock { trafficStatsUnderlyingCallsCount += 1 }
+        if let trafficStatsClosure = trafficStatsClosure {
+            return trafficStatsClosure()
+        } else {
+            return trafficStatsReturnValue
+        }
+    }
+
     //MARK: - unignoreUser
 
     open var unignoreUserUserIdThrowableError: Error?
@@ -4834,6 +4924,49 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return dmRoomDefinitionDmRoomDefinitionClosure(dmRoomDefinition)
         } else {
             return dmRoomDefinitionDmRoomDefinitionReturnValue
+        }
+    }
+
+    //MARK: - enableAutomaticBackPagination
+
+    private let enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCountLock = NSLock()
+    private var enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingCallsCount = 0
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCount: Int {
+        get { enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCountLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingCallsCount } }
+        set { enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCountLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingCallsCount = newValue } }
+    }
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationCalled: Bool {
+        return enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCount > 0
+    }
+    private let enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPaginationLock = NSLock()
+    private var enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedEnableAutomaticBackPagination: Bool?
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPagination: Bool? {
+        get { enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPaginationLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedEnableAutomaticBackPagination } }
+        set { enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPaginationLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedEnableAutomaticBackPagination = newValue } }
+    }
+    private let enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocationsLock = NSLock()
+    private var enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedInvocations: [Bool] = []
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocations: [Bool] {
+        get { enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocationsLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedInvocations } }
+        set { enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocationsLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValueLock = NSLock()
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReturnValue: ClientBuilder!
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValue: ClientBuilder! {
+        get { enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValueLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReturnValue } }
+        set { enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValueLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReturnValue = newValue } }
+    }
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationClosure: ((Bool) -> ClientBuilder)?
+
+    open override func enableAutomaticBackPagination(enableAutomaticBackPagination: Bool) -> ClientBuilder {
+        enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCountLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingCallsCount += 1 }
+        enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPagination = enableAutomaticBackPagination
+        enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocationsLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedInvocations.append(enableAutomaticBackPagination) }
+        if let enableAutomaticBackPaginationEnableAutomaticBackPaginationClosure = enableAutomaticBackPaginationEnableAutomaticBackPaginationClosure {
+            return enableAutomaticBackPaginationEnableAutomaticBackPaginationClosure(enableAutomaticBackPagination)
+        } else {
+            return enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValue
         }
     }
 
@@ -11625,6 +11758,39 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - roomSummaryDetails
+
+    open var roomSummaryDetailsThrowableError: Error?
+    private let roomSummaryDetailsCallsCountLock = NSLock()
+    private var roomSummaryDetailsUnderlyingCallsCount = 0
+    open var roomSummaryDetailsCallsCount: Int {
+        get { roomSummaryDetailsCallsCountLock.withLock { roomSummaryDetailsUnderlyingCallsCount } }
+        set { roomSummaryDetailsCallsCountLock.withLock { roomSummaryDetailsUnderlyingCallsCount = newValue } }
+    }
+    open var roomSummaryDetailsCalled: Bool {
+        return roomSummaryDetailsCallsCount > 0
+    }
+
+    private let roomSummaryDetailsReturnValueLock = NSLock()
+    open var roomSummaryDetailsUnderlyingReturnValue: RoomSummaryDetails!
+    open var roomSummaryDetailsReturnValue: RoomSummaryDetails! {
+        get { roomSummaryDetailsReturnValueLock.withLock { roomSummaryDetailsUnderlyingReturnValue } }
+        set { roomSummaryDetailsReturnValueLock.withLock { roomSummaryDetailsUnderlyingReturnValue = newValue } }
+    }
+    open var roomSummaryDetailsClosure: (() async throws -> RoomSummaryDetails)?
+
+    open override func roomSummaryDetails() async throws -> RoomSummaryDetails {
+        if let error = roomSummaryDetailsThrowableError {
+            throw error
+        }
+        roomSummaryDetailsCallsCountLock.withLock { roomSummaryDetailsUnderlyingCallsCount += 1 }
+        if let roomSummaryDetailsClosure = roomSummaryDetailsClosure {
+            return try await roomSummaryDetailsClosure()
+        } else {
+            return roomSummaryDetailsReturnValue
+        }
+    }
+
     //MARK: - saveComposerDraft
 
     open var saveComposerDraftDraftThreadRootThrowableError: Error?
@@ -16383,6 +16549,49 @@ open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @uncheck
             return cacheSizeCacheSizeClosure(cacheSize)
         } else {
             return cacheSizeCacheSizeReturnValue
+        }
+    }
+
+    //MARK: - highEntropyPassphrase
+
+    private let highEntropyPassphrasePassphraseCallsCountLock = NSLock()
+    private var highEntropyPassphrasePassphraseUnderlyingCallsCount = 0
+    open var highEntropyPassphrasePassphraseCallsCount: Int {
+        get { highEntropyPassphrasePassphraseCallsCountLock.withLock { highEntropyPassphrasePassphraseUnderlyingCallsCount } }
+        set { highEntropyPassphrasePassphraseCallsCountLock.withLock { highEntropyPassphrasePassphraseUnderlyingCallsCount = newValue } }
+    }
+    open var highEntropyPassphrasePassphraseCalled: Bool {
+        return highEntropyPassphrasePassphraseCallsCount > 0
+    }
+    private let highEntropyPassphrasePassphraseReceivedPassphraseLock = NSLock()
+    private var highEntropyPassphrasePassphraseUnderlyingReceivedPassphrase: String?
+    open var highEntropyPassphrasePassphraseReceivedPassphrase: String? {
+        get { highEntropyPassphrasePassphraseReceivedPassphraseLock.withLock { highEntropyPassphrasePassphraseUnderlyingReceivedPassphrase } }
+        set { highEntropyPassphrasePassphraseReceivedPassphraseLock.withLock { highEntropyPassphrasePassphraseUnderlyingReceivedPassphrase = newValue } }
+    }
+    private let highEntropyPassphrasePassphraseReceivedInvocationsLock = NSLock()
+    private var highEntropyPassphrasePassphraseUnderlyingReceivedInvocations: [String?] = []
+    open var highEntropyPassphrasePassphraseReceivedInvocations: [String?] {
+        get { highEntropyPassphrasePassphraseReceivedInvocationsLock.withLock { highEntropyPassphrasePassphraseUnderlyingReceivedInvocations } }
+        set { highEntropyPassphrasePassphraseReceivedInvocationsLock.withLock { highEntropyPassphrasePassphraseUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let highEntropyPassphrasePassphraseReturnValueLock = NSLock()
+    open var highEntropyPassphrasePassphraseUnderlyingReturnValue: SqliteStoreBuilder!
+    open var highEntropyPassphrasePassphraseReturnValue: SqliteStoreBuilder! {
+        get { highEntropyPassphrasePassphraseReturnValueLock.withLock { highEntropyPassphrasePassphraseUnderlyingReturnValue } }
+        set { highEntropyPassphrasePassphraseReturnValueLock.withLock { highEntropyPassphrasePassphraseUnderlyingReturnValue = newValue } }
+    }
+    open var highEntropyPassphrasePassphraseClosure: ((String?) -> SqliteStoreBuilder)?
+
+    open override func highEntropyPassphrase(passphrase: String?) -> SqliteStoreBuilder {
+        highEntropyPassphrasePassphraseCallsCountLock.withLock { highEntropyPassphrasePassphraseUnderlyingCallsCount += 1 }
+        highEntropyPassphrasePassphraseReceivedPassphrase = passphrase
+        highEntropyPassphrasePassphraseReceivedInvocationsLock.withLock { highEntropyPassphrasePassphraseUnderlyingReceivedInvocations.append(passphrase) }
+        if let highEntropyPassphrasePassphraseClosure = highEntropyPassphrasePassphraseClosure {
+            return highEntropyPassphrasePassphraseClosure(passphrase)
+        } else {
+            return highEntropyPassphrasePassphraseReturnValue
         }
     }
 
