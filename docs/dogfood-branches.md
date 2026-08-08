@@ -185,3 +185,10 @@ EXI:
   (measured ~5s on matrix.org) and the modal indicator froze the whole room list for
   that long
   [`556982912`](https://github.com/element-hq/element-x-ios/commit/556982912)
+- Route taps on notifications the NSE couldn't process: the raw pusher payload still
+  carries room/event IDs, but the tap handler required an NSE-only field and silently
+  dropped the tap ("blank pushes" on a poor connection went nowhere)
+  [`eb0555a53`](https://github.com/element-hq/element-x-ios/commit/eb0555a53)
+- Open the room live at the bottom when a notification tap targets the newest message,
+  instead of a permalink-style detached timeline (green highlight, dead jump-to-latest)
+  [`a39307fc0`](https://github.com/element-hq/element-x-ios/commit/a39307fc0)
