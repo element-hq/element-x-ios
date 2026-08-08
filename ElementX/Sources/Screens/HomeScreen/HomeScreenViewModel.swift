@@ -162,17 +162,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         setupRoomListSubscriptions()
-
-        updateRooms()
-
-        // On a warm launch the provider has usually already published the cached room list
-        // before this screen exists. The subscriptions above only deliver the current state
-        // via an async main-queue hop, which can end up queued behind the first full
-        // SwiftUI render and leave the skeletons up for the whole duration - consume the
-        // current state synchronously instead.
-        if let roomSummaryProvider {
-            updateRoomListMode(with: roomSummaryProvider.statePublisher.value)
-        }
     }
     
     // MARK: - Public
@@ -310,17 +299,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
+        // No receive(on: .main) hops: the provider publishes from the main actor already,
+        // and the synchronous delivery means the current (possibly pre-published) state is
+        // consumed before the first render instead of queuing behind it.
         roomSummaryProvider.statePublisher
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 guard let self else { return }
-                
+
                 updateRoomListMode(with: state)
             }
             .store(in: &cancellables)
-        
+
         roomSummaryProvider.roomListPublisher
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
                 updateRooms()
