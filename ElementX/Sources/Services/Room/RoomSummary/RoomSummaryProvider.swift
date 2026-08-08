@@ -238,12 +238,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                      on currentRooms: [RoomSummary],
                                      eventStringBuilder: RoomEventStringBuilder,
                                      name: String) async -> [RoomSummary] {
-        let span = MXLog.createSpan("\(name).process_room_list_diffs")
-        span.enter()
-        defer {
-            span.exit()
-        }
-        
         var updatedRooms = currentRooms
         for diff in diffs {
             updatedRooms = await processDiff(diff, on: updatedRooms, eventStringBuilder: eventStringBuilder, name: name)
@@ -255,6 +249,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         guard let collectionDiff = await buildDiff(from: diff, on: currentItems, eventStringBuilder: eventStringBuilder) else {
             MXLog.error("\(name): Failed building CollectionDifference from \(diff)")
             return currentItems
+        }
+        
+        // The span guard is thread local, so it must not straddle a suspension
+        // point, otherwise the task could resume on a different thread and
+        // unbalance it, causing a panic and subsequent (intentional) crash.
+        let span = MXLog.createSpan("\(name).apply_room_list_diff")
+        span.enter()
+        defer {
+            span.exit()
         }
         
         guard let updatedItems = currentItems.applying(collectionDiff) else {
@@ -447,19 +450,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private func rebuildRoomSummaries() async {
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
         
-        rooms = await Self.rebuiltRoomSummaries(from: rooms, eventStringBuilder: eventStringBuilder, name: name)
+        rooms = await Self.rebuiltRoomSummaries(from: rooms, eventStringBuilder: eventStringBuilder)
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
     }
     
     @concurrent
-    private static func rebuiltRoomSummaries(from rooms: [RoomSummary], eventStringBuilder: RoomEventStringBuilder, name: String) async -> [RoomSummary] {
-        let span = MXLog.createSpan("\(name).rebuild_room_summaries")
-        span.enter()
-        defer {
-            span.exit()
-        }
-        
+    private static func rebuiltRoomSummaries(from rooms: [RoomSummary], eventStringBuilder: RoomEventStringBuilder) async -> [RoomSummary] {
         var rebuiltRooms = [RoomSummary]()
         rebuiltRooms.reserveCapacity(rooms.count)
         for room in rooms {
