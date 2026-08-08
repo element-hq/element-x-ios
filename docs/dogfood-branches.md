@@ -198,3 +198,7 @@ EXI:
 - Open the room live at the bottom when a notification tap targets the newest message,
   instead of a permalink-style detached timeline (green highlight, dead jump-to-latest)
   [`a39307fc0`](https://github.com/element-hq/element-x-ios/commit/a39307fc0)
+- Show the app and SDK git SHAs in the Settings version footer (build phase stamps
+  `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
+  exactly which dogfood pairing a phone is running
+  [`48cba7c70`](https://github.com/element-hq/element-x-ios/commit/48cba7c70)
