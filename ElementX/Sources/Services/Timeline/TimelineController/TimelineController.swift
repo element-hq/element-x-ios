@@ -70,7 +70,16 @@ class TimelineController: TimelineControllerProtocol {
         
         Task {
             paginationState = TimelinePaginationState(backward: .paginating, forward: .paginating)
-            
+
+            // Focussing the newest message (the common notification-tap case) would show
+            // a permalink-style detached timeline for the same place the live timeline
+            // already ends at - just open live at the bottom instead.
+            if case .event(let item)? = liveTimelineItemProvider.itemProxies.last(where: \.isEvent),
+               item.id.eventID == initialFocussedEventID {
+                configureActiveTimelineItemProvider()
+                return
+            }
+
             switch await focusOnEvent(initialFocussedEventID, timelineSize: 100) {
             case .success:
                 break

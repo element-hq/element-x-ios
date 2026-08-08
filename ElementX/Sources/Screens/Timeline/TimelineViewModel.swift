@@ -472,11 +472,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .isLive(let isLive):
                     if state.timelineState.isLive != isLive {
                         state.timelineState.isLive = isLive
-                        
-                        // Remove the event highlight *only* when transitioning from non-live to live.
-                        if isLive, state.timelineState.focussedEvent != nil {
-                            state.timelineState.focussedEvent = nil
-                        }
+                    }
+
+                    // The live timeline never highlights a focussed event. This isn't only
+                    // for the non-live -> live transition: the controller may skip a focus
+                    // entirely (already-latest event) and go straight to live.
+                    if isLive, state.timelineState.focussedEvent != nil {
+                        state.timelineState.focussedEvent = nil
                     }
                 case .messageSentOrEdited:
                     actionsSubject.send(.composer(action: .clear))
