@@ -21,6 +21,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     private var roomPreview: RoomPreviewProxyProtocol?
     private var room: RoomProxyType?
     private var isLoadingPreview = true
+    private var hasHandledAlreadyJoinedRoom = false
     private var membershipStateChangeCancellable: AnyCancellable?
     
     private let actionsSubject: PassthroughSubject<JoinRoomScreenViewModelAction, Never> = .init()
@@ -247,8 +248,12 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             }
         } else if let roomPreview {
             let membershipDetails = await roomPreview.ownMembershipDetails
-            
+
             switch roomPreview.info.membership {
+            case .joined:
+                // The server says we're already a member (e.g. the room hasn't synced
+                // into this process yet) - never offer Join, go straight in.
+                await handleAlreadyJoinedRoom()
             case .invited:
                 state.mode = .invited(isDM: state.roomDetails?.isDirect == true && state.roomDetails?.memberCount == 1)
             case .knocked:
@@ -270,6 +275,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             }
         } else if let room {
             switch room {
+            case .joined:
+                await handleAlreadyJoinedRoom()
             case .invited:
                 state.mode = .invited(isDM: state.roomDetails?.isDirect == true && state.roomDetails?.memberCount == 1)
             case .knocked:
@@ -280,6 +287,12 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 state.mode = .joinable
             }
         }
+    }
+
+    private func handleAlreadyJoinedRoom() async {
+        guard !hasHandledAlreadyJoinedRoom else { return }
+        hasHandledAlreadyJoinedRoom = true
+        await finishJoinAction()
     }
     
     private func joinRoom() async {

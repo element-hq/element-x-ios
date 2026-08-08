@@ -870,7 +870,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .joined(.roomID(let roomID)):
                     Task { [weak self] in
                         guard let self else { return }
-                        
+
+                        // The membership change may not have reached this process's sync yet.
+                        userSession.clientProxy.roomsToAwait.insert(roomID)
                         if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) {
                             await storeAndSubscribeToRoomProxy(roomProxy)
                             stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))

@@ -438,12 +438,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         let eventID = appSettings.focusEventOnNotificationTap ? content.eventID : nil
+
+        // The NSE runs its own client and may have shown this notification before the room
+        // reached this process's sync, so always give the room a chance to arrive before
+        // room resolution treats it as unknown and shows a join screen.
+        if let userSession {
+            userSession.clientProxy.roomsToAwait.insert(roomID)
+        } else {
+            storedRoomsToAwait = [roomID]
+        }
+
         if content.categoryIdentifier == NotificationConstants.Category.invite {
-            if let userSession {
-                userSession.clientProxy.roomsToAwait.insert(roomID)
-            } else {
-                storedRoomsToAwait = [roomID]
-            }
             handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
             handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID), windowType: nil)
@@ -1277,7 +1282,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
         }
         
-        MXLog.info("Register background app refresh with result: \(result)")
+        MXLog.info("Register background app refresh with result: \(result), backgroundRefreshStatus: \(UIApplication.shared.backgroundRefreshStatus.rawValue)")
     }
     
     private func scheduleBackgroundAppRefresh() {
@@ -1320,9 +1325,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         guard let userSession else {
+            // Happens when iOS relaunches a terminated app for the task: the session
+            // restores asynchronously and loses the race, making the refresh a no-op.
+            MXLog.error("Background app refresh has no user session, skipping")
+            task.setTaskCompleted(success: false)
             return
         }
-        
+
         // Configure the background-refresh sync to carry set_presence=offline so it doesn't mark the
         // user online or idle. Note: If already online/idle then setting offline shouldn't override that.
         _ = await userSession.clientProxy.configurePresence(.offline, sendImmediately: false)
