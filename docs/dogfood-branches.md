@@ -119,6 +119,10 @@ SDK - previews and the back-pagination queue:
   [`53c1bed53`](https://github.com/matrix-org/matrix-rust-sdk/commit/53c1bed53)
 - Drain the latest-event backlog in reverse chronological order
   [`32220d70e`](https://github.com/matrix-org/matrix-rust-sdk/commit/32220d70e)
+- Stop the room list spasming during catch-up syncs: a burst of freshly computed
+  latest events now broadcasts only after the last store write (one atomic reorder per
+  drain instead of one per room), and one drain fits a whole response's rooms
+  [`a637111d1`](https://github.com/matrix-org/matrix-rust-sdk/commit/a637111d1)
 - Never fetch `/room_keys/version` while classifying UTDs - cold-launch first paint
   blocked up to 49s offline on this network call
   [`12e2d0d8b`](https://github.com/matrix-org/matrix-rust-sdk/commit/12e2d0d8b)
