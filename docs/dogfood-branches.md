@@ -156,6 +156,9 @@ SDK - NSE and push-taps:
 - Upgrade the persisted UTD in place once the NSE's encryption sync fetches the key, so
   the main app doesn't come up rendering a UTD it has the key for
   [`6cf6b06e5`](https://github.com/matrix-org/matrix-rust-sdk/commit/6cf6b06e5)
+- Don't back-paginate rooms we're not joined to (a declined invite's leave update
+  re-armed the backfill, which 403'd against `/messages`)
+  [`2860034b0`](https://github.com/matrix-org/matrix-rust-sdk/commit/2860034b0)
 
 EXI:
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
@@ -178,3 +181,7 @@ EXI:
 - Focus notification taps on their event (served locally when the NSE prefilled it);
   give background refresh a bounded wait for session restore instead of a silent no-op
   [`580ba004d`](https://github.com/element-hq/element-x-ios/commit/580ba004d)
+- Make declining an invite non-blocking: the decline also forgets the room server-side
+  (measured ~5s on matrix.org) and the modal indicator froze the whole room list for
+  that long
+  [`556982912`](https://github.com/element-hq/element-x-ios/commit/556982912)
