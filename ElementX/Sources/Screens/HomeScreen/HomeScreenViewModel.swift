@@ -550,8 +550,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         defer {
             userIndicatorController.retractIndicatorWithId(roomID)
         }
-        
-        userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+
+        // Non-blocking on purpose: declining also forgets the room server-side, which
+        // can take seconds, and the room list should stay usable throughout.
+        userIndicatorController.submitIndicator(UserIndicator(id: roomID,
+                                                              type: .toast(progress: .indeterminate),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
         
         guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             displayError()
