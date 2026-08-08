@@ -432,8 +432,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     func notificationTapped(content: UNNotificationContent) async {
         MXLog.info("Tapped Notification")
         
-        guard let roomID = content.roomID,
-              content.receiverID != nil else {
+        // Don't require receiverID: it's only set by the NSE's content builder, so a
+        // notification the NSE failed to process (e.g. it ran out of time on a poor
+        // connection) still carries the pusher's room/event IDs and must route.
+        guard let roomID = content.roomID else {
             return
         }
         
