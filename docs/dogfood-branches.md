@@ -159,6 +159,12 @@ SDK - NSE and push-taps:
 - Don't back-paginate rooms we're not joined to (a declined invite's leave update
   re-armed the backfill, which 403'd against `/messages`)
   [`2860034b0`](https://github.com/matrix-org/matrix-rust-sdk/commit/2860034b0)
+- Stop the NSE burning its ~30s budget on fixed network costs, which turned
+  poor-connectivity pushes into blank notifications: reuse the cached `/versions`
+  instead of refetching per launch, skip the all-tracked-users device-list refresh
+  (decrypt-only process; it cost a 0.5-1.3MB `/keys/query` per push), and fall back
+  to `/context` after a single failed `/sync` attempt instead of three
+  [`c187fef45`](https://github.com/matrix-org/matrix-rust-sdk/commit/c187fef45)
 
 EXI:
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
