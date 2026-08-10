@@ -191,6 +191,10 @@ SDK - launch speed and diagnosability:
 - Log which event counts a room as unread, so rooms stuck unread despite an up-to-date
   receipt name their culprit
   [`24333794e`](https://github.com/matrix-org/matrix-rust-sdk/commit/24333794e)
+- Wait for the progressive room load before snapshotting the room list: pages load in
+  state-store row order (roughly least-recently-updated first), so a mid-load snapshot
+  rendered a stale subset of the account as the cold-launch room list until sync healed it
+  [`110050e5a`](https://github.com/matrix-org/matrix-rust-sdk/commit/110050e5a)
 
 EXI:
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
