@@ -40,7 +40,9 @@ jobs:
         if: failure()
         with:
           name: Results
-          path: test_output/IntegrationTests.xcresult.zip
+          path: |
+            test_output/IntegrationTests.xcresult.zip
+            test_output/console*
           retention-days: 7
           if-no-files-found: ignore
 
