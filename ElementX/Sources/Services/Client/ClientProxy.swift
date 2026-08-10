@@ -1567,10 +1567,14 @@ private struct ClientProxyServices {
         // blocks of 20 rooms with a timeline limit of 10, so previews and ordering are
         // expected to be settled before the user scrolls. Visible-range changes use the
         // default subscription path on the main connection (no viewport prioritizer).
+        // A small first page: the home screen renders ~10 rows and scrolling already
+        // grows the list page by page, while every room in the first page costs a
+        // summary build (an FFI fetch + string building) in front of the first paint.
         roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                   eventStringBuilder: eventStringBuilder,
                                                   name: "AllRooms",
                                                   shouldUpdateVisibleRange: true,
+                                                  roomListPageSize: 32,
                                                   notificationSettings: notificationSettings,
                                                   appSettings: appSettings)
         try await roomSummaryProvider.setRoomList(roomListService.allRooms())

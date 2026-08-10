@@ -250,7 +250,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         // CollectionDifference can be expensive, so compute off the main actor and only
         // hop back to publish the result.
         let visibleBefore = Self.visibleSignature(of: rooms)
+        let start = Date.now
         rooms = await Self.updatedRooms(from: diffs, on: rooms, eventStringBuilder: eventStringBuilder, name: name)
+        let duration = Date.now.timeIntervalSince(start)
+        if duration > 0.025 {
+            MXLog.info("\(name): Built \(rooms.count) room summaries in \(Int(duration * 1000))ms")
+        }
         // Launch instrumentation: track when the top of the home list stops changing.
         if shouldUpdateVisibleRange, Self.visibleSignature(of: rooms) != visibleBefore {
             LaunchMetrics.noteVisibleChurn()
