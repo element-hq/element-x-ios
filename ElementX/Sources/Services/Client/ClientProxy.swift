@@ -1574,7 +1574,7 @@ private struct ClientProxyServices {
                                                   eventStringBuilder: eventStringBuilder,
                                                   name: "AllRooms",
                                                   shouldUpdateVisibleRange: true,
-                                                  roomListPageSize: 32,
+                                                  roomListPageSize: 64,
                                                   notificationSettings: notificationSettings,
                                                   appSettings: appSettings)
         try await roomSummaryProvider.setRoomList(roomListService.allRooms())
