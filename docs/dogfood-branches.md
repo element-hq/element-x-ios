@@ -195,6 +195,12 @@ SDK - launch speed and diagnosability:
   state-store row order (roughly least-recently-updated first), so a mid-load snapshot
   rendered a stale subset of the account as the cold-launch room list until sync healed it
   [`110050e5a`](https://github.com/matrix-org/matrix-rust-sdk/commit/110050e5a)
+- Load the most recent rooms first and fill the rest concurrently: the barrier above
+  fixed correctness but put the full ~750ms load back on the paint path; a plaintext
+  `recency` column on `room_info` makes the inline first page the most recently active
+  rooms (correct first render, no waiting), and the remaining pages load on a small
+  worker pool since sync processing still waits for completeness
+  [`8d22c6b4d`](https://github.com/matrix-org/matrix-rust-sdk/commit/8d22c6b4d)
 
 EXI:
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
