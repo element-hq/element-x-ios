@@ -266,8 +266,17 @@ EXI:
 - Prefetch the next room list page half a page before the user reaches the bottom:
   the grow trigger fired only once the last row was visible, and the visible-range
   publisher is throttled at 0.5s, so fast scrolls bounced off the end of the list
-  while the next page loaded
-  [`ab7b063c7`](https://github.com/element-hq/element-x-ios/commit/ab7b063c7)
+  while the next page loaded. The home screen also dropped range updates entirely
+  while a scroll was in flight (0.5s defer + ignore-while-scrolling guard), so
+  scroll events now publish the range live and the provider grows the list
+  unthrottled, suppressing re-requests until the previous growth lands
+  [`ab7b063c7`](https://github.com/element-hq/element-x-ios/commit/ab7b063c7),
+  [`5859d1c52`](https://github.com/element-hq/element-x-ios/commit/5859d1c52),
+  [`5e55f53e9`](https://github.com/element-hq/element-x-ios/commit/5e55f53e9)
+- Don't blank the room list into the "no chats" empty state when a sliding-sync
+  session expiry (HTTP 400 → pos reset) momentarily reports the list count as nil:
+  only trust a zero count when no rooms are actually published
+  [`c2d9cf778`](https://github.com/element-hq/element-x-ios/commit/c2d9cf778)
 - Load MapLibre lazily via dlopen: its static initialisers (mostly a Metal compression
   context) cost ~60ms of dyld work on every cold launch, for a map that only renders
   once a location screen opens. The interactive map moved into a MapLibreShim framework
