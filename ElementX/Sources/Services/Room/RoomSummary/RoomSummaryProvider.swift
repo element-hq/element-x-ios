@@ -251,15 +251,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             return currentItems
         }
         
-        // The span guard is thread local, so it must not straddle a suspension
-        // point, otherwise the task could resume on a different thread and
-        // unbalance it, causing a panic and subsequent (intentional) crash.
-        let span = MXLog.createSpan("\(name).apply_room_list_diff")
-        span.enter()
-        defer {
-            span.exit()
-        }
-        
         guard let updatedItems = currentItems.applying(collectionDiff) else {
             MXLog.error("\(name): Failed applying diff: \(collectionDiff)")
             return currentItems
