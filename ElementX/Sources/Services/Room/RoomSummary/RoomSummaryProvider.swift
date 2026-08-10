@@ -199,6 +199,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         visibleItemRangePublisher
             .sink { [weak self] range in
                 guard let self,
+                      !range.isEmpty, // The publisher's initial 0..<0 would otherwise trigger a page add before the list even loads
                       range.upperBound >= rooms.count - Int(roomListPageSize) / 2,
                       rooms.count != lastGrowthRequestRoomCount else {
                     return
