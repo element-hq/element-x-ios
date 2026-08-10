@@ -206,10 +206,13 @@ SDK - launch speed and diagnosability:
   presence, ignored users) to render a name and avatar - 3-13ms per room under launch
   contention, 89-426ms for the first page of summaries
   [`b9e04f7d4`](https://github.com/matrix-org/matrix-rust-sdk/commit/b9e04f7d4)
-- Shrink the inline room load to 100 rooms (was 200): the recency-ordered read fetches
-  rows in index order (random table lookups, ~0.45ms/room on the restore critical path)
+- Shrink the inline room load to 64 rooms (was 200): the recency-ordered read fetches
+  rows in index order (random table lookups, ~0.45ms/room on the restore critical path);
+  64 matches the home list's first page so the inline read covers exactly what first
+  paint can show
   [`79b5182d3`](https://github.com/matrix-org/matrix-rust-sdk/commit/79b5182d3),
-  [`4df4dbca2`](https://github.com/matrix-org/matrix-rust-sdk/commit/4df4dbca2)
+  [`4df4dbca2`](https://github.com/matrix-org/matrix-rust-sdk/commit/4df4dbca2),
+  [`2cd2f16b4`](https://github.com/matrix-org/matrix-rust-sdk/commit/2cd2f16b4)
 
 EXI:
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
@@ -256,5 +259,19 @@ EXI:
 - Shrink the home list's first page from 100 to 32 rooms: every first-page room costs
   a summary build (FFI fetch + string building) in front of the first paint, while the
   screen renders ~10 rows and scrolling grows the list anyway; also log summary builds
-  over 25ms so launches attribute this stage
-  [`edb009314`](https://github.com/element-hq/element-x-ios/commit/edb009314)
+  over 25ms so launches attribute this stage. Later settled on 64 once summary builds
+  slimmed down and the bottom-bounce prefetch landed
+  [`edb009314`](https://github.com/element-hq/element-x-ios/commit/edb009314),
+  [`babf62b7d`](https://github.com/element-hq/element-x-ios/commit/babf62b7d)
+- Prefetch the next room list page half a page before the user reaches the bottom:
+  the grow trigger fired only once the last row was visible, and the visible-range
+  publisher is throttled at 0.5s, so fast scrolls bounced off the end of the list
+  while the next page loaded
+  [`ab7b063c7`](https://github.com/element-hq/element-x-ios/commit/ab7b063c7)
+- Load MapLibre lazily via dlopen: its static initialisers (mostly a Metal compression
+  context) cost ~60ms of dyld work on every cold launch, for a map that only renders
+  once a location screen opens. The interactive map moved into a MapLibreShim framework
+  (embedded, unlinked, dlopen'd on first map use); the app links only a tiny
+  MapInterface framework of shared types. Timeline location messages already used the
+  static tile view, which never touched MapLibre
+  [`e80dd55a5`](https://github.com/element-hq/element-x-ios/commit/e80dd55a5)
