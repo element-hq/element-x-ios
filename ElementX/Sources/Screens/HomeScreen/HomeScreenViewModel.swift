@@ -325,10 +325,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState) {
         let isLoadingData = !roomSummaryProviderState.isLoaded
-        let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0
         // The state can report loaded before the first summary batch has published; showing
         // .rooms then would flash an empty list, so hold the skeletons until rooms exist.
         let hasPublishedRooms = roomSummaryProvider?.roomListPublisher.value.isEmpty == false
+        // Only trust a zero count when no rooms are published: a sliding-sync session
+        // expiry resets the list's count to nil mid-recovery, and blanking a full room
+        // list into the empty state over that would be a lie (the rooms are still there).
+        let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0 && !hasPublishedRooms
 
         var roomListMode = state.roomListMode
         if isLoadingData {
