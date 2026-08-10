@@ -45,9 +45,19 @@ struct CI: ParsableCommand {
             try await run(.name("swiftformat"), ["--lint", "."])
         } catch {
             logger.error("\n❌ SwiftFormat failed.\n")
+            annotateError(title: "SwiftFormat lint failed", "Run `swiftformat .` from the project root and commit the changes.")
             throw error
         }
         logger.info("\n✅ SwiftFormat passed.\n")
+    }
+    
+    // MARK: - GitHub Actions
+    
+    /// Logs an error annotation, surfacing the failure on the workflow run's summary page.
+    ///
+    /// This is printed directly as the workflow command must be at the very start of the line.
+    static func annotateError(title: String, _ message: String) {
+        print("::error title=\(title)::\(message)")
     }
     
     // MARK: - Test Results

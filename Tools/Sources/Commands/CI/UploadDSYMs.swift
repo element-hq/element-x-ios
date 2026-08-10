@@ -51,6 +51,7 @@ struct UploadDSYMs: AsyncParsableCommand {
         }
         
         if let lastError {
+            CI.annotateError(title: "Failed to upload dSYMs to Sentry", "All \(maxRetries) attempts failed: \(lastError.localizedDescription)")
             throw lastError
         }
     }
