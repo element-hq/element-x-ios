@@ -182,6 +182,14 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: AppAppearance.system)
     var appAppearance: AppAppearance
     
+    /// Tracks previous servers the user connected to for autocompletion purposes. Entries are made lowercase on write.
+    @UserPreference(key: "previousServers", defaultValue: [])
+    var previousServers: [String]
+    
+    var defaultServer: String {
+        previousServers.first ?? accountProviders[0]
+    }
+    
     // MARK: - Security
     
     /// The app must be locked with a PIN code as part of the authentication flow.

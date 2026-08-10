@@ -24,22 +24,10 @@ extension XCUIApplication {
         getStartedButton.tap(.center)
         
         if let homeserver {
-            let changeHomeserverButton = buttons[A11yIdentifiers.serverConfirmationScreen.changeServer]
-            XCTAssertTrue(changeHomeserverButton.waitForExistence(timeout: 10.0))
-            changeHomeserverButton.tap(.center)
-            
+            // Server selection screen appears directly after sign in
             let homeserverTextField = textFields[A11yIdentifiers.changeServerScreen.server]
             XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 10.0))
-            
             homeserverTextField.clearAndTypeText(homeserver, app: self)
-            
-            let confirmButton = buttons[A11yIdentifiers.changeServerScreen.continue]
-            XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
-            confirmButton.tap(.center)
-            
-            // Wait for server confirmation to finish
-            currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: confirmButton)
-            currentTestCase.waitForExpectations(timeout: 300.0)
         }
         
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
@@ -50,7 +38,7 @@ extension XCUIApplication {
         // Keep looping on the Continue button for ~5 minutes until the Authentication Session is happy.
         var remainingAttempts = 10
         while !webAuthenticationSessionAlertContinueButton.exists {
-            let continueButton = buttons[A11yIdentifiers.serverConfirmationScreen.continue]
+            let continueButton = buttons[A11yIdentifiers.changeServerScreen.continue]
             XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
             continueButton.tap(.center)
             
