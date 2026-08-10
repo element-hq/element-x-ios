@@ -68,6 +68,11 @@ SDK:
 - Compute latest events for rooms created by the response being processed (fixes dropped
   "Room is unknown" computes after a clear-cache)
   [`17b6dc3b7`](https://github.com/matrix-org/matrix-rust-sdk/commit/17b6dc3b7)
+- Take the WAL checkpoint off the store-open critical path: the open-time TRUNCATE
+  (upstream #6004) stalls launch in proportion to the WAL grown while only the NSE was
+  writing (~1s after a 30-min pause); replaced by a deferred PASSIVE checkpoint on a pool
+  connection, close/pause keeps its TRUNCATE
+  [`c4b51714a`](https://github.com/matrix-org/matrix-rust-sdk/commit/c4b51714a)
 
 EXI:
 - Start the session restore eagerly from `AppCoordinator.init`, on a detached task, and
