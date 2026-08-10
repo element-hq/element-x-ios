@@ -32,6 +32,10 @@ struct IntegrationTests: AsyncParsableCommand {
         } catch {
             testsFailed = true
             logger.error("\n❌ Integration tests failed.\n")
+            
+            // Preserve the app's logs alongside the results so that they can be uploaded as artifacts.
+            logger.info("🗂️ Collecting log files…")
+            _ = try? await CI.run(.path("/bin/zsh"), ["-cu", "cp /Users/Shared/console* \(CI.testOutputDirectory)"])
         }
         
         // Validate logs only when tests passed — log files won't be meaningful otherwise
