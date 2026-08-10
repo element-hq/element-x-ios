@@ -206,10 +206,10 @@ SDK - launch speed and diagnosability:
   presence, ignored users) to render a name and avatar - 3-13ms per room under launch
   contention, 89-426ms for the first page of summaries
   [`b9e04f7d4`](https://github.com/matrix-org/matrix-rust-sdk/commit/b9e04f7d4)
-- Shrink the inline room load to 64 rooms: the recency-ordered read fetches rows in
-  index order (random table lookups, ~0.45ms/room on the restore critical path); the
-  home screen consumes 32
-  [`79b5182d3`](https://github.com/matrix-org/matrix-rust-sdk/commit/79b5182d3)
+- Shrink the inline room load to 100 rooms (was 200): the recency-ordered read fetches
+  rows in index order (random table lookups, ~0.45ms/room on the restore critical path)
+  [`79b5182d3`](https://github.com/matrix-org/matrix-rust-sdk/commit/79b5182d3),
+  [`4df4dbca2`](https://github.com/matrix-org/matrix-rust-sdk/commit/4df4dbca2)
 
 EXI:
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
