@@ -479,6 +479,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     // entirely (already-latest event) and go straight to live.
                     if isLive, state.timelineState.focussedEvent != nil {
                         state.timelineState.focussedEvent = nil
+                        // With no focussed event, didScrollToFocussedItem can never fire to
+                        // hide the persistent toast shown in init - retract it here instead.
+                        hideFocusLoadingIndicator()
                     }
                 case .messageSentOrEdited:
                     actionsSubject.send(.composer(action: .clear))
