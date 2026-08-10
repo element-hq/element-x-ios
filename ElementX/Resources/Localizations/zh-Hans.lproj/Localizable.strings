@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "编辑头像";
 "a11y_edit_room_address_hint" = "完整地址为 %1$@";
 "a11y_expand_message_text_field" = "展开消息文本框";
+"a11y_gallery_attachment" = "媒体组，第 %1$d 个附件";
+"a11y_gallery_failed_scan" = "媒体组，第 %1$d 个扫描失败";
+"a11y_gallery_image" = "媒体组，第 %1$d 个图像";
+"a11y_gallery_scanning" = "媒体组，正在扫描第 %1$d 个";
+"a11y_gallery_video" = "媒体组，第 %1$d 个视频";
 "a11y_hide_password" = "隐藏密码";
 "a11y_info" = "信息";
 "a11y_join_call" = "加入通话";
@@ -269,7 +274,7 @@
 "common_file_saved" = "文件已保存";
 "common_forward_message" = "转发消息";
 "common_frequently_used" = "常用";
-"common_gallery" = "图库";
+"common_gallery" = "媒体组";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "群组通话进行中";
 "common_image" = "图片";
@@ -710,8 +715,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "账户提供者 %1$@ 不被允许。";
 "screen_change_server_form_header" = "主服务器 URL";
 "screen_change_server_form_notice" = "输入域名地址。";
+"screen_change_server_navigation_title_login" = "登录";
+"screen_change_server_navigation_title_register" = "创建账户";
 "screen_change_server_subtitle" = "你的服务器地址是什么？";
+"screen_change_server_textfield_footer_login" = "如果你的账户由你的公司或社区提供，则应更改账户提供者（例如：companyname.com）。";
+"screen_change_server_textfield_footer_register" = "在 matrix.org 创建免费账户。如果你想使用其它服务提供者创建账户，请相应地更改域名（例如：communityname.org）。";
+"screen_change_server_textfield_header" = "账户提供者";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "选择服务器";
+"screen_change_server_title_login" = "输入你的账户提供者";
+"screen_change_server_title_register" = "选择账户提供者";
 "screen_chat_backup_key_backup_action_disable" = "关闭备份";
 "screen_chat_backup_key_backup_action_enable" = "开启备份";
 "screen_chat_backup_key_backup_description" = "这将允许你在新设备上查看聊天历史， 这是备份聊天与数字身份所必需的。%1$@。";
