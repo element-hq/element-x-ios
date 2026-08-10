@@ -68,7 +68,10 @@ struct HomeScreenContent: View {
                 scrollViewAdapter.scrollView = scrollView
             }
             .onReceive(scrollViewAdapter.didScroll) { _ in
-                updateVisibleRange()
+                // Live, undelayed updates while scrolling: pagination needs to see the
+                // range early enough to grow the list before the user reaches the bottom,
+                // and the scroll geometry is valid mid-scroll.
+                sendVisibleRange()
             }
             .onReceive(scrollViewAdapter.isScrolling) { _ in
                 updateVisibleRange()
@@ -136,15 +139,21 @@ struct HomeScreenContent: View {
     private func updateVisibleRange() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { delayedUpdateVisibleRange() }
     }
-    
+
     private func delayedUpdateVisibleRange() {
+        guard scrollViewAdapter.isScrolling.value == false else { // Scrolling reports live through didScroll
+            return
+        }
+        sendVisibleRange()
+    }
+
+    private func sendVisibleRange() {
         guard let scrollView = scrollViewAdapter.scrollView,
-              scrollViewAdapter.isScrolling.value == false, // Ignore while scrolling
               context.searchQuery.isEmpty == true, // Ignore while filtering
               !context.viewState.visibleRooms.isEmpty else {
             return
         }
-        
+
         guard scrollView.contentSize.height > scrollView.bounds.height else {
             // This list never scrolls, publish the range manually.
             context.send(viewAction: .updateVisibleItemRange(0..<context.viewState.visibleRooms.count))

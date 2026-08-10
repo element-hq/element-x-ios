@@ -20,6 +20,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let visibleRoomsPrioritizer: (([String]) async throws -> Void)?
 
     private let roomListPageSize: UInt32
+    /// The `rooms` count when the last page growth was requested; suppresses repeated
+    /// `addOnePage` calls while the previous growth is still being applied.
+    private var lastGrowthRequestRoomCount = -1
     
     private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
     
@@ -189,20 +192,38 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
     
     private func setupVisibleRangeObservers() {
+        // Unthrottled: grow the list half a page before the user reaches the bottom so
+        // the next page is in by the time they get there, instead of bouncing off the
+        // end while it loads. Ranges stream in on every scroll tick, so re-requests are
+        // suppressed until the previous growth has actually landed in `rooms`.
+        visibleItemRangePublisher
+            .sink { [weak self] range in
+                guard let self,
+                      range.upperBound >= rooms.count - Int(roomListPageSize) / 2,
+                      rooms.count != lastGrowthRequestRoomCount else {
+                    return
+                }
+
+                lastGrowthRequestRoomCount = rooms.count
+
+                MXLog.info("\(self.name): Adding a page at \(rooms.count) rooms, visible range: \(range)")
+
+                listUpdatesSubscriptionResult?.controller().addOnePage()
+            }
+            .store(in: &cancellables)
+
         visibleItemRangePublisher
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates()
             .sink { [weak self] range in
                 guard let self else { return }
-                
+
                 MXLog.info("\(self.name): Updating visible range: \(range)")
-                
-                // Grow the list half a page before the user reaches the bottom so the
-                // next page is in by the time they get there, instead of bouncing off
-                // the end while it loads (the range publisher is throttled at 0.5s).
-                if range.upperBound >= rooms.count - Int(roomListPageSize) / 2 {
-                    listUpdatesSubscriptionResult?.controller().addOnePage()
-                } else if range.lowerBound == 0 {
+
+                if range.lowerBound == 0, range.upperBound < rooms.count {
+                    // The shrink lands `rooms` back on a count the growth guard may have
+                    // already recorded, so re-arm it explicitly.
+                    lastGrowthRequestRoomCount = -1
                     listUpdatesSubscriptionResult?.controller().resetToOnePage()
                 }
             }
