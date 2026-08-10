@@ -97,6 +97,25 @@ Attacks blank previews after scroll/clear-cache, rooms opening without local his
 (latest round) the NSE/main-app seams: push-taps landing on an unsynced room, lost sync
 events, and rooms stuck unread.
 
+**Headline: cold launch to a correct room list is now ~200ms on a 6k-room account**
+(measured 198-205ms across launches, zero stale exposure; was ~2.1s when this arc
+started). A representative launch (2026-08-10 19:27:35 / 19:31:53 measurement round,
+iPhone 12 Pro Max, dev-signed build):
+
+| phase | window | cost |
+|---|---|---|
+| pre-main + UIKit bringup to first app log | 0 → ~80ms | ~80ms |
+| AppCoordinator init, splash root, bg-refresh registration | +80 → +105 | ~25ms |
+| four SQLite stores open, in parallel (state 24ms the longest) | +105 → +135 | ~30ms |
+| session restore incl. inline 64-room recency load | +135 → +165 | ~30ms |
+| providers subscribe, room list `loaded`, sync starts | +165 → +170 | ~5ms |
+| first 64-room summary batch (30ms) + render | +170 → +205 | ~35ms |
+
+Pre-main was 264-580ms before MapLibre moved behind dlopen (its 60ms Metal static
+initialiser plus dev-signing validation dominated); no single fat target remains -
+everything is 25-35ms slices. Note LaunchMetrics lines print at settle time (~1s
+after paint), not paint time.
+
 SDK - previews and the back-pagination queue:
 - Accept undecrypted events as latest-event candidates: UTDs render as "Waiting for
   decryption key", keep an accurate bump timestamp (no sink treadmill), and are replaced
