@@ -201,6 +201,11 @@ SDK - launch speed and diagnosability:
   rooms (correct first render, no waiting), and the remaining pages load on a small
   worker pool since sync processing still waits for completeness
   [`8d22c6b4d`](https://github.com/matrix-org/matrix-rust-sdk/commit/8d22c6b4d)
+- Read only the profile row for latest-event preview senders: each room-list entry
+  loaded the sender's full RoomMember (seven store queries: power levels, ambiguity,
+  presence, ignored users) to render a name and avatar - 3-13ms per room under launch
+  contention, 89-426ms for the first page of summaries
+  [`b9e04f7d4`](https://github.com/matrix-org/matrix-rust-sdk/commit/b9e04f7d4)
 
 EXI:
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
