@@ -197,7 +197,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 
                 MXLog.info("\(self.name): Updating visible range: \(range)")
                 
-                if range.upperBound >= rooms.count {
+                // Grow the list half a page before the user reaches the bottom so the
+                // next page is in by the time they get there, instead of bouncing off
+                // the end while it loads (the range publisher is throttled at 0.5s).
+                if range.upperBound >= rooms.count - Int(roomListPageSize) / 2 {
                     listUpdatesSubscriptionResult?.controller().addOnePage()
                 } else if range.lowerBound == 0 {
                     listUpdatesSubscriptionResult?.controller().resetToOnePage()
