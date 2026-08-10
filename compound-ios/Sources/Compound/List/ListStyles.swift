@@ -24,11 +24,13 @@ public extension View {
             environment(\.defaultMinListRowHeight, 48)
                 .scrollContentBackground(.hidden)
                 .background(Color.compound.bgSubtleSecondaryLevel0.ignoresSafeArea())
+                .preference(key: CompoundBackgroundPreferenceKey.self, value: .color(.compound.bgSubtleSecondaryLevel0))
         case .plain:
             listStyle(.plain)
                 .environment(\.defaultMinListRowHeight, 48)
                 .scrollContentBackground(.hidden)
                 .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                .preference(key: CompoundBackgroundPreferenceKey.self, value: .default)
         }
     }
     

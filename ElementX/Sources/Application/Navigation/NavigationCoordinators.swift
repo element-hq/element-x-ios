@@ -385,15 +385,18 @@ private struct NavigationSplitCoordinatorView: View {
     /// The NavigationSplitView that will be used in non-compact layouts
     var navigationSplitView: some View {
         NavigationSplitView(columnVisibility: $navigationSplitCoordinator.columnVisibility) {
-            if let sidebarModule = navigationSplitCoordinator.sidebarModule {
-                sidebarModule.coordinator?.toPresentable()
-                    .environment(\.isInSidebar, true)
-                    .id(sidebarModule.id)
-            } else {
-                navigationSplitCoordinator.placeholderModule.coordinator?.toPresentable()
-                    .environment(\.isInSidebar, true)
-                    .id(navigationSplitCoordinator.placeholderModule.id)
+            Group {
+                if let sidebarModule = navigationSplitCoordinator.sidebarModule {
+                    sidebarModule.coordinator?.toPresentable()
+                        .id(sidebarModule.id)
+                } else {
+                    navigationSplitCoordinator.placeholderModule.coordinator?.toPresentable()
+                        .id(navigationSplitCoordinator.placeholderModule.id)
+                }
             }
+            .environment(\.isInSidebar, true)
+            // The tab rail's background tracks the detail module, so exclude the sidebar's background value.
+            .transformPreference(CompoundBackgroundPreferenceKey.self) { $0 = nil }
         } detail: {
             if let detailModule = navigationSplitCoordinator.detailModule {
                 detailModule.coordinator?.toPresentable()
