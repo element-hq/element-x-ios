@@ -6,9 +6,10 @@
 //
 
 import CoreLocation
+import MapInterface
 import QuartzCore
 
-/// Smoothly animates a `LocationAnnotation`'s coordinate from its current
+/// Smoothly animates a `MapAnnotation`'s coordinate from its current
 /// position to a new one using a `CADisplayLink` for frame-accurate updates.
 ///
 /// ## How it works
@@ -26,7 +27,7 @@ import QuartzCore
 /// cancels the previous one and begins from the annotation's current position.
 final class CoordinateAnimator {
     private var displayLink: CADisplayLink?
-    private weak var annotation: LocationAnnotation?
+    private weak var annotation: MapAnnotation?
     private let startCoordinate: CLLocationCoordinate2D
     private let endCoordinate: CLLocationCoordinate2D
     private let duration: CFTimeInterval
@@ -36,7 +37,7 @@ final class CoordinateAnimator {
     /// while the display link is running. Keyed by annotation ID.
     private static var activeAnimators: [String: CoordinateAnimator] = [:]
     
-    private init(annotation: LocationAnnotation,
+    private init(annotation: MapAnnotation,
                  to end: CLLocationCoordinate2D,
                  duration: CFTimeInterval) {
         self.annotation = annotation
@@ -48,7 +49,7 @@ final class CoordinateAnimator {
     /// Starts animating the annotation's coordinate to `end` over `duration` seconds.
     /// If the annotation is already being animated, the in-flight animation is
     /// cancelled and a new one starts from the current position.
-    static func animate(annotation: LocationAnnotation,
+    static func animate(annotation: MapAnnotation,
                         to end: CLLocationCoordinate2D,
                         duration: CFTimeInterval) {
         guard annotation.coordinate.latitude != end.latitude

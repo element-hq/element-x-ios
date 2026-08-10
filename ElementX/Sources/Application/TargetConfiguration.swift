@@ -8,9 +8,6 @@
 
 import Combine
 import Foundation
-#if IS_MAIN_APP
-import MapLibre
-#endif
 import MatrixRustSDK
 
 nonisolated enum Target: String {
@@ -64,37 +61,13 @@ nonisolated enum Target: String {
         enableSentryLogging(enabled: false)
         
         MXLog.configure(currentTarget: rawValue)
-        
-        configureMapLibreIfAvailable()
-        
+
         let hookCancellable = rageshakeURL.publisher
             .sink { _ in
                 appHooks.tracingHook.update(tracingConfiguration, with: rageshakeURL)
             }
         
         return ConfigurationResult(hookCancellable: hookCancellable)
-    }
-    
-    private func configureMapLibreIfAvailable() {
-        #if IS_MAIN_APP
-        MLNLoggingConfiguration.shared.loggingLevel = .debug
-        MLNLoggingConfiguration.shared.handler = { loggingLevel, _, _, message in
-            switch loggingLevel {
-            case .error:
-                MXLog.error(message)
-            case .warning:
-                MXLog.warning(message)
-            case .info:
-                MXLog.info(message)
-            case .debug:
-                MXLog.debug(message)
-            case .verbose:
-                MXLog.verbose(message)
-            default:
-                break
-            }
-        }
-        #endif
     }
     
     /// The result of calling ``configure(logLevel:traceLogPacks:sentryURL:)``.

@@ -1,46 +1,29 @@
 //
-// Copyright 2025 Element Creations Ltd.
-// Copyright 2023-2025 New Vector Ltd.
+// Copyright 2026 Element Creations Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Combine
-import MapLibre
+import CoreLocation
+import MapInterface
 import SwiftUI
 
-struct MapLibreMapView: UIViewRepresentable {
-    struct Options {
-        /// the final zoom level used when the first user location emit
-        let zoomLevel: Double
-        /// The initial zoom level used when the map it firstly loaded and the user location is not yet available, in case of annotations this property is not being used
-        let initialZoomLevel: Double
-        
-        /// The initial map center
-        let mapCenter: CLLocationCoordinate2D
-        
-        /// Map annotations
-        let annotations: [LocationAnnotation]
-        
-        init(zoomLevel: Double, initialZoomLevel: Double, mapCenter: CLLocationCoordinate2D, annotations: [LocationAnnotation] = []) {
-            self.zoomLevel = zoomLevel
-            self.initialZoomLevel = initialZoomLevel
-            self.mapCenter = mapCenter
-            self.annotations = annotations
-        }
-    }
-    
-    // MARK: - Properties
-    
-    @Environment(\.colorScheme) private var colorScheme
-    
+/// The interactive map, rendered by the dlopen'd MapLibreShim framework.
+///
+/// The app deliberately doesn't link MapLibre: its static initialisers cost tens of
+/// milliseconds on every cold launch, for a map that only appears once a location
+/// screen is opened. This wrapper keeps the old `MapLibreMapView` call-site surface
+/// and loads the shim (and with it MapLibre) the first time a map is actually shown.
+struct MapLibreMapView: View {
+    typealias Options = InteractiveMapOptions
+
     let mapURLBuilder: MapTilerURLBuilderProtocol
-    
+
     let options: Options
-    
+
     let mediaProvider: MediaProviderProtocol?
-    
+
     /// Behavior mode of the current user's location, can be hidden, only shown and shown following the user
     @Binding var showsUserLocationMode: ShowUserLocationMode
     /// Bind view errors if any
@@ -51,299 +34,78 @@ struct MapLibreMapView: UIViewRepresentable {
     @Binding var isLocationAuthorized: Bool?
     /// The radius of uncertainty for the location, measured in meters.
     @Binding var geolocationUncertainty: CLLocationAccuracy?
-    
+
     /// Called when the user pan on the map
     var userDidPan: (() -> Void)?
-    
-    // MARK: - UIViewRepresentable
-    
-    func makeUIView(context: Context) -> MLNMapView {
-        let mapView = makeMapView()
-        mapView.delegate = context.coordinator
-        setupMap(mapView: mapView, with: options)
-        return mapView
-    }
-    
-    func updateUIView(_ mapView: MLNMapView, context: Context) {
-        // Don't set the same value twice. Otherwise, if there is an error loading the map, a loop
-        // is caused as the `error` binding being set, which triggers this update, which sets a
-        // new URL, which causes another error, and so it goes on round and round in a circle.
-        let dynamicMapURL = mapURLBuilder.interactiveMapURL(for: .init(colorScheme))
-        if mapView.styleURL != dynamicMapURL {
-            mapView.styleURL = dynamicMapURL
+
+    var body: some View {
+        if let builder = MapLibreShimLoader.builder {
+            builder.makeMapView(styleURL: { [mapURLBuilder] isDarkMode in
+                                    mapURLBuilder.interactiveMapURL(for: isDarkMode ? .dark : .light)
+                                },
+                                options: resolvedOptions,
+                                showsUserLocationMode: $showsUserLocationMode,
+                                error: $error,
+                                mapCenterCoordinate: $mapCenterCoordinate,
+                                hasLoadedUserLocation: $hasLoadedUserLocation,
+                                isLocationAuthorized: $isLocationAuthorized,
+                                geolocationUncertainty: $geolocationUncertainty,
+                                userDidPan: userDidPan)
+        } else {
+            // The shim failed to load, surface it the same way as a map loading failure.
+            Color.clear
+                .onAppear { error = .failedLoadingMap }
         }
-        
-        // If the center coordinate was updated externally (not by the map itself), move the map.
-        // Not applied while following a marker, where the camera is driven by the marker's position.
-        if showsUserLocationMode.followedMarkerID == nil,
-           let newCenter = mapCenterCoordinate,
-           newCenter != context.coordinator.lastReportedCenter {
-            context.coordinator.lastReportedCenter = newCenter
-            mapView.setCenter(newCenter, animated: true)
-        }
-        
-        // Update existing annotation views with fresh SwiftUI content.
-        // This handles the case where the annotation's view data changes after
-        // the annotation was initially placed (e.g. user avatar loads asynchronously).
-        updateAnnotations(in: mapView)
-        
-        showUserLocation(in: mapView)
-        
-        context.coordinator.updateMarkerFollowing(in: mapView, markerID: showsUserLocationMode.followedMarkerID)
     }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    // MARK: - Private
-    
-    private func setupMap(mapView: MLNMapView, with options: Options) {
-        mapView.addAnnotations(options.annotations)
-        mapView.zoomLevel = options.annotations.isEmpty ? options.initialZoomLevel : options.zoomLevel
-        mapView.centerCoordinate = options.mapCenter
-    }
-    
-    private func updateAnnotations(in mapView: MLNMapView) {
-        let existingByID = Dictionary(uniqueKeysWithValues:
-            (mapView.annotations ?? []).compactMap { $0 as? LocationAnnotation }.map { ($0.id, $0) })
-        let updatedByID = Dictionary(uniqueKeysWithValues: options.annotations.map { ($0.id, $0) })
-        
-        let existingIDs = Set(existingByID.keys)
-        let updatedIDs = Set(updatedByID.keys)
-        
-        // Remove annotations that are no longer present
-        let removedIDs = existingIDs.subtracting(updatedIDs)
-        if !removedIDs.isEmpty {
-            let toRemove = removedIDs.compactMap { existingByID[$0] }
-            mapView.removeAnnotations(toRemove)
-        }
-        
-        // Add new annotations
-        let addedIDs = updatedIDs.subtracting(existingIDs)
-        if !addedIDs.isEmpty {
-            let toAdd = addedIDs.compactMap { updatedByID[$0] }
-            mapView.addAnnotations(toAdd)
-        }
-        
-        // Update existing annotations that are still present
-        let keptIDs = existingIDs.intersection(updatedIDs)
-        for id in keptIDs {
-            guard let existingAnnotation = existingByID[id],
-                  let updatedAnnotation = updatedByID[id] else {
-                continue
-            }
-            CoordinateAnimator.animate(annotation: existingAnnotation,
-                                       to: updatedAnnotation.coordinate,
-                                       duration: 1.0)
-            if let annotationView = mapView.view(for: existingAnnotation) as? LocationAnnotationView {
-                annotationView.updateContent(with: updatedAnnotation.kind, mediaProvider: mediaProvider)
+
+    /// The options with the app-only pieces (marker views, tint) resolved into
+    /// the shared types the shim understands.
+    private var resolvedOptions: Options {
+        for case let annotation as LocationAnnotation in options.annotations {
+            annotation.makeContent = { [kind = annotation.kind, mediaProvider] in
+                AnyView(LocationMarkerView(kind: kind, mediaProvider: mediaProvider))
             }
         }
-    }
-    
-    private func makeMapView() -> MLNMapView {
-        let mapView = MLNMapView(frame: .zero, styleURL: mapURLBuilder.interactiveMapURL(for: colorScheme == .dark ? .dark : .light))
-        mapView.logoViewPosition = .topLeft
-        mapView.attributionButtonPosition = .topLeft
-        mapView.attributionButtonMargins = .init(x: mapView.logoView.frame.maxX + 8, y: mapView.logoView.center.y / 2)
-        mapView.tintColor = .compound.iconAccentPrimary
-        mapView.allowsRotating = false
-        mapView.allowsTilting = false
-        return mapView
-    }
-    
-    private func showUserLocation(in mapView: MLNMapView) {
-        switch (showsUserLocationMode, options.annotations) {
-        case (.showAndFollow, _):
-            mapView.userTrackingMode = .follow
-        case (.show, let annotations) where !annotations.isEmpty:
-            // In the show mode, if there are annotations, we check the authorizationStatus,
-            // if it's not determined, we wont prompt the user with a request for permissions,
-            // because they should be able to see the annotations without sharing their location information.
-            guard mapView.locationManager.authorizationStatus != .notDetermined else { return }
-            fallthrough
-        case (.show, _):
-            mapView.showsUserLocation = true
-            mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
-        case (.hide, _), (.hideAndFollowMarker, _):
-            // In hideAndFollowMarker mode the camera following is handled by the coordinator.
-            mapView.showsUserLocation = false
-            mapView.setUserTrackingMode(.none, animated: false, completionHandler: nil)
-        }
+
+        var options = options
+        options.tintColor = .compound.iconAccentPrimary
+        return options
     }
 }
 
-// MARK: - Coordinator
+/// Loads the MapLibreShim framework on first use and vends its map view builder.
+enum MapLibreShimLoader {
+    static let builder: InteractiveMapViewBuilding? = {
+        guard let frameworksPath = Bundle.main.privateFrameworksPath else {
+            return nil
+        }
 
-extension MapLibreMapView {
-    class Coordinator: NSObject, MLNMapViewDelegate {
-        // MARK: - Properties
-        
-        var mapLibreView: MapLibreMapView
-        
-        private var previousUserLocation: MLNUserLocation?
-        /// Tracks the last center coordinate reported by the map (or set programmatically),
-        /// so that `updateUIView` can tell apart external binding changes from internal ones.
-        var lastReportedCenter: CLLocationCoordinate2D?
-        
-        /// The annotation the camera is currently locked on while in the `hideAndFollowMarker` mode.
-        private weak var followedAnnotation: LocationAnnotation?
-        /// Observes the followed annotation's coordinate, updated every frame by the `CoordinateAnimator`.
-        private var followedAnnotationObservation: NSKeyValueObservation?
-        
-        // MARK: - Setup
-        
-        init(_ mapLibreView: MapLibreMapView) {
-            self.mapLibreView = mapLibreView
+        guard dlopen(frameworksPath + "/MapLibreShim.framework/MapLibreShim", RTLD_NOW) != nil else {
+            MXLog.error("Failed loading MapLibreShim: \(dlerror().map { String(cString: $0) } ?? "unknown error")")
+            return nil
         }
-        
-        // MARK: - Marker following
-        
-        /// Keeps the camera locked on the marker with the given id, or stops following when nil.
-        func updateMarkerFollowing(in mapView: MLNMapView, markerID: String?) {
-            guard let markerID else {
-                stopFollowingMarker()
-                return
-            }
-            
-            guard let annotation = (mapView.annotations ?? [])
-                .compactMap({ $0 as? LocationAnnotation })
-                .first(where: { $0.id == markerID }) else {
-                // The marker isn't on the map (yet), resolve it again on the next update.
-                stopFollowingMarker()
-                return
-            }
-            
-            guard annotation !== followedAnnotation else { return }
-            startFollowingMarker(annotation, in: mapView)
-        }
-        
-        private func startFollowingMarker(_ annotation: LocationAnnotation, in mapView: MLNMapView) {
-            followedAnnotation = annotation
-            followedAnnotationObservation = nil
-            
-            // Animate to the marker first, attaching the per-frame tracking only on completion
-            // so that it doesn't cancel the transition.
-            mapView.setCenter(annotation.coordinate,
-                              zoomLevel: mapView.zoomLevel,
-                              direction: -1, // negative value keeps the current direction
-                              animated: true) { [weak self, weak annotation, weak mapView] in
-                guard let self, let annotation, let mapView, annotation === followedAnnotation else { return }
-                
-                // Mirror every animated coordinate update to keep the camera as smooth as the marker.
-                followedAnnotationObservation = annotation.observe(\.coordinate) { [weak mapView] annotation, _ in
-                    // The coordinate is only ever updated by SwiftUI so KVO fires on the main actor.
-                    MainActor.assumeIsolated {
-                        mapView?.setCenter(annotation.coordinate, animated: false)
-                    }
-                }
-            }
-        }
-        
-        private func stopFollowingMarker() {
-            followedAnnotation = nil
-            followedAnnotationObservation = nil
-        }
-        
-        // MARK: - MLNMapViewDelegate
-        
-        func mapView(_ mapView: MLNMapView, viewFor annotation: MLNAnnotation) -> MLNAnnotationView? {
-            guard let annotation = annotation as? LocationAnnotation else {
-                return nil
-            }
-            return LocationAnnotationView(annotation: annotation, mediaProvider: mapLibreView.mediaProvider)
-        }
-        
-        func mapViewDidFailLoadingMap(_ mapView: MLNMapView, withError error: Error) {
-            if mapLibreView.error != .failedLoadingMap {
-                mapLibreView.error = .failedLoadingMap
-            }
-        }
-        
-        func mapView(_ mapView: MLNMapView, didUpdate userLocation: MLNUserLocation?) {
-            guard let userLocation else { return }
-            mapLibreView.hasLoadedUserLocation = true
-            
-            if previousUserLocation == nil, mapLibreView.options.annotations.isEmpty {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    mapView.setCenter(userLocation.coordinate, zoomLevel: self.mapLibreView.options.zoomLevel, animated: true)
-                }
-            }
-            
-            previousUserLocation = userLocation
-            updateGeolocationUncertainty(location: userLocation)
-        }
-        
-        func mapView(_ mapView: MLNMapView, didChangeLocationManagerAuthorization manager: MLNLocationManager) {
-            switch manager.authorizationStatus {
-            case .denied, .restricted:
-                mapLibreView.isLocationAuthorized = false
-            case .authorizedAlways, .authorizedWhenInUse:
-                mapLibreView.isLocationAuthorized = true
-            case .notDetermined:
-                mapLibreView.isLocationAuthorized = nil
-            @unknown default:
-                break
-            }
-        }
-        
-        func mapView(_ mapView: MLNMapView, regionDidChangeAnimated animated: Bool) {
-            // While following a marker, don't flood the center binding with per-frame camera updates.
-            // Leaving `lastReportedCenter` untouched avoids an external re-centering when following stops.
-            guard mapLibreView.showsUserLocationMode.followedMarkerID == nil else { return }
-            
-            // Avoid `Publishing changes from within view update` warnings
-            DispatchQueue.main.async { [mapLibreView, weak self] in
-                let center = mapView.centerCoordinate
-                self?.lastReportedCenter = center
-                mapLibreView.mapCenterCoordinate = center
-            }
-        }
-        
-        func mapView(_ mapView: MLNMapView, shouldChangeFrom oldCamera: MLNMapCamera, to newCamera: MLNMapCamera, reason: MLNCameraChangeReason) -> Bool {
-            // Send userDidPan only for gestures that actually change the map center. The reason
-            // is an option set and gestures can come combined with other reasons, so check for
-            // containment instead of an exact match.
-            let centerChangingGestures: MLNCameraChangeReason = [.gesturePan, .gesturePinch, .gestureRotate]
-            if !reason.isDisjoint(with: centerChangingGestures) {
-                // Stop following immediately, the camera would fight the gesture otherwise.
-                stopFollowingMarker()
-                mapLibreView.userDidPan?()
-            }
-            return true
-        }
-        
-        // MARK: Callout
-        
-        func mapView(_ mapView: MLNMapView, annotationCanShowCallout annotation: MLNAnnotation) -> Bool {
-            false
-        }
-        
-        // MARK: Private
-        
-        private func updateGeolocationUncertainty(location: MLNUserLocation) {
-            guard let clLocation = location.location, clLocation.horizontalAccuracy >= 0 else {
-                mapLibreView.geolocationUncertainty = nil
-                return
-            }
-            
-            mapLibreView.geolocationUncertainty = clLocation.horizontalAccuracy
-        }
-    }
-}
 
-// MARK: - MLNMapView convenient methods
-
-private extension MapTilerStyle {
-    init(_ colorScheme: ColorScheme) {
-        switch colorScheme {
-        case .light:
-            self = .light
-        case .dark:
-            self = .dark
-        @unknown default:
-            fatalError()
+        guard let builderClass = NSClassFromString("MapLibreShimBuilder") as? NSObject.Type,
+              let builder = builderClass.init() as? InteractiveMapViewBuilding else {
+            MXLog.error("MapLibreShimBuilder missing from MapLibreShim")
+            return nil
         }
-    }
+
+        builder.configureLogging { severity, message in
+            switch severity {
+            case .error:
+                MXLog.error(message)
+            case .warning:
+                MXLog.warning(message)
+            case .info:
+                MXLog.info(message)
+            case .debug:
+                MXLog.debug(message)
+            case .verbose:
+                MXLog.verbose(message)
+            }
+        }
+
+        return builder
+    }()
 }

@@ -270,6 +270,13 @@ targets:
     - target: NSE
     - target: ShareExtension
     - target: MatrixRustSDKMocks
+    - target: MapInterface
+      embed: true
+    # Embedded but not linked: dlopen'd on first map use so MapLibre's static
+    # initialisers stay off the launch path (see MapLibreShimLoader).
+    - target: MapLibreShim
+      link: false
+      embed: true
     - package: MatrixRustSDK
       embed: true
     - package: Compound
@@ -287,7 +294,14 @@ targets:
     - package: LoremSwiftum
     - package: LRUCache
     - package: Mantis
-    - package: MapLibre
+    # MapLibre itself is only linked by MapLibreShim; the app just embeds the framework
+    # (staged into the build products by the shim's package dependency) so it's in the
+    # bundle for the shim's load command to resolve against. An implicit framework
+    # reference because xcodegen can't express embed-without-link for package products.
+    - framework: ../../MapLibre.framework
+      implicit: true
+      link: false
+      embed: true
     - package: PostHog
     - package: SwiftState
     - package: GZIP
