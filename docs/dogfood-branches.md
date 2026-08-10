@@ -68,18 +68,6 @@ SDK:
 - Compute latest events for rooms created by the response being processed (fixes dropped
   "Room is unknown" computes after a clear-cache)
   [`17b6dc3b7`](https://github.com/matrix-org/matrix-rust-sdk/commit/17b6dc3b7)
-- Take the WAL checkpoint off the store-open critical path: the open-time TRUNCATE
-  (upstream #6004) stalls launch in proportion to the WAL grown while only the NSE was
-  writing (~1s after a 30-min pause); replaced by a deferred PASSIVE checkpoint on a pool
-  connection, close/pause keeps its TRUNCATE
-  [`c4b51714a`](https://github.com/matrix-org/matrix-rust-sdk/commit/c4b51714a)
-- Give every first-party SDK crate a root log target: the FFI filter has no global
-  directive, so crates missing from its target table (`matrix_sdk_base`,
-  `matrix_sdk_common`, `matrix_sdk_sqlite`, `matrix_sdk_store_encryption`,
-  `matrix_sdk_ui`) were dropped at every app log level; now the app's chosen level
-  propagates through the whole SDK
-  [`3524b89a1`](https://github.com/matrix-org/matrix-rust-sdk/commit/3524b89a1)
-
 EXI:
 - Start the session restore eagerly from `AppCoordinator.init`, on a detached task, and
   build + start the sync service on it (first sync request out at ~0.9s instead of ~1.4s)
@@ -183,6 +171,27 @@ SDK - NSE and push-taps:
   to `/context` after a single failed `/sync` attempt instead of three
   [`c187fef45`](https://github.com/matrix-org/matrix-rust-sdk/commit/c187fef45)
 
+SDK - launch speed and diagnosability:
+- Take the WAL checkpoint off the store-open critical path: the open-time TRUNCATE
+  (upstream #6004) stalls launch in proportion to the WAL grown while only the NSE was
+  writing (~1s after a 30-min pause); replaced by a deferred PASSIVE checkpoint on a pool
+  connection, close/pause keeps its TRUNCATE
+  [`c4b51714a`](https://github.com/matrix-org/matrix-rust-sdk/commit/c4b51714a)
+- Give every first-party SDK crate a root log target: the FFI filter has no global
+  directive, so crates missing from its target table (`matrix_sdk_base`,
+  `matrix_sdk_common`, `matrix_sdk_sqlite`, `matrix_sdk_store_encryption`,
+  `matrix_sdk_ui`) were dropped at every app log level; now the app's chosen level
+  propagates through the whole SDK
+  [`3524b89a1`](https://github.com/matrix-org/matrix-rust-sdk/commit/3524b89a1)
+- Load rooms progressively in pages of 200 instead of deserializing every RoomInfo
+  before session restore returns (~500ms of the launch critical path on a 6k-room
+  account; measured launch→roomlist 302ms after); sync processing waits on a
+  rooms-loaded barrier so a not-yet-loaded room can't be recreated blank
+  [`a6bdc2720`](https://github.com/matrix-org/matrix-rust-sdk/commit/a6bdc2720)
+- Log which event counts a room as unread, so rooms stuck unread despite an up-to-date
+  receipt name their culprit
+  [`24333794e`](https://github.com/matrix-org/matrix-rust-sdk/commit/24333794e)
+
 EXI:
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
   1 visible event requested, SDK tops up the timeline
@@ -221,3 +230,7 @@ EXI:
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
   [`48cba7c70`](https://github.com/element-hq/element-x-ios/commit/48cba7c70)
+- Re-snap to the real top after a system scroll-to-top: with 6k rooms the status-bar
+  tap lands slightly off the estimated top, leaving the navigation bar (large title,
+  search drawer, filter chips) stuck mid-transition
+  [`877f5db4c`](https://github.com/element-hq/element-x-ios/commit/877f5db4c)
