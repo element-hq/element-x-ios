@@ -244,3 +244,8 @@ EXI:
   tap lands slightly off the estimated top, leaving the navigation bar (large title,
   search drawer, filter chips) stuck mid-transition
   [`877f5db4c`](https://github.com/element-hq/element-x-ios/commit/877f5db4c)
+- Shrink the home list's first page from 100 to 32 rooms: every first-page room costs
+  a summary build (FFI fetch + string building) in front of the first paint, while the
+  screen renders ~10 rows and scrolling grows the list anyway; also log summary builds
+  over 25ms so launches attribute this stage
+  [`edb009314`](https://github.com/element-hq/element-x-ios/commit/edb009314)
