@@ -73,6 +73,12 @@ SDK:
   writing (~1s after a 30-min pause); replaced by a deferred PASSIVE checkpoint on a pool
   connection, close/pause keeps its TRUNCATE
   [`c4b51714a`](https://github.com/matrix-org/matrix-rust-sdk/commit/c4b51714a)
+- Give every first-party SDK crate a root log target: the FFI filter has no global
+  directive, so crates missing from its target table (`matrix_sdk_base`,
+  `matrix_sdk_common`, `matrix_sdk_sqlite`, `matrix_sdk_store_encryption`,
+  `matrix_sdk_ui`) were dropped at every app log level; now the app's chosen level
+  propagates through the whole SDK
+  [`3524b89a1`](https://github.com/matrix-org/matrix-rust-sdk/commit/3524b89a1)
 
 EXI:
 - Start the session restore eagerly from `AppCoordinator.init`, on a detached task, and
