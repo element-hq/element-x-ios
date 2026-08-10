@@ -61,6 +61,7 @@ struct UITests: AsyncParsableCommand {
         } catch {
             testsFailed = true
             print("\n❌ UI tests (\(deviceType.rawValue)) failed.\n")
+            CI.annotateError(title: "UI tests (\(deviceType.rawValue)) failed", "Download the artifacts for the xcresult bundle.")
         }
         
         await CI.zipResults(bundles: ["UITests.xcresult"],
