@@ -20,6 +20,24 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>a11y_gallery_more_media</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Галерея, ще %1$d медіа</string>
+			<key>many</key>
+			<string>Галерея, ще %1$d медіа</string>
+			<key>one</key>
+			<string>Галерея, ще %1$d медіа</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>a11y_polls_percent_of_total</key>
 	<dict>
 		<key>COUNT</key>
@@ -280,10 +298,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Поширено %1$d вкладення</string>
+			<key>many</key>
+			<string>Поширено %1$d вкладень</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
-			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>Поширено %1$d вкладення</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
