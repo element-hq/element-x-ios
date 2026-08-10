@@ -53,6 +53,18 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         updateDidScroll(scrollView)
+
+        // With a large LazyVStack, the system scroll-to-top's landing offset is
+        // computed from estimated row heights, so it can settle slightly off the
+        // real top once the rows above materialise - which also leaves the
+        // navigation bar's scroll-edge appearance stuck mid-transition. Re-snap
+        // after the layout settles, nudging even when already at the top so the
+        // bar re-evaluates its state.
+        DispatchQueue.main.async {
+            let top = CGPoint(x: scrollView.contentOffset.x, y: -scrollView.adjustedContentInset.top)
+            scrollView.setContentOffset(CGPoint(x: top.x, y: top.y + 1), animated: false)
+            scrollView.setContentOffset(top, animated: false)
+        }
     }
     
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
