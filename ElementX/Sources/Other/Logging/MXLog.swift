@@ -23,14 +23,6 @@ nonisolated enum MXLog {
         rootSpan.enter()
     }
     
-    static func createSpan(_ name: String,
-                           file: String = #file,
-                           function: String = #function,
-                           line: Int = #line,
-                           column: Int = #column) -> Span {
-        createSpan(name, level: .info, file: file, function: function, line: line, column: column)
-    }
-    
     static func verbose(_ message: Any,
                         file: String = #file,
                         function: String = #function,
@@ -111,20 +103,6 @@ nonisolated enum MXLog {
     #endif
     
     // MARK: - Private
-    
-    // periphery:ignore:parameters function,column
-    private static func createSpan(_ name: String,
-                                   level: LogLevel,
-                                   file: String = #file,
-                                   function: String = #function,
-                                   line: Int = #line,
-                                   column: Int = #column) -> Span {
-        if Span.current().isNone() {
-            rootSpan.enter()
-        }
-        
-        return Span(file: file, line: UInt32(line), level: level.rustLogLevel, target: currentTarget, name: name, bridgeTraceId: nil)
-    }
     
     // periphery:ignore:parameters function,column
     private static func log(_ message: Any,

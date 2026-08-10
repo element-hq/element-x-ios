@@ -99,12 +99,6 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     private static func processDiffs(_ diffs: [TimelineDiff],
                                      on currentItems: [TimelineItemProxy],
                                      spanName: String) async -> (itemProxies: [TimelineItemProxy], hasMembershipChange: Bool) {
-        let span = MXLog.createSpan(spanName)
-        span.enter()
-        defer {
-            span.exit()
-        }
-        
         var hasMembershipChange = false
         
         let itemProxies = diffs.reduce(currentItems) { currentItems, diff in
