@@ -117,6 +117,7 @@ struct CallView: UIViewRepresentable {
             configuration.userContentController = userContentController
             configuration.allowsInlineMediaPlayback = true
             configuration.allowsPictureInPictureMediaPlayback = true
+            configuration.applicationNameForUserAgent = InfoPlistReader.main.bundleDisplayName
             
             if let script = viewModelContext.viewState.script {
                 let userScript = WKUserScript(source: script, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
@@ -128,8 +129,6 @@ struct CallView: UIViewRepresentable {
             webView.navigationDelegate = self
             webView.isInspectable = true
             webView.scrollView.contentInsetAdjustmentBehavior = .never // Let Element Call manage the safe areas within the web view.
-            
-            webView.customUserAgent = UserAgentBuilder.makeASCIIUserAgent()
             
             // https://stackoverflow.com/a/77963877/730924
             webView.allowsLinkPreview = true
