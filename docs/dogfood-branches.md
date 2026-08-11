@@ -342,7 +342,12 @@ EXI:
   [`bde3cbd69`](https://github.com/element-hq/element-x-ios/commit/bde3cbd69) and update
   in place when the key arrives - the SDK hooks the redecryptor's resolved-UTDs report
   to refresh replies whose target is outside the loaded timeline
-  ([SDK `17af054e3`](https://github.com/matrix-org/matrix-rust-sdk/commit/17af054e3))
+  ([SDK `17af054e3`](https://github.com/matrix-org/matrix-rust-sdk/commit/17af054e3)).
+  Events fetched over `/event` are now saved into the event cache too: reply targets
+  used to be refetched over the network on every item rebuild (a ~10s skeleton while
+  matrix.org served a cold 2023 event) and, being invisible to the redecryptor, never
+  resolved in place when their key arrived from backup
+  ([SDK `4b23e1d77`](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77))
 - Fix the first list item rendering more indented than the rest (inter-element
   whitespace in markdown-generated HTML normalised into stray spaces)
   [`550a6467d`](https://github.com/element-hq/element-x-ios/commit/550a6467d)
