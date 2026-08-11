@@ -72,6 +72,9 @@ struct RoomPeekInteraction: UIViewRepresentable {
             return UIContextMenuConfiguration(identifier: nil) {
                 let controller = UIHostingController(rootView: RoomPeekView(roomID: interaction.room.id,
                                                                             viewModelBuilder: interaction.viewModelBuilder))
+                // The platter floats clear of the screen edges, so the window's
+                // safe areas must not inset the content again inside it.
+                controller.safeAreaRegions = []
                 // Match the 16pt margins used by the rest of the screen's
                 // chrome and leave the bottom ~40% for the context menu.
                 controller.preferredContentSize = CGSize(width: windowBounds.width - 32,
