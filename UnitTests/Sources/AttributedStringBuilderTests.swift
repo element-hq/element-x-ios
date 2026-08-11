@@ -649,9 +649,20 @@ struct AttributedStringBuilderTests {
         
         let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        #expect(String(attributedString.characters) == "like\n    • this\ntest")
+        #expect(String(attributedString.characters) == "like\n  • this\ntest")
     }
     
+    @Test
+    func firstListItemIndentation() throws {
+        // The inter-element newlines (as sent by markdown-generated HTML) used to
+        // normalise into stray spaces, indenting the first item deeper than the rest.
+        let htmlString = "<p>intro:</p>\n<ul>\n<li>first</li>\n<li>second</li>\n</ul>\n"
+
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+
+        #expect(String(attributedString.characters) == "intro:\n  • first\n  • second")
+    }
+
     @Test
     func unorderedList() throws {
         let htmlString = "<ul><li>1</li><li>2</li><li>3</li></ul>"
@@ -694,7 +705,7 @@ struct AttributedStringBuilderTests {
         
         let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        #expect(String(attributedString.characters) == "   2. this is a two")
+        #expect(String(attributedString.characters) == "  2. this is a two")
     }
     
     @Test
@@ -725,7 +736,7 @@ struct AttributedStringBuilderTests {
         """
         let attributedString = try #require(attributedStringBuilder.fromHTML(html), "Could not build the attributed string")
         
-        #expect(String(attributedString.characters) == "Stefan pushed 2 commits to main:\n   •  Some update \n   •  Some other update")
+        #expect(String(attributedString.characters) == "Stefan pushed 2 commits to main:\n  •  Some update \n  •  Some other update")
     }
     
     // MARK: - Phishing prevention

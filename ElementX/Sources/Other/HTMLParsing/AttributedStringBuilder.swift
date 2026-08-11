@@ -119,12 +119,22 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         for node in element.getChildNodes() {
             if let textNode = node as? TextNode {
+                // Inter-element whitespace (e.g. the newlines separating a <ul> from
+                // its <li>s, or two block elements) normalises to a stray space that
+                // misindents the following line; HTML collapses it away entirely.
+                if !preserveFormatting, textNode.isBlank(),
+                   (node.parent() as? Element).map({ ["ul", "ol"].contains($0.tagName()) }) == true
+                   || (node.previousSibling() as? Element)?.isBlock() == true
+                   || (node.nextSibling() as? Element)?.isBlock() == true {
+                    continue
+                }
+
                 // If this node is plain text append the whitespace normalised version
                 if node.parent() == documentBody {
                     result.append(NSAttributedString(string: textNode.text()))
                     continue
                 }
-                
+
                 var text = preserveFormatting ? textNode.getWholeText() : textNode.text()
                 
                 // There seem to be sibling TextNodes following every </br> tag that
