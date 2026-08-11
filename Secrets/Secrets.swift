@@ -3,7 +3,7 @@ nonisolated enum Secrets {
     static let sentryRustDSN: String? = "https://username@sentry.localhost/project_id"
     static let postHogHost: String? = "https://posthog.localhost"
     static let postHogAPIKey: String? = "your_key"
-    static let rageshakeURL: String? = "https://rageshake.localhost/submit"
+    static let rageshakeURL: String? = "https://riot.im/bugreports/submit"
     static let mapLibreAPIKey: String? = "your_key"
 
 }
