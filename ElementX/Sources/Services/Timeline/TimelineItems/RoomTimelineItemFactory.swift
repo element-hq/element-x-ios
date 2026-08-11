@@ -113,6 +113,8 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                     replyContent = .redacted
                 case .liveLocation:
                     replyContent = .liveLocation
+                case .unableToDecrypt:
+                    replyContent = .message(.text(.init(body: L10n.commonWaitingForDecryptionKey)))
                 default:
                     replyContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
                 }
@@ -844,6 +846,8 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                     .message(.text(.init(body: body)))
                 case .redacted:
                     .redacted
+                case .unableToDecrypt:
+                    .message(.text(.init(body: L10n.commonWaitingForDecryptionKey)))
                 default:
                     .message(.text(.init(body: L10n.commonUnsupportedEvent)))
                 }
