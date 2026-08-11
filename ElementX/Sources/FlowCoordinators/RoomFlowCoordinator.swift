@@ -318,11 +318,23 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 // Otherwise check if the focussed event exists to handle a possible error or theaded event.
                 switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
                 case .success(let event):
+                    // A focus target that is the room's newest message (the common
+                    // notification-tap case) wants the live bottom of the room, not the
+                    // permalink treatment - and skipping the focus here avoids the focussed
+                    // timeline build entirely. Compare by timestamp as well as ID: right
+                    // after a tap wakes the app, the in-memory latest event lags what the
+                    // NSE already stored, so an event at least as new as the stale value is
+                    // the newest this process knows about.
+                    let isNewestKnownEvent = roomProxy.latestEventID == focusEvent.eventID
+                        || roomProxy.latestEventTimestamp.map { event.timestamp() >= $0 } ?? false
+
                     if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
                         stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID,
                                                                                        focusEvent: .init(eventID: focusEvent.eventID,
                                                                                                          shouldSetPin: focusEvent.shouldSetPin))),
                                               userInfo: EventUserInfo(animated: animated))
+                    } else if isNewestKnownEvent {
+                        stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
                     } else {
                         stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                     }

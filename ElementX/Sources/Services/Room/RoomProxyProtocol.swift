@@ -81,6 +81,13 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     /// or `nil` when none has been computed (or it's an unsent local echo).
     var latestEventID: String? { get }
 
+    /// The millisecond timestamp of the room's latest event from the
+    /// latest-events subsystem, or `nil` when none has been computed. May lag
+    /// reality when sync is catching up (e.g. right after a notification tap
+    /// wakes the app) - an event with a timestamp at or above this value is at
+    /// least as new as anything this process knows about.
+    var latestEventTimestamp: UInt64? { get }
+
     func subscribeForUpdates() async
     
     func subscribeToRoomInfoUpdates()
