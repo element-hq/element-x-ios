@@ -282,6 +282,14 @@ EXI:
   of my own message after sending from a notification tap") stayed a single bubble
   until the user scrolled
   [`c1cae2c9c`](https://github.com/element-hq/element-x-ios/commit/c1cae2c9c)
+- Focus scrolls (permalinks, pinned-message taps) now put the top of the target message
+  halfway up the viewport, accurately: `scrollToRow(.top)` pinned a long message's
+  bottom to the viewport edge (top off-screen), and estimated row heights made the
+  landing drift anywhere from mid-message to past it. The offset is computed
+  explicitly and re-measured as layout settles (within one paint for jumps); nearby
+  targets animate normally, distant ones crossfade a settled jump since animating
+  across estimated heights can't aim
+  [`6b300c22c`](https://github.com/element-hq/element-x-ios/commit/6b300c22c)
 - Long-press on a redacted message showed a blank fullscreen sheet (the filtered action
   set came back empty with view source off, and the sheet presents regardless; state
   events hit the same). Redacted items keep copy-permalink (plus view source in dev
