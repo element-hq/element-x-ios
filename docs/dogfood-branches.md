@@ -422,9 +422,13 @@ EXI:
   matrix.org served a cold 2023 event) and, being invisible to the redecryptor, never
   resolved in place when their key arrived from backup
   ([SDK `4b23e1d77`](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77);
-  REVERTED in [`ff0d38bd2`](https://github.com/matrix-org/matrix-rust-sdk/commit/ff0d38bd2) while
-  bisecting duplicate echoes of freshly sent messages - the save ran in the affected
-  room minutes before the duplicates started; mechanism not yet root-caused)
+  briefly reverted while bisecting duplicate echoes of freshly sent messages, then
+  reapplied in [`bdea86735`](https://github.com/matrix-org/matrix-rust-sdk/commit/bdea86735) -
+  the duplicates turned out to be a long-standing intermittent race, reported since
+  2025 as [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242)
+  and rageshakes [#6945](https://github.com/element-hq/element-x-ios-rageshakes/issues/6945),
+  [#6592](https://github.com/element-hq/element-x-ios-rageshakes/issues/6592),
+  [#5789](https://github.com/element-hq/element-x-ios-rageshakes/issues/5789))
   - fixes [#3113 Late decryptions don't update RepliedToEvent](https://github.com/element-hq/element-x-ios/issues/3113)
   - fixes the "unsupported event in summary" half of
     [#4819 Message in thread shows as UTD in main timeline + unsupported event in summary until you load the thread](https://github.com/element-hq/element-x-ios/issues/4819)
@@ -434,3 +438,12 @@ EXI:
   whitespace in markdown-generated HTML normalised into stray spaces)
   [`550a6467d`](https://github.com/element-hq/element-x-ios/commit/550a6467d)
   - fixes [#5179 First bullet point in an unordered list is always incorrectly indented](https://github.com/element-hq/element-x-ios/issues/5179)
+- Instrument the local-echo reconciliation to catch duplicated sent-message echoes
+  in the wild (intermittent for months; server-side the event exists once). Logs the
+  birth of a duplicate item, own remote events failing to match a local echo, the
+  send queue's eager event-cache insert, and each delivery's dedup classification
+  ([SDK `9a24a6a76`](https://github.com/matrix-org/matrix-rust-sdk/commit/9a24a6a76))
+  - diagnoses [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242),
+    [rageshake#6945 all my sent msgs are showing in duplicate in most recent room](https://github.com/element-hq/element-x-ios-rageshakes/issues/6945),
+    [rageshake#6592 a pile of UTDs, and then my messages are getting duplicated](https://github.com/element-hq/element-x-ios-rageshakes/issues/6592) and
+    [rageshake#5789 I sometimes see messages double](https://github.com/element-hq/element-x-ios-rageshakes/issues/5789)
