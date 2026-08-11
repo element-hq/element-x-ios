@@ -290,6 +290,24 @@ EXI:
   targets animate normally, distant ones crossfade a settled jump since animating
   across estimated heights can't aim
   [`6b300c22c`](https://github.com/element-hq/element-x-ios/commit/6b300c22c)
+- Notification taps jump straight to the room: taps on the newest message open live at
+  the bottom with no focus treatment, decided at the route level from the fetched
+  event's ID *and timestamp* (the in-memory latest event lags the NSE right after a
+  tap wakes the app, so ID comparison alone mis-decides)
+  [`363b3b7f5`](https://github.com/element-hq/element-x-ios/commit/363b3b7f5),
+  new `latestEventTimestamp` FFI
+  ([SDK `9a7707b37`](https://github.com/matrix-org/matrix-rust-sdk/commit/9a7707b37))
+- Dirty-lock recovery scoped to the rooms other processes actually touched: after the
+  NSE handled a push, the first store access reloaded the entire in-memory event cache
+  state (5451 rooms, ~11s, synchronously inside the tap's room open). Writers journal
+  the rooms they modify per lock-generation tenure; recovery reloads only those (the
+  NSE touches 1-2). Fail-safe by construction: tenure markers stamped at every lease
+  acquisition let recovery verify the journal covers every generation in its window -
+  a gap (e.g. a build without the journal) falls back to the full reload, so
+  mixed-version cost is the old slow path, never staleness. Store-wide clears and
+  pruning leave wildcard/horizon markers with the same fallback
+  ([SDK `b10561742`](https://github.com/matrix-org/matrix-rust-sdk/commit/b10561742),
+  [`41e4704ed`](https://github.com/matrix-org/matrix-rust-sdk/commit/41e4704ed))
 - Long-press on a redacted message showed a blank fullscreen sheet (the filtered action
   set came back empty with view source off, and the sheet presents regardless; state
   events hit the same). Redacted items keep copy-permalink (plus view source in dev
