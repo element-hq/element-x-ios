@@ -316,6 +316,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @State private var window: UIWindow?
     @State private var isFullScreen = true
     @State private var isRailVisible = true
+    @State private var railBackgroundColor: Color = .compound.bgCanvasDefault
     
     var body: some View {
         tabView
@@ -362,12 +363,18 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         HStack(spacing: 0) {
             if isRailVisible {
                 TabRailView(navigationTabCoordinator: navigationTabCoordinator, isFullScreen: isFullScreen)
+                    .background(railBackgroundColor.ignoresSafeArea())
+                    .animation(.easeInOut(duration: 0.4).disabledDuringTests(), value: railBackgroundColor)
             }
             
             if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
                 module.coordinator?.toPresentable()
                     .id(module.id)
             }
+        }
+        // Match the rail's background to the colour of the split view's detail (or the root if there isn't a split).
+        .onPreferenceChange(CompoundBackgroundPreferenceKey.self) { background in
+            railBackgroundColor = background?.colorValue ?? .compound.bgCanvasDefault
         }
         .introspect(.window, on: .supportedVersions) { window in
             guard self.window !== window else { return }
