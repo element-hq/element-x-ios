@@ -18618,6 +18618,53 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
     }
 
+    //MARK: - toggleReactionWithExtraContent
+
+    open var toggleReactionWithExtraContentItemIdKeyExtraContentJsonThrowableError: Error?
+    private let toggleReactionWithExtraContentItemIdKeyExtraContentJsonCallsCountLock = NSLock()
+    private var toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingCallsCount = 0
+    open var toggleReactionWithExtraContentItemIdKeyExtraContentJsonCallsCount: Int {
+        get { toggleReactionWithExtraContentItemIdKeyExtraContentJsonCallsCountLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingCallsCount } }
+        set { toggleReactionWithExtraContentItemIdKeyExtraContentJsonCallsCountLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingCallsCount = newValue } }
+    }
+    open var toggleReactionWithExtraContentItemIdKeyExtraContentJsonCalled: Bool {
+        return toggleReactionWithExtraContentItemIdKeyExtraContentJsonCallsCount > 0
+    }
+    private let toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedArgumentsLock = NSLock()
+    private var toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReceivedArguments: (itemId: EventOrTransactionId, key: String, extraContentJson: String?)?
+    open var toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedArguments: (itemId: EventOrTransactionId, key: String, extraContentJson: String?)? {
+        get { toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedArgumentsLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReceivedArguments } }
+        set { toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedArgumentsLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReceivedArguments = newValue } }
+    }
+    private let toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedInvocationsLock = NSLock()
+    private var toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReceivedInvocations: [(itemId: EventOrTransactionId, key: String, extraContentJson: String?)] = []
+    open var toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedInvocations: [(itemId: EventOrTransactionId, key: String, extraContentJson: String?)] {
+        get { toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedInvocationsLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReceivedInvocations } }
+        set { toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedInvocationsLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let toggleReactionWithExtraContentItemIdKeyExtraContentJsonReturnValueLock = NSLock()
+    open var toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReturnValue: Bool!
+    open var toggleReactionWithExtraContentItemIdKeyExtraContentJsonReturnValue: Bool! {
+        get { toggleReactionWithExtraContentItemIdKeyExtraContentJsonReturnValueLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReturnValue } }
+        set { toggleReactionWithExtraContentItemIdKeyExtraContentJsonReturnValueLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReturnValue = newValue } }
+    }
+    open var toggleReactionWithExtraContentItemIdKeyExtraContentJsonClosure: ((EventOrTransactionId, String, String?) async throws -> Bool)?
+
+    open override func toggleReactionWithExtraContent(itemId: EventOrTransactionId, key: String, extraContentJson: String?) async throws -> Bool {
+        if let error = toggleReactionWithExtraContentItemIdKeyExtraContentJsonThrowableError {
+            throw error
+        }
+        toggleReactionWithExtraContentItemIdKeyExtraContentJsonCallsCountLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingCallsCount += 1 }
+        toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedArguments = (itemId: itemId, key: key, extraContentJson: extraContentJson)
+        toggleReactionWithExtraContentItemIdKeyExtraContentJsonReceivedInvocationsLock.withLock { toggleReactionWithExtraContentItemIdKeyExtraContentJsonUnderlyingReceivedInvocations.append((itemId: itemId, key: key, extraContentJson: extraContentJson)) }
+        if let toggleReactionWithExtraContentItemIdKeyExtraContentJsonClosure = toggleReactionWithExtraContentItemIdKeyExtraContentJsonClosure {
+            return try await toggleReactionWithExtraContentItemIdKeyExtraContentJsonClosure(itemId, key, extraContentJson)
+        } else {
+            return toggleReactionWithExtraContentItemIdKeyExtraContentJsonReturnValue
+        }
+    }
+
     //MARK: - unpinEvent
 
     open var unpinEventEventIdThrowableError: Error?
