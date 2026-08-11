@@ -21,8 +21,6 @@ struct RoomPeekView: View {
 
     var body: some View {
         content
-            // ponytail: fixed peek size, revisit if it looks cramped on iPad.
-            .frame(width: 320, height: 480)
             .background(Color.compound.bgCanvasDefault)
             .task {
                 timelineViewModel = await viewModelBuilder?(roomID)

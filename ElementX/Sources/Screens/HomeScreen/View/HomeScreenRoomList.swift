@@ -40,67 +40,12 @@ struct HomeScreenRoomList: View {
                                    isSelected: isSelected,
                                    mediaProvider: context.mediaProvider,
                                    action: context.send)
-                    .simultaneousGesture(TapGesture(count: 2).onEnded {
-                        context.send(viewAction: .detachRoom(roomIdentifier: room.id))
-                    })
-                    .contextMenu {
-                        if room.badges.isDotShown {
-                            Button {
-                                context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.screenRoomlistMarkAsRead, icon: \.markAsRead)
-                            }
-                        } else {
-                            Button {
-                                context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.screenRoomlistMarkAsUnread, icon: \.markAsUnread)
-                            }
-                        }
-                        
-                        if supportsMultipleWindows {
-                            Button {
-                                context.send(viewAction: .detachRoom(roomIdentifier: room.id))
-                            } label: {
-                                Label("Open in new window", icon: \.spotlight)
-                            }
-                        }
-                        
-                        if room.isFavourite {
-                            Button {
-                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: false))
-                            } label: {
-                                Label(L10n.commonFavourited, icon: \.favouriteSolid)
-                            }
-                        } else {
-                            Button {
-                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: true))
-                            } label: {
-                                Label(L10n.commonFavourite, icon: \.favourite)
-                            }
-                        }
-                        
-                        Button {
-                            context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
-                        } label: {
-                            Label(L10n.commonSettings, icon: \.settings)
-                        }
-                        
-                        if context.viewState.reportRoomEnabled {
-                            Button(role: .destructive) {
-                                context.send(viewAction: .reportRoom(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.actionReportRoom, icon: \.chatProblem)
-                            }
-                        }
-                        
-                        Button(role: .destructive) {
-                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
-                        } label: {
-                            Label(L10n.actionLeaveRoom, icon: \.leave)
-                        }
-                    } preview: {
-                        RoomPeekView(roomID: room.id, viewModelBuilder: context.viewState.roomPeekViewModelBuilder)
+                    .overlay {
+                        RoomPeekInteraction(room: room,
+                                            supportsMultipleWindows: supportsMultipleWindows,
+                                            reportRoomEnabled: context.viewState.reportRoomEnabled,
+                                            viewModelBuilder: context.viewState.roomPeekViewModelBuilder,
+                                            action: context.send)
                     }
             }
         }
