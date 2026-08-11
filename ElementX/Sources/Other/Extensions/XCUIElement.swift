@@ -14,7 +14,10 @@ extension XCUIElement {
     ///
     /// Keystrokes are silently dropped when the element hasn't finished taking focus, which corrupts the
     /// value in ways that are hard to spot later on, so the result is verified and retried before failing.
-    func clearAndTypeText(_ text: String, app: XCUIApplication) {
+    ///
+    /// - Parameter verifyingValue: Whether to read the value back. Pass `false` for a field that submits
+    /// itself once it is full, such as the PIN screens, as its value can no longer be read at that point.
+    func clearAndTypeText(_ text: String, app: XCUIApplication, verifyingValue: Bool = true) {
         for _ in 0..<3 {
             tap(.center)
             
@@ -33,7 +36,7 @@ extension XCUIElement {
             typeText(text)
             
             // A newline submits the field, which tears it down before its value can be read back.
-            if text.contains("\n") || containsTypedText(text) {
+            if text.contains("\n") || !verifyingValue || containsTypedText(text) {
                 return
             }
         }
