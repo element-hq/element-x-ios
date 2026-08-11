@@ -1,3 +1,52 @@
+## Changes in 26.08.2 (2026-08-11)
+
+### What's Changed
+
+✨ Features
+* Allow tapping the avatar in the room member bottom sheet to view it fullscreen by @danderson-cont in https://github.com/element-hq/element-x-ios/pull/5989
+
+🙌 Improvements
+* Remove map tiler url from matrix wellknown by @Velin92 in https://github.com/element-hq/element-x-ios/pull/5983
+* Combine the Server Selection screen into the Server Confirmation screen and add autocompletion when entering an account provider. by @mredig in https://github.com/element-hq/element-x-ios/pull/5949
+
+🐛 Bugfixes
+* Fix broken avatar aspect ratio in the share sheet and notifications by @ara4n in https://github.com/element-hq/element-x-ios/pull/5972
+* Fix Pro Max In Call Rotation Bug by @mredig in https://github.com/element-hq/element-x-ios/pull/5990
+* Update the SDK with a fix for read receipts. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5991
+* Fix tracing span panic when accessed from multiple threads by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5996
+* Make sure the Tab Rail's background matches the split view's detail background. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6003
+* Fix a simulcast bug in Element Call. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6009
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/5999
+
+🧱 Build
+* Add an HTTP_PROXY environment variable too (also disabled). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5984
+* Annotate failures for Github Actions so they're easier to spot. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6004
+* Run XcodeGen by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6006
+* Drop the `addressSanitizer` and `undefinedBehaviorSanitizer` from the Accessibility and UI tests by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6008
+* Reinforce text typing within XCUITests by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6007
+
+🚧 In development 🚧
+* Add timeouts after verifying the device owner when linking a new device. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5970
+* Show loading/failure states when setting/clearing user status. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5993
+* Enable automatic call status under the User Status feature flag. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5994
+
+Others
+* Update dependency pointfreeco/swift-snapshot-testing to v1.19.4 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5981
+* Add hooks for the RoomDetails, RoomMemberDetails and UserProfile screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5980
+* Improve the room member part of the UI test user session flows by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/5985
+* Update the SDK and handle some API breaks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5986
+* Update Contributing.md with snapshot testing instructions by @mredig in https://github.com/element-hq/element-x-ios/pull/5974
+* Update zizmorcore/zizmor-action action to v0.6.2 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/5998
+* Set the finalised OAuth Client URI path to match the new EXI page. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/5992
+* Improve integration test diagnostics in an attempt to catch run crashes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6000
+* Prevent invalid snapshots on timeline replies by waiting for the keyboard to appear for longer by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6001
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6010
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.08.1...release/26.08.2
+
 ## Changes in 26.08.1 (2026-08-04)
 
 ### What's Changed
