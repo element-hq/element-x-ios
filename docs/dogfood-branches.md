@@ -330,6 +330,13 @@ EXI:
   sites now snapshot cheap clone handles and release the map lock before awaiting
   per-room locks
   ([SDK `830f3dc0e`](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e))
+- Open the thread when a room's preview shows a threaded reply: the preview surfaces
+  the room's latest event even when it is threaded, which the main timeline hides -
+  tapping the room then appears to be missing the previewed message (dogfooded as
+  "preview shows 13:41 but the room ends at 13:32")
+  [`b2140c102`](https://github.com/element-hq/element-x-ios/commit/b2140c102),
+  new `latestEventThreadRootId` FFI
+  ([SDK `0ba9d0d9d`](https://github.com/matrix-org/matrix-rust-sdk/commit/0ba9d0d9d))
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
