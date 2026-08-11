@@ -56,6 +56,7 @@ struct UserIndicatorModalView: View {
         .background {
             if !indicator.allowsInteraction {
                 Color.black.opacity(0.1)
+                    .onTapGesture { indicator.onCancel?() }
             }
         }
         .ignoresSafeArea()

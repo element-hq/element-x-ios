@@ -32,6 +32,10 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     private let stateMachine: ChatsTabFlowCoordinatorStateMachine
     
     private var roomFlowCoordinator: RoomFlowCoordinator?
+
+    /// The in-flight route, kept so that tapping the loading indicator's
+    /// background can abandon it (e.g. alias resolution on a bad network).
+    private var appRouteTask: Task<Void, Never>?
     // periphery:ignore - retaining purpose
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
     
@@ -79,9 +83,10 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         MXLog.info("Handling app route: \(appRoute)")
-        
-        Task {
-            await asyncHandleAppRoute(appRoute, animated: animated)
+
+        appRouteTask = Task { [weak self] in
+            await self?.asyncHandleAppRoute(appRoute, animated: animated)
+            self?.appRouteTask = nil
         }
     }
     
@@ -94,9 +99,10 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     func asyncHandleAppRoute(_ appRoute: AppRoute, animated: Bool) async {
         showLoadingIndicator(delay: .seconds(0.5))
         defer { hideLoadingIndicator() }
-        
+
         await clearPresentedSheets(animated: animated)
-        
+        guard !Task.isCancelled else { return }
+
         switch appRoute {
         case .room(let roomID, let via):
             stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .room), userInfo: .init(animated: animated))
@@ -829,15 +835,27 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         flowParameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                              type: .modal,
                                                                              title: L10n.commonLoading,
-                                                                             persistent: true),
+                                                                             persistent: true,
+                                                                             onCancel: { [weak self] in self?.cancelAppRoute() }),
                                                                delay: delay)
     }
-    
+
     private func hideLoadingIndicator() {
         flowParameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
-    
+
+    /// Abandons an in-flight route so the user can keep using the app instead
+    /// of waiting behind the loading indicator, e.g. on a bad network.
+    private func cancelAppRoute() {
+        guard let appRouteTask else { return }
+        hideLoadingIndicator()
+        appRouteTask.cancel()
+        self.appRouteTask = nil
+    }
+
     private func showFailureIndicator() {
+        // An abandoned route's failure isn't worth surfacing.
+        guard !Task.isCancelled else { return }
         flowParameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
                                                                              type: .toast,
                                                                              title: L10n.errorUnknown,

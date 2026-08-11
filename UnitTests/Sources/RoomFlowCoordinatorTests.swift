@@ -15,6 +15,7 @@ import Testing
 final class RoomFlowCoordinatorTests {
     var clientProxy: ClientProxyMock!
     var timelineControllerFactory: TimelineControllerFactoryMock!
+    var userIndicatorController: UserIndicatorControllerMock!
     var roomFlowCoordinator: RoomFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
     var cancellables = Set<AnyCancellable>()
@@ -227,7 +228,36 @@ final class RoomFlowCoordinatorTests {
         #expect(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         #expect(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
     }
-    
+
+    @Test
+    func cancellingEventRouteAbandonsNavigation() async throws {
+        setupRoomFlowCoordinator()
+
+        let roomProxy = JoinedRoomProxyMock(.init(id: "1"))
+        roomProxy.loadOrFetchEventDetailsForClosure = { _ in
+            // Simulate a request wedged on a bad network until it's cancelled.
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .milliseconds(10))
+            }
+            return .failure(.sdkError(CancellationError()))
+        }
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+
+        roomFlowCoordinator.handleAppRoute(.event(eventID: "1", roomID: "1", via: []), animated: true)
+
+        // Wait for the loading indicator, then give up on it by tapping its background.
+        while userIndicatorController.submitIndicatorDelayReceivedArguments == nil {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        let onCancel = try #require(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.onCancel)
+
+        let deferred = deferFulfillment(roomFlowCoordinator.actions) { $0 == .finished }
+        onCancel()
+        try await deferred.fulfill()
+
+        #expect(navigationStackCoordinator.rootCoordinator == nil)
+    }
+
     @Test
     func threadedEventRoutes() async throws {
         appSettings.threadsEnabled = true
@@ -497,6 +527,7 @@ final class RoomFlowCoordinatorTests {
     
     private func setupRoomFlowCoordinator(asChildFlow: Bool = false, roomType: RoomType? = nil) {
         cancellables.removeAll()
+        userIndicatorController = UserIndicatorControllerMock()
         clientProxy = ClientProxyMock(.init(userID: "hi@bob",
                                             roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                             spaceServiceConfiguration: .populated))
@@ -532,7 +563,7 @@ final class RoomFlowCoordinatorTests {
                                                   appSettings: appSettings,
                                                   appHooks: AppHooks(),
                                                   analytics: AnalyticsServiceMock(.init()),
-                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  userIndicatorController: userIndicatorController,
                                                   notificationManager: NotificationManagerMock(),
                                                   stateMachineFactory: StateMachineFactory())
         

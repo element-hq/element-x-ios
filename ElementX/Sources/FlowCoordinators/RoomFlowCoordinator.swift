@@ -96,7 +96,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
-    
+
+    /// The in-flight event (notification tap) route, kept so that tapping the
+    /// loading indicator's background can abandon it on a bad network.
+    private var eventRouteTask: Task<Void, Never>?
+
+    /// The in-flight thread presentation, kept for the same reason: the thread
+    /// timeline build can wedge on a bad network behind the loading indicator.
+    private var threadPresentationTask: Task<Void, Never>?
+
     private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<RoomFlowCoordinatorAction, Never> = .init()
@@ -185,11 +193,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                       animated: animated)
             }
         case .event(let eventID, let roomID, let via):
-            Task {
-                await handleRoomRoute(roomID: roomID,
-                                      via: via,
-                                      presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false)),
-                                      animated: animated)
+            eventRouteTask = Task { [weak self] in
+                await self?.handleRoomRoute(roomID: roomID,
+                                            via: via,
+                                            presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false)),
+                                            animated: animated)
+                self?.eventRouteTask = nil
             }
         case .childEvent(let eventID, let roomID, let via):
             handleChildEventRoute(eventID: eventID, roomID: roomID, via: via, animated: animated)
@@ -233,10 +242,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         } else if roomID != roomProxy.id {
             stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
         } else {
-            showLoadingIndicator(delay: .seconds(0.5))
-            Task {
-                defer { hideLoadingIndicator() }
-                switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
+            showLoadingIndicator(delay: .seconds(0.5), onCancel: { [weak self] in self?.cancelEventRoute() })
+            eventRouteTask = Task { [weak self] in
+                defer { self?.hideLoadingIndicator() }
+                guard let self else { return }
+
+                let eventDetails = await roomProxy.loadOrFetchEventDetails(for: eventID)
+                guard !Task.isCancelled else { return }
+                eventRouteTask = nil
+
+                switch eventDetails {
                 case .success(let event):
                     if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
                         if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreadScreenCoordinators.last {
@@ -288,10 +303,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func handleRoomRoute(roomID: String, via: [String], presentationAction: PresentationAction? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
-        showLoadingIndicator(delay: .seconds(0.5))
+        // An event route can wedge here for ~90s fetching the tapped event on a bad
+        // network - let a tap on the loading indicator's background give up on it.
+        let onCancel: (() -> Void)? = eventRouteTask == nil ? nil : { [weak self] in self?.cancelEventRoute() }
+        showLoadingIndicator(delay: .seconds(0.5), onCancel: onCancel)
         defer { hideLoadingIndicator() }
-        
-        guard let room = await userSession.clientProxy.roomForIdentifier(roomID) else {
+
+        let room = await userSession.clientProxy.roomForIdentifier(roomID)
+        guard !Task.isCancelled else { return }
+
+        guard let room else {
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
             return
         }
@@ -326,7 +347,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 
                 // Otherwise check if the focussed event exists to handle a possible error or theaded event.
-                switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
+                let eventDetails = await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID)
+                guard !Task.isCancelled else { return }
+
+                switch eventDetails {
                 case .success(let event):
                     // A focus target that is the room's newest message (the common
                     // notification-tap case) wants the live bottom of the room, not the
@@ -431,7 +455,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             // Thread
                 
             case (_, .presentThread(let threadRootEventID, let focusEventID), .thread):
-                Task { await self.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEventID, animated: animated) }
+                threadPresentationTask = Task {
+                    await self.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEventID, animated: animated)
+                    self.threadPresentationTask = nil
+                }
                 
             // Thread + Room
                 
@@ -790,19 +817,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentThread(threadRootEventID: String, focusEventID: String?, animated: Bool) async {
-        showLoadingIndicator()
+        showLoadingIndicator(onCancel: { [weak self] in self?.cancelThreadPresentation() })
         defer { hideLoadingIndicator() }
-        
+
         let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
-        
-        guard case let .success(timelineController) = await flowParameters.timelineControllerFactory.buildThreadTimelineController(threadRootEventID: threadRootEventID,
-                                                                                                                                   initialFocussedEventID: focusEventID,
-                                                                                                                                   roomProxy: roomProxy,
-                                                                                                                                   timelineItemFactory: timelineItemFactory,
-                                                                                                                                   mediaProvider: userSession.mediaProvider) else {
-            MXLog.error("Failed presenting media timeline")
+
+        let timelineControllerResult = await flowParameters.timelineControllerFactory.buildThreadTimelineController(threadRootEventID: threadRootEventID,
+                                                                                                                    initialFocussedEventID: focusEventID,
+                                                                                                                    roomProxy: roomProxy,
+                                                                                                                    timelineItemFactory: timelineItemFactory,
+                                                                                                                    mediaProvider: userSession.mediaProvider)
+        // On cancellation the state machine has already been unwound.
+        guard !Task.isCancelled else { return }
+
+        guard case let .success(timelineController) = timelineControllerResult else {
+            MXLog.error("Failed presenting thread timeline")
+            stateMachine.tryEvent(.dismissThread)
             return
         }
         
@@ -1710,18 +1742,45 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private static let loadingIndicatorID = "\(RoomFlowCoordinator.self)-Loading"
-    
+
     private func showLoadingIndicator(delay: Duration? = nil,
                                       title: String = L10n.commonLoading,
-                                      message: String? = nil) {
+                                      message: String? = nil,
+                                      onCancel: (() -> Void)? = nil) {
         flowParameters.userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
                                                                      type: .modal(progress: .indeterminate,
                                                                                   interactiveDismissDisabled: false,
                                                                                   allowsInteraction: false),
                                                                      title: title,
                                                                      message: message,
-                                                                     persistent: true),
+                                                                     persistent: true,
+                                                                     onCancel: onCancel),
                                                                delay: delay)
+    }
+
+    /// Abandons an in-flight event route so the user can keep using the app
+    /// instead of waiting behind the loading indicator, e.g. on a bad network.
+    private func cancelEventRoute() {
+        guard let eventRouteTask else { return }
+        hideLoadingIndicator()
+        eventRouteTask.cancel()
+        self.eventRouteTask = nil
+
+        // The route never presented anything, so unwind the parent's selection
+        // rather than leaving a half-started flow behind.
+        if stateMachine.state == .initial {
+            actionsSubject.send(.finished)
+        }
+    }
+
+    /// Abandons an in-flight thread presentation, unwinding the state machine
+    /// back to whatever was on show before it.
+    private func cancelThreadPresentation() {
+        guard let threadPresentationTask else { return }
+        hideLoadingIndicator()
+        threadPresentationTask.cancel()
+        self.threadPresentationTask = nil
+        stateMachine.tryEvent(.dismissThread)
     }
     
     private func hideLoadingIndicator() {

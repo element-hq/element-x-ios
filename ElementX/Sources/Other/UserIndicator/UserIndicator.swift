@@ -43,7 +43,20 @@ struct UserIndicator: Equatable, Identifiable {
     var message: String?
     var icon: KeyPath<CompoundIcons, Image>?
     var persistent = false
-    
+    /// When set, a modal indicator's obscured background becomes tappable and
+    /// a tap calls this instead of blocking, letting the user abandon whatever
+    /// the indicator is waiting on.
+    var onCancel: (() -> Void)?
+
+    static func == (lhs: UserIndicator, rhs: UserIndicator) -> Bool {
+        lhs.id == rhs.id
+            && lhs.type == rhs.type
+            && lhs.title == rhs.title
+            && lhs.message == rhs.message
+            && lhs.icon == rhs.icon
+            && lhs.persistent == rhs.persistent
+    }
+
     // MARK: - Associated values from the type
     
     var progress: Progress? {
