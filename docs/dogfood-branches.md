@@ -298,6 +298,14 @@ EXI:
   [`5e43d0872`](https://github.com/element-hq/element-x-ios/commit/5e43d0872)
   - the unhideable focus toast matches stuck-"Loading…" reports like
     [rageshake#3004 upgraded to 851 and promptly got stuck on a loading… spinner](https://github.com/element-hq/element-x-ios-rageshakes/issues/3004)
+- Let a tap on a route's "Loading…" modal abandon the navigation: a push-tap on a
+  black-hole network wedged the whole app for ~92s, because the tapped event's fetch
+  retries 3x30s behind a non-interactive modal (console logs 2026-08-11 ~18:58 local).
+  The modal's scrim is now tappable for the event/child-event routes, ChatsTab alias
+  resolution and thread presentation - a tap hides the modal, cancels the in-flight
+  task and unwinds whatever the route half-started. Also fixes a failed thread
+  timeline build leaving the state machine in `.thread` with no screen pushed
+  [`5c11e1b37`](https://github.com/element-hq/element-x-ios/commit/5c11e1b37)
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
