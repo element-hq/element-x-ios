@@ -66,19 +66,34 @@ struct RoomPeekInteraction: UIViewRepresentable {
 
         func contextMenuInteraction(_ contextMenuInteraction: UIContextMenuInteraction,
                                     configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-            guard let windowBounds = contextMenuInteraction.view?.window?.bounds else { return nil }
+            guard let window = contextMenuInteraction.view?.window else { return nil }
             let interaction = interaction
 
+            // Size the platter so that platter + gap + menu exactly fill the
+            // system's layout region. Any slack gets distributed according to
+            // which row was pressed, making the peek's position jump around;
+            // zero slack pins it, with the top gap equal to the platter-menu
+            // gap. Region insets, gap and row height measured on iOS 26
+            // (see PeekGeometry logging): safe area + 20 on every side, 20
+            // between platter and menu, menu rows 45pt at standard type sizes.
+            // The width must match the region exactly too: a wider request is
+            // scaled down aspect-preserved, changing the height unpredictably.
+            let menuRowCount = 4 + (interaction.supportsMultipleWindows ? 1 : 0) + (interaction.reportRoomEnabled ? 1 : 0)
+            let region = window.bounds.inset(by: window.safeAreaInsets).insetBy(dx: 20, dy: 20)
+            let size = CGSize(width: region.width,
+                              height: region.height - 20 - CGFloat(menuRowCount) * 45)
+
             return UIContextMenuConfiguration(identifier: nil) {
+                // The explicit frame matters as well: the platter sizes from
+                // the content's ideal size, not preferredContentSize, so
+                // without it the peek's height varies per room.
                 let controller = UIHostingController(rootView: RoomPeekView(roomID: interaction.room.id,
-                                                                            viewModelBuilder: interaction.viewModelBuilder))
+                                                                            viewModelBuilder: interaction.viewModelBuilder)
+                        .frame(width: size.width, height: size.height))
                 // The platter floats clear of the screen edges, so the window's
                 // safe areas must not inset the content again inside it.
                 controller.safeAreaRegions = []
-                // Match the 16pt margins used by the rest of the screen's
-                // chrome and leave the bottom ~40% for the context menu.
-                controller.preferredContentSize = CGSize(width: windowBounds.width - 32,
-                                                         height: windowBounds.height * 0.6)
+                controller.preferredContentSize = size
                 return controller
             } actionProvider: { [weak self] _ in
                 self?.makeMenu()

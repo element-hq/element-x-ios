@@ -309,7 +309,17 @@ EXI:
 - Long-press a room in the room list to peek at its timeline (iMessage-style preview
   above the context menu) without sending a read receipt: the peek renders the real
   timeline item views read-only, deliberately avoiding the timeline table controller
-  and RoomScreenViewModel - the only two places receipts originate
+  and RoomScreenViewModel - the only two places receipts originate. Tapping the
+  preview opens the room properly (which needs UIKit: SwiftUI context menu previews
+  never receive taps, so the row's menu moved to a UIContextMenuInteraction with a
+  preview-commit handler), a themed 20% scrim fades in behind the preview and menu,
+  short histories back-paginate to fill the viewport, and the platter is sized so
+  platter + gap + menu exactly fill the screen - any slack makes the peek's position
+  track whichever row you pressed. Gotcha for posterity: a bottom-anchored lazy stack
+  of timeline items layout-loops (appearing items fetch reply details, change height
+  and re-cross the lazy horizon) hard enough that the cpu watchdog kills the app;
+  the peek renders the newest 40 items in a non-lazy stack instead
+  - implements [#3658 Long-tap on room list entry to read-only preview room contents](https://github.com/element-hq/element-x-ios/issues/3658)
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
