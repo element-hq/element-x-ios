@@ -447,3 +447,18 @@ EXI:
     [rageshake#6945 all my sent msgs are showing in duplicate in most recent room](https://github.com/element-hq/element-x-ios-rageshakes/issues/6945),
     [rageshake#6592 a pile of UTDs, and then my messages are getting duplicated](https://github.com/element-hq/element-x-ios-rageshakes/issues/6592) and
     [rageshake#5789 I sometimes see messages double](https://github.com/element-hq/element-x-ios-rageshakes/issues/5789)
+- ROOT-CAUSED the duplicated sent-message echoes, from the rageshake#6945 logs: a room
+  update that fails mid-way (there: the store closed during a `JoinedRoomUpdate`,
+  aborting the chunk shrink between its store operations) leaves the in-memory linked
+  chunk divergent from the store. The store is the deduplication oracle, so every
+  re-delivery of an event already in memory - notably each sent message's sync echo,
+  which the send queue also eagerly inserts - is misclassified as new and appended
+  again: every send duplicates until something reloads the chunk (leaving the room
+  triggers the auto-shrink, hence the observed self-healing). Failed updates now
+  poison the room, and the next update entry point reloads the linked chunk from the
+  store before mutating anything
+  ([SDK `4eed9b8a2`](https://github.com/matrix-org/matrix-rust-sdk/commit/4eed9b8a2))
+  - fixes [rageshake#6945 all my sent msgs are showing in duplicate in most recent room](https://github.com/element-hq/element-x-ios-rageshakes/issues/6945)
+    and likely [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242),
+    [rageshake#6592](https://github.com/element-hq/element-x-ios-rageshakes/issues/6592) and
+    [rageshake#5789](https://github.com/element-hq/element-x-ios-rageshakes/issues/5789)
