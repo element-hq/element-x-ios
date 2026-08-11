@@ -5118,6 +5118,7 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
     nonisolated(unsafe) var predecessorRoom: PredecessorRoom?
     nonisolated(unsafe) var latestEventID: String?
     nonisolated(unsafe) var latestEventTimestamp: UInt64?
+    nonisolated(unsafe) var latestEventThreadRootID: String?
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }

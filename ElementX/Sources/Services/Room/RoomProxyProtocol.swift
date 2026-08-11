@@ -88,6 +88,12 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     /// least as new as anything this process knows about.
     var latestEventTimestamp: UInt64? { get }
 
+    /// The thread root ID of the room's latest event when that event is a
+    /// threaded reply, or `nil` otherwise. The main timeline hides threaded
+    /// events, so a room whose preview shows a threaded reply should open
+    /// that thread instead.
+    var latestEventThreadRootID: String? { get }
+
     func subscribeForUpdates() async
     
     func subscribeToRoomInfoUpdates()

@@ -310,6 +310,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 await storeAndSubscribeToRoomProxy(roomProxy)
                 
                 guard case let .eventFocus(focusEvent) = presentationAction else {
+                    var presentationAction = presentationAction
+                    // The room list preview shows the room's latest event even when it is a
+                    // threaded reply, which the main timeline hides - so entering the room
+                    // would appear to be missing the previewed message. Open the thread instead.
+                    if presentationAction == nil,
+                       flowParameters.appSettings.threadsEnabled,
+                       let threadRootEventID = roomProxy.latestEventThreadRootID {
+                        presentationAction = .thread(rootEventID: threadRootEventID, focusEvent: nil)
+                    }
+
                     // If is not a focus event just handle the presentation action directly in `presentRoom`
                     stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                     return
