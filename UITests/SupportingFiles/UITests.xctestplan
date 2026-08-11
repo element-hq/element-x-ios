@@ -10,9 +10,6 @@
     }
   ],
   "defaultOptions" : {
-    "addressSanitizer" : {
-      "enabled" : true
-    },
     "codeCoverage" : {
       "targets" : [
         {
@@ -43,8 +40,7 @@
       "identifier" : "0E28CD62691FDBC63147D5E3",
       "name" : "UITests"
     },
-    "testTimeoutsEnabled" : true,
-    "undefinedBehaviorSanitizerEnabled" : true
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {
