@@ -294,6 +294,16 @@ EXI:
   immediately - plus the usual queue durability (retries, offline, ordering behind
   pending sends)
   ([SDK `4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b))
+- THE SYNC WEDGE, root-caused and fixed: the latest-events "re-trigger missing
+  computations" step held the rooms-map read lock while awaiting every response room's
+  own lock; with the compute task holding a room's write lock and a room registration
+  queued on `rooms.write()`, tokio's write-preferring `RwLock` closed a three-party
+  cycle. The sync handler sat inside it holding the sliding-sync `position` lock, so
+  the sync loop, the ack-gated pos persist and any room open all wedged behind it
+  (dogfooding: room list stuck behind a permanent "Loading…" overlay). Both offending
+  sites now snapshot cheap clone handles and release the map lock before awaiting
+  per-room locks
+  ([SDK `830f3dc0e`](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e))
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
