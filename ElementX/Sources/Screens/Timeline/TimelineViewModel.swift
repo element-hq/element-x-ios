@@ -535,7 +535,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     if case .media(.mediaFilesScreen) = timelineController.timelineKind,
                        let item = actionMenuInfo.item as? EventBasedMessageTimelineItemProtocol {
                         actionsSubject.send(.displayMediaDetails(item: item))
-                    } else {
+                    } else if hasActions(for: actionMenuInfo.item) {
+                        // The sheet presents whenever the binding is set, so an item
+                        // without any applicable actions (e.g. a state event) would
+                        // otherwise show a completely blank sheet.
                         self.state.bindings.actionMenuInfo = actionMenuInfo
                     }
                 case .showDebugInfo(let debugInfo):
@@ -626,6 +629,21 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .store(in: &cancellables)
     }
     
+    /// Whether the item menu would have anything to show for this item - mirrors
+    /// the provider built in `TimelineView`'s sheet.
+    private func hasActions(for item: EventBasedTimelineItemProtocol) -> Bool {
+        TimelineItemMenuActionProvider(timelineItem: item,
+                                       canCurrentUserSendMessage: state.canCurrentUserSendMessage,
+                                       canCurrentUserRedactSelf: state.canCurrentUserRedactSelf,
+                                       canCurrentUserRedactOthers: state.canCurrentUserRedactOthers,
+                                       canCurrentUserPin: state.canCurrentUserPin,
+                                       pinnedEventIDs: state.pinnedEventIDs,
+                                       isViewSourceEnabled: state.isViewSourceEnabled,
+                                       areThreadsEnabled: state.areThreadsEnabled,
+                                       timelineKind: state.timelineKind,
+                                       emojiProvider: state.emojiProvider).makeActions() != nil
+    }
+
     private func paginateBackwards() {
         guard paginateBackwardsTask == nil else {
             return

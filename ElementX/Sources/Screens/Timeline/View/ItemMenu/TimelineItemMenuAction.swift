@@ -105,7 +105,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the action should be shown for a redacted item.
     var canAppearInRedacted: Bool {
         switch self {
-        case .viewSource, .unpin, .viewInRoomTimeline:
+        case .viewSource, .unpin, .viewInRoomTimeline, .copyPermalink:
             true
         default:
             false
