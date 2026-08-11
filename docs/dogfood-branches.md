@@ -306,6 +306,10 @@ EXI:
   task and unwinds whatever the route half-started. Also fixes a failed thread
   timeline build leaving the state machine in `.thread` with no screen pushed
   [`5c11e1b37`](https://github.com/element-hq/element-x-ios/commit/5c11e1b37)
+- Long-press a room in the room list to peek at its timeline (iMessage-style preview
+  above the context menu) without sending a read receipt: the peek renders the real
+  timeline item views read-only, deliberately avoiding the timeline table controller
+  and RoomScreenViewModel - the only two places receipts originate
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running

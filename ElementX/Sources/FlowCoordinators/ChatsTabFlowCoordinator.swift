@@ -391,7 +391,10 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                                                          appSettings: flowParameters.appSettings,
                                                          analyticsService: flowParameters.analytics,
                                                          notificationManager: flowParameters.notificationManager,
-                                                         userIndicatorController: flowParameters.userIndicatorController)
+                                                         userIndicatorController: flowParameters.userIndicatorController,
+                                                         roomPeekViewModelBuilder: { [weak self] roomID in
+                                                             await self?.buildRoomPeekViewModel(roomID: roomID)
+                                                         })
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.actions
@@ -437,6 +440,35 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+
+    /// Builds a timeline view model for the room list's long-press peek preview.
+    /// The peek renders it read-only (see `RoomPeekView`), so nothing here may
+    /// mark the room as read or send receipts.
+    private func buildRoomPeekViewModel(roomID: String) async -> TimelineViewModelProtocol? {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else { return nil }
+        await roomProxy.subscribeForUpdates()
+
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
+                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
+
+        let timelineController = flowParameters.timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
+                                                                                                  initialFocussedEventID: nil,
+                                                                                                  timelineItemFactory: timelineItemFactory,
+                                                                                                  mediaProvider: userSession.mediaProvider)
+
+        return TimelineViewModel(roomProxy: roomProxy,
+                                 timelineController: timelineController,
+                                 userSession: userSession,
+                                 mediaPlayerProvider: MediaPlayerProvider(),
+                                 userIndicatorController: flowParameters.userIndicatorController,
+                                 appMediator: flowParameters.appMediator,
+                                 appSettings: flowParameters.appSettings,
+                                 analyticsService: flowParameters.analytics,
+                                 emojiProvider: flowParameters.emojiProvider,
+                                 linkMetadataProvider: flowParameters.linkMetadataProvider,
+                                 timelineControllerFactory: flowParameters.timelineControllerFactory)
     }
     
     private func presentReportRoom(for roomID: String) async {

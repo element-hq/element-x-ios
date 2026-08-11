@@ -91,7 +91,10 @@ enum HomeScreenSecurityBannerMode: Equatable {
 
 struct HomeScreenViewState: BindableState {
     var userProfile: UserProfile
-    
+
+    /// Builds the read-only timeline view model backing a room's long-press peek preview.
+    var roomPeekViewModelBuilder: ((String) async -> TimelineViewModelProtocol?)?
+
     var securityBannerMode = HomeScreenSecurityBannerMode.none
     var shouldShowNewSoundBanner = false
     

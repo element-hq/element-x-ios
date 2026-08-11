@@ -17,6 +17,8 @@ struct HomeScreenCoordinatorParameters {
     let analyticsService: AnalyticsServiceProtocol
     let notificationManager: NotificationManagerProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    /// Builds the read-only timeline view model backing a room's long-press peek preview.
+    var roomPeekViewModelBuilder: ((String) async -> TimelineViewModelProtocol?)?
 }
 
 enum HomeScreenCoordinatorAction {
@@ -55,7 +57,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         appSettings: parameters.appSettings,
                                         analyticsService: parameters.analyticsService,
                                         notificationManager: parameters.notificationManager,
-                                        userIndicatorController: parameters.userIndicatorController)
+                                        userIndicatorController: parameters.userIndicatorController,
+                                        roomPeekViewModelBuilder: parameters.roomPeekViewModelBuilder)
         bugReportService = parameters.bugReportService
         
         viewModel.actions

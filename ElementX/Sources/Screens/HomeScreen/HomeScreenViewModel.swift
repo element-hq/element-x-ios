@@ -34,7 +34,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
          appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol,
          notificationManager: NotificationManagerProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         roomPeekViewModelBuilder: ((String) async -> TimelineViewModelProtocol?)? = nil) {
         self.userSession = userSession
         self.analyticsService = analyticsService
         self.appSettings = appSettings
@@ -46,6 +47,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: .init(userProfile: userSession.clientProxy.userProfilePublisher.value,
+                                           roomPeekViewModelBuilder: roomPeekViewModelBuilder,
                                            bindings: .init(filtersState: .init(appSettings: appSettings))),
                    mediaProvider: userSession.mediaProvider)
         

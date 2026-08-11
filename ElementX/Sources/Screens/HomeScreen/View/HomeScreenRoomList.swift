@@ -99,6 +99,8 @@ struct HomeScreenRoomList: View {
                         } label: {
                             Label(L10n.actionLeaveRoom, icon: \.leave)
                         }
+                    } preview: {
+                        RoomPeekView(roomID: room.id, viewModelBuilder: context.viewState.roomPeekViewModelBuilder)
                     }
             }
         }
