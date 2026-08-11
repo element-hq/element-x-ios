@@ -29,8 +29,8 @@ SDK:
 - Stop inconsistent anchors promoting previewless rooms in the room list
   [`b92ec4b4c`](https://github.com/matrix-org/matrix-rust-sdk/commit/b92ec4b4c)
 - Don't synthesise `now()` timestamps for invites (they jumped the list on every restart)
-  [`e8cf882bb`](https://github.com/matrix-org/matrix-rust-sdk/commit/e8cf882bb).
-  Possibly fixes [#4916 invites for new rooms are sorted after existing rooms](https://github.com/element-hq/element-x-ios/issues/4916)
+  [`e8cf882bb`](https://github.com/matrix-org/matrix-rust-sdk/commit/e8cf882bb)
+  - possibly fixes [#4916 invites for new rooms are sorted after existing rooms](https://github.com/element-hq/element-x-ios/issues/4916)
 - Replay the current state when an FFI state listener attaches, so observers attached
   after `Running` don't miss it (prerequisite for EXI's eager sync start)
   [`a804ac7fc`](https://github.com/matrix-org/matrix-rust-sdk/commit/a804ac7fc)
@@ -124,27 +124,24 @@ SDK - previews and the back-pagination queue:
   decryption key", keep an accurate bump timestamp (no sink treadmill), and are replaced
   in place once the key arrives
   [`e1374ff8f`](https://github.com/matrix-org/matrix-rust-sdk/commit/e1374ff8f),
-  [`1457a8eca`](https://github.com/matrix-org/matrix-rust-sdk/commit/1457a8eca).
-  Fixes [#4088 UTDs make room previews lie](https://github.com/element-hq/element-x-ios/issues/4088) (closed)
+  [`1457a8eca`](https://github.com/matrix-org/matrix-rust-sdk/commit/1457a8eca)
 - `BackPaginationQueue`: priority heap, per-room single-flight, per-priority concurrency
   caps, coalescing - replaces the credit system (built on Stefan's queue series)
   [`3fe3a3dcc`](https://github.com/matrix-org/matrix-rust-sdk/commit/3fe3a3dcc)…[`6bed07f5b`](https://github.com/matrix-org/matrix-rust-sdk/commit/6bed07f5b),
   caps [`6a3546d95`](https://github.com/matrix-org/matrix-rust-sdk/commit/6a3546d95),
-  concurrency [`993bb82d7`](https://github.com/matrix-org/matrix-rust-sdk/commit/993bb82d7).
-  Part of [sdk#6014 [meta] Automatic backpagination](https://github.com/matrix-org/matrix-rust-sdk/issues/6014)
+  concurrency [`993bb82d7`](https://github.com/matrix-org/matrix-rust-sdk/commit/993bb82d7)
+  - part of [sdk#6014 [meta] Automatic backpagination](https://github.com/matrix-org/matrix-rust-sdk/issues/6014)
 - Valueless rooms backfill their preview automatically via a detached request; viewport
   rooms preload with top priority, two-tier (preview first, then a screenful)
   [`25c7c3a83`](https://github.com/matrix-org/matrix-rust-sdk/commit/25c7c3a83),
   [`c55c20607`](https://github.com/matrix-org/matrix-rust-sdk/commit/c55c20607),
-  [`3685da91e`](https://github.com/matrix-org/matrix-rust-sdk/commit/3685da91e).
-  Fixes [#4898 Last messages are populated only for the displayed rooms in the room list](https://github.com/element-hq/element-x-ios/issues/4898),
-  [#5189 No last message logic when logging in with a small account](https://github.com/element-hq/element-x-ios/issues/5189),
-  [#3577 All the last messages are missing in the room list after a new login](https://github.com/element-hq/element-x-ios/issues/3577) (closed) and
-  [#5307 Last message not shown in Recent Chats after logout/login or reinstall](https://github.com/element-hq/element-x-ios/issues/5307) (closed)
+  [`3685da91e`](https://github.com/matrix-org/matrix-rust-sdk/commit/3685da91e)
+  - fixes [#4898 Last messages are populated only for the displayed rooms in the room list](https://github.com/element-hq/element-x-ios/issues/4898)
+  - fixes [#5189 No last message logic when logging in with a small account](https://github.com/element-hq/element-x-ios/issues/5189)
 - Stop the automatic backfill walking a room's entire history (the `/messages` trickle
   loop; origin-aware re-arm with a strict budget)
-  [`53c1bed53`](https://github.com/matrix-org/matrix-rust-sdk/commit/53c1bed53).
-  Likely fixes [#3183 Opening a room when offline causes scrollback spinner to tightloop](https://github.com/element-hq/element-x-ios/issues/3183)
+  [`53c1bed53`](https://github.com/matrix-org/matrix-rust-sdk/commit/53c1bed53)
+  - likely fixes [#3183 Opening a room when offline causes scrollback spinner to tightloop](https://github.com/element-hq/element-x-ios/issues/3183)
 - Drain the latest-event backlog in reverse chronological order
   [`32220d70e`](https://github.com/matrix-org/matrix-rust-sdk/commit/32220d70e)
 - Stop the room list spasming during catch-up syncs: a burst of freshly computed
@@ -152,24 +149,22 @@ SDK - previews and the back-pagination queue:
   (one atomic reorder per drain instead of one per room), and one drain fits a
   whole response's rooms
   [`a637111d1`](https://github.com/matrix-org/matrix-rust-sdk/commit/a637111d1),
-  [`f08c09150`](https://github.com/matrix-org/matrix-rust-sdk/commit/f08c09150).
-  Fixes [#4814 The roomlist order jumps around (spasms) fairly wildly when syncing](https://github.com/element-hq/element-x-ios/issues/4814)
-  and [rageshake#4993 yet another 20s sync… then the roomlist spasmed like crazy as it caught up](https://github.com/element-hq/element-x-ios-rageshakes/issues/4993)
+  [`f08c09150`](https://github.com/matrix-org/matrix-rust-sdk/commit/f08c09150)
+  - fixes [#4814 The roomlist order jumps around (spasms) fairly wildly when syncing](https://github.com/element-hq/element-x-ios/issues/4814)
+  - fixes [rageshake#4993 yet another 20s sync… then the roomlist spasmed like crazy as it caught up](https://github.com/element-hq/element-x-ios-rageshakes/issues/4993)
 - Never fetch `/room_keys/version` while classifying UTDs - cold-launch first paint
   blocked up to 49s offline on this network call
-  [`12e2d0d8b`](https://github.com/matrix-org/matrix-rust-sdk/commit/12e2d0d8b).
-  Fixes [#3390 Application hangs for several minutes on the main screen](https://github.com/element-hq/element-x-ios/issues/3390) (closed)
+  [`12e2d0d8b`](https://github.com/matrix-org/matrix-rust-sdk/commit/12e2d0d8b)
 
 SDK - sync correctness:
 - Never persist the sliding-sync `pos` ahead of the event cache: a kill between the two
   silently lost events forever (rooms stuck unread). Pos persistence is now ack-gated on
   the event cache having durably processed the response
-  [`a2ce71d71`](https://github.com/matrix-org/matrix-rust-sdk/commit/a2ce71d71).
-  Fixes [#4729 3 inbound messages (and 1 edit) went entirely missing from my timeline](https://github.com/element-hq/element-x-ios/issues/4729)
-  and addresses [sdk#6401 Find a better place for the pos persistance](https://github.com/matrix-org/matrix-rust-sdk/issues/6401);
-  likely behind stuck-unread reports like
-  [rageshake#6243 Stuck unread in the room list](https://github.com/element-hq/element-x-ios-rageshakes/issues/6243) and
-  [rageshake#6272 Stuck unread, had to manually mark it as read](https://github.com/element-hq/element-x-ios-rageshakes/issues/6272)
+  [`a2ce71d71`](https://github.com/matrix-org/matrix-rust-sdk/commit/a2ce71d71)
+  - fixes [#4729 3 inbound messages (and 1 edit) went entirely missing from my timeline](https://github.com/element-hq/element-x-ios/issues/4729)
+  - addresses [sdk#6401 Find a better place for the pos persistance](https://github.com/matrix-org/matrix-rust-sdk/issues/6401)
+  - likely behind stuck-unread reports like [rageshake#6243 Stuck unread in the room list](https://github.com/element-hq/element-x-ios-rageshakes/issues/6243)
+    and [rageshake#6272 Stuck unread, had to manually mark it as read](https://github.com/element-hq/element-x-ios-rageshakes/issues/6272)
 - Make the read-receipt hunt a shallow seek, not a deep spider (3MB `/messages` batches
   of server-ACL churn were starving the queue), then merge all same-room walks into
   needs-based shared runs
@@ -194,8 +189,7 @@ SDK - NSE and push-taps:
   [`48e010cbc`](https://github.com/matrix-org/matrix-rust-sdk/commit/48e010cbc)
 - Serve focused timelines from the persisted event cache instead of always hitting
   `/context`
-  [`8b73bb326`](https://github.com/matrix-org/matrix-rust-sdk/commit/8b73bb326).
-  Addresses [sdk#5954 Focused timelines bypass the event cache](https://github.com/matrix-org/matrix-rust-sdk/issues/5954) (closed)
+  [`8b73bb326`](https://github.com/matrix-org/matrix-rust-sdk/commit/8b73bb326)
 - Upgrade the persisted UTD in place once the NSE's encryption sync fetches the key, so
   the main app doesn't come up rendering a UTD it has the key for
   [`6cf6b06e5`](https://github.com/matrix-org/matrix-rust-sdk/commit/6cf6b06e5)
@@ -263,36 +257,31 @@ EXI:
   [`5cd7d67b5`](https://github.com/element-hq/element-x-ios/commit/5cd7d67b5)
 - Never block launch on the network (fire-and-forget `auth_metadata` caching); add
   per-launch `LaunchMetrics` (greppable log line + Sentry transaction)
-  [`e86a457b5`](https://github.com/element-hq/element-x-ios/commit/e86a457b5).
-  Related: [#1257 Opening app in airplane mode displays empty but loading room list](https://github.com/element-hq/element-x-ios/issues/1257) (closed)
+  [`e86a457b5`](https://github.com/element-hq/element-x-ios/commit/e86a457b5)
 - Never show a join screen for a room the user is already in (push-taps for unsynced
   rooms now wait for the room; the join screen honours server-reported membership)
-  [`ac2169469`](https://github.com/element-hq/element-x-ios/commit/ac2169469).
-  Fixes [#4287 Opening a push for a room whose invite you accepted elsewhere fails](https://github.com/element-hq/element-x-ios/issues/4287)
-  and [#3036 Opening room immediately after launch takes you to join page even if you're already joined](https://github.com/element-hq/element-x-ios/issues/3036) (closed);
-  likely [rageshake#7352 Opening rooms just opens an invite screen and not the room](https://github.com/element-hq/element-x-ios-rageshakes/issues/7352),
-  [#3031 Opening a room whilst the app is syncing takes you to the JoinRoomScreen](https://github.com/element-hq/element-x-ios/issues/3031) (closed) and
-  [rageshake#2479 Tapped notification and got the Join Room screen](https://github.com/element-hq/element-x-ios-rageshakes/issues/2479)
+  [`ac2169469`](https://github.com/element-hq/element-x-ios/commit/ac2169469)
+  - fixes [#4287 Opening a push for a room whose invite you accepted elsewhere fails](https://github.com/element-hq/element-x-ios/issues/4287)
+  - likely fixes [rageshake#7352 Opening rooms just opens an invite screen and not the room](https://github.com/element-hq/element-x-ios-rageshakes/issues/7352)
+    and [rageshake#2479 Tapped notification and got the Join Room screen](https://github.com/element-hq/element-x-ios-rageshakes/issues/2479)
 - Hold the splash until the cached room list has published - zero skeleton frames on
   launch
-  [`5ae04e03f`](https://github.com/element-hq/element-x-ios/commit/5ae04e03f).
-  Related: [#1640 Loading skeleton in the room list doesn't work properly](https://github.com/element-hq/element-x-ios/issues/1640) (closed)
+  [`5ae04e03f`](https://github.com/element-hq/element-x-ios/commit/5ae04e03f)
 - Focus notification taps on their event (served locally when the NSE prefilled it);
   give background refresh a bounded wait for session restore instead of a silent no-op
-  [`580ba004d`](https://github.com/element-hq/element-x-ios/commit/580ba004d).
-  Fixes [#4790 Tapping on a push should permalink to that message](https://github.com/element-hq/element-x-ios/issues/4790) and
-  [#4620 [Task] Tapping a notification should also focus the event](https://github.com/element-hq/element-x-ios/issues/4620) (closed)
+  [`580ba004d`](https://github.com/element-hq/element-x-ios/commit/580ba004d)
+  - fixes [#4790 Tapping on a push should permalink to that message](https://github.com/element-hq/element-x-ios/issues/4790)
 - Make declining an invite non-blocking: the decline also forgets the room server-side
   (measured ~5s on matrix.org) and the modal indicator froze the whole room list for
   that long
-  [`556982912`](https://github.com/element-hq/element-x-ios/commit/556982912).
-  Related: [rageshake#6668 unable to decline… I just get a Loading window pop up and the app is unresponsive](https://github.com/element-hq/element-x-ios-rageshakes/issues/6668).
-  Fixes the blocking half of [#2535 No local echo on rejecting invites](https://github.com/element-hq/element-x-ios/issues/2535)
+  [`556982912`](https://github.com/element-hq/element-x-ios/commit/556982912)
+  - fixes the blocking half of [#2535 No local echo on rejecting invites](https://github.com/element-hq/element-x-ios/issues/2535)
+  - related: [rageshake#6668 unable to decline… I just get a Loading window pop up and the app is unresponsive](https://github.com/element-hq/element-x-ios-rageshakes/issues/6668)
 - Route taps on notifications the NSE couldn't process: the raw pusher payload still
   carries room/event IDs, but the tap handler required an NSE-only field and silently
   dropped the tap ("blank pushes" on a poor connection went nowhere)
-  [`eb0555a53`](https://github.com/element-hq/element-x-ios/commit/eb0555a53).
-  Likely [rageshake#5207 New notification came in, I tapped it. Message didn't load](https://github.com/element-hq/element-x-ios-rageshakes/issues/5207)
+  [`eb0555a53`](https://github.com/element-hq/element-x-ios/commit/eb0555a53)
+  - likely fixes [rageshake#5207 New notification came in, I tapped it. Message didn't load](https://github.com/element-hq/element-x-ios-rageshakes/issues/5207)
 - Open the room live at the bottom when a notification tap targets the newest message,
   instead of a permalink-style detached timeline (green highlight, dead jump-to-latest)
   [`a39307fc0`](https://github.com/element-hq/element-x-ios/commit/a39307fc0), waiting for the
@@ -305,20 +294,19 @@ EXI:
   the last item can trail the room's newest event right after opening) - it now compares
   against the latest-events value instead, via a new `latestEventId` FFI
   ([SDK `92950c9f3`](https://github.com/matrix-org/matrix-rust-sdk/commit/92950c9f3))
-  [`5e43d0872`](https://github.com/element-hq/element-x-ios/commit/5e43d0872).
-  The unhideable focus toast matches stuck-"Loading…" reports like
-  [#3857 Got stuck on "Loading…" modal on opening room and had to force quit](https://github.com/element-hq/element-x-ios/issues/3857) (closed) and
-  [rageshake#3004 upgraded to 851 and promptly got stuck on a loading… spinner](https://github.com/element-hq/element-x-ios-rageshakes/issues/3004)
+  [`5e43d0872`](https://github.com/element-hq/element-x-ios/commit/5e43d0872)
+  - the unhideable focus toast matches stuck-"Loading…" reports like
+    [rageshake#3004 upgraded to 851 and promptly got stuck on a loading… spinner](https://github.com/element-hq/element-x-ios-rageshakes/issues/3004)
 - Re-run the timeline's viewport fill check after each snapshot applies: it only ran on
   scroll and pagination-state changes, which fire against the previous timeline's
   geometry when switching timelines. A live timeline whose loaded window had been
   unloaded by a limited sync (dogfooding hit this as "room shows only the remote echo
   of my own message after sending from a notification tap") stayed a single bubble
   until the user scrolled
-  [`c1cae2c9c`](https://github.com/element-hq/element-x-ios/commit/c1cae2c9c).
-  Likely fixes [#5817 Timeline can get stuck showing only the most recent message if there's a reset which races with a local echo](https://github.com/element-hq/element-x-ios/issues/5817)
-  (mirrored as [sdk#6709](https://github.com/matrix-org/matrix-rust-sdk/issues/6709));
-  possibly [rageshake#5597 new messages the notification was about simply disappear from the conversation view](https://github.com/element-hq/element-x-ios-rageshakes/issues/5597)
+  [`c1cae2c9c`](https://github.com/element-hq/element-x-ios/commit/c1cae2c9c)
+  - likely fixes [#5817 Timeline can get stuck showing only the most recent message if there's a reset which races with a local echo](https://github.com/element-hq/element-x-ios/issues/5817)
+    (mirrored as [sdk#6709](https://github.com/matrix-org/matrix-rust-sdk/issues/6709))
+  - possibly fixes [rageshake#5597 new messages the notification was about simply disappear from the conversation view](https://github.com/element-hq/element-x-ios-rageshakes/issues/5597)
 - Focus scrolls (permalinks, pinned-message taps) now put the top of the target message
   halfway up the viewport, accurately: `scrollToRow(.top)` pinned a long message's
   bottom to the viewport edge (top off-screen), and estimated row heights made the
@@ -326,18 +314,17 @@ EXI:
   explicitly and re-measured as layout settles (within one paint for jumps); nearby
   targets animate normally, distant ones crossfade a settled jump since animating
   across estimated heights can't aim
-  [`6b300c22c`](https://github.com/element-hq/element-x-ios/commit/6b300c22c).
-  Fixes [#2806 tapping on replies doesn't always take you to the top of the replied to message](https://github.com/element-hq/element-x-ios/issues/2806);
-  possibly [#4377 Scrolling got stuck after jumping to a permalink, and refused to scroll to the actual bottom of the timeline](https://github.com/element-hq/element-x-ios/issues/4377).
-  Implements [#2757 It might be nice to animate the timeline when jumping to a nearby permalink](https://github.com/element-hq/element-x-ios/issues/2757) (closed)
+  [`6b300c22c`](https://github.com/element-hq/element-x-ios/commit/6b300c22c)
+  - fixes [#2806 tapping on replies doesn't always take you to the top of the replied to message](https://github.com/element-hq/element-x-ios/issues/2806)
+  - possibly fixes [#4377 Scrolling got stuck after jumping to a permalink, and refused to scroll to the actual bottom of the timeline](https://github.com/element-hq/element-x-ios/issues/4377)
 - Notification taps jump straight to the room: taps on the newest message open live at
   the bottom with no focus treatment, decided at the route level from the fetched
   event's ID *and timestamp* (the in-memory latest event lags the NSE right after a
   tap wakes the app, so ID comparison alone mis-decides)
   [`363b3b7f5`](https://github.com/element-hq/element-x-ios/commit/363b3b7f5),
   new `latestEventTimestamp` FFI
-  ([SDK `9a7707b37`](https://github.com/matrix-org/matrix-rust-sdk/commit/9a7707b37)).
-  Likely fixes [rageshake#2349 Tapped on a notification… the latest message was wrong… after a few seconds it turned into the correct, new message](https://github.com/element-hq/element-x-ios-rageshakes/issues/2349)
+  ([SDK `9a7707b37`](https://github.com/matrix-org/matrix-rust-sdk/commit/9a7707b37))
+  - likely fixes [rageshake#2349 Tapped on a notification… the latest message was wrong… after a few seconds it turned into the correct, new message](https://github.com/element-hq/element-x-ios-rageshakes/issues/2349)
 - Dirty-lock recovery scoped to the rooms other processes actually touched: after the
   NSE handled a push, the first store access reloaded the entire in-memory event cache
   state (5451 rooms, ~11s, synchronously inside the tap's room open). Writers journal
@@ -348,10 +335,10 @@ EXI:
   mixed-version cost is the old slow path, never staleness. Store-wide clears and
   pruning leave wildcard/horizon markers with the same fallback
   ([SDK `b10561742`](https://github.com/matrix-org/matrix-rust-sdk/commit/b10561742),
-  [`41e4704ed`](https://github.com/matrix-org/matrix-rust-sdk/commit/41e4704ed)).
-  Advances [sdk#4874 [meta] Dirty cross-process locks](https://github.com/matrix-org/matrix-rust-sdk/issues/4874) and
-  [sdk#6681 [meta] Adopt a new cross-process state invalidation strategy](https://github.com/matrix-org/matrix-rust-sdk/issues/6681);
-  likely fixes [rageshake#5029 Opening a room takes several seconds](https://github.com/element-hq/element-x-ios-rageshakes/issues/5029)
+  [`41e4704ed`](https://github.com/matrix-org/matrix-rust-sdk/commit/41e4704ed))
+  - advances [sdk#4874 [meta] Dirty cross-process locks](https://github.com/matrix-org/matrix-rust-sdk/issues/4874)
+    and [sdk#6681 [meta] Adopt a new cross-process state invalidation strategy](https://github.com/matrix-org/matrix-rust-sdk/issues/6681)
+  - likely fixes [rageshake#5029 Opening a room takes several seconds](https://github.com/element-hq/element-x-ios-rageshakes/issues/5029)
 - Long-press on a redacted message showed a blank fullscreen sheet (the filtered action
   set came back empty with view source off, and the sheet presents regardless; state
   events hit the same). Redacted items keep copy-permalink (plus view source in dev
@@ -363,8 +350,8 @@ EXI:
   queue, whose redaction local echo the timeline already applies to the target item
   immediately - plus the usual queue durability (retries, offline, ordering behind
   pending sends)
-  ([SDK `4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b)).
-  Fixes [#1713 Redactions don't local echo](https://github.com/element-hq/element-x-ios/issues/1713)
+  ([SDK `4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b))
+  - fixes [#1713 Redactions don't local echo](https://github.com/element-hq/element-x-ios/issues/1713)
 - THE SYNC WEDGE, root-caused and fixed: the latest-events "re-trigger missing
   computations" step held the rooms-map read lock while awaiting every response room's
   own lock; with the compute task holding a room's write lock and a room registration
@@ -374,12 +361,12 @@ EXI:
   (dogfooding: room list stuck behind a permanent "Loading…" overlay). Both offending
   sites now snapshot cheap clone handles and release the map lock before awaiting
   per-room locks
-  ([SDK `830f3dc0e`](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e)).
-  Likely the cause of
-  [rageshake#6487 app got stuck on Loading… when opening a room and had to be force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6487),
-  [rageshake#6322 app hung while opening room on "loading…" spinner. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6322),
-  [rageshake#7173 infinite Loading spinner while trying to open room. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/7173) and
-  [rageshake#5716 app stuck solid on loading spinner trying to open room](https://github.com/element-hq/element-x-ios-rageshakes/issues/5716)
+  ([SDK `830f3dc0e`](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e))
+  - likely the cause of
+    [rageshake#6487 app got stuck on Loading… when opening a room and had to be force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6487),
+    [rageshake#6322 app hung while opening room on "loading…" spinner. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6322),
+    [rageshake#7173 infinite Loading spinner while trying to open room. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/7173) and
+    [rageshake#5716 app stuck solid on loading spinner trying to open room](https://github.com/element-hq/element-x-ios-rageshakes/issues/5716)
 - Open the thread when a room's preview shows a threaded reply: the preview surfaces
   the room's latest event even when it is threaded, which the main timeline hides -
   tapping the room then appears to be missing the previewed message (dogfooded as
@@ -397,17 +384,16 @@ EXI:
   used to be refetched over the network on every item rebuild (a ~10s skeleton while
   matrix.org served a cold 2023 event) and, being invisible to the redecryptor, never
   resolved in place when their key arrived from backup
-  ([SDK `4b23e1d77`](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77)).
-  Fixes [#3113 Late decryptions don't update RepliedToEvent](https://github.com/element-hq/element-x-ios/issues/3113),
-  [sdk#4196 replied-to UTD messages are not updated when the key is received](https://github.com/matrix-org/matrix-rust-sdk/issues/4196) (closed),
-  and the "unsupported event in summary" half of
-  [#4819 Message in thread shows as UTD in main timeline + unsupported event in summary until you load the thread](https://github.com/element-hq/element-x-ios/issues/4819)
-  (reported in the wild as [rageshake#6859 "unsupported event" in thread preview](https://github.com/element-hq/element-x-ios-rageshakes/issues/6859)).
-  Related: [#6002 Update UI when replied to message cannot be loaded](https://github.com/element-hq/element-x-ios/issues/6002)
+  ([SDK `4b23e1d77`](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77))
+  - fixes [#3113 Late decryptions don't update RepliedToEvent](https://github.com/element-hq/element-x-ios/issues/3113)
+  - fixes the "unsupported event in summary" half of
+    [#4819 Message in thread shows as UTD in main timeline + unsupported event in summary until you load the thread](https://github.com/element-hq/element-x-ios/issues/4819)
+    (reported in the wild as [rageshake#6859 "unsupported event" in thread preview](https://github.com/element-hq/element-x-ios-rageshakes/issues/6859))
+  - related: [#6002 Update UI when replied to message cannot be loaded](https://github.com/element-hq/element-x-ios/issues/6002)
 - Fix the first list item rendering more indented than the rest (inter-element
   whitespace in markdown-generated HTML normalised into stray spaces)
-  [`550a6467d`](https://github.com/element-hq/element-x-ios/commit/550a6467d).
-  Fixes [#5179 First bullet point in an unordered list is always incorrectly indented](https://github.com/element-hq/element-x-ios/issues/5179)
+  [`550a6467d`](https://github.com/element-hq/element-x-ios/commit/550a6467d)
+  - fixes [#5179 First bullet point in an unordered list is always incorrectly indented](https://github.com/element-hq/element-x-ios/issues/5179)
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
