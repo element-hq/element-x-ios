@@ -337,6 +337,15 @@ EXI:
   [`b2140c102`](https://github.com/element-hq/element-x-ios/commit/b2140c102),
   new `latestEventThreadRootId` FFI
   ([SDK `0ba9d0d9d`](https://github.com/matrix-org/matrix-rust-sdk/commit/0ba9d0d9d))
+- Reply previews of undecrypted events showed "Unsupported event" and never refreshed:
+  they now say "Waiting for decryption key"
+  [`bde3cbd69`](https://github.com/element-hq/element-x-ios/commit/bde3cbd69) and update
+  in place when the key arrives - the SDK hooks the redecryptor's resolved-UTDs report
+  to refresh replies whose target is outside the loaded timeline
+  ([SDK `17af054e3`](https://github.com/matrix-org/matrix-rust-sdk/commit/17af054e3))
+- Fix the first list item rendering more indented than the rest (inter-element
+  whitespace in markdown-generated HTML normalised into stray spaces)
+  [`550a6467d`](https://github.com/element-hq/element-x-ios/commit/550a6467d)
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
