@@ -431,16 +431,29 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
-    /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
+    /// Scrolls to the item with the corresponding event ID if loaded in the timeline,
+    /// positioning the top of the message halfway up the viewport.
     private func scrollToItem(eventID: String, animated: Bool) {
         DispatchQueue.main.async { [weak self] in // Fixes #2805
             guard let self else { return }
             if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == eventID }),
                let indexPath = dataSource?.indexPath(for: kvPair.key) {
-                // Scrolling to the middle created a small bump in the timeline
-                // Using top, which is bottom in the reversed timeline helps with rendering
-                // in full long messages and images
-                tableView.scrollToRow(at: indexPath, at: .top, animated: animated)
+                if animated, tableView.rectForRow(at: indexPath).intersects(tableView.bounds.insetBy(dx: 0, dy: -tableView.bounds.height)) {
+                    // Within a viewport of the visible rows the heights are real, so the
+                    // target is exact and the scroll animation lands cleanly. Keep a silent
+                    // post-animation settle as insurance (scrollViewDidEndScrollingAnimation).
+                    focusRefinementIndexPath = indexPath
+                    tableView.setContentOffset(CGPoint(x: 0, y: focussedRowTargetOffset(for: indexPath)), animated: true)
+                } else if animated {
+                    // A distant target sits behind estimated row heights: an animated scroll
+                    // can't aim at it correctly, and correcting afterwards reads as a bounce.
+                    // Crossfade a layout-settled jump instead.
+                    UIView.transition(with: tableView, duration: 0.25, options: [.transitionCrossDissolve, .allowUserInteraction]) {
+                        self.scrollToFocussedRowSettlingLayout(at: indexPath)
+                    }
+                } else {
+                    scrollToFocussedRowSettlingLayout(at: indexPath)
+                }
                 coordinator.send(viewAction: .scrolledToFocussedItem)
                 // Ensure VoiceOver focus happens after the scroll animation (if any)
                 DispatchQueue.main.asyncAfter(deadline: .now() + (animated ? 0.5 : 0.0)) {
@@ -449,6 +462,36 @@ class TimelineTableViewController: UIViewController {
                     }
                 }
             }
+        }
+    }
+
+    /// The row awaiting a post-animation position refinement, if any.
+    private var focusRefinementIndexPath: IndexPath?
+
+    /// The content offset that puts the top of the given row's message halfway up the
+    /// viewport. In the flipped table the message's visual top is the row rect's `maxY`.
+    ///
+    /// Only accurate once the rows between the current offset and the target have real
+    /// (non-estimated) heights - callers must re-evaluate after layout settles.
+    private func focussedRowTargetOffset(for indexPath: IndexPath) -> CGFloat {
+        let rowRect = tableView.rectForRow(at: indexPath)
+        let target = rowRect.maxY - tableView.visibleSize.height / 2
+
+        let minOffset = -tableView.adjustedContentInset.top
+        let maxOffset = max(minOffset, tableView.contentSize.height - tableView.bounds.height + tableView.adjustedContentInset.bottom)
+        return min(max(target, minOffset), maxOffset)
+    }
+
+    /// Jumps to the focussed row, re-measuring until its position stops moving as
+    /// estimated row heights are replaced by real ones.
+    private func scrollToFocussedRowSettlingLayout(at indexPath: IndexPath) {
+        for _ in 0..<3 {
+            let target = focussedRowTargetOffset(for: indexPath)
+            if abs(tableView.contentOffset.y - target) < 1 {
+                return
+            }
+            tableView.setContentOffset(CGPoint(x: 0, y: target), animated: false)
+            tableView.layoutIfNeeded()
         }
     }
     
@@ -555,6 +598,9 @@ extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isDraggingScrollView = true
         scrollViewIsScrolling = true
+
+        // The user took over - don't yank the viewport back to the focussed row.
+        focusRefinementIndexPath = nil
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -573,6 +619,13 @@ extension TimelineTableViewController: UITableViewDelegate {
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         sendLastVisibleItemReadReceipt()
+
+        // The animated focus scroll lands wherever the pre-animation height estimates
+        // said the row was - correct against the now-materialised layout.
+        if let indexPath = focusRefinementIndexPath {
+            focusRefinementIndexPath = nil
+            scrollToFocussedRowSettlingLayout(at: indexPath)
+        }
     }
 }
 
