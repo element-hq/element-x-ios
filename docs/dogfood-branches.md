@@ -282,6 +282,18 @@ EXI:
   of my own message after sending from a notification tap") stayed a single bubble
   until the user scrolled
   [`c1cae2c9c`](https://github.com/element-hq/element-x-ios/commit/c1cae2c9c)
+- Long-press on a redacted message showed a blank fullscreen sheet (the filtered action
+  set came back empty with view source off, and the sheet presents regardless; state
+  events hit the same). Redacted items keep copy-permalink (plus view source in dev
+  mode), and the menu no longer presents at all when a provider has nothing to offer
+  [`d8b529726`](https://github.com/element-hq/element-x-ios/commit/d8b529726)
+- Redactions now apply as local echoes: `Timeline::redact` sent remote-target
+  redactions as a direct HTTP request, so "Remove" left the message visible until the
+  redaction came back down /sync (forever, while offline). Routed through the send
+  queue, whose redaction local echo the timeline already applies to the target item
+  immediately - plus the usual queue durability (retries, offline, ordering behind
+  pending sends)
+  ([SDK `4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b))
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
