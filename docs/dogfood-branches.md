@@ -269,7 +269,19 @@ EXI:
   [`f26581fe4`](https://github.com/element-hq/element-x-ios/commit/f26581fe4), and retracting
   the focus "Loading…" toast when the skip goes straight to live (nothing else could ever
   hide it, so it spun at the top of the room forever)
-  [`e550a82df`](https://github.com/element-hq/element-x-ios/commit/e550a82df)
+  [`e550a82df`](https://github.com/element-hq/element-x-ios/commit/e550a82df).
+  The item-based check still mis-decided (the provider builds items progressively, so
+  the last item can trail the room's newest event right after opening) - it now compares
+  against the latest-events value instead, via a new `latestEventId` FFI
+  ([SDK `92950c9f3`](https://github.com/matrix-org/matrix-rust-sdk/commit/92950c9f3))
+  [`5e43d0872`](https://github.com/element-hq/element-x-ios/commit/5e43d0872)
+- Re-run the timeline's viewport fill check after each snapshot applies: it only ran on
+  scroll and pagination-state changes, which fire against the previous timeline's
+  geometry when switching timelines. A live timeline whose loaded window had been
+  unloaded by a limited sync (dogfooding hit this as "room shows only the remote echo
+  of my own message after sending from a notification tap") stayed a single bubble
+  until the user scrolled
+  [`c1cae2c9c`](https://github.com/element-hq/element-x-ios/commit/c1cae2c9c)
 - Show the app and SDK git SHAs in the Settings version footer (build phase stamps
   `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
   exactly which dogfood pairing a phone is running
