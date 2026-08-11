@@ -76,7 +76,11 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     var timeline: TimelineProxyProtocol { get }
     
     var predecessorRoom: PredecessorRoom? { get }
-    
+
+    /// The ID of the room's latest event from the latest-events subsystem,
+    /// or `nil` when none has been computed (or it's an unsent local echo).
+    var latestEventID: String? { get }
+
     func subscribeForUpdates() async
     
     func subscribeToRoomInfoUpdates()

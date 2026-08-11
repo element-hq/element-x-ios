@@ -68,16 +68,18 @@ class TimelineController: TimelineControllerProtocol {
             return
         }
         
+        // Focussing the newest message (the common notification-tap case) would show
+        // a permalink-style detached timeline for the same place the live timeline
+        // already ends at - just open live at the bottom instead. Compare against the
+        // latest-events subsystem rather than the live item provider: the provider
+        // builds its items asynchronously (decryption etc.) so racing it mis-decides.
+        if roomProxy.latestEventID == initialFocussedEventID {
+            configureActiveTimelineItemProvider()
+            return
+        }
+
         Task {
             paginationState = TimelinePaginationState(backward: .paginating, forward: .paginating)
-
-            // Focussing the newest message (the common notification-tap case) would show
-            // a permalink-style detached timeline for the same place the live timeline
-            // already ends at - just open live at the bottom instead.
-            if await liveTimelineLastEventID() == initialFocussedEventID {
-                configureActiveTimelineItemProvider()
-                return
-            }
 
             switch await focusOnEvent(initialFocussedEventID, timelineSize: 100) {
             case .success:
@@ -87,33 +89,6 @@ class TimelineController: TimelineControllerProtocol {
                 configureActiveTimelineItemProvider()
             }
         }
-    }
-    
-    /// The ID of the last event in the live timeline.
-    ///
-    /// The provider publishes its items asynchronously once subscribed, so they're normally
-    /// still empty when opening a room. Wait for the first batch instead of racing it.
-    private func liveTimelineLastEventID() async -> String? {
-        var itemProxies = liveTimelineItemProvider.itemProxies
-
-        if itemProxies.isEmpty {
-            // `updatePublisher` is an `AnyPublisher` which can't be awaited across actors, so
-            // bridge it through a subject that can.
-            let subject = CurrentValueSubject<[TimelineItemProxy], Never>([])
-            let cancellable = liveTimelineItemProvider.updatePublisher.sink { subject.send($0.0) }
-            let runner = ExpiringTaskRunner { [publisher = subject.asCurrentValuePublisher()] in
-                await publisher.values.first { @Sendable in !$0.isEmpty } ?? []
-            }
-
-            itemProxies = (try? await runner.run(timeout: .seconds(1))) ?? []
-            cancellable.cancel()
-        }
-
-        guard case .event(let item)? = itemProxies.last(where: \.isEvent) else {
-            return nil
-        }
-
-        return item.id.eventID
     }
 
     func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, TimelineControllerError> {
@@ -568,7 +543,7 @@ class TimelineController: TimelineControllerProtocol {
         }
         
         timelineItems = newTimelineItems
-        
+
         callbacks.send(.updatedTimelineItems(timelineItems: newTimelineItems, isSwitchingTimelines: isNewTimeline))
         self.paginationState = paginationState
     }

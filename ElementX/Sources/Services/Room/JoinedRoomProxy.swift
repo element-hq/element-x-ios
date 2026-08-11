@@ -41,6 +41,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     /// The predecessor is set on room creation and never changes, so we lazily store it.
     lazy var predecessorRoom = room.predecessorRoom()
+
+    // Not lazy: the latest event moves with every sync.
+    var latestEventID: String? { room.latestEventId() }
     
     let timeline: TimelineProxyProtocol
     
