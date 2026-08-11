@@ -9,9 +9,6 @@
     }
   ],
   "defaultOptions" : {
-    "addressSanitizer" : {
-      "enabled" : true
-    },
     "codeCoverage" : {
       "targets" : [
         {
@@ -36,8 +33,7 @@
       "identifier" : "C0C687DE1D270F9895FEE186",
       "name" : "AccessibilityTests"
     },
-    "testTimeoutsEnabled" : true,
-    "undefinedBehaviorSanitizerEnabled" : true
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {
