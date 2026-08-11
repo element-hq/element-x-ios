@@ -384,7 +384,10 @@ EXI:
   used to be refetched over the network on every item rebuild (a ~10s skeleton while
   matrix.org served a cold 2023 event) and, being invisible to the redecryptor, never
   resolved in place when their key arrived from backup
-  ([SDK `4b23e1d77`](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77))
+  ([SDK `4b23e1d77`](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77);
+  REVERTED in [`ff0d38bd2`](https://github.com/matrix-org/matrix-rust-sdk/commit/ff0d38bd2) while
+  bisecting duplicate echoes of freshly sent messages - the save ran in the affected
+  room minutes before the duplicates started; mechanism not yet root-caused)
   - fixes [#3113 Late decryptions don't update RepliedToEvent](https://github.com/element-hq/element-x-ios/issues/3113)
   - fixes the "unsupported event in summary" half of
     [#4819 Message in thread shows as UTD in main timeline + unsupported event in summary until you load the thread](https://github.com/element-hq/element-x-ios/issues/4819)
