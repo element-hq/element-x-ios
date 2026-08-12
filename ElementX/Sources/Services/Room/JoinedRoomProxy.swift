@@ -85,8 +85,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         self.analyticsService = analyticsService
         self.eventStringBuilder = eventStringBuilder
         
+        MXLog.info("Joined room proxy: fetching room info")
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
-        
+        MXLog.info("Joined room proxy: building the live timeline")
+
         let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .openRoom)
         timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
                                                                                                          filter: .eventFilter(filter: Self.excludedEventsFilter),
@@ -117,14 +119,17 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
         
         subscribedForUpdates = true
-        
+
+        MXLog.info("Room subscription: subscribing to the room list")
         do {
             try await roomListService.subscribeToRooms(roomIds: [id])
         } catch {
             MXLog.error("Failed subscribing to room with error: \(error)")
         }
-        
+
+        MXLog.info("Room subscription: subscribing to the timeline")
         await timeline.subscribeForUpdates()
+        MXLog.info("Room subscription: done")
         
         Task {
             subscribeToRoomInfoUpdates()

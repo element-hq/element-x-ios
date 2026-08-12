@@ -1367,9 +1367,11 @@ class ClientProxy: ClientProxyProtocol {
     
     private func buildRoomForIdentifier(_ roomID: String) async -> RoomProxyType? {
         do {
+            MXLog.info("Build room proxy: fetching the room")
             guard let room = try client.getRoom(roomId: roomID) else {
                 return nil
             }
+            MXLog.info("Build room proxy: fetched the room")
             
             switch room.membership() {
             case .invited:

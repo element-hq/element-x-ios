@@ -312,7 +312,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         showLoadingIndicator(delay: .seconds(0.5), onCancel: { [weak self] in self?.cancelRoomRoute() })
         defer { hideLoadingIndicator() }
 
+        MXLog.info("Room route: resolving room proxy")
         let room = await userSession.clientProxy.roomForIdentifier(roomID)
+        MXLog.info("Room route: resolved room proxy")
         guard !Task.isCancelled else { return }
 
         guard let room else {
@@ -332,6 +334,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
             } else {
                 await storeAndSubscribeToRoomProxy(roomProxy)
+                MXLog.info("Room route: subscribed to room proxy")
                 guard !Task.isCancelled else { return }
 
                 guard case let .eventFocus(focusEvent) = presentationAction else {
