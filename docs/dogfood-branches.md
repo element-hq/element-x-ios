@@ -566,3 +566,17 @@ EXI:
   ignored `.truncate` diff (silent desync if one ever arrives; nothing emits it
   today). To validate: burst-send on a poor connection, watch for the vanish,
   rageshake immediately
+- ROOT CAUSE FOUND + FIXED for the vanishing own sends: the instrumented repro
+  (2026-08-12 23:01, 10 sends, ~5 vanished 11.5s) showed the FFI forwarding
+  `[Clear, PushBack x20]` then `PushBack x10` with no removes - the rebuild
+  never contained the sends, so the loss was in the event cache, not the app.
+  The long-poll response was stale: generated before the sends completed but
+  delivered after them, limited+gappy with a batch of only older events. The
+  all-duplicates early return requires a foreign sender, so the all-own stale
+  batch fell through to the gap+shrink path and the newer tail fell behind the
+  gap. Fix: ignore batches that are entirely known events and don't contain
+  the newest in-memory event (such a response describes a server view older
+  than local state); batches containing the tail keep today's behaviour.
+  Regression test drops exactly the tail sends without the fix. Upstream this
+  together with the diagnostics commit
+  [SDK `6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)
