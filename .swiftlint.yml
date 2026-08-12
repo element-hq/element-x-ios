@@ -18,7 +18,7 @@ included:
 excluded:
   - "*/Sources/Generated/*"
   - Tools/Sources # Our command-line tools use a lot of print commands.
-  - Secrets
+  - Components/Secrets
   - compound-ios/Inspector
 
 line_length:
