@@ -724,12 +724,18 @@ This bug has been around since the event cache landed, i think.
 #### Stop the first tap after a "Loading..." modal being silently swallowed
 
 - Systematically reproduced as "the first back press (or scroll) after
-  opening a thread from the room list does nothing, the second works". On
-  iOS 26 the user-indicator overlay window decides tap-passthrough by layer
-  hit-testing, which is geometry-only: a just-retracted modal's zero-opacity
-  layers linger in the layer tree until SwiftUI's next cleanup pass, so the
-  first tap is routed to the overlay window (and triggers the cleanup that
-  unblocks the second). The controller now disables user interaction on the
-  window whenever no indicator is active, so UIKit never routes events to it;
-  behaviour while an indicator is showing is unchanged. Upstreamable.
+  opening a thread from the room list does nothing, the second works" - and
+  pinned by dogfood observation: waiting an extra ~500ms avoided it. A
+  retracted indicator lingers for the rest of `minimumDisplayDuration`
+  (0.5s) so it doesn't flash, but it kept its scrim and the overlay window's
+  interactivity for that whole window, so any tap during the linger hit a
+  scrim whose cancel action had nothing left to cancel. The controller now
+  tracks retracting indicators: the pill still fades over the linger, but
+  the scrim is removed and the overlay window stops intercepting the moment
+  the retract begins. (An earlier attempt disabling window interaction only
+  once no indicator was active -
   [EXI `1f669f332`](https://github.com/element-hq/element-x-ios/commit/1f669f332)
+  - kept as a belt, was too late to help.) Window-level touch logging landed
+  alongside for future swallowed-tap hunts
+  ([EXI `7ff0ea3fb`](https://github.com/element-hq/element-x-ios/commit/7ff0ea3fb),
+  strip before upstreaming). Upstreamable.

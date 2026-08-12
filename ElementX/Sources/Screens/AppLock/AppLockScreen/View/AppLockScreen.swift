@@ -50,7 +50,7 @@ struct AppLockScreen: View {
         .backgroundStyle(.compound.bgCanvasDefault)
         .disabled(context.viewState.forcedLogoutIndicator != nil)
         .overlay {
-            context.viewState.forcedLogoutIndicator.map(UserIndicatorModalView.init)
+            context.viewState.forcedLogoutIndicator.map { UserIndicatorModalView(indicator: $0) }
                 .animation(.elementDefault, value: context.viewState.forcedLogoutIndicator)
         }
         .alert(item: $context.alertInfo)
