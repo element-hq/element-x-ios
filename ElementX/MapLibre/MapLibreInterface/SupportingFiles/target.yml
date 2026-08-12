@@ -1,0 +1,19 @@
+# The types shared between the app and the MapLibreShim framework. The app links this
+# (tiny, initialiser-free) framework instead of MapLibre, see MapLibreShim's target.yml.
+name: MapLibreInterface
+
+targets:
+  MapLibreInterface:
+    type: framework
+    platform: iOS
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).maplibre-interface
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: 6.2
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+
+    sources:
+    - path: ../Sources

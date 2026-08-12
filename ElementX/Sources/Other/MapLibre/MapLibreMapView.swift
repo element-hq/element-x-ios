@@ -8,6 +8,7 @@
 
 import Combine
 import MapLibre
+import MapLibreInterface
 import SwiftUI
 
 struct MapLibreMapView: UIViewRepresentable {
