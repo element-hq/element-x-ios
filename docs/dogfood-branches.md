@@ -533,15 +533,22 @@ EXI:
   - likely fixes [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242)-family
     residue beyond the dup-echo divergence fix, and the 2026-08-12 1-10 self-send
     duplicate run
-- Animate the sent tick's removal from the previous message: sending made the
-  previously-last outgoing bubble snap ~27pt shorter (the tick row under it vanishing
-  unanimated) while the new row's insertion animated, so the old bubble visibly halved
-  in height and squashed against its neighbour before re-expanding (screen recording
-  2026-08-12 ~20:35 local, frame-by-frame). The tick only shows on the last outgoing
-  message and nothing animated that flip; an `elementDefault` animation keyed on it
-  makes the collapse resize the cell in sync with the insertion. Not yet validated
-  on the phone; upstreamable
-  [`0125d9091`](https://github.com/element-hq/element-x-ios/commit/0125d9091)
+- Animate the sent tick's removal from the previous message in sync with the new
+  row's insertion: sending made the previously-last outgoing bubble snap ~27pt
+  shorter (the tick row under it vanishing unanimated) while the insertion animated,
+  so the old bubble visibly halved in height and squashed against its neighbour
+  before re-expanding (screen recording 2026-08-12 ~20:35 local, frame-by-frame).
+  First attempt keyed an `elementDefault` animation on the last-item flip
+  ([`0125d9091`](https://github.com/element-hq/element-x-ios/commit/0125d9091)), but a
+  minimal sim harness (bubble-anim-harness in the workspace: same flipped-table +
+  diffable + UIHostingConfiguration construction, frame-by-frame measured) showed
+  that to be worse: the self-sizing invalidation desyncs from the batch animation -
+  the whole stack pops down by the tick-row height in one frame and the old bubble
+  rides up truncated. Real fix: reconfigure the previous newest item inside the same
+  animated snapshot apply, making its height change part of the one batch layout
+  animation with the insertion - every bubble stays full height and the stack rises
+  monotonically. Not yet validated on the phone; upstreamable
+  [`1b450577b`](https://github.com/element-hq/element-x-ios/commit/1b450577b)
 - Diagnostics for own sends vanishing after a limited gappy sync (2026-08-12
   20:35 local, Self DM): four just-sent messages left the visible timeline for
   ~19s until the next sync re-delivered them. Trigger fully established (bad
