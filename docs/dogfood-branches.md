@@ -248,6 +248,9 @@ SDK - launch speed and diagnosability:
   [`2cd2f16b4`](https://github.com/matrix-org/matrix-rust-sdk/commit/2cd2f16b4)
 
 EXI:
+
+#### Prefill rooms via Stefan's auto-pagination engine rather than via SSS subscriptions
+
 - Preload visible rooms via the back-pagination queue instead of SSS subscriptions;
   1 visible event requested, SDK tops up the timeline
   [`38ef09140`](https://github.com/element-hq/element-x-ios/commit/38ef09140),
@@ -256,28 +259,183 @@ EXI:
   room-list growth relies on proactive sync
   [`eadcb4239`](https://github.com/element-hq/element-x-ios/commit/eadcb4239),
   [`5cd7d67b5`](https://github.com/element-hq/element-x-ios/commit/5cd7d67b5)
+  - **I am pretty sure this is a dead-end commit which got backed out later: rather than proactively expanding all_rooms in blocks of 20 with timeline_limit=10 to prefill room history, we switched back to growing it rapidly in blocks of 200 with timeline_limit=1 and instead hooked up autopagination to prefill history.**
+
+#### Unbreak offline mode
+
 - Never block launch on the network (fire-and-forget `auth_metadata` caching); add
   per-launch `LaunchMetrics` (greppable log line + Sentry transaction)
   [`e86a457b5`](https://github.com/element-hq/element-x-ios/commit/e86a457b5)
+
+#### Fix all the spurious "join" screens when you try to view a room which hasn't been synced yet.
+
 - Never show a join screen for a room the user is already in (push-taps for unsynced
   rooms now wait for the room; the join screen honours server-reported membership)
   [`ac2169469`](https://github.com/element-hq/element-x-ios/commit/ac2169469)
   - fixes [#4287 Opening a push for a room whose invite you accepted elsewhere fails](https://github.com/element-hq/element-x-ios/issues/4287)
   - likely fixes [rageshake#7352 Opening rooms just opens an invite screen and not the room](https://github.com/element-hq/element-x-ios-rageshakes/issues/7352)
     and [rageshake#2479 Tapped notification and got the Join Room screen](https://github.com/element-hq/element-x-ios-rageshakes/issues/2479)
+
+#### Hide skeletons as they make things feel slower by flashing up (plus we're fast enough to never see them now)
+
 - Hold the splash until the cached room list has published - zero skeleton frames on
   launch
   [`5ae04e03f`](https://github.com/element-hq/element-x-ios/commit/5ae04e03f)
-- Focus notification taps on their event (served locally when the NSE prefilled it);
-  give background refresh a bounded wait for session restore instead of a silent no-op
-  [`580ba004d`](https://github.com/element-hq/element-x-ios/commit/580ba004d)
-  - fixes [#4790 Tapping on a push should permalink to that message](https://github.com/element-hq/element-x-ios/issues/4790)
+
+#### Make it clear precisely what git versions any given app build is using
+
+- Show the app and SDK git SHAs in the Settings version footer (build phase stamps
+  `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
+  exactly which dogfood pairing a phone is running
+  [`48cba7c70`](https://github.com/element-hq/element-x-ios/commit/48cba7c70)
+
+#### Implement smooth infinite scrolling on the room list
+
+- Prefetch the next room list page half a page before the user reaches the bottom:
+  the grow trigger fired only once the last row was visible, and the visible-range
+  publisher is throttled at 0.5s, so fast scrolls bounced off the end of the list
+  while the next page loaded. The home screen also dropped range updates entirely
+  while a scroll was in flight (0.5s defer + ignore-while-scrolling guard), so
+  scroll events now publish the range live and the provider grows the list
+  unthrottled, suppressing re-requests until the previous growth lands
+  [`ab7b063c7`](https://github.com/element-hq/element-x-ios/commit/ab7b063c7),
+  [`5859d1c52`](https://github.com/element-hq/element-x-ios/commit/5859d1c52),
+  [`5e55f53e9`](https://github.com/element-hq/element-x-ios/commit/5e55f53e9)
+- Don't blank the room list into the "no chats" empty state when a sliding-sync
+  session expiry (HTTP 400 → pos reset) momentarily reports the list count as nil:
+  only trust a zero count when no rooms are actually published
+  [`c2d9cf778`](https://github.com/element-hq/element-x-ios/commit/c2d9cf778)
+- Re-snap to the real top after a system scroll-to-top: with 6k rooms the status-bar
+  tap lands slightly off the estimated top, leaving the navigation bar (large title,
+  search drawer, filter chips) stuck mid-transition
+  [`877f5db4c`](https://github.com/element-hq/element-x-ios/commit/877f5db4c)
+- Shrink the home list's first page from 100 to 64 rooms: every first-page room costs
+  a summary build (FFI fetch + string building) in front of the first paint, while the
+  screen renders ~10 rows and scrolling grows the list anyway; also log summary builds
+  over 25ms so launches attribute this stage. (Was originally 32 rooms; later settled on
+  64 once summary builds slimmed down and the bottom-bounce prefetch landed)
+  [`edb009314`](https://github.com/element-hq/element-x-ios/commit/edb009314),
+  [`babf62b7d`](https://github.com/element-hq/element-x-ios/commit/babf62b7d)
+
+#### Speed up launch from 480ms to 80ms on iPhone 12 by lazyloading MapLibre on demand
+
+- Load MapLibre lazily via dlopen: its static initialisers (mostly a Metal compression
+  context) cost ~60ms of dyld work on every cold launch, for a map that only renders
+  once a location screen opens. The interactive map moved into a MapLibreShim framework
+  (embedded, unlinked, dlopen'd on first map use); the app links only a tiny
+  MapInterface framework of shared types. Timeline location messages already used the
+  static tile view, which never touched MapLibre
+  [`e80dd55a5`](https://github.com/element-hq/element-x-ios/commit/e80dd55a5)
+
+#### Implement long-tap-to-peek on the room list
+
+- Long-press a room in the room list to peek at its timeline (iMessage-style preview
+  above the context menu) without sending a read receipt: the peek renders the real
+  timeline item views read-only, deliberately avoiding the timeline table controller
+  and RoomScreenViewModel - the only two places receipts originate. Tapping the
+  preview opens the room properly (which needs UIKit: SwiftUI context menu previews
+  never receive taps, so the row's menu moved to a UIContextMenuInteraction with a
+  preview-commit handler), a themed 20% scrim fades in behind the preview and menu,
+  short histories back-paginate to fill the viewport, and the platter is sized so
+  platter + gap + menu exactly fill the screen - any slack makes the peek's position
+  track whichever row you pressed. Gotcha for posterity: a bottom-anchored lazy stack
+  of timeline items layout-loops (appearing items fetch reply details, change height
+  and re-cross the lazy horizon) hard enough that the cpu watchdog kills the app;
+  the peek renders the newest 40 items in a non-lazy stack instead
+  - implements [#3658 Long-tap on room list entry to read-only preview room contents](https://github.com/element-hq/element-x-ios/issues/3658)
+
+#### Fix the class of problems where timelines get stuck with one message visible and don't automatically backfill
+
+- Re-run the timeline's viewport fill check after each snapshot applies: it only ran on
+  scroll and pagination-state changes, which fire against the previous timeline's
+  geometry when switching timelines. A live timeline whose loaded window had been
+  unloaded by a limited sync (dogfooding hit this as "room shows only the remote echo
+  of my own message after sending from a notification tap") stayed a single bubble
+  until the user scrolled
+  [`c1cae2c9c`](https://github.com/element-hq/element-x-ios/commit/c1cae2c9c)
+  - likely fixes [#5817 Timeline can get stuck showing only the most recent message if there's a reset which races with a local echo](https://github.com/element-hq/element-x-ios/issues/5817)
+    (mirrored as [sdk#6709](https://github.com/matrix-org/matrix-rust-sdk/issues/6709))
+
+#### Make rejecting invites local echo & non-blocking
+
 - Make declining an invite non-blocking: the decline also forgets the room server-side
   (measured ~5s on matrix.org) and the modal indicator froze the whole room list for
   that long
   [`556982912`](https://github.com/element-hq/element-x-ios/commit/556982912)
   - fixes the blocking half of [#2535 No local echo on rejecting invites](https://github.com/element-hq/element-x-ios/issues/2535)
   - related: [rageshake#6668 unable to decline… I just get a Loading window pop up and the app is unresponsive](https://github.com/element-hq/element-x-ios-rageshakes/issues/6668)
+
+#### Make redactions local echo, and fix what happens if you long-press on them
+
+- Redactions now apply as local echoes: `Timeline::redact` sent remote-target
+  redactions as a direct HTTP request, so "Remove" left the message visible until the
+  redaction came back down /sync (forever, while offline). Routed through the send
+  queue, whose redaction local echo the timeline already applies to the target item
+  immediately - plus the usual queue durability (retries, offline, ordering behind
+  pending sends)
+  ([SDK `4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b))
+  - fixes [#1713 Redactions don't local echo](https://github.com/element-hq/element-x-ios/issues/1713)
+  - broke `test_redact_message`/`test_redact_local_sent_message` (they asserted the
+    old direct-HTTP shapes, and the queued redaction raced test teardown); re-mocked
+    for the local-echo semantics in
+    [SDK `a0dbb30ba`](https://github.com/matrix-org/matrix-rust-sdk/commit/a0dbb30ba)
+- Long-press on a redacted message showed a blank fullscreen sheet (the filtered action
+  set came back empty with view source off, and the sheet presents regardless; state
+  events hit the same). Redacted items keep copy-permalink (plus view source in dev
+  mode), and the menu no longer presents at all when a provider has nothing to offer
+  [`d8b529726`](https://github.com/element-hq/element-x-ios/commit/d8b529726)
+
+#### Stop getting blocked on "Loading..." when opening rooms
+
+I'm not entirely sure about this one, or what "THE SYNC WEDGE" is that Fable is thinking about.
+In general, the fact the app now has the ability to lock the user out beind a "Loading..." modal they can never cancel feels like a major footgun and antipattern.
+
+- THE SYNC WEDGE, root-caused and fixed: the latest-events "re-trigger missing
+  computations" step held the rooms-map read lock while awaiting every response room's
+  own lock; with the compute task holding a room's write lock and a room registration
+  queued on `rooms.write()`, tokio's write-preferring `RwLock` closed a three-party
+  cycle. The sync handler sat inside it holding the sliding-sync `position` lock, so
+  the sync loop, the ack-gated pos persist and any room open all wedged behind it
+  (dogfooding: room list stuck behind a permanent "Loading…" overlay). Both offending
+  sites now snapshot cheap clone handles and release the map lock before awaiting
+  per-room locks
+  ([SDK `830f3dc0e`](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e))
+  - likely the cause of
+    [rageshake#6487 app got stuck on Loading… when opening a room and had to be force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6487),
+    [rageshake#6322 app hung while opening room on "loading…" spinner. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6322),
+    [rageshake#7173 infinite Loading spinner while trying to open room. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/7173) and
+    [rageshake#5716 app stuck solid on loading spinner trying to open room](https://github.com/element-hq/element-x-ios-rageshakes/issues/5716)
+
+#### Stop "Loading..." blocking and locking you out of the app when you tap on a push on bad network
+
+- Let a tap on a route's "Loading…" modal abandon the navigation: a push-tap on a
+  black-hole network wedged the whole app for ~92s, because the tapped event's fetch
+  retries 3x30s behind a non-interactive modal (console logs 2026-08-11 ~18:58 local).
+  The modal's scrim is now tappable for the event/child-event routes, ChatsTab alias
+  resolution and thread presentation - a tap hides the modal, cancels the in-flight
+  task and unwinds whatever the route half-started. Also fixes a failed thread
+  timeline build leaving the state machine in `.thread` with no screen pushed
+  [`5c11e1b37`](https://github.com/element-hq/element-x-ios/commit/5c11e1b37)
+
+#### Position permalinks correctly in the middle of the viewport
+
+- Focus scrolls (permalinks, pinned-message taps) now put the top of the target message
+  halfway up the viewport, accurately: `scrollToRow(.top)` pinned a long message's
+  bottom to the viewport edge (top off-screen), and estimated row heights made the
+  landing drift anywhere from mid-message to past it. The offset is computed
+  explicitly and re-measured as layout settles (within one paint for jumps); nearby
+  targets animate normally, distant ones crossfade a settled jump since animating
+  across estimated heights can't aim
+  [`6b300c22c`](https://github.com/element-hq/element-x-ios/commit/6b300c22c)
+  - fixes [#2806 tapping on replies doesn't always take you to the top of the replied to message](https://github.com/element-hq/element-x-ios/issues/2806)
+  - possibly fixes [#4377 Scrolling got stuck after jumping to a permalink, and refused to scroll to the actual bottom of the timeline](https://github.com/element-hq/element-x-ios/issues/4377)
+
+#### Make tap-on-push work, and go rapidly straight to the right room and permalink (unless the event is at the bottom of the timeline, then don't bother permalinking)
+
+- Focus notification taps on their event (served locally when the NSE prefilled it);
+  give background refresh a bounded wait for session restore instead of a silent no-op
+  [`580ba004d`](https://github.com/element-hq/element-x-ios/commit/580ba004d)
+  - fixes [#4790 Tapping on a push should permalink to that message](https://github.com/element-hq/element-x-ios/issues/4790)
 - Route taps on notifications the NSE couldn't process: the raw pusher payload still
   carries room/event IDs, but the tap handler required an NSE-only field and silently
   dropped the tap ("blank pushes" on a poor connection went nowhere)
@@ -298,14 +456,6 @@ EXI:
   [`5e43d0872`](https://github.com/element-hq/element-x-ios/commit/5e43d0872)
   - the unhideable focus toast matches stuck-"Loading…" reports like
     [rageshake#3004 upgraded to 851 and promptly got stuck on a loading… spinner](https://github.com/element-hq/element-x-ios-rageshakes/issues/3004)
-- Let a tap on a route's "Loading…" modal abandon the navigation: a push-tap on a
-  black-hole network wedged the whole app for ~92s, because the tapped event's fetch
-  retries 3x30s behind a non-interactive modal (console logs 2026-08-11 ~18:58 local).
-  The modal's scrim is now tappable for the event/child-event routes, ChatsTab alias
-  resolution and thread presentation - a tap hides the modal, cancels the in-flight
-  task and unwinds whatever the route half-started. Also fixes a failed thread
-  timeline build leaving the state machine in `.thread` with no screen pushed
-  [`5c11e1b37`](https://github.com/element-hq/element-x-ios/commit/5c11e1b37)
 - Attach the UNUserNotificationCenter delegate at init: deferring notification startup
   off the launch critical path (`505a9d6da`, above) also deferred the delegate
   assignment past the end of launch, and iOS discards (not buffers) the notification
@@ -313,108 +463,6 @@ EXI:
   while the app was killed silently dropped its route and left the user on the room
   list (console logs 2026-08-12 ~11:30 local). Warm-app taps were unaffected
   [`2c7928bb9`](https://github.com/element-hq/element-x-ios/commit/2c7928bb9)
-- Long-press a room in the room list to peek at its timeline (iMessage-style preview
-  above the context menu) without sending a read receipt: the peek renders the real
-  timeline item views read-only, deliberately avoiding the timeline table controller
-  and RoomScreenViewModel - the only two places receipts originate. Tapping the
-  preview opens the room properly (which needs UIKit: SwiftUI context menu previews
-  never receive taps, so the row's menu moved to a UIContextMenuInteraction with a
-  preview-commit handler), a themed 20% scrim fades in behind the preview and menu,
-  short histories back-paginate to fill the viewport, and the platter is sized so
-  platter + gap + menu exactly fill the screen - any slack makes the peek's position
-  track whichever row you pressed. Gotcha for posterity: a bottom-anchored lazy stack
-  of timeline items layout-loops (appearing items fetch reply details, change height
-  and re-cross the lazy horizon) hard enough that the cpu watchdog kills the app;
-  the peek renders the newest 40 items in a non-lazy stack instead
-  - implements [#3658 Long-tap on room list entry to read-only preview room contents](https://github.com/element-hq/element-x-ios/issues/3658)
-- Show the app and SDK git SHAs in the Settings version footer (build phase stamps
-  `AppGitSHA` into Info.plist, `-dirty` when the tree is modified) so you can tell
-  exactly which dogfood pairing a phone is running
-  [`48cba7c70`](https://github.com/element-hq/element-x-ios/commit/48cba7c70)
-- Re-snap to the real top after a system scroll-to-top: with 6k rooms the status-bar
-  tap lands slightly off the estimated top, leaving the navigation bar (large title,
-  search drawer, filter chips) stuck mid-transition
-  [`877f5db4c`](https://github.com/element-hq/element-x-ios/commit/877f5db4c)
-- Shrink the home list's first page from 100 to 32 rooms: every first-page room costs
-  a summary build (FFI fetch + string building) in front of the first paint, while the
-  screen renders ~10 rows and scrolling grows the list anyway; also log summary builds
-  over 25ms so launches attribute this stage. Later settled on 64 once summary builds
-  slimmed down and the bottom-bounce prefetch landed
-  [`edb009314`](https://github.com/element-hq/element-x-ios/commit/edb009314),
-  [`babf62b7d`](https://github.com/element-hq/element-x-ios/commit/babf62b7d)
-- Prefetch the next room list page half a page before the user reaches the bottom:
-  the grow trigger fired only once the last row was visible, and the visible-range
-  publisher is throttled at 0.5s, so fast scrolls bounced off the end of the list
-  while the next page loaded. The home screen also dropped range updates entirely
-  while a scroll was in flight (0.5s defer + ignore-while-scrolling guard), so
-  scroll events now publish the range live and the provider grows the list
-  unthrottled, suppressing re-requests until the previous growth lands
-  [`ab7b063c7`](https://github.com/element-hq/element-x-ios/commit/ab7b063c7),
-  [`5859d1c52`](https://github.com/element-hq/element-x-ios/commit/5859d1c52),
-  [`5e55f53e9`](https://github.com/element-hq/element-x-ios/commit/5e55f53e9)
-- Load MapLibre lazily via dlopen: its static initialisers (mostly a Metal compression
-  context) cost ~60ms of dyld work on every cold launch, for a map that only renders
-  once a location screen opens. The interactive map moved into a MapLibreShim framework
-  (embedded, unlinked, dlopen'd on first map use); the app links only a tiny
-  MapInterface framework of shared types. Timeline location messages already used the
-  static tile view, which never touched MapLibre
-  [`e80dd55a5`](https://github.com/element-hq/element-x-ios/commit/e80dd55a5)
-- Don't blank the room list into the "no chats" empty state when a sliding-sync
-  session expiry (HTTP 400 → pos reset) momentarily reports the list count as nil:
-  only trust a zero count when no rooms are actually published
-  [`c2d9cf778`](https://github.com/element-hq/element-x-ios/commit/c2d9cf778)
-- Re-run the timeline's viewport fill check after each snapshot applies: it only ran on
-  scroll and pagination-state changes, which fire against the previous timeline's
-  geometry when switching timelines. A live timeline whose loaded window had been
-  unloaded by a limited sync (dogfooding hit this as "room shows only the remote echo
-  of my own message after sending from a notification tap") stayed a single bubble
-  until the user scrolled
-  [`c1cae2c9c`](https://github.com/element-hq/element-x-ios/commit/c1cae2c9c)
-  - likely fixes [#5817 Timeline can get stuck showing only the most recent message if there's a reset which races with a local echo](https://github.com/element-hq/element-x-ios/issues/5817)
-    (mirrored as [sdk#6709](https://github.com/matrix-org/matrix-rust-sdk/issues/6709))
-  - possibly fixes [rageshake#5597 new messages the notification was about simply disappear from the conversation view](https://github.com/element-hq/element-x-ios-rageshakes/issues/5597)
-- Redactions now apply as local echoes: `Timeline::redact` sent remote-target
-  redactions as a direct HTTP request, so "Remove" left the message visible until the
-  redaction came back down /sync (forever, while offline). Routed through the send
-  queue, whose redaction local echo the timeline already applies to the target item
-  immediately - plus the usual queue durability (retries, offline, ordering behind
-  pending sends)
-  ([SDK `4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b))
-  - fixes [#1713 Redactions don't local echo](https://github.com/element-hq/element-x-ios/issues/1713)
-  - broke `test_redact_message`/`test_redact_local_sent_message` (they asserted the
-    old direct-HTTP shapes, and the queued redaction raced test teardown); re-mocked
-    for the local-echo semantics in
-    [SDK `a0dbb30ba`](https://github.com/matrix-org/matrix-rust-sdk/commit/a0dbb30ba)
-- Long-press on a redacted message showed a blank fullscreen sheet (the filtered action
-  set came back empty with view source off, and the sheet presents regardless; state
-  events hit the same). Redacted items keep copy-permalink (plus view source in dev
-  mode), and the menu no longer presents at all when a provider has nothing to offer
-  [`d8b529726`](https://github.com/element-hq/element-x-ios/commit/d8b529726)
-- THE SYNC WEDGE, root-caused and fixed: the latest-events "re-trigger missing
-  computations" step held the rooms-map read lock while awaiting every response room's
-  own lock; with the compute task holding a room's write lock and a room registration
-  queued on `rooms.write()`, tokio's write-preferring `RwLock` closed a three-party
-  cycle. The sync handler sat inside it holding the sliding-sync `position` lock, so
-  the sync loop, the ack-gated pos persist and any room open all wedged behind it
-  (dogfooding: room list stuck behind a permanent "Loading…" overlay). Both offending
-  sites now snapshot cheap clone handles and release the map lock before awaiting
-  per-room locks
-  ([SDK `830f3dc0e`](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e))
-  - likely the cause of
-    [rageshake#6487 app got stuck on Loading… when opening a room and had to be force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6487),
-    [rageshake#6322 app hung while opening room on "loading…" spinner. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6322),
-    [rageshake#7173 infinite Loading spinner while trying to open room. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/7173) and
-    [rageshake#5716 app stuck solid on loading spinner trying to open room](https://github.com/element-hq/element-x-ios-rageshakes/issues/5716)
-- Focus scrolls (permalinks, pinned-message taps) now put the top of the target message
-  halfway up the viewport, accurately: `scrollToRow(.top)` pinned a long message's
-  bottom to the viewport edge (top off-screen), and estimated row heights made the
-  landing drift anywhere from mid-message to past it. The offset is computed
-  explicitly and re-measured as layout settles (within one paint for jumps); nearby
-  targets animate normally, distant ones crossfade a settled jump since animating
-  across estimated heights can't aim
-  [`6b300c22c`](https://github.com/element-hq/element-x-ios/commit/6b300c22c)
-  - fixes [#2806 tapping on replies doesn't always take you to the top of the replied to message](https://github.com/element-hq/element-x-ios/issues/2806)
-  - possibly fixes [#4377 Scrolling got stuck after jumping to a permalink, and refused to scroll to the actual bottom of the timeline](https://github.com/element-hq/element-x-ios/issues/4377)
 - Notification taps jump straight to the room: taps on the newest message open live at
   the bottom with no focus treatment, decided at the route level from the fetched
   event's ID *and timestamp* (the in-memory latest event lags the NSE right after a
@@ -437,6 +485,9 @@ EXI:
   - advances [sdk#4874 [meta] Dirty cross-process locks](https://github.com/matrix-org/matrix-rust-sdk/issues/4874)
     and [sdk#6681 [meta] Adopt a new cross-process state invalidation strategy](https://github.com/matrix-org/matrix-rust-sdk/issues/6681)
   - likely fixes [rageshake#5029 Opening a room takes several seconds](https://github.com/element-hq/element-x-ios-rageshakes/issues/5029)
+
+#### Jump straight to thread from room preview rather than taking you to the main room and feeling lost
+
 - Open the thread when a room's preview shows a threaded reply: the preview surfaces
   the room's latest event even when it is threaded, which the main timeline hides -
   tapping the room then appears to be missing the previewed message (dogfooded as
@@ -444,6 +495,9 @@ EXI:
   [`b2140c102`](https://github.com/element-hq/element-x-ios/commit/b2140c102),
   new `latestEventThreadRootId` FFI
   ([SDK `0ba9d0d9d`](https://github.com/matrix-org/matrix-rust-sdk/commit/0ba9d0d9d))
+
+#### Fix reply previews showing "Unsupported event" if they haven't yet decrypted the reply
+
 - Reply previews of undecrypted events showed "Unsupported event" and never refreshed:
   they now say "Waiting for decryption key"
   [`bde3cbd69`](https://github.com/element-hq/element-x-ios/commit/bde3cbd69) and update
@@ -467,10 +521,16 @@ EXI:
     [#4819 Message in thread shows as UTD in main timeline + unsupported event in summary until you load the thread](https://github.com/element-hq/element-x-ios/issues/4819)
     (reported in the wild as [rageshake#6859 "unsupported event" in thread preview](https://github.com/element-hq/element-x-ios-rageshakes/issues/6859))
   - related: [#6002 Update UI when replied to message cannot be loaded](https://github.com/element-hq/element-x-ios/issues/6002)
+
+#### Fix indentation in markdown bullet lists
+
 - Fix the first list item rendering more indented than the rest (inter-element
   whitespace in markdown-generated HTML normalised into stray spaces)
   [`550a6467d`](https://github.com/element-hq/element-x-ios/commit/550a6467d)
   - fixes [#5179 First bullet point in an unordered list is always incorrectly indented](https://github.com/element-hq/element-x-ios/issues/5179)
+
+#### Fix many scenarios where sent messages can duplicate in the timeline or get lost
+
 - Instrument the local-echo reconciliation to catch duplicated sent-message echoes
   in the wild (intermittent for months; server-side the event exists once). Logs the
   birth of a duplicate item, own remote events failing to match a local echo, the
@@ -495,18 +555,6 @@ EXI:
     and likely [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242),
     [rageshake#6592](https://github.com/element-hq/element-x-ios-rageshakes/issues/6592) and
     [rageshake#5789](https://github.com/element-hq/element-x-ios-rageshakes/issues/5789)
-- ROOT-CAUSED the sent-message ordering bounce (echoes swapping back and forth on slow
-  connections, screen recordings 2026-08-12 ~12:36 local): the send queue eagerly
-  inserts each sent event at the linked chunk's tail, and every lagging sync delivery
-  of an already-inserted event went through the dedup's remove+re-append, yanking a
-  visible message below newer sends until a final all-inclusive batch settled it. The
-  all-duplicates early return never saves own sends (it requires a foreign sender).
-  Tail duplicates that form a prefix of the sync batch - sync merely catching up on a
-  tail we already have - are now replaced in place, also swapping the eager copy's
-  fabricated `origin_server_ts` for the real payload; superset re-deliveries (e.g. a
-  timeline-limit increase) and gappy responses keep the authoritative remove+re-append
-  ([SDK `b004a4b9b`](https://github.com/matrix-org/matrix-rust-sdk/commit/b004a4b9b))
-  - upstreamable; also softens [#4242](https://github.com/element-hq/element-x-ios/issues/4242)-family churn
 - Widen the duplicated-echoes tripwire to the remotes region and log what
   `remove_events` actually removes: the 1-10 self-send repro (2026-08-12, sliding-sync
   session restart mid-send collapsed the open timeline and left 6-10 duplicated below
@@ -533,6 +581,27 @@ EXI:
   - likely fixes [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242)-family
     residue beyond the dup-echo divergence fix, and the 2026-08-12 1-10 self-send
     duplicate run
+
+#### Fix echoes bouncing back and forth as you send a sequence of messages
+
+- ROOT-CAUSED the sent-message ordering bounce (echoes swapping back and forth on slow
+  connections, screen recordings 2026-08-12 ~12:36 local): the send queue eagerly
+  inserts each sent event at the linked chunk's tail, and every lagging sync delivery
+  of an already-inserted event went through the dedup's remove+re-append, yanking a
+  visible message below newer sends until a final all-inclusive batch settled it. The
+  all-duplicates early return never saves own sends (it requires a foreign sender).
+  Tail duplicates that form a prefix of the sync batch - sync merely catching up on a
+  tail we already have - are now replaced in place, also swapping the eager copy's
+  fabricated `origin_server_ts` for the real payload; superset re-deliveries (e.g. a
+  timeline-limit increase) and gappy responses keep the authoritative remove+re-append
+  ([SDK `b004a4b9b`](https://github.com/matrix-org/matrix-rust-sdk/commit/b004a4b9b))
+  - upstreamable; also softens [#4242](https://github.com/element-hq/element-x-ios/issues/4242)-family churn
+
+#### Fix the glitches in the send animation at last.
+
+Finish off the nightmare of https://github.com/element-hq/element-x-ios/issues/4127 at last.
+See the test jig that Fable built to diagnose this at https://github.com/element-hq/bubbleanim
+
 - Animate the sent tick's removal from the previous message in sync with the new
   row's insertion: sending made the previously-last outgoing bubble snap ~27pt
   shorter (the tick row under it vanishing unanimated) while the insertion animated,
@@ -558,6 +627,11 @@ EXI:
   fully monotonic in the harness incl. image-sized bubbles either side of the
   transition. Upstreamable together with the reconfigure
   [`66bea662f`](https://github.com/element-hq/element-x-ios/commit/66bea662f)
+
+#### Fixing blocks of sends which vanish and then reappear 10s of seconds later
+
+This bug has been around since the event cache landed, i think.
+
 - Diagnostics for own sends vanishing after a limited gappy sync (2026-08-12
   20:35 local, Self DM): four just-sent messages left the visible timeline for
   ~19s until the next sync re-delivered them. Trigger fully established (bad
@@ -589,6 +663,9 @@ EXI:
   Regression test drops exactly the tail sends without the fix. Upstream this
   together with the diagnostics commit
   [SDK `6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)
+
+#### Crash if the user stabs the send button too fast as it switches between send and VM
+
 - Crash + missing crash prompt fixed (2026-08-13, from the 22:19 rageshake,
   Sentry `4671176f84f8`): a send action racing the start of a voice recording
   reached `TimelineViewModel.sendCurrentMessage` with mode `.recordVoiceMessage`
