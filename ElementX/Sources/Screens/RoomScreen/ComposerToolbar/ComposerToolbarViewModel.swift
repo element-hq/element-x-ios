@@ -189,6 +189,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             switch state.composerMode {
             case .previewVoiceMessage:
                 actionsSubject.send(.voiceMessage(.send))
+            case .recordVoiceMessage:
+                // A send action can race the start of a voice recording; forwarding it
+                // with this mode used to fatalError in TimelineViewModel.
+                MXLog.warning("Ignoring send action while recording a voice message.")
             default:
                 if context.composerFormattingEnabled {
                     actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,

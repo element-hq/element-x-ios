@@ -53,6 +53,7 @@ protocol BugReportServiceProtocol: AnyObject {
     var crashedLastRun: Bool { get }
     
     var lastCrashEventID: String? { get set }
+    var lastCrashEventIDPublisher: CurrentValuePublisher<String?, Never> { get }
     
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>

@@ -107,9 +107,17 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
         #if !DEBUG
         // Note: bugReportService.isEnabled doesn't determine if a user has opted in to Analytics/Sentry.
         // Therefore we use lastCrashEventID as this will only be set if we have crash ID from Sentry.
-        if bugReportService.crashedLastRun, bugReportService.lastCrashEventID != nil {
-            viewModel.presentCrashedLastRunAlert()
-        }
+        // Sentry's onCrashedLastRun callback can fire after this coordinator starts (a fast warm
+        // relaunch reliably wins that race), so observe the ID instead of sampling it once.
+        bugReportService.lastCrashEventIDPublisher
+            .compactMap { $0 }
+            .first()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self, bugReportService.crashedLastRun else { return }
+                viewModel.presentCrashedLastRunAlert()
+            }
+            .store(in: &cancellables)
         #endif
     }
     

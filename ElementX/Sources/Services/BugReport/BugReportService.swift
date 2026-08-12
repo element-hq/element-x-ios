@@ -26,7 +26,15 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         rageshakeURL != .disabled
     }
     
-    var lastCrashEventID: String?
+    private let lastCrashEventIDSubject = CurrentValueSubject<String?, Never>(nil)
+    var lastCrashEventID: String? {
+        get { lastCrashEventIDSubject.value }
+        set { lastCrashEventIDSubject.send(newValue) }
+    }
+
+    var lastCrashEventIDPublisher: CurrentValuePublisher<String?, Never> {
+        lastCrashEventIDSubject.asCurrentValuePublisher()
+    }
     
     init(rageshakeURLPublisher: CurrentValuePublisher<RageshakeConfiguration, Never>,
          applicationID: String,

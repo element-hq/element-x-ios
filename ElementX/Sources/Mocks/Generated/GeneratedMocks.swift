@@ -1815,6 +1815,11 @@ nonisolated class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sen
     }
     nonisolated(unsafe) var underlyingCrashedLastRun: Bool!
     nonisolated(unsafe) var lastCrashEventID: String?
+    var lastCrashEventIDPublisher: CurrentValuePublisher<String?, Never> {
+        get { return underlyingLastCrashEventIDPublisher }
+        set(value) { underlyingLastCrashEventIDPublisher = value }
+    }
+    nonisolated(unsafe) var underlyingLastCrashEventIDPublisher: CurrentValuePublisher<String?, Never>! = CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher()
 
     //MARK: - submitBugReport
 
