@@ -366,6 +366,16 @@ class TimelineTableViewController: UIViewController {
         let currentNewestItemIdentifier = currentSnapshot.mainItemIdentifiers.first
         let newestItemIDChanged = snapshot.numberOfMainItems > 0 && currentSnapshot.numberOfMainItems > 0 && newestItemIdentifier != currentNewestItemIdentifier
         let animated = isLive && !isSwitchingTimelines && newestItemIDChanged
+
+        // The previous newest item loses its delivery status marker when a newer one
+        // arrives, which shrinks its cell. Reconfiguring it in the same apply makes
+        // that height change part of the same batch animation as the insertion, so
+        // the bubbles slide up in sync; otherwise the collapse snaps separately and
+        // the timeline visibly warps (a SwiftUI .animation on the marker is worse:
+        // the self-sizing desyncs and clips the bubble).
+        if animated, let currentNewestItemIdentifier, snapshot.mainItemIdentifiers.contains(currentNewestItemIdentifier) {
+            snapshot.reconfigureItems([currentNewestItemIdentifier])
+        }
         
         let layout: Layout? = if !isLive, newestItemIDChanged {
             snapshotLayout()
