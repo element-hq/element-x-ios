@@ -70,14 +70,24 @@ class WindowManager: SecureWindowManagerProtocol {
         // SwiftUI WindowGroup's window is already attached to the scene by then.
         mainWindow = scene.keyWindow ?? scene.windows.first
         mainWindow.tintColor = .compound.textActionPrimary
-        
+
         overlayWindow = PassthroughWindow(windowScene: scene)
         overlayWindow.tintColor = .compound.textActionPrimary
         overlayWindow.backgroundColor = .clear
         overlayWindow.isHidden = false
-        
+
         alternateWindow = UIWindow(windowScene: scene)
         alternateWindow.tintColor = .compound.textActionPrimary
+
+        // Dogfood diagnostics for swallowed taps: log which window received each
+        // touch and what it hit-tested to. Strip before upstreaming.
+        for (label, window) in [("main", mainWindow), ("overlay", overlayWindow), ("alternate", alternateWindow)] {
+            let recognizer = TouchLoggingGestureRecognizer(label: label)
+            recognizer.cancelsTouchesInView = false
+            recognizer.delaysTouchesBegan = false
+            recognizer.delaysTouchesEnded = false
+            window?.addGestureRecognizer(recognizer)
+        }
         
         delegate?.windowManagerDidConfigureWindows(self)
     }
@@ -251,5 +261,27 @@ private extension UIWindowScene {
             self.sizeRestrictions?.minimumSize = sizeRestrictions.minimumSize
             self.sizeRestrictions?.maximumSize = sizeRestrictions.maximumSize
         }
+    }
+}
+
+/// Dogfood diagnostics: observes (never recognises, never cancels) every touch
+/// delivered to its window and logs where it landed, so a swallowed tap names
+/// the window and view that consumed it. Strip before upstreaming.
+private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
+    private let label: String
+
+    init(label: String) {
+        self.label = label
+        super.init(target: nil, action: nil)
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        guard let touch = touches.first, let window = view else { return }
+
+        let point = touch.location(in: window)
+        let hitView = window.hitTest(point, with: event)
+        let hitDescription = hitView.map { String(describing: type(of: $0)) } ?? "nil"
+        let responder = (touch.view).map { String(describing: type(of: $0)) } ?? "nil"
+        MXLog.info("TouchDebug[\(label)]: began at \(Int(point.x)),\(Int(point.y)) hit=\(hitDescription) touchView=\(responder) interactive=\(window.isUserInteractionEnabled)")
     }
 }
