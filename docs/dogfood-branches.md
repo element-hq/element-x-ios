@@ -381,6 +381,10 @@ EXI:
   pending sends)
   ([SDK `4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b))
   - fixes [#1713 Redactions don't local echo](https://github.com/element-hq/element-x-ios/issues/1713)
+  - broke `test_redact_message`/`test_redact_local_sent_message` (they asserted the
+    old direct-HTTP shapes, and the queued redaction raced test teardown); re-mocked
+    for the local-echo semantics in
+    [SDK `a0dbb30ba`](https://github.com/matrix-org/matrix-rust-sdk/commit/a0dbb30ba)
 - Long-press on a redacted message showed a blank fullscreen sheet (the filtered action
   set came back empty with view source off, and the sheet presents regardless; state
   events hit the same). Redacted items keep copy-permalink (plus view source in dev
@@ -507,7 +511,7 @@ EXI:
   `remove_events` actually removes: the 1-10 self-send repro (2026-08-12, sliding-sync
   session restart mid-send collapsed the open timeline and left 6-10 duplicated below
   a re-appended 1-10) produced visible duplicates without tripping the existing
-  instrumentation, and the decisive dedup-classification logs were filtered out of
-  rageshakes - the timeline, send-queue and event-cache targets now default to debug
-  ([SDK `4a3906914`](https://github.com/matrix-org/matrix-rust-sdk/commit/4a3906914),
-  [SDK `038d0121c`](https://github.com/matrix-org/matrix-rust-sdk/commit/038d0121c))
+  instrumentation (the decisive classification logs sit at debug, below the rageshake
+  filter - a temporary debug default `038d0121c` was reverted in `98f06f80f` as too
+  noisy for the phone; the warn-level tripwires carry the signal instead)
+  ([SDK `4a3906914`](https://github.com/matrix-org/matrix-rust-sdk/commit/4a3906914))
