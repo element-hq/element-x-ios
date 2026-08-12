@@ -221,19 +221,19 @@ SDK - launch speed and diagnosability:
   account; measured launch→roomlist 302ms after); sync processing waits on a
   rooms-loaded barrier so a not-yet-loaded room can't be recreated blank
   [`a6bdc2720`](https://github.com/matrix-org/matrix-rust-sdk/commit/a6bdc2720)
+  - Wait for the progressive room load before snapshotting the room list: pages load in
+    state-store row order (roughly least-recently-updated first), so a mid-load snapshot
+    rendered a stale subset of the account as the cold-launch room list until sync healed it
+    [`110050e5a`](https://github.com/matrix-org/matrix-rust-sdk/commit/110050e5a)
+  - Load the most recent rooms first and fill the rest concurrently: the barrier above
+    fixed correctness but put the full ~750ms load back on the paint path; a plaintext
+    `recency` column on `room_info` makes the inline first page the most recently active
+    rooms (correct first render, no waiting), and the remaining pages load on a small
+    worker pool since sync processing still waits for completeness
+    [`8d22c6b4d`](https://github.com/matrix-org/matrix-rust-sdk/commit/8d22c6b4d)
 - Log which event counts a room as unread, so rooms stuck unread despite an up-to-date
   receipt name their culprit
   [`24333794e`](https://github.com/matrix-org/matrix-rust-sdk/commit/24333794e)
-- Wait for the progressive room load before snapshotting the room list: pages load in
-  state-store row order (roughly least-recently-updated first), so a mid-load snapshot
-  rendered a stale subset of the account as the cold-launch room list until sync healed it
-  [`110050e5a`](https://github.com/matrix-org/matrix-rust-sdk/commit/110050e5a)
-- Load the most recent rooms first and fill the rest concurrently: the barrier above
-  fixed correctness but put the full ~750ms load back on the paint path; a plaintext
-  `recency` column on `room_info` makes the inline first page the most recently active
-  rooms (correct first render, no waiting), and the remaining pages load on a small
-  worker pool since sync processing still waits for completeness
-  [`8d22c6b4d`](https://github.com/matrix-org/matrix-rust-sdk/commit/8d22c6b4d)
 - Read only the profile row for latest-event preview senders: each room-list entry
   loaded the sender's full RoomMember (seven store queries: power levels, ambiguity,
   presence, ignored users) to render a name and avatar - 3-13ms per room under launch
