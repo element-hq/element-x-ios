@@ -25,6 +25,12 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         self.notificationCenter = notificationCenter
         self.appSettings = appSettings
         super.init()
+
+        // The delegate must be attached before the app finishes launching: iOS
+        // discards (not buffers) the notification response for a tap that
+        // launched the app if no delegate is in place, so it can't wait for the
+        // render-gated start() with the rest of the setup.
+        notificationCenter.delegate = self
     }
     
     // MARK: NotificationManagerProtocol
@@ -45,8 +51,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                                     intentIdentifiers: [],
                                                     options: [])
         notificationCenter.setNotificationCategories([messageCategory, inviteCategory])
-        notificationCenter.delegate = self
-        
+
         notificationsEnabled = appSettings.enableNotifications
         MXLog.info("App setting 'enableNotifications' is '\(notificationsEnabled)'")
         
