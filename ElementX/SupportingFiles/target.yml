@@ -250,6 +250,8 @@ targets:
     - package: Mantis
     - target: MapLibreInterface
       embed: true
+    - target: MapLibreShim
+      embed: true
     - package: MapLibre
     - package: PostHog
     - package: SwiftState

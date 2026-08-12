@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import CoreLocation
 import Foundation
 
 /**
@@ -32,4 +33,24 @@ public enum ShowUserLocationMode: Equatable {
 public enum MapLibreError: Error, Hashable {
     case failedLoadingMap
     case failedLocatingUser
+}
+
+/// The severity of a map log message forwarded to the app.
+public enum MapLogSeverity {
+    case error
+    case warning
+    case info
+    case debug
+    case verbose
+}
+
+/// A marker shown on the map, identified so that it can be moved in place when its coordinate changes.
+public struct MapAnnotation {
+    public let id: String
+    public let coordinate: CLLocationCoordinate2D
+    
+    public init(id: String, coordinate: CLLocationCoordinate2D) {
+        self.id = id
+        self.coordinate = coordinate
+    }
 }
