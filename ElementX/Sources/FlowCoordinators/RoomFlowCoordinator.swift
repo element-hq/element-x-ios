@@ -97,9 +97,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
 
-    /// The in-flight event (notification tap) route, kept so that tapping the
-    /// loading indicator's background can abandon it on a bad network.
-    private var eventRouteTask: Task<Void, Never>?
+    /// The in-flight room or event route, kept so that tapping the loading
+    /// indicator's background can abandon it on a bad network or a stalled SDK.
+    private var roomRouteTask: Task<Void, Never>?
 
     /// The in-flight thread presentation, kept for the same reason: the thread
     /// timeline build can wedge on a bad network behind the loading indicator.
@@ -143,8 +143,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch appRoute {
         case .room(let roomID, let via):
             flowParameters.analytics.signpost.startTransaction(.openRoom)
-            Task {
-                await handleRoomRoute(roomID: roomID, via: via, animated: animated)
+            roomRouteTask = Task { [weak self] in
+                await self?.handleRoomRoute(roomID: roomID, via: via, animated: animated)
+                self?.roomRouteTask = nil
             }
         case .childRoom(let roomID, let via):
             if case .membersFlow = stateMachine.state, let membersFlowCoordinator {
@@ -180,25 +181,26 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)), userInfo: EventUserInfo(animated: animated))
             }
         case .thread(let roomID, let threadRootEventID, let focusEventID):
-            Task {
+            roomRouteTask = Task { [weak self] in
                 let focusEvent: FocusEvent? = if let focusEventID {
                     .init(eventID: focusEventID, shouldSetPin: false)
                 } else {
                     nil
                 }
-                await handleRoomRoute(roomID: roomID,
-                                      via: [],
-                                      presentationAction: .thread(rootEventID: threadRootEventID,
-                                                                  focusEvent: focusEvent),
-                                      animated: animated)
+                await self?.handleRoomRoute(roomID: roomID,
+                                            via: [],
+                                            presentationAction: .thread(rootEventID: threadRootEventID,
+                                                                        focusEvent: focusEvent),
+                                            animated: animated)
+                self?.roomRouteTask = nil
             }
         case .event(let eventID, let roomID, let via):
-            eventRouteTask = Task { [weak self] in
+            roomRouteTask = Task { [weak self] in
                 await self?.handleRoomRoute(roomID: roomID,
                                             via: via,
                                             presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false)),
                                             animated: animated)
-                self?.eventRouteTask = nil
+                self?.roomRouteTask = nil
             }
         case .childEvent(let eventID, let roomID, let via):
             handleChildEventRoute(eventID: eventID, roomID: roomID, via: via, animated: animated)
@@ -207,11 +209,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 fatalError("Navigation route doesn't belong to this room flow.")
             }
             
-            Task {
-                await handleRoomRoute(roomID: roomID,
-                                      via: [],
-                                      presentationAction: .share(payload),
-                                      animated: animated)
+            roomRouteTask = Task { [weak self] in
+                await self?.handleRoomRoute(roomID: roomID,
+                                            via: [],
+                                            presentationAction: .share(payload),
+                                            animated: animated)
+                self?.roomRouteTask = nil
             }
         case .roomAlias, .childRoomAlias, .eventOnRoomAlias, .childEventOnRoomAlias:
             break // These are converted to a room ID route one level above.
@@ -242,14 +245,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         } else if roomID != roomProxy.id {
             stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
         } else {
-            showLoadingIndicator(delay: .seconds(0.5), onCancel: { [weak self] in self?.cancelEventRoute() })
-            eventRouteTask = Task { [weak self] in
+            showLoadingIndicator(delay: .seconds(0.5), onCancel: { [weak self] in self?.cancelRoomRoute() })
+            roomRouteTask = Task { [weak self] in
                 defer { self?.hideLoadingIndicator() }
                 guard let self else { return }
 
                 let eventDetails = await roomProxy.loadOrFetchEventDetails(for: eventID)
                 guard !Task.isCancelled else { return }
-                eventRouteTask = nil
+                roomRouteTask = nil
 
                 switch eventDetails {
                 case .success(let event):
@@ -303,10 +306,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func handleRoomRoute(roomID: String, via: [String], presentationAction: PresentationAction? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
-        // An event route can wedge here for ~90s fetching the tapped event on a bad
-        // network - let a tap on the loading indicator's background give up on it.
-        let onCancel: (() -> Void)? = eventRouteTask == nil ? nil : { [weak self] in self?.cancelEventRoute() }
-        showLoadingIndicator(delay: .seconds(0.5), onCancel: onCancel)
+        // Any route can wedge here - an event route fetching the tapped event on a
+        // bad network, a plain room route behind a stalled SDK lock - so always let
+        // a tap on the loading indicator's background give up on it.
+        showLoadingIndicator(delay: .seconds(0.5), onCancel: { [weak self] in self?.cancelRoomRoute() })
         defer { hideLoadingIndicator() }
 
         let room = await userSession.clientProxy.roomForIdentifier(roomID)
@@ -329,7 +332,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
             } else {
                 await storeAndSubscribeToRoomProxy(roomProxy)
-                
+                guard !Task.isCancelled else { return }
+
                 guard case let .eventFocus(focusEvent) = presentationAction else {
                     var presentationAction = presentationAction
                     // The room list preview shows the room's latest event even when it is a
@@ -1758,13 +1762,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                delay: delay)
     }
 
-    /// Abandons an in-flight event route so the user can keep using the app
-    /// instead of waiting behind the loading indicator, e.g. on a bad network.
-    private func cancelEventRoute() {
-        guard let eventRouteTask else { return }
+    /// Abandons an in-flight room or event route so the user can keep using
+    /// the app instead of waiting behind the loading indicator, e.g. on a bad
+    /// network.
+    private func cancelRoomRoute() {
+        guard let roomRouteTask else { return }
         hideLoadingIndicator()
-        eventRouteTask.cancel()
-        self.eventRouteTask = nil
+        roomRouteTask.cancel()
+        self.roomRouteTask = nil
 
         // The route never presented anything, so unwind the parent's selection
         // rather than leaving a half-started flow behind.
