@@ -57,17 +57,17 @@ settings:
 
 include:
 - path: app.yml
-- path: Components/MapLibre/MapLibreInterface/SupportingFiles/target.yml
-- path: Components/MapLibre/MapLibreShim/SupportingFiles/target.yml
 - path: ElementX/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
-- path: Components/SDKMocks/SupportingFiles/target.yml
 - path: UnitTests/SupportingFiles/target.yml
 - path: PreviewTests/SupportingFiles/target.yml
 - path: UITests/SupportingFiles/target.yml
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: AccessibilityTests/SupportingFiles/target.yml
+- path: Components/MapLibre/MapLibreInterface/SupportingFiles/target.yml
+- path: Components/MapLibre/MapLibreShim/SupportingFiles/target.yml
+- path: Components/SDKMocks/SupportingFiles/target.yml
 # - path: MyAppVariant/override.yml
 
 packages:
