@@ -57,8 +57,8 @@ settings:
 
 include:
 - path: app.yml
-- path: ElementX/MapLibre/MapLibreInterface/SupportingFiles/target.yml
-- path: ElementX/MapLibre/MapLibreShim/SupportingFiles/target.yml
+- path: Components/MapLibre/MapLibreInterface/SupportingFiles/target.yml
+- path: Components/MapLibre/MapLibreShim/SupportingFiles/target.yml
 - path: ElementX/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
