@@ -491,3 +491,23 @@ EXI:
     and likely [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242),
     [rageshake#6592](https://github.com/element-hq/element-x-ios-rageshakes/issues/6592) and
     [rageshake#5789](https://github.com/element-hq/element-x-ios-rageshakes/issues/5789)
+- ROOT-CAUSED the sent-message ordering bounce (echoes swapping back and forth on slow
+  connections, screen recordings 2026-08-12 ~12:36 local): the send queue eagerly
+  inserts each sent event at the linked chunk's tail, and every lagging sync delivery
+  of an already-inserted event went through the dedup's remove+re-append, yanking a
+  visible message below newer sends until a final all-inclusive batch settled it. The
+  all-duplicates early return never saves own sends (it requires a foreign sender).
+  Tail duplicates that form a prefix of the sync batch - sync merely catching up on a
+  tail we already have - are now replaced in place, also swapping the eager copy's
+  fabricated `origin_server_ts` for the real payload; superset re-deliveries (e.g. a
+  timeline-limit increase) and gappy responses keep the authoritative remove+re-append
+  ([SDK `b004a4b9b`](https://github.com/matrix-org/matrix-rust-sdk/commit/b004a4b9b))
+  - upstreamable; also softens [#4242](https://github.com/element-hq/element-x-ios/issues/4242)-family churn
+- Widen the duplicated-echoes tripwire to the remotes region and log what
+  `remove_events` actually removes: the 1-10 self-send repro (2026-08-12, sliding-sync
+  session restart mid-send collapsed the open timeline and left 6-10 duplicated below
+  a re-appended 1-10) produced visible duplicates without tripping the existing
+  instrumentation, and the decisive dedup-classification logs were filtered out of
+  rageshakes - the timeline, send-queue and event-cache targets now default to debug
+  ([SDK `4a3906914`](https://github.com/matrix-org/matrix-rust-sdk/commit/4a3906914),
+  [SDK `038d0121c`](https://github.com/matrix-org/matrix-rust-sdk/commit/038d0121c))
