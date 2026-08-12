@@ -3020,7 +3020,7 @@
 		DEBB74427E24AF30CDB131B7 /* DeferredFulfillmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeferredFulfillmentTests.swift; sourceTree = "<group>"; };
 		DEC1D382565A4E9CAC2F14EA /* MediaFileHandleProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFileHandleProxy.swift; sourceTree = "<group>"; };
 		DEC6D4E798C1207298964778 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		DEF8766F9B1A5CEB15FD0935 /* BuildExtensions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BuildExtensions; path = BuildExtensions; sourceTree = SOURCE_ROOT; };
+		DEF8766F9B1A5CEB15FD0935 /* BuildExtensions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BuildExtensions; path = Components/BuildExtensions; sourceTree = SOURCE_ROOT; };
 		DF05DA24F71B455E8EFEBC3B /* SessionVerificationViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationViewModelTests.swift; sourceTree = "<group>"; };
 		DF17EA323AD0205A6AB621AA /* Snapshotting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snapshotting.swift; sourceTree = "<group>"; };
 		DF3D25B3EDB283B5807EADCF /* ReadMarkerRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadMarkerRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -7812,7 +7812,7 @@
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
 				EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
-				FE1E8395D966E5C36506BB4A /* XCLocalSwiftPackageReference "BuildExtensions" */,
+				5041EBEAA51463D649A3CF31 /* XCLocalSwiftPackageReference "Components/BuildExtensions" */,
 				C89CF7729E028671C5DC461E /* XCLocalSwiftPackageReference "compound-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -10674,13 +10674,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		5041EBEAA51463D649A3CF31 /* XCLocalSwiftPackageReference "Components/BuildExtensions" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Components/BuildExtensions;
+		};
 		C89CF7729E028671C5DC461E /* XCLocalSwiftPackageReference "compound-ios" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "compound-ios";
-		};
-		FE1E8395D966E5C36506BB4A /* XCLocalSwiftPackageReference "BuildExtensions" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = BuildExtensions;
 		};
 /* End XCLocalSwiftPackageReference section */
 
