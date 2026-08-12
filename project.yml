@@ -79,7 +79,7 @@ packages:
   Compound:
     path: compound-ios
   BuildExtensions:
-    path: BuildExtensions
+    path: Components/BuildExtensions
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     minorVersion: 0.37.0
