@@ -589,3 +589,18 @@ EXI:
   Regression test drops exactly the tail sends without the fix. Upstream this
   together with the diagnostics commit
   [SDK `6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)
+- Crash + missing crash prompt fixed (2026-08-13, from the 22:19 rageshake,
+  Sentry `4671176f84f8`): a send action racing the start of a voice recording
+  reached `TimelineViewModel.sendCurrentMessage` with mode `.recordVoiceMessage`
+  and hit `fatalError("invalid composer mode.")`. The composer view model now
+  ignores sends while recording and the fatalError is an error log. Separately,
+  the "app crashed, submit report?" prompt never appeared because
+  `HomeScreenCoordinator.start()` sampled `lastCrashEventID` once, ~76ms before
+  Sentry's `onCrashedLastRun` callback set it (fast warm relaunches reliably
+  win that race); the ID is now a `CurrentValuePublisher` and the alert is
+  presented when it first becomes non-nil. Both upstreamable. EXI
+  [`e8b28d5ef`](https://github.com/element-hq/element-x-ios/commit/e8b28d5ef).
+  The same rageshake showed the post-crash flavour of the stale-sync-batch
+  vanish (first sync after relaunch uses the pre-crash pos while the send queue
+  is still re-sending), covered by SDK `6532fc2be` above; the send queue itself
+  behaved (both pending messages restored and re-sent, nothing lost)
