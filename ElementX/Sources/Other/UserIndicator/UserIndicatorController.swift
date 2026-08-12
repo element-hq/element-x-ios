@@ -17,7 +17,16 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     var nonPersistentDisplayDuration = 2.5
     var minimumDisplayDuration = 0.5
     
-    @Published private(set) var activeIndicator: UserIndicator?
+    @Published private(set) var activeIndicator: UserIndicator? {
+        didSet {
+            // Never leave the overlay window hit-testable without an indicator on
+            // show: its passthrough relies on layer hit-testing (iOS 26), and a
+            // just-retracted modal's zero-opacity layers linger until SwiftUI's
+            // next cleanup pass - which the user's next tap triggers and loses.
+            window?.isUserInteractionEnabled = activeIndicator != nil
+        }
+    }
+
     private(set) var indicatorQueue = [UserIndicator]() {
         didSet {
             activeIndicator = indicatorQueue.last
@@ -37,6 +46,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
             let hostingController = UIHostingController(rootView: UserIndicatorPresenter(userIndicatorController: self).statusBarHidden(ProcessInfo.isRunningUITests))
             hostingController.view.backgroundColor = .clear
             window?.rootViewController = hostingController
+            window?.isUserInteractionEnabled = activeIndicator != nil
         }
     }
     
