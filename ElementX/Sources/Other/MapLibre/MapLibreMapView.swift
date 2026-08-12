@@ -9,33 +9,14 @@
 import Compound
 import CoreLocation
 import MapLibreInterface
-import MapLibreShim
 import SwiftUI
 
-/// The interactive map, rendered by the `MapLibreShim` framework.
+/// The interactive map, rendered by the `MapLibreShim` framework which is loaded on first use.
+///
+/// The app deliberately doesn't link MapLibre: dyld would otherwise load it, run its static
+/// initialisers and register its classes on every single launch, for a map that is only shown
+/// on the location screens.
 struct MapLibreMapView: View {
-    /// Built once, so that MapLibre's logging is only configured once.
-    private static let shim: MapLibreShimProtocol = {
-        let shim = MapLibreShim()
-        
-        shim.configureLogging { severity, message in
-            switch severity {
-            case .error:
-                MXLog.error(message)
-            case .warning:
-                MXLog.warning(message)
-            case .info:
-                MXLog.info(message)
-            case .debug:
-                MXLog.debug(message)
-            case .verbose:
-                MXLog.verbose(message)
-            }
-        }
-        
-        return shim
-    }()
-    
     struct Options {
         /// the final zoom level used when the first user location emit
         let zoomLevel: Double
@@ -77,7 +58,13 @@ struct MapLibreMapView: View {
     var userDidPan: (() -> Void)?
     
     var body: some View {
-        Self.shim.makeMapView(configuration: configuration)
+        if let shim = MapLibreLoader.shim {
+            shim.makeMapView(configuration: configuration)
+        } else {
+            // The shim failed to load, surface it the same way as a map loading failure.
+            Color.clear
+                .onAppear { error = .failedLoadingMap }
+        }
     }
     
     /// The configuration for the shim, with the app-only pieces (marker views, tint, styles)
@@ -105,4 +92,42 @@ struct MapLibreMapView: View {
                      geolocationUncertainty: $geolocationUncertainty,
                      userDidPan: userDidPan)
     }
+}
+
+/// Loads the `MapLibreShim` framework on first use.
+enum MapLibreLoader {
+    static let shim: MapLibreShimProtocol? = {
+        guard let frameworksPath = Bundle.main.privateFrameworksPath else {
+            MXLog.error("Missing frameworks path.")
+            return nil
+        }
+        
+        guard dlopen("\(frameworksPath)/MapLibreShim.framework/MapLibreShim", RTLD_NOW) != nil else {
+            MXLog.error("Failed loading MapLibreShim: \(dlerror().map { String(cString: $0) } ?? "unknown error")")
+            return nil
+        }
+        
+        guard let shimClass = NSClassFromString("MapLibreShim") as? NSObject.Type,
+              let shim = shimClass.init() as? MapLibreShimProtocol else {
+            MXLog.error("Failed resolving MapLibreShim.")
+            return nil
+        }
+        
+        shim.configureLogging { severity, message in
+            switch severity {
+            case .error:
+                MXLog.error(message)
+            case .warning:
+                MXLog.warning(message)
+            case .info:
+                MXLog.info(message)
+            case .debug:
+                MXLog.debug(message)
+            case .verbose:
+                MXLog.verbose(message)
+            }
+        }
+        
+        return shim
+    }()
 }

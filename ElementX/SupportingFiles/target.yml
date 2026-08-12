@@ -250,9 +250,16 @@ targets:
     - package: Mantis
     - target: MapLibreInterface
       embed: true
+    # Embedded but not linked, dlopen'd on first map use
     - target: MapLibreShim
+      link: false
       embed: true
-    - package: MapLibre
+    # The app just embeds the framework so it's in the bundle for the shim's load 
+    # command to resolve against.
+    - framework: ../../MapLibre.framework
+      implicit: true
+      link: false
+      embed: true
     - package: PostHog
     - package: SwiftState
     - package: GZIP

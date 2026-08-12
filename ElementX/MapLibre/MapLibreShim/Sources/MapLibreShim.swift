@@ -9,7 +9,9 @@ import MapLibre
 import MapLibreInterface
 import SwiftUI
 
-/// The shim's entry point, vending the interactive map view to the app.
+/// The shim's entry point: the app looks this class up by name through the ObjC runtime
+/// after `dlopen`-ing the framework, keeping MapLibre off the app's launch path.
+@objc(MapLibreShim)
 public final class MapLibreShim: NSObject, MapLibreShimProtocol {
     public func configureLogging(_ handler: @escaping @Sendable (MapLogSeverity, String) -> Void) {
         MLNLoggingConfiguration.shared.loggingLevel = .debug
