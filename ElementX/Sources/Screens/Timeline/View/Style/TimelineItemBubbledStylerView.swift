@@ -34,6 +34,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         focussedEventID != nil && timelineItem.id.eventID == focussedEventID
     }
     
+    /// Mirrors `TimelineItemStatusView.isLastOutgoingMessage`: when this flips, the sent tick
+    /// row appears/disappears, so the change must be animated to keep the cell resize in sync
+    /// with the table view's row-insertion animation.
+    private var isLastOutgoingMessage: Bool {
+        timelineItem.isOutgoing && context.viewState.timelineState.uniqueIDs.last == timelineItem.id.uniqueID
+    }
+
     private var isPinned: Bool {
         guard context.viewState.timelineKind != .pinned,
               let eventID = timelineItem.id.eventID else {
@@ -82,6 +89,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
                 .padding(.horizontal, bubbleHorizontalPadding)
                 .padding(.leading, bubbleAvatarPadding)
+                .animation(.elementDefault, value: isLastOutgoingMessage)
             }
         }
         .padding(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
