@@ -1,5 +1,5 @@
 {
-  "originHash" : "4bc536b8dc1a24c51f7aee755efcae049ef53f92314c1fa8dfe3467b8ac0d54d",
+  "originHash" : "8a0c9555b8a89581c69dc3e2b91f47adf41791f04765972870fe510b261f83b3",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "06a2303e4b7019d9c2321666fbb7bf9c925346ee",
-        "version" : "0.22.0"
+        "revision" : "f4ff4868a84749005c224af95242e77a90cd8f44",
+        "version" : "0.23.0"
       }
     },
     {
@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
       "state" : {
-        "revision" : "84a79bc375a301169390ac110c868f06c857b83f",
-        "version" : "6.27.0"
+        "revision" : "5ee345ca5d65238a6fce29bba87816204be7df20",
+        "version" : "6.28.0"
       }
     },
     {
@@ -194,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "0191008e2b089a59574ab02a9ee5afbd65631aaf",
-        "version" : "3.67.1"
+        "revision" : "9b12d093e774883c40ee456e34b74b45cee03d46",
+        "version" : "3.69.5"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "67310f115f3fc1e5e1f2e262f9009c64bb387e3f",
-        "version" : "9.22.0"
+        "revision" : "d82bb1c5eb353a593573a5624bb370f5a1f500ce",
+        "version" : "9.24.0"
       }
     },
     {
@@ -311,8 +311,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "ead56133a693d0184d8c2db1a6d6394410cacfd6",
-        "version" : "2.13.6"
+        "revision" : "8d6ad267714cac3ae747cefdd21f7a6665006e1f",
+        "version" : "2.13.7"
       }
     },
     {
