@@ -549,6 +549,15 @@ EXI:
   animation with the insertion - every bubble stays full height and the stack rises
   monotonically. Not yet validated on the phone; upstreamable
   [`1b450577b`](https://github.com/element-hq/element-x-ios/commit/1b450577b)
+- Follow-up: residual downward dip of the previous bubble during the insert
+  (phone-visible). Harness root cause: on the batch's first frames the cell keeps
+  its old tall frame while its content has already re-rendered without the status
+  row, and SwiftUI centres content in the excess space - the bubble dips by half
+  the status-row height. Fix: pin the hosted cell content to topLeading with
+  maxHeight .infinity, so the excess is consumed at the status-row edge; measured
+  fully monotonic in the harness incl. image-sized bubbles either side of the
+  transition. Upstreamable together with the reconfigure
+  [`66bea662f`](https://github.com/element-hq/element-x-ios/commit/66bea662f)
 - Diagnostics for own sends vanishing after a limited gappy sync (2026-08-12
   20:35 local, Self DM): four just-sent messages left the visible timeline for
   ~19s until the next sync re-delivered them. Trigger fully established (bad
