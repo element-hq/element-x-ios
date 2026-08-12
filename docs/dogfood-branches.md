@@ -515,3 +515,21 @@ EXI:
   filter - a temporary debug default `038d0121c` was reverted in `98f06f80f` as too
   noisy for the phone; the warn-level tripwires carry the signal instead)
   ([SDK `4a3906914`](https://github.com/matrix-org/matrix-rust-sdk/commit/4a3906914))
+- Merge the tachyon (DMLS) review's collapse/redelivery fixes, §§1-5 of
+  `workspace-dmls .../docs/dmls/REVIEW-upstream-timeline-bugs.md` - §3+§4 are the
+  root causes of the 1-10 self-send duplicates (a limited-sync collapse makes the
+  dedup's recorded removal positions stale, so `push_live_events` appends a second
+  copy; and a copy offloaded to the store during the collapse means chunk-level dedup
+  correctly removes nothing while the timeline still shows its item). §1 un-wedges
+  backfill behind non-advancing empty `/messages` gaps after such collapses, §2 stops
+  a clear-racing-a-local-echo leaving stale `all_remote_events` meta that offsets
+  later positional diffs (fresh messages vanishing), §5 downgrades a stale-position
+  `.expect()` panic in `remove_events` to a log. §6 (timeline-only state events under
+  MSC4186) deliberately NOT merged - inverts documented upstream behaviour, needs an
+  upstream design discussion first. All six were verified still present in upstream
+  main @ `44a907dd8` (2026-08-04); upstreaming candidates
+  ([SDK `f5d631a4a`](https://github.com/matrix-org/matrix-rust-sdk/commit/f5d631a4a),
+  [SDK `59d0d4f3d`](https://github.com/matrix-org/matrix-rust-sdk/commit/59d0d4f3d))
+  - likely fixes [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242)-family
+    residue beyond the dup-echo divergence fix, and the 2026-08-12 1-10 self-send
+    duplicate run
