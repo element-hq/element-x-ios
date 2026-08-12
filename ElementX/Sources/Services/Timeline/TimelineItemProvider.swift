@@ -83,11 +83,16 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     
     private func applyDiffs(_ diffs: [TimelineDiff]) async {
         MXLog.verbose("Received diffs: \(diffs)")
-        
+
         // Building the item proxies and computing/applying the CollectionDifference can be
         // expensive, so run it off the main actor and only hop back to publish the result.
         let result = await Self.processDiffs(diffs, on: itemProxies, spanName: "process_timeline_list_diffs:\(kind)")
-        
+
+        // Dogfood diagnostics for vanishing messages: record what was applied and
+        // the resulting item count, mirroring the SDK's "forwarding diffs" log so
+        // a rageshake can pair the two up.
+        MXLog.info("Timeline(\(kind)) applied \(diffs.map(\.debugDescription)) -> \(result.itemProxies.count) items")
+
         itemProxies = result.itemProxies
         
         if result.hasMembershipChange {
@@ -181,8 +186,12 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             let itemProxy = TimelineItemProxy(item: item)
             changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: itemProxy, associatedWith: nil))
-        case .truncate:
-            break
+        case .truncate(let length):
+            // Was previously ignored entirely, silently desyncing this array from
+            // the SDK's timeline whenever a truncation came through.
+            for (index, itemProxy) in itemProxies.enumerated() where index >= Int(length) {
+                changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
+            }
         }
         
         return CollectionDifference(changes)
