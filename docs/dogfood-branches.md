@@ -306,6 +306,13 @@ EXI:
   task and unwinds whatever the route half-started. Also fixes a failed thread
   timeline build leaving the state machine in `.thread` with no screen pushed
   [`5c11e1b37`](https://github.com/element-hq/element-x-ios/commit/5c11e1b37)
+- Attach the UNUserNotificationCenter delegate at init: deferring notification startup
+  off the launch critical path (`505a9d6da`, above) also deferred the delegate
+  assignment past the end of launch, and iOS discards (not buffers) the notification
+  response for a tap that launched the app when no delegate is in place - a push tapped
+  while the app was killed silently dropped its route and left the user on the room
+  list (console logs 2026-08-12 ~11:30 local). Warm-app taps were unaffected
+  [`2c7928bb9`](https://github.com/element-hq/element-x-ios/commit/2c7928bb9)
 - Long-press a room in the room list to peek at its timeline (iMessage-style preview
   above the context menu) without sending a read receipt: the peek renders the real
   timeline item views read-only, deliberately avoiding the timeline table controller
