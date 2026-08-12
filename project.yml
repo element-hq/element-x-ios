@@ -24,7 +24,6 @@ options:
     - UITests
     - AccessibilityTests
     - IntegrationTests
-    - DevelopmentAssets
     - Components
     - Tools
   - pattern: ElementX
