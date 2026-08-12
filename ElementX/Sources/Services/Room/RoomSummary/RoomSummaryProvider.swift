@@ -27,6 +27,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
+    private var currentFilter: RoomSummaryProviderFilter?
     private var stateUpdatesTaskHandle: TaskHandle?
     
     private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
@@ -117,6 +118,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                                                                 })
             
             // Forces the listener above to be called with the current state
+            currentFilter = nil
             setFilter(.all(filters: []))
             
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: SDKListener { [loadingStateContinuation] state in
@@ -136,6 +138,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
+        guard filter != currentFilter else {
+            return
+        }
+        
+        currentFilter = filter
+        
         let baseFilter: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
                                                                              .all(filters: [.space, .invite])]),
                                                               .deduplicateVersions]
