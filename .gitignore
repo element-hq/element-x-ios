@@ -12,6 +12,7 @@ xcuserdata/
 
 ## SwiftPM
 /.build
+/BuildTools/.build
 /Packages
 xcuserdata/
 DerivedData/

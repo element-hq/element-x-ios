@@ -20,6 +20,8 @@ jobs:
 
     steps:
       - uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
+        with:
+          fetch-depth: 2
 
       - uses: actions/cache@v4
         with:
@@ -27,6 +29,13 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
+
+      - uses: actions/cache@v4
+        with:
+          path: BuildTools/.build
+          key: ${{ runner.os }}-swiftformat-${{ hashFiles('BuildTools/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-swiftformat-
 
       - name: Setup environment
         run:
@@ -56,11 +65,34 @@ jobs:
           xcrun simctl list devices "iOS 18.6"
 
       - name: SwiftFormat
-        run:
-          swiftformat --lint .
+        run: swift run --package-path BuildTools -c release swiftformat --lint .
+
+      - name: Determine test scope
+        id: test-scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          run_previews=true
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            run_previews=false
+            while IFS= read -r path; do
+              case "$path" in
+                .github/*|.gitignore|BuildTools/*|ci_scripts/*) ;;
+                *) run_previews=true; break ;;
+              esac
+            done < <(git diff --name-only "$BASE_SHA" HEAD)
+          fi
+          echo "run-previews=$run_previews" >> "$GITHUB_OUTPUT"
       
       - name: Run tests
-        run: bundle exec fastlane unit_tests
+        env:
+          RUN_PREVIEW_TESTS: ${{ steps.test-scope.outputs.run-previews }}
+        run: |
+          if [ "$RUN_PREVIEW_TESTS" = "true" ]; then
+            bundle exec fastlane unit_tests
+          else
+            bundle exec fastlane unit_tests skip_previews:true
+          fi
 
       - name: Collect recorded snapshots # TEMPORARY: remove together with the RECORD_FAILURES test plan change
         if: ${{ !cancelled() }}
@@ -86,8 +118,20 @@ jobs:
 
       - name: Zip results # for faster upload
         if: failure()
-        working-directory: fastlane/test_output
-        run: zip -r UnitTests.zip UnitTests.xcresult PreviewTests.xcresult
+        run: |
+          bundles=()
+          for bundle in UnitTests.xcresult PreviewTests.xcresult; do
+            if [ -d "fastlane/test_output/$bundle" ]; then
+              bundles+=("$bundle")
+            fi
+          done
+
+          if [ ${#bundles[@]} -gt 0 ]; then
+            cd fastlane/test_output
+            zip -r UnitTests.zip "${bundles[@]}"
+          else
+            echo "No test result bundles were produced."
+          fi
       
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
@@ -101,8 +145,12 @@ jobs:
       
       - name: Collect coverage
         run: |
-          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UnitTests.xcresult > fastlane/test_output/unit-cobertura.xml
-          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-cobertura.xml
+          if [ -d fastlane/test_output/UnitTests.xcresult ]; then
+            xcresultparser -q -o cobertura -t Gua.app -p "$PWD" fastlane/test_output/UnitTests.xcresult > fastlane/test_output/unit-cobertura.xml
+          fi
+          if [ -d fastlane/test_output/PreviewTests.xcresult ]; then
+            xcresultparser -q -o cobertura -t Gua.app -p "$PWD" fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-cobertura.xml
+          fi
       
       - name: Upload coverage to Codecov
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }} # Skip in forks
