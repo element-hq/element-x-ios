@@ -16,6 +16,10 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     
     var nonPersistentDisplayDuration = 2.5
     var minimumDisplayDuration = 0.5
+
+    /// Indicators sitting out the remainder of `minimumDisplayDuration` after
+    /// being retracted: still visible, but no longer blocking anything.
+    @Published private(set) var retractingIndicatorIDs = Set<String>()
     
     @Published private(set) var activeIndicator: UserIndicator? {
         didSet {
@@ -81,16 +85,26 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     
     func retractIndicatorWithId(_ id: String) {
         delayedIndicators.remove(id)
-        
+
         guard let displayTime = displayTimes[id], abs(displayTime.timeIntervalSinceNow) <= minimumDisplayDuration else {
             indicatorQueue.removeAll { $0.id == id }
             return
         }
-        
+
+        // The indicator lingers for the rest of `minimumDisplayDuration` to
+        // avoid flashing, but whatever it covered is finished: drop its scrim
+        // and stop the overlay window blocking touches straight away
+        // (systematically swallowed the first tap after opening a thread).
+        retractingIndicatorIDs.insert(id)
+        if activeIndicator?.id == id {
+            window?.isUserInteractionEnabled = false
+        }
+
         Task {
             try? await Task.sleep(for: .seconds(minimumDisplayDuration))
             indicatorQueue.removeAll { $0.id == id }
             displayTimes[id] = nil
+            retractingIndicatorIDs.remove(id)
         }
     }
     
@@ -98,6 +112,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     
     private func enqueue(indicator: UserIndicator) {
         retractIndicatorWithId(indicator.id)
+        retractingIndicatorIDs.remove(indicator.id)
         indicatorQueue.append(indicator)
         displayTimes[indicator.id] = .now
     }

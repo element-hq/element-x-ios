@@ -12,6 +12,10 @@ import SwiftUI
 
 struct UserIndicatorModalView: View {
     let indicator: UserIndicator
+    /// Whether the indicator is sitting out the rest of its minimum display
+    /// duration after being retracted: the pill keeps fading, but the scrim
+    /// must go immediately so it cannot swallow taps.
+    var isRetracting = false
     @State private var progressFraction = 0.0
     
     var body: some View {
@@ -54,7 +58,7 @@ struct UserIndicatorModalView: View {
         .id(indicator.id)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
-            if !indicator.allowsInteraction {
+            if !indicator.allowsInteraction, !isRetracting {
                 Color.black.opacity(0.1)
                     .onTapGesture { indicator.onCancel?() }
             }

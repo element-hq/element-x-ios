@@ -24,7 +24,8 @@ struct UserIndicatorPresenter: View {
                 case .toast:
                     UserIndicatorToastView(indicator: indicator)
                 case .modal:
-                    UserIndicatorModalView(indicator: indicator)
+                    UserIndicatorModalView(indicator: indicator,
+                                           isRetracting: userIndicatorController.retractingIndicatorIDs.contains(indicator.id))
                 }
             }
         }
