@@ -38,7 +38,7 @@ An option would be to export it to your environment and use the existing `Secret
 
 One way to avoid pushing the API key by mistake is running on your machine the command: 
 ```
-git update-index assume-unchanged Secrets/Secrets.swift
+git update-index assume-unchanged Components/Secrets/Secrets.swift
 ``` 
 this will prevent pushing any update of the file `Secrets.swift`.
 

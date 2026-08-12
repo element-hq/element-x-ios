@@ -282,7 +282,7 @@ targets:
       excludes:
         - Other/Extensions/XCTestCase.swift
         - Other/Extensions/XCUIElement.swift
-    - path: ../../Secrets/Secrets.swift
+    - path: ../../Components/Secrets/Secrets.swift
     - path: ../Resources
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/ElementX
