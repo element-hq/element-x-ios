@@ -15,6 +15,10 @@ extension PostHogConfig {
         postHogConfiguration.captureScreenViews = false
         postHogConfiguration.surveys = false
         
+        // Should be disabled by the swizzling config below, but also seriously, wtf PostHog?!
+        postHogConfiguration.capturePushNotificationSubscriptions = false
+        postHogConfiguration.capturePushNotificationOpened = false
+        
         // We only want to track the events provided by the AnalyticsEvents package
         postHogConfiguration.enableSwizzling = false
         
