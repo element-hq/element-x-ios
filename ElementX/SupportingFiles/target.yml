@@ -248,6 +248,8 @@ targets:
     - package: LoremSwiftum
     - package: LRUCache
     - package: Mantis
+    - target: MapLibreInterface
+      embed: true
     - package: MapLibre
     - package: PostHog
     - package: SwiftState

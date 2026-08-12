@@ -59,6 +59,7 @@ settings:
 
 include:
 - path: app.yml
+- path: ElementX/MapLibre/MapLibreInterface/SupportingFiles/target.yml
 - path: ElementX/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
