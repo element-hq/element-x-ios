@@ -542,3 +542,20 @@ EXI:
   makes the collapse resize the cell in sync with the insertion. Not yet validated
   on the phone; upstreamable
   [`0125d9091`](https://github.com/element-hq/element-x-ios/commit/0125d9091)
+- Diagnostics for own sends vanishing after a limited gappy sync (2026-08-12
+  20:35 local, Self DM): four just-sent messages left the visible timeline for
+  ~19s until the next sync re-delivered them. Trigger fully established (bad
+  network delays the long-poll → the room comes back limited with a new gap
+  whose batch is exactly the just-sent tail → dedup remove + re-append +
+  `shrink_to_last_reloaded_chunk`), but every rust layer checks out under new
+  regression tests (event cache emits `[Clear, Append]`, timeline + lazy skip
+  subscriber deliver a faithful view), so the loss is between the FFI hop and
+  the app's table. Both sides now log each timeline diff batch at info level so
+  a rageshake can pair them up: SDK
+  [`6f60ba2e3`](https://github.com/matrix-org/matrix-rust-sdk/commit/6f60ba2e3)
+  ("timeline listener: forwarding diffs" + regression tests), EXI
+  [`365c091af`](https://github.com/element-hq/element-x-ios/commit/365c091af)
+  ("Timeline(kind) applied ..."). The EXI commit also implements the previously
+  ignored `.truncate` diff (silent desync if one ever arrives; nothing emits it
+  today). To validate: burst-send on a poor connection, watch for the vanish,
+  rageshake immediately
