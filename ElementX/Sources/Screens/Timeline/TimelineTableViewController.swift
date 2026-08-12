@@ -313,7 +313,12 @@ class TimelineTableViewController: UIViewController {
                 cell.contentConfiguration = UIHostingConfiguration { [coordinator, hideTimelineMedia] in
                     RoomTimelineItemView(viewState: viewState)
                         .id(id)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        // maxHeight + topLeading: during animated snapshot applies the cell's frame
+                        // and its (already re-rendered) content height are transiently out of sync;
+                        // without a vertical alignment SwiftUI centres the content in the excess
+                        // space, which reads as the bubble dipping by half the removed status row.
+                        // Top-pinning keeps the bubble glued to the cell's animating top edge.
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                         .environment(\.timelineContext, coordinator.context)
                         .environment(\.shouldAutomaticallyLoadImages, !hideTimelineMedia)
