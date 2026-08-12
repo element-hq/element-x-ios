@@ -495,6 +495,42 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   [`b2140c102`](https://github.com/element-hq/element-x-ios/commit/b2140c102),
   new `latestEventThreadRootId` FFI
   ([SDK `0ba9d0d9d`](https://github.com/matrix-org/matrix-rust-sdk/commit/0ba9d0d9d))
+- The tap-into-thread routing made thread latest events a routine code path,
+  and reproduced the sync wedge the 2026-08-11 fix had left as a residual
+  watch. Three distinct causes were found and fixed across one evening of
+  repro rounds (all with regression tests that fail without the fix):
+  - `room_latest_event`'s thread arm (plus `forget_thread`, both
+    `listen_and_subscribe` entry points and the backfill-candidates loop)
+    still awaited a per-room lock while holding the rooms-map lock; a second
+    tap on the room then parked holding the map, the sync response handler
+    queued behind it holding the sliding sync `position` lock, and the whole
+    app wedged behind a permanent uncancellable "Loading..." modal. All
+    remaining under-map-lock awaits evicted with the snapshot-handle pattern.
+    [SDK `84c47e013`](https://github.com/matrix-org/matrix-rust-sdk/commit/84c47e013)
+  - With that fixed, the handler still wedged 70s+ inside "Re-triggering
+    missing latest event computations": a catch-up response registering
+    hundreds of rooms enqueues as many computations, and the trigger loop
+    awaited each room's lock under the `position` lock, convoying behind the
+    compute task. It now `try_read`s and enqueues busy rooms unconditionally
+    (recomputing an existing value is idempotent; the check only avoids queue
+    spam).
+    [SDK `19e852a81`](https://github.com/matrix-org/matrix-rust-sdk/commit/19e852a81)
+  - The plain room route's loading modal was uncancellable (only event routes
+    wired up tap-to-cancel), so a wedged open locked the whole app. All four
+    routes through `handleRoomRoute` (room, thread, event, share) now track
+    their in-flight task and a tap on the modal's background abandons it.
+    [EXI `49f379d51`](https://github.com/element-hq/element-x-ios/commit/49f379d51)
+- The room-open path now logs every await boundary (resolve proxy, fetch
+  room, fetch room info, build live timeline, room-list/timeline
+  subscriptions) so any future silent hang names its stuck await in the
+  rageshake.
+  [EXI `5c868e39c`](https://github.com/element-hq/element-x-ios/commit/5c868e39c)
+- A final repro round was poisoned by a rig bug worth knowing about:
+  `devicectl device process launch --terminate-existing` only terminates the
+  newest install's process, so every reinstall left the previous build
+  running as a zombie - three live ElementX instances were sharing the
+  app-group sqlite stores and the sync session. The dogfood install script
+  now kills every ElementX pid before installing (e2ee-rig `11c7545`).
 
 #### Fix reply previews showing "Unsupported event" if they haven't yet decrypted the reply
 
@@ -681,45 +717,6 @@ This bug has been around since the event cache landed, i think.
   vanish (first sync after relaunch uses the pre-crash pos while the send queue
   is still re-sending), covered by SDK `6532fc2be` above; the send queue itself
   behaved (both pending messages restored and re-sent, nothing lost)
-
-#### Kill the "Loading..." wedge when re-opening a room that goes straight to a thread
-
-- The tap-into-thread routing made thread latest events a routine code path,
-  and reproduced the sync wedge the 2026-08-11 fix had left as a residual
-  watch. Three distinct causes were found and fixed across one evening of
-  repro rounds (all with regression tests that fail without the fix):
-  - `room_latest_event`'s thread arm (plus `forget_thread`, both
-    `listen_and_subscribe` entry points and the backfill-candidates loop)
-    still awaited a per-room lock while holding the rooms-map lock; a second
-    tap on the room then parked holding the map, the sync response handler
-    queued behind it holding the sliding sync `position` lock, and the whole
-    app wedged behind a permanent uncancellable "Loading..." modal. All
-    remaining under-map-lock awaits evicted with the snapshot-handle pattern.
-    [SDK `84c47e013`](https://github.com/matrix-org/matrix-rust-sdk/commit/84c47e013)
-  - With that fixed, the handler still wedged 70s+ inside "Re-triggering
-    missing latest event computations": a catch-up response registering
-    hundreds of rooms enqueues as many computations, and the trigger loop
-    awaited each room's lock under the `position` lock, convoying behind the
-    compute task. It now `try_read`s and enqueues busy rooms unconditionally
-    (recomputing an existing value is idempotent; the check only avoids queue
-    spam).
-    [SDK `19e852a81`](https://github.com/matrix-org/matrix-rust-sdk/commit/19e852a81)
-  - The plain room route's loading modal was uncancellable (only event routes
-    wired up tap-to-cancel), so a wedged open locked the whole app. All four
-    routes through `handleRoomRoute` (room, thread, event, share) now track
-    their in-flight task and a tap on the modal's background abandons it.
-    [EXI `49f379d51`](https://github.com/element-hq/element-x-ios/commit/49f379d51)
-- The room-open path now logs every await boundary (resolve proxy, fetch
-  room, fetch room info, build live timeline, room-list/timeline
-  subscriptions) so any future silent hang names its stuck await in the
-  rageshake.
-  [EXI `5c868e39c`](https://github.com/element-hq/element-x-ios/commit/5c868e39c)
-- A final repro round was poisoned by a rig bug worth knowing about:
-  `devicectl device process launch --terminate-existing` only terminates the
-  newest install's process, so every reinstall left the previous build
-  running as a zombie - three live ElementX instances were sharing the
-  app-group sqlite stores and the sync session. The dogfood install script
-  now kills every ElementX pid before installing (e2ee-rig `11c7545`).
 
 #### Stop the first tap after a "Loading..." modal being silently swallowed
 
