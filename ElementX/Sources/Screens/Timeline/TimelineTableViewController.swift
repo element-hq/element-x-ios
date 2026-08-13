@@ -666,13 +666,18 @@ class TimelineTableViewController: UIViewController {
                 let finalViewHeight = sendTransitionViewHeightAtBegin + sendTransitionExpectedDelta
                 let target = -1 - (tableView.frame.height - finalViewHeight)
                 let travel = tableView.contentOffset.y - target
-                // A message taller than the viewport has more than a screenful
-                // of residual, and any motion over that distance reads as the
-                // bubbles zooming in from below. Everything pinned is offscreen
-                // once it lands, so snap there unanimated and let the fade
-                // below carry the transition alone.
-                let snap = travel > finalViewHeight
+                // A message that fills the final viewport on its own leaves no
+                // older content visible once the settle lands, so the whole
+                // motion reads as the message zooming in from below. Snap to
+                // the target unanimated and let the fade below carry the
+                // transition alone. The height is measured from the laid-out
+                // cell; a message so tall it isn't even materialised within
+                // the oversized frame qualifies by definition. Same deal when
+                // the residual travel itself exceeds a screenful.
+                let newMessageHeight = newestItemIdentifier.flatMap { cellFrame(for: $0)?.height } ?? .greatestFiniteMagnitude
+                let snap = newMessageHeight >= finalViewHeight || travel > finalViewHeight
                 if snap {
+                    MXLog.info("SendTransition: snapping, newMessageHeight=\(newMessageHeight) travel=\(travel) finalViewHeight=\(finalViewHeight)")
                     sendTransitionDriftStarted = true
                     sendTransitionIsSettling = false
                     UIView.performWithoutAnimation {
