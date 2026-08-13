@@ -751,7 +751,7 @@ today's behaviour; reduce-motion skips it entirely.
 **How the fix works, in one breath**: when you tap send, the composer tells the
 timeline exactly how much height its collapse is about to hand back (it
 measures itself against its empty baseline). The timeline pins itself in place
-- freezing its frame and compensating its scroll offset - so neither the
+\- freezing its frame and compensating its scroll offset - so neither the
 composer's animated collapse nor the echo's insertion can shove it around;
 the sent message is laid out early behind the composer's opaque background and
 is revealed as the composer shrinks, fading in, while a single ease-out scroll
