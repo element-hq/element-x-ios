@@ -68,7 +68,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         // Need to use TextKit 1 for mentions
         let textView = ElementTextView(timelineContext: timelineContext,
                                        presendCallback: $presendCallback)
-        
+
+        textView.maxFittingHeight = maxHeight
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
         textView.textColor = .compound.textPrimary
@@ -211,8 +212,24 @@ private protocol ElementTextViewDelegate: AnyObject {
 private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     private(set) var timelineContext: TimelineViewModel.Context?
     private var pillViews = NSHashTable<UIView>.weakObjects()
-    
+
     weak var elementDelegate: ElementTextViewDelegate?
+
+    /// The height the wrapper grows the view to before it starts scrolling.
+    var maxFittingHeight: CGFloat = .greatestFiniteMagnitude
+
+    /// While the composer's height tween runs, the bounds briefly lag the content
+    /// and the caret auto-scroll kicks in, making the text jump ahead of the
+    /// animating field. Whenever the content fully fits under ``maxFittingHeight``
+    /// the correct offset is always zero, so drop those scrolls; real scrolling
+    /// (content taller than the height cap, or the user dragging) is untouched.
+    override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
+        if !isTracking, !isDecelerating, contentSize.height <= maxFittingHeight {
+            super.setContentOffset(.zero, animated: false)
+            return
+        }
+        super.setContentOffset(contentOffset, animated: animated)
+    }
     
     init(timelineContext: TimelineViewModel.Context?,
          presendCallback: Binding<(() -> Void)?>) {
