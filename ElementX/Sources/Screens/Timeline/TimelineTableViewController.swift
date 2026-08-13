@@ -656,6 +656,31 @@ class TimelineTableViewController: UIViewController {
             }
 
             if newestItemIDChanged {
+                // One settle, all the way: absolute bottom is computable in the
+                // frozen coordinates (final view height = height at send + the
+                // measured collapse delta), so the whole residual runs as a
+                // single ease-out curve in parallel with the collapse - no
+                // second phase, no allowances, and the status-row shrink can't
+                // offset an absolute target. The geometry restore at the end
+                // waits for this to land (sendTransitionRestoreDeferred).
+                let finalViewHeight = sendTransitionViewHeightAtBegin + sendTransitionExpectedDelta
+                let target = -1 - (tableView.frame.height - finalViewHeight)
+                let travel = tableView.contentOffset.y - target
+                // A message taller than the viewport has more than a screenful
+                // of residual, and any motion over that distance reads as the
+                // bubbles zooming in from below. Everything pinned is offscreen
+                // once it lands, so snap there unanimated and let the fade
+                // below carry the transition alone.
+                let snap = travel > finalViewHeight
+                if snap {
+                    sendTransitionDriftStarted = true
+                    sendTransitionIsSettling = false
+                    UIView.performWithoutAnimation {
+                        tableView.contentOffset.y = target
+                        tableView.layoutIfNeeded()
+                    }
+                }
+
                 if let newestItemIdentifier,
                    !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
                    let indexPath = dataSource.indexPath(for: newestItemIdentifier),
@@ -667,16 +692,7 @@ class TimelineTableViewController: UIViewController {
                     }
                 }
 
-                // One settle, all the way: absolute bottom is computable in the
-                // frozen coordinates (final view height = height at send + the
-                // measured collapse delta), so the whole residual runs as a
-                // single ease-out curve in parallel with the collapse - no
-                // second phase, no allowances, and the status-row shrink can't
-                // offset an absolute target. The geometry restore at the end
-                // waits for this to land (sendTransitionRestoreDeferred).
-                let finalViewHeight = sendTransitionViewHeightAtBegin + sendTransitionExpectedDelta
-                let target = -1 - (tableView.frame.height - finalViewHeight)
-                if abs(tableView.contentOffset.y - target) > 1 {
+                if !snap, abs(travel) > 1 {
                     settle(to: target)
                 }
             }
