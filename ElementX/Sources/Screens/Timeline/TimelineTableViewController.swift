@@ -639,11 +639,22 @@ class TimelineTableViewController: UIViewController {
             }
         } else {
             // A single-line send's transition ends here: the animated apply below
-            // is its slide-in.
-            if sendTransitionReference != nil {
+            // is its slide-in, with a fade layered on so it doesn't pop.
+            let endingSendTransition = sendTransitionReference != nil
+            if endingSendTransition {
                 endSendTransition()
             }
             dataSource.apply(snapshot, animatingDifferences: animated)
+            if endingSendTransition, animated,
+               let newestItemIdentifier,
+               !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
+               let indexPath = dataSource.indexPath(for: newestItemIdentifier),
+               let cell = tableView.cellForRow(at: indexPath) {
+                cell.alpha = 0
+                UIView.animate(withDuration: 0.25) {
+                    cell.alpha = 1
+                }
+            }
         }
         
         if let focussedEvent, focussedEvent.appearance != .hasAppeared {
