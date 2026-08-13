@@ -885,3 +885,36 @@ on-device pin-delta logs; the dead ends are as valuable as the fixes:
 Before upstreaming: strip the `SendTransition: restore`/`materialising` MXLog
 diagnostics in the pin paths. Upstreamable as a whole; the composer-side
 pieces (measured delta, growth tween, caret-scroll suppression) stand alone.
+
+## Send transition follow-up: full-screen sends snap instead of settling
+
+`0df3d522f`. Sends taller than the visible timeline (~19+ lines) left more
+than a screenful of residual travel after the pin, and animating that
+distance read as the bubbles zooming in from the bottom. Since everything
+pinned is offscreen once the settle lands anyway, the frozen apply now
+detects `travel > post-collapse view height`, jumps the content offset to
+the target unanimated inside the same layout pass, and lets the existing
+0.2s fade-in on the new message carry the transition alone. The settle path
+(and its deferred geometry-restore handshake) is bypassed, so the normal
+`endSendTransition` restore runs afterwards. Sub-screenful sends keep the
+single-curve settle unchanged.
+
+## Room list wedged on skeletons after a session expiry (SDK fix)
+
+rust-sdk `60a514641` on `matthew/preview-prefill`. Dogfood incident: a
+sliding-sync session expiry two seconds into a cold launch (the reinstall
+killed the app mid-poll → `UnknownPos`) emptied the home screen's room list
+and left it on skeletons forever, while search and static lookups kept
+working. Root cause shape: `entries_with_dynamic_adapters` yielded each
+filter/sort/head adapter chain into `switch()`, so the chain's death was
+unobservable - when its underlying entries stream ended (most plausibly the
+eyeball broadcast subscriber lagging out during the post-expiry flood),
+nothing rebuilt the chain until the next `set_filter` call, which never
+comes for the home screen's fixed filter. Fix: the generator is now a flat
+loop that `select!`s between filter changes and chain items; when the chain
+ends it rebuilds immediately under the current filter and re-emits a fresh
+`Reset`. Filter changes keep the old drop-and-rebuild semantics with
+priority over pending diffs. The two previously-silent death sites (merged
+raw-stream end, FFI listener task exit) now log `error!` so a recurrence
+pinpoints which stream died. Upstreamable; the exact death trigger is still
+unproven from logs - the new diagnostics exist to catch it.
