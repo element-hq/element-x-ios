@@ -1809,12 +1809,11 @@ nonisolated class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sen
         set(value) { underlyingIsEnabled = value }
     }
     nonisolated(unsafe) var underlyingIsEnabled: Bool!
-    var crashedLastRun: Bool {
-        get { return underlyingCrashedLastRun }
-        set(value) { underlyingCrashedLastRun = value }
+    var lastCrashEventIDSubject: CurrentValueSubject<String?, Never> {
+        get { return underlyingLastCrashEventIDSubject }
+        set(value) { underlyingLastCrashEventIDSubject = value }
     }
-    nonisolated(unsafe) var underlyingCrashedLastRun: Bool!
-    nonisolated(unsafe) var lastCrashEventID: String?
+    nonisolated(unsafe) var underlyingLastCrashEventIDSubject: CurrentValueSubject<String?, Never>!
 
     //MARK: - submitBugReport
 

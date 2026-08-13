@@ -1018,7 +1018,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         options.onLastRunStatusDetermined = { status, event in
             guard case .didCrash = status, let event else { return }
             MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
-            bugReportService.lastCrashEventID = event.eventId.sentryIdString
+            bugReportService.lastCrashEventIDSubject.send(event.eventId.sentryIdString)
         }
         
         // Mirror every crash into our own logs (which ship with rageshakes) before it's sent to Sentry.

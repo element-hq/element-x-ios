@@ -39,8 +39,6 @@ enum HomeScreenCoordinatorAction {
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
     private var viewModel: HomeScreenViewModelProtocol
-    // periphery:ignore - only used in release builds
-    private let bugReportService: BugReportServiceProtocol
     
     private let actionsSubject: PassthroughSubject<HomeScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -54,9 +52,9 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         appSettings: parameters.appSettings,
                                         analyticsService: parameters.analyticsService,
+                                        bugReportService: parameters.bugReportService,
                                         notificationManager: parameters.notificationManager,
                                         userIndicatorController: parameters.userIndicatorController)
-        bugReportService = parameters.bugReportService
         
         viewModel.actions
             .sink { [weak self] action in
@@ -99,16 +97,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     }
     
     // MARK: - Public
-    
-    func start() {
-        #if !DEBUG
-        // Note: bugReportService.isEnabled doesn't determine if a user has opted in to Analytics/Sentry.
-        // Therefore we use lastCrashEventID as this will only be set if we have crash ID from Sentry.
-        if bugReportService.crashedLastRun, bugReportService.lastCrashEventID != nil {
-            viewModel.presentCrashedLastRunAlert()
-        }
-        #endif
-    }
     
     func toPresentable() -> AnyView {
         AnyView(HomeScreen(context: viewModel.context))

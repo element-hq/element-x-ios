@@ -17,6 +17,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let userSession: UserSessionProtocol
     private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsServiceProtocol
+    private let bugReportService: BugReportServiceProtocol
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -33,10 +34,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol,
+         bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.analyticsService = analyticsService
+        self.bugReportService = bugReportService
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
@@ -139,6 +142,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         spaceFilterSubject
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.selectedSpaceFilter, on: self)
+            .store(in: &cancellables)
+        
+        bugReportService.lastCrashEventIDSubject
+            .compactMap { $0 }
+            .first()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.presentCrashedLastRunAlert()
+            }
             .store(in: &cancellables)
         
         Task {

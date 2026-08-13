@@ -17,5 +17,6 @@ extension BugReportServiceMock {
         self.init()
         
         isEnabled = configuration.isEnabled
+        lastCrashEventIDSubject = .init(nil)
     }
 }
