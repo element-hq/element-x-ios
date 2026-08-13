@@ -633,26 +633,25 @@ class TimelineTableViewController: UIViewController {
             // (delivery status, receipts) go unpinned rather than yanking the
             // content back (the bounce).
             UIView.performWithoutAnimation {
-                let preApplyContentHeight = tableView.contentSize.height
                 dataSource.apply(snapshot, animatingDifferences: false)
                 tableView.layoutIfNeeded()
                 if !sendTransitionDriftStarted {
-                    if cellFrame(for: reference.id.uniqueID) != nil {
-                        restoreSendTransitionPosition(reference)
-                    } else {
+                    if cellFrame(for: reference.id.uniqueID) == nil,
+                       let indexPath = dataSource.indexPath(for: reference.id.uniqueID) {
                         // A message taller than the frame oversize pushes the
                         // reference cell beyond the materialised window, so the
-                        // cell-based pin can't see it - without this the settle
-                        // then runs from the unpinned offset and moves the WRONG
-                        // way (the >9-line dive). Compensate arithmetically for
-                        // exactly the content this apply added at the start.
-                        let growth = tableView.contentSize.height - preApplyContentHeight
+                        // pin can't measure it and the settle would run from the
+                        // unpinned offset (the >9-line dive). Scroll it back into
+                        // the window inside this un-committed pass - which also
+                        // materialises the new row's REAL height; contentSize
+                        // arithmetic is estimate-poisoned for exactly that row -
+                        // and let the delta pin below do its usual exact fix.
                         // Strip before upstreaming: dip diagnostics.
-                        MXLog.info("SendTransition: arithmetic pin, growth=\(growth)")
-                        if growth != 0 {
-                            tableView.contentOffset.y += growth
-                        }
+                        MXLog.info("SendTransition: materialising the reference for the pin")
+                        tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+                        tableView.layoutIfNeeded()
                     }
+                    restoreSendTransitionPosition(reference)
                 }
             }
 
