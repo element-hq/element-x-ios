@@ -38,6 +38,19 @@ class TypingMembersObservableObject: ObservableObject {
     }
 }
 
+/// A table view that reports its layout passes, so the send transition can
+/// re-pin the timeline after ANY content-height change (e.g. the previous
+/// message's delivery status row animating away mid-transition), not just
+/// view-controller-level layout.
+private final class SendTransitionTableView: UITableView {
+    var onDidLayout: (() -> Void)?
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        onDidLayout?()
+    }
+}
+
 /// A table view controller that displays the timeline of a room.
 ///
 /// This class subclasses `UIViewController` as `UITableViewController` adds some
@@ -45,7 +58,7 @@ class TypingMembersObservableObject: ObservableObject {
 /// Also this TableViewController uses a **flipped tableview**
 class TimelineTableViewController: UIViewController {
     private let coordinator: TimelineViewRepresentable.Coordinator
-    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let tableView = SendTransitionTableView(frame: .zero, style: .plain)
     
     var timelineItemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>() {
         didSet {
@@ -228,6 +241,15 @@ class TimelineTableViewController: UIViewController {
         // The tableview is flipped to display the newest items at the bottom.
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         view.addSubview(tableView)
+
+        // Every table layout pass during a send transition re-pins the content:
+        // cell self-sizing (the previous message's status row animating away)
+        // and the collapse's view resizes must not move the timeline. The pin
+        // stops as soon as the transition ends so the settle drift can run.
+        tableView.onDidLayout = { [weak self] in
+            guard let self, let sendTransitionReference else { return }
+            restoreSendTransitionPosition(sendTransitionReference)
+        }
         
         // Prevents XCUITest from invoking the diffable dataSource's cellProvider
         // for each possible cell, causing layout issues
@@ -320,15 +342,6 @@ class TimelineTableViewController: UIViewController {
         tableView.frame = CGRect(origin: .zero, size: view.frame.size)
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // Layout passes during the transition (the collapse animating the view,
-        // or a cell's async self-sizing) must not move the pinned content.
-        if let sendTransitionReference {
-            restoreSendTransitionPosition(sendTransitionReference)
-        }
-    }
 
     // MARK: - Send transition
 
@@ -547,22 +560,24 @@ class TimelineTableViewController: UIViewController {
             }
 
             if newestItemIDChanged {
-                if let newestItemIdentifier,
-                   !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
-                   let indexPath = dataSource.indexPath(for: newestItemIdentifier),
-                   let cell = tableView.cellForRow(at: indexPath) {
-                    cell.alpha = 0
-                    UIView.animate(withDuration: 0.2) {
-                        cell.alpha = 1
+                // During a collapse the new message lands in the opening gap, so it
+                // fades in as the composer reveals it. Without one (single-line
+                // sends) it lands just below the visual bottom edge and the settle
+                // drift slides it in from the bottom instead - start that almost
+                // immediately, with a two-frame beat in case a racing collapse is
+                // about to begin.
+                if sendTransitionCollapseObserved {
+                    if let newestItemIdentifier,
+                       !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
+                       let indexPath = dataSource.indexPath(for: newestItemIdentifier),
+                       let cell = tableView.cellForRow(at: indexPath) {
+                        cell.alpha = 0
+                        UIView.animate(withDuration: 0.2) {
+                            cell.alpha = 1
+                        }
                     }
-                }
-
-                // With a collapse in flight the transition ends on the collapse's
-                // schedule (the fade runs in parallel with it). Otherwise wait one
-                // beat for a racing collapse to start - single-line sends never
-                // resize the view - and settle if none does.
-                if !sendTransitionCollapseObserved {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
                         guard let self, !sendTransitionCollapseObserved else { return }
                         endSendTransition()
                     }
