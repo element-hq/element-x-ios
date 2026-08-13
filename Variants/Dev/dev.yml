@@ -1,5 +1,5 @@
-# Dev-environment app variant: a SECOND installable app that talks to the dev
-# backend, so the shipping app (global.gua) can be a real production build.
+# QA app variant: a SECOND installable app that talks to the dev backend, so
+# the shipping app (global.gua) can be a real production build.
 #
 # Applied by `fastlane config_dev` (appends this file to project.yml's include
 # list, then regenerates), mirroring the upstream Nightly variant.
@@ -17,6 +17,8 @@ settings:
 
 targets:
   ElementX:
+    sources:
+      - path: Resources
     settings:
       base:
         # APP_DISPLAY_NAME has to be overridden per target, not in the settings
@@ -24,9 +26,31 @@ targets:
         # over its includes, so a top-level override here would be ignored.
         # It also becomes the OIDC client_name MAS sees, which usefully
         # distinguishes the two apps in the consent/session UI.
-        APP_DISPLAY_NAME: Gua Dev
+        APP_DISPLAY_NAME: Gua QA
+        # APP_NAME feeds PRODUCT_NAME and therefore CFBundleName, which is what
+        # Xcode prefills as the App Store Connect record name when it creates
+        # the app, so it must also say Gua QA.
+        APP_NAME: Gua QA
+        # Own icon: the Gua icon with a peeled-back corner revealing an Apple
+        # style blueprint, so the QA app is distinguishable at a glance in every
+        # home screen mode. The bundle id family stays global.gua.dev (renaming
+        # identifiers would orphan the existing app record); only user-visible
+        # names say QA.
+        ASSETCATALOG_COMPILER_APPICON_NAME: QAAppIcon
       configs:
         Release:
           # Point Release archives of this variant back at the dev backend. The
           # dev hosts are not committed; CI injects them into Secrets/Secrets.swift.
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) GUA_DEVELOPMENT"
+
+  # The hosted test targets derive TEST_HOST from $(APP_NAME); without these
+  # overrides they would look for Gua.app inside a build that produces
+  # Gua QA.app and fail to load. (Codex review catch on this PR.)
+  UnitTests:
+    settings:
+      base:
+        APP_NAME: Gua QA
+  PreviewTests:
+    settings:
+      base:
+        APP_NAME: Gua QA
