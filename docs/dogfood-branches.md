@@ -984,3 +984,55 @@ seconds logs an `error!` with the live-holder snapshot, repeating every
 changes (pending acquisitions keep their fair-queue position; nothing
 times out): a stall stays a bug, now surfaced loudly with names. The next
 occurrence identifies the cycle; the real fix follows from that.
+
+## Event cache wedge: candidate lock-contention theories
+
+Companion to the diagnostics entry above (`25ff0e827`), so the next
+occurrence can be read against the shortlist. Evidence timeline: the
+redecryptor went silent at 13:42:06.9Z, the room updates task at
+13:42:12.9 (in the threads-aggregation phase, right after a `find_event`),
+the backfill worker at 13:42:14.6 (just before applying a /messages
+response, i.e. just before its state write), and everything else queued
+behind. Ranked candidates:
+
+1. **Redecryptor holding a state guard across crypto work.** Best timing
+   fit: it stalled first, exactly while the encryption sync loop had the
+   OlmMachine and crypto store busy (keys/claim, to-device batches). If
+   any redecryptor path (`on_resolved_utds`, the retry loops,
+   `update_encryption_info_for_events`) holds a state guard while calling
+   `decrypt_event` / `get_encryption_info` / `push_context`, that one
+   held guard plus the backfill worker's queued write is the whole wedge:
+   the fair RwLock parks all later readers behind the queued writer. The
+   static read suggests the `all_*_events` helpers drop their guards
+   before the crypto calls, but not every path was audited.
+
+2. **A nested `read()` while already holding a read guard.** Three-party
+   shape: A holds a read guard and calls `read()` again, blocking on the
+   upgrade mutex; C holds the mutex inside `read()`, queued behind B's
+   pending write; B waits on A's first guard. One nested-read call site
+   anywhere suffices, and it also wedges every other `read()` via the
+   mutex. None found in the audited paths (aggregator, thread summaries,
+   receipts); subscriber/auto-shrink, pinned events, event-focused,
+   latest-events and the send queue's eager insert remain unaudited.
+
+3. **Cross-process store lock stalling inside an acquisition.** Every
+   state guard also acquires the store lock, and `read()` does so while
+   holding the upgrade mutex; a leaked in-process store-lock holder
+   presents identically. The NSE variant is ruled out for this incident
+   (idle since 13:24, lease would have expired).
+
+4. **Dirty-recovery reload under the write lock.** The unscoped
+   (`Ok(None)`) recovery path is log-silent and reloads all ~5.4k rooms
+   holding the write lock and upgrade mutex. Weakened because a running
+   reload would have emitted store timer lines and none appeared after
+   13:42:12.9.
+
+Ruled out from logs or code: threads-map/state ABBA and by_room ordering
+(both consistently ordered), the read-receipts hunt (fire-and-forget),
+linked-chunk update channel backpressure (broadcast, non-blocking send),
+NSE store-lock holding.
+
+The diagnostics distinguish these directly: candidate 1/2 shows as a
+long-held `state (read)` naming the owner span; candidate 3 as a stall on
+`store (read|write)` with no live holders; candidate 4 as a long-held
+`state (read, dirty upgrade)`.
