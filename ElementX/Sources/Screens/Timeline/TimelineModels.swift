@@ -270,8 +270,9 @@ struct TimelineState {
     var scrollToReadMarkerPublisher = PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>()
     /// Fired at the moment a message send begins, before the composer clears, so the
     /// table can run the send transition (pin the timeline over the composer's collapse
-    /// and fade the new message into the vacated slot instead of popping).
-    var sendTransitionPublisher = PassthroughSubject<Void, Never>()
+    /// and slide/fade the new message into the vacated slot instead of popping). The
+    /// value is the height the composer's collapse will hand back (0 for single-line).
+    var sendTransitionPublisher = PassthroughSubject<CGFloat, Never>()
     
     var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
     

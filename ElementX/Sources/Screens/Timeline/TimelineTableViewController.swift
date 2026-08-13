@@ -207,6 +207,12 @@ class TimelineTableViewController: UIViewController {
     /// Whether the composer collapse's animated resize has been observed while
     /// frozen (it never fires for single-line sends).
     private var sendTransitionCollapseObserved = false
+    /// The height the composer's collapse is expected to hand back, measured by
+    /// the composer at send time (0 for single-line sends).
+    private var sendTransitionExpectedDelta: CGFloat = 0
+    /// Whether the settle motion has started; the per-layout re-pin stops then
+    /// so it doesn't fight the deliberate scroll.
+    private var sendTransitionDriftStarted = false
     private var sendTransitionFallback: DispatchWorkItem?
     /// True from the start of a send transition until its settling scroll finishes.
     /// The pin and drift briefly leave a positive content offset, which would
@@ -222,7 +228,7 @@ class TimelineTableViewController: UIViewController {
          scrollToBottomPublisher: PassthroughSubject<Void, Never>,
          scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>,
          scrollToReadMarkerPublisher: PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>,
-         sendTransitionPublisher: PassthroughSubject<Void, Never>) {
+         sendTransitionPublisher: PassthroughSubject<CGFloat, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
         _isReadMarkerVisible = isReadMarkerVisible
@@ -247,7 +253,7 @@ class TimelineTableViewController: UIViewController {
         // and the collapse's view resizes must not move the timeline. The pin
         // stops as soon as the transition ends so the settle drift can run.
         tableView.onDidLayout = { [weak self] in
-            guard let self, let sendTransitionReference else { return }
+            guard let self, let sendTransitionReference, !sendTransitionDriftStarted else { return }
             restoreSendTransitionPosition(sendTransitionReference)
         }
         
@@ -274,8 +280,8 @@ class TimelineTableViewController: UIViewController {
             .store(in: &cancellables)
 
         sendTransitionPublisher
-            .sink { [weak self] in
-                self?.beginSendTransition()
+            .sink { [weak self] collapseHeight in
+                self?.beginSendTransition(expectedCollapseDelta: collapseHeight)
             }
             .store(in: &cancellables)
         
@@ -352,7 +358,7 @@ class TimelineTableViewController: UIViewController {
     /// and the echo applies in one compensated pass: old content pinned, the
     /// sent message fading into the vacated slot, and a final drift to the
     /// bottom for the residual.
-    private func beginSendTransition() {
+    private func beginSendTransition(expectedCollapseDelta: CGFloat) {
         guard isLive, !isSwitchingTimelines, isScrolledToBottom,
               !UIAccessibility.isReduceMotionEnabled,
               sendTransitionReference == nil,
@@ -364,6 +370,8 @@ class TimelineTableViewController: UIViewController {
         sendTransitionIsSettling = true
         sendTransitionFrameFrozen = true
         sendTransitionCollapseObserved = false
+        sendTransitionExpectedDelta = expectedCollapseDelta
+        sendTransitionDriftStarted = false
 
         // Freeze the table OVERSIZED so the sent message's row is materialised
         // even though it lands beyond the old bottom edge: it renders behind the
@@ -389,27 +397,37 @@ class TimelineTableViewController: UIViewController {
     /// when the sent message lands, so pinning the bottom edge would drop the
     /// bubble by the status row's height.
     private func restoreSendTransitionPosition(_ reference: Layout) {
-        guard let frame = cellFrame(for: reference.id.uniqueID) else { return }
+        guard let frame = cellFrame(for: reference.id.uniqueID) else {
+            MXLog.info("SendTransition: restore found no cell for \(reference.id.uniqueID)")
+            return
+        }
         let deltaY = frame.minY - reference.frame.minY
+        // Strip before upstreaming: dip diagnostics.
+        MXLog.info("SendTransition: restore delta=\(deltaY) offset=\(tableView.contentOffset.y) tableH=\(tableView.frame.height) viewH=\(view.frame.height)")
         if deltaY != 0 {
             tableView.contentOffset.y -= deltaY
         }
     }
 
     /// Ends the transition: the table's frame catches up with the view in one
-    /// compensated pass, then any residual offset drifts to bottom-pinned.
+    /// compensated pass, then the offset settles to bottom-pinned.
     private func endSendTransition() {
         sendTransitionFallback?.cancel()
         sendTransitionFallback = nil
-        guard let reference = sendTransitionReference else { return }
+        guard sendTransitionReference != nil else { return }
         sendTransitionReference = nil
 
         if sendTransitionFrameFrozen {
             sendTransitionFrameFrozen = false
             UIView.performWithoutAnimation {
+                // Pin whatever is on screen NOW across the frame swap (mid-settle
+                // the content has legitimately moved off the send-time reference).
+                let current = snapshotLayout()
                 tableView.frame = CGRect(origin: .zero, size: view.frame.size)
                 tableView.layoutIfNeeded()
-                restoreSendTransitionPosition(reference)
+                if let current {
+                    restoreSendTransitionPosition(current)
+                }
             }
         }
 
@@ -418,9 +436,25 @@ class TimelineTableViewController: UIViewController {
             sendTransitionIsSettling = false
             return
         }
-        // setContentOffset rather than UIView.animate so a user touch can interrupt.
-        // sendTransitionIsSettling clears when the animation ends (or a drag starts).
-        tableView.setContentOffset(CGPoint(x: 0, y: target), animated: true)
+        settle(to: target)
+    }
+
+    /// Animates the content offset with an ease-out curve so the motion reads as
+    /// an immediate response to the send rather than winding up. A beginning
+    /// drag cancels it (``scrollViewWillBeginDragging``).
+    private func settle(to target: CGFloat) {
+        sendTransitionDriftStarted = true
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut, .allowUserInteraction, .beginFromCurrentState]) {
+            self.tableView.contentOffset.y = target
+        } completion: { [weak self] _ in
+            guard let self, sendTransitionReference == nil else { return }
+            sendTransitionIsSettling = false
+            sendLastVisibleItemReadReceipt()
+        }
+    }
+
+    private func settle(by delta: CGFloat) {
+        settle(to: tableView.contentOffset.y + delta)
     }
     
     /// Configures a diffable data source for the timeline's table view.
@@ -560,27 +594,34 @@ class TimelineTableViewController: UIViewController {
             }
 
             if newestItemIDChanged {
-                // During a collapse the new message lands in the opening gap, so it
-                // fades in as the composer reveals it. Without one (single-line
-                // sends) it lands just below the visual bottom edge and the settle
-                // drift slides it in from the bottom instead - start that almost
-                // immediately, with a two-frame beat in case a racing collapse is
-                // about to begin.
-                if sendTransitionCollapseObserved {
-                    if let newestItemIdentifier,
-                       !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
-                       let indexPath = dataSource.indexPath(for: newestItemIdentifier),
-                       let cell = tableView.cellForRow(at: indexPath) {
+                let expectsCollapse = sendTransitionExpectedDelta > 1
+
+                var newCellHeight: CGFloat = 0
+                if let newestItemIdentifier,
+                   !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
+                   let indexPath = dataSource.indexPath(for: newestItemIdentifier) {
+                    newCellHeight = tableView.rectForRow(at: indexPath).height
+                    if expectsCollapse, let cell = tableView.cellForRow(at: indexPath) {
+                        // The collapse reveals the slot; fade the message in as it does.
                         cell.alpha = 0
                         UIView.animate(withDuration: 0.2) {
                             cell.alpha = 1
                         }
                     }
-                } else {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
-                        guard let self, !sendTransitionCollapseObserved else { return }
-                        endSendTransition()
+                }
+
+                if expectsCollapse {
+                    // Start the residual rise now, in parallel with the collapse (the
+                    // message is taller than the space the composer hands back); the
+                    // transition's end trues it up against the final layout.
+                    let residual = newCellHeight - sendTransitionExpectedDelta
+                    if abs(residual) > 1 {
+                        settle(by: -residual)
                     }
+                } else {
+                    // No collapse coming: settle immediately - the new message
+                    // slides in from below the bottom edge.
+                    endSendTransition()
                 }
             }
         } else {
@@ -816,9 +857,17 @@ extension TimelineTableViewController: UITableViewDelegate {
         scrollViewIsScrolling = true
 
         // The user took over - don't yank the viewport back to the focussed row,
-        // and settle any in-flight send transition.
+        // and settle any in-flight send transition, handing the scroll position
+        // over at its currently rendered value.
         focusRefinementIndexPath = nil
-        sendTransitionIsSettling = false
+        if sendTransitionIsSettling {
+            sendTransitionIsSettling = false
+            if let presentation = tableView.layer.presentation() {
+                let offset = presentation.bounds.origin
+                tableView.layer.removeAllAnimations()
+                tableView.contentOffset = offset
+            }
+        }
         endSendTransition()
     }
     

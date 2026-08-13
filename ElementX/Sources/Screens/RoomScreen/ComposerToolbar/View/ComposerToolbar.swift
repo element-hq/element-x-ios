@@ -19,6 +19,7 @@ struct ComposerToolbar: View {
     
     @FocusState private var composerFocused: Bool
     @State private var frame: CGRect = .zero
+    @State private var collapseBaselineHeight: CGFloat?
     
     /// - When Liquid Glass is available, the buttons and composer are all 44pt x 44pt.
     /// - On iOS 18 and below, the main buttons are 30pt x 30pt and the composer is 42pt high, so some
@@ -60,6 +61,16 @@ struct ComposerToolbar: View {
             }
         }
         .readFrame($frame)
+        .onChange(of: frame.height) { _, newHeight in
+            // Baseline = the toolbar's height with an empty default-mode composer.
+            // Everything above it (grown text, a reply header) is what the
+            // post-send collapse will hand back to the timeline.
+            if !context.viewState.showSendButton, context.viewState.composerMode == .default {
+                collapseBaselineHeight = newHeight
+            }
+            guard let collapseBaselineHeight else { return }
+            context.composerCollapseExtraHeight = max(0, newHeight - collapseBaselineHeight)
+        }
         .safeAreaInset(edge: .top) {
             if !context.viewState.isRoomEncrypted {
                 Label {

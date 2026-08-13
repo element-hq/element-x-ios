@@ -198,7 +198,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
                                                      html: wysiwygViewModel.content.html,
                                                      mode: state.composerMode,
-                                                     intentionalMentions: wysiwygViewModel.getMentionsState().toIntentionalMentions()))
+                                                     intentionalMentions: wysiwygViewModel.getMentionsState().toIntentionalMentions(),
+                                                     composerCollapseHeight: state.bindings.composerCollapseExtraHeight))
                 } else {
                     sendPlainComposerText()
                 }
@@ -460,7 +461,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         let plainComposerContent = plainComposerContent
         actionsSubject.send(.sendMessage(plain: plainComposerContent.text, html: nil,
                                          mode: state.composerMode,
-                                         intentionalMentions: .init(userIDs: plainComposerContent.mentionedUserIDs, atRoom: plainComposerContent.containsAtRoomMention)))
+                                         intentionalMentions: .init(userIDs: plainComposerContent.mentionedUserIDs, atRoom: plainComposerContent.containsAtRoomMention),
+                                         composerCollapseHeight: state.bindings.composerCollapseExtraHeight))
     }
     
     private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {

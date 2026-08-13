@@ -24,7 +24,7 @@ enum ComposerToolbarVoiceMessageAction {
 }
 
 enum ComposerToolbarViewModelAction {
-    case sendMessage(plain: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions)
+    case sendMessage(plain: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions, composerCollapseHeight: CGFloat)
     case editLastMessage
     case attach(ComposerAttachmentType)
     
@@ -149,8 +149,14 @@ struct ComposerToolbarViewStateBindings {
     var formatItems: [FormatItem] = .init()
     var alertInfo: AlertInfo<UUID>?
     var selectedRange = NSRange(location: 0, length: 0)
-    
+
     var presendCallback: (() -> Void)?
+
+    /// How much taller the composer currently is than its empty single-line
+    /// baseline (grown text and/or a reply header). Measured by the view;
+    /// carried with sends so the timeline knows how much space the composer's
+    /// post-send collapse will hand back before the collapse happens.
+    var composerCollapseExtraHeight: CGFloat = 0
 }
 
 /// An item in the toolbar
