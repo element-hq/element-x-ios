@@ -8,7 +8,7 @@
 
 import Foundation
 
-nonisolated enum EventBasedMessageTimelineItemContentType: Hashable {
+nonisolated enum EventBasedMessageTimelineItemContentType: Hashable, CustomStringConvertible {
     case audio(AudioRoomTimelineItemContent)
     case emote(EmoteRoomTimelineItemContent)
     case file(FileRoomTimelineItemContent)
@@ -19,6 +19,31 @@ nonisolated enum EventBasedMessageTimelineItemContentType: Hashable {
     case location(LocationRoomTimelineItemContent)
     case voice(AudioRoomTimelineItemContent)
     case gallery(GalleryRoomTimelineItemContent)
+    
+    var description: String {
+        switch self {
+        case .audio:
+            "audio"
+        case .emote:
+            "emote"
+        case .file:
+            "file"
+        case .image:
+            "image"
+        case .notice:
+            "notice"
+        case .text:
+            "text"
+        case .video:
+            "video"
+        case .location:
+            "location"
+        case .voice:
+            "voice"
+        case .gallery:
+            "gallery"
+        }
+    }
 }
 
 nonisolated protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
