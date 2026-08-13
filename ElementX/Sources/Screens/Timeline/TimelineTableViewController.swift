@@ -633,10 +633,26 @@ class TimelineTableViewController: UIViewController {
             // (delivery status, receipts) go unpinned rather than yanking the
             // content back (the bounce).
             UIView.performWithoutAnimation {
+                let preApplyContentHeight = tableView.contentSize.height
                 dataSource.apply(snapshot, animatingDifferences: false)
                 tableView.layoutIfNeeded()
                 if !sendTransitionDriftStarted {
-                    restoreSendTransitionPosition(reference)
+                    if cellFrame(for: reference.id.uniqueID) != nil {
+                        restoreSendTransitionPosition(reference)
+                    } else {
+                        // A message taller than the frame oversize pushes the
+                        // reference cell beyond the materialised window, so the
+                        // cell-based pin can't see it - without this the settle
+                        // then runs from the unpinned offset and moves the WRONG
+                        // way (the >9-line dive). Compensate arithmetically for
+                        // exactly the content this apply added at the start.
+                        let growth = tableView.contentSize.height - preApplyContentHeight
+                        // Strip before upstreaming: dip diagnostics.
+                        MXLog.info("SendTransition: arithmetic pin, growth=\(growth)")
+                        if growth != 0 {
+                            tableView.contentOffset.y += growth
+                        }
+                    }
                 }
             }
 
