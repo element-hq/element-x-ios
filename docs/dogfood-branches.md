@@ -663,6 +663,80 @@ See the test jig that Fable built to diagnose this at https://github.com/element
   fully monotonic in the harness incl. image-sized bubbles either side of the
   transition. Upstreamable together with the reconfigure
   [`66bea662f`](https://github.com/element-hq/element-x-ios/commit/66bea662f)
+#### Fixing blocks of sends which vanish and then reappear 10s of seconds later
+
+This bug has been around since the event cache landed, i think.
+
+- Diagnostics for own sends vanishing after a limited gappy sync (2026-08-12
+  20:35 local, Self DM): four just-sent messages left the visible timeline for
+  ~19s until the next sync re-delivered them. Trigger fully established (bad
+  network delays the long-poll → the room comes back limited with a new gap
+  whose batch is exactly the just-sent tail → dedup remove + re-append +
+  `shrink_to_last_reloaded_chunk`), but every rust layer checks out under new
+  regression tests (event cache emits `[Clear, Append]`, timeline + lazy skip
+  subscriber deliver a faithful view), so the loss is between the FFI hop and
+  the app's table. Both sides now log each timeline diff batch at info level so
+  a rageshake can pair them up: SDK
+  [`6f60ba2e3`](https://github.com/matrix-org/matrix-rust-sdk/commit/6f60ba2e3)
+  ("timeline listener: forwarding diffs" + regression tests), EXI
+  [`365c091af`](https://github.com/element-hq/element-x-ios/commit/365c091af)
+  ("Timeline(kind) applied ..."). The EXI commit also implements the previously
+  ignored `.truncate` diff (silent desync if one ever arrives; nothing emits it
+  today). To validate: burst-send on a poor connection, watch for the vanish,
+  rageshake immediately
+- ROOT CAUSE FOUND + FIXED for the vanishing own sends: the instrumented repro
+  (2026-08-12 23:01, 10 sends, ~5 vanished 11.5s) showed the FFI forwarding
+  `[Clear, PushBack x20]` then `PushBack x10` with no removes - the rebuild
+  never contained the sends, so the loss was in the event cache, not the app.
+  The long-poll response was stale: generated before the sends completed but
+  delivered after them, limited+gappy with a batch of only older events. The
+  all-duplicates early return requires a foreign sender, so the all-own stale
+  batch fell through to the gap+shrink path and the newer tail fell behind the
+  gap. Fix: ignore batches that are entirely known events and don't contain
+  the newest in-memory event (such a response describes a server view older
+  than local state); batches containing the tail keep today's behaviour.
+  Regression test drops exactly the tail sends without the fix. Upstream this
+  together with the diagnostics commit
+  [SDK `6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)
+
+#### Crash if the user stabs the send button too fast as it switches between send and VM
+
+- Crash + missing crash prompt fixed (2026-08-13, from the 22:19 rageshake,
+  Sentry `4671176f84f8`): a send action racing the start of a voice recording
+  reached `TimelineViewModel.sendCurrentMessage` with mode `.recordVoiceMessage`
+  and hit `fatalError("invalid composer mode.")`. The composer view model now
+  ignores sends while recording and the fatalError is an error log. Separately,
+  the "app crashed, submit report?" prompt never appeared because
+  `HomeScreenCoordinator.start()` sampled `lastCrashEventID` once, ~76ms before
+  Sentry's `onCrashedLastRun` callback set it (fast warm relaunches reliably
+  win that race); the ID is now a `CurrentValuePublisher` and the alert is
+  presented when it first becomes non-nil. Both upstreamable. EXI
+  [`e8b28d5ef`](https://github.com/element-hq/element-x-ios/commit/e8b28d5ef).
+  The same rageshake showed the post-crash flavour of the stale-sync-batch
+  vanish (first sync after relaunch uses the pre-crash pos while the send queue
+  is still re-sending), covered by SDK `6532fc2be` above; the send queue itself
+  behaved (both pending messages restored and re-sent, nothing lost)
+
+#### Stop the first tap after a "Loading..." modal being silently swallowed
+
+- Systematically reproduced as "the first back press (or scroll) after
+  opening a thread from the room list does nothing, the second works" - and
+  pinned by dogfood observation: waiting an extra ~500ms avoided it. A
+  retracted indicator lingers for the rest of `minimumDisplayDuration`
+  (0.5s) so it doesn't flash, but it kept its scrim and the overlay window's
+  interactivity for that whole window, so any tap during the linger hit a
+  scrim whose cancel action had nothing left to cancel. The controller now
+  tracks retracting indicators: the pill still fades over the linger, but
+  the scrim is removed and the overlay window stops intercepting the moment
+  the retract begins. (An earlier attempt disabling window interaction only
+  once no indicator was active -
+  [EXI `1f669f332`](https://github.com/element-hq/element-x-ios/commit/1f669f332)
+  - kept as a belt, was too late to help.) Window-level touch logging landed
+  alongside for future swallowed-tap hunts
+  ([EXI `7ff0ea3fb`](https://github.com/element-hq/element-x-ios/commit/7ff0ea3fb),
+  strip before upstreaming). Upstreamable.
+
+
 #### The send transition: no more composer-collapse pop
 
 Sending a multiline message popped the whole timeline: clearing the composer
@@ -673,6 +747,18 @@ delta and the echo's insert pushed it back up ~100ms later. Replaced with a
 Signal-style send transition, iterated over 13 commits of phone dogfooding +
 device-log forensics (2026-08-13). Sends + replies only; edits/voice/media keep
 today's behaviour; reduce-motion skips it entirely.
+
+**How the fix works, in one breath**: when you tap send, the composer tells the
+timeline exactly how much height its collapse is about to hand back (it
+measures itself against its empty baseline). The timeline pins itself in place
+- freezing its frame and compensating its scroll offset - so neither the
+composer's animated collapse nor the echo's insertion can shove it around;
+the sent message is laid out early behind the composer's opaque background and
+is revealed as the composer shrinks, fading in, while a single ease-out scroll
+carries the timeline up by exactly the leftover (the message being taller than
+the space handed back) to the final resting position, which is computed up
+front rather than discovered afterwards. Single-line sends need none of this
+choreography and use the stock insert animation. The details:
 
 **Final architecture** (all in `TimelineTableViewController` + small hooks):
 
@@ -770,76 +856,3 @@ on-device pin-delta logs; the dead ends are as valuable as the fixes:
 Before upstreaming: strip the `SendTransition: restore` MXLog diagnostics in
 `restoreSendTransitionPosition`. Upstreamable as a whole; the composer-side
 pieces (measured delta, growth tween, caret-scroll suppression) stand alone.
-
-#### Fixing blocks of sends which vanish and then reappear 10s of seconds later
-
-This bug has been around since the event cache landed, i think.
-
-- Diagnostics for own sends vanishing after a limited gappy sync (2026-08-12
-  20:35 local, Self DM): four just-sent messages left the visible timeline for
-  ~19s until the next sync re-delivered them. Trigger fully established (bad
-  network delays the long-poll → the room comes back limited with a new gap
-  whose batch is exactly the just-sent tail → dedup remove + re-append +
-  `shrink_to_last_reloaded_chunk`), but every rust layer checks out under new
-  regression tests (event cache emits `[Clear, Append]`, timeline + lazy skip
-  subscriber deliver a faithful view), so the loss is between the FFI hop and
-  the app's table. Both sides now log each timeline diff batch at info level so
-  a rageshake can pair them up: SDK
-  [`6f60ba2e3`](https://github.com/matrix-org/matrix-rust-sdk/commit/6f60ba2e3)
-  ("timeline listener: forwarding diffs" + regression tests), EXI
-  [`365c091af`](https://github.com/element-hq/element-x-ios/commit/365c091af)
-  ("Timeline(kind) applied ..."). The EXI commit also implements the previously
-  ignored `.truncate` diff (silent desync if one ever arrives; nothing emits it
-  today). To validate: burst-send on a poor connection, watch for the vanish,
-  rageshake immediately
-- ROOT CAUSE FOUND + FIXED for the vanishing own sends: the instrumented repro
-  (2026-08-12 23:01, 10 sends, ~5 vanished 11.5s) showed the FFI forwarding
-  `[Clear, PushBack x20]` then `PushBack x10` with no removes - the rebuild
-  never contained the sends, so the loss was in the event cache, not the app.
-  The long-poll response was stale: generated before the sends completed but
-  delivered after them, limited+gappy with a batch of only older events. The
-  all-duplicates early return requires a foreign sender, so the all-own stale
-  batch fell through to the gap+shrink path and the newer tail fell behind the
-  gap. Fix: ignore batches that are entirely known events and don't contain
-  the newest in-memory event (such a response describes a server view older
-  than local state); batches containing the tail keep today's behaviour.
-  Regression test drops exactly the tail sends without the fix. Upstream this
-  together with the diagnostics commit
-  [SDK `6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)
-
-#### Crash if the user stabs the send button too fast as it switches between send and VM
-
-- Crash + missing crash prompt fixed (2026-08-13, from the 22:19 rageshake,
-  Sentry `4671176f84f8`): a send action racing the start of a voice recording
-  reached `TimelineViewModel.sendCurrentMessage` with mode `.recordVoiceMessage`
-  and hit `fatalError("invalid composer mode.")`. The composer view model now
-  ignores sends while recording and the fatalError is an error log. Separately,
-  the "app crashed, submit report?" prompt never appeared because
-  `HomeScreenCoordinator.start()` sampled `lastCrashEventID` once, ~76ms before
-  Sentry's `onCrashedLastRun` callback set it (fast warm relaunches reliably
-  win that race); the ID is now a `CurrentValuePublisher` and the alert is
-  presented when it first becomes non-nil. Both upstreamable. EXI
-  [`e8b28d5ef`](https://github.com/element-hq/element-x-ios/commit/e8b28d5ef).
-  The same rageshake showed the post-crash flavour of the stale-sync-batch
-  vanish (first sync after relaunch uses the pre-crash pos while the send queue
-  is still re-sending), covered by SDK `6532fc2be` above; the send queue itself
-  behaved (both pending messages restored and re-sent, nothing lost)
-
-#### Stop the first tap after a "Loading..." modal being silently swallowed
-
-- Systematically reproduced as "the first back press (or scroll) after
-  opening a thread from the room list does nothing, the second works" - and
-  pinned by dogfood observation: waiting an extra ~500ms avoided it. A
-  retracted indicator lingers for the rest of `minimumDisplayDuration`
-  (0.5s) so it doesn't flash, but it kept its scrim and the overlay window's
-  interactivity for that whole window, so any tap during the linger hit a
-  scrim whose cancel action had nothing left to cancel. The controller now
-  tracks retracting indicators: the pill still fades over the linger, but
-  the scrim is removed and the overlay window stops intercepting the moment
-  the retract begins. (An earlier attempt disabling window interaction only
-  once no indicator was active -
-  [EXI `1f669f332`](https://github.com/element-hq/element-x-ios/commit/1f669f332)
-  - kept as a belt, was too late to help.) Window-level touch logging landed
-  alongside for future swallowed-tap hunts
-  ([EXI `7ff0ea3fb`](https://github.com/element-hq/element-x-ios/commit/7ff0ea3fb),
-  strip before upstreaming). Upstreamable.
