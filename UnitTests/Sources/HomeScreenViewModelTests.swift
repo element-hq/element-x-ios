@@ -432,6 +432,7 @@ final class HomeScreenViewModelTests {
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         appSettings: appSettings,
                                         analyticsService: AnalyticsServiceMock(.init()),
+                                        bugReportService: BugReportServiceMock(.init()),
                                         notificationManager: notificationManager,
                                         userIndicatorController: UserIndicatorControllerMock())
     }
