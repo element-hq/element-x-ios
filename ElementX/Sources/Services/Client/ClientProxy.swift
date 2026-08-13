@@ -1177,7 +1177,8 @@ class ClientProxy: ClientProxyProtocol {
             
             // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
-            await cacheAccountURL()
+            // Fire and forget as it might hit the network.
+            Task { await cacheAccountURL() }
             
             // Nudge the send queue listener to re-evaluate now that we're running; a resume doesn't otherwise
             // emit, and the SDK only re-enables queues when client.resume() runs (gated behind the flag).
