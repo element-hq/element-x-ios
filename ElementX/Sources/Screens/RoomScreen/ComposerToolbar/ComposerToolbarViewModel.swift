@@ -275,6 +275,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             if let draft = draftService.loadVolatileDraft() {
                 handleLoadDraft(draft)
                 draftService.clearVolatileDraft()
+            } else if UIAccessibility.isReduceMotionEnabled {
+                set(mode: .default)
+                set(text: "")
             } else {
                 // Animated so a multiline composer tweens back down to a single
                 // line after sending; the content is already blank so only the
