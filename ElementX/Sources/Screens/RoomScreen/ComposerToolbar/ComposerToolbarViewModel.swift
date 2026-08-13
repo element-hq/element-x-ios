@@ -276,8 +276,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 handleLoadDraft(draft)
                 draftService.clearVolatileDraft()
             } else {
-                set(mode: .default)
-                set(text: "")
+                // Animated so a multiline composer tweens back down to a single
+                // line after sending; the content is already blank so only the
+                // height change animates.
+                withAnimation(.easeOut(duration: 0.2)) {
+                    set(mode: .default)
+                    set(text: "")
+                }
             }
         }
     }

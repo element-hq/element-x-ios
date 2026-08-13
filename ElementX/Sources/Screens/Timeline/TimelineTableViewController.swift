@@ -51,9 +51,17 @@ class TimelineTableViewController: UIViewController {
         didSet {
             guard canApplySnapshot else {
                 hasPendingItems = true
+                // Probably the echo arriving mid send transition: give a racing
+                // composer collapse a beat to start, then unfreeze and apply if
+                // none did (single-line sends never resize the view).
+                if sendTransitionFrameFrozen {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+                        self?.attemptSendTransitionUnfreeze(collapseCompleted: false)
+                    }
+                }
                 return
             }
-            
+
             applySnapshot()
             
             if timelineItemsDictionary.isEmpty {
@@ -66,7 +74,12 @@ class TimelineTableViewController: UIViewController {
     
     /// Whether or not it is safe to update the data source with the latest items.
     private var canApplySnapshot: Bool {
-        if isLive {
+        // While a send transition has the table's frame frozen, applies wait for
+        // the unfreeze (which consumes hasPendingItems in a compensated pass).
+        guard !sendTransitionFrameFrozen else {
+            return false
+        }
+        return if isLive {
             // Backward pagination jumps if items are inserted whilst actively dragging.
             !isDraggingScrollView
         } else {
@@ -185,18 +198,21 @@ class TimelineTableViewController: UIViewController {
     /// reference so the composer's height collapse can't move it, and the sent
     /// message fades into the vacated slot instead of shoving everything around.
     private var sendTransitionReference: Layout?
-    /// Snapshot of the composer taken just before the send cleared it, tweened
-    /// shut over the (instant) collapse so it reads as a smooth animation.
-    /// Paired with the view height at capture time to measure the collapse delta.
-    private var sendTransitionOverlay: (view: UIView, viewHeight: CGFloat)?
+    /// While true, the table stops tracking the view's size: the composer's
+    /// animated collapse resizes the view every frame, and the flipped table's
+    /// content is glued to its frame's bottom edge, so following the resize
+    /// would drag the timeline down with it. The frame catches up in one
+    /// compensated pass when the collapse finishes.
+    private var sendTransitionFrameFrozen = false
+    /// Whether the composer collapse's animated resize has been observed while
+    /// frozen (it never fires for single-line sends).
+    private var sendTransitionCollapseObserved = false
     private var sendTransitionFallback: DispatchWorkItem?
     /// True from the start of a send transition until its settling scroll finishes.
     /// The pin and drift briefly leave a positive content offset, which would
     /// otherwise read as "scrolled away from the bottom" and flash the
     /// jump-to-bottom button on every send.
     private var sendTransitionIsSettling = false
-    /// The keyboard's frame, tracked so the composer snapshot never includes it.
-    private var keyboardFrame: CGRect = .null
 
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
@@ -253,12 +269,6 @@ class TimelineTableViewController: UIViewController {
                 self?.beginSendTransition()
             }
             .store(in: &cancellables)
-
-        NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)
-            .sink { [weak self] notification in
-                self?.keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .null
-            }
-            .store(in: &cancellables)
         
         paginatePublisher
             .collect(.byTime(DispatchQueue.main, 0.1))
@@ -307,55 +317,53 @@ class TimelineTableViewController: UIViewController {
             return
         }
 
+        if sendTransitionFrameFrozen {
+            // The composer's animated collapse is resizing the view; hold the
+            // table (and its bottom-glued content) still and catch up in one
+            // compensated pass once the animation completes.
+            if !sendTransitionCollapseObserved {
+                sendTransitionCollapseObserved = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                    self?.attemptSendTransitionUnfreeze(collapseCompleted: true)
+                }
+            }
+            return
+        }
+
         tableView.frame = CGRect(origin: .zero, size: view.frame.size)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        if let sendTransitionReference {
-            animateSendTransitionOverlayIfNeeded()
+        // Once unfrozen but still transitioning, stray layout passes can clamp
+        // the compensated offset - re-pin.
+        if let sendTransitionReference, !sendTransitionFrameFrozen {
             restoreSendTransitionPosition(sendTransitionReference)
         }
     }
 
     // MARK: - Send transition
 
-    /// Starts a send transition: captures the current layout and a snapshot of the
-    /// composer so that when the composer clears (an instant layout jump that would
-    /// otherwise pop the bottom-pinned timeline down by the collapse delta) the
-    /// timeline stays pinned, the snapshot animates the collapse smoothly, and the
-    /// sent message fades into the vacated slot with a final drift to the bottom.
+    /// Starts a send transition: the composer clears with an animated height
+    /// collapse (ComposerToolbarViewModel), and following that resize would drag
+    /// the bottom-glued timeline down with it, so the table's frame freezes for
+    /// the duration instead. When the collapse completes the frame catches up
+    /// and the echo applies in one compensated pass: old content pinned, the
+    /// sent message fading into the vacated slot, and a final drift to the
+    /// bottom for the residual.
     private func beginSendTransition() {
         guard isLive, !isSwitchingTimelines, isScrolledToBottom,
               !UIAccessibility.isReduceMotionEnabled,
               sendTransitionReference == nil,
-              let window = view.window,
               let reference = snapshotLayout() else {
             return
         }
 
         sendTransitionReference = reference
         sendTransitionIsSettling = true
-
-        // Snapshot the region between the timeline and the keyboard (the composer)
-        // before the clear renders. Cap insets keep the field's top chrome and the
-        // bottom row (last text line + buttons) unstretched while the middle
-        // squishes, so animating the snapshot's frame shut reads as the composer
-        // genuinely tweening back to its single-line shape - the top border rides
-        // the shrinking edge - rather than a clipped vertical wipe.
-        let tableBottom = view.convert(view.bounds, to: window).maxY
-        let keyboardTop = keyboardFrame.isNull ? window.bounds.maxY : max(tableBottom, window.convert(keyboardFrame, from: window.screen.coordinateSpace).minY)
-        let composerRect = CGRect(x: 0, y: tableBottom, width: window.bounds.width, height: keyboardTop - tableBottom)
-        if composerRect.height > 0,
-           let snapshot = window.resizableSnapshotView(from: composerRect,
-                                                      afterScreenUpdates: false,
-                                                      withCapInsets: UIEdgeInsets(top: 16, left: 0, bottom: 40, right: 0)) {
-            snapshot.frame = composerRect
-            snapshot.isUserInteractionEnabled = false
-            window.addSubview(snapshot)
-            sendTransitionOverlay = (snapshot, view.frame.height)
-        }
+        sendTransitionFrameFrozen = true
+        sendTransitionCollapseObserved = false
 
         // If the echo never lands (send failure, slash command), settle anyway.
         let fallback = DispatchWorkItem { [weak self] in
@@ -365,25 +373,33 @@ class TimelineTableViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: fallback)
     }
 
-    /// Called on the layout pass where the composer's collapse jump lands: the view
-    /// grew by the collapse delta, so tween the (cap-inset) snapshot's frame shut
-    /// by the same amount - the composer visually shrinks back to a single line -
-    /// with a short cross-fade at the end to swap in the real (empty) composer.
-    private func animateSendTransitionOverlayIfNeeded() {
-        guard let (overlay, capturedHeight) = sendTransitionOverlay else { return }
-        let delta = view.frame.height - capturedHeight
-        guard delta > 0 else { return }
-        sendTransitionOverlay = nil
-        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut]) {
-            overlay.frame = CGRect(x: overlay.frame.minX,
-                                   y: overlay.frame.minY + delta,
-                                   width: overlay.frame.width,
-                                   height: overlay.frame.height - delta)
+    /// Unfreezes the table's frame once it is safe to: either the composer's
+    /// collapse animation completed, or the echo arrived without any collapse
+    /// being observed (single-line sends never resize). Bails if a collapse is
+    /// still in flight - its own completion call will do the work.
+    private func attemptSendTransitionUnfreeze(collapseCompleted: Bool) {
+        guard sendTransitionFrameFrozen else { return }
+        if !collapseCompleted, sendTransitionCollapseObserved {
+            return
         }
-        UIView.animate(withDuration: 0.1, delay: 0.15, options: [.curveEaseInOut]) {
-            overlay.alpha = 0
-        } completion: { _ in
-            overlay.removeFromSuperview()
+        unfreezeSendTransition()
+    }
+
+    /// Catches the table's frame up with the view and re-pins the content, then
+    /// applies any items that arrived while frozen (running the pinned apply).
+    private func unfreezeSendTransition() {
+        guard sendTransitionFrameFrozen else { return }
+        sendTransitionFrameFrozen = false
+
+        UIView.performWithoutAnimation {
+            tableView.frame = CGRect(origin: .zero, size: view.frame.size)
+            if hasPendingItems {
+                hasPendingItems = false
+                applySnapshot()
+            } else if let sendTransitionReference {
+                tableView.layoutIfNeeded()
+                restoreSendTransitionPosition(sendTransitionReference)
+            }
         }
     }
 
@@ -406,10 +422,9 @@ class TimelineTableViewController: UIViewController {
         guard sendTransitionReference != nil else { return }
         sendTransitionReference = nil
 
-        if let (overlay, _) = sendTransitionOverlay {
-            // The composer never changed height (e.g. a single-line send).
-            sendTransitionOverlay = nil
-            overlay.removeFromSuperview()
+        if sendTransitionFrameFrozen {
+            sendTransitionFrameFrozen = false
+            tableView.frame = CGRect(origin: .zero, size: view.frame.size)
         }
 
         let target = min(-1, -tableView.adjustedContentInset.top)
