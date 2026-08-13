@@ -663,24 +663,113 @@ See the test jig that Fable built to diagnose this at https://github.com/element
   fully monotonic in the harness incl. image-sized bubbles either side of the
   transition. Upstreamable together with the reconfigure
   [`66bea662f`](https://github.com/element-hq/element-x-ios/commit/66bea662f)
-- Follow-up: sending a multiline message popped the whole timeline. Clearing the
-  composer shrinks the bottom inset in one unanimated pass (the harness showed
-  SwiftUI turns the safeAreaInset into a frame resize of the table, whose flipped
-  content is glued to the frame's bottom edge), so the timeline dropped by the
-  collapse delta and the echo's insert pushed it back up ~100ms later. Now a
-  Signal-style send transition (prototyped + pixel-validated in the harness,
-  bubbleanim `9a5a67b`): the timeline pins itself over the collapse jump, a
-  clipping snapshot of the old composer tweens shut (buttons pinned, field top
-  edge animating down, late cross-fade), the echo applies without row animations
-  and fades into the vacated slot, and the residual drifts to bottom-pinned in
-  one interruptible scroll - the history never moves down at any frame. Dead end
-  recorded in the harness: genuinely animating the collapse through the layout
-  system and pinning per pass renders inconsistently (the scroll view clamps the
-  overscrolled offset on every animated frame set), hence snapshot-overlay.
-  Typing across a line boundary also animates now (the growth previously popped
-  too). Sends + replies only; edits/voice keep today's behaviour; reduce-motion
-  skips it. Upstreamable
-  [`0bbbfe5e4`](https://github.com/element-hq/element-x-ios/commit/0bbbfe5e4)
+#### The send transition: no more composer-collapse pop
+
+Sending a multiline message popped the whole timeline: clearing the composer
+shrinks the bottom inset in one unanimated pass (the harness showed SwiftUI
+turns the safeAreaInset into a frame resize of the table, whose flipped content
+is glued to the frame's bottom edge), so the timeline dropped by the collapse
+delta and the echo's insert pushed it back up ~100ms later. Replaced with a
+Signal-style send transition, iterated over 13 commits of phone dogfooding +
+device-log forensics (2026-08-13). Sends + replies only; edits/voice/media keep
+today's behaviour; reduce-motion skips it entirely.
+
+**Final architecture** (all in `TimelineTableViewController` + small hooks):
+
+- *Measured collapse delta*: `ComposerToolbar` already reads its own frame; it
+  records the excess over its empty-default-mode baseline height in
+  `composerCollapseExtraHeight` (bindings) and every `.sendMessage` action
+  carries it. This is the one number the timeline cannot observe in time, and
+  it makes single-vs-multiline detection exact at the send tap (the send→mic
+  button swap jiggles the toolbar height on clear, so observing resizes
+  misfires).
+- *Send hook*: `TimelineViewModel` fires `sendTransitionPublisher(delta)`
+  synchronously when a `.default`/`.reply` send begins, before the clear
+  renders.
+- *Composer animations, decoupled from the timeline*: the post-send clear
+  blanks the content instantly and animates only the height collapse
+  (`withAnimation(.easeOut(0.2))` in the `.clear` handler). Typing growth
+  tweens too (0.1s in `textViewDidChange`, `geometryGroup()` on the field, and
+  `ElementTextView` drops caret auto-scrolls while the content fits under the
+  height cap so the text stays glued to the animating box).
+- *The freeze*: on send the table stops tracking the view's size (the collapse
+  resizes the view every frame; following it drags the bottom-glued timeline
+  down). For collapsing sends the frame freezes oversized (+300pt) so the
+  echo's row materialises early - it renders behind the composer's opaque
+  background and is revealed as the collapse shrinks - with a matching
+  `contentInset.top` making the pinned overscroll legal (UIScrollView silently
+  clamps illegal offsets mid-collapse; found via on-device logging of the pin
+  deltas).
+- *The pin*: a one-shot content-offset compensation keyed on the previous
+  newest cell's visual top edge (top, because the same update removes its
+  delivery status row), re-applied on every table layout pass
+  (`SendTransitionTableView.onDidLayout`) until the settle motion starts.
+- *The choreography*: the echo applies unanimated whenever it lands, re-pinned;
+  the new message fades in (0.2s) in the opening gap while an ease-out settle
+  of the residual (message height − delta − 30pt status-row allowance) runs in
+  parallel with the collapse; the transition's end restores the frame/inset in
+  one compensated pass pinning the *current* layout and issues a final ease-out
+  settle to absolute bottom (−1), so nothing ever needs truing up against
+  estimates. Single-line sends leave the transition at the echo and use the
+  stock animated batch insert (reconfigure included) with an alpha fade layered
+  on. A settling flag keeps `isScrolledToBottom` true so the jump-to-bottom
+  button doesn't flash; drags interrupt at the presentation value; a 1s
+  fallback settles sends that never produce an echo (failures, slash commands);
+  `scrollToNewestItem` is suppressed while active.
+
+**The journey** - each step was phone-validated or refuted by the user, with
+screen recordings frame-scanned (ffmpeg column run-length traces) and, later,
+on-device pin-delta logs; the dead ends are as valuable as the fixes:
+
+1. [`0bbbfe5e4`](https://github.com/element-hq/element-x-ios/commit/0bbbfe5e4)
+   pin + snapshot-overlay slide (prototyped in bubbleanim `9a5a67b`; harness
+   dead end: animating the collapse through layout + per-pass pinning renders
+   inconsistently). Overlay read as the composer *sliding*, not shrinking.
+2. [`e1a9fff97`](https://github.com/element-hq/element-x-ios/commit/e1a9fff97)
+   clip-shrink overlay + typing-growth tween → collapse read as a vertical
+   wipe (clipping cuts the field's top border off).
+3. [`6e4f71c3b`](https://github.com/element-hq/element-x-ios/commit/6e4f71c3b)
+   jump-to-bottom flash suppressed; status-row flicker fixed (no reconfigure in
+   the frozen apply - rebuilding hosted content blanks it a frame).
+4. [`0e268e0bd`](https://github.com/element-hq/element-x-ios/commit/0e268e0bd)
+   growth desync root-caused from a recording: text led the box ~4pt on growth
+   only - UITextView's caret auto-scroll during the tween. Suppressed.
+5. [`4cf06d5aa`](https://github.com/element-hq/element-x-ios/commit/4cf06d5aa)
+   cap-inset stretch overlay → worse (text block squished). Dead end: any
+   snapshot of a *full* composer has content that can't fake a shrink.
+6. [`36c5c6bd5`](https://github.com/element-hq/element-x-ios/commit/36c5c6bd5)
+   the pivot (user suggestion): blank instantly, genuinely animate only the
+   height, freeze the table's frame instead of fighting offsets. Overlay
+   machinery deleted.
+7. [`cd9462cbf`](https://github.com/element-hq/element-x-ios/commit/cd9462cbf)
+   parallelism: oversized freeze so the echo applies mid-collapse; apply
+   gating deleted (also fixed a single-line pop the gating caused - the echo
+   parked while the status-row removal animated).
+8. [`43f1da9af`](https://github.com/element-hq/element-x-ios/commit/43f1da9af)
+   single-line slide-in; per-table-layout re-pin.
+9. [`9cb742b52`](https://github.com/element-hq/element-x-ios/commit/9cb742b52)
+   the measured collapse delta plumbed through; ease-out settles (user
+   suggestion); residual settle starts at the apply; pin-delta logging added.
+10. [`d84983b4e`](https://github.com/element-hq/element-x-ios/commit/d84983b4e)
+    the dip root-caused from device logs: the oversize makes the pin
+    overscroll and UIScrollView silently clamps it (-301 → -1, ~255pt repair
+    deltas). Legalised with a matching content inset.
+11. [`816054ffb`](https://github.com/element-hq/element-x-ios/commit/816054ffb)
+    single-line skips the oversize churn; multiline undershoots by the
+    status-row allowance so the end tops up in the same direction.
+12. [`7f96896ff`](https://github.com/element-hq/element-x-ios/commit/7f96896ff)
+    the bounce root-caused from logs: the dynamic frame-growth check fed on
+    contentSize estimate-noise (frames exploded to 2036pt, offsets to -1555,
+    top-of-viewport rows blanking) - deleted; and post-settle applies stopped
+    pinning to the stale send-time reference. Single-line handed back to the
+    stock animated insert.
+13. [`4bb249f14`](https://github.com/element-hq/element-x-ios/commit/4bb249f14)
+    single-line fades as it slides. Validated by the user: "multiline is
+    working perfectly without dip or overscroll".
+
+Before upstreaming: strip the `SendTransition: restore` MXLog diagnostics in
+`restoreSendTransitionPosition`. Upstreamable as a whole; the composer-side
+pieces (measured delta, growth tween, caret-scroll suppression) stand alone.
 
 #### Fixing blocks of sends which vanish and then reappear 10s of seconds later
 
