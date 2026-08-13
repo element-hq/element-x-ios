@@ -339,23 +339,22 @@ class TimelineTableViewController: UIViewController {
         sendTransitionIsSettling = true
 
         // Snapshot the region between the timeline and the keyboard (the composer)
-        // before the clear renders. The snapshot is bottom-anchored in a clipping
-        // container so animating the container's top edge downwards reads as the
-        // composer genuinely shrinking: the buttons stay put and the field's top
-        // edge tweens down, rather than the whole composer sliding.
+        // before the clear renders. Cap insets keep the field's top chrome and the
+        // bottom row (last text line + buttons) unstretched while the middle
+        // squishes, so animating the snapshot's frame shut reads as the composer
+        // genuinely tweening back to its single-line shape - the top border rides
+        // the shrinking edge - rather than a clipped vertical wipe.
         let tableBottom = view.convert(view.bounds, to: window).maxY
         let keyboardTop = keyboardFrame.isNull ? window.bounds.maxY : max(tableBottom, window.convert(keyboardFrame, from: window.screen.coordinateSpace).minY)
         let composerRect = CGRect(x: 0, y: tableBottom, width: window.bounds.width, height: keyboardTop - tableBottom)
         if composerRect.height > 0,
-           let snapshot = window.resizableSnapshotView(from: composerRect, afterScreenUpdates: false, withCapInsets: .zero) {
-            let container = UIView(frame: composerRect)
-            container.clipsToBounds = true
-            container.isUserInteractionEnabled = false
-            snapshot.frame = CGRect(origin: .zero, size: composerRect.size)
-            snapshot.autoresizingMask = [.flexibleTopMargin, .flexibleWidth]
-            container.addSubview(snapshot)
-            window.addSubview(container)
-            sendTransitionOverlay = (container, view.frame.height)
+           let snapshot = window.resizableSnapshotView(from: composerRect,
+                                                      afterScreenUpdates: false,
+                                                      withCapInsets: UIEdgeInsets(top: 16, left: 0, bottom: 40, right: 0)) {
+            snapshot.frame = composerRect
+            snapshot.isUserInteractionEnabled = false
+            window.addSubview(snapshot)
+            sendTransitionOverlay = (snapshot, view.frame.height)
         }
 
         // If the echo never lands (send failure, slash command), settle anyway.
@@ -367,7 +366,7 @@ class TimelineTableViewController: UIViewController {
     }
 
     /// Called on the layout pass where the composer's collapse jump lands: the view
-    /// grew by the collapse delta, so tween the snapshot container's top edge down
+    /// grew by the collapse delta, so tween the (cap-inset) snapshot's frame shut
     /// by the same amount - the composer visually shrinks back to a single line -
     /// with a short cross-fade at the end to swap in the real (empty) composer.
     private func animateSendTransitionOverlayIfNeeded() {
