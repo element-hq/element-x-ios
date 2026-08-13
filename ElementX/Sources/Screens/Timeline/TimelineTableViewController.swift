@@ -204,6 +204,13 @@ class TimelineTableViewController: UIViewController {
     /// would drag the timeline down with it. The frame catches up in one
     /// compensated pass when the collapse finishes.
     private var sendTransitionFrameFrozen = false
+    /// How far the frozen table's frame extends beyond the view so rows beyond
+    /// the old bottom edge are materialised (grown further if a message needs it).
+    private static let sendTransitionOversize: CGFloat = 300
+    /// The extra legal overscroll granted (as a content-start inset) while
+    /// frozen: pinning against the extended frame overscrolls by up to the
+    /// oversize, and an illegal offset gets silently clamped mid-collapse.
+    private static let sendTransitionOverscrollAllowance: CGFloat = 340
     /// Whether the composer collapse's animated resize has been observed while
     /// frozen (it never fires for single-line sends).
     private var sendTransitionCollapseObserved = false
@@ -213,6 +220,8 @@ class TimelineTableViewController: UIViewController {
     /// Whether the settle motion has started; the per-layout re-pin stops then
     /// so it doesn't fight the deliberate scroll.
     private var sendTransitionDriftStarted = false
+    /// The content inset currently added for legal overscroll, removed at the end.
+    private var sendTransitionInsetAdded: CGFloat = 0
     private var sendTransitionFallback: DispatchWorkItem?
     /// True from the start of a send transition until its settling scroll finishes.
     /// The pin and drift briefly leave a positive content offset, which would
@@ -376,10 +385,15 @@ class TimelineTableViewController: UIViewController {
         // Freeze the table OVERSIZED so the sent message's row is materialised
         // even though it lands beyond the old bottom edge: it renders behind the
         // composer's opaque background and is revealed as the collapse shrinks
-        // it, in parallel. Pinned in the same pass so nothing moves visually
-        // (and the oversize keeps the offset positive, clear of any clamping).
+        // it, in parallel. Pinning against a bottom-extended frame necessarily
+        // overscrolls (the device logs showed the scroll view silently clamping
+        // the pinned offset back to -1 during collapse layout passes - the dip),
+        // so a matching content inset on the content-start side makes the
+        // overscrolled range legal for the duration.
         UIView.performWithoutAnimation {
-            tableView.frame = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: view.frame.height + 300))
+            tableView.contentInset.top += Self.sendTransitionOverscrollAllowance
+            sendTransitionInsetAdded = Self.sendTransitionOverscrollAllowance
+            tableView.frame = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: view.frame.height + Self.sendTransitionOversize))
             tableView.layoutIfNeeded()
             restoreSendTransitionPosition(reference)
         }
@@ -423,6 +437,10 @@ class TimelineTableViewController: UIViewController {
                 // Pin whatever is on screen NOW across the frame swap (mid-settle
                 // the content has legitimately moved off the send-time reference).
                 let current = snapshotLayout()
+                if sendTransitionInsetAdded != 0 {
+                    tableView.contentInset.top -= sendTransitionInsetAdded
+                    sendTransitionInsetAdded = 0
+                }
                 tableView.frame = CGRect(origin: .zero, size: view.frame.size)
                 tableView.layoutIfNeeded()
                 if let current {
@@ -580,12 +598,16 @@ class TimelineTableViewController: UIViewController {
                 tableView.layoutIfNeeded()
 
                 // If the frozen oversize isn't enough for the new content (a very
-                // tall message), grow the frame so its rows materialise.
+                // tall message), grow the frame so its rows materialise - and the
+                // legal-overscroll inset with it.
                 if sendTransitionFrameFrozen {
                     let growth = tableView.contentSize.height - preApplyContentHeight
                     let slack = tableView.frame.height - view.frame.height
                     if growth + 50 > slack {
-                        tableView.frame.size.height = view.frame.height + growth + 100
+                        let extension_ = view.frame.height + growth + 100 - tableView.frame.height
+                        tableView.frame.size.height += extension_
+                        tableView.contentInset.top += extension_
+                        sendTransitionInsetAdded += extension_
                         tableView.layoutIfNeeded()
                     }
                 }
