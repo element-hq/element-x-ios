@@ -190,6 +190,11 @@ class TimelineTableViewController: UIViewController {
     /// Paired with the view height at capture time to measure the collapse delta.
     private var sendTransitionOverlay: (view: UIView, viewHeight: CGFloat)?
     private var sendTransitionFallback: DispatchWorkItem?
+    /// True from the start of a send transition until its settling scroll finishes.
+    /// The pin and drift briefly leave a positive content offset, which would
+    /// otherwise read as "scrolled away from the bottom" and flash the
+    /// jump-to-bottom button on every send.
+    private var sendTransitionIsSettling = false
     /// The keyboard's frame, tracked so the composer snapshot never includes it.
     private var keyboardFrame: CGRect = .null
 
@@ -331,6 +336,7 @@ class TimelineTableViewController: UIViewController {
         }
 
         sendTransitionReference = reference
+        sendTransitionIsSettling = true
 
         // Snapshot the region between the timeline and the keyboard (the composer)
         // before the clear renders. The snapshot is bottom-anchored in a clipping
@@ -408,8 +414,12 @@ class TimelineTableViewController: UIViewController {
         }
 
         let target = min(-1, -tableView.adjustedContentInset.top)
-        guard abs(tableView.contentOffset.y - target) > 0.5 else { return }
+        guard abs(tableView.contentOffset.y - target) > 0.5 else {
+            sendTransitionIsSettling = false
+            return
+        }
         // setContentOffset rather than UIView.animate so a user touch can interrupt.
+        // sendTransitionIsSettling clears when the animation ends (or a drag starts).
         tableView.setContentOffset(CGPoint(x: 0, y: target), animated: true)
     }
     
@@ -513,9 +523,10 @@ class TimelineTableViewController: UIViewController {
         // that height change part of the same batch animation as the insertion, so
         // the bubbles slide up in sync; otherwise the collapse snaps separately and
         // the timeline visibly warps (a SwiftUI .animation on the marker is worse:
-        // the self-sizing desyncs and clips the bubble).
-        if animated || (sendTransitionActive && newestItemIDChanged),
-           let currentNewestItemIdentifier, snapshot.mainItemIdentifiers.contains(currentNewestItemIdentifier) {
+        // the self-sizing desyncs and clips the bubble). Not wanted in the frozen
+        // send-transition apply: rebuilding the hosted content there blanks the
+        // status row for a frame, and the reactive update fades it out anyway.
+        if animated, let currentNewestItemIdentifier, snapshot.mainItemIdentifiers.contains(currentNewestItemIdentifier) {
             snapshot.reconfigureItems([currentNewestItemIdentifier])
         }
 
@@ -740,7 +751,7 @@ extension TimelineTableViewController: UITableViewDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             
-            let isScrolledToBottom = scrollView.contentOffset.y <= 0
+            let isScrolledToBottom = scrollView.contentOffset.y <= 0 || sendTransitionIsSettling
             
             // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
             if self.isScrolledToBottom != isScrolledToBottom {
@@ -782,6 +793,7 @@ extension TimelineTableViewController: UITableViewDelegate {
         // The user took over - don't yank the viewport back to the focussed row,
         // and settle any in-flight send transition.
         focusRefinementIndexPath = nil
+        sendTransitionIsSettling = false
         endSendTransition()
     }
     
@@ -801,6 +813,7 @@ extension TimelineTableViewController: UITableViewDelegate {
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         sendLastVisibleItemReadReceipt()
+        sendTransitionIsSettling = false
 
         // The animated focus scroll lands wherever the pre-animation height estimates
         // said the row was - correct against the now-materialised layout.

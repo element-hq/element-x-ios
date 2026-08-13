@@ -175,7 +175,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         func textViewDidChange(_ textView: UITextView) {
             // Animated so the composer growing or shrinking a line tweens the
             // layout (the timeline rides along smoothly) instead of popping.
-            withAnimation(.easeOut(duration: 0.15)) {
+            withAnimation(.easeOut(duration: 0.1)) {
                 text.wrappedValue = textView.attributedText
             }
         }

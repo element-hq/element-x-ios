@@ -75,6 +75,9 @@ struct MessageComposer: View {
                                      maxHeight: ComposerConstant.maxHeight,
                                      keyHandler: { handleKeyPress($0) },
                                      pasteHandler: pasteAction)
+                // Keep the text view's animated geometry in lockstep with the
+                // background/border during the line-growth tween.
+                .geometryGroup()
         }
     }
     
