@@ -173,7 +173,11 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
         
         func textViewDidChange(_ textView: UITextView) {
-            text.wrappedValue = textView.attributedText
+            // Animated so the composer growing or shrinking a line tweens the
+            // layout (the timeline rides along smoothly) instead of popping.
+            withAnimation(.easeOut(duration: 0.15)) {
+                text.wrappedValue = textView.attributedText
+            }
         }
         
         func textViewDidReceiveKeyPress(_ textView: UITextView, key: UIKeyboardHIDUsage) {

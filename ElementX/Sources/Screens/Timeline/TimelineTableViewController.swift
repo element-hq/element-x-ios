@@ -185,8 +185,8 @@ class TimelineTableViewController: UIViewController {
     /// reference so the composer's height collapse can't move it, and the sent
     /// message fades into the vacated slot instead of shoving everything around.
     private var sendTransitionReference: Layout?
-    /// Snapshot of the composer taken just before the send cleared it, slid down
-    /// and faded over the (instant) collapse so it reads as a smooth animation.
+    /// Snapshot of the composer taken just before the send cleared it, tweened
+    /// shut over the (instant) collapse so it reads as a smooth animation.
     /// Paired with the view height at capture time to measure the collapse delta.
     private var sendTransitionOverlay: (view: UIView, viewHeight: CGFloat)?
     private var sendTransitionFallback: DispatchWorkItem?
@@ -333,16 +333,23 @@ class TimelineTableViewController: UIViewController {
         sendTransitionReference = reference
 
         // Snapshot the region between the timeline and the keyboard (the composer)
-        // before the clear renders.
+        // before the clear renders. The snapshot is bottom-anchored in a clipping
+        // container so animating the container's top edge downwards reads as the
+        // composer genuinely shrinking: the buttons stay put and the field's top
+        // edge tweens down, rather than the whole composer sliding.
         let tableBottom = view.convert(view.bounds, to: window).maxY
         let keyboardTop = keyboardFrame.isNull ? window.bounds.maxY : max(tableBottom, window.convert(keyboardFrame, from: window.screen.coordinateSpace).minY)
         let composerRect = CGRect(x: 0, y: tableBottom, width: window.bounds.width, height: keyboardTop - tableBottom)
         if composerRect.height > 0,
            let snapshot = window.resizableSnapshotView(from: composerRect, afterScreenUpdates: false, withCapInsets: .zero) {
-            snapshot.frame = composerRect
-            snapshot.isUserInteractionEnabled = false
-            window.addSubview(snapshot)
-            sendTransitionOverlay = (snapshot, view.frame.height)
+            let container = UIView(frame: composerRect)
+            container.clipsToBounds = true
+            container.isUserInteractionEnabled = false
+            snapshot.frame = CGRect(origin: .zero, size: composerRect.size)
+            snapshot.autoresizingMask = [.flexibleTopMargin, .flexibleWidth]
+            container.addSubview(snapshot)
+            window.addSubview(container)
+            sendTransitionOverlay = (container, view.frame.height)
         }
 
         // If the echo never lands (send failure, slash command), settle anyway.
@@ -354,15 +361,21 @@ class TimelineTableViewController: UIViewController {
     }
 
     /// Called on the layout pass where the composer's collapse jump lands: the view
-    /// grew by the collapse delta, so slide the composer snapshot down by the same
-    /// amount (fading it out) to make the collapse read as a smooth animation.
+    /// grew by the collapse delta, so tween the snapshot container's top edge down
+    /// by the same amount - the composer visually shrinks back to a single line -
+    /// with a short cross-fade at the end to swap in the real (empty) composer.
     private func animateSendTransitionOverlayIfNeeded() {
         guard let (overlay, capturedHeight) = sendTransitionOverlay else { return }
         let delta = view.frame.height - capturedHeight
         guard delta > 0 else { return }
         sendTransitionOverlay = nil
         UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut]) {
-            overlay.frame.origin.y += delta
+            overlay.frame = CGRect(x: overlay.frame.minX,
+                                   y: overlay.frame.minY + delta,
+                                   width: overlay.frame.width,
+                                   height: overlay.frame.height - delta)
+        }
+        UIView.animate(withDuration: 0.1, delay: 0.15, options: [.curveEaseInOut]) {
             overlay.alpha = 0
         } completion: { _ in
             overlay.removeFromSuperview()

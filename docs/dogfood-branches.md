@@ -663,6 +663,24 @@ See the test jig that Fable built to diagnose this at https://github.com/element
   fully monotonic in the harness incl. image-sized bubbles either side of the
   transition. Upstreamable together with the reconfigure
   [`66bea662f`](https://github.com/element-hq/element-x-ios/commit/66bea662f)
+- Follow-up: sending a multiline message popped the whole timeline. Clearing the
+  composer shrinks the bottom inset in one unanimated pass (the harness showed
+  SwiftUI turns the safeAreaInset into a frame resize of the table, whose flipped
+  content is glued to the frame's bottom edge), so the timeline dropped by the
+  collapse delta and the echo's insert pushed it back up ~100ms later. Now a
+  Signal-style send transition (prototyped + pixel-validated in the harness,
+  bubbleanim `9a5a67b`): the timeline pins itself over the collapse jump, a
+  clipping snapshot of the old composer tweens shut (buttons pinned, field top
+  edge animating down, late cross-fade), the echo applies without row animations
+  and fades into the vacated slot, and the residual drifts to bottom-pinned in
+  one interruptible scroll - the history never moves down at any frame. Dead end
+  recorded in the harness: genuinely animating the collapse through the layout
+  system and pinning per pass renders inconsistently (the scroll view clamps the
+  overscrolled offset on every animated frame set), hence snapshot-overlay.
+  Typing across a line boundary also animates now (the growth previously popped
+  too). Sends + replies only; edits/voice keep today's behaviour; reduce-motion
+  skips it. Upstreamable
+  [`0bbbfe5e4`](https://github.com/element-hq/element-x-ios/commit/0bbbfe5e4)
 
 #### Fixing blocks of sends which vanish and then reappear 10s of seconds later
 
