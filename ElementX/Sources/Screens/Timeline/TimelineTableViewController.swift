@@ -382,20 +382,24 @@ class TimelineTableViewController: UIViewController {
         sendTransitionExpectedDelta = expectedCollapseDelta
         sendTransitionDriftStarted = false
 
-        // Freeze the table OVERSIZED so the sent message's row is materialised
-        // even though it lands beyond the old bottom edge: it renders behind the
-        // composer's opaque background and is revealed as the collapse shrinks
-        // it, in parallel. Pinning against a bottom-extended frame necessarily
-        // overscrolls (the device logs showed the scroll view silently clamping
-        // the pinned offset back to -1 during collapse layout passes - the dip),
-        // so a matching content inset on the content-start side makes the
-        // overscrolled range legal for the duration.
-        UIView.performWithoutAnimation {
-            tableView.contentInset.top += Self.sendTransitionOverscrollAllowance
-            sendTransitionInsetAdded = Self.sendTransitionOverscrollAllowance
-            tableView.frame = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: view.frame.height + Self.sendTransitionOversize))
-            tableView.layoutIfNeeded()
-            restoreSendTransitionPosition(reference)
+        // For a collapsing (multiline) composer, freeze the table OVERSIZED so
+        // the sent message's row is materialised even though it lands beyond the
+        // old bottom edge: it renders behind the composer's opaque background
+        // and is revealed as the collapse shrinks it, in parallel. Pinning
+        // against a bottom-extended frame necessarily overscrolls (the device
+        // logs showed the scroll view silently clamping the pinned offset back
+        // to -1 during collapse layout passes - the dip), so a matching content
+        // inset on the content-start side makes the overscroll legal for the
+        // duration. Single-line sends skip all of this: their message slides in
+        // from the bottom via the settle, materialising like any other scroll.
+        if expectedCollapseDelta > 1 {
+            UIView.performWithoutAnimation {
+                tableView.contentInset.top += Self.sendTransitionOverscrollAllowance
+                sendTransitionInsetAdded = Self.sendTransitionOverscrollAllowance
+                tableView.frame = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: view.frame.height + Self.sendTransitionOversize))
+                tableView.layoutIfNeeded()
+                restoreSendTransitionPosition(reference)
+            }
         }
 
         // If the echo never lands (send failure, slash command), settle anyway.
@@ -634,10 +638,13 @@ class TimelineTableViewController: UIViewController {
 
                 if expectsCollapse {
                     // Start the residual rise now, in parallel with the collapse (the
-                    // message is taller than the space the composer hands back); the
-                    // transition's end trues it up against the final layout.
-                    let residual = newCellHeight - sendTransitionExpectedDelta
-                    if abs(residual) > 1 {
+                    // message is taller than the space the composer hands back). The
+                    // previous message also loses its delivery status row after this
+                    // measurement, so undershoot by an allowance for it - the end
+                    // then tops up in the SAME direction against the final layout
+                    // instead of oversteering and coming back.
+                    let residual = newCellHeight - sendTransitionExpectedDelta - 30
+                    if residual > 1 {
                         settle(by: -residual)
                     }
                 } else {
