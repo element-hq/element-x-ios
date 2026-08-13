@@ -179,6 +179,20 @@ class TimelineTableViewController: UIViewController {
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     
+    // MARK: Send transition
+
+    /// While non-nil, a send transition is running: the timeline is pinned to this
+    /// reference so the composer's height collapse can't move it, and the sent
+    /// message fades into the vacated slot instead of shoving everything around.
+    private var sendTransitionReference: Layout?
+    /// Snapshot of the composer taken just before the send cleared it, slid down
+    /// and faded over the (instant) collapse so it reads as a smooth animation.
+    /// Paired with the view height at capture time to measure the collapse delta.
+    private var sendTransitionOverlay: (view: UIView, viewHeight: CGFloat)?
+    private var sendTransitionFallback: DispatchWorkItem?
+    /// The keyboard's frame, tracked so the composer snapshot never includes it.
+    private var keyboardFrame: CGRect = .null
+
     init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
          isReadMarkerVisible: Binding<Bool>,
@@ -186,7 +200,8 @@ class TimelineTableViewController: UIViewController {
          floatingDate: Binding<Date?>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>,
          scrollToFirstItemForDatePublisher: PassthroughSubject<Void, Never>,
-         scrollToReadMarkerPublisher: PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>) {
+         scrollToReadMarkerPublisher: PassthroughSubject<TimelineItemIdentifier.UniqueID, Never>,
+         sendTransitionPublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
         _isScrolledToBottom = isScrolledToBottom
         _isReadMarkerVisible = isReadMarkerVisible
@@ -225,6 +240,18 @@ class TimelineTableViewController: UIViewController {
         scrollToReadMarkerPublisher
             .sink { [weak self] uniqueID in
                 self?.scrollToItem(uniqueID: uniqueID, animated: true)
+            }
+            .store(in: &cancellables)
+
+        sendTransitionPublisher
+            .sink { [weak self] in
+                self?.beginSendTransition()
+            }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)
+            .sink { [weak self] notification in
+                self?.keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .null
             }
             .store(in: &cancellables)
         
@@ -270,12 +297,107 @@ class TimelineTableViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        
+
         guard tableView.frame.size != view.frame.size else {
             return
         }
-        
+
         tableView.frame = CGRect(origin: .zero, size: view.frame.size)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if let sendTransitionReference {
+            animateSendTransitionOverlayIfNeeded()
+            restoreSendTransitionPosition(sendTransitionReference)
+        }
+    }
+
+    // MARK: - Send transition
+
+    /// Starts a send transition: captures the current layout and a snapshot of the
+    /// composer so that when the composer clears (an instant layout jump that would
+    /// otherwise pop the bottom-pinned timeline down by the collapse delta) the
+    /// timeline stays pinned, the snapshot animates the collapse smoothly, and the
+    /// sent message fades into the vacated slot with a final drift to the bottom.
+    private func beginSendTransition() {
+        guard isLive, !isSwitchingTimelines, isScrolledToBottom,
+              !UIAccessibility.isReduceMotionEnabled,
+              sendTransitionReference == nil,
+              let window = view.window,
+              let reference = snapshotLayout() else {
+            return
+        }
+
+        sendTransitionReference = reference
+
+        // Snapshot the region between the timeline and the keyboard (the composer)
+        // before the clear renders.
+        let tableBottom = view.convert(view.bounds, to: window).maxY
+        let keyboardTop = keyboardFrame.isNull ? window.bounds.maxY : max(tableBottom, window.convert(keyboardFrame, from: window.screen.coordinateSpace).minY)
+        let composerRect = CGRect(x: 0, y: tableBottom, width: window.bounds.width, height: keyboardTop - tableBottom)
+        if composerRect.height > 0,
+           let snapshot = window.resizableSnapshotView(from: composerRect, afterScreenUpdates: false, withCapInsets: .zero) {
+            snapshot.frame = composerRect
+            snapshot.isUserInteractionEnabled = false
+            window.addSubview(snapshot)
+            sendTransitionOverlay = (snapshot, view.frame.height)
+        }
+
+        // If the echo never lands (send failure, slash command), settle anyway.
+        let fallback = DispatchWorkItem { [weak self] in
+            self?.endSendTransition()
+        }
+        sendTransitionFallback = fallback
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: fallback)
+    }
+
+    /// Called on the layout pass where the composer's collapse jump lands: the view
+    /// grew by the collapse delta, so slide the composer snapshot down by the same
+    /// amount (fading it out) to make the collapse read as a smooth animation.
+    private func animateSendTransitionOverlayIfNeeded() {
+        guard let (overlay, capturedHeight) = sendTransitionOverlay else { return }
+        let delta = view.frame.height - capturedHeight
+        guard delta > 0 else { return }
+        sendTransitionOverlay = nil
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut]) {
+            overlay.frame.origin.y += delta
+            overlay.alpha = 0
+        } completion: { _ in
+            overlay.removeFromSuperview()
+        }
+    }
+
+    /// Shifts the content offset so the reference cell sits back at its captured
+    /// position. Pins the visual top edge: the cell loses its delivery status row
+    /// when the sent message lands, so pinning the bottom edge would drop the
+    /// bubble by the status row's height.
+    private func restoreSendTransitionPosition(_ reference: Layout) {
+        guard let frame = cellFrame(for: reference.id.uniqueID) else { return }
+        let deltaY = frame.minY - reference.frame.minY
+        if deltaY != 0 {
+            tableView.contentOffset.y -= deltaY
+        }
+    }
+
+    /// Ends the transition, drifting any residual offset to bottom-pinned.
+    private func endSendTransition() {
+        sendTransitionFallback?.cancel()
+        sendTransitionFallback = nil
+        guard sendTransitionReference != nil else { return }
+        sendTransitionReference = nil
+
+        if let (overlay, _) = sendTransitionOverlay {
+            // The composer never changed height (e.g. a single-line send).
+            sendTransitionOverlay = nil
+            overlay.removeFromSuperview()
+        }
+
+        let target = min(-1, -tableView.adjustedContentInset.top)
+        guard abs(tableView.contentOffset.y - target) > 0.5 else { return }
+        // setContentOffset rather than UIView.animate so a user touch can interrupt.
+        tableView.setContentOffset(CGPoint(x: 0, y: target), animated: true)
     }
     
     /// Configures a diffable data source for the timeline's table view.
@@ -365,12 +487,13 @@ class TimelineTableViewController: UIViewController {
         snapshot.appendItems(timelineItemsIDs)
         
         let currentSnapshot = dataSource.snapshot()
-        
+
         // We only animate when new items come at the end of a live timeline, ignoring transitions through empty.
         let newestItemIdentifier = snapshot.mainItemIdentifiers.first
         let currentNewestItemIdentifier = currentSnapshot.mainItemIdentifiers.first
         let newestItemIDChanged = snapshot.numberOfMainItems > 0 && currentSnapshot.numberOfMainItems > 0 && newestItemIdentifier != currentNewestItemIdentifier
-        let animated = isLive && !isSwitchingTimelines && newestItemIDChanged
+        let sendTransitionActive = sendTransitionReference != nil
+        let animated = isLive && !isSwitchingTimelines && newestItemIDChanged && !sendTransitionActive
 
         // The previous newest item loses its delivery status marker when a newer one
         // arrives, which shrinks its cell. Reconfiguring it in the same apply makes
@@ -378,17 +501,42 @@ class TimelineTableViewController: UIViewController {
         // the bubbles slide up in sync; otherwise the collapse snaps separately and
         // the timeline visibly warps (a SwiftUI .animation on the marker is worse:
         // the self-sizing desyncs and clips the bubble).
-        if animated, let currentNewestItemIdentifier, snapshot.mainItemIdentifiers.contains(currentNewestItemIdentifier) {
+        if animated || (sendTransitionActive && newestItemIDChanged),
+           let currentNewestItemIdentifier, snapshot.mainItemIdentifiers.contains(currentNewestItemIdentifier) {
             snapshot.reconfigureItems([currentNewestItemIdentifier])
         }
-        
+
         let layout: Layout? = if !isLive, newestItemIDChanged {
             snapshotLayout()
         } else {
             nil
         }
-        
-        dataSource.apply(snapshot, animatingDifferences: animated)
+
+        if let reference = sendTransitionReference {
+            // Mid send transition the timeline is pinned: apply without any row
+            // animation, re-pin, and when the sent message arrives fade it into the
+            // slot the composer vacated before drifting to bottom-pinned.
+            UIView.performWithoutAnimation {
+                dataSource.apply(snapshot, animatingDifferences: false)
+                tableView.layoutIfNeeded()
+                restoreSendTransitionPosition(reference)
+            }
+
+            if newestItemIDChanged {
+                if let newestItemIdentifier,
+                   !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
+                   let indexPath = dataSource.indexPath(for: newestItemIdentifier),
+                   let cell = tableView.cellForRow(at: indexPath) {
+                    cell.alpha = 0
+                    UIView.animate(withDuration: 0.2) {
+                        cell.alpha = 1
+                    }
+                }
+                endSendTransition()
+            }
+        } else {
+            dataSource.apply(snapshot, animatingDifferences: animated)
+        }
         
         if let focussedEvent, focussedEvent.appearance != .hasAppeared {
             scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
@@ -418,6 +566,10 @@ class TimelineTableViewController: UIViewController {
     /// Scrolls to the newest item in the timeline.
     private func scrollToNewestItem(animated: Bool) {
         guard !timelineItemsIDs.isEmpty else {
+            return
+        }
+        // A send transition is already carrying the timeline to the bottom.
+        guard sendTransitionReference == nil else {
             return
         }
         tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: animated)
@@ -614,8 +766,10 @@ extension TimelineTableViewController: UITableViewDelegate {
         isDraggingScrollView = true
         scrollViewIsScrolling = true
 
-        // The user took over - don't yank the viewport back to the focussed row.
+        // The user took over - don't yank the viewport back to the focussed row,
+        // and settle any in-flight send transition.
         focusRefinementIndexPath = nil
+        endSendTransition()
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

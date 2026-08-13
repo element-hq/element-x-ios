@@ -241,6 +241,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     func process(composerAction: ComposerToolbarViewModelAction) {
         switch composerAction {
         case .sendMessage(let message, let html, let mode, let intentionalMentions):
+            // Synchronously, before the composer's clear renders: sends and replies
+            // insert at the bottom, so the table can transition the new message in
+            // from the space the collapsing composer vacates.
+            switch mode {
+            case .default, .reply:
+                state.timelineState.sendTransitionPublisher.send(())
+            case .edit, .recordVoiceMessage, .previewVoiceMessage:
+                break
+            }
             Task {
                 await sendCurrentMessage(message,
                                          html: html,
