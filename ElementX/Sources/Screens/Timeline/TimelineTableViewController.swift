@@ -571,8 +571,12 @@ class TimelineTableViewController: UIViewController {
         let newestItemIdentifier = snapshot.mainItemIdentifiers.first
         let currentNewestItemIdentifier = currentSnapshot.mainItemIdentifiers.first
         let newestItemIDChanged = snapshot.numberOfMainItems > 0 && currentSnapshot.numberOfMainItems > 0 && newestItemIdentifier != currentNewestItemIdentifier
-        let sendTransitionActive = sendTransitionReference != nil
-        let animated = isLive && !isSwitchingTimelines && newestItemIDChanged && !sendTransitionActive
+        // Only sends with a collapsing (multiline) composer take the frozen apply
+        // path; single-line sends release their freeze and use the stock animated
+        // batch insert, which already slides the message in from the bottom edge
+        // in sync with the rest of the timeline.
+        let frozenApply = sendTransitionReference != nil && sendTransitionExpectedDelta > 1
+        let animated = isLive && !isSwitchingTimelines && newestItemIDChanged && !frozenApply
 
         // The previous newest item loses its delivery status marker when a newer one
         // arrives, which shrinks its cell. Reconfiguring it in the same apply makes
@@ -592,42 +596,28 @@ class TimelineTableViewController: UIViewController {
             nil
         }
 
-        if let reference = sendTransitionReference {
+        if frozenApply, let reference = sendTransitionReference {
             // Mid send transition the timeline is pinned: apply without any row
             // animation, re-pin, and when the sent message arrives fade it into the
-            // slot the composer vacated before drifting to bottom-pinned.
+            // slot the composer vacated before drifting to bottom-pinned. Once the
+            // settle is moving the send-time reference is stale, so later applies
+            // (delivery status, receipts) go unpinned rather than yanking the
+            // content back (the bounce).
             UIView.performWithoutAnimation {
-                let preApplyContentHeight = tableView.contentSize.height
                 dataSource.apply(snapshot, animatingDifferences: false)
                 tableView.layoutIfNeeded()
-
-                // If the frozen oversize isn't enough for the new content (a very
-                // tall message), grow the frame so its rows materialise - and the
-                // legal-overscroll inset with it.
-                if sendTransitionFrameFrozen {
-                    let growth = tableView.contentSize.height - preApplyContentHeight
-                    let slack = tableView.frame.height - view.frame.height
-                    if growth + 50 > slack {
-                        let extension_ = view.frame.height + growth + 100 - tableView.frame.height
-                        tableView.frame.size.height += extension_
-                        tableView.contentInset.top += extension_
-                        sendTransitionInsetAdded += extension_
-                        tableView.layoutIfNeeded()
-                    }
+                if !sendTransitionDriftStarted {
+                    restoreSendTransitionPosition(reference)
                 }
-
-                restoreSendTransitionPosition(reference)
             }
 
             if newestItemIDChanged {
-                let expectsCollapse = sendTransitionExpectedDelta > 1
-
                 var newCellHeight: CGFloat = 0
                 if let newestItemIdentifier,
                    !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
                    let indexPath = dataSource.indexPath(for: newestItemIdentifier) {
                     newCellHeight = tableView.rectForRow(at: indexPath).height
-                    if expectsCollapse, let cell = tableView.cellForRow(at: indexPath) {
+                    if let cell = tableView.cellForRow(at: indexPath) {
                         // The collapse reveals the slot; fade the message in as it does.
                         cell.alpha = 0
                         UIView.animate(withDuration: 0.2) {
@@ -636,24 +626,23 @@ class TimelineTableViewController: UIViewController {
                     }
                 }
 
-                if expectsCollapse {
-                    // Start the residual rise now, in parallel with the collapse (the
-                    // message is taller than the space the composer hands back). The
-                    // previous message also loses its delivery status row after this
-                    // measurement, so undershoot by an allowance for it - the end
-                    // then tops up in the SAME direction against the final layout
-                    // instead of oversteering and coming back.
-                    let residual = newCellHeight - sendTransitionExpectedDelta - 30
-                    if residual > 1 {
-                        settle(by: -residual)
-                    }
-                } else {
-                    // No collapse coming: settle immediately - the new message
-                    // slides in from below the bottom edge.
-                    endSendTransition()
+                // Start the residual rise now, in parallel with the collapse (the
+                // message is taller than the space the composer hands back). The
+                // previous message also loses its delivery status row after this
+                // measurement, so undershoot by an allowance for it - the end
+                // then tops up in the SAME direction against the final layout
+                // instead of oversteering and coming back.
+                let residual = newCellHeight - sendTransitionExpectedDelta - 30
+                if residual > 1 {
+                    settle(by: -residual)
                 }
             }
         } else {
+            // A single-line send's transition ends here: the animated apply below
+            // is its slide-in.
+            if sendTransitionReference != nil {
+                endSendTransition()
+            }
             dataSource.apply(snapshot, animatingDifferences: animated)
         }
         
