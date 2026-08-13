@@ -744,7 +744,7 @@ shrinks the bottom inset in one unanimated pass (the harness showed SwiftUI
 turns the safeAreaInset into a frame resize of the table, whose flipped content
 is glued to the frame's bottom edge), so the timeline dropped by the collapse
 delta and the echo's insert pushed it back up ~100ms later. Replaced with a
-Signal-style send transition, iterated over 13 commits of phone dogfooding +
+Signal-style send transition, iterated over 16 commits of phone dogfooding +
 device-log forensics (2026-08-13). Sends + replies only; edits/voice/media keep
 today's behaviour; reduce-motion skips it entirely.
 
@@ -786,22 +786,31 @@ choreography and use the stock insert animation. The details:
   `contentInset.top` making the pinned overscroll legal (UIScrollView silently
   clamps illegal offsets mid-collapse; found via on-device logging of the pin
   deltas).
-- *The pin*: a one-shot content-offset compensation keyed on the previous
-  newest cell's visual top edge (top, because the same update removes its
-  delivery status row), re-applied on every table layout pass
-  (`SendTransitionTableView.onDidLayout`) until the settle motion starts.
+- *The pin*: a content-offset compensation keyed on the previous newest cell's
+  visual top edge (top, because the same update removes its delivery status
+  row), re-applied on every table layout pass
+  (`SendTransitionTableView.onDidLayout`) until the settle motion starts. When
+  a message taller than the oversize pushes the reference cell outside the
+  materialised window, it is scrolled back in *inside the un-committed layout
+  pass* (the `restoreLayout` pattern) before measuring - never measure
+  unmaterialised rows via `contentSize`/`rectForRow`, their estimated heights
+  track recent real cells and the error flips sign with context.
 - *The choreography*: the echo applies unanimated whenever it lands, re-pinned;
-  the new message fades in (0.2s) in the opening gap while an ease-out settle
-  of the residual (message height − delta − 30pt status-row allowance) runs in
-  parallel with the collapse; the transition's end restores the frame/inset in
-  one compensated pass pinning the *current* layout and issues a final ease-out
-  settle to absolute bottom (−1), so nothing ever needs truing up against
-  estimates. Single-line sends leave the transition at the echo and use the
+  the new message fades in (0.2s) in the opening gap while ONE ease-out settle
+  runs in parallel with the collapse, targeting absolute bottom computed in the
+  frozen coordinates (final view height = height at send + measured delta) so
+  there is a single velocity curve and nothing to true up afterwards; the
+  frame/inset restore is a compensated no-op deferred to the settle's
+  completion. Single-line sends leave the transition at the echo and use the
   stock animated batch insert (reconfigure included) with an alpha fade layered
   on. A settling flag keeps `isScrolledToBottom` true so the jump-to-bottom
   button doesn't flash; drags interrupt at the presentation value; a 1s
   fallback settles sends that never produce an echo (failures, slash commands);
-  `scrollToNewestItem` is suppressed while active.
+  `scrollToNewestItem` is suppressed while active. Note: a message much taller
+  than the composer's height cap necessarily "flies in from the bottom" - the
+  timeline must end risen by (message height − delta), and only ~9 lines' worth
+  is revealed by the collapse itself; if that ever grates, scale the settle
+  duration with distance rather than adding a second phase.
 
 **The journey** - each step was phone-validated or refuted by the user, with
 screen recordings frame-scanned (ffmpeg column run-length traces) and, later,
@@ -852,7 +861,27 @@ on-device pin-delta logs; the dead ends are as valuable as the fixes:
 13. [`4bb249f14`](https://github.com/element-hq/element-x-ios/commit/4bb249f14)
     single-line fades as it slides. Validated by the user: "multiline is
     working perfectly without dip or overscroll".
+14. [`b06904f5c`](https://github.com/element-hq/element-x-ios/commit/b06904f5c)
+    freeze-framing caught a velocity kink halfway through: the residual
+    settle's ease-out tail met the end's fresh top-up curve. Replaced by ONE
+    settle targeting absolute bottom in frozen coordinates, geometry restore
+    deferred to its completion; the 30pt allowance and the whole second phase
+    deleted.
+15. [`b4ed1dd7d`](https://github.com/element-hq/element-x-ios/commit/b4ed1dd7d)
+    >9-line sends dived: the message outgrew the 300pt oversize, the reference
+    cell fell outside the materialised window, the pin silently no-opped
+    ("restore found no cell" in the logs) and the settle ran from the wrong
+    side of the target. First fix (contentSize arithmetic) was itself
+    estimate-poisoned - the new row contributes only its estimated height, and
+    estimates track recent real cells, so a short previous message made
+    bubbles fly down from the top and a long one made them fly up from below.
+16. [`03d924df9`](https://github.com/element-hq/element-x-ios/commit/03d924df9)
+    the estimate-free pin: scroll the reference back into the window inside
+    the un-committed pass (materialising the new row's real height), then the
+    normal exact delta pin. Validated "almost perfect"; the remaining
+    fly-in-from-the-bottom for very long messages is the designed motion (see
+    the choreography note above).
 
-Before upstreaming: strip the `SendTransition: restore` MXLog diagnostics in
-`restoreSendTransitionPosition`. Upstreamable as a whole; the composer-side
+Before upstreaming: strip the `SendTransition: restore`/`materialising` MXLog
+diagnostics in the pin paths. Upstreamable as a whole; the composer-side
 pieces (measured delta, growth tween, caret-scroll suppression) stand alone.
