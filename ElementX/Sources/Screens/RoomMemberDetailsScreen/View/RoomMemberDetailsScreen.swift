@@ -186,7 +186,8 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
             .snapshotPreferences(expect: otherUserViewModel.context.$viewState.map { state in
                 state.memberDetails?.role == .user && state.dmRoomID != nil
-            })
+            }
+            .delay(for: .milliseconds(100), scheduler: DispatchQueue.main))
             .previewDisplayName("Other User")
             
         RoomMemberDetailsScreen(context: accountOwnerViewModel.context)

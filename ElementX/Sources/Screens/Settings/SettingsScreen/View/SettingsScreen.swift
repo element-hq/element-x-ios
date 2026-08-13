@@ -287,18 +287,19 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         }
         .environment(\.colorScheme, .dark)
         .preferredColorScheme(.dark)
+        .snapshotPreferences(expect: guaMarketingViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil }.eraseToStream())
         .previewDisplayName("GuaMarketingAjustes")
 
         NavigationStack {
             SettingsScreen(context: viewModel.context)
         }
-        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil }.eraseToStream())
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil }.eraseToStream())
         .previewDisplayName("Default")
 
         NavigationStack {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
-        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil }.eraseToStream())
+        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil }.eraseToStream())
         .previewDisplayName("Bug report disabled")
     }
 

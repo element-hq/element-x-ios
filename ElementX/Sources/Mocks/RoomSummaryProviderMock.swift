@@ -258,6 +258,12 @@ extension Array where Element == RoomSummary {
                     isTombstoned: false)
     ]
     
+    private static func guaMarketingTimestamp(hour: Int, minute: Int) -> Date {
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: .now)
+        return calendar.date(byAdding: .minute, value: hour * 60 + minute, to: startOfToday) ?? startOfToday
+    }
+
     static let mockRoomsGuaMarketing: [Element] = [
         RoomSummary(room: RoomSDKMock(),
                     id: "gua1",
@@ -268,7 +274,7 @@ extension Array where Element == RoomSummary {
                     heroes: [],
                     activeMembersCount: 0,
                     lastMessage: AttributedString("Mãe: Já chegaram em casa?"),
-                    lastMessageDate: Date.now.addingTimeInterval(-2 * 60),
+                    lastMessageDate: guaMarketingTimestamp(hour: 16, minute: 17),
                     unreadMessagesCount: 3,
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 3,
@@ -288,7 +294,7 @@ extension Array where Element == RoomSummary {
                     heroes: [],
                     activeMembersCount: 0,
                     lastMessage: AttributedString("Síndico: Manutenção da água amanhã, 8h–10h"),
-                    lastMessageDate: Date.now.addingTimeInterval(-48 * 60),
+                    lastMessageDate: guaMarketingTimestamp(hour: 15, minute: 31),
                     unreadMessagesCount: 0,
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 0,
@@ -308,7 +314,7 @@ extension Array where Element == RoomSummary {
                     heroes: [],
                     activeMembersCount: 0,
                     lastMessage: AttributedString("Rafa: A entrega do TCC foi adiada 🙏"),
-                    lastMessageDate: Date.now.addingTimeInterval(-3 * 60 * 60),
+                    lastMessageDate: guaMarketingTimestamp(hour: 13, minute: 19),
                     unreadMessagesCount: 0,
                     unreadMentionsCount: 1,
                     unreadNotificationsCount: 1,
@@ -328,7 +334,7 @@ extension Array where Element == RoomSummary {
                     heroes: [],
                     activeMembersCount: 0,
                     lastMessage: AttributedString("Marina: Subi o protótipo novo, deem uma olhada"),
-                    lastMessageDate: Date.now.addingTimeInterval(-6 * 60 * 60),
+                    lastMessageDate: guaMarketingTimestamp(hour: 10, minute: 19),
                     unreadMessagesCount: 1,
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 1,
@@ -348,7 +354,7 @@ extension Array where Element == RoomSummary {
                     heroes: [],
                     activeMembersCount: 0,
                     lastMessage: AttributedString("Seu pão tá saindo do forno 🥖"),
-                    lastMessageDate: Date.now.addingTimeInterval(-26 * 60 * 60),
+                    lastMessageDate: guaMarketingTimestamp(hour: 9, minute: 41),
                     unreadMessagesCount: 2,
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 2,
@@ -368,7 +374,7 @@ extension Array where Element == RoomSummary {
                     heroes: [],
                     activeMembersCount: 0,
                     lastMessage: AttributedString("Que paz nesse lugar 😍"),
-                    lastMessageDate: Date.now.addingTimeInterval(-27 * 60 * 60),
+                    lastMessageDate: guaMarketingTimestamp(hour: 8, minute: 41),
                     unreadMessagesCount: 0,
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 0,
@@ -388,7 +394,7 @@ extension Array where Element == RoomSummary {
                     heroes: [],
                     activeMembersCount: 0,
                     lastMessage: AttributedString("Pedro: Fechamos o trimestre acima da meta! 🎉"),
-                    lastMessageDate: Date.now.addingTimeInterval(-3 * 24 * 60 * 60),
+                    lastMessageDate: guaMarketingTimestamp(hour: 7, minute: 41),
                     unreadMessagesCount: 0,
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 0,

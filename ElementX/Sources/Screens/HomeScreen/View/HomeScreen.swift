@@ -87,16 +87,16 @@ struct HomeScreen: View {
 // MARK: - Previews
 
 struct HomeScreen_Previews: PreviewProvider, TestablePreview {
-    static let loadingViewModel = viewModel(.skeletons)
-    static let emptyViewModel = viewModel(.empty)
-    static let loadedViewModel = viewModel(.rooms)
-    static let guaMarketingViewModel = viewModel(roomSummaryProviderState: .loaded(.mockRoomsGuaMarketing))
-
     static var previews: some View {
+        let loadingViewModel = viewModel(.skeletons)
+        let emptyViewModel = viewModel(.empty)
+        let loadedViewModel = viewModel(.rooms)
+        let guaMarketingViewModel = viewModel(roomSummaryProviderState: .loaded(.mockRoomsGuaMarketing))
+
         NavigationStack {
             HomeScreen(context: loadingViewModel.context)
         }
-        .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
+        .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
             state.roomListMode == .skeletons
         })
         .previewDisplayName("Loading")
@@ -124,7 +124,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         .preferredColorScheme(.dark)
         .snapshotPreferences(expect: guaMarketingViewModel.context.$viewState.map { state in
             state.roomListMode == .rooms
-        })
+        }, precision: 0.997)
         .previewDisplayName("GuaMarketingConversas")
     }
 

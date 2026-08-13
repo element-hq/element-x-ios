@@ -123,5 +123,6 @@ struct UserDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             UserDetailsEditScreen(context: viewModel.context)
         }
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.currentDisplayName).map { $0 != nil }.eraseToStream())
     }
 }

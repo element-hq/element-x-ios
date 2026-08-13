@@ -225,5 +225,6 @@ struct TwoStepVerificationScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             TwoStepVerificationScreen(context: viewModel.context)
         }
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.phase).map { $0 == .overviewNoPin }.eraseToStream())
     }
 }

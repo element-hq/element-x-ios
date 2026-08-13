@@ -403,8 +403,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
         
         state.isProcessingIgnoreRequest = true
+        defer { state.isProcessingIgnoreRequest = false }
         let result = await userSession.clientProxy.ignoreUser(dmUserID)
-        state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
             // Mutating the optional in place when built for Release crashes 🤷‍♂️
@@ -424,8 +424,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
         
         state.isProcessingIgnoreRequest = true
+        defer { state.isProcessingIgnoreRequest = false }
         let result = await userSession.clientProxy.unignoreUser(dmUserID)
-        state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
             // Mutating the optional in place when built for Release crashes 🤷‍♂️

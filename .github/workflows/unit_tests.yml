@@ -94,28 +94,6 @@ jobs:
             bundle exec fastlane unit_tests skip_previews:true
           fi
 
-      - name: Collect recorded snapshots # TEMPORARY: remove together with the RECORD_FAILURES test plan change
-        if: ${{ !cancelled() }}
-        run: |
-          mkdir -p recorded-snapshots
-          git status --porcelain -- PreviewTests/Sources/__Snapshots__ | tee recorded-snapshots/status.txt
-          git status --porcelain -z -- PreviewTests/Sources/__Snapshots__ | while IFS= read -r -d '' entry; do
-            path="${entry:3}"
-            if [ -f "$path" ]; then
-              mkdir -p "recorded-snapshots/$(dirname "$path")"
-              cp "$path" "recorded-snapshots/$path"
-            fi
-          done
-
-      - name: Upload recorded snapshots # TEMPORARY: remove together with the RECORD_FAILURES test plan change
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: RecordedSnapshots
-          path: recorded-snapshots
-          retention-days: 1
-          if-no-files-found: warn
-
       - name: Zip results # for faster upload
         if: failure()
         run: |
