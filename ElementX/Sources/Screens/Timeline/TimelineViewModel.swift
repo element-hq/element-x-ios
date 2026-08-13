@@ -807,7 +807,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                      intentionalMentions: intentionalMentions)
             }
         case .recordVoiceMessage, .previewVoiceMessage:
-            fatalError("invalid composer mode.")
+            MXLog.error("Ignoring sendCurrentMessage with invalid composer mode: \(mode)")
+            return
         }
         
         scrollToBottom()

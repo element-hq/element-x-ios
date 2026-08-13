@@ -189,6 +189,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             switch state.composerMode {
             case .previewVoiceMessage:
                 actionsSubject.send(.voiceMessage(.send))
+            case .recordVoiceMessage:
+                MXLog.warning("Ignoring send action while recording a voice message.")
             default:
                 if context.composerFormattingEnabled {
                     actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
