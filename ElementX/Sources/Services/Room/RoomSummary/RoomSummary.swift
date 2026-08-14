@@ -41,6 +41,7 @@ nonisolated struct RoomSummary {
     
     let lastMessage: AttributedString?
     let lastMessageDate: Date?
+    var lastMessageIsThreaded = false
     let lastMessageState: LastMessageState?
     let unreadMessagesCount: UInt
     let unreadMentionsCount: UInt

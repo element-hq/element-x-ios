@@ -371,9 +371,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var attributedLastMessage: AttributedString?
         var lastMessageDate: Date?
         var lastMessageState: RoomSummary.LastMessageState?
+        var lastMessageIsThreaded = false
 
         switch details.latestEvent {
-        case .local(let timestamp, let senderID, let profile, let content, let state):
+        case .local(let timestamp, let senderID, let profile, let content, let threadRootEventID, let state):
+            lastMessageIsThreaded = threadRootEventID != nil
             let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: true)
             lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
@@ -386,7 +388,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             case .hasBeenSent:
                 lastMessageState = nil
             }
-        case .remote(let timestamp, let senderID, let isOwn, let profile, let content):
+        case .remote(let timestamp, let senderID, let isOwn, let profile, let content, let threadRootEventID):
+            lastMessageIsThreaded = threadRootEventID != nil
             let sender = TimelineItemSender(senderID: senderID, senderProfile: profile)
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: content, sender: sender, isOutgoing: isOwn)
             lastMessageDate = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
@@ -438,6 +441,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            activeMembersCount: UInt(details.activeMembersCount),
                            lastMessage: attributedLastMessage,
                            lastMessageDate: lastMessageDate,
+                           lastMessageIsThreaded: lastMessageIsThreaded,
                            lastMessageState: lastMessageState,
                            unreadMessagesCount: UInt(details.numUnreadMessages),
                            unreadMentionsCount: UInt(details.numUnreadMentions),

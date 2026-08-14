@@ -92,7 +92,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     /// threaded reply, or `nil` otherwise. The main timeline hides threaded
     /// events, so a room whose preview shows a threaded reply should open
     /// that thread instead.
-    var latestEventThreadRootID: String? { get }
+    func latestEventThreadRootID() async -> String?
 
     func subscribeForUpdates() async
     

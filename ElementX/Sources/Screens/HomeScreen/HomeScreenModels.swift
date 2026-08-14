@@ -215,6 +215,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let lastMessage: AttributedString?
     
+    var lastMessageIsThreaded = false
+    
     enum LastMessageState { case sending, failed }
     let lastMessageState: LastMessageState?
     
@@ -300,6 +302,7 @@ extension HomeScreenRoom {
                   isFavourite: summary.isFavourite,
                   timestamp: summary.lastMessageDate?.formattedMinimal(),
                   lastMessage: summary.lastMessage,
+                  lastMessageIsThreaded: summary.lastMessageIsThreaded,
                   lastMessageState: summary.homeScreenLastMessageState,
                   avatar: summary.avatar,
                   statusEmoji: summary.statusEmoji,

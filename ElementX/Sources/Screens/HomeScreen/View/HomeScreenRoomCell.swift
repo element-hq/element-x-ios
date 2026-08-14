@@ -174,9 +174,20 @@ struct HomeScreenRoomCell: View {
     @ViewBuilder
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
-            Text(displayedLastMessage)
-                .font(lastMessageFont)
-                .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                if room.lastMessageIsThreaded {
+                    CompoundIcon(\.threads, size: .xSmall, relativeTo: .compound.bodyMD)
+                        .foregroundColor(.compound.iconSecondary)
+                        // Sit the icon on the first line's baseline rather than
+                        // letting the (baseline-less) image float centred.
+                        .alignmentGuide(.firstTextBaseline) { $0[.bottom] }
+                        .accessibilityLabel(L10n.commonThread)
+                }
+
+                Text(displayedLastMessage)
+                    .font(lastMessageFont)
+                    .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
+            }
         }
     }
     

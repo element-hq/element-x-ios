@@ -344,7 +344,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     // would appear to be missing the previewed message. Open the thread instead.
                     if presentationAction == nil,
                        flowParameters.appSettings.threadsEnabled,
-                       let threadRootEventID = roomProxy.latestEventThreadRootID {
+                       let threadRootEventID = await roomProxy.latestEventThreadRootID() {
                         presentationAction = .thread(rootEventID: threadRootEventID, focusEvent: nil)
                     }
 

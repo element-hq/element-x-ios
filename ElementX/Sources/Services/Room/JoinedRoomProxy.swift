@@ -45,7 +45,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     // Not lazy: the latest event moves with every sync.
     var latestEventID: String? { room.latestEventId() }
     var latestEventTimestamp: UInt64? { room.latestEventTimestamp() }
-    var latestEventThreadRootID: String? { room.latestEventThreadRootId() }
+    func latestEventThreadRootID() async -> String? { await room.latestEventThreadRootId() }
     
     let timeline: TimelineProxyProtocol
     
