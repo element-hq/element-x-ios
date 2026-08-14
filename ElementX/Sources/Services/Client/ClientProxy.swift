@@ -281,7 +281,8 @@ class ClientProxy: ClientProxyProtocol {
         
         try await client.setUtdDelegate(utdDelegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
         
-        let canSubscribeToUserProfile = if appSettings.userStatusEnabled, case .success(true) = await isUserStatusSupported() {
+        let canSubscribeToUserProfile = if appSettings.userStatusEnabled,
+                                           await (try? client.isProfilesSlidingSyncExtensionSupported()) == true {
             true
         } else {
             false
@@ -369,7 +370,7 @@ class ClientProxy: ClientProxyProtocol {
     var isLiveKitRTCSupported: Bool {
         get async {
             do {
-                return try await client.isLivekitRtcSupported(fallbackToWellKnown: true)
+                return try await client.isLivekitRtcSupported()
             } catch {
                 MXLog.error("Failed checking LiveKit RTC support with error: \(error)")
                 return false
