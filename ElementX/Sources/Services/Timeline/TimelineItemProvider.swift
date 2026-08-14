@@ -175,8 +175,10 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             let itemProxy = TimelineItemProxy(item: item)
             changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: itemProxy, associatedWith: nil))
-        case .truncate:
-            break
+        case .truncate(let length):
+            for (index, itemProxy) in itemProxies.enumerated() where index >= Int(length) {
+                changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
+            }
         }
         
         return CollectionDifference(changes)
