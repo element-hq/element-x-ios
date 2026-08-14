@@ -25,6 +25,32 @@ struct HomeserverResolution: Equatable {
     let homeserver: ResolvedHomeserver
 }
 
+/// One homeserver in the resolver's signed federation roster (`GET /roster`). Only the fields
+/// federated user search consumes are decoded; the rest of the entry (keys, weights, …) is ignored.
+struct FederationRosterServer: Decodable, Equatable {
+    let serverName: String
+    /// Raw bare-handle discoverability policy; absent means globally discoverable.
+    /// Interpreted by `RosterSearchVisibility`.
+    let searchVisibility: String?
+    /// Discovery groups compared against the searcher's own server's groups when the policy is `group`.
+    let searchGroups: [String]?
+}
+
+/// A roster entry: a homeserver plus its membership status in the federation.
+struct FederationRosterEntry: Decodable, Equatable {
+    let homeserver: FederationRosterServer
+    let status: String
+
+    var isActive: Bool {
+        status == "ACTIVE"
+    }
+}
+
+/// The resolver's view of the federation: every homeserver it routes to.
+struct FederationRoster: Decodable, Equatable {
+    let entries: [FederationRosterEntry]
+}
+
 enum ResolverError: Error, LocalizedError {
     case notConfigured
     case invalidURL
@@ -62,9 +88,15 @@ protocol ResolverClientProtocol: Sendable {
     func resolve(phoneNumber: String) async throws -> HomeserverResolution
 }
 
-/// Talks to the Gua resolver (`POST /resolve`) — the federation front door that maps a phone number to a
-/// homeserver, so the client never hardcodes one. See `gua-resolver`.
-final class ResolverClient: ResolverClientProtocol {
+/// The slice of the resolver that federated user search needs: the roster of federation homeservers.
+protocol FederationRosterFetching: Sendable {
+    func fetchRoster() async throws -> FederationRoster
+}
+
+/// Talks to the Gua resolver — the federation front door. `POST /resolve` maps a phone number to a
+/// homeserver, so the client never hardcodes one; `GET /roster` lists the federation's homeservers so
+/// bare-handle search can fan out across them. See `gua-resolver`.
+final class ResolverClient: ResolverClientProtocol, FederationRosterFetching {
     private let baseURL: URL
     private let session: URLSession
     private let decoder = JSONDecoder()
@@ -132,5 +164,28 @@ final class ResolverClient: ResolverClientProtocol {
                                                                    baseURL: ref.baseUrl,
                                                                    masIssuer: ref.masIssuer,
                                                                    region: ref.region))
+    }
+
+    func fetchRoster() async throws -> FederationRoster {
+        guard let url = URL(string: "/roster", relativeTo: baseURL) else { throw ResolverError.invalidURL }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            throw ResolverError.transport(error)
+        }
+        guard let httpResponse = response as? HTTPURLResponse else { throw ResolverError.malformedResponse }
+        guard httpResponse.statusCode == 200 else { throw ResolverError.server(status: httpResponse.statusCode) }
+
+        do {
+            return try decoder.decode(FederationRoster.self, from: data)
+        } catch {
+            throw ResolverError.decoding(error)
+        }
     }
 }

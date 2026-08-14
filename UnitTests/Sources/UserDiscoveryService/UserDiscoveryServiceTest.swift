@@ -15,7 +15,7 @@ class UserDiscoveryServiceTest: XCTestCase {
     
     override func setUpWithError() throws {
         clientProxy = .init(.init(userID: "@foo:matrix.org"))
-        service = UserDiscoveryService(clientProxy: clientProxy)
+        service = UserDiscoveryService(clientProxy: clientProxy, federationRosterProvider: nil)
     }
     
     func testQueryShowingResults() async {
@@ -107,8 +107,90 @@ class UserDiscoveryServiceTest: XCTestCase {
         XCTAssertTrue(clientProxy.profileForCalled)
     }
     
+    // MARK: - Gua federated bare-handle search
+
+    func testBareHandleFansOutAcrossFederationSkippingOwnServer() async {
+        makeFederatedService(entries: [("matrix.org", "ACTIVE"), ("ca.gua.example", "ACTIVE"), ("br.gua.example", "ACTIVE")])
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [.mockAlice], limited: false))
+        clientProxy.profileForClosure = { userID in .success(.init(userID: userID)) }
+
+        let results = await (try? search(query: "ana-souza").get()) ?? []
+
+        XCTAssertEqual(results.map(\.userID), ["@alice:matrix.org",
+                                               "@ana-souza:ca.gua.example",
+                                               "@ana-souza:br.gua.example"])
+    }
+
+    func testFederatedLookupFailuresAreDropped() async {
+        makeFederatedService(entries: [("matrix.org", "ACTIVE"), ("ca.gua.example", "ACTIVE"), ("br.gua.example", "ACTIVE")])
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [.mockAlice], limited: false))
+        clientProxy.profileForClosure = { userID in
+            userID == "@ana-souza:br.gua.example" ? .success(.init(userID: userID, displayName: "Ana")) : .failure(.sdkError(ClientProxyMockError.generic))
+        }
+
+        let results = await (try? search(query: "ana-souza").get()) ?? []
+
+        XCTAssertEqual(results.map(\.userID), ["@alice:matrix.org", "@ana-souza:br.gua.example"])
+    }
+
+    func testFederatedMatchesAreDeduplicatedAgainstLocalResults() async {
+        makeFederatedService(entries: [("matrix.org", "ACTIVE"), ("ca.gua.example", "ACTIVE")])
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [.init(userID: "@ana-souza:ca.gua.example")], limited: false))
+        clientProxy.profileForClosure = { userID in .success(.init(userID: userID)) }
+
+        let results = await (try? search(query: "ana-souza").get()) ?? []
+
+        XCTAssertEqual(results.map(\.userID), ["@ana-souza:ca.gua.example"])
+    }
+
+    func testFederatedMatchesShowWhenLocalSearchFails() async {
+        makeFederatedService(entries: [("matrix.org", "ACTIVE"), ("ca.gua.example", "ACTIVE")])
+        clientProxy.searchUsersSearchTermLimitReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        clientProxy.profileForClosure = { userID in .success(.init(userID: userID)) }
+
+        let results = await (try? search(query: "ana-souza").get()) ?? []
+
+        XCTAssertEqual(results.map(\.userID), ["@ana-souza:ca.gua.example"])
+    }
+
+    func testSlowFederatedLookupIsDroppedAfterTimeout() async {
+        makeFederatedService(entries: [("matrix.org", "ACTIVE"), ("ca.gua.example", "ACTIVE"), ("br.gua.example", "ACTIVE")],
+                             lookupTimeout: .milliseconds(50))
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [.mockAlice], limited: false))
+        clientProxy.profileForClosure = { userID in
+            if userID == "@ana-souza:ca.gua.example" {
+                try? await Task.sleep(for: .seconds(10))
+            }
+            return .success(.init(userID: userID))
+        }
+
+        let results = await (try? search(query: "ana-souza").get()) ?? []
+
+        XCTAssertEqual(results.map(\.userID), ["@alice:matrix.org", "@ana-souza:br.gua.example"])
+    }
+
+    func testNonHandleQueryDoesNotFanOut() async {
+        makeFederatedService(entries: [("matrix.org", "ACTIVE"), ("ca.gua.example", "ACTIVE")])
+        clientProxy.searchUsersSearchTermLimitReturnValue = .success(.init(results: [.mockAlice], limited: false))
+
+        let results = await (try? search(query: "ana souza").get()) ?? []
+
+        assertSearchResults(results, toBe: 1)
+        XCTAssertFalse(clientProxy.profileForCalled)
+    }
+
     // MARK: - Private
-    
+
+    private func makeFederatedService(entries: [(serverName: String, status: String)], lookupTimeout: Duration = .seconds(3)) {
+        let roster = FederationRoster(entries: entries.map { entry in
+            FederationRosterEntry(homeserver: .init(serverName: entry.serverName, searchVisibility: nil, searchGroups: nil),
+                                  status: entry.status)
+        })
+        service = UserDiscoveryService(clientProxy: clientProxy,
+                                       federationRosterProvider: StaticRosterProvider(roster: roster),
+                                       federatedLookupTimeout: lookupTimeout)
+    }
+
     private func assertSearchResults(_ results: [UserProfileProxy], toBe count: Int) {
         XCTAssertTrue(count >= 0)
         XCTAssertEqual(results.count, count)
@@ -125,5 +207,13 @@ class UserDiscoveryServiceTest: XCTestCase {
             .mockBob,
             .mockCharlie
         ]
+    }
+}
+
+private struct StaticRosterProvider: FederationRosterProviding {
+    let roster: FederationRoster?
+
+    func currentRoster() async -> FederationRoster? {
+        roster
     }
 }
