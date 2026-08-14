@@ -5123,7 +5123,6 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
     nonisolated(unsafe) var predecessorRoom: PredecessorRoom?
     nonisolated(unsafe) var latestEventID: String?
     nonisolated(unsafe) var latestEventTimestamp: UInt64?
-    nonisolated(unsafe) var latestEventThreadRootID: String?
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
@@ -5135,6 +5134,34 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
     }
     nonisolated(unsafe) var underlyingOwnUserID: String!
 
+    //MARK: - latestEventThreadRootID
+
+    private let latestEventThreadRootIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var latestEventThreadRootIDUnderlyingCallsCount = 0
+    var latestEventThreadRootIDCallsCount: Int {
+        get { latestEventThreadRootIDCallsCountLock.withLock { latestEventThreadRootIDUnderlyingCallsCount } }
+        set { latestEventThreadRootIDCallsCountLock.withLock { latestEventThreadRootIDUnderlyingCallsCount = newValue } }
+    }
+    var latestEventThreadRootIDCalled: Bool {
+        return latestEventThreadRootIDCallsCount > 0
+    }
+
+    private let latestEventThreadRootIDReturnValueLock = NSLock()
+    private nonisolated(unsafe) var latestEventThreadRootIDUnderlyingReturnValue: String?
+    var latestEventThreadRootIDReturnValue: String? {
+        get { latestEventThreadRootIDReturnValueLock.withLock { latestEventThreadRootIDUnderlyingReturnValue } }
+        set { latestEventThreadRootIDReturnValueLock.withLock { latestEventThreadRootIDUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var latestEventThreadRootIDClosure: (() async -> String?)?
+
+    @concurrent func latestEventThreadRootID() async -> String? {
+        latestEventThreadRootIDCallsCountLock.withLock { latestEventThreadRootIDUnderlyingCallsCount += 1 }
+        if let latestEventThreadRootIDClosure = latestEventThreadRootIDClosure {
+            return await latestEventThreadRootIDClosure()
+        } else {
+            return latestEventThreadRootIDReturnValue
+        }
+    }
     //MARK: - subscribeForUpdates
 
     private let subscribeForUpdatesCallsCountLock = NSLock()
