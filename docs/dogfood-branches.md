@@ -1321,3 +1321,56 @@ then bisect the Set-index path (live_update_handler position mapping
 after a shrink rebuild). Store state believed to contain all three
 events; awaiting post-restart visual check to split store-level vs
 timeline-level loss.
+
+## Vanished mid-send message ROOT-CAUSED + FIXED: stale-batch guard ate the stranded event's echo (SDK fix)
+
+Resolution of the OPEN entry above, via the CHUNKDUMP diagnostics (SDK
+62f1f2522) - no repro needed, the persisted store state was read
+directly off the phone on one room-open:
+
+```
+chunk 4: GAP          chunk 3: []          chunk 2: [$LwBCw]  <- send 1, stranded
+chunk 5: GAP          chunk 6: [20 events all <=18:32Z, $OFAzx, $AgqKj]
+```
+
+So the missing message was SEND 1 ($LwBCw), not send 2 - with identical
+bodies the eye can't tell. Mechanism, each step now log-proven:
+
+1. 21:04:35 send 1 eager-appends $LwBCw to the live tail.
+2. 21:04:41 a stale limited+gappy sync (its ~20 events all predate
+   18:32Z, and not all were known, so no guard applied) takes the legacy
+   dedup path: appends [GAP][batch] after $LwBCw, and the shrink
+   collapses memory to the batch chunk. $LwBCw is stranded behind the
+   gap, offloaded to the store, in the wrong causal order.
+3. 21:04:50 the server's late echo of $LwBCw arrives as a lone batch -
+   the exact information that would restore it to the live tail - and
+   the 6532fc2be stale-batch guard eats it: "all events known" (the
+   stranded copy) "and lacking the tail". Permanent invisibility,
+   surviving restarts.
+
+Fix (SDK cbf7545bc, pushed): the guard now requires the known copies to
+all live IN MEMORY (the live tail). A store-resident copy means a
+stranded event, and the batch takes the legacy dedup path, pulling the
+event back to the tail. Regression test red-before/green-after; 63+99
+event cache tests green. The 21:04:41-window incident (test
+test_late_echo_of_a_stranded_event_is_not_treated_as_stale) needs the
+sender to be the OWN user: foreign fully-known batches are dropped
+earlier by non_empty_all_duplicates.
+
+Residuals (deliberate, journal for upstream):
+- The stranding itself still happens transiently; the echo now heals it
+  within seconds. The deeper fix - inserting a stale gap+batch BEFORE
+  the eager tail suffix rather than after it - is an upstream
+  discussion.
+- The heal appends the event at the tail, which can leave a cosmetic
+  misorder (send 1 after send 2) until server order is re-asserted.
+- non_empty_all_duplicates has the same theoretical hole for stranded
+  FOREIGN events; unreachable via the send queue, upstream discussion.
+- The Self room's $LwBCw remains stranded on the phone (its echo was
+  already eaten pre-fix; the server won't re-send it): clear cache to
+  fully heal that one room, or ignore it.
+
+The "Timeline item not found, can't update send state" WARNs firing on
+EVERY send remain unexplained-but-benign in this incident (likely a
+stale second Timeline instance; the FFI diff log now carries room +
+instance markers to pin that down next time).
