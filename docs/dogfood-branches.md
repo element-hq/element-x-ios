@@ -1036,3 +1036,56 @@ The diagnostics distinguish these directly: candidate 1/2 shows as a
 long-held `state (read)` naming the owner span; candidate 3 as a stall on
 `store (read|write)` with no live holders; candidate 4 as a long-held
 `state (read, dirty upgrade)`.
+
+## Event cache wedge SOLVED: nested read in the thread aggregator (SDK fix)
+
+The wedge recurred on 2026-08-14 at 07:05:23Z (permanent Loading modal on
+every room open after filtering via search), and this time the phone was
+running the holder-attributing stall diagnostics
+([`25ff0e827`](https://github.com/matrix-org/matrix-rust-sdk/commit/25ff0e827)).
+129 `state lock acquisition is stalled` errors named the parties
+immediately, confirming candidate theory 2 (the three-party nested read)
+- with the embarrassing footnote that the culprit sat in the one path the
+first audit had marked clean.
+
+The snapshot: `state (read) held by handle_room_updates` (for 2569s and
+counting), `upgrade mutex (read) held by handle_room_updates` acquired
+0.157s later, the main `room_updates_task` itself stalled on `state
+(read)`, and backfill `run_request` spans stalled on `state (write)`.
+
+The chain, matched line-by-line against the log:
+
+1. 07:05:23.290 - `Caches::handle_joined_room_update`'s threads section
+   acquired the room read guard and passed it **by value** into
+   `aggregate_timeline_for_threads`, so the guard lived for the whole
+   aggregation. The batch contained a redaction whose target existed in
+   the room.
+2. 07:05:23.420 - a backfill `/messages` response for
+   `!DWnKHhSrAvvbpShXda:fosdem.org` arrived and called `write()`,
+   queueing on the write-preferring RwLock behind the held guard.
+3. 07:05:23.447 - the aggregator's redaction full-search called
+   `ThreadEventCache::find_event`, which re-acquires the same global
+   state lock via `read()`. That nested read acquired the upgrade mutex,
+   then parked behind the queued writer. Writer waits on the guard; the
+   guard's owner is the parked reader. Deadlock, and the held upgrade
+   mutex wedges every other `read()` in the process too.
+
+iOS suspending the app mid-catch-up (background refresh expiry at
+07:05:23.4) made the window easy to hit, but the race needs no
+suspension: any write landing in the ~0.1s between the guard acquisition
+and the thread search suffices, which is why it fires on bad-network
+catch-up batches (backfill writers are flying) and not in quiet steady
+state.
+
+Fix ([`addbff009`](https://github.com/matrix-org/matrix-rust-sdk/commit/addbff009)):
+`aggregate_timeline_for_threads` now takes the `CacheStateLock` instead
+of a guard, so each room lookup takes a short-lived guard dropped before
+the thread search runs. Nothing in the aggregation holds the state lock
+across `thread.find_event` any more. All 99 unit + 61 integration event
+cache tests green. UPSTREAMABLE, together with the diagnostics that
+caught it.
+
+Rule reaffirmed, now with a proven scalp: never acquire the event cache
+StateLock (via any per-room/thread/pinned `CacheStateLock` view - they
+are all the same lock) while holding any guard on it. The stall
+diagnostics stay in the build to name any sibling site instantly.
