@@ -905,6 +905,14 @@ on-device pin-delta logs; the dead ends are as valuable as the fixes:
     `SendTransition: snapping` diagnostic logs the measured heights - strip
     with the other SendTransition logs before upstreaming.
 
+Before (note animation glitches on the previously bottom-most message, and the composer snapping back and thus the timeline jumping around when sending multiline messages):
+
+https://github.com/user-attachments/assets/7d3ab293-141b-4605-855f-14ffab5a61c0
+
+After (note new messages slide in without the previously bottom-most message bouncing around; composer now expands smoothly and snaps back smoothly without causing the timeline to bounce on multiline messages):
+
+https://github.com/user-attachments/assets/d9f1aca5-f445-412d-a06c-f93c7a4a08ec
+
 Before upstreaming: strip the `SendTransition: restore`/`materialising` MXLog
 diagnostics in the pin paths. Upstreamable as a whole; the composer-side
 pieces (measured delta, growth tween, caret-scroll suppression) stand alone.
