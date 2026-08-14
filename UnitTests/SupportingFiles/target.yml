@@ -34,7 +34,6 @@ targets:
     - target: MapLibreInterface
     - package: MatrixRustSDK
     - package: AsyncAlgorithms
-    - package: Clocks
     - package: Dynamic
     - package: BuildExtensions
       product: Macros
