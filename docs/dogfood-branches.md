@@ -1166,3 +1166,53 @@ map write guard is still held across `start_from` during cache creation
 redecryptor sweeps for the fetch duration, not the global lock; fixing
 it needs a started-flag or two-phase insert, not worth it until it shows
 up in practice.
+
+## Vanished sent message in !FBSk: collateral of the StateLock wedge, no new bug
+
+Report: sent message `$178662887510241ftaZv` (13:47:55Z 2026-08-13,
+room !FBSkLwrSkdSBBXWHUj:matrix.org) disappeared entirely from the EXI
+timeline, reappearing only after a later timeline reload.
+
+Log forensics gotcha first: the "EXI" console logs supplied for this bug
+(and one of yesterday's downloads) were actually the **Nightly** app's
+log - three separate downloads were byte-identical (same md5) and
+contained Nightly's `$ilx` send. Confirmed by pulling Nightly's own log
+straight off the phone via devicectl
+(`--domain-identifier group.io.element.nightly`, path
+`Library/Logs/io.element.elementx.nightly/`). The dogfood evidence came
+from rageshake 7468's copy of `console.2026-08-13-16.log`, which covers
+13:00:04-13:46:52Z; the on-device originals for hours 16-17 have rotated
+away.
+
+Not a wrong-client send this time, and no new bug. The chain, from
+rageshake 7468's log:
+
+1. 13:42:08-13:42:10 - three sends to !FBSk succeed; each is followed by
+   its eager-insert persistence
+   (`handle_linked_chunk_updates{Room(!FBSk)}`). Healthy.
+2. 13:42:12.899 - the event cache StateLock wedge begins (this IS the
+   rageshake 7468 deadlock, root-caused since as the thread-aggregator
+   nested read and fixed in
+   [`addbff009`](https://github.com/matrix-org/matrix-rust-sdk/commit/addbff009));
+   pos-persist stall WARNs from 13:42:37.
+3. 13:44:36 - another !FBSk send succeeds ("Sent event in room") but NO
+   !FBSk persistence ever follows: the send queue's eager insert calls
+   `state.write()` and parks forever on the wedged lock. By design the
+   queue continues anyway (the insert is "not crucial"), and crucially
+   `mark_as_sent` has already durably removed the queue entry, so
+   nothing will retry the insert after restart.
+4. 13:44:51 and 13:45:34 - two more messages queued ("Finished sending
+   message"); their PUTs crawl out over the dying network and one is
+   accepted server-side at 13:47:55 = the vanished event (the log copy
+   ends 13:46:52, before the success line).
+5. After the app restart cleared the wedge, the event existed nowhere
+   locally: never eager-inserted, never synced (the room's next syncs
+   were limited+gappy, so it sat behind a gap). Timeline shows it
+   gone. It reappeared once a reload/back-pagination filled the gap.
+
+So the vanish is pure collateral of the (now fixed) deadlock, amplified
+by the mark-as-sent-before-eager-insert ordering, which converts "event
+cache unavailable at send time" into "sent event absent from local
+timeline until backfill". With the deadlock fixed the window is gone;
+the ordering is upstream's design (the eager insert is best-effort by
+intent), so no change made.
