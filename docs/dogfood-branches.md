@@ -1384,3 +1384,28 @@ The "Timeline item not found, can't update send state" WARNs firing on
 EVERY send remain unexplained-but-benign in this incident (likely a
 stale second Timeline instance; the FFI diff log now carries room +
 instance markers to pin that down next time).
+
+## Eager-tail relocation: the stranding itself is now fixed, not just healed (SDK fix)
+
+Follow-up to the two entries above, closing the vanished-send incident
+at both ends. The transient residual - a stale gappy batch stranding
+our just-sent events behind its gap until the sync echo heals them - is
+an UPSTREAM flaw (their legacy path + shrink; our buggy 6532fc2be only
+made it permanent). Fixed at the source (SDK
+[`7fad14efb`](https://github.com/matrix-org/matrix-rust-sdk/commit/7fad14efb),
+pushed): in the legacy gappy path, identify the eager tail suffix
+conservatively (maximal trailing run of OWN events, absent from the
+batch, strictly newer by origin_server_ts than every batch event), pull
+it out, append the gap+batch, re-append the suffix at the new tail. The
+room stays [batch..., our sends]: no invisibility window, no misorder,
+and the later echo dedups in place as an anchor. Anything the rule
+doesn't confidently claim stays put and falls back to the cbf7545bc
+echo-heal.
+
+Regression test red-before/green-after
+(test_gappy_stale_batch_does_not_strand_our_eager_tail); the echo-heal
+and reorder tests still green; 64+99 event cache tests green.
+
+Upstream arc for this family is now: 4d97fa38a (anchored merge) +
+6532fc2be (stale-batch guard, ONLY together with) + cbf7545bc (guard
+narrowing) + 7fad14efb (suffix relocation) + the diagnostics-strip.
