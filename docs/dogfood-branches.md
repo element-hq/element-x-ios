@@ -1089,3 +1089,42 @@ Rule reaffirmed, now with a proven scalp: never acquire the event cache
 StateLock (via any per-room/thread/pinned `CacheStateLock` view - they
 are all the same lock) while holding any guard on it. The stall
 diagnostics stay in the build to name any sibling site instantly.
+
+## StateLock nesting audit: no further deadlock sites, one stall hazard
+
+Following the aggregator fix, a full audit of the event cache for the
+same bug class: any code holding a StateLock guard across a call that
+(transitively) re-acquires the lock. Method: enumerate every acquisition
+site (`read()`/`write()`/`try_insert_once_with`/`clear_and_reload` plus
+every helper that wraps one, e.g. `ThreadEventCache::find_event` - the
+wrapper that hid the original bug), then inspect every guard-holding
+region for calls into that set.
+
+**No other deadlock site exists.** Every guard-across-await region only
+touches guard-local state, the store, or non-blocking channel sends:
+`handle_sync` and `post_process_new_events` (both run under held write
+guards on the sync, send-queue and redecryptor paths) never leave the
+guard; the receipts hunt is a fire-and-forget enqueue; redecryptor
+decrypts with no guard held and takes short-lived guards per phase;
+auto-shrink, subscriber drop (`try_send` capped at 1024 attempts),
+pinned-events and both pagination conclude paths are clean. Two places
+already defend against exactly this class: thread pagination fetches the
+thread root *before* locking (with a comment naming the constraint), and
+the pinned listener explicitly drops its guard before
+`reload_from_network`. Guards never escape the event_cache module, so
+external callers (timeline, send queue, latest-events) cannot construct
+the bug. Lock ordering is consistent everywhere: by_room / threads-map /
+event_focused-map before the global StateLock, never the reverse.
+
+**One stall (not deadlock) hazard, upstream too:** the event-focused
+cache runs its network fetches *under the held global write guard* -
+`reload_impl` awaits `/context` inside `start_from`, and
+`paginate_backwards`/`paginate_forwards` await `/messages` or
+`/relations` the same way (event_focused/mod.rs; `origin/main`
+identical). Nothing inside re-acquires the lock, so it cannot wedge, but
+on bad network one permalink/focused-timeline open freezes the entire
+event cache - every room, sync ingestion, the lot - for up to the HTTP
+timeout, presenting as a self-healing flavour of the Loading-modal
+symptom. Fix shape is the dance thread pagination already does: fetch
+outside the guard, lock to install. Not yet fixed; flagged for a
+follow-up round.
