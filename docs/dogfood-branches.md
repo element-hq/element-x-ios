@@ -698,6 +698,15 @@ This bug has been around since the event cache landed, i think.
   Regression test drops exactly the tail sends without the fix. Upstream this
   together with the diagnostics commit
   [SDK [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)
+- **BUGGY AS SHIPPED (flagged 2026-08-15): this guard over-matched.** It
+  conflated known-and-in-the-live-tail with known-but-stranded-behind-a-gap
+  (store-only copy), and so ate the late sync echo of a stranded just-sent
+  event - making a sent message invisible permanently (survived restarts).
+  Properly fixed by SDK
+  [`cbf7545bc`](https://github.com/matrix-org/matrix-rust-sdk/commit/cbf7545bc)
+  (the known copies must all live in memory); see "Vanished mid-send message
+  ROOT-CAUSED + FIXED" at the end of this document. Upstream `6532fc2be` only
+  together with `cbf7545bc`.
 
 #### Crash if the user stabs the send button too fast as it switches between send and VM
 
@@ -714,7 +723,8 @@ This bug has been around since the event cache landed, i think.
   [`e8b28d5ef`](https://github.com/element-hq/element-x-ios/commit/e8b28d5ef).
   The same rageshake showed the post-crash flavour of the stale-sync-batch
   vanish (first sync after relaunch uses the pre-crash pos while the send queue
-  is still re-sending), covered by SDK [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be) above; the send queue itself
+  is still re-sending), covered by SDK [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be) above (BUGGY AS SHIPPED, see the
+  flag on its entry; corrected by `cbf7545bc`); the send queue itself
   behaved (both pending messages restored and re-sent, nothing lost)
 
 #### Stop the first tap after a "Loading..." modal being silently swallowed
