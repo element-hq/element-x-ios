@@ -1409,3 +1409,29 @@ and reorder tests still green; 64+99 event cache tests green.
 Upstream arc for this family is now: 4d97fa38a (anchored merge) +
 6532fc2be (stale-batch guard, ONLY together with) + cbf7545bc (guard
 narrowing) + 7fad14efb (suffix relocation) + the diagnostics-strip.
+
+## Room-list taps route into threads through edits + threaded-preview icon (VALIDATED)
+
+Two related pieces, user-validated 2026-08-15:
+
+1. The room-list tap-to-thread routing (opens the thread when the
+   room's latest event is a threaded reply) silently broke when that
+   reply was EDITED: the latest-event value becomes the edit event,
+   whose relation is m.replace, so latest_event_thread_root_id saw no
+   thread. Fixed in the SDK
+   ([`b69d40ecd`](https://github.com/matrix-org/matrix-rust-sdk/commit/b69d40ecd)):
+   the UI latest-event value now carries a resolved thread_root - read
+   off the event itself or, for an edit, off the edited original looked
+   up in the event cache (no network) - and the FFI
+   latestEventThreadRootID became async to do the same resolution.
+   Regression test covers both the direct and the edit case.
+2. Room-list rows now show a Compound threads icon before the message
+   preview when the previewed event lives in a thread (matching Element
+   Web), piped via thread_root_event_id on the room summary's latest
+   event. Position user-tuned: vertically centred on the first line's
+   capitals, nudged 1pt down (EXI
+   [`51e1d46b0`](https://github.com/element-hq/element-x-ios/commit/51e1d46b0)
+   + [`a85914f67`](https://github.com/element-hq/element-x-ios/commit/a85914f67)).
+
+Both validated on the phone. The routing feature itself plus this
+resolution are candidates for upstreaming with the thread work.
