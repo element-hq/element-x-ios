@@ -1282,3 +1282,42 @@ occurrence of the shape is what would indicate the fix failed.
 
 Upstream queue: add `5a4990bc3` alongside `4d97fa38a`, `25ff0e827`,
 `addbff009`, `5f715227a`.
+
+## OPEN: own send vanishes when a catch-up shrink lands mid-send (Self room, 2026-08-14 21:04Z)
+
+Repro (screen recording + hour-00 log in scratchpad/vanish2): three
+identical `/me` sends to !ZBAy (Self) at 21:04:34 ($LwBCw), 21:04:41
+($OFAzx) and 21:06:00 ($AgqKj), during the tail of the clear-cache
+catch-up. End state: $OFAzx accepted server-side but absent from the
+timeline; at the video's end it was $LwBCw that was missing and $OFAzx
+visible (read receipts targeted $OFAzx until 21:05:48), so the two
+swapped at some point - a poison/heal dance, not a clean drop.
+
+Established from the log:
+
+1. ALL THREE sends (plus one in !Kzal) completed into "Timeline item
+   not found, can't update send state ... remote_item_exists=false":
+   the local echo item was destroyed before each send finished.
+2. The killer for send 2: a limited+gappy sync for !ZBAy landed at
+   21:04:41.489 (filter_duplicated_events → shrink_to_last_reloaded_chunk),
+   BETWEEN the local echo PushBack (41.367) and the send completing
+   (42.83). The timeline was mass-rebuilt (14 removes + 21 inserts,
+   16 → 24 items) and the local echo did not survive.
+3. Each send's eager insert DID persist
+   (handle_linked_chunk_updates{Room(!ZBAy)} after each "Sent event"),
+   and surfaced in the timeline as a bare Set(last-index) rather than an
+   append - after the rebuild those indices don't correspond to what the
+   handler believes, which is the leading theory for how one own-message
+   item ends up overwriting another's.
+4. The 6532fc2be stale-batch guard fired correctly at 21:04:50
+   ("Ignoring a stale sync batch", batch_len=1) - this new loss is a
+   DIFFERENT window in the same limited-sync-collapse family.
+5. Sync redeliveries at 21:05:04 and 21:06:19 each produced a lone
+   Set(last-index) on the live timeline.
+
+Next steps: deterministic repro as a matrix-sdk-ui integration test
+(local echo + limited gappy sync with shrink mid-send + mark_as_sent),
+then bisect the Set-index path (live_update_handler position mapping
+after a shrink rebuild). Store state believed to contain all three
+events; awaiting post-restart visual check to split store-level vs
+timeline-level loss.
