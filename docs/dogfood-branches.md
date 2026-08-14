@@ -1224,3 +1224,61 @@ cache unavailable at send time" into "sent event absent from local
 timeline until backfill". With the deadlock fixed the window is gone;
 the ordering is upstream's design (the eager insert is best-effort by
 intent), so no change made.
+
+## Thread root shows a permanent loading skeleton instead of its thread summary (SDK fix)
+
+Report (2026-08-14 ~17:20Z, Techteam Internal): tapping the room in the
+room list (whose latest activity was in a thread) opened the main
+timeline, and the thread root rendered EXI's redacted-placeholder
+thread-summary pill (the "skeleton") indefinitely instead of "N replies
++ latest reply preview". Note the first half of that report is expected
+behaviour today: a room-list tap always opens the room, and the thread
+is reached via the summary pill, which makes a skeleton pill doubly
+useless.
+
+Diagnosis (hour-20 console log pulled off the phone; the user's .gz
+download was truncated to 556 bytes):
+
+1. EXI renders the skeleton whenever `TimelineItemThreadSummary` is not
+   `.loaded`; `.notLoaded` maps from the SDK's
+   `TimelineDetails::Unavailable`, which the timeline produces when the
+   `ThreadSummary` has `latest_reply: None` (a failed load would log
+   "Failed to load thread latest event"; the log has none).
+2. `compute_thread_summary` finds the latest reply by scanning the
+   in-memory thread linked chunk with the latest-events filter (which
+   rejects reactions/edits/redactions), but counts `num_replies` from
+   the store's relations. The two can disagree.
+3. At 17:18:12 the thread cache for the root was created fresh (empty
+   store: `try_insert_once_with > load_last_chunk` found nothing) by a
+   sync whose only in-thread event was an aggregation (a reaction to
+   the user's reply, routed by the aggregator's Annotation branch). The
+   log proves the scan found nothing: each episode shows exactly ONE
+   `find_event_relations` (the num_replies count) and no edit-check
+   lookups, which only happens when `latest_event_id` is `None`.
+4. Result: summary `{num_replies: N, latest_reply: None}` persisted
+   onto the root event; every timeline build renders it as the eternal
+   skeleton. Nothing ever heals it (the thread chunk stays
+   aggregation-only until the thread is opened or a real reply
+   arrives). Same episode repeated at 17:20:54.
+
+The bug is UPSTREAM: `thread/state.rs` is byte-identical to
+origin/main; the same shape also fires without a fresh cache, via the
+limited-sync shrink (`handle_sync` shrinks the thread chunk to its last
+chunk, which can be a lone reaction).
+
+Fix (SDK
+[`5a4990bc3`](https://github.com/matrix-org/matrix-rust-sdk/commit/5a4990bc3),
+pushed): when the in-memory scan finds no suitable event, fall back to
+the thread replies already fetched from the store for `num_replies` and
+pick the newest suitable one by `origin_server_ts`. Regression test
+reproduces the limited-sync shrink shape (red before, green after); all
+62 + 99 event cache tests green.
+
+Caveat for validation: the bad summary is PERSISTED on this thread's
+root, and the fix only recomputes on the next thread activity. So the
+Techteam Internal root may still show the skeleton after updating until
+someone reacts/replies in that thread (or cache is cleared); any NEW
+occurrence of the shape is what would indicate the fix failed.
+
+Upstream queue: add `5a4990bc3` alongside `4d97fa38a`, `25ff0e827`,
+`addbff009`, `5f715227a`.
