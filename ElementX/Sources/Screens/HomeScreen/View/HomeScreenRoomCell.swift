@@ -178,9 +178,17 @@ struct HomeScreenRoomCell: View {
                 if room.lastMessageIsThreaded {
                     CompoundIcon(\.threads, size: .xSmall, relativeTo: .compound.bodyMD)
                         .foregroundColor(.compound.iconSecondary)
-                        // Sit the icon on the first line's baseline rather than
-                        // letting the (baseline-less) image float centred.
-                        .alignmentGuide(.firstTextBaseline) { $0[.bottom] }
+                        // Centre the icon vertically on the first line's
+                        // capitals: the line's visual centre sits capHeight/2
+                        // above the baseline. bodyMD is the subheadline text
+                        // style, so measure that.
+                        // Centred on the first line's capitals, nudged 1pt down
+                        // to visually balance.
+                        .alignmentGuide(.firstTextBaseline) { dimensions in
+                            dimensions.height / 2
+                                + UIFont.preferredFont(forTextStyle: .subheadline).capHeight / 2
+                                - 1
+                        }
                         .accessibilityLabel(L10n.commonThread)
                 }
 
