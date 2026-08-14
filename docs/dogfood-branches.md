@@ -892,7 +892,7 @@ on-device pin-delta logs; the dead ends are as valuable as the fixes:
     (and its deferred geometry-restore handshake) is bypassed, so the normal
     `endSendTransition` restore runs afterwards. Sub-screenful sends keep the
     single-curve settle unchanged.
-18. [][`8acdd35a9`](https://github.com/element-hq/element-x-ios/commit/8acdd35a9)](https://github.com/element-hq/element-x-ios/commit/8acdd35a9).
+18. [`8acdd35a9`](https://github.com/element-hq/element-x-ios/commit/8acdd35a9).
     validated on the phone. The travel-based snap condition above
     never fired for a real 26-line send: after the materialising pin the
     residual travel is only the couple hundred points the collapse doesn't
@@ -1128,3 +1128,41 @@ timeout, presenting as a self-healing flavour of the Loading-modal
 symptom. Fix shape is the dance thread pagination already does: fetch
 outside the guard, lock to install. Not yet fixed; flagged for a
 follow-up round.
+
+## Event-focused network-under-lock stall FIXED (SDK fix)
+
+The stall hazard flagged by the nesting audit is fixed in SDK
+[`5f715227a`](https://github.com/matrix-org/matrix-rust-sdk/commit/5f715227a):
+the event-focused cache no longer runs any network request under the
+global state lock.
+
+What changed, per entry point:
+
+- `start_from` (permalink / focused-timeline open): store hydration and
+  input capture happen under a short-lived guard, the `/context` fetch
+  runs with no lock held, then a fresh guard installs the response
+  (`install_context_response`, the old `reload_impl` tail).
+- `paginate_backwards` / `paginate_forwards`: capture the gap token and
+  pagination mode under a short read guard, fetch `/messages` or
+  `/relations` unlocked, then re-acquire and install. The install
+  verifies the gap it paginated from is still in place (a concurrent
+  pagination or a reload may have consumed it) and drops the response
+  otherwise - the same conclude dance room pagination does.
+- Recovery `reload` never touches the network any more. It used to
+  refetch `/context` under the reloadable write guard during dirty
+  recovery, where a network error also aborted the whole recovery via
+  `?`. A dirty store cannot invalidate this in-memory cache, so ForgetAll
+  now resets the chunk and plain recovery keeps the snapshot. The
+  `initial_num_context_events` and `thread_mode` state fields existed
+  only to serve that refetch and are deleted.
+
+All event cache tests green (99 unit + 61 integration) plus the 8
+focused-timeline integration tests in matrix-sdk-ui. UPSTREAMABLE (the
+hazard is on origin/main verbatim).
+
+Known remaining ceiling, deliberately left: the per-room event-focused
+map write guard is still held across `start_from` during cache creation
+(Caches::event_focused). That blocks only same-room focused opens and
+redecryptor sweeps for the fetch duration, not the global lock; fixing
+it needs a started-flag or two-phase insert, not worth it until it shows
+up in practice.
