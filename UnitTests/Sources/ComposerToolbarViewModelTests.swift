@@ -190,7 +190,7 @@ final class ComposerToolbarViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
-            case let .sendMessage(_, _, _, intentionalMentions):
+            case let .sendMessage(_, _, _, intentionalMentions, _):
                 return intentionalMentions == IntentionalMentions(userIDs: ["@test:matrix.org"], atRoom: true)
             default:
                 return false
@@ -592,7 +592,7 @@ final class ComposerToolbarViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
-            case let .sendMessage(plainText, _, _, intentionalMentions):
+            case let .sendMessage(plainText, _, _, intentionalMentions, _):
                 // As of right now the markdown loses the display name when restored
                 return plainText == "Hello [@test:matrix.org](https://matrix.to/#/@test:matrix.org)!" &&
                     intentionalMentions == IntentionalMentions(userIDs: ["@test:matrix.org"], atRoom: false)
@@ -613,7 +613,7 @@ final class ComposerToolbarViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
-            case let .sendMessage(plainText, _, _, intentionalMentions):
+            case let .sendMessage(plainText, _, _, intentionalMentions, _):
                 return plainText == "Hello @room" &&
                     intentionalMentions == IntentionalMentions(userIDs: [], atRoom: true)
             default:
@@ -633,7 +633,7 @@ final class ComposerToolbarViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
-            case let .sendMessage(plainText, _, _, intentionalMentions):
+            case let .sendMessage(plainText, _, _, intentionalMentions, _):
                 // As of right now the markdown loses the display name when restored
                 return plainText == "Hello [@user1:matrix.org](https://matrix.to/#/@user1:matrix.org), [@user2:matrix.org](https://matrix.to/#/@user2:matrix.org) and @room" &&
                     intentionalMentions == IntentionalMentions(userIDs: ["@user1:matrix.org", "@user2:matrix.org"], atRoom: true)
@@ -654,7 +654,7 @@ final class ComposerToolbarViewModelTests {
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
-            case let .sendMessage(plainText, _, _, intentionalMentions):
+            case let .sendMessage(plainText, _, _, intentionalMentions, _):
                 // As of right now the markdown loses the display name when restored
                 return plainText == "Hello [@roomuser:matrix.org](https://matrix.to/#/@roomuser:matrix.org)" &&
                     intentionalMentions == IntentionalMentions(userIDs: ["@roomuser:matrix.org"], atRoom: false)
