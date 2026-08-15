@@ -76,6 +76,14 @@ enum InlineCodeAttribute: AttributedStringKey {
     static let name = "MXInlineCodeAttribute"
 }
 
+enum ListIndentAttribute: AttributedStringKey {
+    /// How many list levels deep a block element (blockquote/code block) sits,
+    /// so it can be indented under its item's bullet. Only applied to block
+    /// elements: list text carries literal indentation instead.
+    typealias Value = Int
+    static let name = "MXListIndentAttribute"
+}
+
 nonisolated extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
         let blockquote: BlockquoteAttribute
@@ -97,6 +105,8 @@ nonisolated extension AttributeScopes {
         let codeBlock: CodeBlockAttribute
         // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
         let inlineCode: InlineCodeAttribute
+        
+        let listIndent: ListIndentAttribute
         
         // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
         

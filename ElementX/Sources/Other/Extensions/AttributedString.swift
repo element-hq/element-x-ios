@@ -14,35 +14,73 @@ nonisolated extension AttributedString {
         String(characters[...])
     }
     
+    /// The string separated into a tree of block components: quotes contain
+    /// their nested quotes and code blocks as children, so `> \u{60}\u{60}\u{60}code` and
+    /// nested quotes render with their real structure.
     var formattedComponents: [AttributedStringBuilderComponent] {
-        var components = [AttributedStringBuilderComponent]()
-        
-        for run in runs[\.blockquote, \.codeBlock] {
-            var attributedString = AttributedString(self[run.2])
-            
-            // Remove trailing new lines if any
-            if attributedString.characters.last?.isNewline ?? false,
-               let range = attributedString.range(of: "\n", options: .backwards, locale: nil) {
-                attributedString.removeSubrange(range)
-            }
-            
-            let componentType: AttributedStringBuilderComponent.ComponentType = if let depth = run.0 {
-                .blockquote(depth: depth)
-            } else if run.1 != nil {
-                .codeBlock
-            } else {
-                .plainText
-            }
-            
-            // Prefix the position: two components with the same text (e.g. a
-            // quote of "test" answered with "test") must not share an identity,
-            // or the ForEach rendering them falls apart.
-            components.append(AttributedStringBuilderComponent(id: "\(components.count)-\(String(attributedString.characters))",
-                                                               attributedString: attributedString,
-                                                               type: componentType))
+        struct OpenQuote {
+            var children = [AttributedStringBuilderComponent]()
+            var content = AttributedString()
+            var listIndent = 0
         }
         
-        return components
+        var rootComponents = [AttributedStringBuilderComponent]()
+        var openQuotes = [OpenQuote]()
+        
+        func trimmingTrailingNewline(_ string: AttributedString) -> AttributedString {
+            var string = string
+            if string.characters.last?.isNewline ?? false,
+               let range = string.range(of: "\n", options: .backwards, locale: nil) {
+                string.removeSubrange(range)
+            }
+            return string
+        }
+        
+        // Prefix ids with the position: two components with the same text (e.g.
+        // a quote of "test" answered with "test") must not share an identity,
+        // or the ForEach rendering them falls apart.
+        func append(_ attributedString: AttributedString, kind: AttributedStringBuilderComponent.Kind, listIndent: Int) {
+            let index = openQuotes.last.map(\.children.count) ?? rootComponents.count
+            let component = AttributedStringBuilderComponent(id: "\(index)-\(String(attributedString.characters))",
+                                                             attributedString: attributedString,
+                                                             kind: kind,
+                                                             listIndent: listIndent)
+            if openQuotes.isEmpty {
+                rootComponents.append(component)
+            } else {
+                openQuotes[openQuotes.count - 1].children.append(component)
+            }
+        }
+        
+        func closeQuote() {
+            let quote = openQuotes.removeLast()
+            append(trimmingTrailingNewline(quote.content), kind: .blockquote(children: quote.children), listIndent: quote.listIndent)
+        }
+        
+        for run in runs[\.blockquote, \.codeBlock, \.listIndent] {
+            let depth = run.0 ?? 0
+            let isCodeBlock = run.1 != nil
+            let listIndent = run.2 ?? 0
+            let slice = AttributedString(self[run.3])
+            
+            while openQuotes.count > depth { closeQuote() }
+            while openQuotes.count < depth { openQuotes.append(OpenQuote(listIndent: listIndent)) }
+            
+            for index in openQuotes.indices {
+                openQuotes[index].content += slice
+            }
+            
+            let leaf = trimmingTrailingNewline(slice)
+            // Inter-block separators reduce to nothing; they only exist to keep
+            // adjacent blocks' runs from coalescing.
+            guard !leaf.characters.isEmpty else { continue }
+            
+            append(leaf, kind: isCodeBlock ? .codeBlock : .text, listIndent: listIndent)
+        }
+        
+        while !openQuotes.isEmpty { closeQuote() }
+        
+        return rootComponents
     }
     
     /// Returns a new attributed string with leading and trailing whitespace and

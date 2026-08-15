@@ -34,6 +34,7 @@ nonisolated extension NSAttributedString.Key {
     static let MatrixAllUsersMention: NSAttributedString.Key = .init(rawValue: AllUsersMentionAttribute.name)
     static let CodeBlock: NSAttributedString.Key = .init(rawValue: CodeBlockAttribute.name)
     static let InlineCode: NSAttributedString.Key = .init(rawValue: InlineCodeAttribute.name)
+    static let ListIndent: NSAttributedString.Key = .init(rawValue: ListIndentAttribute.name)
 }
 
 nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
@@ -301,6 +302,20 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 content.insert(NSAttributedString(string: bullet), at: 0)
                 if !(content.string.last?.isNewline ?? false) {
                     content.append(NSAttributedString(string: "\n"))
+                }
+
+                // Block elements inside this item indent under its bullet. Only
+                // marked on block ranges: list text carries literal indentation,
+                // and attributing it would needlessly split its runs.
+                let fullRange = NSRange(location: 0, length: content.length)
+                for key in [NSAttributedString.Key.MatrixBlockquote, .CodeBlock] {
+                    content.enumerateAttribute(key, in: fullRange) { value, range, _ in
+                        guard value != nil,
+                              content.attribute(.ListIndent, at: range.location, effectiveRange: nil) == nil else { return }
+                        // The enclosing ul/ol already incremented indentLevel, so
+                        // it is this item's list nesting level.
+                        content.addAttribute(.ListIndent, value: indentLevel, range: range)
+                    }
                 }
                 
             case "img":

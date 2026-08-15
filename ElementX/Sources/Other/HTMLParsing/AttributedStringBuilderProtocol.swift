@@ -9,16 +9,26 @@
 import Foundation
 
 nonisolated struct AttributedStringBuilderComponent: Hashable, Identifiable {
-    enum ComponentType: Hashable {
-        case plainText
-        case blockquote(depth: Int)
+    enum Kind: Hashable {
+        case text
+        case blockquote(children: [AttributedStringBuilderComponent])
         case codeBlock
     }
     
     /// Identifier for the `Identifiable` conformance, allows edits to the `FormattedBodyText` to animate seamlessly
     let id: String
+    /// The component's content. For a blockquote this is everything inside it,
+    /// whilst its `children` carry the same content as structured components.
     let attributedString: AttributedString
-    let type: ComponentType
+    let kind: Kind
+    /// How many list levels deep this block sits (0 outside of lists), so it
+    /// can be indented under its item's bullet.
+    var listIndent = 0
+    
+    var isText: Bool {
+        if case .text = kind { return true }
+        return false
+    }
 }
 
 nonisolated protocol AttributedStringBuilderProtocol: Sendable {

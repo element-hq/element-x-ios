@@ -318,18 +318,71 @@ struct AttributedStringBuilderTests {
         
         let component = try #require(coalescedComponents.first, "Could not get the first component")
         
-        #expect(component.type == .blockquote(depth: 1), "The reply quote should be a blockquote.")
+        guard case .blockquote = component.kind else {
+            Issue.record("The reply quote should be a blockquote.")
+            return
+        }
     }
     
     @Test
-    func nestedBlockquoteDepths() throws {
+    func nestedBlockquoteTree() throws {
         // "> > test\n>\n> test\n\ntest" in markdown.
         let html = "<blockquote><blockquote><p>test</p></blockquote><p>test</p></blockquote><p>test</p>"
         let attributedString = try #require(attributedStringBuilder.fromHTML(html))
         
         let components = attributedString.formattedComponents
-        #expect(components.map(\.type) == [.blockquote(depth: 2), .blockquote(depth: 1), .plainText])
-        #expect(components.map(\.attributedString.string) == ["test", "test", "test"])
+        #expect(components.count == 2)
+        
+        guard case .blockquote(let children) = try #require(components.first).kind else {
+            Issue.record("The first component should be the outer quote.")
+            return
+        }
+        #expect(children.count == 2)
+        guard case .blockquote(let nested) = try #require(children.first).kind else {
+            Issue.record("The outer quote should contain the nested quote.")
+            return
+        }
+        #expect(nested.map(\.attributedString.string) == ["test"])
+        #expect(children.last?.isText == true)
+        #expect(components.last?.isText == true)
+    }
+    
+    @Test
+    func codeBlockInsideBlockquote() throws {
+        let html = "<blockquote><p>look:</p><pre><code>let x = 1</code></pre></blockquote>"
+        let attributedString = try #require(attributedStringBuilder.fromHTML(html))
+        
+        let components = attributedString.formattedComponents
+        #expect(components.count == 1)
+        
+        guard case .blockquote(let children) = try #require(components.first).kind else {
+            Issue.record("The component should be a blockquote.")
+            return
+        }
+        #expect(children.count == 2)
+        #expect(children.first?.isText == true)
+        guard case .codeBlock = try #require(children.last).kind else {
+            Issue.record("The quote should contain the code block as a child.")
+            return
+        }
+        #expect(children.last?.attributedString.string == "let x = 1")
+    }
+    
+    @Test
+    func blockquoteInsideListItem() throws {
+        let html = "<ul><li>item<blockquote>quoted</blockquote></li></ul>"
+        let attributedString = try #require(attributedStringBuilder.fromHTML(html))
+        
+        let components = attributedString.formattedComponents
+        #expect(components.count == 2)
+        #expect(components.first?.isText == true)
+        
+        let quote = try #require(components.last)
+        guard case .blockquote = quote.kind else {
+            Issue.record("The quote should be its own component.")
+            return
+        }
+        #expect(quote.listIndent == 1, "The quote should indent under its item's bullet.")
     }
     
     @Test
@@ -349,7 +402,8 @@ struct AttributedStringBuilderTests {
         let attributedString = try #require(attributedStringBuilder.fromHTML(HTMLFixtures.groupedBlockQuotes.rawValue), "Could not build the attributed string")
         
         #expect(attributedString.runs.count == 11)
-        #expect(attributedString.formattedComponents.count == 5)
+        // Three quote components; the separators between them reduce to nothing.
+        #expect(attributedString.formattedComponents.count == 3)
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote != nil && run.link != nil {

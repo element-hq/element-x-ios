@@ -67,30 +67,32 @@ struct FormattedBodyText: View {
         // When the body ends in a block component (blockquote/codeBlock) the overlaid
         // timestamp would land on top of it, so append an empty trailing plain-text
         // component that exists solely to reserve space for the timestamp underneath.
-        if trailingReservedSize != .zero, let last = components.last, last.type != .plainText {
+        if trailingReservedSize != .zero, let last = components.last, !last.isText {
             components.append(AttributedStringBuilderComponent(id: "trailing-timestamp-reservation",
                                                                attributedString: AttributedString(),
-                                                               type: .plainText))
+                                                               kind: .text))
         }
-        let lastPlainTextIndex = components.lastIndex { $0.type == .plainText }
+        let lastPlainTextIndex = components.lastIndex(where: \.isText)
         
         return TimelineBubbleLayout(spacing: 8) {
             // The `ForEach` needs to iterate over the id of the element to allow
             // SwiftUI animations to work properly ater any edit.
             ForEach(Array(components.enumerated()), id: \.element.id) { index, component in
-                switch component.type {
-                case .blockquote(let depth):
-                    BlockquoteView(attributedString: component.attributedString, depth: depth, mode: .rendering)
+                switch component.kind {
+                case .blockquote(let children):
+                    BlockquoteView(children: children, mode: .rendering)
+                        .padding(.leading, CGFloat(component.listIndent) * 16.0)
                         .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                 case .codeBlock:
                     CodeBlockView(attributedString: component.attributedString, mode: .rendering)
+                        .padding(.leading, CGFloat(component.listIndent) * 16.0)
                         .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                         .contextMenu {
                             Button(L10n.actionCopy) {
                                 UIPasteboard.general.string = component.attributedString.string
                             }
                         }
-                case .plainText:
+                case .text:
                     MessageText(attributedString: component.attributedString,
                                 trailingReservedSize: index == lastPlainTextIndex ? trailingReservedSize : .zero)
                         .padding(.horizontal, 4)
@@ -102,16 +104,18 @@ struct FormattedBodyText: View {
             // Make a second iteration through the components adding naturally sized versions of the
             // block quotes and code blocks which are used for layout calculations but won't be rendered.
             ForEach(components) { component in
-                switch component.type {
-                case .blockquote(let depth):
-                    BlockquoteView(attributedString: component.attributedString, depth: depth, mode: .layout)
+                switch component.kind {
+                case .blockquote(let children):
+                    BlockquoteView(children: children, mode: .layout)
+                        .padding(.leading, CGFloat(component.listIndent) * 16.0)
                         .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                         .hidden()
                 case .codeBlock:
                     CodeBlockView(attributedString: component.attributedString, mode: .layout)
+                        .padding(.leading, CGFloat(component.listIndent) * 16.0)
                         .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                         .hidden()
-                case .plainText:
+                case .text:
                     EmptyView()
                 }
             }
@@ -125,30 +129,36 @@ struct FormattedBodyText: View {
     /// - `.rendering`: The view has a greedy width that, in combination with the custom layout,
     /// will fill any available space, whilst remaining constrained by the bubble's calculated width.
     struct BlockquoteView: View {
-        let attributedString: AttributedString
-        var depth = 1
+        let children: [AttributedStringBuilderComponent]
         let mode: TimelineBubbleLayout.Size.BubbleWidthMode
         
         var body: some View {
-            MessageText(attributedString: attributedString.mergingAttributes(blockquoteAttributes))
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: mode == .rendering ? .infinity : nil, alignment: .leading)
-                .padding(.leading, 12.0 * CGFloat(depth))
-                .overlay(alignment: .leading) {
-                    // Use an overlay here so that the rectangle's infinite height doesn't take priority
-                    if mode == .rendering {
-                        // One bar per nesting level.
-                        HStack(spacing: 10.0) {
-                            ForEach(0..<depth, id: \.self) { _ in
-                                Capsule()
-                                    .frame(width: 2.0)
-                            }
-                        }
+            VStack(alignment: .leading, spacing: 8.0) {
+                ForEach(children) { child in
+                    switch child.kind {
+                    case .blockquote(let grandchildren):
+                        // Nested quotes recurse, drawing their own bar inside this one.
+                        BlockquoteView(children: grandchildren, mode: mode)
+                    case .codeBlock:
+                        CodeBlockView(attributedString: child.attributedString, mode: mode)
+                    case .text:
+                        MessageText(attributedString: child.attributedString.mergingAttributes(blockquoteAttributes))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+            .frame(maxWidth: mode == .rendering ? .infinity : nil, alignment: .leading)
+            .padding(.leading, 12.0)
+            .overlay(alignment: .leading) {
+                // Use an overlay here so that the rectangle's infinite height doesn't take priority
+                if mode == .rendering {
+                    Capsule()
+                        .frame(width: 2.0)
                         .padding(.leading, 5.0)
                         .foregroundColor(.compound.textSecondary)
                         .padding(.vertical, 2)
-                    }
                 }
+            }
         }
         
         private var blockquoteAttributes: AttributeContainer {
@@ -167,7 +177,7 @@ struct FormattedBodyText: View {
     /// - `.layout`: The view is given it's natural size to be used for layout calculations.
     /// - `.rendering`: The view has a greedy width that, in combination with the custom layout,
     /// will fill any available space, whilst remaining constrained by the bubble's calculated width.
-    private struct CodeBlockView: View {
+    struct CodeBlockView: View {
         let attributedString: AttributedString
         let mode: TimelineBubbleLayout.Size.BubbleWidthMode
         
