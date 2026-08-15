@@ -1549,3 +1549,27 @@ UnitTests target down (`fedf3ae3d`).
 
 STRIP/RERECORD pre-upstream: FormattedBodyText preview snapshots
 (grouped blockquotes now render correctly as separate boxes).
+
+## Quote-reply bubble mangled + reply fallbacks in previews (FIXED, EXI)
+
+Regression report 2026-08-16 (dogfood validation of the previews arc):
+`> test` / blank / `test` rendered with BOTH lines quote-barred and the
+timestamp overlapping the second line. Root cause was latent, not the
+new parsing: `formattedComponents` used each component's TEXT as its
+Identifiable id, so quote("test") + plain("test") shared an identity
+and FormattedBodyText's ForEach rendered identity soup. The
+inter-element whitespace that used to leak between components (" test"
+vs "test") masked the collision; `1a3a97317`'s whitespace fix exposed
+it. Nightly still leaks the whitespace, which is also why its quote bar
+over-extends below the quoted line (stray blank line inside the quote
+box) - our branch renders that part correctly now. Fix (EXI
+[`5ccc92263`](https://github.com/element-hq/element-x-ios/commit/5ccc92263)):
+component ids carry their position; the timestamp-reservation component
+gets a sentinel id instead of "".
+
+Same commit, per user request: previews strip reply fallbacks entirely
+- `<mx-reply>` blocks from formatted bodies, and leading
+`> <@user:server> ...` lines (to the first blank line) from plain-text
+bodies, gated on the `> <` signature so genuine markdown quotes keep
+their `> ` preview marker. Regression tests for id uniqueness, both
+fallback paths, and the genuine-quote guard.
