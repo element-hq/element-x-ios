@@ -1589,3 +1589,32 @@ depth. Known approximation: the flat component stack draws the outer
 bar per-component rather than spanning the whole outer quote as EW
 does; good enough until the component model grows nesting. Tests:
 component depths + preview markers for the nested fixture.
+
+## Tree-shaped block components (FIXED, EXI)
+
+Round 4 on the previews/formatting arc, 2026-08-16: the flat component
+model's composition defects (code blocks inside quotes losing their
+box, quotes inside list items detaching from their bullet, and the
+fragmented quote spine) fixed by restructuring `formattedComponents`
+into a TREE (EXI
+[`76a39ee07`](https://github.com/element-hq/element-x-ios/commit/76a39ee07)):
+
+- Stack machine over the SAME attribute runs (a quoted code block's run
+  already carries both attributes; the flat splitter just discarded the
+  composition). Blockquote components hold `children`; BlockquoteView
+  recurses, so nested quotes draw their bar inside the parent's
+  SPANNING bar (supersedes the depth-count bars from `fcf00a121`) and
+  code blocks render as real boxes within quotes.
+- New `ListIndent` attribute set ONLY on block ranges inside `<li>`
+  (list text keeps literal indentation - attributing it would split
+  runs and change unrelated rendering); block components indent
+  16pt/level under their bullet.
+- Quote components keep aggregate content in `attributedString` (a11y +
+  test compat); separator runs reduce to nothing instead of surfacing
+  as empty components (grouped-quotes component count 5 → 3).
+- Gotcha: inside the parser's `li` case, `indentLevel` is already the
+  list nesting level (ul/ol increments before recursing).
+
+Tests: nested-quote tree shape, code-block-in-quote, quote-in-list
+(+updated legacy component-count expectations). Preview flatten path
+(runs-based) unchanged. Snapshots still need re-recording pre-upstream.
