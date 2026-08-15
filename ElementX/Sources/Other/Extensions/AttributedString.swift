@@ -37,7 +37,10 @@ nonisolated extension AttributedString {
                 .plainText
             }
             
-            components.append(AttributedStringBuilderComponent(id: String(attributedString.characters),
+            // Prefix the position: two components with the same text (e.g. a
+            // quote of "test" answered with "test") must not share an identity,
+            // or the ForEach rendering them falls apart.
+            components.append(AttributedStringBuilderComponent(id: "\(components.count)-\(String(attributedString.characters))",
                                                                attributedString: attributedString,
                                                                type: componentType))
         }

@@ -105,6 +105,29 @@ struct RoomEventStringBuilderTests {
                 "Inline code should stay monospaced via its presentation intent.")
     }
     
+    @Test
+    func replyFallbacksAreStrippedFromPreviews() throws {
+        let fallbackHTML = "<mx-reply><blockquote><a href=\"https://matrix.to/#/!r:m.org/$e\">In reply to</a> <a href=\"https://matrix.to/#/@a:m.org\">@a:m.org</a><br>original message</blockquote></mx-reply>the reply"
+        let formatted = try #require(stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
+                                                                                              senderDisplayName: "Bob",
+                                                                                              message: "> <@a:m.org> original message\n\nthe reply",
+                                                                                              formattedBody: fallbackHTML)))
+        #expect(formatted.string == "Bob: the reply",
+                "The rich reply fallback should be stripped from previews.")
+        
+        let plain = try #require(stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
+                                                                                          senderDisplayName: "Bob",
+                                                                                          message: "> <@a:m.org> original message\n\nthe reply")))
+        #expect(plain.string == "Bob: the reply",
+                "The plain-text reply fallback should be stripped from previews.")
+        
+        let genuineQuote = try #require(stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
+                                                                                                 senderDisplayName: "Bob",
+                                                                                                 message: "> a real quote\n\nthe reply")))
+        #expect(genuineQuote.string == "Bob: > a real quote\n\nthe reply",
+                "A genuine markdown quote in a plain-text body must not be stripped.")
+    }
+    
     // MARK: - Helpers
     
     private enum MockMessageType { case textMessage, emote }

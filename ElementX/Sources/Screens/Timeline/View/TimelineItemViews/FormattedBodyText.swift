@@ -68,7 +68,7 @@ struct FormattedBodyText: View {
         // timestamp would land on top of it, so append an empty trailing plain-text
         // component that exists solely to reserve space for the timestamp underneath.
         if trailingReservedSize != .zero, let last = components.last, last.type != .plainText {
-            components.append(AttributedStringBuilderComponent(id: "",
+            components.append(AttributedStringBuilderComponent(id: "trailing-timestamp-reservation",
                                                                attributedString: AttributedString(),
                                                                type: .plainText))
         }

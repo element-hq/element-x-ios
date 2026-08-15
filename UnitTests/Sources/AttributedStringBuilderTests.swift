@@ -322,6 +322,18 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
+    func componentIDsAreUniqueForRepeatedText() throws {
+        // A quote of "test" answered with "test": identical text must not
+        // produce identical component identities or the timeline's ForEach
+        // renders the wrong views.
+        let attributedString = try #require(attributedStringBuilder.fromHTML("<blockquote><p>test</p></blockquote><p>test</p>"))
+        
+        let components = attributedString.formattedComponents
+        #expect(components.count == 2)
+        #expect(Set(components.map(\.id)).count == components.count, "Component identities should be unique.")
+    }
+    
+    @Test
     func multipleGroupedBlockquotes() throws {
         let attributedString = try #require(attributedStringBuilder.fromHTML(HTMLFixtures.groupedBlockQuotes.rawValue), "Could not build the attributed string")
         

@@ -32,7 +32,7 @@ nonisolated struct RoomMessageEventStringBuilder {
             if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
                 return AttributedString(L10n.commonEmote(senderDisplayName, String(attributedMessage.characters)))
             } else {
-                return AttributedString(L10n.commonEmote(senderDisplayName, content.body))
+                return AttributedString(L10n.commonEmote(senderDisplayName, content.body.strippingPlainTextReplyFallback()))
             }
         case .audio(content: let content):
             let isVoiceMessage = content.voice != nil
@@ -57,13 +57,13 @@ nonisolated struct RoomMessageEventStringBuilder {
             if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
                 message = attributedMessage
             } else {
-                message = AttributedString(content.body)
+                message = AttributedString(content.body.strippingPlainTextReplyFallback())
             }
         case .text(content: let content):
             if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
                 message = attributedMessage
             } else {
-                message = AttributedString(content.body)
+                message = AttributedString(content.body.strippingPlainTextReplyFallback())
             }
         case .gallery(let content):
             message = buildGalleryMessage(for: style, content: content)
@@ -130,6 +130,35 @@ nonisolated struct RoomMessageEventStringBuilder {
     }
     
     private func attributedMessageFrom(formattedBody: FormattedBody?) -> AttributedString? {
-        formattedBody.flatMap { attributedStringBuilder.fromHTML($0.body)?.flattenedForPreview() }
+        formattedBody.flatMap { attributedStringBuilder.fromHTML($0.body.strippingHTMLReplyFallback())?.flattenedForPreview() }
+    }
+}
+
+private nonisolated extension String {
+    /// Removes the rich reply fallback (`<mx-reply>...</mx-reply>`) from a
+    /// formatted body: previews show the reply itself, not the quoted original.
+    func strippingHTMLReplyFallback() -> String {
+        guard let start = range(of: "<mx-reply>"),
+              let end = range(of: "</mx-reply>"),
+              start.lowerBound < end.upperBound else {
+            return self
+        }
+        var result = self
+        result.removeSubrange(start.lowerBound..<end.upperBound)
+        return result
+    }
+    
+    /// Removes the plain-text reply fallback: the leading `> <@user:server> ...`
+    /// quoted lines up to the first blank line. Gated on the `> <` signature so
+    /// a message genuinely starting with a markdown quote is left alone.
+    func strippingPlainTextReplyFallback() -> String {
+        guard hasPrefix("> <") else {
+            return self
+        }
+        let lines = components(separatedBy: "\n")
+        guard let blankIndex = lines.firstIndex(where: \.isEmpty), blankIndex + 1 < lines.count else {
+            return self
+        }
+        return lines[(blankIndex + 1)...].joined(separator: "\n")
     }
 }
