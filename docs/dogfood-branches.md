@@ -1435,3 +1435,34 @@ Two related pieces, user-validated 2026-08-15:
 
 Both validated on the phone. The routing feature itself plus this
 resolution are candidates for upstreaming with the thread work.
+
+## Reply previews sometimes show raw mxids instead of sender names (FIXED, SDK)
+
+User report 2026-08-15 (no logs needed - fully explainable from code):
+the quoted-sender line in a reply preview sometimes shows the raw
+@user:server instead of their display name. Audit found the embedded
+sender profile is a ONE-SHOT SNAPSHOT that nothing ever heals:
+
+- Built either by copying the replied-to item's profile as it was at
+  that instant (`InReplyToDetails::new`), or store-only via
+  `get_member_no_sync` for out-of-timeline targets
+  (`EmbeddedEvent::try_from_timeline_event`). During the room-open
+  window (`/members` still in flight, lazy-loaded member lists, fresh
+  cache) that snapshot is Unavailable/Pending.
+- The heal sweeps (`update_missing_sender_profiles` after `/members`,
+  `force_update_sender_profiles` on member changes) only replaced the
+  item's top-level `sender_profile` and never descended into
+  `content.in_reply_to`.
+- `fetch_in_reply_to_details` early-returns once the details are Ready,
+  and EXI only refetches on notLoaded/error - so
+  content-loaded-with-mxid was a terminal state until timeline rebuild
+  (why it "sometimes" self-fixed on reopen).
+
+UPSTREAM bug (matrix-sdk-ui, untouched by our branches). Fixed in SDK
+([`f6e0cba3a`](https://github.com/matrix-org/matrix-rust-sdk/commit/f6e0cba3a)):
+both profile sweeps now also refresh the embedded reply sender profile
+through a shared helper - the missing sweep fills any non-ready
+embedded profile, the force sweep re-resolves embedded profiles for
+changed senders. Regression test
+(`test_reply_preview_sender_profile_updates_when_members_load`) red
+before / green after. Add to the upstream queue.
