@@ -9,9 +9,9 @@
 import Foundation
 
 nonisolated struct AttributedStringBuilderComponent: Hashable, Identifiable {
-    enum ComponentType {
+    enum ComponentType: Hashable {
         case plainText
-        case blockquote
+        case blockquote(depth: Int)
         case codeBlock
     }
     

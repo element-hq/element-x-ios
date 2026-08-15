@@ -18,8 +18,6 @@ nonisolated extension AttributedString {
         var components = [AttributedStringBuilderComponent]()
         
         for run in runs[\.blockquote, \.codeBlock] {
-            let isBlockquote = run.0 != nil
-            let isCodeBlock = run.1 != nil
             var attributedString = AttributedString(self[run.2])
             
             // Remove trailing new lines if any
@@ -28,12 +26,11 @@ nonisolated extension AttributedString {
                 attributedString.removeSubrange(range)
             }
             
-            let componentType: AttributedStringBuilderComponent.ComponentType = switch (isBlockquote, isCodeBlock) {
-            case (true, _):
-                .blockquote
-            case (false, true):
+            let componentType: AttributedStringBuilderComponent.ComponentType = if let depth = run.0 {
+                .blockquote(depth: depth)
+            } else if run.1 != nil {
                 .codeBlock
-            case (false, false):
+            } else {
                 .plainText
             }
             
@@ -106,8 +103,9 @@ nonisolated extension AttributedString {
         for (blockquote, range) in runs[\.blockquote] {
             var piece = AttributedString(self[range])
 
-            if blockquote != nil {
-                // Mark every quoted line, not just the first one.
+            if let depth = blockquote {
+                // Mark every quoted line, not just the first one, repeating the
+                // marker to preserve the nesting depth.
                 var markerPositions = [piece.startIndex]
                 var index = piece.characters.startIndex
                 while index < piece.characters.endIndex {
@@ -118,8 +116,9 @@ nonisolated extension AttributedString {
                     index = next
                 }
 
+                let marker = AttributedString(String(repeating: "> ", count: depth))
                 for position in markerPositions.reversed() {
-                    piece.insert(AttributedString("> "), at: position)
+                    piece.insert(marker, at: position)
                 }
 
                 // Quoted content must not run into whatever follows it.

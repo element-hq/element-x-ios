@@ -12,7 +12,7 @@ import UIKit
 nonisolated struct MentionBuilder: MentionBuilderProtocol {
     struct AttributesToRestore {
         let font: UIFont
-        let blockquote: Bool?
+        let blockquote: Int?
         let foregroundColor: UIColor
     }
     
@@ -157,7 +157,7 @@ nonisolated struct MentionBuilder: MentionBuilderProtocol {
     private func getAttributesToRestore(for attributedString: NSMutableAttributedString, in range: NSRange) -> AttributesToRestore {
         let attributes = attributedString.attributes(at: 0, longestEffectiveRange: nil, in: range)
         let font = attributes[.font] as? UIFont ?? .preferredFont(forTextStyle: .body)
-        let blockquote = attributes[.MatrixBlockquote] as? Bool
+        let blockquote = attributes[.MatrixBlockquote] as? Int
         let foregroundColor = attributes[.foregroundColor] as? UIColor ?? .compound.textPrimary
         
         return AttributesToRestore(font: font, blockquote: blockquote, foregroundColor: foregroundColor)
@@ -174,7 +174,7 @@ nonisolated struct MentionBuilder: MentionBuilderProtocol {
 }
 
 private nonisolated extension Dictionary where Key == NSAttributedString.Key, Value == Any {
-    mutating func addBlockquoteIfNeeded(_ value: Bool?) {
+    mutating func addBlockquoteIfNeeded(_ value: Int?) {
         if let value {
             self[.MatrixBlockquote] = value
         }

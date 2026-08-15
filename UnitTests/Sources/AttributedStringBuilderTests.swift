@@ -252,7 +252,7 @@ struct AttributedStringBuilderTests {
         
         #expect(attributedString.formattedComponents.count == 2)
         
-        for run in attributedString.runs where run.elementX.blockquote ?? false {
+        for run in attributedString.runs where run.elementX.blockquote != nil {
             return
         }
         
@@ -276,7 +276,7 @@ struct AttributedStringBuilderTests {
         
         #expect(attributedString.formattedComponents.count == 3)
         
-        for run in attributedString.runs where run.elementX.blockquote ?? false {
+        for run in attributedString.runs where run.elementX.blockquote != nil {
             return
         }
         
@@ -300,7 +300,7 @@ struct AttributedStringBuilderTests {
         #expect(coalescedComponents.first?.attributedString.runs.count == 3, "Link not present in the component")
         
         var foundBlockquoteAndLink = false
-        for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
+        for run in attributedString.runs where run.elementX.blockquote != nil && run.link != nil {
             foundBlockquoteAndLink = true
         }
         
@@ -318,7 +318,18 @@ struct AttributedStringBuilderTests {
         
         let component = try #require(coalescedComponents.first, "Could not get the first component")
         
-        #expect(component.type == .blockquote, "The reply quote should be a blockquote.")
+        #expect(component.type == .blockquote(depth: 1), "The reply quote should be a blockquote.")
+    }
+    
+    @Test
+    func nestedBlockquoteDepths() throws {
+        // "> > test\n>\n> test\n\ntest" in markdown.
+        let html = "<blockquote><blockquote><p>test</p></blockquote><p>test</p></blockquote><p>test</p>"
+        let attributedString = try #require(attributedStringBuilder.fromHTML(html))
+        
+        let components = attributedString.formattedComponents
+        #expect(components.map(\.type) == [.blockquote(depth: 2), .blockquote(depth: 1), .plainText])
+        #expect(components.map(\.attributedString.string) == ["test", "test", "test"])
     }
     
     @Test
@@ -341,7 +352,7 @@ struct AttributedStringBuilderTests {
         #expect(attributedString.formattedComponents.count == 5)
         
         var numberOfBlockquotes = 0
-        for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
+        for run in attributedString.runs where run.elementX.blockquote != nil && run.link != nil {
             numberOfBlockquotes += 1
         }
         
@@ -358,7 +369,7 @@ struct AttributedStringBuilderTests {
         #expect(coalescedComponents.count == 5)
         
         var numberOfBlockquotes = 0
-        for run in attributedString.runs where run.elementX.blockquote ?? false {
+        for run in attributedString.runs where run.elementX.blockquote != nil {
             numberOfBlockquotes += 1
         }
         

@@ -9,7 +9,8 @@
 import Foundation
 
 enum BlockquoteAttribute: AttributedStringKey {
-    typealias Value = Bool
+    /// The quote's nesting depth, starting at 1.
+    typealias Value = Int
     static let name = "MXBlockquoteAttribute"
 }
 

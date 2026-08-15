@@ -128,6 +128,16 @@ struct RoomEventStringBuilderTests {
                 "A genuine markdown quote in a plain-text body must not be stripped.")
     }
     
+    @Test
+    func nestedBlockquotePreviewMarkers() throws {
+        let preview = try #require(stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
+                                                                                            senderDisplayName: "Bob",
+                                                                                            message: "> > test\n>\n> test\n\ntest",
+                                                                                            formattedBody: "<blockquote><blockquote><p>test</p></blockquote><p>test</p></blockquote><p>test</p>")))
+        #expect(preview.string == "Bob: > > test\n> test\ntest",
+                "Nested quotes should repeat their marker per depth in previews.")
+    }
+    
     // MARK: - Helpers
     
     private enum MockMessageType { case textMessage, emote }

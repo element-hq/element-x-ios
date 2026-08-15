@@ -79,8 +79,8 @@ struct FormattedBodyText: View {
             // SwiftUI animations to work properly ater any edit.
             ForEach(Array(components.enumerated()), id: \.element.id) { index, component in
                 switch component.type {
-                case .blockquote:
-                    BlockquoteView(attributedString: component.attributedString, mode: .rendering)
+                case .blockquote(let depth):
+                    BlockquoteView(attributedString: component.attributedString, depth: depth, mode: .rendering)
                         .timelineBubbleLayoutSize(.bubbleWidth(mode: .rendering))
                 case .codeBlock:
                     CodeBlockView(attributedString: component.attributedString, mode: .rendering)
@@ -103,8 +103,8 @@ struct FormattedBodyText: View {
             // block quotes and code blocks which are used for layout calculations but won't be rendered.
             ForEach(components) { component in
                 switch component.type {
-                case .blockquote:
-                    BlockquoteView(attributedString: component.attributedString, mode: .layout)
+                case .blockquote(let depth):
+                    BlockquoteView(attributedString: component.attributedString, depth: depth, mode: .layout)
                         .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                         .hidden()
                 case .codeBlock:
@@ -126,21 +126,27 @@ struct FormattedBodyText: View {
     /// will fill any available space, whilst remaining constrained by the bubble's calculated width.
     struct BlockquoteView: View {
         let attributedString: AttributedString
+        var depth = 1
         let mode: TimelineBubbleLayout.Size.BubbleWidthMode
         
         var body: some View {
             MessageText(attributedString: attributedString.mergingAttributes(blockquoteAttributes))
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: mode == .rendering ? .infinity : nil, alignment: .leading)
-                .padding(.leading, 12.0)
+                .padding(.leading, 12.0 * CGFloat(depth))
                 .overlay(alignment: .leading) {
                     // Use an overlay here so that the rectangle's infinite height doesn't take priority
                     if mode == .rendering {
-                        Capsule()
-                            .frame(width: 2.0)
-                            .padding(.leading, 5.0)
-                            .foregroundColor(.compound.textSecondary)
-                            .padding(.vertical, 2)
+                        // One bar per nesting level.
+                        HStack(spacing: 10.0) {
+                            ForEach(0..<depth, id: \.self) { _ in
+                                Capsule()
+                                    .frame(width: 2.0)
+                            }
+                        }
+                        .padding(.leading, 5.0)
+                        .foregroundColor(.compound.textSecondary)
+                        .padding(.vertical, 2)
                     }
                 }
         }

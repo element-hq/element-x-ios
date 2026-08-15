@@ -213,7 +213,16 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 
             case "blockquote":
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
-                content.addAttribute(.MatrixBlockquote, value: true, range: NSRange(location: 0, length: content.length))
+
+                // The attribute carries the nesting depth: inner blockquotes were
+                // attributed by the recursion above, and every level increments it.
+                var depths = [(NSRange, Int)]()
+                content.enumerateAttribute(.MatrixBlockquote, in: NSRange(location: 0, length: content.length)) { value, range, _ in
+                    depths.append((range, (value as? Int ?? 0) + 1))
+                }
+                for (range, depth) in depths {
+                    content.addAttribute(.MatrixBlockquote, value: depth, range: range)
+                }
 
                 // Two adjacent blockquotes would coalesce into a single run (and
                 // render as one quote); keep an unattributed separator between them.
