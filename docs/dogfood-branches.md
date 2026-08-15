@@ -1618,3 +1618,48 @@ into a TREE (EXI
 Tests: nested-quote tree shape, code-block-in-quote, quote-in-list
 (+updated legacy component-count expectations). Preview flatten path
 (runs-based) unchanged. Snapshots still need re-recording pre-upstream.
+
+## Change role from the member sheet (NEW FEATURE, EXI)
+
+2026-08-16, implements
+[element-meta#3028](https://github.com/element-hq/element-meta/issues/3028)
+(deferred upstream as a new feature, implemented here on request): the
+manage-member bottom sheet (tap a sender avatar / member-list row) gains
+a Role row (EXI
+[`e8458da2b`](https://github.com/element-hq/element-x-ios/commit/e8458da2b)):
+
+- The role is ALWAYS shown when non-default (Moderator/Admin/Owner),
+  read-only trailing text if you can't act on it (user refinement over
+  the issue's AC).
+- It becomes a Compound `.picker` row (same idiom as Settings →
+  Advanced → Appearance; native menu when expanded) when you can send
+  `m.room.power_levels` AND outrank the member. Options are every role
+  up to your own power level, so admins can mint admins (with the
+  Roles & permissions screen's irreversible "Add Admin?" warning) and
+  owners/creators can transfer ownership (same transfer warning).
+  Apply path is the same `updatePowerLevelsForUsers` +
+  info-echo-then-`updateMembers` dance as RoomChangeRolesScreen, then
+  the sheet dismisses; cancelling a warning reverts the picker.
+- Permission plumbing: `canOwnUserEditRolesAndPermissions()` threaded
+  through both sheet construction sites (member list + timeline).
+
+Follow-up (user request, same day): own user no longer special-cased
+straight to "view profile" from the member list - it presents the same
+sheet for symmetry (EXI
+[`8edfdf132`](https://github.com/element-hq/element-x-ios/commit/8edfdf132)):
+since you can only demote yourself, the role row opens the Roles &
+permissions screen's "Change my role" vertical-buttons dialog instead
+of the picker (demote to moderator/member, filtered to roles below your
+own); "Remove user" skips the power-level comparison for self (removing
+yourself is just leaving) while self-ban stays disabled (matches the
+`target < sender` ban auth rule). Regular-member self shows no role row
+(nothing to demote to). Creators show read-only Owner.
+
+Tests: 10 sheet suite tests (visibility/editability gating incl. self,
+plain demotion, add-admin warning flow, cancel-reverts-picker,
+self-demote dialog, self-regular hides row) + member-list self-tap now
+expects the sheet. Three new previews (Editable Role / Read Only Role /
+Own User) - FormattedBodyText + these need the same snapshot re-record
+before upstreaming. Open question inherited from the issue: promoting
+to owner is offered to owners/creators here (the Roles & permissions
+screens only reach admin/moderator modes today).
