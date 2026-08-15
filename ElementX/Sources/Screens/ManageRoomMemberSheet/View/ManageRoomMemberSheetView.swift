@@ -46,9 +46,10 @@ struct ManageRoomMemberSheetView: View {
                         if context.viewState.isOwnUser, let role = context.viewState.memberRole {
                             // You can only demote yourself, so offer the Roles & permissions
                             // screen's Change my role dialog rather than a picker.
+                            // The chevrons match the picker rows so the row reads as tappable.
                             ListRow(label: .default(title: L10n.commonRole,
                                                     icon: \.admin),
-                                    details: .title(role.localizedTitle),
+                                    details: .label(title: role.localizedTitle, systemIcon: .chevronUpChevronDown),
                                     kind: .button {
                                         context.send(viewAction: .changeOwnRole)
                                     })
