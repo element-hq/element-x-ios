@@ -1573,3 +1573,19 @@ Same commit, per user request: previews strip reply fallbacks entirely
 bodies, gated on the `> <` signature so genuine markdown quotes keep
 their `> ` preview marker. Regression tests for id uniqueness, both
 fallback paths, and the genuine-quote guard.
+
+## Nested blockquotes rendered flat (FIXED, EXI)
+
+Dogfood round 3 on the previews arc, 2026-08-16: `> > test` inside an
+outer quote rendered identically to the outer quote - one uniform box,
+unlike GFM/EW. The blockquote attribute was a Bool, so nesting was
+flattened at parse time. Fixed (EXI
+[`fcf00a121`](https://github.com/element-hq/element-x-ios/commit/fcf00a121)):
+the attribute now carries nesting depth (each blockquote level
+increments what the recursion below produced), `formattedComponents`
+split per depth (`.blockquote(depth:)`), BlockquoteView draws one bar
+per level with matching indent, previews repeat the `> ` marker per
+depth. Known approximation: the flat component stack draws the outer
+bar per-component rather than spanning the whole outer quote as EW
+does; good enough until the component model grows nesting. Tests:
+component depths + preview markers for the nested fixture.
