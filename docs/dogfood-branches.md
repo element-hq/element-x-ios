@@ -1505,3 +1505,47 @@ multi-conn stale response arriving after another conn's echo cleared
 the marker can still flicker briefly (self-heals); sync v2 has the same
 theoretical hole, untouched. Two regression tests (accept + decline),
 red before / green after. Add to the upstream queue.
+
+## Formatted room previews (quotes stripped / plaintext previews FIXED, EXI)
+
+User report 2026-08-16: room-list previews showed "a plaintext view of
+the rendered markdown" - quotes lost their markers entirely, bold
+didn't render. Decision: base previews on the HTML representation
+(formatted_body), falling back to plaintext body when absent, and
+render the subset a two-line Text can represent - native inline
+styling, markdown-style markers for blocks.
+
+Root causes (EXI
+[`1a3a97317`](https://github.com/element-hq/element-x-ios/commit/1a3a97317)):
+1. `RoomMessageEventStringBuilder.prefix()` rebuilt the summary from
+   its plain `.string` to avoid tappable links, stripping ALL
+   formatting. Now preserves attributes, drops only `.link`.
+2. Nothing re-inserted block semantics on flattening. New
+   `flattenedForPreview()` (AttributedString extension): "> " on every
+   quoted line, font→presentation-intent conversion (bold/italic/code
+   render at the row's own size + Dynamic Type),
+   strikethrough/underline remapped from UIKit to SwiftUI attributes,
+   consecutive newlines collapsed. Applies to all flattened surfaces
+   sharing the builder: room list, notifications (NSE), thread list,
+   pinned banner.
+
+Bycatch - two parser regressions from the list-indent fix (`550a6467d`),
+caught once the unit tests could run again:
+- SwiftSoup classes del/ins/s as BLOCK tags, so the inter-element
+  whitespace drop ate real spaces around strikethrough. Explicit
+  block-tag list now.
+- Adjacent blockquotes coalesced into one run = grouped quotes rendered
+  as a single quote box in the timeline (`multipleGroupedBlockquotes`
+  red). Unattributed "\n" separator between adjacent quotes; the
+  separated-quotes case is unaffected (only inter-element whitespace is
+  skipped when checking adjacency).
+
+Also unblocked the branch's unit tests: the xcframework now builds with
+a simulator slice (build-xcframework.sh unchanged; both-targets build
+done manually - consider making it the default), and
+ComposerToolbarViewModelTests' sendMessage patterns were missing the
+new fifth associated value, crashing the compiler and taking the whole
+UnitTests target down (`fedf3ae3d`).
+
+STRIP/RERECORD pre-upstream: FormattedBodyText preview snapshots
+(grouped blockquotes now render correctly as separate boxes).
