@@ -196,6 +196,39 @@ struct ManageRoomMemberSheetViewModelTests {
         #expect(!roomProxy.updatePowerLevelsForUsersCalled)
     }
 
+    @Test
+    mutating func demoteOwnUser() async throws {
+        // Own user goes through the Change my role dialog, offering only demotions.
+        let roomProxy = setupForRoles(member: RoomMemberProxyMock.mockMeAdmin, canEditRoles: true)
+        #expect(context.viewState.isOwnUser)
+        #expect(context.viewState.isRoleVisible)
+        #expect(context.viewState.isRoleEditable)
+        #expect(!context.viewState.isKickDisabled)
+
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
+        context.send(viewAction: .changeOwnRole)
+        try await deferred.fulfill()
+
+        let demotionButtons = try #require(context.alertInfo?.verticalButtons)
+        #expect(demotionButtons.count == 2) // Moderator and member for an admin.
+
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            action == .dismiss(shouldShowDetails: false)
+        }
+        demotionButtons.last?.action?()
+        try await deferredAction.fulfill()
+
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == RoomMemberProxyMock.mockMeAdmin.userID && $0.powerLevel == 0 } == true)
+    }
+
+    @Test
+    mutating func ownRegularUserHasNoRoleRow() {
+        // A regular member can't demote themselves any further, so no role row.
+        setupForRoles(member: RoomMemberProxyMock.mockMe, canEditRoles: true)
+        #expect(context.viewState.isOwnUser)
+        #expect(!context.viewState.isRoleVisible)
+    }
+
     @discardableResult
     private mutating func setupForRoles(member: RoomMemberProxyMock, canEditRoles: Bool) -> JoinedRoomProxyMock {
         let roomProxy = JoinedRoomProxyMock(.init(members: [RoomMemberProxyMock.mockMeAdmin, member]))

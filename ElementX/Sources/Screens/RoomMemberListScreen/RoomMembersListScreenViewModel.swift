@@ -170,11 +170,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
     
     private func selectMember(_ member: RoomMemberDetails) {
-        guard currentUserProxy?.userID != member.id else {
-            showMemberDetails(member)
-            return
-        }
-        
         let manageMemberViewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
                                                                    permissions: .init(canKick: state.canKickUsers,
                                                                                       canBan: state.canBanUsers,

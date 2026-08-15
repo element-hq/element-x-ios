@@ -254,16 +254,17 @@ struct RoomMembersListScreenViewModelTests {
         let deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
         try await deferred.fulfill()
         
-        let memberDetailsAction = deferFulfillment(viewModel.actions) { $0.isSelectMember }
+        let sheetPresented = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
         guard let ownMember = viewModel.state.visibleJoinedMembers.first(where: { $0.member.id == RoomMemberProxyMock.mockMe.userID })?.member else {
             Issue.record("Expected to find own user admin.")
             return
         }
-        
+
         context.send(viewAction: .selectMember(ownMember))
-        try await memberDetailsAction.fulfill()
-        
-        #expect(context.manageMemeberViewModel == nil)
+        try await sheetPresented.fulfill()
+
+        #expect(context.manageMemeberViewModel?.state.memberDetails.id == ownMember.id)
+        #expect(context.manageMemeberViewModel?.state.isOwnUser == true)
     }
     
     @Test

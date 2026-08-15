@@ -11,15 +11,6 @@ import Foundation
 enum RoomMembersListScreenViewModelAction {
     case selectMember(_ member: RoomMemberProxyProtocol)
     case invite
-    
-    var isSelectMember: Bool {
-        switch self {
-        case .selectMember:
-            true
-        default:
-            false
-        }
-    }
 }
 
 /// The different modes that the screen can be in.

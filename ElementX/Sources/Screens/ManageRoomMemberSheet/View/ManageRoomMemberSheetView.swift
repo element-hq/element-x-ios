@@ -43,13 +43,24 @@ struct ManageRoomMemberSheetView: View {
 
                 if context.viewState.isRoleVisible {
                     if context.viewState.isRoleEditable {
-                        ListRow(label: .default(title: L10n.commonRole,
-                                                icon: \.admin),
-                                kind: .picker(selection: $context.selectedRole,
-                                              items: context.viewState.availableRoles.map { (title: $0.localizedTitle, tag: $0) }))
-                            .onChange(of: context.selectedRole) { _, newRole in
-                                context.send(viewAction: .updateRole(newRole))
-                            }
+                        if context.viewState.isOwnUser, let role = context.viewState.memberRole {
+                            // You can only demote yourself, so offer the Roles & permissions
+                            // screen's Change my role dialog rather than a picker.
+                            ListRow(label: .default(title: L10n.commonRole,
+                                                    icon: \.admin),
+                                    details: .title(role.localizedTitle),
+                                    kind: .button {
+                                        context.send(viewAction: .changeOwnRole)
+                                    })
+                        } else {
+                            ListRow(label: .default(title: L10n.commonRole,
+                                                    icon: \.admin),
+                                    kind: .picker(selection: $context.selectedRole,
+                                                  items: context.viewState.availableRoles.map { (title: $0.localizedTitle, tag: $0) }))
+                                .onChange(of: context.selectedRole) { _, newRole in
+                                    context.send(viewAction: .updateRole(newRole))
+                                }
+                        }
                     } else if let role = context.viewState.memberRole {
                         ListRow(label: .default(title: L10n.commonRole,
                                                 icon: \.admin),
@@ -116,6 +127,16 @@ struct ManageRoomMemberSheetView_Previews: PreviewProvider, TestablePreview {
 
     static let readOnlyRoleViewModel = ManageRoomMemberSheetViewModel.mock(memberPowerLevel: .init(value: 100))
 
+    static let ownUserViewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockMeAdmin)),
+                                                                 permissions: .init(canKick: true,
+                                                                                    canBan: true,
+                                                                                    canEditRoles: true,
+                                                                                    ownPowerLevel: .init(value: 100)),
+                                                                 roomProxy: JoinedRoomProxyMock(.init()),
+                                                                 userIndicatorController: UserIndicatorControllerMock(),
+                                                                 analyticsService: AnalyticsServiceMock(.init()),
+                                                                 mediaProvider: MediaProviderMock(.init()))
+
     static var previews: some View {
         ManageRoomMemberSheetView(context: allActionsViewModel.context)
             .previewDisplayName("All Actions")
@@ -131,6 +152,8 @@ struct ManageRoomMemberSheetView_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("Editable Role")
         ManageRoomMemberSheetView(context: readOnlyRoleViewModel.context)
             .previewDisplayName("Read Only Role")
+        ManageRoomMemberSheetView(context: ownUserViewModel.context)
+            .previewDisplayName("Own User")
     }
 }
 

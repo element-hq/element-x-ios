@@ -15,7 +15,8 @@ enum ManageRoomMemberSheetViewModelAction: Equatable {
 struct ManageRoomMemberSheetViewState: BindableState {
     let memberDetails: ManageRoomMemberDetails
     let permissions: ManageRoomMemberPermissions
-    
+    var isOwnUser = false
+
     var isBanUnbanDisabled: Bool {
         // This is a best effort check, if we haven't fetched the member yet we assume we can peform the action
         guard case let .memberDetails(member) = memberDetails else {
@@ -30,7 +31,12 @@ struct ManageRoomMemberSheetViewState: BindableState {
         guard case let .memberDetails(member) = memberDetails else {
             return false
         }
-        
+
+        // Removing yourself is just leaving, so the power level comparison doesn't apply.
+        if isOwnUser {
+            return !member.isActive
+        }
+
         return !member.isActive || permissions.ownPowerLevel <= member.powerLevel
     }
     
@@ -59,11 +65,16 @@ struct ManageRoomMemberSheetViewState: BindableState {
     }
 
     var isRoleEditable: Bool {
-        guard case let .memberDetails(member) = memberDetails else {
+        guard case let .memberDetails(member) = memberDetails, permissions.canEditRoles, member.isActive else {
             return false
         }
 
-        return permissions.canEditRoles && member.isActive && permissions.ownPowerLevel > member.powerLevel
+        // You can only demote yourself (and a creator can't be demoted at all).
+        if isOwnUser {
+            return member.role != .user && member.role != .creator
+        }
+
+        return permissions.ownPowerLevel > member.powerLevel
     }
 
     /// The roles the user is able to assign - anything up to their own power level.
@@ -86,6 +97,7 @@ enum ManageRoomMemberSheetViewAlertType {
     case unban
     case promoteToAdmin
     case promoteToOwner
+    case demoteOwnUser
 }
 
 enum ManageRoomMemberSheetViewAction {
@@ -93,6 +105,7 @@ enum ManageRoomMemberSheetViewAction {
     case ban
     case unban
     case updateRole(RoomRole)
+    case changeOwnRole
     case displayDetails
     case displayAvatar(URL)
 }

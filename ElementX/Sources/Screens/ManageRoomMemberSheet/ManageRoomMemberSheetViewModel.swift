@@ -34,7 +34,10 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         self.roomProxy = roomProxy
         self.analyticsService = analyticsService
         self.mediaProvider = mediaProvider
-        super.init(initialViewState: .init(memberDetails: memberDetails, permissions: permissions), mediaProvider: mediaProvider)
+        super.init(initialViewState: .init(memberDetails: memberDetails,
+                                           permissions: permissions,
+                                           isOwnUser: memberDetails.id == roomProxy.ownUserID),
+                   mediaProvider: mediaProvider)
 
         state.bindings.selectedRole = state.memberRole ?? .user
     }
@@ -51,6 +54,8 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
             displayAlert(.unban)
         case .updateRole(let role):
             confirmRoleUpdate(role)
+        case .changeOwnRole:
+            displayDemoteOwnUserAlert()
         case .displayAvatar(let url):
             Task { await displayFullScreenAvatar(url) }
         }
@@ -90,8 +95,8 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
                                              message: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
                                              secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationAction) { [weak self] in Task { await self?.unbanMember(id: memberID, name: memberName) } })
-        case .promoteToAdmin, .promoteToOwner:
-            break // Built directly in confirmRoleUpdate.
+        case .promoteToAdmin, .promoteToOwner, .demoteOwnUser:
+            break // Built directly in confirmRoleUpdate/displayDemoteOwnUserAlert.
         }
     }
     
@@ -119,6 +124,26 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         } else {
             Task { await updateRole(role) }
         }
+    }
+
+    private func displayDemoteOwnUserAlert() {
+        guard let currentRole = state.memberRole else { return }
+
+        var demotionButtons = [AlertInfo<ManageRoomMemberSheetViewAlertType>.AlertButton]()
+        if currentRole > .moderator {
+            demotionButtons.append(.init(title: L10n.screenRoomRolesAndPermissionsChangeRoleDemoteToModerator, role: .destructive) { [weak self] in
+                Task { await self?.updateRole(.moderator) }
+            })
+        }
+        demotionButtons.append(.init(title: L10n.screenRoomRolesAndPermissionsChangeRoleDemoteToMember, role: .destructive) { [weak self] in
+            Task { await self?.updateRole(.user) }
+        })
+
+        state.bindings.alertInfo = .init(id: .demoteOwnUser,
+                                         title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
+                                         message: L10n.screenRoomChangeRoleConfirmDemoteSelfDescription,
+                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
+                                         verticalButtons: demotionButtons)
     }
 
     private func updateRole(_ role: RoomRole) async {
