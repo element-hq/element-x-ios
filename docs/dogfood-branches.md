@@ -1466,3 +1466,42 @@ embedded profile, the force sweep re-resolves embedded profiles for
 changed senders. Regression test
 (`test_reply_preview_sender_profile_updates_when_members_load`) red
 before / green after. Add to the upstream queue.
+
+## Accepted invite lingers in the room list (FIXED, SDK, upstream bug)
+
+User report 2026-08-15 (no logs - root-caused by audit): hitting Accept
+on a room-list invite leaves the invite row hanging around for a while,
+even after the room has been joined and opened. Chain audited end to
+end; every local link was sound:
+
+- `/join` success marks the room Joined locally (`room_joined`,
+  base client) and emits a MEMBERSHIP notable update; the room-list
+  merge stream re-emits a Set diff; EXI rebuilds the summary from live
+  state. The row should flip within milliseconds.
+- The culprit is the sliding-sync processor
+  (`response_processors/room/msc4186`): any response carrying
+  `invite_state` did `mark_as_invited()` with an explicit "override the
+  room state if the room already exists". A long-poll IN FLIGHT when
+  Accept was tapped - generated pre-join - lands post-join and
+  regresses Joined back to Invited. The row resurrects until a later
+  response re-delivers the room as joined.
+- `awaitRoomRemoteEcho` doesn't help: it returns on "partially
+  synced", which the local mark itself sets, so EXI's post-join wait is
+  satisfied instantly and the whole stale window is user-visible. Our
+  viewport-subscriptions conn (second SSS connection) widens the window
+  further. Declining has the mirror hole: a stale response resurrects
+  the declined invite as Left flips back to Invited.
+
+Same stale-long-poll family as the event-cache bugs (stale gappy
+batches). UPSTREAM flaw. Fixed in SDK
+([`f7161bf4b`](https://github.com/matrix-org/matrix-rust-sdk/commit/f7161bf4b)):
+in-memory `membership_from_local_action` marker on RoomInfo, set by
+`room_joined`/`room_left`; while set, the processor ignores
+`invite_state` for the room (state kept, stripped-state dispatch and
+its re-notification skipped); cleared by the action's sync echo or any
+genuinely honoured invite/knock. Not persisted deliberately (restart
+clears; persisting could suppress a genuine re-invite). Known ceiling:
+multi-conn stale response arriving after another conn's echo cleared
+the marker can still flicker briefly (self-heals); sync v2 has the same
+theoretical hole, untouched. Two regression tests (accept + decline),
+red before / green after. Add to the upstream queue.
