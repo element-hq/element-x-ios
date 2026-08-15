@@ -107,7 +107,17 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     // MARK: - Private
-    
+
+    private static let blockLevelTags: Set<String> = ["p", "div", "blockquote", "pre",
+                                                      "ul", "ol", "li",
+                                                      "h1", "h2", "h3", "h4", "h5", "h6",
+                                                      "hr", "table"]
+
+    private static func isBlockLevel(_ node: Node?) -> Bool {
+        guard let element = node as? Element else { return false }
+        return blockLevelTags.contains(element.tagName().lowercased())
+    }
+
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     func attributedString(element: Element,
                           documentBody: Element,
@@ -122,10 +132,12 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 // Inter-element whitespace (e.g. the newlines separating a <ul> from
                 // its <li>s, or two block elements) normalises to a stray space that
                 // misindents the following line; HTML collapses it away entirely.
+                // Use our own block list: SwiftSoup classifies del/ins/s as block
+                // elements, and dropping the spaces around those eats real ones.
                 if !preserveFormatting, textNode.isBlank(),
                    (node.parent() as? Element).map({ ["ul", "ol"].contains($0.tagName()) }) == true
-                   || (node.previousSibling() as? Element)?.isBlock() == true
-                   || (node.nextSibling() as? Element)?.isBlock() == true {
+                   || Self.isBlockLevel(node.previousSibling())
+                   || Self.isBlockLevel(node.nextSibling()) {
                     continue
                 }
 
@@ -202,6 +214,17 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             case "blockquote":
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.MatrixBlockquote, value: true, range: NSRange(location: 0, length: content.length))
+
+                // Two adjacent blockquotes would coalesce into a single run (and
+                // render as one quote); keep an unattributed separator between them.
+                // Adjacent means nothing but inter-element whitespace in between.
+                var nextNode = childElement.nextSibling()
+                while let textNode = nextNode as? TextNode, textNode.isBlank() {
+                    nextNode = textNode.nextSibling()
+                }
+                if (nextNode as? Element)?.tagName().lowercased() == "blockquote" {
+                    content.append(NSAttributedString(string: "\n"))
+                }
                 
             case "code", "pre":
                 let isCodeBlock = tag == "pre"

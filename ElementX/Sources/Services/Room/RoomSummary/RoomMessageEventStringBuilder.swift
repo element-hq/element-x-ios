@@ -119,16 +119,17 @@ nonisolated struct RoomMessageEventStringBuilder {
     }
     
     private func prefix(_ eventSummary: AttributedString, with textToBold: String) -> AttributedString {
-        let attributedEventSummary = AttributedString(eventSummary.string.trimmingCharacters(in: .whitespacesAndNewlines))
+        var attributedEventSummary = eventSummary.trimmingWhitespaceAndNewlines()
+        // Previews aren't interactive; keep link text but drop the tappable attribute.
+        attributedEventSummary.link = nil
         
         var attributedPrefix = AttributedString(textToBold + ":")
         attributedPrefix.bold()
         
-        // Don't include the message body in the markdown otherwise it makes tappable links.
         return attributedPrefix + " " + attributedEventSummary
     }
     
     private func attributedMessageFrom(formattedBody: FormattedBody?) -> AttributedString? {
-        formattedBody.flatMap { attributedStringBuilder.fromHTML($0.body) }
+        formattedBody.flatMap { attributedStringBuilder.fromHTML($0.body)?.flattenedForPreview() }
     }
 }

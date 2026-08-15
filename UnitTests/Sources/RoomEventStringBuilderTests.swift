@@ -58,6 +58,53 @@ struct RoomEventStringBuilderTests {
         #expect(otherPollString?.string == "Bob: Poll: Which is better?", "Everyone else's polls should be prefixed with their display name.")
     }
     
+    @Test
+    func blockquotePreviewKeepsQuoteMarkers() {
+        let quoteReply = stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
+                                                                                  senderDisplayName: "Bob",
+                                                                                  message: "> original quote\n\na reply",
+                                                                                  formattedBody: "<blockquote><p>original quote</p></blockquote><p>a reply</p>"))
+        #expect(quoteReply?.string == "Bob: > original quote\na reply",
+                "Quoted lines should keep a quote marker in flattened previews.")
+        
+        let multilineQuote = stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
+                                                                                      senderDisplayName: "Bob",
+                                                                                      message: "> line one\n> line two\n\na reply",
+                                                                                      formattedBody: "<blockquote><p>line one</p><p>line two</p></blockquote><p>a reply</p>"))
+        #expect(multilineQuote?.string == "Bob: > line one\n> line two\na reply",
+                "Every quoted line should get its own marker.")
+    }
+    
+    @Test
+    func formattedPreviewCapabilities() throws {
+        let preview = try #require(stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
+                                                                                            senderDisplayName: "Bob",
+                                                                                            message: "**bold** ~~struck~~ `code` [site](https://example.org)",
+                                                                                            formattedBody: "<strong>bold</strong> <del>struck</del> <code>code</code> <a href=\"https://example.org\">site</a>")))
+        #expect(preview.string == "Bob: bold struck code site")
+        
+        for run in preview.runs {
+            #expect(run.link == nil, "Previews aren't interactive; links should be plain text.")
+        }
+        
+        for run in preview.runs {
+            #expect(run.uiKit.font == nil, "Previews should carry presentation intents, not fixed-size fonts.")
+            #expect(run.uiKit.strikethroughStyle == nil, "UIKit line styles aren't rendered by Text and should be replaced.")
+        }
+        
+        let bold = try #require(preview.range(of: "bold"))
+        #expect(preview[bold].runs.allSatisfy { $0.inlinePresentationIntent?.contains(.stronglyEmphasized) == true },
+                "Bold text should render bold at the preview's own font size.")
+        
+        let struck = try #require(preview.range(of: "struck"))
+        #expect(preview[struck].runs.allSatisfy { $0.swiftUI.strikethroughStyle == .single },
+                "Strikethrough should survive via the SwiftUI attribute.")
+        
+        let code = try #require(preview.range(of: "code", options: .backwards))
+        #expect(preview[code].runs.allSatisfy { $0.inlinePresentationIntent?.contains(.code) == true },
+                "Inline code should stay monospaced via its presentation intent.")
+    }
+    
     // MARK: - Helpers
     
     private enum MockMessageType { case textMessage, emote }
@@ -66,9 +113,10 @@ struct RoomEventStringBuilderTests {
                                  senderDisplayName: String? = nil,
                                  senderDisplayNameAmbiguous: Bool = false,
                                  type: MockMessageType = .textMessage,
-                                 message: String = "Hello, World!") -> EventTimelineItemProxy {
+                                 message: String = "Hello, World!",
+                                 formattedBody: String? = nil) -> EventTimelineItemProxy {
         let content = switch type {
-        case .textMessage: makeTextContent(message: message)
+        case .textMessage: makeTextContent(message: message, formattedBody: formattedBody)
         case .emote: makeEmoteContent(message: message)
         }
         
@@ -91,8 +139,8 @@ struct RoomEventStringBuilderTests {
                      uniqueID: .init("0"))
     }
     
-    private func makeTextContent(message: String) -> MessageType {
-        .text(content: .init(body: message, formatted: nil))
+    private func makeTextContent(message: String, formattedBody: String? = nil) -> MessageType {
+        .text(content: .init(body: message, formatted: formattedBody.map { .init(format: .html, body: $0) }))
     }
     
     private func makeEmoteContent(message: String) -> MessageType {
