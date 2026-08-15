@@ -1663,3 +1663,6 @@ Own User) - FormattedBodyText + these need the same snapshot re-record
 before upstreaming. Open question inherited from the issue: promoting
 to owner is offered to owners/creators here (the Roles & permissions
 screens only reach admin/moderator modes today).
+
+Affordance follow-up (`3ba795880`): the own-user role row
+gained the picker rows' up/down chevrons glyph so it reads as tappable.
