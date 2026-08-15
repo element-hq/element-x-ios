@@ -325,6 +325,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         let viewModel = ManageRoomMemberSheetViewModel(memberDetails: memberDetails,
                                                        permissions: .init(canKick: state.canCurrentUserKick,
                                                                           canBan: state.canCurrentUserBan,
+                                                                          canEditRoles: state.canCurrentUserEditRoles,
                                                                           ownPowerLevel: currentUserProxy?.powerLevel ?? .init(value: 0)),
                                                        roomProxy: roomProxy,
                                                        userIndicatorController: userIndicatorController,
@@ -458,6 +459,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.canCurrentUserPin = powerLevels.canOwnUserPinOrUnpin()
             state.canCurrentUserKick = powerLevels.canOwnUserKick()
             state.canCurrentUserBan = powerLevels.canOwnUserBan()
+            state.canCurrentUserEditRoles = powerLevels.canOwnUserEditRolesAndPermissions()
         }
     }
     

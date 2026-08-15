@@ -121,6 +121,7 @@ struct TimelineViewState: BindableState {
     var canCurrentUserPin = false
     var canCurrentUserKick = false
     var canCurrentUserBan = false
+    var canCurrentUserEditRoles = false
     
     var hideTimelineMedia: Bool
     

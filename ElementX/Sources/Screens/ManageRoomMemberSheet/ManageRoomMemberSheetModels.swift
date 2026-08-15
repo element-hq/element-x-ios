@@ -39,28 +39,60 @@ struct ManageRoomMemberSheetViewState: BindableState {
         guard case let .memberDetails(member) = memberDetails else {
             return false
         }
-        
+
         return member.isBanned
     }
-    
+
+    var memberRole: RoomRole? {
+        guard case let .memberDetails(member) = memberDetails else {
+            return nil
+        }
+
+        return member.role
+    }
+
+    /// The role is always shown when it isn't the default one, but is only shown for
+    /// regular members when the user is able to promote them.
+    var isRoleVisible: Bool {
+        guard let memberRole else { return false }
+        return memberRole != .user || isRoleEditable
+    }
+
+    var isRoleEditable: Bool {
+        guard case let .memberDetails(member) = memberDetails else {
+            return false
+        }
+
+        return permissions.canEditRoles && member.isActive && permissions.ownPowerLevel > member.powerLevel
+    }
+
+    /// The roles the user is able to assign - anything up to their own power level.
+    var availableRoles: [RoomRole] {
+        [.owner, .administrator, .moderator, .user].filter { $0.powerLevel <= permissions.ownPowerLevel }
+    }
+
     var bindings = ManageRoomMemberSheetViewStateBindings()
 }
 
 struct ManageRoomMemberSheetViewStateBindings {
     var alertInfo: AlertInfo<ManageRoomMemberSheetViewAlertType>?
     var mediaPreviewItem: MediaPreviewItem?
+    var selectedRole: RoomRole = .user
 }
 
 enum ManageRoomMemberSheetViewAlertType {
     case kick
     case ban
     case unban
+    case promoteToAdmin
+    case promoteToOwner
 }
 
 enum ManageRoomMemberSheetViewAction {
     case kick
     case ban
     case unban
+    case updateRole(RoomRole)
     case displayDetails
     case displayAvatar(URL)
 }
@@ -91,5 +123,21 @@ enum ManageRoomMemberDetails {
 struct ManageRoomMemberPermissions {
     let canKick: Bool
     let canBan: Bool
+    var canEditRoles = false
     let ownPowerLevel: RoomPowerLevel
+}
+
+nonisolated extension RoomRole {
+    var localizedTitle: String {
+        switch self {
+        case .creator, .owner:
+            L10n.screenRoomMemberListRoleOwner
+        case .administrator:
+            L10n.screenRoomMemberListRoleAdministrator
+        case .moderator:
+            L10n.screenRoomMemberListRoleModerator
+        case .user:
+            L10n.screenRoomChangePermissionsEveryone
+        }
+    }
 }

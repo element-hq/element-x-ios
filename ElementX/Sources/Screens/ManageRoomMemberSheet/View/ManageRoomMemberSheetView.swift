@@ -40,6 +40,23 @@ struct ManageRoomMemberSheetView: View {
                             context.send(viewAction: .displayDetails)
                         })
                         .accessibilityIdentifier(A11yIdentifiers.manageRoomMemberSheet.viewProfile)
+
+                if context.viewState.isRoleVisible {
+                    if context.viewState.isRoleEditable {
+                        ListRow(label: .default(title: L10n.commonRole,
+                                                icon: \.admin),
+                                kind: .picker(selection: $context.selectedRole,
+                                              items: context.viewState.availableRoles.map { (title: $0.localizedTitle, tag: $0) }))
+                            .onChange(of: context.selectedRole) { _, newRole in
+                                context.send(viewAction: .updateRole(newRole))
+                            }
+                    } else if let role = context.viewState.memberRole {
+                        ListRow(label: .default(title: L10n.commonRole,
+                                                icon: \.admin),
+                                details: .title(role.localizedTitle),
+                                kind: .label)
+                    }
+                }
             }
             
             Section {
@@ -94,7 +111,11 @@ struct ManageRoomMemberSheetView_Previews: PreviewProvider, TestablePreview {
     static let banOnlyViewModel = ManageRoomMemberSheetViewModel.mock(canKick: false)
     
     static let unbanOnlyViewModel = ManageRoomMemberSheetViewModel.mock(canKick: true, memberIsBanned: true)
-    
+
+    static let editableRoleViewModel = ManageRoomMemberSheetViewModel.mock(canEditRoles: true, memberPowerLevel: .init(value: 50))
+
+    static let readOnlyRoleViewModel = ManageRoomMemberSheetViewModel.mock(memberPowerLevel: .init(value: 100))
+
     static var previews: some View {
         ManageRoomMemberSheetView(context: allActionsViewModel.context)
             .previewDisplayName("All Actions")
@@ -106,22 +127,33 @@ struct ManageRoomMemberSheetView_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("Ban Only")
         ManageRoomMemberSheetView(context: unbanOnlyViewModel.context)
             .previewDisplayName("Unban Only")
+        ManageRoomMemberSheetView(context: editableRoleViewModel.context)
+            .previewDisplayName("Editable Role")
+        ManageRoomMemberSheetView(context: readOnlyRoleViewModel.context)
+            .previewDisplayName("Read Only Role")
     }
 }
 
 private extension ManageRoomMemberSheetViewModel {
     static func mock(canKick: Bool = true,
                      canBan: Bool = true,
+                     canEditRoles: Bool = false,
                      memberIsBanned: Bool = false,
+                     memberPowerLevel: RoomPowerLevel = .init(value: 0),
                      powerLevel: RoomPowerLevel = .init(value: 100)) -> ManageRoomMemberSheetViewModel {
         let member = if memberIsBanned {
             RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBanned[0])
         } else {
-            RoomMemberDetails(withProxy: RoomMemberProxyMock.mockDan)
+            RoomMemberDetails(withProxy: RoomMemberProxyMock(with: .init(userID: "@dan:matrix.org",
+                                                                         displayName: "Dan",
+                                                                         avatarURL: .mockMXCUserAvatar,
+                                                                         membership: .join,
+                                                                         powerLevel: memberPowerLevel)))
         }
         return ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
                                               permissions: .init(canKick: canKick,
                                                                  canBan: canBan,
+                                                                 canEditRoles: canEditRoles,
                                                                  ownPowerLevel: powerLevel),
                                               roomProxy: JoinedRoomProxyMock(.init()),
                                               userIndicatorController: UserIndicatorControllerMock(),

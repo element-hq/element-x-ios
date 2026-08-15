@@ -35,8 +35,10 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         self.analyticsService = analyticsService
         self.mediaProvider = mediaProvider
         super.init(initialViewState: .init(memberDetails: memberDetails, permissions: permissions), mediaProvider: mediaProvider)
+
+        state.bindings.selectedRole = state.memberRole ?? .user
     }
-    
+
     override func process(viewAction: ManageRoomMemberSheetViewAction) {
         switch viewAction {
         case .kick:
@@ -47,6 +49,8 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
             actionsSubject.send(.dismiss(shouldShowDetails: true))
         case .unban:
             displayAlert(.unban)
+        case .updateRole(let role):
+            confirmRoleUpdate(role)
         case .displayAvatar(let url):
             Task { await displayFullScreenAvatar(url) }
         }
@@ -86,9 +90,65 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
                                              message: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
                                              secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationAction) { [weak self] in Task { await self?.unbanMember(id: memberID, name: memberName) } })
+        case .promoteToAdmin, .promoteToOwner:
+            break // Built directly in confirmRoleUpdate.
         }
     }
     
+    private func confirmRoleUpdate(_ role: RoomRole) {
+        guard let currentRole = state.memberRole, role != currentRole else { return }
+
+        let revertSelection = { [weak self] in
+            guard let self else { return }
+            state.bindings.selectedRole = currentRole
+        }
+
+        if role == .owner {
+            state.bindings.alertInfo = .init(id: .promoteToOwner,
+                                             title: L10n.screenRoomChangeRoleConfirmChangeOwnersTitle,
+                                             message: L10n.screenRoomChangeRoleConfirmChangeOwnersDescription,
+                                             primaryButton: .init(title: L10n.actionContinue, role: .destructive) { [weak self] in Task { await self?.updateRole(role) } },
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: revertSelection))
+        } else if role == .administrator, state.permissions.ownPowerLevel.role == .administrator {
+            // Promoting to your own power level can't be undone.
+            state.bindings.alertInfo = .init(id: .promoteToAdmin,
+                                             title: L10n.screenRoomChangeRoleConfirmAddAdminTitle,
+                                             message: L10n.screenRoomChangeRoleConfirmAddAdminDescription,
+                                             primaryButton: .init(title: L10n.actionContinue) { [weak self] in Task { await self?.updateRole(role) } },
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: revertSelection))
+        } else {
+            Task { await updateRole(role) }
+        }
+    }
+
+    private func updateRole(_ role: RoomRole) async {
+        let indicatorTitle = L10n.commonSaving
+        showManageMemberIndicator(title: indicatorTitle)
+
+        // A task we can await until the room's info gets modified with the new power levels.
+        // Note: Ignore the first value as the publisher is backed by a current value subject.
+        let infoTask = Task {
+            var iterator = roomProxy.infoPublisher.values.makeAsyncIterator()
+            _ = await iterator.next(isolation: #isolation) // The publisher's current value.
+            _ = await iterator.next(isolation: #isolation)
+        }
+
+        switch await roomProxy.updatePowerLevelsForUsers([(userID: state.memberDetails.id, powerLevel: role.powerLevelValue)]) {
+        case .success:
+            hideManageMemberIndicator(title: indicatorTitle)
+            analyticsService.trackRoomModeration(action: .ChangeMemberRole, role: role)
+            actionsSubject.send(.dismiss(shouldShowDetails: false))
+
+            // Refresh the members once the new power levels are in so role badges update.
+            _ = await infoTask.value
+            await roomProxy.updateMembers()
+        case .failure:
+            infoTask.cancel()
+            showManageMemberFailure(title: indicatorTitle)
+            state.bindings.selectedRole = state.memberRole ?? .user
+        }
+    }
+
     private func kickMember(id: String, name: String?, reason: String?) async {
         let indicatorTitle = L10n.screenBottomSheetManageRoomMemberRemovingUser(name ?? id)
         showManageMemberIndicator(title: indicatorTitle)

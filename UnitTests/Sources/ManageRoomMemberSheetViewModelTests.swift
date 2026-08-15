@@ -115,4 +115,99 @@ struct ManageRoomMemberSheetViewModelTests {
         
         #expect(context.mediaPreviewItem?.previewItemTitle == member.name)
     }
+
+    @Test
+    mutating func roleVisibility() {
+        // An admin looking at a moderator can edit their role.
+        setupForRoles(member: RoomMemberProxyMock.mockModerator, canEditRoles: true)
+        #expect(context.viewState.isRoleVisible)
+        #expect(context.viewState.isRoleEditable)
+        #expect(context.viewState.availableRoles == [.administrator, .moderator, .user])
+        #expect(context.selectedRole == .moderator)
+
+        // An admin looking at another admin sees the role but can't edit it.
+        setupForRoles(member: RoomMemberProxyMock.mockAdmin, canEditRoles: true)
+        #expect(context.viewState.isRoleVisible)
+        #expect(!context.viewState.isRoleEditable)
+
+        // An admin looking at a regular member can promote them.
+        setupForRoles(member: RoomMemberProxyMock.mockAlice, canEditRoles: true)
+        #expect(context.viewState.isRoleVisible)
+        #expect(context.viewState.isRoleEditable)
+
+        // Without permission to edit power levels a regular member's role is hidden…
+        setupForRoles(member: RoomMemberProxyMock.mockAlice, canEditRoles: false)
+        #expect(!context.viewState.isRoleVisible)
+
+        // …but a non-default role is always shown.
+        setupForRoles(member: RoomMemberProxyMock.mockModerator, canEditRoles: false)
+        #expect(context.viewState.isRoleVisible)
+        #expect(!context.viewState.isRoleEditable)
+    }
+
+    @Test
+    mutating func updateRole() async throws {
+        // Demoting a moderator to a member doesn't need any confirmation.
+        let roomProxy = setupForRoles(member: RoomMemberProxyMock.mockModerator, canEditRoles: true)
+
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            action == .dismiss(shouldShowDetails: false)
+        }
+        context.send(viewAction: .updateRole(.user))
+        try await deferredAction.fulfill()
+
+        #expect(context.alertInfo == nil)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count == 1)
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == RoomMemberProxyMock.mockModerator.userID && $0.powerLevel == 0 } == true)
+    }
+
+    @Test
+    mutating func promoteToAdminWarning() async throws {
+        // Promoting someone to your own power level shows a warning first.
+        let roomProxy = setupForRoles(member: RoomMemberProxyMock.mockAlice, canEditRoles: true)
+
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
+        context.send(viewAction: .updateRole(.administrator))
+        try await deferred.fulfill()
+
+        #expect(!roomProxy.updatePowerLevelsForUsersCalled)
+
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            action == .dismiss(shouldShowDetails: false)
+        }
+        context.alertInfo?.primaryButton.action?()
+        try await deferredAction.fulfill()
+
+        #expect(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == RoomMemberProxyMock.mockAlice.userID && $0.powerLevel == 100 } == true)
+    }
+
+    @Test
+    mutating func cancelledRoleChangeRevertsSelection() async throws {
+        let roomProxy = setupForRoles(member: RoomMemberProxyMock.mockAlice, canEditRoles: true)
+
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
+        context.selectedRole = .administrator
+        context.send(viewAction: .updateRole(.administrator))
+        try await deferred.fulfill()
+
+        context.alertInfo?.secondaryButton?.action?()
+
+        #expect(context.selectedRole == .user)
+        #expect(!roomProxy.updatePowerLevelsForUsersCalled)
+    }
+
+    @discardableResult
+    private mutating func setupForRoles(member: RoomMemberProxyMock, canEditRoles: Bool) -> JoinedRoomProxyMock {
+        let roomProxy = JoinedRoomProxyMock(.init(members: [RoomMemberProxyMock.mockMeAdmin, member]))
+        viewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: .init(withProxy: member)),
+                                                   permissions: .init(canKick: true,
+                                                                      canBan: true,
+                                                                      canEditRoles: canEditRoles,
+                                                                      ownPowerLevel: RoomMemberProxyMock.mockMeAdmin.powerLevel),
+                                                   roomProxy: roomProxy,
+                                                   userIndicatorController: UserIndicatorControllerMock(),
+                                                   analyticsService: AnalyticsServiceMock(.init()),
+                                                   mediaProvider: MediaProviderMock(.init()))
+        return roomProxy
+    }
 }

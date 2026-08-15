@@ -118,6 +118,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                 self.state.canInviteUsers = powerLevels.canOwnUserInvite()
                 self.state.canKickUsers = powerLevels.canOwnUserKick()
                 self.state.canBanUsers = powerLevels.canOwnUserBan()
+                self.state.canEditRoles = powerLevels.canOwnUserEditRolesAndPermissions()
             }
         }
     }
@@ -177,6 +178,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         let manageMemberViewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
                                                                    permissions: .init(canKick: state.canKickUsers,
                                                                                       canBan: state.canBanUsers,
+                                                                                      canEditRoles: state.canEditRoles,
                                                                                       ownPowerLevel: currentUserProxy?.powerLevel ?? .init(value: 0)),
                                                                    roomProxy: roomProxy,
                                                                    userIndicatorController: userIndicatorController,

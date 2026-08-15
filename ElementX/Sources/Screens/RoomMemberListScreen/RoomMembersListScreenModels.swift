@@ -50,6 +50,7 @@ struct RoomMembersListScreenViewState: BindableState {
     var canInviteUsers = false
     var canKickUsers = false
     var canBanUsers = false
+    var canEditRoles = false
     
     var bindings: RoomMembersListScreenViewStateBindings
     
