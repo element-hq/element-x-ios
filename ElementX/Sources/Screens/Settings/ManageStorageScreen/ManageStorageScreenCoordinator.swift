@@ -16,6 +16,7 @@ struct ManageStorageScreenCoordinatorParameters {
 enum ManageStorageScreenCoordinatorAction {
     /// The whole state store is to be cleared: the app clears its caches and restarts.
     case clearCache
+    case viewLogs
 }
 
 final class ManageStorageScreenCoordinator: CoordinatorProtocol {
@@ -41,6 +42,8 @@ final class ManageStorageScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .clearCache:
                 actionsSubject.send(.clearCache)
+            case .viewLogs:
+                actionsSubject.send(.viewLogs)
             }
         }
         .store(in: &cancellables)

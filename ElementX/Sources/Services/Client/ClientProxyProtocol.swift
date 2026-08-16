@@ -258,10 +258,11 @@ protocol ClientProxyProtocol: AnyObject {
     
     func storeSizes() async -> Result<StoreSizes, ClientProxyError>
     
-    /// Walks the rooms' storage usage, yielding each room with cached data as soon as its numbers are
-    /// known (roughly the biggest first), finishing once every room has been reported. Cancelling the
-    /// iteration stops the walk. The totals are the store sizes, see ``storeSizes()``.
-    func storageUsageByRoom() -> AsyncStream<StorageUsageRoom>
+    /// Walks the rooms' storage usage, yielding batches of rooms with cached data as soon as their
+    /// numbers are known (every room first, biggest first, then the rooms with media once attributed;
+    /// a batch replaces the previous numbers of its rooms), finishing once every room has been
+    /// reported. Cancelling the iteration stops the walk. The totals are the store sizes, see ``storeSizes()``.
+    func storageUsageByRoom() -> AsyncStream<[StorageUsageRoom]>
     
     /// Deletes the message keys of the given rooms (all rooms when nil). Encrypted history
     /// can't be read again unless the keys are fetched from a key backup.

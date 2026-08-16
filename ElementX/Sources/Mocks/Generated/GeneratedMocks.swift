@@ -3784,14 +3784,14 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let storageUsageByRoomReturnValueLock = NSLock()
-    private nonisolated(unsafe) var storageUsageByRoomUnderlyingReturnValue: AsyncStream<StorageUsageRoom>!
-    var storageUsageByRoomReturnValue: AsyncStream<StorageUsageRoom>! {
+    private nonisolated(unsafe) var storageUsageByRoomUnderlyingReturnValue: AsyncStream<[StorageUsageRoom]>!
+    var storageUsageByRoomReturnValue: AsyncStream<[StorageUsageRoom]>! {
         get { storageUsageByRoomReturnValueLock.withLock { storageUsageByRoomUnderlyingReturnValue } }
         set { storageUsageByRoomReturnValueLock.withLock { storageUsageByRoomUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var storageUsageByRoomClosure: (() -> AsyncStream<StorageUsageRoom>)?
+    nonisolated(unsafe) var storageUsageByRoomClosure: (() -> AsyncStream<[StorageUsageRoom]>)?
 
-    func storageUsageByRoom() -> AsyncStream<StorageUsageRoom> {
+    func storageUsageByRoom() -> AsyncStream<[StorageUsageRoom]> {
         storageUsageByRoomCallsCountLock.withLock { storageUsageByRoomUnderlyingCallsCount += 1 }
         if let storageUsageByRoomClosure = storageUsageByRoomClosure {
             return storageUsageByRoomClosure()

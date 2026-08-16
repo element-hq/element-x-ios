@@ -91,6 +91,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             .sink { [weak self] _ in
                 // This isn't removing duplicates which may try to download and/or write to disk concurrently????
                 self?.loadCurrentItem()
+                self?.reloadPagesIfPending()
             }
             .store(in: &cancellables)
         
@@ -105,6 +106,8 @@ class TimelineMediaPreviewController: QLPreviewController {
                 switch action {
                 case .itemLoaded(let itemID):
                     self?.handleFileLoaded(itemID: itemID)
+                case .neighbourPreloaded:
+                    self?.reloadPagesWhenResting()
                 case .showItemDetails(let mediaItem):
                     self?.presentMediaDetails(for: mediaItem)
                 case .exportFile(let file):
@@ -269,6 +272,24 @@ class TimelineMediaPreviewController: QLPreviewController {
         if dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) as AnyObject !== displayedItem {
             refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
         }
+    }
+    
+    private var isPageReloadPending = false
+    
+    /// Rebuilds the pages so that a preloaded neighbour's page shows its media as it swipes in;
+    /// deferred whilst swiping (see `handleFileLoaded`), to the next settled index.
+    private func reloadPagesWhenResting() {
+        if let scrollView = pageScrollView, scrollView.isDragging || scrollView.isDecelerating {
+            isPageReloadPending = true
+            return
+        }
+        isPageReloadPending = false
+        reloadData()
+    }
+    
+    private func reloadPagesIfPending() {
+        guard isPageReloadPending else { return }
+        reloadPagesWhenResting()
     }
     
     private func handleFileLoaded(itemID: MediaPreviewItemID) {

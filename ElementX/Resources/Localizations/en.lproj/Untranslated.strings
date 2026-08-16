@@ -10,8 +10,7 @@
 "screen_manage_storage_clear_cache_title" = "Clear %1$@?";
 "screen_manage_storage_clear_for_room" = "Clear caches for %1$@";
 "screen_manage_storage_clear_for_rooms" = "Clear caches for %1$d rooms";
-"screen_manage_storage_clear_option_everything" = "Clear everything";
-"screen_manage_storage_clear_option_older_than" = "Clear older than %1$d days";
+"screen_manage_storage_clear_scope_title" = "%1$@?";
 "screen_manage_storage_cleared" = "Cleared";
 "screen_manage_storage_error" = "Some caches could not be cleared.";
 "screen_manage_storage_rooms_section_footer" = "Rooms using more than 5 MB. Select rooms to see and clear their caches only.";
@@ -19,8 +18,8 @@
 "screen_manage_storage_scope_all_rooms" = "All rooms";
 "screen_manage_storage_scope_rooms" = "%1$d rooms";
 "screen_manage_storage_title" = "Manage storage";
+"screen_manage_storage_view_logs" = "View log files";
 "screen_manage_storage_warning_message_keys" = "If your message keys aren’t backed up, you may not be able to read older encrypted messages after clearing them.";
-"screen_manage_storage_warning_older_than" = "Media not opened for that long, log files older than that, and the caches of rooms with no activity for that long.";
 "screen_manage_storage_warning_restart" = "The app will restart to clear them.";
 "screen_manage_storage_warning_room_state" = "Cached room state and cached messages are cleared together.";
 "screen_search_empty_state_message" = "Search for chats and messages";

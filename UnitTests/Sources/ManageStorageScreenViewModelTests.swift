@@ -19,8 +19,6 @@ struct ManageStorageScreenViewModelTests {
 
     var context: ManageStorageScreenViewModelType.Context { viewModel.context }
 
-    static let day: TimeInterval = 24 * 60 * 60
-
     init() throws {
         clientProxy = ClientProxyMock(.init())
         // The second measurement (after a clear) is marked, so tests can wait for it.
@@ -33,7 +31,11 @@ struct ManageStorageScreenViewModelTests {
         }
         clientProxy.storageUsageByRoomClosure = {
             AsyncStream { continuation in
-                [StorageUsageRoom].mock.forEach { continuation.yield($0) }
+                // As the SDK does: every room without media first, then the rooms with media.
+                let rooms = [StorageUsageRoom].mock
+                continuation.yield(rooms.map { StorageUsageRoom(id: $0.id, name: $0.name, lastActivity: $0.lastActivity,
+                                                                bytes: $0.bytes.filter { $0.key != .media }) })
+                continuation.yield(rooms.filter { $0.bytes[.media, default: 0] > 0 })
                 continuation.finish()
             }
         }
@@ -43,11 +45,8 @@ struct ManageStorageScreenViewModelTests {
 
         logsDirectory = FileManager.default.temporaryDirectory.appending(component: UUID().uuidString)
         try FileManager.default.createDirectory(at: logsDirectory, withIntermediateDirectories: true)
-        // Two log files: one fresh, one 40 days old.
-        try Data(repeating: 1, count: 1000).write(to: logsDirectory.appending(component: "fresh.log"))
-        let oldURL = logsDirectory.appending(component: "old.log")
-        try Data(repeating: 1, count: 2000).write(to: oldURL)
-        try FileManager.default.setAttributes([.modificationDate: Date.now.addingTimeInterval(-40 * Self.day)], ofItemAtPath: oldURL.path())
+        try Data(repeating: 1, count: 1000).write(to: logsDirectory.appending(component: "a.log"))
+        try Data(repeating: 1, count: 2000).write(to: logsDirectory.appending(component: "b.log"))
 
         viewModel = ManageStorageScreenViewModel(clientProxy: clientProxy,
                                                  userIndicatorController: UserIndicatorControllerMock(),
@@ -90,9 +89,10 @@ struct ManageStorageScreenViewModelTests {
         context.send(viewAction: .requestClear(nil))
         let request = try #require(context.viewState.bindings.clearRequest)
         #expect(!request.restartsApp)
+        #expect(request.title == "Clear caches for Element X iOS?")
 
         let deferred = deferFulfillment(context.observe(\.viewState.totalBytes)) { $0[.messages] == 1 }
-        context.send(viewAction: .confirmClear(.everything))
+        context.send(viewAction: .confirmClear)
         try await deferred.fulfill()
 
         #expect(clientProxy.clearRoomKeysRoomIDsReceivedRoomIDs == ["!big:example.org"])
@@ -114,29 +114,32 @@ struct ManageStorageScreenViewModelTests {
         #expect(request.message.contains(UntranslatedL10n.screenManageStorageWarningRoomState))
 
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .clearCache }
-        context.send(viewAction: .confirmClear(.everything))
+        context.send(viewAction: .confirmClear)
         try await deferred.fulfill()
         #expect(clientProxy.clearRoomCachesRoomIDsCallsCount == 0)
     }
 
     @Test
-    func clearingOlderThan() async throws {
+    func clearingLogs() async throws {
         try await waitForLoad()
 
-        // Older than 30 days, all rooms: only the inactive room's caches, media by last access, old log files.
-        context.send(viewAction: .requestClear(nil))
-        let deferred = deferFulfillment(context.observe(\.viewState.totalBytes)) { $0[.messages] == 1 }
-        context.send(viewAction: .confirmClear(.olderThan30Days))
-        try await deferred.fulfill()
+        context.send(viewAction: .requestClear(.logs))
+        let request = try #require(context.viewState.bindings.clearRequest)
+        #expect(request.title == "Clear log files?")
 
-        #expect(clientProxy.clearRoomKeysRoomIDsReceivedRoomIDs == ["!medium:example.org"])
-        #expect(clientProxy.clearRoomCachesRoomIDsReceivedRoomIDs == ["!medium:example.org"])
-        #expect(clientProxy.clearMediaCacheRoomIDsNotAccessedForCallsCount == 1)
-        #expect(clientProxy.clearMediaCacheRoomIDsNotAccessedForReceivedArguments?.roomIDs == nil)
-        #expect(clientProxy.clearMediaCacheRoomIDsNotAccessedForReceivedArguments?.notAccessedFor == 30 * Self.day)
-        #expect(context.viewState.totalBytes[.logs] == 1000)
-        #expect(FileManager.default.fileExists(atPath: logsDirectory.appending(component: "fresh.log").path()))
-        #expect(!FileManager.default.fileExists(atPath: logsDirectory.appending(component: "old.log").path()))
+        // Viewing them dismisses the alert without clearing.
+        let viewLogs = deferFulfillment(viewModel.actionsPublisher) { $0 == .viewLogs }
+        context.send(viewAction: .viewLogs)
+        try await viewLogs.fulfill()
+        #expect(context.viewState.bindings.clearRequest == nil)
+        #expect(context.viewState.totalBytes[.logs] == 3000)
+
+        context.send(viewAction: .requestClear(.logs))
+        let deferred = deferFulfillment(context.observe(\.viewState.totalBytes)) { $0[.logs] == 0 }
+        context.send(viewAction: .confirmClear)
+        try await deferred.fulfill()
+        #expect(try FileManager.default.contentsOfDirectory(atPath: logsDirectory.path()).isEmpty)
+        #expect(clientProxy.clearRoomCachesRoomIDsCallsCount == 0)
     }
 
     private func waitForLoad() async throws {

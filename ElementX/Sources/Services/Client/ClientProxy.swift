@@ -918,7 +918,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func storageUsageByRoom() -> AsyncStream<StorageUsageRoom> {
+    func storageUsageByRoom() -> AsyncStream<[StorageUsageRoom]> {
         AsyncStream { [client] continuation in
             let handle = client.storageUsageByRoom(listener: StorageUsageListenerProxy(continuation: continuation))
             continuation.onTermination = { _ in handle.cancel() }

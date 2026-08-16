@@ -296,6 +296,22 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .clearCache:
                     self?.actionsSubject.send(.clearCache)
+                case .viewLogs:
+                    self?.presentLogViewer()
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentLogViewer() {
+        let coordinator = LogViewerScreenCoordinator()
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .done:
+                    self?.navigationStackCoordinator.pop()
                 }
             }
             .store(in: &cancellables)

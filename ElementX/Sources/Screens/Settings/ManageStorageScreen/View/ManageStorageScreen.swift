@@ -21,12 +21,16 @@ struct ManageStorageScreen: View {
         .navigationTitle(UntranslatedL10n.screenManageStorageTitle)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
-        .confirmationDialog(item: $context.clearRequest, titleVisibility: .visible) { _ in
-            ForEach(ManageStorageClearAge.allCases, id: \.self) { age in
-                Button(age.title, role: .destructive) {
-                    context.send(viewAction: .confirmClear(age))
+        .alert(item: $context.clearRequest) { request in
+            if request.cache == .logs {
+                Button(UntranslatedL10n.screenManageStorageViewLogs) {
+                    context.send(viewAction: .viewLogs)
                 }
             }
+            Button(L10n.actionClear, role: .destructive) {
+                context.send(viewAction: .confirmClear)
+            }
+            Button(L10n.actionCancel, role: .cancel) { }
         } message: { request in
             Text(request.message)
         }
@@ -183,7 +187,7 @@ struct ManageStorageScreen_Previews: PreviewProvider, TestablePreview {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.storeSizesReturnValue = .success(.mock)
         clientProxy.storageUsageByRoomReturnValue = AsyncStream { continuation in
-            rooms.forEach { continuation.yield($0) }
+            continuation.yield(rooms)
             continuation.finish()
         }
         return ManageStorageScreenViewModel(clientProxy: clientProxy,

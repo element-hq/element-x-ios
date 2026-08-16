@@ -182,12 +182,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// The neighbour loads in flight, joined by the load on display if the user swipes before they finish.
     private var preloads = [MediaPreviewItemID: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>]()
     
-    /// Fetches the media on either side of the current one into the SDK's media cache, so that a
-    /// swipe lands on a (cache-fast) load instead of a download. Small files only, and skipped when
-    /// a content scanner is configured (a neighbour must be scanned as the current item is, on display).
+    /// Fetches the media on either side of the current one, so that a swipe reveals the media itself
+    /// rather than an empty page. Small files only, and skipped when a content scanner is configured
+    /// (a neighbour must be scanned as the current item is, on display).
     ///
-    /// The item's file handle is left for the regular load on display, which is what tells QuickLook
-    /// to refresh the page it may already have built for the item.
+    /// The neighbour gets its file handle straight away, and QuickLook is told to rebuild the pages
+    /// it has already built without it.
     private func preloadNeighbours(of mediaItem: TimelineMediaPreviewItem.Media) {
         guard contentScannerService == nil else { return }
         
@@ -207,6 +207,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 // Failures aren't recorded here: the load on display retries and reports them.
                 let result = await mediaProvider.loadFileFromSource(source, filename: neighbour.filename)
                 preloads[neighbourID] = nil
+                if case .success(let handle) = result, neighbour.fileHandle == nil {
+                    neighbour.fileHandle = handle
+                    state.previewControllerDriver.send(.neighbourPreloaded(neighbourID))
+                }
                 return result
             }
         }

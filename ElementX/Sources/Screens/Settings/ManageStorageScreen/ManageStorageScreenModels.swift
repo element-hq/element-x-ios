@@ -12,6 +12,7 @@ import SwiftUI
 enum ManageStorageScreenViewModelAction {
     /// The whole state store is to be cleared: the app clears its caches and restarts.
     case clearCache
+    case viewLogs
 }
 
 struct ManageStorageScreenViewState: BindableState {
@@ -70,7 +71,7 @@ struct ManageStorageScreenViewState: BindableState {
 }
 
 struct ManageStorageScreenViewStateBindings {
-    /// The clear the user is being asked to confirm (and scope by age).
+    /// The clear the user is being asked to confirm.
     var clearRequest: ManageStorageClearRequest?
     var alertInfo: AlertInfo<ManageStorageScreenAlert>?
 }
@@ -80,16 +81,14 @@ enum ManageStorageScreenAlert {
 }
 
 /// A clear awaiting confirmation: one cache, or all of them (`nil`).
-struct ManageStorageClearRequest: Identifiable, Equatable, ConfirmationDialogProtocol {
+struct ManageStorageClearRequest: Identifiable, Equatable, AlertProtocol {
     let cache: StorageCacheKind?
     /// Whether clearing means clearing the whole state store, which restarts the app.
     let restartsApp: Bool
+    /// The alert's title: the cache, or the scope (all caches, or the selected rooms').
+    let title: String
 
     var id: String { cache.map(\.title) ?? "all" }
-
-    var title: String {
-        UntranslatedL10n.screenManageStorageClearCacheTitle(cache?.title.lowercased() ?? UntranslatedL10n.screenManageStorageClearAll.lowercased())
-    }
 
     /// The warnings for what's about to be cleared.
     var message: String {
@@ -103,32 +102,7 @@ struct ManageStorageClearRequest: Identifiable, Equatable, ConfirmationDialogPro
         if restartsApp {
             lines.append(UntranslatedL10n.screenManageStorageWarningRestart)
         }
-        lines.append(UntranslatedL10n.screenManageStorageWarningOlderThan)
         return lines.joined(separator: "\n\n")
-    }
-}
-
-/// The age options offered when clearing.
-enum ManageStorageClearAge: CaseIterable {
-    case everything, olderThan30Days, olderThan90Days
-
-    var days: Int? {
-        switch self {
-        case .everything: nil
-        case .olderThan30Days: 30
-        case .olderThan90Days: 90
-        }
-    }
-
-    var title: String {
-        switch days {
-        case .none: UntranslatedL10n.screenManageStorageClearOptionEverything
-        case .some(let days): UntranslatedL10n.screenManageStorageClearOptionOlderThan(days)
-        }
-    }
-
-    var duration: TimeInterval? {
-        days.map { TimeInterval($0) * 24 * 60 * 60 }
     }
 }
 
@@ -137,8 +111,9 @@ enum ManageStorageScreenViewAction {
     case toggleRoom(String)
     /// Ask to clear one cache, or all of them (`nil`).
     case requestClear(StorageCacheKind?)
-    /// Perform the pending clear request with the chosen age.
-    case confirmClear(ManageStorageClearAge)
+    /// Perform the pending clear request.
+    case confirmClear
+    case viewLogs
 }
 
 extension StorageCacheKind {

@@ -2132,3 +2132,31 @@ from `storeSizes()`, progressive list, >5 MB filter. Note the crypto
 "Cached message keys" total is now the whole crypto store file (devices,
 identities, olm sessions included), like Developer options; per-room
 shares stay the megolm-session payloads.
+
+## Round addendum 11 (2026-08-17): Manage storage, third pass + viewer preload
+
+Build 21 dogfood: rooms appeared quickly but the media shares took ~30 s.
+Log: the media pass called `room_media_uris` per room (5728 rooms × 3
+sqlite round-trips ≈ 11 s) and each room was upserted into the list one
+at a time, twice (11k SwiftUI updates for the rest). Now one query for
+the whole `event_media` index (`media_uris_by_room(room_ids)`, legacy
+backfill done once across rooms) and the SDK reports rooms in two
+batches (all rooms, then the rooms with media); the screen merges each
+batch in one state update. Also from the same round: the per-room
+counters (SDK
+[`2d44d71f3`](https://github.com/matrix-org/matrix-rust-sdk/commit/2d44d71f3)
+/ [`9f25138a8`](https://github.com/matrix-org/matrix-rust-sdk/commit/9f25138a8),
+migrations 020 event cache + 016 state store): trigger-maintained
+`room_event_sizes` / `room_data_sizes` tables replace the GROUP BY scans,
+filled once from existing rows on first use.
+
+UI, per feedback: the older-than options are gone (clears are
+all-or-nothing again; the SDK's `notAccessedFor` stays available), the
+confirmation is a plain alert titled "Clear all caches?" / "Clear caches
+for X?" / "Clear cached media?", and clearing the log files offers "View
+log files" (the bug-report log viewer, pushed) first.
+
+Media viewer: a preloaded neighbour now gets its file handle as soon as
+the preload finishes and QuickLook rebuilds its pages (deferred to the
+next settled index if mid-swipe), so the neighbouring media swipes into
+view instead of a black page that pops in once the transition ends.

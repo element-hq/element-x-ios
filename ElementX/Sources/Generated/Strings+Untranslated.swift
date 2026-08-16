@@ -42,11 +42,9 @@ internal nonisolated enum UntranslatedL10n {
   internal static func screenManageStorageClearForRooms(_ p1: Int) -> String {
     return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_for_rooms", p1)
   }
-  /// Clear everything
-  internal static var screenManageStorageClearOptionEverything: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_option_everything") }
-  /// Clear older than %1$d days
-  internal static func screenManageStorageClearOptionOlderThan(_ p1: Int) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_option_older_than", p1)
+  /// %1$@?
+  internal static func screenManageStorageClearScopeTitle(_ p1: Any) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_scope_title", String(describing: p1))
   }
   /// Cleared
   internal static var screenManageStorageCleared: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_cleared") }
@@ -64,10 +62,10 @@ internal nonisolated enum UntranslatedL10n {
   }
   /// Manage storage
   internal static var screenManageStorageTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_title") }
+  /// View log files
+  internal static var screenManageStorageViewLogs: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_view_logs") }
   /// If your message keys aren’t backed up, you may not be able to read older encrypted messages after clearing them.
   internal static var screenManageStorageWarningMessageKeys: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_message_keys") }
-  /// Media not opened for that long, log files older than that, and the caches of rooms with no activity for that long.
-  internal static var screenManageStorageWarningOlderThan: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_older_than") }
   /// The app will restart to clear them.
   internal static var screenManageStorageWarningRestart: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_restart") }
   /// Cached room state and cached messages are cleared together.

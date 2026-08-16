@@ -52,11 +52,17 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
             }
         case .requestClear(let cache):
             let clearsState = cache == nil || cache == .roomState || cache == .messages
-            state.bindings.clearRequest = .init(cache: cache, restartsApp: clearsState && !state.isFiltered)
-        case .confirmClear(let age):
+            state.bindings.clearRequest = .init(cache: cache,
+                                                restartsApp: clearsState && !state.isFiltered,
+                                                title: cache.map { UntranslatedL10n.screenManageStorageClearCacheTitle($0.title.lowercased()) }
+                                                    ?? UntranslatedL10n.screenManageStorageClearScopeTitle(state.clearAllTitle))
+        case .confirmClear:
             guard let request = state.bindings.clearRequest else { return }
             state.bindings.clearRequest = nil
-            Task { await clear(request, age: age) }
+            Task { await clear(request) }
+        case .viewLogs:
+            state.bindings.clearRequest = nil
+            actionsSubject.send(.viewLogs)
         }
     }
 
@@ -84,8 +90,8 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         state.rooms = []
         state.isLoadingRooms = true
         roomsTask = Task { [weak self, clientProxy] in
-            for await room in clientProxy.storageUsageByRoom() {
-                self?.upsert(room)
+            for await rooms in clientProxy.storageUsageByRoom() {
+                self?.upsert(rooms)
             }
             guard !Task.isCancelled, let self else { return }
             state.selectedRoomIDs = state.selectedRoomIDs.intersection(state.rooms.map(\.id))
@@ -93,20 +99,16 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         }
     }
 
-    /// Adds a room (or replaces its previous numbers), keeping the rooms sorted by total, largest first.
-    private func upsert(_ room: StorageUsageRoom) {
-        var rooms = state.rooms.filter { $0.id != room.id }
-        let index = rooms.firstIndex { $0.totalBytes < room.totalBytes } ?? rooms.endIndex
-        rooms.insert(room, at: index)
-        state.rooms = rooms
+    /// Adds a batch of rooms (replacing their previous numbers), keeping the rooms sorted by total, largest first.
+    private func upsert(_ batch: [StorageUsageRoom]) {
+        let batchIDs = Set(batch.map(\.id))
+        state.rooms = (state.rooms.filter { !batchIDs.contains($0.id) } + batch).sorted { $0.totalBytes > $1.totalBytes }
     }
 
     private static let clearingIndicatorID = "\(ManageStorageScreenViewModel.self)-Clearing"
 
-    /// Clears the requested cache(s) within the current scope (the selected rooms, or everything),
-    /// limited to what's older than the chosen age: media not accessed for that long, log files
-    /// older than that, and (for the per-room caches) the rooms with no activity for that long.
-    private func clear(_ request: ManageStorageClearRequest, age: ManageStorageClearAge) async {
+    /// Clears the requested cache(s) within the current scope (the selected rooms, or everything).
+    private func clear(_ request: ManageStorageClearRequest) async {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.clearingIndicatorID,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                               title: L10n.commonPleaseWait,
@@ -114,15 +116,8 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         defer { userIndicatorController.retractIndicatorWithId(Self.clearingIndicatorID) }
 
         let caches = request.cache.map { [$0] } ?? state.visibleCaches
-        // The rooms whose per-room caches are cleared: the selection (or all), pruned by inactivity when an age is set.
-        let scopedRoomIDs: [String]? = state.isFiltered ? Array(state.selectedRoomIDs) : nil
-        let roomIDs: [String]? = if let duration = age.duration {
-            (state.isFiltered ? state.selectedRooms : state.rooms)
-                .filter { room in room.lastActivity.map { $0 < Date.now.addingTimeInterval(-duration) } ?? false }
-                .map(\.id)
-        } else {
-            scopedRoomIDs
-        }
+        // The rooms whose caches are cleared: the selection, or all.
+        let roomIDs: [String]? = state.isFiltered ? Array(state.selectedRoomIDs) : nil
 
         var failed = false
         var restartsApp = false
@@ -140,9 +135,9 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
                     restartsApp = true // The whole state store: the app clears its caches and restarts.
                 }
             case .media:
-                if case .failure = await clientProxy.clearMediaCache(roomIDs: scopedRoomIDs, notAccessedFor: age.duration) { failed = true }
+                if case .failure = await clientProxy.clearMediaCache(roomIDs: roomIDs, notAccessedFor: nil) { failed = true }
             case .logs:
-                deleteLogFiles(olderThan: age.duration)
+                deleteLogFiles()
             }
         }
 
@@ -174,9 +169,8 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         }
     }
 
-    private func deleteLogFiles(olderThan duration: TimeInterval?) {
-        let cutoff = duration.map { Date.now.addingTimeInterval(-$0) }
-        for file in logFiles() where cutoff.map({ file.modificationDate < $0 }) ?? true {
+    private func deleteLogFiles() {
+        for file in logFiles() {
             try? FileManager.default.removeItem(at: file.url)
         }
     }
