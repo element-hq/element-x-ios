@@ -17,8 +17,14 @@ struct GapRoomTimelineView: View {
         ProgressView()
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .onAppear {
-                context?.send(viewAction: .resolveGap(prevToken: timelineItem.prevToken))
+            .task {
+                // Re-request periodically while visible: a resolution killed by
+                // backgrounding or a network error would otherwise never retry.
+                // The SDK deduplicates in-flight resolutions, so this is cheap.
+                while !Task.isCancelled {
+                    context?.send(viewAction: .resolveGap(prevToken: timelineItem.prevToken))
+                    try? await Task.sleep(for: .seconds(2))
+                }
             }
     }
 }
