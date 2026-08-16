@@ -1797,3 +1797,22 @@ animate only resolves that close EMPTY (pure spinner removal - the true
 shrink-away); all content-inserting resolves apply unanimated with the
 visible content pinned. Pin now adjusts bounds.origin directly instead
 of scrollToRow, so it no longer cancels an in-flight fling.
+
+### Gappy timelines: merged into preview-prefill (2026-08-16)
+
+Round-2 fixes user-validated on the phone ("feels great"). Both
+`matthew/gappy-timelines` branches fast-forward-merged into
+`matthew/preview-prefill` (SDK f7161bf4b..d88bbf2a0, EXI
+6f3b3249d..2e5e05436) and pushed; gappy-timelines branches retired
+(same commits, kept for the upstream PR split). Final behaviour, for
+the record: gaps render as inline spinners that resolve while visible
+(2s idempotent retry loop, so backgrounding/network failures self-heal);
+adjacent same-anchor gaps collapse to their newest member; a resolve
+that closes EMPTY animates away (100ms ease-out), any resolve that
+inserts content applies unanimated with the viewport pinned via a
+momentum-preserving bounds.origin adjustment; group items are never
+scroll anchors. Storage-only pagination stays scoped to the live and
+Media & Files timelines. Open follow-ups tracked above: media-less
+cached rooms show a false Media & Files empty state (needs design);
+offline "content missing" hint; Slack-style placeholder design;
+aggregations-across-gaps watch.
