@@ -1948,6 +1948,8 @@ loads via storage walks; no spinner above the first date divider.
 Same drop class could plausibly have hidden other late state updates
 (forward pagination state, item batches during heavy builds).
 
+### Speeding up Media & Files view so it's not blocked by gaps and can be used as an index
+
 Round addendum 6 (Media & Files): three reports - slow load, no
 spinner while looking for media in a media-less room, never any gap
 spinners in the grid. Logs showed the grid's filtered storage-only
@@ -2026,7 +2028,7 @@ logs the size of every (re)built dynamic entries chain; EXI
 [`e806f1d55`](https://github.com/element-hq/element-x-ios/commit/e806f1d55)
 logs the diff kinds that empty a populated list.
 
-## Round addendum 8 (2026-08-16, later): media viewer swipes on the index
+### Media viewer swipes using the event cache index rather than walking the timeline
 
 Tapping a media in the chat used to build a fresh msgtype-filtered live
 (or event-focused) timeline to swipe through: another walk of the room's
@@ -2171,3 +2173,20 @@ refreshed, once it's current. "Media and files" in Room Info waited
 decodes every media message of the room): the two timelines are now
 built when Room Info opens (and again when returning to it), so the tap
 opens instantly; a tap before they're ready still waits.
+
+## Round addendum 12 (2026-08-17): media views seeded index-only
+
+The Media and files open cost was O(all media in the room): the
+message-type view decoded every matching event at seed (twice, plus the
+files view). SDK
+[`0e26df61e`](https://github.com/matrix-org/matrix-rust-sdk/commit/0e26df61e):
+the view is seeded from the index alone (`find_event_refs_by_message_types`,
+opaque event refs + positions, no content read), events are held as
+pending and loaded in one query per page as they come into the exposed
+window (seed page, `paginate_backwards`/`paginate_forwards`), and the
+around-event focus is located through `filter_duplicated_events`. So
+opening the media grid costs one index query + one page decode however
+big the room; the Room Info prewarm (addendum 11) stays as a bonus.
+Also on this build: the preloaded-neighbour refresh in the media viewer
+waits for the pages to rest (it was being dropped by the
+don't-refresh-while-scrolling guard, leaving preloaded items black).
