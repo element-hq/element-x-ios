@@ -966,8 +966,20 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
         if let timelineItemViewState = state.timelineState.itemsDictionary[item.id.uniqueID] {
-            timelineItemViewState.groupStyle = groupStyle
-            timelineItemViewState.type = .init(item: item)
+            // Losing the sender details means an older message from the same sender has just been
+            // paginated in above. That item is typically at the top of the viewport, so animating
+            // the header away (see RoomTimelineItemView) makes it visibly slide. Snap instead.
+            if timelineItemViewState.groupStyle.shouldShowSenderDetails, !groupStyle.shouldShowSenderDetails {
+                var transaction = Transaction()
+                transaction.disablesAnimations = true
+                withTransaction(transaction) {
+                    timelineItemViewState.groupStyle = groupStyle
+                    timelineItemViewState.type = .init(item: item)
+                }
+            } else {
+                timelineItemViewState.groupStyle = groupStyle
+                timelineItemViewState.type = .init(item: item)
+            }
             return timelineItemViewState
         } else {
             return RoomTimelineItemViewState(item: item, groupStyle: groupStyle)
