@@ -1913,3 +1913,16 @@ EXI-side (TimelineTableViewController / hosting-cell resize); not fixed
 yet, approach TBD (disable the implicit resize animation for
 pagination-driven group-style updates, or pin the layout on the newest
 visible item as the non-live path does).
+
+Round addendum 4: the top-bubble regroup jump above turned out to be
+EXI's own `RoomTimelineItemView` `.animation(.elementDefault, value:
+groupStyle)`: meant for live sends regrouping the tail, it also
+animated the sender header away when back-pagination landed a
+same-sender predecessor above the top visible item. Fixed EXI
+[`b8f5db3bf`](https://github.com/element-hq/element-x-ios/commit/b8f5db3bf):
+`TimelineViewModel.updateViewState` applies a "loses sender details"
+regroup inside a transaction with animations disabled; every other
+group-style change keeps its animation. Validate: paginating up through
+a same-sender run no longer slides/fades the top bubble; if a residual
+whole-viewport shift remains on those batches, that's the flipped
+table's row-shrink at max content offset (next suspect).
