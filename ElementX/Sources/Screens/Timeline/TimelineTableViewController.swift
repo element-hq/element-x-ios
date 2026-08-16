@@ -618,7 +618,14 @@ class TimelineTableViewController: UIViewController {
         })
         let resolvedGapIDs = renderedGapIDs.subtracting(newGapIDs)
         let visibleIDs = Set(tableView.indexPathsForVisibleRows?.compactMap { dataSource.itemIdentifier(for: $0) } ?? [])
-        let visibleGapResolved = !frozenApply && !resolvedGapIDs.isDisjoint(with: visibleIDs)
+        // Rows this apply removes or re-creates under a new identity beyond the
+        // resolved gaps themselves - e.g. the "N room changes" groups regrouping
+        // around the freshly inserted events. If any of those are visible, an
+        // animated apply cross-fades half the screen (the reported "spasm");
+        // snap it with the layout pin below instead.
+        let removedIDs = Set(currentSnapshot.mainItemIdentifiers).subtracting(timelineItemsIDs)
+        let visibleChurn = !removedIDs.subtracting(resolvedGapIDs).isDisjoint(with: visibleIDs)
+        let visibleGapResolved = !frozenApply && !visibleChurn && !resolvedGapIDs.isDisjoint(with: visibleIDs)
         renderedGapIDs = newGapIDs
 
         // The previous newest item loses its delivery status marker when a newer one
@@ -1160,8 +1167,9 @@ extension TimelineTableViewController {
         guard let timelineCell = tableView.visibleCells.first(where: {
             guard let cell = $0 as? TimelineItemCell, let itemType = cell.item?.type else { return false }
             switch itemType {
-            // Transient cells make for a bad scroll anchor.
-            case .paginationIndicator, .gap:
+            // Transient cells make for a bad scroll anchor, and state-event
+            // groups take a new identity when events land next to them.
+            case .paginationIndicator, .gap, .group:
                 return false
             default:
                 return true
