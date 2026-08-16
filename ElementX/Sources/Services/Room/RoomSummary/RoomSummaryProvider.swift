@@ -281,9 +281,29 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         if duration > 0.025 {
             MXLog.info("\(name): Built \(rooms.count) room summaries in \(Int(duration * 1000))ms")
         }
+        if rooms.isEmpty, !visibleBefore.isEmpty {
+            // Diagnostic for the "skeletons forever" wedge: name the diffs that emptied a populated list.
+            MXLog.error("\(name): Room list emptied by diffs: \(diffs.map(Self.diffKind))")
+        }
         // Launch instrumentation: track when the top of the home list stops changing.
         if shouldUpdateVisibleRange, Self.visibleSignature(of: rooms) != visibleBefore {
             LaunchMetrics.noteVisibleChurn()
+        }
+    }
+
+    private nonisolated static func diffKind(_ diff: RoomListEntriesUpdate) -> String {
+        switch diff {
+        case .append(let values): "append(\(values.count))"
+        case .clear: "clear"
+        case .pushFront: "pushFront"
+        case .pushBack: "pushBack"
+        case .popFront: "popFront"
+        case .popBack: "popBack"
+        case .insert(let index, _): "insert(\(index))"
+        case .set(let index, _): "set(\(index))"
+        case .remove(let index): "remove(\(index))"
+        case .truncate(let length): "truncate(\(length))"
+        case .reset(let values): "reset(\(values.count))"
         }
     }
 
