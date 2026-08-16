@@ -1664,5 +1664,80 @@ before upstreaming. Open question inherited from the issue: promoting
 to owner is offered to owners/creators here (the Roles & permissions
 screens only reach admin/moderator modes today).
 
-Affordance follow-up (`3ba795880`): the own-user role row
+Affordance follow-up ([`3ba795880`](https://github.com/element-hq/element-x-ios/commit/3ba795880)): the own-user role row
 gained the picker rows' up/down chevrons glyph so it reads as tappable.
+
+## Gappy timelines: cached content always visible (SDK + EXI, `matthew/gappy-timelines`)
+
+Implements how-hard-can-it-be-2025#115 / element-x-ios#3872, landing the
+ideas from Hywan's `feat-ui-timeline-with-gaps` hackathon branch as a
+fresh port onto `matthew/preview-prefill` (his merge-base predates the
+event-cache `caches/` restructure, so nothing was cherry-pickable).
+Branches: rust-sdk `matthew/gappy-timelines` (off preview-prefill, 4
+commits) and EXI `matthew/gappy-timelines` (off preview-prefill).
+
+The idea: a live timeline should never block on the network to show
+what's already cached. Back-pagination now (opt-in) walks the storage
+only, straight past gaps; each gap becomes an inline timeline item
+rendered as a small spinner (same look as the top pagination spinner),
+and is resolved with a single `/messages` request when it becomes
+visible. Offline you see everything that's cached with spinners marking
+the holes; online the spinners fill in and disappear.
+
+SDK design (differs from the hackathon branch deliberately):
+
+- `RoomEventCacheUpdate::UpdateTimelineGaps` carries a full snapshot of
+  `TimelineGap { prev_token, following_event_id }` (the event after the
+  gap anchors it). Snapshot-and-reconcile replaces Hywan's
+  prepend/resolve event pair, which couldn't represent mid-timeline
+  gaps (`events / gap / events`), i.e. the exact offline scenario. The
+  state change-detects (`take_timeline_gaps_update`) so unchanged sets
+  are never re-sent; trailing gaps (nothing after them) aren't reported.
+- `RoomPagination::run_backwards_once_from_storage`: storage-only
+  pagination mode; the historical storage-then-network mode is untouched
+  (the BackPaginationQueue keeps using it), and purely legacy flows
+  never see gap updates (guarded on "observers already believe in
+  gaps"), so the update chatter for old consumers is zero.
+- `RoomEventCache::resolve_gap(prev_token, batch_size)`: the network
+  path, reusing the hardened `conclude_backwards_pagination_from_network`
+  (dedup + dead-end-gap guard + stale-token check) with an in-flight
+  token set so UI retriggers dedupe, plus a cheap pre-check that skips
+  the request when the token is unknown.
+- Timeline: `VirtualTimelineItem::Gap` items are reconciled against the
+  latest snapshot at the end of *every* state transaction (so events
+  landing around a gap re-anchor it in the same atomic diff batch), with
+  a fast path that avoids no-op remove/insert churn. Items keep their
+  identity across moves. TimelineStart is suppressed while a gap leads
+  the timeline (storage exhausted != room start seen). All opt-in via
+  `TimelineBuilder::with_storage_only_pagination`, which EXI enables for
+  the live and media timelines only.
+
+Tests (all green): 3 in-crate storage tests (snapshot anchoring,
+walk-past-gap without network, stop-at-leading-gap), 2 wiremock
+integration tests (limited-sync gap surfaced by storage pagination;
+full+partial+stale resolve_gap cycle), 5 timeline unit tests
+(anchoring, re-anchor with stable identity, removal, deferred anchor,
+TimelineStart guard), plus the full pre-existing event-cache and
+timeline suites (only two tests needed updating for the new update
+type, both asserting it explicitly now).
+
+EXI side: `GapRoomTimelineItem` renders as `ProgressView` via
+`GapRoomTimelineView`, firing `.resolveGap(prevToken:)` on appear (SDK
+dedupes repeats; failures leave the spinner, retried on next appear).
+The inverted table view keeps content below a resolving gap stationary
+for free (insertions above the anchor push older content up), and the
+scroll-anchor helper now skips gap cells (and actually skips pagination
+indicators, fixing an always-false `is` check). Media & Files keeps gap
+items in both modes as spinner cells that resolve on appear, so the
+grid shows all cached media fast with spinners for the holes.
+
+Issue-thread notes worth keeping (element-x-ios#3872): bnjbvr wants an
+"offline, content may be missing" hint rather than an eternally
+spinning gap when there's no network - follow-up, we render the plain
+spinner for now; design (mxandreas) leans towards a subtler
+Slack-style placeholder, same treatment for top-of-timeline and
+mid-timeline; and bnjbvr's technical caveat that mid-timeline gaps
+stress related-event ordering (aggregations arriving across gap
+boundaries) - the aggregations machinery has ordering support now, but
+watch for misattached edits/reactions around freshly resolved gaps
+while dogfooding.
