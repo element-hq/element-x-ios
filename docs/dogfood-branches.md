@@ -1741,3 +1741,35 @@ stress related-event ordering (aggregations arriving across gap
 boundaries) - the aggregations machinery has ordering support now, but
 watch for misattached edits/reactions around freshly resolved gaps
 while dogfooding.
+
+### Dogfood round 2 (2026-08-16): adjacent spinners, stalls, pops
+
+First real-world round (matrix.org HQ room) surfaced three issues, all
+fixed:
+
+- **Two adjacent spinners** - two gap chunks with no rendered event
+  between them (limited sync whose events all deduplicated away, or
+  followers filtered out of the timeline) each rendered a spinner. SDK
+  `reconcile_gap_items` now collapses each run of gaps sharing an
+  anchor down to its newest member; resolving it either closes it or
+  lands events between the gaps, at which point survivors re-anchor
+  and render in turn (d88bbf2a0 + regression test).
+- **Stalled index after backgrounding** - a resolution killed mid-flight
+  (bg the app, network error) never retried: the spinner's `onAppear`
+  had already fired and nothing re-requested it, with no user
+  affordance to kick it. Both gap views (room timeline + Media & Files)
+  now re-send `.resolveGap` every 2s while the spinner is visible via a
+  `.task` loop (idempotent thanks to SDK in-flight dedupe + cheap
+  unknown-token pre-check) (EXI 0c0c33ed2).
+- **Timeline pop on resolution** - the gap's spinner row swapped for the
+  fetched events in an unanimated snapshot apply. When a *visible* gap
+  disappears from the snapshot, the apply now runs animated (100ms
+  ease-out, `.fade` row animation) so neighbours close the slot and the
+  spinner reads as shrinking away (EXI 1d478a346).
+
+Open caveat spotted while reviewing: a room with cached text history
+but *no cached media* shows the Media & Files empty state ("endReached"
+from the storage walk + gaps unanchored because no media item exists to
+anchor before), even though the server has media in the gaps. Needs a
+design think - maybe render unanchored/trailing gaps at the list end,
+or fall back to network pagination when the filtered timeline is empty.
