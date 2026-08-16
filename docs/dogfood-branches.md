@@ -1816,3 +1816,36 @@ Media & Files timelines. Open follow-ups tracked above: media-less
 cached rooms show a false Media & Files empty state (needs design);
 offline "content missing" hint; Slack-style placeholder design;
 aggregations-across-gaps watch.
+
+### Cache-as-index round (2026-08-16 afternoon)
+
+Principle (user): the event cache is an INDEX, not a cache - only an
+explicit clear (or a future user-set size cap, or known-bad data) may
+empty it. Four fixes on preview-prefill towards that:
+
+- SDK a706d3bfd: the event cache now receives sync room updates over a
+  dedicated lossless unbounded queue instead of the capacity-32
+  broadcast; the lag path that wiped EVERY room's persisted chunks on
+  a missed broadcast is gone entirely.
+- SDK d77c69156: linked chunk updates (feeding the search index, thread
+  subscriber and re-decryptor) now go through a lossless per-subscriber
+  fanout; previously each consumer silently skipped updates on lag
+  (dozens of "Lagged behind linked chunk updates" in one busy session =
+  permanent search-index holes, missed redecryptions).
+- SDK 9587599ea: ignoring a user now filters their events out of the
+  existing cache (rooms + instantiated threads, memory + store, via the
+  dedup removal machinery, emitting removal diffs) instead of wiping
+  everything. Unignore still clears (only way to resurrect filtered
+  events). Known gap: never-instantiated persisted thread chunks can't
+  be enumerated yet (store threads table is write-only) - store-level
+  enumeration API is the follow-up.
+- SDK 32ad3ed0c + EXI ecaf44a38: the UnknownPos "server unavailable"
+  flash pair - sync service restarts silently on session expiry (10s
+  anti-spin guard), and EXI debounces the offline/unreachable banners
+  (2s sustained before showing, immediate retract via switchToLatest).
+
+Toolchain gotcha (bit us twice today): stable rustc hangs 20+ minutes
+in trait-solver error-recovery on unresolved-name errors after
+mechanical refactors; `cargo +nightly check` reports the real errors
+in seconds. Also hit a nightly incremental-compilation ICE once
+(`cargo clean -p matrix-sdk` fixes it).
