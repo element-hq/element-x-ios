@@ -639,6 +639,18 @@ class TimelineTableViewController: UIViewController {
             nil
         }
 
+        // A gap resolving on the newer side of the viewport (its spinner scrolled
+        // off the bottom) inserts rows between the visible content and the newest
+        // end, which the flipped table measures its offsets from - shifting every
+        // visible row. Pin the visible content across the apply. Only for
+        // unanimated applies: a visible gap's animated shrink is its own feedback,
+        // and mid-animation frames make the anchor's measured position unreliable.
+        let gapPinLayout: Layout? = if !resolvedGapIDs.isEmpty, !visibleGapResolved, !frozenApply {
+            snapshotLayout()
+        } else {
+            nil
+        }
+
         if frozenApply, let reference = sendTransitionReference {
             // Mid send transition the timeline is pinned: apply without any row
             // animation, re-pin, and when the sent message arrives fade it into the
@@ -752,6 +764,8 @@ class TimelineTableViewController: UIViewController {
             scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
         } else if let layout {
             restoreLayout(layout)
+        } else if let gapPinLayout {
+            restoreLayout(gapPinLayout)
         } else if isSwitchingTimelines {
             scrollToNewestItem(animated: false)
         }
