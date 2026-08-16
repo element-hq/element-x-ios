@@ -90,6 +90,9 @@ class TimelineTableViewController: UIViewController {
     
     /// There are pending items in `timelineItemsDictionary` that haven't been applied to the data source.
     private var hasPendingItems = false
+
+    /// The gap items rendered by the last applied snapshot, used to animate a gap's resolution.
+    private var renderedGapIDs = Set<TimelineItemIdentifier.UniqueID>()
     
     /// The scroll view is scrolling either directly with a drag or indirectly with inertia.
     private var scrollViewIsScrolling = false {
@@ -607,6 +610,17 @@ class TimelineTableViewController: UIViewController {
         let frozenApply = sendTransitionReference != nil && sendTransitionExpectedDelta > 1
         let animated = isLive && !isSwitchingTimelines && newestItemIDChanged && !frozenApply
 
+        // A gap resolving swaps its visible spinner row for the fetched events;
+        // animate that apply so the swap shrinks/fades instead of popping.
+        let newGapIDs = Set(timelineItemsDictionary.compactMap { id, viewState -> TimelineItemIdentifier.UniqueID? in
+            guard case .gap = viewState.type else { return nil }
+            return id
+        })
+        let resolvedGapIDs = renderedGapIDs.subtracting(newGapIDs)
+        let visibleIDs = Set(tableView.indexPathsForVisibleRows?.compactMap { dataSource.itemIdentifier(for: $0) } ?? [])
+        let visibleGapResolved = !frozenApply && !resolvedGapIDs.isDisjoint(with: visibleIDs)
+        renderedGapIDs = newGapIDs
+
         // The previous newest item loses its delivery status marker when a newer one
         // arrives, which shrinks its cell. Reconfiguring it in the same apply makes
         // that height change part of the same batch animation as the insertion, so
@@ -708,7 +722,20 @@ class TimelineTableViewController: UIViewController {
             if endingSendTransition {
                 endSendTransition()
             }
-            dataSource.apply(snapshot, animatingDifferences: animated)
+            if visibleGapResolved, !animated {
+                // A quick ease-out so the spinner reads as shrinking away rather
+                // than popping. Fade (not the default slide) plus the neighbours
+                // closing the slot gives the shrink; performBatchUpdates inherits
+                // the surrounding animation block's duration and curve.
+                let defaultRowAnimation = dataSource.defaultRowAnimation
+                dataSource.defaultRowAnimation = .fade
+                UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut]) {
+                    dataSource.apply(snapshot, animatingDifferences: true)
+                }
+                dataSource.defaultRowAnimation = defaultRowAnimation
+            } else {
+                dataSource.apply(snapshot, animatingDifferences: animated)
+            }
             if endingSendTransition, animated,
                let newestItemIdentifier,
                !currentSnapshot.itemIdentifiers.contains(newestItemIdentifier),
