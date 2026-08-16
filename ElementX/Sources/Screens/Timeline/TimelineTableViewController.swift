@@ -618,14 +618,18 @@ class TimelineTableViewController: UIViewController {
         })
         let resolvedGapIDs = renderedGapIDs.subtracting(newGapIDs)
         let visibleIDs = Set(tableView.indexPathsForVisibleRows?.compactMap { dataSource.itemIdentifier(for: $0) } ?? [])
-        // Rows this apply removes or re-creates under a new identity beyond the
-        // resolved gaps themselves - e.g. the "N room changes" groups regrouping
-        // around the freshly inserted events. If any of those are visible, an
-        // animated apply cross-fades half the screen (the reported "spasm");
-        // snap it with the layout pin below instead.
+        // Only animate a resolution that removes its spinner without inserting
+        // anything (the gap closed empty): that one genuinely shrinks away.
+        // Animating an apply that inserts content near the viewport slides and
+        // cross-fades everything in a flipped table (the reported "spasms"),
+        // whether from a tall message landing or from neighbours like the
+        // "N room changes" groups regrouping under new identities - those
+        // applies go unanimated with the visible content pinned instead.
+        let insertedIDs = Set(timelineItemsIDs).subtracting(currentSnapshot.mainItemIdentifiers)
         let removedIDs = Set(currentSnapshot.mainItemIdentifiers).subtracting(timelineItemsIDs)
         let visibleChurn = !removedIDs.subtracting(resolvedGapIDs).isDisjoint(with: visibleIDs)
-        let visibleGapResolved = !frozenApply && !visibleChurn && !resolvedGapIDs.isDisjoint(with: visibleIDs)
+        let visibleGapResolved = !frozenApply && !visibleChurn && insertedIDs.isEmpty
+            && !resolvedGapIDs.isDisjoint(with: visibleIDs)
         renderedGapIDs = newGapIDs
 
         // The previous newest item loses its delivery status marker when a newer one
@@ -772,7 +776,7 @@ class TimelineTableViewController: UIViewController {
         } else if let layout {
             restoreLayout(layout)
         } else if let gapPinLayout {
-            restoreLayout(gapPinLayout)
+            restoreLayoutPreservingMomentum(gapPinLayout)
         } else if isSwitchingTimelines {
             scrollToNewestItem(animated: false)
         }
@@ -1137,6 +1141,21 @@ extension TimelineTableViewController {
         return Layout(id: newestItemID, frame: newestCellFrame)
     }
     
+    /// Restores an anchor row to its snapshotted on-screen position without
+    /// cancelling any in-flight scroll: adjusting `bounds.origin` directly,
+    /// unlike `scrollToRow`/`setContentOffset`, preserves deceleration, so a
+    /// gap resolving mid-scroll doesn't kill the user's fling.
+    private func restoreLayoutPreservingMomentum(_ layout: Layout) {
+        guard let indexPath = dataSource?.indexPath(for: layout.id.uniqueID) else { return }
+        tableView.layoutIfNeeded()
+        // rectForRow doesn't need the cell to be materialised.
+        let screenFrame = tableView.convert(tableView.rectForRow(at: indexPath), to: tableView.superview)
+        let deltaY = screenFrame.maxY - layout.frame.maxY
+        if deltaY != 0 {
+            tableView.bounds.origin.y -= deltaY
+        }
+    }
+
     /// Restores the timeline's layout from an old snapshot.
     private func restoreLayout(_ layout: Layout) {
         if let indexPath = dataSource?.indexPath(for: layout.id.uniqueID) {
