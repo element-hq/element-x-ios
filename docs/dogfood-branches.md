@@ -1887,3 +1887,29 @@ ignore-filtering removals weren't emitted to timelines until the next
 sync's diffs (found by the timeline ignore test) - emitted right away
 now. The earlier EXI cancelled-drag fix stands: it was a real,
 separate wedge.
+
+Round addendum 3: with the wedge gone, scrolling history showed a
+one-frame jump on every gap resolution. Logs: each resolution produced
+two diff batches, `[Insert x N ..., Remove(1), Insert(21)]` then
+`[Remove(21), Insert(1)]` - the gap spinner was briefly re-anchored
+just above the previously-first event (mid-viewport), then moved back
+to the top. Cause: the event cache announces the events diffs and the
+resulting gaps snapshot as two separate updates, and the timeline
+applied the diffs against the stale snapshot. Fixed SDK
+[`ff480667c`](https://github.com/matrix-org/matrix-rust-sdk/commit/ff480667c):
+the live event-subscriber reads the cache's current gaps before
+applying an events batch, so one transaction places both. Regression
+test drives the resolution through the event cache directly (the
+timeline's own `resolve_gap` refreshes gaps right after and hides the
+race on a single-threaded runtime).
+
+Still open from the same session: the topmost visible bubble jumping
+when back-pagination lands a same-sender predecessor above it. It's the
+group-style change (`.first` -> `.middle`, sender header removed) on an
+existing cell: UIKit self-sizing invalidation animates the row-height
+change (header fades, bubble slides ~35pt), then the row shrink shifts
+the whole viewport when scrolled at the top of loaded content. Purely
+EXI-side (TimelineTableViewController / hosting-cell resize); not fixed
+yet, approach TBD (disable the implicit resize animation for
+pagination-driven group-style updates, or pin the layout on the newest
+visible item as the non-live path does).
