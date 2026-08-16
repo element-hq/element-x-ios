@@ -705,8 +705,8 @@ This bug has been around since the event cache landed, i think.
   Properly fixed by SDK
   [`cbf7545bc`](https://github.com/matrix-org/matrix-rust-sdk/commit/cbf7545bc)
   (the known copies must all live in memory); see "Vanished mid-send message
-  ROOT-CAUSED + FIXED" at the end of this document. Upstream `6532fc2be` only
-  together with `cbf7545bc`.
+  ROOT-CAUSED + FIXED" at the end of this document. Upstream [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be) only
+  together with [`cbf7545bc`](https://github.com/matrix-org/matrix-rust-sdk/commit/cbf7545bc).
 
 #### Crash if the user stabs the send button too fast as it switches between send and VM
 
@@ -724,7 +724,7 @@ This bug has been around since the event cache landed, i think.
   The same rageshake showed the post-crash flavour of the stale-sync-batch
   vanish (first sync after relaunch uses the pre-crash pos while the send queue
   is still re-sending), covered by SDK [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be) above (BUGGY AS SHIPPED, see the
-  flag on its entry; corrected by `cbf7545bc`); the send queue itself
+  flag on its entry; corrected by [`cbf7545bc`](https://github.com/matrix-org/matrix-rust-sdk/commit/cbf7545bc)); the send queue itself
   behaved (both pending messages restored and re-sent, nothing lost)
 
 #### Stop the first tap after a "Loading..." modal being silently swallowed
@@ -1290,8 +1290,8 @@ Techteam Internal root may still show the skeleton after updating until
 someone reacts/replies in that thread (or cache is cleared); any NEW
 occurrence of the shape is what would indicate the fix failed.
 
-Upstream queue: add `5a4990bc3` alongside `4d97fa38a`, `25ff0e827`,
-`addbff009`, `5f715227a`.
+Upstream queue: add [`5a4990bc3`](https://github.com/matrix-org/matrix-rust-sdk/commit/5a4990bc3) alongside [`4d97fa38a`](https://github.com/matrix-org/matrix-rust-sdk/commit/4d97fa38a), [`25ff0e827`](https://github.com/matrix-org/matrix-rust-sdk/commit/25ff0e827),
+[`addbff009`](https://github.com/matrix-org/matrix-rust-sdk/commit/addbff009), [`5f715227a`](https://github.com/matrix-org/matrix-rust-sdk/commit/5f715227a).
 
 ## OPEN: own send vanishes when a catch-up shrink lands mid-send (Self room, 2026-08-14 21:04Z)
 
@@ -1319,7 +1319,7 @@ Established from the log:
    append - after the rebuild those indices don't correspond to what the
    handler believes, which is the leading theory for how one own-message
    item ends up overwriting another's.
-4. The 6532fc2be stale-batch guard fired correctly at 21:04:50
+4. The [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be) stale-batch guard fired correctly at 21:04:50
    ("Ignoring a stale sync batch", batch_len=1) - this new loss is a
    DIFFERENT window in the same limited-sync-collapse family.
 5. Sync redeliveries at 21:05:04 and 21:06:19 each produced a lone
@@ -1335,7 +1335,7 @@ timeline-level loss.
 ## Vanished mid-send message ROOT-CAUSED + FIXED: stale-batch guard ate the stranded event's echo (SDK fix)
 
 Resolution of the OPEN entry above, via the CHUNKDUMP diagnostics (SDK
-62f1f2522) - no repro needed, the persisted store state was read
+[`62f1f2522`](https://github.com/matrix-org/matrix-rust-sdk/commit/62f1f2522)) - no repro needed, the persisted store state was read
 directly off the phone on one room-open:
 
 ```
@@ -1354,11 +1354,11 @@ bodies the eye can't tell. Mechanism, each step now log-proven:
    gap, offloaded to the store, in the wrong causal order.
 3. 21:04:50 the server's late echo of $LwBCw arrives as a lone batch -
    the exact information that would restore it to the live tail - and
-   the 6532fc2be stale-batch guard eats it: "all events known" (the
+   the [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be) stale-batch guard eats it: "all events known" (the
    stranded copy) "and lacking the tail". Permanent invisibility,
    surviving restarts.
 
-Fix (SDK cbf7545bc, pushed): the guard now requires the known copies to
+Fix (SDK [`cbf7545bc`](https://github.com/matrix-org/matrix-rust-sdk/commit/cbf7545bc), pushed): the guard now requires the known copies to
 all live IN MEMORY (the live tail). A store-resident copy means a
 stranded event, and the batch takes the legacy dedup path, pulling the
 event back to the tail. Regression test red-before/green-after; 63+99
@@ -1390,7 +1390,7 @@ instance markers to pin that down next time).
 Follow-up to the two entries above, closing the vanished-send incident
 at both ends. The transient residual - a stale gappy batch stranding
 our just-sent events behind its gap until the sync echo heals them - is
-an UPSTREAM flaw (their legacy path + shrink; our buggy 6532fc2be only
+an UPSTREAM flaw (their legacy path + shrink; our buggy [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be) only
 made it permanent). Fixed at the source (SDK
 [`7fad14efb`](https://github.com/matrix-org/matrix-rust-sdk/commit/7fad14efb),
 pushed): in the legacy gappy path, identify the eager tail suffix
@@ -1399,16 +1399,16 @@ batch, strictly newer by origin_server_ts than every batch event), pull
 it out, append the gap+batch, re-append the suffix at the new tail. The
 room stays [batch..., our sends]: no invisibility window, no misorder,
 and the later echo dedups in place as an anchor. Anything the rule
-doesn't confidently claim stays put and falls back to the cbf7545bc
+doesn't confidently claim stays put and falls back to the [`cbf7545bc`](https://github.com/matrix-org/matrix-rust-sdk/commit/cbf7545bc)
 echo-heal.
 
 Regression test red-before/green-after
 (test_gappy_stale_batch_does_not_strand_our_eager_tail); the echo-heal
 and reorder tests still green; 64+99 event cache tests green.
 
-Upstream arc for this family is now: 4d97fa38a (anchored merge) +
-6532fc2be (stale-batch guard, ONLY together with) + cbf7545bc (guard
-narrowing) + 7fad14efb (suffix relocation) + the diagnostics-strip.
+Upstream arc for this family is now: [`4d97fa38a`](https://github.com/matrix-org/matrix-rust-sdk/commit/4d97fa38a) (anchored merge) +
+[`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be) (stale-batch guard, ONLY together with) + [`cbf7545bc`](https://github.com/matrix-org/matrix-rust-sdk/commit/cbf7545bc) (guard
+narrowing) + [`7fad14efb`](https://github.com/matrix-org/matrix-rust-sdk/commit/7fad14efb) (suffix relocation) + the diagnostics-strip.
 
 ## Room-list taps route into threads through edits + threaded-preview icon (VALIDATED)
 
@@ -1529,7 +1529,7 @@ Root causes (EXI
    sharing the builder: room list, notifications (NSE), thread list,
    pinned banner.
 
-Bycatch - two parser regressions from the list-indent fix (`550a6467d`),
+Bycatch - two parser regressions from the list-indent fix ([`550a6467d`](https://github.com/element-hq/element-x-ios/commit/550a6467d)),
 caught once the unit tests could run again:
 - SwiftSoup classes del/ins/s as BLOCK tags, so the inter-element
   whitespace drop ate real spaces around strikethrough. Explicit
@@ -1545,7 +1545,7 @@ a simulator slice (build-xcframework.sh unchanged; both-targets build
 done manually - consider making it the default), and
 ComposerToolbarViewModelTests' sendMessage patterns were missing the
 new fifth associated value, crashing the compiler and taking the whole
-UnitTests target down (`fedf3ae3d`).
+UnitTests target down ([`fedf3ae3d`](https://github.com/element-hq/element-x-ios/commit/fedf3ae3d)).
 
 STRIP/RERECORD pre-upstream: FormattedBodyText preview snapshots
 (grouped blockquotes now render correctly as separate boxes).
@@ -1559,7 +1559,7 @@ new parsing: `formattedComponents` used each component's TEXT as its
 Identifiable id, so quote("test") + plain("test") shared an identity
 and FormattedBodyText's ForEach rendered identity soup. The
 inter-element whitespace that used to leak between components (" test"
-vs "test") masked the collision; `1a3a97317`'s whitespace fix exposed
+vs "test") masked the collision; [`1a3a97317`](https://github.com/element-hq/element-x-ios/commit/1a3a97317)'s whitespace fix exposed
 it. Nightly still leaks the whitespace, which is also why its quote bar
 over-extends below the quoted line (stray blank line inside the quote
 box) - our branch renders that part correctly now. Fix (EXI
@@ -1603,7 +1603,7 @@ into a TREE (EXI
   already carries both attributes; the flat splitter just discarded the
   composition). Blockquote components hold `children`; BlockquoteView
   recurses, so nested quotes draw their bar inside the parent's
-  SPANNING bar (supersedes the depth-count bars from `fcf00a121`) and
+  SPANNING bar (supersedes the depth-count bars from [`fcf00a121`](https://github.com/element-hq/element-x-ios/commit/fcf00a121)) and
   code blocks render as real boxes within quotes.
 - New `ListIndent` attribute set ONLY on block ranges inside `<li>`
   (list text keeps literal indentation - attributing it would split
@@ -1753,19 +1753,19 @@ fixed:
   `reconcile_gap_items` now collapses each run of gaps sharing an
   anchor down to its newest member; resolving it either closes it or
   lands events between the gaps, at which point survivors re-anchor
-  and render in turn (d88bbf2a0 + regression test).
+  and render in turn ([`d88bbf2a0`](https://github.com/matrix-org/matrix-rust-sdk/commit/d88bbf2a0) + regression test).
 - **Stalled index after backgrounding** - a resolution killed mid-flight
   (bg the app, network error) never retried: the spinner's `onAppear`
   had already fired and nothing re-requested it, with no user
   affordance to kick it. Both gap views (room timeline + Media & Files)
   now re-send `.resolveGap` every 2s while the spinner is visible via a
   `.task` loop (idempotent thanks to SDK in-flight dedupe + cheap
-  unknown-token pre-check) (EXI 0c0c33ed2).
+  unknown-token pre-check) (EXI [`0c0c33ed2`](https://github.com/element-hq/element-x-ios/commit/0c0c33ed2)).
 - **Timeline pop on resolution** - the gap's spinner row swapped for the
   fetched events in an unanimated snapshot apply. When a *visible* gap
   disappears from the snapshot, the apply now runs animated (100ms
   ease-out, `.fade` row animation) so neighbours close the slot and the
-  spinner reads as shrinking away (EXI 1d478a346).
+  spinner reads as shrinking away (EXI [`1d478a346`](https://github.com/element-hq/element-x-ios/commit/1d478a346)).
 
 Open caveat spotted while reviewing: a room with cached text history
 but *no cached media* shows the Media & Files empty state ("endReached"
@@ -1778,7 +1778,7 @@ Round 2 addendum: off-screen gap resolution jumped the visible timeline
 (flipped table = offsets measured from the newest end, so newer-side
 insertions shift everything; also skewed paginateIfNeeded's thresholds).
 Fixed by pinning the newest visible item across unanimated gap-resolve
-applies, reusing snapshotLayout/restoreLayout (EXI, after 1d478a346).
+applies, reusing snapshotLayout/restoreLayout (EXI [`53c10646d`](https://github.com/element-hq/element-x-ios/commit/53c10646d)).
 
 Round 2 addendum 2: scroll-back spasms at the top of the room
 (user recording, spasms at 10.5s/12.86s matching "Finished resolving
@@ -1787,12 +1787,12 @@ adjacent "N room changes" groups regroup under new identities, so the
 animated .fade apply cross-faded half the screen mid-scroll. Now a
 resolution only animates when the spinner is the sole visible casualty;
 churny applies go unanimated + pinned, and group items are no longer
-used as the layout anchor (identity unstable). EXI 25291a7be.
+used as the layout anchor (identity unstable). EXI [`25291a7be`](https://github.com/element-hq/element-x-ios/commit/25291a7be).
 
 Round 2 addendum 3: second recording (spasm at 4.56s) showed a tall
 single-message resolve at the viewport top spasming WITHOUT identity
 churn - animating any content-inserting apply near the viewport is
-inherently messy in the flipped table. Final policy (EXI 912c06177):
+inherently messy in the flipped table. Final policy (EXI [`912c06177`](https://github.com/element-hq/element-x-ios/commit/912c06177)):
 animate only resolves that close EMPTY (pure spinner removal - the true
 shrink-away); all content-inserting resolves apply unanimated with the
 visible content pinned. Pin now adjusts bounds.origin directly instead
@@ -1802,8 +1802,8 @@ of scrollToRow, so it no longer cancels an in-flight fling.
 
 Round-2 fixes user-validated on the phone ("feels great"). Both
 `matthew/gappy-timelines` branches fast-forward-merged into
-`matthew/preview-prefill` (SDK f7161bf4b..d88bbf2a0, EXI
-6f3b3249d..2e5e05436) and pushed; gappy-timelines branches retired
+`matthew/preview-prefill` (SDK [`f7161bf4b`](https://github.com/matrix-org/matrix-rust-sdk/commit/f7161bf4b)..[`d88bbf2a0`](https://github.com/matrix-org/matrix-rust-sdk/commit/d88bbf2a0), EXI
+[`6f3b3249d`](https://github.com/element-hq/element-x-ios/commit/6f3b3249d)..[`2e5e05436`](https://github.com/element-hq/element-x-ios/commit/2e5e05436)) and pushed; gappy-timelines branches retired
 (same commits, kept for the upstream PR split). Final behaviour, for
 the record: gaps render as inline spinners that resolve while visible
 (2s idempotent retry loop, so backgrounding/network failures self-heal);
@@ -1823,26 +1823,29 @@ Principle (user): the event cache is an INDEX, not a cache - only an
 explicit clear (or a future user-set size cap, or known-bad data) may
 empty it. Four fixes on preview-prefill towards that:
 
-- SDK a706d3bfd: the event cache now receives sync room updates over a
+- SDK [`a706d3bfd`](https://github.com/matrix-org/matrix-rust-sdk/commit/a706d3bfd): the event cache now receives sync room updates over a
   dedicated lossless unbounded queue instead of the capacity-32
   broadcast; the lag path that wiped EVERY room's persisted chunks on
   a missed broadcast is gone entirely.
-- SDK d77c69156: linked chunk updates (feeding the search index, thread
+- SDK [`d77c69156`](https://github.com/matrix-org/matrix-rust-sdk/commit/d77c69156): linked chunk updates (feeding the search index, thread
   subscriber and re-decryptor) now go through a lossless per-subscriber
   fanout; previously each consumer silently skipped updates on lag
   (dozens of "Lagged behind linked chunk updates" in one busy session =
   permanent search-index holes, missed redecryptions).
-- SDK 9587599ea: ignoring a user now filters their events out of the
+- SDK [`9587599ea`](https://github.com/matrix-org/matrix-rust-sdk/commit/9587599ea): ignoring a user now filters their events out of the
   existing cache (rooms + instantiated threads, memory + store, via the
   dedup removal machinery, emitting removal diffs) instead of wiping
   everything. Unignore still clears (only way to resurrect filtered
   events). Known gap: never-instantiated persisted thread chunks can't
   be enumerated yet (store threads table is write-only) - store-level
   enumeration API is the follow-up.
-- SDK 32ad3ed0c + EXI ecaf44a38: the UnknownPos "server unavailable"
+- SDK [`32ad3ed0c`](https://github.com/matrix-org/matrix-rust-sdk/commit/32ad3ed0c) + EXI [`ecaf44a38`](https://github.com/element-hq/element-x-ios/commit/ecaf44a38): the UnknownPos "server unavailable"
   flash pair - sync service restarts silently on session expiry (10s
   anti-spin guard), and EXI debounces the offline/unreachable banners
   (2s sustained before showing, immediate retract via switchToLatest).
+  Follow-up [`3d974500c`](https://github.com/matrix-org/matrix-rust-sdk/commit/3d974500c): drain stale child termination reports on the
+  silent restart - they otherwise killed the freshly restarted sync
+  (real bug, found via the hanging regression test).
 
 Toolchain gotcha (bit us twice today): stable rustc hangs 20+ minutes
 in trait-solver error-recovery on unresolved-name errors after
