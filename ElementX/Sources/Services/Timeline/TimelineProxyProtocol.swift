@@ -38,6 +38,9 @@ enum TimelineFocus {
     case eventID(String)
     case thread(eventID: String)
     case pinned
+    /// Only the messages of the allowed types, served from the SDK's event cache index
+    /// (instant for a cached room, no history walk), with the room's gaps as spinner items.
+    case messageTypes
 }
 
 enum TimelineAllowedMessageType {

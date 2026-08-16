@@ -227,13 +227,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                  allowedMessageTypes: [TimelineAllowedMessageType],
                                  presentation: TimelineKind.MediaPresentation) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
         do {
-            let rustFocus: MatrixRustSDK.TimelineFocus = switch focus {
-            case .live: .live(hideThreadedEvents: false)
-            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, threadMode: .automatic(hideThreadedEvents: false))
-            case .thread(let eventID): .thread(rootEventId: eventID)
-            case .pinned: .pinnedEvents
-            }
-            
             let rustMessageTypes: [MatrixRustSDK.RoomMessageEventMessageType] = allowedMessageTypes.map {
                 switch $0 {
                 case .audio: .audio
@@ -242,6 +235,14 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                 case .video: .video
                 case .gallery: .gallery
                 }
+            }
+            
+            let rustFocus: MatrixRustSDK.TimelineFocus = switch focus {
+            case .live: .live(hideThreadedEvents: false)
+            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, threadMode: .automatic(hideThreadedEvents: false))
+            case .thread(let eventID): .thread(rootEventId: eventID)
+            case .pinned: .pinnedEvents
+            case .messageTypes: .messageTypes(types: rustMessageTypes)
             }
             
             let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: rustFocus,
