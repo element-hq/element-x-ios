@@ -1863,3 +1863,27 @@ also gates on). Fixed EXI [`6586deb77`](https://github.com/element-hq/element-x-
 isTracking/isDragging and flush pending items from scrollViewDidScroll.
 Pre-existing bug, but gappy timelines made it much more visible (the
 gap item that would resolve history sat in the pending batch).
+
+Round addendum 2: the frozen-timeline symptom recurred on the drag-fix
+build (#ruma-dev again, then GNOME Newcomers): no start-of-room item,
+no gap spinner, overscroll dead, bg/fg heals. Logs showed a healthy
+chain of gap resolutions ending 2 min before the report, then silence:
+storage-only pagination hits the leading gap and reports "start hit"
+(EXI flips to endReached and stops paginating - by design, the gap
+item drives itself from there); when the gap chain then resolves to
+completion, nothing inserted the timeline start (the status stream is
+dedup'd and already said hit) and nobody paginates anymore. bg/fg
+heals by re-subscribing. Fixed SDK
+[`ce16d5247`](https://github.com/matrix-org/matrix-rust-sdk/commit/ce16d5247):
+gaps drive the timeline-start decision (inserted when no gap leads and
+the status says hit; retracted if a racing status update inserted it
+before the gap was known); paginations and gap resolutions refresh
+gaps synchronously; the leading-gap check uses the cache's snapshot
+rather than rendered items. Regression test covers the wedge and the
+race (the race alone made the test fail before the fix, so it was
+biting too). Also SDK
+[`bd9e6f428`](https://github.com/matrix-org/matrix-rust-sdk/commit/bd9e6f428):
+ignore-filtering removals weren't emitted to timelines until the next
+sync's diffs (found by the timeline ignore test) - emitted right away
+now. The earlier EXI cancelled-drag fix stands: it was a real,
+separate wedge.
