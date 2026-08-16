@@ -1926,3 +1926,24 @@ group-style change keeps its animation. Validate: paginating up through
 a same-sender run no longer slides/fades the top bubble; if a residual
 whole-viewport shift remains on those batches, that's the flipped
 table's row-shrink at max content offset (next suspect).
+
+Round addendum 5: "history won't load from cache behind a leading gap"
+(offline, and on slow network): the top spinner was not the gap item
+but EXI's pagination indicator, i.e. `paginationState.backward` stuck
+at `.paginating`, so `paginateIfNeeded` never asked for another storage
+walk (the SDK had settled to Idle: logs show the walk returning, and a
+new SDK test asserts the status stream settles with a leading gap).
+Cause: `TimelineController` iterated the provider's `updatePublisher`
+(`combineLatest` of items + state) via `.values`, which requests one
+value at a time; `combineLatest` forwards that demand to the subjects
+and a subject drops values sent while its demand is 0, so a
+`paginating -> idle` pair arriving while the previous update was still
+being built lost the `idle` for good (reproduced standalone in 20 lines
+of Combine). Fixed EXI
+[`1c6c7f4bf`](https://github.com/element-hq/element-x-ios/commit/1c6c7f4bf):
+unlimited-demand sink coalescing to the latest update, processed
+serially. Validate offline: open a room with a leading gap, scroll up:
+one spinner (the gap's) below the divider, cached history behind it
+loads via storage walks; no spinner above the first date divider.
+Same drop class could plausibly have hidden other late state updates
+(forward pagination state, item batches during heavy builds).
