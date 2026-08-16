@@ -1852,3 +1852,14 @@ in trait-solver error-recovery on unresolved-name errors after
 mechanical refactors; `cargo +nightly check` reports the real errors
 in seconds. Also hit a nightly incremental-compilation ICE once
 (`cargo clean -p matrix-sdk` fixes it).
+
+Round addendum: first dogfood of the cache-as-index build surfaced a
+frozen timeline in #ruma-dev:flipdot.org - overscroll did nothing (no
+pagination, no gap spinner) until bg/fg. Logs proved the SDK idle and
+the table frozen on a stale snapshot: a cancelled drag gesture fires
+willBeginDragging without didEndDragging, wedging isDraggingScrollView
+true, parking every update in hasPendingItems (which paginateIfNeeded
+also gates on). Fixed EXI [`6586deb77`](https://github.com/element-hq/element-x-ios/commit/6586deb77): gate applies on UIKit's live
+isTracking/isDragging and flush pending items from scrollViewDidScroll.
+Pre-existing bug, but gappy timelines made it much more visible (the
+gap item that would resolve history sat in the pending batch).
