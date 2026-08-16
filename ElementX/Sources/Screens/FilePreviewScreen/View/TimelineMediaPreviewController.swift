@@ -305,13 +305,18 @@ class TimelineMediaPreviewController: QLPreviewController {
         // if it's called whilst swiping between items. So wait for the swipe to settle (the index
         // changes whilst the pages are still decelerating).
         for _ in 0..<40 {
-            guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
+            guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else {
+                // Swiped on before it could be refreshed: refresh it when it's next current.
+                itemsBuiltWithoutFile.insert(itemID)
+                return
+            }
             guard let scrollView = pageScrollView, scrollView.isDragging || scrollView.isDecelerating else {
                 refreshCurrentPreviewItem()
                 return
             }
             try? await Task.sleep(for: .milliseconds(50))
         }
+        itemsBuiltWithoutFile.insert(itemID)
     }
     
     // MARK: - Actions
