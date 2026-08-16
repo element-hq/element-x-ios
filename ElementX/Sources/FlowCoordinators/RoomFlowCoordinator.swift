@@ -90,6 +90,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var pinnedEventsTimelineFlowCoordinator: PinnedEventsTimelineFlowCoordinator?
     // periphery:ignore - used to avoid deallocation
     private var mediaEventsTimelineFlowCoordinator: MediaEventsTimelineFlowCoordinator?
+    /// The Media and files timelines, built when Room Info opens so that the tap opens them instantly.
+    private var prebuiltMediaEventsTimelineControllers: Task<MediaEventsTimelineFlowCoordinator.Controllers?, Never>?
     private var childRoomFlowCoordinator: RoomFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
@@ -1009,6 +1011,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
                                                             attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()))
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
+        prebuiltMediaEventsTimelineControllers = MediaEventsTimelineFlowCoordinator.buildControllers(roomProxy: roomProxy, flowParameters: flowParameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
@@ -1059,6 +1062,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         } else {
             navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
                 guard let self else { return }
+                prebuiltMediaEventsTimelineControllers = nil
                 if case .roomDetails = stateMachine.state {
                     stateMachine.tryEvent(.dismissRoomDetails)
                 }
@@ -1673,7 +1677,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func startMediaEventsTimelineFlow() async {
         let flowCoordinator = MediaEventsTimelineFlowCoordinator(roomProxy: roomProxy,
                                                                  navigationStackCoordinator: navigationStackCoordinator,
-                                                                 flowParameters: flowParameters)
+                                                                 flowParameters: flowParameters,
+                                                                 prebuiltControllers: prebuiltMediaEventsTimelineControllers)
+        // Used once: a second visit from the same Room Info builds fresh timelines.
+        prebuiltMediaEventsTimelineControllers = nil
         
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -1689,6 +1696,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                       userInfo: EventUserInfo(animated: false)) // No animation so the timeline visible when the preview animates away.
             case .finished:
                 stateMachine.tryEvent(.dismissMediaEventsTimeline)
+                // Back on Room Info: ready for another tap.
+                prebuiltMediaEventsTimelineControllers = MediaEventsTimelineFlowCoordinator.buildControllers(roomProxy: roomProxy, flowParameters: flowParameters)
             case .displayMessageForwarding(let forwardingItem):
                 stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
             }

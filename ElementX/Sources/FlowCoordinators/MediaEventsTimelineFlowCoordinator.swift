@@ -16,9 +16,12 @@ enum MediaEventsTimelineFlowCoordinatorAction {
 }
 
 class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
+    typealias Controllers = (media: TimelineControllerProtocol, files: TimelineControllerProtocol)
+    
     private let roomProxy: JoinedRoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let flowParameters: CommonFlowParameters
+    private let prebuiltControllers: Task<Controllers?, Never>?
     
     private var userSession: UserSessionProtocol {
         flowParameters.userSession
@@ -31,12 +34,46 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
+    /// - Parameter prebuiltControllers: the timelines built ahead (see ``buildControllers``), so
+    ///   that the screen opens as soon as it's asked for.
     init(roomProxy: JoinedRoomProxyProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         flowParameters: CommonFlowParameters) {
+         flowParameters: CommonFlowParameters,
+         prebuiltControllers: Task<Controllers?, Never>? = nil) {
         self.roomProxy = roomProxy
         self.navigationStackCoordinator = navigationStackCoordinator
         self.flowParameters = flowParameters
+        self.prebuiltControllers = prebuiltControllers
+    }
+    
+    /// Builds the media and files timelines of the room, which takes a while for a media-heavy
+    /// room (the store is walked for the room's media messages): call it ahead of the tap.
+    static func buildControllers(roomProxy: JoinedRoomProxyProtocol, flowParameters: CommonFlowParameters) -> Task<Controllers?, Never> {
+        Task {
+            let userSession = flowParameters.userSession
+            let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
+                                                              attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
+            
+            let media = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .messageTypes(),
+                                                                                                            allowedMessageTypes: [.image, .video, .gallery],
+                                                                                                             presentation: .mediaFilesScreen,
+                                                                                                             roomProxy: roomProxy,
+                                                                                                             timelineItemFactory: timelineItemFactory,
+                                                                                                             mediaProvider: userSession.mediaProvider)
+            let files = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .messageTypes(),
+                                                                                                            allowedMessageTypes: [.file, .audio, .gallery],
+                                                                                                             presentation: .mediaFilesScreen,
+                                                                                                             roomProxy: roomProxy,
+                                                                                                             timelineItemFactory: timelineItemFactory,
+                                                                                                             mediaProvider: userSession.mediaProvider)
+            guard case .success(let mediaTimelineController) = media,
+                  case .success(let filesTimelineController) = files else {
+                MXLog.error("Failed building the media and files timelines")
+                return nil
+            }
+            return (mediaTimelineController, filesTimelineController)
+        }
     }
     
     func start(animated: Bool) {
@@ -54,26 +91,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func presentMediaEventsTimeline() async {
-        let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
-                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
-        
-        guard case let .success(mediaTimelineController) = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .messageTypes(),
-                                                                                                                                                 allowedMessageTypes: [.image, .video, .gallery],
-                                                                                                                                                 presentation: .mediaFilesScreen,
-                                                                                                                                                 roomProxy: roomProxy,
-                                                                                                                                                 timelineItemFactory: timelineItemFactory,
-                                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
-            MXLog.error("Failed presenting media timeline")
-            return
-        }
-        
-        guard case let .success(filesTimelineController) = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .messageTypes(),
-                                                                                                                                                 allowedMessageTypes: [.file, .audio, .gallery],
-                                                                                                                                                 presentation: .mediaFilesScreen,
-                                                                                                                                                 roomProxy: roomProxy,
-                                                                                                                                                 timelineItemFactory: timelineItemFactory,
-                                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
+        let controllers = prebuiltControllers ?? Self.buildControllers(roomProxy: roomProxy, flowParameters: flowParameters)
+        guard let (mediaTimelineController, filesTimelineController) = await controllers.value else {
             MXLog.error("Failed presenting media timeline")
             return
         }

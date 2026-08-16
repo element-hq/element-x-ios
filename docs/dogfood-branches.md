@@ -2160,3 +2160,14 @@ Media viewer: a preloaded neighbour now gets its file handle as soon as
 the preload finishes and QuickLook rebuilds its pages (deferred to the
 next settled index if mid-swipe), so the neighbouring media swipes into
 view instead of a black page that pops in once the transition ends.
+
+Follow-up on the same build: rebuilding all the QuickLook pages flashed
+the current one black, so instead two items either side are preloaded
+(QuickLook builds the pages next to the current one as it settles, so
+the item after next has its file by the time the next one is reached)
+and only a page that QuickLook built before its file arrived is
+refreshed, once it's current. "Media and files" in Room Info waited
+~1.3 s for both filtered timelines (`find_events_by_message_types`
+decodes every media message of the room): the two timelines are now
+built when Room Info opens (and again when returning to it), so the tap
+opens instantly; a tap before they're ready still waits.

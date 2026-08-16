@@ -182,19 +182,21 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// The neighbour loads in flight, joined by the load on display if the user swipes before they finish.
     private var preloads = [MediaPreviewItemID: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>]()
     
-    /// Fetches the media on either side of the current one, so that a swipe reveals the media itself
-    /// rather than an empty page. Small files only, and skipped when a content scanner is configured
-    /// (a neighbour must be scanned as the current item is, on display).
+    /// Fetches the two media on either side of the current one, so that a swipe reveals the media
+    /// itself rather than an empty page: QuickLook builds the pages next to the current one as it
+    /// settles on it, so the item after next needs its file by the time the next one is reached.
+    /// Small files only, and skipped when a content scanner is configured (a neighbour must be
+    /// scanned as the current item is, on display).
     ///
-    /// The neighbour gets its file handle straight away, and QuickLook is told to rebuild the pages
-    /// it has already built without it.
+    /// The neighbour gets its file handle straight away; the controller refreshes any page that
+    /// QuickLook built before the file was there.
     private func preloadNeighbours(of mediaItem: TimelineMediaPreviewItem.Media) {
         guard contentScannerService == nil else { return }
         
         let items = state.dataSource.previewItems
         guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
         
-        for neighbourIndex in [index - 1, index + 1] where items.indices.contains(neighbourIndex) {
+        for neighbourIndex in [index - 1, index + 1, index - 2, index + 2] where items.indices.contains(neighbourIndex) {
             let neighbour = items[neighbourIndex]
             guard neighbour.fileHandle == nil,
                   neighbour.downloadError == nil,

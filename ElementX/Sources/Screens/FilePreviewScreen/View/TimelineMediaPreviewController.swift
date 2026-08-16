@@ -91,7 +91,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             .sink { [weak self] _ in
                 // This isn't removing duplicates which may try to download and/or write to disk concurrently????
                 self?.loadCurrentItem()
-                self?.reloadPagesIfPending()
+                self?.refreshCurrentItemIfBuiltWithoutFile()
             }
             .store(in: &cancellables)
         
@@ -106,8 +106,8 @@ class TimelineMediaPreviewController: QLPreviewController {
                 switch action {
                 case .itemLoaded(let itemID):
                     self?.handleFileLoaded(itemID: itemID)
-                case .neighbourPreloaded:
-                    self?.reloadPagesWhenResting()
+                case .neighbourPreloaded(let itemID):
+                    self?.handleNeighbourPreloaded(itemID: itemID)
                 case .showItemDetails(let mediaItem):
                     self?.presentMediaDetails(for: mediaItem)
                 case .exportFile(let file):
@@ -274,22 +274,25 @@ class TimelineMediaPreviewController: QLPreviewController {
         }
     }
     
-    private var isPageReloadPending = false
+    /// The items whose file arrived after QuickLook had built their page (without it): the page
+    /// needs a refresh once it's the current one. Rebuilding all the pages instead would flash the
+    /// current one.
+    private var itemsBuiltWithoutFile = Set<MediaPreviewItemID>()
     
-    /// Rebuilds the pages so that a preloaded neighbour's page shows its media as it swipes in;
-    /// deferred whilst swiping (see `handleFileLoaded`), to the next settled index.
-    private func reloadPagesWhenResting() {
-        if let scrollView = pageScrollView, scrollView.isDragging || scrollView.isDecelerating {
-            isPageReloadPending = true
-            return
+    private func handleNeighbourPreloaded(itemID: MediaPreviewItemID) {
+        let dataSource = context.viewState.dataSource
+        for index in [currentPreviewItemIndex - 1, currentPreviewItemIndex + 1]
+            where index >= 0 && index < dataSource.numberOfPreviewItems(in: self) {
+            if (dataSource.previewController(self, previewItemAt: index) as? TimelineMediaPreviewItem.Media)?.id == itemID {
+                itemsBuiltWithoutFile.insert(itemID)
+            }
         }
-        isPageReloadPending = false
-        reloadData()
     }
     
-    private func reloadPagesIfPending() {
-        guard isPageReloadPending else { return }
-        reloadPagesWhenResting()
+    private func refreshCurrentItemIfBuiltWithoutFile() {
+        guard let itemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id,
+              itemsBuiltWithoutFile.remove(itemID) != nil else { return }
+        handleFileLoaded(itemID: itemID)
     }
     
     private func handleFileLoaded(itemID: MediaPreviewItemID) {
