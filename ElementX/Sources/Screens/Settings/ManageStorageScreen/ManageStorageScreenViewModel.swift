@@ -15,6 +15,8 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let logsDirectory: URL
 
+    private var roomsTask: Task<Void, Never>?
+
     private let actionsSubject: PassthroughSubject<ManageStorageScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ManageStorageScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -30,6 +32,10 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         super.init(initialViewState: ManageStorageScreenViewState())
 
         Task { await reload() }
+    }
+
+    isolated deinit {
+        roomsTask?.cancel()
     }
 
     override func process(viewAction: ManageStorageScreenViewAction) {
@@ -56,21 +62,43 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
 
     // MARK: - Private
 
+    /// The totals (the stores' sizes on disk, instant) come first; the rooms then fill in as the
+    /// SDK walks them, biggest first.
     private func reload() async {
         state.isLoading = true
-        defer { state.isLoading = false }
 
-        switch await clientProxy.storageUsage() {
-        case .success(let usage):
-            var totalBytes = usage.totalBytes
-            totalBytes[.logs] = logFiles().reduce(0) { $0 + $1.size }
-            state.totalBytes = totalBytes
-            state.rooms = usage.rooms
-            state.selectedRoomIDs = state.selectedRoomIDs.intersection(usage.rooms.map(\.id))
+        switch await clientProxy.storeSizes() {
+        case .success(let sizes):
+            state.totalBytes = [.messageKeys: sizes.cryptoStore ?? 0,
+                                .roomState: sizes.stateStore ?? 0,
+                                .messages: sizes.eventCacheStore ?? 0,
+                                .media: sizes.mediaStore ?? 0,
+                                .logs: logFiles().reduce(0) { $0 + $1.size }]
         case .failure(let error):
-            MXLog.error("Failed measuring the storage usage: \(error)")
+            MXLog.error("Failed measuring the store sizes: \(error)")
             state.bindings.alertInfo = .init(id: .failure, title: L10n.errorUnknown, message: String(describing: error))
         }
+        state.isLoading = false
+
+        roomsTask?.cancel()
+        state.rooms = []
+        state.isLoadingRooms = true
+        roomsTask = Task { [weak self, clientProxy] in
+            for await room in clientProxy.storageUsageByRoom() {
+                self?.upsert(room)
+            }
+            guard !Task.isCancelled, let self else { return }
+            state.selectedRoomIDs = state.selectedRoomIDs.intersection(state.rooms.map(\.id))
+            state.isLoadingRooms = false
+        }
+    }
+
+    /// Adds a room (or replaces its previous numbers), keeping the rooms sorted by total, largest first.
+    private func upsert(_ room: StorageUsageRoom) {
+        var rooms = state.rooms.filter { $0.id != room.id }
+        let index = rooms.firstIndex { $0.totalBytes < room.totalBytes } ?? rooms.endIndex
+        rooms.insert(room, at: index)
+        state.rooms = rooms
     }
 
     private static let clearingIndicatorID = "\(ManageStorageScreenViewModel.self)-Clearing"

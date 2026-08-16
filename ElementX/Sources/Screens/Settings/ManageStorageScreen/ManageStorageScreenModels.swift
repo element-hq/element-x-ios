@@ -15,8 +15,13 @@ enum ManageStorageScreenViewModelAction {
 }
 
 struct ManageStorageScreenViewState: BindableState {
+    /// The smallest room worth listing.
+    static let listedRoomMinimumBytes: UInt64 = 5_000_000
+
     var isLoading = true
-    /// The size of each cache across all rooms, the log files included.
+    /// Whether the rooms are still being walked (they fill in progressively).
+    var isLoadingRooms = false
+    /// The size of each cache across all rooms (the stores' sizes on disk), the log files included.
     var totalBytes: [StorageCacheKind: UInt64] = [:]
     /// The rooms with cached data, largest first.
     var rooms: [StorageUsageRoom] = []
@@ -25,6 +30,11 @@ struct ManageStorageScreenViewState: BindableState {
     var bindings = ManageStorageScreenViewStateBindings()
 
     var isFiltered: Bool { !selectedRoomIDs.isEmpty }
+
+    /// The rooms shown: the ones using more than ``listedRoomMinimumBytes``.
+    var listedRooms: [StorageUsageRoom] {
+        rooms.filter { $0.totalBytes >= Self.listedRoomMinimumBytes }
+    }
 
     var selectedRooms: [StorageUsageRoom] {
         rooms.filter { selectedRoomIDs.contains($0.id) }

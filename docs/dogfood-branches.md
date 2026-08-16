@@ -2109,3 +2109,26 @@ levels etc.) on purpose.
 Also this round: chat media swipe on the index (addendum 8), (i) icon
 swap now KVO-synchronous, neighbour preload joins in-flight loads and
 covers unknown sizes.
+
+## Round addendum 10 (2026-08-17): Manage storage, second pass
+
+Dogfood on build 18: totals didn't match Developer options (payload sums
+vs on-disk files), and the screen blocked for ages because attributing
+media to rooms decoded every stored media message of every room. Now:
+the all-rooms bars are the stores' on-disk sizes (same numbers as
+Developer options, instant); the rooms stream in one by one, biggest
+first, with a spinner in the section header, and only rooms over 5 MB
+are listed (the older-than logic still considers every room); and the
+event cache store indexes each media message's mxc URIs when the event
+is written (`event_media` table, small encrypted values, cascading with
+the event) so nothing is decoded to measure - rows written before the
+table are indexed lazily once per room, the last time a media message
+is decoded for this. SDK
+[`6b95f506d`](https://github.com/matrix-org/matrix-rust-sdk/commit/6b95f506d)
+(`Client::storage_usage_by_room(on_room)`, FFI
+`storageUsageByRoom(listener) -> TaskHandle`, migration 019); EXI (this
+commit): `storageUsageByRoom() -> AsyncStream<StorageUsageRoom>`, totals
+from `storeSizes()`, progressive list, >5 MB filter. Note the crypto
+"Cached message keys" total is now the whole crypto store file (devices,
+identities, olm sessions included), like Developer options; per-room
+shares stay the megolm-session payloads.

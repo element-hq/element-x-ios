@@ -3771,32 +3771,32 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return storeSizesReturnValue
         }
     }
-    //MARK: - storageUsage
+    //MARK: - storageUsageByRoom
 
-    private let storageUsageCallsCountLock = NSLock()
-    private nonisolated(unsafe) var storageUsageUnderlyingCallsCount = 0
-    var storageUsageCallsCount: Int {
-        get { storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount } }
-        set { storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount = newValue } }
+    private let storageUsageByRoomCallsCountLock = NSLock()
+    private nonisolated(unsafe) var storageUsageByRoomUnderlyingCallsCount = 0
+    var storageUsageByRoomCallsCount: Int {
+        get { storageUsageByRoomCallsCountLock.withLock { storageUsageByRoomUnderlyingCallsCount } }
+        set { storageUsageByRoomCallsCountLock.withLock { storageUsageByRoomUnderlyingCallsCount = newValue } }
     }
-    var storageUsageCalled: Bool {
-        return storageUsageCallsCount > 0
+    var storageUsageByRoomCalled: Bool {
+        return storageUsageByRoomCallsCount > 0
     }
 
-    private let storageUsageReturnValueLock = NSLock()
-    private nonisolated(unsafe) var storageUsageUnderlyingReturnValue: Result<StorageUsage, ClientProxyError>!
-    var storageUsageReturnValue: Result<StorageUsage, ClientProxyError>! {
-        get { storageUsageReturnValueLock.withLock { storageUsageUnderlyingReturnValue } }
-        set { storageUsageReturnValueLock.withLock { storageUsageUnderlyingReturnValue = newValue } }
+    private let storageUsageByRoomReturnValueLock = NSLock()
+    private nonisolated(unsafe) var storageUsageByRoomUnderlyingReturnValue: AsyncStream<StorageUsageRoom>!
+    var storageUsageByRoomReturnValue: AsyncStream<StorageUsageRoom>! {
+        get { storageUsageByRoomReturnValueLock.withLock { storageUsageByRoomUnderlyingReturnValue } }
+        set { storageUsageByRoomReturnValueLock.withLock { storageUsageByRoomUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var storageUsageClosure: (() async -> Result<StorageUsage, ClientProxyError>)?
+    nonisolated(unsafe) var storageUsageByRoomClosure: (() -> AsyncStream<StorageUsageRoom>)?
 
-    @concurrent func storageUsage() async -> Result<StorageUsage, ClientProxyError> {
-        storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount += 1 }
-        if let storageUsageClosure = storageUsageClosure {
-            return await storageUsageClosure()
+    func storageUsageByRoom() -> AsyncStream<StorageUsageRoom> {
+        storageUsageByRoomCallsCountLock.withLock { storageUsageByRoomUnderlyingCallsCount += 1 }
+        if let storageUsageByRoomClosure = storageUsageByRoomClosure {
+            return storageUsageByRoomClosure()
         } else {
-            return storageUsageReturnValue
+            return storageUsageByRoomReturnValue
         }
     }
     //MARK: - clearRoomKeys

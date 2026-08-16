@@ -8,6 +8,7 @@
 import Combine
 @testable import ElementX
 import Foundation
+import MatrixRustSDK
 import Testing
 
 @MainActor
@@ -23,12 +24,18 @@ struct ManageStorageScreenViewModelTests {
     init() throws {
         clientProxy = ClientProxyMock(.init())
         // The second measurement (after a clear) is marked, so tests can wait for it.
-        clientProxy.storageUsageClosure = { [clientProxy] in
-            var usage = StorageUsage.mock
-            if clientProxy.storageUsageCallsCount > 1 {
-                usage = .init(totalBytes: usage.totalBytes.merging([.messages: 1]) { _, new in new }, rooms: usage.rooms)
+        clientProxy.storeSizesClosure = { [clientProxy] in
+            var sizes = StoreSizes.mock
+            if clientProxy.storeSizesCallsCount > 1 {
+                sizes.eventCacheStore = 1
             }
-            return .success(usage)
+            return .success(sizes)
+        }
+        clientProxy.storageUsageByRoomClosure = {
+            AsyncStream { continuation in
+                [StorageUsageRoom].mock.forEach { continuation.yield($0) }
+                continuation.finish()
+            }
         }
         clientProxy.clearRoomKeysRoomIDsReturnValue = .success(())
         clientProxy.clearRoomCachesRoomIDsReturnValue = .success(())
@@ -54,9 +61,11 @@ struct ManageStorageScreenViewModelTests {
         // All rooms: every cache including the logs, sized from the report and the files.
         #expect(context.viewState.visibleCaches == StorageCacheKind.allCases)
         #expect(context.viewState.bytes(for: .logs) == 3000)
-        #expect(context.viewState.bytes(for: .media) == StorageUsage.mock.totalBytes[.media])
+        #expect(context.viewState.bytes(for: .media) == StoreSizes.mock.mediaStore)
         #expect(context.viewState.scopeTitle == UntranslatedL10n.screenManageStorageScopeAllRooms)
-        #expect(context.viewState.rooms.map(\.id) == StorageUsage.mock.rooms.map(\.id))
+        #expect(context.viewState.rooms.map(\.id) == [StorageUsageRoom].mock.map(\.id))
+        // The small room isn't worth listing.
+        #expect(context.viewState.listedRooms.map(\.id) == ["!big:example.org", "!medium:example.org"])
 
         // One room selected: its sizes only, no logs.
         context.send(viewAction: .toggleRoom("!medium:example.org"))
@@ -131,7 +140,7 @@ struct ManageStorageScreenViewModelTests {
     }
 
     private func waitForLoad() async throws {
-        let deferred = deferFulfillment(context.observe(\.viewState.isLoading)) { !$0 && !self.context.viewState.rooms.isEmpty }
+        let deferred = deferFulfillment(context.observe(\.viewState.isLoadingRooms)) { !$0 && !self.context.viewState.rooms.isEmpty }
         try await deferred.fulfill()
     }
 }

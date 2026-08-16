@@ -8,37 +8,8 @@
 import Foundation
 import MatrixRustSDK
 
-/// How much storage each of the SDK's caches uses, overall and per room.
-struct StorageUsage: Equatable {
-    /// The size of each cache, all rooms included, in bytes.
-    let totalBytes: [StorageCacheKind: UInt64]
-    /// The rooms with cached data, largest first.
-    let rooms: [StorageUsageRoom]
-    
-    init(totalBytes: [StorageCacheKind: UInt64], rooms: [StorageUsageRoom]) {
-        self.totalBytes = totalBytes
-        self.rooms = rooms
-    }
-    
-    init(rustReport report: StorageUsageReport) {
-        totalBytes = [.messageKeys: report.roomKeysBytes,
-                      .roomState: report.roomStateBytes,
-                      .messages: report.eventsBytes,
-                      .media: report.mediaBytes]
-        rooms = report.rooms.map { room in
-            StorageUsageRoom(id: room.roomId,
-                             name: room.displayName,
-                             lastActivity: room.lastActivityTs.map { Date(timeIntervalSince1970: TimeInterval($0) / 1000) },
-                             bytes: [.messageKeys: room.roomKeysBytes,
-                                     .roomState: room.roomStateBytes,
-                                     .messages: room.eventsBytes,
-                                     .media: room.mediaBytes])
-        }
-    }
-}
-
 /// The caches the SDK keeps on disk (the log files are the app's own).
-enum StorageCacheKind: CaseIterable, Identifiable, Hashable {
+nonisolated enum StorageCacheKind: CaseIterable, Identifiable, Hashable {
     case messageKeys, roomState, messages, media, logs
     
     var id: Self { self }
@@ -47,8 +18,8 @@ enum StorageCacheKind: CaseIterable, Identifiable, Hashable {
     var isPerRoom: Bool { self != .logs }
 }
 
-/// One room's share of each cache.
-struct StorageUsageRoom: Identifiable, Equatable {
+/// One room's share of each cache, in bytes (the stored payloads' sizes).
+nonisolated struct StorageUsageRoom: Identifiable, Equatable {
     let id: String
     let name: String?
     /// When the room was last active, if known.
@@ -56,4 +27,45 @@ struct StorageUsageRoom: Identifiable, Equatable {
     let bytes: [StorageCacheKind: UInt64]
     
     var totalBytes: UInt64 { bytes.values.reduce(0, +) }
+    
+    init(id: String, name: String?, lastActivity: Date?, bytes: [StorageCacheKind: UInt64]) {
+        self.id = id
+        self.name = name
+        self.lastActivity = lastActivity
+        self.bytes = bytes
+    }
+    
+    init(rustUsage room: RoomStorageUsage) {
+        self.init(id: room.roomId,
+                  name: room.displayName,
+                  lastActivity: room.lastActivityTs.map { Date(timeIntervalSince1970: TimeInterval($0) / 1000) },
+                  bytes: [.messageKeys: room.roomKeysBytes,
+                          .roomState: room.roomStateBytes,
+                          .messages: room.eventsBytes,
+                          .media: room.mediaBytes])
+    }
+}
+
+/// Bridges the SDK's storage usage walk to an async stream of rooms.
+nonisolated final class StorageUsageListenerProxy: StorageUsageListener {
+    private let continuation: AsyncStream<StorageUsageRoom>.Continuation
+    
+    init(continuation: AsyncStream<StorageUsageRoom>.Continuation) {
+        self.continuation = continuation
+    }
+    
+    func onRoomUsage(room: RoomStorageUsage) {
+        continuation.yield(StorageUsageRoom(rustUsage: room))
+    }
+    
+    func onFinished() {
+        continuation.finish()
+    }
+}
+
+extension StoreSizes {
+    /// The store sizes shown in previews and tests.
+    static var mock: StoreSizes {
+        StoreSizes(cryptoStore: 20_000_000, stateStore: 100_000_000, eventCacheStore: 110_000_000, mediaStore: 300_000_000)
+    }
 }

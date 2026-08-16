@@ -64,9 +64,9 @@ struct ManageStorageScreen: View {
 
     @ViewBuilder
     private var roomsSection: some View {
-        if !context.viewState.rooms.isEmpty {
+        if !context.viewState.listedRooms.isEmpty || context.viewState.isLoadingRooms {
             Section {
-                ForEach(context.viewState.rooms) { room in
+                ForEach(context.viewState.listedRooms) { room in
                     ListRow(label: .plain(title: room.displayName,
                                           description: room.totalBytes.formatted(.byteCount(style: .file))),
                             kind: .multiSelection(isSelected: context.viewState.selectedRoomIDs.contains(room.id)) {
@@ -74,8 +74,14 @@ struct ManageStorageScreen: View {
                             })
                 }
             } header: {
-                Text(UntranslatedL10n.screenManageStorageRoomsSectionTitle)
-                    .compoundListSectionHeader()
+                HStack(spacing: 8) {
+                    Text(UntranslatedL10n.screenManageStorageRoomsSectionTitle)
+                    if context.viewState.isLoadingRooms {
+                        ProgressView()
+                            .controlSize(.mini)
+                    }
+                }
+                .compoundListSectionHeader()
             } footer: {
                 Text(UntranslatedL10n.screenManageStorageRoomsSectionFooter)
                     .compoundListSectionFooter()
@@ -159,7 +165,7 @@ struct StorageUsageChart: View {
 
 struct ManageStorageScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
-    static let emptyViewModel = makeViewModel(usage: .init(totalBytes: [:], rooms: []))
+    static let emptyViewModel = makeViewModel(rooms: [])
 
     static var previews: some View {
         NavigationStack {
@@ -173,18 +179,22 @@ struct ManageStorageScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Empty")
     }
 
-    static func makeViewModel(usage: StorageUsage = .mock) -> ManageStorageScreenViewModel {
+    static func makeViewModel(rooms: [StorageUsageRoom] = .mock) -> ManageStorageScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.storageUsageReturnValue = .success(usage)
+        clientProxy.storeSizesReturnValue = .success(.mock)
+        clientProxy.storageUsageByRoomReturnValue = AsyncStream { continuation in
+            rooms.forEach { continuation.yield($0) }
+            continuation.finish()
+        }
         return ManageStorageScreenViewModel(clientProxy: clientProxy,
                                             userIndicatorController: UserIndicatorControllerMock(),
                                             logsDirectory: URL(filePath: "/dev/null"))
     }
 }
 
-extension StorageUsage {
-    static var mock: StorageUsage {
-        let rooms = [
+extension [StorageUsageRoom] {
+    static var mock: [StorageUsageRoom] {
+        [
             StorageUsageRoom(id: "!big:example.org", name: "Element X iOS", lastActivity: .now,
                              bytes: [.messageKeys: 12_000_000, .roomState: 30_000_000, .messages: 80_000_000, .media: 250_000_000]),
             StorageUsageRoom(id: "!medium:example.org", name: "Matrix HQ", lastActivity: .now.addingTimeInterval(-100 * 24 * 3600),
@@ -192,10 +202,6 @@ extension StorageUsage {
             StorageUsageRoom(id: "!small:example.org", name: nil, lastActivity: nil,
                              bytes: [.messageKeys: 100_000, .roomState: 500_000, .messages: 900_000, .media: 0])
         ]
-        var totals: [StorageCacheKind: UInt64] = [:]
-        for cache in StorageCacheKind.allCases where cache.isPerRoom {
-            totals[cache] = rooms.reduce(0) { $0 + ($1.bytes[cache] ?? 0) } + 3_000_000
-        }
-        return StorageUsage(totalBytes: totals, rooms: rooms)
     }
 }
+

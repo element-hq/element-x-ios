@@ -258,8 +258,10 @@ protocol ClientProxyProtocol: AnyObject {
     
     func storeSizes() async -> Result<StoreSizes, ClientProxyError>
     
-    /// How much storage each cache uses, overall and per room.
-    func storageUsage() async -> Result<StorageUsage, ClientProxyError>
+    /// Walks the rooms' storage usage, yielding each room with cached data as soon as its numbers are
+    /// known (roughly the biggest first), finishing once every room has been reported. Cancelling the
+    /// iteration stops the walk. The totals are the store sizes, see ``storeSizes()``.
+    func storageUsageByRoom() -> AsyncStream<StorageUsageRoom>
     
     /// Deletes the message keys of the given rooms (all rooms when nil). Encrypted history
     /// can't be read again unless the keys are fetched from a key backup.

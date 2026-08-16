@@ -918,12 +918,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func storageUsage() async -> Result<StorageUsage, ClientProxyError> {
-        do {
-            return try await .success(StorageUsage(rustReport: client.storageUsage()))
-        } catch {
-            MXLog.error("Failed measuring the storage usage with error: \(error)")
-            return .failure(.sdkError(error))
+    func storageUsageByRoom() -> AsyncStream<StorageUsageRoom> {
+        AsyncStream { [client] continuation in
+            let handle = client.storageUsageByRoom(listener: StorageUsageListenerProxy(continuation: continuation))
+            continuation.onTermination = { _ in handle.cancel() }
         }
     }
     

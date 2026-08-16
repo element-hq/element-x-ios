@@ -14,7 +14,7 @@
 "screen_manage_storage_clear_option_older_than" = "Clear older than %1$d days";
 "screen_manage_storage_cleared" = "Cleared";
 "screen_manage_storage_error" = "Some caches could not be cleared.";
-"screen_manage_storage_rooms_section_footer" = "Select rooms to see and clear their caches only.";
+"screen_manage_storage_rooms_section_footer" = "Rooms using more than 5 MB. Select rooms to see and clear their caches only.";
 "screen_manage_storage_rooms_section_title" = "Storage by room";
 "screen_manage_storage_scope_all_rooms" = "All rooms";
 "screen_manage_storage_scope_rooms" = "%1$d rooms";
