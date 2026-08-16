@@ -59,6 +59,7 @@ enum TimelineViewAction {
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
     case paginateForwards
+    case resolveGap(prevToken: String)
     case scrollToBottom
     case scrollToFirstItemForCurrentDate
     case scrollToReadMarker

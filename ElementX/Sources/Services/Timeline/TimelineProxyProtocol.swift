@@ -93,6 +93,8 @@ protocol TimelineProxyProtocol: Sendable {
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     
+    func resolveGap(prevToken: String, requestSize: UInt16) async -> Result<Void, TimelineProxyError>
+    
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               newContent: EditedContent) async -> Result<Void, TimelineProxyError>
     

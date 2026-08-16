@@ -1117,8 +1117,14 @@ extension TimelineTableViewController {
     /// The item ID of the newest visible item in the timeline.
     private func newestVisibleItemID() -> TimelineItemIdentifier? {
         guard let timelineCell = tableView.visibleCells.first(where: {
-            guard let cell = $0 as? TimelineItemCell else { return false }
-            return !(cell.item?.type is PaginationIndicatorRoomTimelineItem)
+            guard let cell = $0 as? TimelineItemCell, let itemType = cell.item?.type else { return false }
+            switch itemType {
+            // Transient cells make for a bad scroll anchor.
+            case .paginationIndicator, .gap:
+                return false
+            default:
+                return true
+            }
         }) else {
             return nil
         }

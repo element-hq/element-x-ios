@@ -52,6 +52,8 @@ struct RoomTimelineItemView: View {
             EncryptedRoomTimelineView(timelineItem: item)
         case .readMarker:
             ReadMarkerRoomTimelineView()
+        case .gap(let item):
+            GapRoomTimelineView(timelineItem: item)
         case .paginationIndicator:
             PaginationIndicatorRoomTimelineView()
         case .sticker(let item):

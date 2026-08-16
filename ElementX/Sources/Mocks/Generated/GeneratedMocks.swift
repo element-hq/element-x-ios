@@ -11744,6 +11744,37 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
             return paginateForwardsRequestSizeReturnValue
         }
     }
+    //MARK: - resolveGap
+
+    private let resolveGapPrevTokenRequestSizeCallsCountLock = NSLock()
+    private nonisolated(unsafe) var resolveGapPrevTokenRequestSizeUnderlyingCallsCount = 0
+    var resolveGapPrevTokenRequestSizeCallsCount: Int {
+        get { resolveGapPrevTokenRequestSizeCallsCountLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingCallsCount } }
+        set { resolveGapPrevTokenRequestSizeCallsCountLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingCallsCount = newValue } }
+    }
+    var resolveGapPrevTokenRequestSizeCalled: Bool {
+        return resolveGapPrevTokenRequestSizeCallsCount > 0
+    }
+    private let resolveGapPrevTokenRequestSizeReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var resolveGapPrevTokenRequestSizeUnderlyingReceivedArguments: (prevToken: String, requestSize: UInt16)?
+    var resolveGapPrevTokenRequestSizeReceivedArguments: (prevToken: String, requestSize: UInt16)? {
+        get { resolveGapPrevTokenRequestSizeReceivedArgumentsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedArguments } }
+        set { resolveGapPrevTokenRequestSizeReceivedArgumentsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedArguments = newValue } }
+    }
+    private let resolveGapPrevTokenRequestSizeReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var resolveGapPrevTokenRequestSizeUnderlyingReceivedInvocations: [(prevToken: String, requestSize: UInt16)] = []
+    var resolveGapPrevTokenRequestSizeReceivedInvocations: [(prevToken: String, requestSize: UInt16)] {
+        get { resolveGapPrevTokenRequestSizeReceivedInvocationsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedInvocations } }
+        set { resolveGapPrevTokenRequestSizeReceivedInvocationsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var resolveGapPrevTokenRequestSizeClosure: ((String, UInt16) async -> Void)?
+
+    @concurrent func resolveGap(prevToken: String, requestSize: UInt16) async {
+        resolveGapPrevTokenRequestSizeCallsCountLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingCallsCount += 1 }
+        resolveGapPrevTokenRequestSizeReceivedArguments = (prevToken: prevToken, requestSize: requestSize)
+        resolveGapPrevTokenRequestSizeReceivedInvocationsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedInvocations.append((prevToken: prevToken, requestSize: requestSize)) }
+        await resolveGapPrevTokenRequestSizeClosure?(prevToken, requestSize)
+    }
     //MARK: - sendReadReceipt
 
     private let sendReadReceiptForCallsCountLock = NSLock()
@@ -12818,6 +12849,48 @@ nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable 
             return await paginateForwardsRequestSizeClosure(requestSize)
         } else {
             return paginateForwardsRequestSizeReturnValue
+        }
+    }
+    //MARK: - resolveGap
+
+    private let resolveGapPrevTokenRequestSizeCallsCountLock = NSLock()
+    private nonisolated(unsafe) var resolveGapPrevTokenRequestSizeUnderlyingCallsCount = 0
+    var resolveGapPrevTokenRequestSizeCallsCount: Int {
+        get { resolveGapPrevTokenRequestSizeCallsCountLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingCallsCount } }
+        set { resolveGapPrevTokenRequestSizeCallsCountLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingCallsCount = newValue } }
+    }
+    var resolveGapPrevTokenRequestSizeCalled: Bool {
+        return resolveGapPrevTokenRequestSizeCallsCount > 0
+    }
+    private let resolveGapPrevTokenRequestSizeReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var resolveGapPrevTokenRequestSizeUnderlyingReceivedArguments: (prevToken: String, requestSize: UInt16)?
+    var resolveGapPrevTokenRequestSizeReceivedArguments: (prevToken: String, requestSize: UInt16)? {
+        get { resolveGapPrevTokenRequestSizeReceivedArgumentsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedArguments } }
+        set { resolveGapPrevTokenRequestSizeReceivedArgumentsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedArguments = newValue } }
+    }
+    private let resolveGapPrevTokenRequestSizeReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var resolveGapPrevTokenRequestSizeUnderlyingReceivedInvocations: [(prevToken: String, requestSize: UInt16)] = []
+    var resolveGapPrevTokenRequestSizeReceivedInvocations: [(prevToken: String, requestSize: UInt16)] {
+        get { resolveGapPrevTokenRequestSizeReceivedInvocationsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedInvocations } }
+        set { resolveGapPrevTokenRequestSizeReceivedInvocationsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let resolveGapPrevTokenRequestSizeReturnValueLock = NSLock()
+    private nonisolated(unsafe) var resolveGapPrevTokenRequestSizeUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var resolveGapPrevTokenRequestSizeReturnValue: Result<Void, TimelineProxyError>! {
+        get { resolveGapPrevTokenRequestSizeReturnValueLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReturnValue } }
+        set { resolveGapPrevTokenRequestSizeReturnValueLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var resolveGapPrevTokenRequestSizeClosure: ((String, UInt16) async -> Result<Void, TimelineProxyError>)?
+
+    @concurrent func resolveGap(prevToken: String, requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        resolveGapPrevTokenRequestSizeCallsCountLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingCallsCount += 1 }
+        resolveGapPrevTokenRequestSizeReceivedArguments = (prevToken: prevToken, requestSize: requestSize)
+        resolveGapPrevTokenRequestSizeReceivedInvocationsLock.withLock { resolveGapPrevTokenRequestSizeUnderlyingReceivedInvocations.append((prevToken: prevToken, requestSize: requestSize)) }
+        if let resolveGapPrevTokenRequestSizeClosure = resolveGapPrevTokenRequestSizeClosure {
+            return await resolveGapPrevTokenRequestSizeClosure(prevToken, requestSize)
+        } else {
+            return resolveGapPrevTokenRequestSizeReturnValue
         }
     }
     //MARK: - edit

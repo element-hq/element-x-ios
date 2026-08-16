@@ -341,6 +341,13 @@ extension PreviewTests {
     }
 
     @Test
+    func gapRoomTimelineView() async throws {
+        for (index, preview) in GapRoomTimelineView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func highlightedTimelineItemModifier() async throws {
         for (index, preview) in HighlightedTimelineItemModifier_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

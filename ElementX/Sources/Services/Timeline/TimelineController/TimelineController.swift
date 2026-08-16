@@ -124,6 +124,16 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
+    func resolveGap(prevToken: String, requestSize: UInt16) async {
+        switch await activeTimeline.resolveGap(prevToken: prevToken, requestSize: requestSize) {
+        case .success:
+            break
+        case .failure(let error):
+            // Leave the gap in place; it retries when its item next appears.
+            MXLog.error("Failed resolving timeline gap with error: \(error)")
+        }
+    }
+    
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
         MXLog.info("Started forward pagination request")
         switch await activeTimeline.paginateForwards(requestSize: requestSize) {
@@ -574,6 +584,8 @@ class TimelineController: TimelineControllerProtocol {
                 return SeparatorRoomTimelineItem(id: .virtual(uniqueID: uniqueID), timestamp: date)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem(id: .virtual(uniqueID: uniqueID))
+            case .gap(let prevToken):
+                return GapRoomTimelineItem(id: .virtual(uniqueID: uniqueID), prevToken: prevToken)
             case .timelineStart:
                 // We always display the timeline start item, if there is a predecessor room.
                 guard !hasPredecessor else {

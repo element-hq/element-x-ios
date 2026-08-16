@@ -10674,6 +10674,93 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - latestEventId
+
+    private let latestEventIdCallsCountLock = NSLock()
+    private var latestEventIdUnderlyingCallsCount = 0
+    open var latestEventIdCallsCount: Int {
+        get { latestEventIdCallsCountLock.withLock { latestEventIdUnderlyingCallsCount } }
+        set { latestEventIdCallsCountLock.withLock { latestEventIdUnderlyingCallsCount = newValue } }
+    }
+    open var latestEventIdCalled: Bool {
+        return latestEventIdCallsCount > 0
+    }
+
+    private let latestEventIdReturnValueLock = NSLock()
+    open var latestEventIdUnderlyingReturnValue: String?
+    open var latestEventIdReturnValue: String? {
+        get { latestEventIdReturnValueLock.withLock { latestEventIdUnderlyingReturnValue } }
+        set { latestEventIdReturnValueLock.withLock { latestEventIdUnderlyingReturnValue = newValue } }
+    }
+    open var latestEventIdClosure: (() -> String?)?
+
+    open override func latestEventId() -> String? {
+        latestEventIdCallsCountLock.withLock { latestEventIdUnderlyingCallsCount += 1 }
+        if let latestEventIdClosure = latestEventIdClosure {
+            return latestEventIdClosure()
+        } else {
+            return latestEventIdReturnValue
+        }
+    }
+
+    //MARK: - latestEventThreadRootId
+
+    private let latestEventThreadRootIdCallsCountLock = NSLock()
+    private var latestEventThreadRootIdUnderlyingCallsCount = 0
+    open var latestEventThreadRootIdCallsCount: Int {
+        get { latestEventThreadRootIdCallsCountLock.withLock { latestEventThreadRootIdUnderlyingCallsCount } }
+        set { latestEventThreadRootIdCallsCountLock.withLock { latestEventThreadRootIdUnderlyingCallsCount = newValue } }
+    }
+    open var latestEventThreadRootIdCalled: Bool {
+        return latestEventThreadRootIdCallsCount > 0
+    }
+
+    private let latestEventThreadRootIdReturnValueLock = NSLock()
+    open var latestEventThreadRootIdUnderlyingReturnValue: String?
+    open var latestEventThreadRootIdReturnValue: String? {
+        get { latestEventThreadRootIdReturnValueLock.withLock { latestEventThreadRootIdUnderlyingReturnValue } }
+        set { latestEventThreadRootIdReturnValueLock.withLock { latestEventThreadRootIdUnderlyingReturnValue = newValue } }
+    }
+    open var latestEventThreadRootIdClosure: (() async -> String?)?
+
+    open override func latestEventThreadRootId() async -> String? {
+        latestEventThreadRootIdCallsCountLock.withLock { latestEventThreadRootIdUnderlyingCallsCount += 1 }
+        if let latestEventThreadRootIdClosure = latestEventThreadRootIdClosure {
+            return await latestEventThreadRootIdClosure()
+        } else {
+            return latestEventThreadRootIdReturnValue
+        }
+    }
+
+    //MARK: - latestEventTimestamp
+
+    private let latestEventTimestampCallsCountLock = NSLock()
+    private var latestEventTimestampUnderlyingCallsCount = 0
+    open var latestEventTimestampCallsCount: Int {
+        get { latestEventTimestampCallsCountLock.withLock { latestEventTimestampUnderlyingCallsCount } }
+        set { latestEventTimestampCallsCountLock.withLock { latestEventTimestampUnderlyingCallsCount = newValue } }
+    }
+    open var latestEventTimestampCalled: Bool {
+        return latestEventTimestampCallsCount > 0
+    }
+
+    private let latestEventTimestampReturnValueLock = NSLock()
+    open var latestEventTimestampUnderlyingReturnValue: Timestamp?
+    open var latestEventTimestampReturnValue: Timestamp? {
+        get { latestEventTimestampReturnValueLock.withLock { latestEventTimestampUnderlyingReturnValue } }
+        set { latestEventTimestampReturnValueLock.withLock { latestEventTimestampUnderlyingReturnValue = newValue } }
+    }
+    open var latestEventTimestampClosure: (() -> Timestamp?)?
+
+    open override func latestEventTimestamp() -> Timestamp? {
+        latestEventTimestampCallsCountLock.withLock { latestEventTimestampUnderlyingCallsCount += 1 }
+        if let latestEventTimestampClosure = latestEventTimestampClosure {
+            return latestEventTimestampClosure()
+        } else {
+            return latestEventTimestampReturnValue
+        }
+    }
+
     //MARK: - leave
 
     open var leaveThrowableError: Error?
@@ -18226,6 +18313,53 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         redactEventEventOrTransactionIdReasonReceivedArguments = (eventOrTransactionId: eventOrTransactionId, reason: reason)
         redactEventEventOrTransactionIdReasonReceivedInvocationsLock.withLock { redactEventEventOrTransactionIdReasonUnderlyingReceivedInvocations.append((eventOrTransactionId: eventOrTransactionId, reason: reason)) }
         try await redactEventEventOrTransactionIdReasonClosure?(eventOrTransactionId, reason)
+    }
+
+    //MARK: - resolveGap
+
+    open var resolveGapPrevTokenNumEventsThrowableError: Error?
+    private let resolveGapPrevTokenNumEventsCallsCountLock = NSLock()
+    private var resolveGapPrevTokenNumEventsUnderlyingCallsCount = 0
+    open var resolveGapPrevTokenNumEventsCallsCount: Int {
+        get { resolveGapPrevTokenNumEventsCallsCountLock.withLock { resolveGapPrevTokenNumEventsUnderlyingCallsCount } }
+        set { resolveGapPrevTokenNumEventsCallsCountLock.withLock { resolveGapPrevTokenNumEventsUnderlyingCallsCount = newValue } }
+    }
+    open var resolveGapPrevTokenNumEventsCalled: Bool {
+        return resolveGapPrevTokenNumEventsCallsCount > 0
+    }
+    private let resolveGapPrevTokenNumEventsReceivedArgumentsLock = NSLock()
+    private var resolveGapPrevTokenNumEventsUnderlyingReceivedArguments: (prevToken: String, numEvents: UInt16)?
+    open var resolveGapPrevTokenNumEventsReceivedArguments: (prevToken: String, numEvents: UInt16)? {
+        get { resolveGapPrevTokenNumEventsReceivedArgumentsLock.withLock { resolveGapPrevTokenNumEventsUnderlyingReceivedArguments } }
+        set { resolveGapPrevTokenNumEventsReceivedArgumentsLock.withLock { resolveGapPrevTokenNumEventsUnderlyingReceivedArguments = newValue } }
+    }
+    private let resolveGapPrevTokenNumEventsReceivedInvocationsLock = NSLock()
+    private var resolveGapPrevTokenNumEventsUnderlyingReceivedInvocations: [(prevToken: String, numEvents: UInt16)] = []
+    open var resolveGapPrevTokenNumEventsReceivedInvocations: [(prevToken: String, numEvents: UInt16)] {
+        get { resolveGapPrevTokenNumEventsReceivedInvocationsLock.withLock { resolveGapPrevTokenNumEventsUnderlyingReceivedInvocations } }
+        set { resolveGapPrevTokenNumEventsReceivedInvocationsLock.withLock { resolveGapPrevTokenNumEventsUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let resolveGapPrevTokenNumEventsReturnValueLock = NSLock()
+    open var resolveGapPrevTokenNumEventsUnderlyingReturnValue: Bool!
+    open var resolveGapPrevTokenNumEventsReturnValue: Bool! {
+        get { resolveGapPrevTokenNumEventsReturnValueLock.withLock { resolveGapPrevTokenNumEventsUnderlyingReturnValue } }
+        set { resolveGapPrevTokenNumEventsReturnValueLock.withLock { resolveGapPrevTokenNumEventsUnderlyingReturnValue = newValue } }
+    }
+    open var resolveGapPrevTokenNumEventsClosure: ((String, UInt16) async throws -> Bool)?
+
+    open override func resolveGap(prevToken: String, numEvents: UInt16) async throws -> Bool {
+        if let error = resolveGapPrevTokenNumEventsThrowableError {
+            throw error
+        }
+        resolveGapPrevTokenNumEventsCallsCountLock.withLock { resolveGapPrevTokenNumEventsUnderlyingCallsCount += 1 }
+        resolveGapPrevTokenNumEventsReceivedArguments = (prevToken: prevToken, numEvents: numEvents)
+        resolveGapPrevTokenNumEventsReceivedInvocationsLock.withLock { resolveGapPrevTokenNumEventsUnderlyingReceivedInvocations.append((prevToken: prevToken, numEvents: numEvents)) }
+        if let resolveGapPrevTokenNumEventsClosure = resolveGapPrevTokenNumEventsClosure {
+            return try await resolveGapPrevTokenNumEventsClosure(prevToken, numEvents)
+        } else {
+            return resolveGapPrevTokenNumEventsReturnValue
+        }
     }
 
     //MARK: - retryDecryption

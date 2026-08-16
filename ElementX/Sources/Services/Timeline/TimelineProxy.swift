@@ -122,6 +122,20 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    func resolveGap(prevToken: String, requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Resolving timeline gap")
+        
+        do {
+            let resolved = try await timeline.resolveGap(prevToken: prevToken, numEvents: requestSize)
+            MXLog.info("Finished resolving timeline gap (resolved: \(resolved))")
+            
+            return .success(())
+        } catch {
+            MXLog.error("Failed resolving timeline gap with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
         guard kind != .pinned else {
             return .success(())

@@ -68,6 +68,8 @@ protocol TimelineControllerProtocol: Sendable {
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError>
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError>
     
+    func resolveGap(prevToken: String, requestSize: UInt16) async
+    
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async
     
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,

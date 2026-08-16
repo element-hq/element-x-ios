@@ -178,6 +178,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             paginateBackwards()
         case .paginateForwards:
             paginateForwards()
+        case .resolveGap(let prevToken):
+            resolveGap(prevToken: prevToken)
         case .scrollToBottom:
             scrollToBottom()
         case .scrollToFirstItemForCurrentDate:
@@ -655,6 +657,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                        emojiProvider: state.emojiProvider).makeActions() != nil
     }
 
+    private func resolveGap(prevToken: String) {
+        // Concurrent resolutions of the same gap are deduplicated by the SDK,
+        // so it's fine to fire this every time a gap item appears. Failures
+        // (e.g. offline) leave the gap in place; it retries when the item
+        // next appears.
+        Task {
+            await timelineController.resolveGap(prevToken: prevToken, requestSize: Constants.paginationEventLimit)
+        }
+    }
+    
     private func paginateBackwards() {
         guard paginateBackwardsTask == nil else {
             return

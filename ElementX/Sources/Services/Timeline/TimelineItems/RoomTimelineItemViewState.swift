@@ -59,6 +59,7 @@ enum RoomTimelineItemType: Equatable {
     case redacted(RedactedRoomTimelineItem)
     case encrypted(EncryptedRoomTimelineItem)
     case readMarker(ReadMarkerRoomTimelineItem)
+    case gap(GapRoomTimelineItem)
     case paginationIndicator(PaginationIndicatorRoomTimelineItem)
     case sticker(StickerRoomTimelineItem)
     case unsupported(UnsupportedRoomTimelineItem)
@@ -98,6 +99,8 @@ enum RoomTimelineItemType: Equatable {
             self = .encrypted(item)
         case let item as ReadMarkerRoomTimelineItem:
             self = .readMarker(item)
+        case let item as GapRoomTimelineItem:
+            self = .gap(item)
         case let item as PaginationIndicatorRoomTimelineItem:
             self = .paginationIndicator(item)
         case let item as StickerRoomTimelineItem:
@@ -141,6 +144,7 @@ enum RoomTimelineItemType: Equatable {
              .redacted(let item as RoomTimelineItemProtocol),
              .encrypted(let item as RoomTimelineItemProtocol),
              .readMarker(let item as RoomTimelineItemProtocol),
+             .gap(let item as RoomTimelineItemProtocol),
              .paginationIndicator(let item as RoomTimelineItemProtocol),
              .sticker(let item as RoomTimelineItemProtocol),
              .unsupported(let item as RoomTimelineItemProtocol),
@@ -205,7 +209,7 @@ enum RoomTimelineItemType: Equatable {
             return item.timestamp
         case .group(let item):
             return (item.items.first { $0 is EventBasedTimelineItemProtocol } as? EventBasedTimelineItemProtocol)?.timestamp
-        case .readMarker, .paginationIndicator, .timelineStart:
+        case .readMarker, .paginationIndicator, .timelineStart, .gap:
             return nil
         }
     }
