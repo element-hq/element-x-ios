@@ -1773,3 +1773,9 @@ from the storage walk + gaps unanchored because no media item exists to
 anchor before), even though the server has media in the gaps. Needs a
 design think - maybe render unanchored/trailing gaps at the list end,
 or fall back to network pagination when the filtered timeline is empty.
+
+Round 2 addendum: off-screen gap resolution jumped the visible timeline
+(flipped table = offsets measured from the newest end, so newer-side
+insertions shift everything; also skewed paginateIfNeeded's thresholds).
+Fixed by pinning the newest visible item across unanimated gap-resolve
+applies, reusing snapshotLayout/restoreLayout (EXI, after 1d478a346).
