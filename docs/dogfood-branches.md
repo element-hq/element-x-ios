@@ -1788,3 +1788,12 @@ animated .fade apply cross-faded half the screen mid-scroll. Now a
 resolution only animates when the spinner is the sole visible casualty;
 churny applies go unanimated + pinned, and group items are no longer
 used as the layout anchor (identity unstable). EXI 25291a7be.
+
+Round 2 addendum 3: second recording (spasm at 4.56s) showed a tall
+single-message resolve at the viewport top spasming WITHOUT identity
+churn - animating any content-inserting apply near the viewport is
+inherently messy in the flipped table. Final policy (EXI 912c06177):
+animate only resolves that close EMPTY (pure spinner removal - the true
+shrink-away); all content-inserting resolves apply unanimated with the
+visible content pinned. Pin now adjusts bounds.origin directly instead
+of scrollToRow, so it no longer cancels an in-flight fling.
