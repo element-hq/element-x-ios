@@ -1947,3 +1947,23 @@ one spinner (the gap's) below the divider, cached history behind it
 loads via storage walks; no spinner above the first date divider.
 Same drop class could plausibly have hidden other late state updates
 (forward pagination state, item batches during heavy builds).
+
+Round addendum 6 (Media & Files): three reports - slow load, no
+spinner while looking for media in a media-less room, never any gap
+spinners in the grid. Logs showed the grid's filtered storage-only
+timeline paginating one store chunk per FFI round trip (~70ms each,
+mostly yielding nothing). Two SDK fixes
+[`e6b518ab7`](https://github.com/matrix-org/matrix-rust-sdk/commit/e6b518ab7):
+(1) gaps whose followers are all filtered out of the timeline (newest
+media predates the gap, or no media at all) were never rendered, so
+nobody resolved them; they now render at the newest end (the grid
+already keeps `.gap` items as spinner cells, so a media-less room shows
+a spinner group instead of the empty state, and gaps in the room show
+as spinners in the grid until filled); (2) storage walks keep going
+(up to 32 chunks per call) until a loaded chunk holds an event passing
+the timeline's filter, instead of returning after every non-empty
+chunk. Still O(cached events) on a cold grid; a real media index is a
+follow-up (hashed `msgtype` column next to the existing hashed
+`event_type` in the sqlite events table + a media-focused event-cache
+view ordered by chunk position/timestamp with gaps placed by
+neighbouring events).
