@@ -258,6 +258,19 @@ protocol ClientProxyProtocol: AnyObject {
     
     func storeSizes() async -> Result<StoreSizes, ClientProxyError>
     
+    /// How much storage each cache uses, overall and per room.
+    func storageUsage() async -> Result<StorageUsage, ClientProxyError>
+    
+    /// Deletes the message keys of the given rooms (all rooms when nil). Encrypted history
+    /// can't be read again unless the keys are fetched from a key backup.
+    @discardableResult func clearRoomKeys(roomIDs: [String]?) async -> Result<Void, ClientProxyError>
+    
+    /// Clears the given rooms' cached messages and members (fetched again lazily). The rooms stay known.
+    @discardableResult func clearRoomCaches(roomIDs: [String]) async -> Result<Void, ClientProxyError>
+    
+    /// Deletes the cached media of the given rooms (all when nil), only that not accessed for the given duration when set.
+    @discardableResult func clearMediaCache(roomIDs: [String]?, notAccessedFor: TimeInterval?) async -> Result<Void, ClientProxyError>
+    
     func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError>
     
     // MARK: - Ignored users

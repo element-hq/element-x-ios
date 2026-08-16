@@ -10,8 +10,68 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Manage storage
+  internal static var screenAdvancedSettingsManageStorage: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_manage_storage") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Clear %1$@
+  internal static func screenManageStorageA11yClear(_ p1: Any) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_a11y_clear", String(describing: p1))
+  }
+  /// Log files
+  internal static var screenManageStorageCacheLogs: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_cache_logs") }
+  /// Cached media
+  internal static var screenManageStorageCacheMedia: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_cache_media") }
+  /// Cached message keys
+  internal static var screenManageStorageCacheMessageKeys: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_cache_message_keys") }
+  /// Cached messages
+  internal static var screenManageStorageCacheMessages: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_cache_messages") }
+  /// Cached room state
+  internal static var screenManageStorageCacheRoomState: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_cache_room_state") }
+  /// Clear all caches
+  internal static var screenManageStorageClearAll: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_all") }
+  /// Clear %1$@?
+  internal static func screenManageStorageClearCacheTitle(_ p1: Any) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_cache_title", String(describing: p1))
+  }
+  /// Clear caches for %1$@
+  internal static func screenManageStorageClearForRoom(_ p1: Any) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_for_room", String(describing: p1))
+  }
+  /// Clear caches for %1$d rooms
+  internal static func screenManageStorageClearForRooms(_ p1: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_for_rooms", p1)
+  }
+  /// Clear everything
+  internal static var screenManageStorageClearOptionEverything: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_option_everything") }
+  /// Clear older than %1$d days
+  internal static func screenManageStorageClearOptionOlderThan(_ p1: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_clear_option_older_than", p1)
+  }
+  /// Cleared
+  internal static var screenManageStorageCleared: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_cleared") }
+  /// Some caches could not be cleared.
+  internal static var screenManageStorageError: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_error") }
+  /// Select rooms to see and clear their caches only.
+  internal static var screenManageStorageRoomsSectionFooter: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_rooms_section_footer") }
+  /// Storage by room
+  internal static var screenManageStorageRoomsSectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_rooms_section_title") }
+  /// All rooms
+  internal static var screenManageStorageScopeAllRooms: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_scope_all_rooms") }
+  /// %1$d rooms
+  internal static func screenManageStorageScopeRooms(_ p1: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_scope_rooms", p1)
+  }
+  /// Manage storage
+  internal static var screenManageStorageTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_title") }
+  /// If your message keys aren’t backed up, you may not be able to read older encrypted messages after clearing them.
+  internal static var screenManageStorageWarningMessageKeys: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_message_keys") }
+  /// Media not opened for that long, log files older than that, and the caches of rooms with no activity for that long.
+  internal static var screenManageStorageWarningOlderThan: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_older_than") }
+  /// The app will restart to clear them.
+  internal static var screenManageStorageWarningRestart: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_restart") }
+  /// Cached room state and cached messages are cleared together.
+  internal static var screenManageStorageWarningRoomState: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_room_state") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...

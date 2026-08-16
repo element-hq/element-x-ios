@@ -16,14 +16,36 @@ struct AdvancedSettingsScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
+enum AdvancedSettingsScreenCoordinatorAction {
+    case manageStorage
+}
+
 final class AdvancedSettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: AdvancedSettingsScreenViewModelProtocol
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    private let actionsSubject: PassthroughSubject<AdvancedSettingsScreenCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<AdvancedSettingsScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: AdvancedSettingsScreenCoordinatorParameters) {
         viewModel = AdvancedSettingsScreenViewModel(advancedSettings: parameters.appSettings,
                                                     analytics: parameters.analytics,
                                                     clientProxy: parameters.clientProxy,
                                                     userIndicatorController: parameters.userIndicatorController)
+    }
+    
+    func start() {
+        viewModel.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .manageStorage:
+                actionsSubject.send(.manageStorage)
+            }
+        }
+        .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {

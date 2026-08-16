@@ -3771,6 +3771,163 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return storeSizesReturnValue
         }
     }
+    //MARK: - storageUsage
+
+    private let storageUsageCallsCountLock = NSLock()
+    private nonisolated(unsafe) var storageUsageUnderlyingCallsCount = 0
+    var storageUsageCallsCount: Int {
+        get { storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount } }
+        set { storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount = newValue } }
+    }
+    var storageUsageCalled: Bool {
+        return storageUsageCallsCount > 0
+    }
+
+    private let storageUsageReturnValueLock = NSLock()
+    private nonisolated(unsafe) var storageUsageUnderlyingReturnValue: Result<StorageUsage, ClientProxyError>!
+    var storageUsageReturnValue: Result<StorageUsage, ClientProxyError>! {
+        get { storageUsageReturnValueLock.withLock { storageUsageUnderlyingReturnValue } }
+        set { storageUsageReturnValueLock.withLock { storageUsageUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var storageUsageClosure: (() async -> Result<StorageUsage, ClientProxyError>)?
+
+    @concurrent func storageUsage() async -> Result<StorageUsage, ClientProxyError> {
+        storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount += 1 }
+        if let storageUsageClosure = storageUsageClosure {
+            return await storageUsageClosure()
+        } else {
+            return storageUsageReturnValue
+        }
+    }
+    //MARK: - clearRoomKeys
+
+    private let clearRoomKeysRoomIDsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var clearRoomKeysRoomIDsUnderlyingCallsCount = 0
+    var clearRoomKeysRoomIDsCallsCount: Int {
+        get { clearRoomKeysRoomIDsCallsCountLock.withLock { clearRoomKeysRoomIDsUnderlyingCallsCount } }
+        set { clearRoomKeysRoomIDsCallsCountLock.withLock { clearRoomKeysRoomIDsUnderlyingCallsCount = newValue } }
+    }
+    var clearRoomKeysRoomIDsCalled: Bool {
+        return clearRoomKeysRoomIDsCallsCount > 0
+    }
+    private let clearRoomKeysRoomIDsReceivedRoomIDsLock = NSLock()
+    private nonisolated(unsafe) var clearRoomKeysRoomIDsUnderlyingReceivedRoomIDs: [String]?
+    var clearRoomKeysRoomIDsReceivedRoomIDs: [String]? {
+        get { clearRoomKeysRoomIDsReceivedRoomIDsLock.withLock { clearRoomKeysRoomIDsUnderlyingReceivedRoomIDs } }
+        set { clearRoomKeysRoomIDsReceivedRoomIDsLock.withLock { clearRoomKeysRoomIDsUnderlyingReceivedRoomIDs = newValue } }
+    }
+    private let clearRoomKeysRoomIDsReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var clearRoomKeysRoomIDsUnderlyingReceivedInvocations: [[String]?] = []
+    var clearRoomKeysRoomIDsReceivedInvocations: [[String]?] {
+        get { clearRoomKeysRoomIDsReceivedInvocationsLock.withLock { clearRoomKeysRoomIDsUnderlyingReceivedInvocations } }
+        set { clearRoomKeysRoomIDsReceivedInvocationsLock.withLock { clearRoomKeysRoomIDsUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let clearRoomKeysRoomIDsReturnValueLock = NSLock()
+    private nonisolated(unsafe) var clearRoomKeysRoomIDsUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var clearRoomKeysRoomIDsReturnValue: Result<Void, ClientProxyError>! {
+        get { clearRoomKeysRoomIDsReturnValueLock.withLock { clearRoomKeysRoomIDsUnderlyingReturnValue } }
+        set { clearRoomKeysRoomIDsReturnValueLock.withLock { clearRoomKeysRoomIDsUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var clearRoomKeysRoomIDsClosure: (([String]?) async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    @concurrent func clearRoomKeys(roomIDs: [String]?) async -> Result<Void, ClientProxyError> {
+        clearRoomKeysRoomIDsCallsCountLock.withLock { clearRoomKeysRoomIDsUnderlyingCallsCount += 1 }
+        clearRoomKeysRoomIDsReceivedRoomIDs = roomIDs
+        clearRoomKeysRoomIDsReceivedInvocationsLock.withLock { clearRoomKeysRoomIDsUnderlyingReceivedInvocations.append(roomIDs) }
+        if let clearRoomKeysRoomIDsClosure = clearRoomKeysRoomIDsClosure {
+            return await clearRoomKeysRoomIDsClosure(roomIDs)
+        } else {
+            return clearRoomKeysRoomIDsReturnValue
+        }
+    }
+    //MARK: - clearRoomCaches
+
+    private let clearRoomCachesRoomIDsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var clearRoomCachesRoomIDsUnderlyingCallsCount = 0
+    var clearRoomCachesRoomIDsCallsCount: Int {
+        get { clearRoomCachesRoomIDsCallsCountLock.withLock { clearRoomCachesRoomIDsUnderlyingCallsCount } }
+        set { clearRoomCachesRoomIDsCallsCountLock.withLock { clearRoomCachesRoomIDsUnderlyingCallsCount = newValue } }
+    }
+    var clearRoomCachesRoomIDsCalled: Bool {
+        return clearRoomCachesRoomIDsCallsCount > 0
+    }
+    private let clearRoomCachesRoomIDsReceivedRoomIDsLock = NSLock()
+    private nonisolated(unsafe) var clearRoomCachesRoomIDsUnderlyingReceivedRoomIDs: [String]?
+    var clearRoomCachesRoomIDsReceivedRoomIDs: [String]? {
+        get { clearRoomCachesRoomIDsReceivedRoomIDsLock.withLock { clearRoomCachesRoomIDsUnderlyingReceivedRoomIDs } }
+        set { clearRoomCachesRoomIDsReceivedRoomIDsLock.withLock { clearRoomCachesRoomIDsUnderlyingReceivedRoomIDs = newValue } }
+    }
+    private let clearRoomCachesRoomIDsReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var clearRoomCachesRoomIDsUnderlyingReceivedInvocations: [[String]] = []
+    var clearRoomCachesRoomIDsReceivedInvocations: [[String]] {
+        get { clearRoomCachesRoomIDsReceivedInvocationsLock.withLock { clearRoomCachesRoomIDsUnderlyingReceivedInvocations } }
+        set { clearRoomCachesRoomIDsReceivedInvocationsLock.withLock { clearRoomCachesRoomIDsUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let clearRoomCachesRoomIDsReturnValueLock = NSLock()
+    private nonisolated(unsafe) var clearRoomCachesRoomIDsUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var clearRoomCachesRoomIDsReturnValue: Result<Void, ClientProxyError>! {
+        get { clearRoomCachesRoomIDsReturnValueLock.withLock { clearRoomCachesRoomIDsUnderlyingReturnValue } }
+        set { clearRoomCachesRoomIDsReturnValueLock.withLock { clearRoomCachesRoomIDsUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var clearRoomCachesRoomIDsClosure: (([String]) async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    @concurrent func clearRoomCaches(roomIDs: [String]) async -> Result<Void, ClientProxyError> {
+        clearRoomCachesRoomIDsCallsCountLock.withLock { clearRoomCachesRoomIDsUnderlyingCallsCount += 1 }
+        clearRoomCachesRoomIDsReceivedRoomIDs = roomIDs
+        clearRoomCachesRoomIDsReceivedInvocationsLock.withLock { clearRoomCachesRoomIDsUnderlyingReceivedInvocations.append(roomIDs) }
+        if let clearRoomCachesRoomIDsClosure = clearRoomCachesRoomIDsClosure {
+            return await clearRoomCachesRoomIDsClosure(roomIDs)
+        } else {
+            return clearRoomCachesRoomIDsReturnValue
+        }
+    }
+    //MARK: - clearMediaCache
+
+    private let clearMediaCacheRoomIDsNotAccessedForCallsCountLock = NSLock()
+    private nonisolated(unsafe) var clearMediaCacheRoomIDsNotAccessedForUnderlyingCallsCount = 0
+    var clearMediaCacheRoomIDsNotAccessedForCallsCount: Int {
+        get { clearMediaCacheRoomIDsNotAccessedForCallsCountLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingCallsCount } }
+        set { clearMediaCacheRoomIDsNotAccessedForCallsCountLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingCallsCount = newValue } }
+    }
+    var clearMediaCacheRoomIDsNotAccessedForCalled: Bool {
+        return clearMediaCacheRoomIDsNotAccessedForCallsCount > 0
+    }
+    private let clearMediaCacheRoomIDsNotAccessedForReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var clearMediaCacheRoomIDsNotAccessedForUnderlyingReceivedArguments: (roomIDs: [String]?, notAccessedFor: TimeInterval?)?
+    var clearMediaCacheRoomIDsNotAccessedForReceivedArguments: (roomIDs: [String]?, notAccessedFor: TimeInterval?)? {
+        get { clearMediaCacheRoomIDsNotAccessedForReceivedArgumentsLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingReceivedArguments } }
+        set { clearMediaCacheRoomIDsNotAccessedForReceivedArgumentsLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingReceivedArguments = newValue } }
+    }
+    private let clearMediaCacheRoomIDsNotAccessedForReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var clearMediaCacheRoomIDsNotAccessedForUnderlyingReceivedInvocations: [(roomIDs: [String]?, notAccessedFor: TimeInterval?)] = []
+    var clearMediaCacheRoomIDsNotAccessedForReceivedInvocations: [(roomIDs: [String]?, notAccessedFor: TimeInterval?)] {
+        get { clearMediaCacheRoomIDsNotAccessedForReceivedInvocationsLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingReceivedInvocations } }
+        set { clearMediaCacheRoomIDsNotAccessedForReceivedInvocationsLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let clearMediaCacheRoomIDsNotAccessedForReturnValueLock = NSLock()
+    private nonisolated(unsafe) var clearMediaCacheRoomIDsNotAccessedForUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var clearMediaCacheRoomIDsNotAccessedForReturnValue: Result<Void, ClientProxyError>! {
+        get { clearMediaCacheRoomIDsNotAccessedForReturnValueLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingReturnValue } }
+        set { clearMediaCacheRoomIDsNotAccessedForReturnValueLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var clearMediaCacheRoomIDsNotAccessedForClosure: (([String]?, TimeInterval?) async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    @concurrent func clearMediaCache(roomIDs: [String]?, notAccessedFor: TimeInterval?) async -> Result<Void, ClientProxyError> {
+        clearMediaCacheRoomIDsNotAccessedForCallsCountLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingCallsCount += 1 }
+        clearMediaCacheRoomIDsNotAccessedForReceivedArguments = (roomIDs: roomIDs, notAccessedFor: notAccessedFor)
+        clearMediaCacheRoomIDsNotAccessedForReceivedInvocationsLock.withLock { clearMediaCacheRoomIDsNotAccessedForUnderlyingReceivedInvocations.append((roomIDs: roomIDs, notAccessedFor: notAccessedFor)) }
+        if let clearMediaCacheRoomIDsNotAccessedForClosure = clearMediaCacheRoomIDsNotAccessedForClosure {
+            return await clearMediaCacheRoomIDsNotAccessedForClosure(roomIDs, notAccessedFor)
+        } else {
+            return clearMediaCacheRoomIDsNotAccessedForReturnValue
+        }
+    }
     //MARK: - fetchMediaPreviewConfiguration
 
     private let fetchMediaPreviewConfigurationCallsCountLock = NSLock()

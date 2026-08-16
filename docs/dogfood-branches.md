@@ -2053,3 +2053,59 @@ fallback) + 1 timeline integration. Watch for: viewer opens on the
 tapped item at once (no "Ignoring update" single-item viewer), swipes
 both ways land fast on cached rooms, live-sent media appears at the end
 only once the viewer has paged to the newest end.
+
+## Round addendum 9 (2026-08-16, evening): Manage storage
+
+Advanced settings → Manage storage: a colour-coded horizontal bar chart of
+the caches (Cached message keys = crypto store megolm sessions, Cached
+room state = state store room data, Cached messages = event cache, Cached
+media = media store, Log files = the app's rageshake logs), each with its
+size in MB and a clear button; a "Clear all caches" row; and the rooms
+listed by total storage with multi-select checkboxes. Selecting rooms
+scopes the chart (its header reads All rooms / the room name / "N rooms",
+the log row hides since logs are session-wide) and the clear buttons,
+whose row reads "Clear caches for <room>" / "Clear caches for N rooms".
+Every clear goes through a confirmation sheet carrying the warnings
+(message keys: unreadable history without a backup; state/messages: the
+two are cleared together, and clearing them for all rooms restarts the
+app through the existing clear-cache flow) and three options:
+everything, older than 30 days, older than 90 days. "Older than" means:
+media not opened for that long (exact, by last access), log files older
+than that (by modification date), and, for the per-room caches, the
+caches of rooms with no activity for that long (the room's recency
+stamp; keys/members/events carry no per-row timestamps, and the linked
+chunk can't have holes, so room granularity is what's cheap).
+
+SDK [`88a7907a0`](https://github.com/matrix-org/matrix-rust-sdk/commit/88a7907a0):
+`StorageUsage { total_bytes, per_room }` (matrix-sdk-common); store trait
+methods with sqlite implementations (memory stores implement the
+clearing, other stores default to no usage / no-op): CryptoStore
+`room_keys_storage_usage` + `remove_inbound_group_sessions` (also drops
+the backup fully-downloaded markers so keys are refetched from backup),
+StateStore `storage_usage` + `remove_room_members` (member events,
+members, profiles, receipts, display names; room info + other state
+kept, and the room is marked members-missing persistently),
+EventCacheStore `storage_usage` + `room_media_uris` (mxc URIs of the
+room's media messages via the msgtype index, so media is attributable
+per room), MediaStore `storage_usage` + `remove_media_contents(uris,
+last_accessed_before)`, `EventCache::clear_room`; `Client::storage_usage()`
+/ `clear_room_keys` / `clear_room_caches` / `clear_media_cache`. Sizes
+are payload sums grouped by the hashed room/uri keys and mapped back
+through the known rooms (approximate vs on-disk; the developer options'
+store sizes stay the on-disk numbers). FFI
+[`ac895b612`](https://github.com/matrix-org/matrix-rust-sdk/commit/ac895b612)
++ [`f0070d5c0`](https://github.com/matrix-org/matrix-rust-sdk/commit/f0070d5c0):
+`storageUsage()` report (per-cache totals, per-room shares with display
+name + last activity, largest first), `clearRoomKeys`, `clearRoomCaches`,
+`clearMediaCache(roomIds, notAccessedFor)`. EXI (this commit): screen
++ ClientProxy wiring + unit tests. Tests: 4 sqlite store tests + 1
+client integration test (SDK), 4 view model tests (EXI). Caveats: a
+room's media share only counts contents referenced by its cached media
+messages (avatars, other rooms' unattributed media sit in the total
+only); clearing a room's messages also makes its media unattributable
+until re-cached; per-room state clearing keeps state events (power
+levels etc.) on purpose.
+
+Also this round: chat media swipe on the index (addendum 8), (i) icon
+swap now KVO-synchronous, neighbour preload joins in-flight loads and
+covers unknown sizes.

@@ -52,6 +52,11 @@ enum AdvancedSettingsScreenViewAction {
     case optimizeMediaUploadsChanged
     case updateTimelineMediaVisibility(TimelineMediaVisibility)
     case updateHideInviteAvatars(Bool)
+    case manageStorage
+}
+
+enum AdvancedSettingsScreenViewModelAction {
+    case manageStorage
 }
 
 protocol AdvancedSettingsProtocol: AnyObject {

@@ -359,6 +359,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ManageRoomMemberSheetView_Previews")
     }
 
+    func testManageStorageScreen() async throws {
+        try await performAccessibilityAudit(named: "ManageStorageScreen_Previews")
+    }
+
     func testMapLibreStaticMapView() async throws {
         try await performAccessibilityAudit(named: "MapLibreStaticMapView_Previews")
     }

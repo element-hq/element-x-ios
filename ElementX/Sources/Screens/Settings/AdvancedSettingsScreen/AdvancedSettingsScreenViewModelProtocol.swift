@@ -9,5 +9,6 @@
 import Combine
 
 protocol AdvancedSettingsScreenViewModelProtocol {
+    var actionsPublisher: AnyPublisher<AdvancedSettingsScreenViewModelAction, Never> { get }
     var context: AdvancedSettingsScreenViewModelType.Context { get }
 }

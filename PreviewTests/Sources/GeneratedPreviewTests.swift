@@ -628,6 +628,13 @@ extension PreviewTests {
     }
 
     @Test
+    func manageStorageScreen() async throws {
+        for (index, preview) in ManageStorageScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func mapLibreStaticMapView() async throws {
         for (index, preview) in MapLibreStaticMapView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

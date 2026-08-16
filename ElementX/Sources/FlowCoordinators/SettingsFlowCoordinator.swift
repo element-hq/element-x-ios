@@ -276,6 +276,30 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                               analytics: flowParameters.analytics,
                                                                               clientProxy: flowParameters.userSession.clientProxy,
                                                                               userIndicatorController: flowParameters.userIndicatorController))
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .manageStorage:
+                    self?.presentManageStorage()
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentManageStorage() {
+        let coordinator = ManageStorageScreenCoordinator(parameters: .init(clientProxy: flowParameters.userSession.clientProxy,
+                                                                           userIndicatorController: flowParameters.userIndicatorController))
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .clearCache:
+                    self?.actionsSubject.send(.clearCache)
+                }
+            }
+            .store(in: &cancellables)
+        
         navigationStackCoordinator.push(coordinator)
     }
     

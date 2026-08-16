@@ -21,6 +21,9 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var detailsHostingController: UIHostingController<TimelineMediaPreviewDetailsView>?
     
     private var barButtonTimer: Timer?
+    /// The navigation item whose left button is being watched, and the watch itself.
+    private var observedNavigationItem: UINavigationItem?
+    private var leftBarButtonObservation: NSKeyValueObservation?
     
     private var pageScrollViewObservation: AnyCancellable?
     /// The content offset that the page scroll view rests at when showing the current item.
@@ -178,6 +181,17 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private func updateBarButtons() {
         guard let topItem = navigationBar?.topItem else { return }
+        
+        // React to the controller re-installing its list button as it happens (KVO fires
+        // synchronously in the setter, before the frame renders) rather than on the timer's
+        // next tick, which left the list button visible for up to 100ms on every item refresh
+        // (a "pulse" of the (i) icon). The timer stays as a fallback.
+        if observedNavigationItem !== topItem {
+            observedNavigationItem = topItem
+            leftBarButtonObservation = topItem.observe(\.leftBarButtonItem) { [weak self] _, _ in
+                MainActor.assumeIsolated { self?.updateBarButtons() }
+            }
+        }
         
         if topItem.leftBarButtonItem?.customView == nil {
             let button = UIBarButtonItem(customView: detailsButtonHostingController.view)

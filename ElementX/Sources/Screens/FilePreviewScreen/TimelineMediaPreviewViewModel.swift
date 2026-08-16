@@ -154,7 +154,15 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             
             guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
             
-            switch await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) {
+            // Join a preload already in flight for this item rather than downloading it a second time.
+            let result = if let preload = preloads[mediaItem.id] {
+                await preload.value
+            } else {
+                await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename)
+            }
+            preloads[mediaItem.id] = nil
+            
+            switch result {
             case .success(let handle):
                 mediaItem.fileHandle = handle
                 state.previewControllerDriver.send(.itemLoaded(mediaItem.id))
@@ -168,15 +176,18 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    /// The largest neighbouring media fetched ahead of a swipe.
+    /// The largest neighbouring media fetched ahead of a swipe (media of unknown size are fetched).
     private static let preloadFileSizeLimit: UInt = 10 * 1024 * 1024
+    
+    /// The neighbour loads in flight, joined by the load on display if the user swipes before they finish.
+    private var preloads = [MediaPreviewItemID: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>]()
     
     /// Fetches the media on either side of the current one into the SDK's media cache, so that a
     /// swipe lands on a (cache-fast) load instead of a download. Small files only, and skipped when
     /// a content scanner is configured (a neighbour must be scanned as the current item is, on display).
     ///
-    /// Only the cache is warmed: the item's file handle is left for the regular load on display,
-    /// which is what tells QuickLook to refresh the page it may already have built for the item.
+    /// The item's file handle is left for the regular load on display, which is what tells QuickLook
+    /// to refresh the page it may already have built for the item.
     private func preloadNeighbours(of mediaItem: TimelineMediaPreviewItem.Media) {
         guard contentScannerService == nil else { return }
         
@@ -187,13 +198,16 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             let neighbour = items[neighbourIndex]
             guard neighbour.fileHandle == nil,
                   neighbour.downloadError == nil,
+                  preloads[neighbour.id] == nil,
                   let source = neighbour.mediaSource,
-                  neighbour.fileSize.map({ $0 <= Self.preloadFileSizeLimit }) ?? false else { continue }
+                  neighbour.fileSize.map({ $0 <= Self.preloadFileSizeLimit }) ?? true else { continue }
             
-            Task {
-                // The handle (a temp file) is dropped right away; the cached content is what matters.
-                // Failures aren't recorded either: the load on display retries and reports them.
-                _ = await mediaProvider.loadFileFromSource(source, filename: neighbour.filename)
+            let neighbourID = neighbour.id
+            preloads[neighbourID] = Task { [mediaProvider] in
+                // Failures aren't recorded here: the load on display retries and reports them.
+                let result = await mediaProvider.loadFileFromSource(source, filename: neighbour.filename)
+                preloads[neighbourID] = nil
+                return result
             }
         }
     }

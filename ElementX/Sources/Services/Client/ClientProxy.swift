@@ -918,6 +918,42 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func storageUsage() async -> Result<StorageUsage, ClientProxyError> {
+        do {
+            return try await .success(StorageUsage(rustReport: client.storageUsage()))
+        } catch {
+            MXLog.error("Failed measuring the storage usage with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func clearRoomKeys(roomIDs: [String]?) async -> Result<Void, ClientProxyError> {
+        do {
+            return try await .success(client.clearRoomKeys(roomIds: roomIDs))
+        } catch {
+            MXLog.error("Failed clearing room keys with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func clearRoomCaches(roomIDs: [String]) async -> Result<Void, ClientProxyError> {
+        do {
+            return try await .success(client.clearRoomCaches(roomIds: roomIDs))
+        } catch {
+            MXLog.error("Failed clearing room caches with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func clearMediaCache(roomIDs: [String]?, notAccessedFor: TimeInterval?) async -> Result<Void, ClientProxyError> {
+        do {
+            return try await .success(client.clearMediaCache(roomIds: roomIDs, notAccessedFor: notAccessedFor))
+        } catch {
+            MXLog.error("Failed clearing the media cache with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError> {
         do {
             let config = try await client.fetchMediaPreviewConfig()

@@ -45,6 +45,11 @@ struct AdvancedSettingsScreen: View {
             moderationAndSafetySection
             timelineMediaSection
             liveLocationSection
+            
+            Section {
+                ListRow(label: .default(title: UntranslatedL10n.screenAdvancedSettingsManageStorage, icon: \.settings),
+                        kind: .navigationLink { context.send(viewAction: .manageStorage) })
+            }
         }
         .compoundList()
         .navigationTitle(L10n.commonAdvancedSettings)
