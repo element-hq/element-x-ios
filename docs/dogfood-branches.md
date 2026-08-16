@@ -1967,3 +1967,61 @@ follow-up (hashed `msgtype` column next to the existing hashed
 `event_type` in the sqlite events table + a media-focused event-cache
 view ordered by chunk position/timestamp with gaps placed by
 neighbouring events).
+
+Round addendum 7 (Media & Files index + store hog). Media & Files was
+still slow with the room fully cached: the console showed the culprit
+was not the storage walk (5-25ms per chunk) but the store being hogged
+between chunks by the redecryptor's per-session encryption-info refresh
+(`get_room_events(room_id, session_id)`, one per received room key,
+~1.8s EACH in a big room, 15 back-to-back after launch; 24s once at
+17:11Z): the query had no covering index (`event_type_index` is
+(room_id, event_type, session_id)) and scanned every event of the room,
+serialising every other store access behind it (also the "`pos`
+persistence is still waiting for the event cache" 10s warnings). SDK
+[`daea5b0e2`](https://github.com/matrix-org/matrix-rust-sdk/commit/daea5b0e2)
+migration 018 adds `events(room_id, session_id)`.
+
+Then the actual index. Same migration adds a hashed `msgtype` column
+(room messages only; hashed "" for msgtype-less/redacted ones; NULL for
+legacy rows, backfilled lazily the first time a room is queried) with
+`events(room_id, msgtype)`, and store methods
+`find_events_by_message_types` (matches + positions, index-only) and
+`load_all_gaps`. SDK
+[`3b387ee02`](https://github.com/matrix-org/matrix-rust-sdk/commit/3b387ee02)
+`MessageTypesEventCache`: a projection of the room's PERSISTED linked
+chunk onto the wanted msgtypes, seeded from the index in one query
+(under the room's state read lock, after a lock-free warm-up query so
+the legacy backfill never stalls sync), ordered by a standalone
+`OrderTracker` over the full chunk metadata, kept up to date from the
+lossless linked-chunk-update fanout (sync, pagination, gap resolution,
+redecryption, redaction, clear); exposes newest-first in pages of 50;
+reports the room's gaps as `TimelineGap`s anchored to the next matching
+event, or unanchored (`following_event_id: None`, rendered at the newest
+end) when nothing matching follows; `resolve_gap` goes through the room
+event cache after loading the room's storage down to the gap (gaps
+resolve on the in-memory linked chunk only; store-only resolution is the
+upgrade path if that load ever hurts). SDK
+[`7544e8345`](https://github.com/matrix-org/matrix-rust-sdk/commit/7544e8345)
+`TimelineFocus::MessageTypes { msgtypes }` (+ FFI
+`.messageTypes(types:)`): storage-only implied, no local echoes, gaps as
+items, timeline start once fully exposed with no leading gap. EXI
+[`38de1429e`](https://github.com/element-hq/element-x-ios/commit/38de1429e):
+Media & Files build both grids on `TimelineFocus.messageTypes`; the media
+viewer's swipe timelines keep their live/event focus. Tests: store
+integration tests (all stores) + sqlite backfill test, 6 projection unit
+tests, 1 timeline integration test. Behaviour changes to watch: no
+sending-media thumbnail in the grid before the send completes (no local
+echoes); first open of each room after upgrade decodes that room's
+message rows once (backfill), instant afterwards; the chat behind the
+grid may briefly show its top spinner while a grid gap resolves (storage
+loads down to the gap).
+
+Also this round: room list to skeletons ~3s after a relaunch (17:51Z):
+AllRooms emptied on the first sync response of the fresh session and
+never recovered, siblings fine, and NEITHER of the 13 Aug death logs
+fired, so the chain was alive and the emptying was a legitimate diff.
+Diagnostics only for now: SDK
+[`f2d87693b`](https://github.com/matrix-org/matrix-rust-sdk/commit/f2d87693b)
+logs the size of every (re)built dynamic entries chain; EXI
+[`e806f1d55`](https://github.com/element-hq/element-x-ios/commit/e806f1d55)
+logs the diff kinds that empty a populated list.
