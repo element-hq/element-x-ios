@@ -81,7 +81,12 @@ class TimelineTableViewController: UIViewController {
     private var canApplySnapshot: Bool {
         if isLive {
             // Backward pagination jumps if items are inserted whilst actively dragging.
-            !isDraggingScrollView
+            // Trust UIKit's own tracking state rather than the delegate-paired
+            // isDraggingScrollView flag: a cancelled gesture (context menu,
+            // swipe-to-reply, a system gesture stealing the touch) fires
+            // willBeginDragging without a matching didEndDragging, which wedged
+            // the flag and froze the timeline behind pending items forever.
+            !tableView.isTracking && !tableView.isDragging
         } else {
             // Forward pagination breaks inertial scrolling when fixing the offset.
             !scrollViewIsScrolling
@@ -956,6 +961,15 @@ class TimelineTableViewController: UIViewController {
 
 extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Self-heal after a cancelled drag gesture: if items queued up while a
+        // phantom drag wedged the apply gate, flush them as soon as UIKit says
+        // no finger is down (paginateIfNeeded also waits on hasPendingItems, so
+        // a wedge here otherwise blocks pagination too).
+        if hasPendingItems, canApplySnapshot {
+            hasPendingItems = false
+            applySnapshot()
+        }
+
         paginatePublisher.send(())
         
         // Dispatch to fix runtime warning about making changes during a view update.
