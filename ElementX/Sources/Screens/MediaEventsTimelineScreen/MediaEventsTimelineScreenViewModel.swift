@@ -197,6 +197,10 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                 return state.screenMode == .files ? [itemViewState] : []
             case .separator:
                 return [itemViewState]
+            case .gap:
+                // Keep gaps visible in both modes: cached items around them show
+                // immediately, and the gap resolves itself when it appears.
+                return [itemViewState]
             case .gallery(let galleryItem):
                 let flattenedItems = galleryItem.itemsAsIndividualMessages(allowedTypes: timelineViewState.allowedGalleryItemTypes)
                 for (mediaIndex, item) in flattenedItems {

@@ -162,6 +162,14 @@ struct MediaEventsTimelineScreen: View {
             FileMediaEventsTimelineView(timelineItem: timelineItem)
         case .audio(let timelineItem) where screenMode == .files:
             AudioMediaEventsTimelineView(timelineItem: timelineItem)
+        case .gap(let timelineItem):
+            ProgressView()
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .scaleEffect(.init(width: 1, height: -1)) // Make sure it spins the right way around 🙃
+                .onAppear {
+                    context.viewState.activeTimelineContext.send(viewAction: .resolveGap(prevToken: timelineItem.prevToken))
+                }
         case .voice(let timelineItem) where screenMode == .files:
             let defaultPlayerState = AudioPlayerState(id: .timelineItemIdentifier(timelineItem.id), title: L10n.commonVoiceMessage, duration: 0)
             let playerState = context.viewState.activeTimelineContext.viewState.audioPlayerStateProvider?(timelineItem.id) ?? defaultPlayerState
