@@ -181,7 +181,11 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         if topItem.leftBarButtonItem?.customView == nil {
             let button = UIBarButtonItem(customView: detailsButtonHostingController.view)
-            navigationBar?.topItem?.leftBarButtonItem = button
+            // The controller re-installs its own button after every item refresh (e.g. once the
+            // file has loaded), so this swap happens repeatedly; don't animate it back in each time.
+            UIView.performWithoutAnimation {
+                navigationBar?.topItem?.leftBarButtonItem = button
+            }
         }
     }
     

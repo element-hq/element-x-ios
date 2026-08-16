@@ -148,6 +148,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         setCurrentItem(previewItem)
         
         if case let .media(mediaItem) = previewItem {
+            defer { preloadNeighbours(of: mediaItem) }
+            
             guard mediaItem.fileHandle == nil, let source = mediaItem.mediaSource else { return }
             
             guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
@@ -163,6 +165,36 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             }
         } else {
             paginateIfNeeded()
+        }
+    }
+    
+    /// The largest neighbouring media fetched ahead of a swipe.
+    private static let preloadFileSizeLimit: UInt = 10 * 1024 * 1024
+    
+    /// Fetches the media on either side of the current one into the SDK's media cache, so that a
+    /// swipe lands on a (cache-fast) load instead of a download. Small files only, and skipped when
+    /// a content scanner is configured (a neighbour must be scanned as the current item is, on display).
+    ///
+    /// Only the cache is warmed: the item's file handle is left for the regular load on display,
+    /// which is what tells QuickLook to refresh the page it may already have built for the item.
+    private func preloadNeighbours(of mediaItem: TimelineMediaPreviewItem.Media) {
+        guard contentScannerService == nil else { return }
+        
+        let items = state.dataSource.previewItems
+        guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
+        
+        for neighbourIndex in [index - 1, index + 1] where items.indices.contains(neighbourIndex) {
+            let neighbour = items[neighbourIndex]
+            guard neighbour.fileHandle == nil,
+                  neighbour.downloadError == nil,
+                  let source = neighbour.mediaSource,
+                  neighbour.fileSize.map({ $0 <= Self.preloadFileSizeLimit }) ?? false else { continue }
+            
+            Task {
+                // The handle (a temp file) is dropped right away; the cached content is what matters.
+                // Failures aren't recorded either: the load on display retries and reports them.
+                _ = await mediaProvider.loadFileFromSource(source, filename: neighbour.filename)
+            }
         }
     }
     
