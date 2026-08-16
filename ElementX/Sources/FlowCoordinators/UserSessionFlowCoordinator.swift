@@ -277,24 +277,46 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         let reachabilityNotificationID = "io.element.elementx.reachability.notification"
+        enum ReachabilityBanner { case offline, serverUnreachable, hidden }
         userSession.clientProxy.homeserverReachabilityPublisher.removeDuplicates()
             .combineLatest(flowParameters.appMediator.networkMonitor.reachabilityPublisher.removeDuplicates())
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] homeserverReachability, networkReachability in
+            .map { homeserverReachability, networkReachability -> ReachabilityBanner in
                 MXLog.info("Homeserver reachability: \(homeserverReachability)")
-                
-                guard let self else { return }
+
                 switch (networkReachability, homeserverReachability) {
                 case (.unreachable, _):
+                    return .offline
+                case (.reachable, .unreachable):
+                    return .serverUnreachable
+                // Don't alarm the user while we've intentionally suspended the client.
+                case (.reachable, .reachable), (.reachable, .suspended):
+                    return .hidden
+                }
+            }
+            .removeDuplicates()
+            // Transient blips (e.g. the sync session silently restarting) shouldn't
+            // flash the banner: bad states only surface once they've persisted for
+            // 2 seconds, while recovery retracts immediately - switchToLatest
+            // cancels a still-pending delayed banner when the state changes.
+            .map { banner in
+                banner == .hidden
+                    ? Just(banner).eraseToAnyPublisher()
+                    : Just(banner).delay(for: .seconds(2), scheduler: DispatchQueue.main).eraseToAnyPublisher()
+            }
+            .switchToLatest()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] banner in
+                guard let self else { return }
+                switch banner {
+                case .offline:
                     flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
                                                                                  title: L10n.commonOffline,
                                                                                  persistent: true))
-                case (.reachable, .unreachable):
+                case .serverUnreachable:
                     flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
                                                                                  title: L10n.commonServerUnreachable,
                                                                                  persistent: true))
-                // Don't alarm the user while we've intentionally suspended the client.
-                case (.reachable, .reachable), (.reachable, .suspended):
+                case .hidden:
                     flowParameters.userIndicatorController.retractIndicatorWithId(reachabilityNotificationID)
                 }
             }
