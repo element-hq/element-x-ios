@@ -469,7 +469,8 @@ class TimelineController: TimelineControllerProtocol {
     /// - Parameter clearExistingItems: Whether or not to clear any existing items before loading the timeline's contents.
     private func configureActiveTimelineItemProvider() {
         updateTimelineItemsCancellable = nil
-        
+        pendingTimelineUpdate = nil
+
         isSwitchingTimelines = true
         
         // Inform the world that the initial items are loading from the store
@@ -485,11 +486,35 @@ class TimelineController: TimelineControllerProtocol {
             return (activeTimelineProvider.itemProxies, activeTimelineProvider.paginationState)
         })
         
-        updateTimelineItemsCancellable = Task { [weak self] in
-            for await (items, paginationState) in timelineUpdates.values {
-                await self?.updateTimelineItems(itemProxies: items, paginationState: paginationState)
+        // Consume with unlimited demand and coalesce to the latest update: iterating
+        // `.values` requests one value at a time, `combineLatest` forwards that demand
+        // to the subjects, and a subject drops values sent while its demand is 0.
+        // A `paginating -> idle` pair arriving while a previous update was still being
+        // built then lost the `idle`, leaving an eternal pagination spinner and no
+        // further paginations if nothing else emitted afterwards (idle room, offline).
+        updateTimelineItemsCancellable = timelineUpdates
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] update in
+                self?.pendingTimelineUpdate = update
+                self?.processPendingTimelineUpdate()
             }
-        }.asCancellable()
+    }
+
+    private var pendingTimelineUpdate: ([TimelineItemProxy], TimelinePaginationState)?
+    private var isProcessingTimelineUpdate = false
+
+    private func processPendingTimelineUpdate() {
+        guard !isProcessingTimelineUpdate, let (items, paginationState) = pendingTimelineUpdate else {
+            return
+        }
+        pendingTimelineUpdate = nil
+        isProcessingTimelineUpdate = true
+
+        Task { [weak self] in
+            await self?.updateTimelineItems(itemProxies: items, paginationState: paginationState)
+            self?.isProcessingTimelineUpdate = false
+            self?.processPendingTimelineUpdate()
+        }
     }
     
     private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: TimelinePaginationState) async {
