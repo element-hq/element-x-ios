@@ -304,13 +304,24 @@ class TimelineMediaPreviewController: QLPreviewController {
         // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController
         // if it's called whilst swiping between items. So wait for the swipe to settle (the index
         // changes whilst the pages are still decelerating).
-        for _ in 0..<40 {
+        // Resting = not dragging or decelerating, and the offset unchanged for a few polls: the
+        // snap to a page after a flick is QuickLook's own animation, invisible to those flags.
+        var restingOffset: CGFloat?
+        var stillPolls = 0
+        for _ in 0..<60 {
             guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else {
                 // Swiped on before it could be refreshed: refresh it when it's next current.
                 itemsBuiltWithoutFile.insert(itemID)
                 return
             }
-            guard let scrollView = pageScrollView, scrollView.isDragging || scrollView.isDecelerating else {
+            if let scrollView = pageScrollView {
+                let isStill = !scrollView.isDragging && !scrollView.isDecelerating && scrollView.contentOffset.x == restingOffset
+                stillPolls = isStill ? stillPolls + 1 : 0
+                restingOffset = scrollView.contentOffset.x
+            } else {
+                stillPolls += 1
+            }
+            if stillPolls >= 4 {
                 refreshCurrentPreviewItem()
                 return
             }
