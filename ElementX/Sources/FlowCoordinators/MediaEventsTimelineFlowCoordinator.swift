@@ -58,7 +58,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
         
-        guard case let .success(mediaTimelineController) = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .messageTypes,
+        guard case let .success(mediaTimelineController) = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .messageTypes(),
                                                                                                                                                  allowedMessageTypes: [.image, .video, .gallery],
                                                                                                                                                  presentation: .mediaFilesScreen,
                                                                                                                                                  roomProxy: roomProxy,
@@ -68,7 +68,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        guard case let .success(filesTimelineController) = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .messageTypes,
+        guard case let .success(filesTimelineController) = await flowParameters.timelineControllerFactory.buildMessageFilteredTimelineController(focus: .messageTypes(),
                                                                                                                                                  allowedMessageTypes: [.file, .audio, .gallery],
                                                                                                                                                  presentation: .mediaFilesScreen,
                                                                                                                                                  roomProxy: roomProxy,

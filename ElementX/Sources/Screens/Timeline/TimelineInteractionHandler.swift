@@ -602,14 +602,21 @@ class TimelineInteractionHandler {
         var newTimelinePresentation: TimelineKind.MediaPresentation?
         switch timelineController.timelineKind {
         case .live:
-            newTimelineFocus = .live
+            // Swipe through the room's media from the event cache index rather than
+            // walking the whole history; a local echo isn't indexed yet, so it keeps
+            // the (filtered) live timeline.
+            if case let .event(_, eventOrTransactionID: .eventID(eventID)) = item.id {
+                newTimelineFocus = .messageTypes(aroundEventID: eventID)
+            } else {
+                newTimelineFocus = .live
+            }
             newTimelinePresentation = .roomScreenLive
         case .detached:
             guard case let .event(_, eventOrTransactionID: .eventID(eventID)) = item.id else {
                 MXLog.error("Unexpected event type on a detached timeline.")
                 return .none
             }
-            newTimelineFocus = .eventID(eventID)
+            newTimelineFocus = .messageTypes(aroundEventID: eventID)
             newTimelinePresentation = .roomScreenDetached
         case .pinned:
             newTimelineFocus = .pinned

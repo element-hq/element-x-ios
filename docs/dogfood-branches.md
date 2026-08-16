@@ -2025,3 +2025,31 @@ Diagnostics only for now: SDK
 logs the size of every (re)built dynamic entries chain; EXI
 [`e806f1d55`](https://github.com/element-hq/element-x-ios/commit/e806f1d55)
 logs the diff kinds that empty a populated list.
+
+## Round addendum 8 (2026-08-16, later): media viewer swipes on the index
+
+Tapping a media in the chat used to build a fresh msgtype-filtered live
+(or event-focused) timeline to swipe through: another walk of the room's
+history, the same slowness the grids had. The viewer now opens a
+`MessageTypes` timeline seeded *around the tapped event*. SDK
+[`843292aec`](https://github.com/matrix-org/matrix-rust-sdk/commit/843292aec):
+`MessageTypesEventCache` exposes a window (`exposed_from..exposed_to`)
+instead of a suffix; `new(around_event)` seeds half a page either side of
+the event (falls back to the newest page with a warning if the event
+isn't an indexed match); `paginate_forwards`/`hit_end` join
+`paginate_backwards`/`hit_start`; a window reaching the newest entry
+follows it (live appends show), one stopped mid-history holds appends
+back until paged to; `TimelineFocus::MessageTypes { around_event }`,
+`Timeline::paginate_forwards` supported for it, FFI `aroundEventId`. EXI
+(this commit): `TimelineFocus.messageTypes(aroundEventID:)`; the room
+screen's media taps (live and detached) build the swipe timeline with it
+when the item has an event ID (a local echo keeps the old live path,
+it isn't indexed yet); `.roomScreenLive` previews start with forward
+pagination `.idle` so newer media beyond the initial page can be paged
+to (one no-op forward call when there is none). Threads and pinned keep
+their focused timelines (the index isn't thread-scoped). Tests: 2 unit
+(window paging both ways + held-back vs followed appends; unknown-event
+fallback) + 1 timeline integration. Watch for: viewer opens on the
+tapped item at once (no "Ignoring update" single-item viewer), swipes
+both ways land fast on cached rooms, live-sent media appears at the end
+only once the viewer has paged to the newest end.

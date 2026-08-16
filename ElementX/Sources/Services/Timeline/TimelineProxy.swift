@@ -657,7 +657,8 @@ final class TimelineProxy: TimelineProxyProtocol {
             forwardPaginationStateSubject.send(.idle)
         case .media(let presentation):
             backPaginationStateSubject.send(presentation == .pinnedEventsScreen ? .endReached : .idle)
-            forwardPaginationStateSubject.send(presentation == .roomScreenDetached ? .idle : .endReached)
+            // Room screen previews open around the tapped media, so there may be newer media to page.
+            forwardPaginationStateSubject.send([.roomScreenLive, .roomScreenDetached].contains(presentation) ? .idle : .endReached)
         case .pinned:
             backPaginationStateSubject.send(.endReached)
             forwardPaginationStateSubject.send(.endReached)

@@ -242,7 +242,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, threadMode: .automatic(hideThreadedEvents: false))
             case .thread(let eventID): .thread(rootEventId: eventID)
             case .pinned: .pinnedEvents
-            case .messageTypes: .messageTypes(types: rustMessageTypes)
+            case .messageTypes(let aroundEventID): .messageTypes(types: rustMessageTypes, aroundEventId: aroundEventID)
             }
             
             let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: rustFocus,

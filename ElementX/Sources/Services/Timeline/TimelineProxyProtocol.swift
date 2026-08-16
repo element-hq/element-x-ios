@@ -40,7 +40,8 @@ enum TimelineFocus {
     case pinned
     /// Only the messages of the allowed types, served from the SDK's event cache index
     /// (instant for a cached room, no history walk), with the room's gaps as spinner items.
-    case messageTypes
+    /// Shows the newest page, or a page around the given event to paginate from both ways.
+    case messageTypes(aroundEventID: String? = nil)
 }
 
 enum TimelineAllowedMessageType {
