@@ -1779,3 +1779,12 @@ Round 2 addendum: off-screen gap resolution jumped the visible timeline
 insertions shift everything; also skewed paginateIfNeeded's thresholds).
 Fixed by pinning the newest visible item across unanimated gap-resolve
 applies, reusing snapshotLayout/restoreLayout (EXI, after 1d478a346).
+
+Round 2 addendum 2: scroll-back spasms at the top of the room
+(user recording, spasms at 10.5s/12.86s matching "Finished resolving
+timeline gap" log lines exactly): a resolution's inserted events make
+adjacent "N room changes" groups regroup under new identities, so the
+animated .fade apply cross-faded half the screen mid-scroll. Now a
+resolution only animates when the spinner is the sole visible casualty;
+churny applies go unanimated + pinned, and group items are no longer
+used as the layout anchor (identity unstable). EXI 25291a7be.
