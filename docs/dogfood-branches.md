@@ -2293,7 +2293,7 @@ Follow-ups (builds 31-34):
 
 ## Round 14: Manage storage, fourth pass
 
-Commits: SDK [`f8b8b7cfa`](https://github.com/matrix-org/matrix-rust-sdk/commit/f8b8b7cfa); EXI: see below (filled in after committing).
+Commits: SDK [`f8b8b7cfa`](https://github.com/matrix-org/matrix-rust-sdk/commit/f8b8b7cfa); EXI [`107753bb5`](https://github.com/element-hq/element-x-ios/commit/107753bb5).
 
 With the media share measured from the URI index in one query (round 11),
 the whole per-room walk finishes in well under a second, so the
