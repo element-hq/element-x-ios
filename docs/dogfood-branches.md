@@ -2616,3 +2616,9 @@ marks all tracked users dirty (five ~1MB `/keys/query` per launch,
 `bytes_down` 2-4MB, upstream behaviour); the room-list connection's
 first response is server-bound (0.9-8.3s on matrix.org this round),
 which is what `stale_exposure_ms` now measures on a busy account.
+
+Decision: [`da464bc52`](https://github.com/element-hq/element-x-ios/commit/da464bc52) reverted; the splash gate
+([`5ae04e03f`](https://github.com/element-hq/element-x-ios/commit/5ae04e03f)) and the >1s loading modal
+([`15e7a42e0`](https://github.com/element-hq/element-x-ios/commit/15e7a42e0)) are back: rooms at first paint,
+summary build on an idle main thread. Round-16's skeleton-deadlock fix
+([`73a0c75fc`](https://github.com/element-hq/element-x-ios/commit/73a0c75fc)) is unaffected.
