@@ -30,8 +30,6 @@ enum MediaPreviewItemID: Hashable {
 
 enum TimelineMediaPreviewDriverAction {
     case itemLoaded(MediaPreviewItemID)
-    /// A neighbour of the current item has its file ahead of a swipe.
-    case neighbourPreloaded(MediaPreviewItemID)
     case showItemDetails(TimelineMediaPreviewItem.Media)
     case exportFile(TimelineMediaPreviewFileExportPicker.File)
     case authorizationRequired(appMediator: AppMediatorProtocol)

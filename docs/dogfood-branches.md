@@ -2028,7 +2028,7 @@ logs the size of every (re)built dynamic entries chain; EXI
 [`e806f1d55`](https://github.com/element-hq/element-x-ios/commit/e806f1d55)
 logs the diff kinds that empty a populated list.
 
-### Media viewer swipes using the event cache index rather than walking the timeline
+### Round 8: Media viewer swipes using the message filter index rather than walking the timeline
 
 Tapping a media in the chat used to build a fresh msgtype-filtered live
 (or event-focused) timeline to swipe through: another walk of the room's
@@ -2056,7 +2056,7 @@ tapped item at once (no "Ignoring update" single-item viewer), swipes
 both ways land fast on cached rooms, live-sent media appears at the end
 only once the viewer has paged to the newest end.
 
-## Round addendum 9 (2026-08-16, evening): Manage storage
+### Round 9: Manage storage screen in Advanced Settings
 
 Advanced settings → Manage storage: a colour-coded horizontal bar chart of
 the caches (Cached message keys = crypto store megolm sessions, Cached
@@ -2112,7 +2112,7 @@ Also this round: chat media swipe on the index (addendum 8), (i) icon
 swap now KVO-synchronous, neighbour preload joins in-flight loads and
 covers unknown sizes.
 
-## Round addendum 10 (2026-08-17): Manage storage, second pass
+## Round 10: Manage storage, second pass
 
 Dogfood on build 18: totals didn't match Developer options (payload sums
 vs on-disk files), and the screen blocked for ages because attributing
@@ -2135,7 +2135,7 @@ from `storeSizes()`, progressive list, >5 MB filter. Note the crypto
 identities, olm sessions included), like Developer options; per-room
 shares stay the megolm-session payloads.
 
-## Round addendum 11 (2026-08-17): Manage storage, third pass + viewer preload
+## Round  11: Manage storage, third pass + viewer preload
 
 Build 21 dogfood: rooms appeared quickly but the media shares took ~30 s.
 Log: the media pass called `room_media_uris` per room (5728 rooms × 3
@@ -2174,7 +2174,7 @@ decodes every media message of the room): the two timelines are now
 built when Room Info opens (and again when returning to it), so the tap
 opens instantly; a tap before they're ready still waits.
 
-## Round addendum 12 (2026-08-17): media views seeded index-only
+## Round 12: media views seeded index-only
 
 The Media and files open cost was O(all media in the room): the
 message-type view decoded every matching event at seed (twice, plus the
@@ -2190,3 +2190,58 @@ big the room; the Room Info prewarm (addendum 11) stays as a bonus.
 Also on this build: the preloaded-neighbour refresh in the media viewer
 waits for the pages to rest (it was being dropped by the
 don't-refresh-while-scrolling guard, leaving preloaded items black).
+
+## Round addendum 13 (2026-08-17): media viewer swiping, the whole journey
+
+The goal: swiping between media in the QuickLook viewer should reveal
+the neighbouring media as it slides in, not a black page that pops in
+afterwards (or never). It took seven builds and a device log to get
+right, because two assumptions about QuickLook were wrong.
+
+1. **Preload the neighbours** (build 21). The viewer fetched the two
+   media either side of the current one into the media cache, but left
+   the item's file handle unset so that the load on display would set
+   it and refresh the page. Result: fast (cache) loads, but a black page
+   still slid in and popped.
+2. **Set the file handle at preload and rebuild the pages** (build 22)
+   with `QLPreviewController.reloadData()`. The media slid in, but
+   `reloadData` rebuilds the current page too: black flash on every
+   settle.
+3. **Refresh only pages built without a file** (build 23): preload ±2,
+   set the handle at preload, and remember the items whose preload
+   finished while their page already existed (assumed: the pages either
+   side of the current one, built as it settles) to refresh them on
+   arrival. Result: everything black. The refresh on arrival went
+   through the existing "don't refresh while scrolling" guard, and the
+   index changes while the pages are still decelerating, so it was
+   silently dropped (build 24 fix: poll until resting). Then a swipe
+   during the wait abandoned the refresh with nothing remembering it,
+   so the item was black for good (build 25: remember it). Then the
+   snap-to-page after a flick is QuickLook's own animation, invisible to
+   `isDragging`/`isDecelerating`, so the refresh could fire mid-snap
+   (build 26: require the page offset to be still for ~200 ms).
+4. **Logs, not theories** (build 27, `PreviewDebug`). The log showed
+   QuickLook building pages two either side, not one (build 28: mark
+   within ±2, preload ±3), and then, decisively, items arriving with
+   their file present, page built with the file present, black anyway.
+   QuickLook simply parks a page on its `_UIContentUnavailableScrollView`
+   placeholder when swiped through quickly, file or not, and nothing but
+   `refreshCurrentPreviewItem` clears it (pages far enough away are
+   dropped and rebuilt fine, which is why swiping back slowly "worked").
+5. **Detect the placeholder** (builds 29-30): on settling on an item
+   (offset still, not dragging/decelerating), and when its file arrives,
+   look for that placeholder view over the page centre and refresh only
+   then. Build 29 still flickered (the old "marked" path refreshed
+   good pages, and two checks could run for one item) and looped on
+   videos (refresh re-fires the index, the video page always looked
+   unavailable). Build 30: one refresh path, always gated on the
+   placeholder, one check per item at a time, at most one refresh per
+   arrival (a freshly loaded file bypasses that once). Verdict: pages
+   that QuickLook drops during a fast flick still land black for a
+   moment and then repair; everything else slides in clean.
+
+Also from this round: the Media and files timelines are seeded
+index-only in the SDK (addendum 12) and prebuilt when Room Info opens
+(addendum 11). The `PreviewDebug` logging is still in and should be
+stripped before upstreaming, as should the whole placeholder-detection
+approach be raised with the EX team as a QuickLook workaround.

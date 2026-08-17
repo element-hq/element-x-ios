@@ -150,6 +150,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         if case let .media(mediaItem) = previewItem {
             defer { preloadNeighbours(of: mediaItem) }
             
+            MXLog.info("PreviewDebug: current item \(mediaItem.id), file \(mediaItem.fileHandle == nil ? "missing" : "present"), preload \(preloads[mediaItem.id] == nil ? "none" : "in flight")")
             guard mediaItem.fileHandle == nil, let source = mediaItem.mediaSource else { return }
             
             guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
@@ -164,6 +165,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             
             switch result {
             case .success(let handle):
+                MXLog.info("PreviewDebug: loaded \(mediaItem.id)")
                 mediaItem.fileHandle = handle
                 state.previewControllerDriver.send(.itemLoaded(mediaItem.id))
             case .failure(let error):
@@ -182,21 +184,23 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// The neighbour loads in flight, joined by the load on display if the user swipes before they finish.
     private var preloads = [MediaPreviewItemID: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>]()
     
-    /// Fetches the two media on either side of the current one, so that a swipe reveals the media
-    /// itself rather than an empty page: QuickLook builds the pages next to the current one as it
-    /// settles on it, so the item after next needs its file by the time the next one is reached.
-    /// Small files only, and skipped when a content scanner is configured (a neighbour must be
-    /// scanned as the current item is, on display).
+    /// Fetches the media on either side of the current one (one further than the pages QuickLook
+    /// builds ahead), so that a swipe reveals the media itself rather than an empty page: QuickLook
+    /// builds the pages around the current one as it settles on it, so an item needs its file by
+    /// the time it comes within that reach. Small files only, and skipped when a content scanner is
+    /// configured (a neighbour must be scanned as the current item is, on display).
     ///
     /// The neighbour gets its file handle straight away; the controller refreshes any page that
-    /// QuickLook built before the file was there.
+    /// QuickLook shows as unavailable on arrival.
     private func preloadNeighbours(of mediaItem: TimelineMediaPreviewItem.Media) {
         guard contentScannerService == nil else { return }
         
         let items = state.dataSource.previewItems
         guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
         
-        for neighbourIndex in [index - 1, index + 1, index - 2, index + 2] where items.indices.contains(neighbourIndex) {
+        let reach = TimelineMediaPreviewController.builtPagesRadius + 1
+        let neighbourIndices = (1...reach).flatMap { [index - $0, index + $0] }.filter { items.indices.contains($0) }
+        for neighbourIndex in neighbourIndices {
             let neighbour = items[neighbourIndex]
             guard neighbour.fileHandle == nil,
                   neighbour.downloadError == nil,
@@ -210,8 +214,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 let result = await mediaProvider.loadFileFromSource(source, filename: neighbour.filename)
                 preloads[neighbourID] = nil
                 if case .success(let handle) = result, neighbour.fileHandle == nil {
+                    MXLog.info("PreviewDebug: preloaded \(neighbourID)")
                     neighbour.fileHandle = handle
-                    state.previewControllerDriver.send(.neighbourPreloaded(neighbourID))
                 }
                 return result
             }

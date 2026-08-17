@@ -88,10 +88,11 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         // Observation of currentPreviewItem doesn't work, so use the index instead.
         publisher(for: \.currentPreviewItemIndex)
-            .sink { [weak self] _ in
+            .sink { [weak self] index in
                 // This isn't removing duplicates which may try to download and/or write to disk concurrently????
+                MXLog.info("PreviewDebug: index changed to \(index), item \(String(describing: (self?.currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id)) url \(String(describing: (self?.currentPreviewItem as? TimelineMediaPreviewItem.Media)?.previewItemURL?.lastPathComponent))")
                 self?.loadCurrentItem()
-                self?.refreshCurrentItemIfBuiltWithoutFile()
+                self?.checkCurrentItemOnArrival()
             }
             .store(in: &cancellables)
         
@@ -106,8 +107,6 @@ class TimelineMediaPreviewController: QLPreviewController {
                 switch action {
                 case .itemLoaded(let itemID):
                     self?.handleFileLoaded(itemID: itemID)
-                case .neighbourPreloaded(let itemID):
-                    self?.handleNeighbourPreloaded(itemID: itemID)
                 case .showItemDetails(let mediaItem):
                     self?.presentMediaDetails(for: mediaItem)
                 case .exportFile(let file):
@@ -274,33 +273,57 @@ class TimelineMediaPreviewController: QLPreviewController {
         }
     }
     
-    /// The items whose file arrived after QuickLook had built their page (without it): the page
-    /// needs a refresh once it's the current one. Rebuilding all the pages instead would flash the
-    /// current one.
-    private var itemsBuiltWithoutFile = Set<MediaPreviewItemID>()
+    /// How far from the current item QuickLook builds pages ahead (observed: the two either side).
+    static let builtPagesRadius = 2
     
-    private func handleNeighbourPreloaded(itemID: MediaPreviewItemID) {
-        let dataSource = context.viewState.dataSource
-        for index in [currentPreviewItemIndex - 1, currentPreviewItemIndex + 1]
-            where index >= 0 && index < dataSource.numberOfPreviewItems(in: self) {
-            if (dataSource.previewController(self, previewItemAt: index) as? TimelineMediaPreviewItem.Media)?.id == itemID {
-                itemsBuiltWithoutFile.insert(itemID)
-            }
+    /// The refresh checks in flight, one per item at most.
+    private var refreshChecks = [MediaPreviewItemID: Task<Void, Never>]()
+    /// The item last arrived at (index changed to another item), and whether its arrival check
+    /// has already refreshed it: once per arrival, as a refresh re-fires the index and a page that
+    /// never satisfies the check (a video's, say) would otherwise be refreshed forever.
+    private var arrivalItemID: MediaPreviewItemID?
+    private var didRefreshOnArrival = false
+    
+    /// Once settled on an item, QuickLook may be showing its "content unavailable" placeholder
+    /// instead of the item (it does when swiped through quickly, whether or not the file was
+    /// there when it built the page), and only a refresh clears it: check, and refresh if so.
+    private func checkCurrentItemOnArrival() {
+        guard let itemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id else { return }
+        if itemID != arrivalItemID {
+            arrivalItemID = itemID
+            didRefreshOnArrival = false
+        }
+        refreshIfUnavailableWhenResting(itemID: itemID, force: false)
+    }
+    
+    /// The item's file has just arrived: QuickLook built its page without it, so refresh it.
+    private func handleFileLoaded(itemID: MediaPreviewItemID) {
+        refreshIfUnavailableWhenResting(itemID: itemID, force: true)
+    }
+    
+    /// Whether the page on display is QuickLook's "content unavailable" placeholder.
+    private var isCurrentPageUnavailable: Bool {
+        let center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
+        return view.firstDescendant { subview in
+            String(describing: type(of: subview)).contains("ContentUnavailable")
+                && !subview.isHidden && subview.alpha > 0 && subview.window != nil
+                && subview.convert(subview.bounds, to: view).contains(center)
+        } != nil
+    }
+    
+    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) {
+        guard refreshChecks[itemID] == nil else { return }
+        refreshChecks[itemID] = Task { [weak self] in
+            await self?.refreshIfUnavailableWhenResting(itemID: itemID, force: force)
+            self?.refreshChecks[itemID] = nil
         }
     }
     
-    private func refreshCurrentItemIfBuiltWithoutFile() {
-        guard let itemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id,
-              itemsBuiltWithoutFile.remove(itemID) != nil else { return }
-        handleFileLoaded(itemID: itemID)
-    }
-    
-    private func handleFileLoaded(itemID: MediaPreviewItemID) {
-        Task { await refreshWhenResting(itemID: itemID) }
-    }
-    
-    /// Refreshes the current item once it's `itemID` and the pages have stopped moving.
-    private func refreshWhenResting(itemID: MediaPreviewItemID) async {
+    /// Refreshes the current item once it's `itemID`, the pages have stopped moving, its file is
+    /// there and QuickLook is showing the placeholder instead of it. `force` bypasses the
+    /// once-per-arrival limit (for a file that has just arrived).
+    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) async {
+        MXLog.info("PreviewDebug: refresh check for \(itemID) (current index \(currentPreviewItemIndex), force: \(force))")
         // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController
         // if it's called whilst swiping between items. So wait for the swipe to settle (the index
         // changes whilst the pages are still decelerating).
@@ -309,9 +332,12 @@ class TimelineMediaPreviewController: QLPreviewController {
         var restingOffset: CGFloat?
         var stillPolls = 0
         for _ in 0..<60 {
-            guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else {
-                // Swiped on before it could be refreshed: refresh it when it's next current.
-                itemsBuiltWithoutFile.insert(itemID)
+            guard let item = currentPreviewItem as? TimelineMediaPreviewItem.Media, item.id == itemID else {
+                MXLog.info("PreviewDebug: refresh check of \(itemID) abandoned, current is now \(String(describing: (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id))")
+                return // Swiped on: its next arrival checks it again.
+            }
+            guard item.fileHandle != nil else {
+                MXLog.info("PreviewDebug: refresh check of \(itemID) dropped, no file yet (its load will refresh it)")
                 return
             }
             if let scrollView = pageScrollView {
@@ -322,12 +348,24 @@ class TimelineMediaPreviewController: QLPreviewController {
                 stillPolls += 1
             }
             if stillPolls >= 4 {
+                guard isCurrentPageUnavailable else {
+                    MXLog.info("PreviewDebug: \(itemID) at index \(currentPreviewItemIndex) is showing, no refresh")
+                    return
+                }
+                guard force || !didRefreshOnArrival else {
+                    MXLog.info("PreviewDebug: \(itemID) at index \(currentPreviewItemIndex) still unavailable after its arrival refresh; leaving it")
+                    return
+                }
+                MXLog.info("PreviewDebug: refreshing \(itemID) at index \(currentPreviewItemIndex), url \(String(describing: item.previewItemURL?.lastPathComponent))")
+                if itemID == arrivalItemID {
+                    didRefreshOnArrival = true
+                }
                 refreshCurrentPreviewItem()
                 return
             }
             try? await Task.sleep(for: .milliseconds(50))
         }
-        itemsBuiltWithoutFile.insert(itemID)
+        MXLog.info("PreviewDebug: refresh check of \(itemID) timed out waiting for rest")
     }
     
     // MARK: - Actions
@@ -541,6 +579,18 @@ private struct DownloadIndicatorView: View {
 // MARK: - Helpers
 
 private extension UIView {
+    func firstDescendant(where predicate: (UIView) -> Bool) -> UIView? {
+        for view in subviews {
+            if predicate(view) {
+                return view
+            }
+            if let match = view.firstDescendant(where: predicate) {
+                return match
+            }
+        }
+        return nil
+    }
+    
     func firstScrollView() -> UIScrollView? {
         for view in subviews {
             if let scrollView = view as? UIScrollView ?? view.firstScrollView() {
