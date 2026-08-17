@@ -2327,3 +2327,42 @@ re-sort under the user's finger. Changes:
 - Listing threshold lowered from 5 MB to 1 MB.
 - The room count is elided from the header until the rooms have loaded
   (no "0 rooms" flash).
+
+## Round 15: Gappy timelines, false "beginning of the room"
+
+Commits: SDK [`11abfd1d7`](https://github.com/matrix-org/matrix-rust-sdk/commit/11abfd1d7).
+
+Muninn Hall Main showed "This is the beginning of Muninn Hall Main"
+above a message from 25 July, nowhere near the room's start
+(console.2026-08-16-21.log). The room had three limited-sync gaps a
+handful of events apart (prev-batch tokens `t4297`, `t4301`, `t4306`),
+all in memory thanks to storage-only pagination, and all being resolved
+concurrently as they scrolled into view (three interleaved `/messages`
+walks in the log). Two walks over overlapping history break the event
+cache's duplicate handling, which assumes a single walk: when a
+resolution returns events we already have, the existing copies are
+moved to the resolved gap's position. That's right when the copies sit
+right before the gap (the classic limited-sync case), and wrong when
+they sit *after* it, fetched through a newer gap whose walk already
+went past: they get dragged backwards in front of that walk's frontier
+gap, the timeline is misordered, and once the leading gap is dropped as
+"all duplicates" nothing leads the frontier gap any more, so the timeline
+start gets inserted.
+
+Fix (SDK `conclude_backwards_pagination_from_network`): if any duplicate
+of a gap's `/messages` response lives after the gap in the linked chunk,
+the gap has been overtaken; drop it, move and insert nothing. Older
+history keeps coming through the newer gap's own trailing gap, which
+stays leading, so no start item. Regression test
+`test_resolve_gap_drops_gap_overtaken_by_a_newer_gap` (fails on the old
+code with the frontier gap ending up behind moved events).
+
+Also checked while here (the "stuck with a spinner at the top" question):
+storage-only back-pagination never blocks on `/messages`. The storage
+walk (`paginate_backwards_impl`) skips over gap chunks and keeps loading
+older cached chunks; it stops (`hit_timeline_start`) only once the
+store is exhausted. Mid-timeline gaps are inline spinners resolved on
+visibility while scrolling continues past them. The only time the top of
+the timeline waits on the network is a *leading* gap with nothing cached
+behind it (plus the empty-room bootstrap), which is the intended
+"nothing left in the cache" case.
