@@ -2366,3 +2366,45 @@ visibility while scrolling continues past them. The only time the top of
 the timeline waits on the network is a *leading* gap with nothing cached
 behind it (plus the empty-room bootstrap), which is the intended
 "nothing left in the cache" case.
+
+## Round 16: Skeletons-forever root cause, launch loading overlay
+
+Commits: EXI [`73a0c75fc`](https://github.com/element-hq/element-x-ios/commit/73a0c75fc), launch overlay commit below.
+
+The "stuck on skeletons" home list recurred (console.2026-08-17-11.log,
+10:02:59Z, ~5s into a launch) and this time the round-14 diagnostics
+caught it: `Dynamic room list entries chain (re)built num_rooms=0`
+followed by `AllRooms: Room list emptied by diffs: ["reset(0)"]`, with
+neither stream-death log firing. So the chain was rebuilt by a filter
+change, and the new filter matched nothing: focusing the search field
+applies `.excludeAll` (the SDK's match-nothing filter; the list is
+hidden behind the search UI by design). The trap is what happens next:
+
+1. A loading-state update lands while the list is empty (here the room
+   count coming back after a session-expiry restart, 0.5s later) and
+   the branch's "hold skeletons until rooms exist" clause in
+   `HomeScreenViewModel.updateRoomListMode` (not upstream) flips the
+   mode to `.skeletons`.
+2. `HomeScreenContent` mounts `.roomListSearchable` only in the
+   `.rooms` case, so the skeleton view removes the search field from
+   the hierarchy; `isSearchFieldFocused` never gets its unfocus,
+   `updateFilter` never runs again, the filter stays `.excludeAll`, the
+   list stays empty, the placeholders stay up, and there is no search
+   bar left to cancel. Deadlock; that's why the log shows no second
+   chain rebuild.
+
+Fix `73a0c75fc`: an empty list under an active search, filter chip or
+space filter is a real answer, not a not-yet-loaded one; it goes to
+`.rooms` (empty-filter state / hidden-behind-search), which keeps the
+searchable modifier mounted, so cancelling the search re-applies `.all`
+and the rooms come back. `RoomSummaryProvider.setFilter` now logs
+`"<name>: Applying filter ..."` so a future emptying names its trigger.
+Yesterday's occurrence (emptied at the first sync response after a
+restart, no death logs) fits the same shape.
+
+Launch overlay: a store migration (or a slow first room list) leaves the
+static splash up for seconds, which reads as a hang and invites a
+force-quit mid-migration. `AppCoordinator.restoreUserSession` now shows
+the standard "Loading..." modal once the restore has taken more than 1s
+(cancelled and retracted when it completes), so the app visibly still
+lives.

@@ -699,6 +699,20 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 await userSessionStore.restoreUserSession()
             }
             eagerRestoreTask = nil
+            
+            // A store migration (or a slow first room list) keeps the static splash up for
+            // seconds, which reads as a hang; show the loading modal so nobody force-quits
+            // the app mid-migration. Only past a delay: the common launch shouldn't flash it.
+            let slowRestoreIndicator = Task { [weak self] in
+                try? await Task.sleep(for: .seconds(1))
+                guard !Task.isCancelled else { return }
+                self?.showLoadingIndicator()
+            }
+            defer {
+                slowRestoreIndicator.cancel()
+                hideLoadingIndicator()
+            }
+            
             switch await restoreTask.value {
             case .success(let userSession):
                 await self.performUserSessionMigrations(userSession)
