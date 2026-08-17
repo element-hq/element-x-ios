@@ -2466,3 +2466,45 @@ minute in busy rooms (68MB of log in an hour). Trimmed in SDK
 `3af5613ce`: the duplicates field already names the events; the items
 dump is gone. Whether the duplicates themselves are a preview-prefill
 artefact (gaps, prefilled receipts) is still open.
+
+## Round 18: pushed message takes ~40s to show after opening the app
+
+Report: a push arrived (with the message), the app was opened without
+tapping it, and the message only appeared in the room tens of seconds
+later. Logs `console.2026-08-16-16.log` + `nse.2026-08-16-16.log`, room
+`!KzalCNJxkqtytlbQvX:matrix.org`, event at 15:40:54Z.
+
+What happened, in order:
+
+- 15:40:45 app foregrounded, no network for 5s; 15:40:50 sync starts.
+  First request 401s (the NSE had rotated the OAuth token; the app
+  refreshes and retries at 15:40:52.8: 2.3s lost).
+- Catch-up sliding sync responses from matrix.org: 11s (26 rooms), then
+  15.6s (75 rooms), then 7s (28 rooms). Client-side processing 1-1.6s
+  each. Pure server latency for a 6155-room account after a background
+  spell; nothing new, this is the cost the paginated-sync experiment
+  targets.
+- 15:40:54 push. NSE's sliding sync attempt (single room subscription,
+  4s budget) *timed out* client-side; fell back to `/context`, which
+  answered in 1s; notification delivered at 15:41:00.
+- 15:41:20 room opened from the list, timeline built from the cache
+  (older tail). The room wasn't in the list ranges of the in-flight
+  catch-up, so it only rode on the third request as a room subscription:
+  response 15:41:29, event in the timeline 15:41:31, i.e. 11s after
+  opening the room and 37s after the push. Typing had started at
+  15:41:23, so the reply was composed against a stale timeline.
+
+The gap that's ours: the NSE only prefills the shared event cache on the
+sliding sync path (`ingest_into_shared_event_cache`); the `/context`
+fallback, which is what a slow server makes the common path, persisted
+nothing. SDK `d00a5b4d6`: persist the `/context` event as a limited
+batch at the room's tail behind the `/context` prev-batch token, unless
+the store already knows it or already holds something newer for the room
+(delayed pushes for old events must not land at the tail). Test covers
+both. Effect: opening the room shows the pushed message from the cache
+immediately; the app's own sync deduplicates it when it finally arrives.
+
+Not addressed: the server-side catch-up latency itself, and the fact
+that opening a room mid-catch-up can't jump the queue (the subscription
+rides on the next request; the SDK's skip-over-iteration only helps
+while a request is in flight and the answer here was already landing).
