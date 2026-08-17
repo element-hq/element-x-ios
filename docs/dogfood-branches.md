@@ -2508,3 +2508,16 @@ Not addressed: the server-side catch-up latency itself, and the fact
 that opening a room mid-catch-up can't jump the queue (the subscription
 rides on the next request; the SDK's skip-over-iteration only helps
 while a request is in flight and the answer here was already landing).
+
+## Round 19: reply preview attributes a redacted message to the redactor
+
+Report: reply to an event, have someone else redact that event, and the
+reply's preview shows the redacted message as sent by the redactor. SDK
+`9e85204c8`: `handle_redaction` built the "redacted" placeholder pushed
+into the replies from the redaction's own context (sender, profile,
+timestamp). It now takes them from the redacted event's timeline item,
+or from a reply's already-loaded details, and otherwise leaves the
+replies alone (their details are fetched from the redacted event, which
+carries the right sender). The upstream unit test redacted as the author
+and so couldn't see it; it now redacts as someone else and asserts the
+sender and timestamp. Upstream bug, straight port.
