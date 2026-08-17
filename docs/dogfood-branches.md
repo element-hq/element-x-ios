@@ -2413,7 +2413,17 @@ until the first summaries land. Caveat: a store migration runs inside
 the client build, before any session UI exists, so during that phase
 the splash is still all there is.
 
-Manage storage bar colours: the decorative pastels are replaced with
-Compound core palette tokens, `blue-800` (message keys), `green-700`
-(room state), `yellow-500` (messages), `purple-800` (media),
-`fuchsia-800` (logs).
+Manage storage bar colours (`579a0078b`): the decorative pastels are
+replaced with Compound core palette tokens, `blue-800` (message keys),
+`green-800` (room state), `pink-800` (messages), `purple-800` (media),
+`fuchsia-800` (logs). Gotcha: the core scale *inverts* in dark mode
+(`yellow-500` is #FBCE00 in light and #5C2400, a dark brown, in dark;
+`green-700` goes dull), so the bars resolve each token at its light-mode
+value in both themes; a chart palette shouldn't flip with the theme.
+
+Also confirmed: `b8f5db3bf` (snap, don't animate, the sender header away
+when an older same-sender message is inserted above) covers inline gap
+resolves too, since it sits in `TimelineViewModel.updateViewState`, the
+one regroup path every applied diff goes through. Residual: the item
+*above* a resolved gap can still animate its corner radii
+(`.last` -> `.middle`), no header or layout shift involved.
