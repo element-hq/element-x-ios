@@ -2454,10 +2454,11 @@ for resolutions (kept after paginations, which only ever add gaps); the
 regression test now asserts the gap removal and the event insertion
 arrive in the same batch.
 
-Not a bug, for the record: the "Tuesday" floating date badge over Monday
-content in the same clip is the badge lagging behind the newly inserted
-rows (it updates on scroll); and the first 0.3s of the clip is the
-overscroll rubber-band settling, not an animation.
+Not a bug, for the record: the floating date badge in the same clip
+tracks the timestamp of the topmost visible row (the "Monday 10 August"
+divider belongs to older content that landed above the viewport), and
+the first 0.3s of the clip is the overscroll rubber-band settling, not
+an animation.
 
 Side note from the same log: `duplicate read receipts in this timeline`
 ERRORs dump the whole item list, 400-700KB per line, dozens of times a
