@@ -153,6 +153,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             return
         }
         appliedFilter = filter
+        // Every filter change rebuilds the SDK's dynamic entries chain (a fresh reset): name
+        // it, so a list that empties can be tied to what asked for it.
+        MXLog.info("\(name): Applying filter \(Self.filterDescription(filter))")
 
         let baseFilter: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
                                                                              .all(filters: [.space, .invite])]),
@@ -288,6 +291,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         // Launch instrumentation: track when the top of the home list stops changing.
         if shouldUpdateVisibleRange, Self.visibleSignature(of: rooms) != visibleBefore {
             LaunchMetrics.noteVisibleChurn()
+        }
+    }
+
+    private static func filterDescription(_ filter: RoomSummaryProviderFilter) -> String {
+        switch filter {
+        case .excludeAll: "excludeAll"
+        case .search(let query): "search(\(query.count) chars)"
+        case .rooms(let roomIDs, let filters): "rooms(\(roomIDs.count) ids, \(filters))"
+        case .all(let filters): "all(\(filters))"
         }
     }
 

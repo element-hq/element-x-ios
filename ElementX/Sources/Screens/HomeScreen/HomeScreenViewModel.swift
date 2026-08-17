@@ -334,13 +334,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         // expiry resets the list's count to nil mid-recovery, and blanking a full room
         // list into the empty state over that would be a lie (the rooms are still there).
         let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0 && !hasPublishedRooms
+        // An empty list under an active filter (chips, space, search) is a real answer, not
+        // a not-yet-loaded one: holding the skeletons there shows placeholders forever
+        // instead of the empty-filter state (dogfood 2026-08-17, "stuck on skeletons").
+        let isFiltering = state.bindings.filtersState.isFiltering || state.selectedSpaceFilter != nil || state.bindings.isSearchFieldFocused
 
         var roomListMode = state.roomListMode
         if isLoadingData {
             roomListMode = .skeletons
         } else if hasNoRooms {
             roomListMode = .empty
-        } else if hasPublishedRooms {
+        } else if hasPublishedRooms || isFiltering {
             roomListMode = .rooms
         } else {
             roomListMode = .skeletons
