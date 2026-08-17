@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Odbij";
 "notification_invite_body" = "Pozvao/la te na razgovor";
 "notification_invite_body_with_sender" = "%1$@ pozvao/la te na razgovor";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Počeli su dijeliti svoju lokaciju uživo";
 "notification_mentioned_you_body" = "Korisnik vas je spomenuo: %1$@";
 "notification_new_messages" = "Nove poruke";
@@ -1363,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Vraćanje zadanog načina rada nije uspjelo, pokušajte ponovno.";
 "screen_room_notification_settings_error_setting_mode" = "Postavljanje načina rada nije uspjelo, pokušajte ponovno.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Vaš matični poslužitelj ne podržava ovu mogućnost u šifriranim sobama; nećete dobiti obavijest u ovoj sobi.";
-"screen_room_notification_settings_mode_all_messages" = "Sve poruke";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Samo spominjanja i ključne riječi";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "U ovoj sobi obavijesti me za";
 "screen_room_pinned_banner_indicator" = "%1$@ od %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Prikvačene poruke";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Pogreška: %1$@ .";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Pogreška, nije moguće testirati push obavijesti.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Pogreška, isteklo je vrijeme čekanja na push obavijest.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Povratna push obavijest trajala je %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testiraj povratnu push obavijest";
 "troubleshoot_notifications_test_unified_push_description" = "Provjerite jesu li UnifiedPush distributeri dostupni.";

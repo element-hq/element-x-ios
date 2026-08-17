@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Weiger";
 "notification_invite_body" = "Nodigde je uit om te chatten";
 "notification_invite_body_with_sender" = "%1$@ nodigde je uit om te chatten";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Heeft je genoemd: %1$@";
 "notification_new_messages" = "Nieuwe berichten";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Het instellen van de meldingen is mislukt. Probeer het opnieuw.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Je homeserver ondersteunt deze optie niet in versleutelde kamers; in deze kamer krijg je geen meldingen.";
 "screen_room_notification_settings_mode_all_messages" = "Alle berichten";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Alleen vermeldingen en trefwoorden";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "In deze kamer, stuur me een melding voor";
 "screen_room_pinned_banner_indicator" = "%1$@ van %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Vastgezette berichten";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Fout: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Fout, kan push niet testen.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Fout, time-out tijdens het wachten op push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push terugkoppeling duurde %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Test Push terugkoppeling";
 "troubleshoot_notifications_test_unified_push_description" = "Ervoor zorgen dat UnifiedPush verdelers beschikbaar zijn.";

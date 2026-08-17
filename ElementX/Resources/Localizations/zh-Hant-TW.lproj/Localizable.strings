@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "拒絕";
 "notification_invite_body" = "邀請您聊天";
 "notification_invite_body_with_sender" = "%1$@ 邀請您加入聊天";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "已開始分享他們的即時位置";
 "notification_mentioned_you_body" = "提及您：%1$@";
 "notification_new_messages" = "新訊息";
@@ -1365,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "您的家伺服器在加密聊天室中不支援此選項，您將不會收到此聊天室的通知。";
 "screen_room_notification_settings_mode_all_messages" = "所有訊息";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "僅限提及與關鍵字";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "在此聊天適中，通知我";
 "screen_room_pinned_banner_indicator" = "第 %1$@ 個，共 %2$@ 個";
 "screen_room_pinned_banner_indicator_description" = "%1$@ 個釘選訊息";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "錯誤：%1$@。";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "錯誤，無法測試推播。";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "錯誤，等待推播逾時。";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "推播返回需要 %1$d 毫秒。";
 "troubleshoot_notifications_test_push_loop_back_title" = "測試推播返回";
 "troubleshoot_notifications_test_unified_push_description" = "確保 UnifiedPush 散佈者可用。";

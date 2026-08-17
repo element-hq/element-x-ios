@@ -27,9 +27,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
+			<string>Galleria, %1$d media lisää</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Galleria, %1$d mediaa lisää</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -267,9 +267,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
+			<string>Jakoi %1$d liitteen</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>Jakoi %1$d liitettä</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -347,9 +347,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
+			<string>%1$d poistettu viesti</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d poistettua viestiä</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

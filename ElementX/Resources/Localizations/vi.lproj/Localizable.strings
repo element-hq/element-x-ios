@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Từ chối";
 "notification_invite_body" = "Đã mời bạn trò chuyện";
 "notification_invite_body_with_sender" = "%1$@ đã mời bạn trò chuyện";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Đã nhắc đến bạn: %1$@";
 "notification_new_messages" = "Tin nhắn mới";
@@ -1363,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Không thể khôi phục chế độ mặc định, vui lòng thử lại.";
 "screen_room_notification_settings_error_setting_mode" = "Không thể thiết lập chế độ, hãy thử lại nhé.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Máy chủ không hỗ trợ tùy chọn này trong phòng mã hóa, bạn sẽ không nhận thông báo ở đây.";
-"screen_room_notification_settings_mode_all_messages" = "Tất cả tin nhắn.";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Chỉ đề cập và từ khóa";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Trong phòng này, thông báo cho tôi khi";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Tin nhắn được ghim";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Error: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Error, cannot test push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Error, timeout waiting for push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back took %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Test Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Ensure that UnifiedPush distributors are available.";

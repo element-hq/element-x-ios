@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Elutasítás";
 "notification_invite_body" = "Meghívta, hogy csevegjen";
 "notification_invite_body_with_sender" = "%1$@ meghívta egy csevegésre";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Elkezdték megosztani az élő helyzetüket";
 "notification_mentioned_you_body" = "Megemlítette Önt: %1$@";
 "notification_new_messages" = "Új üzenetek";
@@ -1365,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, egyes szobákban nem fog értesítéseket kapni.";
 "screen_room_notification_settings_mode_all_messages" = "Összes üzenet";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Csak említések és kulcsszavak";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Ebben a szobában, értesítés ezekről:";
 "screen_room_pinned_banner_indicator" = "%1$@. / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ kitűzött üzenet";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Hiba: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Hiba, nem lehet tesztelni a leküldéses értesítést.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Hiba, időtúllépés a leküldéses értesítésre való várakozás során.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "A leküldéses értesítés folyamata %1$d ezredmásodpercig tartott.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Leküldéses értesítés folyamatának tesztelése";
 "troubleshoot_notifications_test_unified_push_description" = "Győződjön meg arról, hogy a UnifiedPush forgalmazói elérhetők.";

@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Απόρριψη";
 "notification_invite_body" = "Σε προσκάλεσε να συνομιλήσετε";
 "notification_invite_body_with_sender" = "Ο χρήστης %1$@ σε προσκάλεσε σε συνομιλία";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Σέ ανέφερε: %1$@";
 "notification_new_messages" = "Νέα Μηνύματα";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Αποτυχία ρύθμισης της λειτουργίας, δοκίμασε ξανά.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ο αρχικός διακομιστής σας δεν υποστηρίζει αυτή την επιλογή σε κρυπτογραφημένες αίθουσες, δεν θα λάβετε ειδοποιήσεις σε αυτή την αίθουσα.";
 "screen_room_notification_settings_mode_all_messages" = "Όλα τα μηνύματα";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Μόνο αναφορές και λέξεις-κλειδιά";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Σε αυτήν την αίθουσα, ειδοποιήστε με για";
 "screen_room_pinned_banner_indicator" = "%1$@ από %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Καρφιτσωμένα μηνύματα";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Σφάλμα: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Σφάλμα, δεν είναι δυνατή η δοκιμή push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Σφάλμα, λήξη χρονικού ορίου αναμένοντας για push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Το push loop back χρειάστηκε %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Δοκιμή push loopback";
 "troubleshoot_notifications_test_unified_push_description" = "Βεβαιώσου ότι οι διανομείς UnifiedPush είναι διαθέσιμοι.";

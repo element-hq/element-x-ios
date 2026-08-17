@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Ablehnen";
 "notification_invite_body" = "Du wurdest zu einem Chat eingeladen";
 "notification_invite_body_with_sender" = "%1$@ hat dich zum Chatten eingeladen";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Hat Dich erwähnt: %1$@";
 "notification_new_messages" = "Neue Nachrichten";
@@ -1365,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Dein Homeserver unterstützt diese Option in verschlüsselten Chats nicht. Du erhältst in diesem Chat keine Benachrichtigungen.";
 "screen_room_notification_settings_mode_all_messages" = "Alle Nachrichten";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Nur Erwähnungen und Schlüsselwörter";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Benachrichtige mich bei";
 "screen_room_pinned_banner_indicator" = "%1$@ von %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ fixierte Nachrichten";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Fehler:%1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Fehler: Push kann nicht getestet werden.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Fehler: Timeout beim Warten auf Push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push-Loop-Back Dauer: %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Teste Push-Loop-Back";
 "troubleshoot_notifications_test_unified_push_description" = "Stelle sicher, dass UnifiedPush-Verteiler verfügbar sind.";

@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "მოგიწვიათ ჩატში";
 "notification_invite_body_with_sender" = "%1$@ invited you to chat";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "მოგახსენათ: %1$@";
 "notification_new_messages" = "ახალი შეტყობინებები";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "რეჟიმის დაყენება ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "თქვენი სახლის სერვერი არ უჭერს მხარს ამ პარამეტრს დაშიფრულ ოთახებში, თქვენ არ მიიღებთ შეტყობინებას ამ ოთახში.";
 "screen_room_notification_settings_mode_all_messages" = "ყველა შეტყობინება";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "მხოლოდ ხსენებები და საკვანძო სიტყვები";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "ამ ოთახში, შემატყობინეთ:";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "შეცდომა: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "შეცდომა, push-ის ტესტირება შეუძლებელია.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "შეცდომა, push-ისთვის ლოდინის დრო გავიდა.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push-შეტყობინების ციკლმა დაიკავა %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "push-შეტყობინების ციკლის ტესტირება";
 "troubleshoot_notifications_test_unified_push_description" = "დარწმუნდით რომ UnifiedPush დისტრიბუტორები ხელმისაწვდომია.";

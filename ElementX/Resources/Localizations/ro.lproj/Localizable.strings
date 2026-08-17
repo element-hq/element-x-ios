@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Respingeți";
 "notification_invite_body" = "V-a invitat la o discuție";
 "notification_invite_body_with_sender" = "%1$@ v-a invitat să discutați";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "A început să își partajeze locația live";
 "notification_mentioned_you_body" = "%1$@ v-a menționat";
 "notification_new_messages" = "Mesaje noi";
@@ -1365,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, nu veți primi notificări în această cameră.";
 "screen_room_notification_settings_mode_all_messages" = "Toate mesajele";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Numai mențiuni și cuvinte cheie";
+"screen_room_notification_settings_mode_mute" = "Mut";
 "screen_room_notification_settings_room_custom_settings_title" = "În această cameră, anunțați-mă pentru";
 "screen_room_pinned_banner_indicator" = "%1$@ din %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Mesaje fixate";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Eroare: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Eroare, nu se poate testa push-ul.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Eroare, timeout în așteptare pentru push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push-ul înapoi a durat %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testați că push-ul se întoarce";
 "troubleshoot_notifications_test_unified_push_description" = "Asigurați-vă că distribuitorii UnifiedPush sunt disponibili.";

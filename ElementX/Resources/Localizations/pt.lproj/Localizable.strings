@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Rejeitar";
 "notification_invite_body" = "Convidou-te para conversar";
 "notification_invite_body_with_sender" = "%1$@ convidou-te para conversar";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mencionou-te: %1$@";
 "notification_new_messages" = "Mensagens novas";
@@ -1363,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Falha ao restaurar o modo predefinido, tenta novamente.";
 "screen_room_notification_settings_error_setting_mode" = "Falha ao definir o modo, tenta novamente.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "O teu servidor não suporta esta opção em salas cifradas, pelo que não serás notificado nesta sala.";
-"screen_room_notification_settings_mode_all_messages" = "Qualquer mensagem";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Menções ou palavras-chave";
+"screen_room_notification_settings_mode_all_messages" = "Todas as mensagens";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Nesta sala, notifica-me se";
 "screen_room_pinned_banner_indicator" = "%1$@ de %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ mensagens afixadas";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Erro: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Erro: não foi possível testar envio";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Erro: envio demorou demasiado";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "O ciclo de envio demorou %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testar ciclo de envio";
 "troubleshoot_notifications_test_unified_push_description" = "Certifica que os distribuidores de UnifiedPush estão disponíveis.";

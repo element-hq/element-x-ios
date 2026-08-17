@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Odmietnuť";
 "notification_invite_body" = "Vás pozval/a na konverzáciu";
 "notification_invite_body_with_sender" = "%1$@ vás pozval/a na rozhovor";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Spomenul/a vás: %1$@";
 "notification_new_messages" = "Nové správy";
@@ -1365,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v tejto miestnosti nedostanete upozornenie.";
 "screen_room_notification_settings_mode_all_messages" = "Všetky správy";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Iba zmienky a kľúčové slová";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "V tejto miestnosti ma upozorniť na";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pripnutých správ";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Chyba: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Chyba, nie je možné testovať push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Chyba, časový limit na push vypršal.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back trvalo %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testovať Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Uistite sa, že sú dostupní distribútori UnifiedPush.";
