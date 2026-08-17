@@ -2521,3 +2521,28 @@ replies alone (their details are fetched from the redacted event, which
 carries the right sender). The upstream unit test redacted as the author
 and so couldn't see it; it now redacts as someone else and asserts the
 sender and timestamp. Upstream bug, straight port.
+
+## Round 20: media pagination walks into the gaps
+
+Question: does the Media & Files grid resolve the room's gaps to find
+media hidden in them, and does overswiping past the oldest item in the
+viewer still paginate rather than hard-stopping? Grid: yes, gaps render
+as spinner cells (unanchored ones at the newest end, so a room with
+cached text but no cached media shows a spinner, not the empty state;
+pinned by SDK test `cd586ceb1`) and each visible spinner re-requests its
+resolution every 2s. Viewer: the hard stop only applies at `.endReached`.
+The catch: for a message-types timeline `.endReached` meant "store
+exhausted", so at the oldest *cached* media with a gap still above it,
+the viewer stopped dead and only the grid's spinner could make progress.
+
+SDK `07fc90598`: once the store is exhausted, `paginate_backwards` on the
+message-types view resolves the next gap back (the newest gap older than
+the oldest exposed event, or the newest gap at all when nothing matches
+yet), one request per call, and only reports the room's start when no
+such gap remains. Both EXI drivers already loop on `.idle` (viewer:
+`paginateIfNeeded` on each state change while the placeholder is
+current; grid: `backPaginateIfNecessary` at the top), so an overswipe
+now walks back through text-only history until the next media appears,
+or hard-stops at the real start of the room. A resolution already in
+flight (a spinner's) is awaited instead of being reported as no
+progress, so nothing spins. Tests updated on both crates.
