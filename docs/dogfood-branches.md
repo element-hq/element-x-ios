@@ -2546,3 +2546,33 @@ now walks back through text-only history until the next media appears,
 or hard-stops at the real start of the room. A resolution already in
 flight (a spinner's) is awaited instead of being reported as no
 progress, so nothing spins. Tests updated on both crates.
+
+## Round 21: gap resolutions jumped the timeline; leading-gap spinner
+
+Two recordings in a room with a heavily fragmented store (limited syncs
+had stacked gaps: `[events][gap][gap][gap][empty][gap][events]`).
+
+(a) "Spinner at the top I can't scroll past, three times": the storage
+walk had genuinely exhausted the store (chunks loaded down to the first
+one in ~1.5s, oldest chunk = a gap), so what showed was the room's
+*leading* gap spinner, resolving over the network 300-500ms per hop and
+re-appearing with its next token: normal network back-pagination, not
+cached history hidden behind a spinner. Nothing to fix there; the sync
+fragmentation is what makes it look odd (five gaps resolving at once).
+
+(b) "Massive scroll jump while several inline spinners resolved":
+resolving a gap on top of loaded history returns mostly events the
+cache already holds behind the gap, plus a couple it missed. The SDK's
+network-pagination dedup removed every known duplicate and re-inserted
+the whole batch in place of the gap (`Remove(38..22)` then 20 inserts in
+the log): correct order, but a run of rendered rows vanished and came
+back, and the table's scroll anchor went with it. SDK `e553d7414` +
+`40b80d934`: when the batch orders the known events as we do, they stay
+put as anchors; runs of new events are inserted before the anchor that
+follows them, the run newer than every anchor takes the gap's place,
+gaps sitting between the oldest anchor and the resolved gap are dropped
+(the batch spans them), and the older-history token is dropped (it
+points into history we hold). Older new events with a token to follow,
+or a disagreeing order, still take the legacy path. Net diff for the
+recorded case becomes two inserts instead of 18 removes + 20 inserts.
+Two regression tests.
