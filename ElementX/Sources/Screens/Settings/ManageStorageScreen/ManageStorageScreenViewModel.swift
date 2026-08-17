@@ -68,10 +68,10 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
 
     // MARK: - Private
 
-    /// The totals (the stores' sizes on disk, instant) come first; the rooms then fill in as the
-    /// SDK walks them, biggest first.
+    /// The totals (the stores' sizes on disk, instant) come first; the rooms follow once measured.
     private func reload() async {
         state.isLoading = true
+        state.isLoadingRooms = true
 
         switch await clientProxy.storeSizes() {
         case .success(let sizes):
@@ -87,22 +87,19 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         state.isLoading = false
 
         roomsTask?.cancel()
-        state.rooms = []
-        state.isLoadingRooms = true
         roomsTask = Task { [weak self, clientProxy] in
-            for await rooms in clientProxy.storageUsageByRoom() {
-                self?.upsert(rooms)
-            }
+            let result = await clientProxy.storageUsageByRoom()
             guard !Task.isCancelled, let self else { return }
-            state.selectedRoomIDs = state.selectedRoomIDs.intersection(state.rooms.map(\.id))
+            switch result {
+            case .success(let rooms):
+                state.rooms = rooms
+                state.selectedRoomIDs = state.selectedRoomIDs.intersection(rooms.map(\.id))
+            case .failure(let error):
+                MXLog.error("Failed measuring the rooms' storage usage: \(error)")
+                state.bindings.alertInfo = .init(id: .failure, title: L10n.errorUnknown, message: String(describing: error))
+            }
             state.isLoadingRooms = false
         }
-    }
-
-    /// Adds a batch of rooms (replacing their previous numbers), keeping the rooms sorted by total, largest first.
-    private func upsert(_ batch: [StorageUsageRoom]) {
-        let batchIDs = Set(batch.map(\.id))
-        state.rooms = (state.rooms.filter { !batchIDs.contains($0.id) } + batch).sorted { $0.totalBytes > $1.totalBytes }
     }
 
     private static let clearingIndicatorID = "\(ManageStorageScreenViewModel.self)-Clearing"
@@ -115,7 +112,7 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
                                                               persistent: true))
         defer { userIndicatorController.retractIndicatorWithId(Self.clearingIndicatorID) }
 
-        let caches = request.cache.map { [$0] } ?? state.visibleCaches
+        let caches = request.cache.map { [$0] } ?? state.activeCaches
         // The rooms whose caches are cleared: the selection, or all.
         let roomIDs: [String]? = state.isFiltered ? Array(state.selectedRoomIDs) : nil
 

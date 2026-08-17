@@ -48,22 +48,6 @@ nonisolated struct StorageUsageRoom: Identifiable, Equatable {
 
 /// Bridges the SDK's storage usage walk to an async stream of room batches (each batch
 /// replacing the previous numbers of the rooms it contains).
-nonisolated final class StorageUsageListenerProxy: StorageUsageListener {
-    private let continuation: AsyncStream<[StorageUsageRoom]>.Continuation
-    
-    init(continuation: AsyncStream<[StorageUsageRoom]>.Continuation) {
-        self.continuation = continuation
-    }
-    
-    func onRoomsUsage(rooms: [RoomStorageUsage]) {
-        continuation.yield(rooms.map(StorageUsageRoom.init(rustUsage:)))
-    }
-    
-    func onFinished() {
-        continuation.finish()
-    }
-}
-
 extension StoreSizes {
     /// The store sizes shown in previews and tests.
     static var mock: StoreSizes {

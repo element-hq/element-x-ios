@@ -3784,17 +3784,17 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
 
     private let storageUsageByRoomReturnValueLock = NSLock()
-    private nonisolated(unsafe) var storageUsageByRoomUnderlyingReturnValue: AsyncStream<[StorageUsageRoom]>!
-    var storageUsageByRoomReturnValue: AsyncStream<[StorageUsageRoom]>! {
+    private nonisolated(unsafe) var storageUsageByRoomUnderlyingReturnValue: Result<[StorageUsageRoom], ClientProxyError>!
+    var storageUsageByRoomReturnValue: Result<[StorageUsageRoom], ClientProxyError>! {
         get { storageUsageByRoomReturnValueLock.withLock { storageUsageByRoomUnderlyingReturnValue } }
         set { storageUsageByRoomReturnValueLock.withLock { storageUsageByRoomUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var storageUsageByRoomClosure: (() -> AsyncStream<[StorageUsageRoom]>)?
+    nonisolated(unsafe) var storageUsageByRoomClosure: (() async -> Result<[StorageUsageRoom], ClientProxyError>)?
 
-    func storageUsageByRoom() -> AsyncStream<[StorageUsageRoom]> {
+    @concurrent func storageUsageByRoom() async -> Result<[StorageUsageRoom], ClientProxyError> {
         storageUsageByRoomCallsCountLock.withLock { storageUsageByRoomUnderlyingCallsCount += 1 }
         if let storageUsageByRoomClosure = storageUsageByRoomClosure {
-            return storageUsageByRoomClosure()
+            return await storageUsageByRoomClosure()
         } else {
             return storageUsageByRoomReturnValue
         }

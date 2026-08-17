@@ -41,15 +41,21 @@ struct ManageStorageScreenViewState: BindableState {
         rooms.filter { selectedRoomIDs.contains($0.id) }
     }
 
-    /// The caches shown for the current scope: the logs are session-wide, so they hide when rooms are selected.
-    var visibleCaches: [StorageCacheKind] {
+    /// The caches that apply to the current scope: the logs are session-wide, so they're
+    /// greyed out (shown, not clearable) when rooms are selected.
+    var activeCaches: [StorageCacheKind] {
         isFiltered ? StorageCacheKind.allCases.filter(\.isPerRoom) : StorageCacheKind.allCases
     }
 
-    /// The size of a cache within the current scope.
+    /// The size of a cache within the current scope (session-wide caches always show their total).
     func bytes(for cache: StorageCacheKind) -> UInt64 {
-        guard isFiltered else { return totalBytes[cache] ?? 0 }
+        guard isFiltered, cache.isPerRoom else { return totalBytes[cache] ?? 0 }
         return selectedRooms.reduce(0) { $0 + ($1.bytes[cache] ?? 0) }
+    }
+
+    /// The largest listed room's total, the width every room's bar is relative to.
+    var largestListedRoomBytes: UInt64 {
+        listedRooms.first?.totalBytes ?? 0
     }
 
     /// The label of the bar chart: all rooms, the selected room, or the number of selected rooms.

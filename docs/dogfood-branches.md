@@ -2030,6 +2030,8 @@ logs the diff kinds that empty a populated list.
 
 ### Round 8: Media viewer swipes using the message filter index rather than walking the timeline
 
+Commits: SDK [`843292aec`](https://github.com/matrix-org/matrix-rust-sdk/commit/843292aec); EXI [`1edf24d3c`](https://github.com/element-hq/element-x-ios/commit/1edf24d3c), [`27abd3d77`](https://github.com/element-hq/element-x-ios/commit/27abd3d77).
+
 Tapping a media in the chat used to build a fresh msgtype-filtered live
 (or event-focused) timeline to swipe through: another walk of the room's
 history, the same slowness the grids had. The viewer now opens a
@@ -2057,6 +2059,8 @@ both ways land fast on cached rooms, live-sent media appears at the end
 only once the viewer has paged to the newest end.
 
 ### Round 9: Manage storage screen in Advanced Settings
+
+Commits: SDK [`88a7907a0`](https://github.com/matrix-org/matrix-rust-sdk/commit/88a7907a0), [`f0070d5c0`](https://github.com/matrix-org/matrix-rust-sdk/commit/f0070d5c0); EXI [`1bfc65c0e`](https://github.com/element-hq/element-x-ios/commit/1bfc65c0e).
 
 Advanced settings → Manage storage: a colour-coded horizontal bar chart of
 the caches (Cached message keys = crypto store megolm sessions, Cached
@@ -2114,6 +2118,8 @@ covers unknown sizes.
 
 ## Round 10: Manage storage, second pass
 
+Commits: SDK [`6b95f506d`](https://github.com/matrix-org/matrix-rust-sdk/commit/6b95f506d); EXI [`37e87950f`](https://github.com/element-hq/element-x-ios/commit/37e87950f).
+
 Dogfood on build 18: totals didn't match Developer options (payload sums
 vs on-disk files), and the screen blocked for ages because attributing
 media to rooms decoded every stored media message of every room. Now:
@@ -2136,6 +2142,8 @@ identities, olm sessions included), like Developer options; per-room
 shares stay the megolm-session payloads.
 
 ## Round  11: Manage storage, third pass + viewer preload
+
+Commits: SDK [`2d44d71f3`](https://github.com/matrix-org/matrix-rust-sdk/commit/2d44d71f3), [`9f25138a8`](https://github.com/matrix-org/matrix-rust-sdk/commit/9f25138a8), [`6c2d1487e`](https://github.com/matrix-org/matrix-rust-sdk/commit/6c2d1487e); EXI [`470dc4d9b`](https://github.com/element-hq/element-x-ios/commit/470dc4d9b), [`e746f4b29`](https://github.com/element-hq/element-x-ios/commit/e746f4b29).
 
 Build 21 dogfood: rooms appeared quickly but the media shares took ~30 s.
 Log: the media pass called `room_media_uris` per room (5728 rooms × 3
@@ -2176,6 +2184,8 @@ opens instantly; a tap before they're ready still waits.
 
 ## Round 12: media views seeded index-only
 
+Commits: SDK [`0e26df61e`](https://github.com/matrix-org/matrix-rust-sdk/commit/0e26df61e); EXI [`4405607ba`](https://github.com/element-hq/element-x-ios/commit/4405607ba) (docs only, the seeding is SDK-side).
+
 The Media and files open cost was O(all media in the room): the
 message-type view decoded every matching event at seed (twice, plus the
 files view). SDK
@@ -2192,6 +2202,8 @@ waits for the pages to rest (it was being dropped by the
 don't-refresh-while-scrolling guard, leaving preloaded items black).
 
 ## Round 13: media viewer swiping, the whole journey
+
+Commits: EXI [`1edf24d3c`](https://github.com/element-hq/element-x-ios/commit/1edf24d3c), [`e746f4b29`](https://github.com/element-hq/element-x-ios/commit/e746f4b29), [`fc85bea0c`](https://github.com/element-hq/element-x-ios/commit/fc85bea0c), [`eddee8ba0`](https://github.com/element-hq/element-x-ios/commit/eddee8ba0), [`c7a2be821`](https://github.com/element-hq/element-x-ios/commit/c7a2be821), [`13364ae7c`](https://github.com/element-hq/element-x-ios/commit/13364ae7c) (builds 21-30), [`e82c58c13`](https://github.com/element-hq/element-x-ios/commit/e82c58c13) (builds 31-34).
 
 The goal: swiping between media in the QuickLook viewer should reveal
 the neighbouring media as it slides in, not a black page that pops in
@@ -2278,3 +2290,27 @@ Follow-ups (builds 31-34):
    (`AppSettings.preloadMediaInViewer`, default on) for people who
    want to save data; `TimelineMediaPreviewViewModel` takes
    `appSettings` and skips `preloadNeighbours` when it's off.
+
+## Round 14: Manage storage, fourth pass
+
+Commits: SDK [`f8b8b7cfa`](https://github.com/matrix-org/matrix-rust-sdk/commit/f8b8b7cfa); EXI: see below (filled in after committing).
+
+With the media share measured from the URI index in one query (round 11),
+the whole per-room walk finishes in well under a second, so the
+progressive two-batch API wasn't buying anything and made the list
+re-sort under the user's finger. Changes:
+
+- SDK `Client::storage_usage_by_room()` now just returns the
+  `Vec<(OwnedRoomId, RoomStorageUsage)>` (rooms with data, media
+  included, biggest first); the FFI is a plain async
+  `storageUsageByRoom() -> [RoomStorageUsage]` and the
+  `StorageUsageListener` callback interface is gone. EXI
+  `ClientProxy.storageUsageByRoom()` returns a `Result`; the view model
+  sets the rooms once, sorted by total.
+- Each room row draws its total as a stacked capsule (one segment per
+  cache, the chart's colours), width relative to the largest listed
+  room, so the list previews the breakdown you get by selecting it
+  (`StorageUsageRoomRow`).
+- Selecting rooms no longer hides the log-files row (which made the
+  layout pop): all five rows stay; the session-wide one is greyed out,
+  its bar fill hidden and its clear button disabled (`activeCaches`).

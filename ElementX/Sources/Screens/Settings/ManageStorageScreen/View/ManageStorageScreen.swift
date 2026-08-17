@@ -42,7 +42,7 @@ struct ManageStorageScreen: View {
     private var usageSection: some View {
         Section {
             ListRow(kind: .custom {
-                StorageUsageChart(caches: context.viewState.visibleCaches,
+                StorageUsageChart(activeCaches: context.viewState.activeCaches,
                                   bytes: { context.viewState.bytes(for: $0) },
                                   isLoading: context.viewState.isLoading) { cache in
                     context.send(viewAction: .requestClear(cache))
@@ -71,11 +71,13 @@ struct ManageStorageScreen: View {
         if !context.viewState.listedRooms.isEmpty || context.viewState.isLoadingRooms {
             Section {
                 ForEach(context.viewState.listedRooms) { room in
-                    ListRow(label: .plain(title: room.displayName,
-                                          description: room.totalBytes.formatted(.byteCount(style: .file))),
-                            kind: .multiSelection(isSelected: context.viewState.selectedRoomIDs.contains(room.id)) {
-                                context.send(viewAction: .toggleRoom(room.id))
-                            })
+                    ListRow(kind: .custom {
+                        StorageUsageRoomRow(room: room,
+                                            largestBytes: context.viewState.largestListedRoomBytes,
+                                            isSelected: context.viewState.selectedRoomIDs.contains(room.id)) {
+                            context.send(viewAction: .toggleRoom(room.id))
+                        }
+                    })
                 }
             } header: {
                 HStack(spacing: 8) {
@@ -96,21 +98,74 @@ struct ManageStorageScreen: View {
 
 /// A horizontal bar chart of the caches' sizes, one colour-coded bar per cache with its size in
 /// MB and a clear button; the bars are proportional to the largest one (no scale).
+/// A room in the list: its name and total, with its total drawn as a stacked bar (one segment per
+/// cache) whose width is relative to the largest listed room's total, previewing the chart above.
+struct StorageUsageRoomRow: View {
+    let room: StorageUsageRoom
+    let largestBytes: UInt64
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text(room.displayName)
+                            .font(.compound.bodyLG)
+                            .foregroundStyle(.compound.textPrimary)
+                            .lineLimit(1)
+                        Spacer()
+                        Text(room.totalBytes.formatted(.byteCount(style: .file)))
+                            .font(.compound.bodySM)
+                            .foregroundStyle(.compound.textSecondary)
+                            .monospacedDigit()
+                    }
+
+                    GeometryReader { geometry in
+                        HStack(spacing: 0) {
+                            ForEach(StorageCacheKind.allCases.filter(\.isPerRoom)) { cache in
+                                cache.color
+                                    .frame(width: segmentWidth(for: cache, in: geometry.size.width))
+                            }
+                        }
+                        .clipShape(Capsule())
+                    }
+                    .frame(height: 6)
+                }
+
+                ListRowAccessory.multiSelection(isSelected)
+            }
+            .padding(.horizontal, ListRowPadding.horizontal)
+            .padding(.vertical, ListRowPadding.vertical)
+        }
+        .accessibilityAddTraits(.isToggle)
+    }
+
+    private func segmentWidth(for cache: StorageCacheKind, in width: CGFloat) -> CGFloat {
+        guard largestBytes > 0 else { return 0 }
+        return width * CGFloat(room.bytes[cache] ?? 0) / CGFloat(largestBytes)
+    }
+}
+
 struct StorageUsageChart: View {
-    let caches: [StorageCacheKind]
+    /// The caches that can be cleared in the current scope; the others are greyed out.
+    let activeCaches: [StorageCacheKind]
     let bytes: (StorageCacheKind) -> UInt64
     let isLoading: Bool
     let clearAction: (StorageCacheKind) -> Void
 
+    private var caches: [StorageCacheKind] { StorageCacheKind.allCases }
     private var maxBytes: UInt64 { caches.map(bytes).max() ?? 0 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             ForEach(caches) { cache in
                 bar(for: cache)
+                    .opacity(activeCaches.contains(cache) ? 1 : 0.4)
             }
         }
-        .animation(.elementDefault, value: caches)
+        .animation(.elementDefault, value: activeCaches)
         .opacity(isLoading ? 0.5 : 1)
     }
 
@@ -135,6 +190,7 @@ struct StorageUsageChart: View {
                         Capsule()
                             .fill(cache.color)
                             .frame(width: barWidth(for: cache, in: geometry.size.width))
+                            .opacity(activeCaches.contains(cache) ? 1 : 0)
                     }
                 }
                 .frame(height: 10)
@@ -147,7 +203,7 @@ struct StorageUsageChart: View {
                 CompoundIcon(\.delete, size: .small, relativeTo: .compound.bodyMD)
                     .foregroundStyle(.compound.iconCriticalPrimary)
             }
-            .disabled(isLoading || bytes(cache) == 0)
+            .disabled(isLoading || bytes(cache) == 0 || !activeCaches.contains(cache))
             .accessibilityLabel(UntranslatedL10n.screenManageStorageA11yClear(cache.title))
         }
     }
@@ -186,10 +242,7 @@ struct ManageStorageScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(rooms: [StorageUsageRoom] = .mock) -> ManageStorageScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.storeSizesReturnValue = .success(.mock)
-        clientProxy.storageUsageByRoomReturnValue = AsyncStream { continuation in
-            continuation.yield(rooms)
-            continuation.finish()
-        }
+        clientProxy.storageUsageByRoomReturnValue = .success(rooms)
         return ManageStorageScreenViewModel(clientProxy: clientProxy,
                                             userIndicatorController: UserIndicatorControllerMock(),
                                             logsDirectory: URL(filePath: "/dev/null"))

@@ -29,16 +29,7 @@ struct ManageStorageScreenViewModelTests {
             }
             return .success(sizes)
         }
-        clientProxy.storageUsageByRoomClosure = {
-            AsyncStream { continuation in
-                // As the SDK does: every room without media first, then the rooms with media.
-                let rooms = [StorageUsageRoom].mock
-                continuation.yield(rooms.map { StorageUsageRoom(id: $0.id, name: $0.name, lastActivity: $0.lastActivity,
-                                                                bytes: $0.bytes.filter { $0.key != .media }) })
-                continuation.yield(rooms.filter { $0.bytes[.media, default: 0] > 0 })
-                continuation.finish()
-            }
-        }
+        clientProxy.storageUsageByRoomReturnValue = .success(.mock)
         clientProxy.clearRoomKeysRoomIDsReturnValue = .success(())
         clientProxy.clearRoomCachesRoomIDsReturnValue = .success(())
         clientProxy.clearMediaCacheRoomIDsNotAccessedForReturnValue = .success(())
@@ -58,7 +49,7 @@ struct ManageStorageScreenViewModelTests {
         try await waitForLoad()
 
         // All rooms: every cache including the logs, sized from the report and the files.
-        #expect(context.viewState.visibleCaches == StorageCacheKind.allCases)
+        #expect(context.viewState.activeCaches == StorageCacheKind.allCases)
         #expect(context.viewState.bytes(for: .logs) == 3000)
         #expect(context.viewState.bytes(for: .media) == StoreSizes.mock.mediaStore)
         #expect(context.viewState.scopeTitle == UntranslatedL10n.screenManageStorageScopeAllRooms)
@@ -66,9 +57,10 @@ struct ManageStorageScreenViewModelTests {
         // The small room isn't worth listing.
         #expect(context.viewState.listedRooms.map(\.id) == ["!big:example.org", "!medium:example.org"])
 
-        // One room selected: its sizes only, no logs.
+        // One room selected: its sizes only; the logs stay session-wide but aren't clearable.
         context.send(viewAction: .toggleRoom("!medium:example.org"))
-        #expect(context.viewState.visibleCaches == StorageCacheKind.allCases.filter(\.isPerRoom))
+        #expect(context.viewState.activeCaches == StorageCacheKind.allCases.filter(\.isPerRoom))
+        #expect(context.viewState.bytes(for: .logs) == 3000)
         #expect(context.viewState.bytes(for: .roomState) == 60_000_000)
         #expect(context.viewState.scopeTitle == "Matrix HQ")
         #expect(context.viewState.clearAllTitle == UntranslatedL10n.screenManageStorageClearForRoom("Matrix HQ"))
