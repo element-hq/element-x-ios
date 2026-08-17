@@ -373,12 +373,12 @@ EXI:
   queue, whose redaction local echo the timeline already applies to the target item
   immediately - plus the usual queue durability (retries, offline, ordering behind
   pending sends)
-  ([SDK [`4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b)](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b))
+  (SDK [`4366a2e7b`](https://github.com/matrix-org/matrix-rust-sdk/commit/4366a2e7b))
   - fixes [#1713 Redactions don't local echo](https://github.com/element-hq/element-x-ios/issues/1713)
   - broke `test_redact_message`/`test_redact_local_sent_message` (they asserted the
     old direct-HTTP shapes, and the queued redaction raced test teardown); re-mocked
     for the local-echo semantics in
-    [SDK [`a0dbb30ba`](https://github.com/matrix-org/matrix-rust-sdk/commit/a0dbb30ba)](https://github.com/matrix-org/matrix-rust-sdk/commit/a0dbb30ba)
+    SDK [`a0dbb30ba`](https://github.com/matrix-org/matrix-rust-sdk/commit/a0dbb30ba)
 - Long-press on a redacted message showed a blank fullscreen sheet (the filtered action
   set came back empty with view source off, and the sheet presents regardless; state
   events hit the same). Redacted items keep copy-permalink (plus view source in dev
@@ -399,7 +399,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   (dogfooding: room list stuck behind a permanent "Loading…" overlay). Both offending
   sites now snapshot cheap clone handles and release the map lock before awaiting
   per-room locks
-  ([SDK [`830f3dc0e`](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e)](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e))
+  (SDK [`830f3dc0e`](https://github.com/matrix-org/matrix-rust-sdk/commit/830f3dc0e))
   - likely the cause of
     [rageshake#6487 app got stuck on Loading… when opening a room and had to be force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6487),
     [rageshake#6322 app hung while opening room on "loading…" spinner. had to force quit](https://github.com/element-hq/element-x-ios-rageshakes/issues/6322),
@@ -452,7 +452,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   The item-based check still mis-decided (the provider builds items progressively, so
   the last item can trail the room's newest event right after opening) - it now compares
   against the latest-events value instead, via a new `latestEventId` FFI
-  ([SDK [`92950c9f3`](https://github.com/matrix-org/matrix-rust-sdk/commit/92950c9f3)](https://github.com/matrix-org/matrix-rust-sdk/commit/92950c9f3))
+  (SDK [`92950c9f3`](https://github.com/matrix-org/matrix-rust-sdk/commit/92950c9f3))
   [`5e43d0872`](https://github.com/element-hq/element-x-ios/commit/5e43d0872)
   - the unhideable focus toast matches stuck-"Loading…" reports like
     [rageshake#3004 upgraded to 851 and promptly got stuck on a loading… spinner](https://github.com/element-hq/element-x-ios-rageshakes/issues/3004)
@@ -469,7 +469,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   tap wakes the app, so ID comparison alone mis-decides)
   [`363b3b7f5`](https://github.com/element-hq/element-x-ios/commit/363b3b7f5),
   new `latestEventTimestamp` FFI
-  ([SDK [`9a7707b37`](https://github.com/matrix-org/matrix-rust-sdk/commit/9a7707b37)](https://github.com/matrix-org/matrix-rust-sdk/commit/9a7707b37))
+  (SDK [`9a7707b37`](https://github.com/matrix-org/matrix-rust-sdk/commit/9a7707b37))
   - likely fixes [rageshake#2349 Tapped on a notification… the latest message was wrong… after a few seconds it turned into the correct, new message](https://github.com/element-hq/element-x-ios-rageshakes/issues/2349)
 - Dirty-lock recovery scoped to the rooms other processes actually touched: after the
   NSE handled a push, the first store access reloaded the entire in-memory event cache
@@ -480,7 +480,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   a gap (e.g. a build without the journal) falls back to the full reload, so
   mixed-version cost is the old slow path, never staleness. Store-wide clears and
   pruning leave wildcard/horizon markers with the same fallback
-  ([SDK [`b10561742`](https://github.com/matrix-org/matrix-rust-sdk/commit/b10561742)](https://github.com/matrix-org/matrix-rust-sdk/commit/b10561742),
+  (SDK [`b10561742`](https://github.com/matrix-org/matrix-rust-sdk/commit/b10561742),
   [`41e4704ed`](https://github.com/matrix-org/matrix-rust-sdk/commit/41e4704ed))
   - advances [sdk#4874 [meta] Dirty cross-process locks](https://github.com/matrix-org/matrix-rust-sdk/issues/4874)
     and [sdk#6681 [meta] Adopt a new cross-process state invalidation strategy](https://github.com/matrix-org/matrix-rust-sdk/issues/6681)
@@ -494,7 +494,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   "preview shows 13:41 but the room ends at 13:32")
   [`b2140c102`](https://github.com/element-hq/element-x-ios/commit/b2140c102),
   new `latestEventThreadRootId` FFI
-  ([SDK [`0ba9d0d9d`](https://github.com/matrix-org/matrix-rust-sdk/commit/0ba9d0d9d)](https://github.com/matrix-org/matrix-rust-sdk/commit/0ba9d0d9d))
+  (SDK [`0ba9d0d9d`](https://github.com/matrix-org/matrix-rust-sdk/commit/0ba9d0d9d))
 - The tap-into-thread routing made thread latest events a routine code path,
   and reproduced the sync wedge the 2026-08-11 fix had left as a residual
   watch. Three distinct causes were found and fixed across one evening of
@@ -506,7 +506,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
     queued behind it holding the sliding sync `position` lock, and the whole
     app wedged behind a permanent uncancellable "Loading..." modal. All
     remaining under-map-lock awaits evicted with the snapshot-handle pattern.
-    [SDK [`84c47e013`](https://github.com/matrix-org/matrix-rust-sdk/commit/84c47e013)](https://github.com/matrix-org/matrix-rust-sdk/commit/84c47e013)
+    SDK [`84c47e013`](https://github.com/matrix-org/matrix-rust-sdk/commit/84c47e013)
   - With that fixed, the handler still wedged 70s+ inside "Re-triggering
     missing latest event computations": a catch-up response registering
     hundreds of rooms enqueues as many computations, and the trigger loop
@@ -514,17 +514,17 @@ In general, the fact the app now has the ability to lock the user out beind a "L
     compute task. It now `try_read`s and enqueues busy rooms unconditionally
     (recomputing an existing value is idempotent; the check only avoids queue
     spam).
-    [SDK [`19e852a81`](https://github.com/matrix-org/matrix-rust-sdk/commit/19e852a81)](https://github.com/matrix-org/matrix-rust-sdk/commit/19e852a81)
+    SDK [`19e852a81`](https://github.com/matrix-org/matrix-rust-sdk/commit/19e852a81)
   - The plain room route's loading modal was uncancellable (only event routes
     wired up tap-to-cancel), so a wedged open locked the whole app. All four
     routes through `handleRoomRoute` (room, thread, event, share) now track
     their in-flight task and a tap on the modal's background abandons it.
-    [EXI [`49f379d51`](https://github.com/element-hq/element-x-ios/commit/49f379d51)](https://github.com/element-hq/element-x-ios/commit/49f379d51)
+    EXI [`49f379d51`](https://github.com/element-hq/element-x-ios/commit/49f379d51)
 - The room-open path now logs every await boundary (resolve proxy, fetch
   room, fetch room info, build live timeline, room-list/timeline
   subscriptions) so any future silent hang names its stuck await in the
   rageshake.
-  [EXI [`5c868e39c`](https://github.com/element-hq/element-x-ios/commit/5c868e39c)](https://github.com/element-hq/element-x-ios/commit/5c868e39c)
+  EXI [`5c868e39c`](https://github.com/element-hq/element-x-ios/commit/5c868e39c)
 - A final repro round was poisoned by a rig bug worth knowing about:
   `devicectl device process launch --terminate-existing` only terminates the
   newest install's process, so every reinstall left the previous build
@@ -539,12 +539,12 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   [`bde3cbd69`](https://github.com/element-hq/element-x-ios/commit/bde3cbd69) and update
   in place when the key arrives - the SDK hooks the redecryptor's resolved-UTDs report
   to refresh replies whose target is outside the loaded timeline
-  ([SDK [`17af054e3`](https://github.com/matrix-org/matrix-rust-sdk/commit/17af054e3)](https://github.com/matrix-org/matrix-rust-sdk/commit/17af054e3)).
+  (SDK [`17af054e3`](https://github.com/matrix-org/matrix-rust-sdk/commit/17af054e3)).
   Events fetched over `/event` are now saved into the event cache too: reply targets
   used to be refetched over the network on every item rebuild (a ~10s skeleton while
   matrix.org served a cold 2023 event) and, being invisible to the redecryptor, never
   resolved in place when their key arrived from backup
-  ([SDK [`4b23e1d77`](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77)](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77);
+  (SDK [`4b23e1d77`](https://github.com/matrix-org/matrix-rust-sdk/commit/4b23e1d77);
   briefly reverted while bisecting duplicate echoes of freshly sent messages, then
   reapplied in [`bdea86735`](https://github.com/matrix-org/matrix-rust-sdk/commit/bdea86735) -
   the duplicates turned out to be a long-standing intermittent race, reported since
@@ -571,7 +571,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   in the wild (intermittent for months; server-side the event exists once). Logs the
   birth of a duplicate item, own remote events failing to match a local echo, the
   send queue's eager event-cache insert, and each delivery's dedup classification
-  ([SDK [`9a24a6a76`](https://github.com/matrix-org/matrix-rust-sdk/commit/9a24a6a76)](https://github.com/matrix-org/matrix-rust-sdk/commit/9a24a6a76))
+  (SDK [`9a24a6a76`](https://github.com/matrix-org/matrix-rust-sdk/commit/9a24a6a76))
   - diagnoses [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242),
     [rageshake#6945 all my sent msgs are showing in duplicate in most recent room](https://github.com/element-hq/element-x-ios-rageshakes/issues/6945),
     [rageshake#6592 a pile of UTDs, and then my messages are getting duplicated](https://github.com/element-hq/element-x-ios-rageshakes/issues/6592) and
@@ -586,7 +586,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   triggers the auto-shrink, hence the observed self-healing). Failed updates now
   poison the room, and the next update entry point reloads the linked chunk from the
   store before mutating anything
-  ([SDK [`4eed9b8a2`](https://github.com/matrix-org/matrix-rust-sdk/commit/4eed9b8a2)](https://github.com/matrix-org/matrix-rust-sdk/commit/4eed9b8a2))
+  (SDK [`4eed9b8a2`](https://github.com/matrix-org/matrix-rust-sdk/commit/4eed9b8a2))
   - fixes [rageshake#6945 all my sent msgs are showing in duplicate in most recent room](https://github.com/element-hq/element-x-ios-rageshakes/issues/6945)
     and likely [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242),
     [rageshake#6592](https://github.com/element-hq/element-x-ios-rageshakes/issues/6592) and
@@ -598,7 +598,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   instrumentation (the decisive classification logs sit at debug, below the rageshake
   filter - a temporary debug default [`038d0121c`](https://github.com/matrix-org/matrix-rust-sdk/commit/038d0121c) was reverted in [`98f06f80f`](https://github.com/matrix-org/matrix-rust-sdk/commit/98f06f80f) as too
   noisy for the phone; the warn-level tripwires carry the signal instead)
-  ([SDK [`4a3906914`](https://github.com/matrix-org/matrix-rust-sdk/commit/4a3906914)](https://github.com/matrix-org/matrix-rust-sdk/commit/4a3906914))
+  (SDK [`4a3906914`](https://github.com/matrix-org/matrix-rust-sdk/commit/4a3906914))
 - Merge the tachyon (DMLS) review's collapse/redelivery fixes, §§1-5 of
   `workspace-dmls .../docs/dmls/REVIEW-upstream-timeline-bugs.md` - §3+§4 are the
   root causes of the 1-10 self-send duplicates (a limited-sync collapse makes the
@@ -612,8 +612,8 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   MSC4186) deliberately NOT merged - inverts documented upstream behaviour, needs an
   upstream design discussion first. All six were verified still present in upstream
   main @ [`44a907dd8`](https://github.com/matrix-org/matrix-rust-sdk/commit/44a907dd8) (2026-08-04); upstreaming candidates
-  ([SDK [`f5d631a4a`](https://github.com/matrix-org/matrix-rust-sdk/commit/f5d631a4a)](https://github.com/matrix-org/matrix-rust-sdk/commit/f5d631a4a),
-  [SDK [`59d0d4f3d`](https://github.com/matrix-org/matrix-rust-sdk/commit/59d0d4f3d)](https://github.com/matrix-org/matrix-rust-sdk/commit/59d0d4f3d))
+  (SDK [`f5d631a4a`](https://github.com/matrix-org/matrix-rust-sdk/commit/f5d631a4a),
+  SDK [`59d0d4f3d`](https://github.com/matrix-org/matrix-rust-sdk/commit/59d0d4f3d))
   - likely fixes [#4242 Slow server can result in duplicate msgs in E2EE room](https://github.com/element-hq/element-x-ios/issues/4242)-family
     residue beyond the dup-echo divergence fix, and the 2026-08-12 1-10 self-send
     duplicate run
@@ -630,7 +630,7 @@ In general, the fact the app now has the ability to lock the user out beind a "L
   tail we already have - are now replaced in place, also swapping the eager copy's
   fabricated `origin_server_ts` for the real payload; superset re-deliveries (e.g. a
   timeline-limit increase) and gappy responses keep the authoritative remove+re-append
-  ([SDK [`b004a4b9b`](https://github.com/matrix-org/matrix-rust-sdk/commit/b004a4b9b)](https://github.com/matrix-org/matrix-rust-sdk/commit/b004a4b9b))
+  (SDK [`b004a4b9b`](https://github.com/matrix-org/matrix-rust-sdk/commit/b004a4b9b))
   - upstreamable; also softens [#4242](https://github.com/element-hq/element-x-ios/issues/4242)-family churn
 
 #### Fix the glitches in the send animation at last.
@@ -697,7 +697,7 @@ This bug has been around since the event cache landed, i think.
   than local state); batches containing the tail keep today's behaviour.
   Regression test drops exactly the tail sends without the fix. Upstream this
   together with the diagnostics commit
-  [SDK [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)
+  SDK [`6532fc2be`](https://github.com/matrix-org/matrix-rust-sdk/commit/6532fc2be)
 - **BUGGY AS SHIPPED (flagged 2026-08-15): this guard over-matched.** It
   conflated known-and-in-the-live-tail with known-but-stranded-behind-a-gap
   (store-only copy), and so ate the late sync echo of a stranded just-sent
@@ -740,10 +740,10 @@ This bug has been around since the event cache landed, i think.
   the scrim is removed and the overlay window stops intercepting the moment
   the retract begins. (An earlier attempt disabling window interaction only
   once no indicator was active -
-  [EXI [`1f669f332`](https://github.com/element-hq/element-x-ios/commit/1f669f332)](https://github.com/element-hq/element-x-ios/commit/1f669f332)
+  EXI [`1f669f332`](https://github.com/element-hq/element-x-ios/commit/1f669f332)
   - kept as a belt, was too late to help.) Window-level touch logging landed
   alongside for future swallowed-tap hunts
-  ([EXI [`7ff0ea3fb`](https://github.com/element-hq/element-x-ios/commit/7ff0ea3fb)](https://github.com/element-hq/element-x-ios/commit/7ff0ea3fb),
+  (EXI [`7ff0ea3fb`](https://github.com/element-hq/element-x-ios/commit/7ff0ea3fb),
   strip before upstreaming). Upstreamable.
 
 
@@ -2393,7 +2393,7 @@ hidden behind the search UI by design). The trap is what happens next:
    bar left to cancel. Deadlock; that's why the log shows no second
    chain rebuild.
 
-Fix `73a0c75fc`: an empty list under an active search, filter chip or
+Fix [`73a0c75fc`](https://github.com/element-hq/element-x-ios/commit/73a0c75fc): an empty list under an active search, filter chip or
 space filter is a real answer, not a not-yet-loaded one; it goes to
 `.rooms` (empty-filter state / hidden-behind-search), which keeps the
 searchable modifier mounted, so cancelling the search re-applies `.all`
@@ -2402,18 +2402,18 @@ and the rooms come back. `RoomSummaryProvider.setFilter` now logs
 Yesterday's occurrence (emptied at the first sync response after a
 restart, no death logs) fits the same shape.
 
-Slow launches: `15e7a42e0` first tried a "Loading..." modal once the
+Slow launches: [`15e7a42e0`](https://github.com/element-hq/element-x-ios/commit/15e7a42e0) first tried a "Loading..." modal once the
 session restore took over 1s (a store migration leaves the static
 splash up for seconds, which reads as a hang and invites a force-quit
 mid-migration). Reverted in favour of the design's own answer, the
-skeletons: the splash gate from `5ae04e03f` (hold the splash until the
+skeletons: the splash gate from [`5ae04e03f`](https://github.com/element-hq/element-x-ios/commit/5ae04e03f) (hold the splash until the
 cached room list has published, 700ms cap) is backed out, so the home
 screen mounts as soon as the session is restored and shows skeletons
 until the first summaries land. Caveat: a store migration runs inside
 the client build, before any session UI exists, so during that phase
 the splash is still all there is.
 
-Manage storage bar colours (`579a0078b`): the decorative pastels are
+Manage storage bar colours ([`579a0078b`](https://github.com/element-hq/element-x-ios/commit/579a0078b)): the decorative pastels are
 replaced with Compound core palette tokens, `blue-800` (message keys),
 `green-800` (room state), `pink-800` (messages), `purple-800` (media),
 `fuchsia-800` (logs). Gotcha: the core scale *inverts* in dark mode
@@ -2421,7 +2421,7 @@ replaced with Compound core palette tokens, `blue-800` (message keys),
 `green-700` goes dull), so the bars resolve each token at its light-mode
 value in both themes; a chart palette shouldn't flip with the theme.
 
-Also confirmed: `b8f5db3bf` (snap, don't animate, the sender header away
+Also confirmed: [`b8f5db3bf`](https://github.com/element-hq/element-x-ios/commit/b8f5db3bf) (snap, don't animate, the sender header away
 when an older same-sender message is inserted above) covers inline gap
 resolves too, since it sits in `TimelineViewModel.updateViewState`, the
 one regroup path every applied diff goes through. Residual: the item
@@ -2439,13 +2439,13 @@ sequence exactly: every `Finished resolving timeline gap` is followed by
 `Timeline(live) applied ["Remove(1)"]` and, 10-20ms later, a second
 apply with the inserts (`["Insert", "Set(1)", ..., "Set(0)"]`).
 
-Root cause (SDK `e83dfeaf3`): `Timeline::resolve_gap` refreshed the gaps
+Root cause (SDK [`e83dfeaf3`](https://github.com/matrix-org/matrix-rust-sdk/commit/e83dfeaf3)): `Timeline::resolve_gap` refreshed the gaps
 snapshot synchronously right after the event cache resolved the gap
-(`ce16d5247`, added to reach the room start when the last leading gap
+([`ce16d5247`](https://github.com/matrix-org/matrix-rust-sdk/commit/ce16d5247), added to reach the room start when the last leading gap
 resolves). That commits a transaction of its own that removes the gap
 item, racing the event subscriber task that applies the fetched events'
 diffs a moment later. EXI's policy is to animate pure spinner removals
-(`912c06177`), so the removal-only batch is precisely the case that
+([`912c06177`](https://github.com/element-hq/element-x-ios/commit/912c06177)), so the removal-only batch is precisely the case that
 slides; the content batch is then applied unanimated and pinned. The
 events update already reads the current gaps snapshot and applies diffs
 and gaps in one transaction, and the trailing `UpdateTimelineGaps` update
@@ -2463,7 +2463,7 @@ an animation.
 Side note from the same log: `duplicate read receipts in this timeline`
 ERRORs dump the whole item list, 400-700KB per line, dozens of times a
 minute in busy rooms (68MB of log in an hour). Trimmed in SDK
-`3af5613ce`: the duplicates field already names the events; the items
+[`3af5613ce`](https://github.com/matrix-org/matrix-rust-sdk/commit/3af5613ce): the duplicates field already names the events; the items
 dump is gone. Whether the duplicates themselves are a preview-prefill
 artefact (gaps, prefilled receipts) is still open.
 
@@ -2497,7 +2497,7 @@ What happened, in order:
 The gap that's ours: the NSE only prefills the shared event cache on the
 sliding sync path (`ingest_into_shared_event_cache`); the `/context`
 fallback, which is what a slow server makes the common path, persisted
-nothing. SDK `d00a5b4d6`: persist the `/context` event as a limited
+nothing. SDK [`d00a5b4d6`](https://github.com/matrix-org/matrix-rust-sdk/commit/d00a5b4d6): persist the `/context` event as a limited
 batch at the room's tail behind the `/context` prev-batch token, unless
 the store already knows it or already holds something newer for the room
 (delayed pushes for old events must not land at the tail). Test covers
@@ -2513,7 +2513,7 @@ while a request is in flight and the answer here was already landing).
 
 Report: reply to an event, have someone else redact that event, and the
 reply's preview shows the redacted message as sent by the redactor. SDK
-`9e85204c8`: `handle_redaction` built the "redacted" placeholder pushed
+[`9e85204c8`](https://github.com/matrix-org/matrix-rust-sdk/commit/9e85204c8): `handle_redaction` built the "redacted" placeholder pushed
 into the replies from the redaction's own context (sender, profile,
 timestamp). It now takes them from the redacted event's timeline item,
 or from a reply's already-loaded details, and otherwise leaves the
@@ -2529,13 +2529,13 @@ media hidden in them, and does overswiping past the oldest item in the
 viewer still paginate rather than hard-stopping? Grid: yes, gaps render
 as spinner cells (unanchored ones at the newest end, so a room with
 cached text but no cached media shows a spinner, not the empty state;
-pinned by SDK test `cd586ceb1`) and each visible spinner re-requests its
+pinned by SDK test [`cd586ceb1`](https://github.com/matrix-org/matrix-rust-sdk/commit/cd586ceb1)) and each visible spinner re-requests its
 resolution every 2s. Viewer: the hard stop only applies at `.endReached`.
 The catch: for a message-types timeline `.endReached` meant "store
 exhausted", so at the oldest *cached* media with a gap still above it,
 the viewer stopped dead and only the grid's spinner could make progress.
 
-SDK `07fc90598`: once the store is exhausted, `paginate_backwards` on the
+SDK [`07fc90598`](https://github.com/matrix-org/matrix-rust-sdk/commit/07fc90598): once the store is exhausted, `paginate_backwards` on the
 message-types view resolves the next gap back (the newest gap older than
 the oldest exposed event, or the newest gap at all when nothing matches
 yet), one request per call, and only reports the room's start when no
@@ -2566,8 +2566,8 @@ cache already holds behind the gap, plus a couple it missed. The SDK's
 network-pagination dedup removed every known duplicate and re-inserted
 the whole batch in place of the gap (`Remove(38..22)` then 20 inserts in
 the log): correct order, but a run of rendered rows vanished and came
-back, and the table's scroll anchor went with it. SDK `e553d7414` +
-`40b80d934`: when the batch orders the known events as we do, they stay
+back, and the table's scroll anchor went with it. SDK [`e553d7414`](https://github.com/matrix-org/matrix-rust-sdk/commit/e553d7414) +
+[`40b80d934`](https://github.com/matrix-org/matrix-rust-sdk/commit/40b80d934): when the batch orders the known events as we do, they stay
 put as anchors; runs of new events are inserted before the anchor that
 follows them, the run newer than every anchor takes the gap's place,
 gaps sitting between the oldest anchor and the resolved gap are dropped
@@ -2586,13 +2586,13 @@ phase up to "room list `loaded`, sync starts" was unchanged (+87-90ms
 after first log, as before); the whole regression was the first
 64-room summary page: **243-258ms, was ~30ms**.
 
-Cause: SDK `b69d40ecd` (round 19, latest-event thread root through
+Cause: SDK [`b69d40ecd`](https://github.com/matrix-org/matrix-rust-sdk/commit/b69d40ecd) (round 19, latest-event thread root through
 edits) resolved an edit's original via `Room::event_cache()`, which
 creates the room's event cache when it isn't loaded, loading the room's
 last chunk from the store while holding the event cache's global write
 lock. On the launch page one busy bridged room's last chunk took 117ms
 (+25ms for another), and the other 62 summaries queued behind the lock.
-SDK `a14651a2d`: read the original straight from the event cache store
+SDK [`a14651a2d`](https://github.com/matrix-org/matrix-rust-sdk/commit/a14651a2d): read the original straight from the event cache store
 (read-only, dirty lock fine); no room cache is created.
 
 Post-fix numbers below. Also seen, not regressions: the encryption
