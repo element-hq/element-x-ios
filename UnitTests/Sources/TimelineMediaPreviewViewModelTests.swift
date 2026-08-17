@@ -367,7 +367,8 @@ struct TimelineMediaPreviewViewModelTests {
                                                   mediaProvider: mediaProvider,
                                                   photoLibraryManager: photoLibraryManager,
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  appMediator: AppMediatorMock())
+                                                  appMediator: AppMediatorMock(),
+                                                  appSettings: AppSettings.volatile())
     }
     
     private func makeItems() -> [EventBasedMessageTimelineItemProtocol] {

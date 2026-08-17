@@ -21,6 +21,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private let photoLibraryManager: PhotoLibraryManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
+    private let appSettings: AppSettings
     
     private var contentScannerService: ContentScannerServiceProtocol? {
         timelineViewModel.context.contentScannerService
@@ -37,12 +38,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
          mediaProvider: MediaProviderProtocol,
          photoLibraryManager: PhotoLibraryManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appMediator: AppMediatorProtocol) {
+         appMediator: AppMediatorProtocol,
+         appSettings: AppSettings) {
         self.timelineViewModel = timelineViewModel
         self.mediaProvider = mediaProvider
         self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        self.appSettings = appSettings
         
         let timelineState = timelineViewModel.context.viewState.timelineState
         
@@ -66,7 +69,13 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         timelineViewModel.context.$viewState.map(\.timelineState.itemViewStates)
             .removeDuplicates()
             .sink { [weak self] itemViewStates in
-                self?.state.dataSource.updatePreviewItems(itemViewStates: itemViewStates)
+                guard let self else { return }
+                state.dataSource.updatePreviewItems(itemViewStates: itemViewStates)
+                // Opened from the room screen, the media timeline is still loading when the current
+                // item is first shown, so its neighbours only become known (and preloadable) now.
+                if let mediaItem = state.currentItem.mediaItem {
+                    preloadNeighbours(of: mediaItem)
+                }
             }
             .store(in: &cancellables)
         
@@ -89,12 +98,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
          mediaProvider: MediaProviderProtocol,
          photoLibraryManager: PhotoLibraryManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appMediator: AppMediatorProtocol) {
+         appMediator: AppMediatorProtocol,
+         appSettings: AppSettings) {
         self.timelineViewModel = timelineViewModel
         self.mediaProvider = mediaProvider
         self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        self.appSettings = appSettings
         
         super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(galleryItem: galleryItem,
                                                                                      initialIndex: initialIndex)),
@@ -130,8 +141,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             }
         case .redactConfirmation(let item):
             redactItem(item)
-        case .timelineEndReached:
-            showTimelineEndIndicator()
         }
     }
     
@@ -193,7 +202,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// The neighbour gets its file handle straight away; the controller refreshes any page that
     /// QuickLook shows as unavailable on arrival.
     private func preloadNeighbours(of mediaItem: TimelineMediaPreviewItem.Media) {
-        guard contentScannerService == nil else { return }
+        guard appSettings.preloadMediaInViewer, contentScannerService == nil else { return }
         
         let items = state.dataSource.previewItems
         guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
@@ -352,12 +361,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
                                                               icon: \.close))
-    }
-    
-    private func showTimelineEndIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
-                                                              type: .toast,
-                                                              title: L10n.screenMediaDetailsNoMoreMediaToShow))
     }
     
     private var statusIndicatorID: String {

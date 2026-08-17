@@ -36,3 +36,5 @@
 "soft_logout_signin_notice" = "Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).";
 "soft_logout_signin_title" = "Sign in";
 "untranslated" = "Untranslated";
+"screen_advanced_settings_preload_media_title" = "Preload media in viewer";
+"screen_advanced_settings_preload_media_description" = "Fetch the photos and videos either side of the one on show ahead of swiping, using more data";

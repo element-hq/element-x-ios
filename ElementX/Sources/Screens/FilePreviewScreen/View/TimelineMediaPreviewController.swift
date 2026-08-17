@@ -227,14 +227,33 @@ class TimelineMediaPreviewController: QLPreviewController {
             pageScrollViewRestingOffset = pageScrollView.contentOffset.x
         }
         
-        let delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
+        var delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
+
+        // Hold the page still (rather than paging onto the placeholder and bouncing back)
+        // when there's nothing beyond the current item in the swiped direction. Setting the
+        // offset also cancels any deceleration towards the placeholder.
+        if delta != 0, isAtTimelineEdge(forwards: delta > 0) {
+            pageScrollView.contentOffset.x = pageScrollViewRestingOffset
+            delta = 0
+        }
+
         overlayView.transform = CGAffineTransform(translationX: -delta, y: 0)
         // Fade towards the midpoint so the overlay never clashes with the neighbouring item's state.
         overlayView.alpha = max(0, 1 - abs(delta) / (pageWidth / 2))
     }
     
+    /// Whether the current item is the last one in the given direction, with the timeline fully paginated.
+    private func isAtTimelineEdge(forwards: Bool) -> Bool {
+        let dataSource = context.viewState.dataSource
+        return if forwards {
+            currentPreviewItemIndex >= dataSource.lastPreviewItemIndex && dataSource.paginationState.forward == .endReached
+        } else {
+            currentPreviewItemIndex <= dataSource.firstPreviewItemIndex && dataSource.paginationState.backward == .endReached
+        }
+    }
+
     // MARK: Item loading
-    
+
     private func loadCurrentItem() {
         headerHostingController.view.sizeToFit() // Resizing isn't automatic in the toolbar 😒
         
@@ -259,7 +278,6 @@ class TimelineMediaPreviewController: QLPreviewController {
         try? await Task.sleep(for: .seconds(0.1))
         
         currentPreviewItemIndex = index
-        context.send(viewAction: .timelineEndReached)
     }
     
     private func handleUpdatedItems() {

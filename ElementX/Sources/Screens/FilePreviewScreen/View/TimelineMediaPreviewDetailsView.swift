@@ -229,7 +229,8 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                                       mediaProvider: MediaProviderMock(.init()),
                                                       photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      appMediator: AppMediatorMock())
+                                                      appMediator: AppMediatorMock(),
+                                                      appSettings: AppSettings.volatile())
         
         if isDownloaded {
             viewModel.context.send(viewAction: .updateCurrentItem(viewModel.state.currentItem))

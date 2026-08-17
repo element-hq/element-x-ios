@@ -658,7 +658,14 @@ final class TimelineProxy: TimelineProxyProtocol {
         case .media(let presentation):
             backPaginationStateSubject.send(presentation == .pinnedEventsScreen ? .endReached : .idle)
             // Room screen previews open around the tapped media, so there may be newer media to page.
-            forwardPaginationStateSubject.send([.roomScreenLive, .roomScreenDetached].contains(presentation) ? .idle : .endReached)
+            // A zero-sized forward pagination exposes nothing but reports whether the newest media
+            // is already in view (so the viewer can stop at the end rather than page onto a placeholder).
+            let hitEnd = if [.roomScreenLive, .roomScreenDetached].contains(presentation) {
+                (try? await timeline.paginateForwards(numEvents: 0)) ?? false
+            } else {
+                true
+            }
+            forwardPaginationStateSubject.send(hitEnd ? .endReached : .idle)
         case .pinned:
             backPaginationStateSubject.send(.endReached)
             forwardPaginationStateSubject.send(.endReached)

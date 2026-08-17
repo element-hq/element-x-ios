@@ -2191,11 +2191,11 @@ Also on this build: the preloaded-neighbour refresh in the media viewer
 waits for the pages to rest (it was being dropped by the
 don't-refresh-while-scrolling guard, leaving preloaded items black).
 
-## Round addendum 13 (2026-08-17): media viewer swiping, the whole journey
+## Round 13: media viewer swiping, the whole journey
 
 The goal: swiping between media in the QuickLook viewer should reveal
 the neighbouring media as it slides in, not a black page that pops in
-afterwards (or never). It took seven builds and a device log to get
+afterwards after a spinner. It took seven builds and a device log to get
 right, because two assumptions about QuickLook were wrong.
 
 1. **Preload the neighbours** (build 21). The viewer fetched the two
@@ -2245,3 +2245,36 @@ index-only in the SDK (addendum 12) and prebuilt when Room Info opens
 (addendum 11). The `PreviewDebug` logging is still in and should be
 stripped before upstreaming, as should the whole placeholder-detection
 approach be raised with the EX team as a QuickLook workaround.
+
+Follow-ups (builds 31-34):
+
+6. **Stop at the ends instead of bouncing.** Swiping past the first or
+   last media paged onto the timeline-start/end placeholder, snapped
+   back and toasted "No more media to show". The controller now pins
+   the page scroll view's offset at rest whenever the current item is
+   the last one in the swiped direction and that direction has hit the
+   end (`isAtTimelineEdge`), so the page simply doesn't move (setting
+   the offset also cancels any deceleration towards the placeholder).
+   The toast, its view action and string usage are gone; the
+   snap-back stays as a silent fallback should QuickLook flip the
+   index anyway.
+7. **Same behaviour from the room screen as from the grid.** Both flows
+   already open the same `messageTypes(aroundEventID:)` timeline; the
+   room-screen one started with `forward = .idle` because it opened
+   mid-index and couldn't know whether newer media existed, so the
+   first forward swipe still paged onto the "paginating" placeholder
+   before learning there was nothing there. `TimelineProxy` now probes
+   with a zero-sized `paginateForwards(0)` at subscribe time (exposes
+   nothing, returns the message-types cache's `hit_end`) and seeds
+   `.endReached` when already at the newest. Backwards stays `.idle`
+   on both flows (`hit_start` on the index doesn't mean no older
+   history: gaps may remain).
+8. **Neighbours preloaded from the room screen too.** Preloading only
+   ran on the current-item change; opened from the room screen the
+   media timeline was still loading at that point, so the data source
+   held the tapped item alone and its neighbours arrived without a
+   preload pass. It now re-runs whenever the timeline items update.
+9. **"Preload media in viewer" toggle** in Advanced settings
+   (`AppSettings.preloadMediaInViewer`, default on) for people who
+   want to save data; `TimelineMediaPreviewViewModel` takes
+   `appSettings` and skips `preloadNeighbours` when it's off.

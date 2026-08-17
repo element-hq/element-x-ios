@@ -347,6 +347,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var optimizeMediaUploads: Bool
     
+    @UserPreference(defaultValue: true)
+    var preloadMediaInViewer: Bool
+    
     @UserPreference(defaultValue: AudioPlaybackSpeed.default)
     var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
     

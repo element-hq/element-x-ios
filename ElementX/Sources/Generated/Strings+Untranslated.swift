@@ -12,6 +12,10 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Manage storage
   internal static var screenAdvancedSettingsManageStorage: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_manage_storage") }
+  /// Fetch the photos and videos either side of the one on show ahead of swiping, using more data
+  internal static var screenAdvancedSettingsPreloadMediaDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_preload_media_description") }
+  /// Preload media in viewer
+  internal static var screenAdvancedSettingsPreloadMediaTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_preload_media_title") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
   /// Clear %1$@
