@@ -143,14 +143,18 @@ extension StorageCacheKind {
     }
 
     /// The bar colour, from Compound's core palette.
+    ///
+    /// Pinned to the tokens' light-mode values: the core scale flips in dark mode (`yellow500`
+    /// goes from #FBCE00 to a dark brown), and a chart palette shouldn't invert with the theme.
     var color: Color {
-        switch self {
+        let token = switch self {
         case .messageKeys: CompoundCoreColorTokens.blue800
-        case .roomState: CompoundCoreColorTokens.green700
-        case .messages: CompoundCoreColorTokens.yellow500
+        case .roomState: CompoundCoreColorTokens.green800
+        case .messages: CompoundCoreColorTokens.pink800
         case .media: CompoundCoreColorTokens.purple800
         case .logs: CompoundCoreColorTokens.fuchsia800
         }
+        return Color(uiColor: UIColor(token).resolvedColor(with: UITraitCollection(userInterfaceStyle: .light)))
     }
 }
 
