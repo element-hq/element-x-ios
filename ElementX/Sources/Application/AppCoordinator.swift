@@ -699,24 +699,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 await userSessionStore.restoreUserSession()
             }
             eagerRestoreTask = nil
-            
-            // A store migration (or a slow first room list) keeps the static splash up for
-            // seconds, which reads as a hang; show the loading modal so nobody force-quits
-            // the app mid-migration. Only past a delay: the common launch shouldn't flash it.
-            let slowRestoreIndicator = Task { [weak self] in
-                try? await Task.sleep(for: .seconds(1))
-                guard !Task.isCancelled else { return }
-                self?.showLoadingIndicator()
-            }
-            defer {
-                slowRestoreIndicator.cancel()
-                hideLoadingIndicator()
-            }
-            
             switch await restoreTask.value {
             case .success(let userSession):
                 await self.performUserSessionMigrations(userSession)
-                await self.waitForInitialRoomList(userSession: userSession)
                 self.userSession = userSession
                 stateMachine.processEvent(.createdUserSession)
             case .failure:
@@ -726,37 +711,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    /// Holds the splash screen until the cached room list's first non-empty publish (or a
-    /// loaded-but-empty account), so the home screen mounts straight into rooms instead of
-    /// flashing skeletons. The summary build also runs uncontended while the main thread
-    /// idles here, which is faster than building it under the tab-bar mount.
-    private func waitForInitialRoomList(userSession: UserSessionProtocol) async {
-        let provider = userSession.clientProxy.roomSummaryProvider
-
-        let gate = Task {
-            for await (rooms, state) in provider.roomListPublisher.combineLatest(provider.statePublisher).values {
-                if !rooms.isEmpty {
-                    return true
-                }
-                if case .loaded(0) = state {
-                    return true
-                }
-            }
-            return false
-        }
-
-        // Insurance so a pathological state can only ever delay launch, never wedge it.
-        let insurance = Task {
-            try? await Task.sleep(for: .milliseconds(700))
-            gate.cancel()
-        }
-
-        if await gate.value == false {
-            MXLog.error("Cached room list didn't publish within the splash gate, falling back to skeletons")
-        }
-        insurance.cancel()
-    }
-
     private func startAuthentication() {
         let encryptionKeyProvider = EncryptionKeyProvider()
         let classicAppManager = ClassicAppManager()

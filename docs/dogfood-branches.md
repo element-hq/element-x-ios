@@ -2402,9 +2402,13 @@ and the rooms come back. `RoomSummaryProvider.setFilter` now logs
 Yesterday's occurrence (emptied at the first sync response after a
 restart, no death logs) fits the same shape.
 
-Launch overlay: a store migration (or a slow first room list) leaves the
-static splash up for seconds, which reads as a hang and invites a
-force-quit mid-migration. `AppCoordinator.restoreUserSession` now shows
-the standard "Loading..." modal once the restore has taken more than 1s
-(cancelled and retracted when it completes), so the app visibly still
-lives.
+Slow launches: `15e7a42e0` first tried a "Loading..." modal once the
+session restore took over 1s (a store migration leaves the static
+splash up for seconds, which reads as a hang and invites a force-quit
+mid-migration). Reverted in favour of the design's own answer, the
+skeletons: the splash gate from `5ae04e03f` (hold the splash until the
+cached room list has published, 700ms cap) is backed out, so the home
+screen mounts as soon as the session is restored and shows skeletons
+until the first summaries land. Caveat: a store migration runs inside
+the client build, before any session UI exists, so during that phase
+the splash is still all there is.
