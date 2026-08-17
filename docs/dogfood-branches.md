@@ -2576,3 +2576,28 @@ points into history we hold). Older new events with a token to follow,
 or a disagreeing order, still take the legacy path. Net diff for the
 recorded case becomes two inserts instead of 18 removes + 20 inserts.
 Two regression tests.
+
+## Round 22: launch-time re-benchmark (2026-08-17)
+
+Same method as the 2026-08-10 round (four kill+relaunch cycles ~12s
+apart, phone console log, LaunchMetrics + first-app-log-relative
+phases). Before the fix: `rooms_shown_ms` 384-528 (was 198-205). Every
+phase up to "room list `loaded`, sync starts" was unchanged (+87-90ms
+after first log, as before); the whole regression was the first
+64-room summary page: **243-258ms, was ~30ms**.
+
+Cause: SDK `b69d40ecd` (round 19, latest-event thread root through
+edits) resolved an edit's original via `Room::event_cache()`, which
+creates the room's event cache when it isn't loaded, loading the room's
+last chunk from the store while holding the event cache's global write
+lock. On the launch page one busy bridged room's last chunk took 117ms
+(+25ms for another), and the other 62 summaries queued behind the lock.
+SDK `a14651a2d`: read the original straight from the event cache store
+(read-only, dirty lock fine); no room cache is created.
+
+Post-fix numbers below. Also seen, not regressions: the encryption
+sliding-sync connection restarts with `pos=None` on every launch and
+marks all tracked users dirty (five ~1MB `/keys/query` per launch,
+`bytes_down` 2-4MB, upstream behaviour); the room-list connection's
+first response is server-bound (0.9-8.3s on matrix.org this round),
+which is what `stale_exposure_ms` now measures on a busy account.
