@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import os
 import MatrixRustSDK
 
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
@@ -382,11 +383,30 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 submitNext()
             }
 
+            // Dogfood diagnostics (STRIP pre-upstream): where a slow batch spends its time.
+            let stats = buildStats.withLock { stats in
+                defer { stats = .init() }
+                return stats
+            }
+            if rooms.count >= 32 {
+                MXLog.info("SummaryBuild: \(rooms.count) rooms ffi_total=\(Int(stats.ffi * 1000))ms string_total=\(Int(stats.string * 1000))ms slowest=\(stats.slowestRoom ?? "-") \(Int(stats.slowest * 1000))ms")
+            }
+
             return summaries.compactMap(\.self)
         }
     }
 
+    private struct BuildStats: Sendable {
+        var ffi: TimeInterval = 0
+        var string: TimeInterval = 0
+        var slowest: TimeInterval = 0
+        var slowestRoom: String?
+    }
+
+    private nonisolated static let buildStats = OSAllocatedUnfairLock(initialState: BuildStats())
+
     private nonisolated static func buildRoomSummary(from room: Room, eventStringBuilder: RoomEventStringBuilder) async -> RoomSummary {
+        let start = Date.now
         let details: RoomSummaryDetails
         do {
             // A single slim FFI call with everything a room-list entry renders; unlike
@@ -460,6 +480,19 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             intent
         case .none:
             nil
+        }
+
+        let ffiDuration = Date.now.timeIntervalSince(start)
+        defer {
+            let total = Date.now.timeIntervalSince(start)
+            buildStats.withLock { stats in
+                stats.ffi += ffiDuration
+                stats.string += total - ffiDuration
+                if total > stats.slowest {
+                    stats.slowest = total
+                    stats.slowestRoom = details.id
+                }
+            }
         }
 
         return RoomSummary(room: room,
