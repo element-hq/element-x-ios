@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Avvis";
 "notification_invite_body" = "Inviterte deg til å chatte";
 "notification_invite_body_with_sender" = "%1$@ inviterte deg til å chatte";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nevnte deg: %1$@";
 "notification_new_messages" = "Nye meldinger";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Innstilling av modus mislyktes, prøv igjen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Hjemmeserveren din støtter ikke dette alternativet i krypterte rom, og du vil ikke bli varslet i dette rommet.";
 "screen_room_notification_settings_mode_all_messages" = "Alle meldinger";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Bare omtaler og nøkkelord";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "I dette rommet, varsle meg om";
 "screen_room_pinned_banner_indicator" = "%1$@ av %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Festede meldinger";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Feil: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Feil, kan ikke teste push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Feil, tidsavbrudd i påvente av push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back tok %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Test Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Påse at UnifiedPush-distributører er tilgjengelige.";

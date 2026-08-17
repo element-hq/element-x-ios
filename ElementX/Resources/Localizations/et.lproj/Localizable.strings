@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Keeldu";
 "notification_invite_body" = "Kutse osalema vestluses";
 "notification_invite_body_with_sender" = "%1$@ saatus sulle vestluskutse";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Hakkas jagama oma asukohta reaalajas";
 "notification_mentioned_you_body" = "Mainis sind: %1$@";
 "notification_new_messages" = "Uued sõnumid";
@@ -1363,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Vaikimisi seadistuste taastamine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_notification_settings_error_setting_mode" = "Seadistuste muutmine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Sinu koduserver ei toeta seda võimalust krüptitud jututubades, seega sa ei saa selle jututoa kohta teavitusi.";
-"screen_room_notification_settings_mode_all_messages" = "Kõikide sõnumite korral";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mainimiste ja võtmesõnade alusel";
+"screen_room_notification_settings_mode_all_messages" = "Kõik sõnumid";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Selles jututoas teavita mind";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ esiletõstetud sõnumit";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Viga: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Viga: katselist tõuketeavitust pole võimalik teha.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Viga: tõuketeavituse ootamisel tekkis aegumine.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Kogu tõuketeavituse ringi tegemiseks kulus %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Tee tõuketeenuse silmustest";
 "troubleshoot_notifications_test_unified_push_description" = "Palun veendu, et UnifiedPushi levitajad on saadaval.";

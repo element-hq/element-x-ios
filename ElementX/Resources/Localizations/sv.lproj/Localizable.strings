@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Avvisa";
 "notification_invite_body" = "Bjöd in dig att chatta";
 "notification_invite_body_with_sender" = "%1$@ bjöd in dig att chatta";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nämnde dig: %1$@";
 "notification_new_messages" = "Nya meddelanden";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Misslyckades att ställa in läget, vänligen pröva igen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hemserver stöder inte det här alternativet i krypterade rum, du blir inte aviserad i det här rummet.";
 "screen_room_notification_settings_mode_all_messages" = "Alla meddelanden";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Endast omnämnanden och nyckelord";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "I det här rummet, meddela mig för";
 "screen_room_pinned_banner_indicator" = "%1$@ av %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Fästa meddelanden";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Fel: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Fel, kan inte testa push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Fel, tidsgräns överskriden vid väntan på push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Returnering av push tog %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testa returnering av push";
 "troubleshoot_notifications_test_unified_push_description" = "Se till att UnifiedPush-distributörer är tillgängliga.";

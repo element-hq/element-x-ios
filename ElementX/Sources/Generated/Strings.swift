@@ -1220,6 +1220,8 @@ internal nonisolated enum L10n {
   internal static func notificationInviteBodyWithSender(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_invite_body_with_sender", String(describing: p1))
   }
+  /// Requested to join
+  internal static var notificationKnockRequestBody: String { return L10n.tr("Localizable", "notification_knock_request_body") }
   /// Started sharing their live location
   internal static var notificationLiveLocationStartedBody: String { return L10n.tr("Localizable", "notification_live_location_started_body") }
   /// Mentioned you: %1$@
@@ -3164,8 +3166,10 @@ internal nonisolated enum L10n {
   internal static var screenRoomNotificationSettingsMentionsOnlyDisclaimer: String { return L10n.tr("Localizable", "screen_room_notification_settings_mentions_only_disclaimer") }
   /// All messages
   internal static var screenRoomNotificationSettingsModeAllMessages: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_all_messages") }
-  /// Mentions and replies only
+  /// Mentions and Keywords only
   internal static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
+  /// Mute
+  internal static var screenRoomNotificationSettingsModeMute: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mute") }
   /// In this room, notify me for
   internal static var screenRoomNotificationSettingsRoomCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_room_custom_settings_title") }
   /// %1$@ of %2$@
@@ -4083,6 +4087,8 @@ internal nonisolated enum L10n {
   internal static var troubleshootNotificationsTestPushLoopBackFailure3: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_3") }
   /// Error, timeout waiting for push.
   internal static var troubleshootNotificationsTestPushLoopBackFailure4: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_4") }
+  /// Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.
+  internal static var troubleshootNotificationsTestPushLoopBackFailureRateLimit: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_rate_limit") }
   /// Push loop back took %1$d ms.
   internal static func troubleshootNotificationsTestPushLoopBackSuccess(_ p1: Int) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_success", p1)

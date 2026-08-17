@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "拒否";
 "notification_invite_body" = "チャットにあなたを招待しました";
 "notification_invite_body_with_sender" = "%1$@があなたをチャットに招待しました";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "%1$@ があなたをメンションしました";
 "notification_new_messages" = "新着メッセージ";
@@ -1363,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "デフォルトの復元に失敗しました。再試行してください。";
 "screen_room_notification_settings_error_setting_mode" = "設定に失敗しました。再試行してください。";
 "screen_room_notification_settings_mentions_only_disclaimer" = "暗号化されたルームでは、この機能にホームサーバーが対応しないため、このルームからの通知を受信できません。";
-"screen_room_notification_settings_mode_all_messages" = "すべてのメッセージ";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "メンションとキーワードのみ";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "このルームでは以下の通知を受け取る";
 "screen_room_pinned_banner_indicator" = "%2$@ 個のうち %1$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ 個のピン留めされたメッセージ";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "エラー: %1$@";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "エラー: プッシュ通知をテストできません。";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "エラー: 通知の待機がタイムアウトしました。";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "プッシュ通知のループバックに %1$d ms 要しました。";
 "troubleshoot_notifications_test_push_loop_back_title" = "プッシュ通知のループバックをテスト";
 "troubleshoot_notifications_test_unified_push_description" = "UnifiedPush のディストリビューターが利用可能であることを確認してください。";

@@ -27,9 +27,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
+			<string>Galerie, %1$d média de plus</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Galerie, %1$d média de plus</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -59,9 +59,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Lu par %1$@ et %2$d autre</string>
+			<string>Message précédent lu par %1$@ et %2$d autre</string>
 			<key>other</key>
-			<string>Lu par %1$@ et %2$d autres</string>
+			<string>Message précédent lu par %1$@ et %2$d autres</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -75,9 +75,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
+			<string>%1$d élément…</string>
 			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d éléments…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -91,9 +91,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d media item…</string>
+			<string>%1$d élément multimédia…</string>
 			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$d éléments multimédia…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -267,9 +267,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
+			<string>%1$d attachement partagé</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>%1$d attachements partagés</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -347,9 +347,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
+			<string>%1$d message supprimé</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d messages supprimés</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -651,9 +651,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d joined</string>
+			<string>%1$d participant</string>
 			<key>other</key>
-			<string>%1$d joined</string>
+			<string>%1$d participants</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

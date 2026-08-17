@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Recusar";
 "notification_invite_body" = "Convidou você para conversar";
 "notification_invite_body_with_sender" = "%1$@ te convidou para conversar";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mencionou você: %1$@";
 "notification_new_messages" = "Novas mensagens";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Falha ao definir o modo, tente novamente.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Seu servidor-casa não suporta esta opção em salas criptografadas, você não será notificado nesta sala.";
 "screen_room_notification_settings_mode_all_messages" = "Todas as mensagens";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Somente menções e palavras-chave";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Nesta sala, notifique-me de";
 "screen_room_pinned_banner_indicator" = "%1$@ de %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Mensagens fixadas";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Erro: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Erro, não é possível testar o push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Erro, tempo limite de espera pelo push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "O loopback do push levou %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Teste o loopback do push";
 "troubleshoot_notifications_test_unified_push_description" = "Certifique-se de que os distribuidores do UnifiedPush estejam disponíveis.";

@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Gwrthod";
 "notification_invite_body" = "Wedi eich gwahodd i sgwrsio";
 "notification_invite_body_with_sender" = "Mae %1$@ wedi eich gwahodd i sgwrsio";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Wedi eich crybwyll: %1$@";
 "notification_new_messages" = "Negeseuon Newydd";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Wedi methu gosod y modd, ceisiwch eto.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Nid yw eich gweinydd cartref yn cefnogi'r dewis hwn mewn ystafelloedd sydd wedi'u hamgryptio, chewch chi ddim eich hysbysu yn yr ystafell hon.";
 "screen_room_notification_settings_mode_all_messages" = "Pob neges";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Crybwylliadau ac Allweddeiriau'n unig";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Dim ond Crybwylliadau ac Allweddeiriau";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Yn yr ystafell hon, rhowch wybod i mi am";
 "screen_room_pinned_banner_indicator" = "%1$@ o %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Neges wedi'u pinio";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Gwall: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Gwall, methu profi'r gwthio.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Gwall, terfyn amser wrth aros am y gwthio.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Cymerodd dolen gwthio nôl %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Prawf dolen gwthio'n ôl";
 "troubleshoot_notifications_test_unified_push_description" = "Sicrhewch fod dosbarthwyr UnifiedPush ar gael.";

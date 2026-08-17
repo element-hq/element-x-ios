@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Адхіліць";
 "notification_invite_body" = "Запрасіў(-ла) вас у чат";
 "notification_invite_body_with_sender" = "%1$@ запрасіў(-ла) вас у чат";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Згадаў(-ла) вас: %1$@";
 "notification_new_messages" = "Новыя паведамленні";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Не ўдалося наладзіць рэжым, паспрабуйце яшчэ раз.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш хатні сервер не падтрымлівае гэту опцыю ў зашыфраваных пакоях, вы не атрымаеце апавяшчэнне ў гэтым пакоі.";
 "screen_room_notification_settings_mode_all_messages" = "Усе паведамленні";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Толькі згадванні і ключавыя словы";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "У гэтым пакоі паведаміце мяне пра";
 "screen_room_pinned_banner_indicator" = "%1$@ з %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Замацаваныя паведамленні";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Памылка: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Памылка, немагчыма праверыць push-апавяшчэнне.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Памылка, тайм-аўт у чаканні push-апавяшчэння.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Зварот цыклу назад заняў %1$d мс.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Тэст Націсніце кнопку вярнуцца";
 "troubleshoot_notifications_test_unified_push_description" = "Пераканайцеся, што размеркавальнікі UnifiedPush даступныя.";

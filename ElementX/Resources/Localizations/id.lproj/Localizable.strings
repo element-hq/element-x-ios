@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Tolak";
 "notification_invite_body" = "Mengundang Anda untuk mengobrol";
 "notification_invite_body_with_sender" = "%1$@ mengundang Anda untuk mengobrol";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Menyebutkan Anda: %1$@";
 "notification_new_messages" = "Pesan Baru";
@@ -1365,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda tidak akan diberi tahu dalam ruangan ini.";
 "screen_room_notification_settings_mode_all_messages" = "Semua pesan";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Sebutan dan Kata Kunci saja";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Di ruangan ini, beri tahu saya tentang";
 "screen_room_pinned_banner_indicator" = "%1$@ dari %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pesan yang disematkan";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Kesalahan: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Terjadi kesalahan, tidak dapat menguji notifikasi dorongan.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Terjadi kesalahan, melebihi batas waktu menunggu notifikasi dorongan.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Ulangan notifikasi dorongan membutuhkan %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Uji ulangan notifikasi dorongan lagi";
 "troubleshoot_notifications_test_unified_push_description" = "Pastikan distributor UnifiedPush tersedia.";

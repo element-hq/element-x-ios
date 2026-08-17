@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Rifiuta";
 "notification_invite_body" = "Ti ha invitato ad una conversazione";
 "notification_invite_body_with_sender" = "%1$@ ti ha invitato ad una conversazione";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Ti ha menzionato: %1$@";
 "notification_new_messages" = "Nuovi messaggi";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Impossibile impostare la modalità, riprova.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Il tuo homeserver non supporta questa opzione nelle stanze cifrate, quindi non riceverai notifiche in questa stanza.";
 "screen_room_notification_settings_mode_all_messages" = "Tutti i messaggi";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Solo menzioni e parole chiave";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "In questa stanza, avvisami per";
 "screen_room_pinned_banner_indicator" = "%1$@ di %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Messaggi fissati";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Errore: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Errore, impossibile testare le notifiche push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Errore, tempo scaduto in attesa della notifica push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Il test push loop back ha impiegato %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Prova invio notifica push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Assicurati che i distributori UnifiedPush siano disponibili.";

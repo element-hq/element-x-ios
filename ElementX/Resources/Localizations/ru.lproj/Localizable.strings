@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Отклонить";
 "notification_invite_body" = "Пригласил(а) Вас в чат";
 "notification_invite_body_with_sender" = "%1$@ пригласил(а) Вас в чат";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Упомянул(а) вас: %1$@";
 "notification_new_messages" = "Новые сообщения";
@@ -1365,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате.";
 "screen_room_notification_settings_mode_all_messages" = "О всех сообщениях";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Только упоминания и ключевые слова";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "В этой комнате уведомлять меня";
 "screen_room_pinned_banner_indicator" = "%1$@ из %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Закреплённые сообщения";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Ошибка: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Ошибка, невозможно протестировать отправку.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Ошибка, тайм-аут ожидания push-уведомления.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Обратная отправка push-уведомления, заняла %1$d мс.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Тест обратной отправки push-уведомления";
 "troubleshoot_notifications_test_unified_push_description" = "Убедитесь, что дистрибьюторы UnifiedPush доступны.";

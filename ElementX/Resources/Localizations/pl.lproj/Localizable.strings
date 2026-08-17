@@ -477,7 +477,7 @@
 "emoji_picker_category_flags" = "Flagi";
 "emoji_picker_category_foods" = "Jedzenie i napoje";
 "emoji_picker_category_nature" = "Zwierzęta i natura";
-"emoji_picker_category_objects" = "Obiekty";
+"emoji_picker_category_objects" = "Przedmioty";
 "emoji_picker_category_people" = "Buźki i osoby";
 "emoji_picker_category_places" = "Podróż i miejsca";
 "emoji_picker_category_recent" = "Ostatnie emoji";
@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Odrzuć";
 "notification_invite_body" = "Zaprosił Cię do czatu";
 "notification_invite_body_with_sender" = "%1$@ zaprosił Cię do czatu";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Rozpoczął udostępnianie swojej lokalizacji";
 "notification_mentioned_you_body" = "Wspomniano o Tobie: %1$@";
 "notification_new_messages" = "Nowe wiadomości";
@@ -617,13 +618,13 @@
 "screen_advanced_settings_show_media_timeline_title" = "Pokaż media na osi czasu";
 "screen_advanced_settings_view_source_description" = "Włącz, aby móc wyświetlać źródło wiadomości na osi czasu.";
 "screen_analytics_prompt_data_usage" = "Nie będziemy rejestrować ani profilować żadnych danych osobistych";
-"screen_analytics_prompt_help_us_improve" = "Udostępniaj anonimowe dane użytkowania, aby pomóc nam identyfikować problemy.";
+"screen_analytics_prompt_help_us_improve" = "Udostępniaj anonimowe dane użytkowania, aby pomóc nam ulepszać aplikację.";
 "screen_analytics_prompt_read_terms" = "Przeczytaj nasze warunki użytkowania %1$@.";
 "screen_analytics_prompt_read_terms_content_link" = "tutaj";
 "screen_analytics_prompt_settings" = "Możesz to wyłączyć w dowolnym momencie";
 "screen_analytics_prompt_third_party_sharing" = "Nie będziemy udostępniać Twoich danych stronom trzecim";
 "screen_analytics_prompt_title" = "Pomóż nam ulepszyć %1$@";
-"screen_analytics_settings_help_us_improve" = "Udostępniaj anonimowe dane użytkowania, aby pomóc nam identyfikować problemy.";
+"screen_analytics_settings_help_us_improve" = "Udostępniaj anonimowe dane użytkowania, aby pomóc nam ulepszać aplikację.";
 "screen_analytics_settings_read_terms" = "Przeczytaj nasze warunki użytkowania %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "tutaj";
 "screen_analytics_settings_share_data" = "Udostępniaj dane analityczne";
@@ -644,7 +645,7 @@
 "screen_app_lock_setup_biometric_unlock_subtitle" = "Zaoszczędź sobie trochę czasu i korzystaj z %1$@ do odblokowywania aplikacji";
 "screen_app_lock_setup_choose_pin" = "Wybierz PIN";
 "screen_app_lock_setup_confirm_pin" = "Potwierdź PIN";
-"screen_app_lock_setup_pin_context" = "Zablokuj %1$@, aby zwiększyć bezpieczeństwo swoich czatów.\n\nWybierz coś łatwego do zapamiętania. Jeśli zapomnisz ten PIN, zostaniesz wylogowany z aplikacji.";
+"screen_app_lock_setup_pin_context" = "Zablokuj %1$@, aby zwiększyć bezpieczeństwo swoich czatów.\n\nWybierz coś łatwego do zapamiętania. Jeśli zapomnisz tego PINu, zostaniesz wylogowany z aplikacji.";
 "screen_app_lock_setup_pin_forbidden_dialog_content" = "Nie możesz wybrać tego PIN'u ze względów bezpieczeństwa";
 "screen_app_lock_setup_pin_forbidden_dialog_title" = "Wybierz inny kod PIN";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Wprowadź ten sam kod PIN dwa razy";
@@ -1365,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z tego pokoju.";
 "screen_room_notification_settings_mode_all_messages" = "Wszystkie wiadomości";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Tylko wzmianki i słowa kluczowe";
+"screen_room_notification_settings_mode_mute" = "Wycisz";
 "screen_room_notification_settings_room_custom_settings_title" = "W tym pokoju, powiadamiaj mnie przez";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ przypiętych wiadomości";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Błąd: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Błąd, nie można przetestować push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Błąd, upłynął limit czasu powiadomienia push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Pętla powrotna push zajęła %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Przetestuj pętlę Push back";
 "troubleshoot_notifications_test_unified_push_description" = "Upewnij się, że dystrybutorzy UnifiedPush są dostępni.";

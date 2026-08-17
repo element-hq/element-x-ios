@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "拒绝";
 "notification_invite_body" = "已邀请你聊天";
 "notification_invite_body_with_sender" = "%1$@ 已邀请你聊天";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "已开始共享其实时位置";
 "notification_mentioned_you_body" = "提到了你：%1$@";
 "notification_new_messages" = "新消息";
@@ -1364,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "设置模式失败，请重试。";
 "screen_room_notification_settings_mentions_only_disclaimer" = "主服务器不支持在加密房间中的此选项，因此在此房间你可能无法收到通知。";
 "screen_room_notification_settings_mode_all_messages" = "所有消息";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "仅限提及和关键词";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "仅提及与关键词";
+"screen_room_notification_settings_mode_mute" = "静默";
 "screen_room_notification_settings_room_custom_settings_title" = "在此房间通知我以下类型";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ 个已置顶的消息";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "错误：%1$@。";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "错误，无法测试推送。";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "错误，等待推送超时。";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "推送回路耗时 %1$d 毫秒。";
 "troubleshoot_notifications_test_push_loop_back_title" = "测试推送回路";
 "troubleshoot_notifications_test_unified_push_description" = "确保 UnifiedPush 分发器可用。";

@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "مسترد کریں";
 "notification_invite_body" = "آپ کو گفتگو کیلئے مدعو کیا";
 "notification_invite_body_with_sender" = "%1$@ نے آپ کو چیٹ کے لیے مدعو کیا";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "آپ کا تذکرہ کیا: %1$@";
 "notification_new_messages" = "نئے پیغامات";
@@ -1363,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "متعین وضع کو بحال کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔";
 "screen_room_notification_settings_error_setting_mode" = "وضع ترتیب دینے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔";
 "screen_room_notification_settings_mentions_only_disclaimer" = "آپ کا منزلی خادم مرموز کردہ کمروں میں اس اختیار کی حمایت نہیں کرتا ہے، آپ کو اس کمرے میں مطلع کیا جائے گا۔";
-"screen_room_notification_settings_mode_all_messages" = "تمام پیغامات";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "صرف تذکرے اور کلیدی الفاظ";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "اس کمرے میں، مجھے مطلع کریں برائے";
 "screen_room_pinned_banner_indicator" = "%1$@ از %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ مثبتہ پیغامات";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "نقص: %1$@۔";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "نقص، دھکا جانچ نہیں سکتا";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "نقص، دھکے کے انتظار میں نفذ الوقت";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "دھکئی حلقۂ رجوعیہ نے %1$d مث لیا";
 "troubleshoot_notifications_test_push_loop_back_title" = "دھکئی حلقۂ رجوعیہ جانچیں";
 "troubleshoot_notifications_test_unified_push_description" = "یقینی بنائیں کہ UnifiedPush تقسیم کاران دستیاب ہیں۔";

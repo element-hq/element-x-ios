@@ -524,6 +524,7 @@
 "notification_invitation_action_reject" = "Afvis";
 "notification_invite_body" = "Inviterede dig til at samtale";
 "notification_invite_body_with_sender" = "%1$@ inviterede dig til at samtale";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nævnte dig: %1$@";
 "notification_new_messages" = "Nye beskeder";
@@ -1363,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Gendannelse af standardtilstanden mislykkedes. Prøv igen.";
 "screen_room_notification_settings_error_setting_mode" = "Kunne ikke indstille tilstanden. Prøv igen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hjemmeserver understøtter ikke denne indstilling i krypterede rum, du får ikke besked i dette rum.";
-"screen_room_notification_settings_mode_all_messages" = "Alle beskeder";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Kun omtaler og nøgleord";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Giv mig besked i dette rum for";
 "screen_room_pinned_banner_indicator" = "%1$@ af %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Fastgjorte beskeder";
@@ -1721,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Fejl: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Fejl, kan ikke teste push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Fejl, timeout venter på push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back tog %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Afprøv Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Sørg for, at UnifiedPush-distributører er tilgængelige.";
