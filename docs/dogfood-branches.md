@@ -2367,7 +2367,7 @@ the timeline waits on the network is a *leading* gap with nothing cached
 behind it (plus the empty-room bootstrap), which is the intended
 "nothing left in the cache" case.
 
-## Round 16: Skeletons-forever root cause, launch loading overlay
+## Round 16: Skeletons-forever root cause, re-introduce skeletons on launch
 
 Commits: EXI [`73a0c75fc`](https://github.com/element-hq/element-x-ios/commit/73a0c75fc), [`15e7a42e0`](https://github.com/element-hq/element-x-ios/commit/15e7a42e0), [`217289b85`](https://github.com/element-hq/element-x-ios/commit/217289b85), [`da464bc52`](https://github.com/element-hq/element-x-ios/commit/da464bc52), [`30c6c8ae2`](https://github.com/element-hq/element-x-ios/commit/30c6c8ae2).
 
@@ -2427,3 +2427,38 @@ resolves too, since it sits in `TimelineViewModel.updateViewState`, the
 one regroup path every applied diff goes through. Residual: the item
 *above* a resolved gap can still animate its corner radii
 (`.last` -> `.middle`), no header or layout shift involved.
+
+## Round 17: spurious slide at every gap resolution
+
+Symptom (screen recording, GNOME Newcomers, 2026-08-17): scrolling up
+into a gap, the rows below the spinner slide up by the spinner's height
+(sender header of the top message disappears, the day divider
+crossfades), then ~0.3s later the fetched content lands in place. Frame
+analysis of the recording (60fps strips) plus the device log show the
+sequence exactly: every `Finished resolving timeline gap` is followed by
+`Timeline(live) applied ["Remove(1)"]` and, 10-20ms later, a second
+apply with the inserts (`["Insert", "Set(1)", ..., "Set(0)"]`).
+
+Root cause (SDK `e83dfeaf3`): `Timeline::resolve_gap` refreshed the gaps
+snapshot synchronously right after the event cache resolved the gap
+(`ce16d5247`, added to reach the room start when the last leading gap
+resolves). That commits a transaction of its own that removes the gap
+item, racing the event subscriber task that applies the fetched events'
+diffs a moment later. EXI's policy is to animate pure spinner removals
+(`912c06177`), so the removal-only batch is precisely the case that
+slides; the content batch is then applied unanimated and pinned. The
+events update already reads the current gaps snapshot and applies diffs
+and gaps in one transaction, and the trailing `UpdateTimelineGaps` update
+settles the timeline start, so the eager refresh was redundant. Dropped
+for resolutions (kept after paginations, which only ever add gaps); the
+regression test now asserts the gap removal and the event insertion
+arrive in the same batch.
+
+Not a bug, for the record: the "Tuesday" floating date badge over Monday
+content in the same clip is the badge lagging behind the newly inserted
+rows (it updates on scroll); and the first 0.3s of the clip is the
+overscroll rubber-band settling, not an animation.
+
+Side note from the same log: `duplicate read receipts in this timeline`
+ERRORs dump the whole item list, 400-700KB per line, dozens of times a
+minute in busy rooms. Worth trimming before upstreaming the diagnostics.
