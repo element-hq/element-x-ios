@@ -68,7 +68,8 @@ struct ManageStorageScreenViewState: BindableState {
         case let count: UntranslatedL10n.screenManageStorageScopeRooms(count)
         }
         let total = activeCaches.reduce(0) { $0 + bytes(for: $1) }
-        return if isFiltered {
+        // The count waits for the rooms rather than reading "0 rooms" while they load.
+        return if isFiltered || isLoadingRooms {
             "\(scope) (\(StorageUsageChart.megabytes(total)))"
         } else {
             "\(scope) (\(StorageUsageChart.megabytes(total)), \(UntranslatedL10n.screenManageStorageScopeRooms(rooms.count)))"
