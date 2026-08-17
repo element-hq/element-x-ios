@@ -2060,7 +2060,7 @@ only once the viewer has paged to the newest end.
 
 ### Round 9: Manage storage screen in Advanced Settings
 
-Commits: SDK [`88a7907a0`](https://github.com/matrix-org/matrix-rust-sdk/commit/88a7907a0), [`f0070d5c0`](https://github.com/matrix-org/matrix-rust-sdk/commit/f0070d5c0); EXI [`1bfc65c0e`](https://github.com/element-hq/element-x-ios/commit/1bfc65c0e).
+Commits: SDK [`88a7907a0`](https://github.com/matrix-org/matrix-rust-sdk/commit/88a7907a0), [`ac895b612`](https://github.com/matrix-org/matrix-rust-sdk/commit/ac895b612), [`f0070d5c0`](https://github.com/matrix-org/matrix-rust-sdk/commit/f0070d5c0); EXI [`1bfc65c0e`](https://github.com/element-hq/element-x-ios/commit/1bfc65c0e).
 
 Advanced settings → Manage storage: a colour-coded horizontal bar chart of
 the caches (Cached message keys = crypto store megolm sessions, Cached
@@ -2293,7 +2293,7 @@ Follow-ups (builds 31-34):
 
 ## Round 14: Manage storage, fourth pass
 
-Commits: SDK [`f8b8b7cfa`](https://github.com/matrix-org/matrix-rust-sdk/commit/f8b8b7cfa); EXI [`107753bb5`](https://github.com/element-hq/element-x-ios/commit/107753bb5).
+Commits: SDK [`f8b8b7cfa`](https://github.com/matrix-org/matrix-rust-sdk/commit/f8b8b7cfa); EXI [`107753bb5`](https://github.com/element-hq/element-x-ios/commit/107753bb5), [`e3325dbda`](https://github.com/element-hq/element-x-ios/commit/e3325dbda), [`eec67d48c`](https://github.com/element-hq/element-x-ios/commit/eec67d48c), [`4de28ca89`](https://github.com/element-hq/element-x-ios/commit/4de28ca89), [`af1ae89fb`](https://github.com/element-hq/element-x-ios/commit/af1ae89fb), [`96c5b31ef`](https://github.com/element-hq/element-x-ios/commit/96c5b31ef).
 
 With the media share measured from the URI index in one query (round 11),
 the whole per-room walk finishes in well under a second, so the
@@ -2325,3 +2325,5 @@ re-sort under the user's finger. Changes:
   (so no logs once filtered to rooms); the room count is the rooms with
   any cached data (what the SDK reports), shown in All rooms mode only.
 - Listing threshold lowered from 5 MB to 1 MB.
+- The room count is elided from the header until the rooms have loaded
+  (no "0 rooms" flash).
