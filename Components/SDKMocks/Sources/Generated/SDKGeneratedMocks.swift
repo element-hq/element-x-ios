@@ -18465,16 +18465,27 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         get { sendReplyMsgEventIdReceivedInvocationsLock.withLock { sendReplyMsgEventIdUnderlyingReceivedInvocations } }
         set { sendReplyMsgEventIdReceivedInvocationsLock.withLock { sendReplyMsgEventIdUnderlyingReceivedInvocations = newValue } }
     }
-    open var sendReplyMsgEventIdClosure: ((RoomMessageEventContentWithoutRelation, String) async throws -> Void)?
 
-    open override func sendReply(msg: RoomMessageEventContentWithoutRelation, eventId: String) async throws {
+    private let sendReplyMsgEventIdReturnValueLock = NSLock()
+    open var sendReplyMsgEventIdUnderlyingReturnValue: SendHandle!
+    open var sendReplyMsgEventIdReturnValue: SendHandle! {
+        get { sendReplyMsgEventIdReturnValueLock.withLock { sendReplyMsgEventIdUnderlyingReturnValue } }
+        set { sendReplyMsgEventIdReturnValueLock.withLock { sendReplyMsgEventIdUnderlyingReturnValue = newValue } }
+    }
+    open var sendReplyMsgEventIdClosure: ((RoomMessageEventContentWithoutRelation, String) async throws -> SendHandle)?
+
+    open override func sendReply(msg: RoomMessageEventContentWithoutRelation, eventId: String) async throws -> SendHandle {
         if let error = sendReplyMsgEventIdThrowableError {
             throw error
         }
         sendReplyMsgEventIdCallsCountLock.withLock { sendReplyMsgEventIdUnderlyingCallsCount += 1 }
         sendReplyMsgEventIdReceivedArguments = (msg: msg, eventId: eventId)
         sendReplyMsgEventIdReceivedInvocationsLock.withLock { sendReplyMsgEventIdUnderlyingReceivedInvocations.append((msg: msg, eventId: eventId)) }
-        try await sendReplyMsgEventIdClosure?(msg, eventId)
+        if let sendReplyMsgEventIdClosure = sendReplyMsgEventIdClosure {
+            return try await sendReplyMsgEventIdClosure(msg, eventId)
+        } else {
+            return sendReplyMsgEventIdReturnValue
+        }
     }
 
     //MARK: - sendVideo
