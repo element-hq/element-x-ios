@@ -119,7 +119,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         stateMachine = AppCoordinatorStateMachine()
         
-        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
+        let splashScreenCoordinator = SplashScreenCoordinator()
+        self.splashScreenCoordinator = splashScreenCoordinator
+        navigationRootCoordinator.setRootCoordinator(splashScreenCoordinator)
         
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
@@ -692,6 +694,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     /// The session restore started eagerly during `init`, so that it overlaps the rest of
     /// the app's launch work instead of waiting for the state machine to request it.
     private var eagerRestoreTask: Task<Result<UserSessionProtocol, UserSessionStoreError>, Never>?
+    
+    /// The splash currently at the root (nil once a flow has replaced it).
+    private weak var splashScreenCoordinator: SplashScreenCoordinator?
+    
+    private func presentSplashScreenRoot() {
+        let coordinator = SplashScreenCoordinator()
+        splashScreenCoordinator = coordinator
+        navigationRootCoordinator.setRootCoordinator(coordinator)
+    }
 
     private func restoreUserSession() {
         Task {
@@ -701,17 +712,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             eagerRestoreTask = nil
             
             // A store migration (or a slow first room list) keeps the static splash up for
-            // seconds, which reads as a hang; show the loading modal so nobody force-quits
-            // the app mid-migration. Only past a delay: the common launch shouldn't flash it.
+            // seconds, which reads as a hang; past a delay, show room-list skeletons on the
+            // splash as an affordance that the app is busy. The common launch (rooms at
+            // ~200ms) never sees them.
             let slowRestoreIndicator = Task { [weak self] in
-                try? await Task.sleep(for: .seconds(1))
+                try? await Task.sleep(for: .milliseconds(500))
                 guard !Task.isCancelled else { return }
-                self?.showLoadingIndicator()
+                self?.splashScreenCoordinator?.showSkeletons()
             }
-            defer {
-                slowRestoreIndicator.cancel()
-                hideLoadingIndicator()
-            }
+            defer { slowRestoreIndicator.cancel() }
             
             switch await restoreTask.value {
             case .success(let userSession):
@@ -964,7 +973,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func presentSplashScreen(isSoftLogout: Bool = false, disableAppLock: Bool = false) {
-        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
+        presentSplashScreenRoot()
         
         if isSoftLogout {
             startAuthenticationSoftLogout()

@@ -8,9 +8,19 @@
 
 import SwiftUI
 
+@Observable
 class SplashScreenCoordinator: CoordinatorProtocol {
+    /// Whether the splash is showing room-list placeholders instead of a blank canvas.
+    private(set) var showsSkeletons = false
+    
+    /// Swap the blank canvas for room-list skeletons: an affordance that the app is busy
+    /// (e.g. a store migration) rather than hung, when the session takes a while to restore.
+    func showSkeletons() {
+        showsSkeletons = true
+    }
+    
     func toPresentable() -> AnyView {
-        AnyView(SplashScreen())
+        AnyView(SplashScreen(coordinator: self))
     }
 }
 
@@ -18,8 +28,33 @@ class SplashScreenCoordinator: CoordinatorProtocol {
 /// until the app is ready to show the relevant coordinator. The design of
 /// these 2 screens are matched.
 struct SplashScreen: View {
+    var coordinator: SplashScreenCoordinator?
+    
     var body: some View {
-        Color.compound.bgCanvasDefault.ignoresSafeArea()
+        ZStack {
+            Color.compound.bgCanvasDefault.ignoresSafeArea()
+            
+            if coordinator?.showsSkeletons == true {
+                skeletons
+            }
+        }
+    }
+    
+    /// Mirrors the home screen's `.skeletons` mode so the hand-over to the real list is seamless.
+    private var skeletons: some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(0..<10, id: \.self) { _ in
+                    HomeScreenRoomCell(room: .placeholder(), isSelected: false, mediaProvider: nil) { _ in }
+                        .redacted(reason: .placeholder)
+                        .shimmer()
+                }
+            }
+        }
+        .disabled(true)
+        .accessibilityRepresentation {
+            Text(L10n.commonLoading)
+        }
     }
 }
 

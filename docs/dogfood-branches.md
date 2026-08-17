@@ -2622,3 +2622,10 @@ Decision: [`da464bc52`](https://github.com/element-hq/element-x-ios/commit/da464
 ([`15e7a42e0`](https://github.com/element-hq/element-x-ios/commit/15e7a42e0)) are back: rooms at first paint,
 summary build on an idle main thread. Round-16's skeleton-deadlock fix
 ([`73a0c75fc`](https://github.com/element-hq/element-x-ios/commit/73a0c75fc)) is unaffected.
+
+Follow-up: the >1s "Loading..." modal is replaced by skeletons on the
+splash itself after 500ms of restore (`SplashScreenCoordinator.showSkeletons`,
+same placeholder cells as the home screen's `.skeletons` mode, no
+session needed, so it also covers a store migration inside the client
+build). Build 58 re-benchmark: `rooms_shown_ms` 194-221, first 64-room
+page 39-45ms, i.e. back to the 2026-08-10 numbers.
