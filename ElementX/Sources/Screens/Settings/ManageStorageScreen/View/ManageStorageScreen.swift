@@ -257,7 +257,7 @@ extension [StorageUsageRoom] {
             StorageUsageRoom(id: "!medium:example.org", name: "Matrix HQ", lastActivity: .now.addingTimeInterval(-100 * 24 * 3600),
                              bytes: [.messageKeys: 5_000_000, .roomState: 60_000_000, .messages: 20_000_000, .media: 10_000_000]),
             StorageUsageRoom(id: "!small:example.org", name: nil, lastActivity: nil,
-                             bytes: [.messageKeys: 100_000, .roomState: 500_000, .messages: 900_000, .media: 0])
+                             bytes: [.messageKeys: 100_000, .roomState: 200_000, .messages: 400_000, .media: 0])
         ]
     }
 }

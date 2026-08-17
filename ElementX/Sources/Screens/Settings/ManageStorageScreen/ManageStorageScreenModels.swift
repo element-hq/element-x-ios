@@ -17,7 +17,7 @@ enum ManageStorageScreenViewModelAction {
 
 struct ManageStorageScreenViewState: BindableState {
     /// The smallest room worth listing.
-    static let listedRoomMinimumBytes: UInt64 = 5_000_000
+    static let listedRoomMinimumBytes: UInt64 = 1_000_000
 
     var isLoading = true
     /// Whether the rooms are still being walked (they fill in progressively).
@@ -59,13 +59,16 @@ struct ManageStorageScreenViewState: BindableState {
         listedRooms.first?.totalBytes ?? 0
     }
 
-    /// The label of the bar chart: all rooms, the selected room, or the number of selected rooms.
+    /// The label of the bar chart: all rooms, the selected room, or the number of selected rooms,
+    /// with the scope's total (the active caches only, so no logs when filtered to rooms).
     var scopeTitle: String {
-        switch selectedRooms.count {
+        let scope = switch selectedRooms.count {
         case 0: UntranslatedL10n.screenManageStorageScopeAllRooms
         case 1: selectedRooms[0].displayName
         case let count: UntranslatedL10n.screenManageStorageScopeRooms(count)
         }
+        let total = activeCaches.reduce(0) { $0 + bytes(for: $1) }
+        return "\(scope) (\(StorageUsageChart.megabytes(total)))"
     }
 
     var clearAllTitle: String {

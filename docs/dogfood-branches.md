@@ -2320,3 +2320,7 @@ re-sort under the user's finger. Changes:
   selection doesn't vanish from under the user.
 - The Manage storage row moved up above Moderation and safety in
   Advanced settings.
+- The chart header carries the scope's total, e.g. "All rooms (580.0 MB)"
+  or "Matrix HQ (95.0 MB)", summing the active caches only (so no logs
+  once filtered to rooms).
+- Listing threshold lowered from 5 MB to 1 MB.

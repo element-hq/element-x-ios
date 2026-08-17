@@ -56,7 +56,7 @@ struct ManageStorageScreenViewModelTests {
         #expect(context.viewState.activeCaches == StorageCacheKind.allCases)
         #expect(context.viewState.bytes(for: .logs) == 3000)
         #expect(context.viewState.bytes(for: .media) == StoreSizes.mock.mediaStore)
-        #expect(context.viewState.scopeTitle == UntranslatedL10n.screenManageStorageScopeAllRooms)
+        #expect(context.viewState.scopeTitle == "\(UntranslatedL10n.screenManageStorageScopeAllRooms) (530.0 MB)")
         #expect(context.viewState.rooms.map(\.id) == [StorageUsageRoom].mock.map(\.id))
         // The small room isn't worth listing.
         #expect(context.viewState.listedRooms.map(\.id) == ["!big:example.org", "!medium:example.org"])
@@ -66,13 +66,13 @@ struct ManageStorageScreenViewModelTests {
         #expect(context.viewState.activeCaches == StorageCacheKind.allCases.filter(\.isPerRoom))
         #expect(context.viewState.bytes(for: .logs) == 3000)
         #expect(context.viewState.bytes(for: .roomState) == 60_000_000)
-        #expect(context.viewState.scopeTitle == "Matrix HQ")
+        #expect(context.viewState.scopeTitle == "Matrix HQ (95.0 MB)")
         #expect(context.viewState.clearAllTitle == UntranslatedL10n.screenManageStorageClearForRoom("Matrix HQ"))
 
         // Two rooms: summed.
         context.send(viewAction: .toggleRoom("!big:example.org"))
         #expect(context.viewState.bytes(for: .roomState) == 90_000_000)
-        #expect(context.viewState.scopeTitle == UntranslatedL10n.screenManageStorageScopeRooms(2))
+        #expect(context.viewState.scopeTitle == "\(UntranslatedL10n.screenManageStorageScopeRooms(2)) (467.0 MB)")
         #expect(context.viewState.clearAllTitle == UntranslatedL10n.screenManageStorageClearForRooms(2))
     }
 

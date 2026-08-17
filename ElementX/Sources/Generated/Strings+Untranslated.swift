@@ -54,7 +54,7 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenManageStorageCleared: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_cleared") }
   /// Some caches could not be cleared.
   internal static var screenManageStorageError: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_error") }
-  /// Rooms using more than 5 MB. Select rooms to see and clear their caches only.
+  /// Rooms using more than 1 MB. Select rooms to see and clear their caches only.
   internal static var screenManageStorageRoomsSectionFooter: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_rooms_section_footer") }
   /// Storage by room
   internal static var screenManageStorageRoomsSectionTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_rooms_section_title") }
