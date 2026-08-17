@@ -56,7 +56,7 @@ struct ManageStorageScreenViewModelTests {
         #expect(context.viewState.activeCaches == StorageCacheKind.allCases)
         #expect(context.viewState.bytes(for: .logs) == 3000)
         #expect(context.viewState.bytes(for: .media) == StoreSizes.mock.mediaStore)
-        #expect(context.viewState.scopeTitle == "\(UntranslatedL10n.screenManageStorageScopeAllRooms) (530.0 MB)")
+        #expect(context.viewState.scopeTitle == "\(UntranslatedL10n.screenManageStorageScopeAllRooms) (530.0 MB, 3 rooms)")
         #expect(context.viewState.rooms.map(\.id) == [StorageUsageRoom].mock.map(\.id))
         // The small room isn't worth listing.
         #expect(context.viewState.listedRooms.map(\.id) == ["!big:example.org", "!medium:example.org"])

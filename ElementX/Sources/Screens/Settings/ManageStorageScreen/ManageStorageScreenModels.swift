@@ -68,7 +68,11 @@ struct ManageStorageScreenViewState: BindableState {
         case let count: UntranslatedL10n.screenManageStorageScopeRooms(count)
         }
         let total = activeCaches.reduce(0) { $0 + bytes(for: $1) }
-        return "\(scope) (\(StorageUsageChart.megabytes(total)))"
+        return if isFiltered {
+            "\(scope) (\(StorageUsageChart.megabytes(total)))"
+        } else {
+            "\(scope) (\(StorageUsageChart.megabytes(total)), \(UntranslatedL10n.screenManageStorageScopeRooms(rooms.count)))"
+        }
     }
 
     var clearAllTitle: String {
