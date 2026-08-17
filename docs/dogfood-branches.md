@@ -2462,4 +2462,7 @@ an animation.
 
 Side note from the same log: `duplicate read receipts in this timeline`
 ERRORs dump the whole item list, 400-700KB per line, dozens of times a
-minute in busy rooms. Worth trimming before upstreaming the diagnostics.
+minute in busy rooms (68MB of log in an hour). Trimmed in SDK
+`3af5613ce`: the duplicates field already names the events; the items
+dump is gone. Whether the duplicates themselves are a preview-prefill
+artefact (gaps, prefilled receipts) is still open.
