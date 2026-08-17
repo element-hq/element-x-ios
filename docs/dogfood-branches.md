@@ -2595,7 +2595,22 @@ lock. On the launch page one busy bridged room's last chunk took 117ms
 SDK [`a14651a2d`](https://github.com/matrix-org/matrix-rust-sdk/commit/a14651a2d): read the original straight from the event cache store
 (read-only, dirty lock fine); no room cache is created.
 
-Post-fix numbers below. Also seen, not regressions: the encryption
+Post-fix (build 55): `rooms_shown_ms` 347-384; the 64-room page still
+reported 202-231ms. New per-batch diagnostics (EXI [`ab4232f14`](https://github.com/element-hq/element-x-ios/commit/ab4232f14),
+`SummaryBuild:` line) split it: the summaries themselves finish ~50ms
+after the list loads (FFI 300-480ms of work across 8 concurrent tasks);
+the other ~150ms is `updateRoomsWithDiffs` waiting for its hop back to
+the main actor, which is busy mounting the home screen's skeletons and
+tab bar. That is the round-16 back-out of the splash gate
+([`5ae04e03f`](https://github.com/element-hq/element-x-ios/commit/5ae04e03f), held the splash ~until the cached list had published, so
+the build ran on an idle main thread and the home screen mounted
+straight into rooms): the 2026-08-10 numbers were taken with the gate
+in place. The gate never covered the store-migration case (that runs
+inside the client build, before any session UI), so restoring it costs
+nothing there; without it a launch is skeletons for ~150ms and rooms at
+~350ms instead of ~200ms. Product call.
+
+Also seen, not regressions: the encryption
 sliding-sync connection restarts with `pos=None` on every launch and
 marks all tracked users dirty (five ~1MB `/keys/query` per launch,
 `bytes_down` 2-4MB, upstream behaviour); the room-list connection's
