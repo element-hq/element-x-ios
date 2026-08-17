@@ -142,14 +142,14 @@ extension StorageCacheKind {
         }
     }
 
-    /// The bar colour, one of Compound's decorative colours.
+    /// The bar colour, Compound's functional semantic colours (the 700 core tokens).
     var color: Color {
         switch self {
-        case .messageKeys: .compound.textDecorative1
-        case .roomState: .compound.textDecorative2
-        case .messages: .compound.textDecorative3
-        case .media: .compound.textDecorative4
-        case .logs: .compound.textDecorative5
+        case .messageKeys: CompoundCoreColorTokens.blue700
+        case .roomState: CompoundCoreColorTokens.green700
+        case .messages: CompoundCoreColorTokens.yellow700
+        case .media: CompoundCoreColorTokens.red700
+        case .logs: CompoundCoreColorTokens.gray700
         }
     }
 }
