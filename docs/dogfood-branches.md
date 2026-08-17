@@ -2369,7 +2369,7 @@ behind it (plus the empty-room bootstrap), which is the intended
 
 ## Round 16: Skeletons-forever root cause, launch loading overlay
 
-Commits: EXI [`73a0c75fc`](https://github.com/element-hq/element-x-ios/commit/73a0c75fc), launch overlay commit below.
+Commits: EXI [`73a0c75fc`](https://github.com/element-hq/element-x-ios/commit/73a0c75fc), [`15e7a42e0`](https://github.com/element-hq/element-x-ios/commit/15e7a42e0), [`217289b85`](https://github.com/element-hq/element-x-ios/commit/217289b85), [`da464bc52`](https://github.com/element-hq/element-x-ios/commit/da464bc52), [`30c6c8ae2`](https://github.com/element-hq/element-x-ios/commit/30c6c8ae2).
 
 The "stuck on skeletons" home list recurred (console.2026-08-17-11.log,
 10:02:59Z, ~5s into a launch) and this time the round-14 diagnostics
@@ -2412,3 +2412,8 @@ screen mounts as soon as the session is restored and shows skeletons
 until the first summaries land. Caveat: a store migration runs inside
 the client build, before any session UI exists, so during that phase
 the splash is still all there is.
+
+Manage storage bar colours: the decorative pastels are replaced with
+Compound core palette tokens, `blue-800` (message keys), `green-700`
+(room state), `yellow-500` (messages), `purple-800` (media),
+`fuchsia-800` (logs).
