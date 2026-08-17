@@ -2314,3 +2314,9 @@ re-sort under the user's finger. Changes:
 - Selecting rooms no longer hides the log-files row (which made the
   layout pop): all five rows stay; the session-wide one is greyed out,
   its bar fill hidden and its clear button disabled (`activeCaches`).
+- Rooms the user has selected stay listed (and selected) even once a
+  clear takes them under the 5 MB bar or out of the report entirely
+  (kept as an empty entry until the screen is next opened), so the
+  selection doesn't vanish from under the user.
+- The Manage storage row moved up above Moderation and safety in
+  Advanced settings.

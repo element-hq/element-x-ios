@@ -32,9 +32,10 @@ struct ManageStorageScreenViewState: BindableState {
 
     var isFiltered: Bool { !selectedRoomIDs.isEmpty }
 
-    /// The rooms shown: the ones using more than ``listedRoomMinimumBytes``.
+    /// The rooms shown: the ones using more than ``listedRoomMinimumBytes``, and the selected
+    /// ones regardless (clearing shrinks them, but they shouldn't vanish from under the selection).
     var listedRooms: [StorageUsageRoom] {
-        rooms.filter { $0.totalBytes >= Self.listedRoomMinimumBytes }
+        rooms.filter { $0.totalBytes >= Self.listedRoomMinimumBytes || selectedRoomIDs.contains($0.id) }
     }
 
     var selectedRooms: [StorageUsageRoom] {

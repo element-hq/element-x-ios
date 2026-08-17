@@ -29,7 +29,11 @@ struct ManageStorageScreenViewModelTests {
             }
             return .success(sizes)
         }
-        clientProxy.storageUsageByRoomReturnValue = .success(.mock)
+        clientProxy.storageUsageByRoomClosure = { [clientProxy] in
+            // After a clear, the big room reports nothing at all.
+            let rooms = [StorageUsageRoom].mock
+            return .success(clientProxy.storageUsageByRoomCallsCount > 1 ? rooms.filter { $0.id != "!big:example.org" } : rooms)
+        }
         clientProxy.clearRoomKeysRoomIDsReturnValue = .success(())
         clientProxy.clearRoomCachesRoomIDsReturnValue = .success(())
         clientProxy.clearMediaCacheRoomIDsNotAccessedForReturnValue = .success(())
@@ -94,6 +98,12 @@ struct ManageStorageScreenViewModelTests {
         #expect(clientProxy.clearMediaCacheRoomIDsNotAccessedForReceivedArguments?.notAccessedFor == nil)
         // The logs are session-wide: untouched.
         #expect(context.viewState.totalBytes[.logs] == 3000)
+
+        // The cleared room stays listed and selected (empty) rather than vanishing from under the selection.
+        try await waitForLoad()
+        #expect(context.viewState.selectedRoomIDs == ["!big:example.org"])
+        #expect(context.viewState.listedRooms.map(\.id) == ["!medium:example.org", "!big:example.org"])
+        #expect(context.viewState.bytes(for: .roomState) == 0)
     }
 
     @Test

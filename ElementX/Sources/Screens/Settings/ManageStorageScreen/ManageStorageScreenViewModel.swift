@@ -92,8 +92,13 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
             guard !Task.isCancelled, let self else { return }
             switch result {
             case .success(let rooms):
-                state.rooms = rooms
-                state.selectedRoomIDs = state.selectedRoomIDs.intersection(rooms.map(\.id))
+                // A selected room cleared to nothing is no longer reported: keep it listed (empty)
+                // rather than dropping the selection out from under the user.
+                let reportedIDs = Set(rooms.map(\.id))
+                let emptiedSelection = state.rooms
+                    .filter { state.selectedRoomIDs.contains($0.id) && !reportedIDs.contains($0.id) }
+                    .map { StorageUsageRoom(id: $0.id, name: $0.name, lastActivity: $0.lastActivity, bytes: [:]) }
+                state.rooms = rooms + emptiedSelection
             case .failure(let error):
                 MXLog.error("Failed measuring the rooms' storage usage: \(error)")
                 state.bindings.alertInfo = .init(id: .failure, title: L10n.errorUnknown, message: String(describing: error))
