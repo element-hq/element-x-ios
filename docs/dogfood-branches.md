@@ -2700,3 +2700,55 @@ duplicate-one-time-key assertion it exists for is untouched). Upstream
 bug, upstream candidate. Remaining, upstream: the `pos=None` restart of
 the encryption connection at every launch (round 22) is what makes the
 batch that heavy in the first place. Build 60 = SDK 41edd7f48.
+
+### The ~5MB of `/keys/query` per launch, in detail
+
+Not fixed on the branch; recorded here so it can be taken upstream.
+
+Mechanism. `EncryptionSyncService` builds its sliding sync without
+`share_pos()` (the call is commented out in
+`encryption_sync_service.rs` with "racy, needs cross-process lock"), so
+the encryption connection's `pos` only lives in memory: every process
+start (cold launch, background app refresh, foreground after a kill)
+begins with `pos=None`. MSC4186 returns no `device_lists` changes for a
+request without `pos`, so `send_sync_request` marks every tracked user
+dirty (`sliding_sync/mod.rs:707`, "Marking all tracked users as dirty");
+`OlmMachine::users_for_key_query` then chunks the tracked users 250 per
+request (`MAX_KEY_QUERY_USERS`), which on this account is 5 parallel
+`/keys/query`, each 0.4-1.2MB (~1000-1250 tracked users; the largest
+users are big federated rooms), i.e. ~4.5MB and 2-22s of matrix.org
+time per restart. The same happens after every silent session restart:
+`SyncService` restarts both connections when either expires, so the
+encryption connection loses its in-memory `pos` again.
+
+This hour (console.2026-08-18-07.log), six batches ≈ 27MB in 40 minutes:
+
+| when | trigger | batches |
+|---|---|---|
+| 06:15:02 | background app refresh | 10 requests sent (5 aborted with the loop, 5 re-sent), 5 answered, 4.1MB |
+| 06:22:41 + 06:22:47 | background app refresh, then silent restart | 5 + 5, 4.1MB + 4.1MB |
+| 06:47:34 + 06:47:40 | background app refresh, then silent restart | 5 + 5, 4.5MB + 4.5MB |
+| 06:53:48 | foreground | 5, 4.1MB (the round-24 batch, slowest 22.5s) |
+
+The doubles have their own cause: the room-list connection restored a
+persisted `pos` (`667230561/…`) that the previous process had already
+moved past (it used `667535803/…` for its last 3 requests but was killed
+before the ack-gated persist, see the pos/event-cache ordering section),
+Synapse had pruned the older position, `M_UNKNOWN_POS` → silent restart
+→ second batch. So on this branch every background refresh that dies
+mid-catch-up costs ~9MB the next time round.
+
+The NSE is already exempt (`c187fef45`: a notification process only
+decrypts, stale device lists can't make that unsafe), which is the
+argument for the general fix: device lists only need to be fresh before
+*encrypting*. Options, cheapest first: (a) mark users dirty but do not
+issue the `/keys/query` until a room key is about to be shared with them
+(lazy refresh; the SDK already re-queries dirty users before
+`share_room_key`), so a launch that only reads costs nothing; (b) persist
+the encryption `pos` under the existing cross-process crypto store lock
+(the NSE takes that lock anyway, and its position is in-memory so it
+never writes one), which removes the `pos=None` restart for the main
+process entirely; (c) do not restart the encryption connection when only
+the room-list connection expired. Any of these is upstream work; the
+branch keeps the behaviour and only fixes the ordering (41edd7f48) so
+the batch no longer holds the room key hostage.
