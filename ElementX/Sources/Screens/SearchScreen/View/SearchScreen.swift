@@ -33,7 +33,7 @@ struct SearchScreen: View {
         VStack(alignment: .leading, spacing: 0) {
             // Rendered as content rather than a navigation title so it stays visible while the search field is focused.
             Text(L10n.actionSearch)
-                .font(.compound.headingXLBold)
+                .font(.compound.headingLGBold)
                 .foregroundStyle(.compound.textPrimary)
                 .accessibilityAddTraits(.isHeader)
                 .frame(maxWidth: .infinity, alignment: .leading)

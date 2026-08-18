@@ -12,6 +12,8 @@ import SentrySwiftUI
 import SwiftUI
 
 struct HomeScreen: View {
+    @Environment(\.isInSidebar) private var isInSidebar
+    
     @ObservedObject var context: HomeScreenViewModel.Context
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
@@ -28,10 +30,12 @@ struct HomeScreen: View {
                    actions: leaveRoomAlertActions,
                    message: leaveRoomAlertMessage)
             .navigationTitle(title)
+            .navigationBarTitleDisplayMode(Compound.supportsGlass ? .inline : .automatic)
             .toolbar { toolbar }
+            .toolbarRole(Compound.supportsGlass ? .editor : .automatic)
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .track(screen: .Home)
-            .toolbarBloom(hasSearchBar: true)
+            .toolbarBloom(hasSearchBar: context.viewState.isRoomListSearchEnabled)
             .sentryTrace("\(Self.self)")
             .sheet(item: $context.spaceFiltersViewModel) { vm in
                 ChatsSpaceFiltersScreen(context: vm.context)
@@ -52,10 +56,21 @@ struct HomeScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
-            settingsButton
-                .buttonStyle(.borderless)
+        ToolbarItem(placement: Compound.supportsGlass ? .title : .navigationBarLeading) {
+            HStack(spacing: isInSidebar ? 8 : 12) {
+                // The settings button is inside the title on iOS 26 to workaround a
+                // weird liquid glass transition when pushing/popping a room.
+                settingsButton
+                    .buttonStyle(.borderless)
+                
+                if #available(iOS 26, *) {
+                    Text(title)
+                        .font(isInSidebar ? .compound.bodyLGSemibold : .compound.headingLGBold)
+                        .foregroundStyle(.compound.textPrimary)
+                }
+            }
         }
+        .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .primaryAction) {
             if #available(iOS 26, *) {
