@@ -1,6 +1,7 @@
 import ArgumentParser
 import Foundation
 import Subprocess
+import XcresultparserLib
 import Yams
 
 struct CI: ParsableCommand {
@@ -75,7 +76,11 @@ struct CI: ParsableCommand {
         }
         
         do {
-            try await run(.path("/bin/zsh"), ["-cu", "xcresultparser -q -o cobertura -t \(target) -p \(projectPath) \(resultBundlePath) > \(outputPath)"])
+            let converter = try CoberturaCoverageConverter(with: URL(filePath: resultBundlePath),
+                                                           projectRoot: projectPath,
+                                                           coverageTargets: [target],
+                                                           strictPathnames: false)
+            try converter.xmlString(quiet: true).write(toFile: outputPath, atomically: true, encoding: .utf8)
             logger.info("\n📊 Coverage report: \(outputPath)\n")
         } catch {
             logger.error("\n❌ Failed to collect coverage for \(resultBundle): \(error.localizedDescription)\n")
@@ -95,7 +100,8 @@ struct CI: ParsableCommand {
         }
         
         do {
-            try await run(.path("/bin/zsh"), ["-cu", "xcresultparser -q -o junit -p \(projectPath) \(resultBundlePath) > \(outputPath)"])
+            let junitXML = try JunitXML(with: URL(filePath: resultBundlePath), projectRoot: projectPath)
+            try junitXML.xmlString.write(toFile: outputPath, atomically: true, encoding: .utf8)
             logger.info("📋 Test results: \(outputPath)")
         } catch {
             logger.error("\n❌ Failed to collect test results for \(resultBundle): \(error.localizedDescription)\n")

@@ -1,5 +1,5 @@
 {
-  "originHash" : "ec77bc40677bd20f99d813dea09781e534f4cb4539fb504b27d997b95f98d6d0",
+  "originHash" : "eb16f7bcd7ef32b27433d7e2ee4cd129ad3c29e854c62696900658127333c78e",
   "pins" : [
     {
       "identity" : "pkl-swift",
@@ -62,6 +62,15 @@
       "state" : {
         "revision" : "669763cfd5806a67e21972d7e5e2d6b80b1ea985",
         "version" : "1.6.5"
+      }
+    },
+    {
+      "identity" : "xcresultparser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/a7ex/xcresultparser",
+      "state" : {
+        "revision" : "95ca65d0bd56250ccd16331f5b0480a1a2c0c5e9",
+        "version" : "2.2.0"
       }
     },
     {
