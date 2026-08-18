@@ -1563,7 +1563,6 @@ private struct ClientProxyServices {
                                                            name: "AlternateAllRooms",
                                                            notificationSettings: notificationSettings,
                                                            appSettings: appSettings)
-        try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
         
         staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
@@ -1571,7 +1570,29 @@ private struct ClientProxyServices {
                                                         roomListPageSize: .max,
                                                         notificationSettings: notificationSettings,
                                                         appSettings: appSettings)
-        try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
+        
+        // Setting a provider's room list will create summaries for every room so
+        // wait until the app is fully running for the alternate and static providers.
+        Task { [roomSummaryProvider, alternateRoomSummaryProvider, staticRoomSummaryProvider] in
+            // Wait for actual content (or a loaded-but-empty account) as the loading state
+            // doesn't take into account the app having build and published any summaries.
+            for await rooms in roomSummaryProvider.roomListPublisher.values {
+                if !rooms.isEmpty {
+                    break
+                }
+                
+                if case .loaded(0) = roomSummaryProvider.statePublisher.value {
+                    break
+                }
+            }
+            
+            do {
+                try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
+                try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
+            } catch {
+                fatalError("Failed setting up the deferred room summary providers: \(error)")
+            }
+        }
         
         self.syncService = syncService
         self.roomListService = roomListService
