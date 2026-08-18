@@ -5,7 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "BuildExtensions",
-    platforms: [.macOS(.v15)],
+    platforms: [
+        .macOS(.v15),
+        .iOS(.v18) // Only necessary for Previews
+    ],
     products: [
         .library(name: "Macros", targets: ["Macros"])
     ],

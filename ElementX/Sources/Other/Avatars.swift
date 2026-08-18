@@ -61,7 +61,9 @@ enum Avatars {
 
 enum UserAvatarSizeOnScreen {
     case chats
+    case chatsCompact
     case spaces
+    case spacesCompact
     case timeline
     case settings
     case roomDetails
@@ -99,12 +101,14 @@ enum UserAvatarSizeOnScreen {
             24
         case .knockingUsersBannerStack:
             28
-        case .chats, .spaces, .map,
+        case .chatsCompact, .spacesCompact, .map,
              .timeline, .readReceiptSheet, .completionSuggestions,
              .blockedUsers, .roomMembersList, .knockingUserBanner:
             32
         case .startChat:
             36
+        case .chats, .spaces:
+            40
         case .roomDetails:
             44
         case .inviteUsers, .knockingUserList, .sessionVerification,

@@ -24,7 +24,7 @@ struct SpaceHeaderView: View {
             
             VStack(spacing: 8) {
                 Text(spaceServiceRoom.name)
-                    .font(.compound.headingLGBold)
+                    .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
