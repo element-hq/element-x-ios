@@ -2629,3 +2629,42 @@ same placeholder cells as the home screen's `.skeletons` mode, no
 session needed, so it also covers a store migration inside the client
 build). Build 58 re-benchmark: `rooms_shown_ms` 194-221, first 64-room
 page 39-45ms, i.e. back to the 2026-08-10 numbers.
+
+## Round 23: false "beginning of the room", take two (2026-08-17)
+
+Report: The Element Moving Moving Club (`!xIxvCULkoSgHpgZsYg:matrix.org`,
+a tombstone successor) showed "This is the beginning of ..." above a
+message from last Wednesday, with a week's older history below it out of
+order and gaps still open. Log `console.2026-08-17-19.log` 18:00:55Z (and
+the same room at 17:30:51Z in the 18h file): the storage walk exhausted
+the store (28 chunks, ids all over the place: `70 66 67 64 58 52 53 54 50
+22 23 25 31 37 14 27 33 39 41 43 45 71 73 74 9 8 29 35`), the first
+chunk being a plain events chunk with no predecessor -> `StartOfTimeline`
+-> `PushFront` of the timeline start, while gap resolutions were still
+in flight and inserting 20-event pages *below* that head. The store is
+misordered from the pre-round-15 builds (the Aug 12 chunk sits in front
+of Aug 11 ones; visible already in `console.2026-08-16-13.log`), and its
+former leading gap has been dropped by one of the redundant-gap paths
+(all-duplicates, overtaken gap, anchored resolution): each of those
+drops a gap on the strength of "another gap reaches that history", which
+is fine for reachability but leaves an events chunk at the head that
+`load_more_events_backwards` then took for the room's start.
+
+Fix SDK [`f5574914c`](https://github.com/matrix-org/matrix-rust-sdk/commit/f5574914c): the storage
+walk applies the same rule as the network path
+(`push_backwards_pagination_events`' `!has_gaps`): a gap-free head is
+only the start once no gap is left anywhere. With gaps remaining, an
+exhausted storage now resolves the oldest remaining gap over the network
+(new `LoadMoreEventsBackwardsOutcome::ResolveGap`) instead of claiming
+the start; a chunk loaded with no predecessor only reports
+`reached_start` when no gap is left; and `resolve_gap` resets the sticky
+"start hit" pagination status when its resolution didn't reach the start,
+so the next pagination re-evaluates. Net effect on the phone: at the top
+of such a room the spinner keeps going and the remaining gaps fill in
+(one `/messages` per pagination), and the start item only appears once
+history is fully accounted for. The misordering itself is persisted
+damage from before build 41; a clear-cache heals it, the fix stops it
+from lying about the start. Regression tests in the event cache and the
+timeline (see commit). Storage-only pagination doc updated: it now has
+two network exceptions (empty room bootstrap; remaining gaps at store
+exhaustion). EXI unchanged (build 59 = SDK f5574914c).
