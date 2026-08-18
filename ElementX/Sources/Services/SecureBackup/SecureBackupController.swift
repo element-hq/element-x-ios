@@ -79,8 +79,6 @@ class SecureBackupController: SecureBackupControllerProtocol {
             
             MXLog.info("Recovery state changed to: \(state), setting local state to \(recoveryStateSubject.value)")
         })
-        
-        updateBackupStateFromRemote()
     }
     
     func enable() async -> Result<Void, SecureBackupControllerError> {
