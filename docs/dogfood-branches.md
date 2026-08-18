@@ -2668,3 +2668,35 @@ from lying about the start. Regression tests in the event cache and the
 timeline (see commit). Storage-only pagination doc updated: it now has
 two network exceptions (empty room bootstrap; remaining gaps at store
 exhaustion). EXI unchanged (build 59 = SDK f5574914c).
+
+## Round 24: room key ~21s late after foregrounding (2026-08-18)
+
+Report: a UTD in a room preview after the morning foreground; open the
+room, still UTD; back to the list, still UTD; open again, decrypted
+(`!ZCWYLfAKXolsPWObuZ:matrix.org`, `$c0OOkKuX…`, console.2026-08-18-07.log).
+Timeline: foreground 06:53:48.6; encryption sliding-sync connection
+starts with `pos=None` at 06:53:48.9 (every launch), which marks all
+tracked users dirty and fires five ~1MB `/keys/query` (1.3s, 2.3s, 5.6s,
+10.5s, 22.5s); its first sync response, carrying the room key, came back
+at 06:53:48.955 (54ms) but was only handled at 06:54:11.558, i.e. once
+the slowest `/keys/query` returned: `SlidingSync::send_sync_request`
+awaited the concurrent E2EE requests *before* handling the response. The
+room-list sync delivered the message at 06:53:50 (UTD), the user opened
+the room at 06:53:56, went back at 06:54:10.85, the key was processed at
+06:54:11.56, the redecryptor re-decrypted the event and the latest-event
+value was persisted at 06:54:11.58 (`Persisting new latest-event values
+rooms=1`, right after the room's `retry_decryption`), the room was
+reopened at 06:54:14.3. So the preview *did* update, ~3s before the
+reopen; the whole 21s was the deferred response handling, not a missing
+room-list update.
+
+Fix SDK [`41edd7f48`](https://github.com/matrix-org/matrix-rust-sdk/commit/41edd7f48): handle the sync response first,
+then wait on the outgoing E2EE requests (still before the next iteration,
+so batches never overlap; still aborted if the sync request fails).
+Regression test with a 3s `/keys/query` and a to-device event in the
+response (fails at 3.03s on the old order). One brittle test relaxed
+(`/keys/upload` round-trips 3..=4 instead of exactly 4; the
+duplicate-one-time-key assertion it exists for is untouched). Upstream
+bug, upstream candidate. Remaining, upstream: the `pos=None` restart of
+the encryption connection at every launch (round 22) is what makes the
+batch that heavy in the first place. Build 60 = SDK 41edd7f48.
