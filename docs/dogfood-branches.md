@@ -2782,3 +2782,25 @@ Tests: `test_encryption_sync_shares_pos_across_instances`,
 candidate. Build 61 = SDK 7b0388401; validate: "Marking all tracked
 users as dirty" no longer logged on foreground/background refresh, no
 `/keys/query` burst, room keys arrive within the first sync round.
+
+## Round 25: sub/superscripts full-size in previews (2026-08-18)
+
+Reported: `<sub>` renders subscript in room previews (baseline shifted)
+but at the row's full font size; same for `<sup>`.
+
+Cause: `flattenedForPreview` swaps the parser's fixed `UIFont`s for
+presentation intents so previews adopt the row font, and that swap
+discards the 0.7x font the parser sets on sub/sup while the
+`baselineOffset` attribute survives (Text honours it), hence the
+half-applied look.
+
+Fix EXI [`1d4d12138`](https://github.com/element-hq/element-x-ios/commit/1d4d12138):
+runs carrying a `baselineOffset` get a `.caption` SwiftUI font in
+`flattenedForPreview` (compound fonts are MainActor-isolated, the
+extension is `nonisolated`). All flattened surfaces (room list, NSE,
+thread list, pinned banner). `formattedPreviewCapabilities` test extended
+with `H<sub>2</sub>O`. The ±6/-4pt offsets are left as-is (tuned for the
+17pt timeline body; fine at bodyMD). Validate: subscript visibly smaller
+in the room list. Build 62 = EXI 1d4d12138 x SDK 7b0388401, compiled and
+signed but the phone was unavailable to devicectl; re-run
+`build-install-exi.sh` when reachable.
