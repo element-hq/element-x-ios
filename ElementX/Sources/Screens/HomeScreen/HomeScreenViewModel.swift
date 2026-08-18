@@ -313,33 +313,34 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
+        // Combined so that the mode and the rooms are always updated from the same pair of
+        // values: the state can report loaded before the first summaries have published and
+        // flipping to .rooms then would flash an empty list.
         roomSummaryProvider.statePublisher
+            .combineLatest(roomSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
+            .sink { [weak self] state, rooms in
                 guard let self else { return }
                 
-                updateRoomListMode(with: state)
-            }
-            .store(in: &cancellables)
-        
-        roomSummaryProvider.roomListPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateRooms()
+                updateRooms()
+                updateRoomListMode(with: state, hasRooms: !rooms.isEmpty)
             }
             .store(in: &cancellables)
     }
     
-    private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState) {
+    private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState, hasRooms: Bool) {
         let isLoadingData = !roomSummaryProviderState.isLoaded
         let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0
+        // Only the initial transition needs holding back until the rooms have published, an
+        // empty list later on is a filter or a search result.
+        let isInitialLoad = state.roomListMode == .skeletons
         
         var roomListMode = state.roomListMode
         if isLoadingData {
             roomListMode = .skeletons
         } else if hasNoRooms {
             roomListMode = .empty
-        } else {
+        } else if hasRooms || !isInitialLoad {
             roomListMode = .rooms
         }
         
