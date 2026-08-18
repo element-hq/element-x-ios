@@ -19,6 +19,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let appSettings: AppSettings
     
     private let roomListPageSize: UInt32
+    /// Remember how many rooms we had on the previous requests so we can deduplicate
+    private var roomCountOnLastPageAddRequest = -1
     
     private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
     
@@ -182,6 +184,24 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
     
     private func setupVisibleRangeObservers() {
+        // Unthrottled to add another page half way through the last one
+        visibleItemRangePublisher
+            .sink { [weak self] range in
+                guard let self,
+                      !range.isEmpty,
+                      range.upperBound >= rooms.count - Int(roomListPageSize) / 2,
+                      rooms.count != roomCountOnLastPageAddRequest else {
+                    return
+                }
+                
+                roomCountOnLastPageAddRequest = rooms.count
+                
+                MXLog.info("\(self.name): Adding a page at \(rooms.count) rooms, visible range: \(range)")
+                
+                listUpdatesSubscriptionResult?.controller().addOnePage()
+            }
+            .store(in: &cancellables)
+        
         visibleItemRangePublisher
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates()
@@ -190,9 +210,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 
                 MXLog.info("\(self.name): Updating visible range: \(range)")
                 
-                if range.upperBound >= rooms.count {
-                    listUpdatesSubscriptionResult?.controller().addOnePage()
-                } else if range.lowerBound == 0 {
+                if range.lowerBound == 0, range.upperBound < rooms.count {
+                    roomCountOnLastPageAddRequest = -1
                     listUpdatesSubscriptionResult?.controller().resetToOnePage()
                 }
             }
@@ -214,6 +233,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     let upperBound = range.lowerBound + SlidingSyncConstants.maximumVisibleRangeSize
                     range = range.lowerBound..<upperBound
                 }
+                
+                MXLog.info("\(self.name): Subscribing to rooms in range: \(range)")
                 
                 return range
                     .filter { $0 < self.rooms.count }
