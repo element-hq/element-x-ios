@@ -67,6 +67,7 @@ struct HomeScreen: View {
                     Text(title)
                         .font(isInSidebar ? .compound.bodyLGSemibold : .compound.headingLGBold)
                         .foregroundStyle(.compound.textPrimary)
+                        .minimumScaleFactor(isInSidebar ? 1 : 0.6) // Allow scaling down to bodyLG if needed.
                 }
             }
         }
