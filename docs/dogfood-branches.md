@@ -2752,3 +2752,33 @@ process entirely; (c) do not restart the encryption connection when only
 the room-list connection expired. Any of these is upstream work; the
 branch keeps the behaviour and only fixes the ordering (41edd7f48) so
 the batch no longer holds the room key hostage.
+
+### Fix: the encryption `pos` is now shared across processes
+
+SDK [`7b0388401`](https://github.com/matrix-org/matrix-rust-sdk/commit/7b0388401): `EncryptionSyncService` builds its sliding sync with
+`share_pos()` (option b above). The 2023 reason for leaving it off
+("racy, needs a cross-process lock") no longer holds: the `pos` is
+stored in the crypto store, is written only after the response has been
+processed (immediately for a room-less response, see below), and a
+foreign write (the notification process moved the position) is adopted
+on the next request; two processes racing on the same position get
+`M_UNKNOWN_POS` and restart, which is exactly what a non-shared `pos`
+did on every start. Since Synapse deletes the whole connection on a
+`pos`-less request for a known `conn_id`, the old behaviour also meant
+the notification process destroyed the app's server-side connection at
+every push. Synapse has no time-based expiry for a list-less connection
+(only 7 days unused), so the encryption connection now resumes with
+`device_lists.changed` after any pause, and the `/keys/query` sweep only
+happens after a real restart.
+
+Second half of the same commit: the deferred `pos` write of a response
+without room updates keeps the previous target instead of the global
+room-updates sequence, so the encryption connection persists at once
+rather than after the room list's catch-up; otherwise a kill during
+catch-up left a stale encryption `pos` on disk (the same mechanism that
+produced the room-list `M_UNKNOWN_POS` doubles in the table above).
+Tests: `test_encryption_sync_shares_pos_across_instances`,
+`test_pos_of_a_room_less_response_is_persisted_at_once`. Upstream
+candidate. Build 61 = SDK 7b0388401; validate: "Marking all tracked
+users as dirty" no longer logged on foreground/background refresh, no
+`/keys/query` burst, room keys arrive within the first sync round.
