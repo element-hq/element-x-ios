@@ -739,12 +739,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         if case let .sendingFailed(.unknown(reason)) = eventTimelineItem.properties.deliveryStatus {
-            guard let sendHandle = timelineController.sendHandle(for: itemID) else {
-                MXLog.error("Cannot find send handle for \(itemID).")
-                return
-            }
-            
-            displayAlert(.sendingFailed(reason: reason, sendHandle: sendHandle))
+            // A missing send handle only costs the retry/remove actions, the reason is still worth showing.
+            displayAlert(.sendingFailed(reason: reason, sendHandle: timelineController.sendHandle(for: itemID)))
         } else if case let .sendingFailed(.verifiedUser(failure)) = eventTimelineItem.properties.deliveryStatus {
             guard let sendHandle = timelineController.sendHandle(for: itemID) else {
                 MXLog.error("Cannot find send handle for \(itemID).")
@@ -1121,11 +1117,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.bindings.alertInfo = .init(id: type,
                                              title: L10n.commonSendingFailed,
                                              message: reason,
-                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                             verticalButtons: [.init(title: L10n.actionRetry) { [weak self] in self?.retrySending(sendHandle) },
-                                                               .init(title: L10n.actionRemoveMessage, role: .destructive) { [weak self] in
-                                                                   self?.timelineInteractionHandler.handleTimelineItemMenuAction(.redact(isMedia: false), itemID: sendHandle.itemID)
-                                                               }])
+                                             primaryButton: .init(title: sendHandle == nil ? L10n.actionOk : L10n.actionCancel, role: .cancel, action: nil),
+                                             verticalButtons: sendHandle.map { sendHandle in
+                                                 [.init(title: L10n.actionRetry) { [weak self] in self?.retrySending(sendHandle) },
+                                                  .init(title: L10n.actionRemoveMessage, role: .destructive) { [weak self] in
+                                                      self?.timelineInteractionHandler.handleTimelineItemMenuAction(.redact(isMedia: false), itemID: sendHandle.itemID)
+                                                  }]
+                                             })
         case .encryptionAuthenticity(let message):
             state.bindings.alertInfo = .init(id: type,
                                              title: message,
