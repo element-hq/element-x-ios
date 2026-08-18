@@ -1571,13 +1571,11 @@ private struct ClientProxyServices {
                                                         notificationSettings: notificationSettings,
                                                         appSettings: appSettings)
         
-        // Delay alternate and static provider full setup until the main one as
-        // they have no consumers until after the app is fully running.
-        // Avoid creating room summaries for all of them on startup.
+        // Setting a provider's room list will create summaries for every room so
+        // wait until the app is fully running for the alternate and static providers.
         Task { [roomSummaryProvider, alternateRoomSummaryProvider, staticRoomSummaryProvider] in
-            // Wait for actual content (or a loaded-but-empty account): the loading state
-            // alone reports loaded straight from the cache, before the first summaries
-            // have been built and published.
+            // Wait for actual content (or a loaded-but-empty account) as the loading state
+            // doesn't take into account the app having build and published any summaries.
             for await rooms in roomSummaryProvider.roomListPublisher.values {
                 if !rooms.isEmpty {
                     break
@@ -1592,7 +1590,7 @@ private struct ClientProxyServices {
                 try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
                 try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
             } catch {
-                MXLog.error("Failed setting up the deferred room summary providers: \(error)")
+                fatalError("Failed setting up the deferred room summary providers: \(error)")
             }
         }
         
