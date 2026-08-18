@@ -385,6 +385,14 @@ final class HomeScreenViewModelTests {
     enum InviteType { case rooms, spaces }
     
     @Test
+    func roomListModeIsSetSynchronouslyOnAWarmLaunch() {
+        setupViewModel()
+        
+        // No awaiting, the mode must not need the subscription's async delivery.
+        #expect(context.viewState.roomListMode == .rooms)
+    }
+    
+    @Test
     func roomListModeWaitsForTheRoomsToPublish() async throws {
         let (roomListSubject, stateSubject) = setupViewModelWithManualProvider()
         

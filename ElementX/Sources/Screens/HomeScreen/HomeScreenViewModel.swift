@@ -176,6 +176,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         setupRoomListSubscriptions()
         
         updateRooms()
+        
+        // The subscription above only delivers the current state through an async main queue
+        // hop, which can end up queued behind the first render and leave the skeletons up on a
+        // warm launch, where the provider has already published the cached rooms.
+        if let roomSummaryProvider {
+            updateRoomListMode(with: roomSummaryProvider.statePublisher.value,
+                               hasRooms: !roomSummaryProvider.roomListPublisher.value.isEmpty)
+        }
     }
     
     // MARK: - Public
