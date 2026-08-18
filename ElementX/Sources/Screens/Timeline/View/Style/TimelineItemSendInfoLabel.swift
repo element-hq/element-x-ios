@@ -48,8 +48,7 @@ private struct TimelineItemSendInfoModifier: ViewModifier {
             TimelineItemSendInfoLabel(sendInfo: sendInfo)
                 .accessibilityHidden(isAccessibilityHidden)
                 .contentShape(.rect)
-                // Only the labels with a tappable status get the identifier, so that
-                // plain timestamps don't produce ambiguous matches in UI tests.
+                // Only tappable labels get the identifier, plain timestamps would be ambiguous matches.
                 .accessibilityIdentifier(sendInfo.status != nil ? A11yIdentifiers.roomScreen.sendInfo : "")
                 // Tap gesture to avoid the message being detected as a button by VoiceOver
                 // (and the action shows a description that is already read to the user).
