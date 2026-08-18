@@ -79,9 +79,9 @@ struct RoomEventStringBuilderTests {
     func formattedPreviewCapabilities() throws {
         let preview = try #require(stringBuilder.buildAttributedString(for: makeMessageItem(senderID: "@bob:matrix.org",
                                                                                             senderDisplayName: "Bob",
-                                                                                            message: "**bold** ~~struck~~ `code` [site](https://example.org)",
-                                                                                            formattedBody: "<strong>bold</strong> <del>struck</del> <code>code</code> <a href=\"https://example.org\">site</a>")))
-        #expect(preview.string == "Bob: bold struck code site")
+                                                                                            message: "**bold** ~~struck~~ `code` [site](https://example.org) H2O",
+                                                                                            formattedBody: "<strong>bold</strong> <del>struck</del> <code>code</code> <a href=\"https://example.org\">site</a> H<sub>2</sub>O")))
+        #expect(preview.string == "Bob: bold struck code site H2O")
         
         for run in preview.runs {
             #expect(run.link == nil, "Previews aren't interactive; links should be plain text.")
@@ -103,6 +103,10 @@ struct RoomEventStringBuilderTests {
         let code = try #require(preview.range(of: "code", options: .backwards))
         #expect(preview[code].runs.allSatisfy { $0.inlinePresentationIntent?.contains(.code) == true },
                 "Inline code should stay monospaced via its presentation intent.")
+        
+        let sub = try #require(preview.range(of: "2"))
+        #expect(preview[sub].runs.allSatisfy { $0.uiKit.baselineOffset != nil && $0.swiftUI.font != nil },
+                "Subscripts should keep their offset and get a smaller font.")
     }
     
     @Test

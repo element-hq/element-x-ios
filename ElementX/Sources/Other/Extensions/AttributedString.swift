@@ -186,6 +186,11 @@ nonisolated extension AttributedString {
                 result[run.range].uiKit.underlineStyle = nil
                 result[run.range].swiftUI.underlineStyle = .single
             }
+            // Sub/superscripts keep their baseline offset but lost the parser's
+            // shrunken font with the intent swap above; give them a small one back.
+            if run.uiKit.baselineOffset != nil {
+                result[run.range].swiftUI.font = .caption
+            }
         }
 
         return result
