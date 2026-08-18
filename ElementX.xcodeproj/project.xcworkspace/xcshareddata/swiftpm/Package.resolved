@@ -1,5 +1,5 @@
 {
-  "originHash" : "515d7858f8d13128cb330ef4e14c9bb41516cd04a0280a625a852155c53a610e",
+  "originHash" : "fbe2663429af94e60cfa70345bffe72998cbc19f6f659bd6f3c1a0ddc50b941d",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -194,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "9b12d093e774883c40ee456e34b74b45cee03d46",
-        "version" : "3.69.5"
+        "revision" : "c0218386c49115cce6b05a50b41f4f60bc995acb",
+        "version" : "3.69.6"
       }
     },
     {
