@@ -761,7 +761,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         Task {
             if case .failure(let error) = await sendHandle.resend() {
                 MXLog.error("Failed retrying to send \(sendHandle.itemID): \(error)")
-                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                displayErrorToast(L10n.errorUnknown)
             }
         }
     }
