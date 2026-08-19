@@ -98,6 +98,8 @@ struct ComposerToolbarViewState: BindableState {
             return false
         case .previewVoiceMessage:
             return true
+        case .edit:
+            return true
         default:
             if bindings.composerFormattingEnabled {
                 return !composerEmpty

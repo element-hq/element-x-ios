@@ -50,6 +50,31 @@ final class ComposerToolbarViewModelTests {
     }
     
     @Test
+    func sendButtonRemainsVisibleWhenTheComposerIsEmptiedWhileEditing() {
+        for editType in [ComposerMode.EditType.default, .addCaption, .editCaption] {
+            setUpViewModel()
+            viewModel.context.composerFormattingEnabled = false
+            viewModel.context.plainComposerText = .init(string: "A message")
+            viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventID("mock"), type: editType)))
+            #expect(viewModel.state.showSendButton)
+            
+            viewModel.context.plainComposerText = .init(string: "")
+            #expect(viewModel.state.showSendButton)
+            #expect(viewModel.state.sendButtonDisabled)
+        }
+    }
+    
+    @Test
+    func sendButtonIsReplacedWhenTheComposerIsEmptiedOutsideOfEditing() {
+        viewModel.context.composerFormattingEnabled = false
+        viewModel.context.plainComposerText = .init(string: "A message")
+        #expect(viewModel.state.showSendButton)
+        
+        viewModel.context.plainComposerText = .init(string: "")
+        #expect(!viewModel.state.showSendButton)
+    }
+    
+    @Test
     func handleKeyCommand() {
         #expect(viewModel.context.viewState.keyCommands.count == 1)
     }
