@@ -193,7 +193,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         ElementNavigationStack {
             HomeScreen(context: loadingViewModel.context)
         }
-        .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
+        .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
             state.roomListMode == .skeletons
         })
         .previewDisplayName("Loading")
