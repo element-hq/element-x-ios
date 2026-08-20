@@ -2887,3 +2887,14 @@ in place within a few seconds of the backup download (no close/reopen) and
 the label while waiting must be "Unable to decrypt"/"Waiting for decryption
 key", never "Historical messages are not available on this device" while
 backup is enabled.
+
+Addendum (same day): the setup-time warm of the exists-on-server cache in
+3fef1e98e fired on every restore and broke ten backups tests that count
+`/room_keys/version` requests. SDK
+[`134f727b8`](https://github.com/matrix-org/matrix-rust-sdk/commit/134f727b8)
+moves it on demand: `crypto_context_info` calls
+`Backups::warm_exists_on_server_cache` only when the answer is unknown and
+backups are not enabled on this device, deduplicated by an in-flight flag
+(`test_warming_the_exists_on_server_cache_fetches_once`). Build 63 carries
+b1d3ac2d3 (setup-time variant); with backups enabled the two behave the
+same (no request at all), so 134f727b8 rides along with the next build.
