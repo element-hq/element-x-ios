@@ -2959,3 +2959,38 @@ Validate: visible spinner resolving = spinner shrinks, content slides
 in above, no jump below; spinner just past the top/bottom edge = no
 movement; top-of-room spinner = fills in above without a jump; scroll
 through a spinner mid-fling = no spasm.
+
+### Round 28 addendum: the bubble below the spinner popped (2026-08-20 16:19)
+
+Recording: the spinner closed empty and "I suppose it requires…" joined
+richvdh's group above it, so its sender header vanished; the bubble
+jumped UP by the header height in one frame, slid back down, and
+snapped. Column scan of the recording: +30pt at the first frame of the
+apply, back over ~80ms, snap to the original spot at the end.
+
+Cause: the hosted cell content is pinned to the visual TOP
+(66bea662f, for the status-row case where the change is at the
+BOTTOM). A regroup changes the cell at its top: the content re-renders
+short inside the batch while the cell frame still animates, so the
+bubble rides the cell's moving top edge instead of staying on its
+fixed bottom edge. Harness experiment 4 (bubbleanim) reproduces it
+once the apply is driven from `updateUIViewController` like EXI (the
+hosted views are already dirty and render inside the batch); with the
+EXI-style `.animation(value: groupStyle)` on the header the bubble
+moves 72px and eases back over ~0.6s.
+
+Fix EXI [`99d488ebc`](https://github.com/element-hq/element-x-ios/commit/99d488ebc):
+`EdgePinnedTimelineItemView` pins the content to the BOTTOM edge for
+~0.5s after the item's group style changed (decided in body; onChange
+fires a frame late), top otherwise - so a header toggling leaves the
+bubble on the fixed bottom edge and a status/receipts row toggling
+keeps the validated top pin. Harness: bubble within 2px across
+regroup-on-empty-close, regroup-on-insert and pagination; TICK
+unchanged. Also: the 0.1s `UIView.animate` wrapper around the visible
+gap apply (1d478a346) cut UIKit's own row-height animation short - the
+rows above slid linearly then jumped the remainder (visible in the
+phone scan too); the apply now uses the plain batch duration, measured
+smooth to the end. Build 66. Validate: spinner closing next to a
+same-sender message = header fades, bubble below does not move, rows
+above slide smoothly to the end; send a message = previous bubble's
+status row still collapses without a dip (66bea662f case).
