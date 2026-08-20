@@ -151,6 +151,9 @@ struct RunTests: AsyncParsableCommand {
             // -test-iterations is the total number of attempts (initial + retries)
             command += " -retry-tests-on-failure"
             command += " -test-iterations \(retries + 1)"
+            // Repetitions happen in the same process by default, so a runner that exits (e.g. code 75
+            // after a failed app launch) takes its own retries down with it and the test gets skipped.
+            command += " -test-repetition-relaunch-enabled YES"
         }
         
         if let testName {
