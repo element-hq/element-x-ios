@@ -150,8 +150,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                 partialResult[roomSummary.id] = roomSummary.lastMessageDate
             }
         
-        let notificationsIdentifiers = await notificationCenter
-            .deliveredNotifications()
+        let deliveredNotifications = await notificationCenter.deliveredNotifications()
+        let notificationsIdentifiers = deliveredNotifications
             .filter { notification in
                 guard let roomID = notification.request.content.roomID,
                       let lastMessageDate = roomsToLastMessageDates[roomID] else {
@@ -164,6 +164,16 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             }
             .map(\.request.identifier)
         
+        guard !notificationsIdentifiers.isEmpty else {
+            // Name what's being kept, so a stack that should have cleared can be explained.
+            let keptRoomIDs = Set(deliveredNotifications.compactMap(\.request.content.roomID))
+            for summary in rooms where keptRoomIDs.contains(summary.id) {
+                MXLog.info("Keeping notifications for \(summary.id): unread=\(summary.unreadMessagesCount) lastMessageDate=\(summary.lastMessageDate.map { "\($0)" } ?? "nil")")
+            }
+            return
+        }
+        
+        MXLog.info("Removing \(notificationsIdentifiers.count) notifications for fully read rooms")
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
     

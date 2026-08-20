@@ -343,14 +343,20 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .receivedDecryptionError(let info):
                     processDecryptionError(info)
-                case .receivedSyncUpdate:
-                    Task {
-                        let roomSummaries = self.userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.value
-                        await self.flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
-                    }
                 default:
                     break
                 }
+            }
+            .store(in: &cancellables)
+        
+        // Withdraw notifications for rooms that became fully read (e.g. on another client).
+        // Driven by the summaries themselves: the room list's `.running` transition fires once
+        // per resume, usually before the receipts of that sync have been processed.
+        userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher
+            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
+            .sink { [weak self] roomSummaries in
+                guard let self else { return }
+                Task { await self.flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries) }
             }
             .store(in: &cancellables)
     }

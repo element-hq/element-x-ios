@@ -3028,3 +3028,17 @@ covers stale/fresh/legacy notifications and the setting. Validate: read a
 room on EW while the phone has a notification stack for it = the whole
 stack clears at the next refresh; with the setting off nothing clears; a
 push arriving after the app's last sync is never removed.
+
+### Round 29 addendum: nothing cleared on build 67 (2026-08-20 18:35Z)
+
+Rooms read on EW (`#offtopic:continuwuity.org`, `!Kzal…`) kept their stacks
+even after opening the app. The removal was hooked on
+`ClientProxyAction.receivedSyncUpdate`, which despite its name is sent only
+when the room list *state* becomes `.running`: once per resume (18:35:32Z),
+before that sync's room batches and receipts were processed (18:35:36Z+),
+and never again. The 17:24Z case only worked because the state flipped to
+running after the receipt had landed. Now driven by the static room
+summaries publisher (debounced 1s), and the manager logs "Removing N
+notifications for fully read rooms" or "Keeping notifications for <room>:
+unread=… lastMessageDate=…" so a stack that should have cleared can be
+explained from the console log. Build 68. Validate as round 29.
