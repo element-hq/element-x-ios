@@ -9,7 +9,17 @@ import Compound
 import SwiftUI
 
 struct SettingsScreenUserStatusRow: View {
-    enum Mode: Equatable { case pickStatusButton, customStatusInput(emoji: Character), showingStatus(UserStatus.Displayed) }
+    enum Mode: Equatable {
+        case pickStatusButton, customStatusInput(emoji: Character), showingStatus(UserStatus.Displayed)
+        
+        var isCustomStatusInput: Bool {
+            switch self {
+            case .customStatusInput: true
+            default: false
+            }
+        }
+    }
+    
     let mode: Mode
     let action: (SettingsScreenViewAction.UserStatusAction) -> Void
     
@@ -17,6 +27,15 @@ struct SettingsScreenUserStatusRow: View {
     @FocusState private var isCustomFieldFocused: Bool
     
     var body: some View {
+        rowContent
+            .onChange(of: mode.isCustomStatusInput) { _, newValue in
+                guard newValue else { return }
+                customText = ""
+            }
+    }
+    
+    @ViewBuilder
+    var rowContent: some View {
         switch mode {
         case .pickStatusButton:
             ListRow(label: .default(title: L10n.screenSettingsUserStatusPlaceholder, icon: \.reaction),
