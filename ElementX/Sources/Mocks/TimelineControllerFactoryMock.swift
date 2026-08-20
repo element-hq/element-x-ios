@@ -33,5 +33,11 @@ extension TimelineControllerFactoryMock {
                 return .success(timelineController)
             }
         }
+        
+        // Room Info prebuilds the media/files controllers on open; give them a default so
+        // flows that present room details don't trap on an unset return value.
+        buildMessageFilteredTimelineControllerFocusAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderClosure = { _, _, _, _, _, _ in
+            .success(TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: [])))
+        }
     }
 }
