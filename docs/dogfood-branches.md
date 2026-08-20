@@ -2898,3 +2898,27 @@ backups are not enabled on this device, deduplicated by an in-flight flag
 (`test_warming_the_exists_on_server_cache_fetches_once`). Build 63 carries
 b1d3ac2d3 (setup-time variant); with backups enabled the two behave the
 same (no request at all), so 134f727b8 rides along with the next build.
+
+## Round 27: invite screen shows the inviter twice, user ID not copyable (2026-08-20)
+
+Reported (offline, 1:1 invite from a stranger): the invite screen titled
+the room "Yea" with member count 0, then "Invited by Yea
+@33yea34:matrix.org" underneath, and there was no way to copy the user
+ID to check on them before accepting.
+
+Cause: the DM layout required `isDirect && memberCount == 1`; offline (or
+for a brand new invite) the preview is built from local invite state, so
+the joined count is 0 and the check fails. The SDK names a nameless room
+after its only known member, the inviter, hence the duplicate. The same
+happens online when the inviter's client didn't set `is_direct` (we can't
+tell from the logs which one it was here; the fix covers both). Upstream
+has the identical check.
+
+Fix EXI [`6159f5a72`](https://github.com/element-hq/element-x-ios/commit/6159f5a72):
+`invitePresentsAsDM` = nobody but the inviter known in the room (count
+0 or 1) and (the invite is direct, or the room's display name is just the
+inviter's name/ID). Title, subtitle and the "Invited by" user ID get
+`.textSelection(.enabled)` (long-press to copy, as on profile headers).
+Two JoinRoomScreenViewModelTests; suite 10/10. Build 64 = EXI 6159f5a72 x
+SDK 134f727b8. Validate: a 1:1 invite offline shows inviter as title +
+user ID subtitle, no "Invited by" duplicate; long-press the user ID copies.
