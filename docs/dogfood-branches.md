@@ -2922,3 +2922,40 @@ inviter's name/ID). Title, subtitle and the "Invited by" user ID get
 Two JoinRoomScreenViewModelTests; suite 10/10. Build 64 = EXI 6159f5a72 x
 SDK 134f727b8. Validate: a 1:1 invite offline shows inviter as title +
 user ID subtitle, no "Invited by" duplicate; long-press the user ID copies.
+
+## Round 28: inline gap spinners pop instead of shrinking away (2026-08-20)
+
+Reported (recording 15:13): a visible gap spinner resolved mid-viewport
+and the fetched messages appeared above the "NEW" marker in one frame
+while the spinner vanished; the newer rows stayed put. That is the round
+2 addendum 3 policy (912c06177) working as written: only resolutions
+that closed EMPTY took the animated apply, every content-inserting one
+went unanimated + pinned, hence "sometimes they shrink correctly".
+
+Evidence: BubbleAnim harness experiment 3 (private repo
+element-hq/bubbleanim, `Sources/App.swift`) scripts a gap resolve
+inserting three messages (one tall) with the spinner mid-viewport, at
+the viewport top edge, just off the top, just off the bottom, at the
+very top of the page, and during an in-flight scroll, under four modes:
+POP (status quo, reproduces the recording), ANIM (animated `.fade`
+batch, 0.1s ease-out), PRESIZE (ANIM with pre-measured row heights) and
+SHRINK (pinned unanimated apply + the spinner snapshot shrinking away on
+top). ANIM is clean in every visible-spinner position, mid-scroll
+included: the fetched rows fade in while the older rows slide up and the
+newer rows stay put (the flipped table measures its offsets from the
+newest end). PRESIZE adds nothing; SHRINK still pops the older rows.
+The round-18 "spasm without churn" recording could not be reproduced;
+its two candidate causes are both still guarded (below).
+
+Fix EXI [`9d3bee9d1`](https://github.com/element-hq/element-x-ios/commit/9d3bee9d1):
+a resolution animates whenever its spinner is on screen AND the
+identifiers newer than the gap are unchanged in the same apply (if they
+changed, the newer rows would shift - that apply keeps the unanimated
+momentum-preserving pin); visible identity churn still goes unanimated.
+Off-screen resolutions unchanged (unanimated + pinned), so the
+off-the-bottom / off-the-top / fling pins from rounds 2 and 18 stand.
+Build 65 = EXI 9d3bee9d1 x SDK 134f727b8 (also carries round 27).
+Validate: visible spinner resolving = spinner shrinks, content slides
+in above, no jump below; spinner just past the top/bottom edge = no
+movement; top-of-room spinner = fills in above without a jump; scroll
+through a spinner mid-fling = no spasm.
