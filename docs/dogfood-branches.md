@@ -3053,3 +3053,24 @@ on `shouldShowSenderDetails` flipping only. Build 69. Validate: send a
 message = previous bubble still, status row collapses without clipping or
 dip; spinner closing next to a same-sender message (round 28 addendum) still
 fades the header without moving the bubble.
+
+## Round 30: bounce when sending from the emoji keyboard (2026-08-20 22:22)
+
+Symptom: sending a large emoji bounced the whole stack (up 12pt, down 19pt,
+settle); text, multiline and thumbnails fine. Frame scan of the recording +
+the phone log (`SendTransition: restore delta=0.0 tableH=363 viewH=444`,
+then `restore delta=107 tableH=444`) show the trigger: the message was sent
+from the emoji keyboard, and clearing the composer resets the keyboard type
+(upstream #299, intentional: back to letters after a send), swapping in the
+81pt-shorter letters keyboard. The view grows mid send transition, but the
+composer had predicted no collapse (single-line), so the transition took
+the stock path: compensated geometry restore + 81pt settle down, racing the
+animated row insert sliding up.
+
+Fix: `viewWillLayoutSubviews` promotes a single-line send transition to the
+collapse path when it sees the view grow (expected delta := observed growth,
+oversize + pin via the new `oversizeFrozenTable`), so the echo takes the
+frozen apply (fade into the vacated slot, one settle) exactly like a
+multiline collapse. Build 70. Validate: send from the emoji keyboard =
+previous bubbles still, emoji bubble fades into the vacated space, single
+settle; plain single-line and multiline sends unchanged.

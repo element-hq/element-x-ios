@@ -406,6 +406,18 @@ class TimelineTableViewController: UIViewController {
             // the animation completes.
             if !sendTransitionCollapseObserved {
                 sendTransitionCollapseObserved = true
+                // A single-line send predicted no collapse, yet the view is growing:
+                // clearing the composer resets the keyboard type (#299), which swaps
+                // the taller emoji keyboard for the letters one. Same shape as a
+                // collapse, so promote to the frozen path before the echo applies;
+                // the stock path's compensated restore plus settle would otherwise
+                // run against the animated insert (the bounce on emoji sends).
+                let growth = view.frame.height - sendTransitionViewHeightAtBegin
+                if sendTransitionExpectedDelta <= 1, growth > 1, let reference = sendTransitionReference {
+                    MXLog.info("SendTransition: view grew \(growth) during a single-line send, promoting to the collapse path")
+                    sendTransitionExpectedDelta = growth
+                    oversizeFrozenTable(pinning: reference)
+                }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
                     self?.endSendTransition()
                 }
@@ -454,13 +466,7 @@ class TimelineTableViewController: UIViewController {
         // duration. Single-line sends skip all of this: their message slides in
         // from the bottom via the settle, materialising like any other scroll.
         if expectedCollapseDelta > 1 {
-            UIView.performWithoutAnimation {
-                tableView.contentInset.top += Self.sendTransitionOverscrollAllowance
-                sendTransitionInsetAdded = Self.sendTransitionOverscrollAllowance
-                tableView.frame = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: view.frame.height + Self.sendTransitionOversize))
-                tableView.layoutIfNeeded()
-                restoreSendTransitionPosition(reference)
-            }
+            oversizeFrozenTable(pinning: reference)
         }
 
         // If the echo never lands (send failure, slash command), settle anyway.
@@ -469,6 +475,21 @@ class TimelineTableViewController: UIViewController {
         }
         sendTransitionFallback = fallback
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: fallback)
+    }
+
+    /// Extends the frozen table beyond the view (plus the matching overscroll
+    /// allowance) and re-pins the reference, so rows landing past the old bottom
+    /// edge are materialised for the collapse to reveal. Sized from the height
+    /// at the send tap, whatever the view measures by now.
+    private func oversizeFrozenTable(pinning reference: Layout) {
+        guard sendTransitionInsetAdded == 0 else { return }
+        UIView.performWithoutAnimation {
+            tableView.contentInset.top += Self.sendTransitionOverscrollAllowance
+            sendTransitionInsetAdded = Self.sendTransitionOverscrollAllowance
+            tableView.frame = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: sendTransitionViewHeightAtBegin + Self.sendTransitionOversize))
+            tableView.layoutIfNeeded()
+            restoreSendTransitionPosition(reference)
+        }
     }
 
     /// Shifts the content offset so the reference cell sits back at its captured
