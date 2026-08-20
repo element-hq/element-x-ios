@@ -58,7 +58,10 @@ private struct EdgePinnedTimelineItemView: View {
     }
     
     private var alignment: Alignment {
-        if let lastGroupStyle = memory.lastGroupStyle, lastGroupStyle != viewState.groupStyle {
+        // Only a header toggle changes the content's top edge. Other regroups (e.g. the previous
+        // bubble going .single -> .first on send) change the bottom: status row, corner radii.
+        if let lastGroupStyle = memory.lastGroupStyle,
+           lastGroupStyle.shouldShowSenderDetails != viewState.groupStyle.shouldShowSenderDetails {
             memory.alignment = .bottomLeading
             memory.resetWork?.cancel()
             let resetWork = DispatchWorkItem { [memory] in memory.alignment = .topLeading }

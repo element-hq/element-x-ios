@@ -3042,3 +3042,14 @@ summaries publisher (debounced 1s), and the manager logs "Removing N
 notifications for fully read rooms" or "Keeping notifications for <room>:
 unread=… lastMessageDate=…" so a stack that should have cleared can be
 explained from the console log. Build 68. Validate as round 29.
+
+### Round 28 addendum 2: the send animation regressed (2026-08-20 21:59)
+
+`EdgePinnedTimelineItemView` bottom-pinned on any `groupStyle` change, but on
+send the previous own bubble goes `.single -> .first`: no header toggle, its
+status row collapses at the bottom (the 66bea662f case), so it must stay
+top-pinned; bottom-pinned it was clipped at the top and slid back. Now keyed
+on `shouldShowSenderDetails` flipping only. Build 69. Validate: send a
+message = previous bubble still, status row collapses without clipping or
+dip; spinner closing next to a same-sender message (round 28 addendum) still
+fades the header without moving the bubble.
