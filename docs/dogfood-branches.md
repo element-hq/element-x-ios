@@ -2804,3 +2804,86 @@ with `H<sub>2</sub>O`. The ±6/-4pt offsets are left as-is (tuned for the
 in the room list. Build 62 = EXI 1d4d12138 x SDK 7b0388401, compiled and
 signed but the phone was unavailable to devicectl; re-run
 `build-install-exi.sh` when reachable.
+
+## Round 26: permalinks not highlighting + UTDs that never resolve (2026-08-20)
+
+Two rageshakes from build 61 (SDK 7b0388401).
+
+### 7527: permalink opened the room but nothing was highlighted
+
+Reported: a permalink to a message in another room opened that room at
+the bottom with no highlight, so the link looked broken.
+
+Cause: round 9's "open the room live when a notification tap targets the
+newest message" (EXI 363b3b7f5) decided at `handleRoomRoute`, i.e. for
+every event route, and the linked message happened to be the room's
+latest. The skip was only ever meant for notification taps.
+
+Fix EXI [`2707df925`](https://github.com/element-hq/element-x-ios/commit/2707df925):
+`AppRoute.event` carries `openLiveIfNewest` (default false), set only by
+`handleNotificationTap`; it travels through the ChatsTab entry point
+(`RoomFlowCoordinatorEntryPoint.eventID`) and `FocusEvent` to the
+decision, which is now `focusEvent.openLiveIfNewest && isNewest`.
+Permalinks, search results and in-app event taps always get the focus
+treatment. Tests `permalinkToNewestEventStillFocusses` /
+`notificationTapOnNewestEventOpensLive` in RoomFlowCoordinatorTests.
+Validate: tap a permalink to a room's newest message; it must be
+highlighted. Notification taps must still open the room live with no
+green flash.
+
+### 7515: UTDs labelled "Historical messages are not available on this device" and not resolving
+
+Reported: a room full of UTDs from 3-4 August that never resolve, all
+labelled "Historical messages are not available on this device", on a
+device with key backup enabled (v5) and verified.
+
+Two separate SDK bugs, both ours:
+
+**(a) The label.** `Room::crypto_context_info` reads the "backup exists
+on server" answer cached-only since round 10 (12e2d0d8b, a hung
+`/room_keys/version` had blocked first paint), but nothing on a plain
+session restore ever asks the server for the backup version: the log has
+no `/room_keys/version` at all in 27 minutes, the cache stayed `None` and
+`unwrap_or(false)` turned every pre-device UTD into
+`HistoricalMessageAndBackupIsDisabled`. Fix SDK
+[`3fef1e98e`](https://github.com/matrix-org/matrix-rust-sdk/commit/3fef1e98e):
+an unknown answer defaults to "exists" when backups are enabled on this
+device (you cannot be enabled on a backup that isn't there), and
+`Backups::setup_and_resume` warms the cache with a detached
+`fetch_exists_on_server` when backups are not enabled (so the
+unverified/not-configured labels are right too) without ever putting the
+fetch on the render path. Items already classified keep their label
+until rebuilt; the common case (backup enabled at restore) is now right
+from the first paint. Upstream candidate.
+
+**(b) The stall.** The keys for those UTDs WERE downloaded from backup
+(`GET /room_keys/keys/!UnK…/<session>` 200, "Successfully imported room
+keys" at 18:34:33, 18:34:43, 18:35:12) but nothing redecrypted the event
+cache until the room was closed and reopened (timeline re-requests
+decryption of the UTDs it shows): key to retry went from ~8ms before
+18:30:32 to 25-27s after. At 18:30:32 the NSE had bumped the crypto store
+generation and the app regenerated its `OlmMachine`. The event cache
+redecryptor takes its room-key streams from the machine's store and only
+re-obtains them when the old stream ends, which requires every clone of
+the old machine to be dropped, and the FFI `SessionVerificationController`
+holds a `UserIdentity` (hence the old machine's store wrapper and its
+broadcast sender) for the whole app lifetime. No "Regenerating the
+re-decryption streams" in the log, ever. Fix SDK
+[`b1d3ac2d3`](https://github.com/matrix-org/matrix-rust-sdk/commit/b1d3ac2d3):
+`BaseClient::regenerate_olm` broadcasts a regeneration event
+(`subscribe_to_olm_machine_regenerations`) and the redecryptor loop
+selects on it, rebuilding its streams and retrying in-memory UTDs, the
+path it already had for a closed stream. `test_redecryptor` now pins the
+old machine across the regeneration; it fails without the signal. Upstream
+bug (the FFI pinning exists on main too), add to the queue.
+
+Not fixed here: the pinned `UserIdentity` in `SessionVerificationController`
+also means `isVerified()` answers from a pre-regeneration snapshot; worth
+a look upstream but out of scope for the dogfood.
+
+Build 63 = EXI 2707df925 x SDK b1d3ac2d3. Validate: open a room with
+"historical" UTDs after a push arrived in the background, they must resolve
+in place within a few seconds of the backup download (no close/reopen) and
+the label while waiting must be "Unable to decrypt"/"Waiting for decryption
+key", never "Historical messages are not available on this device" while
+backup is enabled.
