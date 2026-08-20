@@ -13,7 +13,7 @@ import UIKit
 
 @MainActor
 final class AuthenticationStartScreenViewModelTests {
-    var clientFactory: AuthenticationClientFactoryMock!
+    var clientFactory: ClientFactoryMock!
     var client: ClientSDKMock!
     var classicAppManager: ClassicAppManagerMock?
     var notificationCenter: NotificationCenter!
@@ -50,7 +50,7 @@ final class AuthenticationStartScreenViewModelTests {
             try await deferred.fulfill()
             
             // Then the authentication service should not be used yet.
-            #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+            #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
             #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
             #expect(authenticationService.homeserver.value.loginMode == .unknown)
         }
@@ -69,7 +69,7 @@ final class AuthenticationStartScreenViewModelTests {
         context.send(viewAction: .login)
         try await deferred.fulfill()
         
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint == "user@company.com")
@@ -90,7 +90,7 @@ final class AuthenticationStartScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(authenticationService.homeserver.value.loginMode == .password)
     }
     
@@ -108,7 +108,7 @@ final class AuthenticationStartScreenViewModelTests {
         context.send(viewAction: .login)
         try await deferred.fulfill()
         
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint == nil)
@@ -130,7 +130,7 @@ final class AuthenticationStartScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then a call to configure service should be made.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(authenticationService.homeserver.value.loginMode == .password)
     }
     
@@ -153,8 +153,8 @@ final class AuthenticationStartScreenViewModelTests {
         context.send(viewAction: .continueWithClassic(classicAppAccount))
         try await deferred.fulfill()
         
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments?.homeserverAddress == "company.com")
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments?.homeserverAddress == "company.com")
         #expect(authenticationService.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: false))
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint == "mxid:\(classicAppAccount.userID)")
     }
@@ -177,8 +177,8 @@ final class AuthenticationStartScreenViewModelTests {
         context.send(viewAction: .continueWithClassic(classicAppAccount))
         try await deferred.fulfill()
         
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments?.homeserverAddress == "https://matrix.company.com")
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments?.homeserverAddress == "https://matrix.company.com")
         #expect(authenticationService.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: false))
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.loginHint == "mxid:\(classicAppAccount.userID)")
     }
@@ -285,7 +285,7 @@ final class AuthenticationStartScreenViewModelTests {
         // Map both the server name and the homeserver URL so fallback lookups work.
         let homeserverClients: [String: ClientSDKMock] = ["company.com": client,
                                                           "https://matrix.company.com": client]
-        let configuration = AuthenticationClientFactoryMock.Configuration(homeserverClients: homeserverClients)
+        let configuration = ClientFactoryMock.Configuration(homeserverClients: homeserverClients)
         
         if let classicAppAccount {
             classicAppManager = ClassicAppManagerMock(.init(accounts: [classicAppAccount], availableSecrets: availableSecrets))
@@ -295,7 +295,7 @@ final class AuthenticationStartScreenViewModelTests {
         
         notificationCenter = NotificationCenter()
         
-        clientFactory = AuthenticationClientFactoryMock(configuration)
+        clientFactory = ClientFactoryMock(configuration)
         authenticationService = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                                       encryptionKeyProvider: EncryptionKeyProvider(),
                                                       classicAppManager: classicAppManager,

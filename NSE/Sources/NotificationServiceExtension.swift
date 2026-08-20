@@ -177,8 +177,8 @@ actor NotificationServiceExtensionActor {
             let userSession = try await NSEUserSession(credentials: credentials,
                                                        roomID: roomID,
                                                        clientSessionDelegate: keychainController,
-                                                       appHooks: appHooks,
-                                                       appSettings: settings)
+                                                       appSettings: settings,
+                                                       appHooks: appHooks)
             
             notificationHandler = NotificationHandler(userSession: userSession,
                                                       settings: settings,

@@ -14,7 +14,7 @@ nonisolated extension ClientSDKMock {
     struct Configuration {
         // MARK: Authentication
         
-        var serverAddress = "matrix.org"
+        var serverName = "matrix.org"
         var homeserverURL = "https://matrix-client.matrix.org"
         var slidingSyncVersion = SlidingSyncVersion.native
         var oAuthLoginURL: String? = "https://account.matrix.org/authorize"
@@ -43,7 +43,7 @@ nonisolated extension ClientSDKMock {
         homeserverLoginDetailsReturnValue = HomeserverLoginDetailsSDKMock(configuration: configuration)
         slidingSyncVersionReturnValue = configuration.slidingSyncVersion
         userIdServerNameThrowableError = MockError.generic
-        serverReturnValue = "https://\(configuration.serverAddress)"
+        serverReturnValue = "https://\(configuration.serverName)"
         homeserverReturnValue = configuration.homeserverURL
         urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
         loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { [weak self] username, password, _, _ in
@@ -54,7 +54,7 @@ nonisolated extension ClientSDKMock {
             if username.hasPrefix("@"), username.contains(":") {
                 self?.userIdReturnValue = username
             } else {
-                self?.userIdReturnValue = "@\(username):\(configuration.serverAddress)"
+                self?.userIdReturnValue = "@\(username):\(configuration.serverName)"
             }
         }
         

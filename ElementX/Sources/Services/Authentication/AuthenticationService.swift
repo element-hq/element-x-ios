@@ -17,7 +17,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     private let userSessionStore: UserSessionStoreProtocol
     private let classicAppManager: ClassicAppManagerProtocol?
-    private let clientFactory: AuthenticationClientFactoryProtocol
+    private let clientFactory: ClientFactoryProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
     
@@ -33,7 +33,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
          classicAppManager: ClassicAppManagerProtocol?,
-         clientFactory: AuthenticationClientFactoryProtocol = AuthenticationClientFactory(),
+         clientFactory: ClientFactoryProtocol = ClientFactory(),
          appSettings: AppSettings,
          appHooks: AppHooks) {
         sessionDirectories = .init()
@@ -252,15 +252,15 @@ class AuthenticationService: AuthenticationServiceProtocol {
         // so that caches (e.g. server versions) are always fresh for the new server.
         rotateSessionDirectory()
         
-        let client = try await clientFactory.makeClient(homeserverAddress: homeserverAddress,
-                                                        sessionDirectories: sessionDirectories,
-                                                        passphrase: passphrase,
-                                                        clientSessionDelegate: userSessionStore.clientSessionDelegate,
-                                                        appSettings: appSettings,
-                                                        appHooks: appHooks)
+        let client = try await clientFactory.makeAuthenticationClient(homeserverAddress: homeserverAddress,
+                                                                      sessionDirectories: sessionDirectories,
+                                                                      passphrase: passphrase,
+                                                                      clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                                      appSettings: appSettings,
+                                                                      appHooks: appHooks)
         try await appHooks.remoteSettingsHook.initializeCache(using: client, applyingTo: appSettings).get()
         
-        return client
+        return appHooks.clientFactoryHook.updateAuthenticationClient(client)
     }
     
     private func rotateSessionDirectory() {
@@ -394,7 +394,7 @@ extension AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
                               classicAppManager: classicAppManager,
-                              clientFactory: AuthenticationClientFactoryMock(.init()),
+                              clientFactory: ClientFactoryMock(.init()),
                               appSettings: .volatile(),
                               appHooks: AppHooks())
     }

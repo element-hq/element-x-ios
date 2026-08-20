@@ -10,30 +10,30 @@ import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
 
-extension AuthenticationClientFactoryMock {
+extension ClientFactoryMock {
     struct Configuration {
         var homeserverClients = [
             "matrix.org": ClientSDKMock(.init()),
             "https://matrix-client.matrix.org": ClientSDKMock(.init()),
-            "example.com": ClientSDKMock(.init(serverAddress: "example.com",
+            "example.com": ClientSDKMock(.init(serverName: "example.com",
                                                homeserverURL: "https://matrix.example.com",
                                                slidingSyncVersion: .native,
                                                oAuthLoginURL: nil,
                                                supportsOAuthCreatePrompt: false,
                                                supportsPasswordLogin: true)),
-            "company.com": ClientSDKMock(.init(serverAddress: "company.com",
+            "company.com": ClientSDKMock(.init(serverName: "company.com",
                                                homeserverURL: "https://matrix.company.com",
                                                slidingSyncVersion: .native,
                                                oAuthLoginURL: "https://auth.company.com/login",
                                                supportsOAuthCreatePrompt: false,
                                                supportsPasswordLogin: false)),
-            "server.net": ClientSDKMock(.init(serverAddress: "server.net",
+            "server.net": ClientSDKMock(.init(serverName: "server.net",
                                               homeserverURL: "https://matrix.server.net",
                                               slidingSyncVersion: .native,
                                               oAuthLoginURL: nil,
                                               supportsOAuthCreatePrompt: false,
                                               supportsPasswordLogin: false)),
-            "secure.gov": ClientSDKMock(.init(serverAddress: "secure.gov",
+            "secure.gov": ClientSDKMock(.init(serverName: "secure.gov",
                                               homeserverURL: "https://ess.secure.gov",
                                               slidingSyncVersion: .native,
                                               oAuthLoginURL: "https://auth.secure.gov/login",
@@ -46,7 +46,7 @@ extension AuthenticationClientFactoryMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _, _, _ in
+        makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _, _, _ in
             guard let client = configuration.homeserverClients[address] else {
                 throw ClientBuildError.ServerUnreachable(message: "Not a known homeserver.")
             }
