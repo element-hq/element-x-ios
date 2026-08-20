@@ -142,6 +142,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async {
+        guard appSettings.removeNotificationsWhenReadElsewhere else { return }
+        
         let roomsToLastMessageDates = rooms
             .filter { $0.hasUnreadMessages == false }
             .reduce(into: [:]) { partialResult, roomSummary in
@@ -156,7 +158,9 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                     return false
                 }
                 
-                return notification.date <= lastMessageDate
+                // The event's own timestamp when the NSE stamped one: the delivery date trails
+                // it, which used to spare the newest notification of a fully read room.
+                return (notification.request.content.eventDate ?? notification.date) <= lastMessageDate
             }
             .map(\.request.identifier)
         

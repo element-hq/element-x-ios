@@ -2994,3 +2994,37 @@ smooth to the end. Build 66. Validate: spinner closing next to a
 same-sender message = header fades, bubble below does not move, rows
 above slide smoothly to the end; send a message = previous bubble's
 status row still collapses without a dip (66bea662f case).
+
+## Round 29: notifications vanish except the newest one (2026-08-20)
+
+Symptom: a stack of missed-message notifications for one room collapsed
+to the most recent one while being looked at (`!ZZVN…`, 17:20-17:22Z
+deliveries, gone at the 17:24:40Z background refresh). Nightly keeps the
+whole stack.
+
+Cause: not an NSE or grouping problem (the NSE log shows "Delivering
+notification" for every push). It is upstream's
+`NotificationManager.removeDeliveredNotificationsForFullyReadRooms`
+(899c33a5a, on `develop` too): on every sync update, rooms whose unread
+count is 0 have their delivered notifications withdrawn, so a room read
+on another client (EW here; the phone sent no receipt for it) stops
+shouting. Two things made it look like a regression:
+
+1. preview-prefill computes the unread count correctly (the NSE prefills
+   the room's tail into the shared store and the scoped dirty-lock reload
+   picks it up, so the own receipt resolves to 0), which is what lets the
+   feature fire at all; develop's count tends to stay >0 for rooms not
+   opened on the phone, so it rarely clears anything.
+2. Upstream bug: the guard compared the notification's *delivery* date to
+   the latest message's `origin_server_ts`; the newest notification is
+   delivered a second or two after its event, so it always survived.
+
+Fix: the NSE stamps the event's `origin_server_ts` into the notification
+`userInfo` (`event_timestamp`, seconds) and the main app compares that,
+falling back to the delivery date for older notifications; and the whole
+removal is gated by a new advanced setting "Clear notifications read
+elsewhere" (`removeNotificationsWhenReadElsewhere`, default on). Unit test
+covers stale/fresh/legacy notifications and the setting. Validate: read a
+room on EW while the phone has a notification stack for it = the whole
+stack clears at the next refresh; with the setting off nothing clears; a
+push arriving after the app's last sync is never removed.

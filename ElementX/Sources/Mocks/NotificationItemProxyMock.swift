@@ -17,6 +17,7 @@ struct NotificationItemProxyMockConfiguration {
         let messageLikeContent = MessageLikeEventContent.roomMessage(messageType: messageType, inReplyToEventId: nil)
         let event = TimelineEventSDKMock()
         event.eventIdReturnValue = UUID().uuidString
+        event.timestampReturnValue = 0
         event.contentReturnValue = .messageLike(content: messageLikeContent)
         return .timeline(event: event)
     }()

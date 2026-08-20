@@ -8,6 +8,7 @@
 
 import Combine
 @testable import ElementX
+import MatrixRustSDKMocks
 import NotificationCenter
 import Testing
 
@@ -192,6 +193,27 @@ final class NotificationManagerTests {
         #expect(authorizationStatusWasGranted)
     }
     
+    @Test
+    func removeDeliveredNotificationsForFullyReadRooms_usesEventDateAndSetting() async throws {
+        let room = RoomSummary(room: RoomSDKMock(), id: "!read:matrix.org", settingsMode: .allMessages,
+                               hasUnreadMessages: false, hasUnreadMentions: false, hasUnreadNotifications: false)
+        // Delivered after the latest message (as the newest one always is) but for an event at/before it: stale.
+        let stale = try UNNotification.with(identifier: "stale", roomID: room.id, eventDate: Date.mock, deliveredAt: Date.mock + 5)
+        // For an event newer than the room's latest message: a push the app hasn't synced yet, keep it.
+        let fresh = try UNNotification.with(identifier: "fresh", roomID: room.id, eventDate: Date.mock + 60, deliveredAt: Date.mock + 61)
+        // No event date stamped (older NSE): fall back to the delivery date.
+        let legacy = try UNNotification.with(identifier: "legacy", roomID: room.id, eventDate: nil, deliveredAt: Date.mock - 5)
+        notificationCenter.deliveredNotificationsReturnValue = [stale, fresh, legacy]
+        
+        await notificationManager.removeDeliveredNotificationsForFullyReadRooms([room])
+        #expect(notificationCenter.removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers == ["stale", "legacy"])
+        
+        appSettings.removeNotificationsWhenReadElsewhere = false
+        notificationCenter.removeDeliveredNotificationsWithIdentifiersCallsCount = 0
+        await notificationManager.removeDeliveredNotificationsForFullyReadRooms([room])
+        #expect(!notificationCenter.removeDeliveredNotificationsWithIdentifiersCalled)
+    }
+
     @Test
     func whenWillPresentNotificationsDelegateNotSet_CorrectPresentationOptionsReturned() async throws {
         let archiver = MockCoder(requiringSecureCoding: false)

@@ -14,6 +14,8 @@ nonisolated enum NotificationConstants {
         static let eventIdentifier = "event_id"
         static let threadRootEventIdentifier = "thread_root_event_id"
         static let unreadCount = "unread_count"
+        /// The notified event's `origin_server_ts`, in seconds since 1970.
+        static let eventTimestamp = "event_timestamp"
         static let pusherNotificationClientIdentifier = "pusher_notification_client_identifier"
         static let receiverIdentifier = "receiver_id"
     }

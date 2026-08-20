@@ -1,4 +1,6 @@
 "screen_advanced_settings_manage_storage" = "Manage storage";
+"screen_advanced_settings_remove_read_notifications" = "Clear notifications read elsewhere";
+"screen_advanced_settings_remove_read_notifications_description" = "Remove notifications for messages once you have read them on another device.";
 "screen_home_tab_search" = "Search";
 "screen_manage_storage_a11y_clear" = "Clear %1$@";
 "screen_manage_storage_cache_logs" = "Log files";

@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+@testable import ElementX
 import Foundation
 import UserNotifications
 import XCTest
@@ -20,6 +21,18 @@ extension UNNotification {
         let archiver = MockCoder(requiringSecureCoding: false)
         let notification = try XCTUnwrap(UNNotification(coder: archiver))
         notification.setValue(request, forKey: "request")
+        return notification
+    }
+    
+    static func with(identifier: String, roomID: String, eventDate: Date?, deliveredAt: Date) throws -> UNNotification {
+        let content = UNMutableNotificationContent()
+        content.roomID = roomID
+        content.eventDate = eventDate
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
+        let archiver = MockCoder(requiringSecureCoding: false)
+        let notification = try XCTUnwrap(UNNotification(coder: archiver))
+        notification.setValue(request, forKey: "request")
+        notification.setValue(deliveredAt, forKey: "date")
         return notification
     }
 }

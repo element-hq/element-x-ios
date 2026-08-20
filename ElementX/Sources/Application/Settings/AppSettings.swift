@@ -393,6 +393,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var sharePresence: Bool
     
+    /// Withdraw delivered notifications for rooms that became fully read (typically on another client).
+    @UserPreference(defaultValue: true)
+    var removeNotificationsWhenReadElsewhere: Bool
+    
     // MARK: - Feature Flags
     
     /// Others

@@ -16,6 +16,10 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenAdvancedSettingsPreloadMediaDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_preload_media_description") }
   /// Preload media in viewer
   internal static var screenAdvancedSettingsPreloadMediaTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_preload_media_title") }
+  /// Clear notifications read elsewhere
+  internal static var screenAdvancedSettingsRemoveReadNotifications: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_remove_read_notifications") }
+  /// Remove notifications for messages once you have read them on another device.
+  internal static var screenAdvancedSettingsRemoveReadNotificationsDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_remove_read_notifications_description") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
   /// Clear %1$@

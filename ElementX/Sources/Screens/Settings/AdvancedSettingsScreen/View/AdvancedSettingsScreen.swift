@@ -34,6 +34,10 @@ struct AdvancedSettingsScreen: View {
                                       description: L10n.screenAdvancedSettingsSharePresenceDescription),
                         kind: .toggle($context.sharePresence))
                 
+                ListRow(label: .plain(title: UntranslatedL10n.screenAdvancedSettingsRemoveReadNotifications,
+                                      description: UntranslatedL10n.screenAdvancedSettingsRemoveReadNotificationsDescription),
+                        kind: .toggle($context.removeNotificationsWhenReadElsewhere))
+                
                 ListRow(label: .plain(title: L10n.screenAdvancedSettingsMediaCompressionTitle,
                                       description: L10n.screenAdvancedSettingsMediaCompressionDescription),
                         kind: .toggle($context.optimizeMediaUploads))

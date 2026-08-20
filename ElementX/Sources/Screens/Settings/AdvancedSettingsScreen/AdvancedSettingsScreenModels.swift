@@ -63,6 +63,7 @@ protocol AdvancedSettingsProtocol: AnyObject {
     var viewSourceEnabled: Bool { get set }
     var appAppearance: AppAppearance { get set }
     var sharePresence: Bool { get set }
+    var removeNotificationsWhenReadElsewhere: Bool { get set }
     var optimizeMediaUploads: Bool { get set }
     var preloadMediaInViewer: Bool { get set }
     var liveLocationMinimumDistanceUpdate: Int { get set }

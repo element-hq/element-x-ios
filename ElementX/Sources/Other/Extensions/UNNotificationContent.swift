@@ -33,6 +33,11 @@ nonisolated extension UNNotificationContent {
     var unreadCount: Int? {
         userInfo[NotificationConstants.UserInfoKey.unreadCount] as? Int
     }
+    
+    /// The notified event's server timestamp (`nil` for notifications without an event).
+    @objc var eventDate: Date? {
+        (userInfo[NotificationConstants.UserInfoKey.eventTimestamp] as? TimeInterval).map { Date(timeIntervalSince1970: $0) }
+    }
 }
 
 nonisolated extension UNMutableNotificationContent {
@@ -69,6 +74,15 @@ nonisolated extension UNMutableNotificationContent {
         }
         set {
             userInfo[NotificationConstants.UserInfoKey.threadRootEventIdentifier] = newValue
+        }
+    }
+    
+    override var eventDate: Date? {
+        get {
+            (userInfo[NotificationConstants.UserInfoKey.eventTimestamp] as? TimeInterval).map { Date(timeIntervalSince1970: $0) }
+        }
+        set {
+            userInfo[NotificationConstants.UserInfoKey.eventTimestamp] = newValue?.timeIntervalSince1970
         }
     }
 }
