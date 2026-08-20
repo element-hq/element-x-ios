@@ -30,6 +30,46 @@ class TimelineTypingIndicatorCell: UITableViewCell {
     static let reuseIdentifier = "TimelineTypingIndicatorCell"
 }
 
+/// Hosts a timeline item pinned to one vertical edge of its cell.
+///
+/// During animated snapshot applies the cell's frame and its (already re-rendered)
+/// content height are transiently out of sync; without a vertical alignment SwiftUI
+/// centres the content in the excess space, which reads as the bubble dipping by half
+/// the removed status row. The bubble must hug the edge OPPOSITE the one whose content
+/// changed: the visual top when a row below the bubble toggles (delivery status, read
+/// receipts, reactions - the common case, EXI 66bea662f), but the visual bottom when the
+/// item joins or leaves a sender group and its header above the bubble appears or
+/// disappears (a gap resolving or a back-pagination landing next to it); top-pinned, the
+/// bubble would jump by the header height and slide back. The edge is decided in body
+/// (`onChange` fires a frame too late) and held for the length of any batch animation.
+private struct EdgePinnedTimelineItemView: View {
+    @ObservedObject var viewState: RoomTimelineItemViewState
+    @State private var memory = EdgeMemory()
+    
+    final class EdgeMemory {
+        var lastGroupStyle: TimelineGroupStyle?
+        var alignment: Alignment = .topLeading
+        var resetWork: DispatchWorkItem?
+    }
+    
+    var body: some View {
+        RoomTimelineItemView(viewState: viewState)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+    }
+    
+    private var alignment: Alignment {
+        if let lastGroupStyle = memory.lastGroupStyle, lastGroupStyle != viewState.groupStyle {
+            memory.alignment = .bottomLeading
+            memory.resetWork?.cancel()
+            let resetWork = DispatchWorkItem { [memory] in memory.alignment = .topLeading }
+            memory.resetWork = resetWork
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: resetWork)
+        }
+        memory.lastGroupStyle = viewState.groupStyle
+        return memory.alignment
+    }
+}
+
 class TypingMembersObservableObject: ObservableObject {
     @Published var members: [String] = []
     
@@ -549,14 +589,8 @@ class TimelineTableViewController: UIViewController {
                 }
                 
                 cell.contentConfiguration = UIHostingConfiguration { [coordinator, hideTimelineMedia] in
-                    RoomTimelineItemView(viewState: viewState)
+                    EdgePinnedTimelineItemView(viewState: viewState)
                         .id(id)
-                        // maxHeight + topLeading: during animated snapshot applies the cell's frame
-                        // and its (already re-rendered) content height are transiently out of sync;
-                        // without a vertical alignment SwiftUI centres the content in the excess
-                        // space, which reads as the bubble dipping by half the removed status row.
-                        // Top-pinning keeps the bubble glued to the cell's animating top edge.
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                         .environment(\.timelineContext, coordinator.context)
                         .environment(\.shouldAutomaticallyLoadImages, !hideTimelineMedia)
@@ -755,16 +789,14 @@ class TimelineTableViewController: UIViewController {
                 endSendTransition()
             }
             if visibleGapResolved, !animated {
-                // A quick ease-out so the spinner reads as shrinking away rather
-                // than popping. Fade (not the default slide) plus the neighbours
-                // closing the slot (or the fetched rows opening it) gives the
-                // shrink; performBatchUpdates inherits the surrounding animation
-                // block's duration and curve.
+                // Fade (not the default slide) plus the neighbours closing the slot
+                // (or the fetched rows opening it) reads as the spinner shrinking
+                // away. Plain batch duration: wrapping the apply in a shorter
+                // UIView.animate cut the rows' own height animations short and
+                // they snapped the remainder at the end.
                 let defaultRowAnimation = dataSource.defaultRowAnimation
                 dataSource.defaultRowAnimation = .fade
-                UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut]) {
-                    dataSource.apply(snapshot, animatingDifferences: true)
-                }
+                dataSource.apply(snapshot, animatingDifferences: true)
                 dataSource.defaultRowAnimation = defaultRowAnimation
             } else {
                 dataSource.apply(snapshot, animatingDifferences: animated)
