@@ -259,6 +259,40 @@ final class RoomFlowCoordinatorTests {
     }
 
     @Test
+    func permalinkToNewestEventStillFocusses() async throws {
+        setupRoomFlowCoordinator()
+        setupRoomWithNewestEvent()
+        
+        try await processExpectingNewRootCoordinator(route: .event(eventID: "2", roomID: "1", via: []))
+        
+        let arguments = try #require(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReceivedArguments)
+        #expect(arguments.initialFocussedEventID == "2")
+    }
+    
+    @Test
+    func notificationTapOnNewestEventOpensLive() async throws {
+        setupRoomFlowCoordinator()
+        setupRoomWithNewestEvent()
+        
+        try await processExpectingNewRootCoordinator(route: .event(eventID: "2", roomID: "1", via: [], openLiveIfNewest: true))
+        
+        let arguments = try #require(timelineControllerFactory.buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReceivedArguments)
+        #expect(arguments.initialFocussedEventID == nil)
+    }
+    
+    /// A joined room "1" whose newest known event is "2", which resolves as a plain (unthreaded) event.
+    private func setupRoomWithNewestEvent() {
+        let roomProxy = JoinedRoomProxyMock(.init(id: "1"))
+        roomProxy.latestEventID = "2"
+        
+        let mockedEvent = TimelineEventSDKMock()
+        mockedEvent.threadRootEventIdReturnValue = nil
+        roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
+        
+        clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
+    }
+    
+    @Test
     func threadedEventRoutes() async throws {
         appSettings.threadsEnabled = true
         setupRoomFlowCoordinator()

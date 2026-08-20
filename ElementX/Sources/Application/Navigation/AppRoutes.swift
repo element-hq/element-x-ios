@@ -33,7 +33,9 @@ enum AppRoute: Hashable {
     /// The profile of a member within the current room.
     case roomMemberDetails(userID: String)
     /// An event within a room, shown as the root of the stack (popping any child rooms).
-    case event(eventID: String, roomID: String, via: [String])
+    /// `openLiveIfNewest` is set by notification taps only: when the event is the room's
+    /// newest message the room opens live without the permalink focus treatment.
+    case event(eventID: String, roomID: String, via: [String], openLiveIfNewest: Bool = false)
     /// The same as ``event`` but using a room alias.
     case eventOnRoomAlias(eventID: String, alias: String)
     /// An event within a room, either within the last child on the stack or pushing a new child if needed.

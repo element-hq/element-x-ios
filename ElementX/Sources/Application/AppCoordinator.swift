@@ -345,7 +345,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     handleAppRoute(.childRoomAlias(alias),
                                    windowType: windowType)
                 }
-            case .event(let eventID, let roomID, let via):
+            case .event(let eventID, let roomID, let via, _):
                 if isExternalURL {
                     handleAppRoute(route,
                                    windowType: windowType)
@@ -459,7 +459,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         } else if let eventID {
             // Only track main timeline event deeplinking
             analyticsService.signpost.startTransaction(.notificationToMessage)
-            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []), windowType: nil)
+            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: [], openLiveIfNewest: true), windowType: nil)
         } else {
             handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
         }

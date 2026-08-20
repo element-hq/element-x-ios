@@ -36,7 +36,7 @@ enum RoomFlowCoordinatorEntryPoint: Hashable {
     /// The flow will start by showing the room directly.
     case room
     /// The flow will start by showing the room, focussing on the supplied event ID.
-    case eventID(String)
+    case eventID(String, openLiveIfNewest: Bool = false)
     /// The flow will start by showing a thread timeline, can only be triggered by notification taps,
     /// which means it can never be a used for child flows.
     case thread(rootEventID: String, focusEventID: String?)
@@ -58,6 +58,9 @@ struct FocusEvent: Hashable {
     let eventID: String
     /// if the focus is coming from the pinned timeline, this should also update the pin banner
     let shouldSetPin: Bool
+    /// Notification taps only: when the event is the room's newest message, open the room
+    /// live instead of focussing on it. Permalinks always get the focus treatment.
+    var openLiveIfNewest = false
 }
 
 enum InviteUsersFlow: Hashable {
@@ -196,11 +199,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                             animated: animated)
                 self?.roomRouteTask = nil
             }
-        case .event(let eventID, let roomID, let via):
+        case .event(let eventID, let roomID, let via, let openLiveIfNewest):
             roomRouteTask = Task { [weak self] in
                 await self?.handleRoomRoute(roomID: roomID,
                                             via: via,
-                                            presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false)),
+                                            presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false, openLiveIfNewest: openLiveIfNewest)),
                                             animated: animated)
                 self?.roomRouteTask = nil
             }
@@ -361,15 +364,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
                 switch eventDetails {
                 case .success(let event):
-                    // A focus target that is the room's newest message (the common
-                    // notification-tap case) wants the live bottom of the room, not the
-                    // permalink treatment - and skipping the focus here avoids the focussed
-                    // timeline build entirely. Compare by timestamp as well as ID: right
-                    // after a tap wakes the app, the in-memory latest event lags what the
-                    // NSE already stored, so an event at least as new as the stale value is
-                    // the newest this process knows about.
-                    let isNewestKnownEvent = roomProxy.latestEventID == focusEvent.eventID
-                        || roomProxy.latestEventTimestamp.map { event.timestamp() >= $0 } ?? false
+                    // A notification tap on the room's newest message wants the live bottom
+                    // of the room, not the permalink treatment - and skipping the focus here
+                    // avoids the focussed timeline build entirely. Compare by timestamp as
+                    // well as ID: right after a tap wakes the app, the in-memory latest event
+                    // lags what the NSE already stored, so an event at least as new as the
+                    // stale value is the newest this process knows about. Permalinks never
+                    // take this path: not highlighting the target reads as a broken link.
+                    let isNewestKnownEvent = focusEvent.openLiveIfNewest
+                        && (roomProxy.latestEventID == focusEvent.eventID
+                            || roomProxy.latestEventTimestamp.map { event.timestamp() >= $0 } ?? false)
 
                     if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
                         stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID,
@@ -1620,8 +1624,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch entryPoint {
         case .room:
             coordinator.handleAppRoute(.room(roomID: roomID, via: via), animated: true)
-        case .eventID(let eventID):
-            coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via), animated: true)
+        case .eventID(let eventID, let openLiveIfNewest):
+            coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via, openLiveIfNewest: openLiveIfNewest), animated: true)
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
         case .share(let payload):
