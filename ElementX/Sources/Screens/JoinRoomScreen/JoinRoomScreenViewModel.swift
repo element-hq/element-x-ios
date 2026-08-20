@@ -215,6 +215,21 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                       spaceVisibility: spaceServiceRoom.visibility)
     }
     
+    /// Whether an invite should be presented as a DM: the inviter as the title with their
+    /// user ID beneath, no separate "Invited by" block.
+    ///
+    /// The invite's `is_direct` flag is the primary signal, but the SDK names a nameless
+    /// room after its members, which for an invite is just the inviter: a non-direct or
+    /// mis-flagged 1:1 invite would otherwise show "<inviter>" as the room name above
+    /// "Invited by <inviter>". The joined count stays 0 until the room summary has been
+    /// fetched (offline, or a brand new invite), so treat unknown as "nobody else".
+    private var invitePresentsAsDM: Bool {
+        guard let details = state.roomDetails else { return false }
+        let nobodyElseKnown = (details.memberCount ?? 0) <= 1
+        let namedAfterInviter = details.inviter.map { details.name == nil || details.name == $0.displayName || details.name == $0.id } ?? false
+        return nobodyElseKnown && (details.isDirect == true || namedAfterInviter)
+    }
+    
     private func updateMode() async {
         if isLoadingPreview {
             state.mode = .loading
@@ -255,7 +270,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 // into this process yet) - never offer Join, go straight in.
                 await handleAlreadyJoinedRoom()
             case .invited:
-                state.mode = .invited(isDM: state.roomDetails?.isDirect == true && state.roomDetails?.memberCount == 1)
+                state.mode = .invited(isDM: invitePresentsAsDM)
             case .knocked:
                 state.mode = .knocked
             case .banned:
@@ -278,7 +293,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             case .joined:
                 await handleAlreadyJoinedRoom()
             case .invited:
-                state.mode = .invited(isDM: state.roomDetails?.isDirect == true && state.roomDetails?.memberCount == 1)
+                state.mode = .invited(isDM: invitePresentsAsDM)
             case .knocked:
                 state.mode = .knocked
             case .banned:

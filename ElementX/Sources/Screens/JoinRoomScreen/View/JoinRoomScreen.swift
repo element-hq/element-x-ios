@@ -70,6 +70,7 @@ struct JoinRoomScreen: View {
                     .font(.compound.headingLGBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
+                    .textSelection(.enabled)
                 
                 if let subtitle = context.viewState.subtitle {
                     Label {
@@ -77,6 +78,7 @@ struct JoinRoomScreen: View {
                             .font(.compound.bodyLG)
                             .foregroundStyle(.compound.textSecondary)
                             .multilineTextAlignment(.center)
+                            .textSelection(.enabled)
                     } icon: {
                         if let icon = context.viewState.subtitleIcon {
                             CompoundIcon(icon, size: .small, relativeTo: .compound.bodyLG)
@@ -330,10 +332,12 @@ private struct InviterView: View {
                         .multilineTextAlignment(.center)
                 }
                 
+                // Long-press to copy: you may want to check who this is before accepting.
                 Text(inviter.id)
                     .font(.compound.bodySM)
                     .foregroundStyle(.compound.textSecondary)
                     .multilineTextAlignment(.center)
+                    .textSelection(.enabled)
             }
         }
         .accessibilityElement(children: .combine)

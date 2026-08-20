@@ -166,6 +166,40 @@ final class JoinRoomScreenViewModelTests {
     
     // MARK: - Helpers
     
+    @Test
+    func directInvitePresentsAsDMBeforeTheSummaryArrives() async throws {
+        // Offline (or a brand new invite) the preview is built from the local invite state:
+        // is_direct is known but the joined count is still 0. That must not fall back to
+        // the room layout, which shows the inviter as the room name above "Invited by <inviter>".
+        clientProxy = ClientProxyMock(.init())
+        clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock(.init(name: "Alice", numJoinedMembers: 0, membership: .invited, joinRule: .invite, isDirect: true)))
+        clientProxy.roomForIdentifierClosure = { _ in .invited(InvitedRoomProxyMock(.init(inviter: .mockAlice))) }
+        viewModel = JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
+                                            appSettings: appSettings,
+                                            userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                            userIndicatorController: UserIndicatorControllerMock())
+        
+        try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .invited(isDM: true) }.fulfill()
+        #expect(context.viewState.title == "Alice")
+        #expect(context.viewState.subtitle == "@alice:matrix.org")
+    }
+    
+    @Test
+    func namelessInviteNamedAfterTheInviterPresentsAsDM() async throws {
+        // A 1:1 invite without the is_direct flag: the SDK names the nameless room after
+        // its only member, the inviter, so showing it as a room duplicates the inviter.
+        clientProxy = ClientProxyMock(.init())
+        clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock(.init(name: "Alice", numJoinedMembers: 1, membership: .invited, joinRule: .invite)))
+        clientProxy.roomForIdentifierClosure = { _ in .invited(InvitedRoomProxyMock(.init(inviter: .mockAlice))) }
+        viewModel = JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
+                                            appSettings: appSettings,
+                                            userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                            userIndicatorController: UserIndicatorControllerMock())
+        
+        try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .invited(isDM: true) }.fulfill()
+        #expect(context.viewState.title == "Alice")
+    }
+    
     private func setupViewModel(throwing: Bool = false, mode: TestMode = .joined) {
         clientProxy = ClientProxyMock(.init())
         
