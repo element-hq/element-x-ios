@@ -623,17 +623,21 @@ class TimelineTableViewController: UIViewController {
         })
         let resolvedGapIDs = renderedGapIDs.subtracting(newGapIDs)
         let visibleIDs = Set(tableView.indexPathsForVisibleRows?.compactMap { dataSource.itemIdentifier(for: $0) } ?? [])
-        // Only animate a resolution that removes its spinner without inserting
-        // anything (the gap closed empty): that one genuinely shrinks away.
-        // Animating an apply that inserts content near the viewport slides and
-        // cross-fades everything in a flipped table (the reported "spasms"),
-        // whether from a tall message landing or from neighbours like the
-        // "N room changes" groups regrouping under new identities - those
-        // applies go unanimated with the visible content pinned instead.
-        let insertedIDs = Set(timelineItemsIDs).subtracting(currentSnapshot.mainItemIdentifiers)
+        // Animate a resolution whose spinner is on screen so it shrinks away as
+        // the fetched events slide in above it (the flipped table measures its
+        // offsets from the newest end, so rows older than the gap move and the
+        // newer ones stay put). That only holds while nothing newer than the
+        // gap changed in the same apply - otherwise the newer rows shift and
+        // the apply needs the pin below instead. Identity churn among visible
+        // rows (e.g. "N room changes" groups regrouping under new identities)
+        // would cross-fade half the screen, so that goes unanimated too.
         let removedIDs = Set(currentSnapshot.mainItemIdentifiers).subtracting(timelineItemsIDs)
         let visibleChurn = !removedIDs.subtracting(resolvedGapIDs).isDisjoint(with: visibleIDs)
-        let visibleGapResolved = !frozenApply && !visibleChurn && insertedIDs.isEmpty
+        let newerSideUnchanged = {
+            guard let gapIndex = currentSnapshot.mainItemIdentifiers.firstIndex(where: { resolvedGapIDs.contains($0) }) else { return false }
+            return Array(currentSnapshot.mainItemIdentifiers.prefix(gapIndex)) == Array(timelineItemsIDs.prefix(gapIndex))
+        }()
+        let visibleGapResolved = !frozenApply && !visibleChurn && newerSideUnchanged
             && !resolvedGapIDs.isDisjoint(with: visibleIDs)
         renderedGapIDs = newGapIDs
 
@@ -753,8 +757,9 @@ class TimelineTableViewController: UIViewController {
             if visibleGapResolved, !animated {
                 // A quick ease-out so the spinner reads as shrinking away rather
                 // than popping. Fade (not the default slide) plus the neighbours
-                // closing the slot gives the shrink; performBatchUpdates inherits
-                // the surrounding animation block's duration and curve.
+                // closing the slot (or the fetched rows opening it) gives the
+                // shrink; performBatchUpdates inherits the surrounding animation
+                // block's duration and curve.
                 let defaultRowAnimation = dataSource.defaultRowAnimation
                 dataSource.defaultRowAnimation = .fade
                 UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut]) {
