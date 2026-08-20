@@ -1,3 +1,47 @@
+## Changes in 26.08.3 (2026-08-20)
+
+### What's Changed
+
+✨ Features
+* Load MapLibre lazily instead of at every app launch by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6012
+
+🙌 Improvements
+* Offer Retry and Remove actions with a reason when tapping a failed message by @ara4n in https://github.com/element-hq/element-x-ios/pull/5988
+* Update the toolbars in the Chats/Spaces screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6043
+
+🐛 Bugfixes
+* Avoid race conditions between the home screen's crash alert and Sentry's `onLastRunStatusDetermined` by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6017
+* Prevent invalid composer mode crashes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6018
+* Delay secondary room summary provider setup by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6038
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6036
+
+🧱 Build
+* Re-run XcodeGen. by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6040
+
+🚧 In development 🚧
+* Update the SDK fixing some user status bugs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6037
+* Fix the emoji picker's title when setting a custom status. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6039
+
+Others
+* Update Project Dependencies by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6011
+* Move various top level folder to the `Components` one by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6014
+* Update dependency PostHog to v3.69.1 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6013
+* Avoid re-applying identical room list filters by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6016
+* Detach the Client's `cacheAccountURL` call by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6019
+* Update the Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6023
+* Fix the flaky ElementCallServiceTests by replacing TestClock by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6022
+* Implement TimelineItemProvider diff `truncate` mechanism by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6029
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6030
+* Attempt another kind of fix for the encryption settings UI test by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6035
+* Fail fast on the integration tests when encountering the first failed assert by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6041
+* Various unit test improvements by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6042
+* Update the Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6049
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.08.2...release/26.08.3
+
 ## Changes in 26.08.2 (2026-08-11)
 
 ### What's Changed
