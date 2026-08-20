@@ -14,6 +14,7 @@ struct SettingsScreenUserStatusRow: View {
     let action: (SettingsScreenViewAction.UserStatusAction) -> Void
     
     @State private var customText = ""
+    @FocusState private var isCustomFieldFocused: Bool
     
     var body: some View {
         switch mode {
@@ -34,6 +35,8 @@ struct SettingsScreenUserStatusRow: View {
                     
                     TextField(L10n.screenSettingsUserStatusCustomHint, text: $customText)
                         .textFieldStyle(.compound(.raised))
+                        .focused($isCustomFieldFocused)
+                        .onAppear { isCustomFieldFocused = true }
                         .accessibilityLabel(L10n.screenSettingsUserStatusCustomHint)
                         .padding(.vertical, 3)
                     
