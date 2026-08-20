@@ -16,7 +16,7 @@ struct LoginScreenViewModelTests {
         viewModel.context
     }
     
-    var clientFactory: AuthenticationClientFactoryMock!
+    var clientFactory: ClientFactoryMock!
     var service: AuthenticationServiceProtocol!
     
     @Test
@@ -229,7 +229,7 @@ struct LoginScreenViewModelTests {
     private mutating func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
         let appSettings = AppSettings.volatile()
         
-        clientFactory = AuthenticationClientFactoryMock(.init())
+        clientFactory = ClientFactoryMock(.init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,

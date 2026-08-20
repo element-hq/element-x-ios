@@ -18,7 +18,7 @@ struct ServerSelectionScreenViewModelTests {
     
     var appSettings: AppSettings!
     var client: ClientSDKMock!
-    var clientFactory: AuthenticationClientFactoryMock!
+    var clientFactory: ClientFactoryMock!
     var service: AuthenticationServiceProtocol!
     var viewModel: ServerSelectionScreenViewModelProtocol!
     
@@ -31,7 +31,7 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for login.
         try setup(authenticationFlow: .login)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When selecting matrix.org.
         context.homeserverAddress = "matrix.org"
@@ -40,7 +40,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then selection should succeed.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(service.homeserver.value == .mockMatrixDotOrg)
     }
     
@@ -49,7 +49,7 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for login.
         try setup(authenticationFlow: .login)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(context.alertInfo == nil)
         
         // When selecting a server that doesn't support login.
@@ -59,7 +59,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then selection should fail with an alert about not supporting registration.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(context.alertInfo?.id == .loginAlert)
     }
     
@@ -68,7 +68,7 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for registration.
         try setup(authenticationFlow: .register)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When selecting matrix.org.
         context.homeserverAddress = "matrix.org"
@@ -77,7 +77,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then selection should succeed.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(service.homeserver.value == .mockMatrixDotOrg)
     }
     
@@ -86,7 +86,7 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for registration.
         try setup(authenticationFlow: .register)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(context.alertInfo == nil)
         
         // When selecting a server that doesn't support registration.
@@ -96,7 +96,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then selection should fail with an alert about not supporting registration.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(context.alertInfo?.id == .registrationAlert)
     }
     
@@ -105,7 +105,7 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for login.
         try setup(authenticationFlow: .login)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(context.alertInfo == nil)
         
         // When selecting a server that requires Element Pro
@@ -115,7 +115,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then selection should fail with an alert telling the user to download Element Pro.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(context.alertInfo?.id == .elementProAlert)
     }
     
@@ -160,7 +160,7 @@ struct ServerSelectionScreenViewModelTests {
         try setup(authenticationFlow: .login)
         context.homeserverAddress = Self.passwordOnlyServer
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When confirming from the server selection screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -168,7 +168,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then the service should be configured but no OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(service.homeserver.value.loginMode == .password)
     }
     
@@ -182,7 +182,7 @@ struct ServerSelectionScreenViewModelTests {
             return
         }
         #expect(service.homeserver.value.loginMode == .password)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         
         // When confirming from the server selection screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -190,7 +190,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then the service should be re-configured but no OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
     }
     
     // MARK: - Picker mode
@@ -201,7 +201,7 @@ struct ServerSelectionScreenViewModelTests {
         try setup(authenticationFlow: .login, mode: .picker(Self.pickerProviders))
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(context.viewState.mode == .picker(Self.pickerProviders))
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When confirming from the picker.
@@ -210,7 +210,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then the service should be configured and the OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
         #expect(service.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: true))
@@ -222,7 +222,7 @@ struct ServerSelectionScreenViewModelTests {
         try setup(authenticationFlow: .login, mode: .picker(Self.pickerProviders))
         context.homeserverAddress = Self.passwordOnlyServer
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When confirming from the picker.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -230,7 +230,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then the service should be configured but no OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(service.homeserver.value.loginMode == .password)
     }
     
@@ -341,10 +341,10 @@ struct ServerSelectionScreenViewModelTests {
                                 mode: ServerSelectionScreenMode = .userInput) throws {
         appSettings = AppSettings.volatile()
         
-        let factoryConfiguration = AuthenticationClientFactoryMock.Configuration()
+        let factoryConfiguration = ClientFactoryMock.Configuration()
         // matrix.org: OAuth. example.com: password only. server.net: no login. secure.gov: OAuth + Element Pro required.
         client = factoryConfiguration.homeserverClients["matrix.org"]
-        clientFactory = AuthenticationClientFactoryMock(factoryConfiguration)
+        clientFactory = ClientFactoryMock(factoryConfiguration)
         
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),

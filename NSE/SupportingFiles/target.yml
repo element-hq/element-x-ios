@@ -87,7 +87,7 @@ targets:
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/AppHooks/AppHooks.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/TracingHook.swift
-    - path: ../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
+    - path: ../../ElementX/Sources/AppHooks/Hooks/ClientFactoryHook.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/RemoteSettingsHook.swift
     - path: ../../Components/Secrets/Secrets.swift
     - path: ../../ElementX/Sources/Application/Settings
@@ -98,7 +98,6 @@ targets:
     - path: ../../ElementX/Sources/Other/ExpiringTaskRunner.swift
     - path: ../../ElementX/Sources/Other/Extensions/AttributedString.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
-    - path: ../../ElementX/Sources/Other/Extensions/ClientBuilder.swift
     - path: ../../ElementX/Sources/Other/Extensions/Date.swift
     - path: ../../ElementX/Sources/Other/Extensions/Dictionary.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
@@ -125,6 +124,8 @@ targets:
     - path: ../../ElementX/Sources/Services/AlertTones/NotificationTone.swift
     - path: ../../ElementX/Sources/Services/AlertTones/NotificationToneManager.swift
     - path: ../../ElementX/Sources/Services/AlertTones/NotificationToneManagerProtocol.swift
+    - path: ../../ElementX/Sources/Services/Client/ClientFactory.swift
+    - path: ../../ElementX/Sources/Services/Client/ClientFactoryProtocol.swift
     - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift

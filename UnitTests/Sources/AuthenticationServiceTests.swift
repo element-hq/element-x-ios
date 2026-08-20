@@ -135,8 +135,8 @@ struct AuthenticationServiceTests {
     private mutating func setup(serverAddress: String = "matrix.org",
                                 classicAppAccounts: [ClassicAppAccount] = [],
                                 availableSecrets: ClassicAppAccount.AvailableSecrets = .complete) async throws {
-        let configuration: AuthenticationClientFactoryMock.Configuration = .init()
-        let clientFactory = AuthenticationClientFactoryMock(configuration)
+        let configuration: ClientFactoryMock.Configuration = .init()
+        let clientFactory = ClientFactoryMock(configuration)
         
         client = configuration.homeserverClients[serverAddress]
         encryption = EncryptionSDKMock()

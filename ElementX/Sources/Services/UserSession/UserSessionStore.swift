@@ -11,6 +11,7 @@ import MatrixRustSDK
 
 class UserSessionStore: UserSessionStoreProtocol {
     private let keychainController: KeychainControllerProtocol
+    private let clientFactory: ClientFactoryProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsServiceProtocol
     private let networkMonitor: NetworkMonitorProtocol
@@ -31,11 +32,13 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     init(keychainController: KeychainControllerProtocol,
+         clientFactory: ClientFactoryProtocol = ClientFactory(),
          appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol,
          appHooks: AppHooks,
          networkMonitor: NetworkMonitorProtocol) {
         self.keychainController = keychainController
+        self.clientFactory = clientFactory
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         self.appHooks = appHooks
@@ -127,26 +130,13 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.failedRestoringLogin)
         }
         
-        let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
-        
-        let builder = ClientBuilder
-            .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
-                         slidingSync: .restored,
-                         sessionDelegate: keychainController,
-                         appHooks: appHooks,
-                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         threadsEnabled: appSettings.threadsEnabled)
-            .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
-                                       cachePath: credentials.restorationToken.sessionDirectories.cachePath)
-                    .passphrase(passphrase: credentials.restorationToken.passphrase))
-            .withSearchIndexStore(path: credentials.restorationToken.sessionDirectories.dataPath,
-                                  password: credentials.restorationToken.passphrase)
-            .homeserverUrl(url: homeserverURL)
+        appHooks.remoteSettingsHook.loadCache(forHomeserver: credentials.restorationToken.session.homeserverUrl, applyingTo: appSettings)
         
         do {
-            let client = try await builder.build()
-            try await client.restoreSession(session: credentials.restorationToken.session)
+            let client = try await clientFactory.makeAppClient(credentials: credentials,
+                                                               clientSessionDelegate: keychainController,
+                                                               appSettings: appSettings,
+                                                               appHooks: appHooks)
             
             MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
             

@@ -18,7 +18,7 @@ nonisolated protocol NSEUserSessionProtocol {
 
 final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     private let appSettings: CommonSettingsProtocol
-    private let baseClient: Client
+    private let baseClient: ClientProtocol
     private let notificationClient: NotificationClient
     private let userID: String
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: baseClient),
@@ -55,29 +55,17 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     init(credentials: KeychainCredentials,
          roomID: String,
          clientSessionDelegate: ClientSessionDelegate,
-         appHooks: AppHooks,
-         appSettings: CommonSettingsProtocol) async throws {
+         clientFactory: ClientFactoryProtocol = ClientFactory(),
+         appSettings: CommonSettingsProtocol,
+         appHooks: AppHooks) async throws {
         userID = credentials.userID
         self.appSettings = appSettings
         
-        let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        let clientBuilder = ClientBuilder
-            .baseBuilder(setupEncryption: false,
-                         httpProxy: URL(string: homeserverURL)?.globalProxy,
-                         slidingSync: .restored,
-                         sessionDelegate: clientSessionDelegate,
-                         appHooks: appHooks,
-                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         requestTimeout: 15000,
-                         maxRequestRetryTime: 5000,
-                         threadsEnabled: appSettings.threadsEnabled)
-            .systemIsMemoryConstrained()
-            .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
-                                       cachePath: credentials.restorationToken.sessionDirectories.cachePath)
-                    .passphrase(passphrase: credentials.restorationToken.passphrase))
-            .homeserverUrl(url: homeserverURL)
-        
-        baseClient = try await clientBuilder.build()
+        baseClient = try await clientFactory.makeNSEClient(credentials: credentials,
+                                                           roomID: roomID,
+                                                           clientSessionDelegate: clientSessionDelegate,
+                                                           appSettings: appSettings,
+                                                           appHooks: appHooks)
         
         do {
             try await baseClient.setPresence(presence: .offline, immediate: false)
@@ -85,9 +73,6 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
             MXLog.error("Failed configuring offline presence before notification processing with error: \(error)")
         }
         delegateHandle = try baseClient.setDelegate(delegate: ClientDelegateWrapper())
-        
-        try await baseClient.restoreSessionWith(session: credentials.restorationToken.session,
-                                                roomLoadSettings: .one(roomId: roomID))
         
         // Inject the content scanner so the SDK gates the media it downloads whilst building the notification.
         if let contentScannerURL = appSettings.contentScannerURL.publisher.value {
