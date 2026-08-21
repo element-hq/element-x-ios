@@ -3074,3 +3074,51 @@ frozen apply (fade into the vacated slot, one settle) exactly like a
 multiline collapse. Build 70. Validate: send from the emoji keyboard =
 previous bubbles still, emoji bubble fades into the vacated space, single
 settle; plain single-line and multiline sends unchanged.
+
+## Round 31: thread contents very slow to load (2026-08-21)
+
+Symptom: opening a thread shows its last few replies, then the rest trickles
+in slowly; it felt like threads weren't using the event cache at all.
+
+Cause: threads do have their own persisted linked chunks, but they were
+only ever read one chunk deep before going to the network. Every *limited*
+room sync that carries a thread reply stamps the room's `prev_batch` onto
+the thread's chunk as a gap and shrinks it to the last chunk (the thread
+gets the room's `limited`/`prev_batch`, not its own), and thread pagination
+had no storage-only mode (`thread/pagination.rs`: "gaps are always
+resolved over the network"). So opening a thread = last chunk from disk,
+then a serial `/relations?recurse=true` round trip per 20 events before any
+older stored reply is reachable: the inline-spinner gappy-timeline problem,
+minus the inline spinner. Two extra taxes on top: an empty thread chunk
+waited up to 3s for a prev-batch token that only ever arrives with new
+activity in that very thread; and (upstream bug) a pagination "from the
+end" that only returned already-known events dropped its token and claimed
+the start of the thread, so a live-created thread longer than the batch
+never loaded its root and showed a false "beginning of thread".
+
+Fix (SDK): the room's storage-first machinery ported to threads.
+`ThreadPagination::run_backwards_once_from_storage` walks the stored
+chunks past gaps (whole chunks at a time, no network), exposes the gaps via
+`ThreadEventCache::timeline_gaps()` (the same `TimelineGap` snapshot as the
+room; observers pull it alongside every `TimelineVectorDiffs` update, and
+an update with no diff means only the gaps changed), and only reaches the
+network once the store is exhausted: remaining gaps oldest-first, then
+"from the end" until the root leads; `reached_start` is never claimed
+without the root leading and no gap left. `ThreadEventCache::resolve_gap`
+resolves one gap on demand (in-flight dedup shared with the room via
+`GapResolutionsInFlight`). The from-the-end all-duplicates page now parks
+its token in front of the oldest known event instead of dropping it; the
+3s token wait is skipped for threads. UI: thread timelines honour
+`storage_only_pagination` (storage walk, gap items, `resolve_gap`), and the
+thread updates task applies diffs + gaps in one transaction like live.
+EXI: `threadTimeline` opens with `storageOnlyPagination: true`; the gap
+item view and resolve action were already timeline-kind agnostic.
+Regression tests: `test_storage_only_pagination_serves_stored_events_past_gaps`
+(no `/relations` mock mounted = any network hit fails the test) and
+`test_pagination_from_the_end_progresses_past_known_events`.
+
+Build 71. Validate: open a long thread = its cached replies appear at once
+(cold and warm), inline spinners where history is missing, scrolling up
+walks the cache before touching the network; a thread created while the app
+was live still reaches its root and "beginning of thread" only shows with
+the root on screen.

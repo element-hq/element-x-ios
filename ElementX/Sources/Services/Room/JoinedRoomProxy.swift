@@ -197,7 +197,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             dateDividerMode: .daily,
                                                                                             trackReadReceipts: .messageLikeEvents,
                                                                                             reportUtds: true,
-                                                                                            storageOnlyPagination: false))
+                                                                                            storageOnlyPagination: true))
             
             let timeline = TimelineProxy(timeline: sdkTimeline, kind: .thread(rootEventID: eventID))
             await timeline.subscribeForUpdates()
