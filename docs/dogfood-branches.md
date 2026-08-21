@@ -3362,3 +3362,27 @@ Build 79 (EXI 0dbd64d2a x SDK 35648826a). Compiled + signed for device; phone
 unreachable at build time (tunnel down), install pending. Validate: overscroll
 the oldest/newest media - it should rubber-band and settle with no crash and no
 snap-back jog; blank-on-swipe stays fixed with the smaller preload window.
+
+## Round 36 follow-ups #4 (thumbnail preload removed)
+
+Device logs (build 80) settled the thumbnail question: zero preloaded
+thumbnails ever reached QuickLook (grep of the controller's index/refresh lines
+for `thumbnail.jpeg` = 0), and only 4 blank-landings in a whole session.
+QuickLook renders file URLs only, and the thumbnail was fetched over the
+network via `loadFileFromSource`, landing ~20s after the viewer opened - far
+too late for a swipe - so it was pure overhead (a per-item network fetch that
+was never shown). The perceived improvement in build 80 was the full-file
+preload (3->5) plus the on-disk cache: a visited item never blanks again
+(hence "occasional blank but doesn't repeat").
+
+The in-memory image cache (what the timeline drew) only holds media near where
+you were scrolled, so it can't cover the deep fast-swipe case where the blank
+actually happens - bridging it to a temp `.jpeg` for QuickLook would only paper
+over the first couple of swipes. Not worth it. So: dropped the thumbnail
+preload entirely, put the full-media neighbour preload back to 8 (the earlier
+sweet spot). The data source's thumbnail-URL fallback is left dormant (harmless)
+in case a future bridge feeds it.
+
+Build 81 (EXI x SDK 35648826a). Installed + launched. Net of round 36: native
+bounce at the media-viewer ends (working well), and blank-on-swipe is rare and
+self-healing via preload=8 + cache.
