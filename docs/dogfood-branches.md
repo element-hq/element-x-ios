@@ -3175,3 +3175,25 @@ out within a second or two of the "Network path changed" log line rather
 than after a 30s timeout; sync resumes on the new interface equally fast;
 open a room with a thumb already resting on the screen = the timeline draws
 immediately.
+
+## Round 33: two spinners at the top of every thread load (2026-08-21)
+
+Symptom: opening or scrolling up a thread showed a spinner, then the date
+header, then a second spinner, then the messages.
+
+Cause: round 31 made a thread whose store is exhausted behind a leading gap
+resolve that gap over the network from the pagination itself, so the top
+pagination indicator spun above the very gap item that was already
+spinning for the same hole. The room never did this: once its storage is
+exhausted, a leading gap is "the start as far as pagination is concerned"
+and the gap item resolves it on demand.
+
+Fix (SDK): threads follow the room's rule. Non-leading remaining gaps are
+still resolved from the pagination (redundant-gap drops), as in the room.
+`test_storage_only_pagination_serves_stored_events_past_gaps` now pins the
+storage walk stopping at the leading gap with no network, then the gap
+resolving on demand.
+
+Build 73 (SDK only; EXI unchanged). Validate: thread loads show one inline
+spinner per hole and no indicator above it; the hole still resolves on its
+own while visible and the thread still reaches its root.
