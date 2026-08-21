@@ -255,14 +255,22 @@ enum TimelineMediaPreviewItem: Equatable {
         
         var fileHandle: MediaFileHandleProxy? {
             didSet {
-                // The full media arriving over a thumbnail means QuickLook, which built the page
-                // from the thumbnail, needs a refresh to show the full media (it won't otherwise:
-                // the page isn't "unavailable"). Flag it so the controller can force that refresh.
-                if fileHandle != nil, thumbnailFileHandle != nil {
+                // The full media arriving over a placeholder (blurhash) or thumbnail means
+                // QuickLook, which built the page from that, needs a refresh to show the full
+                // media (it won't otherwise: the page isn't "unavailable"). Flag it so the
+                // controller can force that refresh.
+                if fileHandle != nil, thumbnailFileHandle != nil || placeholderURL != nil {
                     wasUpgradedFromThumbnail = true
                 }
                 updatePreviewItemValues()
             }
+        }
+
+        /// A blurhash placeholder rendered to a file, shown the instant a page is built so a swipe
+        /// lands on a blurry preview rather than QuickLook's black "content unavailable" screen
+        /// while the full media downloads. Superseded by `fileHandle`.
+        var placeholderURL: URL? {
+            didSet { updatePreviewItemValues() }
         }
 
         /// A cached thumbnail shown while the full media downloads, so a swipe never lands on a
@@ -330,7 +338,7 @@ enum TimelineMediaPreviewItem: Equatable {
         private func updatePreviewItemValues() {
             // Fall back to the thumbnail while the full media downloads, so QuickLook shows the
             // thumbnail rather than a blank page.
-            let url = fileHandle?.url ?? thumbnailFileHandle?.url
+            let url = fileHandle?.url ?? thumbnailFileHandle?.url ?? placeholderURL
             _previewItemURL.withLock { $0 = url }
 
             // Don't show any background text (" ") until the full media is ready.
@@ -397,7 +405,7 @@ enum TimelineMediaPreviewItem: Equatable {
                 }
             }
         }
-        
+
         var filename: String? {
             switch content {
             case .galleryItem(_, let item):

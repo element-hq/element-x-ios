@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import UIKit
 
 typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaPreviewViewState, TimelineMediaPreviewViewAction>
 
@@ -158,6 +159,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         if case let .media(mediaItem) = previewItem {
             defer {
+                preparePlaceholders()
                 preloadNeighbours(of: mediaItem)
                 prefetchTimelinePaginationIfNeeded(around: mediaItem)
             }
@@ -219,6 +221,65 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
+    /// How many items either side of the current one to render a blurhash placeholder for. Cheap
+    /// (a local decode + a small file write, no network) so it can be wide: every page in reach is
+    /// non-black the instant QuickLook builds it.
+    private static let placeholderReach = 30
+
+    private var placeholdersPrepared = Set<MediaPreviewItemID>()
+
+    /// A dedicated temp subdirectory for the blurhash placeholder files, removed wholesale when the
+    /// preview screen is torn down so they don't accumulate across the session (each file is also
+    /// named by its item id, so re-viewing overwrites rather than piling up).
+    private let placeholderDirectory = FileManager.default.temporaryDirectory
+        .appendingPathComponent("media-preview-placeholders-\(UUID().uuidString)")
+
+    /// Renders each nearby image/video's blurhash to a small file and hands it to the preview item
+    /// as a placeholder, so a swipe lands on a blurry preview instead of QuickLook's black
+    /// "content unavailable" screen while the full media downloads. The blurhash is embedded in
+    /// the event, so this is instant and always available, unlike a network thumbnail.
+    private func preparePlaceholders() {
+        guard appSettings.preloadMediaInViewer, contentScannerService == nil else { return }
+
+        let items = state.dataSource.previewItems
+        let currentID = state.currentItem.mediaItem?.id
+        let currentIndex = items.firstIndex { $0.id == currentID } ?? 0
+        for (index, item) in items.enumerated() where abs(index - currentIndex) <= Self.placeholderReach {
+            guard item.fileHandle == nil, item.placeholderURL == nil,
+                  !placeholdersPrepared.contains(item.id), let blurhash = item.blurhash else { continue }
+            let itemID = item.id
+            placeholdersPrepared.insert(itemID)
+            // UIImage(blurHash:) is main-actor bound; the decode is cheap (a 40x40 image), only the
+            // file write is offloaded.
+            Task { [weak self] in
+                guard let self,
+                      let image = UIImage(blurHash: blurhash, size: CGSize(width: 40, height: 40)),
+                      let data = image.jpegData(compressionQuality: 0.9) else { return }
+                let directory = placeholderDirectory
+                let url = directory.appendingPathComponent("\(abs(itemID.hashValue)).jpg")
+                await Task.detached {
+                    try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+                    try? data.write(to: url)
+                }.value
+                applyPlaceholder(url, to: item, itemID: itemID)
+            }
+        }
+    }
+
+    @MainActor
+    private func applyPlaceholder(_ url: URL, to item: TimelineMediaPreviewItem.Media, itemID: MediaPreviewItemID) {
+        guard item.fileHandle == nil else { return }
+        item.placeholderURL = url
+        // If it's the current page and still black, swap the blurhash in.
+        if state.currentItem.mediaItem?.id == itemID {
+            state.previewControllerDriver.send(.itemLoaded(itemID))
+        }
+    }
+
+    isolated deinit {
+        try? FileManager.default.removeItem(at: placeholderDirectory)
+    }
+
     /// Preload reach behind the direction of travel: kept small, since files behind a moving
     /// swipe are the least likely to be looked at next.
     private static let preloadReachBehind = 3
