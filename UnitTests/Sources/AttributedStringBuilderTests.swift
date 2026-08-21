@@ -674,6 +674,17 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
+    func strikethroughTags() throws {
+        var strikethrough = AttributedString("one")
+        strikethrough[AttributeScopes.UIKitAttributes.StrikethroughStyleAttribute.self] = .single
+        
+        for tag in ["s", "del", "strike"] {
+            let attributedString = try #require(attributedStringBuilder.fromHTML("<\(tag)>one</\(tag)>"), "Could not build the attributed string")
+            #expect(attributedString == strikethrough, "<\(tag)> should render as a strikethrough")
+        }
+    }
+    
+    @Test
     func unorderedList() throws {
         let htmlString = "<ul><li>1</li><li>2</li><li>3</li></ul>"
         
