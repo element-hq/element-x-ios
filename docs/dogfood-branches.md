@@ -3386,3 +3386,18 @@ in case a future bridge feeds it.
 Build 81 (EXI x SDK 35648826a). Installed + launched. Net of round 36: native
 bounce at the media-viewer ends (working well), and blank-on-swipe is rare and
 self-healing via preload=8 + cache.
+
+## Round 36 follow-ups #5 (adaptive directional preload)
+
+Replaced the fixed symmetric neighbour preload (8 each side) with a directional
+one that grows while a swipe is sustained. On the first open it's symmetric
+(base 6 each way); once a direction is established the reach ahead grows (+4 per
+same-direction step, cap 24) and the behind reach drops to 3, so the download
+budget follows the user instead of straddling a moving target. Reverse
+direction and it resets. The cap is deliberate: preloading is throughput-bound,
+so queuing more than the network services before they're reached only spends
+bandwidth on files the swipe may pass or that a reversal discards. The truly
+fast deep swipe (swipe faster than the download pipe) stays unbeatable, but the
+sustained-moderate-swipe blank should be gone.
+
+Build 82 (EXI 09100f7a2 x SDK 35648826a). Installed + launched.
