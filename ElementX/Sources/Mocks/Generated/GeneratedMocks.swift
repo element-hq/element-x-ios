@@ -8444,6 +8444,11 @@ nonisolated class NetworkMonitorMock: NetworkMonitorProtocol, @unchecked Sendabl
         set(value) { underlyingReachabilityPublisher = value }
     }
     nonisolated(unsafe) var underlyingReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
+    var pathUpdatePublisher: AnyPublisher<Void, Never> {
+        get { return underlyingPathUpdatePublisher }
+        set(value) { underlyingPathUpdatePublisher = value }
+    }
+    nonisolated(unsafe) var underlyingPathUpdatePublisher: AnyPublisher<Void, Never>!
 
 }
 nonisolated class NotificationItemProxyMock: NotificationItemProxyProtocol, @unchecked Sendable {

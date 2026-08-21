@@ -12,11 +12,13 @@ import Foundation
 extension NetworkMonitorMock {
     struct Configuration {
         var reachabilityPublisher = CurrentValuePublisher<NetworkMonitorReachability, Never>(.init(.reachable))
+        var pathUpdatePublisher = PassthroughSubject<Void, Never>().eraseToAnyPublisher()
     }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
         reachabilityPublisher = configuration.reachabilityPublisher
+        pathUpdatePublisher = configuration.pathUpdatePublisher
     }
 }

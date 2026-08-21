@@ -3122,3 +3122,56 @@ Build 71. Validate: open a long thread = its cached replies appear at once
 walks the cache before touching the network; a thread created while the app
 was live still reaches its root and "beginning of thread" only shows with
 the root on screen.
+
+## Round 32: network handover stalls + blank DM until a drag (2026-08-21)
+
+Rageshakes 7542 and 7543.
+
+### 7542: messages took ages to send walking out of Wi-Fi coverage
+
+Per-request table from the log: the Wi-Fi went black-hole at ~12:16:18;
+every request from then on (typing, the `/keys/claim` of the send, the
+`/members` fetch, presence, both sliding-sync long-polls) hung for its full
+30s/60s timeout, retried on the same dead interface, hung again, and the
+whole lot only recovered at 12:17:19 when the Wi-Fi socket was finally torn
+down, all in-flight requests errored at once and the retries went out over
+5G and completed in under a second. iOS reported nine "reachable" path
+updates during that minute (Wi-Fi Assist / interface set changes) that the
+app ignored because the status never changed.
+
+Cause: the SDK's `reqwest` pool keeps connections bound to the old
+interface; a black-holed TCP/h2 connection is neither closed nor erroring,
+so the only thing that ever notices is the request timeout, and the backoff
+retry then reuses the same pool.
+
+Fix (SDK): `Client::notify_network_change()` (FFI
+`Client.notifyNetworkChange()`). `HttpClient` now keeps the `HttpSettings`
+it was built from and a `watch` generation counter; on a network change it
+rebuilds the `reqwest` client (fresh pool) and bumps the generation, and
+`send_request_inner` races every in-flight attempt against that generation
+so the request re-sends itself immediately on the fresh client without
+consuming one of its retry attempts or any backoff delay. Covers sync,
+sends, media, OAuth token refresh and the QR rendezvous channel (all route
+through the one swappable client). Regression test
+`test_network_change_resends_in_flight_request`.
+EXI: `NetworkMonitor.pathUpdatePublisher` fires on every `NWPathMonitor`
+update (reachable or not, with the interface list logged); `ClientProxy`
+forwards each one to `notifyNetworkChange()`.
+
+### 7543: DM opened to a blank timeline, appeared on the first tap-drag
+
+The SDK delivered the 20 items 80ms after the open; a touch landed on the
+table 60ms later, still before the items reached the table view through
+SwiftUI, and nothing drew until the drag at +9s. The gappy-timelines round's
+"cancelled drag" fix (6586deb77) gated snapshot application on
+`tableView.isTracking || isDragging`; a finger merely resting on the table
+(isTracking, no drag) parked the items, and a tap without a drag produces no
+scroll callback to flush them. Gate on `isDragging` alone (the original
+"actively dragging" semantics, on UIKit's self-clearing state). The second
+open in the log, with no touch, rendered instantly, which is the tell.
+
+Build 72. Validate: walk out of Wi-Fi coverage mid-send = the message goes
+out within a second or two of the "Network path changed" log line rather
+than after a 30s timeout; sync resumes on the new interface equally fast;
+open a room with a thumb already resting on the screen = the timeline draws
+immediately.

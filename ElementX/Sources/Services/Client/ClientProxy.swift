@@ -1111,6 +1111,16 @@ class ClientProxy: ClientProxyProtocol {
             }
             .store(in: &cancellables)
         
+        // Any path change (Wi-Fi to cellular etc.) leaves requests bound to the old
+        // interface black-holed until their timeout: make the SDK re-send them now.
+        networkMonitor.pathUpdatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                MXLog.info("Network path changed, re-sending in-flight requests")
+                self?.client.notifyNetworkChange()
+            }
+            .store(in: &cancellables)
+        
         if canSubscribeToUserProfile {
             userProfileListenerTaskHandle = try? client.subscribeToOwnProfile(listener: SDKListener.onMainActor { [weak self] profile in
                 self?.userProfileSubject.send(.init(rustUserProfile: profile))

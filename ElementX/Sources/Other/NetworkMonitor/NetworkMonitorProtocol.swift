@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 
 enum NetworkMonitorReachability {
@@ -28,6 +29,9 @@ enum HomeserverReachability {
 
 protocol NetworkMonitorProtocol {
     var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
+    /// Fires on every network path update, including the ones where the status stays
+    /// reachable (Wi-Fi to cellular, an interface appearing or vanishing).
+    var pathUpdatePublisher: AnyPublisher<Void, Never> { get }
 }
 
 // sourcery: AutoMockable

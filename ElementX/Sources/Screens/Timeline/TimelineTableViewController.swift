@@ -124,12 +124,16 @@ class TimelineTableViewController: UIViewController {
     private var canApplySnapshot: Bool {
         if isLive {
             // Backward pagination jumps if items are inserted whilst actively dragging.
-            // Trust UIKit's own tracking state rather than the delegate-paired
+            // Trust UIKit's own dragging state rather than the delegate-paired
             // isDraggingScrollView flag: a cancelled gesture (context menu,
             // swipe-to-reply, a system gesture stealing the touch) fires
             // willBeginDragging without a matching didEndDragging, which wedged
             // the flag and froze the timeline behind pending items forever.
-            !tableView.isTracking && !tableView.isDragging
+            // Only dragging counts, not isTracking: a finger merely resting on
+            // the table (rageshake 7543, a touch landing as the room opened)
+            // parked the first items and a tap without a drag produces no scroll
+            // callback to flush them, so the timeline stayed blank until a drag.
+            !tableView.isDragging
         } else {
             // Forward pagination breaks inertial scrolling when fixing the offset.
             !scrollViewIsScrolling

@@ -19,20 +19,27 @@ class NetworkMonitor: NetworkMonitorProtocol {
         reachabilitySubject.asCurrentValuePublisher()
     }
     
+    private let pathUpdateSubject = PassthroughSubject<Void, Never>()
+    var pathUpdatePublisher: AnyPublisher<Void, Never> {
+        pathUpdateSubject.eraseToAnyPublisher()
+    }
+    
     init() {
         queue = DispatchQueue(label: "io.element.elementx.network_monitor", qos: .background)
         pathMonitor = NWPathMonitor()
         reachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
         
         pathMonitor.pathUpdateHandler = { [weak self] path in
+            let interfaces = path.availableInterfaces.map { "\($0.type)" }.joined(separator: ",")
             DispatchQueue.main.async {
                 if path.status == .satisfied {
-                    MXLog.info("Network reachability changed to reachable")
+                    MXLog.info("Network reachability changed to reachable (interfaces: \(interfaces), expensive: \(path.isExpensive))")
                     self?.reachabilitySubject.send(.reachable)
                 } else {
-                    MXLog.info("Network reachability changed to unreachable")
+                    MXLog.info("Network reachability changed to unreachable (interfaces: \(interfaces))")
                     self?.reachabilitySubject.send(.unreachable)
                 }
+                self?.pathUpdateSubject.send(())
             }
         }
         pathMonitor.start(queue: queue)
