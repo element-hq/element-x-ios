@@ -68,9 +68,6 @@ struct HomeScreenContent: View {
                 scrollViewAdapter.scrollView = scrollView
             }
             .onReceive(scrollViewAdapter.didScroll) { _ in
-                // Live, undelayed updates while scrolling: pagination needs to see the
-                // range early enough to grow the list before the user reaches the bottom,
-                // and the scroll geometry is valid mid-scroll.
                 sendVisibleRange()
             }
             .onReceive(scrollViewAdapter.isScrolling) { _ in
