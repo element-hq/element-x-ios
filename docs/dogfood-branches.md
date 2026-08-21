@@ -3331,3 +3331,34 @@ pages. neighbourPreloadReach (8) tunable on feel/bandwidth.
 Build 78. Validate: quick-swiping through a room's media shows thumbnails
 (sharpening to full) instead of blank pages; overscrolling the ends is a clean
 stop with no crash.
+
+## Round 36 follow-ups #3 (native bounce + bounded preload)
+
+Two follow-ups after build 78 validated the blank-on-swipe fix.
+
+- Native bounce at the timeline ends (the smooth overscroll left open in #2).
+  The data source padded QuickLook's item count with 100 phantom slots each
+  side so it never saw a content edge (hence the hard pin). Now, once a side is
+  fully paginated (`endReached`), its phantom padding collapses to zero, so the
+  last real item becomes QuickLook's own content edge and its scroll view
+  rubber-bands and snaps back natively - no `contentOffset` writes, so no crash
+  and no mid-scroll jog. Gated on having seen a real pagination state first,
+  because `.initial` is `endReached/endReached` as a "don't paginate yet"
+  sentinel and would otherwise collapse the padding at open. The controller
+  carries the current item across the one-off index shift and reloads only when
+  the count actually changes (normal pagination keeps it constant, so the
+  padding trick still holds and zoom/playback aren't lost mid-browse). Hard pin
+  removed. Regression test `endReachedCollapsesPhantomPadding` (11/11 green).
+- Bounded the preload after a question about memory. The preview items are the
+  paginated media-timeline window, not the full event-cache media index, so
+  QuickLook is never pointed at thousands of thumbnails; the handles are disk
+  file refs and QuickLook only decodes the ~2 pages around the current one, so
+  there was no OOM path. Still tightened it: thumbnail preload now covers a
+  window (+/-20) around the current item rather than every loaded item (the
+  window grows into the hundreds over a long session), and the full-media
+  neighbour preload dropped from 8 back to 3.
+
+Build 79 (EXI 0dbd64d2a x SDK 35648826a). Compiled + signed for device; phone
+unreachable at build time (tunnel down), install pending. Validate: overscroll
+the oldest/newest media - it should rubber-band and settle with no crash and no
+snap-back jog; blank-on-swipe stays fixed with the smaller preload window.
