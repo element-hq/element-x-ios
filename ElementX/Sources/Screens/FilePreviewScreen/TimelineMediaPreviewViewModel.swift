@@ -293,6 +293,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 if case .success(let handle) = result, neighbour.fileHandle == nil {
                     MXLog.info("PreviewDebug: preloaded \(neighbourID)")
                     neighbour.fileHandle = handle
+                    // Let the controller rebuild QuickLook's page for this neighbour if it built it
+                    // blank before the file was ready, so a swipe lands on the media not a blank.
+                    state.previewControllerDriver.send(.itemLoaded(neighbourID))
                 }
                 return result
             }

@@ -324,6 +324,15 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     /// The item's file has just arrived: QuickLook built its page without it, so refresh it.
     private func handleFileLoaded(itemID: MediaPreviewItemID) {
+        // A neighbour (not the current item) finished preloading: QuickLook may have built its
+        // page blank before the file was ready, and only the current page can be refreshed, so
+        // rebuild the built neighbourhood while resting. Without this the blank is only fixed once
+        // you land on it (swipe into blank, then it pops in) rather than swiping into the media.
+        guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else {
+            scheduleBuiltNeighbourReloadIfResting(for: itemID)
+            return
+        }
+
         // If the full media replaced a thumbnail that's on screen, the page is showing (the
         // thumbnail), not unavailable, so force the refresh past the availability check to swap
         // in the full media.
@@ -331,6 +340,27 @@ class TimelineMediaPreviewController: QLPreviewController {
             $0.id == itemID && $0.wasUpgradedFromThumbnail
         } ?? false
         refreshIfUnavailableWhenResting(itemID: itemID, force: true, ignoreAvailability: upgradedFromThumbnail)
+    }
+
+    /// A debounced reload used to rebuild QuickLook's pages when a neighbour within its build
+    /// radius finishes preloading whilst the user is resting, so the pre-built blank pages become
+    /// the media before the next swipe. Reload (not refresh) because QuickLook only refreshes the
+    /// current page; the padding trick keeps the current item's index across it.
+    private var neighbourReloadTask: Task<Void, Never>?
+    private func scheduleBuiltNeighbourReloadIfResting(for itemID: MediaPreviewItemID) {
+        let dataSource = context.viewState.dataSource
+        guard let index = dataSource.previewItems.firstIndex(where: { $0.id == itemID }) else { return }
+        // Only worth a reload if QuickLook has likely built this page (within its build radius).
+        let currentArrayIndex = currentPreviewItemIndex - dataSource.firstPreviewItemIndex
+        guard abs(index - currentArrayIndex) <= Self.builtPagesRadius else { return }
+
+        neighbourReloadTask?.cancel()
+        neighbourReloadTask = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(150)) // Coalesce a burst of neighbour loads.
+            guard let self, !Task.isCancelled,
+                  let scrollView = pageScrollView, !scrollView.isDragging, !scrollView.isDecelerating else { return }
+            reloadData()
+        }
     }
     
     /// Whether the page on display is QuickLook's "content unavailable" placeholder.
