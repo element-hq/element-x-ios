@@ -399,9 +399,9 @@ final class HomeScreenViewModelTests {
         #expect(context.viewState.roomListMode == .skeletons)
         
         // The provider reports loaded before the first summaries have been published.
+        let failure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.roomListMode != .skeletons }
         stateSubject.send(.loaded(totalNumberOfRooms: 8))
-        try await Task.sleep(for: .milliseconds(100))
-        #expect(context.viewState.roomListMode == .skeletons)
+        try await failure.fulfill()
         
         let deferred = deferFulfillment(context.$viewState) { $0.roomListMode == .rooms }
         roomListSubject.send(.mockRooms)
@@ -418,10 +418,10 @@ final class HomeScreenViewModelTests {
         try await deferred.fulfill()
         
         // A filter or a search without matches empties the list, the mode must not regress.
+        let failure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.roomListMode != .rooms }
         roomListSubject.send([])
         stateSubject.send(.loaded(totalNumberOfRooms: 9))
-        try await Task.sleep(for: .milliseconds(100))
-        #expect(context.viewState.roomListMode == .rooms)
+        try await failure.fulfill()
     }
     
     private func setupViewModelWithManualProvider() -> (CurrentValueSubject<[RoomSummary], Never>, CurrentValueSubject<RoomSummaryProviderState, Never>) {

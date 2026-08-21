@@ -177,9 +177,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         updateRooms()
         
-        // The subscription above only delivers the current state through an async main queue
-        // hop, which can end up queued behind the first render and leave the skeletons up on a
-        // warm launch, where the provider has already published the cached rooms.
         if let roomSummaryProvider {
             updateRoomListMode(with: roomSummaryProvider.statePublisher.value,
                                hasRooms: !roomSummaryProvider.roomListPublisher.value.isEmpty)
@@ -337,19 +334,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState, hasRooms: Bool) {
-        let isLoadingData = !roomSummaryProviderState.isLoaded
-        let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0
-        // Only the initial transition needs holding back until the rooms have published, an
-        // empty list later on is a filter or a search result.
-        let isInitialLoad = state.roomListMode == .skeletons
-        
-        var roomListMode = state.roomListMode
-        if isLoadingData {
-            roomListMode = .skeletons
-        } else if hasNoRooms {
-            roomListMode = .empty
-        } else if hasRooms || !isInitialLoad {
-            roomListMode = .rooms
+        let roomListMode: HomeScreenRoomListMode = if !roomSummaryProviderState.isLoaded {
+            .skeletons // Still loading.
+        } else if roomSummaryProviderState.totalNumberOfRooms == 0 {
+            .empty // Loaded, there are no rooms at all.
+        } else if hasRooms {
+            .rooms // Loaded and the summaries have published.
+        } else if state.roomListMode == .skeletons {
+            .skeletons // Loaded but nothing published yet, flipping to .rooms would flash an empty list.
+        } else {
+            .rooms
         }
         
         guard roomListMode != state.roomListMode else {

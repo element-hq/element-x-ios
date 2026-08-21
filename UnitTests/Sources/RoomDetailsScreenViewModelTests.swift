@@ -271,8 +271,6 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
         #expect(!context.viewState.isProcessingIgnoreRequest)
-        // Waiting on the transient isProcessingIgnoreRequest transition races the view model's task,
-        // which can complete before the observation starts. Wait on the alert instead.
         let deferredAlert = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         
         context.send(viewAction: .unignoreConfirmed)
