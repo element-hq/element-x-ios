@@ -158,7 +158,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         if case let .media(mediaItem) = previewItem {
             defer {
-                preloadThumbnails()
                 preloadNeighbours(of: mediaItem)
                 prefetchTimelinePaginationIfNeeded(around: mediaItem)
             }
@@ -198,61 +197,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private var preloads = [MediaPreviewItemID: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>]()
 
     /// The thumbnail loads in flight, one per item at most.
-    /// How many items either side of the current one to hold a preloaded thumbnail for. Thumbnails
-    /// are tiny (KB, usually already cached from the timeline) and only file references on disk, so
-    /// this can be wide enough that a fast swipe never outruns it whilst still bounding the fetches
-    /// and handles over a long session (the loaded window grows into the hundreds). QuickLook only
-    /// decodes the couple of pages around the current one regardless.
-    private static let thumbnailPreloadReach = 20
-
-    private var thumbnailPreloads = Set<MediaPreviewItemID>()
-
-    /// Fetches a thumbnail for the items within `thumbnailPreloadReach` of the current one that
-    /// don't have their full media yet, so a swipe lands on the thumbnail rather than a blank page
-    /// while the full media downloads. This is what removes the "swipe onto black" ceiling: the
-    /// full-media preload only reaches so far ahead, but thumbnails are small so a wide window of
-    /// them can be ready. Skipped when a content scanner is configured (the media must be scanned
-    /// before anything from it is shown).
-    private func preloadThumbnails() {
-        guard appSettings.preloadMediaInViewer, contentScannerService == nil else { return }
-
-        let items = state.dataSource.previewItems
-        let currentID = state.currentItem.mediaItem?.id
-        let currentIndex = items.firstIndex { $0.id == currentID } ?? 0
-        let window = items.enumerated().filter { abs($0.offset - currentIndex) <= Self.thumbnailPreloadReach }.map(\.element)
-        let withThumbSource = window.filter { $0.thumbnailMediaSource != nil }.count
-        MXLog.info("PreviewDebug: thumbnails - window \(window.count), with thumb source \(withThumbSource), current index \(currentIndex)")
-        for item in window {
-            guard item.fileHandle == nil,
-                  item.thumbnailFileHandle == nil,
-                  !thumbnailPreloads.contains(item.id),
-                  let source = item.thumbnailMediaSource else { continue }
-
-            let itemID = item.id
-            thumbnailPreloads.insert(itemID)
-            Task { [mediaProvider] in
-                // A filename gives QuickLook a usable extension; matrix thumbnails are images
-                // (JPEG by convention), so QuickLook sniffs the content from a .jpeg name even if
-                // the source is a PNG. Without any name it can't tell the file is renderable.
-                let result = await mediaProvider.loadFileFromSource(source, filename: "thumbnail.jpeg")
-                thumbnailPreloads.remove(itemID)
-                switch result {
-                case .success(let handle):
-                    MXLog.info("PreviewDebug: thumbnail loaded \(itemID) -> \(handle.url?.lastPathComponent ?? "nil")")
-                case .failure(let error):
-                    MXLog.info("PreviewDebug: thumbnail FAILED \(itemID): \(error)")
-                }
-                guard case .success(let handle) = result, item.fileHandle == nil, item.thumbnailFileHandle == nil else { return }
-                item.thumbnailFileHandle = handle
-                // If this is the item on screen and it's still blank (its full media hasn't
-                // arrived), nudge the controller to swap the thumbnail in.
-                if state.currentItem.mediaItem?.id == itemID {
-                    state.previewControllerDriver.send(.itemLoaded(itemID))
-                }
-            }
-        }
-    }
-
     /// How many media items ahead of the loaded edge to start paginating the underlying timeline.
     /// Chosen so the next media's event is loaded before the user swipes onto it, rather than
     /// swiping onto a black placeholder that only then triggers the pagination.
@@ -280,7 +224,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// swipe outruns the downloads and lands on an empty page until the file arrives. Reaching
     /// well beyond the built pages keeps files ready ahead of the swipe. Tunable on feel; each
     /// unit is one extra concurrent download in each direction (small files only, deduped).
-    private static let neighbourPreloadReach = 5
+    private static let neighbourPreloadReach = 8
 
     /// Fetches the media around the current one so that a swipe reveals the media itself rather
     /// than an empty page: QuickLook builds the pages around the current one as it settles on it,
