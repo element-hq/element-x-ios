@@ -424,7 +424,11 @@ class TimelineMediaPreviewController: QLPreviewController {
                     didRefreshOnArrival = true
                 }
                 item.didHandleThumbnailUpgrade()
-                refreshCurrentPreviewItem()
+                // reloadData rather than refreshCurrentPreviewItem: the latter reliably fails to
+                // clear QuickLook's pre-built "content unavailable" placeholder for the item the
+                // user rests on (observed on device), leaving it blank. reloadData rebuilds the
+                // pages so the now-present file renders; the padding trick keeps the current index.
+                reloadData()
                 return
             }
             try? await Task.sleep(for: .milliseconds(50))
