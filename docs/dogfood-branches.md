@@ -3197,3 +3197,42 @@ resolving on demand.
 Build 73 (SDK only; EXI unchanged). Validate: thread loads show one inline
 spinner per hole and no indicator above it; the hole still resolves on its
 own while visible and the thread still reaches its root.
+
+## Round 34: room preview stuck on "Waiting for message" for a decrypted thread reply (2026-08-21)
+
+Rageshake-style report: a room's preview showed a UTD ("Waiting for
+message") whose most recent message was a thread reply; tapping the room
+went straight to the thread with the message already decrypted, so the
+preview simply hadn't updated once the message decrypted.
+
+Traced (SDK/main-app logs, room !rbxKpMQm..., session KTxua2/Y...): the
+thread reply arrived as a UTD in a limited/gappy sync while the room was
+backgrounded and became the room's latest-event (this branch lets a thread
+reply be the room preview). The megolm key was later imported by the NSE (a
+separate process) while the app wasn't running: no "Received a new megolm
+room key" line ever appears for this session in the app logs, yet the key
+was in the store by the time the room was opened. Nothing re-decrypted the
+persisted UTD:
+- the redecryptor's room-key stream only carries keys THIS process's
+  OlmMachine receives, so an NSE import is invisible to it;
+- the OlmMachine-regeneration path (the app's cross-process signal) only
+  retries IN-MEMORY UTDs, and this one had been shrunk out to the store;
+- a fresh process start loads with the key already present but nothing
+  requests a retry for background rooms.
+Opening the room instantiated its cache, loaded the chunk, and the
+timeline's retryDecryption issued an explicit request_decryption that read
+the store and decrypted instantly.
+
+Fix (SDK): `Redecryptor::retry_persisted_events`, a store-backed sweep over
+every encrypted room's persisted UTDs. Reads each room straight from the
+store so it doesn't pull thousands of rooms into memory; only rooms with a
+decryptable UTD get instantiated (when the decrypted event is written back,
+which recomputes the latest-event and heals the preview). Runs once at
+startup and on OlmMachine regeneration/Lagging, in batches of 20 with a
+20ms pause. Regression test
+`test_persisted_utd_sweep_heals_out_of_band_key`.
+
+Build 74 (SDK only; EXI unchanged). Validate: a room whose preview is stuck
+on "Waiting for message" heals on its own shortly after launch (or after
+the NSE delivers a push) without needing to open the room; look for
+"Swept persisted UTDs for redecryption" in the logs.
