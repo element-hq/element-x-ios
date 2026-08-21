@@ -157,7 +157,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         setCurrentItem(previewItem)
         
         if case let .media(mediaItem) = previewItem {
-            defer { preloadNeighbours(of: mediaItem) }
+            defer {
+                preloadNeighbours(of: mediaItem)
+                prefetchTimelinePaginationIfNeeded(around: mediaItem)
+            }
             
             MXLog.info("PreviewDebug: current item \(mediaItem.id), file \(mediaItem.fileHandle == nil ? "missing" : "present"), preload \(preloads[mediaItem.id] == nil ? "none" : "in flight")")
             guard mediaItem.fileHandle == nil, let source = mediaItem.mediaSource else { return }
@@ -192,6 +195,28 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     /// The neighbour loads in flight, joined by the load on display if the user swipes before they finish.
     private var preloads = [MediaPreviewItemID: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>]()
+
+    /// How many media items ahead of the loaded edge to start paginating the underlying timeline.
+    /// Chosen so the next media's event is loaded before the user swipes onto it, rather than
+    /// swiping onto a black placeholder that only then triggers the pagination.
+    private static let paginationPrefetchDistance = 5
+
+    /// Paginate the underlying timeline ahead of the swipe: when the current media is within
+    /// `paginationPrefetchDistance` of the loaded range's edge, kick off a pagination in that
+    /// direction (if one isn't already running) so the media beyond the edge is loaded before
+    /// it's reached. Without this, pagination is only triggered once the user lands on the
+    /// placeholder page, so every time the loaded window is exhausted a swipe lands on black.
+    private func prefetchTimelinePaginationIfNeeded(around mediaItem: TimelineMediaPreviewItem.Media) {
+        let items = state.dataSource.previewItems
+        guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
+
+        if index <= Self.paginationPrefetchDistance, state.dataSource.paginationState.backward == .idle {
+            timelineViewModel.context.send(viewAction: .paginateBackwards)
+        }
+        if index >= items.count - 1 - Self.paginationPrefetchDistance, state.dataSource.paginationState.forward == .idle {
+            timelineViewModel.context.send(viewAction: .paginateForwards)
+        }
+    }
     
     /// Fetches the media on either side of the current one (one further than the pages QuickLook
     /// builds ahead), so that a swipe reveals the media itself rather than an empty page: QuickLook

@@ -229,12 +229,14 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         var delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
 
-        // Hold the page still (rather than paging onto the placeholder and bouncing back)
-        // when there's nothing beyond the current item in the swiped direction. Setting the
-        // offset also cancels any deceleration towards the placeholder.
+        // At the timeline edge there's nothing beyond the current item. Rather than paging onto
+        // the placeholder (or hard-locking the swipe dead), rubber-band the page with diminishing
+        // resistance and let it spring back: the standard iOS "you've reached the end" affordance.
+        // Writing the offset also cancels QuickLook's own deceleration towards the placeholder.
         if delta != 0, isAtTimelineEdge(forwards: delta > 0) {
-            pageScrollView.contentOffset.x = pageScrollViewRestingOffset
-            delta = 0
+            let damped = Self.rubberBandedOffset(delta, over: pageWidth)
+            pageScrollView.contentOffset.x = pageScrollViewRestingOffset + damped
+            delta = damped
         }
 
         overlayView.transform = CGAffineTransform(translationX: -delta, y: 0)
@@ -242,6 +244,17 @@ class TimelineMediaPreviewController: QLPreviewController {
         overlayView.alpha = max(0, 1 - abs(delta) / (pageWidth / 2))
     }
     
+    /// The iOS rubber-band curve: pulling `offset` points past the edge of a view `dimension`
+    /// wide resists progressively, asymptotically approaching a fraction of the dimension. This
+    /// is UIScrollView's own bounce formula, so an overscroll here feels like one anywhere else.
+    private static func rubberBandedOffset(_ offset: CGFloat, over dimension: CGFloat) -> CGFloat {
+        guard dimension > 0 else { return 0 }
+        let constant = 0.55 // UIScrollView's constant; smaller resists harder.
+        let sign: CGFloat = offset < 0 ? -1 : 1
+        let magnitude = abs(offset)
+        return sign * (1 - (1 / (magnitude / dimension * constant + 1))) * dimension
+    }
+
     /// Whether the current item is the last one in the given direction, with the timeline fully paginated.
     private func isAtTimelineEdge(forwards: Bool) -> Bool {
         let dataSource = context.viewState.dataSource
