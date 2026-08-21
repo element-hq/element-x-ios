@@ -3308,3 +3308,26 @@ The rubber-band constant (0.55) and prefetch distance (5) are tunable on feel.
 Build 77. Validate: overscrolling the first/last media rubber-bands without
 crashing; swiping quickly through a room's images no longer lands on blank
 pages. neighbourPreloadReach (8) tunable on feel/bandwidth.
+
+## Round 36 follow-ups #2 (2026-08-21)
+
+- "Remove the blank-on-swipe limit entirely": bumping the full-media preload
+  reach only pushed the boundary out (blank moved from the 4th to the ~9th
+  swipe). Real fix: serve a thumbnail until the full media loads. Preload every
+  loaded item's thumbnail (small, usually already cached from the timeline)
+  and return it as the QuickLook preview URL when the full file isn't ready, so
+  a swipe lands on the thumbnail, not black. When the full media replaces an
+  on-screen thumbnail, force a QuickLook page refresh (it won't otherwise: the
+  page is "available"), tracked by `wasUpgradedFromThumbnail`. The arrival
+  refresh now proceeds on any preview URL (thumbnail or full), so a page built
+  blank shows its thumbnail as soon as that arrives.
+- Overscroll: reverted to the hard pin. The rubber-band drove `contentOffset`
+  from the `contentOffset` KVO observation, which fights QuickLook's own
+  scrolling — that was both the crash (repeated overscroll) and the
+  snap-back-mid-scroll jog. A smooth overscroll needs an approach that doesn't
+  write `contentOffset` (native bounce via zero end-padding, or a pan-driven
+  view transform); both need on-device iteration. Pin is stable meanwhile.
+
+Build 78. Validate: quick-swiping through a room's media shows thumbnails
+(sharpening to full) instead of blank pages; overscrolling the ends is a clean
+stop with no crash.
