@@ -219,12 +219,26 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    /// How many media on either side of the current one to fetch ahead. QuickLook only builds
-    /// its pages (`builtPagesRadius`) as it settles on an item, so with a shallow reach a quick
-    /// swipe outruns the downloads and lands on an empty page until the file arrives. Reaching
-    /// well beyond the built pages keeps files ready ahead of the swipe. Tunable on feel; each
-    /// unit is one extra concurrent download in each direction (small files only, deduped).
-    private static let neighbourPreloadReach = 8
+    /// Preload reach behind the direction of travel: kept small, since files behind a moving
+    /// swipe are the least likely to be looked at next.
+    private static let preloadReachBehind = 3
+    /// Preload reach ahead when there's no established direction yet (the item just opened).
+    private static let preloadReachAheadBase = 6
+    /// How far ahead the reach grows per sustained same-direction swipe, and its ceiling. The
+    /// ceiling exists because preloading is throughput-bound: queuing more downloads than the
+    /// network can service before they're reached doesn't make them arrive sooner, it just spends
+    /// bandwidth on files the swipe may pass or that get thrown away on a reversal. Growth
+    /// converts the wasted "behind" budget into "ahead" depth and adapts it to how far the user
+    /// is travelling, up to where extra depth stops paying off.
+    private static let preloadReachAheadGrowth = 4
+    private static let preloadReachAheadMax = 24
+
+    /// The direction of the last swipe (+1 forwards, -1 backwards, 0 = none yet) and the reach
+    /// ahead in that direction, grown while the user keeps swipping the same way and reset on a
+    /// reversal.
+    private var preloadDirection = 0
+    private var preloadReachAhead = preloadReachAheadBase
+    private var lastPreloadIndex: Int?
 
     /// Fetches the media around the current one so that a swipe reveals the media itself rather
     /// than an empty page: QuickLook builds the pages around the current one as it settles on it,
@@ -240,11 +254,29 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         let items = state.dataSource.previewItems
         guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
 
-        // Nearest neighbours first (1, 1, 2, 2, …): they're the most urgent and get their
-        // download slot before the further-ahead ones.
-        let neighbourIndices = (1...Self.neighbourPreloadReach)
-            .flatMap { [index - $0, index + $0] }
-            .filter { items.indices.contains($0) }
+        // Track the swipe direction and grow the reach ahead while it's sustained, so the download
+        // budget follows the user rather than being spent symmetrically around a moving target.
+        let direction = (lastPreloadIndex.map { index > $0 ? 1 : (index < $0 ? -1 : preloadDirection) }) ?? 0
+        if direction != 0, direction == preloadDirection {
+            preloadReachAhead = min(preloadReachAhead + Self.preloadReachAheadGrowth, Self.preloadReachAheadMax)
+        } else if direction != 0 {
+            preloadReachAhead = Self.preloadReachAheadBase // New or reversed direction: start over.
+        }
+        preloadDirection = direction
+        lastPreloadIndex = index
+
+        // Nearest first (1, 1, 2, 2, …) so the most urgent get their download slot before the
+        // further-ahead ones. Ahead means the direction of travel (both sides equally before the
+        // first swipe establishes one); behind stays shallow.
+        let aheadReach = direction == 0 ? Self.preloadReachAheadBase : preloadReachAhead
+        let behindReach = direction == 0 ? Self.preloadReachAheadBase : Self.preloadReachBehind
+        let ahead = direction == 0 ? 1 : direction
+        var neighbourIndices = [Int]()
+        for offset in 1...max(aheadReach, behindReach) {
+            if offset <= aheadReach { neighbourIndices.append(index + ahead * offset) }
+            if offset <= behindReach { neighbourIndices.append(index - ahead * offset) }
+        }
+        neighbourIndices = neighbourIndices.filter { items.indices.contains($0) }
         for neighbourIndex in neighbourIndices {
             let neighbour = items[neighbourIndex]
             guard neighbour.fileHandle == nil,
