@@ -3236,3 +3236,30 @@ Build 74 (SDK only; EXI unchanged). Validate: a room whose preview is stuck
 on "Waiting for message" heals on its own shortly after launch (or after
 the NSE delivers a push) without needing to open the room; look for
 "Swept persisted UTDs for redecryption" in the logs.
+
+## Round 35: spinner before the thread root on reopen (2026-08-21)
+
+Report: opened a thread, waited ages for it to load (/relations over a flaky
+network), went back and reopened it. Second time it loaded fast from cache
+but showed a spinner for ages before the root, then resolved it. It
+shouldn't try to fill a spinner before the root of the thread.
+
+Traced (room !SGNQGP, thread $q4XPKR6H): the thread is stored as
+[gap][root, r1, r2] — a thread whose root arrived in a limited room sync
+gets the room's prev-batch stamped as a gap that lands before the root. On
+reopen, storage loaded the 3 events fast, then the storage-only walk loaded
+the leading gap chunk and surfaced it (Insert -> 4 items = the spinner
+before the root), and the UI resolved it with two /relations round-trips
+(REQ-109/111) before dropping it. Nothing precedes a thread's root event, so
+that gap is provably empty.
+
+Fix (SDK): when the storage walk loads a gap chunk while the thread root
+already leads the known events, drop the gap (and persist the removal,
+healing the stored chunk) and conclude the thread start, instead of
+announcing the gap and resolving it over the network. Regression test
+test_storage_only_pagination_drops_a_gap_before_the_thread_root (no
+/relations mock mounted = any network hit fails the test).
+
+Build 75 (SDK only; EXI unchanged). Validate: reopen a fully-loaded thread =
+no spinner before the root, no /relations; "beginning of thread" shows with
+the root on screen immediately.
