@@ -255,22 +255,14 @@ enum TimelineMediaPreviewItem: Equatable {
         
         var fileHandle: MediaFileHandleProxy? {
             didSet {
-                // The full media arriving over a placeholder (blurhash) or thumbnail means
-                // QuickLook, which built the page from that, needs a refresh to show the full
-                // media (it won't otherwise: the page isn't "unavailable"). Flag it so the
-                // controller can force that refresh.
-                if fileHandle != nil, thumbnailFileHandle != nil || placeholderURL != nil {
+                // The full media arriving over a thumbnail means QuickLook, which built the page
+                // from the thumbnail, needs a refresh to show the full media (it won't otherwise:
+                // the page isn't "unavailable"). Flag it so the controller can force that refresh.
+                if fileHandle != nil, thumbnailFileHandle != nil {
                     wasUpgradedFromThumbnail = true
                 }
                 updatePreviewItemValues()
             }
-        }
-
-        /// A blurhash placeholder rendered to a file, shown the instant a page is built so a swipe
-        /// lands on a blurry preview rather than QuickLook's black "content unavailable" screen
-        /// while the full media downloads. Superseded by `fileHandle`.
-        var placeholderURL: URL? {
-            didSet { updatePreviewItemValues() }
         }
 
         /// A cached thumbnail shown while the full media downloads, so a swipe never lands on a
@@ -338,7 +330,7 @@ enum TimelineMediaPreviewItem: Equatable {
         private func updatePreviewItemValues() {
             // Fall back to the thumbnail while the full media downloads, so QuickLook shows the
             // thumbnail rather than a blank page.
-            let url = fileHandle?.url ?? thumbnailFileHandle?.url ?? placeholderURL
+            let url = fileHandle?.url ?? thumbnailFileHandle?.url
             _previewItemURL.withLock { $0 = url }
 
             // Don't show any background text (" ") until the full media is ready.
@@ -405,7 +397,7 @@ enum TimelineMediaPreviewItem: Equatable {
                 }
             }
         }
-
+        
         var filename: String? {
             switch content {
             case .galleryItem(_, let item):
@@ -476,21 +468,6 @@ enum TimelineMediaPreviewItem: Equatable {
                 switch timelineItem {
                 case let imageItem as ImageRoomTimelineItem: imageItem.content.blurhash
                 case let videoItem as VideoRoomTimelineItem: videoItem.content.blurhash
-                default: nil
-                }
-            }
-        }
-
-        /// The media's pixel dimensions, so a blurhash placeholder can be rendered at the right
-        /// aspect ratio rather than a square.
-        var mediaSize: CGSize? {
-            switch content {
-            case .galleryItem(_, let item):
-                item.size
-            case .timelineItem(let timelineItem):
-                switch timelineItem {
-                case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.size
-                case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.size ?? videoItem.content.thumbnailInfo?.size
                 default: nil
                 }
             }
