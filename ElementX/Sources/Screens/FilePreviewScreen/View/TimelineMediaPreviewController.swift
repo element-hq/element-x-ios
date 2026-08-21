@@ -28,6 +28,9 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var pageScrollViewObservation: AnyCancellable?
     /// The content offset that the page scroll view rests at when showing the current item.
     private var pageScrollViewRestingOffset: CGFloat = 0
+    /// Set whilst we write `contentOffset` ourselves (the rubber-band), so the resulting
+    /// synchronous KVO callback doesn't recurse back into another write.
+    private var isApplyingRubberBand = false
     
     private var cancellables: Set<AnyCancellable> = []
     
@@ -218,7 +221,15 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private func updateOverlayPosition() {
         guard let pageScrollView, let overlayView = downloadIndicatorHostingController.view else { return }
-        
+
+        // Writing `contentOffset` below re-enters this synchronously via KVO. Swallow that one
+        // re-entry: writing an offset-dependent value (unlike a constant pin) would otherwise
+        // recurse until the stack overflows.
+        if isApplyingRubberBand {
+            isApplyingRubberBand = false
+            return
+        }
+
         let pageWidth = pageScrollView.bounds.width
         guard pageWidth > 0 else { return }
         
@@ -235,6 +246,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         // Writing the offset also cancels QuickLook's own deceleration towards the placeholder.
         if delta != 0, isAtTimelineEdge(forwards: delta > 0) {
             let damped = Self.rubberBandedOffset(delta, over: pageWidth)
+            isApplyingRubberBand = true
             pageScrollView.contentOffset.x = pageScrollViewRestingOffset + damped
             delta = damped
         }

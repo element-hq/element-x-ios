@@ -218,22 +218,32 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    /// Fetches the media on either side of the current one (one further than the pages QuickLook
-    /// builds ahead), so that a swipe reveals the media itself rather than an empty page: QuickLook
-    /// builds the pages around the current one as it settles on it, so an item needs its file by
-    /// the time it comes within that reach. Small files only, and skipped when a content scanner is
-    /// configured (a neighbour must be scanned as the current item is, on display).
+    /// How many media on either side of the current one to fetch ahead. QuickLook only builds
+    /// its pages (`builtPagesRadius`) as it settles on an item, so with a shallow reach a quick
+    /// swipe outruns the downloads and lands on an empty page until the file arrives. Reaching
+    /// well beyond the built pages keeps files ready ahead of the swipe. Tunable on feel; each
+    /// unit is one extra concurrent download in each direction (small files only, deduped).
+    private static let neighbourPreloadReach = 8
+
+    /// Fetches the media around the current one so that a swipe reveals the media itself rather
+    /// than an empty page: QuickLook builds the pages around the current one as it settles on it,
+    /// so an item needs its file by the time it comes within that reach. Nearest first, small
+    /// files only, and skipped when a content scanner is configured (a neighbour must be scanned
+    /// as the current item is, on display).
     ///
     /// The neighbour gets its file handle straight away; the controller refreshes any page that
     /// QuickLook shows as unavailable on arrival.
     private func preloadNeighbours(of mediaItem: TimelineMediaPreviewItem.Media) {
         guard appSettings.preloadMediaInViewer, contentScannerService == nil else { return }
-        
+
         let items = state.dataSource.previewItems
         guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
-        
-        let reach = TimelineMediaPreviewController.builtPagesRadius + 1
-        let neighbourIndices = (1...reach).flatMap { [index - $0, index + $0] }.filter { items.indices.contains($0) }
+
+        // Nearest neighbours first (1, 1, 2, 2, …): they're the most urgent and get their
+        // download slot before the further-ahead ones.
+        let neighbourIndices = (1...Self.neighbourPreloadReach)
+            .flatMap { [index - $0, index + $0] }
+            .filter { items.indices.contains($0) }
         for neighbourIndex in neighbourIndices {
             let neighbour = items[neighbourIndex]
             guard neighbour.fileHandle == nil,
