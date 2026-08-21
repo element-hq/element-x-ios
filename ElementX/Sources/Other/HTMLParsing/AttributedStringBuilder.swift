@@ -43,6 +43,8 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let mentionBuilder: MentionBuilderProtocol
     
     private static let attributeMSC4286 = "msc4286-external-payment-details"
+    /// Tags whose content already ends in a newline.
+    private static let lineTerminatingTags: Set = ["p", "div", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "ul", "ol", "li"]
     private static let caches = Mutex<[String: LRUCache<String, AttributedString>]>([:])
     
     static func invalidateCaches() {
@@ -119,6 +121,14 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         for node in element.getChildNodes() {
             if let textNode = node as? TextNode {
+                // Markdown generated HTML separates block elements and list items with newlines.
+                // SwiftSoup normalises those whitespace only nodes into stray spaces which misindent
+                // the following line, whereas HTML rendering collapses them away entirely.
+                if !preserveFormatting, textNode.isBlank(),
+                   Self.isLineTerminating(node.previousSibling()) || Self.isLineTerminating(node.nextSibling()) {
+                    continue
+                }
+                
                 // If this node is plain text append the whitespace normalised version
                 if node.parent() == documentBody {
                     result.append(NSAttributedString(string: textNode.text()))
@@ -276,6 +286,14 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         return result
+    }
+    
+    private static func isLineTerminating(_ node: Node?) -> Bool {
+        guard let element = node as? Element else {
+            return false
+        }
+        
+        return lineTerminatingTags.contains(element.tagName().lowercased())
     }
     
     private static func cacheValue(_ value: AttributedString?, forKey key: String, cacheKey: String) {
