@@ -219,7 +219,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         let items = state.dataSource.previewItems
         let currentID = state.currentItem.mediaItem?.id
         let currentIndex = items.firstIndex { $0.id == currentID } ?? 0
-        for (index, item) in items.enumerated() where abs(index - currentIndex) <= Self.thumbnailPreloadReach {
+        let window = items.enumerated().filter { abs($0.offset - currentIndex) <= Self.thumbnailPreloadReach }.map(\.element)
+        let withThumbSource = window.filter { $0.thumbnailMediaSource != nil }.count
+        MXLog.info("PreviewDebug: thumbnails - window \(window.count), with thumb source \(withThumbSource), current index \(currentIndex)")
+        for item in window {
             guard item.fileHandle == nil,
                   item.thumbnailFileHandle == nil,
                   !thumbnailPreloads.contains(item.id),
@@ -228,8 +231,17 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             let itemID = item.id
             thumbnailPreloads.insert(itemID)
             Task { [mediaProvider] in
-                let result = await mediaProvider.loadFileFromSource(source, filename: nil)
+                // A filename gives QuickLook a usable extension; matrix thumbnails are images
+                // (JPEG by convention), so QuickLook sniffs the content from a .jpeg name even if
+                // the source is a PNG. Without any name it can't tell the file is renderable.
+                let result = await mediaProvider.loadFileFromSource(source, filename: "thumbnail.jpeg")
                 thumbnailPreloads.remove(itemID)
+                switch result {
+                case .success(let handle):
+                    MXLog.info("PreviewDebug: thumbnail loaded \(itemID) -> \(handle.url?.lastPathComponent ?? "nil")")
+                case .failure(let error):
+                    MXLog.info("PreviewDebug: thumbnail FAILED \(itemID): \(error)")
+                }
                 guard case .success(let handle) = result, item.fileHandle == nil, item.thumbnailFileHandle == nil else { return }
                 item.thumbnailFileHandle = handle
                 // If this is the item on screen and it's still blank (its full media hasn't
@@ -268,7 +280,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// swipe outruns the downloads and lands on an empty page until the file arrives. Reaching
     /// well beyond the built pages keeps files ready ahead of the swipe. Tunable on feel; each
     /// unit is one extra concurrent download in each direction (small files only, deduped).
-    private static let neighbourPreloadReach = 3
+    private static let neighbourPreloadReach = 5
 
     /// Fetches the media around the current one so that a swipe reveals the media itself rather
     /// than an empty page: QuickLook builds the pages around the current one as it settles on it,
