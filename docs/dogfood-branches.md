@@ -3263,3 +3263,29 @@ test_storage_only_pagination_drops_a_gap_before_the_thread_root (no
 Build 75 (SDK only; EXI unchanged). Validate: reopen a fully-loaded thread =
 no spinner before the root, no /relations; "beginning of thread" shows with
 the root on screen immediately.
+
+## Round 36: media viewer swipes into black; hard-locked at the ends (2026-08-21)
+
+Two reports about swiping through images in the media viewer (QuickLook).
+
+1. "Swipe 3 times fine, 4th swipe lands on black then the image appears."
+   Not the QuickLook padding (100 placeholder slots each side, plenty). The
+   underlying media-filtered timeline paginates *reactively*: the media view
+   model only sent paginateBackwards/Forwards once the user landed on a
+   `.paginating` placeholder page (already black). So each time the loaded
+   media window was exhausted, a swipe hit black before the load fired.
+   Fix (EXI): prefetch the pagination. When the current media is within
+   `paginationPrefetchDistance` (5) of the loaded range's edge, kick off a
+   pagination in that direction (if idle) so the next media's event is loaded
+   before it's swiped onto. paginationEventLimit (20 events/batch) left as-is.
+
+2. "At the oldest/newest media, don't hard-lock the swipe; let me overscroll
+   a bit with an affordance that I've hit the end." The edge was pinned dead
+   (contentOffset reset to the resting offset). Now rubber-band it with
+   UIScrollView's own bounce curve (`rubberBandedOffset`) so the page gives a
+   little and springs back — the standard iOS end-of-content affordance.
+
+Build 76 (EXI only; SDK unchanged). Validate: swiping through a room's media
+never lands on a black page (media loads ahead of the swipe); at the first/
+last media the page rubber-bands and springs back instead of stopping dead.
+The rubber-band constant (0.55) and prefetch distance (5) are tunable on feel.
