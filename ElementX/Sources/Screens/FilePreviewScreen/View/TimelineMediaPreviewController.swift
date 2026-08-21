@@ -319,12 +319,15 @@ class TimelineMediaPreviewController: QLPreviewController {
             arrivalItemID = itemID
             didRefreshOnArrival = false
         }
-        // Only refresh a page QuickLook is showing as unavailable (black). A page already showing
-        // the media (full or the blurhash placeholder) is left alone: forcing a reload here fired
-        // on every swipe and flashed the current page. Sharpening a page QuickLook built from the
-        // placeholder before its file was ready is driven by the file's arrival (handleFileLoaded),
-        // which only fires for a genuinely late download, not on every arrival.
-        refreshIfUnavailableWhenResting(itemID: itemID, force: false)
+        // A page flagged as built from the placeholder before its file arrived is showing the
+        // blurhash, which QuickLook counts as "showing", so force past the availability check to
+        // sharpen it. Every other page is left alone (forcing a reload on every arrival flashed
+        // the current page); a genuinely black page is still caught by the availability check.
+        if itemsBuiltBeforeFile.contains(itemID) {
+            refreshIfUnavailableWhenResting(itemID: itemID, force: true, ignoreAvailability: true)
+        } else {
+            refreshIfUnavailableWhenResting(itemID: itemID, force: false)
+        }
     }
     
     /// The item's file has just arrived: QuickLook built its page without it, so refresh it.
@@ -351,19 +354,27 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// radius finishes preloading whilst the user is resting, so the pre-built blank pages become
     /// the media before the next swipe. Reload (not refresh) because QuickLook only refreshes the
     /// current page; the padding trick keeps the current item's index across it.
+    /// Items whose file arrived after QuickLook had already built their page (within its build
+    /// radius), so QuickLook is showing the blurhash placeholder and the page needs sharpening -
+    /// now if the user is resting, otherwise when they land on it. Only these pages are reloaded,
+    /// so pages QuickLook built with the full file already present are never needlessly flashed.
+    private var itemsBuiltBeforeFile = Set<MediaPreviewItemID>()
     private var neighbourReloadTask: Task<Void, Never>?
     private func scheduleBuiltNeighbourReloadIfResting(for itemID: MediaPreviewItemID) {
         let dataSource = context.viewState.dataSource
         guard let index = dataSource.previewItems.firstIndex(where: { $0.id == itemID }) else { return }
-        // Only worth a reload if QuickLook has likely built this page (within its build radius).
+        // Only relevant if QuickLook has built this page (within its build radius); if not, it will
+        // build it with the file already present when it comes into range, no sharpening needed.
         let currentArrayIndex = currentPreviewItemIndex - dataSource.firstPreviewItemIndex
         guard abs(index - currentArrayIndex) <= Self.builtPagesRadius else { return }
 
+        itemsBuiltBeforeFile.insert(itemID)
         neighbourReloadTask?.cancel()
         neighbourReloadTask = Task { [weak self] in
             try? await Task.sleep(for: .milliseconds(150)) // Coalesce a burst of neighbour loads.
             guard let self, !Task.isCancelled,
                   let scrollView = pageScrollView, !scrollView.isDragging, !scrollView.isDecelerating else { return }
+            itemsBuiltBeforeFile.removeAll() // The reload rebuilds every built page with its file.
             reloadData()
         }
     }
@@ -433,6 +444,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                 // clear QuickLook's pre-built "content unavailable" placeholder for the item the
                 // user rests on (observed on device), leaving it blank. reloadData rebuilds the
                 // pages so the now-present file renders; the padding trick keeps the current index.
+                itemsBuiltBeforeFile.removeAll() // Every built page is rebuilt with its file.
                 reloadData()
                 return
             }

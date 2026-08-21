@@ -480,6 +480,21 @@ enum TimelineMediaPreviewItem: Equatable {
                 }
             }
         }
+
+        /// The media's pixel dimensions, so a blurhash placeholder can be rendered at the right
+        /// aspect ratio rather than a square.
+        var mediaSize: CGSize? {
+            switch content {
+            case .galleryItem(_, let item):
+                item.size
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.size
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.size ?? videoItem.content.thumbnailInfo?.size
+                default: nil
+                }
+            }
+        }
     }
     
     class Loading: NSObject, QLPreviewItem {

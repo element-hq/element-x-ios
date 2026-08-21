@@ -228,6 +228,16 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
 
     private var placeholdersPrepared = Set<MediaPreviewItemID>()
 
+    /// A small blurhash decode size that preserves the media's aspect ratio (long edge ~48px), so
+    /// the placeholder isn't stretched to a square. Falls back to a square when the size is unknown.
+    private static func placeholderDecodeSize(for mediaSize: CGSize?) -> CGSize {
+        guard let mediaSize, mediaSize.width > 0, mediaSize.height > 0 else { return CGSize(width: 48, height: 48) }
+        let longEdge: CGFloat = 48
+        return mediaSize.width >= mediaSize.height
+            ? CGSize(width: longEdge, height: (longEdge * mediaSize.height / mediaSize.width).rounded())
+            : CGSize(width: (longEdge * mediaSize.width / mediaSize.height).rounded(), height: longEdge)
+    }
+
     /// A dedicated temp subdirectory for the blurhash placeholder files, removed wholesale when the
     /// preview screen is torn down so they don't accumulate across the session (each file is also
     /// named by its item id, so re-viewing overwrites rather than piling up).
@@ -251,9 +261,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             placeholdersPrepared.insert(itemID)
             // UIImage(blurHash:) is main-actor bound; the decode is cheap (a 40x40 image), only the
             // file write is offloaded.
+            let decodeSize = Self.placeholderDecodeSize(for: item.mediaSize)
             Task { [weak self] in
                 guard let self,
-                      let image = UIImage(blurHash: blurhash, size: CGSize(width: 40, height: 40)),
+                      let image = UIImage(blurHash: blurhash, size: decodeSize),
                       let data = image.jpegData(compressionQuality: 0.9) else { return }
                 let directory = placeholderDirectory
                 let url = directory.appendingPathComponent("\(abs(itemID.hashValue)).jpg")
