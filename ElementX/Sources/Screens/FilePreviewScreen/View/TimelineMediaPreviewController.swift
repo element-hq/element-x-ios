@@ -227,32 +227,17 @@ class TimelineMediaPreviewController: QLPreviewController {
             pageScrollViewRestingOffset = pageScrollView.contentOffset.x
         }
 
-        var delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
+        let delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
 
-        // Hold the page still (rather than paging onto the placeholder and bouncing back)
-        // when there's nothing beyond the current item in the swiped direction. Setting the
-        // offset also cancels any deceleration towards the placeholder. Writing a *constant*
-        // (the resting offset) is idempotent, so the resulting KVO callback settles at once;
-        // an offset-dependent value here fights QuickLook's own scrolling and never settles.
-        if delta != 0, isAtTimelineEdge(forwards: delta > 0) {
-            pageScrollView.contentOffset.x = pageScrollViewRestingOffset
-            delta = 0
-        }
+        // At the timeline ends QuickLook now bounces natively (the data source drops its phantom
+        // padding once a side is fully paginated), so there's nothing to hard-block here; the
+        // overlay just tracks whatever the scroll view does, bounce included.
 
         overlayView.transform = CGAffineTransform(translationX: -delta, y: 0)
         // Fade towards the midpoint so the overlay never clashes with the neighbouring item's state.
         overlayView.alpha = max(0, 1 - abs(delta) / (pageWidth / 2))
     }
 
-    /// Whether the current item is the last one in the given direction, with the timeline fully paginated.
-    private func isAtTimelineEdge(forwards: Bool) -> Bool {
-        let dataSource = context.viewState.dataSource
-        return if forwards {
-            currentPreviewItemIndex >= dataSource.lastPreviewItemIndex && dataSource.paginationState.forward == .endReached
-        } else {
-            currentPreviewItemIndex <= dataSource.firstPreviewItemIndex && dataSource.paginationState.backward == .endReached
-        }
-    }
 
     // MARK: Item loading
 
@@ -282,12 +267,33 @@ class TimelineMediaPreviewController: QLPreviewController {
         currentPreviewItemIndex = index
     }
     
+    /// The QuickLook item count and first-item index at the last update, tracked so we notice
+    /// when a side's phantom padding collapses at end-reached (see the data source). Normal
+    /// pagination keeps the count constant (the padding trick), so these change only at the two
+    /// end transitions, when the items shift and QuickLook's cached count goes stale.
+    private var lastKnownItemCount: Int?
+    private var lastKnownFirstIndex = 0
+
     private func handleUpdatedItems() {
+        let dataSource = context.viewState.dataSource
+
+        // When a side reaches the end of the timeline its phantom padding drops to zero so the
+        // last real item becomes QuickLook's content edge (native bounce). That changes the
+        // count and, for the leading side, shifts every index; QuickLook only re-reads the count
+        // on reloadData, so carry the current item across any shift and reload just then.
+        let count = dataSource.numberOfPreviewItems(in: self)
+        let firstIndex = dataSource.firstPreviewItemIndex
+        if let previousCount = lastKnownItemCount, previousCount != count {
+            currentPreviewItemIndex += firstIndex - lastKnownFirstIndex
+            reloadData()
+        }
+        lastKnownItemCount = count
+        lastKnownFirstIndex = firstIndex
+
         guard let displayedItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading else { return }
-        
+
         // The index may now hold a media, or a different placeholder having reached the end of
         // the timeline, in which case what's on display is stale.
-        let dataSource = context.viewState.dataSource
         if dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) as AnyObject !== displayedItem {
             refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
         }

@@ -344,6 +344,33 @@ struct TimelineMediaPreviewDataSourceTests {
     }
     
     @discardableResult
+    @Test
+    func endReachedCollapsesPhantomPadding() throws {
+        // Given a loaded data source that hasn't yet seen a real (non-initial) pagination state.
+        let dataSource = try assertInitialDataSource()
+        let itemCount = initialMediaViewStates.count
+
+        // When the forward side reaches the end of the timeline (backward still loadable).
+        dataSource.paginationState = .init(backward: .idle, forward: .endReached)
+
+        // Then only the forward phantom padding collapses, so QuickLook bounces at the newest item
+        // whilst the older side keeps its padding to paginate into.
+        #expect(dataSource.firstPreviewItemIndex == initialPadding)
+        #expect(dataSource.lastPreviewItemIndex == initialPadding + itemCount - 1)
+        #expect(dataSource.numberOfPreviewItems(in: previewController) == itemCount + initialPadding)
+
+        // When the backward side also reaches the end.
+        dataSource.paginationState = .init(backward: .endReached, forward: .endReached)
+
+        // Then both sides collapse: the real items are the whole of QuickLook's content, so it
+        // bounces natively at either end, and the current item survives the index shift.
+        #expect(dataSource.firstPreviewItemIndex == 0)
+        #expect(dataSource.lastPreviewItemIndex == itemCount - 1)
+        #expect(dataSource.numberOfPreviewItems(in: previewController) == itemCount)
+        let currentItem = try #require(dataSource.previewController(previewController, previewItemAt: initialItemIndex) as? TimelineMediaPreviewItem.Media)
+        #expect(currentItem.id == initialMediaItems[initialItemIndex].previewID)
+    }
+
     private func assertInitialDataSource() throws -> TimelineMediaPreviewDataSource {
         // Given a data source built with the initial items.
         let dataSource = TimelineMediaPreviewDataSource(itemViewStates: initialMediaViewStates,

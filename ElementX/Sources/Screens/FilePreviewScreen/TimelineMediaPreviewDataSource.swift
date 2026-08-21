@@ -33,11 +33,18 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     private var backwardPadding: Int
     private var forwardPadding: Int
     
+    /// Whether a real (post-load) pagination state has been seen. `.initial` is `endReached` on
+    /// both sides as a "don't paginate yet" sentinel, indistinguishable by value from a genuinely
+    /// exhausted small room, so we only collapse the phantom padding (below) once a real state has
+    /// arrived; until then the padding stays, keeping room to paginate.
+    private var hasReceivedRealPaginationState: Bool
+    
     /// Reaching the end of the timeline changes which placeholder an index shows, so a change
     /// needs to be published too, not only the arrival of new items.
     var paginationState: TimelinePaginationState {
         didSet {
             guard paginationState != oldValue else { return }
+            if paginationState != .initial { hasReceivedRealPaginationState = true }
             previewItemsPaginationPublisher.send()
         }
     }
@@ -70,6 +77,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         
         backwardPadding = initialPadding
         forwardPadding = initialPadding
+        hasReceivedRealPaginationState = paginationState != .initial
         
         self.paginationState = paginationState
     }
@@ -100,6 +108,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         // And we disable any use of the timeline by configuring the data source as though everything has paginated.
         backwardPadding = 0
         forwardPadding = 0
+        hasReceivedRealPaginationState = true // Self-contained; the (zero) padding never needs to collapse.
         paginationState = .init(backward: .endReached, forward: .endReached)
     }
     
@@ -158,20 +167,33 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     // MARK: - QLPreviewControllerDataSource
     
+    /// Once a direction is fully paginated we drop its phantom padding to zero, so the last
+    /// real item becomes QuickLook's own content edge and its scroll view bounces natively there
+    /// (the affordance for "nothing more this way") instead of us hard-blocking the swipe.
+    /// This only changes the reported count at the two end-reached transitions, so the padding
+    /// invariant (constant count during normal pagination) still holds everywhere else.
+    private var effectiveBackwardPadding: Int {
+        hasReceivedRealPaginationState && paginationState.backward == .endReached ? 0 : backwardPadding
+    }
+    
+    private var effectiveForwardPadding: Int {
+        hasReceivedRealPaginationState && paginationState.forward == .endReached ? 0 : forwardPadding
+    }
+    
     var firstPreviewItemIndex: Int {
-        backwardPadding
+        effectiveBackwardPadding
     }
     
     var lastPreviewItemIndex: Int {
-        backwardPadding + previewItems.count - 1
+        effectiveBackwardPadding + previewItems.count - 1
     }
     
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-        previewItems.count + backwardPadding + forwardPadding
+        previewItems.count + effectiveBackwardPadding + effectiveForwardPadding
     }
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> any QLPreviewItem {
-        let arrayIndex = index - backwardPadding
+        let arrayIndex = index - effectiveBackwardPadding
         
         if index < firstPreviewItemIndex {
             return paginationState.backward == .endReached ? TimelineMediaPreviewItem.Loading.timelineStart : .paginatingBackwards
