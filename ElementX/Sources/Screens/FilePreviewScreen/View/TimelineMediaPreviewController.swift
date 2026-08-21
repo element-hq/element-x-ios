@@ -314,17 +314,17 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// instead of the item (it does when swiped through quickly, whether or not the file was
     /// there when it built the page), and only a refresh clears it: check, and refresh if so.
     private func checkCurrentItemOnArrival() {
-        guard let item = currentPreviewItem as? TimelineMediaPreviewItem.Media else { return }
-        let itemID = item.id
+        guard let itemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id else { return }
         if itemID != arrivalItemID {
             arrivalItemID = itemID
             didRefreshOnArrival = false
         }
-        // If the full media is present over a blurhash placeholder, QuickLook shows the (blurry)
-        // placeholder, not its "unavailable" screen, so the availability check would skip it and
-        // leave it blurry. Force past that check to sharpen it to the full media.
-        let upgraded = item.wasUpgradedFromThumbnail
-        refreshIfUnavailableWhenResting(itemID: itemID, force: upgraded, ignoreAvailability: upgraded)
+        // Only refresh a page QuickLook is showing as unavailable (black). A page already showing
+        // the media (full or the blurhash placeholder) is left alone: forcing a reload here fired
+        // on every swipe and flashed the current page. Sharpening a page QuickLook built from the
+        // placeholder before its file was ready is driven by the file's arrival (handleFileLoaded),
+        // which only fires for a genuinely late download, not on every arrival.
+        refreshIfUnavailableWhenResting(itemID: itemID, force: false)
     }
     
     /// The item's file has just arrived: QuickLook built its page without it, so refresh it.
