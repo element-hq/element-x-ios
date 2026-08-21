@@ -649,7 +649,28 @@ struct AttributedStringBuilderTests {
         
         let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        #expect(String(attributedString.characters) == "like\n    • this\ntest")
+        #expect(String(attributedString.characters) == "like\n  • this\ntest")
+    }
+    
+    /// Markdown generated HTML separates block elements with newlines which used to normalise
+    /// into stray spaces, indenting the first list item deeper than the ones that followed.
+    @Test
+    func interBlockWhitespace() throws {
+        let htmlString = "<p>intro:</p>\n<ul>\n<li>first</li>\n<li>second</li>\n</ul>\n"
+        
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "intro:\n  • first\n  • second")
+    }
+    
+    /// Whitespace between inline elements is meaningful, unlike the inter block variety.
+    @Test
+    func interInlineWhitespace() throws {
+        let htmlString = "<del>one</del> <del>two</del>"
+        
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "one two")
     }
     
     @Test
@@ -694,7 +715,7 @@ struct AttributedStringBuilderTests {
         
         let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
         
-        #expect(String(attributedString.characters) == "   2. this is a two")
+        #expect(String(attributedString.characters) == "  2. this is a two")
     }
     
     @Test
@@ -725,7 +746,7 @@ struct AttributedStringBuilderTests {
         """
         let attributedString = try #require(attributedStringBuilder.fromHTML(html), "Could not build the attributed string")
         
-        #expect(String(attributedString.characters) == "Stefan pushed 2 commits to main:\n   •  Some update \n   •  Some other update")
+        #expect(String(attributedString.characters) == "Stefan pushed 2 commits to main:\n  •  Some update \n  •  Some other update")
     }
     
     // MARK: - Phishing prevention
