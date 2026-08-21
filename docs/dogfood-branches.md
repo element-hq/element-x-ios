@@ -3289,3 +3289,22 @@ Build 76 (EXI only; SDK unchanged). Validate: swiping through a room's media
 never lands on a black page (media loads ahead of the swipe); at the first/
 last media the page rubber-bands and springs back instead of stopping dead.
 The rubber-band constant (0.55) and prefetch distance (5) are tunable on feel.
+
+## Round 36 follow-ups (2026-08-21)
+
+- Crash on overscrolling the end: the edge rubber-band wrote `contentOffset`
+  from inside the `contentOffset` KVO observation. The old hard pin wrote a
+  constant (converges in one step); an offset-dependent write never settles,
+  so the synchronous KVO callback recursed to a stack overflow. Guard our own
+  write (`isApplyingRubberBand`) so the re-entrant callback is swallowed.
+- "Blank on the 4th swipe" persisted because it was never timeline pagination
+  (logs showed the current item is always a media item being refreshed once
+  its file arrives, never a `.paginating` placeholder). It's the media file
+  download outrunning the preload: only 3 items were fetched ahead
+  (`builtPagesRadius + 1`). Raised to 8 (`neighbourPreloadReach`, nearest
+  first). The timeline prefetch from round 36 stays (helps when the event
+  itself isn't loaded), but the reach bump is the actual fix.
+
+Build 77. Validate: overscrolling the first/last media rubber-bands without
+crashing; swiping quickly through a room's images no longer lands on blank
+pages. neighbourPreloadReach (8) tunable on feel/bandwidth.
