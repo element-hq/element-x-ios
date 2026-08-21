@@ -158,6 +158,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         if case let .media(mediaItem) = previewItem {
             defer {
+                preloadThumbnails()
                 preloadNeighbours(of: mediaItem)
                 prefetchTimelinePaginationIfNeeded(around: mediaItem)
             }
@@ -195,6 +196,40 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     /// The neighbour loads in flight, joined by the load on display if the user swipes before they finish.
     private var preloads = [MediaPreviewItemID: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>]()
+
+    /// The thumbnail loads in flight, one per item at most.
+    private var thumbnailPreloads = Set<MediaPreviewItemID>()
+
+    /// Fetches a thumbnail for every loaded item that doesn't have its full media yet, so a swipe
+    /// always lands on the thumbnail rather than a blank page while the full media downloads. This
+    /// is what removes the "swipe onto black" ceiling: the full-media preload only reaches so far
+    /// ahead, but thumbnails are small (usually already cached from the timeline) so every loaded
+    /// item can have one. Skipped when a content scanner is configured (the media must be scanned
+    /// before anything from it is shown).
+    private func preloadThumbnails() {
+        guard appSettings.preloadMediaInViewer, contentScannerService == nil else { return }
+
+        for item in state.dataSource.previewItems {
+            guard item.fileHandle == nil,
+                  item.thumbnailFileHandle == nil,
+                  !thumbnailPreloads.contains(item.id),
+                  let source = item.thumbnailMediaSource else { continue }
+
+            let itemID = item.id
+            thumbnailPreloads.insert(itemID)
+            Task { [mediaProvider] in
+                let result = await mediaProvider.loadFileFromSource(source, filename: nil)
+                thumbnailPreloads.remove(itemID)
+                guard case .success(let handle) = result, item.fileHandle == nil, item.thumbnailFileHandle == nil else { return }
+                item.thumbnailFileHandle = handle
+                // If this is the item on screen and it's still blank (its full media hasn't
+                // arrived), nudge the controller to swap the thumbnail in.
+                if state.currentItem.mediaItem?.id == itemID {
+                    state.previewControllerDriver.send(.itemLoaded(itemID))
+                }
+            }
+        }
+    }
 
     /// How many media items ahead of the loaded edge to start paginating the underlying timeline.
     /// Chosen so the next media's event is loaded before the user swipes onto it, rather than

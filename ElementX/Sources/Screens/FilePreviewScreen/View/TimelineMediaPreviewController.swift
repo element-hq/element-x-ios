@@ -28,9 +28,6 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var pageScrollViewObservation: AnyCancellable?
     /// The content offset that the page scroll view rests at when showing the current item.
     private var pageScrollViewRestingOffset: CGFloat = 0
-    /// Set whilst we write `contentOffset` ourselves (the rubber-band), so the resulting
-    /// synchronous KVO callback doesn't recurse back into another write.
-    private var isApplyingRubberBand = false
     
     private var cancellables: Set<AnyCancellable> = []
     
@@ -222,49 +219,29 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func updateOverlayPosition() {
         guard let pageScrollView, let overlayView = downloadIndicatorHostingController.view else { return }
 
-        // Writing `contentOffset` below re-enters this synchronously via KVO. Swallow that one
-        // re-entry: writing an offset-dependent value (unlike a constant pin) would otherwise
-        // recurse until the stack overflows.
-        if isApplyingRubberBand {
-            isApplyingRubberBand = false
-            return
-        }
-
         let pageWidth = pageScrollView.bounds.width
         guard pageWidth > 0 else { return }
-        
+
         // Whilst resting on an item, keep track of the offset that any swipe will start from.
         if !pageScrollView.isDragging, !pageScrollView.isDecelerating {
             pageScrollViewRestingOffset = pageScrollView.contentOffset.x
         }
-        
+
         var delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
 
-        // At the timeline edge there's nothing beyond the current item. Rather than paging onto
-        // the placeholder (or hard-locking the swipe dead), rubber-band the page with diminishing
-        // resistance and let it spring back: the standard iOS "you've reached the end" affordance.
-        // Writing the offset also cancels QuickLook's own deceleration towards the placeholder.
+        // Hold the page still (rather than paging onto the placeholder and bouncing back)
+        // when there's nothing beyond the current item in the swiped direction. Setting the
+        // offset also cancels any deceleration towards the placeholder. Writing a *constant*
+        // (the resting offset) is idempotent, so the resulting KVO callback settles at once;
+        // an offset-dependent value here fights QuickLook's own scrolling and never settles.
         if delta != 0, isAtTimelineEdge(forwards: delta > 0) {
-            let damped = Self.rubberBandedOffset(delta, over: pageWidth)
-            isApplyingRubberBand = true
-            pageScrollView.contentOffset.x = pageScrollViewRestingOffset + damped
-            delta = damped
+            pageScrollView.contentOffset.x = pageScrollViewRestingOffset
+            delta = 0
         }
 
         overlayView.transform = CGAffineTransform(translationX: -delta, y: 0)
         // Fade towards the midpoint so the overlay never clashes with the neighbouring item's state.
         overlayView.alpha = max(0, 1 - abs(delta) / (pageWidth / 2))
-    }
-    
-    /// The iOS rubber-band curve: pulling `offset` points past the edge of a view `dimension`
-    /// wide resists progressively, asymptotically approaching a fraction of the dimension. This
-    /// is UIScrollView's own bounce formula, so an overscroll here feels like one anywhere else.
-    private static func rubberBandedOffset(_ offset: CGFloat, over dimension: CGFloat) -> CGFloat {
-        guard dimension > 0 else { return 0 }
-        let constant = 0.55 // UIScrollView's constant; smaller resists harder.
-        let sign: CGFloat = offset < 0 ? -1 : 1
-        let magnitude = abs(offset)
-        return sign * (1 - (1 / (magnitude / dimension * constant + 1))) * dimension
     }
 
     /// Whether the current item is the last one in the given direction, with the timeline fully paginated.
@@ -341,7 +318,13 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     /// The item's file has just arrived: QuickLook built its page without it, so refresh it.
     private func handleFileLoaded(itemID: MediaPreviewItemID) {
-        refreshIfUnavailableWhenResting(itemID: itemID, force: true)
+        // If the full media replaced a thumbnail that's on screen, the page is showing (the
+        // thumbnail), not unavailable, so force the refresh past the availability check to swap
+        // in the full media.
+        let upgradedFromThumbnail = (currentPreviewItem as? TimelineMediaPreviewItem.Media).map {
+            $0.id == itemID && $0.wasUpgradedFromThumbnail
+        } ?? false
+        refreshIfUnavailableWhenResting(itemID: itemID, force: true, ignoreAvailability: upgradedFromThumbnail)
     }
     
     /// Whether the page on display is QuickLook's "content unavailable" placeholder.
@@ -354,18 +337,19 @@ class TimelineMediaPreviewController: QLPreviewController {
         } != nil
     }
     
-    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) {
+    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool, ignoreAvailability: Bool = false) {
         guard refreshChecks[itemID] == nil else { return }
         refreshChecks[itemID] = Task { [weak self] in
-            await self?.refreshIfUnavailableWhenResting(itemID: itemID, force: force)
+            await self?.refreshIfUnavailableWhenResting(itemID: itemID, force: force, ignoreAvailability: ignoreAvailability)
             self?.refreshChecks[itemID] = nil
         }
     }
-    
+
     /// Refreshes the current item once it's `itemID`, the pages have stopped moving, its file is
     /// there and QuickLook is showing the placeholder instead of it. `force` bypasses the
-    /// once-per-arrival limit (for a file that has just arrived).
-    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) async {
+    /// once-per-arrival limit (for a file that has just arrived); `ignoreAvailability` refreshes
+    /// even when the page is showing (to swap a thumbnail for the full media).
+    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool, ignoreAvailability: Bool) async {
         MXLog.info("PreviewDebug: refresh check for \(itemID) (current index \(currentPreviewItemIndex), force: \(force))")
         // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController
         // if it's called whilst swiping between items. So wait for the swipe to settle (the index
@@ -379,7 +363,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                 MXLog.info("PreviewDebug: refresh check of \(itemID) abandoned, current is now \(String(describing: (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id))")
                 return // Swiped on: its next arrival checks it again.
             }
-            guard item.fileHandle != nil else {
+            guard item.previewItemURL != nil else {
                 MXLog.info("PreviewDebug: refresh check of \(itemID) dropped, no file yet (its load will refresh it)")
                 return
             }
@@ -391,7 +375,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                 stillPolls += 1
             }
             if stillPolls >= 4 {
-                guard isCurrentPageUnavailable else {
+                guard ignoreAvailability || isCurrentPageUnavailable else {
                     MXLog.info("PreviewDebug: \(itemID) at index \(currentPreviewItemIndex) is showing, no refresh")
                     return
                 }
@@ -403,6 +387,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                 if itemID == arrivalItemID {
                     didRefreshOnArrival = true
                 }
+                item.didHandleThumbnailUpgrade()
                 refreshCurrentPreviewItem()
                 return
             }
