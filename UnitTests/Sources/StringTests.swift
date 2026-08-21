@@ -73,13 +73,18 @@ struct StringTests {
         let input3 = "</p>\n\n\n\n<p>"
         let input4 = "<p>a</p>\n<p>b</p>"
         let input5 = "empty"
+        let input6 = "<ul><li>a</li></ul>\n<p>b</p>"
+        let input7 = "</p>\n<ul>"
         
         let expectedOutput0 = input0
-        let expectedOutput1 = "<br><br>"
-        let expectedOutput2 = "<br><br><br>"
-        let expectedOutput3 = "<br><br><br><br><br>"
-        let expectedOutput4 = "<p>a<br><br>b</p>"
+        let expectedOutput1 = "</p><br><p>"
+        let expectedOutput2 = "</p><br><br><p>"
+        let expectedOutput3 = "</p><br><br><br><br><p>"
+        let expectedOutput4 = "<p>a</p><br><p>b</p>"
         let expectedOutput5 = input5
+        let expectedOutput6 = "<ul><li>a</li></ul><br><p>b</p>"
+        // A list can interrupt a paragraph, so this newline isn't a blank line the user typed.
+        let expectedOutput7 = input7
         
         #expect(input0.replacingHtmlBreaksOccurrences() == expectedOutput0)
         #expect(input1.replacingHtmlBreaksOccurrences() == expectedOutput1)
@@ -87,5 +92,7 @@ struct StringTests {
         #expect(input3.replacingHtmlBreaksOccurrences() == expectedOutput3)
         #expect(input4.replacingHtmlBreaksOccurrences() == expectedOutput4)
         #expect(input5.replacingHtmlBreaksOccurrences() == expectedOutput5)
+        #expect(input6.replacingHtmlBreaksOccurrences() == expectedOutput6)
+        #expect(input7.replacingHtmlBreaksOccurrences() == expectedOutput7)
     }
 }
