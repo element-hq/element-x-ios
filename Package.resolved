@@ -1,5 +1,5 @@
 {
-  "originHash" : "eb16f7bcd7ef32b27433d7e2ee4cd129ad3c29e854c62696900658127333c78e",
+  "originHash" : "a7bfbb574dd171065ecafd3e16a9c44aad10c659d08e85e77358ed769af0aad9",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -16,7 +16,7 @@
       "location" : "https://github.com/element-hq/swift-command-line-tools.git",
       "state" : {
         "branch" : "main",
-        "revision" : "c9400d7cc9cf5b0e2609206aa6f3218d31409042"
+        "revision" : "e1e7939200f47bc3ee7c468076077a5d6ceaa364"
       }
     },
     {
