@@ -127,7 +127,12 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.typingAttributes = [.font: font,
                                      .foregroundColor: UIColor.compound.textPrimary]
         
-        if textView.attributedText != text {
+        // Only apply the binding when it holds something other than what this wrapper last pushed
+        // or applied, i.e. a programmatic change (edit/draft load, pill insertion, clear on send).
+        // The text view's own storage drifts from the pushed value by attributes UIKit adds while
+        // typing (seen on every keystroke when editing); re-applying for that reset the selection
+        // and the scroll offset, and was behind the caret dipping, hopping and scroll jumps.
+        if text != context.coordinator.lastText, textView.attributedText != text {
             // Remember the selection if only the attributes have changed.
             let selection = textView.attributedText.string == text.string ? textView.selectedTextRange : nil
             
@@ -137,9 +142,13 @@ private struct UITextViewWrapper: UIViewRepresentable {
             _ = textView.layoutManager
             
             let attributesOnly = textView.attributedText.string == text.string
-            MXLog.info("CARETPROBE updateUIView re-applies attributedText (\(attributesOnly ? "attributes only" : "string differs")) off \(textView.contentOffset.y) sel \(textView.selectedRange.location) len \(text.length)")
+            var viewKeys = Set<String>(), bindingKeys = Set<String>()
+            textView.attributedText.enumerateAttributes(in: NSRange(location: 0, length: textView.attributedText.length)) { attributes, _, _ in attributes.keys.forEach { viewKeys.insert($0.rawValue) } }
+            text.enumerateAttributes(in: NSRange(location: 0, length: text.length)) { attributes, _, _ in attributes.keys.forEach { bindingKeys.insert($0.rawValue) } }
+            MXLog.info("CARETPROBE updateUIView re-applies attributedText (\(attributesOnly ? "attributes only" : "string differs")) off \(textView.contentOffset.y) sel \(textView.selectedRange.location) len \(text.length) viewKeys \(viewKeys.sorted()) bindingKeys \(bindingKeys.sorted())")
             
             textView.attributedText = text
+            context.coordinator.lastText = text
             
             // Re-apply the default font when setting text for e.g. edits.
             textView.font = font
@@ -188,6 +197,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         /// The height last returned by `sizeThatFits`, reused for the stacks' width probes.
         var lastFittedHeight: CGFloat?
+        /// The value this wrapper last pushed into, or applied from, the text binding.
+        var lastText: NSAttributedString?
         private let maxHeight: CGFloat
         
         private let keyHandler: GenericKeyHandler
@@ -210,12 +221,14 @@ private struct UITextViewWrapper: UIViewRepresentable {
             // going tweens the layout (the timeline rides along smoothly) instead of popping.
             // At the height cap nothing moves, and the scrolled text view is where animated
             // transactions have interfered with caret placement, so update plainly there.
+            let attributedText = textView.attributedText ?? NSAttributedString()
+            lastText = attributedText
             if textView.bounds.height < maxHeight - 0.5 {
                 withAnimation(.easeOut(duration: 0.1)) {
-                    text.wrappedValue = textView.attributedText
+                    text.wrappedValue = attributedText
                 }
             } else {
-                text.wrappedValue = textView.attributedText
+                text.wrappedValue = attributedText
             }
         }
         
