@@ -439,14 +439,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// otherwise a spinner on black until the full-size file lands). The controller then refreshes
     /// the page as it does when a file arrives, and swaps the media in when it does.
     private func preparePlaceholder(for item: TimelineMediaPreviewItem.Media) {
-        guard let (thumbnail, size, url) = placeholderJob(for: item) else {
-            if item.fileHandle == nil, item.placeholderURL == nil {
-                MXLog.info("Media viewer: no cached thumbnail for \(item.id), no placeholder")
-            }
-            return
-        }
         let directory = placeholderDirectory
         Task { [weak self] in
+            guard let (thumbnail, size, url) = await self?.placeholderJob(for: item) else {
+                if item.fileHandle == nil, item.placeholderURL == nil {
+                    MXLog.info("Media viewer: no thumbnail for \(item.id), no placeholder")
+                }
+                return
+            }
             let written = await Task.detached(priority: .userInitiated) {
                 Self.writePlaceholder(thumbnail, size: size, to: url, in: directory)
             }.value
@@ -479,8 +479,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 MXLog.info("Media viewer: initial item loaded within the grace period")
                 return
             }
-            guard let (thumbnail, size, url) = placeholderJob(for: item) else {
-                MXLog.info("Media viewer: no cached thumbnail for the initial item, no placeholder")
+            guard let (thumbnail, size, url) = await placeholderJob(for: item), item.fileHandle == nil else {
+                MXLog.info("Media viewer: no thumbnail for the initial item, no placeholder")
                 return
             }
             // Synchronous (a few tens of ms): the presentation is waiting on it.
@@ -512,9 +512,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     /// What's needed to render an item's placeholder, or nil when it doesn't get one.
-    private func placeholderJob(for item: TimelineMediaPreviewItem.Media) -> (UIImage, CGSize, URL)? {
+    private func placeholderJob(for item: TimelineMediaPreviewItem.Media) async -> (UIImage, CGSize, URL)? {
         guard contentScannerService == nil, item.kind != .file, item.fileHandle == nil, item.placeholderURL == nil,
-              let thumbnail = cachedThumbnail(for: item) else { return nil }
+              let thumbnail = await thumbnail(for: item) else { return nil }
         let size = Self.placeholderSize(mediaSize: item.mediaSize,
                                         thumbnailSize: CGSize(width: thumbnail.size.width * thumbnail.scale,
                                                               height: thumbnail.size.height * thumbnail.scale))
@@ -537,9 +537,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    /// The thumbnail the timeline drew for this item, if it's still in the in-memory image cache.
-    /// Tries the source/size pairs the timeline, gallery and media-grid cells load with.
-    private func cachedThumbnail(for item: TimelineMediaPreviewItem.Media) -> UIImage? {
+    /// The longest a thumbnail is waited for: the SDK's media store answers in milliseconds when it
+    /// has it; anything slower is a network fetch that would land after the point.
+    private static let thumbnailTimeout: Duration = .milliseconds(400)
+    
+    /// The item's thumbnail: the in-memory image cache (what the timeline drew, keyed as the
+    /// timeline, gallery and media-grid cells load it) or, that being short-lived, the SDK's
+    /// media store via the provider, which caches the result.
+    private func thumbnail(for item: TimelineMediaPreviewItem.Media) async -> UIImage? {
         let candidates: [(MediaSourceProxy?, CGSize?)] = [(item.thumbnailMediaSource, item.thumbnailSize),
                                                           (item.thumbnailMediaSource ?? item.mediaSource, item.mediaSize),
                                                           (item.mediaSource, item.mediaSize),
@@ -549,7 +554,19 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 return image
             }
         }
-        return nil
+        guard let source = item.thumbnailMediaSource ?? item.mediaSource else { return nil }
+        let size = item.thumbnailMediaSource == nil ? item.mediaSize : item.thumbnailSize
+        let load = mediaProvider.loadImageRetryingOnReconnection(source, size: size)
+        let timeout = Task { try await Task.sleep(for: Self.thumbnailTimeout) }
+        let image: UIImage? = await withTaskGroup(of: UIImage?.self) { group in
+            group.addTask { try? await load.value }
+            group.addTask { try? await timeout.value; return nil }
+            let first = await group.next() ?? nil
+            group.cancelAll()
+            return first
+        }
+        MXLog.info("Media viewer: thumbnail for \(item.id) from the store: \(image != nil)")
+        return image
     }
     
     /// The media's size capped to `placeholderMaxSide`; with no size on the event, the thumbnail
