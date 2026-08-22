@@ -254,31 +254,9 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         var fileHandle: MediaFileHandleProxy? {
-            didSet {
-                // The full media arriving over a thumbnail means QuickLook, which built the page
-                // from the thumbnail, needs a refresh to show the full media (it won't otherwise:
-                // the page isn't "unavailable"). Flag it so the controller can force that refresh.
-                if fileHandle != nil, thumbnailFileHandle != nil {
-                    wasUpgradedFromThumbnail = true
-                }
-                updatePreviewItemValues()
-            }
-        }
-
-        /// A cached thumbnail shown while the full media downloads, so a swipe never lands on a
-        /// blank page. Superseded by `fileHandle` once the full media is ready.
-        var thumbnailFileHandle: MediaFileHandleProxy? {
             didSet { updatePreviewItemValues() }
         }
-
-        /// Whether the full media has just replaced a thumbnail that was already on screen.
-        private(set) var wasUpgradedFromThumbnail = false
-
-        /// Clears the upgrade flag once the controller has refreshed the page for it.
-        func didHandleThumbnailUpgrade() {
-            wasUpgradedFromThumbnail = false
-        }
-
+        
         var downloadError: Error?
         
         /// A stable identifier that's unique per preview item — including individual gallery
@@ -328,13 +306,8 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         private func updatePreviewItemValues() {
-            // Fall back to the thumbnail while the full media downloads, so QuickLook shows the
-            // thumbnail rather than a blank page.
-            let url = fileHandle?.url ?? thumbnailFileHandle?.url
-            _previewItemURL.withLock { $0 = url }
-
-            // Don't show any background text (" ") until the full media is ready.
-            _previewItemTitle.withLock { $0 = fileHandle == nil ? " " : filename }
+            _previewItemURL.withLock { $0 = fileHandle?.url }
+            _previewItemTitle.withLock { $0 = fileHandle == nil ? " " : filename } // Don't show any background text until the file is ready.
         }
         
         // MARK: Event details

@@ -162,7 +162,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 prefetchTimelinePaginationIfNeeded(around: mediaItem)
             }
             
-            MXLog.info("PreviewDebug: current item \(mediaItem.id), file \(mediaItem.fileHandle == nil ? "missing" : "present"), preload \(preloads[mediaItem.id] == nil ? "none" : "in flight")")
             guard mediaItem.fileHandle == nil, let source = mediaItem.mediaSource else { return }
             
             guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
@@ -177,7 +176,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             
             switch result {
             case .success(let handle):
-                MXLog.info("PreviewDebug: loaded \(mediaItem.id)")
                 mediaItem.fileHandle = handle
                 state.previewControllerDriver.send(.itemLoaded(mediaItem.id))
             case .failure(let error):
@@ -196,7 +194,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// The neighbour loads in flight, joined by the load on display if the user swipes before they finish.
     private var preloads = [MediaPreviewItemID: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>]()
 
-    /// The thumbnail loads in flight, one per item at most.
     /// How many media items ahead of the loaded edge to start paginating the underlying timeline.
     /// Chosen so the next media's event is loaded before the user swipes onto it, rather than
     /// swiping onto a black placeholder that only then triggers the pagination.
@@ -211,94 +208,66 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         let items = state.dataSource.previewItems
         guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
 
-        if index <= Self.paginationPrefetchDistance, state.dataSource.paginationState.backward == .idle {
+        let backwardState = state.dataSource.paginationState.backward
+        let forwardState = state.dataSource.paginationState.forward
+        let nearBack = index <= Self.paginationPrefetchDistance
+        let nearFwd = index >= items.count - 1 - Self.paginationPrefetchDistance
+
+        if nearBack, backwardState == .idle {
             timelineViewModel.context.send(viewAction: .paginateBackwards)
         }
-        if index >= items.count - 1 - Self.paginationPrefetchDistance, state.dataSource.paginationState.forward == .idle {
+        if nearFwd, forwardState == .idle {
             timelineViewModel.context.send(viewAction: .paginateForwards)
         }
     }
     
-    /// Preload reach behind the direction of travel: kept small, since files behind a moving
-    /// swipe are the least likely to be looked at next.
-    private static let preloadReachBehind = 3
-    /// Preload reach ahead when there's no established direction yet (the item just opened).
-    private static let preloadReachAheadBase = 6
-    /// How far ahead the reach grows per sustained same-direction swipe, and its ceiling. The
-    /// ceiling exists because preloading is throughput-bound: queuing more downloads than the
-    /// network can service before they're reached doesn't make them arrive sooner, it just spends
-    /// bandwidth on files the swipe may pass or that get thrown away on a reversal. Growth
-    /// converts the wasted "behind" budget into "ahead" depth and adapts it to how far the user
-    /// is travelling, up to where extra depth stops paying off.
-    private static let preloadReachAheadGrowth = 4
-    private static let preloadReachAheadMax = 24
-
-    /// The direction of the last swipe (+1 forwards, -1 backwards, 0 = none yet) and the reach
-    /// ahead in that direction, grown while the user keeps swipping the same way and reset on a
-    /// reversal.
-    private var preloadDirection = 0
-    private var preloadReachAhead = preloadReachAheadBase
-    private var lastPreloadIndex: Int?
-
+    /// How many neighbours either side of the current item are fetched ahead of a swipe. Small
+    /// on purpose: QuickLook only builds the two pages either side of the current one, and the
+    /// download pipe is shared, so a deep queue slows the neighbours that matter without making
+    /// a fast swipe land on media any more often.
+    private static let preloadReach = 3
+    
     /// Fetches the media around the current one so that a swipe reveals the media itself rather
     /// than an empty page: QuickLook builds the pages around the current one as it settles on it,
-    /// so an item needs its file by the time it comes within that reach. Nearest first, small
-    /// files only, and skipped when a content scanner is configured (a neighbour must be scanned
-    /// as the current item is, on display).
+    /// so an item needs its file by the time it comes within that reach. Small files only, and
+    /// skipped when a content scanner is configured (a neighbour must be scanned as the current
+    /// item is, on display).
     ///
-    /// The neighbour gets its file handle straight away; the controller refreshes any page that
-    /// QuickLook shows as unavailable on arrival.
+    /// The neighbour gets its file handle straight away; the controller rebuilds any page that
+    /// QuickLook built before the file was there.
     private func preloadNeighbours(of mediaItem: TimelineMediaPreviewItem.Media) {
         guard appSettings.preloadMediaInViewer, contentScannerService == nil else { return }
 
         let items = state.dataSource.previewItems
         guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
 
-        // Track the swipe direction and grow the reach ahead while it's sustained, so the download
-        // budget follows the user rather than being spent symmetrically around a moving target.
-        let direction = (lastPreloadIndex.map { index > $0 ? 1 : (index < $0 ? -1 : preloadDirection) }) ?? 0
-        if direction != 0, direction == preloadDirection {
-            preloadReachAhead = min(preloadReachAhead + Self.preloadReachAheadGrowth, Self.preloadReachAheadMax)
-        } else if direction != 0 {
-            preloadReachAhead = Self.preloadReachAheadBase // New or reversed direction: start over.
+        // Nearest first (1, 1, 2, 2, …) so the most urgent get their download slot first.
+        let neighbourIndices = (1...Self.preloadReach).flatMap { [index + $0, index - $0] }
+        for neighbourIndex in neighbourIndices where items.indices.contains(neighbourIndex) {
+            preload(items[neighbourIndex])
         }
-        preloadDirection = direction
-        lastPreloadIndex = index
-
-        // Nearest first (1, 1, 2, 2, …) so the most urgent get their download slot before the
-        // further-ahead ones. Ahead means the direction of travel (both sides equally before the
-        // first swipe establishes one); behind stays shallow.
-        let aheadReach = direction == 0 ? Self.preloadReachAheadBase : preloadReachAhead
-        let behindReach = direction == 0 ? Self.preloadReachAheadBase : Self.preloadReachBehind
-        let ahead = direction == 0 ? 1 : direction
-        var neighbourIndices = [Int]()
-        for offset in 1...max(aheadReach, behindReach) {
-            if offset <= aheadReach { neighbourIndices.append(index + ahead * offset) }
-            if offset <= behindReach { neighbourIndices.append(index - ahead * offset) }
-        }
-        neighbourIndices = neighbourIndices.filter { items.indices.contains($0) }
-        for neighbourIndex in neighbourIndices {
-            let neighbour = items[neighbourIndex]
-            guard neighbour.fileHandle == nil,
-                  neighbour.downloadError == nil,
-                  preloads[neighbour.id] == nil,
-                  let source = neighbour.mediaSource,
-                  neighbour.fileSize.map({ $0 <= Self.preloadFileSizeLimit }) ?? true else { continue }
-            
-            let neighbourID = neighbour.id
-            preloads[neighbourID] = Task { [mediaProvider] in
-                // Failures aren't recorded here: the load on display retries and reports them.
-                let result = await mediaProvider.loadFileFromSource(source, filename: neighbour.filename)
-                preloads[neighbourID] = nil
-                if case .success(let handle) = result, neighbour.fileHandle == nil {
-                    MXLog.info("PreviewDebug: preloaded \(neighbourID)")
-                    neighbour.fileHandle = handle
-                    // Let the controller rebuild QuickLook's page for this neighbour if it built it
-                    // blank before the file was ready, so a swipe lands on the media not a blank.
-                    state.previewControllerDriver.send(.itemLoaded(neighbourID))
-                }
-                return result
+    }
+    
+    /// Fetches an item's file into the cache ahead of it being displayed (small files only).
+    private func preload(_ item: TimelineMediaPreviewItem.Media) {
+        guard item.fileHandle == nil,
+              item.downloadError == nil,
+              preloads[item.id] == nil,
+              let source = item.mediaSource,
+              item.fileSize.map({ $0 <= Self.preloadFileSizeLimit }) ?? true else { return }
+        
+        let itemID = item.id
+        preloads[itemID] = Task { [mediaProvider] in
+            // Failures aren't recorded here: the load on display retries and reports them.
+            let result = await mediaProvider.loadFileFromSource(source, filename: item.filename)
+            preloads[itemID] = nil
+            if case .success(let handle) = result, item.fileHandle == nil {
+                item.fileHandle = handle
+                // Let the controller rebuild QuickLook's page for this item if it built it
+                // blank before the file was ready, so a swipe lands on the media not a blank.
+                state.previewControllerDriver.send(.itemLoaded(itemID))
             }
+            return result
         }
     }
     

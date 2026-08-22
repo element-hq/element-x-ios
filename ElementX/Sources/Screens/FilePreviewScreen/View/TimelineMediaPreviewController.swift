@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AVFoundation
 import Combine
 import Compound
 import QuickLook
@@ -90,7 +91,6 @@ class TimelineMediaPreviewController: QLPreviewController {
         publisher(for: \.currentPreviewItemIndex)
             .sink { [weak self] index in
                 // This isn't removing duplicates which may try to download and/or write to disk concurrently????
-                MXLog.info("PreviewDebug: index changed to \(index), item \(String(describing: (self?.currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id)) url \(String(describing: (self?.currentPreviewItem as? TimelineMediaPreviewItem.Media)?.previewItemURL?.lastPathComponent))")
                 self?.loadCurrentItem()
                 self?.checkCurrentItemOnArrival()
             }
@@ -121,6 +121,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         dataSource = context.viewState.dataSource
         currentPreviewItemIndex = context.viewState.dataSource.initialItemIndex
+        recordBuiltBlankPages() // Seed the blank model from the initial (mostly file-less) build.
     }
     
     @available(*, unavailable) required init?(coder: NSCoder) {
@@ -225,6 +226,8 @@ class TimelineMediaPreviewController: QLPreviewController {
         // Whilst resting on an item, keep track of the offset that any swipe will start from.
         if !pageScrollView.isDragging, !pageScrollView.isDecelerating {
             pageScrollViewRestingOffset = pageScrollView.contentOffset.x
+        } else {
+            removeReloadCover(animated: false) // Don't freeze the pages under a swipe.
         }
 
         let delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
@@ -285,7 +288,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         let firstIndex = dataSource.firstPreviewItemIndex
         if let previousCount = lastKnownItemCount, previousCount != count {
             currentPreviewItemIndex += firstIndex - lastKnownFirstIndex
-            reloadData()
+            reloadDataTrackingBlanks()
         }
         lastKnownItemCount = count
         lastKnownFirstIndex = firstIndex
@@ -320,6 +323,11 @@ class TimelineMediaPreviewController: QLPreviewController {
             didRefreshOnArrival = false
         }
         refreshIfUnavailableWhenResting(itemID: itemID, force: false)
+        // Also heal the page we're about to swipe into: while resting here, a built neighbour may be
+        // showing QuickLook's blank placeholder with its file already present (its file arrived long
+        // before we approached, so no file-load event re-checks it). Proactively reload once so the
+        // next swipe lands on the media, not blank.
+        scheduleHealReloadIfResting()
     }
     
     /// The item's file has just arrived: QuickLook built its page without it, so refresh it.
@@ -329,37 +337,47 @@ class TimelineMediaPreviewController: QLPreviewController {
         // rebuild the built neighbourhood while resting. Without this the blank is only fixed once
         // you land on it (swipe into blank, then it pops in) rather than swiping into the media.
         guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else {
-            scheduleBuiltNeighbourReloadIfResting(for: itemID)
+            scheduleHealReloadIfResting()
             return
         }
 
-        // If the full media replaced a thumbnail that's on screen, the page is showing (the
-        // thumbnail), not unavailable, so force the refresh past the availability check to swap
-        // in the full media.
-        let upgradedFromThumbnail = (currentPreviewItem as? TimelineMediaPreviewItem.Media).map {
-            $0.id == itemID && $0.wasUpgradedFromThumbnail
-        } ?? false
-        refreshIfUnavailableWhenResting(itemID: itemID, force: true, ignoreAvailability: upgradedFromThumbnail)
+        refreshIfUnavailableWhenResting(itemID: itemID, force: true)
     }
 
-    /// A debounced reload used to rebuild QuickLook's pages when a neighbour within its build
-    /// radius finishes preloading whilst the user is resting, so the pre-built blank pages become
-    /// the media before the next swipe. Reload (not refresh) because QuickLook only refreshes the
-    /// current page; the padding trick keeps the current item's index across it.
+    /// A debounced reload used to rebuild QuickLook's pages when a neighbour finishes preloading
+    /// whilst the user is resting, so pre-built blank pages become the media before the next swipe.
+    /// Reload (not refresh) because QuickLook only refreshes the current page; the padding trick
+    /// keeps the current item's index across it.
+    ///
+    /// No proximity guard: QuickLook does NOT only build the 2 pages either side. Its initial load
+    /// (and every reloadData) builds a wide range of pages up front, so a page many items away can
+    /// already be cached blank. Meanwhile preload delivers files several items ahead (reach grows
+    /// to preloadReachAheadMax), so the file for a blank-built page routinely arrives while that
+    /// page is well outside +/-2. Gating on builtPagesRadius skipped exactly those heals and left
+    /// the page blank until the user landed on it (swipe into blank, then it pops in). Any preloaded
+    /// neighbour arriving whilst resting is worth one debounced, resting-gated reload.
     private var neighbourReloadTask: Task<Void, Never>?
-    private func scheduleBuiltNeighbourReloadIfResting(for itemID: MediaPreviewItemID) {
-        let dataSource = context.viewState.dataSource
-        guard let index = dataSource.previewItems.firstIndex(where: { $0.id == itemID }) else { return }
-        // Only worth a reload if QuickLook has likely built this page (within its build radius).
-        let currentArrayIndex = currentPreviewItemIndex - dataSource.firstPreviewItemIndex
-        guard abs(index - currentArrayIndex) <= Self.builtPagesRadius else { return }
-
+    /// The item the last heal reload fired on, so we reload at most once per rest. Keyed on the
+    /// item (not the scroll offset: QuickLook reuses the same offset after a reload, so an offset
+    /// key over-fired across different pages and suppressed legitimate heals).
+    private var lastHealReloadItemID: MediaPreviewItemID?
+    private func scheduleHealReloadIfResting() {
         neighbourReloadTask?.cancel()
         neighbourReloadTask = Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(150)) // Coalesce a burst of neighbour loads.
+            try? await Task.sleep(for: .milliseconds(350)) // Coalesce a trickle of neighbour loads into one reload.
             guard let self, !Task.isCancelled,
                   let scrollView = pageScrollView, !scrollView.isDragging, !scrollView.isDecelerating else { return }
-            reloadData()
+            // One reload per rest: a single reloadData rebuilds every page with whatever files are
+            // present now, so later arrivals in the same rest need no further reload (they would just
+            // re-flash the current page). Files that land after this reload heal on the next rest,
+            // before the user can swipe to them.
+            let currentItemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id
+            guard currentItemID != lastHealReloadItemID else { return }
+            // Only reload if a built page is actually blank while its file is present: reload is
+            // QuickLook's only re-read lever, so skip it when every built page already renders.
+            guard hasHealableBlankPage() else { return }
+            lastHealReloadItemID = currentItemID
+            reloadDataTrackingBlanks()
         }
     }
     
@@ -373,20 +391,122 @@ class TimelineMediaPreviewController: QLPreviewController {
         } != nil
     }
     
-    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool, ignoreAvailability: Bool = false) {
+    /// The items QuickLook has built into pages while their file was absent, so it is caching a blank
+    /// "content unavailable" page for them. QuickLook never re-reads such a page on its own, and it
+    /// does NOT keep the blank neighbour's view in the hierarchy while offscreen (so it can't be found
+    /// by inspecting subviews) - the only signal we have is the file state at build time, which we
+    /// model here. Recomputed from actual file state after every (re)build; an item leaves the set
+    /// only when a reload rebuilds it with its file present.
+    private var builtBlankItemIDs = Set<MediaPreviewItemID>()
+
+    /// Snapshot which built pages are blank, from the data source's current file state. Called after
+    /// every build/reload: QuickLook (re)builds its pages from the files present at that instant, so
+    /// items still missing a file are blank and items that now have one have been rebuilt correctly.
+    private func recordBuiltBlankPages() {
+        let items = context.viewState.dataSource.previewItems
+        builtBlankItemIDs = Set(items.filter { $0.previewItemURL == nil }.map(\.id))
+    }
+
+    /// reloadData plus a blank-set refresh, so every rebuild keeps the model in sync. `covered`
+    /// hides the rebuild behind a snapshot; pass false when the page on display is blank anyway
+    /// (a snapshot of it would only delay the media the reload brings in).
+    private func reloadDataTrackingBlanks(covered: Bool = true) {
+        if covered {
+            coverReload { reloadData() }
+        } else {
+            reloadData()
+        }
+        recordBuiltBlankPages()
+    }
+    
+    /// The longest the cover stays up if the rebuilt page's arrival can't be detected (a page
+    /// type without a recognised content view, say).
+    private static let reloadCoverTimeout: Duration = .seconds(1)
+    private var reloadCoverView: UIView?
+    
+    /// Hides the flash reloadData causes (QuickLook rebuilds every page, the current one
+    /// included): freeze a snapshot of the pages over the page scroll view (below the bars, so
+    /// their glass keeps animating), reload underneath, and drop the snapshot the moment the
+    /// rebuilt page has content again. QuickLook empties the current page synchronously and
+    /// repopulates it ~20ms (image) to ~100ms (video) later, so the signal is a new content
+    /// view under the centre of the screen.
+    private func coverReload(_ reload: () -> Void) {
+        reloadCoverView?.removeFromSuperview()
+        let previousContent = renderedPageContentView
+        if let pageScrollView, let snapshot = pageScrollView.snapshotView(afterScreenUpdates: false) {
+            snapshot.frame = pageScrollView.frame
+            snapshot.isUserInteractionEnabled = false
+            pageScrollView.superview?.insertSubview(snapshot, aboveSubview: pageScrollView)
+            reloadCoverView = snapshot
+        }
+        reload()
+        Task { [weak self] in
+            let started = ContinuousClock.now
+            var rendered = false
+            while let self, reloadCoverView != nil, ContinuousClock.now - started < Self.reloadCoverTimeout {
+                if let content = renderedPageContentView, content !== previousContent {
+                    rendered = true
+                    break
+                }
+                try? await Task.sleep(for: .milliseconds(16))
+            }
+            self?.removeReloadCover(animated: false)
+        }
+    }
+    
+    /// The view QuickLook is rendering the current page's content with (an image view showing
+    /// an image, or a video layer ready for display), or nil while the page is being (re)built.
+    /// The page containers are the plain UIViews directly inside the page scroll view.
+    private var renderedPageContentView: UIView? {
+        guard let pageScrollView else { return nil }
+        let center = view.convert(CGPoint(x: view.bounds.midX, y: view.bounds.midY), to: pageScrollView)
+        guard let page = pageScrollView.subviews.first(where: { type(of: $0) == UIView.self && $0.frame.contains(center) }) else { return nil }
+        return page.firstVisibleDescendant { subview in
+            if let imageView = subview as? UIImageView { return imageView.image != nil }
+            if let playerLayer = subview.layer as? AVPlayerLayer { return playerLayer.isReadyForDisplay }
+            return false
+        }
+    }
+    
+    private func removeReloadCover(animated: Bool) {
+        guard let cover = reloadCoverView else { return }
+        reloadCoverView = nil
+        UIView.animate(withDuration: animated ? 0.15 : 0) {
+            cover.alpha = 0
+        } completion: { _ in
+            cover.removeFromSuperview()
+        }
+    }
+
+    /// Whether a page within QuickLook's build radius is one it built blank and whose file has since
+    /// arrived - a stale blank a reload would heal. Reloading only for these (not on every rest)
+    /// keeps the current-page flash reloadData causes to the rare pages that actually need it.
+    private func hasHealableBlankPage() -> Bool {
+        let dataSource = context.viewState.dataSource
+        let firstIndex = dataSource.firstPreviewItemIndex
+        for delta in -Self.builtPagesRadius...Self.builtPagesRadius {
+            let arrayIndex = currentPreviewItemIndex + delta - firstIndex
+            guard dataSource.previewItems.indices.contains(arrayIndex) else { continue }
+            let item = dataSource.previewItems[arrayIndex]
+            if builtBlankItemIDs.contains(item.id), item.previewItemURL != nil {
+                return true
+            }
+        }
+        return false
+    }
+
+    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) {
         guard refreshChecks[itemID] == nil else { return }
         refreshChecks[itemID] = Task { [weak self] in
-            await self?.refreshIfUnavailableWhenResting(itemID: itemID, force: force, ignoreAvailability: ignoreAvailability)
+            await self?.refreshIfUnavailableWhenResting(itemID: itemID, force: force)
             self?.refreshChecks[itemID] = nil
         }
     }
 
     /// Refreshes the current item once it's `itemID`, the pages have stopped moving, its file is
     /// there and QuickLook is showing the placeholder instead of it. `force` bypasses the
-    /// once-per-arrival limit (for a file that has just arrived); `ignoreAvailability` refreshes
-    /// even when the page is showing (to swap a thumbnail for the full media).
-    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool, ignoreAvailability: Bool) async {
-        MXLog.info("PreviewDebug: refresh check for \(itemID) (current index \(currentPreviewItemIndex), force: \(force))")
+    /// once-per-arrival limit (for a file that has just arrived).
+    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) async {
         // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController
         // if it's called whilst swiping between items. So wait for the swipe to settle (the index
         // changes whilst the pages are still decelerating).
@@ -396,13 +516,9 @@ class TimelineMediaPreviewController: QLPreviewController {
         var stillPolls = 0
         for _ in 0..<60 {
             guard let item = currentPreviewItem as? TimelineMediaPreviewItem.Media, item.id == itemID else {
-                MXLog.info("PreviewDebug: refresh check of \(itemID) abandoned, current is now \(String(describing: (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id))")
                 return // Swiped on: its next arrival checks it again.
             }
-            guard item.previewItemURL != nil else {
-                MXLog.info("PreviewDebug: refresh check of \(itemID) dropped, no file yet (its load will refresh it)")
-                return
-            }
+            guard item.previewItemURL != nil else { return } // Its load will refresh it.
             if let scrollView = pageScrollView {
                 let isStill = !scrollView.isDragging && !scrollView.isDecelerating && scrollView.contentOffset.x == restingOffset
                 stillPolls = isStill ? stillPolls + 1 : 0
@@ -411,29 +527,20 @@ class TimelineMediaPreviewController: QLPreviewController {
                 stillPolls += 1
             }
             if stillPolls >= 4 {
-                guard ignoreAvailability || isCurrentPageUnavailable else {
-                    MXLog.info("PreviewDebug: \(itemID) at index \(currentPreviewItemIndex) is showing, no refresh")
-                    return
-                }
-                guard force || !didRefreshOnArrival else {
-                    MXLog.info("PreviewDebug: \(itemID) at index \(currentPreviewItemIndex) still unavailable after its arrival refresh; leaving it")
-                    return
-                }
-                MXLog.info("PreviewDebug: refreshing \(itemID) at index \(currentPreviewItemIndex), url \(String(describing: item.previewItemURL?.lastPathComponent))")
+                guard isCurrentPageUnavailable, force || !didRefreshOnArrival else { return }
                 if itemID == arrivalItemID {
                     didRefreshOnArrival = true
                 }
-                item.didHandleThumbnailUpgrade()
                 // reloadData rather than refreshCurrentPreviewItem: the latter reliably fails to
                 // clear QuickLook's pre-built "content unavailable" placeholder for the item the
                 // user rests on (observed on device), leaving it blank. reloadData rebuilds the
                 // pages so the now-present file renders; the padding trick keeps the current index.
-                reloadData()
+                // Uncovered: the page is blank, a snapshot of it would only delay the media.
+                reloadDataTrackingBlanks(covered: false)
                 return
             }
             try? await Task.sleep(for: .milliseconds(50))
         }
-        MXLog.info("PreviewDebug: refresh check of \(itemID) timed out waiting for rest")
     }
     
     // MARK: - Actions
@@ -653,6 +760,20 @@ private extension UIView {
                 return view
             }
             if let match = view.firstDescendant(where: predicate) {
+                return match
+            }
+        }
+        return nil
+    }
+
+    
+    /// Like `firstDescendant`, skipping hidden/transparent subtrees.
+    func firstVisibleDescendant(where predicate: (UIView) -> Bool) -> UIView? {
+        for view in subviews where !view.isHidden && view.alpha > 0 {
+            if predicate(view) {
+                return view
+            }
+            if let match = view.firstVisibleDescendant(where: predicate) {
                 return match
             }
         }
