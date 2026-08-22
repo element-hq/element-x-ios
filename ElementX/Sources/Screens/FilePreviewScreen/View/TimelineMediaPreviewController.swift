@@ -403,8 +403,18 @@ class TimelineMediaPreviewController: QLPreviewController {
             let target = newIndex ?? min(max(currentPreviewItemIndex + firstIndex - lastKnownFirstIndex, 0), count - 1)
             moveToIndexAndReload(target)
         }
+        let reloaded = lastKnownItemCount != count
         lastKnownItemCount = count
         lastKnownFirstIndex = firstIndex
+        
+        // A reshuffle without a count change: the pages still need rebuilding (covered, at rest).
+        if dataSource.needsRebuild {
+            dataSource.needsRebuild = false
+            if !reloaded {
+                MXLog.info("Media viewer: items reshuffled, rebuilding the pages when resting")
+                scheduleWhenResting { $0.reloadDataTrackingBlanks() }
+            }
+        }
 
         guard let displayedItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading else { return }
 
