@@ -3539,3 +3539,68 @@ Validate: swipe runs out and back at ~1s cadence, cellular and Wi-Fi; no
 black pages on the 4th swipe onward; `Media viewer: healing ...` / `landed on
 a blank page` lines rare; fewer `media/download` requests per viewer open
 (up to 7 on open, then ≤1 new per swipe in the travelled direction).
+
+## Media viewer: why it was always the 4th swipe (QuickLook snapshots every URL at load)
+
+Post-mortem (2026-08-22) of the round 36 "swipe 3 times fine, 4th swipe lands
+on black then the image appears". Two diagnoses were offered along the way and
+both were wrong for the case reported: it wasn't timeline pagination (#1: the
+current item was always a media item, never a `.paginating` placeholder), and
+it wasn't download throughput (follow-up #1 / round 38 reasoning): the media
+was already in the cache, a cache read lands in ~50-300ms, and the black came
+no matter how long you rested before swiping. What the reach bumps (3 -> 8 ->
+directional) actually did is explained below; they moved the boundary, they
+didn't remove the cause.
+
+**Mechanism.** QuickLook does not ask the data source for items lazily as
+pages come within reach. The device logs show it calling `previewItemAt:` for
+*every* index in the count at open (placeholder builds logged for 0...99 and
+101...200), again on `refreshCurrentPreviewItem`, and again after every
+`reloadData`; the hierarchy probe's three page containers (previous/current/
+next) are which pages get *views*, not when the items are read. The per-item
+answer is fixed at that sweep: an item whose `previewItemURL` was nil when
+QuickLook swept it is "content unavailable" until the next refresh (current
+page only) or reload (everything), however early its file arrives afterwards.
+The item objects are reused across updates and the URL is computed from the
+file handle, so a lazy read at page-build time would have found the file; it
+didn't, so the URL is captured at the sweep.
+
+Timeline of an open on cached media (device log console.2026-08-22-01,
+00:07:14): open at index 100 with the current URL nil -> full sweep at +2ms,
+before any preload has started (every neighbour nil) -> current item read from
+cache at +170ms -> its arrival refresh at +380ms re-sweeps everything, by which
+time the +/-3 neighbour preloads (also cache reads, +300ms) have URLs -> swipe
+to N-1 at +2.6s queues N-4 and it lands in ~60ms, but the page on display is
+fine so nothing refreshes or reloads, and N-4 keeps the nil QuickLook cached at
+open -> its page is built blank -> 4th swipe lands on black -> the landing
+refresh shows the file. Hence "4th" = reach + 1 exactly, independent of
+waiting: the +/-reach items were rescued by the open-time arrival refresh
+re-sweep (which is why +/-2 originally, +/-3 and 8 moved the blank to the 3rd,
+4th and ~9th swipe), and nothing ever re-read anything beyond it. Preloading is
+necessary (the URL has to be there when QuickLook looks) but never sufficient:
+QuickLook has to be made to look again.
+
+**Solution (as shipped, builds 95-100):**
+
+- Heal reload: when a preloaded neighbour's file arrives while the user rests,
+  one debounced `reloadData` (`TimelineMediaPreviewController`), ungated from
+  the +/-2 radius precisely because the blank can be any item from the last
+  sweep; the blank model (`builtBlankItemIDs`) is every item whose URL was nil
+  at the last load/reload, and a reload is only issued if one of those now has
+  a file. The current page's flash is hidden by a snapshot of the page scroll
+  view dropped the instant the rebuilt page renders (~20-35ms images, ~50-130ms
+  video).
+- Landing reload: arriving on a page that is blank with its file present
+  (the sweep caught it nil and no rest happened since) reloads uncovered.
+- Preload: directional (8 ahead / 2 behind once a direction is known, +/-3 on
+  open), queued before the current item's own load so the neighbours have URLs
+  by the open-time refresh re-sweep. This is what makes the heal reloads rare
+  (2 in 27 swipes in build 95), not what fixes the blank.
+- Not taken: a renderable placeholder URL for every item so no sweep ever sees
+  nil (blurhash, builds 83-88): flashed on every arrival and was reverted.
+
+Still an inference rather than a direct observation: that QuickLook reads
+`previewItemURL` (not just fetches the item) during the sweep. One line in the
+SwipeTest harness (log every `previewItemURL` read by index in `ProxyItem`, run
+on device) would show exactly which indices are read at open, on swipe and on
+refresh/reload.
