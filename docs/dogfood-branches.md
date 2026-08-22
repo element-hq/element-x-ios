@@ -3478,3 +3478,33 @@ upgrade-from-thumbnail refresh path removed from the data source/controller,
 the hierarchy probe and forced-reload switch removed.
 
 Build 98 (EXI b9b01c433 x SDK 35648826a); build 99 = reach 8 (EXI 5b3deb996).
+
+## Media & Files: 4-5s to open, on the message-type index (SDK)
+
+Regression report (round 37, 2026-08-22): tapping Media & Files in Room Info
+took 3-4s, reproducibly, with the prewarm from Room Info in place. The log
+shows the prewarm firing on the Room Info push (1.5s ahead of the tap) but the
+two timeline builds taking ~5.8s between them, all of it in the SQLite store:
+
+- `find_event_refs_by_message_types` ran `backfill_legacy_msgtypes` on every
+  call, and that is a full `SCAN events` of the whole store (no index leads
+  with `event_type`; the content blobs are read too): ~1.5s per call here, and
+  the media view calls it twice (once outside the room lock, once under it),
+  the files view once more. The "no-op once done" was the UPDATE, not the
+  SELECT. Fixed: recorded once under the `msgtypes_backfilled` kv key, like
+  the room event-size counters.
+- `load_events_by_refs` looked the page's ~50 events up with `room_id = ? AND
+  event_id IN (...)`. Once `ANALYZE` stats exist (the SDK runs `PRAGMA
+  optimize`), the planner prefers the `(room_id, ...)` index over the `IN`
+  list for a page-sized list and walks the whole room (a big room: ~2s),
+  reproduced on a synthetic store. The refs are primary keys: dropped the
+  `room_id` term so they're looked up as such.
+
+Timers per open before the fix (UTC 09:59 / 01:25 / 01:54, all alike): find
+1.5s + find 0.7-1.5s + load 2.2-2.5s for media, find 0.9s + load 0.2s for
+files. Regression test `test_find_event_refs_by_message_types_backfills_legacy_rows_once`.
+Expect the prewarmed screen to open instantly and the cold build to be tens of
+milliseconds; check with the `event_cache_store.rs` `Timer _method_` lines
+under `build > new{msgtypes=...}`.
+
+SDK 891f0122f; build 101 (EXI unchanged a713b865f x SDK 891f0122f).
