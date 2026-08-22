@@ -221,11 +221,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    /// How many neighbours either side of the current item are fetched ahead of a swipe. Small
-    /// on purpose: QuickLook only builds the two pages either side of the current one, and the
-    /// download pipe is shared, so a deep queue slows the neighbours that matter without making
-    /// a fast swipe land on media any more often.
-    private static let preloadReach = 3
+    /// How many neighbours either side of the current item are fetched ahead of a swipe. QuickLook
+    /// builds the two pages either side of the current one, so an item's file must be there by the
+    /// time the user is two swipes away; at a ~1s swipe cadence a reach of 3 reliably lost that
+    /// race on the 4th swipe (the file was only queued one swipe earlier), 8 keeps ahead of it
+    /// without queuing the dozens a deeper reach spends on files a reversal discards.
+    private static let preloadReach = 8
     
     /// Fetches the media around the current one so that a swipe reveals the media itself rather
     /// than an empty page: QuickLook builds the pages around the current one as it settles on it,
