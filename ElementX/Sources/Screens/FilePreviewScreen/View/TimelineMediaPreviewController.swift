@@ -262,7 +262,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         // over the previous media. The move's landing re-runs this.
         guard pendingMoveIndex == nil else { return }
         if let previewItem = currentPreviewItem as? TimelineMediaPreviewItem.Media {
-            DispatchQueue.main.async { [weak self] in self?.releasePlaceholderClamp() }
+            scheduleWhenResting { $0.releasePlaceholderClamp() }
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
             // A page QuickLook built as "loading more" whose index now holds a media (items the
@@ -281,7 +281,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             }
             switch loadingItem.state {
             case .paginating(let direction):
-                DispatchQueue.main.async { [weak self] in self?.clampToPlaceholder(direction) }
+                scheduleWhenResting { $0.clampToPlaceholder(direction) }
                 context.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
             case .timelineStart:
                 Task { await returnToIndex(context.viewState.dataSource.firstPreviewItemIndex) }
@@ -708,6 +708,17 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// count it last read, so an index beyond it (the count just grew: padding restored, items
     /// arrived) is set after the reload, not before (observed: the write silently dropped, the
     /// viewer left on the placeholder until the timeline's start).
+    /// Runs `action` once the pages have stopped moving, if the user is still on this page by then.
+    /// The clamp transitions reload; a reload while QuickLook is still decelerating wedges it
+    /// (half-scrolled page, stale title, the transit page's spinner: observed on release).
+    private func scheduleWhenResting(_ action: @escaping (TimelineMediaPreviewController) -> Void) {
+        let index = currentPreviewItemIndex
+        Task { [weak self] in
+            guard let self, await waitUntilResting(atIndex: index) else { return }
+            action(self)
+        }
+    }
+    
     /// Waits until the pages have stopped moving while still on `index` (same test as the arrival
     /// check: not dragging or decelerating, offset unchanged for a few polls). False if swiped on.
     private func waitUntilResting(atIndex index: Int) async -> Bool {
