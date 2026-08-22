@@ -3701,3 +3701,21 @@ while cursor and caret disagree (`MISMATCHn`) and every `attributedText`
 re-apply in `updateUIView` (the path that parks the caret at the end and
 resets scroll), to catch the hop/scroll-jump reports. Upstream candidate once
 validated; strip the probe.
+
+Build 105 probe log (phone, editing a long message): `updateUIView
+re-applies attributedText (attributes only)` on EVERY keystroke (len 919,
+920, 921 ...), each followed by a transient content size (456/581/602 with
+the offset clamped to match) and a cursor/caret mismatch. The binding value
+we push in `textViewDidChange` is the view's text at that moment; the text
+view's storage then drifts from it by attributes UIKit adds while typing, and
+upstream's `textView.attributedText != text` check took the drift for a
+binding change: re-setting the text resets the selection (restored after,
+but the scroll offset and content size bounce) on every keystroke while
+editing. That is the common root of the dips, the hop to the left of the
+deleted text and the scroll jumps in edit mode.
+
+Build 106 (`e6a4137e0`): the coordinator remembers what the wrapper last
+pushed into or applied from the binding and `updateUIView` only applies a
+binding that differs from that (edit/draft load, pill insertion, clear on
+send, formatting toggle still apply). Upstream candidate; the probe line
+now lists the attribute keys on both sides for the report.
