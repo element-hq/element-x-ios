@@ -44,30 +44,67 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     /// built pages no longer match their indices and need a rebuild. Cleared by the controller.
     var needsRebuild = false
     
-    /// Media with an unresolved timeline gap between them and the next newer media: a backfill
-    /// can land older items before the ones in between, so stepping onto them would skip those.
+    /// Media with something unresolved between them and the next newer media: a timeline gap, or a
+    /// message we couldn't decrypt yet that may turn out to be media (its key is usually on its way).
+    /// A backfill lands older items before those resolve, so stepping onto them would skip those.
     private(set) var itemIDsWithGapOnNewerSide: Set<MediaPreviewItemID> = []
+    /// Whether such not-yet-decrypted messages sit older than the oldest media: paginating further
+    /// back would only fetch (and request keys for) older pages ahead of the nearest ones.
+    private(set) var hasPendingUTDsBeforeOldestMedia = false
+    /// When the wait on the oldest pending UTD runs out, if any: the shape wants re-evaluating then.
+    private(set) var nextPendingUTDExpiry: Date?
+    /// How long a UTD of unknown cause counts as "maybe media" before being given up on. Keys come
+    /// from backup within a second or so; one that doesn't come by now isn't coming.
+    static let pendingUTDWait: TimeInterval = 5
+    private var utdFirstSeen: [TimelineItemIdentifier: Date] = [:]
+    private var lastItemViewStates: [RoomTimelineItemViewState] = []
     private var lastLoggedShape = ""
     
-    private static func itemIDsWithGapOnNewerSide(in itemViewStates: [RoomTimelineItemViewState],
-                                                  allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?) -> Set<MediaPreviewItemID> {
+    private func analyseShape(_ itemViewStates: [RoomTimelineItemViewState]) {
+        lastItemViewStates = itemViewStates
+        let now = Date()
+        var firstSeen = [TimelineItemIdentifier: Date]()
         var gapped = Set<MediaPreviewItemID>()
         var lastMediaID: MediaPreviewItemID?
-        var gapSinceLastMedia = false
+        var unresolvedSinceLastMedia = false
+        var pendingBeforeOldestMedia = false
+        var nextExpiry: Date?
         for state in itemViewStates { // Oldest first.
-            if case .gap = state.type {
-                gapSinceLastMedia = true
+            switch state.type {
+            case .gap:
+                unresolvedSinceLastMedia = true
                 continue
+            case .encrypted(let item) where item.mayStillDecrypt:
+                let seen = utdFirstSeen[item.id] ?? now
+                firstSeen[item.id] = seen
+                let expiry = seen.addingTimeInterval(Self.pendingUTDWait)
+                guard expiry > now else { continue } // Waited long enough: treat it as not media.
+                nextExpiry = min(nextExpiry ?? expiry, expiry)
+                unresolvedSinceLastMedia = true
+                if lastMediaID == nil { pendingBeforeOldestMedia = true }
+                continue
+            default:
+                break
             }
             let media = state.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes)
             guard let last = media.last else { continue }
-            if gapSinceLastMedia, let lastMediaID {
+            if unresolvedSinceLastMedia, let lastMediaID {
                 gapped.insert(lastMediaID)
             }
-            gapSinceLastMedia = false
+            unresolvedSinceLastMedia = false
             lastMediaID = last.id
         }
-        return gapped
+        utdFirstSeen = firstSeen
+        itemIDsWithGapOnNewerSide = gapped
+        hasPendingUTDsBeforeOldestMedia = pendingBeforeOldestMedia
+        nextPendingUTDExpiry = nextExpiry
+    }
+    
+    /// The wait on some pending UTDs ran out: re-evaluate without them, and let the controller step if it can.
+    func pendingUTDsExpired() {
+        analyseShape(lastItemViewStates)
+        MXLog.info("Media viewer: gave up waiting on undecryptable messages, gapped: \(itemIDsWithGapOnNewerSide.count), pending before oldest: \(hasPendingUTDsBeforeOldestMedia)")
+        previewItemsPaginationPublisher.send()
     }
     
     /// The media at a QuickLook index, or nil for a padding/placeholder index.
@@ -105,7 +142,6 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         self.allowedGalleryItemTypes = allowedGalleryItemTypes
         
         previewItems = itemViewStates.flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
-        itemIDsWithGapOnNewerSide = Self.itemIDsWithGapOnNewerSide(in: itemViewStates, allowedGalleryItemTypes: allowedGalleryItemTypes)
         
         let initialPreviewID = TimelineMediaPreviewItem.Media(timelineItem: initialItem).id
         if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialPreviewID }) {
@@ -124,6 +160,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         hasReceivedRealPaginationState = paginationState != .initial
         
         self.paginationState = paginationState
+        super.init()
+        analyseShape(itemViewStates)
     }
     
     /// Builds a data source scoped to a single gallery's previewable attachments.
@@ -221,12 +259,13 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         }
         
         previewItems = newItems
-        itemIDsWithGapOnNewerSide = Self.itemIDsWithGapOnNewerSide(in: itemViewStates, allowedGalleryItemTypes: allowedGalleryItemTypes)
-        // DIAG: the timeline's shape, oldest first (M media, G gap, P pagination indicator, S start, D separator, o other).
+        analyseShape(itemViewStates)
+        // DIAG: the timeline's shape, oldest first (M media, G gap, U undecryptable, P pagination indicator, S start, D separator, o other).
         let shape = itemViewStates.map { state -> String in
             switch state.type {
             case .image, .video, .audio, .file, .gallery: "M"
             case .gap: "G"
+            case .encrypted: "U"
             case .paginationIndicator: "P"
             case .timelineStart: "S"
             case .separator: "D"
@@ -235,7 +274,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         }.joined()
         if shape != lastLoggedShape {
             lastLoggedShape = shape
-            MXLog.info("Media viewer: timeline shape \(shape), gapped: \(itemIDsWithGapOnNewerSide.count)")
+            MXLog.info("Media viewer: timeline shape \(shape), gapped: \(itemIDsWithGapOnNewerSide.count), pending before oldest: \(hasPendingUTDsBeforeOldestMedia)")
         }
         
         if hasPaginated {

@@ -370,12 +370,13 @@ class TimelineMediaPreviewController: QLPreviewController {
            let edgeIndex = dataSource.previewIndex(of: edgeID) {
             let stepped = direction == .backwards ? edgeIndex - 1 : edgeIndex + 1
             // Only onto an item adjacent to the edge in the timeline: a backfill can land older
-            // items first with a gap still between them and the edge (stepping then skipped the
-            // ~20 items that filled the gap afterwards). Until it resolves, stay on the placeholder.
+            // items first with a gap, or messages still waiting on their keys, between them and
+            // the edge (stepping then skipped the ~20 items that filled in afterwards). Until that
+            // resolves, stay on the placeholder.
             let olderID = direction == .backwards ? dataSource.mediaItem(atPreviewIndex: stepped)?.id : edgeID
             let gapBetween = olderID.map { dataSource.itemIDsWithGapOnNewerSide.contains($0) } ?? false
             if gapBetween {
-                MXLog.info("Media viewer: items arrived beyond the \(direction) placeholder but a gap remains between, waiting")
+                MXLog.info("Media viewer: items arrived beyond the \(direction) placeholder but a gap or undecryptable messages remain between, waiting")
             } else if stepped >= dataSource.firstPreviewItemIndex, stepped <= dataSource.lastPreviewItemIndex {
                 dataSource.isClampedToBackwardPlaceholder = false
                 dataSource.isClampedToForwardPlaceholder = false

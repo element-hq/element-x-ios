@@ -18,6 +18,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     let instanceID = UUID()
     
     private let timelineViewModel: TimelineViewModelProtocol
+    private var utdExpiryTask: Task<Void, Never>?
     private let mediaProvider: MediaProviderProtocol
     private let photoLibraryManager: PhotoLibraryManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -73,6 +74,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             .sink { [weak self] itemViewStates in
                 guard let self else { return }
                 state.dataSource.updatePreviewItems(itemViewStates: itemViewStates)
+                scheduleUTDExpiry()
                 // Opened from the room screen, the media timeline is still loading when the current
                 // item is first shown, so its neighbours only become known (and preloadable) now.
                 if let mediaItem = state.currentItem.mediaItem {
@@ -354,10 +356,26 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         rebuildCurrentItemActions()
     }
     
+    /// Re-evaluates the timeline's shape once the wait on its pending UTDs runs out (see the data source).
+    private func scheduleUTDExpiry() {
+        utdExpiryTask?.cancel()
+        guard let expiry = state.dataSource.nextPendingUTDExpiry else { return }
+        utdExpiryTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(max(0, expiry.timeIntervalSinceNow)))
+            guard !Task.isCancelled, let self else { return }
+            state.dataSource.pendingUTDsExpired()
+            paginateIfNeeded()
+        }
+    }
+    
     private func paginateIfNeeded() {
         switch state.currentItem {
         case .loading(.paginatingBackwards):
-            if state.dataSource.paginationState.backward == .idle {
+            if state.dataSource.hasPendingUTDsBeforeOldestMedia {
+                // Resolve the nearest ones first: they may be the media we're after, and paginating
+                // on would request keys for older pages ahead of theirs (and step past them).
+                MXLog.info("Media viewer: undecryptable messages pending behind the oldest media, not paginating yet")
+            } else if state.dataSource.paginationState.backward == .idle {
                 timelineViewModel.context.send(viewAction: .paginateBackwards)
             }
         case .loading(.paginatingForwards):
