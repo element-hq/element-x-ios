@@ -3760,3 +3760,41 @@ something is off, naming every recogniser in the window currently in
 ancestors of the hit view with layer animations in flight. On recurrence:
 reproduce the dead drag once, pull the console log, grep `TouchDebug` for
 `active=`.
+
+## Round 41: media viewer shows the thumbnail while the full image downloads
+
+Ask: tapping an image whose thumbnail the timeline has drawn but whose
+full-size file has never been downloaded showed a spinner on black until the
+file landed; show the thumbnail first, spinner over it, and swap the full
+image in when it arrives.
+
+`90edabed1` (build 109). When an item becomes current without a file, the
+view model looks the thumbnail up in the in-memory image cache (the same
+source/size keys the timeline, gallery and media-grid cells load with) and
+draws it into a JPEG in a temp directory (removed with the view model) at
+the media's own pixel size from the event's `w`/`h`, capped at 2048 on the
+longest side (a file at the thumbnail's own size would sit tiny on the page
+and jump when the media replaced it: QuickLook lays images out by pixel
+size, native when they fit, fit-to-screen otherwise; the sim harness showed
+a same-size placeholder to be pixel-identical in layout). The file is handed
+to QuickLook as `previewItemURL` via `Media.placeholderURL`; the existing
+`.itemLoaded` path then refreshes the black page (uncovered reload, page
+blank anyway) and the download spinner stays up (`fileHandle == nil`).
+
+When the file arrives, pages built from a placeholder (tracked in the
+controller as `builtPlaceholderItemIDs`, recorded alongside the blank set
+after every build) are not "unavailable" to QuickLook, so the arrival check
+and file-loaded path take an explicit `upgrade`: `refreshCurrentPreviewItem()`
+once resting, verified by watching the rendered page's image view / image
+identity change within 1s, otherwise a snapshot-covered `reloadData`. The
+resting heal reload also treats a placeholder page whose media has arrived
+as healable. Log lines: `swapping the placeholder for the media`, then
+`placeholder swapped after …` or `placeholder swap not detected …,
+reloading`.
+
+Device-unverified parts (build 109 is the test): that
+`refreshCurrentPreviewItem` honours the URL change on device (sim: yes; the
+fallback covers a no), and that the upscaled placeholder lays out exactly
+like the media for portrait/landscape/small images. Scope: images and videos
+(a video's poster thumbnail, then the player), current item only; no
+blurhash fallback when the thumbnail isn't cached.
