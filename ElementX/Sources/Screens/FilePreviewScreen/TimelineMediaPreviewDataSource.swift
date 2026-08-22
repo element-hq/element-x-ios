@@ -33,6 +33,13 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     private var backwardPadding: Int
     private var forwardPadding: Int
     
+    /// While the user is on a "loading more" page, only that one page is reported beyond the loaded
+    /// items on its side, so QuickLook's own edge bounce stops the swipe there instead of paging on
+    /// into a run of identical placeholders (the phantom padding is there for index stability, not
+    /// to be browsed). It changes the count, hence needs a reload: the controller drives it.
+    var isClampedToBackwardPlaceholder = false
+    var isClampedToForwardPlaceholder = false
+    
     /// Whether a real (post-load) pagination state has been seen. `.initial` is `endReached` on
     /// both sides as a "don't paginate yet" sentinel, indistinguishable by value from a genuinely
     /// exhausted small room, so we only collapse the phantom padding (below) once a real state has
@@ -175,7 +182,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     /// This only changes the reported count at the two end-reached transitions, so the padding
     /// invariant (constant count during normal pagination) still holds everywhere else.
     private var effectiveBackwardPadding: Int {
-        hasReceivedRealPaginationState && paginationState.backward == .endReached ? 0 : backwardPadding
+        if hasReceivedRealPaginationState, paginationState.backward == .endReached { return 0 }
+        return isClampedToBackwardPlaceholder ? 1 : backwardPadding
     }
     
     /// QuickLook's index for the item right now, given the current items and padding.
@@ -184,7 +192,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     }
     
     private var effectiveForwardPadding: Int {
-        hasReceivedRealPaginationState && paginationState.forward == .endReached ? 0 : forwardPadding
+        if hasReceivedRealPaginationState, paginationState.forward == .endReached { return 0 }
+        return isClampedToForwardPlaceholder ? 1 : forwardPadding
     }
     
     var firstPreviewItemIndex: Int {

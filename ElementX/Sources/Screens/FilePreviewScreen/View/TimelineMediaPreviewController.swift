@@ -253,10 +253,12 @@ class TimelineMediaPreviewController: QLPreviewController {
         headerHostingController.view.sizeToFit() // Resizing isn't automatic in the toolbar 😒
         
         if let previewItem = currentPreviewItem as? TimelineMediaPreviewItem.Media {
+            releasePlaceholderClamp()
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
             switch loadingItem.state {
-            case .paginating:
+            case .paginating(let direction):
+                clampToPlaceholder(direction)
                 context.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
             case .timelineStart:
                 Task { await returnToIndex(context.viewState.dataSource.firstPreviewItemIndex) }
@@ -282,8 +284,64 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var lastKnownItemCount: Int?
     private var lastKnownFirstIndex = 0
 
+    /// The loaded item at the edge the user paged off onto a "loading more" page, so that when
+    /// its items arrive the viewer steps onto the newest of them (the page the placeholder stood for).
+    private var anchoredEdgeItemID: MediaPreviewItemID?
+    
+    /// The user has paged onto a "loading more" placeholder: make it QuickLook's content edge on
+    /// that side (one placeholder page, native bounce beyond it) rather than one of a hundred.
+    private func clampToPlaceholder(_ direction: PaginationDirection) {
+        let dataSource = context.viewState.dataSource
+        switch direction {
+        case .backwards:
+            guard !dataSource.isClampedToBackwardPlaceholder else { return }
+            dataSource.isClampedToBackwardPlaceholder = true
+            anchoredEdgeItemID = dataSource.previewItems.first?.id
+        case .forwards:
+            guard !dataSource.isClampedToForwardPlaceholder else { return }
+            dataSource.isClampedToForwardPlaceholder = true
+            anchoredEdgeItemID = dataSource.previewItems.last?.id
+        }
+        MXLog.info("Media viewer: clamping to the \(direction) placeholder page")
+        handleUpdatedItems() // Count changed: the placeholder keeps its page, the count is re-read on reload.
+    }
+    
+    /// Back on a media page: the padding returns so pagination keeps the indices stable again.
+    private func releasePlaceholderClamp() {
+        let dataSource = context.viewState.dataSource
+        guard dataSource.isClampedToBackwardPlaceholder || dataSource.isClampedToForwardPlaceholder else { return }
+        dataSource.isClampedToBackwardPlaceholder = false
+        dataSource.isClampedToForwardPlaceholder = false
+        anchoredEdgeItemID = nil
+        MXLog.info("Media viewer: releasing the placeholder clamp")
+        handleUpdatedItems()
+    }
+    
     private func handleUpdatedItems() {
         let dataSource = context.viewState.dataSource
+        
+        // On a clamped "loading more" page whose items have arrived: step onto the newest of them
+        // (what the placeholder stood for), with the padding restored in the same reload.
+        if let edgeID = anchoredEdgeItemID,
+           let placeholder = currentPreviewItem as? TimelineMediaPreviewItem.Loading,
+           case .paginating(let direction) = placeholder.state,
+           let edgeIndex = dataSource.previewIndex(of: edgeID) {
+            let stepped = direction == .backwards ? edgeIndex - 1 : edgeIndex + 1
+            if stepped >= dataSource.firstPreviewItemIndex, stepped <= dataSource.lastPreviewItemIndex {
+                dataSource.isClampedToBackwardPlaceholder = false
+                dataSource.isClampedToForwardPlaceholder = false
+                anchoredEdgeItemID = nil
+                if let edgeIndex = dataSource.previewIndex(of: edgeID) {
+                    let target = direction == .backwards ? edgeIndex - 1 : edgeIndex + 1
+                    MXLog.info("Media viewer: items arrived beyond the \(direction) placeholder, stepping to index \(target)")
+                    currentPreviewItemIndex = target
+                    reloadDataTrackingBlanks()
+                    lastKnownItemCount = dataSource.numberOfPreviewItems(in: self)
+                    lastKnownFirstIndex = dataSource.firstPreviewItemIndex
+                    return
+                }
+            }
+        }
 
         // When a side reaches the end of the timeline its phantom padding drops to zero so the
         // last real item becomes QuickLook's content edge (native bounce). That changes the
@@ -295,14 +353,16 @@ class TimelineMediaPreviewController: QLPreviewController {
         let count = dataSource.numberOfPreviewItems(in: self)
         let firstIndex = dataSource.firstPreviewItemIndex
         if let previousCount = lastKnownItemCount, previousCount != count {
-            let currentItemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id ?? dataSource.currentItem.mediaItem?.id
+            // QuickLook's own current item, or the item the viewer opens on before it has built.
+            let currentItemID = currentPreviewItem == nil ? dataSource.currentItem.mediaItem?.id : (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id
             let newIndex = currentItemID.flatMap { dataSource.previewIndex(of: $0) }
             MXLog.info("Media viewer: item count \(previousCount) -> \(count), first index \(lastKnownFirstIndex) -> \(firstIndex), current index \(currentPreviewItemIndex) -> \(newIndex.map(String.init) ?? "shift \(firstIndex - lastKnownFirstIndex)")")
             if let newIndex {
                 currentPreviewItemIndex = newIndex
             } else {
-                // On a placeholder page: follow the padding edge it belongs to.
-                currentPreviewItemIndex += firstIndex - lastKnownFirstIndex
+                // On a placeholder page: follow the padding edge it belongs to, staying in range
+                // (the placeholder vanishes when its side reaches the end: land on the edge item).
+                currentPreviewItemIndex = min(max(currentPreviewItemIndex + firstIndex - lastKnownFirstIndex, 0), count - 1)
             }
             reloadDataTrackingBlanks()
         }
