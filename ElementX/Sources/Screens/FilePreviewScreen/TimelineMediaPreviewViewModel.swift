@@ -439,7 +439,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// otherwise a spinner on black until the full-size file lands). The controller then refreshes
     /// the page as it does when a file arrives, and swaps the media in when it does.
     private func preparePlaceholder(for item: TimelineMediaPreviewItem.Media) {
-        guard let (thumbnail, size, url) = placeholderJob(for: item) else { return }
+        guard let (thumbnail, size, url) = placeholderJob(for: item) else {
+            if item.fileHandle == nil, item.placeholderURL == nil {
+                MXLog.info("Media viewer: no cached thumbnail for \(item.id), no placeholder")
+            }
+            return
+        }
         let directory = placeholderDirectory
         Task { [weak self] in
             let written = await Task.detached(priority: .userInitiated) {
@@ -470,8 +475,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         preload(item, source: source)
         initialPresentationGate = Task { [weak self] in
             await self?.awaitPlaceholderGrace(for: item)
-            guard let self, item.fileHandle == nil, let (thumbnail, size, url) = placeholderJob(for: item) else {
-                MXLog.info("Media viewer: initial item loaded within the grace period, or has no cached thumbnail")
+            guard let self, item.fileHandle == nil else {
+                MXLog.info("Media viewer: initial item loaded within the grace period")
+                return
+            }
+            guard let (thumbnail, size, url) = placeholderJob(for: item) else {
+                MXLog.info("Media viewer: no cached thumbnail for the initial item, no placeholder")
                 return
             }
             // Synchronous (a few tens of ms): the presentation is waiting on it.
