@@ -257,6 +257,18 @@ enum TimelineMediaPreviewItem: Equatable {
             didSet { updatePreviewItemValues() }
         }
         
+        /// The timeline's cached thumbnail written to a file, shown in place of the media while it
+        /// downloads (the tapped image is otherwise a spinner on black until the full-size file
+        /// lands). Superseded by `fileHandle`; the file dies with the view model.
+        var placeholderURL: URL? {
+            didSet { updatePreviewItemValues() }
+        }
+        
+        /// QuickLook is (or will be) showing the thumbnail placeholder rather than the media.
+        var isShowingPlaceholder: Bool {
+            fileHandle == nil && placeholderURL != nil
+        }
+        
         var downloadError: Error?
         
         /// A stable identifier that's unique per preview item — including individual gallery
@@ -306,7 +318,7 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         private func updatePreviewItemValues() {
-            _previewItemURL.withLock { $0 = fileHandle?.url }
+            _previewItemURL.withLock { $0 = fileHandle?.url ?? placeholderURL }
             _previewItemTitle.withLock { $0 = fileHandle == nil ? " " : filename } // Don't show any background text until the file is ready.
         }
         
@@ -357,6 +369,38 @@ enum TimelineMediaPreviewItem: Equatable {
             }
         }
         
+        /// The media's pixel size from the event, when known.
+        var mediaSize: CGSize? {
+            switch content {
+            case .galleryItem(_, let item):
+                item.size
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.size
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.size
+                default: nil
+                }
+            }
+        }
+        
+        /// The thumbnail's pixel size from the event, when known.
+        var thumbnailSize: CGSize? {
+            switch content {
+            case .galleryItem(_, let item):
+                switch item {
+                case .image(_, let content): content.thumbnailInfo?.size
+                case .video(_, let content): content.thumbnailInfo?.size
+                default: nil
+                }
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.thumbnailInfo?.size
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.thumbnailInfo?.size
+                default: nil
+                }
+            }
+        }
+        
         var thumbnailMediaSource: MediaSourceProxy? {
             switch content {
             case .galleryItem(_, let item):
@@ -387,7 +431,7 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         var fileSize: UInt? {
-            previewItemURL.flatMap { try? FileManager.default.sizeForItem(at: $0) } ?? expectedFileSize
+            fileHandle?.url.flatMap { try? FileManager.default.sizeForItem(at: $0) } ?? expectedFileSize
         }
         
         private var expectedFileSize: UInt? {

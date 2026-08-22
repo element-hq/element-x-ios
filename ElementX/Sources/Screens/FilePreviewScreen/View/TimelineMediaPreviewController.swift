@@ -317,12 +317,16 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// instead of the item (it does when swiped through quickly, whether or not the file was
     /// there when it built the page), and only a refresh clears it: check, and refresh if so.
     private func checkCurrentItemOnArrival() {
-        guard let itemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id else { return }
+        guard let item = currentPreviewItem as? TimelineMediaPreviewItem.Media else { return }
+        let itemID = item.id
         if itemID != arrivalItemID {
             arrivalItemID = itemID
             didRefreshOnArrival = false
         }
-        refreshIfUnavailableWhenResting(itemID: itemID, force: false)
+        // A page built from the thumbnail placeholder whose media has since arrived isn't
+        // "unavailable" to QuickLook, so it's swapped explicitly.
+        let upgrade = builtPlaceholderItemIDs.contains(itemID) && item.fileHandle != nil
+        refreshIfUnavailableWhenResting(itemID: itemID, force: upgrade, upgrade: upgrade)
         // Also heal the page we're about to swipe into: while resting here, a built neighbour may be
         // showing QuickLook's blank placeholder with its file already present (its file arrived long
         // before we approached, so no file-load event re-checks it). Proactively reload once so the
@@ -341,7 +345,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             return
         }
 
-        refreshIfUnavailableWhenResting(itemID: itemID, force: true)
+        refreshIfUnavailableWhenResting(itemID: itemID, force: true, upgrade: builtPlaceholderItemIDs.contains(itemID))
     }
 
     /// A debounced reload used to rebuild QuickLook's pages when a neighbour finishes preloading
@@ -399,6 +403,11 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// model here. Recomputed from actual file state after every (re)build; an item leaves the set
     /// only when a reload rebuilds it with its file present.
     private var builtBlankItemIDs = Set<MediaPreviewItemID>()
+    
+    /// The items whose page QuickLook built from the thumbnail placeholder (media absent at build
+    /// time). Once the media arrives the page needs rebuilding, as a blank one does, but QuickLook
+    /// doesn't consider it unavailable, so it's tracked separately and swapped explicitly.
+    private var builtPlaceholderItemIDs = Set<MediaPreviewItemID>()
 
     /// Snapshot which built pages are blank, from the data source's current file state. Called after
     /// every build/reload: QuickLook (re)builds its pages from the files present at that instant, so
@@ -406,6 +415,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func recordBuiltBlankPages() {
         let items = context.viewState.dataSource.previewItems
         builtBlankItemIDs = Set(items.filter { $0.previewItemURL == nil }.map(\.id))
+        builtPlaceholderItemIDs = Set(items.filter(\.isShowingPlaceholder).map(\.id))
     }
 
     /// reloadData plus a blank-set refresh, so every rebuild keeps the model in sync. `covered`
@@ -491,25 +501,28 @@ class TimelineMediaPreviewController: QLPreviewController {
             let arrayIndex = currentPreviewItemIndex + delta - firstIndex
             guard dataSource.previewItems.indices.contains(arrayIndex) else { continue }
             let item = dataSource.previewItems[arrayIndex]
-            if builtBlankItemIDs.contains(item.id), item.previewItemURL != nil {
+            let healable = builtBlankItemIDs.contains(item.id) ? item.previewItemURL != nil
+                : builtPlaceholderItemIDs.contains(item.id) && item.fileHandle != nil
+            if healable {
                 return delta
             }
         }
         return nil
     }
 
-    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) {
+    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool, upgrade: Bool = false) {
         guard refreshChecks[itemID] == nil else { return }
         refreshChecks[itemID] = Task { [weak self] in
-            await self?.refreshIfUnavailableWhenResting(itemID: itemID, force: force)
+            await self?.refreshIfUnavailableWhenResting(itemID: itemID, force: force, upgrade: upgrade)
             self?.refreshChecks[itemID] = nil
         }
     }
 
     /// Refreshes the current item once it's `itemID`, the pages have stopped moving, its file is
     /// there and QuickLook is showing the placeholder instead of it. `force` bypasses the
-    /// once-per-arrival limit (for a file that has just arrived).
-    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) async {
+    /// once-per-arrival limit (for a file that has just arrived). `upgrade` swaps a page built
+    /// from the thumbnail placeholder for the media regardless of availability.
+    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool, upgrade: Bool) async {
         // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController
         // if it's called whilst swiping between items. So wait for the swipe to settle (the index
         // changes whilst the pages are still decelerating).
@@ -530,6 +543,10 @@ class TimelineMediaPreviewController: QLPreviewController {
                 stillPolls += 1
             }
             if stillPolls >= 4 {
+                if upgrade {
+                    upgradePlaceholderPage(itemID: itemID)
+                    return
+                }
                 guard isCurrentPageUnavailable, force || !didRefreshOnArrival else { return }
                 if itemID == arrivalItemID {
                     didRefreshOnArrival = true
@@ -544,6 +561,32 @@ class TimelineMediaPreviewController: QLPreviewController {
                 return
             }
             try? await Task.sleep(for: .milliseconds(50))
+        }
+    }
+    
+    /// The current page was built from the thumbnail placeholder and the media has arrived: refresh
+    /// the page so QuickLook re-reads the item (now the file). Verified, as QuickLook's refresh is
+    /// not always honoured on device: if the page's content hasn't changed shortly after, every
+    /// page is rebuilt behind a cover instead.
+    private func upgradePlaceholderPage(itemID: MediaPreviewItemID) {
+        builtPlaceholderItemIDs.remove(itemID)
+        let previousContent = renderedPageContentView
+        let previousImage = (previousContent as? UIImageView)?.image
+        MXLog.info("Media viewer: swapping the placeholder for the media of \(itemID)")
+        refreshCurrentPreviewItem()
+        Task { [weak self] in
+            let started = ContinuousClock.now
+            while let self, ContinuousClock.now - started < .seconds(1) {
+                if let content = renderedPageContentView,
+                   content !== previousContent || (content as? UIImageView)?.image !== previousImage {
+                    MXLog.info("Media viewer: placeholder swapped after \(ContinuousClock.now - started)")
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(16))
+            }
+            guard let self, (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
+            MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading")
+            reloadDataTrackingBlanks()
         }
     }
     

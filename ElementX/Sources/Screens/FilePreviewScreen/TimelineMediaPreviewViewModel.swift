@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import UIKit
 
 typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaPreviewViewState, TimelineMediaPreviewViewAction>
 
@@ -162,6 +163,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             var load: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>?
             if mediaItem.fileHandle == nil, let source = mediaItem.mediaSource {
                 guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
+                
+                // Show the timeline's thumbnail (when it's cached) while the media downloads.
+                preparePlaceholder(for: mediaItem)
                 
                 // Join a preload already in flight for this item rather than downloading it a second
                 // time. Started before the neighbours' loads so it keeps the head download slot.
@@ -409,6 +413,81 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         state.previewControllerDriver.send(.dismissDetailsSheet)
         actionsSubject.send(.dismiss)
         showRedactedIndicator()
+    }
+    
+    // MARK: - Thumbnail placeholder
+    
+    /// A temp directory for the placeholder files, removed wholesale when the view model goes.
+    private let placeholderDirectory = FileManager.default.temporaryDirectory
+        .appendingPathComponent("media-preview-placeholders-\(UUID().uuidString)")
+    
+    /// The longest side of a placeholder file, in pixels. QuickLook lays an image out at its native
+    /// size when it fits the screen and fit-to-screen otherwise, so the placeholder is rendered at
+    /// the media's own size (capped to keep the file small) rather than the thumbnail's: a small
+    /// file would sit tiny in the middle of the page and jump when the media replaces it.
+    private static let placeholderMaxSide: CGFloat = 2048
+    
+    /// When the item's media isn't downloaded yet but the timeline already drew its thumbnail, writes
+    /// that thumbnail to a file for QuickLook to show while the media downloads (the tapped image is
+    /// otherwise a spinner on black until the full-size file lands). The controller then refreshes
+    /// the page as it does when a file arrives, and swaps the media in when it does.
+    private func preparePlaceholder(for item: TimelineMediaPreviewItem.Media) {
+        guard contentScannerService == nil, item.kind != .file, item.placeholderURL == nil,
+              let thumbnail = cachedThumbnail(for: item) else { return }
+        let size = Self.placeholderSize(mediaSize: item.mediaSize,
+                                        thumbnailSize: CGSize(width: thumbnail.size.width * thumbnail.scale,
+                                                              height: thumbnail.size.height * thumbnail.scale))
+        let directory = placeholderDirectory
+        let url = directory.appendingPathComponent("\(UUID().uuidString).jpg")
+        Task { [weak self] in
+            let written = await Task.detached(priority: .userInitiated) {
+                let format = UIGraphicsImageRendererFormat()
+                format.scale = 1
+                let data = UIGraphicsImageRenderer(size: size, format: format).jpegData(withCompressionQuality: 0.8) { _ in
+                    thumbnail.draw(in: CGRect(origin: .zero, size: size))
+                }
+                do {
+                    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+                    try data.write(to: url)
+                    return true
+                } catch {
+                    MXLog.error("Failed writing the media placeholder: \(error)")
+                    return false
+                }
+            }.value
+            guard written, let self, item.fileHandle == nil else { return }
+            item.placeholderURL = url
+            state.previewControllerDriver.send(.itemLoaded(item.id))
+        }
+    }
+    
+    /// The thumbnail the timeline drew for this item, if it's still in the in-memory image cache.
+    /// Tries the source/size pairs the timeline, gallery and media-grid cells load with.
+    private func cachedThumbnail(for item: TimelineMediaPreviewItem.Media) -> UIImage? {
+        let candidates: [(MediaSourceProxy?, CGSize?)] = [(item.thumbnailMediaSource, item.thumbnailSize),
+                                                          (item.thumbnailMediaSource ?? item.mediaSource, item.mediaSize),
+                                                          (item.mediaSource, item.mediaSize),
+                                                          (item.mediaSource, nil)]
+        for (source, size) in candidates {
+            if let source, let image = mediaProvider.imageFromSource(source, size: size) {
+                return image
+            }
+        }
+        return nil
+    }
+    
+    /// The media's size capped to `placeholderMaxSide`; with no size on the event, the thumbnail
+    /// scaled up to the cap (photos are bigger than the screen, so fit-to-screen is the right bet).
+    private static func placeholderSize(mediaSize: CGSize?, thumbnailSize: CGSize) -> CGSize {
+        let base = mediaSize ?? thumbnailSize
+        let longest = max(base.width, base.height)
+        guard longest > 0 else { return CGSize(width: placeholderMaxSide, height: placeholderMaxSide) }
+        let scale = mediaSize == nil ? placeholderMaxSide / longest : min(1, placeholderMaxSide / longest)
+        return CGSize(width: (base.width * scale).rounded(), height: (base.height * scale).rounded())
+    }
+    
+    isolated deinit {
+        try? FileManager.default.removeItem(at: placeholderDirectory)
     }
     
     // MARK: - Indicators
