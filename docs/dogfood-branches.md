@@ -3833,3 +3833,70 @@ to download get the thumbnail too, so a swipe lands on it.
 Also in build 113: `TouchDebug` still logs the active-recogniser line from
 round 40. Validate: tapping any item opens that item; uncached images open on
 the thumbnail and sharpen in place; cached ones open directly.
+
+## Round 42: viewer overscroll ("loading more" maze), and the wedges found fixing it
+
+User: swiping off the oldest loaded media paged into a run of identical
+"Loading more..." placeholders (the index-stability padding: 100 phantom
+pages a side until that side reaches the end). Asked for one such page with
+the elastic band beyond it. USER-VALIDATED on build 123 ("the backpagination
+logic all seems to be working well now"). Commits, in order, each a
+device-observed failure:
+
+- `656dc2b44` (build 115; 114 was meant to carry it but the patch had
+  aborted, only its log split `8e8c9a119` shipped): while on a "loading
+  more" page the data source reports one page beyond the loaded items on
+  that side (`isClampedToBackward/ForwardPlaceholder`, effective padding 1),
+  so QuickLook's native edge bounce stops the swipe; when the page's items
+  arrive the controller steps onto the newest of them (anchored on the edge
+  item it paged off); back on media the padding returns. Each transition is
+  a covered reload.
+- `e7cd6c958` (116): watchdog kill on overscroll. Clamp/release ran inside
+  QuickLook's index-change callback, and QuickLook drops an index write made
+  from there, so the state toggled forever. Transitions deferred a run-loop
+  turn, re-checking the page; a rate breaker stops any toggling.
+- `2e8b59f5a` (117): stepping onto the arrived items never landed and the
+  viewer ended on the room's first media (2018): QuickLook drops an index
+  write beyond the count it last read (still the clamped count), so a larger
+  index is set after the reload. And a page QuickLook built as "loading
+  more" whose index now holds a media (absorbed by the padding since the
+  build) is refreshed rather than clamped on.
+- `49ff69188` (118): stuck unable to page either way after releasing the
+  clamp: reload and the index jump in the same run-loop turn leave
+  QuickLook's page queue wedged; the index is set 0.1s after the reload
+  (upstream's `returnToIndex` uses the same remedy).
+- `fbcecf7d3` (119): the step still dropped every time: the reload's own
+  index callback re-clamped the transit page before the delayed set. While a
+  move is pending the callback leaves the page alone; the landing re-runs it.
+- `34989c881` (120): a blank video page (Feb 2025 mp4) that could be neither
+  viewed nor left, swipes stuck midway: the stale-page refresh called
+  `refreshCurrentPreviewItem` the instant the swipe landed, i.e. mid
+  deceleration (the documented way to wedge QLPreviewController). It now
+  waits for rest and uses the covered reload; the transit page is ignored by
+  the index callback (its "loading" state had put a spinner over the cover).
+- `6b887f8d3` (122): mangled view after swiping back from the placeholder
+  (half-scrolled page, "Loading more..." title, spinner): the release
+  reloaded one turn after landing, still decelerating. Clamp and release
+  wait for rest too (`scheduleWhenResting`, `waitUntilResting(atIndex:)`).
+- `5274de125` (123): stuck on a Sep 2025 image with no "loading more" page:
+  the data source ignored any update in which its loaded items weren't a
+  contiguous run of the new list (upstream), and the media timeline's
+  dedup/backfill churn broke that 142 times in a minute, freezing the viewer
+  at 9 items while the timeline went on to the room's start and reported end
+  reached (padding collapsed). Such updates are now taken, re-anchored on the
+  current item (or any shared item) so its index stays put, and the pages
+  are rebuilt behind the cover at rest (`needsRebuild`).
+
+Rules learned for QLPreviewController on device: never set
+`currentPreviewItemIndex` from inside its index-change callback; never set
+an index beyond the count it last read before a reload; never reload or
+refresh while its pages are still decelerating; an index jump in the same
+turn as a reload wedges the page queue.
+
+Also this round: `d634097e6` (121) the thumbnail placeholder falls back to
+the SDK's media store via the provider (400ms cap) when the in-memory image
+cache (memory-only, short idle expiry) has let the timeline's thumbnail go.
+Today's logs had shown zero placeholders ever rendered: every tapped item was
+cached, every swiped-to download had no thumbnail in memory. Build 124 adds a
+DEMO 2s delay on every full-size load (`fullSizeDemoDelay`, STRIP) so the
+thumbnail and its swap can be seen at all.
