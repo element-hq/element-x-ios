@@ -102,13 +102,13 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
         
         if let width = proposal.width, abs(width - uiView.bounds.width) < 0.5 {
-            // Same width as laid out: read the height off the live layout. Re-measuring with
-            // `uiView.sizeThatFits` resizes the text container, which momentarily shrinks
-            // `contentSize` and clamps `contentOffset`; in a scrolled composer the caret was then
-            // drawn a scroll-offset too high for a few frames on every keystroke.
-            uiView.layoutManager.ensureLayout(for: uiView.textContainer)
-            let usedHeight = uiView.layoutManager.usedRect(for: uiView.textContainer).height
-            let height = min(maxHeight, ceil(usedHeight) + uiView.textContainerInset.top + uiView.textContainerInset.bottom)
+            // Same width as laid out: use UIKit's own content size and don't touch the layout.
+            // Re-measuring with `uiView.sizeThatFits` resizes the text container, which
+            // momentarily shrinks `contentSize` and clamps `contentOffset`, and forcing the
+            // layout manager here moves UIKit's content-size update ahead of its caret update;
+            // either way the caret was drawn on the wrong line for a few frames per keystroke
+            // in a scrolled composer. A programmatic text set lays out in `updateUIView`.
+            let height = min(maxHeight, ceil(uiView.contentSize.height))
             context.coordinator.lastFittedHeight = height
             return CGSize(width: width, height: height)
         }
@@ -136,11 +136,17 @@ private struct UITextViewWrapper: UIViewRepresentable {
             // https://github.com/element-hq/element-x-ios/issues/3369
             _ = textView.layoutManager
             
+            let attributesOnly = textView.attributedText.string == text.string
+            MXLog.info("CARETPROBE updateUIView re-applies attributedText (\(attributesOnly ? "attributes only" : "string differs")) off \(textView.contentOffset.y) sel \(textView.selectedRange.location) len \(text.length)")
+            
             textView.attributedText = text
             
             // Re-apply the default font when setting text for e.g. edits.
             textView.font = font
             textView.textColor = .compound.textPrimary
+            
+            // Lay the new text out now so `sizeThatFits` sees the right content size.
+            textView.layoutIfNeeded()
             
             if text.string.isEmpty {
                 // text cleared, probably because the written text is sent
@@ -171,6 +177,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
                     selectedRange: $selectedRange,
+                    maxHeight: maxHeight,
                     keyHandler: keyHandler,
                     pasteHandler: pasteHandler)
     }
@@ -181,31 +188,29 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         /// The height last returned by `sizeThatFits`, reused for the stacks' width probes.
         var lastFittedHeight: CGFloat?
+        private let maxHeight: CGFloat
         
         private let keyHandler: GenericKeyHandler
         private let pasteHandler: PasteHandler
         
         init(text: Binding<NSAttributedString>,
              selectedRange: Binding<NSRange>,
+             maxHeight: CGFloat,
              keyHandler: @escaping GenericKeyHandler,
              pasteHandler: @escaping PasteHandler) {
             self.text = text
             self.selectedRange = selectedRange
+            self.maxHeight = maxHeight
             self.keyHandler = keyHandler
             self.pasteHandler = pasteHandler
         }
         
-        /// The laid-out text height after the last change, to tell a line-count change from plain typing.
-        private var lastUsedHeight: CGFloat?
-        
         func textViewDidChange(_ textView: UITextView) {
-            // Animated only when the text grows or shrinks a line, so the composer tweens the
-            // layout (the timeline rides along smoothly) instead of popping. Plain typing must not
-            // run inside an animation transaction: every keystroke then re-lays out the field
-            // mid-edit, which is the prime suspect for the caret briefly landing one line up.
-            let usedHeight = textView.layoutManager.usedRect(for: textView.textContainer).height
-            defer { lastUsedHeight = usedHeight }
-            if let lastUsedHeight, lastUsedHeight != usedHeight {
+            // Animated while the field can still grow or shrink, so a line appearing or
+            // going tweens the layout (the timeline rides along smoothly) instead of popping.
+            // At the height cap nothing moves, and the scrolled text view is where animated
+            // transactions have interfered with caret placement, so update plainly there.
+            if textView.bounds.height < maxHeight - 0.5 {
                 withAnimation(.easeOut(duration: 0.1)) {
                     text.wrappedValue = textView.attributedText
                 }
@@ -274,6 +279,8 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     
     private var caretProbe: CADisplayLink?
     private var lastCaretProbe = ""
+    private var caretProbeTicks = 0
+    private var caretProbeMismatchTicks = 0
     
     override func becomeFirstResponder() -> Bool {
         let became = super.becomeFirstResponder()
@@ -292,17 +299,22 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     
     @objc private func caretProbeTick() {
         guard let window, let end = selectedTextRange?.end else { return }
+        caretProbeTicks += 1
         let caret = convert(caretRect(for: end), to: window)
         var cursor = "none"
+        var mismatch = false
         if let cursorView = subviews.first(where: { NSStringFromClass(type(of: $0)) == "UIStandardTextCursorView" }) {
             let frame = convert((cursorView.layer.presentation() ?? cursorView.layer).frame, to: window)
             cursor = String(format: "%.1f,%.1f h%.1f", frame.minX, frame.minY, frame.height)
+            mismatch = abs(frame.minY - caret.minY) > 1 || abs(frame.minX - caret.minX) > 2
         }
+        caretProbeMismatchTicks = mismatch ? caretProbeMismatchTicks + 1 : 0
         let line = String(format: "caret %.1f,%.1f h%.1f | cursor %@ | off %.1f bounds %.1f content %.1f len %d",
                           caret.minX, caret.minY, caret.height, cursor, contentOffset.y, bounds.height, contentSize.height, attributedText.length)
-        if line != lastCaretProbe {
+        // Log on change, and every tick while the cursor disagrees with the caret (capped) so durations are visible.
+        if line != lastCaretProbe || (mismatch && caretProbeMismatchTicks <= 12) {
             lastCaretProbe = line
-            MXLog.info("CARETPROBE \(line)")
+            MXLog.info("CARETPROBE t\(caretProbeTicks) \(mismatch ? "MISMATCH\(caretProbeMismatchTicks) " : "")\(line)")
         }
     }
     
