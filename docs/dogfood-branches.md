@@ -3618,3 +3618,37 @@ My manual notes on the whole rigamarole above:
 - I tried fixing this by instead getting QL to display thumbnails or blurhashes even if the main content hasn't yet downloaded/decrypted-from-cache so worst-case you swipe to a thumbnail/blur. However, this was painful, because QL doesn't seem to have a way to reliably show thumbnails/blurhashes at the same size/shape as the full-res contents (so you have to gen transient blurhashes which are as big as the viewport), and more importantly I couldn't see a way to reliably swap between the thumbnails/blurhashes and full-res image reliably. And for that matter thumbnails & blurhashes don't exist on disk, so you'd have to mess around transitively generating them which feels pretty ugly.
 - So in the end up I gave up and switched to making option 2 work better, with the fairly evil hack of papering over the flicker when QL reloads by taking a UI snapshot and temporarily freezing it over the top as QL restarts.  In practice, this actually works surprisingly well, and seems to have solved things.
 - Finally, there's always a risk that if you swipe too fast you try to view a file which hasn't yet been downloaded/decrypted yet and so you swipe to black - but given it fixes as soon as you stop swiping, this doesn't seem too bad; it's the exception rather than reliably doing it 1 in N times, which just felt crap.
+## Composer caret bouncing one line up while typing (EXI, round 39)
+
+Symptom (recording 2026-08-22 15:29, editing a 12-line message): on most
+keystrokes the green caret is drawn one line above the insertion point (same x,
+one line pitch higher, 1pt taller) for 1-4 frames, then drops back. The text
+itself never moves (whole-screen frame diffs: only the caret and the key
+highlight change). The text view was just over the 250pt height cap (12 x 21pt
+at content size M) so it was scrolling by ~2pt.
+
+Not reproduced in the simulator with the same build (`0dbd64d2a`, composer
+code identical to `7bb7688e7`): a minimal UITextViewWrapper harness
+(`carettest/`, caretRect + cursor-view probe per frame) in fit / over-cap
+regimes with `insertText`, `UIKeyboardImpl addInputString:` and the software
+keyboard; nor real EX in the UI-tests mock room driven by XCUITest through the
+software keyboard (default compose, edit mode, content size M, over-cap, human
+typing pace) - caret y flat in all of them.
+
+Prime suspect on the preview-prefill branch: `textViewDidChange` wraps the
+text binding update in `withAnimation(.easeOut(0.1))` on every keystroke
+(added for the line-growth tween), putting the whole SwiftUI update and the
+representable's re-layout inside an animation transaction mid-edit.
+
+Build 103: animate only when the laid-out text height changes (line added or
+removed; `layoutManager.usedRect` compared with the last change), plain
+binding update otherwise. Plus a temporary per-frame probe while the composer
+is first responder: `CARETPROBE caret x,y h | cursor x,y h | off bounds
+content len` (`MXLog.info`, only on change) and the `setContentOffset`
+override's decisions, to distinguish a wrong `caretRect` (TextKit) from a
+late cursor-view layout (UIKit) if the bounce persists. Strip the probe before
+upstreaming.
+
+Validate: edit or compose a message longer than the composer cap (12+ lines)
+and type a sentence; caret must stay on the insertion line. If it still
+bounces, pull the console log and grep `CARETPROBE` around the keystrokes.

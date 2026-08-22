@@ -173,10 +173,21 @@ private struct UITextViewWrapper: UIViewRepresentable {
             self.pasteHandler = pasteHandler
         }
         
+        /// The laid-out text height after the last change, to tell a line-count change from plain typing.
+        private var lastUsedHeight: CGFloat?
+        
         func textViewDidChange(_ textView: UITextView) {
-            // Animated so the composer growing or shrinking a line tweens the
-            // layout (the timeline rides along smoothly) instead of popping.
-            withAnimation(.easeOut(duration: 0.1)) {
+            // Animated only when the text grows or shrinks a line, so the composer tweens the
+            // layout (the timeline rides along smoothly) instead of popping. Plain typing must not
+            // run inside an animation transaction: every keystroke then re-lays out the field
+            // mid-edit, which is the prime suspect for the caret briefly landing one line up.
+            let usedHeight = textView.layoutManager.usedRect(for: textView.textContainer).height
+            defer { lastUsedHeight = usedHeight }
+            if let lastUsedHeight, lastUsedHeight != usedHeight {
+                withAnimation(.easeOut(duration: 0.1)) {
+                    text.wrappedValue = textView.attributedText
+                }
+            } else {
                 text.wrappedValue = textView.attributedText
             }
         }
@@ -225,10 +236,52 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     /// (content taller than the height cap, or the user dragging) is untouched.
     override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
         if !isTracking, !isDecelerating, contentSize.height <= maxFittingHeight {
+            if contentOffset != .zero {
+                MXLog.info("CARETPROBE setContentOffset \(contentOffset) forced zero (content \(contentSize.height) <= \(maxFittingHeight))")
+            }
             super.setContentOffset(.zero, animated: false)
             return
         }
+        if contentOffset != self.contentOffset {
+            MXLog.info("CARETPROBE setContentOffset \(contentOffset) animated \(animated) (content \(contentSize.height) bounds \(bounds.height))")
+        }
         super.setContentOffset(contentOffset, animated: animated)
+    }
+    
+    // MARK: - Caret probe (temporary, round 39): logs caretRect vs the cursor view per frame while editing.
+    
+    private var caretProbe: CADisplayLink?
+    private var lastCaretProbe = ""
+    
+    override func becomeFirstResponder() -> Bool {
+        let became = super.becomeFirstResponder()
+        if became, caretProbe == nil {
+            caretProbe = CADisplayLink(target: self, selector: #selector(caretProbeTick))
+            caretProbe?.add(to: .main, forMode: .common)
+        }
+        return became
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        caretProbe?.invalidate()
+        caretProbe = nil
+        return super.resignFirstResponder()
+    }
+    
+    @objc private func caretProbeTick() {
+        guard let window, let end = selectedTextRange?.end else { return }
+        let caret = convert(caretRect(for: end), to: window)
+        var cursor = "none"
+        if let cursorView = subviews.first(where: { NSStringFromClass(type(of: $0)) == "UIStandardTextCursorView" }) {
+            let frame = convert((cursorView.layer.presentation() ?? cursorView.layer).frame, to: window)
+            cursor = String(format: "%.1f,%.1f h%.1f", frame.minX, frame.minY, frame.height)
+        }
+        let line = String(format: "caret %.1f,%.1f h%.1f | cursor %@ | off %.1f bounds %.1f content %.1f len %d",
+                          caret.minX, caret.minY, caret.height, cursor, contentOffset.y, bounds.height, contentSize.height, attributedText.length)
+        if line != lastCaretProbe {
+            lastCaretProbe = line
+            MXLog.info("CARETPROBE \(line)")
+        }
     }
     
     init(timelineContext: TimelineViewModel.Context?,
