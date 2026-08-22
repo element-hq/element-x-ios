@@ -259,6 +259,14 @@ class TimelineMediaPreviewController: QLPreviewController {
             DispatchQueue.main.async { [weak self] in self?.releasePlaceholderClamp() }
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
+            // A page QuickLook built as "loading more" whose index now holds a media (items the
+            // padding absorbed since the build): re-read it rather than treat it as the edge.
+            if case .paginating = loadingItem.state,
+               context.viewState.dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
+                MXLog.info("Media viewer: stale placeholder page at index \(currentPreviewItemIndex), refreshing")
+                DispatchQueue.main.async { [weak self] in self?.refreshCurrentPreviewItem() }
+                return
+            }
             switch loadingItem.state {
             case .paginating(let direction):
                 DispatchQueue.main.async { [weak self] in self?.clampToPlaceholder(direction) }
@@ -356,8 +364,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                 if let edgeIndex = dataSource.previewIndex(of: edgeID) {
                     let target = direction == .backwards ? edgeIndex - 1 : edgeIndex + 1
                     MXLog.info("Media viewer: items arrived beyond the \(direction) placeholder, stepping to index \(target)")
-                    currentPreviewItemIndex = target
-                    reloadDataTrackingBlanks()
+                    moveToIndexAndReload(target)
                     lastKnownItemCount = dataSource.numberOfPreviewItems(in: self)
                     lastKnownFirstIndex = dataSource.firstPreviewItemIndex
                     return
@@ -379,14 +386,10 @@ class TimelineMediaPreviewController: QLPreviewController {
             let currentItemID = currentPreviewItem == nil ? dataSource.currentItem.mediaItem?.id : (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id
             let newIndex = currentItemID.flatMap { dataSource.previewIndex(of: $0) }
             MXLog.info("Media viewer: item count \(previousCount) -> \(count), first index \(lastKnownFirstIndex) -> \(firstIndex), current index \(currentPreviewItemIndex) -> \(newIndex.map(String.init) ?? "shift \(firstIndex - lastKnownFirstIndex)")")
-            if let newIndex {
-                currentPreviewItemIndex = newIndex
-            } else {
-                // On a placeholder page: follow the padding edge it belongs to, staying in range
-                // (the placeholder vanishes when its side reaches the end: land on the edge item).
-                currentPreviewItemIndex = min(max(currentPreviewItemIndex + firstIndex - lastKnownFirstIndex, 0), count - 1)
-            }
-            reloadDataTrackingBlanks()
+            // On a placeholder page: follow the padding edge it belongs to, staying in range
+            // (the placeholder vanishes when its side reaches the end: land on the edge item).
+            let target = newIndex ?? min(max(currentPreviewItemIndex + firstIndex - lastKnownFirstIndex, 0), count - 1)
+            moveToIndexAndReload(target)
         }
         lastKnownItemCount = count
         lastKnownFirstIndex = firstIndex
@@ -686,6 +689,20 @@ class TimelineMediaPreviewController: QLPreviewController {
             guard let self, (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
             MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading")
             reloadDataTrackingBlanks()
+        }
+    }
+    
+    /// Moves QuickLook to `index` and reloads. QuickLook validates an index write against the
+    /// count it last read, so an index beyond it (the count just grew: padding restored, items
+    /// arrived) is set after the reload, not before (observed: the write silently dropped, the
+    /// viewer left on the placeholder until the timeline's start).
+    private func moveToIndexAndReload(_ index: Int) {
+        if index < (lastKnownItemCount ?? 0) {
+            currentPreviewItemIndex = index
+            reloadDataTrackingBlanks()
+        } else {
+            reloadDataTrackingBlanks()
+            currentPreviewItemIndex = index
         }
     }
     
