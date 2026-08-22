@@ -75,6 +75,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 guard let self else { return }
                 state.dataSource.updatePreviewItems(itemViewStates: itemViewStates)
                 scheduleUTDExpiry()
+                // The pending UTDs this update resolved may have been holding the pagination back.
+                paginateIfNeeded()
                 // Opened from the room screen, the media timeline is still loading when the current
                 // item is first shown, so its neighbours only become known (and preloadable) now.
                 if let mediaItem = state.currentItem.mediaItem {
