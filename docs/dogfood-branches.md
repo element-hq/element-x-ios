@@ -3604,3 +3604,17 @@ Still an inference rather than a direct observation: that QuickLook reads
 SwipeTest harness (log every `previewItemURL` read by index in `ProxyItem`, run
 on device) would show exactly which indices are read at open, on swipe and on
 refresh/reload.
+
+## Media view - Matthew's notes
+
+My manual notes on the whole rigamarole above:
+
+- the core problem is that QL materialises n-2 and n+2 images from its file list, and if the file doesn't exist at the point it attempts to preload them, it caches the negative and never tries again.
+- refreshCurrentPreviewItem() doesn't fix that.
+- therefore, if you hit a race with pulling an image out of the cache or downloading it (or QL wasn't told the URL when it was instantiated), you end up "swiping into black"
+- the two fixes are either to then:
+    1. reload the whole of QL if you ever swipe into black in order to force it to refresh and load the missing image (which is how my branch was previously working, but meant that you'd be guaranteed to hit this whenever you hit the end of the current range of file URLs you handed QL, meaning one in X swipes would always swipe to black.)
+    2. spot when media which is n±2 of your current one has not yet loaded, and refresh QL when it does, so that rather than swiping into black you swipe into the now-loaded content.  However, this causes a nasty flicker to black for a few frames while QL reloads, which is pretty unpleasant.
+- I tried fixing this by instead getting QL to display thumbnails or blurhashes even if the main content hasn't yet downloaded/decrypted-from-cache so worst-case you swipe to a thumbnail/blur. However, this was painful, because QL doesn't seem to have a way to reliably show thumbnails/blurhashes at the same size/shape as the full-res contents (so you have to gen transient blurhashes which are as big as the viewport), and more importantly I couldn't see a way to reliably swap between the thumbnails/blurhashes and full-res image reliably. And for that matter thumbnails & blurhashes don't exist on disk, so you'd have to mess around transitively generating them which feels pretty ugly.
+- So in the end up I gave up and switched to making option 2 work better, with the fairly evil hack of papering over the flicker when QL reloads by taking a UI snapshot and temporarily freezing it over the top as QL restarts.  In practice, this actually works surprisingly well, and seems to have solved things.
+- Finally, there's always a risk that if you swipe too fast you try to view a file which hasn't yet been downloaded/decrypted yet and so you swipe to black - but given it fixes as soon as you stop swiping, this doesn't seem too bad; it's the exception rather than reliably doing it 1 in N times, which just felt crap.
