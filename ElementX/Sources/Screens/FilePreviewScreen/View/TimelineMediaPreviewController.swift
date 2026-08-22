@@ -257,26 +257,31 @@ class TimelineMediaPreviewController: QLPreviewController {
         // which toggled clamp/release forever. Defer them to the next run-loop turn. And while
         // a move is mid-flight (reload done, index set pending) the reload's own index callback
         // must not re-clamp the page being moved away from (observed: the move then dropped).
-        let isMoving = pendingMoveIndex != nil
+        // The page the reload of a move passes through isn't anyone's current item: handling it
+        // (clamp, the "loading" state's spinner over the cover) is what the user saw as a spinner
+        // over the previous media. The move's landing re-runs this.
+        guard pendingMoveIndex == nil else { return }
         if let previewItem = currentPreviewItem as? TimelineMediaPreviewItem.Media {
-            if !isMoving {
-                DispatchQueue.main.async { [weak self] in self?.releasePlaceholderClamp() }
-            }
+            DispatchQueue.main.async { [weak self] in self?.releasePlaceholderClamp() }
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
             // A page QuickLook built as "loading more" whose index now holds a media (items the
-            // padding absorbed since the build): re-read it rather than treat it as the edge.
-            if !isMoving, case .paginating = loadingItem.state,
+            // padding absorbed since the build): rebuild it rather than treat it as the edge. Once
+            // the pages have stopped moving: refreshing mid-swipe wedges QuickLook (the stuck
+            // blank video), and a covered reload is what reliably rebuilds a page on device.
+            if case .paginating = loadingItem.state,
                context.viewState.dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
-                MXLog.info("Media viewer: stale placeholder page at index \(currentPreviewItemIndex), refreshing")
-                DispatchQueue.main.async { [weak self] in self?.refreshCurrentPreviewItem() }
+                MXLog.info("Media viewer: stale placeholder page at index \(currentPreviewItemIndex), rebuilding when resting")
+                let index = currentPreviewItemIndex
+                Task { [weak self] in
+                    guard await self?.waitUntilResting(atIndex: index) == true else { return }
+                    self?.reloadDataTrackingBlanks()
+                }
                 return
             }
             switch loadingItem.state {
             case .paginating(let direction):
-                if !isMoving {
-                    DispatchQueue.main.async { [weak self] in self?.clampToPlaceholder(direction) }
-                }
+                DispatchQueue.main.async { [weak self] in self?.clampToPlaceholder(direction) }
                 context.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
             case .timelineStart:
                 Task { await returnToIndex(context.viewState.dataSource.firstPreviewItemIndex) }
@@ -703,6 +708,26 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// count it last read, so an index beyond it (the count just grew: padding restored, items
     /// arrived) is set after the reload, not before (observed: the write silently dropped, the
     /// viewer left on the placeholder until the timeline's start).
+    /// Waits until the pages have stopped moving while still on `index` (same test as the arrival
+    /// check: not dragging or decelerating, offset unchanged for a few polls). False if swiped on.
+    private func waitUntilResting(atIndex index: Int) async -> Bool {
+        var restingOffset: CGFloat?
+        var stillPolls = 0
+        for _ in 0..<60 {
+            guard currentPreviewItemIndex == index else { return false }
+            if let scrollView = pageScrollView {
+                let isStill = !scrollView.isDragging && !scrollView.isDecelerating && scrollView.contentOffset.x == restingOffset
+                stillPolls = isStill ? stillPolls + 1 : 0
+                restingOffset = scrollView.contentOffset.x
+            } else {
+                stillPolls += 1
+            }
+            if stillPolls >= 4 { return true }
+            try? await Task.sleep(for: .milliseconds(50))
+        }
+        return false
+    }
+    
     /// The index a reload-then-set move is about to land on (see `moveToIndexAndReload`).
     private var pendingMoveIndex: Int?
     
