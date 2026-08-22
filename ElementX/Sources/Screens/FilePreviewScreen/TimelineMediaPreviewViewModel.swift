@@ -172,7 +172,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 // Join a preload already in flight for this item rather than downloading it a second
                 // time. Started before the neighbours' loads so it keeps the head download slot.
                 load = preloads[mediaItem.id] ?? Task { [mediaProvider] in
-                    await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename)
+                    await Self.demoDelayed { await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) }
                 }
             }
             
@@ -299,7 +299,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         let itemID = item.id
         preloads[itemID] = Task { [mediaProvider] in
             // Failures aren't recorded here: the load on display retries and reports them.
-            let result = await mediaProvider.loadFileFromSource(source, filename: item.filename)
+            let result = await Self.demoDelayed { await mediaProvider.loadFileFromSource(source, filename: item.filename) }
             preloads[itemID] = nil
             if case .success(let handle) = result, item.fileHandle == nil {
                 item.fileHandle = handle
@@ -423,6 +423,18 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     // MARK: - Thumbnail placeholder
+    
+    /// DEMO, STRIP: holds every full-size load back so the thumbnail placeholder and its swap can
+    /// be seen even for cached media. nil = off.
+    private static let fullSizeDemoDelay: Duration? = .seconds(2)
+    
+    private static func demoDelayed(_ load: () async -> Result<MediaFileHandleProxy, MediaProviderError>) async -> Result<MediaFileHandleProxy, MediaProviderError> {
+        let value = await load()
+        if let fullSizeDemoDelay {
+            try? await Task.sleep(for: fullSizeDemoDelay)
+        }
+        return value
+    }
     
     /// A temp directory for the placeholder files, removed wholesale when the view model goes.
     private let placeholderDirectory = FileManager.default.temporaryDirectory
