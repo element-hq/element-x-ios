@@ -141,12 +141,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
             // https://github.com/element-hq/element-x-ios/issues/3369
             _ = textView.layoutManager
             
-            let attributesOnly = textView.attributedText.string == text.string
-            var viewKeys = Set<String>(), bindingKeys = Set<String>()
-            textView.attributedText.enumerateAttributes(in: NSRange(location: 0, length: textView.attributedText.length)) { attributes, _, _ in attributes.keys.forEach { viewKeys.insert($0.rawValue) } }
-            text.enumerateAttributes(in: NSRange(location: 0, length: text.length)) { attributes, _, _ in attributes.keys.forEach { bindingKeys.insert($0.rawValue) } }
-            MXLog.info("CARETPROBE updateUIView re-applies attributedText (\(attributesOnly ? "attributes only" : "string differs")) off \(textView.contentOffset.y) sel \(textView.selectedRange.location) len \(text.length) viewKeys \(viewKeys.sorted()) bindingKeys \(bindingKeys.sorted())")
-            
             textView.attributedText = text
             context.coordinator.lastText = text
             
@@ -276,59 +270,10 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     /// (content taller than the height cap, or the user dragging) is untouched.
     override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
         if !isTracking, !isDecelerating, contentSize.height <= maxFittingHeight {
-            if contentOffset != .zero {
-                MXLog.info("CARETPROBE setContentOffset \(contentOffset) forced zero (content \(contentSize.height) <= \(maxFittingHeight))")
-            }
             super.setContentOffset(.zero, animated: false)
             return
         }
-        if contentOffset != self.contentOffset {
-            MXLog.info("CARETPROBE setContentOffset \(contentOffset) animated \(animated) (content \(contentSize.height) bounds \(bounds.height))")
-        }
         super.setContentOffset(contentOffset, animated: animated)
-    }
-    
-    // MARK: - Caret probe (temporary, round 39): logs caretRect vs the cursor view per frame while editing.
-    
-    private var caretProbe: CADisplayLink?
-    private var lastCaretProbe = ""
-    private var caretProbeTicks = 0
-    private var caretProbeMismatchTicks = 0
-    
-    override func becomeFirstResponder() -> Bool {
-        let became = super.becomeFirstResponder()
-        if became, caretProbe == nil {
-            caretProbe = CADisplayLink(target: self, selector: #selector(caretProbeTick))
-            caretProbe?.add(to: .main, forMode: .common)
-        }
-        return became
-    }
-    
-    override func resignFirstResponder() -> Bool {
-        caretProbe?.invalidate()
-        caretProbe = nil
-        return super.resignFirstResponder()
-    }
-    
-    @objc private func caretProbeTick() {
-        guard let window, let end = selectedTextRange?.end else { return }
-        caretProbeTicks += 1
-        let caret = convert(caretRect(for: end), to: window)
-        var cursor = "none"
-        var mismatch = false
-        if let cursorView = subviews.first(where: { NSStringFromClass(type(of: $0)) == "UIStandardTextCursorView" }) {
-            let frame = convert((cursorView.layer.presentation() ?? cursorView.layer).frame, to: window)
-            cursor = String(format: "%.1f,%.1f h%.1f", frame.minX, frame.minY, frame.height)
-            mismatch = abs(frame.minY - caret.minY) > 1 || abs(frame.minX - caret.minX) > 2
-        }
-        caretProbeMismatchTicks = mismatch ? caretProbeMismatchTicks + 1 : 0
-        let line = String(format: "caret %.1f,%.1f h%.1f | cursor %@ | off %.1f bounds %.1f content %.1f len %d",
-                          caret.minX, caret.minY, caret.height, cursor, contentOffset.y, bounds.height, contentSize.height, attributedText.length)
-        // Log on change, and every tick while the cursor disagrees with the caret (capped) so durations are visible.
-        if line != lastCaretProbe || (mismatch && caretProbeMismatchTicks <= 12) {
-            lastCaretProbe = line
-            MXLog.info("CARETPROBE t\(caretProbeTicks) \(mismatch ? "MISMATCH\(caretProbeMismatchTicks) " : "")\(line)")
-        }
     }
     
     init(timelineContext: TimelineViewModel.Context?,
