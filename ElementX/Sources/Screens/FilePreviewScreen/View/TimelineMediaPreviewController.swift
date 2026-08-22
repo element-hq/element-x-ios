@@ -252,13 +252,16 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func loadCurrentItem() {
         headerHostingController.view.sizeToFit() // Resizing isn't automatic in the toolbar 😒
         
+        // The clamp transitions set the index and reload; done from inside this index
+        // observation QuickLook drops the index write (observed: the set logged as a no-op),
+        // which toggled clamp/release forever. Defer them to the next run-loop turn.
         if let previewItem = currentPreviewItem as? TimelineMediaPreviewItem.Media {
-            releasePlaceholderClamp()
+            DispatchQueue.main.async { [weak self] in self?.releasePlaceholderClamp() }
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
             switch loadingItem.state {
             case .paginating(let direction):
-                clampToPlaceholder(direction)
+                DispatchQueue.main.async { [weak self] in self?.clampToPlaceholder(direction) }
                 context.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
             case .timelineStart:
                 Task { await returnToIndex(context.viewState.dataSource.firstPreviewItemIndex) }
@@ -290,8 +293,25 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     /// The user has paged onto a "loading more" placeholder: make it QuickLook's content edge on
     /// that side (one placeholder page, native bounce beyond it) rather than one of a hundred.
+    /// Clamp transitions in the last second: a toggling loop (clamp, release, clamp…) is stopped
+    /// rather than left to starve the main thread, whatever new way QuickLook finds to cause one.
+    private var clampTransitionTimes = [ContinuousClock.Instant]()
+    private func recordClampTransition() -> Bool {
+        let now = ContinuousClock.now
+        clampTransitionTimes = clampTransitionTimes.filter { now - $0 < .seconds(1) } + [now]
+        if clampTransitionTimes.count > 4 {
+            MXLog.error("Media viewer: placeholder clamp is toggling, leaving it alone")
+            return false
+        }
+        return true
+    }
+    
     private func clampToPlaceholder(_ direction: PaginationDirection) {
         let dataSource = context.viewState.dataSource
+        // Still on that placeholder? (Deferred from the index change; the pages may have moved on.)
+        guard let placeholder = currentPreviewItem as? TimelineMediaPreviewItem.Loading,
+              case .paginating(let current) = placeholder.state, current == direction,
+              recordClampTransition() else { return }
         switch direction {
         case .backwards:
             guard !dataSource.isClampedToBackwardPlaceholder else { return }
@@ -309,7 +329,9 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// Back on a media page: the padding returns so pagination keeps the indices stable again.
     private func releasePlaceholderClamp() {
         let dataSource = context.viewState.dataSource
-        guard dataSource.isClampedToBackwardPlaceholder || dataSource.isClampedToForwardPlaceholder else { return }
+        guard dataSource.isClampedToBackwardPlaceholder || dataSource.isClampedToForwardPlaceholder,
+              currentPreviewItem is TimelineMediaPreviewItem.Media,
+              recordClampTransition() else { return }
         dataSource.isClampedToBackwardPlaceholder = false
         dataSource.isClampedToForwardPlaceholder = false
         anchoredEdgeItemID = nil
