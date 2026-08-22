@@ -254,14 +254,19 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         // The clamp transitions set the index and reload; done from inside this index
         // observation QuickLook drops the index write (observed: the set logged as a no-op),
-        // which toggled clamp/release forever. Defer them to the next run-loop turn.
+        // which toggled clamp/release forever. Defer them to the next run-loop turn. And while
+        // a move is mid-flight (reload done, index set pending) the reload's own index callback
+        // must not re-clamp the page being moved away from (observed: the move then dropped).
+        let isMoving = pendingMoveIndex != nil
         if let previewItem = currentPreviewItem as? TimelineMediaPreviewItem.Media {
-            DispatchQueue.main.async { [weak self] in self?.releasePlaceholderClamp() }
+            if !isMoving {
+                DispatchQueue.main.async { [weak self] in self?.releasePlaceholderClamp() }
+            }
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
             // A page QuickLook built as "loading more" whose index now holds a media (items the
             // padding absorbed since the build): re-read it rather than treat it as the edge.
-            if case .paginating = loadingItem.state,
+            if !isMoving, case .paginating = loadingItem.state,
                context.viewState.dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
                 MXLog.info("Media viewer: stale placeholder page at index \(currentPreviewItemIndex), refreshing")
                 DispatchQueue.main.async { [weak self] in self?.refreshCurrentPreviewItem() }
@@ -269,7 +274,9 @@ class TimelineMediaPreviewController: QLPreviewController {
             }
             switch loadingItem.state {
             case .paginating(let direction):
-                DispatchQueue.main.async { [weak self] in self?.clampToPlaceholder(direction) }
+                if !isMoving {
+                    DispatchQueue.main.async { [weak self] in self?.clampToPlaceholder(direction) }
+                }
                 context.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
             case .timelineStart:
                 Task { await returnToIndex(context.viewState.dataSource.firstPreviewItemIndex) }
@@ -696,6 +703,9 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// count it last read, so an index beyond it (the count just grew: padding restored, items
     /// arrived) is set after the reload, not before (observed: the write silently dropped, the
     /// viewer left on the placeholder until the timeline's start).
+    /// The index a reload-then-set move is about to land on (see `moveToIndexAndReload`).
+    private var pendingMoveIndex: Int?
+    
     private func moveToIndexAndReload(_ index: Int) {
         if index < (lastKnownItemCount ?? 0) {
             currentPreviewItemIndex = index
@@ -703,11 +713,15 @@ class TimelineMediaPreviewController: QLPreviewController {
         } else {
             // Not in the same turn as the reload: QuickLook's page queue is left unable to page
             // either way (observed). Same remedy as returnToIndex; the reload cover hides the wait.
+            pendingMoveIndex = index
             reloadDataTrackingBlanks()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
                 guard let self else { return }
                 MXLog.info("Media viewer: moving to index \(index) after the reload")
                 currentPreviewItemIndex = index
+                pendingMoveIndex = nil
+                // The landing page's own handling (clamp/release) was skipped while moving; redo it.
+                loadCurrentItem()
             }
         }
     }
