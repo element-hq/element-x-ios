@@ -3652,3 +3652,28 @@ upstreaming.
 Validate: edit or compose a message longer than the composer cap (12+ lines)
 and type a sentence; caret must stay on the insertion line. If it still
 bounces, pull the console log and grep `CARETPROBE` around the keystrokes.
+
+Round 39, second recording (editing the MIDDLE of a long message, deleting):
+caret drawn up to ~5 lines above for 3-6 frames per keystroke, sometimes off
+the top of the field, later one line; text static. The displacement equals
+the field's scroll offset, not a line count. Root cause found with the
+`carettest` harness once the field was put in an HStack like EX's: on every
+layout pass SwiftUI's stack probes the field with width 0, infinity and the
+real width, and each `UITextView.sizeThatFits` resizes the text container,
+which momentarily shrinks `contentSize`; UIKit clamps `contentOffset` (e.g.
+146.7 -> 111) and the text view restores it a moment later. The cursor gets
+laid out during that window and sits a scroll-offset too high until the next
+layout pass. Upstream has the same measurement code; what makes it visible is
+a scrolled composer (content over the 250pt cap), common when editing long
+messages. Neither the keystroke animation nor the `setContentOffset`
+override nor an unbounded measuring height changes the count (A/B in the
+harness: ~13 transient offset sets per keystroke in all of them).
+
+Build 104 (`1d50e73bc`): answer the 0/infinity width probes from the cached
+height, and for the same width read the height off the live
+`layoutManager.usedRect` (no container resize); only a width change still
+measures. Harness: transient offset sets 378 -> 0 over 37 keystrokes, height
+sequences identical to the measuring path for growth, trailing newlines and
+empty text. Build 103's line-count-only animation stays (fewer animated
+transactions, growth still tweens). CARETPROBE logging still in; strip once
+validated. Upstream candidate (the measurement path is upstream code).
