@@ -3677,3 +3677,27 @@ sequences identical to the measuring path for growth, trailing newlines and
 empty text. Build 103's line-count-only animation stays (fewer animated
 transactions, growth still tweens). CARETPROBE logging still in; strip once
 validated. Upstream candidate (the measurement path is upstream code).
+
+Build 104 feedback: caret bounces one line DOWN for a few frames when deleting
+inserted linefeeds in a scrolled composer; separately the caret sometimes hops
+to the end and the scroll offset jumps while deleting (not reliably
+reproducible). Phone probe log (build 104): offset overshoot-and-return with
+no text change (212->288, 314->397->329), one keystroke moving the caret six
+lines, one-line-tall frames with the full text at edit entry (pre-existing).
+Harness: deleting a line in a bottom-scrolled field clamps contentOffset the
+moment contentSize shrinks; build 104's forced `ensureLayout`/`usedRect` in
+`sizeThatFits` and in `textViewDidChange` (line-count animation gate) moved
+that update ahead of UIKit's own caret update, so the cursor sat at its old
+content position (one line below on screen) until the next pass.
+
+Build 105 (`4f44e42c7`): no forced text layout while typing at all.
+`sizeThatFits` reads UIKit's `contentSize` for the current width (a
+programmatic text set calls `layoutIfNeeded` in `updateUIView` so the first
+measure is right), the 0/infinity probes use the cached height, a width change
+still measures. The binding update animates only while the field is under the
+250pt cap (growth/shrink tween kept; at the cap nothing moves). Harness:
+identical height sequences, zero offset transients. Probe now logs every tick
+while cursor and caret disagree (`MISMATCHn`) and every `attributedText`
+re-apply in `updateUIView` (the path that parks the caret at the end and
+resets scroll), to catch the hop/scroll-jump reports. Upstream candidate once
+validated; strip the probe.
