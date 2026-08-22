@@ -3798,3 +3798,38 @@ fallback covers a no), and that the upscaled placeholder lays out exactly
 like the media for portrait/landscape/small images. Scope: images and videos
 (a video's poster thumbnail, then the player), current item only; no
 blurhash fallback when the thumbnail isn't cached.
+
+## Round 41 follow-ups: viewer opened on the wrong item; placeholders only for media that has to download
+
+**Wrong item (builds 109-112, user: "tapping N-1 opens ~N-10").** Caught in
+the build-111 log: the viewer opened on the tapped `$AjbFg` at QuickLook index
+100, the media timeline's first `Reset(30)` arrived, and `handleUpdatedItems`
+shifted the index by -25 onto `$LuhgO`. The round-36 padding-collapse code
+moved QuickLook's index by the change in the data source's first index
+whenever the item count changed; but a prepend the padding absorbs (that
+first reset inserts the items older than the tapped one) moves the first
+index without moving any page, so the shift was wrong whenever a count change
+(the forward padding collapsing at the live end) coincided with it. Build 112
+made it systematic by seeding the baseline. Fix `2eca4747a` (build 113): on a
+count change, re-derive the current item's absolute index from the data
+source (`previewIndex(of:)`: array index + effective leading padding),
+falling back to the edge-following shift only on placeholder pages; the
+baseline is seeded at build time. Pre-existing since round 36 (native
+bounce); the new early reloads only made it visible. Logs: `item count A -> B,
+… current index X -> Y`, `index i -> item`, `reloadData (covered:) at index`.
+
+**Placeholders only when the media isn't cached (user rule).** Whether the
+file is in the SDK's media store can't be known without an async store read,
+so: the initial item's load starts at view model init, the QuickLook
+presentation (`PreviewHostingController.viewDidAppear`) awaits the view
+model's `initialPresentationGate` (load landed or 150ms), and only a load
+still outstanding after that grace gets the placeholder (rendered
+synchronously for the initial item so the first page is built from it;
+async for swiped-to items and preload neighbours, which go through the
+existing `.itemLoaded` refresh). Cached media opens straight to the file, no
+spinner; uncached opens ≤150ms later on the thumbnail. Neighbours that have
+to download get the thumbnail too, so a swipe lands on it.
+
+Also in build 113: `TouchDebug` still logs the active-recogniser line from
+round 40. Validate: tapping any item opens that item; uncached images open on
+the thumbnail and sharpen in place; cached ones open directly.
