@@ -3719,3 +3719,8 @@ pushed into or applied from the binding and `updateUIView` only applies a
 binding that differs from that (edit/draft load, pill insertion, clear on
 send, formatting toggle still apply). Upstream candidate; the probe line
 now lists the attribute keys on both sides for the report.
+
+Build 106 USER-VALIDATED ("totally fixed"). Build 107 (`6f0cf8c50`) strips
+the CARETPROBE lines; behaviour unchanged. Upstream candidates from this
+round: the binding re-apply guard (`e6a4137e0`, the bug) and not re-measuring
+the live text view on every layout pass (`1d50e73bc`/`4f44e42c7`).
