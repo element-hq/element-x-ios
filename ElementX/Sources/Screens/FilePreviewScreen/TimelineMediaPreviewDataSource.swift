@@ -47,6 +47,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     /// Media with an unresolved timeline gap between them and the next newer media: a backfill
     /// can land older items before the ones in between, so stepping onto them would skip those.
     private(set) var itemIDsWithGapOnNewerSide: Set<MediaPreviewItemID> = []
+    private var lastLoggedShape = ""
     
     private static func itemIDsWithGapOnNewerSide(in itemViewStates: [RoomTimelineItemViewState],
                                                   allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?) -> Set<MediaPreviewItemID> {
@@ -221,6 +222,21 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         
         previewItems = newItems
         itemIDsWithGapOnNewerSide = Self.itemIDsWithGapOnNewerSide(in: itemViewStates, allowedGalleryItemTypes: allowedGalleryItemTypes)
+        // DIAG: the timeline's shape, oldest first (M media, G gap, P pagination indicator, S start, D separator, o other).
+        let shape = itemViewStates.map { state -> String in
+            switch state.type {
+            case .image, .video, .audio, .file, .gallery: "M"
+            case .gap: "G"
+            case .paginationIndicator: "P"
+            case .timelineStart: "S"
+            case .separator: "D"
+            default: "o"
+            }
+        }.joined()
+        if shape != lastLoggedShape {
+            lastLoggedShape = shape
+            MXLog.info("Media viewer: timeline shape \(shape), gapped: \(itemIDsWithGapOnNewerSide.count)")
+        }
         
         if hasPaginated {
             previewItemsPaginationPublisher.send()
