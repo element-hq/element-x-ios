@@ -355,7 +355,8 @@ enum TimelineMediaPreviewItem: Equatable {
         
         private func updatePreviewItemValues() {
             _previewItemURL.withLock { $0 = fileHandle?.url ?? placeholderURL }
-            _previewItemTitle.withLock { $0 = fileHandle == nil ? " " : filename } // Don't show any background text until the file is ready.
+            // No background text until there's something (the file or its placeholder) to show it under.
+            _previewItemTitle.withLock { $0 = fileHandle != nil || placeholderURL != nil ? filename : " " }
         }
         
         // MARK: Event details

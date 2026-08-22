@@ -172,7 +172,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 // Join a preload already in flight for this item rather than downloading it a second
                 // time. Started before the neighbours' loads so it keeps the head download slot.
                 load = preloads[mediaItem.id] ?? Task { [mediaProvider] in
-                    await Self.demoDelayed { await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) }
+                    await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename)
                 }
             }
             
@@ -299,7 +299,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         let itemID = item.id
         preloads[itemID] = Task { [mediaProvider] in
             // Failures aren't recorded here: the load on display retries and reports them.
-            let result = await Self.demoDelayed { await mediaProvider.loadFileFromSource(source, filename: item.filename) }
+            let result = await mediaProvider.loadFileFromSource(source, filename: item.filename)
             preloads[itemID] = nil
             if case .success(let handle) = result, item.fileHandle == nil {
                 item.fileHandle = handle
@@ -424,18 +424,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     // MARK: - Thumbnail placeholder
     
-    /// DEMO, STRIP: holds every full-size load back so the thumbnail placeholder and its swap can
-    /// be seen even for cached media. nil = off.
-    private static let fullSizeDemoDelay: Duration? = .seconds(2)
-    
-    private static func demoDelayed(_ load: () async -> Result<MediaFileHandleProxy, MediaProviderError>) async -> Result<MediaFileHandleProxy, MediaProviderError> {
-        let value = await load()
-        if let fullSizeDemoDelay {
-            try? await Task.sleep(for: fullSizeDemoDelay)
-        }
-        return value
-    }
-    
     /// A temp directory for the placeholder files, removed wholesale when the view model goes.
     private let placeholderDirectory = FileManager.default.temporaryDirectory
         .appendingPathComponent("media-preview-placeholders-\(UUID().uuidString)")
@@ -462,7 +450,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             let written = await Task.detached(priority: .userInitiated) {
                 Self.writePlaceholder(thumbnail, size: size, to: url, in: directory)
             }.value
-            guard written, let self, item.fileHandle == nil else { return }
+            guard written, let self, item.fileHandle == nil, item.placeholderURL == nil else { return }
             item.placeholderURL = url
             MXLog.info("Media viewer: placeholder for \(item.id) \(Int(size.width))x\(Int(size.height))")
             state.previewControllerDriver.send(.itemLoaded(item.id))
@@ -472,7 +460,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// How long a media load gets before its thumbnail placeholder is made: whether the media is
     /// already in the cache can't be known without an async store read, and a cached load lands
     /// within this, so only media that actually has to download gets (and briefly shows) a placeholder.
-    private static let placeholderGrace: Duration = .milliseconds(150)
+    private static let placeholderGrace: Duration = .milliseconds(300)
     
     /// Completes once the initial item's file has loaded or `placeholderGrace` has passed, with the
     /// placeholder written in the latter case. The preview is presented after it, so QuickLook
@@ -486,20 +474,27 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
               contentScannerService == nil else { return }
         preload(item, source: source)
         initialPresentationGate = Task { [weak self] in
+            // Prepared alongside the grace wait rather than after it, so it adds nothing to the
+            // presentation (a wasted temp file if the media arrives in time; cleaned up with the rest).
+            let placeholder = Task { [weak self] () -> (URL, CGSize)? in
+                guard let self, let (thumbnail, size, url) = await placeholderJob(for: item) else { return nil }
+                let directory = placeholderDirectory
+                let written = await Task.detached(priority: .userInitiated) {
+                    Self.writePlaceholder(thumbnail, size: size, to: url, in: directory)
+                }.value
+                return written ? (url, size) : nil
+            }
             await self?.awaitPlaceholderGrace(for: item)
-            guard let self, item.fileHandle == nil else {
+            guard item.fileHandle == nil else {
                 MXLog.info("Media viewer: initial item loaded within the grace period")
                 return
             }
-            guard let (thumbnail, size, url) = await placeholderJob(for: item), item.fileHandle == nil else {
+            guard let (url, size) = await placeholder.value, item.fileHandle == nil, item.placeholderURL == nil else {
                 MXLog.info("Media viewer: no thumbnail for the initial item, no placeholder")
                 return
             }
-            // Synchronous (a few tens of ms): the presentation is waiting on it.
-            if Self.writePlaceholder(thumbnail, size: size, to: url, in: placeholderDirectory) {
-                item.placeholderURL = url
-                MXLog.info("Media viewer: placeholder for the initial item \(Int(size.width))x\(Int(size.height))")
-            }
+            item.placeholderURL = url
+            MXLog.info("Media viewer: placeholder for the initial item \(Int(size.width))x\(Int(size.height))")
         }
     }
     
@@ -525,6 +520,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     /// What's needed to render an item's placeholder, or nil when it doesn't get one.
     private func placeholderJob(for item: TimelineMediaPreviewItem.Media) async -> (UIImage, CGSize, URL)? {
+        // Videos too: a poster (with the title saying it is loading) beats a black page.
         guard contentScannerService == nil, item.kind != .file, item.fileHandle == nil, item.placeholderURL == nil,
               let thumbnail = await thumbnail(for: item) else { return nil }
         let size = Self.placeholderSize(mediaSize: item.mediaSize,

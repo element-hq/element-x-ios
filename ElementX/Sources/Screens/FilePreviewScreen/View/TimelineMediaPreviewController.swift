@@ -565,9 +565,11 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// rebuilt page has content again. QuickLook empties the current page synchronously and
     /// repopulates it ~20ms (image) to ~100ms (video) later, so the signal is a new content
     /// view under the centre of the screen.
-    private func coverReload(_ reload: () -> Void) {
+    /// `completion` says whether the rebuilt page was detected.
+    private func coverReload(_ reload: () -> Void, completion: ((Bool) -> Void)? = nil) {
         reloadCoverView?.removeFromSuperview()
         let previousContent = renderedPageContentView
+        let previousImage = (previousContent as? UIImageView)?.image
         if let pageScrollView, let snapshot = pageScrollView.snapshotView(afterScreenUpdates: false) {
             snapshot.frame = pageScrollView.frame
             snapshot.isUserInteractionEnabled = false
@@ -579,7 +581,8 @@ class TimelineMediaPreviewController: QLPreviewController {
             let started = ContinuousClock.now
             var rendered = false
             while let self, reloadCoverView != nil, ContinuousClock.now - started < Self.reloadCoverTimeout {
-                if let content = renderedPageContentView, content !== previousContent {
+                if let content = renderedPageContentView,
+                   content !== previousContent || (content as? UIImageView)?.image !== previousImage {
                     rendered = true
                     break
                 }
@@ -587,6 +590,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             }
             MXLog.info("Media viewer: reload cover down after \(ContinuousClock.now - started), rebuilt page \(rendered ? "rendered" : "not detected")")
             self?.removeReloadCover(animated: false)
+            completion?(rendered)
         }
     }
     
@@ -694,23 +698,20 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// page is rebuilt behind a cover instead.
     private func upgradePlaceholderPage(itemID: MediaPreviewItemID) {
         builtPlaceholderItemIDs.remove(itemID)
-        let previousContent = renderedPageContentView
-        let previousImage = (previousContent as? UIImageView)?.image
         MXLog.info("Media viewer: swapping the placeholder for the media of \(itemID)")
-        refreshCurrentPreviewItem()
-        Task { [weak self] in
-            let started = ContinuousClock.now
-            while let self, ContinuousClock.now - started < .seconds(1) {
-                if let content = renderedPageContentView,
-                   content !== previousContent || (content as? UIImageView)?.image !== previousImage {
-                    MXLog.info("Media viewer: placeholder swapped after \(ContinuousClock.now - started)")
-                    return
-                }
-                try? await Task.sleep(for: .milliseconds(16))
+        // Under a page cover: the refresh flashes the page black, so the thumbnail stays up until the
+        // media has rendered. The bars are left uncovered: their buttons re-animating is the cue
+        // that the media has arrived.
+        coverReload {
+            refreshCurrentPreviewItem()
+        } completion: { [weak self] rendered in
+            guard let self else { return }
+            if rendered {
+                MXLog.info("Media viewer: placeholder swapped")
+            } else if (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID {
+                MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading")
+                reloadDataTrackingBlanks()
             }
-            guard let self, (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
-            MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading")
-            reloadDataTrackingBlanks()
         }
     }
     
@@ -827,7 +828,7 @@ private struct HeaderView: View {
     var body: some View {
         if let mediaItem = currentItem.mediaItem {
             VStack(spacing: 0) {
-                Text(mediaItem.sender.displayName ?? mediaItem.sender.id)
+                Text(mediaItem.isShowingPlaceholder ? L10n.commonLoading : mediaItem.sender.displayName ?? mediaItem.sender.id)
                     .font(.compound.bodySMSemibold)
                     .foregroundStyle(.compound.textPrimary)
                 Text(mediaItem.timestamp.formatted(date: .abbreviated, time: .omitted))
@@ -932,7 +933,7 @@ private struct DownloadIndicatorView: View {
         case .media(let mediaItem):
             if mediaItem.downloadError != nil {
                 downloadErrorView
-            } else if mediaItem.fileHandle == nil {
+            } else if mediaItem.fileHandle == nil, mediaItem.placeholderURL == nil { // The placeholder's title says it's loading.
                 loadingIndicator(isScanning: false)
             }
         case .contentScan(let scan):
