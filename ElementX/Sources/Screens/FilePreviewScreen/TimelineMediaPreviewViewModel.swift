@@ -514,13 +514,13 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     /// Waits for the item's in-flight load or the grace period, whichever comes first.
     private func awaitPlaceholderGrace(for item: TimelineMediaPreviewItem.Media) async {
-        guard let load = preloads[item.id] else { return }
-        await withTaskGroup(of: Void.self) { group in
-            group.addTask { _ = await load.value }
-            group.addTask { try? await Task.sleep(for: Self.placeholderGrace) }
-            await group.next()
-            group.cancelAll()
+        // A poll, not a task-group race: the race's sleep branch never won on device (the gate
+        // always waited for the load, the thumbnail path never ran).
+        let started = ContinuousClock.now
+        while item.fileHandle == nil, preloads[item.id] != nil, ContinuousClock.now - started < Self.placeholderGrace {
+            try? await Task.sleep(for: .milliseconds(10))
         }
+        MXLog.info("Media viewer: grace wait for \(item.id) ended after \(ContinuousClock.now - started), file: \(item.fileHandle != nil)")
     }
     
     /// What's needed to render an item's placeholder, or nil when it doesn't get one.
