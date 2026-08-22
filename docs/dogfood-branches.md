@@ -3900,3 +3900,36 @@ Today's logs had shown zero placeholders ever rendered: every tapped item was
 cached, every swiped-to download had no thumbnail in memory. Build 124 adds a
 DEMO 2s delay on every full-size load (`fullSizeDemoDelay`, STRIP) so the
 thumbnail and its swap can be seen at all.
+
+## Round 43: thumbnail placeholder UX, and a faster tap-to-viewer
+
+With the demo delay in, the placeholder was finally visible, and it showed
+the approach's rough edges: a spinner sat over the thumbnail, QuickLook
+re-animated its bar buttons and flashed the page black on the swap, and a
+video's poster with no way to play it read as broken. Build 127
+(`93cf06e2d`, with `460c6cf22` making the grace wait a 10ms poll: the
+task-group race it replaced never timed out on device, so build 124's
+presentation waited the whole 2s for the load):
+
+- The placeholder only kicks in after a 300ms grace (was 150ms): cached
+  media lands inside it and never shows one.
+- No spinner over the placeholder. While it's up the header reads
+  "Loading..." where the sender's name goes, and the filename shows under
+  the page (it used to be blank until the file was ready).
+- The thumbnail-to-media swap runs under the page cover (hides the black
+  flash); the bars are left uncovered on purpose, their buttons
+  re-animating is the cue that the media has arrived.
+- Videos keep their poster placeholder (a black page is worse).
+
+Tap-to-viewer timing, from the log of one open: tap, ~110ms building the
+media timeline and view model (the only thing the timeline's spinner
+covers), 300ms grace, then ~140ms writing the 2048px placeholder JPEG
+synchronously, then QuickLook's presentation animation. Build 128: the
+placeholder is prepared alongside the grace wait (a wasted temp file when
+the media arrives in time) so it costs the presentation nothing, and the
+timeline's tap spinner only appears if building the media timeline takes
+more than 300ms, so it no longer flashes for the ~100ms cache-backed case.
+Build 129 strips the DEMO 2s delay.
+
+Remaining nit: the "loading more" spinner lingers a fraction of a second
+after swiping away from the placeholder page.

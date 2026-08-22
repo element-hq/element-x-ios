@@ -520,7 +520,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     /// What's needed to render an item's placeholder, or nil when it doesn't get one.
     private func placeholderJob(for item: TimelineMediaPreviewItem.Media) async -> (UIImage, CGSize, URL)? {
-        // Videos too: a poster (with the title saying it is loading) beats a black page.
+        // Videos too: a poster (with the header saying it is loading) beats a black page.
         guard contentScannerService == nil, item.kind != .file, item.fileHandle == nil, item.placeholderURL == nil,
               let thumbnail = await thumbnail(for: item) else { return nil }
         let size = Self.placeholderSize(mediaSize: item.mediaSize,
