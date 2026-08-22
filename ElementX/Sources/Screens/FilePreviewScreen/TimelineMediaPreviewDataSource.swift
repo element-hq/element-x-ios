@@ -44,6 +44,37 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     /// built pages no longer match their indices and need a rebuild. Cleared by the controller.
     var needsRebuild = false
     
+    /// Media with an unresolved timeline gap between them and the next newer media: a backfill
+    /// can land older items before the ones in between, so stepping onto them would skip those.
+    private(set) var itemIDsWithGapOnNewerSide: Set<MediaPreviewItemID> = []
+    
+    private static func itemIDsWithGapOnNewerSide(in itemViewStates: [RoomTimelineItemViewState],
+                                                  allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?) -> Set<MediaPreviewItemID> {
+        var gapped = Set<MediaPreviewItemID>()
+        var lastMediaID: MediaPreviewItemID?
+        var gapSinceLastMedia = false
+        for state in itemViewStates { // Oldest first.
+            if case .gap = state.type {
+                gapSinceLastMedia = true
+                continue
+            }
+            let media = state.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes)
+            guard let last = media.last else { continue }
+            if gapSinceLastMedia, let lastMediaID {
+                gapped.insert(lastMediaID)
+            }
+            gapSinceLastMedia = false
+            lastMediaID = last.id
+        }
+        return gapped
+    }
+    
+    /// The media at a QuickLook index, or nil for a padding/placeholder index.
+    func mediaItem(atPreviewIndex index: Int) -> TimelineMediaPreviewItem.Media? {
+        let arrayIndex = index - effectiveBackwardPadding
+        return previewItems.indices.contains(arrayIndex) ? previewItems[arrayIndex] : nil
+    }
+    
     /// Whether a real (post-load) pagination state has been seen. `.initial` is `endReached` on
     /// both sides as a "don't paginate yet" sentinel, indistinguishable by value from a genuinely
     /// exhausted small room, so we only collapse the phantom padding (below) once a real state has
@@ -73,6 +104,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         self.allowedGalleryItemTypes = allowedGalleryItemTypes
         
         previewItems = itemViewStates.flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
+        itemIDsWithGapOnNewerSide = Self.itemIDsWithGapOnNewerSide(in: itemViewStates, allowedGalleryItemTypes: allowedGalleryItemTypes)
         
         let initialPreviewID = TimelineMediaPreviewItem.Media(timelineItem: initialItem).id
         if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialPreviewID }) {
@@ -188,6 +220,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         }
         
         previewItems = newItems
+        itemIDsWithGapOnNewerSide = Self.itemIDsWithGapOnNewerSide(in: itemViewStates, allowedGalleryItemTypes: allowedGalleryItemTypes)
         
         if hasPaginated {
             previewItemsPaginationPublisher.send()
