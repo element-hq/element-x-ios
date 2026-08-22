@@ -701,8 +701,14 @@ class TimelineMediaPreviewController: QLPreviewController {
             currentPreviewItemIndex = index
             reloadDataTrackingBlanks()
         } else {
+            // Not in the same turn as the reload: QuickLook's page queue is left unable to page
+            // either way (observed). Same remedy as returnToIndex; the reload cover hides the wait.
             reloadDataTrackingBlanks()
-            currentPreviewItemIndex = index
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                guard let self else { return }
+                MXLog.info("Media viewer: moving to index \(index) after the reload")
+                currentPreviewItemIndex = index
+            }
         }
     }
     
