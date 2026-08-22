@@ -283,5 +283,42 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
         let hitDescription = hitView.map { String(describing: type(of: $0)) } ?? "nil"
         let responder = (touch.view).map { String(describing: type(of: $0)) } ?? "nil"
         MXLog.info("TouchDebug[\(label)]: began at \(Int(point.x)),\(Int(point.y)) hit=\(hitDescription) touchView=\(responder) interactive=\(window.isUserInteractionEnabled)")
+
+        // Rageshake 7549: the timeline stopped responding to drags (programmatic
+        // scrolls still worked) until a scroll-to-bottom tap; the log could only
+        // show touches landing on cells with no drag ever beginning. Name the
+        // likely culprits when it recurs: recognisers already mid-gesture
+        // anywhere in the window (a stale one blocks every non-simultaneous
+        // recogniser below it), the hit scroll view's own state, and ancestors
+        // mid-animation (UIView animations eat touches without
+        // .allowUserInteraction).
+        var active = [String]()
+        var stack: [UIView] = [window]
+        while let view = stack.popLast() {
+            for recognizer in view.gestureRecognizers ?? [] where recognizer !== self {
+                switch recognizer.state {
+                case .began, .changed:
+                    active.append("\(type(of: recognizer))@\(type(of: view)):\(recognizer.state.rawValue)")
+                default:
+                    break
+                }
+            }
+            stack.append(contentsOf: view.subviews)
+        }
+        var scroll = ""
+        var animating = [String]()
+        var ancestor = hitView
+        while let current = ancestor {
+            if scroll.isEmpty, let scrollView = current as? UIScrollView {
+                scroll = "\(type(of: scrollView)) enabled=\(scrollView.isScrollEnabled) tracking=\(scrollView.isTracking) dragging=\(scrollView.isDragging) decelerating=\(scrollView.isDecelerating) pan=\(scrollView.panGestureRecognizer.state.rawValue)/\(scrollView.panGestureRecognizer.isEnabled) content=\(Int(scrollView.contentSize.height)) bounds=\(Int(scrollView.bounds.height)) offset=\(Int(scrollView.contentOffset.y))"
+            }
+            if let keys = current.layer.animationKeys(), !keys.isEmpty {
+                animating.append("\(type(of: current)):\(keys.joined(separator: ","))")
+            }
+            ancestor = current.superview
+        }
+        if !active.isEmpty || !animating.isEmpty || scroll.contains("tracking=true") || scroll.contains("dragging=true") {
+            MXLog.info("TouchDebug[\(label)]: active=\(active) scroll=[\(scroll)] animating=\(animating)")
+        }
     }
 }
