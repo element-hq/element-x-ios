@@ -3401,3 +3401,76 @@ fast deep swipe (swipe faster than the download pipe) stays unbeatable, but the
 sustained-moderate-swipe blank should be gone.
 
 Build 82 (EXI 09100f7a2 x SDK 35648826a). Installed + launched.
+
+## Round 36 follow-ups #6 (snapshot-covered heal reloads, preload back to 3)
+
+Between #5 and here (builds 83-88, commits 5a5d22735..a08f99aac) a blurhash
+placeholder was tried and reverted: it forced a reload on nearly every arrival
+(flash on every swipe), and a placeholder-from-the-timeline can only ever cover
+the first couple of swipes anyway. Net of that detour: QuickLook's page for a
+neighbour preloaded late is rebuilt by a resting, debounced `reloadData` (the
+heal), and a rested-on blank is cleared by an uncovered `reloadData` on arrival.
+
+The question this round: can QuickLook be made to swipe smoothly through a
+gallery at all, given that it builds pages eagerly from `previewItemURL` at
+build time, never re-reads a built page, offers no per-page invalidation (only
+`refreshCurrentPreviewItem` for the current page and `reloadData` for
+everything) and `reloadData` flashes the current page? Three options were on
+the table: (A) hand QuickLook a renderable placeholder file per page, (B) keep
+the reactive heal reload and live with the flash, (C) block the open until the
+current item and its +/-2 neighbours are downloaded. (C) was written and
+dropped within the hour: it holds the image you tapped hostage to four
+downloads you haven't asked for, and a fast swipe outruns it regardless. The
+fix is (B) plus a cover for the flash.
+
+**Snapshot cover.** `TimelineMediaPreviewController.coverReload` takes a
+`snapshotView(afterScreenUpdates: false)` of the page scroll view, inserts it
+directly above that scroll view (below the navigation/tool bars, so their glass
+keeps animating and the (i) swap stays live), calls `reloadData`, then polls
+every 16ms and drops the snapshot the instant the rebuilt page has content
+again; a drag also drops it, and a 1s cap covers page types it can't recognise.
+The "has content" signal came from a device-side hierarchy probe (build 96):
+on iOS 26.5 the pages ARE in-process - `_UIQueuingScrollView` -> three plain
+`UIView` page containers (previous/current/next) -> `QLPreviewScrollView` ->
+`UIImageView` (images) or `AVPlayerView` -> `AVPlayerLayer` (video). `reloadData`
+empties the current container synchronously and repopulates it ~20-35ms later
+for an image, ~50-130ms for a video, and the "content unavailable" placeholder
+never appears during a rebuild (so polling for it, the first attempt, was
+blind). Rendered = a NEW (identity-checked) visible `UIImageView.image` or an
+`AVPlayerLayer.isReadyForDisplay` under the container beneath the view centre.
+The arrival refresh (page already blank) stays uncovered: a snapshot of black
+would only delay the media. Note the simulator is useless for this: on 26.5 it
+hosts the whole QuickLook UI as one remote ExtensionKit scene
+(`QLHostRemoteView` -> `CALayerHost`) with nothing in-process.
+
+**Heal guard fix.** The once-per-rest guard keyed on `contentOffset.x`, which
+QuickLook reuses after a reload, so it over-fired across different pages and
+suppressed legitimate heals (the residual swipe-13 blank of build 94). Keyed on
+the current item id now.
+
+**Preload reach.** The adaptive directional reach (#5: base 6, growing to 24)
+is gone; back to a fixed +/-3, nearest first. QuickLook only builds media pages
+at +/-2, the download pipe is shared (a deep queue slows the neighbours that
+decide whether the next swipe lands on media, and a concurrent pool doesn't
+honour enqueue order), and a 24-deep queue on cellular is up to ~240MB for a
+gallery you may close after one image. Build 95's session showed the cost
+side: 51 preloads for 31 items visited, 22 never looked at.
+
+**Measured (build 95, 27 swipes out and back, user saw no black and no
+flicker):** 65/67 arrivals had their file present (the other 2 = the initial
+item and a >10MB video, which the on-display load handles); 2 heal reloads in
+the whole session, both covered. Build 96 (one forced covered reload per rest,
+to sample the probe) produced the only black flash of the round, a reload
+colliding with the next drag before the page repopulated - exactly the window
+the rendered-page detection now closes - and one swipe-to-blank at a 0.6s
+cadence with the file cached, which is QuickLook parking a page built mid-swipe
+on its placeholder (pre-existing; the arrival refresh clears it). Build 97
+(detection live, no forced reloads): 76 index changes, 2 heal reloads, cover
+down after 17ms and 23ms, both `rendered`.
+
+**Tidy-up.** All `PreviewDebug` logging stripped from the viewer (controller,
+view model, data source), the dormant thumbnail-URL fallback and
+upgrade-from-thumbnail refresh path removed from the data source/controller,
+the hierarchy probe and forced-reload switch removed.
+
+Build 98 (EXI b9b01c433 x SDK 35648826a).
