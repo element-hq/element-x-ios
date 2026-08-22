@@ -137,6 +137,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             // Don't worry about negative padding here. Turns out that it just limits
             // the displayable items from growing any more, but makes sure that the
             // current item doesn't jump around so we don't need to reload anything.
+            // That only holds while the padding is in play: collapsed to zero, a prepend
+            // shifts every index and the controller re-derives its index (`previewIndex(of:)`).
             backwardPadding -= backPaginationCount
             forwardPadding -= forwardPaginationCount
             
@@ -174,6 +176,11 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     /// invariant (constant count during normal pagination) still holds everywhere else.
     private var effectiveBackwardPadding: Int {
         hasReceivedRealPaginationState && paginationState.backward == .endReached ? 0 : backwardPadding
+    }
+    
+    /// QuickLook's index for the item right now, given the current items and padding.
+    func previewIndex(of itemID: MediaPreviewItemID) -> Int? {
+        previewItems.firstIndex { $0.id == itemID }.map { $0 + effectiveBackwardPadding }
     }
     
     private var effectiveForwardPadding: Int {

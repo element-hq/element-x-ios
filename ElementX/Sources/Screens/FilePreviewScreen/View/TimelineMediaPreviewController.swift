@@ -91,6 +91,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         publisher(for: \.currentPreviewItemIndex)
             .sink { [weak self] index in
                 // This isn't removing duplicates which may try to download and/or write to disk concurrently????
+                MXLog.info("Media viewer: index \(index) -> \(self?.currentPreviewItemDescription ?? "nil")")
                 self?.loadCurrentItem()
                 self?.checkCurrentItemOnArrival()
             }
@@ -121,6 +122,10 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         dataSource = context.viewState.dataSource
         currentPreviewItemIndex = context.viewState.dataSource.initialItemIndex
+        // The geometry QuickLook builds with, so the first count change already shifts the index
+        // (the padding can collapse before the first items update, which used to slip through).
+        lastKnownItemCount = context.viewState.dataSource.numberOfPreviewItems(in: self)
+        lastKnownFirstIndex = context.viewState.dataSource.firstPreviewItemIndex
         recordBuiltBlankPages() // Seed the blank model from the initial (mostly file-less) build.
     }
     
@@ -282,12 +287,23 @@ class TimelineMediaPreviewController: QLPreviewController {
 
         // When a side reaches the end of the timeline its phantom padding drops to zero so the
         // last real item becomes QuickLook's content edge (native bounce). That changes the
-        // count and, for the leading side, shifts every index; QuickLook only re-reads the count
-        // on reloadData, so carry the current item across any shift and reload just then.
+        // count and can move the current item's index; QuickLook only re-reads the count on
+        // reloadData, so re-derive the current item's index from the data source and reload
+        // just then. Re-derived, not shifted by the first index's change: a prepend the padding
+        // absorbs moves the first index without moving any page (shifting by it opened the
+        // viewer on an item ~N older than the one tapped).
         let count = dataSource.numberOfPreviewItems(in: self)
         let firstIndex = dataSource.firstPreviewItemIndex
         if let previousCount = lastKnownItemCount, previousCount != count {
-            currentPreviewItemIndex += firstIndex - lastKnownFirstIndex
+            let currentItemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id ?? dataSource.currentItem.mediaItem?.id
+            let newIndex = currentItemID.flatMap { dataSource.previewIndex(of: $0) }
+            MXLog.info("Media viewer: item count \(previousCount) -> \(count), first index \(lastKnownFirstIndex) -> \(firstIndex), current index \(currentPreviewItemIndex) -> \(newIndex.map(String.init) ?? "shift \(firstIndex - lastKnownFirstIndex)")")
+            if let newIndex {
+                currentPreviewItemIndex = newIndex
+            } else {
+                // On a placeholder page: follow the padding edge it belongs to.
+                currentPreviewItemIndex += firstIndex - lastKnownFirstIndex
+            }
             reloadDataTrackingBlanks()
         }
         lastKnownItemCount = count
@@ -422,6 +438,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// hides the rebuild behind a snapshot; pass false when the page on display is blank anyway
     /// (a snapshot of it would only delay the media the reload brings in).
     private func reloadDataTrackingBlanks(covered: Bool = true) {
+        MXLog.info("Media viewer: reloadData (covered: \(covered)) at index \(currentPreviewItemIndex) of \(context.viewState.dataSource.numberOfPreviewItems(in: self)), \(currentPreviewItemDescription)")
         if covered {
             coverReload { reloadData() }
         } else {
@@ -588,6 +605,13 @@ class TimelineMediaPreviewController: QLPreviewController {
             MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading")
             reloadDataTrackingBlanks()
         }
+    }
+    
+    /// The current item, for the logs: its event ID, or the placeholder kind.
+    private var currentPreviewItemDescription: String {
+        if let item = currentPreviewItem as? TimelineMediaPreviewItem.Media { return "\(item.id)" }
+        if let loading = currentPreviewItem as? TimelineMediaPreviewItem.Loading { return "\(loading.state)" }
+        return "nil"
     }
     
     // MARK: - Actions

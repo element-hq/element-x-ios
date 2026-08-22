@@ -59,6 +59,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         let sourceView = UIView()
         
         private let previewController: TimelineMediaPreviewController
+        private let presentationGate: Task<Void, Never>?
         private var hasBeenPresented = false
         
         private var dismissalObserver: AnyCancellable?
@@ -68,6 +69,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
              onDismiss: @escaping () -> Void) {
             self.onDismiss = onDismiss
             previewController = TimelineMediaPreviewController(context: viewModel.context)
+            presentationGate = viewModel.initialPresentationGate
             
             super.init(nibName: nil, bundle: nil)
             
@@ -108,12 +110,17 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
             super.viewDidAppear(animated)
             
             guard !hasBeenPresented else { return }
+            hasBeenPresented = true
             
             previewController.delegate = self
             
-            present(previewController, animated: true)
-            
-            hasBeenPresented = true
+            // Give the initial item's load a moment (see the view model's gate) so QuickLook builds
+            // its first page from the file or the thumbnail placeholder rather than black.
+            Task { [weak self] in
+                await self?.presentationGate?.value
+                guard let self else { return }
+                present(previewController, animated: true)
+            }
         }
         
         // MARK: QLPreviewControllerDelegate
