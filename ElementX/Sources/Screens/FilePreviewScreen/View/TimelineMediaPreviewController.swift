@@ -375,8 +375,9 @@ class TimelineMediaPreviewController: QLPreviewController {
             guard currentItemID != lastHealReloadItemID else { return }
             // Only reload if a built page is actually blank while its file is present: reload is
             // QuickLook's only re-read lever, so skip it when every built page already renders.
-            guard hasHealableBlankPage() else { return }
+            guard let staleBlankDelta = healableBlankPageDelta() else { return }
             lastHealReloadItemID = currentItemID
+            MXLog.info("Media viewer: healing a page built before its file arrived, \(staleBlankDelta) from the current item")
             reloadDataTrackingBlanks()
         }
     }
@@ -450,6 +451,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                 }
                 try? await Task.sleep(for: .milliseconds(16))
             }
+            MXLog.info("Media viewer: reload cover down after \(ContinuousClock.now - started), rebuilt page \(rendered ? "rendered" : "not detected")")
             self?.removeReloadCover(animated: false)
         }
     }
@@ -478,10 +480,11 @@ class TimelineMediaPreviewController: QLPreviewController {
         }
     }
 
-    /// Whether a page within QuickLook's build radius is one it built blank and whose file has since
-    /// arrived - a stale blank a reload would heal. Reloading only for these (not on every rest)
-    /// keeps the current-page flash reloadData causes to the rare pages that actually need it.
-    private func hasHealableBlankPage() -> Bool {
+    /// The offset from the current item of a page within QuickLook's build radius that it built
+    /// blank and whose file has since arrived - a stale blank a reload would heal - or nil if
+    /// there's none. Reloading only for these (not on every rest) keeps the rebuild to the rare
+    /// pages that actually need it.
+    private func healableBlankPageDelta() -> Int? {
         let dataSource = context.viewState.dataSource
         let firstIndex = dataSource.firstPreviewItemIndex
         for delta in -Self.builtPagesRadius...Self.builtPagesRadius {
@@ -489,10 +492,10 @@ class TimelineMediaPreviewController: QLPreviewController {
             guard dataSource.previewItems.indices.contains(arrayIndex) else { continue }
             let item = dataSource.previewItems[arrayIndex]
             if builtBlankItemIDs.contains(item.id), item.previewItemURL != nil {
-                return true
+                return delta
             }
         }
-        return false
+        return nil
     }
 
     private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool) {
@@ -536,6 +539,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                 // user rests on (observed on device), leaving it blank. reloadData rebuilds the
                 // pages so the now-present file renders; the padding trick keeps the current index.
                 // Uncovered: the page is blank, a snapshot of it would only delay the media.
+                MXLog.info("Media viewer: landed on a blank page for \(itemID), reloading")
                 reloadDataTrackingBlanks(covered: false)
                 return
             }
