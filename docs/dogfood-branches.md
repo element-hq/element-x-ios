@@ -3449,12 +3449,16 @@ suppressed legitimate heals (the residual swipe-13 blank of build 94). Keyed on
 the current item id now.
 
 **Preload reach.** The adaptive directional reach (#5: base 6, growing to 24)
-is gone; back to a fixed +/-3, nearest first. QuickLook only builds media pages
-at +/-2, the download pipe is shared (a deep queue slows the neighbours that
-decide whether the next swipe lands on media, and a concurrent pool doesn't
-honour enqueue order), and a 24-deep queue on cellular is up to ~240MB for a
-gallery you may close after one image. Build 95's session showed the cost
-side: 51 preloads for 31 items visited, 22 never looked at.
+is gone; back to a fixed, symmetric, nearest-first reach. QuickLook only builds
+media pages at +/-2, the download pipe is shared (a deep queue slows the
+neighbours that decide whether the next swipe lands on media, and a concurrent
+pool doesn't honour enqueue order), and a 24-deep queue on cellular is up to
+~240MB for a gallery you may close after one image. Build 95's session showed
+the cost side: 51 preloads for 31 items visited, 22 never looked at. First cut
+was +/-3 (build 98), which brought back the reliable 4th-swipe black that
+follow-up #1 had already diagnosed: the 4th item is only queued on landing on
+the 1st, and at a ~1s cadence QuickLook builds its page (two swipes out) before
+the download lands. Settled on 8 (build 99), the sweet spot #4 found.
 
 **Measured (build 95, 27 swipes out and back, user saw no black and no
 flicker):** 65/67 arrivals had their file present (the other 2 = the initial
@@ -3473,4 +3477,4 @@ view model, data source), the dormant thumbnail-URL fallback and
 upgrade-from-thumbnail refresh path removed from the data source/controller,
 the hierarchy probe and forced-reload switch removed.
 
-Build 98 (EXI b9b01c433 x SDK 35648826a).
+Build 98 (EXI b9b01c433 x SDK 35648826a); build 99 = reach 8 (EXI 5b3deb996).
