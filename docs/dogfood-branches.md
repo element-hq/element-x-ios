@@ -3724,3 +3724,39 @@ Build 106 USER-VALIDATED ("totally fixed"). Build 107 (`6f0cf8c50`) strips
 the CARETPROBE lines; behaviour unchanged. Upstream candidates from this
 round: the binding re-apply guard (`e6a4137e0`, the bug) and not re-measuring
 the live text view on every layout pass (`1d50e73bc`/`4f44e42c7`).
+
+## Round 40: timeline stops responding to drags (rageshake 7549)
+
+Rageshake 7549 (2026-08-22 14:56Z, build 107, SDK 891f0122f): in a room,
+dragging the timeline did nothing at all; the status-bar tap scrolled to
+the top (drag still dead), then the scroll-to-bottom button worked and
+dragging was fine afterwards.
+
+What the log shows (`console.2026-08-22-15.log`, room `!vuHhaspFFTUFPmqAaS`):
+the room was opened at 14:42:38 and scrolled normally; a message was edited
+and sent at 14:43:08 (no send transition: none of the `SendTransition:`
+lines); the app was backgrounded at 14:43:19, then became active three
+times for ~150ms each at 14:47:40-46 (home-indicator swipes, touches
+landing on the root hosting view at y≈913-917 followed immediately by
+`will resign active`), and came back for real at 14:55:05. From 14:55:11
+to 14:55:25 a dozen touches began on `MessageTextView` cells with no
+drag ever beginning: no `scrollViewDidEndDragging` read-receipt send
+follows any of them, whereas after the bottom tap at 14:55:26 every
+touch is followed by one. The status-bar tap (no app touch involved)
+paginated and sent receipts normally. Nothing in our code gates the pan
+gesture; `isScrollEnabled` is never touched; no in-flight send transition
+or frozen geometry. The shape (touches reach the cells, UIKit's pan never
+recognises, programmatic scrolls fine, clears when the overlay changes)
+fits a gesture recogniser left mid-gesture (`.began`/`.changed`) somewhere
+in the room screen's hierarchy after the rapid active/inactive flicks: a
+stale recogniser blocks every non-simultaneous recogniser below it for
+new touches. Which one, the log cannot say.
+
+Diagnostics only this round (`32f90239f`, build 108): the existing
+window-level `TouchDebug` line gains a second line, logged only when
+something is off, naming every recogniser in the window currently in
+`.began`/`.changed` (class@view:state), the hit scroll view's state
+(enabled/tracking/dragging/decelerating/pan state/content vs bounds), and
+ancestors of the hit view with layer animations in flight. On recurrence:
+reproduce the dead drag once, pull the console log, grep `TouchDebug` for
+`active=`.
