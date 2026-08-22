@@ -95,10 +95,29 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
     
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
+        if let width = proposal.width, width == 0 || width == .infinity {
+            // Stacks probe with 0 and infinity to learn the flexibility; only the width
+            // is used from those answers, so don't re-measure the text for them.
+            return CGSize(width: width, height: context.coordinator.lastFittedHeight ?? min(maxHeight, uiView.bounds.height))
+        }
+        
+        if let width = proposal.width, abs(width - uiView.bounds.width) < 0.5 {
+            // Same width as laid out: read the height off the live layout. Re-measuring with
+            // `uiView.sizeThatFits` resizes the text container, which momentarily shrinks
+            // `contentSize` and clamps `contentOffset`; in a scrolled composer the caret was then
+            // drawn a scroll-offset too high for a few frames on every keystroke.
+            uiView.layoutManager.ensureLayout(for: uiView.textContainer)
+            let usedHeight = uiView.layoutManager.usedRect(for: uiView.textContainer).height
+            let height = min(maxHeight, ceil(usedHeight) + uiView.textContainerInset.top + uiView.textContainerInset.bottom)
+            context.coordinator.lastFittedHeight = height
+            return CGSize(width: width, height: height)
+        }
+        
         // Note: Coalescing a width of zero here returns a size for the view with 1 line of text visible.
         let newSize = uiView.sizeThatFits(CGSize(width: proposal.width ?? .zero, height: maxHeight))
         let width = proposal.width ?? newSize.width
         let height = min(maxHeight, newSize.height)
+        context.coordinator.lastFittedHeight = height
         
         return CGSize(width: width, height: height)
     }
@@ -159,6 +178,9 @@ private struct UITextViewWrapper: UIViewRepresentable {
     final class Coordinator: NSObject, UITextViewDelegate, ElementTextViewDelegate {
         private var text: Binding<NSAttributedString>
         private var selectedRange: Binding<NSRange>
+        
+        /// The height last returned by `sizeThatFits`, reused for the stacks' width probes.
+        var lastFittedHeight: CGFloat?
         
         private let keyHandler: GenericKeyHandler
         private let pasteHandler: PasteHandler
