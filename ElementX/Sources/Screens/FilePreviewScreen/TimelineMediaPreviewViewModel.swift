@@ -157,21 +157,25 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         setCurrentItem(previewItem)
         
         if case let .media(mediaItem) = previewItem {
-            defer {
-                preloadNeighbours(of: mediaItem)
-                prefetchTimelinePaginationIfNeeded(around: mediaItem)
+            defer { prefetchTimelinePaginationIfNeeded(around: mediaItem) }
+            
+            var load: Task<Result<MediaFileHandleProxy, MediaProviderError>, Never>?
+            if mediaItem.fileHandle == nil, let source = mediaItem.mediaSource {
+                guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
+                
+                // Join a preload already in flight for this item rather than downloading it a second
+                // time. Started before the neighbours' loads so it keeps the head download slot.
+                load = preloads[mediaItem.id] ?? Task { [mediaProvider] in
+                    await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename)
+                }
             }
             
-            guard mediaItem.fileHandle == nil, let source = mediaItem.mediaSource else { return }
+            // Queue the neighbours now rather than once this item has landed: on cellular a load
+            // can take seconds, and QuickLook builds the neighbouring pages as soon as it settles.
+            preloadNeighbours(of: mediaItem)
             
-            guard await checkSourceIsSafeIfNeeded(for: mediaItem, source: source) else { return }
-            
-            // Join a preload already in flight for this item rather than downloading it a second time.
-            let result = if let preload = preloads[mediaItem.id] {
-                await preload.value
-            } else {
-                await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename)
-            }
+            guard let load else { return }
+            let result = await load.value
             preloads[mediaItem.id] = nil
             
             switch result {
@@ -221,12 +225,20 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    /// How many neighbours either side of the current item are fetched ahead of a swipe. QuickLook
-    /// builds the two pages either side of the current one, so an item's file must be there by the
-    /// time the user is two swipes away; at a ~1s swipe cadence a reach of 3 reliably lost that
-    /// race on the 4th swipe (the file was only queued one swipe earlier), 8 keeps ahead of it
-    /// without queuing the dozens a deeper reach spends on files a reversal discards.
-    private static let preloadReach = 8
+    /// How many neighbours are fetched ahead of a swipe. QuickLook builds the two pages either side
+    /// of the current one, so an item's file must be there by the time the user is two swipes away,
+    /// and what bounds that is download time × swipe rate, not QuickLook: phone photos take 1-3s on
+    /// cellular, so at a ~1s swipe cadence a reach of 3 reliably lost the race on the 4th swipe
+    /// (the file was only queued one swipe earlier) whilst 8 keeps ahead of it. On opening there's
+    /// no direction yet, so both sides get the minimum (QuickLook's two + a spare); once the user
+    /// swipes, the deep reach only goes the way they're heading and the other side keeps the
+    /// minimum, rather than spending the downloads on files a reversal never shows.
+    private static let preloadReachAhead = 8
+    private static let preloadReachBehind = 2
+    private static let preloadReachUndirected = 3
+    
+    /// The item the last preload was centred on, to tell which way the user is swiping.
+    private var lastPreloadCentreID: MediaPreviewItemID?
     
     /// Fetches the media around the current one so that a swipe reveals the media itself rather
     /// than an empty page: QuickLook builds the pages around the current one as it settles on it,
@@ -241,9 +253,27 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
 
         let items = state.dataSource.previewItems
         guard let index = items.firstIndex(where: { $0.id == mediaItem.id }) else { return }
-
+        
+        // By item (not index): pagination prepends items, shifting every index.
+        let lastIndex = lastPreloadCentreID.flatMap { lastID in items.firstIndex { $0.id == lastID } }
+        lastPreloadCentreID = mediaItem.id
+        let direction = lastIndex.map { (index - $0).signum() } ?? 0
+        let forwardReach = switch direction {
+        case 1: Self.preloadReachAhead
+        case -1: Self.preloadReachBehind
+        default: Self.preloadReachUndirected
+        }
+        let backwardReach = switch direction {
+        case 1: Self.preloadReachBehind
+        case -1: Self.preloadReachAhead
+        default: Self.preloadReachUndirected
+        }
+        
         // Nearest first (1, 1, 2, 2, …) so the most urgent get their download slot first.
-        let neighbourIndices = (1...Self.preloadReach).flatMap { [index + $0, index - $0] }
+        let neighbourIndices = (1...max(forwardReach, backwardReach)).flatMap { distance in
+            [distance <= forwardReach ? index + distance : nil,
+             distance <= backwardReach ? index - distance : nil].compactMap { $0 }
+        }
         for neighbourIndex in neighbourIndices where items.indices.contains(neighbourIndex) {
             preload(items[neighbourIndex])
         }

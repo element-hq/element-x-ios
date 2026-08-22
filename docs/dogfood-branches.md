@@ -3508,3 +3508,34 @@ milliseconds; check with the `event_cache_store.rs` `Timer _method_` lines
 under `build > new{msgtypes=...}`.
 
 SDK 891f0122f; build 101 (EXI unchanged a713b865f x SDK 891f0122f).
+
+## Media viewer: directional preload, queued before the current item lands (EXI)
+
+Round 38 (2026-08-22). Fetching ±8 neighbours (17 files) to view one item is
+wasteful, and the question was whether ±3 (QuickLook's ±2 pages + a spare)
+plus the covered heal reload would do. It doesn't, and that was build 98: what
+bounds the reach isn't QuickLook geometry but download time × swipe rate.
+Only first views download (the timeline/grid cache thumbnails, the viewer
+needs the file; cached files are just a store read + temp file write), but
+phone photos are 2-8MB and take 1-3s on cellular, so file n+3, queued on
+landing on n and built into a page on n+1, has ~2s before the rest on n+2 is
+the last chance to heal it. Reach 8 gives ~7s.
+
+Changed in `TimelineMediaPreviewViewModel`:
+
+- Opening: ±3 both sides (no direction known yet). After the first swipe the
+  deep reach (8) only goes the way the user is heading, the other side keeps
+  2: ~10 files in flight instead of 17, reversal waste gone. Direction is
+  derived from the last preload centre by item id (pagination prepends items,
+  indices shift).
+- The neighbours are queued as soon as the current item becomes current, not
+  once its own load has finished (the old `defer` ordering): the current
+  item's load is started first so it keeps the head download slot, then the
+  neighbours, then it's awaited. At open this is what QuickLook needs: it
+  builds ±1/±2 the moment the first item lands, which is exactly when the
+  old code only started queuing them.
+
+Validate: swipe runs out and back at ~1s cadence, cellular and Wi-Fi; no
+black pages on the 4th swipe onward; `Media viewer: healing ...` / `landed on
+a blank page` lines rare; fewer `media/download` requests per viewer open
+(up to 7 on open, then ≤1 new per swipe in the travelled direction).
