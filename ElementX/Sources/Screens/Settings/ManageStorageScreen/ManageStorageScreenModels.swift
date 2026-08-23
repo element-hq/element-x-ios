@@ -69,7 +69,7 @@ struct ManageStorageScreenViewState: BindableState {
 
     /// The largest listed room's total, the width every room's bar is relative to.
     var largestListedRoomBytes: UInt64 {
-        listedRooms.first?.totalBytes ?? 0
+        listedRooms.map(\.totalBytes).max() ?? 0
     }
 
     /// The label of the bar chart: all rooms, the selected room, or the number of selected rooms,

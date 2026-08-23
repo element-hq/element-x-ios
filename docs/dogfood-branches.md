@@ -4566,3 +4566,17 @@ paste gets markdown and a rich-text one keeps the formatting; a partial
 selection copies its plain text. (7) Manage storage: a search field filters
 the room list by name or ID and lists every match regardless of the 1 MB
 threshold (build 166 = bf8d4a5e4…).
+
+**Round 57 follow-ups (builds 167-168).** "Select text" now selects in the
+bubble: the item's `MessageTextView`s enter a selection mode (all selected,
+system handles/edit menu, loupe allowed, the bubble's long press and double
+tap disabled for that item), ended when the view loses focus or another
+bubble is tapped; whole-text copy keeps the plain + HTML + RTF pasteboard.
+Limits: a message rendered as several components (code blocks, quotes)
+selects per component; a partial selection over a pill copies U+FFFC for
+it. Double tap is a UIKit recogniser (`onDoubleTap`, simultaneous with the
+text views' taps): the SwiftUI one only fired on a triple tap of the
+timestamp. Manage storage: the navigation-bar search field hung the app on
+the first keystroke (cause not chased: `.searchable` + introspected search
+bar in this Form); replaced by a text-field row at the top of the rooms
+section, and the bars scale to the largest *listed* room (build 168).

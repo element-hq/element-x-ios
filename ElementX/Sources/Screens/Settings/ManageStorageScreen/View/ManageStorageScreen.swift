@@ -18,11 +18,6 @@ struct ManageStorageScreen: View {
             roomsSection
         }
         .compoundList()
-        .searchable(text: $context.searchQuery,
-                    placement: .navigationBarDrawer,
-                    prompt: UntranslatedL10n.screenManageStorageSearchPrompt)
-        .compoundSearchField()
-        .autocorrectionDisabled()
         .navigationTitle(UntranslatedL10n.screenManageStorageTitle)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
@@ -73,8 +68,15 @@ struct ManageStorageScreen: View {
 
     @ViewBuilder
     private var roomsSection: some View {
-        if !context.viewState.listedRooms.isEmpty || context.viewState.isLoadingRooms {
+        if !context.viewState.listedRooms.isEmpty || context.viewState.isLoadingRooms || context.viewState.isSearching {
             Section {
+                // The filter sits above the rooms (a navigation-bar search field hung the app on
+                // the first keystroke in this Form).
+                ListRow(label: .plain(title: UntranslatedL10n.screenManageStorageSearchPrompt),
+                        kind: .textField(text: $context.searchQuery, axis: .horizontal))
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                
                 ForEach(context.viewState.listedRooms) { room in
                     ListRow(kind: .custom {
                         StorageUsageRoomRow(room: room,
