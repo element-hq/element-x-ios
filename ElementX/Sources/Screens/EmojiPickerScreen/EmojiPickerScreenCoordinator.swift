@@ -71,7 +71,7 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     
     /// Builds (and renders once, off-screen) the cached picker so the first real
     /// presentation doesn't pay for view building or emoji glyph rasterisation.
-    static func prewarm(emojiProvider: EmojiProviderProtocol) {
+    static func prewarm(emojiProvider: EmojiProviderProtocol, in window: UIWindow?) {
         guard cached == nil else { return }
         
         let startDate = Date()
@@ -93,11 +93,20 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
         
         let hostingController = EmojiPickerHostingController(rootView: coordinator.toPresentable())
         let view = hostingController.view!
-        view.frame = CGRect(origin: .zero, size: UIScreen.main.bounds.size)
+        // Build inside the real window (off-screen) so the graph resolves against the real
+        // environment: detached, SwiftUI defers the build and redoes everything (traits,
+        // appearance) inside the first presentation - the very cost the cache is for.
+        if let window {
+            view.frame = window.bounds.offsetBy(dx: window.bounds.width * 2, dy: 0)
+            window.addSubview(view)
+        } else {
+            view.frame = CGRect(origin: .zero, size: UIScreen.main.bounds.size)
+        }
         view.layoutIfNeeded()
         
         // Layout alone doesn't draw: an actual render warms the emoji glyph caches.
         _ = UIGraphicsImageRenderer(bounds: view.bounds).image { view.layer.render(in: $0.cgContext) }
+        view.removeFromSuperview()
         
         continuation.finish()
         cached = (coordinator, hostingController)
@@ -113,7 +122,7 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
                               selectedEmojis: Set<String>,
                               continuation: EmojiPickerScreenContinuation,
                               onDismiss: @escaping () -> Void) {
-        prewarm(emojiProvider: emojiProvider)
+        prewarm(emojiProvider: emojiProvider, in: presenter.viewIfLoaded?.window)
         guard let cached, cached.hostingController.presentingViewController == nil else {
             MXLog.error("Cached emoji picker unavailable or already presented")
             continuation.finish()

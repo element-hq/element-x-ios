@@ -119,11 +119,26 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         super.addGestureRecognizer(gestureRecognizer)
     }
     
+    /// Outside "Select text" the view never takes focus: the system's own double-tap word
+    /// selection otherwise grabs first responder and leaves a stuck selection with drag
+    /// handles (of the timestamp spacer, when the tap lands past the text).
+    override var canBecomeFirstResponder: Bool {
+        let can = isSelectingText || ProcessInfo.processInfo.isiOSAppOnMac
+        if !can {
+            MXLog.info("MessageTextView: refusing first responder outside text selection")
+        }
+        return can
+    }
+    
     /// Outside "Select text" the text view's own recognisers never see a second tap: its
     /// internal double-tap word selection would otherwise flash a selection (of the timestamp
     /// spacer, when tapped past the text) under the reaction picker before the delegate clears it.
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        !(touch.tapCount > 1 && !isSelectingText)
+        if touch.tapCount > 1, !isSelectingText {
+            MXLog.info("MessageTextView: blocking second tap for \(type(of: gestureRecognizer)) '\(gestureRecognizer.name ?? "-")'")
+            return false
+        }
+        return true
     }
     
     /// This prevents the magnifying glass from showing up, and (while selecting) the long-press
@@ -351,6 +366,7 @@ struct MessageText: UIViewRepresentable {
         }
         
         func textViewDidChangeSelection(_ textView: UITextView) {
+            MXLog.info("MessageTextView: selection changed to \(textView.selectedRange), selecting=\((textView as? MessageTextView)?.isSelectingText == true)")
             guard !ProcessInfo.processInfo.isiOSAppOnMac, (textView as? MessageTextView)?.isSelectingText != true else {
                 return
             }

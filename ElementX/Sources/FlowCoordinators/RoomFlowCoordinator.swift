@@ -650,8 +650,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                              animated: Bool) async {
         // Prewarm the reaction picker so a double-tap presents it instantly, once the
         // room-opening work is out of the way.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [emojiProvider = flowParameters.emojiProvider] in
-            EmojiPickerScreenCoordinator.prewarm(emojiProvider: emojiProvider)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self else { return }
+            EmojiPickerScreenCoordinator.prewarm(emojiProvider: flowParameters.emojiProvider,
+                                                 in: flowParameters.windowManager.mainWindow)
         }
         
         // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine

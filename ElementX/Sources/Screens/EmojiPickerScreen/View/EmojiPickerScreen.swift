@@ -56,6 +56,9 @@ struct EmojiPickerScreen: View {
             .onSubmit(of: .search, sendFirstEmojiOnMac)
             .compoundSearchField()
         }
+        // Presented UIKit-side from the cache: paint the background explicitly, else the
+        // bare sheet material shows through behind the grid.
+        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(isSearching ? .hidden : .visible)
         .onChange(of: searchString) {
