@@ -4256,3 +4256,44 @@ kept; the fallback has filtered them like the timeline since `b33630f3e`.
 2pt strip flush with the bottom edge of the media (bubble thumbnail / gallery
 grid / viewer page above the caption), transparent track, accent-green
 (`iconAccentPrimary`) fill growing from the leading edge, no padding.
+
+**Round 49 (2026-08-23): uploads in the viewer, upload caching, mid-upload
+network change (build 151).** Three checks asked for, two holes closed:
+(1) Queued uploads DO appear when swiping: every timeline focus (incl. the
+viewer's MessageTypes one) subscribes to the send queue, so the local echo is
+on the media timeline at the newest end; the viewer's `MediaPreviewItemID`
+accepts a transaction ID. HOLE: when the send completes the item's ID flips
+transaction -> event, which the data source read as a reshuffle (page rebuilt
+around a "new" item reloading the file; if the echo was the only item, updates
+were ignored for good). The SDK recycles the local item's timeline unique ID on
+the flip and media timelines carry a UUID prefix (no cross-timeline clash), so
+`updatePreviewItems` now matches old-local -> new-remote by unique ID (+
+gallery index) and migrates the `Media` object's `id` in place: same page, same
+file handle, no rebuild. Test `sentLocalEchoKeepsItsPage`.
+(2) Uploads are NOT re-downloaded: the send queue caches the file (and
+thumbnail) under a local `mxc://send-queue.localhost/<txn>` key before sending;
+`update_media_cache_keys_after_upload` renames to the real mxc as
+`MediaFormat::File` and re-stores the thumbnail as `Thumbnail(w,h)` with the
+event's thumbnail dims, which is exactly what the bubble asks for
+(`thumbnailInfo.size`) and the viewer's `getMediaFile(useCache: true)` hits
+the File key. Only the in-memory Kingfisher key changes across the flip (one
+local decode). Encrypted rooms: keyed on the encrypted source, same match.
+(3) A network change mid-upload is handled by the same `send_request_inner`
+loop as every request, whose `select!` on the network-change watch (round 32)
+re-executes the attempt on a fresh reqwest client with no backoff; EXI fires
+it from `NetworkMonitor.pathUpdatePublisher` (and the Retry menu item). It
+used to drop EVERY in-flight request, a multi-MB upload still flowing over the
+old path included (Wi-Fi joining while on cellular): SDK `c17016f4d` gives a
+byte-counted transfer (send/recv progress subscriber present, i.e. uploads
+with the bar on and viewer downloads) a 2 s stall grace and keeps it if it
+moved; only a stalled one is re-sent. Requests without that signal (long-poll,
+small requests) still re-send at once. Ceiling: progress counts bytes as
+reqwest pulls them, so a black-holed socket the kernel is still buffering into
+looks alive for a moment; the menu Retry (another notification) re-checks once
+the buffer is full. Also fixed there: the progress observables accumulated
+across attempts (`total += content_length`, `current` kept counting) so the
+bar ended short of 100 % after a re-send; reset to zero on re-send. Tests
+`test_network_change_resends_in_flight_request` (untracked = immediate) +
+`..._resends_tracked_transfer_only_once_stalled` (grace honoured). Also:
+`MediaProgressBar` is 3pt high on a `bgCanvasDefault` track (dark/light with
+the theme) instead of transparent.

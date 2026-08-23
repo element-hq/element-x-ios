@@ -8,9 +8,10 @@
 import Compound
 import SwiftUI
 
-/// A 2pt strip flush with the bottom edge of a piece of media, filling from the leading edge in
-/// the accent green as a transfer progresses: uploads in the timeline, downloads in the viewer.
-/// Nothing when there's no progress to show.
+/// A 3pt strip flush with the bottom edge of a piece of media, filling from the leading edge in
+/// the accent green over a canvas-coloured track (dark or light with the theme) as a transfer
+/// progresses: uploads in the timeline, downloads in the viewer. Nothing when there's no progress
+/// to show.
 struct MediaProgressBar: View {
     /// 0...1, `nil` hides the bar.
     let progress: Double?
@@ -23,7 +24,8 @@ struct MediaProgressBar: View {
                     .frame(width: geometry.size.width * min(max(progress, 0), 1))
                     .animation(.linear(duration: 0.15), value: progress)
             }
-            .frame(height: 2)
+            .frame(height: 3)
+            .background(.compound.bgCanvasDefault)
             .accessibilityElement()
             .accessibilityLabel(L10n.commonSending)
             .accessibilityValue(Text(progress, format: .percent.precision(.fractionLength(0))))
