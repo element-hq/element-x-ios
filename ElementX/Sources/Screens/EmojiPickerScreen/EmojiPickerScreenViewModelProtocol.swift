@@ -13,8 +13,4 @@ protocol EmojiPickerScreenViewModelProtocol {
     var context: EmojiPickerScreenViewModelType.Context { get }
     
     func stop()
-    
-    /// Re-arms a cached picker for another presentation: fresh continuation, the newly
-    /// selected emojis and re-ordered frequently-used categories.
-    func prepareForPresentation(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
 }

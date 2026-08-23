@@ -61,18 +61,16 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
         AnyView(EmojiPickerScreen(context: viewModel.context))
     }
     
-    // MARK: - Instant presentation
+    // MARK: - Prewarming
     
-    /// One picker instance is built ahead of time and re-presented forever: SwiftUI rebuilds a
-    /// sheet's entire view graph on every `.sheet` presentation (~110ms of double-tap-to-sheet
-    /// latency), whereas re-presenting a cached hosting controller via UIKit takes a frame.
-    private static var cached: (coordinator: EmojiPickerScreenCoordinator, hostingController: EmojiPickerHostingController)?
-    private static var cachedCancellables = Set<AnyCancellable>()
+    private static var hasPrewarmed = false
     
-    /// Builds (and renders once, off-screen) the cached picker so the first real
-    /// presentation doesn't pay for view building or emoji glyph rasterisation.
+    /// Renders a throwaway picker once, off-screen inside the real window (so the graph
+    /// resolves against the real environment), so the first real presentation doesn't
+    /// pay for emoji glyph rasterisation and the sheet appears quickly on double-tap.
     static func prewarm(emojiProvider: EmojiProviderProtocol, in window: UIWindow?) {
-        guard cached == nil else { return }
+        guard !hasPrewarmed else { return }
+        hasPrewarmed = true
         
         let startDate = Date()
         
@@ -81,21 +79,8 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
                                                                          selectedEmojis: [],
                                                                          emojiProvider: emojiProvider,
                                                                          continuation: continuation))
-        coordinator.start()
-        coordinator.actions
-            .sink { action in
-                switch action {
-                case .dismiss:
-                    cached?.hostingController.dismiss(animated: true)
-                }
-            }
-            .store(in: &cachedCancellables)
         
-        let hostingController = EmojiPickerHostingController(rootView: coordinator.toPresentable())
-        let view = hostingController.view!
-        // Build inside the real window (off-screen) so the graph resolves against the real
-        // environment: detached, SwiftUI defers the build and redoes everything (traits,
-        // appearance) inside the first presentation - the very cost the cache is for.
+        guard let view = UIHostingController(rootView: coordinator.toPresentable()).view else { return }
         if let window {
             view.frame = window.bounds.offsetBy(dx: window.bounds.width * 2, dy: 0)
             window.addSubview(view)
@@ -109,57 +94,7 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
         view.removeFromSuperview()
         
         continuation.finish()
-        cached = (coordinator, hostingController)
         
         MXLog.info("Prewarmed the emoji picker in \(Int(Date().timeIntervalSince(startDate) * 1000))ms")
-    }
-    
-    /// Instantly presents the cached picker over `presenter` as an unanimated UIKit sheet.
-    /// `onDismiss` fires once on any dismissal (selection, toolbar or swipe-down), after the
-    /// current continuation is finished.
-    static func presentCached(over presenter: UIViewController,
-                              emojiProvider: EmojiProviderProtocol,
-                              selectedEmojis: Set<String>,
-                              continuation: EmojiPickerScreenContinuation,
-                              onDismiss: @escaping () -> Void) {
-        prewarm(emojiProvider: emojiProvider, in: presenter.viewIfLoaded?.window)
-        guard let cached, cached.hostingController.presentingViewController == nil else {
-            MXLog.error("Cached emoji picker unavailable or already presented")
-            continuation.finish()
-            onDismiss()
-            return
-        }
-        
-        cached.coordinator.viewModel.prepareForPresentation(selectedEmojis: selectedEmojis, continuation: continuation)
-        
-        if let sheet = cached.hostingController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
-        }
-        cached.hostingController.onDismiss = { [weak coordinator = cached.coordinator] in
-            coordinator?.stop() // Finish the continuation on swipe-down too.
-            onDismiss()
-        }
-        presenter.present(cached.hostingController, animated: false)
-    }
-    
-    /// Dismisses the cached picker if it's currently presented. For navigation that leaves
-    /// the picker's state some other way (deep link, flow dismissal): as a UIKit-presented
-    /// sheet it isn't implicitly removed by SwiftUI navigation changes.
-    static func dismissCached() {
-        guard let cached, cached.hostingController.presentingViewController != nil else { return }
-        cached.hostingController.dismiss(animated: false)
-    }
-}
-
-/// Fires `onDismiss` whenever the presented picker leaves the screen, whichever way
-/// it was dismissed.
-private final class EmojiPickerHostingController: UIHostingController<AnyView> {
-    var onDismiss: (() -> Void)?
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        onDismiss?()
-        onDismiss = nil
     }
 }

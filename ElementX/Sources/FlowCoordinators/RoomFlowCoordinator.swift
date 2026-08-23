@@ -445,15 +445,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             
             let animated = (context.userInfo as? EventUserInfo)?.animated ?? true
             
-            // The emoji picker is a UIKit-presented sheet, so navigation transitions don't
-            // implicitly remove it: leaving its state any other way dismisses it explicitly.
-            if case .emojiPicker = context.fromState {
-                switch context.event {
-                case .dismissEmojiPicker: break
-                default: EmojiPickerScreenCoordinator.dismissCached()
-                }
-            }
-            
             switch (context.fromState, context.event, context.toState) {
             // Room
                 
@@ -1237,29 +1228,26 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentEmojiPicker(selectedEmojis: Set<String>,
                                     emojiPickerContinuation: EmojiPickerScreenContinuation,
                                     animated: Bool) {
-        // Presented as a cached UIKit sheet instead of through setSheetCoordinator: a double
-        // tap on a bubble wants the picker at once, and SwiftUI rebuilding the sheet's view
-        // graph on every presentation is most of the double-tap-to-sheet latency.
-        var presenter = flowParameters.windowManager.mainWindow.rootViewController
-        while let presented = presenter?.presentedViewController {
-            presenter = presented
-        }
-        guard let presenter else {
-            MXLog.error("No view controller to present the emoji picker from")
-            emojiPickerContinuation.finish()
-            DispatchQueue.main.async { [weak self] in // Not re-entrantly: we're inside a transition.
-                self?.stateMachine.tryEvent(.dismissEmojiPicker)
-            }
-            return
-        }
+        let params = EmojiPickerScreenCoordinatorParameters(mode: .reaction,
+                                                            selectedEmojis: selectedEmojis,
+                                                            emojiProvider: flowParameters.emojiProvider,
+                                                            continuation: emojiPickerContinuation)
+        let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        // Straight up, no slide: a double tap on a bubble wants the picker at once.
         DoubleTapTiming.log("presenting sheet")
-        EmojiPickerScreenCoordinator.presentCached(over: presenter,
-                                                   emojiProvider: flowParameters.emojiProvider,
-                                                   selectedEmojis: selectedEmojis,
-                                                   continuation: emojiPickerContinuation) { [weak self] in
-            guard let self, case .emojiPicker = stateMachine.state else { return }
-            stateMachine.tryEvent(.dismissEmojiPicker)
+        navigationStackCoordinator.setSheetCoordinator(coordinator, animated: false) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissEmojiPicker)
         }
     }
     
