@@ -22,6 +22,8 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
     
     func beginTextSelection(_ selection: TimelineTextSelectionInfo) {
         activeTextSelection = selection
+        // No dragging the selection out as a floating item (it got stuck on-screen).
+        textDragInteraction?.isEnabled = false
         DispatchQueue.main.async { [weak self] in
             guard let self, isSelectingText else { return }
             becomeFirstResponder()
@@ -90,10 +92,11 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         super.addGestureRecognizer(gestureRecognizer)
     }
     
-    /// This prevents the magnifying glass from showing up (unless the text is being selected).
+    /// This prevents the magnifying glass from showing up, and (while selecting) the long-press
+    /// drag that lifts a floating copy of the text and never dismisses.
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if otherGestureRecognizer is UILongPressGestureRecognizer {
-            return isSelectingText
+            return false
         }
         return true
     }
