@@ -626,8 +626,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private static let thumbnailTimeout: Duration = .milliseconds(400)
     /// Once the page is on display nothing waits on the placeholder, and a big download takes far
     /// longer than this: give a thumbnail that has to be fetched (a cleared media cache, a slow
-    /// network) time to land rather than leaving the bar over a black page.
-    private static let thumbnailTimeoutOnDisplay: Duration = .seconds(5)
+    /// network, a fetch queued behind the video's own download) time to land rather than leaving
+    /// the bar over a black page. The wait ends early anyway once the media lands.
+    private static let thumbnailTimeoutOnDisplay: Duration = .seconds(30)
     
     /// The item's thumbnail: the in-memory image cache (what the timeline drew, keyed as the
     /// timeline, gallery and media-grid cells load it) or, that being short-lived, the SDK's
@@ -646,17 +647,20 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         let size = item.thumbnailMediaSource == nil ? item.mediaSize : item.thumbnailSize
         let lookupStarted = ContinuousClock.now
         let load = mediaProvider.loadImageRetryingOnReconnection(source, size: size)
-        let image: UIImage? = await withTaskGroup(of: UIImage?.self) { group in
-            group.addTask { try? await load.value }
-            // Slept in the child itself: an unstructured timer task here outlived `cancelAll()`, so
-            // the group waited the whole timeout however fast the load came back (or failed).
-            group.addTask { try? await Task.sleep(for: timeout); return nil }
-            let first = await group.next() ?? nil
-            group.cancelAll()
-            return first
+        // A poll, not a task-group race: the group waited for its load child, which awaited the
+        // unstructured load (not cancelled until after the group returned), so the timeout neither
+        // bounded the wait nor kept a late result: a poster that landed at 17-20 s (its fetch
+        // starved by the video's own download) was dropped and the page stayed black.
+        final class Arrival { var image: UIImage?; var done = false }
+        let arrival = Arrival()
+        Task { arrival.image = try? await load.value; arrival.done = true }
+        // Ends early once the media itself lands: a placeholder is pointless then.
+        while !arrival.done, item.fileHandle == nil, ContinuousClock.now - lookupStarted < timeout {
+            try? await Task.sleep(for: .milliseconds(50))
         }
-        if image == nil {
-            load.cancel() // Timed out: don't keep a fetch going that nothing will use.
+        let image = arrival.image
+        if !arrival.done {
+            load.cancel() // Timed out, or overtaken by the media: don't keep a fetch going that nothing will use.
         }
         MXLog.info("Media viewer: thumbnail for \(item.id) from the store: \(image != nil) after \(ContinuousClock.now - lookupStarted)")
         return image

@@ -4670,3 +4670,13 @@ the view applies as a `Set` (or a removal when it decrypted into a non-media
 message); the viewer's existing reshuffle/rebuild path takes it from there.
 Regression test drives a real redecryption into a message-types view (fails
 without the fix). Side effect: redecrypted events now reach the search index.
+
+**Round 61 follow-up: video poster never loaded (build 175).** The Aug-13
+video's thumbnail lookup logged "from the store: false after 17-20 s" against
+a 5 s on-display timeout: the task-group race waited for its load child,
+which awaited the unstructured load (only cancelled after the group
+returned), so the timeout neither bounded the wait nor kept a late result;
+the poster, starved behind the video's own download, was dropped and the page
+stayed black until the video landed (36 s). Replaced by a poll (like the
+placeholder grace wait) that ends on arrival, the media landing, or the
+timeout (on-display now 30 s); a late poster is kept.
