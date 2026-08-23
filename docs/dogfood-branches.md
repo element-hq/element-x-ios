@@ -4479,3 +4479,31 @@ QuickLook builds (±3) now get their thumbnail placeholder prepared alongside
 the preload (`placeholderReach`, de-duplicated via `placeholderJobs`), so a
 cold cache builds poster pages that swap to the media on arrival instead of
 blank ones.
+
+**Round 55 (2026-08-23): three on build 161, cold caches (build 162).**
+Log 16:10-16:11Z, three viewer opens right after "Clear for room" (event
+cache AND media cache cold). (1) "Gaps that never fixed" = pages QuickLook
+built as the "Loading more…" placeholder while the media timeline had not
+yet paginated the items (the padding absorbs prepends, so no count change, no
+reload); they rebuilt only on landing + rest ("stale placeholder page …
+rebuilding when resting", 3x). New: when items land inside the built
+neighbourhood (first index moves below it within 3 of the current page) a
+covered rebuild is scheduled for the next rest (`placeholderRebuildRadius`,
+coalesced by `prependRebuildPending`). (2) "Copy to preview" = 6 unavailable
+pages, every one with its file present (102 kB-870 kB), i.e. built before
+the file landed; heal on landing + rest as before, the ±3 neighbour
+placeholders (161) need the thumbnail in the store to help, and after a
+media flush the thumbnails download too. (3) "Couldn't swipe beyond a point"
+(session 4, 16:11:26Z): stopped on index 95, a video whose file wasn't there
+yet (poster page, grace wait "file: false"), nothing logged after; not
+reproduced from the log. Structural note: all three are QuickLook's
+build-once pages vs content arriving later; every mitigation here is a
+rest-gated reload, the real fix is owning the pager.
+Bug 3 FOUND (session 2, 16:11:08Z): landed on index 97, the placeholder swap
+ran after the 200 ms rest check, its rebuilt-page detection failed, and the
+fallback `reloadData` ran at 08.135 while the next touch had begun at 08.083
+(`TouchDebug: began`); QuickLook then accepted every pan but moved no page
+until the viewer was closed (the known refresh/reload-mid-swipe wedge). The
+rest predicates checked `isDragging`/`isDecelerating` but not `isTracking`
+(finger down before the pan is recognised): added everywhere, and the swap
+fallback reload now defers to the next rest when a touch is down (build 163).

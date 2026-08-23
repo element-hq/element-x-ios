@@ -242,7 +242,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         guard pageWidth > 0 else { return }
 
         // Whilst resting on an item, keep track of the offset that any swipe will start from.
-        if !pageScrollView.isDragging, !pageScrollView.isDecelerating {
+        if !pageScrollView.isTracking, !pageScrollView.isDragging, !pageScrollView.isDecelerating {
             pageScrollViewRestingOffset = pageScrollView.contentOffset.x
         } else {
             removeReloadCover(animated: false) // Don't freeze the pages under a swipe.
@@ -372,6 +372,10 @@ class TimelineMediaPreviewController: QLPreviewController {
         handleUpdatedItems()
     }
     
+    /// How far below the current index prepended items count as landing inside built pages.
+    private static let placeholderRebuildRadius = 3
+    private var prependRebuildPending = false
+    
     private func handleUpdatedItems() {
         let dataSource = context.viewState.dataSource
         
@@ -425,6 +429,20 @@ class TimelineMediaPreviewController: QLPreviewController {
             moveToIndexAndReload(target)
         }
         let reloaded = lastKnownItemCount != count
+        // Items prepended into the pages QuickLook has built (a cold event cache: the pages either
+        // side were built as the "loading more" placeholder before the items arrived, and QuickLook
+        // keeps them): rebuild when resting, rather than only once the user lands on one and rests
+        // there, so the next swipe finds the media.
+        if !reloaded, firstIndex < lastKnownFirstIndex, lastKnownFirstIndex >= currentPreviewItemIndex - Self.placeholderRebuildRadius, !prependRebuildPending {
+            prependRebuildPending = true
+            MXLog.info("Media viewer: items arrived inside the built pages (first index \(lastKnownFirstIndex) -> \(firstIndex)), rebuilding when resting")
+            let index = currentPreviewItemIndex
+            Task { [weak self] in
+                let resting = await self?.waitUntilResting(atIndex: index) ?? false
+                self?.prependRebuildPending = false
+                if resting { self?.reloadDataTrackingBlanks() } // Swiped on: that landing's stale-page check takes over.
+            }
+        }
         lastKnownItemCount = count
         lastKnownFirstIndex = firstIndex
         
@@ -514,7 +532,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         neighbourReloadTask = Task { [weak self] in
             try? await Task.sleep(for: .milliseconds(350)) // Coalesce a trickle of neighbour loads into one reload.
             guard let self, !Task.isCancelled,
-                  let scrollView = pageScrollView, !scrollView.isDragging, !scrollView.isDecelerating else { return }
+                  let scrollView = pageScrollView, !scrollView.isTracking, !scrollView.isDragging, !scrollView.isDecelerating else { return }
             // One reload per rest: a single reloadData rebuilds every page with whatever files are
             // present now, so later arrivals in the same rest need no further reload (they would just
             // re-flash the current page). Files that land after this reload heal on the next rest,
@@ -702,7 +720,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             }
             guard item.previewItemURL != nil else { return } // Its load will refresh it.
             if let scrollView = pageScrollView {
-                let isStill = !scrollView.isDragging && !scrollView.isDecelerating && scrollView.contentOffset.x == restingOffset
+                let isStill = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating && scrollView.contentOffset.x == restingOffset
                 stillPolls = isStill ? stillPolls + 1 : 0
                 restingOffset = scrollView.contentOffset.x
             } else {
@@ -758,8 +776,15 @@ class TimelineMediaPreviewController: QLPreviewController {
                     player.play()
                 }
             } else if (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID {
-                MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading")
-                reloadDataTrackingBlanks()
+                // Only at rest: this reload landing on a touch that had just begun wedged QuickLook
+                // (every pan accepted, no page moved, until the viewer was closed).
+                if let scrollView = pageScrollView, scrollView.isTracking || scrollView.isDragging || scrollView.isDecelerating {
+                    MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading when resting")
+                    scheduleWhenResting { $0.reloadDataTrackingBlanks() }
+                } else {
+                    MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading")
+                    reloadDataTrackingBlanks()
+                }
             }
         }
     }
@@ -787,7 +812,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         for _ in 0..<60 {
             guard currentPreviewItemIndex == index else { return false }
             if let scrollView = pageScrollView {
-                let isStill = !scrollView.isDragging && !scrollView.isDecelerating && scrollView.contentOffset.x == restingOffset
+                let isStill = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating && scrollView.contentOffset.x == restingOffset
                 stillPolls = isStill ? stillPolls + 1 : 0
                 restingOffset = scrollView.contentOffset.x
             } else {
