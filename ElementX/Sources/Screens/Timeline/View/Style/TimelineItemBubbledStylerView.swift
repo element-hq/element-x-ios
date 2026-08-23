@@ -156,6 +156,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubbleWithActions: some View {
         messageBubble
+            // A double tap opens the reaction picker. Declared before the single tap so it wins
+            // (the other way round the single tap fires first and the double never does); a
+            // content view's own tap (media, links) still takes precedence over both.
+            .onTapGesture(count: 2) {
+                context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
+            }
             .onTapGesture {
                 // We need a tap gesture before the long press gesture below, otherwise something
                 // on iOS 17 hijacks the long press and you can't bring up the context menu. This
