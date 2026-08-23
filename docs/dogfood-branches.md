@@ -4580,3 +4580,15 @@ timestamp. Manage storage: the navigation-bar search field hung the app on
 the first keystroke (cause not chased: `.searchable` + introspected search
 bar in this Form); replaced by a text-field row at the top of the rooms
 section, and the bars scale to the largest *listed* room (build 168).
+
+**Round 58 (2026-08-23): "still had to reopen to pick up decrypted gap
+content" (build 169).** Log 17:32:42/44Z: "items arrived inside the built
+pages … rebuilding when resting" twice with no reload after either: the
+rest-gated rebuild gave up when the swipe went on (`waitUntilResting(atIndex:)`
+returns false on an index change) and nothing retried, so QuickLook's already
+built pages stayed stale until the viewer was reopened (17:33:03 showed the
+24 items at once). The same drop hit the stale-placeholder landing path
+(17:32:43 → not rebuilt until landed on again at 17:32:49). The rebuild is
+now sticky (`pendingRestRebuild` + `rebuildWhenResting()`): re-armed for
+wherever the next landing is, from the index observer, until a rest lets
+the covered reload run.

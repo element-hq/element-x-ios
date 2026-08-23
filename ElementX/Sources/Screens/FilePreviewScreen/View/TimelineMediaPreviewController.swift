@@ -99,6 +99,8 @@ class TimelineMediaPreviewController: QLPreviewController {
                 MXLog.info("Media viewer: index \(index) -> \(self?.currentPreviewItemDescription ?? "nil")")
                 self?.loadCurrentItem()
                 self?.checkCurrentItemOnArrival()
+                // A rebuild that found the pages moving re-arms for wherever the swipe lands.
+                if self?.pendingRestRebuild == true { self?.rebuildWhenResting() }
             }
             .store(in: &cancellables)
         
@@ -289,11 +291,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             if case .paginating = loadingItem.state,
                context.viewState.dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
                 MXLog.info("Media viewer: stale placeholder page at index \(currentPreviewItemIndex), rebuilding when resting")
-                let index = currentPreviewItemIndex
-                Task { [weak self] in
-                    guard await self?.waitUntilResting(atIndex: index) == true else { return }
-                    self?.reloadDataTrackingBlanks()
-                }
+                rebuildWhenResting()
                 return
             }
             switch loadingItem.state {
@@ -386,7 +384,21 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     /// How far below the current index prepended items count as landing inside built pages.
     private static let placeholderRebuildRadius = 3
-    private var prependRebuildPending = false
+    /// A rebuild of QuickLook's pages is owed (items landed inside or moved under the built pages)
+    /// but the pages were moving: it runs at the next rest, wherever that is. Swiping on used to
+    /// drop it ("that landing's stale-page check takes over", which only covers "loading more"
+    /// pages), leaving stale pages until the viewer was reopened.
+    private var pendingRestRebuild = false
+    
+    private func rebuildWhenResting() {
+        pendingRestRebuild = true
+        let index = currentPreviewItemIndex
+        Task { [weak self] in
+            guard let self, await waitUntilResting(atIndex: index), pendingRestRebuild else { return }
+            pendingRestRebuild = false
+            reloadDataTrackingBlanks()
+        }
+    }
     
     private func handleUpdatedItems() {
         let dataSource = context.viewState.dataSource
@@ -464,15 +476,9 @@ class TimelineMediaPreviewController: QLPreviewController {
         // side were built as the "loading more" placeholder before the items arrived, and QuickLook
         // keeps them): rebuild when resting, rather than only once the user lands on one and rests
         // there, so the next swipe finds the media.
-        if !reloaded, firstIndex < lastKnownFirstIndex, lastKnownFirstIndex >= currentPreviewItemIndex - Self.placeholderRebuildRadius, !prependRebuildPending {
-            prependRebuildPending = true
+        if !reloaded, firstIndex < lastKnownFirstIndex, lastKnownFirstIndex >= currentPreviewItemIndex - Self.placeholderRebuildRadius, !pendingRestRebuild {
             MXLog.info("Media viewer: items arrived inside the built pages (first index \(lastKnownFirstIndex) -> \(firstIndex)), rebuilding when resting")
-            let index = currentPreviewItemIndex
-            Task { [weak self] in
-                let resting = await self?.waitUntilResting(atIndex: index) ?? false
-                self?.prependRebuildPending = false
-                if resting { self?.reloadDataTrackingBlanks() } // Swiped on: that landing's stale-page check takes over.
-            }
+            rebuildWhenResting()
         }
         lastKnownItemCount = count
         lastKnownFirstIndex = firstIndex
@@ -482,7 +488,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             dataSource.needsRebuild = false
             if !reloaded {
                 MXLog.info("Media viewer: items reshuffled, rebuilding the pages when resting")
-                scheduleWhenResting { $0.reloadDataTrackingBlanks() }
+                rebuildWhenResting()
             }
         }
 
