@@ -125,6 +125,10 @@ class TimelineMediaPreviewController: QLPreviewController {
             }
             .store(in: &cancellables)
         
+        // QuickLook's text selection (Live Text, documents) and caret take the view's tint: the
+        // window's primary-text tint reads as a faint grey on dark media, so use the composer's.
+        view.tintColor = .compound.iconAccentTertiary
+        
         dataSource = context.viewState.dataSource
         currentPreviewItemIndex = context.viewState.dataSource.initialItemIndex
         // The geometry QuickLook builds with, so the first count change already shifts the index

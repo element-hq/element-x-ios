@@ -306,8 +306,15 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private func preload(_ item: TimelineMediaPreviewItem.Media) {
         guard item.downloadError == nil,
               let source = item.mediaSource,
-              item.fileSize.map({ $0 <= Self.preloadFileSizeLimit }) ?? true else { return }
+              !isLargeFile(item) else { return }
         preload(item, source: source)
+    }
+    
+    /// Whether the item's file is too big to fetch speculatively: over ``preloadFileSizeLimit``,
+    /// or a video of unknown size (an unsized neighbouring video was preloaded next to the one on
+    /// display and starved its download).
+    private func isLargeFile(_ item: TimelineMediaPreviewItem.Media) -> Bool {
+        item.fileSize.map { $0 > Self.preloadFileSizeLimit } ?? (item.kind == .video)
     }
     
     private func preload(_ item: TimelineMediaPreviewItem.Media, source: MediaSourceProxy, placeholderFirst: Bool = false) {
@@ -505,7 +512,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     private func isPlaceholderFirst(_ item: TimelineMediaPreviewItem.Media) -> Bool {
         contentScannerService == nil && item.kind != .file && item.placeholderURL == nil && item.thumbnailMediaSource != nil
-            && item.fileSize.map { $0 >= Self.placeholderFirstFileSize } ?? false
+            && item.fileSize.map { $0 >= Self.placeholderFirstFileSize } ?? (item.kind == .video)
     }
     
     /// How long a media load gets before its thumbnail placeholder is made: whether the media is
