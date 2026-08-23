@@ -4533,3 +4533,36 @@ when they land. "Skipped from Aug to June": the shapes show ~30 undecryptable
 messages between them decrypting later in batches; those land as mid-list
 inserts (reshuffle path, rebuilt at rest) or prepends (rebuild at rest), so
 swiping back should find them without a restart once they've decrypted.
+
+**Round 57 (2026-08-23): build 165 report + asks (build 166).** Build 165
+"felt pretty good". (1) "Couldn't swipe back into the items that decrypted
+in the initial gap": the log shows the viewer holding the user on the
+"Loading more" placeholder for 13 s (16:43:38-51Z) while 12 items decrypted
+behind it: the data source waits 5 s per undecryptable message from first
+sight, and each backfill brought more, so the wait kept restarting while the
+arrived items sat unreachable behind the clamp. The hold is now bounded from
+landing on the placeholder (`placeholderHoldLimit` = the same 5 s, with a
+re-check timer): past it the viewer steps onto what has arrived; what
+decrypts later lands as a reshuffle, rebuilt at rest, reachable by swiping.
+(2) "Adjacent large video preloaded": a neighbouring video with no `size`
+in its event info was preloaded (the 10 MB limit only applied to sized
+files) and shared the bandwidth of the one on display. Videos of unknown
+size now count as large: not preloaded, and placeholder-first on display.
+Cancelling a download you've swiped past isn't possible from Swift (uniffi:
+"Cancellation not supported yet"), so no setting for that; "Preload media in
+the viewer" in Advanced settings already turns neighbour preloads off.
+(3) QuickLook's selection/caret tint (Live Text) was the window's
+primary-text grey: the controller's view now takes the composer's
+`iconAccentTertiary`. (4) Video posters use the timeline's `VideoPlayBadge`
+(shared view, rendered with `ImageRenderer` at the poster's on-screen density)
+instead of a hand-drawn circle. (5) Timeline: double tap on a bubble opens
+the reaction picker (declared before the empty single tap so it wins; a
+content view's own tap, e.g. media, still goes first). (6) "Copy text" is
+now "Select text": a sheet with the message body in a selectable text view,
+all selected, with the system edit menu and a Copy button; copying the whole
+message puts the body (markdown for formatted messages) on the pasteboard as
+plain text plus the formatted body as HTML and RTF, so a plain-text composer
+paste gets markdown and a rich-text one keeps the formatting; a partial
+selection copies its plain text. (7) Manage storage: a search field filters
+the room list by name or ID and lists every match regardless of the 1 MB
+threshold (build 166 = bf8d4a5e4…).
