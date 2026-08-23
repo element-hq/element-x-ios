@@ -548,7 +548,9 @@ class TimelineInteractionHandler {
         .asCancellable()
     }
     
-    func processItemTap(_ itemID: TimelineItemIdentifier) async -> TimelineControllerAction {
+    /// `galleryIndex` is the tapped attachment when the item is a gallery, so that the media
+    /// timeline is filtered to that attachment's kind (and the gallery's other media).
+    func processItemTap(_ itemID: TimelineItemIdentifier, galleryIndex: Int? = nil) async -> TimelineControllerAction {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedTimelineItemProtocol else {
             return .none
         }
@@ -577,8 +579,13 @@ class TimelineInteractionHandler {
         case let item as FileRoomTimelineItem:
             return await mediaPreviewAction(for: item, messageTypes: [.audio, .file, .gallery])
         case let item as GalleryRoomTimelineItem:
-            // Only galleries are needed as the preview is scoped to the attachments of the tapped one.
-            return await mediaPreviewAction(for: item, messageTypes: [.gallery])
+            // The attachments are browsed inline with the room's other media of the same kind.
+            switch galleryIndex.flatMap({ item.content.items.indices.contains($0) ? item.content.items[$0] : nil }) {
+            case .audio, .file:
+                return await mediaPreviewAction(for: item, messageTypes: [.audio, .file, .gallery])
+            default:
+                return await mediaPreviewAction(for: item, messageTypes: [.image, .video, .gallery])
+            }
         default:
             return .none
         }

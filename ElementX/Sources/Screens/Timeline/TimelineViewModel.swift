@@ -761,7 +761,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             guard !Task.isCancelled else { return }
             state.showLoading = true
         }
-        let action = await timelineInteractionHandler.processItemTap(itemID)
+        let action = await timelineInteractionHandler.processItemTap(itemID, galleryIndex: galleryIndex)
         spinner.cancel()
         
         switch action {
