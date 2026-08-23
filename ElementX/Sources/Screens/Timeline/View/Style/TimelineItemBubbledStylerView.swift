@@ -154,21 +154,29 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
     }
     
+    private var isSelectingText: Bool {
+        context.textSelection?.itemID == timelineItem.id
+    }
+    
     var messageBubbleWithActions: some View {
         messageBubble
-            // A double tap opens the reaction picker. Declared before the single tap so it wins
-            // (the other way round the single tap fires first and the double never does); a
-            // content view's own tap (media, links) still takes precedence over both.
-            .onTapGesture(count: 2) {
-                context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
-            }
             .onTapGesture {
                 // We need a tap gesture before the long press gesture below, otherwise something
                 // on iOS 17 hijacks the long press and you can't bring up the context menu. This
                 // is no longer an issue on iOS 18. Note: it's fine for this to be empty, we handle
                 // specific taps within the timeline views themselves.
+                
+                // A tap on another bubble ends an in-bubble text selection.
+                if let selection = context.textSelection, selection.itemID != timelineItem.id {
+                    context.send(viewAction: .endTextSelection)
+                }
             }
-            .longPressWithFeedback {
+            // A double tap opens the reaction picker (not while the text is being selected: the
+            // text view's double tap selects a word then).
+            .onDoubleTap(isEnabled: !isSelectingText) {
+                context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
+            }
+            .longPressWithFeedback(isEnabled: !isSelectingText) {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
             .swipeRightAction {
@@ -239,6 +247,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             
             content()
+                // "Select text": the item's text views select in place (see `MessageText`).
+                .environment(\.timelineTextSelection, isSelectingText ? context.textSelection : nil)
                 .timelineBubbleLayoutSize(.natural)
                 .cornerRadius(timelineItem.contentCornerRadius)
         }

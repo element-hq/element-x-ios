@@ -27,7 +27,7 @@ enum TimelineInteractionHandlerAction {
     case viewInRoomTimeline(eventID: String)
     case displayThread(itemID: TimelineItemIdentifier)
     case showTranslation(text: String)
-    case showTextSelection(text: String, html: String?)
+    case showTextSelection(TimelineTextSelectionInfo)
 }
 
 /// The interaction handler groups logic for dealing with various actions the user can take on a timeline's
@@ -129,7 +129,7 @@ class TimelineInteractionHandler {
             case .emote(let content): content.formattedBodyHTMLString
             default: nil
             }
-            actionsSubject.send(.showTextSelection(text: messageTimelineItem.body, html: html))
+            actionsSubject.send(.showTextSelection(.init(itemID: eventTimelineItem.id, text: messageTimelineItem.body, html: html)))
         case .copyCaption:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
                   let caption = messageTimelineItem.mediaCaption else {

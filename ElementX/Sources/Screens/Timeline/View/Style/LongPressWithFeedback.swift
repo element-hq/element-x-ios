@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct LongPressWithFeedback: ViewModifier {
+    let isEnabled: Bool
     let action: () -> Void
     
     @State private var triggerTask: Task<Void, Never>?
@@ -17,7 +18,7 @@ struct LongPressWithFeedback: ViewModifier {
     
     func body(content: Content) -> some View {
         mainContent(content: content)
-            .gesture(LongPressGestureRepresentable { gesture in
+            .gesture(LongPressGestureRepresentable(isEnabled: isEnabled) { gesture in
                 switch gesture.state {
                 case .began:
                     handleLongPress(isPressing: true)
@@ -69,8 +70,48 @@ struct LongPressWithFeedback: ViewModifier {
 }
 
 extension View {
-    func longPressWithFeedback(action: @escaping () -> Void) -> some View {
-        modifier(LongPressWithFeedback(action: action))
+    func longPressWithFeedback(isEnabled: Bool = true, action: @escaping () -> Void) -> some View {
+        modifier(LongPressWithFeedback(isEnabled: isEnabled, action: action))
+    }
+    
+    /// A double tap, recognised by UIKit so that it also fires over a bubble's text views (whose
+    /// own tap recognisers eat a SwiftUI double tap), without delaying anyone's single tap.
+    func onDoubleTap(isEnabled: Bool = true, perform action: @escaping () -> Void) -> some View {
+        gesture(DoubleTapGestureRepresentable(isEnabled: isEnabled, action: action))
+    }
+}
+
+private struct DoubleTapGestureRepresentable: UIGestureRecognizerRepresentable {
+    let isEnabled: Bool
+    let action: () -> Void
+    
+    func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator {
+        .init()
+    }
+    
+    func makeUIGestureRecognizer(context: Context) -> UITapGestureRecognizer {
+        let gesture = UITapGestureRecognizer()
+        gesture.numberOfTapsRequired = 2
+        gesture.delegate = context.coordinator
+        gesture.isEnabled = isEnabled
+        return gesture
+    }
+    
+    func updateUIGestureRecognizer(_ recognizer: UITapGestureRecognizer, context: Context) {
+        recognizer.isEnabled = isEnabled
+    }
+    
+    func handleUIGestureRecognizerAction(_ recognizer: UITapGestureRecognizer, context: Context) {
+        guard recognizer.state == .ended else { return }
+        action()
+    }
+    
+    class Coordinator: NSObject, UIGestureRecognizerDelegate {
+        // Alongside the text views' taps (links) and the scroll view, never instead of them.
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            true
+        }
     }
 }
 
@@ -127,6 +168,7 @@ struct LongPressWithFeedback_Previews: PreviewProvider, TestablePreview {
 /// Fixes the issue on iOS 18 where LongPress conflicts with the scroll view
 /// https://github.com/feedback-assistant/reports/issues/542#issuecomment-2581322968
 private struct LongPressGestureRepresentable: UIGestureRecognizerRepresentable {
+    var isEnabled = true
     var handle: (UILongPressGestureRecognizer) -> Void
     
     func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator {
@@ -137,8 +179,12 @@ private struct LongPressGestureRepresentable: UIGestureRecognizerRepresentable {
         let gesture = UILongPressGestureRecognizer()
         gesture.minimumPressDuration = 0.25
         gesture.delegate = context.coordinator
-        gesture.isEnabled = true
+        gesture.isEnabled = isEnabled
         return gesture
+    }
+    
+    func updateUIGestureRecognizer(_ recognizer: UILongPressGestureRecognizer, context: Context) {
+        recognizer.isEnabled = isEnabled
     }
     
     func handleUIGestureRecognizerAction(_ recognizer: UILongPressGestureRecognizer, context: Context) {

@@ -71,6 +71,7 @@ enum TimelineViewAction {
     case tappedOnSenderDetails(sender: TimelineItemSender)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
     case displayEmojiPicker(itemID: TimelineItemIdentifier)
+    case endTextSelection
     case displayReadReceipts(itemID: TimelineItemIdentifier)
     case displayThread(itemID: TimelineItemIdentifier)
     
@@ -193,7 +194,7 @@ struct TimelineViewStateBindings {
     
     var showTranslation = false
     var textToBeTranslated: String?
-    /// A message's text presented for selection (the "Select text" menu action).
+    /// The message whose text is being selected in its bubble (the "Select text" menu action).
     var textSelection: TimelineTextSelectionInfo?
 }
 
@@ -402,13 +403,4 @@ extension TimelineViewState {
         
         return attributedString.string
     }
-}
-
-struct TimelineTextSelectionInfo: Identifiable, Equatable {
-    let id = UUID()
-    /// The message's body: the markdown-ish source for formatted messages, what a plain-text
-    /// composer wants pasted.
-    let text: String
-    /// The message's formatted body, for a rich-text paste.
-    let html: String?
 }

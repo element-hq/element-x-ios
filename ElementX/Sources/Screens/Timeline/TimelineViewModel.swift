@@ -197,7 +197,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 state.timelineState.fullyReadEventID = nil
             }
         case .displayTimelineItemMenu(let itemID):
+            state.bindings.textSelection = nil
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
+        case .endTextSelection:
+            state.bindings.textSelection = nil
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
         case .tappedOnSenderDetails(let sender):
@@ -563,8 +566,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .showTranslation(let text):
                     self.state.bindings.textToBeTranslated = text
                     self.state.bindings.showTranslation = true
-                case .showTextSelection(let text, let html):
-                    self.state.bindings.textSelection = TimelineTextSelectionInfo(text: text, html: html)
+                case .showTextSelection(let selection):
+                    self.state.bindings.textSelection = selection
                 }
             }
             .store(in: &cancellables)

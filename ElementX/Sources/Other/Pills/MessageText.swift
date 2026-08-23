@@ -14,6 +14,50 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
     var updateClosure: (() -> Void)?
     private var pillViews = NSHashTable<UIView>.weakObjects()
     
+    /// Set while the message is in "Select text": the selection is kept (not cleared by the
+    /// delegate), the view is first responder with everything selected, and the text view's own
+    /// long press (loupe, handles) is allowed.
+    var activeTextSelection: TimelineTextSelectionInfo?
+    var isSelectingText: Bool { activeTextSelection != nil }
+    
+    func beginTextSelection(_ selection: TimelineTextSelectionInfo) {
+        activeTextSelection = selection
+        DispatchQueue.main.async { [weak self] in
+            guard let self, isSelectingText else { return }
+            becomeFirstResponder()
+            selectAll(nil)
+        }
+    }
+    
+    func endTextSelection() {
+        guard isSelectingText else { return }
+        activeTextSelection = nil
+        selectedTextRange = nil
+        if isFirstResponder {
+            super.resignFirstResponder()
+        }
+    }
+    
+    /// Losing focus to something else (the composer, say) ends the selection.
+    override func resignFirstResponder() -> Bool {
+        let resigned = super.resignFirstResponder()
+        if resigned, isSelectingText {
+            activeTextSelection = nil
+            selectedTextRange = nil
+            timelineContext?.send(viewAction: .endTextSelection)
+        }
+        return resigned
+    }
+    
+    /// Copying the whole text copies the message in both representations (see `TimelineTextSelectionInfo`).
+    override func copy(_ sender: Any?) {
+        if let activeTextSelection, selectedRange.location == 0, selectedRange.length == attributedText.length {
+            activeTextSelection.copyToPasteboard()
+        } else {
+            super.copy(sender)
+        }
+    }
+    
     override func addGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
         // We don't need to change the behaviour on MacOS
         if !ProcessInfo.processInfo.isiOSAppOnMac {
@@ -22,10 +66,10 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         super.addGestureRecognizer(gestureRecognizer)
     }
     
-    /// This prevents the magnifying glass from showing up
+    /// This prevents the magnifying glass from showing up (unless the text is being selected).
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if otherGestureRecognizer is UILongPressGestureRecognizer {
-            return false
+            return isSelectingText
         }
         return true
     }
@@ -73,6 +117,7 @@ private final nonisolated class TransparentTextAttachment: NSTextAttachment {
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction
     @Environment(\.timelineContext) private var viewModel
+    @Environment(\.timelineTextSelection) private var textSelection
     @Environment(\.layoutDirection) private var layoutDirection
     
     /// Cache key for `sizeThatFits`. Keyed on the reserved trailing size as well as the proposed
@@ -210,6 +255,12 @@ struct MessageText: UIViewRepresentable {
             computedSizes.removeAll()
         }
         context.coordinator.openURLAction = openURLAction
+        
+        if let textSelection, !uiView.isSelectingText {
+            uiView.beginTextSelection(textSelection)
+        } else if textSelection == nil, uiView.isSelectingText {
+            uiView.endTextSelection()
+        }
     }
     
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: MessageTextView, context: Context) -> CGSize? {
@@ -239,7 +290,7 @@ struct MessageText: UIViewRepresentable {
         }
         
         func textViewDidChangeSelection(_ textView: UITextView) {
-            guard !ProcessInfo.processInfo.isiOSAppOnMac else {
+            guard !ProcessInfo.processInfo.isiOSAppOnMac, (textView as? MessageTextView)?.isSelectingText != true else {
                 return
             }
             textView.selectedTextRange = nil
