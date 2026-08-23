@@ -116,6 +116,7 @@ private struct DoubleTapGestureRepresentable: UIGestureRecognizerRepresentable {
     func handleUIGestureRecognizerAction(_ recognizer: UITapGestureRecognizer, context: Context) {
         guard recognizer.state == .ended else { return }
         DoubleTapTiming.recognised = Date()
+        MainThreadSampler.start(duration: 0.8, label: "reaction-picker")
         action()
     }
     
