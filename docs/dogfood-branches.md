@@ -4373,3 +4373,17 @@ placeholder before; 5 s once the on-display wait grew, which would have held
 the placeholder-first download back by 5 s). The sleep now lives in the group
 child; a timed-out load is cancelled. Placeholder-first also requires the
 event to carry a thumbnail source (no server-side video thumbnail attempts).
+
+**Round 51 follow-up (build 156).** Bar moved to the very bottom edge of the
+screen: following the placeholder's content edge broke down once it was
+pinched/zoomed. Spinner-before-thumbnail question: on build 155 both
+placeholder-first thumbnails took ~5.0 s (14:42:11.3 -> 16.4Z, 28.5 -> 33.6Z)
+although the SDK's store read for them took 3 ms (`media_store Timer
+2.985ms` at 11.338Z) and nothing else touched the store or the network until
+the viewer logged them; the main thread was alive throughout. So the ~5 s sits
+in the Swift provider layer (Kingfisher disk lookup / decode + store / the
+retry-on-reachability path), not the SDK. DIAG added (strip pre-upstream):
+`Slow image load …: disk cache …, loader …, decode+store …` for any image
+load over 500 ms, `Image load failed, retrying on reconnection`, and the
+viewer's "thumbnail … from the store: … after …" elapsed. Next slow one
+names the stage.

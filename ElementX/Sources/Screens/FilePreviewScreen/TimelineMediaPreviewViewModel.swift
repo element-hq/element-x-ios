@@ -609,6 +609,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
         guard let source = item.thumbnailMediaSource ?? item.mediaSource else { return nil }
         let size = item.thumbnailMediaSource == nil ? item.mediaSize : item.thumbnailSize
+        let lookupStarted = ContinuousClock.now
         let load = mediaProvider.loadImageRetryingOnReconnection(source, size: size)
         let image: UIImage? = await withTaskGroup(of: UIImage?.self) { group in
             group.addTask { try? await load.value }
@@ -622,7 +623,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         if image == nil {
             load.cancel() // Timed out: don't keep a fetch going that nothing will use.
         }
-        MXLog.info("Media viewer: thumbnail for \(item.id) from the store: \(image != nil)")
+        MXLog.info("Media viewer: thumbnail for \(item.id) from the store: \(image != nil) after \(ContinuousClock.now - lookupStarted)")
         return image
     }
     

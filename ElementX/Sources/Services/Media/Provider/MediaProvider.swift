@@ -39,11 +39,13 @@ nonisolated struct MediaProvider: MediaProviderProtocol {
         }
         
         let cacheKey = cacheKeyForURL(source.url, size: size)
+        let started = ContinuousClock.now
         
         if let cacheResult = try? await imageCache.retrieveImage(forKey: cacheKey, options: nil),
            let image = cacheResult.image {
             return .success(image)
         }
+        let diskChecked = ContinuousClock.now
         
         do {
             let imageData: Data
@@ -52,6 +54,7 @@ nonisolated struct MediaProvider: MediaProviderProtocol {
             } else {
                 imageData = try await mediaLoader.loadMediaContentForSource(source)
             }
+            let loaded = ContinuousClock.now
             
             guard let image = UIImage(data: imageData) else {
                 MXLog.error("Invalid image data")
@@ -59,6 +62,13 @@ nonisolated struct MediaProvider: MediaProviderProtocol {
             }
             
             try await imageCache.store(image, forKey: cacheKey)
+            
+            // DIAG: a viewer thumbnail took ~5 s end to end on device while the SDK's store read took
+            // 3 ms; says which stage it is. Strip pre-upstream.
+            let total = ContinuousClock.now - started
+            if total > .milliseconds(500) {
+                MXLog.info("Slow image load \(total): disk cache \(diskChecked - started), loader \(loaded - diskChecked), decode+store \(ContinuousClock.now - loaded), size \(size.map { "\(Int($0.width))x\(Int($0.height))" } ?? "full")")
+            }
             
             return .success(image)
         } catch {
@@ -81,6 +91,7 @@ nonisolated struct MediaProvider: MediaProviderProtocol {
                 throw MediaProviderError.cancelled
             }
             
+            MXLog.info("Image load failed, retrying on reconnection (currently \(homeserverReachabilityPublisher.value))")
             for await reachability in homeserverReachabilityPublisher.values {
                 guard !Task.isCancelled else {
                     throw MediaProviderError.cancelled

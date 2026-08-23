@@ -181,7 +181,6 @@ class TimelineMediaPreviewController: QLPreviewController {
                 // The timer is scheduled on the main run loop so it always fires on the main actor.
                 MainActor.assumeIsolated {
                     self?.updateBarButtons()
-                    self?.layoutProgressBar() // The page content QuickLook builds (placeholder, media) comes and goes asynchronously.
                     // Also re-centers the overlay once the scroll view has settled on an item.
                     self?.updateOverlayPosition()
                 }
@@ -618,25 +617,11 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private static let progressBarHeight: CGFloat = 3
     
-    /// Puts the download bar flush with the bottom edge of what QuickLook is showing for the page:
-    /// the placeholder's displayed image rect (aspect-fit within its image view), or, on a page
-    /// without one yet, along the bottom of the page above the caption.
+    /// Puts the download bar along the very bottom edge of the screen (tracking the content's edge
+    /// fell apart once the placeholder was pinched/zoomed).
     private func layoutProgressBar() {
-        let bar = progressBarHostingController.view!
         let height = Self.progressBarHeight
-        if let imageView = renderedPageContentView as? UIImageView, let image = imageView.image,
-           image.size.width > 0, image.size.height > 0, imageView.bounds.width > 0, imageView.bounds.height > 0 {
-            let bounds = imageView.bounds
-            let scale = min(bounds.width / image.size.width, bounds.height / image.size.height)
-            let fitted = CGSize(width: image.size.width * scale, height: image.size.height * scale)
-            let rect = imageView.convert(CGRect(x: bounds.midX - fitted.width / 2, y: bounds.midY - fitted.height / 2,
-                                                width: fitted.width, height: fitted.height), to: view)
-            bar.frame = CGRect(x: rect.minX, y: rect.maxY - height, width: rect.width, height: height)
-        } else if captionView.constraints.isEmpty {
-            bar.frame = CGRect(x: 0, y: view.bounds.maxY - view.safeAreaInsets.bottom - height, width: view.bounds.width, height: height)
-        } else {
-            bar.frame = CGRect(x: 0, y: captionView.frame.minY - height, width: view.bounds.width, height: height)
-        }
+        progressBarHostingController.view.frame = CGRect(x: 0, y: view.bounds.maxY - height, width: view.bounds.width, height: height)
     }
     
     /// The view QuickLook is rendering the current page's content with (an image view showing
