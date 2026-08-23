@@ -54,6 +54,30 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
     override func selectAll(_ sender: Any?) {
         selectedRange = contentRange
     }
+
+    /// Touches on the invisible timestamp spacer never belong to the text: outside
+    /// "Select text" they fall through to the bubble, so the spacer behaves like bubble
+    /// background (long press menu, double tap to react, scroll) instead of lifting
+    /// drag previews or flashing selections.
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard !isSelectingText, !ProcessInfo.processInfo.isiOSAppOnMac else {
+            return super.point(inside: point, with: event)
+        }
+        let content = contentRange
+        let fullLength = (attributedText.string as NSString).length
+        guard fullLength > content.length else {
+            return super.point(inside: point, with: event)
+        }
+        let spacerRange = NSRange(location: content.length, length: fullLength - content.length)
+        let glyphRange = layoutManager.glyphRange(forCharacterRange: spacerRange, actualCharacterRange: nil)
+        var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+        rect.origin.x += textContainerInset.left
+        rect.origin.y += textContainerInset.top
+        if rect.contains(point) {
+            return false
+        }
+        return super.point(inside: point, with: event)
+    }
     
     /// The spacer is never selectable (and so never copyable): any selection - dragged
     /// handles included - is clamped to the real content. Both setters are overridden as
@@ -299,6 +323,11 @@ struct MessageText: UIViewRepresentable {
             textView.removeInteraction(textDropInteraction)
         }
         
+        // The selection handles' knobs extend beyond the zero-inset bounds and get
+        // clipped (until a drag re-hosts them in an unclipped container): don't clip.
+        textView.clipsToBounds = false
+        // Selection highlight/handles in the same tint as selecting text in the composer.
+        textView.tintColor = .compound.iconAccentTertiary
         textView.contentInset = .zero
         textView.contentInsetAdjustmentBehavior = .never
         textView.textContainerInset = .zero
@@ -318,6 +347,8 @@ struct MessageText: UIViewRepresentable {
             uiView.flushPills()
             uiView.attributedText = newAttributedText
             computedSizes.removeAll()
+            // Setting new text can rebuild the interaction stack: keep drag lifts dead.
+            uiView.textDragInteraction?.isEnabled = false
         }
         context.coordinator.openURLAction = openURLAction
         
@@ -356,7 +387,17 @@ struct MessageText: UIViewRepresentable {
         
         func textViewDidChangeSelection(_ textView: UITextView) {
             MXLog.info("MessageTextView: selection changed to \(textView.selectedRange), selecting=\((textView as? MessageTextView)?.isSelectingText == true)")
-            guard !ProcessInfo.processInfo.isiOSAppOnMac, (textView as? MessageTextView)?.isSelectingText != true else {
+            if let messageTextView = textView as? MessageTextView, messageTextView.isSelectingText {
+                // Dragged selection handles set the selection through the text-interaction
+                // controller, not the public setters: clamp here too so the spacer can't be
+                // selected. Reassigning routes through the clamping setter (and no-ops the
+                // re-entrant delegate call once in bounds).
+                if NSMaxRange(textView.selectedRange) > messageTextView.contentRange.length {
+                    messageTextView.selectedRange = textView.selectedRange
+                }
+                return
+            }
+            guard !ProcessInfo.processInfo.isiOSAppOnMac else {
                 return
             }
             textView.selectedTextRange = nil
