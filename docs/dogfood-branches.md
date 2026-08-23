@@ -4646,3 +4646,27 @@ runs at launch and no "Upgrading" overlay is needed. The existing 875 MB
 shrinks as the cache churns and fully on the next Manage-storage clear+VACUUM
 (already behind a "Please wait" modal); a one-time bulk recompression pass
 (which would need an overlay) was considered and left out.
+
+**Round 61 (2026-08-23): Manage-storage search hang + media viewer UTD holes
+(EXI 80406b24f, SDK 1ae6577e4, build 174).** (1) Typing in the
+storage-by-room filter hung the UI until force-quit (log: last main-thread
+line is the tap on the field at 18:31:50, next is the relaunch at 18:32:30).
+`listedRooms` was computed: a locale-aware filter over every room (6171 on
+this account), read per row per render (each row also derived
+`largestListedRoomBytes` from it) as soon as the query was non-empty. It's
+stored now, recomputed once per rooms / selection / query change (query
+observed via `context.observe`). (2) Swiping media in a freshly
+cache-cleared room showed "missing media" holes the reopened viewer didn't
+have: the media-only timeline (`TimelineFocus::MessageTypes`) only ever
+applied `Insert`s while the live timeline applied dozens of `Set`s (the same
+second). Root cause in the SDK redecryptor: decrypted events are written to
+the store silently (`save_events`) and the in-memory `ReplaceItem` updates
+drained, so nothing keyed on the linked chunk fanout (the message-types view,
+also the search index) ever learned a UTD had been replaced; the viewer's
+U's stayed U's until the view was rebuilt on reopen. The redecryptor now
+forwards the in-memory replacements to the fanout as `ReplaceItem`s (no
+store write) and the store-only ones by event ID (`replaced_events`), which
+the view applies as a `Set` (or a removal when it decrypted into a non-media
+message); the viewer's existing reshuffle/rebuild path takes it from there.
+Regression test drives a real redecryption into a message-types view (fails
+without the fix). Side effect: redecrypted events now reach the search index.
