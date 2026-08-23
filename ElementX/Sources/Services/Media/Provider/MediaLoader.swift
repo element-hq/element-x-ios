@@ -25,6 +25,7 @@ actor MediaLoader: MediaLoaderProtocol {
     // don't have an accompanying ClientMock to own it.
     private weak var client: ClientProtocol?
     private var ongoingRequests = [MediaSourceProxy: Task<Data, Error>]()
+    private var ongoingFileRequests = [MediaSourceProxy: Task<MediaFileHandleProxy, Error>]()
     
     init(client: ClientProtocol) {
         self.client = client
@@ -45,15 +46,30 @@ actor MediaLoader: MediaLoaderProtocol {
     }
     
     func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?, progress: MediaDownloadProgressHandler?) async throws -> MediaFileHandleProxy {
-        guard let client else { throw MediaLoaderError.missingClient }
-        let result = try await client.getMediaFile(mediaSource: source.underlyingSource,
-                                                   filename: filename,
-                                                   mimeType: source.mimeType ?? "application/octet-stream",
-                                                   useCache: true,
-                                                   tempDir: nil,
-                                                   progressWatcher: progress.map(MediaDownloadProgressWatcher.init))
+        // One download per source however many callers ask while it's in flight (the viewer asked
+        // for a page again mid-download and fetched the video twice). A joiner's progress handler
+        // isn't wired up: the first caller's is reporting the same transfer.
+        if let ongoingRequest = ongoingFileRequests[source] {
+            return try await ongoingRequest.value
+        }
         
-        return MediaFileHandleProxy(handle: result)
+        let ongoingRequest = Task { [weak client] in
+            guard let client else { throw MediaLoaderError.missingClient }
+            let result = try await client.getMediaFile(mediaSource: source.underlyingSource,
+                                                       filename: filename,
+                                                       mimeType: source.mimeType ?? "application/octet-stream",
+                                                       useCache: true,
+                                                       tempDir: nil,
+                                                       progressWatcher: progress.map(MediaDownloadProgressWatcher.init))
+            return MediaFileHandleProxy(handle: result)
+        }
+        ongoingFileRequests[source] = ongoingRequest
+        
+        defer {
+            ongoingFileRequests[source] = nil
+        }
+        
+        return try await ongoingRequest.value
     }
     
     // MARK: - Private

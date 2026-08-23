@@ -4305,3 +4305,36 @@ logs bar set the scale: after "Clear for room" the room caches dropped to ~0
 while the logs stayed the maximum, so the remaining bars collapsed to slivers
 although their numbers updated. Session-wide caches now read zero in the
 filtered scope (`bytes(for:)`); test `loadingAndScoping` updated.
+
+**Round 50 (2026-08-23): first viewer download bar on device, three findings
+(build 153).** Log of the session (video `WqaQzuhEDPdqdDllTdqUsnOk`):
+(1) The bar bounced backwards: the SAME file was downloaded twice concurrently
+(REQ-135 + REQ-139), each download's watcher writing the one `downloadProgress`.
+The viewer's display load wasn't registered in `preloads` (only neighbour
+preloads and the initial item were), so QuickLook asking for the page again
+mid-download (it rebuilds pages as neighbours/placeholders land) started a
+second `loadFileFromSource`; videos exceed the preload size cap so no preload
+covered them. FIXED at both levels: `MediaLoader.loadMediaFileForSource` now
+de-duplicates in-flight file loads by source (`ongoingFileRequests`, like the
+data loads; a joiner's progress handler isn't wired, the first drives the same
+item) and the viewer registers its display load in `preloads` (which the
+placeholder grace wait also keys on). Test `displayLoadIsNotDuplicated`.
+(2) Bar over a black page though the bubble showed a thumbnail: the media
+cache had been cleared per-room at 14:03:53Z, so the thumbnail wasn't in the
+store (the in-memory Kingfisher cache expires entries after ~5 min) and went to
+the network, which under a flapping connection missed the 400 ms thumbnail
+wait ("thumbnail … from the store: false … no placeholder"). The 400 ms stays
+for the initial item (it gates presentation) but the on-display placeholder
+path now waits up to 5 s (`thumbnailTimeoutOnDisplay`): nothing blocks on it
+and the download takes far longer.
+(3) `NWPathMonitor` delivered an identical path (wifi,wifi,cellular) every
+~0.5 s for stretches: 128 "Network path changed" in 10 min, each re-sending
+every untracked in-flight request (a `/messages` was re-sent 10+ times in 5 s
+and could never complete). `NetworkMonitor` now fingerprints the path (status,
+interface names+types, gateways, expensive/constrained) and only publishes a
+real change. The tracked video download survived the spam thanks to the round
+49 stall grace ("still progressing, keeping it" every 2 s).
+Progressive video playback while downloading: not with QuickLook (needs the
+whole file); would be an AVPlayer page streaming via HTTP ranges with the auth
+header (unencrypted media only; encrypted files need the full download for the
+SHA-256 check). Not started.

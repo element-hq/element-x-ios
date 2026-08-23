@@ -145,10 +145,19 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 // Show the timeline's thumbnail (when it's cached) if the media doesn't land quickly.
                 preparePlaceholderIfLoadIsSlow(for: mediaItem)
                 
-                // Join a preload already in flight for this item rather than downloading it a second
-                // time. Started before the neighbours' loads so it keeps the head download slot.
-                load = preloads[mediaItem.id] ?? Task { [mediaProvider] in
-                    await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) { mediaItem.downloadProgress = $0 }
+                // Join a load already in flight for this item (a preload, or this same page asked
+                // for again as QuickLook rebuilds it mid-download) rather than downloading it a
+                // second time: two downloads of one video fed one progress bar (it bounced) and
+                // doubled the traffic. Started before the neighbours' loads so it keeps the head
+                // download slot, and registered so they and the placeholder grace see it.
+                if let inFlight = preloads[mediaItem.id] {
+                    load = inFlight
+                } else {
+                    let task = Task { [mediaProvider] in
+                        await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) { mediaItem.downloadProgress = $0 }
+                    }
+                    preloads[mediaItem.id] = task
+                    load = task
                 }
             }
             
@@ -440,7 +449,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private func preparePlaceholder(for item: TimelineMediaPreviewItem.Media) {
         let directory = placeholderDirectory
         Task { [weak self] in
-            guard let (thumbnail, size, url) = await self?.placeholderJob(for: item) else {
+            guard let (thumbnail, size, url) = await self?.placeholderJob(for: item, thumbnailTimeout: Self.thumbnailTimeoutOnDisplay) else {
                 if item.fileHandle == nil, item.placeholderURL == nil {
                     MXLog.info("Media viewer: no thumbnail for \(item.id), no placeholder")
                 }
@@ -518,10 +527,11 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     /// What's needed to render an item's placeholder, or nil when it doesn't get one.
-    private func placeholderJob(for item: TimelineMediaPreviewItem.Media) async -> (UIImage, CGSize, URL)? {
+    private func placeholderJob(for item: TimelineMediaPreviewItem.Media,
+                                thumbnailTimeout: Duration = TimelineMediaPreviewViewModel.thumbnailTimeout) async -> (UIImage, CGSize, URL)? {
         // Videos too: a poster (with the header saying it is loading) beats a black page.
         guard contentScannerService == nil, item.kind != .file, item.fileHandle == nil, item.placeholderURL == nil,
-              let thumbnail = await thumbnail(for: item) else { return nil }
+              let thumbnail = await thumbnail(for: item, timeout: thumbnailTimeout) else { return nil }
         let size = Self.placeholderSize(mediaSize: item.mediaSize,
                                         thumbnailSize: CGSize(width: thumbnail.size.width * thumbnail.scale,
                                                               height: thumbnail.size.height * thumbnail.scale))
@@ -547,11 +557,15 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     /// The longest a thumbnail is waited for: the SDK's media store answers in milliseconds when it
     /// has it; anything slower is a network fetch that would land after the point.
     private static let thumbnailTimeout: Duration = .milliseconds(400)
+    /// Once the page is on display nothing waits on the placeholder, and a big download takes far
+    /// longer than this: give a thumbnail that has to be fetched (a cleared media cache, a slow
+    /// network) time to land rather than leaving the bar over a black page.
+    private static let thumbnailTimeoutOnDisplay: Duration = .seconds(5)
     
     /// The item's thumbnail: the in-memory image cache (what the timeline drew, keyed as the
     /// timeline, gallery and media-grid cells load it) or, that being short-lived, the SDK's
     /// media store via the provider, which caches the result.
-    private func thumbnail(for item: TimelineMediaPreviewItem.Media) async -> UIImage? {
+    private func thumbnail(for item: TimelineMediaPreviewItem.Media, timeout: Duration) async -> UIImage? {
         let candidates: [(MediaSourceProxy?, CGSize?)] = [(item.thumbnailMediaSource, item.thumbnailSize),
                                                           (item.thumbnailMediaSource ?? item.mediaSource, item.mediaSize),
                                                           (item.mediaSource, item.mediaSize),
@@ -564,7 +578,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         guard let source = item.thumbnailMediaSource ?? item.mediaSource else { return nil }
         let size = item.thumbnailMediaSource == nil ? item.mediaSize : item.thumbnailSize
         let load = mediaProvider.loadImageRetryingOnReconnection(source, size: size)
-        let timeout = Task { try await Task.sleep(for: Self.thumbnailTimeout) }
+        let timeout = Task { try await Task.sleep(for: timeout) }
         let image: UIImage? = await withTaskGroup(of: UIImage?.self) { group in
             group.addTask { try? await load.value }
             group.addTask { try? await timeout.value; return nil }

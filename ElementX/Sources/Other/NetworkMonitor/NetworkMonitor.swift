@@ -20,9 +20,15 @@ class NetworkMonitor: NetworkMonitorProtocol {
     }
     
     private let pathUpdateSubject = PassthroughSubject<Void, Never>()
+    /// Fires when the network path actually changes (status, interfaces, gateways, cost), not
+    /// on every delivery: NWPathMonitor re-delivers an identical path several times a second
+    /// around a change (128 in ten minutes seen), and each delivery used to re-send every
+    /// in-flight request, so a slow one never completed.
     var pathUpdatePublisher: AnyPublisher<Void, Never> {
         pathUpdateSubject.eraseToAnyPublisher()
     }
+    
+    private var lastPathFingerprint: String?
     
     init() {
         queue = DispatchQueue(label: "io.element.elementx.network_monitor", qos: .background)
@@ -31,15 +37,21 @@ class NetworkMonitor: NetworkMonitorProtocol {
         
         pathMonitor.pathUpdateHandler = { [weak self] path in
             let interfaces = path.availableInterfaces.map { "\($0.type)" }.joined(separator: ",")
+            let fingerprint = [String(describing: path.status),
+                               path.availableInterfaces.map { "\($0.name):\($0.type)" }.joined(separator: ","),
+                               String(describing: path.gateways),
+                               "\(path.isExpensive)/\(path.isConstrained)"].joined(separator: "|")
             DispatchQueue.main.async {
+                guard let self, fingerprint != self.lastPathFingerprint else { return }
+                self.lastPathFingerprint = fingerprint
                 if path.status == .satisfied {
                     MXLog.info("Network reachability changed to reachable (interfaces: \(interfaces), expensive: \(path.isExpensive))")
-                    self?.reachabilitySubject.send(.reachable)
+                    self.reachabilitySubject.send(.reachable)
                 } else {
                     MXLog.info("Network reachability changed to unreachable (interfaces: \(interfaces))")
-                    self?.reachabilitySubject.send(.unreachable)
+                    self.reachabilitySubject.send(.unreachable)
                 }
-                self?.pathUpdateSubject.send(())
+                self.pathUpdateSubject.send(())
             }
         }
         pathMonitor.start(queue: queue)

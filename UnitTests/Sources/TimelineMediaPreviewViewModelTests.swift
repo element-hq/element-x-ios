@@ -67,6 +67,30 @@ struct TimelineMediaPreviewViewModelTests {
     }
     
     @Test
+    mutating func displayLoadIsNotDuplicated() async throws {
+        // Given a fresh view model whose media downloads slowly.
+        setupViewModel()
+        let mediaItem = context.viewState.dataSource.previewItems[1]
+        try await Task.sleep(for: .milliseconds(50)) // Let the initial item's own load settle.
+        let loadsBefore = mediaProvider.loadFileFromSourceFilenameProgressCallsCount
+        mediaProvider.loadFileFromSourceFilenameProgressClosure = { _, _, _ in
+            try? await Task.sleep(for: .milliseconds(300))
+            return .failure(.failedRetrievingFile)
+        }
+        
+        // When QuickLook asks for the same page twice while its download is in flight (it rebuilds
+        // pages as neighbours and placeholders land).
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
+        try await Task.sleep(for: .milliseconds(50))
+        context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
+        try await failure.fulfill()
+        
+        // Then the second request joins the first download rather than starting another.
+        #expect(mediaProvider.loadFileFromSourceFilenameProgressCallsCount == loadsBefore + 1)
+    }
+    
+    @Test
     mutating func downloadProgress() async throws {
         // Given a fresh view model whose media downloads slowly, reporting its progress.
         setupViewModel()
