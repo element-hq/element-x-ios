@@ -48,6 +48,10 @@ struct AdvancedSettingsScreen: View {
                 ListRow(label: .plain(title: UntranslatedL10n.screenAdvancedSettingsPreloadMediaTitle,
                                       description: UntranslatedL10n.screenAdvancedSettingsPreloadMediaDescription),
                         kind: .toggle($context.preloadMediaInViewer))
+                
+                ListRow(label: .plain(title: UntranslatedL10n.screenAdvancedSettingsCancelDownloadsTitle,
+                                      description: UntranslatedL10n.screenAdvancedSettingsCancelDownloadsDescription),
+                        kind: .toggle($context.cancelMediaDownloadsOnSwipeAway))
             }
             
             Section {

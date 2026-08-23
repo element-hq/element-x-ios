@@ -12,6 +12,10 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Select text
   internal static var actionSelectText: String { return UntranslatedL10n.tr("Untranslated", "action_select_text") }
+  /// Stop fetching a large photo or video once you swipe onwards or close the viewer, so only downloads you are waiting on use data
+  internal static var screenAdvancedSettingsCancelDownloadsDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_cancel_downloads_description") }
+  /// Stop downloads when swiping away
+  internal static var screenAdvancedSettingsCancelDownloadsTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_cancel_downloads_title") }
   /// Manage storage
   internal static var screenAdvancedSettingsManageStorage: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_manage_storage") }
   /// Fetch the photos and videos either side of the one on show ahead of swiping, using more data

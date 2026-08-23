@@ -832,6 +832,49 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - downloadMediaFile
+
+    private let downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCountLock = NSLock()
+    private var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingCallsCount = 0
+    open var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCount: Int {
+        get { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCountLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingCallsCount } }
+        set { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCountLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingCallsCount = newValue } }
+    }
+    open var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCalled: Bool {
+        return downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCount > 0
+    }
+    private let downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArgumentsLock = NSLock()
+    private var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedArguments: (mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?)?
+    open var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArguments: (mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?)? {
+        get { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArgumentsLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedArguments } }
+        set { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArgumentsLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedArguments = newValue } }
+    }
+    private let downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocationsLock = NSLock()
+    private var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedInvocations: [(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?)] = []
+    open var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocations: [(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?)] {
+        get { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocationsLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedInvocations } }
+        set { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocationsLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValueLock = NSLock()
+    open var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReturnValue: MediaFileDownloadHandle!
+    open var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValue: MediaFileDownloadHandle! {
+        get { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValueLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReturnValue } }
+        set { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValueLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReturnValue = newValue } }
+    }
+    open var downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherClosure: ((MediaSource, String?, String, Bool, String?, ProgressWatcher?) -> MediaFileDownloadHandle)?
+
+    open override func downloadMediaFile(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?) -> MediaFileDownloadHandle {
+        downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCountLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingCallsCount += 1 }
+        downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArguments = (mediaSource: mediaSource, filename: filename, mimeType: mimeType, useCache: useCache, tempDir: tempDir, progressWatcher: progressWatcher)
+        downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocationsLock.withLock { downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedInvocations.append((mediaSource: mediaSource, filename: filename, mimeType: mimeType, useCache: useCache, tempDir: tempDir, progressWatcher: progressWatcher)) }
+        if let downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherClosure = downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherClosure {
+            return downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherClosure(mediaSource, filename, mimeType, useCache, tempDir, progressWatcher)
+        } else {
+            return downloadMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValue
+        }
+    }
+
     //MARK: - enableAllSendQueues
 
     private let enableAllSendQueuesEnableCallsCountLock = NSLock()
@@ -8429,6 +8472,72 @@ open class LoginWithQrCodeHandlerSDKMock: MatrixRustSDK.LoginWithQrCodeHandler, 
         scanQrCodeDataProgressListenerReceivedArguments = (qrCodeData: qrCodeData, progressListener: progressListener)
         scanQrCodeDataProgressListenerReceivedInvocationsLock.withLock { scanQrCodeDataProgressListenerUnderlyingReceivedInvocations.append((qrCodeData: qrCodeData, progressListener: progressListener)) }
         try await scanQrCodeDataProgressListenerClosure?(qrCodeData, progressListener)
+    }
+}
+open class MediaFileDownloadHandleSDKMock: MatrixRustSDK.MediaFileDownloadHandle, @unchecked Sendable {
+    public init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - cancel
+
+    private let cancelCallsCountLock = NSLock()
+    private var cancelUnderlyingCallsCount = 0
+    open var cancelCallsCount: Int {
+        get { cancelCallsCountLock.withLock { cancelUnderlyingCallsCount } }
+        set { cancelCallsCountLock.withLock { cancelUnderlyingCallsCount = newValue } }
+    }
+    open var cancelCalled: Bool {
+        return cancelCallsCount > 0
+    }
+    open var cancelClosure: (() -> Void)?
+
+    open override func cancel() {
+        cancelCallsCountLock.withLock { cancelUnderlyingCallsCount += 1 }
+        cancelClosure?()
+    }
+
+    //MARK: - join
+
+    open var joinThrowableError: Error?
+    private let joinCallsCountLock = NSLock()
+    private var joinUnderlyingCallsCount = 0
+    open var joinCallsCount: Int {
+        get { joinCallsCountLock.withLock { joinUnderlyingCallsCount } }
+        set { joinCallsCountLock.withLock { joinUnderlyingCallsCount = newValue } }
+    }
+    open var joinCalled: Bool {
+        return joinCallsCount > 0
+    }
+
+    private let joinReturnValueLock = NSLock()
+    open var joinUnderlyingReturnValue: MediaFileHandle!
+    open var joinReturnValue: MediaFileHandle! {
+        get { joinReturnValueLock.withLock { joinUnderlyingReturnValue } }
+        set { joinReturnValueLock.withLock { joinUnderlyingReturnValue = newValue } }
+    }
+    open var joinClosure: (() async throws -> MediaFileHandle)?
+
+    open override func join() async throws -> MediaFileHandle {
+        if let error = joinThrowableError {
+            throw error
+        }
+        joinCallsCountLock.withLock { joinUnderlyingCallsCount += 1 }
+        if let joinClosure = joinClosure {
+            return try await joinClosure()
+        } else {
+            return joinReturnValue
+        }
     }
 }
 open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sendable {

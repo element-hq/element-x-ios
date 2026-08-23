@@ -4680,3 +4680,18 @@ the poster, starved behind the video's own download, was dropped and the page
 stayed black until the video landed (36 s). Replaced by a poll (like the
 placeholder grace wait) that ends on arrival, the media landing, or the
 timeout (on-display now 30 s); a late poster is kept.
+
+**Round 62 (2026-08-23): cancellable downloads + "Stop downloads when
+swiping away" (SDK f-download-handle, EXI build 176).** Swiping over a run of
+video thumbnails quietly fetched all of them: cancelling the Swift task never
+reached the Rust future, so an abandoned video kept downloading gigabytes.
+SDK: new `download_media_file` FFI returns at once with a
+`MediaFileDownloadHandle` (`join()`/`cancel()`, the abort drops the transfer,
+nothing kept); `get_media_file` delegates to it. EXI: `MediaLoader` tracks
+one shared `OngoingFileRequest` per source with a waiter count, and cancels
+over the FFI once every caller has cancelled (task cancellation now
+propagates to Rust). New advanced option (default off)
+`cancelMediaDownloadsOnSwipeAway`: leaving an item cancels its in-flight
+download when it's large (or preloading is off) so only downloads the user is
+explicitly waiting on run; closing the viewer cancels them all. Swiping back
+retries. SDK mocks regenerated (sourcery recipe in handover #45).

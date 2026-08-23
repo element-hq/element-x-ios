@@ -43,3 +43,5 @@
 "untranslated" = "Untranslated";
 "screen_advanced_settings_preload_media_title" = "Preload media in viewer";
 "screen_advanced_settings_preload_media_description" = "Fetch the photos and videos either side of the one on show ahead of swiping, using more data";
+"screen_advanced_settings_cancel_downloads_title" = "Stop downloads when swiping away";
+"screen_advanced_settings_cancel_downloads_description" = "Stop fetching a large photo or video once you swipe onwards or close the viewer, so only downloads you are waiting on use data";

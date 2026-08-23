@@ -358,6 +358,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var preloadMediaInViewer: Bool
     
+    /// Stop a media download the moment the viewer leaves its item (or closes): a download only
+    /// runs while the user is explicitly waiting for it, so swiping over a run of videos doesn't
+    /// quietly fetch all of them.
+    @UserPreference(defaultValue: false)
+    var cancelMediaDownloadsOnSwipeAway: Bool
+    
     @UserPreference(defaultValue: AudioPlaybackSpeed.default)
     var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
     

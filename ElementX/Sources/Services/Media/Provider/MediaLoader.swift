@@ -25,7 +25,7 @@ actor MediaLoader: MediaLoaderProtocol {
     // don't have an accompanying ClientMock to own it.
     private weak var client: ClientProtocol?
     private var ongoingRequests = [MediaSourceProxy: Task<Data, Error>]()
-    private var ongoingFileRequests = [MediaSourceProxy: Task<MediaFileHandleProxy, Error>]()
+    private var ongoingFileRequests = [MediaSourceProxy: OngoingFileRequest]()
     
     init(client: ClientProtocol) {
         self.client = client
@@ -49,27 +49,62 @@ actor MediaLoader: MediaLoaderProtocol {
         // One download per source however many callers ask while it's in flight (the viewer asked
         // for a page again mid-download and fetched the video twice). A joiner's progress handler
         // isn't wired up: the first caller's is reporting the same transfer.
+        let request: OngoingFileRequest
         if let ongoingRequest = ongoingFileRequests[source] {
-            return try await ongoingRequest.value
-        }
-        
-        let ongoingRequest = Task { [weak client] in
+            request = ongoingRequest
+        } else {
             guard let client else { throw MediaLoaderError.missingClient }
-            let result = try await client.getMediaFile(mediaSource: source.underlyingSource,
-                                                       filename: filename,
-                                                       mimeType: source.mimeType ?? "application/octet-stream",
-                                                       useCache: true,
-                                                       tempDir: nil,
-                                                       progressWatcher: progress.map(MediaDownloadProgressWatcher.init))
-            return MediaFileHandleProxy(handle: result)
+            let download = client.downloadMediaFile(mediaSource: source.underlyingSource,
+                                                    filename: filename,
+                                                    mimeType: source.mimeType ?? "application/octet-stream",
+                                                    useCache: true,
+                                                    tempDir: nil,
+                                                    progressWatcher: progress.map(MediaDownloadProgressWatcher.init))
+            request = OngoingFileRequest(download: download)
+            ongoingFileRequests[source] = request
+            request.task = Task { [weak self] in
+                do {
+                    let handle = MediaFileHandleProxy(handle: try await download.join())
+                    await self?.finishFileRequest(request, for: source)
+                    return handle
+                } catch {
+                    await self?.finishFileRequest(request, for: source)
+                    throw error
+                }
+            }
         }
-        ongoingFileRequests[source] = ongoingRequest
         
-        defer {
+        // Cancelling the caller's task doesn't reach the Rust download by itself (the SDK future
+        // outlives the Swift one): once every caller has cancelled, stop it over the FFI.
+        request.waiters += 1
+        return try await withTaskCancellationHandler {
+            try await request.task!.value
+        } onCancel: {
+            Task { await self.cancelFileRequestWaiter(request, for: source) }
+        }
+    }
+    
+    /// A file download in flight, shared by every caller asking for the same source.
+    private final class OngoingFileRequest: Sendable {
+        let download: MediaFileDownloadHandleProtocol
+        nonisolated(unsafe) var task: Task<MediaFileHandleProxy, Error>?
+        nonisolated(unsafe) var waiters = 0
+        nonisolated(unsafe) var cancelledWaiters = 0
+        init(download: MediaFileDownloadHandleProtocol) { self.download = download }
+    }
+    
+    private func finishFileRequest(_ request: OngoingFileRequest, for source: MediaSourceProxy) {
+        if ongoingFileRequests[source] === request {
             ongoingFileRequests[source] = nil
         }
-        
-        return try await ongoingRequest.value
+    }
+    
+    private func cancelFileRequestWaiter(_ request: OngoingFileRequest, for source: MediaSourceProxy) {
+        request.cancelledWaiters += 1
+        guard request.cancelledWaiters >= request.waiters else { return }
+        MXLog.info("Cancelling the download of \(String(describing: source.url)): nothing is waiting for it any more")
+        request.download.cancel()
+        finishFileRequest(request, for: source) // A later caller starts a fresh download.
     }
     
     // MARK: - Private

@@ -133,6 +133,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         if case let .media(item) = previewItem {
             item.downloadError = nil // Clear any existing error so that the download is retried.
         }
+        if let left = state.dataSource.currentItem.mediaItem, left.id != previewItem.mediaItem?.id {
+            cancelDownloadIfSwipedAway(from: left)
+        }
         setCurrentItem(previewItem)
         
         if case let .media(mediaItem) = previewItem {
@@ -301,6 +304,17 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private static let placeholderReach = 3
     /// Placeholder jobs in flight, so a neighbour isn't rendered twice while swiping around it.
     private var placeholderJobs = Set<MediaPreviewItemID>()
+    
+    /// With the setting on, a download only runs while the user is explicitly waiting on it: the
+    /// item just swiped away from loses its in-flight download, unless it's one the neighbour
+    /// preload would fetch anyway (small, with preloading on), so swiping over a run of videos
+    /// doesn't quietly fetch all of them. Swiping back retries it.
+    private func cancelDownloadIfSwipedAway(from item: TimelineMediaPreviewItem.Media) {
+        guard appSettings.cancelMediaDownloadsOnSwipeAway, let load = preloads[item.id],
+              isLargeFile(item) || !appSettings.preloadMediaInViewer else { return }
+        MXLog.info("Media viewer: swiped away from \(item.id) mid-download, cancelling it")
+        load.cancel()
+    }
     
     /// Fetches an item's file into the cache ahead of it being displayed (small files only).
     private func preload(_ item: TimelineMediaPreviewItem.Media) {
@@ -678,6 +692,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     isolated deinit {
         try? FileManager.default.removeItem(at: placeholderDirectory)
+        // Closing the viewer: nothing is waiting on the downloads any more.
+        if appSettings.cancelMediaDownloadsOnSwipeAway {
+            preloads.values.forEach { $0.cancel() }
+        }
     }
     
     // MARK: - Indicators
