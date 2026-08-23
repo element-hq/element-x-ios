@@ -391,10 +391,33 @@ enum TimelineMediaPreviewItem: Equatable {
             didSet { updatePreviewItemValues() }
         }
         
-        /// QuickLook is (or will be) showing the thumbnail placeholder rather than the media.
+        /// QuickLook is (or will be) showing a placeholder rather than the media: the thumbnail, or
+        /// the shared loading image every file-less item answers with.
         var isShowingPlaceholder: Bool {
-            fileHandle == nil && placeholderURL != nil
+            fileHandle == nil && (placeholderURL != nil || Self.loadingPlaceholderURL != nil)
         }
+        
+        /// What an item without a file or thumbnail hands QuickLook: a black image, so the page is
+        /// built as a placeholder page (swapped when the media lands) rather than from nothing,
+        /// which QuickLook renders as its "unavailable / copy to" page and never re-reads on its
+        /// own. Written once per process into the temp directory.
+        static let loadingPlaceholderURL: URL? = {
+            let size = CGSize(width: 1080, height: 1920)
+            let format = UIGraphicsImageRendererFormat()
+            format.scale = 1
+            let data = UIGraphicsImageRenderer(size: size, format: format).jpegData(withCompressionQuality: 0.5) { context in
+                UIColor.black.setFill()
+                context.fill(CGRect(origin: .zero, size: size))
+            }
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent("media-preview-loading-\(ProcessInfo.processInfo.processIdentifier).jpg")
+            do {
+                try data.write(to: url)
+                return url
+            } catch {
+                MXLog.error("Failed writing the media viewer's loading placeholder: \(error)")
+                return nil
+            }
+        }()
         
         var downloadError: Error?
         
@@ -424,6 +447,8 @@ enum TimelineMediaPreviewItem: Equatable {
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
             content = .timelineItem(timelineItem)
             id = MediaPreviewItemID(timelineItem: timelineItem)
+            super.init()
+            updatePreviewItemValues()
         }
         
         init?(roomTimelineItemViewState: RoomTimelineItemViewState) {
@@ -442,6 +467,8 @@ enum TimelineMediaPreviewItem: Equatable {
             }
             content = .timelineItem(timelineItem)
             id = MediaPreviewItemID(timelineItem: timelineItem)
+            super.init()
+            updatePreviewItemValues()
         }
         
         /// Wraps a single attachment of a gallery message. `.other` items have no media source,
@@ -449,6 +476,8 @@ enum TimelineMediaPreviewItem: Equatable {
         init(galleryParent: GalleryRoomTimelineItem, item: GalleryItem) {
             content = .galleryItem(parent: galleryParent, item: item)
             id = .galleryItem(item.id)
+            super.init()
+            updatePreviewItemValues()
         }
         
         // MARK: QLPreviewItem
@@ -464,7 +493,7 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         private func updatePreviewItemValues() {
-            _previewItemURL.withLock { $0 = fileHandle?.url ?? placeholderURL }
+            _previewItemURL.withLock { $0 = fileHandle?.url ?? placeholderURL ?? Self.loadingPlaceholderURL }
             // No background text until there's something (the file or its placeholder) to show it under.
             _previewItemTitle.withLock { $0 = fileHandle != nil || placeholderURL != nil ? filename : " " }
         }

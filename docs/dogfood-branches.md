@@ -4518,3 +4518,18 @@ once per rest on the same item, which that rebuild had consumed: nothing
 healed them until landing (unavailable pages at 98/95/85/83, all with files).
 Fix: a rebuild resets the once-per-rest heal guard. Also: video posters get a
 play badge (circle + play.fill) like the timeline's thumbnails.
+
+**Round 56 follow-up: never hand QuickLook nothing (build 165).** User:
+"wait until the URL is valid before telling QL". QuickLook reads the URL once
+when it builds the page and never re-reads; a nil answer is what it renders
+as the "unavailable / copy to" page. Every file-less item without a
+thumbnail now answers with a shared black loading JPEG
+(`Media.loadingPlaceholderURL`, written once per process), so pages are built
+as placeholder pages: the header says Loading, the spinner/bar sit over
+black, and the arrival path is the placeholder upgrade (refresh under cover,
+rest-gated reload fallback) rather than the "landed on a blank page" heal,
+which can no longer occur. Thumbnails replace the black via the same upgrade
+when they land. "Skipped from Aug to June": the shapes show ~30 undecryptable
+messages between them decrypting later in batches; those land as mid-list
+inserts (reshuffle path, rebuilt at rest) or prepends (rebuild at rest), so
+swiping back should find them without a restart once they've decrypted.
