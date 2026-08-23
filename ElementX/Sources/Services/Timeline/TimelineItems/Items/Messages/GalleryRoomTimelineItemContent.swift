@@ -38,6 +38,25 @@ nonisolated struct GalleryItemID: Hashable {
     let timelineItemID: TimelineItemIdentifier
     /// The item's position within the gallery.
     let mediaIndex: Int
+    
+    // Identity across timelines: the unique ID is per-timeline (the room timeline and the media
+    // timeline built for the viewer number the same event differently), the event/transaction ID
+    // is not. Synthesised equality over the whole identifier made the viewer unable to match a
+    // tapped gallery against the media timeline's copy ("Ignoring update: unable to find existing
+    // preview items range"). Fall back to the whole identifier only for virtual items.
+    static func == (lhs: GalleryItemID, rhs: GalleryItemID) -> Bool {
+        guard lhs.mediaIndex == rhs.mediaIndex else { return false }
+        switch (lhs.timelineItemID.eventOrTransactionID, rhs.timelineItemID.eventOrTransactionID) {
+        case (let lhsID?, let rhsID?): return lhsID == rhsID
+        case (nil, nil): return lhs.timelineItemID == rhs.timelineItemID
+        default: return false
+        }
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(mediaIndex)
+        hasher.combine(timelineItemID.eventOrTransactionID)
+    }
 }
 
 /// A single attachment of a gallery message. The SDK hands back the same content types it uses for
