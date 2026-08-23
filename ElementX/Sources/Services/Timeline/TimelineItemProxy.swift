@@ -107,6 +107,12 @@ final nonisolated class EventTimelineItemProxy: Sendable {
         }
     }
     
+    /// How far the item's media upload has got (0...1) while it's sending, `nil` otherwise.
+    var uploadProgress: Double? {
+        guard case .notSentYet(let progress?) = item.localSendState, progress.progress.total > 0 else { return nil }
+        return min(Double(progress.progress.current) / Double(progress.progress.total), 1)
+    }
+    
     var canBeRepliedTo: Bool {
         item.canBeRepliedTo
     }

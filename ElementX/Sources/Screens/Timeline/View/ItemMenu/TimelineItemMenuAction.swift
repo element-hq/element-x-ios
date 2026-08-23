@@ -77,6 +77,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case unpin
     case viewInRoomTimeline
     case downloadMedia
+    /// Kicks a stalled upload along: the in-flight requests are re-sent on a fresh connection.
+    case retryUpload
     
     var id: Self {
         self
@@ -190,6 +192,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionViewInTimeline, icon: \.visibilityOn)
         case .downloadMedia:
             Label(L10n.actionDownload, icon: \.downloadIos)
+        case .retryUpload:
+            Label(L10n.actionRetry, icon: \.restart)
         }
     }
 }

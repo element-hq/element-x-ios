@@ -205,6 +205,8 @@ class TimelineInteractionHandler {
             actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
         case .downloadMedia:
             break // Handled inline in the media preview screen.
+        case .retryUpload:
+            userSession.clientProxy.retryInFlightRequests()
         case .translate:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
             actionsSubject.send(.showTranslation(text: messageTimelineItem.body))

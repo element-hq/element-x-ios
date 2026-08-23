@@ -148,7 +148,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 // Join a preload already in flight for this item rather than downloading it a second
                 // time. Started before the neighbours' loads so it keeps the head download slot.
                 load = preloads[mediaItem.id] ?? Task { [mediaProvider] in
-                    await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename)
+                    await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) { mediaItem.downloadProgress = $0 }
                 }
             }
             
@@ -159,6 +159,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             guard let load else { return }
             let result = await load.value
             preloads[mediaItem.id] = nil
+            mediaItem.downloadProgress = nil
             
             switch result {
             case .success(let handle):
@@ -276,8 +277,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         let itemID = item.id
         preloads[itemID] = Task { [mediaProvider] in
             // Failures aren't recorded here: the load on display retries and reports them.
-            let result = await mediaProvider.loadFileFromSource(source, filename: item.filename)
+            let result = await mediaProvider.loadFileFromSource(source, filename: item.filename) { item.downloadProgress = $0 }
             preloads[itemID] = nil
+            item.downloadProgress = nil
             if case .success(let handle) = result, item.fileHandle == nil {
                 MXLog.info("Media viewer: file for \(itemID): \(handle.url?.lastPathComponent ?? "nil") (filename: \(item.filename ?? "nil"), mime: \(source.mimeType ?? "nil"))")
                 item.fileHandle = handle

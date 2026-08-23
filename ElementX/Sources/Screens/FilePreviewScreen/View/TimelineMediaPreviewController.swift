@@ -891,9 +891,22 @@ private struct CaptionView: View {
     }
     
     var body: some View {
-        if let mediaItem = currentItem.mediaItem, mediaItem.hasCaption {
-            CaptionScrollView(mediaItem: mediaItem)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+        VStack(spacing: 0) {
+            if let mediaItem = currentItem.mediaItem {
+                if mediaItem.fileHandle == nil, let progress = mediaItem.downloadProgress {
+                    // The download's progress, along the bottom of the page (the placeholder/blank
+                    // page above it is QuickLook's; the header says it's loading).
+                    ProgressView(value: progress)
+                        .tint(.compound.iconPrimary)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .accessibilityLabel(L10n.commonLoading)
+                }
+                if mediaItem.hasCaption {
+                    CaptionScrollView(mediaItem: mediaItem)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
         }
     }
 }
@@ -956,7 +969,8 @@ private struct DownloadIndicatorView: View {
         case .media(let mediaItem):
             if mediaItem.downloadError != nil {
                 downloadErrorView
-            } else if mediaItem.fileHandle == nil, mediaItem.placeholderURL == nil { // The placeholder's title says it's loading.
+            } else if mediaItem.fileHandle == nil, mediaItem.placeholderURL == nil, mediaItem.downloadProgress == nil {
+                // The placeholder's title says it's loading, the progress bar (CaptionView) shows how far.
                 loadingIndicator(isScanning: false)
             }
         case .contentScan(let scan):

@@ -1199,48 +1199,48 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - getMediaFile
 
-    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirThrowableError: Error?
-    private let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCountLock = NSLock()
-    private var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount = 0
-    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCount: Int {
-        get { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCountLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount } }
-        set { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCountLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount = newValue } }
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherThrowableError: Error?
+    private let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCountLock = NSLock()
+    private var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingCallsCount = 0
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCount: Int {
+        get { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCountLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingCallsCount } }
+        set { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCountLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingCallsCount = newValue } }
     }
-    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCalled: Bool {
-        return getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCount > 0
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCalled: Bool {
+        return getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCount > 0
     }
-    private let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedArgumentsLock = NSLock()
-    private var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReceivedArguments: (mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?)?
-    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedArguments: (mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?)? {
-        get { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedArgumentsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReceivedArguments } }
-        set { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedArgumentsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReceivedArguments = newValue } }
+    private let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArgumentsLock = NSLock()
+    private var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedArguments: (mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?)?
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArguments: (mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?)? {
+        get { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArgumentsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedArguments } }
+        set { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArgumentsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedArguments = newValue } }
     }
-    private let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedInvocationsLock = NSLock()
-    private var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReceivedInvocations: [(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?)] = []
-    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedInvocations: [(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?)] {
-        get { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedInvocationsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReceivedInvocations } }
-        set { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedInvocationsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReceivedInvocations = newValue } }
+    private let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocationsLock = NSLock()
+    private var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedInvocations: [(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?)] = []
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocations: [(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?)] {
+        get { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocationsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedInvocations } }
+        set { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocationsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReturnValueLock = NSLock()
-    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue: MediaFileHandle!
-    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReturnValue: MediaFileHandle! {
-        get { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReturnValueLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue } }
-        set { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReturnValueLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue = newValue } }
+    private let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValueLock = NSLock()
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReturnValue: MediaFileHandle!
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValue: MediaFileHandle! {
+        get { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValueLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReturnValue } }
+        set { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValueLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReturnValue = newValue } }
     }
-    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirClosure: ((MediaSource, String?, String, Bool, String?) async throws -> MediaFileHandle)?
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherClosure: ((MediaSource, String?, String, Bool, String?, ProgressWatcher?) async throws -> MediaFileHandle)?
 
-    open override func getMediaFile(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?) async throws -> MediaFileHandle {
-        if let error = getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirThrowableError {
+    open override func getMediaFile(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?, progressWatcher: ProgressWatcher?) async throws -> MediaFileHandle {
+        if let error = getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherThrowableError {
             throw error
         }
-        getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCountLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount += 1 }
-        getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedArguments = (mediaSource: mediaSource, filename: filename, mimeType: mimeType, useCache: useCache, tempDir: tempDir)
-        getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedInvocationsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReceivedInvocations.append((mediaSource: mediaSource, filename: filename, mimeType: mimeType, useCache: useCache, tempDir: tempDir)) }
-        if let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirClosure = getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirClosure {
-            return try await getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirClosure(mediaSource, filename, mimeType, useCache, tempDir)
+        getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherCallsCountLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingCallsCount += 1 }
+        getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedArguments = (mediaSource: mediaSource, filename: filename, mimeType: mimeType, useCache: useCache, tempDir: tempDir, progressWatcher: progressWatcher)
+        getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReceivedInvocationsLock.withLock { getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherUnderlyingReceivedInvocations.append((mediaSource: mediaSource, filename: filename, mimeType: mimeType, useCache: useCache, tempDir: tempDir, progressWatcher: progressWatcher)) }
+        if let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherClosure = getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherClosure {
+            return try await getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherClosure(mediaSource, filename, mimeType, useCache, tempDir, progressWatcher)
         } else {
-            return getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReturnValue
+            return getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirProgressWatcherReturnValue
         }
     }
 

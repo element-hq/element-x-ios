@@ -44,18 +44,43 @@ actor MediaLoader: MediaLoaderProtocol {
         }
     }
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
+    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?, progress: MediaDownloadProgressHandler?) async throws -> MediaFileHandleProxy {
         guard let client else { throw MediaLoaderError.missingClient }
         let result = try await client.getMediaFile(mediaSource: source.underlyingSource,
                                                    filename: filename,
                                                    mimeType: source.mimeType ?? "application/octet-stream",
                                                    useCache: true,
-                                                   tempDir: nil)
+                                                   tempDir: nil,
+                                                   progressWatcher: progress.map(MediaDownloadProgressWatcher.init))
         
         return MediaFileHandleProxy(handle: result)
     }
     
     // MARK: - Private
+    
+    /// Forwards the SDK's per-chunk download progress to the handler as a fraction, on the main
+    /// actor, once per percent (a 10 MB file is hundreds of chunks).
+    private final class MediaDownloadProgressWatcher: ProgressWatcher, @unchecked Sendable {
+        private let handler: MediaDownloadProgressHandler
+        private let lock = NSLock()
+        private var lastReported = -1.0
+        
+        init(handler: @escaping MediaDownloadProgressHandler) {
+            self.handler = handler
+        }
+        
+        func transmissionProgress(progress: TransmissionProgress) {
+            guard progress.total > 0 else { return } // No Content-Length: nothing meaningful to show.
+            let fraction = min(Double(progress.current) / Double(progress.total), 1)
+            let shouldReport = lock.withLock {
+                guard fraction - lastReported >= 0.01 || fraction == 1 else { return false }
+                lastReported = fraction
+                return true
+            }
+            guard shouldReport else { return }
+            Task { @MainActor [handler] in handler(fraction) }
+        }
+    }
     
     private func enqueueLoadMediaRequest(forSource source: MediaSourceProxy, operation: @escaping @Sendable () async throws -> Data) async throws -> Data {
         if let ongoingRequest = ongoingRequests[source] {

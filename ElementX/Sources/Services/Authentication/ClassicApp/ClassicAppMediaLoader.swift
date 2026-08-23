@@ -25,7 +25,7 @@ final class ClassicAppMediaLoader: MediaLoaderProtocol {
         try await loadMedia(source: source, width: width, height: height)
     }
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
+    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?, progress: MediaDownloadProgressHandler?) async throws -> MediaFileHandleProxy {
         throw MediaLoaderError.notSupported // Not needed for LoadableImage
     }
     

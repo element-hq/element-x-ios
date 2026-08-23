@@ -28,6 +28,7 @@ struct VideoRoomTimelineView: View {
                                     thumbnailSource: timelineItem.content.thumbnailInfo?.source) {
                     thumbnail
                         .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
+                        .overlay(alignment: .bottom) { TimelineMediaUploadProgressBar(progress: timelineItem.properties.uploadProgress) }
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(L10n.commonVideo)
                         // This clip shape is distinct from the one in the styler as that one

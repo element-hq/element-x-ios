@@ -214,6 +214,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                isEdited: messageContent.isEdited,
                                                reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                deliveryStatus: eventItemProxy.deliveryStatus,
+                                               uploadProgress: eventItemProxy.uploadProgress,
                                                orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                encryptionForwarder: eventItemProxy.forwarder))
@@ -238,6 +239,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 isEdited: messageContent.isEdited,
                                                 reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
+                                                uploadProgress: eventItemProxy.uploadProgress,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                 encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                 encryptionForwarder: eventItemProxy.forwarder))
@@ -262,6 +264,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 isEdited: messageContent.isEdited,
                                                 reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
+                                                uploadProgress: eventItemProxy.uploadProgress,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                 encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                 encryptionForwarder: eventItemProxy.forwarder))
@@ -286,6 +289,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 isEdited: messageContent.isEdited,
                                                 reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
+                                                uploadProgress: eventItemProxy.uploadProgress,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                 encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                 encryptionForwarder: eventItemProxy.forwarder))
@@ -309,6 +313,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        isEdited: messageContent.isEdited,
                                                        reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                        deliveryStatus: eventItemProxy.deliveryStatus,
+                                                       uploadProgress: eventItemProxy.uploadProgress,
                                                        orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                        encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                        encryptionForwarder: eventItemProxy.forwarder))
@@ -333,6 +338,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                isEdited: messageContent.isEdited,
                                                reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                deliveryStatus: eventItemProxy.deliveryStatus,
+                                               uploadProgress: eventItemProxy.uploadProgress,
                                                orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                encryptionForwarder: eventItemProxy.forwarder))
@@ -356,6 +362,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                  isEdited: messageContent.isEdited,
                                                  reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                  deliveryStatus: eventItemProxy.deliveryStatus,
+                                                 uploadProgress: eventItemProxy.uploadProgress,
                                                  orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                  encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                  encryptionForwarder: eventItemProxy.forwarder))
@@ -379,6 +386,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 isEdited: messageContent.isEdited,
                                                 reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
+                                                uploadProgress: eventItemProxy.uploadProgress,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                 encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                 encryptionForwarder: eventItemProxy.forwarder))
@@ -402,6 +410,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    isEdited: messageContent.isEdited,
                                                    reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                    deliveryStatus: eventItemProxy.deliveryStatus,
+                                                   uploadProgress: eventItemProxy.uploadProgress,
                                                    orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                    encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                    encryptionForwarder: eventItemProxy.forwarder))
@@ -426,6 +435,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                   isEdited: messageContent.isEdited,
                                                   reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                   deliveryStatus: eventItemProxy.deliveryStatus,
+                                                  uploadProgress: eventItemProxy.uploadProgress,
                                                   orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                   encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                   encryptionForwarder: eventItemProxy.forwarder))
@@ -484,6 +494,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                          threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                          reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                          deliveryStatus: eventItemProxy.deliveryStatus,
+                                                         uploadProgress: eventItemProxy.uploadProgress,
                                                          orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                          encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                          encryptionForwarder: eventItemProxy.forwarder))
@@ -545,6 +556,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                       isEdited: edited,
                                                       reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                       deliveryStatus: eventItemProxy.deliveryStatus,
+                                                      uploadProgress: eventItemProxy.uploadProgress,
                                                       orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                       encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                       encryptionForwarder: eventItemProxy.forwarder))
@@ -566,6 +578,7 @@ nonisolated struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                        reactions: buildAggregatedReactions(messageLikeContent.reactions),
                                                        deliveryStatus: eventItemProxy.deliveryStatus,
+                                                       uploadProgress: eventItemProxy.uploadProgress,
                                                        orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                        encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState),
                                                        encryptionForwarder: eventItemProxy.forwarder))

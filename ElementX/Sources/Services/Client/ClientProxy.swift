@@ -298,6 +298,9 @@ class ClientProxy: ClientProxyProtocol {
         
         await setupSubscriptions(canSubscribeToUserProfile: canSubscribeToUserProfile)
         
+        // Local echoes of media carry their upload's progress (timeline bubbles show a bar).
+        client.enableSendQueueUploadProgress(enable: true)
+        
         Task {
             do {
                 try await client.setMediaRetentionPolicy(policy: .init(maxCacheSize: nil,
@@ -890,6 +893,11 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed clearing client caches with error: \(error)")
             return .failure(.sdkError(error))
         }
+    }
+    
+    func retryInFlightRequests() {
+        MXLog.info("Re-sending in-flight requests on request")
+        client.notifyNetworkChange()
     }
     
     func optimizeStores() async -> Result<Void, ClientProxyError> {

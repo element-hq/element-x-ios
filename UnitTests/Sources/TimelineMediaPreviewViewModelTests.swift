@@ -28,7 +28,7 @@ struct TimelineMediaPreviewViewModelTests {
     mutating func loadingItem() async throws {
         // Given a fresh view model.
         setupViewModel()
-        #expect(!mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(!mediaProvider.loadFileFromSourceFilenameProgressCalled)
         #expect(context.viewState.currentItem == .media(context.viewState.dataSource.previewItems[0]))
         #expect(context.viewState.currentItemActions != nil)
         
@@ -36,7 +36,7 @@ struct TimelineMediaPreviewViewModelTests {
         try await loadInitialItem()
         
         // Then the view model should load the item and update its view state.
-        #expect(mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(mediaProvider.loadFileFromSourceFilenameProgressCalled)
         #expect(context.viewState.currentItem == .media(context.viewState.dataSource.previewItems[0]))
         #expect(context.viewState.currentItemActions != nil)
     }
@@ -50,20 +50,48 @@ struct TimelineMediaPreviewViewModelTests {
             return
         }
         
-        #expect(!mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(!mediaProvider.loadFileFromSourceFilenameProgressCalled)
         #expect(mediaItem == context.viewState.dataSource.previewItems[0])
         #expect(mediaItem.downloadError == nil)
         
         // When the preview controller sets an item that fails to load.
-        mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
+        mediaProvider.loadFileFromSourceFilenameProgressClosure = { _, _, _ in .failure(.failedRetrievingFile) }
         let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(context.viewState.dataSource.previewItems[0])))
         try await failure.fulfill()
         
         // Then the view model should load the item and update its view state.
-        #expect(mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(mediaProvider.loadFileFromSourceFilenameProgressCalled)
         #expect(mediaItem == context.viewState.dataSource.previewItems[0])
         #expect(mediaItem.downloadError != nil)
+    }
+    
+    @Test
+    mutating func downloadProgress() async throws {
+        // Given a fresh view model whose media downloads slowly, reporting its progress.
+        setupViewModel()
+        guard case let .media(mediaItem) = context.viewState.currentItem else {
+            Issue.record("There should be a current item")
+            return
+        }
+        #expect(mediaItem.downloadProgress == nil)
+        mediaProvider.loadFileFromSourceFilenameProgressClosure = { _, _, progress in
+            await progress?(0.42)
+            try? await Task.sleep(for: .milliseconds(200))
+            return .failure(.failedRetrievingFile)
+        }
+        
+        // When the preview controller sets the item.
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
+        
+        // Then the item shows the download's progress until the load ends.
+        for _ in 0..<100 where mediaItem.downloadProgress == nil {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        #expect(mediaItem.downloadProgress == 0.42)
+        try await failure.fulfill()
+        #expect(mediaItem.downloadProgress == nil)
     }
     
     @Test
@@ -77,7 +105,7 @@ struct TimelineMediaPreviewViewModelTests {
         try await deferred.fulfill()
         
         // Then the view model should load the item and update its view state.
-        #expect(mediaProvider.loadFileFromSourceFilenameCallsCount == 2)
+        #expect(mediaProvider.loadFileFromSourceFilenameProgressCallsCount == 2)
         #expect(context.viewState.currentItem == .media(context.viewState.dataSource.previewItems[1]))
         
         // When swiping back to the first item.
@@ -86,7 +114,7 @@ struct TimelineMediaPreviewViewModelTests {
         try await failure.fulfill()
         
         // Then the view model should not need to load the item, but should still update its view state.
-        #expect(mediaProvider.loadFileFromSourceFilenameCallsCount == 2)
+        #expect(mediaProvider.loadFileFromSourceFilenameProgressCallsCount == 2)
         #expect(context.viewState.currentItem == .media(context.viewState.dataSource.previewItems[0]))
     }
     
@@ -103,7 +131,7 @@ struct TimelineMediaPreviewViewModelTests {
         try await failure.fulfill()
         
         // Then there should no longer be a media preview and instead of loading any media, a pagination request should be made.
-        #expect(mediaProvider.loadFileFromSourceFilenameCallsCount == 1)
+        #expect(mediaProvider.loadFileFromSourceFilenameProgressCallsCount == 1)
         #expect(context.viewState.currentItem == .loading(.paginatingBackwards)) // Note: This item only changes when the preview controller handles the new items.
         #expect(timelineController.paginateBackwardsRequestSizeCallsCount == 1)
     }
@@ -121,14 +149,14 @@ struct TimelineMediaPreviewViewModelTests {
         try await deferred.fulfill()
         
         // And the preview controller attempts to update the current item (now at a new index in the array but it hasn't changed in the data source).
-        mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
+        mediaProvider.loadFileFromSourceFilenameProgressClosure = { _, _, _ in .failure(.failedRetrievingFile) }
         let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
         context.send(viewAction: .updateCurrentItem(.media(context.viewState.dataSource.previewItems[3])))
         try await failure.fulfill()
         
         // Then the current item shouldn't need to be reloaded.
         #expect(context.viewState.dataSource.previewItems.count == 6)
-        #expect(mediaProvider.loadFileFromSourceFilenameCallsCount == 1)
+        #expect(mediaProvider.loadFileFromSourceFilenameProgressCallsCount == 1)
     }
     
     @Test
@@ -292,7 +320,7 @@ struct TimelineMediaPreviewViewModelTests {
             Issue.record("The item should be previewable")
             return
         }
-        #expect(mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(mediaProvider.loadFileFromSourceFilenameProgressCalled)
     }
     
     @Test
@@ -310,7 +338,7 @@ struct TimelineMediaPreviewViewModelTests {
         try await failure.fulfill()
         
         // Then the media must not be downloaded and the failure should be reflected in the current item.
-        #expect(!mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(!mediaProvider.loadFileFromSourceFilenameProgressCalled)
         #expect(context.viewState.currentItem == .contentScan(.init(media: mediaItem, state: .failure(.notSafe))))
         #expect(mediaItem.fileHandle == nil)
     }
@@ -332,7 +360,7 @@ struct TimelineMediaPreviewViewModelTests {
         try await failure.fulfill()
         
         // Then the media must not be downloaded and the failure should be reflected in the current item.
-        #expect(!mediaProvider.loadFileFromSourceFilenameCalled)
+        #expect(!mediaProvider.loadFileFromSourceFilenameProgressCalled)
         #expect(context.viewState.currentItem == .contentScan(.init(media: mediaItem, state: .failure(.notFound))))
         #expect(mediaItem.fileHandle == nil)
     }

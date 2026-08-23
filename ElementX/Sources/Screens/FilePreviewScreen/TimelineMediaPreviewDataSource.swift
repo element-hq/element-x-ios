@@ -397,6 +397,10 @@ enum TimelineMediaPreviewItem: Equatable {
         
         var downloadError: Error?
         
+        /// How much of the file has been downloaded (0...1) while it's in flight and the server
+        /// said how big it is; `nil` otherwise (and once it has landed).
+        var downloadProgress: Double?
+        
         /// A stable identifier that's unique per preview item — including individual gallery
         /// attachments that would otherwise share their parent event's ID.
         let id: MediaPreviewItemID

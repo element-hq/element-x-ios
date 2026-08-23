@@ -51,6 +51,11 @@ nonisolated extension EventBasedTimelineItemProtocol {
         properties.deliveryStatus?.isSendingFailed == true
     }
     
+    /// Whether the item's media is still uploading (a local echo reporting upload progress).
+    var isUploading: Bool {
+        properties.uploadProgress != nil
+    }
+    
     var hasFailedDecryption: Bool {
         self is EncryptedRoomTimelineItem
     }

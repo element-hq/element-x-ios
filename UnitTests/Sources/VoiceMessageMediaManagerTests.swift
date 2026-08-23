@@ -23,7 +23,7 @@ struct VoiceMessageMediaManagerTests {
     init() {
         voiceMessageCache = VoiceMessageCacheMock()
         mediaProvider = MediaProviderMock(.init())
-        mediaProvider.loadFileFromSourceFilenameClosure = nil
+        mediaProvider.loadFileFromSourceFilenameProgressClosure = nil
         mediaProvider.loadFileFromSourceFilenameReturnValue = .failure(.failedRetrievingFile)
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache)

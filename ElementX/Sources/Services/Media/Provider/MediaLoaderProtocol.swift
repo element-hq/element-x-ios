@@ -21,5 +21,5 @@ nonisolated protocol MediaLoaderProtocol: Sendable {
     
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy
+    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?, progress: MediaDownloadProgressHandler?) async throws -> MediaFileHandleProxy
 }

@@ -4193,3 +4193,48 @@ reached: nothing to swipe onto. The tapped attachment index is now threaded
 into `processItemTap` and a gallery tap filters like an individual tap of
 that attachment's kind would (image/video -> `[image, video, gallery]`,
 audio/file -> `[audio, file, gallery]`). Build 146 = this x SDK `5140c5839`.
+
+## Round 48: media download + upload progress bars, retry for stalled uploads
+
+**Download progress in the viewer (SDK `4ea0801f1`, EXI this round, build 148).**
+Nothing in the stack reported download progress: the SDK's HTTP client only
+streamed the *request* body (`send_progress`, for uploads) and read every
+response whole with `bytes()`, so a full-size image/video/file in the viewer
+gave no feedback until it landed (spinner or thumbnail placeholder + "Loading"
+header). SDK: a receive-side observable (`SendRequest::with_recv_progress_observable`
+/ `subscribe_to_recv_progress`); when subscribed, the native client streams the
+body chunk by chunk with the `Content-Length` as the total (wasm keeps
+`bytes()`); `Media::get_media_content_with_progress` / `get_media_file_with_progress`
+thread it to the fetcher (`MediaFetcher::fetch_media_content` gains the
+parameter, the content-scanner fetcher ignores it); FFI `Client::get_media_file`
+takes an optional `ProgressWatcher` forwarded like the upload one (cached files
+arrive without any update). Integration test `test_get_media_content_reports_download_progress`.
+EXI: `MediaLoaderProtocol/MediaProviderProtocol.loadFileFromSource(_:filename:progress:)`
+(`MediaDownloadProgressHandler`, a fraction on the main actor, throttled to 1%
+steps in `MediaLoader`); the viewer's `Media.downloadProgress` feeds a
+`ProgressView(value:)` along the bottom of the page (in `CaptionView`, above
+the caption/toolbar) and replaces the centred spinner while a fraction is
+known. Thumbnails deliberately NOT given a bar: their wait is time-to-first-byte
+(auth, server-side thumbnailing), bytes would sit at 0 then jump to 100.
+Unit test `downloadProgress` in `TimelineMediaPreviewViewModelTests` (sim
+slice not built this round, NOT RUN).
+
+**Upload progress on timeline media (same build).** The SDK already puts per-item
+upload progress on the local echo (`EventSendState::NotSentYet { progress }`,
+cumulative over a gallery's attachments) behind
+`enable_send_queue_upload_progress`, which EXI never enabled and whose payload
+`TimelineItemProxy.deliveryStatus` dropped. Now enabled in `ClientProxy`;
+`EventTimelineItemProxy.uploadProgress` -> `RoomTimelineItemProperties.uploadProgress`
+(all factory sites) -> `TimelineMediaUploadProgressBar` overlaid along the
+bottom of image/video thumbnails and gallery grids while sending.
+
+**Stalled uploads.** Send-queue uploads use `reasonable_upload_timeout` (>= 5 min,
+size-based), so a black-holed connection sits silently with the bar frozen.
+First cut of a kick: the long-press menu on an uploading item gains "Retry"
+(`TimelineItemMenuAction.retryUpload` -> `ClientProxy.retryInFlightRequests()`
+= `Client::notify_network_change()`, the round-32 re-send hook: drops the pool
+and re-sends every in-flight request on a fresh connection without consuming a
+retry; blunt, also nudges the sync long-poll, harmless). Candidates if wanted:
+auto-detect a bar frozen for ~15 s and show "Stalled, tap to retry" on the
+bubble; a per-request re-send (new SDK API on `SendHandle`) instead of the
+client-wide kick.

@@ -254,6 +254,10 @@ protocol ClientProxyProtocol: AnyObject {
     
     @discardableResult func optimizeStores() async -> Result<Void, ClientProxyError>
     
+    /// Drops the HTTP connection pool and re-sends every in-flight request on a fresh connection,
+    /// the same as on a network path change: the way to kick a stalled upload along.
+    func retryInFlightRequests()
+    
     @discardableResult func markAllRoomsAsRead() async -> Result<Void, ClientProxyError>
     
     func storeSizes() async -> Result<StoreSizes, ClientProxyError>

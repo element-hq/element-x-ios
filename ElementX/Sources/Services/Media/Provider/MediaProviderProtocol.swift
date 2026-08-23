@@ -17,6 +17,10 @@ enum MediaProviderError: Error {
     case cancelled
 }
 
+/// Told how much of a file has been downloaded, as a fraction (0...1), at most every percent.
+/// Only called when the server sent the file's size; a cached file arrives without any call.
+typealias MediaDownloadProgressHandler = @MainActor @Sendable (Double) -> Void
+
 // sourcery: AutoMockable
 nonisolated protocol MediaProviderProtocol: Sendable {
     func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage?
@@ -25,7 +29,7 @@ nonisolated protocol MediaProviderProtocol: Sendable {
     
     func loadThumbnailForSource(source: MediaSourceProxy, size: CGSize) async -> Result<Data, MediaProviderError>
     
-    func loadFileFromSource(_ source: MediaSourceProxy, filename: String?) async -> Result<MediaFileHandleProxy, MediaProviderError>
+    func loadFileFromSource(_ source: MediaSourceProxy, filename: String?, progress: MediaDownloadProgressHandler?) async -> Result<MediaFileHandleProxy, MediaProviderError>
 }
 
 extension MediaProviderProtocol {
@@ -37,7 +41,7 @@ extension MediaProviderProtocol {
         loadImageRetryingOnReconnection(source, size: nil)
     }
     
-    func loadFileFromSource(_ source: MediaSourceProxy) async -> Result<MediaFileHandleProxy, MediaProviderError> {
-        await loadFileFromSource(source, filename: nil)
+    func loadFileFromSource(_ source: MediaSourceProxy, filename: String? = nil) async -> Result<MediaFileHandleProxy, MediaProviderError> {
+        await loadFileFromSource(source, filename: filename, progress: nil)
     }
 }

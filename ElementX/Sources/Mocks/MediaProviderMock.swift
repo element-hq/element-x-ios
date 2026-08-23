@@ -54,7 +54,7 @@ extension MediaProviderMock {
             return .success(data)
         }
         
-        loadFileFromSourceFilenameClosure = { _, _ in
+        loadFileFromSourceFilenameProgressClosure = { _, _, _ in
             guard let url = Bundle.main.url(forResource: "preview_image", withExtension: "jpg") else {
                 return .failure(.failedRetrievingFile)
             }

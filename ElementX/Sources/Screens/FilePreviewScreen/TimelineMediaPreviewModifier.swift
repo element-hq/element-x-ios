@@ -174,12 +174,12 @@ struct TimelineMediaPreviewModifier_Previews: PreviewProvider {
         let mediaProvider = MediaProviderMock(.init())
         
         if isDownloading {
-            mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in
+            mediaProvider.loadFileFromSourceFilenameProgressClosure = { _, _, _ in
                 try? await Task.sleep(for: .seconds(3600))
                 return .failure(.failedRetrievingFile)
             }
         } else if isDownloadError {
-            mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
+            mediaProvider.loadFileFromSourceFilenameProgressClosure = { _, _, _ in .failure(.failedRetrievingFile) }
         }
         
         return TimelineMediaPreviewViewModel(initialItem: item,

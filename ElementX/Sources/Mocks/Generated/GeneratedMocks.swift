@@ -3708,6 +3708,23 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return optimizeStoresReturnValue
         }
     }
+    //MARK: - retryInFlightRequests
+
+    private let retryInFlightRequestsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var retryInFlightRequestsUnderlyingCallsCount = 0
+    var retryInFlightRequestsCallsCount: Int {
+        get { retryInFlightRequestsCallsCountLock.withLock { retryInFlightRequestsUnderlyingCallsCount } }
+        set { retryInFlightRequestsCallsCountLock.withLock { retryInFlightRequestsUnderlyingCallsCount = newValue } }
+    }
+    var retryInFlightRequestsCalled: Bool {
+        return retryInFlightRequestsCallsCount > 0
+    }
+    nonisolated(unsafe) var retryInFlightRequestsClosure: (() -> Void)?
+
+    func retryInFlightRequests() {
+        retryInFlightRequestsCallsCountLock.withLock { retryInFlightRequestsUnderlyingCallsCount += 1 }
+        retryInFlightRequestsClosure?()
+    }
     //MARK: - markAllRoomsAsRead
 
     private let markAllRoomsAsReadCallsCountLock = NSLock()
@@ -7989,48 +8006,34 @@ nonisolated class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
     }
     //MARK: - loadMediaFileForSource
 
-    nonisolated(unsafe) var loadMediaFileForSourceFilenameThrowableError: Error?
-    private let loadMediaFileForSourceFilenameCallsCountLock = NSLock()
-    private nonisolated(unsafe) var loadMediaFileForSourceFilenameUnderlyingCallsCount = 0
-    var loadMediaFileForSourceFilenameCallsCount: Int {
-        get { loadMediaFileForSourceFilenameCallsCountLock.withLock { loadMediaFileForSourceFilenameUnderlyingCallsCount } }
-        set { loadMediaFileForSourceFilenameCallsCountLock.withLock { loadMediaFileForSourceFilenameUnderlyingCallsCount = newValue } }
+    nonisolated(unsafe) var loadMediaFileForSourceFilenameProgressThrowableError: Error?
+    private let loadMediaFileForSourceFilenameProgressCallsCountLock = NSLock()
+    private nonisolated(unsafe) var loadMediaFileForSourceFilenameProgressUnderlyingCallsCount = 0
+    var loadMediaFileForSourceFilenameProgressCallsCount: Int {
+        get { loadMediaFileForSourceFilenameProgressCallsCountLock.withLock { loadMediaFileForSourceFilenameProgressUnderlyingCallsCount } }
+        set { loadMediaFileForSourceFilenameProgressCallsCountLock.withLock { loadMediaFileForSourceFilenameProgressUnderlyingCallsCount = newValue } }
     }
-    var loadMediaFileForSourceFilenameCalled: Bool {
-        return loadMediaFileForSourceFilenameCallsCount > 0
-    }
-    private let loadMediaFileForSourceFilenameReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var loadMediaFileForSourceFilenameUnderlyingReceivedArguments: (source: MediaSourceProxy, filename: String?)?
-    var loadMediaFileForSourceFilenameReceivedArguments: (source: MediaSourceProxy, filename: String?)? {
-        get { loadMediaFileForSourceFilenameReceivedArgumentsLock.withLock { loadMediaFileForSourceFilenameUnderlyingReceivedArguments } }
-        set { loadMediaFileForSourceFilenameReceivedArgumentsLock.withLock { loadMediaFileForSourceFilenameUnderlyingReceivedArguments = newValue } }
-    }
-    private let loadMediaFileForSourceFilenameReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var loadMediaFileForSourceFilenameUnderlyingReceivedInvocations: [(source: MediaSourceProxy, filename: String?)] = []
-    var loadMediaFileForSourceFilenameReceivedInvocations: [(source: MediaSourceProxy, filename: String?)] {
-        get { loadMediaFileForSourceFilenameReceivedInvocationsLock.withLock { loadMediaFileForSourceFilenameUnderlyingReceivedInvocations } }
-        set { loadMediaFileForSourceFilenameReceivedInvocationsLock.withLock { loadMediaFileForSourceFilenameUnderlyingReceivedInvocations = newValue } }
+    var loadMediaFileForSourceFilenameProgressCalled: Bool {
+        return loadMediaFileForSourceFilenameProgressCallsCount > 0
     }
 
-    private let loadMediaFileForSourceFilenameReturnValueLock = NSLock()
-    private nonisolated(unsafe) var loadMediaFileForSourceFilenameUnderlyingReturnValue: MediaFileHandleProxy!
-    var loadMediaFileForSourceFilenameReturnValue: MediaFileHandleProxy! {
-        get { loadMediaFileForSourceFilenameReturnValueLock.withLock { loadMediaFileForSourceFilenameUnderlyingReturnValue } }
-        set { loadMediaFileForSourceFilenameReturnValueLock.withLock { loadMediaFileForSourceFilenameUnderlyingReturnValue = newValue } }
+    private let loadMediaFileForSourceFilenameProgressReturnValueLock = NSLock()
+    private nonisolated(unsafe) var loadMediaFileForSourceFilenameProgressUnderlyingReturnValue: MediaFileHandleProxy!
+    var loadMediaFileForSourceFilenameProgressReturnValue: MediaFileHandleProxy! {
+        get { loadMediaFileForSourceFilenameProgressReturnValueLock.withLock { loadMediaFileForSourceFilenameProgressUnderlyingReturnValue } }
+        set { loadMediaFileForSourceFilenameProgressReturnValueLock.withLock { loadMediaFileForSourceFilenameProgressUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var loadMediaFileForSourceFilenameClosure: ((MediaSourceProxy, String?) async throws -> MediaFileHandleProxy)?
+    nonisolated(unsafe) var loadMediaFileForSourceFilenameProgressClosure: ((MediaSourceProxy, String?, MediaDownloadProgressHandler?) async throws -> MediaFileHandleProxy)?
 
-    @concurrent func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
-        if let error = loadMediaFileForSourceFilenameThrowableError {
+    @concurrent func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?, progress: MediaDownloadProgressHandler?) async throws -> MediaFileHandleProxy {
+        if let error = loadMediaFileForSourceFilenameProgressThrowableError {
             throw error
         }
-        loadMediaFileForSourceFilenameCallsCountLock.withLock { loadMediaFileForSourceFilenameUnderlyingCallsCount += 1 }
-        loadMediaFileForSourceFilenameReceivedArguments = (source: source, filename: filename)
-        loadMediaFileForSourceFilenameReceivedInvocationsLock.withLock { loadMediaFileForSourceFilenameUnderlyingReceivedInvocations.append((source: source, filename: filename)) }
-        if let loadMediaFileForSourceFilenameClosure = loadMediaFileForSourceFilenameClosure {
-            return try await loadMediaFileForSourceFilenameClosure(source, filename)
+        loadMediaFileForSourceFilenameProgressCallsCountLock.withLock { loadMediaFileForSourceFilenameProgressUnderlyingCallsCount += 1 }
+        if let loadMediaFileForSourceFilenameProgressClosure = loadMediaFileForSourceFilenameProgressClosure {
+            return try await loadMediaFileForSourceFilenameProgressClosure(source, filename, progress)
         } else {
-            return loadMediaFileForSourceFilenameReturnValue
+            return loadMediaFileForSourceFilenameProgressReturnValue
         }
     }
 }
@@ -8349,44 +8352,30 @@ nonisolated class MediaProviderMock: MediaProviderProtocol, @unchecked Sendable 
     }
     //MARK: - loadFileFromSource
 
-    private let loadFileFromSourceFilenameCallsCountLock = NSLock()
-    private nonisolated(unsafe) var loadFileFromSourceFilenameUnderlyingCallsCount = 0
-    var loadFileFromSourceFilenameCallsCount: Int {
-        get { loadFileFromSourceFilenameCallsCountLock.withLock { loadFileFromSourceFilenameUnderlyingCallsCount } }
-        set { loadFileFromSourceFilenameCallsCountLock.withLock { loadFileFromSourceFilenameUnderlyingCallsCount = newValue } }
+    private let loadFileFromSourceFilenameProgressCallsCountLock = NSLock()
+    private nonisolated(unsafe) var loadFileFromSourceFilenameProgressUnderlyingCallsCount = 0
+    var loadFileFromSourceFilenameProgressCallsCount: Int {
+        get { loadFileFromSourceFilenameProgressCallsCountLock.withLock { loadFileFromSourceFilenameProgressUnderlyingCallsCount } }
+        set { loadFileFromSourceFilenameProgressCallsCountLock.withLock { loadFileFromSourceFilenameProgressUnderlyingCallsCount = newValue } }
     }
-    var loadFileFromSourceFilenameCalled: Bool {
-        return loadFileFromSourceFilenameCallsCount > 0
-    }
-    private let loadFileFromSourceFilenameReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var loadFileFromSourceFilenameUnderlyingReceivedArguments: (source: MediaSourceProxy, filename: String?)?
-    var loadFileFromSourceFilenameReceivedArguments: (source: MediaSourceProxy, filename: String?)? {
-        get { loadFileFromSourceFilenameReceivedArgumentsLock.withLock { loadFileFromSourceFilenameUnderlyingReceivedArguments } }
-        set { loadFileFromSourceFilenameReceivedArgumentsLock.withLock { loadFileFromSourceFilenameUnderlyingReceivedArguments = newValue } }
-    }
-    private let loadFileFromSourceFilenameReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var loadFileFromSourceFilenameUnderlyingReceivedInvocations: [(source: MediaSourceProxy, filename: String?)] = []
-    var loadFileFromSourceFilenameReceivedInvocations: [(source: MediaSourceProxy, filename: String?)] {
-        get { loadFileFromSourceFilenameReceivedInvocationsLock.withLock { loadFileFromSourceFilenameUnderlyingReceivedInvocations } }
-        set { loadFileFromSourceFilenameReceivedInvocationsLock.withLock { loadFileFromSourceFilenameUnderlyingReceivedInvocations = newValue } }
+    var loadFileFromSourceFilenameProgressCalled: Bool {
+        return loadFileFromSourceFilenameProgressCallsCount > 0
     }
 
-    private let loadFileFromSourceFilenameReturnValueLock = NSLock()
-    private nonisolated(unsafe) var loadFileFromSourceFilenameUnderlyingReturnValue: Result<MediaFileHandleProxy, MediaProviderError>!
-    var loadFileFromSourceFilenameReturnValue: Result<MediaFileHandleProxy, MediaProviderError>! {
-        get { loadFileFromSourceFilenameReturnValueLock.withLock { loadFileFromSourceFilenameUnderlyingReturnValue } }
-        set { loadFileFromSourceFilenameReturnValueLock.withLock { loadFileFromSourceFilenameUnderlyingReturnValue = newValue } }
+    private let loadFileFromSourceFilenameProgressReturnValueLock = NSLock()
+    private nonisolated(unsafe) var loadFileFromSourceFilenameProgressUnderlyingReturnValue: Result<MediaFileHandleProxy, MediaProviderError>!
+    var loadFileFromSourceFilenameProgressReturnValue: Result<MediaFileHandleProxy, MediaProviderError>! {
+        get { loadFileFromSourceFilenameProgressReturnValueLock.withLock { loadFileFromSourceFilenameProgressUnderlyingReturnValue } }
+        set { loadFileFromSourceFilenameProgressReturnValueLock.withLock { loadFileFromSourceFilenameProgressUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var loadFileFromSourceFilenameClosure: ((MediaSourceProxy, String?) async -> Result<MediaFileHandleProxy, MediaProviderError>)?
+    nonisolated(unsafe) var loadFileFromSourceFilenameProgressClosure: ((MediaSourceProxy, String?, MediaDownloadProgressHandler?) async -> Result<MediaFileHandleProxy, MediaProviderError>)?
 
-    @concurrent func loadFileFromSource(_ source: MediaSourceProxy, filename: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
-        loadFileFromSourceFilenameCallsCountLock.withLock { loadFileFromSourceFilenameUnderlyingCallsCount += 1 }
-        loadFileFromSourceFilenameReceivedArguments = (source: source, filename: filename)
-        loadFileFromSourceFilenameReceivedInvocationsLock.withLock { loadFileFromSourceFilenameUnderlyingReceivedInvocations.append((source: source, filename: filename)) }
-        if let loadFileFromSourceFilenameClosure = loadFileFromSourceFilenameClosure {
-            return await loadFileFromSourceFilenameClosure(source, filename)
+    @concurrent func loadFileFromSource(_ source: MediaSourceProxy, filename: String?, progress: MediaDownloadProgressHandler?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
+        loadFileFromSourceFilenameProgressCallsCountLock.withLock { loadFileFromSourceFilenameProgressUnderlyingCallsCount += 1 }
+        if let loadFileFromSourceFilenameProgressClosure = loadFileFromSourceFilenameProgressClosure {
+            return await loadFileFromSourceFilenameProgressClosure(source, filename, progress)
         } else {
-            return loadFileFromSourceFilenameReturnValue
+            return loadFileFromSourceFilenameProgressReturnValue
         }
     }
 }

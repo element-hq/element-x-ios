@@ -132,6 +132,10 @@ struct TimelineItemMenuActionProvider {
             break // viewInRoomTimeline is the only non-room item and was added conditionally.
         }
         
+        if item.isUploading {
+            actions.insert(.retryUpload, at: 0)
+        }
+        
         if item.hasFailedToSend {
             actions = actions.filter(\.canAppearInFailedEcho)
             secondaryActions = secondaryActions.filter(\.canAppearInFailedEcho)

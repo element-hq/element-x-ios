@@ -22,6 +22,8 @@ nonisolated struct RoomTimelineItemProperties: Hashable {
     var reactions: [AggregatedReaction] = []
     /// The delivery status for this item. If a sent message is echoed the value is nil.
     var deliveryStatus: TimelineItemDeliveryStatus?
+    /// How far the item's media upload has got (0...1) while it's sending, `nil` otherwise.
+    var uploadProgress: Double?
     /// The read receipts of the item, ordered from newest to oldest.
     var orderedReadReceipts: [ReadReceipt] = []
     /// Authenticity warnings for item's sent in encrypted rooms.

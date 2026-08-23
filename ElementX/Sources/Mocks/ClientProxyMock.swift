@@ -108,7 +108,7 @@ extension ClientProxyMock {
         let mediaLoader = MediaLoaderMock()
         mediaLoader.loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         mediaLoader.loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
-        mediaLoader.loadMediaFileForSourceFilenameThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        mediaLoader.loadMediaFileForSourceFilenameProgressThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         self.mediaLoader = mediaLoader
         
         secureBackupController = SecureBackupControllerMock(.init(recoveryState: configuration.recoveryState))
