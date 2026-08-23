@@ -89,7 +89,27 @@ class WindowManager: SecureWindowManagerProtocol {
             window?.addGestureRecognizer(recognizer)
         }
         
+        // Dogfood diagnostics for the blank-after-background-launch screen (2026-08-23: the
+        // room list was hit-testable but not drawn until a background/foreground cycle): name
+        // every window's visibility whenever the app comes to the front. Strip before upstreaming.
+        for name in [UIApplication.willEnterForegroundNotification, UIApplication.didBecomeActiveNotification] {
+            let trigger = name.rawValue
+            NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.logWindowState(trigger: trigger) }
+            }
+        }
+        
         delegate?.windowManagerDidConfigureWindows(self)
+    }
+    
+    private func logWindowState(trigger: String) {
+        let sceneState = mainScene.map { String(describing: $0.activationState) } ?? "no scene"
+        let sceneWindows = mainScene?.windows.count ?? -1
+        let descriptions = zip(["main", "overlay", "alternate"], windows).map { label, window in
+            let root = window.rootViewController.map { String(describing: type(of: $0)) } ?? "nil"
+            return "\(label)[hidden=\(window.isHidden) alpha=\(window.alpha) key=\(window.isKeyWindow) level=\(window.windowLevel.rawValue) root=\(root) bounds=\(Int(window.bounds.width))x\(Int(window.bounds.height))]"
+        }
+        MXLog.info("WindowDebug (\(trigger)): scene=\(sceneState) windows=\(sceneWindows) \(descriptions.joined(separator: " "))")
     }
     
     func configure(withOpenWindowAction openWindowAction: OpenWindowAction,

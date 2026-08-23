@@ -147,12 +147,19 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         previewItems = itemViewStates.flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
         
         // What to show if the timeline hasn't loaded the initial item yet: the tapped message, or the
-        // whole of the tapped gallery (unfiltered, so the tapped attachment is always there).
+        // tapped gallery's attachments. The gallery is filtered the same way the timeline's own
+        // flattening will be (the filter derives from the tapped attachment's type, so that one is
+        // always kept): the loaded list must then match it as a contiguous range when the timeline
+        // arrives, or the merge takes the re-anchoring path and leaves the padding (and its
+        // "Loading more" pages) in place around the gallery.
         let fallbackItems: [TimelineMediaPreviewItem.Media]
         let fallbackIndex: Int
-        if let galleryItem = initialItem as? GalleryRoomTimelineItem, !galleryItem.content.items.isEmpty {
-            fallbackItems = galleryItem.content.items.map { .init(galleryParent: galleryItem, item: $0) }
-            fallbackIndex = min(max(initialGalleryIndex ?? 0, 0), fallbackItems.count - 1)
+        if let galleryItem = initialItem as? GalleryRoomTimelineItem,
+           case let galleryItems = galleryItem.content.items(matching: allowedGalleryItemTypes),
+           !galleryItems.isEmpty {
+            fallbackItems = galleryItems.map { .init(galleryParent: galleryItem, item: $0.item) }
+            let tappedID = initialGalleryIndex.flatMap { galleryItem.content.items.indices.contains($0) ? galleryItem.content.items[$0].id : nil }
+            fallbackIndex = galleryItems.firstIndex { $0.item.id == tappedID } ?? 0
         } else {
             fallbackItems = [.init(timelineItem: initialItem)]
             fallbackIndex = 0
