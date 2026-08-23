@@ -50,10 +50,8 @@ enum BugReportServiceError: LocalizedError {
 // sourcery: AutoMockable
 protocol BugReportServiceProtocol: AnyObject {
     var isEnabled: Bool { get }
-    var crashedLastRun: Bool { get }
     
-    var lastCrashEventID: String? { get set }
-    var lastCrashEventIDPublisher: CurrentValuePublisher<String?, Never> { get }
+    var lastCrashEventIDSubject: CurrentValueSubject<String?, Never> { get }
     
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>

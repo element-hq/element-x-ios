@@ -31,8 +31,8 @@ struct ConfigureNightly: AsyncParsableCommand {
         }
         
         // Check if the nightly variant is already included
-        if projectConfig["include"]?.sequence?.contains(where: { $0.mapping?["path"] == "Variants/Nightly/nightly.yml" }) == false {
-            projectConfig["include"]?.sequence?.append(["path": "Variants/Nightly/nightly.yml"])
+        if projectConfig["include"]?.sequence?.contains(where: { $0.mapping?["path"] == "Components/Variants/Nightly/nightly.yml" }) == false {
+            projectConfig["include"]?.sequence?.append(["path": "Components/Variants/Nightly/nightly.yml"])
         }
         
         let updatedYAMLString = try Yams.serialize(node: projectConfig)
@@ -41,7 +41,7 @@ struct ConfigureNightly: AsyncParsableCommand {
     
     /// Generates the app icon banner with version and build number.
     private func generateAppIconBanner(buildNumber: String) async throws {
-        let iconPath = "Variants/Nightly/Resources/NightlyAppIcon.icon/Assets/Version.png"
+        let iconPath = "Components/Variants/Nightly/Resources/NightlyAppIcon.icon/Assets/Version.png"
         try await AppIconBanner.parse([iconPath, "--build-number", buildNumber]).run()
     }
 }

@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Edit avatar";
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_expand_message_text_field" = "Expand message text field";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Amaga contrasenya";
 "a11y_info" = "Info";
 "a11y_join_call" = "Uneix-te a la trucada";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Rebutja";
 "notification_invite_body" = "T'ha convidat a xatejar";
 "notification_invite_body_with_sender" = "%1$@ t'ha convidat a xatejar";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "T'ha mencionat: %1$@";
 "notification_new_messages" = "Missatges nous";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
 "screen_change_server_form_header" = "URL del servidor";
 "screen_change_server_form_notice" = "Introdueix un domini.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "Quina és l'adreça del teu servidor?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Selecciona el teu servidor";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "Elimina l'emmagatzematge de claus";
 "screen_chat_backup_key_backup_action_enable" = "Activa còpia de seguretat";
 "screen_chat_backup_key_backup_description" = "Emmagatzema la teva identitat criptogràfica i les claus de missatge de forma segura al servidor. Això et permetrà veure l'historial de missatges en qualsevol dispositiu nou. %1$@.";
@@ -1350,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "No s'ha pogut restaurar el mode predeterminat. Torna-ho a provar.";
 "screen_room_notification_settings_error_setting_mode" = "No s'ha pogut configurar el mode. Torna-ho a provar.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "El servidor no admet aquesta opció en sales xifrades, no rebras notificacions en aquesta sala.";
-"screen_room_notification_settings_mode_all_messages" = "Tots els missatges";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mencions y paraules clau (només)";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "En aquesta sala, notifica'm en";
 "screen_room_pinned_banner_indicator" = "%1$@ de %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ missatges fixats";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Error: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Error, no s'han pogut provar les notificacions push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Error, s'ha acabat el temps d'espera de la notificació push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "El bucle de notificacions push ha tardat %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Prova el bucle de notificacions push";
 "troubleshoot_notifications_test_unified_push_description" = "Assegura't que hi hagi distribuïdors d'UnifiedPush disponibles.";

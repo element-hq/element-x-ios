@@ -729,6 +729,38 @@ struct AttributedStringBuilderTests {
         #expect(String(attributedString.characters) == "like\n  • this\ntest")
     }
     
+    /// Markdown generated HTML separates block elements with newlines which used to normalise
+    /// into stray spaces, indenting the first list item deeper than the ones that followed.
+    @Test
+    func interBlockWhitespace() throws {
+        let htmlString = "<p>intro:</p>\n<ul>\n<li>first</li>\n<li>second</li>\n</ul>\n"
+        
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "intro:\n  • first\n  • second")
+    }
+    
+    /// Whitespace between inline elements is meaningful, unlike the inter block variety.
+    @Test
+    func interInlineWhitespace() throws {
+        let htmlString = "<del>one</del> <del>two</del>"
+        
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "one two")
+    }
+    
+    @Test
+    func strikethroughTags() throws {
+        var strikethrough = AttributedString("one")
+        strikethrough[AttributeScopes.UIKitAttributes.StrikethroughStyleAttribute.self] = .single
+        
+        for tag in ["s", "del", "strike"] {
+            let attributedString = try #require(attributedStringBuilder.fromHTML("<\(tag)>one</\(tag)>"), "Could not build the attributed string")
+            #expect(attributedString == strikethrough, "<\(tag)> should render as a strikethrough")
+        }
+    }
+    
     @Test
     func firstListItemIndentation() throws {
         // The inter-element newlines (as sent by markdown-generated HTML) used to

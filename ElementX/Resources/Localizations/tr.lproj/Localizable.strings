@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Fotoğrafı düzenle";
 "a11y_edit_room_address_hint" = "Tam adres %1$@ olacaktır";
 "a11y_expand_message_text_field" = "Mesaj metin alanını genişlet";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Şifreyi gizle";
 "a11y_info" = "Bilgi";
 "a11y_join_call" = "Aramaya katıl";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Reddet";
 "notification_invite_body" = "Sizi sohbete davet etti";
 "notification_invite_body_with_sender" = "%1$@ sizi sohbete davet etti";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Senden bahsettim: %1$@";
 "notification_new_messages" = "Yeni Mesajlar";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Hesap sağlayıcısı %1$@ İzin verilmiyor.";
 "screen_change_server_form_header" = "Ana sunucu URL'si";
 "screen_change_server_form_notice" = "Enter a domain address.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "Sunucunuzun adresi nedir?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Sunucunuzu seçin";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "Anahtar depolamasını sil";
 "screen_chat_backup_key_backup_action_enable" = "Yedeklemeyi aç";
 "screen_chat_backup_key_backup_description" = "Kriptografik kimliğinizi ve mesaj anahtarlarınızı sunucuda güvenli bir şekilde saklayın. Bu, mesaj geçmişinizi herhangi bir yeni cihazda görüntülemenize olanak tanır. %1$@.";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Ayarlanamadı, lütfen tekrar deneyin.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ana sunucunuz şifreli odalarda bu seçeneği desteklemiyor, bu odada bildirim almayacaksınız.";
 "screen_room_notification_settings_mode_all_messages" = "Tüm mesajlar";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Yalnızca Bahsetmeler ve Anahtar Kelimeler";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Bu odada, bana bildir";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Sabitlenmiş mesajlar";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Hata: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Hata, itme test edilemiyor.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Hata, push beklenirken zaman aşımı oluştu.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Geri itme döngüsü %1$d ms sürdü.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Test Geri İtme döngüsü";
 "troubleshoot_notifications_test_unified_push_description" = "UnifiedPush distribütörlerinin mevcut olduğundan emin olun.";

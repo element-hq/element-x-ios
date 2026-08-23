@@ -1,24 +1,6 @@
 {
-  "originHash" : "ec77bc40677bd20f99d813dea09781e534f4cb4539fb504b27d997b95f98d6d0",
+  "originHash" : "a7bfbb574dd171065ecafd3e16a9c44aad10c659d08e85e77358ed769af0aad9",
   "pins" : [
-    {
-      "identity" : "pkl-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/pkl-swift",
-      "state" : {
-        "revision" : "00f4b15c0941e137bf90de712b6fb643c9f0880a",
-        "version" : "0.10.0"
-      }
-    },
-    {
-      "identity" : "semanticversion",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftPackageIndex/SemanticVersion",
-      "state" : {
-        "revision" : "330bab3e41aad91fb3b1b0f779d1325738e54b93",
-        "version" : "0.5.3"
-      }
-    },
     {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",
@@ -34,7 +16,7 @@
       "location" : "https://github.com/element-hq/swift-command-line-tools.git",
       "state" : {
         "branch" : "main",
-        "revision" : "17a90e116418c061d6c67ec9fd5c4f40dc2c9028"
+        "revision" : "e1e7939200f47bc3ee7c468076077a5d6ceaa364"
       }
     },
     {
@@ -62,6 +44,15 @@
       "state" : {
         "revision" : "669763cfd5806a67e21972d7e5e2d6b80b1ea985",
         "version" : "1.6.5"
+      }
+    },
+    {
+      "identity" : "xcresultparser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/a7ex/xcresultparser",
+      "state" : {
+        "revision" : "95ca65d0bd56250ccd16331f5b0480a1a2c0c5e9",
+        "version" : "2.2.0"
       }
     },
     {

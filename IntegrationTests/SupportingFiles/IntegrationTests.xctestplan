@@ -18,6 +18,7 @@
         }
       ]
     },
+    "diagnosticCollectionPolicy" : "Always",
     "environmentVariableEntries" : [
       {
         "key" : "INTEGRATION_TESTS_HOST",

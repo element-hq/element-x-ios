@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Modifica avatar";
 "a11y_edit_room_address_hint" = "L'indirizzo completo sarà %1$@";
 "a11y_expand_message_text_field" = "Allarga il campo di testo del messaggio";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Nascondi password";
 "a11y_info" = "Info";
 "a11y_join_call" = "Entra in chiamata";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Rifiuta";
 "notification_invite_body" = "Ti ha invitato ad una conversazione";
 "notification_invite_body_with_sender" = "%1$@ ti ha invitato ad una conversazione";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Ti ha menzionato: %1$@";
 "notification_new_messages" = "Nuovi messaggi";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Fornitore dell'account %1$@ non consentito.";
 "screen_change_server_form_header" = "URL dell'homeserver";
 "screen_change_server_form_notice" = "Inserisci un indirizzo di dominio.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "Qual è l'indirizzo del tuo server?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Seleziona il tuo server";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "Disattiva il backup";
 "screen_chat_backup_key_backup_action_enable" = "Attiva il backup";
 "screen_chat_backup_key_backup_description" = "Questo ti permetterà di visualizzare la cronologia delle conversazioni su qualsiasi nuovo dispositivo ed è necessario per il backup delle chat e dell'identità digitale.%1$@ .";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Impossibile impostare la modalità, riprova.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Il tuo homeserver non supporta questa opzione nelle stanze cifrate, quindi non riceverai notifiche in questa stanza.";
 "screen_room_notification_settings_mode_all_messages" = "Tutti i messaggi";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Solo menzioni e parole chiave";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "In questa stanza, avvisami per";
 "screen_room_pinned_banner_indicator" = "%1$@ di %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Messaggi fissati";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Errore: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Errore, impossibile testare le notifiche push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Errore, tempo scaduto in attesa della notifica push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Il test push loop back ha impiegato %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Prova invio notifica push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Assicurati che i distributori UnifiedPush siano disponibili.";

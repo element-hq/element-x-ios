@@ -565,6 +565,35 @@ final class TimelineViewModelTests {
         #expect(viewModel.state.bindings.alertInfo?.title == "alice (@alice:matrix.org) shared this message since you were not in the room when it was sent.")
     }
     
+    @Test
+    func tapSendInfoSendingFailedDisplaysAlertWithActions() {
+        // Given a room with a message that failed to send for a known reason
+        let items = [TextRoomTimelineItem(eventID: "t1", sendFailure: .unknown(reason: "M_TOO_LARGE"))]
+        let timelineController = TimelineControllerMock(.init(timelineItems: items))
+        timelineController.sendHandleForReturnValue = .mock
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        viewModel.process(viewAction: .itemSendInfoTapped(itemID: items[0].id))
+        
+        // Then the reason and both recovery actions are offered
+        #expect(viewModel.state.bindings.alertInfo?.message == "M_TOO_LARGE")
+        #expect(viewModel.state.bindings.alertInfo?.verticalButtons?.count == 2)
+    }
+    
+    @Test
+    func tapSendInfoSendingFailedWithoutSendHandleStillDisplaysAlert() {
+        // Given a failed message whose send handle can no longer be found
+        let items = [TextRoomTimelineItem(eventID: "t1", sendFailure: .unknown(reason: "M_TOO_LARGE"))]
+        let timelineController = TimelineControllerMock(.init(timelineItems: items))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        viewModel.process(viewAction: .itemSendInfoTapped(itemID: items[0].id))
+        
+        // Then the reason is still shown, without any actions to recover with
+        #expect(viewModel.state.bindings.alertInfo?.message == "M_TOO_LARGE")
+        #expect(viewModel.state.bindings.alertInfo?.verticalButtons == nil)
+    }
+    
     // MARK: - Helpers
     
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
@@ -642,6 +671,19 @@ private extension TextRoomTimelineItem {
                   sender: .init(id: ""),
                   content: .init(body: "Hello, World!"),
                   properties: RoomTimelineItemProperties(encryptionAuthenticity: encryptionAuthenticity))
+    }
+}
+
+private extension TextRoomTimelineItem {
+    init(eventID: String, sendFailure: TimelineItemSendFailure) {
+        self.init(id: .event(uniqueID: .init(UUID().uuidString), eventOrTransactionID: .eventID(eventID)),
+                  timestamp: .mock,
+                  isOutgoing: true,
+                  isEditable: false,
+                  canBeRepliedTo: true,
+                  sender: .init(id: ""),
+                  content: .init(body: "Hello, World!"),
+                  properties: RoomTimelineItemProperties(deliveryStatus: .sendingFailed(sendFailure)))
     }
 }
 

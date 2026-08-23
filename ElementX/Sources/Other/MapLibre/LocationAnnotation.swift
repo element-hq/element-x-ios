@@ -8,15 +8,9 @@
 
 import CoreLocation
 import Foundation
-import MapInterface
 
-final class LocationAnnotation: MapAnnotation {
+struct LocationAnnotation: Identifiable {
+    let id: String
+    let coordinate: CLLocationCoordinate2D
     let kind: LocationMarkerKind
-
-    // MARK: - Setup
-
-    init(id: String, coordinate: CLLocationCoordinate2D, kind: LocationMarkerKind) {
-        self.kind = kind
-        super.init(id: id, coordinate: coordinate)
-    }
 }

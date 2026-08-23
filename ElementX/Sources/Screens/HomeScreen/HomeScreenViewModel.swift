@@ -17,6 +17,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let userSession: UserSessionProtocol
     private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsServiceProtocol
+    private let bugReportService: BugReportServiceProtocol
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -33,11 +34,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol,
+         bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          roomPeekViewModelBuilder: ((String) async -> TimelineViewModelProtocol?)? = nil) {
         self.userSession = userSession
         self.analyticsService = analyticsService
+        self.bugReportService = bugReportService
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
@@ -143,6 +146,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedSpaceFilter, on: self)
             .store(in: &cancellables)
         
+        bugReportService.lastCrashEventIDSubject
+            .compactMap { $0 }
+            .first()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.presentCrashedLastRunAlert()
+            }
+            .store(in: &cancellables)
+        
         Task {
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
         }
@@ -164,6 +176,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         setupRoomListSubscriptions()
+        
+        updateRooms()
+        
+        if let roomSummaryProvider {
+            updateRoomListMode(with: roomSummaryProvider.statePublisher.value,
+                               hasRooms: !roomSummaryProvider.roomListPublisher.value.isEmpty)
+        }
     }
     
     // MARK: - Public
@@ -301,53 +320,40 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        // No receive(on: .main) hops: the provider publishes from the main actor already,
-        // and the synchronous delivery means the current (possibly pre-published) state is
-        // consumed before the first render instead of queuing behind it.
+        // Combined so that the mode and the rooms are always updated from the same pair of
+        // values: the state can report loaded before the first summaries have published and
+        // flipping to .rooms then would flash an empty list.
         roomSummaryProvider.statePublisher
-            .sink { [weak self] state in
+            .combineLatest(roomSummaryProvider.roomListPublisher)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state, rooms in
                 guard let self else { return }
-
-                updateRoomListMode(with: state)
-            }
-            .store(in: &cancellables)
-
-        roomSummaryProvider.roomListPublisher
-            .sink { [weak self] _ in
-                guard let self else { return }
+                
                 updateRooms()
-                // The first summary batch may land after the provider reported loaded;
-                // re-evaluate so the skeletons->rooms flip isn't missed.
-                if state.roomListMode == .skeletons {
-                    updateRoomListMode(with: roomSummaryProvider.statePublisher.value)
-                }
+                updateRoomListMode(with: state, hasRooms: !rooms.isEmpty)
             }
             .store(in: &cancellables)
     }
     
-    private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState) {
-        let isLoadingData = !roomSummaryProviderState.isLoaded
-        // The state can report loaded before the first summary batch has published; showing
-        // .rooms then would flash an empty list, so hold the skeletons until rooms exist.
-        let hasPublishedRooms = roomSummaryProvider?.roomListPublisher.value.isEmpty == false
-        // Only trust a zero count when no rooms are published: a sliding-sync session
-        // expiry resets the list's count to nil mid-recovery, and blanking a full room
-        // list into the empty state over that would be a lie (the rooms are still there).
-        let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0 && !hasPublishedRooms
+    private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState, hasRooms: Bool) {
         // An empty list under an active filter (chips, space, search) is a real answer, not
         // a not-yet-loaded one: holding the skeletons there shows placeholders forever
         // instead of the empty-filter state (dogfood 2026-08-17, "stuck on skeletons").
         let isFiltering = state.bindings.filtersState.isFiltering || state.selectedSpaceFilter != nil || state.bindings.isSearchFieldFocused
-
-        var roomListMode = state.roomListMode
-        if isLoadingData {
-            roomListMode = .skeletons
-        } else if hasNoRooms {
-            roomListMode = .empty
-        } else if hasPublishedRooms || isFiltering {
-            roomListMode = .rooms
+        
+        let roomListMode: HomeScreenRoomListMode = if !roomSummaryProviderState.isLoaded {
+            .skeletons // Still loading.
+        } else if roomSummaryProviderState.totalNumberOfRooms == 0, !hasRooms {
+            // Loaded, there are no rooms at all. Only trusted while no rooms are published: a
+            // sliding-sync session expiry resets the count mid-recovery, and blanking a full
+            // list into the empty state over that would be a lie (the rooms are still there).
+            .empty
+        } else if hasRooms || isFiltering {
+            .rooms // Loaded and the summaries have published (or an empty filter result).
+        } else if state.roomListMode == .skeletons {
+            .skeletons // Loaded but nothing published yet, flipping to .rooms would flash an empty list.
         } else {
-            roomListMode = .skeletons
+            .rooms
         }
         
         guard roomListMode != state.roomListMode else {

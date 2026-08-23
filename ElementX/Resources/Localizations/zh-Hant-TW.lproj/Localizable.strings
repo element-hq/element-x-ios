@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "編輯大頭照";
 "a11y_edit_room_address_hint" = "完整地址為 %1$@";
 "a11y_expand_message_text_field" = "展開訊息文字欄位";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "隱藏密碼";
 "a11y_info" = "資訊";
 "a11y_join_call" = "加入通話";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "拒絕";
 "notification_invite_body" = "邀請您聊天";
 "notification_invite_body_with_sender" = "%1$@ 邀請您加入聊天";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "已開始分享他們的即時位置";
 "notification_mentioned_you_body" = "提及您：%1$@";
 "notification_new_messages" = "新訊息";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "不允許帳號提供者 %1$@。";
 "screen_change_server_form_header" = "家伺服器 URL";
 "screen_change_server_form_notice" = "輸入網域位址。";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "您的伺服器地址？";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "選擇您的伺服器";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "關閉備份功能";
 "screen_chat_backup_key_backup_action_enable" = "開啟備份功能";
 "screen_chat_backup_key_backup_description" = "此舉將讓您能在任何新裝置上檢視聊天記錄，且對於備份聊天內容及數位身分而言是必要的。%1$@。";
@@ -1352,6 +1366,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "您的家伺服器在加密聊天室中不支援此選項，您將不會收到此聊天室的通知。";
 "screen_room_notification_settings_mode_all_messages" = "所有訊息";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "僅限提及與關鍵字";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "在此聊天適中，通知我";
 "screen_room_pinned_banner_indicator" = "第 %1$@ 個，共 %2$@ 個";
 "screen_room_pinned_banner_indicator_description" = "%1$@ 個釘選訊息";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "錯誤：%1$@。";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "錯誤，無法測試推播。";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "錯誤，等待推播逾時。";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "推播返回需要 %1$d 毫秒。";
 "troubleshoot_notifications_test_push_loop_back_title" = "測試推播返回";
 "troubleshoot_notifications_test_unified_push_description" = "確保 UnifiedPush 散佈者可用。";

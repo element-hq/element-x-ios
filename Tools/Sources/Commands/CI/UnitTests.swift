@@ -59,6 +59,7 @@ struct UnitTests: AsyncParsableCommand {
         if !failures.isEmpty {
             let failedSuites = "[\(failures.joined(separator: ","))]"
             logger.error("\n❌ \(failures.count) test suite(s) failed \(failedSuites)\n")
+            CI.annotateError(title: "\(failures.count) test suite(s) failed", "Failing suites: \(failedSuites). Download the artifacts for the xcresult bundles.")
             throw ExitCode.failure
         }
         

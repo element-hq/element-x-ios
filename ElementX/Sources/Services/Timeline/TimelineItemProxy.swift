@@ -65,7 +65,7 @@ nonisolated enum TimelineItemSendFailure: Hashable {
     }
     
     case verifiedUser(VerifiedUser)
-    case unknown
+    case unknown(reason: String?)
 }
 
 /// A light wrapper around event timeline items returned from Rust.
@@ -95,8 +95,10 @@ final nonisolated class EventTimelineItemProxy: Sendable {
                 return .sendingFailed(.verifiedUser(.changedIdentity(users: users)))
             case .insecureDevices(let userDeviceMap):
                 return .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: userDeviceMap)))
+            case .genericApiError(let message):
+                return .sendingFailed(.unknown(reason: message))
             default:
-                return .sendingFailed(.unknown)
+                return .sendingFailed(.unknown(reason: nil))
             }
         case .notSentYet:
             return .sending

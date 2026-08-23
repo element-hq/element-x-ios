@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "아바타 편집";
 "a11y_edit_room_address_hint" = "전체 주소는 다음과 같습니다 %1$@";
 "a11y_expand_message_text_field" = "메시지 텍스트 필드 확장";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "비밀번호 숨기기";
 "a11y_info" = "정보";
 "a11y_join_call" = "통화 참가";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "거부";
 "notification_invite_body" = "채팅에 초대됨";
 "notification_invite_body_with_sender" = "%1$@ 가 채팅에 초대했습니다";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "당신을 언급했습니다: %1$@";
 "notification_new_messages" = "새 메시지";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "계정 제공자 %1$@ 는 허용되지 않습니다.";
 "screen_change_server_form_header" = "홈서버 URL";
 "screen_change_server_form_notice" = "도메인 주소를 입력하세요.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "서버의 주소는 무엇인가요?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "서버 선택";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "백업 비활성화";
 "screen_chat_backup_key_backup_action_enable" = "백업 활성화";
 "screen_chat_backup_key_backup_description" = "이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업을 위해 반드시 필요합니다. %1$@.";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "모드 설정이 실패했습니다. 다시 시도해 주세요.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "귀하의 홈 서버는 암호화된 방에서 이 옵션을 지원하지 않으므로, 이 방에서 알림을 받지 못합니다.";
 "screen_room_notification_settings_mode_all_messages" = "모든 메시지";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "언급 및 키워드만";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "이 방에서, 알림을 주세요";
 "screen_room_pinned_banner_indicator" = "%2$@ 의 %1$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ 고정된 메시지";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "오류: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "오류, 푸시 테스트가 불가능합니다.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "오류, 푸시 대기 중 시간 초과.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "푸시 루프백이 %1$d ms 소요되었습니다.";
 "troubleshoot_notifications_test_push_loop_back_title" = "테스트 푸시 루프백";
 "troubleshoot_notifications_test_unified_push_description" = "UnifiedPush 배포자가 사용할 수 있는지 확인하세요.";

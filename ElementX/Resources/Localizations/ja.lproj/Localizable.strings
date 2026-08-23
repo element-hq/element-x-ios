@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "アバターを編集";
 "a11y_edit_room_address_hint" = "完全なアドレスは %1$@ になります。";
 "a11y_expand_message_text_field" = "入力欄を拡大";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "パスワードを非表示";
 "a11y_info" = "情報";
 "a11y_join_call" = "通話に参加";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "拒否";
 "notification_invite_body" = "チャットにあなたを招待しました";
 "notification_invite_body_with_sender" = "%1$@があなたをチャットに招待しました";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "%1$@ があなたをメンションしました";
 "notification_new_messages" = "新着メッセージ";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "アカウント提供元 %1$@ は許可されていません。";
 "screen_change_server_form_header" = "ホームサーバーURL";
 "screen_change_server_form_notice" = "ドメイン名を入力してください";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "サーバーのアドレスは何ですか？";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "サーバーを選択";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "保存されている鍵を削除";
 "screen_chat_backup_key_backup_action_enable" = "バックアップを有効化";
 "screen_chat_backup_key_backup_description" = "暗号化されたデジタルIDとメッセージの鍵をサーバーに保存します。これにより、新しい端末から過去のメッセージを確認することができます。%1$@";
@@ -1350,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "デフォルトの復元に失敗しました。再試行してください。";
 "screen_room_notification_settings_error_setting_mode" = "設定に失敗しました。再試行してください。";
 "screen_room_notification_settings_mentions_only_disclaimer" = "暗号化されたルームでは、この機能にホームサーバーが対応しないため、このルームからの通知を受信できません。";
-"screen_room_notification_settings_mode_all_messages" = "すべてのメッセージ";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "メンションとキーワードのみ";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "このルームでは以下の通知を受け取る";
 "screen_room_pinned_banner_indicator" = "%2$@ 個のうち %1$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ 個のピン留めされたメッセージ";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "エラー: %1$@";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "エラー: プッシュ通知をテストできません。";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "エラー: 通知の待機がタイムアウトしました。";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "プッシュ通知のループバックに %1$d ms 要しました。";
 "troubleshoot_notifications_test_push_loop_back_title" = "プッシュ通知のループバックをテスト";
 "troubleshoot_notifications_test_unified_push_description" = "UnifiedPush のディストリビューターが利用可能であることを確認してください。";

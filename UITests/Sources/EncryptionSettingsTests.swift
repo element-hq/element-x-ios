@@ -32,10 +32,15 @@ class EncryptionSettingsUITests: XCTestCase {
         // Toggle key storage off.
         // app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].tap()
         // Broken by https://github.com/element-hq/compound-ios/pull/140
-        app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].switches.firstMatch.tap()
+        let keyStorageToggle = app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].switches.firstMatch
+        keyStorageToggle.tap()
         
-        // Has been failing often on CI, reasons unclear.
-        try await app.assertScreenshot(step: Step.keyBackupScreen, delay: .seconds(1))
+        // The tap is occasionally lost on CI, retry it once.
+        if !app.buttons[A11yIdentifiers.secureBackupKeyBackupScreen.deleteKeyStorage].waitForExistence(timeout: 5) {
+            keyStorageToggle.tap()
+        }
+        
+        try await app.assertScreenshot(step: Step.keyBackupScreen)
         
         // Confirm deletion of keys.
         app.buttons[A11yIdentifiers.secureBackupKeyBackupScreen.deleteKeyStorage].tap()

@@ -112,10 +112,6 @@ class TimelineTableViewController: UIViewController {
 
             applySnapshot()
             
-            if timelineItemsDictionary.isEmpty {
-                paginatePublisher.send()
-            }
-            
             sendLastVisibleItemReadReceipt()
         }
     }
@@ -858,12 +854,8 @@ class TimelineTableViewController: UIViewController {
         // Re-evaluate after the snapshot has been applied so the new layout is reflected.
         DispatchQueue.main.async { [weak self] in
             self?.updateReadMarkerVisibility()
-
-            // The scroll-position check in paginateIfNeeded is otherwise only re-run on
-            // scroll and pagination-state changes, both of which can fire against the
-            // *previous* timeline's geometry when switching timelines. Re-check with the
-            // new layout so a short live window (e.g. unloaded by a limited sync) fills
-            // the viewport instead of sitting there until the user scrolls.
+            
+            // Make sure we paginate with the final timeline geometry
             self?.paginatePublisher.send(())
         }
     }

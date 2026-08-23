@@ -26,15 +26,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         rageshakeURL != .disabled
     }
     
-    private let lastCrashEventIDSubject = CurrentValueSubject<String?, Never>(nil)
-    var lastCrashEventID: String? {
-        get { lastCrashEventIDSubject.value }
-        set { lastCrashEventIDSubject.send(newValue) }
-    }
-
-    var lastCrashEventIDPublisher: CurrentValuePublisher<String?, Never> {
-        lastCrashEventIDSubject.asCurrentValuePublisher()
-    }
+    let lastCrashEventIDSubject = CurrentValueSubject<String?, Never>(nil)
     
     init(rageshakeURLPublisher: CurrentValuePublisher<RageshakeConfiguration, Never>,
          applicationID: String,
@@ -55,10 +47,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     }
     
     // MARK: - BugReportServiceProtocol
-    
-    var crashedLastRun: Bool {
-        SentrySDK.lastRunStatus == .didCrash
-    }
     
     // swiftlint:disable:next cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
@@ -89,7 +77,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             params.append(.init(key: "device_keys", type: .text(value: compactKeys)))
         }
         
-        if let crashEventID = lastCrashEventID {
+        if let crashEventID = lastCrashEventIDSubject.value {
             params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventID)>")))
             bugReport.githubLabels.append("crash")
         }
@@ -163,7 +151,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             let decoder = JSONDecoder()
             let uploadResponse = try decoder.decode(SubmitBugReportResponse.self, from: data)
             
-            lastCrashEventID = nil
+            lastCrashEventIDSubject.send(nil)
             
             MXLog.info("Feedback submitted.")
             

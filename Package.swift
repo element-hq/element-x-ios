@@ -7,14 +7,15 @@ import Foundation
 var dependencies: [Package.Dependency] = [
     .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "1.8.1")),
     .package(url: "https://github.com/element-hq/swift-command-line-tools.git", branch: "main"),
-    // .package(path: "../../../swift-command-line-tools"),
+    // .package(path: "../swift-command-line-tools"),
     .package(url: "https://github.com/swiftlang/swift-subprocess", .upToNextMinor(from: "0.3.0")),
     .package(url: "https://github.com/jpsim/Yams", .upToNextMinor(from: "6.2.2")),
-    .package(url: "https://github.com/apple/swift-log", .upToNextMinor(from: "1.10.1"))
+    .package(url: "https://github.com/apple/swift-log", .upToNextMinor(from: "1.10.1")),
+    .package(url: "https://github.com/a7ex/xcresultparser", .upToNextMinor(from: "2.2.0"))
 ]
 
 if FileManager.default.fileExists(atPath: "Enterprise/Pipeline/Package.swift") {
-    dependencies.append(.package(path: "./enterprise/pipeline"))
+    dependencies.append(.package(path: "./Enterprise/Pipeline"))
 }
 
 let package = Package(
@@ -33,7 +34,8 @@ let package = Package(
                             .product(name: "CommandLineTools", package: "swift-command-line-tools"),
                             .product(name: "Subprocess", package: "swift-subprocess"),
                             .product(name: "Yams", package: "Yams"),
-                            .product(name: "Logging", package: "swift-log")
+                            .product(name: "Logging", package: "swift-log"),
+                            .product(name: "XcresultparserLib", package: "xcresultparser")
                           ],
                           path: "Tools/Sources",
                           swiftSettings: [

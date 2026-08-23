@@ -10,21 +10,46 @@ import SwiftUI
 import XCTest
 
 extension XCUIElement {
-    func clearAndTypeText(_ text: String, app: XCUIApplication) {
-        tap(.center)
-        
-        app.showKeyboardIfNeeded()
-        
-        guard let currentValue = value as? String else {
-            XCTFail("Tried to clear and type text into a non string value")
-            return
+    /// Clears the element's content and types the given text into it.
+    ///
+    /// Keystrokes are silently dropped when the element hasn't finished taking focus, which corrupts the
+    /// value in ways that are hard to spot later on, so the result is verified and retried before failing.
+    ///
+    /// - Parameter verifyingValue: Whether to read the value back. Pass `false` for a field that submits
+    /// itself once it is full, such as the PIN screens, as its value can no longer be read at that point.
+    func clearAndTypeText(_ text: String, app: XCUIApplication, verifyingValue: Bool = true) {
+        for _ in 0..<3 {
+            tap(.center)
+            
+            app.showKeyboardIfNeeded()
+            _ = app.keyboards.firstMatch.waitForExistence(timeout: 10.0)
+            
+            guard let currentValue = value as? String else {
+                XCTFail("Tried to clear and type text into a non string value")
+                return
+            }
+            
+            let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count)
+            typeText(deleteString)
+            
+            // Note: In the past, we had to type chars one by one to avoid CI flakiness
+            typeText(text)
+            
+            // A newline submits the field, which tears it down before its value can be read back.
+            if text.contains("\n") || !verifyingValue || containsTypedText(text) {
+                return
+            }
         }
         
-        let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count)
-        typeText(deleteString)
-        
-        // Note: In the past, we had to type chars one by one to avoid CI flakiness
-        typeText(text)
+        XCTFail("Failed to type the expected text, the value is \(value as? String ?? "nil")")
+    }
+    
+    /// Whether the element's value reflects the given text.
+    ///
+    /// Secure text fields report a bullet per character instead of the text itself, so all that can be compared is the length.
+    private func containsTypedText(_ text: String) -> Bool {
+        guard let value = value as? String else { return false }
+        return elementType == .secureTextField ? value.count == text.count : value == text
     }
     
     func tap(_ point: UnitPoint) {

@@ -27,6 +27,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
+    private var updateMembersTask: Task<Void, Never>?
+    
     init(roomProxy: JoinedRoomProxyProtocol,
          roomListPublisher: AnyPublisher<[RoomSummary], Never>) {
         self.roomProxy = roomProxy
@@ -66,7 +68,17 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
+        let isNewUserMention = suggestionTrigger?.type == .user && suggestionTriggerSubject.value?.type != .user
+        
         suggestionTriggerSubject.value = suggestionTrigger
+        
+        // Refresh the members each time a new user suggestion is triggered to pull in the latest profiles.
+        guard isNewUserMention, updateMembersTask == nil else { return }
+        
+        updateMembersTask = Task { [weak self, roomProxy] in
+            await roomProxy.updateMembers()
+            self?.updateMembersTask = nil
+        }
     }
     
     // MARK: - Private

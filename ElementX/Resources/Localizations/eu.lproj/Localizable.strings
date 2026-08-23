@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Editatu abatarra";
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_expand_message_text_field" = "Expand message text field";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Ezkutatu pasahitza";
 "a11y_info" = "Info";
 "a11y_join_call" = "Batu deira";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Baztertu";
 "notification_invite_body" = "Txatetzera gonbidatu zaitu";
 "notification_invite_body_with_sender" = "%1$@(e)k txatera gonbidatu zaitu";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Aipatu zaitu: %1$@";
 "notification_new_messages" = "Mezu berriak";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Ez da %1$@ kontu-hornitzailea onartzen.";
 "screen_change_server_form_header" = "Zerbitzariaren URLa";
 "screen_change_server_form_notice" = "Sartu domeinu-helbide bat.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "Zein da zure zerbitzariaren helbidea?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Hautatu zure zerbitzaria";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "Ezabatu gakoen biltegia";
 "screen_chat_backup_key_backup_action_enable" = "Aktibatu babeskopia";
 "screen_chat_backup_key_backup_description" = "Gorde zure identitate-kriptografikoa eta mezuen gakoak modu seguruan zerbitzarian. Horrek zure mezuen historia edozein gailu berritan ikusteko aukera emango dizu. %1$@.";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Failed setting the mode, please try again.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Zure zerbitzaria ez da bateragarria enkriptatutako gelen aukerarekin; litekeena da gela batzuetako jakinarazpenak ez jasotzea.";
 "screen_room_notification_settings_mode_all_messages" = "Mezu guztiak";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Aipamenak eta hitz gakoak soilik";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Gela honetan, jakinarazi";
 "screen_room_pinned_banner_indicator" = "%2$@(e)tik %1$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Errorea: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Errorea, ezin da push-a probatu.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Errorea, denbora agortu da push-aren zain.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back took %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Test Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Ensure that UnifiedPush distributors are available.";

@@ -47,5 +47,5 @@ build
 test_output
 
 # Only commit Pkl packages (there may be other caches in here).
-Secrets/vendor/*
-!Secrets/vendor/package-2
+Components/Secrets/vendor/*
+!Components/Secrets/vendor/package-2

@@ -32,6 +32,11 @@ struct IntegrationTests: AsyncParsableCommand {
         } catch {
             testsFailed = true
             logger.error("\n❌ Integration tests failed.\n")
+            CI.annotateError(title: "Integration tests failed", "One or more tests failed. Download the Results artifact for the xcresult bundle.")
+            
+            // Preserve the app's logs alongside the results so that they can be uploaded as artifacts.
+            logger.info("🗂️ Collecting log files…")
+            _ = try? await CI.run(.path("/bin/zsh"), ["-cu", "cp /Users/Shared/console* \(CI.testOutputDirectory)"])
         }
         
         // Validate logs only when tests passed — log files won't be meaningful otherwise
@@ -43,6 +48,7 @@ struct IntegrationTests: AsyncParsableCommand {
             } catch {
                 testsFailed = true
                 logger.error("❌ Logs are not set to the trace level.")
+                CI.annotateError(title: "Logs are not set to the trace level", "The tests passed, this is a logging failure.")
             }
             
             do {
@@ -52,6 +58,7 @@ struct IntegrationTests: AsyncParsableCommand {
             } catch {
                 testsFailed = true
                 logger.error("❌ Private messages found in logs.")
+                CI.annotateError(title: "Private data found in the logs", "A message body was logged. The tests passed, this is a logging failure.")
             }
         }
         

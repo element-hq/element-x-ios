@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Επεξεργασία Άβαταρ";
 "a11y_edit_room_address_hint" = "Η πλήρης διεύθυνση θα είναι %1$@";
 "a11y_expand_message_text_field" = "Επεκτείνετε το πεδίο κειμένου του μηνύματος";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Απόκρυψη κωδικού πρόσβασης";
 "a11y_info" = "Info";
 "a11y_join_call" = "Συμμετοχή στην κλήση";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Απόρριψη";
 "notification_invite_body" = "Σε προσκάλεσε να συνομιλήσετε";
 "notification_invite_body_with_sender" = "Ο χρήστης %1$@ σε προσκάλεσε σε συνομιλία";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Σέ ανέφερε: %1$@";
 "notification_new_messages" = "Νέα Μηνύματα";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Ο πάροχος %1$@ λογαριασμού δεν επιτρέπεται.";
 "screen_change_server_form_header" = "URL οικιακού διακομιστή";
 "screen_change_server_form_notice" = "Εισήγαγε μια διεύθυνση τομέα.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "Ποια είναι η διεύθυνση του διακομιστή σου;";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Επέλεξε το διακομιστή σου";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "Απενεργοποίηση αντιγράφων ασφαλείας";
 "screen_chat_backup_key_backup_action_enable" = "Ενεργοποίηση αντιγράφων ασφαλείας";
 "screen_chat_backup_key_backup_description" = "Αυτό θα σας επιτρέψει να δείτε το ιστορικό συνομιλιών σας σε οποιεσδήποτε νέες συσκευές και είναι απαραίτητο για τη δημιουργία αντιγράφων ασφαλείας των συνομιλιών και της ψηφιακής ταυτότητας. %1$@ .";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Αποτυχία ρύθμισης της λειτουργίας, δοκίμασε ξανά.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ο αρχικός διακομιστής σας δεν υποστηρίζει αυτή την επιλογή σε κρυπτογραφημένες αίθουσες, δεν θα λάβετε ειδοποιήσεις σε αυτή την αίθουσα.";
 "screen_room_notification_settings_mode_all_messages" = "Όλα τα μηνύματα";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Μόνο αναφορές και λέξεις-κλειδιά";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Σε αυτήν την αίθουσα, ειδοποιήστε με για";
 "screen_room_pinned_banner_indicator" = "%1$@ από %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Καρφιτσωμένα μηνύματα";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Σφάλμα: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Σφάλμα, δεν είναι δυνατή η δοκιμή push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Σφάλμα, λήξη χρονικού ορίου αναμένοντας για push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Το push loop back χρειάστηκε %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Δοκιμή push loopback";
 "troubleshoot_notifications_test_unified_push_description" = "Βεβαιώσου ότι οι διανομείς UnifiedPush είναι διαθέσιμοι.";

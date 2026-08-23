@@ -21,9 +21,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let visibleRoomsPrioritizer: (([String]) async throws -> Void)?
 
     private let roomListPageSize: UInt32
-    /// The `rooms` count when the last page growth was requested; suppresses repeated
-    /// `addOnePage` calls while the previous growth is still being applied.
-    private var lastGrowthRequestRoomCount = -1
+    /// Remember how many rooms we had on the previous requests so we can deduplicate
+    private var roomCountOnLastPageAddRequest = -1
     
     private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
     
@@ -32,8 +31,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
+    private var currentFilter: RoomSummaryProviderFilter?
     private var stateUpdatesTaskHandle: TaskHandle?
-    private var appliedFilter: RoomSummaryProviderFilter?
     
     private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
     private let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
@@ -128,6 +127,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                                                                 })
             
             // Forces the listener above to be called with the current state
+            currentFilter = nil
             setFilter(.all(filters: []))
             
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: SDKListener { [loadingStateContinuation] state in
@@ -147,17 +147,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
-        // Re-applying the same filter would make the SDK re-emit a full reset
-        // for an identical list, e.g. at startup where the home screen's initial
-        // filter matches the one applied in `setRoomList`.
-        guard filter != appliedFilter else {
+        guard filter != currentFilter else {
             return
         }
-        appliedFilter = filter
-        // Every filter change rebuilds the SDK's dynamic entries chain (a fresh reset): name
-        // it, so a list that empties can be tied to what asked for it.
-        MXLog.info("\(name): Applying filter \(Self.filterDescription(filter))")
-
+        
+        currentFilter = filter
+        
         let baseFilter: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
                                                                              .all(filters: [.space, .invite])]),
                                                               .deduplicateVersions]
@@ -196,27 +191,24 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
     
     private func setupVisibleRangeObservers() {
-        // Unthrottled: grow the list half a page before the user reaches the bottom so
-        // the next page is in by the time they get there, instead of bouncing off the
-        // end while it loads. Ranges stream in on every scroll tick, so re-requests are
-        // suppressed until the previous growth has actually landed in `rooms`.
+        // Unthrottled to add another page half way through the last one
         visibleItemRangePublisher
             .sink { [weak self] range in
                 guard let self,
-                      !range.isEmpty, // The publisher's initial 0..<0 would otherwise trigger a page add before the list even loads
+                      !range.isEmpty,
                       range.upperBound >= rooms.count - Int(roomListPageSize) / 2,
-                      rooms.count != lastGrowthRequestRoomCount else {
+                      rooms.count != roomCountOnLastPageAddRequest else {
                     return
                 }
-
-                lastGrowthRequestRoomCount = rooms.count
-
+                
+                roomCountOnLastPageAddRequest = rooms.count
+                
                 MXLog.info("\(self.name): Adding a page at \(rooms.count) rooms, visible range: \(range)")
-
+                
                 listUpdatesSubscriptionResult?.controller().addOnePage()
             }
             .store(in: &cancellables)
-
+        
         visibleItemRangePublisher
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates()
@@ -224,11 +216,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 guard let self else { return }
 
                 MXLog.info("\(self.name): Updating visible range: \(range)")
-
+                
                 if range.lowerBound == 0, range.upperBound < rooms.count {
-                    // The shrink lands `rooms` back on a count the growth guard may have
-                    // already recorded, so re-arm it explicitly.
-                    lastGrowthRequestRoomCount = -1
+                    roomCountOnLastPageAddRequest = -1
                     listUpdatesSubscriptionResult?.controller().resetToOnePage()
                 }
             }
@@ -250,6 +240,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     let upperBound = range.lowerBound + SlidingSyncConstants.maximumVisibleRangeSize
                     range = range.lowerBound..<upperBound
                 }
+                
+                MXLog.info("\(self.name): Subscribing to rooms in range: \(range)")
                 
                 return range
                     .filter { $0 < self.rooms.count }
@@ -331,9 +323,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                      on currentRooms: [RoomSummary],
                                      eventStringBuilder: RoomEventStringBuilder,
                                      name: String) async -> [RoomSummary] {
-        // No tracing span here: the body awaits, so the deferred exit() can run on a
-        // different thread than enter(), which sentry-tracing panics on under
-        // debug-assertions builds (and leaks hub state otherwise).
         var updatedRooms = currentRooms
         for diff in diffs {
             updatedRooms = await processDiff(diff, on: updatedRooms, eventStringBuilder: eventStringBuilder, name: name)
@@ -596,14 +585,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private func rebuildRoomSummaries() async {
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
         
-        rooms = await Self.rebuiltRoomSummaries(from: rooms, eventStringBuilder: eventStringBuilder, name: name)
+        rooms = await Self.rebuiltRoomSummaries(from: rooms, eventStringBuilder: eventStringBuilder)
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
     }
     
     @concurrent
-    private static func rebuiltRoomSummaries(from rooms: [RoomSummary], eventStringBuilder: RoomEventStringBuilder, name: String) async -> [RoomSummary] {
-        // No tracing span - see updatedRooms(from:on:eventStringBuilder:name:).
+    private static func rebuiltRoomSummaries(from rooms: [RoomSummary], eventStringBuilder: RoomEventStringBuilder) async -> [RoomSummary] {
         var rebuiltRooms = [RoomSummary]()
         rebuiltRooms.reserveCapacity(rooms.count)
         for room in rooms {

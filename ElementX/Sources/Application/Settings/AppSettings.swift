@@ -182,6 +182,14 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: AppAppearance.system)
     var appAppearance: AppAppearance
     
+    /// Tracks previous servers the user connected to for autocompletion purposes. Entries are made lowercase on write.
+    @UserPreference(key: "previousServers", defaultValue: [])
+    var previousServers: [String]
+    
+    var defaultServer: String {
+        previousServers.first ?? accountProviders[0]
+    }
+    
     // MARK: - Security
     
     /// The app must be locked with a PIN code as part of the authentication flow.
@@ -204,7 +212,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// A path that is appended to `websiteURL` to form the OAuth `clientURI`. MAS uses `clientURI` as the identifier for a specific app, allowing us to
     /// distinguish the various clients we have for Android, iOS and Web from each other.
     /// Intentionally a distinct property so it can be easily overridden without having to manipulate the website URL.
-    private(set) var oAuthClientURIPath: String? // = "app/ios"
+    private(set) var oAuthClientURIPath: String? = "apps/ios"
     
     var oAuthConfiguration: OAuthConfiguration {
         OAuthConfiguration(clientName: InfoPlistReader.main.bundleDisplayName,

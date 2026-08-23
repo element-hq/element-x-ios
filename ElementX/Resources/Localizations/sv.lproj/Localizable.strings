@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Redigera avatar";
 "a11y_edit_room_address_hint" = "Den fullständiga adressen kommer att vara %1$@";
 "a11y_expand_message_text_field" = "Expandera meddelandetextfältet";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Dölj lösenord";
 "a11y_info" = "Info";
 "a11y_join_call" = "Anslut till samtal";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Avvisa";
 "notification_invite_body" = "Bjöd in dig att chatta";
 "notification_invite_body_with_sender" = "%1$@ bjöd in dig att chatta";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nämnde dig: %1$@";
 "notification_new_messages" = "Nya meddelanden";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Kontoleverantör %1$@ är inte tillåten.";
 "screen_change_server_form_header" = "Hemserverns URL";
 "screen_change_server_form_notice" = "Ange en domänadress.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "Vad är adressen till din server?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Välj din server";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "Stäng av säkerhetskopiering";
 "screen_chat_backup_key_backup_action_enable" = "Slå på säkerhetskopiering";
 "screen_chat_backup_key_backup_description" = "Lagra din kryptografiska identitet och dina meddelandenycklar säkert på servern. Detta gör att du kan se din meddelandehistorik på alla nya enheter. %1$@.";
@@ -980,7 +994,7 @@
 "screen_live_location_sheet_title" = "On the map";
 "screen_local_network_opt_in_subtitle" = "Your homeserver is on your local network. To connect, %1$@ needs permission to reach devices on this network.";
 "screen_local_network_opt_in_title" = "Allow access to local network";
-"screen_login_error_deactivated_account" = "Detta konto har avaktiverats.";
+"screen_login_error_deactivated_account" = "Detta konto har raderats.";
 "screen_login_error_invalid_credentials" = "Felaktigt användarnamn och/eller lösenord";
 "screen_login_error_invalid_user_id" = "Detta är inte en giltig användaridentifierare. Förväntat format: '@användare:hemserver.org'";
 "screen_login_error_refresh_tokens" = "Den här servern är konfigurerad för att använda uppdateringstokens. Dessa stöds inte när du använder lösenordsbaserad inloggning.";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Misslyckades att ställa in läget, vänligen pröva igen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hemserver stöder inte det här alternativet i krypterade rum, du blir inte aviserad i det här rummet.";
 "screen_room_notification_settings_mode_all_messages" = "Alla meddelanden";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Endast omnämnanden och nyckelord";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "I det här rummet, meddela mig för";
 "screen_room_pinned_banner_indicator" = "%1$@ av %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Fästa meddelanden";
@@ -1526,7 +1541,7 @@
 "screen_share_open_apple_maps" = "Öppna i Apple Maps";
 "screen_share_open_google_maps" = "Öppna i Google Maps";
 "screen_share_open_osm_maps" = "Öppna i OpenStreetMap";
-"screen_share_this_location_action" = "Dela fäst plats";
+"screen_share_this_location_action" = "Dela vald plats";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_signed_out_reason_1" = "Du har ändrat ditt lösenord på en annan session";
 "screen_signed_out_reason_2" = "Du har raderat sessionen från en annan session";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Fel: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Fel, kan inte testa push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Fel, tidsgräns överskriden vid väntan på push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Returnering av push tog %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testa returnering av push";
 "troubleshoot_notifications_test_unified_push_description" = "Se till att UnifiedPush-distributörer är tillgängliga.";

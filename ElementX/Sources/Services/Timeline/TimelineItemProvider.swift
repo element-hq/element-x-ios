@@ -104,12 +104,6 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
     private static func processDiffs(_ diffs: [TimelineDiff],
                                      on currentItems: [TimelineItemProxy],
                                      spanName: String) async -> (itemProxies: [TimelineItemProxy], hasMembershipChange: Bool) {
-        let span = MXLog.createSpan(spanName)
-        span.enter()
-        defer {
-            span.exit()
-        }
-        
         var hasMembershipChange = false
         
         let itemProxies = diffs.reduce(currentItems) { currentItems, diff in
@@ -187,8 +181,6 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: itemProxy, associatedWith: nil))
         case .truncate(let length):
-            // Was previously ignored entirely, silently desyncing this array from
-            // the SDK's timeline whenever a truncation came through.
             for (index, itemProxy) in itemProxies.enumerated() where index >= Int(length) {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }

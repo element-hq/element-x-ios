@@ -24,9 +24,7 @@ options:
     - UITests
     - AccessibilityTests
     - IntegrationTests
-    - DevelopmentAssets
-    - SDKMocks
-    - Secrets
+    - Components
     - Tools
   - pattern: ElementX
     order:
@@ -53,7 +51,7 @@ settings:
   ENABLE_BITCODE: false
   APP_NAME: ElementX
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 26.08.2
+  MARKETING_VERSION: 26.08.4
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -62,32 +60,33 @@ include:
 - path: ElementX/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
-- path: MapLibreShim/SupportingFiles/target.yml
-- path: SDKMocks/SupportingFiles/target.yml
 - path: UnitTests/SupportingFiles/target.yml
 - path: PreviewTests/SupportingFiles/target.yml
 - path: UITests/SupportingFiles/target.yml
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: AccessibilityTests/SupportingFiles/target.yml
+- path: Components/MapLibre/MapLibreInterface/SupportingFiles/target.yml
+- path: Components/MapLibre/MapLibreShim/SupportingFiles/target.yml
+- path: Components/SDKMocks/SupportingFiles/target.yml
 # - path: MyAppVariant/override.yml
 
 packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.08.07
+    exactVersion: 26.08.17
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
   BuildExtensions:
-    path: BuildExtensions
+    path: Components/BuildExtensions
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     minorVersion: 0.37.0
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.22.0
+    exactVersion: 0.23.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
@@ -109,9 +108,6 @@ packages:
   AsyncAlgorithms:
     url: https://github.com/apple/swift-async-algorithms
     minorVersion: 1.1.5
-  Clocks:
-    url: https://github.com/pointfreeco/swift-clocks
-    from: 1.1.0
   Collections:
     url: https://github.com/apple/swift-collections
     minorVersion: 1.6.0
@@ -147,22 +143,22 @@ packages:
     minorVersion: 3.1.0
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    minorVersion: 6.27.0
+    minorVersion: 6.28.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.67.0
+    minorVersion: 3.69.1
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 9.22.0
+    minorVersion: 9.24.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.19.3
+    minorVersion: 1.19.4
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
     minorVersion: 3.4.0
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
-    minorVersion: 2.13.6
+    minorVersion: 2.13.7
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.1

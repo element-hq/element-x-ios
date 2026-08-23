@@ -6,18 +6,15 @@
 //
 
 import CallKit
-import Clocks
 @testable import ElementX
 import PushKit
 import Testing
 
-// The TestClock advances by yielding to background tasks which can be starved on a busy CI runner.
-@Suite(.timeLimit(.minutes(2)))
 @MainActor
 final class ElementCallServiceTests {
     private var callProvider: CXProviderMock!
     private var currentDate: Date!
-    private var testClock: TestClock<Duration>!
+    private var clock: ManualClock!
     private var pushRegistry: PKPushRegistry!
     private var service: ElementCallService!
     
@@ -25,17 +22,17 @@ final class ElementCallServiceTests {
         pushRegistry = PKPushRegistry(queue: nil)
         callProvider = CXProviderMock(.init())
         currentDate = Date()
-        testClock = TestClock()
+        clock = ManualClock()
         let dateProvider: () -> Date = {
             self.currentDate
         }
-        service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: testClock, now: dateProvider))
+        service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: clock, now: dateProvider))
     }
     
     isolated deinit {
         callProvider = nil
         currentDate = nil
-        testClock = nil
+        clock = nil
         pushRegistry = nil
     }
     
@@ -84,11 +81,17 @@ final class ElementCallServiceTests {
         }
     }
     
-    @Test(.disabled())
-    func callIsTimingOut() async {
+    @Test
+    func callIsTimingOut() async throws {
         #expect(!callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
-        await confirmation { confirmation in
+        let (endedCalls, endedCallsContinuation) = AsyncStream<CXCallEndedReason>.makeStream()
+        callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
+            endedCallsContinuation.yield(reason)
+        }
+        let deferredEndedCall = deferFulfillment(endedCalls) { _ in true }
+        
+        await waitForConfirmation { confirmation in
             let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
             
             service.pushRegistry(pushRegistry,
@@ -98,18 +101,13 @@ final class ElementCallServiceTests {
             }
         }
         
-        await confirmation { confirmation in
-            callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
-                if reason == .unanswered {
-                    confirmation()
-                } else {
-                    Issue.record("Call should have ended as unanswered")
-                }
-            }
-            
-            // advance past the timeout
-            await testClock.advance(by: .seconds(30))
-        }
+        await clock.waitForScheduledSleep()
+        
+        // advance past the timeout
+        clock.advance(by: .seconds(30))
+        
+        let reason = try await deferredEndedCall.fulfill()
+        #expect(reason == .unanswered, "Call should have ended as unanswered")
     }
     
     @Test
@@ -128,10 +126,11 @@ final class ElementCallServiceTests {
                              didReceiveIncomingPushWith: pushPayload,
                              for: .voIP) { }
         
-        await waitForScheduledSleep()
+        // The ring duration is capped, no matter how far away the push's expiration is.
+        #expect(await clock.waitForScheduledSleep() == .seconds(90))
         
         // Advance past the max timeout but below the 300
-        await testClock.advance(by: .seconds(100))
+        clock.advance(by: .seconds(100))
         
         let reason = try await deferredEndedCall.fulfill()
         #expect(reason == .unanswered, "Call should have ended as unanswered")
@@ -156,8 +155,8 @@ final class ElementCallServiceTests {
         let firstPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
         service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: firstPayload, for: .voIP) { }
         
-        await waitForScheduledSleep()
-        await testClock.advance(by: .seconds(70))
+        await clock.waitForScheduledSleep()
+        clock.advance(by: .seconds(70))
         try await deferredEndedCall.fulfill()
         
         callProvider.reportCallWithEndedAtReasonClosure = nil
@@ -193,7 +192,7 @@ final class ElementCallServiceTests {
         }
         
         // Make sure the cancellation below exercises a scheduled timer rather than one that never started.
-        await waitForScheduledSleep()
+        await clock.waitForScheduledSleep()
         
         // Simulate the answer flow handing off to setupCallSession, which must cancel
         // the pending endUnansweredCallTask as part of clearing the incoming state.
@@ -207,7 +206,7 @@ final class ElementCallServiceTests {
         }
         
         // Advance past what would have been the 60s unanswered timeout
-        await testClock.advance(by: .seconds(120))
+        clock.advance(by: .seconds(120))
         for _ in 0..<3 {
             await Task.yield()
         }
@@ -239,15 +238,6 @@ final class ElementCallServiceTests {
         #expect(update?.localizedCallerName == "welcome")
         
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
-    }
-    
-    /// Waits until the unanswered-call timer is sleeping on the test clock — it runs in an
-    /// unstructured task, so advancing the clock before that would never wake it.
-    /// Note: `checkSuspension()` throws when a sleep is scheduled, which is the state we want.
-    private func waitForScheduledSleep() async {
-        while await (try? testClock.checkSuspension()) != nil {
-            await Task.yield()
-        }
     }
     
     private func expectImmediatelyEndedCallReported(forPayload payload: PKPushPayloadMock,

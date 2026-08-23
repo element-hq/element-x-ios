@@ -21,7 +21,7 @@ final class BugReportServiceTests {
         appSettings.bugReportRageshakeURL.reset()
         
         let bugReportServiceMock = BugReportServiceMock()
-        bugReportServiceMock.crashedLastRun = false
+        bugReportServiceMock.lastCrashEventIDSubject = .init(nil)
         bugReportServiceMock.submitBugReportProgressListenerReturnValue = .success(SubmitBugReportResponse(reportURL: "https://www.example.com/123"))
         bugReportService = bugReportServiceMock
     }
@@ -32,7 +32,7 @@ final class BugReportServiceTests {
     
     @Test
     func initialStateWithMockService() {
-        #expect(!bugReportService.crashedLastRun)
+        #expect(bugReportService.lastCrashEventIDSubject.value == nil)
     }
     
     @Test
@@ -62,7 +62,7 @@ final class BugReportServiceTests {
                                        session: .mock,
                                        appHooks: AppHooks())
         #expect(service.isEnabled)
-        #expect(!service.crashedLastRun)
+        #expect(bugReportService.lastCrashEventIDSubject.value == nil)
     }
     
     @Test
@@ -74,7 +74,7 @@ final class BugReportServiceTests {
                                        session: .mock,
                                        appHooks: AppHooks())
         #expect(!service.isEnabled)
-        #expect(!service.crashedLastRun)
+        #expect(bugReportService.lastCrashEventIDSubject.value == nil)
     }
     
     @Test

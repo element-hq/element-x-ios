@@ -7,12 +7,6 @@
 //
 
 import Foundation
-import MapInterface
-
-// The map types shared with the dlopen'd MapLibreShim framework live in MapInterface,
-// aliased here so call sites keep reading naturally.
-typealias ShowUserLocationMode = MapInterface.ShowUserLocationMode
-typealias MapLibreError = MapInterface.MapLibreError
 
 /// The style to show a map in.
 ///

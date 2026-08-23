@@ -285,7 +285,8 @@ class ClientProxy: ClientProxyProtocol {
         
         try await client.setUtdDelegate(utdDelegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
         
-        let canSubscribeToUserProfile = if appSettings.userStatusEnabled, case .success(true) = await isUserStatusSupported() {
+        let canSubscribeToUserProfile = if appSettings.userStatusEnabled,
+                                           await (try? client.isProfilesSlidingSyncExtensionSupported()) == true {
             true
         } else {
             false
@@ -373,7 +374,7 @@ class ClientProxy: ClientProxyProtocol {
     var isLiveKitRTCSupported: Bool {
         get async {
             do {
-                return try await client.isLivekitRtcSupported(fallbackToWellKnown: true)
+                return try await client.isLivekitRtcSupported()
             } catch {
                 MXLog.error("Failed checking LiveKit RTC support with error: \(error)")
                 return false
@@ -1227,9 +1228,8 @@ class ClientProxy: ClientProxyProtocol {
             
             // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
-            // Fire-and-forget: it fetches auth_metadata over the network, and awaiting it here serialises
-            // every subsequent pause/resume transition behind that request (measured 47s offline).
-            Task { await self.cacheAccountURL() }
+            // Fire and forget as it might hit the network.
+            Task { await cacheAccountURL() }
             
             // Nudge the send queue listener to re-evaluate now that we're running; a resume doesn't otherwise
             // emit, and the SDK only re-enables queues when client.resume() runs (gated behind the flag).
@@ -1632,40 +1632,37 @@ private struct ClientProxyServices {
                                                            name: "AlternateAllRooms",
                                                            notificationSettings: notificationSettings,
                                                            appSettings: appSettings)
-
+        
         staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
                                                         name: "StaticAllRooms",
                                                         roomListPageSize: .max,
                                                         notificationSettings: notificationSettings,
                                                         appSettings: appSettings)
-
-        // Nothing consumes the alternate (search and room-selection flows) or static
-        // (room lookups, notification cleanup) providers before the home screen is up,
-        // but subscribing them here would triple the O(rooms) summary building - and the
-        // static provider's page size covers the whole account - all in front of the
-        // first paint of the cached room list. Subscribe them once the primary provider
-        // has delivered its first list instead.
+        
+        // Setting a provider's room list will create summaries for every room so
+        // wait until the app is fully running for the alternate and static providers.
         Task { [roomSummaryProvider, alternateRoomSummaryProvider, staticRoomSummaryProvider] in
-            // Wait for actual content (or a loaded-but-empty account): the loading state
-            // alone reports loaded straight from the cache, before the first summaries
-            // have been built and published.
+            // Wait for actual content (or a loaded-but-empty account) as the loading state
+            // doesn't take into account the app having build and published any summaries.
             for await rooms in roomSummaryProvider.roomListPublisher.values {
                 if !rooms.isEmpty {
                     break
                 }
+                
                 if case .loaded(0) = roomSummaryProvider.statePublisher.value {
                     break
                 }
             }
+            
             do {
                 try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
                 try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
             } catch {
-                MXLog.error("Failed setting up the deferred room summary providers: \(error)")
+                fatalError("Failed setting up the deferred room summary providers: \(error)")
             }
         }
-
+        
         self.syncService = syncService
         self.roomListService = roomListService
     }

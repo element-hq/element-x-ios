@@ -271,13 +271,13 @@ struct RoomDetailsScreenViewModelTests {
         #expect(context.viewState.dmRecipientInfo?.member == RoomMemberDetails(withProxy: recipient))
         
         #expect(!context.viewState.isProcessingIgnoreRequest)
-        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
-                                                  transitionValues: [true, false])
+        let deferredAlert = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         
         context.send(viewAction: .unignoreConfirmed)
         
-        try await deferredProcessing.fulfill()
+        try await deferredAlert.fulfill()
         
+        #expect(!context.viewState.isProcessingIgnoreRequest)
         #expect(context.viewState.dmRecipientInfo?.member.isIgnored == true)
         #expect(context.alertInfo != nil)
     }

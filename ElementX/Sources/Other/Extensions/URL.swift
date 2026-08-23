@@ -94,12 +94,6 @@ nonisolated extension URL {
     }
     
     var globalProxy: String? {
-        let span = MXLog.createSpan("Global proxy")
-        span.enter()
-        defer {
-            span.exit()
-        }
-        
         guard let proxySettings = CFNetworkCopySystemProxySettings()?.takeRetainedValue() else {
             MXLog.error("Failed retrieving proxy settings")
             return nil

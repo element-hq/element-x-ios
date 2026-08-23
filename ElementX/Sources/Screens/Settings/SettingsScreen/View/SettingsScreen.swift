@@ -46,6 +46,13 @@ struct SettingsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarVisibility(context.viewState.navigationBarVisibility, for: .navigationBar)
         .toolbar { toolbar }
+        .sheet(isPresented: $context.isPresentingStatusPicker) {
+            SettingsScreenUserStatusPickerView { action in
+                context.send(viewAction: .userStatus(action))
+            }
+            .presentationDetents([.medium])
+            .presentationBackground(.compound.bgCanvasDefault)
+        }
     }
     
     private var userSection: some View {
@@ -93,13 +100,6 @@ struct SettingsScreen: View {
         Section {
             SettingsScreenUserStatusRow(mode: context.viewState.userStatusRowMode) { action in
                 context.send(viewAction: .userStatus(action))
-            }
-            .sheet(isPresented: $context.isPresentingStatusPicker) {
-                SettingsScreenUserStatusPickerView { action in
-                    context.send(viewAction: .userStatus(action))
-                }
-                .presentationDetents([.medium]) // Stop using a List and calculate the exact height?
-                .presentationBackground(.compound.bgCanvasDefault)
             }
         }
     }

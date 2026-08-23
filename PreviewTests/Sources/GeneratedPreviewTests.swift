@@ -1167,13 +1167,6 @@ extension PreviewTests {
     }
 
     @Test
-    func serverConfirmationScreen() async throws {
-        for (index, preview) in ServerConfirmationScreen_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func serverSelection() async throws {
         for (index, preview) in ServerSelection_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

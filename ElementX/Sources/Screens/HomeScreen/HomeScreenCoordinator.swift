@@ -11,7 +11,6 @@ import SwiftUI
 
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let bugReportService: BugReportServiceProtocol
     let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
     let appSettings: AppSettings
     let analyticsService: AnalyticsServiceProtocol
@@ -41,8 +40,6 @@ enum HomeScreenCoordinatorAction {
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
     private var viewModel: HomeScreenViewModelProtocol
-    // periphery:ignore - only used in release builds
-    private let bugReportService: BugReportServiceProtocol
     
     private let actionsSubject: PassthroughSubject<HomeScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
@@ -56,10 +53,10 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         appSettings: parameters.appSettings,
                                         analyticsService: parameters.analyticsService,
+                                        bugReportService: parameters.bugReportService,
                                         notificationManager: parameters.notificationManager,
                                         userIndicatorController: parameters.userIndicatorController,
                                         roomPeekViewModelBuilder: parameters.roomPeekViewModelBuilder)
-        bugReportService = parameters.bugReportService
         
         viewModel.actions
             .sink { [weak self] action in
@@ -102,24 +99,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     }
     
     // MARK: - Public
-    
-    func start() {
-        #if !DEBUG
-        // Note: bugReportService.isEnabled doesn't determine if a user has opted in to Analytics/Sentry.
-        // Therefore we use lastCrashEventID as this will only be set if we have crash ID from Sentry.
-        // Sentry's onCrashedLastRun callback can fire after this coordinator starts (a fast warm
-        // relaunch reliably wins that race), so observe the ID instead of sampling it once.
-        bugReportService.lastCrashEventIDPublisher
-            .compactMap { $0 }
-            .first()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self, bugReportService.crashedLastRun else { return }
-                viewModel.presentCrashedLastRunAlert()
-            }
-            .store(in: &cancellables)
-        #endif
-    }
     
     func toPresentable() -> AnyView {
         AnyView(HomeScreen(context: viewModel.context))

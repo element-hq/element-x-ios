@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Editar avatar";
 "a11y_edit_room_address_hint" = "O endereço completo será %1$@";
 "a11y_expand_message_text_field" = "Expandir campo de texto de mensagem";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Ocultar senha";
 "a11y_info" = "Info";
 "a11y_join_call" = "Entrar à chamada";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Recusar";
 "notification_invite_body" = "Convidou você para conversar";
 "notification_invite_body_with_sender" = "%1$@ te convidou para conversar";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mencionou você: %1$@";
 "notification_new_messages" = "Novas mensagens";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "O provedor de conta %1$@ não é permitido.";
 "screen_change_server_form_header" = "URL do servidor";
 "screen_change_server_form_notice" = "Digite o endereço de um domínio.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "Qual é o endereço do seu servidor?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Selecione seu servidor";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "Apagar o armazenamento de chaves";
 "screen_chat_backup_key_backup_action_enable" = "Ativar o backup";
 "screen_chat_backup_key_backup_description" = "Isso te permite ver seu histórico de conversas em dispositivos novos, e é necessário para o backup de conversas e identidade digital. %1$@";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Falha ao definir o modo, tente novamente.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Seu servidor-casa não suporta esta opção em salas criptografadas, você não será notificado nesta sala.";
 "screen_room_notification_settings_mode_all_messages" = "Todas as mensagens";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Somente menções e palavras-chave";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Nesta sala, notifique-me de";
 "screen_room_pinned_banner_indicator" = "%1$@ de %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Mensagens fixadas";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Erro: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Erro, não é possível testar o push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Erro, tempo limite de espera pelo push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "O loopback do push levou %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Teste o loopback do push";
 "troubleshoot_notifications_test_unified_push_description" = "Certifique-se de que os distribuidores do UnifiedPush estejam disponíveis.";

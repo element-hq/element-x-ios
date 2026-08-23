@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Edit avatar";
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_expand_message_text_field" = "Expand message text field";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "პაროლის დამალვა";
 "a11y_info" = "Info";
 "a11y_join_call" = "Join call";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "მოგიწვიათ ჩატში";
 "notification_invite_body_with_sender" = "%1$@ invited you to chat";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "მოგახსენათ: %1$@";
 "notification_new_messages" = "ახალი შეტყობინებები";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
 "screen_change_server_form_header" = "სახლის სერვერის URL";
 "screen_change_server_form_notice" = "Enter a domain address.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "რა არის თქვენი სერვერის მისამართი?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "აირჩიეთ თქვენი სერვერი";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "სარეზერვო ასლის გამორთვა";
 "screen_chat_backup_key_backup_action_enable" = "სარეზერვო ასლის ჩართვა";
 "screen_chat_backup_key_backup_description" = "სარეზერვო ასლი უზრუნველყოფს იმას, რომ თქვენ შეტყობინებების ისტორიას არ დაკარგავთ. %1$@";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "რეჟიმის დაყენება ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "თქვენი სახლის სერვერი არ უჭერს მხარს ამ პარამეტრს დაშიფრულ ოთახებში, თქვენ არ მიიღებთ შეტყობინებას ამ ოთახში.";
 "screen_room_notification_settings_mode_all_messages" = "ყველა შეტყობინება";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "მხოლოდ ხსენებები და საკვანძო სიტყვები";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "ამ ოთახში, შემატყობინეთ:";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "შეცდომა: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "შეცდომა, push-ის ტესტირება შეუძლებელია.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "შეცდომა, push-ისთვის ლოდინის დრო გავიდა.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push-შეტყობინების ციკლმა დაიკავა %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "push-შეტყობინების ციკლის ტესტირება";
 "troubleshoot_notifications_test_unified_push_description" = "დარწმუნდით რომ UnifiedPush დისტრიბუტორები ხელმისაწვდომია.";

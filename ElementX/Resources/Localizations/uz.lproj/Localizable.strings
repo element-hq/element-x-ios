@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Avatarni tahrirlash";
 "a11y_edit_room_address_hint" = "To'liq manzil %1$@ bo'ladi";
 "a11y_expand_message_text_field" = "Xabar matni maydonini kengaytirish";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Parolni yashirish";
 "a11y_info" = "Maʻlumot";
 "a11y_join_call" = "Qoʻngʻiroqga qoʻshilish";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Rad etish";
 "notification_invite_body" = "Sizni suhbatga taklif qildi";
 "notification_invite_body_with_sender" = "%1$@ sizni suhbatga taklif qildi";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "%1$@ sizni eslatib oʻtdi";
 "notification_new_messages" = "Yangi xabarlar";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Hisob provayderi %1$@ ga ruxsat berilmagan.";
 "screen_change_server_form_header" = "Uy serverining URL manzili";
 "screen_change_server_form_notice" = "Domen manzilini kiriting.";
+"screen_change_server_navigation_title_login" = "Sign in";
+"screen_change_server_navigation_title_register" = "Create account";
 "screen_change_server_subtitle" = "Serveringizning manzili nima?";
+"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
+"screen_change_server_textfield_header" = "Account provider";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Serveringizni tanlang";
+"screen_change_server_title_login" = "Enter your account provider";
+"screen_change_server_title_register" = "Choose an account provider";
 "screen_chat_backup_key_backup_action_disable" = "Zaxiralashni o'chirib qo'ying";
 "screen_chat_backup_key_backup_action_enable" = "Zaxiralashni yoqing";
 "screen_chat_backup_key_backup_description" = "Bu sizga chat tarixingizni har qanday yangi qurilmalarda ko‘rish imkonini beradi hamda chatlar zaxirasi va raqamli identifikatsiya uchun talab qilinadi. %1$@.";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Rejimni o‘rnatib bo‘lmadi, qayta urinib ko‘ring.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Uy serveringiz shifrlangan xonalarda ushbu imkoniyatni qoʻllab-quvvatlamaydi, shuning uchun bu xonadan bildirishnomalar olmaysiz.";
 "screen_room_notification_settings_mode_all_messages" = "Barcha xabarlar";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Faqat eslatmalar va kalit so'zlar";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Bu xonada menga xabar bering";
 "screen_room_pinned_banner_indicator" = "%1$@ʼdan %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ ta qadalgan xabar";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Xato: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Xatolik, push qilishni sinab bo‘lmadi.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Xatolik, taym aut pushni kutmoqda.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Tsiklni orqaga surish %1$d millisekund davom etdi.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Test Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "UnifiedPush distribyutorlari mavjudligiga ishonch hosil qiling.";

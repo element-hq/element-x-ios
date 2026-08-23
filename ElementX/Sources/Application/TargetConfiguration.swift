@@ -61,7 +61,7 @@ nonisolated enum Target: String {
         enableSentryLogging(enabled: false)
         
         MXLog.configure(currentTarget: rawValue)
-
+        
         let hookCancellable = rageshakeURL.publisher
             .sink { _ in
                 appHooks.tracingHook.update(tracingConfiguration, with: rageshakeURL)

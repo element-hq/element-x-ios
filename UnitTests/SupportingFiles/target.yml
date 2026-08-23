@@ -31,9 +31,9 @@ targets:
 
     dependencies:
     - target: ElementX
+    - target: MapLibreInterface
     - package: MatrixRustSDK
     - package: AsyncAlgorithms
-    - package: Clocks
     - package: Dynamic
     - package: BuildExtensions
       product: Macros
@@ -56,8 +56,8 @@ targets:
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
-    - path: ../../DevelopmentAssets/Media
-    - path: ../../DevelopmentAssets/ClassicAppFixtures
+    - path: ../../Components/DevelopmentAssets/Media
+    - path: ../../Components/DevelopmentAssets/ClassicAppFixtures
       buildPhase: resources # Necessary to add binary files to the target.
     - path: ../../ElementX/Sources/Other/Extensions/Publisher.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift

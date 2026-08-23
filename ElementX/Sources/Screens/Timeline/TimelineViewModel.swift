@@ -797,8 +797,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             fatalError("Only events can have send info.")
         }
         
-        if case .sendingFailed(.unknown) = eventTimelineItem.properties.deliveryStatus {
-            displayAlert(.sendingFailed)
+        if case let .sendingFailed(.unknown(reason)) = eventTimelineItem.properties.deliveryStatus {
+            // A missing send handle only costs the retry/remove actions, the reason is still worth showing.
+            displayAlert(.sendingFailed(reason: reason, sendHandle: timelineController.sendHandle(for: itemID)))
         } else if case let .sendingFailed(.verifiedUser(failure)) = eventTimelineItem.properties.deliveryStatus {
             guard let sendHandle = timelineController.sendHandle(for: itemID) else {
                 MXLog.error("Cannot find send handle for \(itemID).")
@@ -812,6 +813,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             displayAlert(.encryptionForwarder(forwarderMessage))
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
+        }
+    }
+    
+    private func retrySending(_ sendHandle: SendHandleProxy) {
+        Task {
+            if case .failure(let error) = await sendHandle.resend() {
+                MXLog.error("Failed retrying to send \(sendHandle.itemID): \(error)")
+                displayErrorToast(L10n.errorUnknown)
+            }
         }
     }
     
@@ -866,8 +876,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                      intentionalMentions: intentionalMentions)
             }
         case .recordVoiceMessage, .previewVoiceMessage:
-            // Reachable when a send action races a voice recording; dropping the
-            // send is the only sane recovery, crashing here took the app down.
             MXLog.error("Ignoring sendCurrentMessage with invalid composer mode: \(mode)")
             return
         }
@@ -1178,10 +1186,17 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              message: L10n.commonPollEndConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                              secondaryButton: .init(title: L10n.actionOk) { self.timelineInteractionHandler.endPoll(pollStartID: pollStartID) })
-        case .sendingFailed:
+        case .sendingFailed(let reason, let sendHandle):
             state.bindings.alertInfo = .init(id: type,
                                              title: L10n.commonSendingFailed,
-                                             primaryButton: .init(title: L10n.actionOk, action: nil))
+                                             message: reason,
+                                             primaryButton: .init(title: sendHandle == nil ? L10n.actionOk : L10n.actionCancel, role: .cancel, action: nil),
+                                             verticalButtons: sendHandle.map { sendHandle in
+                                                 [.init(title: L10n.actionRetry) { [weak self] in self?.retrySending(sendHandle) },
+                                                  .init(title: L10n.actionRemoveMessage, role: .destructive) { [weak self] in
+                                                      self?.timelineInteractionHandler.handleTimelineItemMenuAction(.redact(isMedia: false), itemID: sendHandle.itemID)
+                                                  }]
+                                             })
         case .encryptionAuthenticity(let message):
             state.bindings.alertInfo = .init(id: type,
                                              title: message,

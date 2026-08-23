@@ -18,6 +18,22 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>a11y_gallery_more_media</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Gallery, %1$d more media</string>
+			<key>other</key>
+			<string>Gallery, %1$d more medias</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>a11y_polls_percent_of_total</key>
 	<dict>
 		<key>COUNT</key>
@@ -27,9 +43,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d percent of total votes</string>
+			<string>درصد %1$d از کل آرا</string>
 			<key>other</key>
-			<string>%1$d percents of total votes</string>
+			<string>درصد %1$d از کل آرا</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -59,9 +75,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
+			<string>پیوست %1$d…</string>
 			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>پیوست‌های %1$d…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -75,9 +91,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d media item…</string>
+			<string>مورد رسانه‌ای %1$d…</string>
 			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>موارد رسانه‌ای %1$d…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -139,9 +155,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d reply</string>
+			<string>پاسخ %1$d</string>
 			<key>other</key>
-			<string>%1$d replies</string>
+			<string>پاسخ‌های %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -155,9 +171,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>اتاق %1$d</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>اتاق‌های %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -171,9 +187,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d selected</string>
+			<string>%1$d انتخاب شد</string>
 			<key>other</key>
-			<string>%1$d selected</string>
+			<string>%1$d انتخاب شد</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -187,9 +203,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>فضای %1$d</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>فضاهای %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -235,9 +251,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %d new message.</string>
+			<string>شما یک پیام جدید %d دارید.</string>
 			<key>other</key>
-			<string>You have %d new messages.</string>
+			<string>شما پیام‌های جدید %d دارید.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -251,9 +267,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
+			<string>پیوست %1$d مشترک</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>پیوست‌های %1$d مشترک</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -331,9 +347,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
+			<string>پیام حذف شده %1$d</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>پیام‌های حذف شده %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -347,9 +363,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
+			<string>هر کنتور %1$d</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>هر کنتور %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -395,9 +411,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Minimum %1$d character. Do not use your account password</string>
+			<string>حداقل کاراکتر %1$d. از رمز عبور حساب کاربری خود استفاده نکنید.</string>
 			<key>other</key>
-			<string>Minimum %1$d characters. Do not use your account password</string>
+			<string>حداقل کاراکترهای %1$d. از رمز عبور حساب کاربری خود استفاده نکنید.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -411,9 +427,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d degree</string>
+			<string>درجه %1$d</string>
 			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>درجه‌های %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -427,9 +443,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
+			<string>اتاق و فضای %1$d را ترک کنید</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>اتاق‌ها و فضای %1$d را ترک کنید</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -443,9 +459,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>شخص %1$d</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>افراد %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -459,9 +475,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
+			<string>پیام پین شده %1$d</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>پیام‌های پین‌شده %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -475,9 +491,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Banned</string>
+			<string>%1$d محروم شد</string>
 			<key>other</key>
-			<string>%1$d Banned</string>
+			<string>%1$d محروم شد</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -507,9 +523,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Invited</string>
+			<string>%1$d دعوت شده</string>
 			<key>other</key>
-			<string>%1$d Invited</string>
+			<string>%1$d دعوت شده</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -523,9 +539,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d other want to join this room</string>
+			<string>%1$@ +%2$d افراد دیگری هم می‌خواهند به این اتاق بپیوندند</string>
 			<key>other</key>
-			<string>%1$@ +%2$d others want to join this room</string>
+			<string>%1$@ +%2$d دیگران می‌خواهند به این اتاق بپیوندند</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -539,9 +555,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d member reacted with %2$@</string>
+			<string>عضو %1$d با %2$@ واکنش نشان داد</string>
 			<key>other</key>
-			<string>%1$d members reacted with %2$@</string>
+			<string>اعضای %1$d با %2$@ واکنش نشان دادند</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -555,9 +571,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You and %1$d member reacted with %2$@</string>
+			<string>شما و عضو %1$d با %2$@ واکنش نشان دادید</string>
 			<key>other</key>
-			<string>You and %1$d members reacted with %2$@</string>
+			<string>شما و اعضای %1$d با %2$@ واکنش نشان دادید</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -619,9 +635,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Remove %1$d room from %2$@</string>
+			<string>حذف اتاق %1$d از %2$@</string>
 			<key>other</key>
-			<string>Remove %1$d rooms from %2$@</string>
+			<string>حذف اتاق‌های %1$d از %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -635,9 +651,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d joined</string>
+			<string>%1$d عضو شد</string>
 			<key>other</key>
-			<string>%1$d joined</string>
+			<string>%1$d عضو شد</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -651,9 +667,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
+			<string>شما کاربر %1$d را مسدود کرده‌اید. شما اعلان‌هایی برای این کاربر دریافت نخواهید کرد.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>شما کاربران %1$d را مسدود کرده‌اید. برای این کاربران اعلان دریافت نخواهید کرد.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -667,9 +683,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
+			<string>ارائه دهنده فشار %1$d یافت شد: %2$@</string>
 			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
+			<string>ارائه دهندگان فشار %1$d یافت شد: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -683,9 +699,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distributor found: %2$@.</string>
+			<string>توزیع‌کننده‌ی %1$d پیدا شد: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distributors found: %2$@.</string>
+			<string>توزیع‌کنندگان %1$d موارد زیر را یافتند: %2$@.</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

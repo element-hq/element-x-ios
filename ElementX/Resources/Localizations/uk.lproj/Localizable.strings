@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Редагувати аватар";
 "a11y_edit_room_address_hint" = "Повна адреса буде %1$@";
 "a11y_expand_message_text_field" = "Розгорнути текстове поле повідомлення";
+"a11y_gallery_attachment" = "Галерея, вкладення %1$d";
+"a11y_gallery_failed_scan" = "Галерея, невдалося сканувати %1$d";
+"a11y_gallery_image" = "Галерея, зображення %1$d";
+"a11y_gallery_scanning" = "Галерея, сканування %1$d";
+"a11y_gallery_video" = "Галерея, відео %1$d";
 "a11y_hide_password" = "Cховати пароль";
 "a11y_info" = "Інформація";
 "a11y_join_call" = "Приєднатися до виклику";
@@ -519,6 +524,7 @@
 "notification_invitation_action_reject" = "Відхилити";
 "notification_invite_body" = "Запрошує вас до бесіди";
 "notification_invite_body_with_sender" = "%1$@ запрошує вас до бесіди";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Починає ділитися своїм поточним місцем розташування";
 "notification_mentioned_you_body" = "Вас згадує: %1$@";
 "notification_new_messages" = "Нові повідомлення";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Постачальник облікового запису %1$@ не дозволений.";
 "screen_change_server_form_header" = "URL-адреса домашнього сервера";
 "screen_change_server_form_notice" = "Введіть адресу домену.";
+"screen_change_server_navigation_title_login" = "Увійти";
+"screen_change_server_navigation_title_register" = "Створити обліковий запис";
 "screen_change_server_subtitle" = "Яка адреса вашого сервера?";
+"screen_change_server_textfield_footer_login" = "Якщо ваш обліковий запис надано вашою компанією або спільнотою, змініть постачальника облікового запису (наприклад: companyname.com).";
+"screen_change_server_textfield_footer_register" = "Створіть обліковий запис на matrix.org безплатно. Якщо ви хочете створити обліковий запис у іншого постачальника, змініть його відповідно (наприклад: communityname.org).";
+"screen_change_server_textfield_header" = "Постачальник облікового запису";
+"screen_change_server_textfield_placeholder" = "example.com";
 "screen_change_server_title" = "Виберіть свій сервер";
+"screen_change_server_title_login" = "Вкажіть постачальника вашого облікового запису";
+"screen_change_server_title_register" = "Оберіть постачальника облікового запису";
 "screen_chat_backup_key_backup_action_disable" = "Вимкнути резервне копіювання";
 "screen_chat_backup_key_backup_action_enable" = "Увімкнути резервне копіювання";
 "screen_chat_backup_key_backup_description" = "Це дозволить вам переглядати історію бесід на нових пристроях і необхідно для резервного копіювання бесід і цифрової ідентичності. %1$@.";
@@ -1351,7 +1365,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Не вдалося встановити режим, спробуйте ще раз.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті.";
 "screen_room_notification_settings_mode_all_messages" = "Всі повідомлення";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Тільки згадки та ключові слова";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Лише згадки та ключові слова";
+"screen_room_notification_settings_mode_mute" = "Вимкнути звук";
 "screen_room_notification_settings_room_custom_settings_title" = "У цій кімнаті сповіщати мене про";
 "screen_room_pinned_banner_indicator" = "%1$@ із %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ закріплених повідомлень";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Помилка: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Помилка, неможливо перевірити push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Помилка, час очікування вийшов на push-повідомлення.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Зворотнє відправлення push-повідомлення, зайняло %1$d мс.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Перевірка зворотного надсилання";
 "troubleshoot_notifications_test_unified_push_description" = "Переконується, що дистриб'ютори UnifiedPush доступні.";

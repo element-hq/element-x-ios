@@ -44,6 +44,8 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let mentionBuilder: MentionBuilderProtocol
     
     private static let attributeMSC4286 = "msc4286-external-payment-details"
+    /// Tags whose content already ends in a newline.
+    private static let lineTerminatingTags: Set = ["p", "div", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "ul", "ol", "li"]
     private static let caches = Mutex<[String: LRUCache<String, AttributedString>]>([:])
     
     static func invalidateCaches() {
@@ -109,16 +111,6 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     
     // MARK: - Private
 
-    private static let blockLevelTags: Set<String> = ["p", "div", "blockquote", "pre",
-                                                      "ul", "ol", "li",
-                                                      "h1", "h2", "h3", "h4", "h5", "h6",
-                                                      "hr", "table"]
-
-    private static func isBlockLevel(_ node: Node?) -> Bool {
-        guard let element = node as? Element else { return false }
-        return blockLevelTags.contains(element.tagName().lowercased())
-    }
-
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     func attributedString(element: Element,
                           documentBody: Element,
@@ -130,18 +122,14 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         for node in element.getChildNodes() {
             if let textNode = node as? TextNode {
-                // Inter-element whitespace (e.g. the newlines separating a <ul> from
-                // its <li>s, or two block elements) normalises to a stray space that
-                // misindents the following line; HTML collapses it away entirely.
-                // Use our own block list: SwiftSoup classifies del/ins/s as block
-                // elements, and dropping the spaces around those eats real ones.
+                // Markdown generated HTML separates block elements and list items with newlines.
+                // SwiftSoup normalises those whitespace only nodes into stray spaces which misindent
+                // the following line, whereas HTML rendering collapses them away entirely.
                 if !preserveFormatting, textNode.isBlank(),
-                   (node.parent() as? Element).map({ ["ul", "ol"].contains($0.tagName()) }) == true
-                   || Self.isBlockLevel(node.previousSibling())
-                   || Self.isBlockLevel(node.nextSibling()) {
+                   Self.isLineTerminating(node.previousSibling()) || Self.isLineTerminating(node.nextSibling()) {
                     continue
                 }
-
+                
                 // If this node is plain text append the whitespace normalised version
                 if node.parent() == documentBody {
                     result.append(NSAttributedString(string: textNode.text()))
@@ -198,7 +186,7 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: content.length))
                 
-            case "s", "del":
+            case "s", "del", "strike":
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: content.length))
                 
@@ -333,6 +321,14 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         return result
+    }
+    
+    private static func isLineTerminating(_ node: Node?) -> Bool {
+        guard let element = node as? Element else {
+            return false
+        }
+        
+        return lineTerminatingTags.contains(element.tagName().lowercased())
     }
     
     private static func cacheValue(_ value: AttributedString?, forKey key: String, cacheKey: String) {

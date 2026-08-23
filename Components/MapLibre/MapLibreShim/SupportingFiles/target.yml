@@ -1,0 +1,26 @@
+# The interactive map, split out of the app so MapLibre's static initialisers stay off the
+# launch path: the app links only the tiny MapLibreInterface framework, while MapLibreShim (the
+# only image linking MapLibre) is embedded unlinked and dlopen'd on first map use.
+name: MapLibreShim
+
+targets:
+  MapLibreShim:
+    type: framework
+    platform: iOS
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).maplibre-shim
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: 6.2
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+
+    dependencies:
+    - target: MapLibreInterface
+      embed: false
+    - package: MapLibre
+      embed: false
+
+    sources:
+    - path: ../Sources

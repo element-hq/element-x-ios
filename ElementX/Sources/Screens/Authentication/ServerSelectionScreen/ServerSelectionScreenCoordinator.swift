@@ -14,12 +14,13 @@ struct ServerSelectionScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProtocol
     let authenticationFlow: AuthenticationFlow
     let appSettings: AppSettings
+    let homeserverHistoryManager: HomeserverHistoryManager
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum ServerSelectionScreenCoordinatorAction {
-    case updated
-    case dismiss
+    case continueWithOAuth(data: OAuthAuthorizationDataProxy, window: UIWindow)
+    case continueWithPassword
 }
 
 /// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
@@ -36,9 +37,18 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: ServerSelectionScreenCoordinatorParameters) {
         self.parameters = parameters
+        
+        let mode: ServerSelectionScreenMode = if parameters.appSettings.allowOtherAccountProviders {
+            .userInput
+        } else {
+            .picker(parameters.appSettings.accountProviders)
+        }
+        
         viewModel = ServerSelectionScreenViewModel(authenticationService: parameters.authenticationService,
+                                                   mode: mode,
                                                    authenticationFlow: parameters.authenticationFlow,
                                                    appSettings: parameters.appSettings,
+                                                   homeserverHistoryManager: parameters.homeserverHistoryManager,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     
@@ -50,10 +60,10 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .updated:
-                    actionsSubject.send(.updated)
-                case .dismiss:
-                    actionsSubject.send(.dismiss)
+                case .continueWithOAuth(let oAuthData, let window):
+                    actionsSubject.send(.continueWithOAuth(data: oAuthData, window: window))
+                case .continueWithPassword:
+                    actionsSubject.send(.continueWithPassword)
                 }
             }
             .store(in: &cancellables)

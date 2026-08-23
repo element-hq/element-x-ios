@@ -12,6 +12,11 @@
 "a11y_edit_avatar" = "Muuda tunnuspilti";
 "a11y_edit_room_address_hint" = "Täisaadress saab olema %1$@";
 "a11y_expand_message_text_field" = "Laienda tekstivälja";
+"a11y_gallery_attachment" = "Gallery, attachment %1$d";
+"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
+"a11y_gallery_image" = "Gallery, image %1$d";
+"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Peida salasõna";
 "a11y_info" = "Teave";
 "a11y_join_call" = "Liitu kõnega";
@@ -519,7 +524,8 @@
 "notification_invitation_action_reject" = "Keeldu";
 "notification_invite_body" = "Kutse osalema vestluses";
 "notification_invite_body_with_sender" = "%1$@ saatus sulle vestluskutse";
-"notification_live_location_started_body" = "Started sharing their live location";
+"notification_knock_request_body" = "Requested to join";
+"notification_live_location_started_body" = "Hakkas jagama oma asukohta reaalajas";
 "notification_mentioned_you_body" = "Mainis sind: %1$@";
 "notification_new_messages" = "Uued sõnumid";
 "notification_reaction_body" = "Reageeris nii: %1$@";
@@ -710,8 +716,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "%1$@ teenusepakkuja pole lubatud.";
 "screen_change_server_form_header" = "Koduserveri url";
 "screen_change_server_form_notice" = "Sisesta domeeni aadress.";
+"screen_change_server_navigation_title_login" = "Logi sisse";
+"screen_change_server_navigation_title_register" = "Loo kasutajakonto";
 "screen_change_server_subtitle" = "Mis on sinu koduserveri aadress?";
+"screen_change_server_textfield_footer_login" = "Kui sinu kasutajakonto paikneb äriühingu või kogukonna serveris, siis muuda kontoteenuse pakkujat (näiteks: minufirmanimi.ee).";
+"screen_change_server_textfield_footer_register" = "Loo tasuta kasutajakonto matrix.org serverisse. Kui soovid luua kasutajakonto mõne teise teenusepakkuja juures, siis muuda seda vastavalt (näiteks: minukogukond.ee).";
+"screen_change_server_textfield_header" = "Teenusepakkuja";
+"screen_change_server_textfield_placeholder" = "domeeninäidis.ee";
 "screen_change_server_title" = "Vali oma server";
+"screen_change_server_title_login" = "Sisesta oma kasutajakonto teenusepakkuja";
+"screen_change_server_title_register" = "Vali kasutajakonto teenusepakkuja";
 "screen_chat_backup_key_backup_action_disable" = "Lülita võtmete varundamine välja";
 "screen_chat_backup_key_backup_action_enable" = "Lülita võtmete varundamine sisse";
 "screen_chat_backup_key_backup_description" = "Salvesta oma digitaalne identiteet ja sõnumite krüptovõtmed turvaliselt serveris. See tagab, et sinu sõnumite ajalugu on alati loetav, ka kõikides uutes seadmetes. %1$@.";
@@ -951,7 +965,7 @@
 "screen_link_new_device_desktop_step3" = "Skaneeri QR-koodi selle seadmega";
 "screen_link_new_device_desktop_submit" = "Skaneerimiseks valmis";
 "screen_link_new_device_desktop_title" = "QR-koodi laadimiseks ava %1$@ süle- või lauaarvutis";
-"screen_link_new_device_desktop_warning" = "Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person.";
+"screen_link_new_device_desktop_warning" = "Skaneeri QR-koodi peale järgnevate sammude läbitegemist oma seadmes. Ära iialgi skaneeri QR-koodi, mille on saatnud keegi teine.";
 "screen_link_new_device_enter_number_error_numbers_do_not_match" = "Numbrid ei klapi";
 "screen_link_new_device_enter_number_notice" = "Sisesta kahekohaline kood";
 "screen_link_new_device_enter_number_subtitle" = "Sellega verifitseerime, et ühendus sinu teise seadmega on turvaline.";
@@ -1350,8 +1364,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Vaikimisi seadistuste taastamine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_notification_settings_error_setting_mode" = "Seadistuste muutmine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Sinu koduserver ei toeta seda võimalust krüptitud jututubades, seega sa ei saa selle jututoa kohta teavitusi.";
-"screen_room_notification_settings_mode_all_messages" = "Kõikide sõnumite korral";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mainimiste ja võtmesõnade alusel";
+"screen_room_notification_settings_mode_all_messages" = "Kõik sõnumid";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Selles jututoas teavita mind";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ esiletõstetud sõnumit";
@@ -1708,6 +1723,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Viga: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Viga: katselist tõuketeavitust pole võimalik teha.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Viga: tõuketeavituse ootamisel tekkis aegumine.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Kogu tõuketeavituse ringi tegemiseks kulus %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Tee tõuketeenuse silmustest";
 "troubleshoot_notifications_test_unified_push_description" = "Palun veendu, et UnifiedPushi levitajad on saadaval.";
