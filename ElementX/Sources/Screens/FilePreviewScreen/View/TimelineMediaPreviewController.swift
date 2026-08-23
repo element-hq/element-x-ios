@@ -1076,6 +1076,10 @@ private struct DownloadIndicatorView: View {
                 // byte is in, the SDK still decrypts and stores the file (6 s for a 90 MB video), so the
                 // spinner says something is happening while the bar sits at 100 %.
                 loadingIndicator(isScanning: false)
+            } else if mediaItem.fileHandle == nil, mediaItem.placeholderURL != nil, mediaItem.kind == .video {
+                // A video's poster gets the timeline's play badge, as a vector overlay (crisp whatever
+                // the thumbnail's resolution) rather than baked into the poster.
+                VideoPlayBadge()
             }
         case .contentScan(let scan):
             switch scan.state {
