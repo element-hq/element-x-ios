@@ -4001,3 +4001,68 @@ first (one GET for all the room's keys); local search would be a new FTS
 index in the event cache store (same shape as the msgtype index); per-room
 opt-in on wifi/idle, not all 6000 rooms. Suggested: an explicit "Load full
 history" room action first.
+
+## Round 45: redecryptor bulk replacements, the upstream merge, and a narrower UTD sweep
+
+Three things, in order.
+
+**Bulk replacements (SDK `0fd1acf75`).** The remaining per-page cost from
+round 44: a room key resolves hundreds of UTDs and the redecryptor looked
+each one up (one store query per event not in memory) and replaced each
+one (one store transaction per event). New `EventCacheStore::find_events`
+/ `save_events` (default looping impls; SQLite overrides with one `IN`
+query and one write transaction, `save_event` now delegates to
+`save_events`), `find_events` on the room state (one in-memory pass + one
+store query), and the redecryptor uses both. Integration test
+`test_save_events_and_find_events` runs against every store. Build 139.
+
+**Upstream merge.** `origin/main` (87 commits, head `c260607d5`) into the
+SDK branch -> `821ec9e95`; `origin/develop` (82 commits, head `1ba090b91`)
+into the EXI branch -> `9cd67edf3`. Rule applied: where upstream solved the
+same problem its way, ours goes; where ours goes further and the branch
+still needs it, ours is rebased on top and flagged. Full report in the
+session handover; the short version:
+
+- Replaced by upstream's version (ours deleted): FFI state-listener replay
+  (#6895), the thread-aggregator StateLock deadlock fix (upstream takes one
+  all-states read lock), the redecryptor's resolve-once `on_resolved_utds`
+  flow (our `replace_events` dropped; our bulk `find_events` + store
+  `save_events` kept underneath it), MapLibre lazy loading (#6012, our
+  `MapInterface`/`MapLibreShim` removed wholesale), crash-report prompt
+  race (#6017), composer voice-mode crash (#6018), `cacheAccountURL`
+  detach (#6019), deferred secondary summary providers (#6038), the #6045
+  set (backup init check, empty-list flash, sync list mode, half-page
+  prefetch + growth guard), identical-filter skip (#6016), tracing spans
+  (#5996, `createSpan` is gone upstream), `truncate` diff (#6029), viewport
+  re-check (#6056), inter-block whitespace (#6055).
+- Ours layered on top (FLAGGED): HomeScreenViewModel keeps two guards over
+  upstream's `combineLatest`/`hasRooms` mode logic (empty filter result ->
+  `.rooms`, zero count only trusted while no rooms are published); the
+  StateLock holder-registry ticket became `Option` like upstream's mapped
+  guards' timer; OAuth refresh keeps upstream's lock ordering but our
+  `cached_server_metadata()`; `root_leads` thread-start guard; both new
+  `client_builder` options.
+- Regenerated: `GeneratedMocks.swift` (sourcery), `project.pbxproj`
+  (xcodegen), and `Components/SDKMocks/.../SDKGeneratedMocks.swift` against
+  the local bindings (upstream's copy targets the released SDK; same
+  recipe as `213cbe3e8`, output path is now under `Components/`).
+- Tests on the merged SDK: event cache lib 113, integration 73,
+  sliding_sync 62, base store 36, sqlite 96, ui timeline 227, redecryptor
+  4, all green. EXI unit tests not run (snapshot re-record still owed).
+- Build 140 tripped over a stale MapLibre precompiled module in derived
+  data (the framework moved); cleared. Build 140f (after an SDK `username` -> `serverNameFromUserId` rename the pinned-SDK develop had not hit, EXI `c6cfceb47`) compiled and installed; VALIDATE on the phone.
+
+**Narrower UTD sweep (SDK `5140c5839`).** The round-34 startup/Lagging
+sweep scanned every encrypted room's persisted events and re-attempted
+every UTD, i.e. thousands of long-term undecryptable messages on each
+launch, for the one case it was added for (a room preview stuck on a UTD
+whose key the NSE imported out of band). It now retries only each room's
+latest-event UTD, read from the persisted latest-event value: no store
+scan, one decrypt attempt per such room. Older UTDs are retried when the
+room is opened (the `Timeline` builder retries every event) or by the
+room-key stream. Test updated.
+
+#3290 bookkeeping: `5859d1c52`/`5e55f53e9` (live visible-range publishing,
+no growth on the initial empty range) look upstreamed by #6045 after all
+(develop's `HomeScreenContent` reports through `didScroll`, the provider
+has the `!range.isEmpty` guard); the merge hunks differed only by comments.
