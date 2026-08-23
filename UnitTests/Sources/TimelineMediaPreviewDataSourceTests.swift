@@ -93,8 +93,8 @@ struct TimelineMediaPreviewDataSourceTests {
     }
     
     @Test
-    func galleryPreviewIncludesNonPreviewableItems() throws {
-        // Given a gallery whose first attachment is an unknown type (QuickLook shows its default screen).
+    func galleryPreviewSkipsNonPreviewableItems() throws {
+        // Given a gallery whose first attachment is an unknown type (no media source, nothing to preview).
         let items: [GalleryItem] = [
             .other(id: .mock(0), filename: "unknown.bin"),
             .mockImage(index: 1, filename: "image-1.jpg"),
@@ -116,10 +116,10 @@ struct TimelineMediaPreviewDataSourceTests {
                                                         initialPadding: 0,
                                                         paginationState: .initial)
         
-        // Then every attachment is kept — indices line up 1:1 — and the unknown item has no media source.
-        #expect(dataSource.previewItems.count == 3)
-        #expect(dataSource.previewItems[0].id == .galleryItem(items[0].id))
-        #expect(dataSource.previewItems[0].mediaSource == nil)
+        // Then the unknown attachment is skipped, the same as the timeline's own flattening does, and
+        // the tapped image is still the current item (matched by ID, not by index).
+        #expect(dataSource.previewItems.count == 2)
+        #expect(dataSource.previewItems[0].id == .galleryItem(items[1].id))
         let media = try #require(dataSource.currentItem.mediaItem, "The current item should be a media item.")
         #expect(media.id == .galleryItem(items[1].id))
     }

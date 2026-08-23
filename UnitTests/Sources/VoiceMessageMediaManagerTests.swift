@@ -24,7 +24,7 @@ struct VoiceMessageMediaManagerTests {
         voiceMessageCache = VoiceMessageCacheMock()
         mediaProvider = MediaProviderMock(.init())
         mediaProvider.loadFileFromSourceFilenameProgressClosure = nil
-        mediaProvider.loadFileFromSourceFilenameReturnValue = .failure(.failedRetrievingFile)
+        mediaProvider.loadFileFromSourceFilenameProgressReturnValue = .failure(.failedRetrievingFile)
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache)
     }
@@ -55,7 +55,7 @@ struct VoiceMessageMediaManagerTests {
         
         voiceMessageCache.fileURLForReturnValue = nil
         let mediaSource = try MediaSourceProxy(url: someURL, mimeType: "audio/ogg; codecs=opus")
-        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        mediaProvider.loadFileFromSourceFilenameProgressReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
         voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
@@ -111,7 +111,7 @@ struct VoiceMessageMediaManagerTests {
         // Check if the file is not already present in cache
         voiceMessageCache.fileURLForReturnValue = nil
         let mediaSource = try MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
-        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        mediaProvider.loadFileFromSourceFilenameProgressReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
         let audioConverter = AudioConverterMock()
         voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
@@ -148,7 +148,7 @@ struct VoiceMessageMediaManagerTests {
         }
         
         let audioConverter = AudioConverterMock()
-        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        mediaProvider.loadFileFromSourceFilenameProgressReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
         
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache,

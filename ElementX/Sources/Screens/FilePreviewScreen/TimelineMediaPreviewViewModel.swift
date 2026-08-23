@@ -163,6 +163,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             
             switch result {
             case .success(let handle):
+                // A joined preload has already stored the handle and told the controller (one
+                // `.itemLoaded`, one page rebuild); only a load of our own needs to.
+                guard mediaItem.fileHandle == nil else { break }
                 MXLog.info("Media viewer: file for \(mediaItem.id): \(handle.url?.lastPathComponent ?? "nil") (filename: \(mediaItem.filename ?? "nil"), mime: \(mediaItem.mediaSource?.mimeType ?? "nil"))")
                 mediaItem.fileHandle = handle
                 state.previewControllerDriver.send(.itemLoaded(mediaItem.id))

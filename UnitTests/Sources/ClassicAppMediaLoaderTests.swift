@@ -92,7 +92,7 @@ final class ClassicAppMediaLoaderTests {
     func loadMediaFileIsNotSupported() async throws {
         let source = try MediaSourceProxy(url: MockURLProtocol.mxcURL, mimeType: nil)
         await #expect(throws: MediaLoaderError.notSupported) {
-            try await mediaLoader.loadMediaFileForSource(source, filename: nil)
+            try await mediaLoader.loadMediaFileForSource(source, filename: nil, progress: nil)
         }
     }
     

@@ -4238,3 +4238,16 @@ retry; blunt, also nudges the sync long-poll, harmless). Candidates if wanted:
 auto-detect a bar frozen for ~15 s and show "Stalled, tap to retry" on the
 bubble; a per-request re-send (new SDK API on `SendHandle`) instead of the
 client-wide kick.
+
+**Round 48 follow-up: viewer unit tests run (both-slices xcframework), one real fix.**
+First sim run since the viewer rounds: 4 VM tests + 1 DS test red. Causes, all
+pre-existing: (1) a load joining an in-flight preload emitted `.itemLoaded`
+TWICE for the item (preload task, then the joined awaiter) = a redundant
+covered page rebuild on device; FIXED (skip when the handle is already there).
+(2) The thumbnail placeholder path emits `.itemLoaded` ~300 ms in, which the
+tests' "no load on failure" watch read as the media landing; tests now run
+without cached/loadable thumbnails. (3) Neighbour preload (default on) breaks
+the tests' single-load call counts; off in the test setup. (4) DS test written
+for the first inline-gallery commit expected non-previewable gallery items
+kept; the fallback has filtered them like the timeline since `b33630f3e`.
+26/26 green. Build 149 = the dedupe x SDK `4ea0801f1`.
