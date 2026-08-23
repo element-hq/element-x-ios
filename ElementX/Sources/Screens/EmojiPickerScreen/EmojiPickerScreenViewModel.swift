@@ -13,7 +13,7 @@ typealias EmojiPickerScreenViewModelType = StateStoreViewModelV2<EmojiPickerScre
 
 class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScreenViewModelProtocol {
     private let emojiProvider: EmojiProviderProtocol
-    private let continuation: EmojiPickerScreenContinuation
+    private var continuation: EmojiPickerScreenContinuation
     
     private var actionsSubject: PassthroughSubject<EmojiPickerScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<EmojiPickerScreenViewModelAction, Never> {
@@ -35,6 +35,13 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     
     func stop() {
         continuation.finish() // Ensure the continuation always finishes even without a selection.
+    }
+    
+    func prepareForPresentation(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation) {
+        self.continuation.finish()
+        self.continuation = continuation
+        state.selectedEmojis = selectedEmojis
+        loadEmojis()
     }
     
     override func process(viewAction: EmojiPickerScreenViewAction) {

@@ -62,6 +62,9 @@ struct EmojiPickerScreen: View {
             context.send(viewAction: .search(searchString: searchString))
         }
         .onAppear {
+            // The picker instance is cached and re-presented: clear any leftover search.
+            searchString = ""
+            isSearching = false
             DoubleTapTiming.log("sheet appeared")
             DispatchQueue.main.async {
                 // One runloop later = the presentation transaction has committed and drawn.
