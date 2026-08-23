@@ -4338,3 +4338,8 @@ Progressive video playback while downloading: not with QuickLook (needs the
 whole file); would be an AVPlayer page streaming via HTTP ranges with the auth
 header (unencrypted media only; encrypted files need the full download for the
 SHA-256 check). Not started.
+
+**Round 50 follow-up: Manage storage "0.0 MB" bars (build 154).** A cache
+under 50 kB (labelled "0.0 MB") was still scaled against the largest value, so
+when it was the largest left (after clearing a room) it drew a full bar. Such
+caches now draw empty and don't set the scale (`minimumDrawnBytes`).

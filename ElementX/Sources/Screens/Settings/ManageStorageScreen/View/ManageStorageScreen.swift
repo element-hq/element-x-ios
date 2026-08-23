@@ -156,7 +156,10 @@ struct StorageUsageChart: View {
     let clearAction: (StorageCacheKind) -> Void
 
     private var caches: [StorageCacheKind] { StorageCacheKind.allCases }
-    private var maxBytes: UInt64 { caches.map(bytes).max() ?? 0 }
+    /// Below this a cache is labelled "0.0 MB": its bar stays empty rather than being scaled up
+    /// (to a full bar when it happens to be the largest left, e.g. after clearing a room).
+    private static let minimumDrawnBytes: UInt64 = 50_000
+    private var maxBytes: UInt64 { caches.map(bytes).filter { $0 >= Self.minimumDrawnBytes }.max() ?? 0 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -209,10 +212,10 @@ struct StorageUsageChart: View {
     }
 
     private func barWidth(for cache: StorageCacheKind, in width: CGFloat) -> CGFloat {
-        guard maxBytes > 0 else { return 0 }
+        guard maxBytes > 0, bytes(cache) >= Self.minimumDrawnBytes else { return 0 }
         let fraction = CGFloat(bytes(cache)) / CGFloat(maxBytes)
-        // A non-empty cache always shows a sliver.
-        return bytes(cache) == 0 ? 0 : max(6, width * fraction)
+        // A cache that's labelled non-empty always shows a sliver.
+        return max(6, width * fraction)
     }
 
     static func megabytes(_ bytes: UInt64) -> String {
