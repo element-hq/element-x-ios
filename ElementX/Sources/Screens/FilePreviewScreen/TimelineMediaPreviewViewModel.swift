@@ -488,8 +488,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             }
             return
         }
+        let playIcon = item.kind == .video
         let written = await Task.detached(priority: .userInitiated) {
-            Self.writePlaceholder(thumbnail, size: size, playIcon: item.kind == .video, to: url, in: directory)
+            Self.writePlaceholder(thumbnail, size: size, playIcon: playIcon, to: url, in: directory)
         }.value
         guard written, item.fileHandle == nil, item.placeholderURL == nil else { return }
         item.placeholderURL = url
@@ -544,8 +545,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             let placeholder = Task { [weak self] () -> (URL, CGSize)? in
                 guard let self, let (thumbnail, size, url) = await placeholderJob(for: item) else { return nil }
                 let directory = placeholderDirectory
+                let playIcon = item.kind == .video
                 let written = await Task.detached(priority: .userInitiated) {
-                    Self.writePlaceholder(thumbnail, size: size, playIcon: item.kind == .video, to: url, in: directory)
+                    Self.writePlaceholder(thumbnail, size: size, playIcon: playIcon, to: url, in: directory)
                 }.value
                 return written ? (url, size) : nil
             }
