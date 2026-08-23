@@ -657,13 +657,19 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                        emojiProvider: state.emojiProvider).makeActions() != nil
     }
 
+    /// A media timeline walks past everything that isn't media: bigger pages mean fewer
+    /// round trips (and the keys of a page's undecrypted events are fetched in one go).
+    private var paginationRequestSize: UInt16 {
+        if case .media = timelineController.timelineKind { 50 } else { Constants.paginationEventLimit }
+    }
+    
     private func resolveGap(prevToken: String) {
         // Concurrent resolutions of the same gap are deduplicated by the SDK,
         // so it's fine to fire this every time a gap item appears. Failures
         // (e.g. offline) leave the gap in place; it retries when the item
         // next appears.
         Task {
-            await timelineController.resolveGap(prevToken: prevToken, requestSize: Constants.paginationEventLimit)
+            await timelineController.resolveGap(prevToken: prevToken, requestSize: paginationRequestSize)
         }
     }
     
@@ -677,7 +683,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 return
             }
             
-            switch await timelineController.paginateBackwards(requestSize: Constants.paginationEventLimit) {
+            switch await timelineController.paginateBackwards(requestSize: paginationRequestSize) {
             case .failure:
                 displayErrorToast(L10n.errorFailedLoadingMessages)
             default:
@@ -697,7 +703,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 return
             }
             
-            switch await timelineController.paginateForwards(requestSize: Constants.paginationEventLimit) {
+            switch await timelineController.paginateForwards(requestSize: paginationRequestSize) {
             case .failure:
                 displayErrorToast(L10n.errorFailedLoadingMessages)
             default:
