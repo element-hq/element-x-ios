@@ -26,7 +26,31 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
             guard let self, isSelectingText else { return }
             becomeFirstResponder()
             selectAll(nil)
+            // The edit menu (Copy…) straight away, over the selection, rather than after a tap on it.
+            let rect = selectionRects(for: selectedTextRange ?? UITextRange()).map(\.rect).reduce(CGRect.null) { $0.union($1) }
+            let point = rect.isNull ? CGPoint(x: bounds.midX, y: bounds.midY) : CGPoint(x: rect.midX, y: rect.minY)
+            (interactions.first { $0 is UIEditMenuInteraction } as? UIEditMenuInteraction)?
+                .presentEditMenu(with: UIEditMenuConfiguration(identifier: nil, sourcePoint: point))
         }
+    }
+    
+    /// The message's text without the invisible spacer appended at the end for the timestamp
+    /// overlay (a newline + transparent attachment), which selecting "all" would otherwise include
+    /// as a blank trailing line.
+    var contentRange: NSRange {
+        let string = attributedText.string as NSString
+        var length = string.length
+        if length > 0, string.character(at: length - 1) == 0xFFFC { // Object replacement (the attachment).
+            length -= 1
+            if length > 0, string.character(at: length - 1) == 0x0A {
+                length -= 1
+            }
+        }
+        return NSRange(location: 0, length: length)
+    }
+    
+    override func selectAll(_ sender: Any?) {
+        selectedRange = contentRange
     }
     
     func endTextSelection() {
@@ -51,7 +75,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
     
     /// Copying the whole text copies the message in both representations (see `TimelineTextSelectionInfo`).
     override func copy(_ sender: Any?) {
-        if let activeTextSelection, selectedRange.location == 0, selectedRange.length == attributedText.length {
+        if let activeTextSelection, selectedRange.location == 0, selectedRange.length >= contentRange.length {
             activeTextSelection.copyToPasteboard()
         } else {
             super.copy(sender)

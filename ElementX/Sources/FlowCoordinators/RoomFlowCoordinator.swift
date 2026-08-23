@@ -1236,7 +1236,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navigationStackCoordinator.setSheetCoordinator(coordinator, animated: animated) { [weak self] in
+        // Straight up, no slide: a double tap on a bubble wants the picker at once.
+        navigationStackCoordinator.setSheetCoordinator(coordinator, animated: false) { [weak self] in
             self?.stateMachine.tryEvent(.dismissEmojiPicker)
         }
     }
