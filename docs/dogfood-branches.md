@@ -4695,3 +4695,46 @@ propagates to Rust). New advanced option (default off)
 download when it's large (or preloading is off) so only downloads the user is
 explicitly waiting on run; closing the viewer cancels them all. Swiping back
 retries. SDK mocks regenerated (sourcery recipe in handover #45).
+
+**Round 63 (2026-08-23): instant double-tap reaction picker + blank Chats
+self-heal (EXI 5d2d85024, build 178).** (1) The reaction picker slid in
+despite `presentEmojiPicker` asking for `animated: false`:
+`Transaction.disablesAnimations` never reaches UIKit's sheet presentation,
+and the stack-coordinator's sheet proxy to the split coordinator dropped the
+`animated` flag entirely. Both `setSheetCoordinator`s now disable UIView
+animations for unanimated presentations (re-enabled in the sheet content's
+`onAppear`). The picker is also prewarmed once per session (off-screen
+build + render ~1 s after the first room opens) and reads its categories
+synchronously when the emojibase datasource has already loaded, so the grid
+is part of the sheet's first layout. (2) Chats came up permanently blank
+("Start a chat" empty state, then nothing) after a cold relaunch during a
+sliding-sync session-expiry recovery: SwiftUI's `isSearching` environment
+glitched to true with no search session, hiding the room list and filtering
+AllRooms to `.excludeAll` (the SDK then rebuilt the chain with `num_rooms=0`
+forever). Known-flaky flag (the code already papered over a variant after
+cancelling search); the home screen now self-heals: if the list is hidden
+for an empty-query "search" but nothing is first responder a second later,
+the stale flag is cleared and the filter subscription restores `.all`.
+
+**Round 64 (2026-08-23): timestamp-spacer selection + the picker's residual
+latency (EXI 5e40b98a7, builds 179-187).** (1) The invisible spacer that
+reserves room for the overlaid timestamp (newline + transparent attachment)
+could still be selected: dragging a handle to the bubble's end swept it up
+(pasting a stray blank line), and a double tap past the text left a stuck
+selection of it, drag handles and all. Three-layer fix in `MessageTextView`:
+both selection setters clamp to `contentRange`; outside "Select text" the
+view's recognisers never receive a second tap; and - the one that actually
+kills the stuck case, since the system's word selection bypasses both the
+setters and the delegate clear - the view refuses first responder outside
+"Select text". (2) The remaining ~150 ms double-tap-to-sheet pause was
+profiled with a new in-app main-thread sampler (2 ms suspend + frame-pointer
+walk, folded stacks to the log, offline `atos -offset` symbolication): ~30 ms
+UIKit sheet machinery, ~80 ms SwiftUI building the sheet's view graph, ~25 ms
+first draw - diffuse, nothing to cut. Presenting a cached, prewarmed hosting
+controller directly as a UIKit sheet was tried (builds 185-186: needed
+in-window prewarm - a detached prewarm defers the real build and the first
+presentation redoes the graph via `updateEnvironment` - plus explicit
+background painting) but the plain no-animation SwiftUI sheet was judged fast
+enough and the cached path reverted; the in-window prewarm, sync category
+load and diagnostics (timing probes, sampler - strip before upstreaming)
+stay.
