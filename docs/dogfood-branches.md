@@ -4633,3 +4633,16 @@ blocked again and the drag interaction hard-disabled while selecting. Play
 badge now a vector overlay (169/170); the emoji-picker sheet still slides
 (the `animated: false` on the coordinator doesn't reach SwiftUI's `.sheet`;
 a lighter tapback-style overlay would be the real fix, deferred).
+
+**Round 60 update: dropped the 16 KB page size (SDK 8ba77b9e2, build 173).**
+User asked whether 16 KB is needed given zstd, and whether a DB upgrade
+runs / needs an overlay. It isn't: compressed rows fall under the 4 KB
+page's ~1 KB overflow threshold, so overflow waste is mostly gone from zstd
+alone; 16 KB's remaining gain is marginal and it carried a risky
+WAL->DELETE->VACUUM->WAL conversion on a live pool and a bigger page cache.
+Removing it also removes any migration: compression applies to new writes,
+old rows read back untouched via the frame-magic passthrough, so nothing
+runs at launch and no "Upgrading" overlay is needed. The existing 875 MB
+shrinks as the cache churns and fully on the next Manage-storage clear+VACUUM
+(already behind a "Please wait" modal); a one-time bulk recompression pass
+(which would need an overlay) was considered and left out.
