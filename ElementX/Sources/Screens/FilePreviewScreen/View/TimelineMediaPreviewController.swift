@@ -688,7 +688,14 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// fell apart once the placeholder was pinched/zoomed).
     private func layoutProgressBar() {
         let height = Self.progressBarHeight
-        progressBarHostingController.view.frame = CGRect(x: 0, y: view.bounds.maxY - height, width: view.bounds.width, height: height)
+        // Inset past the display's curved corners, which otherwise truncate the
+        // bar's ends. 24 clears the curve's incursion into the bottom 3pt on
+        // every current device (~17pt on the largest radius).
+        let inset: CGFloat = 24
+        progressBarHostingController.view.frame = CGRect(x: inset,
+                                                         y: view.bounds.maxY - height,
+                                                         width: view.bounds.width - 2 * inset,
+                                                         height: height)
     }
     
     /// The view QuickLook is rendering the current page's content with (an image view showing
