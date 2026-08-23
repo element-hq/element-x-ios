@@ -4150,3 +4150,22 @@ not run. Gotchas: `xctrace record` keeps writing for minutes after "ending
 recording" (export before `Output file saved` = "Document Missing Template
 Error"); `time-sample` callstacks export as raw PCs (needs dSYM + slide to
 symbolicate).
+
+**Round 47 follow-ups (EXI `b33630f3e`, build 144).** (1) Swiping off the end
+of a gallery landed on "Loading more…" with the neighbours cached: the
+not-yet-loaded fallback held every attachment of the gallery while the media
+timeline flattens galleries through `allowedGalleryItemTypes`, so the loaded
+list never matched the fallback as a contiguous range and the merge took the
+re-anchoring path, leaving the padding pages around the gallery. The fallback
+is now filtered the same way (the filter derives from the tapped attachment's
+type, so it is always kept). (2) Blank screen after the build-143 launch: the
+install script launched the app via `devicectl` on the locked phone at
+09:34:38Z; it ran in the background for 13s (splash root only; `start()` is
+deferred to foreground), restored the session within 120ms of "will enter
+foreground", yet the screen stayed blank until a background/foreground cycle
+even though a touch at +7s hit-tested to the room list's `HostingScrollView`
+(content 5371pt, tracking): drawn-nothing, not missing content. No cause
+found from the log; `WindowDebug` now logs each window's
+hidden/alpha/key/root on willEnterForeground + didBecomeActive (strip before
+upstreaming). Reproduce with `devicectl device process launch --no-activate`
+then activate.
