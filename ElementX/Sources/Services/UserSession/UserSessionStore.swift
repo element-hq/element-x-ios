@@ -232,7 +232,7 @@ class UserSessionStore: UserSessionStoreProtocol {
                     .highEntropyPassphrase(passphrase: credentials.restorationToken.passphrase))
             .withSearchIndexStore(path: credentials.restorationToken.sessionDirectories.dataPath,
                                   password: credentials.restorationToken.passphrase)
-            .username(username: credentials.userID)
+            .serverNameFromUserId(userId: credentials.userID)
             .homeserverUrl(url: homeserverURL)
 
         let client = try await builder.build()

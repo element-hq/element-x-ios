@@ -11,6 +11,7 @@ import SwiftUI
 
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let bugReportService: BugReportServiceProtocol
     let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
     let appSettings: AppSettings
     let analyticsService: AnalyticsServiceProtocol

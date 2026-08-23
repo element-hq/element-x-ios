@@ -420,6 +420,114 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await clearCachesSyncServiceClosure?(syncService)
     }
 
+    //MARK: - clearMediaCache
+
+    open var clearMediaCacheRoomIdsNotAccessedForThrowableError: Error?
+    private let clearMediaCacheRoomIdsNotAccessedForCallsCountLock = NSLock()
+    private var clearMediaCacheRoomIdsNotAccessedForUnderlyingCallsCount = 0
+    open var clearMediaCacheRoomIdsNotAccessedForCallsCount: Int {
+        get { clearMediaCacheRoomIdsNotAccessedForCallsCountLock.withLock { clearMediaCacheRoomIdsNotAccessedForUnderlyingCallsCount } }
+        set { clearMediaCacheRoomIdsNotAccessedForCallsCountLock.withLock { clearMediaCacheRoomIdsNotAccessedForUnderlyingCallsCount = newValue } }
+    }
+    open var clearMediaCacheRoomIdsNotAccessedForCalled: Bool {
+        return clearMediaCacheRoomIdsNotAccessedForCallsCount > 0
+    }
+    private let clearMediaCacheRoomIdsNotAccessedForReceivedArgumentsLock = NSLock()
+    private var clearMediaCacheRoomIdsNotAccessedForUnderlyingReceivedArguments: (roomIds: [String]?, notAccessedFor: TimeInterval?)?
+    open var clearMediaCacheRoomIdsNotAccessedForReceivedArguments: (roomIds: [String]?, notAccessedFor: TimeInterval?)? {
+        get { clearMediaCacheRoomIdsNotAccessedForReceivedArgumentsLock.withLock { clearMediaCacheRoomIdsNotAccessedForUnderlyingReceivedArguments } }
+        set { clearMediaCacheRoomIdsNotAccessedForReceivedArgumentsLock.withLock { clearMediaCacheRoomIdsNotAccessedForUnderlyingReceivedArguments = newValue } }
+    }
+    private let clearMediaCacheRoomIdsNotAccessedForReceivedInvocationsLock = NSLock()
+    private var clearMediaCacheRoomIdsNotAccessedForUnderlyingReceivedInvocations: [(roomIds: [String]?, notAccessedFor: TimeInterval?)] = []
+    open var clearMediaCacheRoomIdsNotAccessedForReceivedInvocations: [(roomIds: [String]?, notAccessedFor: TimeInterval?)] {
+        get { clearMediaCacheRoomIdsNotAccessedForReceivedInvocationsLock.withLock { clearMediaCacheRoomIdsNotAccessedForUnderlyingReceivedInvocations } }
+        set { clearMediaCacheRoomIdsNotAccessedForReceivedInvocationsLock.withLock { clearMediaCacheRoomIdsNotAccessedForUnderlyingReceivedInvocations = newValue } }
+    }
+    open var clearMediaCacheRoomIdsNotAccessedForClosure: (([String]?, TimeInterval?) async throws -> Void)?
+
+    open override func clearMediaCache(roomIds: [String]?, notAccessedFor: TimeInterval?) async throws {
+        if let error = clearMediaCacheRoomIdsNotAccessedForThrowableError {
+            throw error
+        }
+        clearMediaCacheRoomIdsNotAccessedForCallsCountLock.withLock { clearMediaCacheRoomIdsNotAccessedForUnderlyingCallsCount += 1 }
+        clearMediaCacheRoomIdsNotAccessedForReceivedArguments = (roomIds: roomIds, notAccessedFor: notAccessedFor)
+        clearMediaCacheRoomIdsNotAccessedForReceivedInvocationsLock.withLock { clearMediaCacheRoomIdsNotAccessedForUnderlyingReceivedInvocations.append((roomIds: roomIds, notAccessedFor: notAccessedFor)) }
+        try await clearMediaCacheRoomIdsNotAccessedForClosure?(roomIds, notAccessedFor)
+    }
+
+    //MARK: - clearRoomCaches
+
+    open var clearRoomCachesRoomIdsThrowableError: Error?
+    private let clearRoomCachesRoomIdsCallsCountLock = NSLock()
+    private var clearRoomCachesRoomIdsUnderlyingCallsCount = 0
+    open var clearRoomCachesRoomIdsCallsCount: Int {
+        get { clearRoomCachesRoomIdsCallsCountLock.withLock { clearRoomCachesRoomIdsUnderlyingCallsCount } }
+        set { clearRoomCachesRoomIdsCallsCountLock.withLock { clearRoomCachesRoomIdsUnderlyingCallsCount = newValue } }
+    }
+    open var clearRoomCachesRoomIdsCalled: Bool {
+        return clearRoomCachesRoomIdsCallsCount > 0
+    }
+    private let clearRoomCachesRoomIdsReceivedRoomIdsLock = NSLock()
+    private var clearRoomCachesRoomIdsUnderlyingReceivedRoomIds: [String]?
+    open var clearRoomCachesRoomIdsReceivedRoomIds: [String]? {
+        get { clearRoomCachesRoomIdsReceivedRoomIdsLock.withLock { clearRoomCachesRoomIdsUnderlyingReceivedRoomIds } }
+        set { clearRoomCachesRoomIdsReceivedRoomIdsLock.withLock { clearRoomCachesRoomIdsUnderlyingReceivedRoomIds = newValue } }
+    }
+    private let clearRoomCachesRoomIdsReceivedInvocationsLock = NSLock()
+    private var clearRoomCachesRoomIdsUnderlyingReceivedInvocations: [[String]] = []
+    open var clearRoomCachesRoomIdsReceivedInvocations: [[String]] {
+        get { clearRoomCachesRoomIdsReceivedInvocationsLock.withLock { clearRoomCachesRoomIdsUnderlyingReceivedInvocations } }
+        set { clearRoomCachesRoomIdsReceivedInvocationsLock.withLock { clearRoomCachesRoomIdsUnderlyingReceivedInvocations = newValue } }
+    }
+    open var clearRoomCachesRoomIdsClosure: (([String]) async throws -> Void)?
+
+    open override func clearRoomCaches(roomIds: [String]) async throws {
+        if let error = clearRoomCachesRoomIdsThrowableError {
+            throw error
+        }
+        clearRoomCachesRoomIdsCallsCountLock.withLock { clearRoomCachesRoomIdsUnderlyingCallsCount += 1 }
+        clearRoomCachesRoomIdsReceivedRoomIds = roomIds
+        clearRoomCachesRoomIdsReceivedInvocationsLock.withLock { clearRoomCachesRoomIdsUnderlyingReceivedInvocations.append(roomIds) }
+        try await clearRoomCachesRoomIdsClosure?(roomIds)
+    }
+
+    //MARK: - clearRoomKeys
+
+    open var clearRoomKeysRoomIdsThrowableError: Error?
+    private let clearRoomKeysRoomIdsCallsCountLock = NSLock()
+    private var clearRoomKeysRoomIdsUnderlyingCallsCount = 0
+    open var clearRoomKeysRoomIdsCallsCount: Int {
+        get { clearRoomKeysRoomIdsCallsCountLock.withLock { clearRoomKeysRoomIdsUnderlyingCallsCount } }
+        set { clearRoomKeysRoomIdsCallsCountLock.withLock { clearRoomKeysRoomIdsUnderlyingCallsCount = newValue } }
+    }
+    open var clearRoomKeysRoomIdsCalled: Bool {
+        return clearRoomKeysRoomIdsCallsCount > 0
+    }
+    private let clearRoomKeysRoomIdsReceivedRoomIdsLock = NSLock()
+    private var clearRoomKeysRoomIdsUnderlyingReceivedRoomIds: [String]?
+    open var clearRoomKeysRoomIdsReceivedRoomIds: [String]? {
+        get { clearRoomKeysRoomIdsReceivedRoomIdsLock.withLock { clearRoomKeysRoomIdsUnderlyingReceivedRoomIds } }
+        set { clearRoomKeysRoomIdsReceivedRoomIdsLock.withLock { clearRoomKeysRoomIdsUnderlyingReceivedRoomIds = newValue } }
+    }
+    private let clearRoomKeysRoomIdsReceivedInvocationsLock = NSLock()
+    private var clearRoomKeysRoomIdsUnderlyingReceivedInvocations: [[String]?] = []
+    open var clearRoomKeysRoomIdsReceivedInvocations: [[String]?] {
+        get { clearRoomKeysRoomIdsReceivedInvocationsLock.withLock { clearRoomKeysRoomIdsUnderlyingReceivedInvocations } }
+        set { clearRoomKeysRoomIdsReceivedInvocationsLock.withLock { clearRoomKeysRoomIdsUnderlyingReceivedInvocations = newValue } }
+    }
+    open var clearRoomKeysRoomIdsClosure: (([String]?) async throws -> Void)?
+
+    open override func clearRoomKeys(roomIds: [String]?) async throws {
+        if let error = clearRoomKeysRoomIdsThrowableError {
+            throw error
+        }
+        clearRoomKeysRoomIdsCallsCountLock.withLock { clearRoomKeysRoomIdsUnderlyingCallsCount += 1 }
+        clearRoomKeysRoomIdsReceivedRoomIds = roomIds
+        clearRoomKeysRoomIdsReceivedInvocationsLock.withLock { clearRoomKeysRoomIdsUnderlyingReceivedInvocations.append(roomIds) }
+        try await clearRoomKeysRoomIdsClosure?(roomIds)
+    }
+
     //MARK: - clearUserStatus
 
     open var clearUserStatusThrowableError: Error?
@@ -2359,6 +2467,24 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - notifyNetworkChange
+
+    private let notifyNetworkChangeCallsCountLock = NSLock()
+    private var notifyNetworkChangeUnderlyingCallsCount = 0
+    open var notifyNetworkChangeCallsCount: Int {
+        get { notifyNetworkChangeCallsCountLock.withLock { notifyNetworkChangeUnderlyingCallsCount } }
+        set { notifyNetworkChangeCallsCountLock.withLock { notifyNetworkChangeUnderlyingCallsCount = newValue } }
+    }
+    open var notifyNetworkChangeCalled: Bool {
+        return notifyNetworkChangeCallsCount > 0
+    }
+    open var notifyNetworkChangeClosure: (() -> Void)?
+
+    open override func notifyNetworkChange() {
+        notifyNetworkChangeCallsCountLock.withLock { notifyNetworkChangeUnderlyingCallsCount += 1 }
+        notifyNetworkChangeClosure?()
+    }
+
     //MARK: - observeAccountDataEvent
 
     private let observeAccountDataEventEventTypeListenerCallsCountLock = NSLock()
@@ -3632,6 +3758,72 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try await startSsoLoginRedirectUrlIdpIdClosure(redirectUrl, idpId)
         } else {
             return startSsoLoginRedirectUrlIdpIdReturnValue
+        }
+    }
+
+    //MARK: - storageUsage
+
+    open var storageUsageThrowableError: Error?
+    private let storageUsageCallsCountLock = NSLock()
+    private var storageUsageUnderlyingCallsCount = 0
+    open var storageUsageCallsCount: Int {
+        get { storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount } }
+        set { storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount = newValue } }
+    }
+    open var storageUsageCalled: Bool {
+        return storageUsageCallsCount > 0
+    }
+
+    private let storageUsageReturnValueLock = NSLock()
+    open var storageUsageUnderlyingReturnValue: StorageUsageReport!
+    open var storageUsageReturnValue: StorageUsageReport! {
+        get { storageUsageReturnValueLock.withLock { storageUsageUnderlyingReturnValue } }
+        set { storageUsageReturnValueLock.withLock { storageUsageUnderlyingReturnValue = newValue } }
+    }
+    open var storageUsageClosure: (() async throws -> StorageUsageReport)?
+
+    open override func storageUsage() async throws -> StorageUsageReport {
+        if let error = storageUsageThrowableError {
+            throw error
+        }
+        storageUsageCallsCountLock.withLock { storageUsageUnderlyingCallsCount += 1 }
+        if let storageUsageClosure = storageUsageClosure {
+            return try await storageUsageClosure()
+        } else {
+            return storageUsageReturnValue
+        }
+    }
+
+    //MARK: - storageUsageByRoom
+
+    open var storageUsageByRoomThrowableError: Error?
+    private let storageUsageByRoomCallsCountLock = NSLock()
+    private var storageUsageByRoomUnderlyingCallsCount = 0
+    open var storageUsageByRoomCallsCount: Int {
+        get { storageUsageByRoomCallsCountLock.withLock { storageUsageByRoomUnderlyingCallsCount } }
+        set { storageUsageByRoomCallsCountLock.withLock { storageUsageByRoomUnderlyingCallsCount = newValue } }
+    }
+    open var storageUsageByRoomCalled: Bool {
+        return storageUsageByRoomCallsCount > 0
+    }
+
+    private let storageUsageByRoomReturnValueLock = NSLock()
+    open var storageUsageByRoomUnderlyingReturnValue: [RoomStorageUsage]!
+    open var storageUsageByRoomReturnValue: [RoomStorageUsage]! {
+        get { storageUsageByRoomReturnValueLock.withLock { storageUsageByRoomUnderlyingReturnValue } }
+        set { storageUsageByRoomReturnValueLock.withLock { storageUsageByRoomUnderlyingReturnValue = newValue } }
+    }
+    open var storageUsageByRoomClosure: (() async throws -> [RoomStorageUsage])?
+
+    open override func storageUsageByRoom() async throws -> [RoomStorageUsage] {
+        if let error = storageUsageByRoomThrowableError {
+            throw error
+        }
+        storageUsageByRoomCallsCountLock.withLock { storageUsageByRoomUnderlyingCallsCount += 1 }
+        if let storageUsageByRoomClosure = storageUsageByRoomClosure {
+            return try await storageUsageByRoomClosure()
+        } else {
+            return storageUsageByRoomReturnValue
         }
     }
 
@@ -5351,6 +5543,49 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
+    //MARK: - serverNameFromUserId
+
+    private let serverNameFromUserIdUserIdCallsCountLock = NSLock()
+    private var serverNameFromUserIdUserIdUnderlyingCallsCount = 0
+    open var serverNameFromUserIdUserIdCallsCount: Int {
+        get { serverNameFromUserIdUserIdCallsCountLock.withLock { serverNameFromUserIdUserIdUnderlyingCallsCount } }
+        set { serverNameFromUserIdUserIdCallsCountLock.withLock { serverNameFromUserIdUserIdUnderlyingCallsCount = newValue } }
+    }
+    open var serverNameFromUserIdUserIdCalled: Bool {
+        return serverNameFromUserIdUserIdCallsCount > 0
+    }
+    private let serverNameFromUserIdUserIdReceivedUserIdLock = NSLock()
+    private var serverNameFromUserIdUserIdUnderlyingReceivedUserId: String?
+    open var serverNameFromUserIdUserIdReceivedUserId: String? {
+        get { serverNameFromUserIdUserIdReceivedUserIdLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedUserId } }
+        set { serverNameFromUserIdUserIdReceivedUserIdLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedUserId = newValue } }
+    }
+    private let serverNameFromUserIdUserIdReceivedInvocationsLock = NSLock()
+    private var serverNameFromUserIdUserIdUnderlyingReceivedInvocations: [String] = []
+    open var serverNameFromUserIdUserIdReceivedInvocations: [String] {
+        get { serverNameFromUserIdUserIdReceivedInvocationsLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedInvocations } }
+        set { serverNameFromUserIdUserIdReceivedInvocationsLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let serverNameFromUserIdUserIdReturnValueLock = NSLock()
+    open var serverNameFromUserIdUserIdUnderlyingReturnValue: ClientBuilder!
+    open var serverNameFromUserIdUserIdReturnValue: ClientBuilder! {
+        get { serverNameFromUserIdUserIdReturnValueLock.withLock { serverNameFromUserIdUserIdUnderlyingReturnValue } }
+        set { serverNameFromUserIdUserIdReturnValueLock.withLock { serverNameFromUserIdUserIdUnderlyingReturnValue = newValue } }
+    }
+    open var serverNameFromUserIdUserIdClosure: ((String) -> ClientBuilder)?
+
+    open override func serverNameFromUserId(userId: String) -> ClientBuilder {
+        serverNameFromUserIdUserIdCallsCountLock.withLock { serverNameFromUserIdUserIdUnderlyingCallsCount += 1 }
+        serverNameFromUserIdUserIdReceivedUserId = userId
+        serverNameFromUserIdUserIdReceivedInvocationsLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedInvocations.append(userId) }
+        if let serverNameFromUserIdUserIdClosure = serverNameFromUserIdUserIdClosure {
+            return serverNameFromUserIdUserIdClosure(userId)
+        } else {
+            return serverNameFromUserIdUserIdReturnValue
+        }
+    }
+
     //MARK: - serverNameOrHomeserverUrl
 
     private let serverNameOrHomeserverUrlServerNameOrUrlCallsCountLock = NSLock()
@@ -5678,49 +5913,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return userAgentUserAgentClosure(userAgent)
         } else {
             return userAgentUserAgentReturnValue
-        }
-    }
-
-    //MARK: - username
-
-    private let usernameUsernameCallsCountLock = NSLock()
-    private var usernameUsernameUnderlyingCallsCount = 0
-    open var usernameUsernameCallsCount: Int {
-        get { usernameUsernameCallsCountLock.withLock { usernameUsernameUnderlyingCallsCount } }
-        set { usernameUsernameCallsCountLock.withLock { usernameUsernameUnderlyingCallsCount = newValue } }
-    }
-    open var usernameUsernameCalled: Bool {
-        return usernameUsernameCallsCount > 0
-    }
-    private let usernameUsernameReceivedUsernameLock = NSLock()
-    private var usernameUsernameUnderlyingReceivedUsername: String?
-    open var usernameUsernameReceivedUsername: String? {
-        get { usernameUsernameReceivedUsernameLock.withLock { usernameUsernameUnderlyingReceivedUsername } }
-        set { usernameUsernameReceivedUsernameLock.withLock { usernameUsernameUnderlyingReceivedUsername = newValue } }
-    }
-    private let usernameUsernameReceivedInvocationsLock = NSLock()
-    private var usernameUsernameUnderlyingReceivedInvocations: [String] = []
-    open var usernameUsernameReceivedInvocations: [String] {
-        get { usernameUsernameReceivedInvocationsLock.withLock { usernameUsernameUnderlyingReceivedInvocations } }
-        set { usernameUsernameReceivedInvocationsLock.withLock { usernameUsernameUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let usernameUsernameReturnValueLock = NSLock()
-    open var usernameUsernameUnderlyingReturnValue: ClientBuilder!
-    open var usernameUsernameReturnValue: ClientBuilder! {
-        get { usernameUsernameReturnValueLock.withLock { usernameUsernameUnderlyingReturnValue } }
-        set { usernameUsernameReturnValueLock.withLock { usernameUsernameUnderlyingReturnValue = newValue } }
-    }
-    open var usernameUsernameClosure: ((String) -> ClientBuilder)?
-
-    open override func username(username: String) -> ClientBuilder {
-        usernameUsernameCallsCountLock.withLock { usernameUsernameUnderlyingCallsCount += 1 }
-        usernameUsernameReceivedUsername = username
-        usernameUsernameReceivedInvocationsLock.withLock { usernameUsernameUnderlyingReceivedInvocations.append(username) }
-        if let usernameUsernameClosure = usernameUsernameClosure {
-            return usernameUsernameClosure(username)
-        } else {
-            return usernameUsernameReturnValue
         }
     }
 
@@ -10997,6 +11189,53 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return try await loadOrFetchEventEventIdClosure(eventId)
         } else {
             return loadOrFetchEventEventIdReturnValue
+        }
+    }
+
+    //MARK: - loadOrFetchEventWithRelations
+
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterThrowableError: Error?
+    private let loadOrFetchEventWithRelationsEventIdRelationFilterCallsCountLock = NSLock()
+    private var loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingCallsCount = 0
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterCallsCount: Int {
+        get { loadOrFetchEventWithRelationsEventIdRelationFilterCallsCountLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingCallsCount } }
+        set { loadOrFetchEventWithRelationsEventIdRelationFilterCallsCountLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingCallsCount = newValue } }
+    }
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterCalled: Bool {
+        return loadOrFetchEventWithRelationsEventIdRelationFilterCallsCount > 0
+    }
+    private let loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArgumentsLock = NSLock()
+    private var loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedArguments: (eventId: String, relationFilter: [RelationType]?)?
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArguments: (eventId: String, relationFilter: [RelationType]?)? {
+        get { loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArgumentsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedArguments } }
+        set { loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArgumentsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedArguments = newValue } }
+    }
+    private let loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocationsLock = NSLock()
+    private var loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedInvocations: [(eventId: String, relationFilter: [RelationType]?)] = []
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocations: [(eventId: String, relationFilter: [RelationType]?)] {
+        get { loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocationsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedInvocations } }
+        set { loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocationsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let loadOrFetchEventWithRelationsEventIdRelationFilterReturnValueLock = NSLock()
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReturnValue: EventWithRelations!
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterReturnValue: EventWithRelations! {
+        get { loadOrFetchEventWithRelationsEventIdRelationFilterReturnValueLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReturnValue } }
+        set { loadOrFetchEventWithRelationsEventIdRelationFilterReturnValueLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReturnValue = newValue } }
+    }
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterClosure: ((String, [RelationType]?) async throws -> EventWithRelations)?
+
+    open override func loadOrFetchEventWithRelations(eventId: String, relationFilter: [RelationType]?) async throws -> EventWithRelations {
+        if let error = loadOrFetchEventWithRelationsEventIdRelationFilterThrowableError {
+            throw error
+        }
+        loadOrFetchEventWithRelationsEventIdRelationFilterCallsCountLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingCallsCount += 1 }
+        loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArguments = (eventId: eventId, relationFilter: relationFilter)
+        loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocationsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedInvocations.append((eventId: eventId, relationFilter: relationFilter)) }
+        if let loadOrFetchEventWithRelationsEventIdRelationFilterClosure = loadOrFetchEventWithRelationsEventIdRelationFilterClosure {
+            return try await loadOrFetchEventWithRelationsEventIdRelationFilterClosure(eventId, relationFilter)
+        } else {
+            return loadOrFetchEventWithRelationsEventIdRelationFilterReturnValue
         }
     }
 
