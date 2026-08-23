@@ -4103,3 +4103,50 @@ empty state" for 0.5s before "Showing rooms" (`loaded(maximumNumberOfRooms:
 nil)` at +0.36s while the summaries were still building, `hasRooms` false).
 Our zero-count guard trusts the count only while no rooms are published,
 which is exactly this window; open nit, not a wedge.
+
+## Round 47: viewer header lost to QuickLook's filename, galleries browsed inline, launch hitch trace
+
+**Header showing filenames (EXI `383b7c761`, build 142).** The media viewer's
+sender/timestamp header is installed as the navigation item's `titleView`,
+but only from `viewWillLayoutSubviews`; QuickLook replaces its navigation
+item on the same refreshes that re-install its list button (file loaded,
+reloads, placeholder swaps), after which its own title (the item's
+filename, `previewItemTitle`) showed until the next layout pass. Not a
+merge change (the merge did not touch FilePreviewScreen); our reload-heavy
+rounds (36+) made the swaps frequent. Fix: reapply the title view from
+`updateBarButtons`, which already runs on exactly those swaps (KVO +
+100ms timer fallback). "Loading…" over a thumbnail placeholder is kept
+(the header text, not the QuickLook title).
+
+**Galleries browsed inline (EXI `01f22400b`, build 143).** Tapping a tile in a
+gallery message opened a viewer scoped to that gallery (paging trapped in
+the subset). The tap already builds the room's media timeline, so galleries
+now go through the timeline-spanning data source: `initialGalleryIndex`
+picks the tapped attachment (whole gallery as the not-yet-loaded fallback),
+swiping past either end continues to the adjacent media events, and the
+header reads e.g. "Alice (2 of 3)" for gallery attachments (reusing the
+pinned-banner "%1$@ of %2$@" string). The gallery-only data source / view
+model inits and `displayGalleryPreview` are gone (-66 lines). Data source
+tests adapted to the fallback path but NOT RUN: the local xcframework has
+only the device slice; rebuild both slices before the next sim test pass.
+
+**Launch after the merge (asked: "has launch time regressed? the launch
+animation stutters more").** `LaunchMetrics` cold launches: 868/1156ms
+(the 1156 = dyld-cold first launch after install) vs 693-935ms pre-merge
+cold launches: time-to-rooms NOT regressed. Instruments Animation Hitches
+trace of a cold launch of build 141 on the phone (`xcrun xctrace record
+--template 'Animation Hitches' --device <UDID> --time-limit 12s --launch --
+io.element.elementx`; export tables `hitches`, `potential-hangs`,
+`life-cycle-period` via `xctrace export --xpath`): 13 hitches in the 1.2s
+after the first frame: one 183ms "Potentially expensive app update" + 194ms
+main-thread "Brief Unresponsiveness" at t+1.87s = the HomeScreen's first
+render (53 rooms "Showing rooms" at t+1.90s; upstream's tab bar + Spaces
+screen are built in the same instant), then 17-67ms hitches at t+2.1-2.9s =
+the 64/100-room summary republishes during sync catch-up (SummaryBuild
+ffi_total 93-436ms off-main, list diffs applied on main). Whether that is
+worse than pre-merge needs the same trace on the pre-merge pair (EXI
+`0d32214de`-era x SDK `2ed0284a5` xcframework, ~45 min of builds): offered,
+not run. Gotchas: `xctrace record` keeps writing for minutes after "ending
+recording" (export before `Output file saved` = "Document Missing Template
+Error"); `time-sample` callstacks export as raw PCs (needs dSYM + slide to
+symbolicate).
