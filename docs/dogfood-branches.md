@@ -3933,3 +3933,71 @@ Build 129 strips the DEMO 2s delay.
 
 Remaining nit: the "loading more" spinner lingers a fraction of a second
 after swiping away from the placeholder page.
+
+## Round 44: the viewer skipped ~20 media on "Loading more", and the redecryptor lag behind it
+
+Swiping back into history from the viewer sometimes landed ~20 items too
+far (Jan 2026 straight to Dec 2024), the skipped media appearing behind the
+user a while later. Builds 131-138, SDK `b80c5ff7a`..`2ed0284a5`.
+
+How it skipped: the media timeline is the msgtype-filtered event cache
+view, and /messages pages fetched ahead of their room keys are all UTDs,
+invisible to a msgtype filter. A page of them looked like "no media here",
+the viewer asked for the next page, and so on until the next *decrypted*
+media, which it stepped onto; the keys then arrived from backup, the ~20
+media between decrypted, and inserted themselves behind the current page.
+Build 131's gap-aware step (`f9681ba7e`, don't step while a gap remains
+between the edge and the target) never applied, the timeline-shape log
+(`71ef1e0bd`, `M`/`G`/`U`/`P`/`S`/`D`/`o` per item, oldest first) showed the
+gap only ever sits beyond the oldest item. First SDK fix, `b80c5ff7a`:
+the room-key broadcast stream had capacity 10 and the ~117 single-session
+backup imports of one swipe-back overflowed it, so the redecryptor hit
+`Lagging`, swept all 6170 rooms' persisted UTDs (~11s) inline in its loop,
+lagged again, swept again: the in-between media decrypted ~14s late.
+Capacity 1024, the sweep off-loop and coalesced, faster batches.
+
+The real fix (the user's idea: resolve the UTDs nearest first rather than
+race the decryption): make the UTDs visible to the viewer. SDK
+`0e0579380`, the filtered view's `matches()` accepts undecryptable events
+("maybe media once the key arrives"; the decryption already replaces them
+in place if media, removes them otherwise; test added), and `59f270858`,
+the FFI `OnlyMessage` filter lets `m.room.encrypted` through (it was the
+second filter hiding them, build 134 skipped exactly as before). EXI
+`275671ca1`: a UTD of unknown cause between the current item and the next
+older media counts like a gap for the step rule; while any such UTD sits
+older than the oldest media, back-pagination is held (the nearest page's
+keys get requested first, ~20 GETs instead of 117); final causes (withheld,
+before-join, insecure device) are ignored at once, `.unknown` is given up
+on after 5s (`pendingUTDWait`, timer re-evaluates the shape). `0992805e7`:
+the hold was only re-evaluated on a pagination state change or a swipe, so
+a text-only UTD page left "Loading more…" spinning until the user moved
+(25s, 11s stalls in the build-135 log); resolved UTDs now re-trigger
+pagination.
+
+Then "largely works but very slow to backpaginate" (build 136, cleared
+room cache, chatty room): ~1s per 20-event page, plus 5-7s stalls with the
+give-ups stepping early ("a little out of order around Dec 2024"). The log:
+keys arrived 0.19s (median) after each UTD was first seen, EXI applied
+diffs in sub-ms, but the redecryptor itself fell behind: for every key
+received it refreshes the encryption info of all already-decrypted events
+of that session, one crypto-store lookup per event although the info only
+depends on (session, sender); sessions of ~100 messages × ~300 backup
+downloads = seconds. SDK `2ed0284a5`: one lookup per session. EXI
+`0d32214de`: media timelines page 50 events (a text-heavy stretch is mostly
+round trips). Build 138: no give-ups, ~1 page/s.
+
+Remaining per-page cost, measured: a 50-UTD page resolves in ~2-3s because
+the redecryptor replaces events one at a time (one store txn, one diff, one
+EXI timeline rebuild each, 10-30ms per event: the `TODO` at
+`redecryptor.rs:515`). Batching the replacements per key batch is the next
+win. Upstream candidates: `0e0579380`, `59f270858`, `b80c5ff7a`,
+`2ed0284a5`.
+
+Asked: background auto-pagination to pre-index a room for media browsing
+and search. Assessment: a low-priority "index to room start" request kind
+on the `BackPaginationQueue` is small (paced, capped, resumable via the
+stored gap tokens); encrypted rooms want `download_room_keys_for_room`
+first (one GET for all the room's keys); local search would be a new FTS
+index in the event cache store (same shape as the msgtype index); per-room
+opt-in on wifi/idle, not all 6000 rooms. Suggested: an explicit "Load full
+history" room action first.
