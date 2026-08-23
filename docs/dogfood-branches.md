@@ -4592,3 +4592,22 @@ built pages stayed stale until the viewer was reopened (17:33:03 showed the
 now sticky (`pendingRestRebuild` + `rebuildWhenResting()`): re-armed for
 wherever the next landing is, from the index observer, until a rest lets
 the covered reload run.
+
+**Round 59 (2026-08-23): builds 170-171.** Play badge: baked into the poster
+it was rasterised at the thumbnail's pixel density (soft) with the circle
+stroke clipped at the render bounds; now the timeline's `VideoPlayBadge` as
+a vector overlay hosted by the controller (in `DownloadIndicatorView`) while
+the current page is a video poster (170). Select text: the invisible
+newline + transparent attachment appended for the timestamp overlay was
+selected as a blank trailing line; selection and Select All stop at the
+content (`MessageTextView.contentRange`), the edit menu is presented at once
+(`UIEditMenuInteraction`). Reaction picker: the double tap → sheet path is
+~80 ms in the log (second touch 17:25:33.295Z, sheet set 33.372Z); the slide
+animation was the visible wait, so the picker presents unanimated (171).
+Event cache size (phone DB copy): 116,224 events, 335 MB of content, avg
+2.9 KB/row, 99,923 rows > 1 KB; with 4 KB pages anything over ~1 KB spills to
+overflow pages, so most rows cost ≥ 2 pages (≥ 8 KB): the 875 MB file is
+mostly page waste (109 MB freelist on top). Levers: bigger page size
+(16 KB → overflow threshold ~4 KB, applied by the Manage-storage VACUUM),
+zstd before the store cipher in `encode_value` (JSON/msgpack 3-5x), and a
+retention policy (none today).
