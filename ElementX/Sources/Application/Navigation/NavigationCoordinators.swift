@@ -225,6 +225,12 @@ import SwiftUI
             fatalError("Cannot use the same coordinator more than once")
         }
         
+        // Transaction.disablesAnimations doesn't reach UIKit's sheet presentation,
+        // so globally disable animations; re-enabled in the sheet content's onAppear.
+        if !animated {
+            UIView.setAnimationsEnabled(false)
+        }
+        
         var transaction = Transaction()
         transaction.disablesAnimations = !animated
         
@@ -355,6 +361,11 @@ private struct NavigationSplitCoordinatorView: View {
         .sheet(item: $navigationSplitCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
                 .id(module.id)
+                .onAppear {
+                    if !UIView.areAnimationsEnabled {
+                        UIView.setAnimationsEnabled(true)
+                    }
+                }
         }
         .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
@@ -609,7 +620,7 @@ private struct NavigationSplitCoordinatorView: View {
     ///   - dismissalCallback: called when the sheet has been dismissed, programatically or otherwise
     func setSheetCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
         if let navigationSplitCoordinator {
-            navigationSplitCoordinator.setSheetCoordinator(coordinator, dismissalCallback: dismissalCallback)
+            navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: animated, dismissalCallback: dismissalCallback)
             return
         }
         
@@ -620,6 +631,12 @@ private struct NavigationSplitCoordinatorView: View {
         
         if sheetModule?.coordinator === coordinator {
             fatalError("Cannot use the same coordinator more than once")
+        }
+        
+        // Transaction.disablesAnimations doesn't reach UIKit's sheet presentation,
+        // so globally disable animations; re-enabled in the sheet content's onAppear.
+        if !animated {
+            UIView.setAnimationsEnabled(false)
         }
         
         var transaction = Transaction()
@@ -714,6 +731,11 @@ private struct NavigationStackCoordinatorView: View {
         .sheet(item: $navigationStackCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
                 .id(module.id)
+                .onAppear {
+                    if !UIView.areAnimationsEnabled {
+                        UIView.setAnimationsEnabled(true)
+                    }
+                }
         }
         .fullScreenCover(item: $navigationStackCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
