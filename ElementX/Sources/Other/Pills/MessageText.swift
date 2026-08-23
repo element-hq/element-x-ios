@@ -55,6 +55,33 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         selectedRange = contentRange
     }
     
+    /// The spacer is never selectable (and so never copyable): any selection - dragged
+    /// handles included - is clamped to the real content. Both setters are overridden as
+    /// interactive selection goes through `selectedTextRange` and programmatic mutations
+    /// through `selectedRange`, and neither reliably funnels into the other.
+    override var selectedRange: NSRange {
+        get { super.selectedRange }
+        set {
+            let limit = contentRange.length
+            let location = min(newValue.location, limit)
+            super.selectedRange = NSRange(location: location, length: min(newValue.length, limit - location))
+        }
+    }
+    
+    override var selectedTextRange: UITextRange? {
+        get { super.selectedTextRange }
+        set {
+            guard let newValue,
+                  let contentEnd = position(from: beginningOfDocument, offset: contentRange.length),
+                  offset(from: contentEnd, to: newValue.end) > 0 else {
+                super.selectedTextRange = newValue
+                return
+            }
+            let start = offset(from: newValue.start, to: contentEnd) > 0 ? newValue.start : contentEnd
+            super.selectedTextRange = textRange(from: start, to: contentEnd) ?? newValue
+        }
+    }
+    
     func endTextSelection() {
         guard isSelectingText else { return }
         activeTextSelection = nil
