@@ -81,6 +81,18 @@ extension View {
     }
 }
 
+/// Timing diagnostics for the double-tap reaction picker: when the double tap was
+/// recognised, so downstream stages can log their latency relative to it.
+@MainActor
+enum DoubleTapTiming {
+    static var recognised: Date?
+
+    static func log(_ stage: String) {
+        guard let recognised else { return }
+        MXLog.info("Reaction picker timing: \(stage) +\(Int(Date().timeIntervalSince(recognised) * 1000))ms after double tap")
+    }
+}
+
 private struct DoubleTapGestureRepresentable: UIGestureRecognizerRepresentable {
     let isEnabled: Bool
     let action: () -> Void
@@ -103,6 +115,7 @@ private struct DoubleTapGestureRepresentable: UIGestureRecognizerRepresentable {
     
     func handleUIGestureRecognizerAction(_ recognizer: UITapGestureRecognizer, context: Context) {
         guard recognizer.state == .ended else { return }
+        DoubleTapTiming.recognised = Date()
         action()
     }
     

@@ -1243,6 +1243,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         // Straight up, no slide: a double tap on a bubble wants the picker at once.
+        DoubleTapTiming.log("presenting sheet")
         navigationStackCoordinator.setSheetCoordinator(coordinator, animated: false) { [weak self] in
             self?.stateMachine.tryEvent(.dismissEmojiPicker)
         }

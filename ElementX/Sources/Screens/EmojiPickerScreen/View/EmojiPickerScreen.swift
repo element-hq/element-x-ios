@@ -61,6 +61,14 @@ struct EmojiPickerScreen: View {
         .onChange(of: searchString) {
             context.send(viewAction: .search(searchString: searchString))
         }
+        .onAppear {
+            DoubleTapTiming.log("sheet appeared")
+            DispatchQueue.main.async {
+                // One runloop later = the presentation transaction has committed and drawn.
+                DoubleTapTiming.log("first frame after appear")
+                DoubleTapTiming.recognised = nil
+            }
+        }
     }
     
     private func accessibilityLabel(for emoji: String) -> String {
