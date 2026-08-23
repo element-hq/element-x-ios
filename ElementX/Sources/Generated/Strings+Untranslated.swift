@@ -74,6 +74,8 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenManageStorageViewLogs: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_view_logs") }
   /// If your message keys aren’t backed up, you may not be able to read older encrypted messages after clearing them.
   internal static var screenManageStorageWarningMessageKeys: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_message_keys") }
+  /// The room's cached media is cleared with its messages: once the messages are gone, the media can no longer be told apart from other rooms'.
+  internal static var screenManageStorageWarningMessagesMedia: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_messages_media") }
   /// The app will restart to clear them.
   internal static var screenManageStorageWarningRestart: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_restart") }
   /// Cached room state and cached messages are cleared together.

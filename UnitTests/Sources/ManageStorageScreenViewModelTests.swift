@@ -111,6 +111,25 @@ struct ManageStorageScreenViewModelTests {
     }
 
     @Test
+    func clearingRoomMessagesClearsItsMediaFirst() async throws {
+        try await waitForLoad()
+        context.send(viewAction: .toggleRoom("!big:example.org"))
+        
+        // When clearing only the room's messages.
+        var order = [String]()
+        clientProxy.clearMediaCacheRoomIDsNotAccessedForClosure = { _, _ in order.append("media"); return .success(()) }
+        clientProxy.clearRoomCachesRoomIDsClosure = { _ in order.append("messages"); return .success(()) }
+        context.send(viewAction: .requestClear(.messages))
+        #expect(context.viewState.bindings.clearRequest?.message.contains(UntranslatedL10n.screenManageStorageWarningMessagesMedia) == true)
+        context.send(viewAction: .confirmClear)
+        try await waitForLoad()
+        
+        // Then its media is cleared too, and before the messages (the media is found through them).
+        #expect(order == ["media", "messages"])
+        #expect(clientProxy.clearMediaCacheRoomIDsNotAccessedForReceivedArguments?.roomIDs == ["!big:example.org"])
+    }
+    
+    @Test
     func clearingEverythingRestarts() async throws {
         try await waitForLoad()
 

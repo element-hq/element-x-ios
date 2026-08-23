@@ -116,6 +116,9 @@ struct ManageStorageClearRequest: Identifiable, Equatable, AlertProtocol {
         }
         if cache == .roomState || cache == .messages {
             lines.append(UntranslatedL10n.screenManageStorageWarningRoomState)
+            if !restartsApp {
+                lines.append(UntranslatedL10n.screenManageStorageWarningMessagesMedia)
+            }
         }
         if restartsApp {
             lines.append(UntranslatedL10n.screenManageStorageWarningRestart)

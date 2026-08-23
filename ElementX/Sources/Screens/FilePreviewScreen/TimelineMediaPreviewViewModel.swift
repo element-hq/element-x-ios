@@ -279,7 +279,28 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         for neighbourIndex in neighbourIndices where items.indices.contains(neighbourIndex) {
             preload(items[neighbourIndex])
         }
+        
+        // QuickLook builds the pages either side now, from whatever URL each item has: on a cold
+        // cache (a flushed media store, fast swiping) that's nothing, and a page built blank or
+        // "unavailable" only heals on the next rest. Give those pages the item's thumbnail to build
+        // from instead; the media swaps in when it lands.
+        for neighbourIndex in (index - Self.placeholderReach...index + Self.placeholderReach) where neighbourIndex != index && items.indices.contains(neighbourIndex) {
+            let neighbour = items[neighbourIndex]
+            guard neighbour.fileHandle == nil, neighbour.placeholderURL == nil, neighbour.kind != .file, neighbour.thumbnailMediaSource != nil,
+                  !placeholderJobs.contains(neighbour.id) else { continue }
+            placeholderJobs.insert(neighbour.id)
+            Task { [weak self] in
+                await self?.preparePlaceholder(for: neighbour)
+                self?.placeholderJobs.remove(neighbour.id)
+            }
+        }
     }
+    
+    /// How many items either side of the current one get a thumbnail placeholder ahead of their
+    /// media: QuickLook builds ±2 pages at rest, one more covers a swipe in flight.
+    private static let placeholderReach = 3
+    /// Placeholder jobs in flight, so a neighbour isn't rendered twice while swiping around it.
+    private var placeholderJobs = Set<MediaPreviewItemID>()
     
     /// Fetches an item's file into the cache ahead of it being displayed (small files only).
     private func preload(_ item: TimelineMediaPreviewItem.Media) {

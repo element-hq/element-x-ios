@@ -117,9 +117,18 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
                                                               persistent: true))
         defer { userIndicatorController.retractIndicatorWithId(Self.clearingIndicatorID) }
 
-        let caches = request.cache.map { [$0] } ?? state.activeCaches
+        var caches = request.cache.map { [$0] } ?? state.activeCaches
         // The rooms whose caches are cleared: the selection, or all.
         let roomIDs: [String]? = state.isFiltered ? Array(state.selectedRoomIDs) : nil
+        
+        // A room's media is found through its stored messages: once those are cleared the media
+        // can't be attributed to the room any more (clearing it afterwards found nothing, every
+        // time). So media goes BEFORE messages/state, and clearing a room's messages clears its
+        // media too, as clearing its messages clears its state.
+        if roomIDs != nil, caches.contains(where: { $0 == .messages || $0 == .roomState }), !caches.contains(.media) {
+            caches.append(.media)
+        }
+        caches.sort { lhs, rhs in (lhs == .media ? 0 : 1) < (rhs == .media ? 0 : 1) }
 
         var failed = false
         var restartsApp = false

@@ -4437,3 +4437,45 @@ under a clean cross-process lock) + FFI; `ManageStorageScreenViewModel` calls
 them for the stores it cleared, under the same "please wait" (a big store
 takes a while; the version-bump VACUUM of all three took minutes, which is why
 `optimizeStores()` left the launch path in round 46).
+
+**Round 53 findings from the phone's event cache DB (copied via devicectl,
+875 MB).** 116,224 events in 5,741 rooms: 23,178 decrypted `m.room.message`
+rows, 85,838 rows stored ENCRYPTED (UTD at write time; the biggest rooms are
+75-95 % encrypted, e.g. 1616 events / 1511 encrypted / 1 media URI). The
+`event_media` index is complete for what the store can see (`media_indexed =
+0` count 0) but holds only 915 URIs over 205 rooms: a per-room media clear
+can only remove media whose events are decrypted IN THE STORE, and in the
+test rooms most aren't (lost keys for the bulk, and what does decrypt on
+display isn't what the clear sees), hence `num_uris=0`. Whole-cache media
+clear (no room selected) has no URI filter and works. Size: 213,670 × 4 KB
+pages; 26,646 (109 MB) free-list from past clears (the 159 VACUUM recovers
+them); `events.content` is 336 MB (avg 2.9 KB, a third of it undecrypted
+ciphertext plus the store's value encryption); the rest indexes/chunk tables.
+No retention policy exists for the event cache. Fix direction for the
+per-room media clear (not done): have `clear_media_cache(room_ids)` try
+decrypting the room's stored UTDs with the current keys to collect URIs, and
+persist what decrypts (heals the store too).
+
+**Round 53 diag (build 160 = EXI 4049cfeae x SDK 02ec3cdc0).** User's point:
+no stored UTD needs decrypting to flush media, every cached media came from an
+event the app decrypted, so the gap is write-back. Every redecryptor path
+does `save_events` (`on_resolved_utds`), so the 85k encrypted rows should be
+the genuinely undecryptable ones and the viewed media should be indexed;
+`num_uris=0` for the cleared rooms 21 times says otherwise for them. SDK
+`02ec3cdc0` logs, per requested room in `media_uris_by_room`: stored rows,
+rows still encrypted, indexed media URIs, index room count (DEBUG, strip
+pre-upstream). Repro: Manage storage, select the test room, clear Media,
+pull the log. Whole-cache media clear + vacuum (159) remains the reliable
+flush meanwhile.
+
+**Round 54 (2026-08-23): viewer collapse on a cold cache (build 161).** After
+the whole-cache media flush the user swiped through ~10 pages in seconds and
+got "copy to preview"/blank pages en masse. Log: the files landed 5-30 s after
+the pages were built; every unavailable page the diag caught had its file
+present (placeholder or media, right sizes) and the forced reload ran, so the
+files are fine. The remaining pages were built blank/unavailable while
+swiping and heal only on the next rest, once per rest. Fix: the neighbours
+QuickLook builds (±3) now get their thumbnail placeholder prepared alongside
+the preload (`placeholderReach`, de-duplicated via `placeholderJobs`), so a
+cold cache builds poster pages that swap to the media on arrival instead of
+blank ones.
