@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import SwiftUI
 import UIKit
 
 typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaPreviewViewState, TimelineMediaPreviewViewAction>
@@ -495,9 +496,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             }
             return
         }
-        let playIcon = item.kind == .video
+        let playBadge = item.kind == .video ? Self.renderPlayBadge(forPosterOf: size) : nil
         let written = await Task.detached(priority: .userInitiated) {
-            Self.writePlaceholder(thumbnail, size: size, playIcon: playIcon, to: url, in: directory)
+            Self.writePlaceholder(thumbnail, size: size, playBadge: playBadge, to: url, in: directory)
         }.value
         guard written, item.fileHandle == nil, item.placeholderURL == nil else { return }
         item.placeholderURL = url
@@ -552,9 +553,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             let placeholder = Task { [weak self] () -> (URL, CGSize)? in
                 guard let self, let (thumbnail, size, url) = await placeholderJob(for: item) else { return nil }
                 let directory = placeholderDirectory
-                let playIcon = item.kind == .video
+                let playBadge = item.kind == .video ? Self.renderPlayBadge(forPosterOf: size) : nil
                 let written = await Task.detached(priority: .userInitiated) {
-                    Self.writePlaceholder(thumbnail, size: size, playIcon: playIcon, to: url, in: directory)
+                    Self.writePlaceholder(thumbnail, size: size, playBadge: playBadge, to: url, in: directory)
                 }.value
                 return written ? (url, size) : nil
             }
@@ -604,25 +605,27 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         return (thumbnail, size, placeholderDirectory.appendingPathComponent("\(UUID().uuidString).jpg"))
     }
     
-    private nonisolated static func writePlaceholder(_ thumbnail: UIImage, size: CGSize, playIcon: Bool, to url: URL, in directory: URL) -> Bool {
+    /// The timeline's play badge rendered at the pixel density a poster of this size is displayed
+    /// at (aspect-fit to the screen), so it comes out the same size and look as in the timeline.
+    private static func renderPlayBadge(forPosterOf size: CGSize) -> UIImage? {
+        let screen = UIScreen.main.bounds.size
+        let pointsPerPixel = min(screen.width / size.width, screen.height / size.height)
+        let renderer = ImageRenderer(content: VideoPlayBadge().environment(\.colorScheme, .dark))
+        renderer.scale = 1 / pointsPerPixel
+        return renderer.uiImage
+    }
+    
+    private nonisolated static func writePlaceholder(_ thumbnail: UIImage, size: CGSize, playBadge: UIImage?, to url: URL, in directory: URL) -> Bool {
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
-        let data = UIGraphicsImageRenderer(size: size, format: format).jpegData(withCompressionQuality: 0.8) { context in
+        let data = UIGraphicsImageRenderer(size: size, format: format).jpegData(withCompressionQuality: 0.8) { _ in
             thumbnail.draw(in: CGRect(origin: .zero, size: size))
             // A video's poster gets the play badge the timeline draws on its thumbnail, so the page
             // reads as a video while it downloads.
-            if playIcon {
-                let diameter = min(size.width, size.height) * 0.2
-                let circle = CGRect(x: (size.width - diameter) / 2, y: (size.height - diameter) / 2, width: diameter, height: diameter)
-                UIColor.black.withAlphaComponent(0.5).setFill()
-                context.cgContext.fillEllipse(in: circle)
-                let symbol = UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: diameter * 0.45, weight: .bold))?
-                    .withTintColor(.white, renderingMode: .alwaysOriginal)
-                if let symbol {
-                    let symbolRect = CGRect(x: circle.midX - symbol.size.width / 2 + diameter * 0.03, y: circle.midY - symbol.size.height / 2,
-                                            width: symbol.size.width, height: symbol.size.height)
-                    symbol.draw(in: symbolRect)
-                }
+            if let playBadge {
+                let badgeSize = CGSize(width: playBadge.size.width * playBadge.scale, height: playBadge.size.height * playBadge.scale)
+                playBadge.draw(in: CGRect(x: (size.width - badgeSize.width) / 2, y: (size.height - badgeSize.height) / 2,
+                                          width: badgeSize.width, height: badgeSize.height))
             }
         }
         do {
