@@ -130,17 +130,6 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         return can
     }
     
-    /// Outside "Select text" the text view's own recognisers never see a second tap: its
-    /// internal double-tap word selection would otherwise flash a selection (of the timestamp
-    /// spacer, when tapped past the text) under the reaction picker before the delegate clears it.
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        if touch.tapCount > 1, !isSelectingText {
-            MXLog.info("MessageTextView: blocking second tap for \(type(of: gestureRecognizer)) '\(gestureRecognizer.name ?? "-")'")
-            return false
-        }
-        return true
-    }
-    
     /// This prevents the magnifying glass from showing up, and (while selecting) the long-press
     /// drag that lifts a floating copy of the text and never dismisses.
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
