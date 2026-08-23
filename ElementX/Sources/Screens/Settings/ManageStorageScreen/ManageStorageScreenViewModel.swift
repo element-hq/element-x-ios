@@ -7,6 +7,7 @@
 
 import AsyncAlgorithms
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias ManageStorageScreenViewModelType = StateStoreViewModelV2<ManageStorageScreenViewState, ManageStorageScreenViewAction>
@@ -18,6 +19,7 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
 
     private var roomsTask: Task<Void, Never>?
     private var searchTask: Task<Void, Never>?
+    private var refreshTask: Task<Void, Never>?
 
     private let actionsSubject: PassthroughSubject<ManageStorageScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ManageStorageScreenViewModelAction, Never> {
@@ -41,11 +43,19 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         }
 
         Task { await reload() }
+
+        refreshTask = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(3))
+                await self?.refreshQuietly()
+            }
+        }
     }
 
     isolated deinit {
         roomsTask?.cancel()
         searchTask?.cancel()
+        refreshTask?.cancel()
     }
 
     override func process(viewAction: ManageStorageScreenViewAction) {
@@ -93,11 +103,7 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
 
         switch await clientProxy.storeSizes() {
         case .success(let sizes):
-            state.totalBytes = [.messageKeys: sizes.cryptoStore ?? 0,
-                                .roomState: sizes.stateStore ?? 0,
-                                .messages: sizes.eventCacheStore ?? 0,
-                                .media: sizes.mediaStore ?? 0,
-                                .logs: logFiles().reduce(0) { $0 + $1.size }]
+            applyStoreSizes(sizes)
         case .failure(let error):
             MXLog.error("Failed measuring the store sizes: \(error)")
             state.bindings.alertInfo = .init(id: .failure, title: L10n.errorUnknown, message: String(describing: error))
@@ -110,20 +116,46 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
             guard !Task.isCancelled, let self else { return }
             switch result {
             case .success(let rooms):
-                // A selected room cleared to nothing is no longer reported: keep it listed (empty)
-                // rather than dropping the selection out from under the user.
-                let reportedIDs = Set(rooms.map(\.id))
-                let emptiedSelection = state.rooms
-                    .filter { state.selectedRoomIDs.contains($0.id) && !reportedIDs.contains($0.id) }
-                    .map { StorageUsageRoom(id: $0.id, name: $0.name, lastActivity: $0.lastActivity, bytes: [:]) }
-                state.rooms = rooms + emptiedSelection
-                updateListedRooms()
+                apply(reportedRooms: rooms)
             case .failure(let error):
                 MXLog.error("Failed measuring the rooms' storage usage: \(error)")
                 state.bindings.alertInfo = .init(id: .failure, title: L10n.errorUnknown, message: String(describing: error))
             }
             state.isLoadingRooms = false
         }
+    }
+
+    /// A quiet re-measurement: no loading states, no error alerts. Run on a timer while
+    /// the screen is up, because right after a full clear the app re-syncs for a while
+    /// and the sizes on show would otherwise only be true for the moment the screen
+    /// opened. Sequential awaits give natural backpressure: a slow measurement just
+    /// delays the next tick.
+    private func refreshQuietly() async {
+        if case .success(let sizes) = await clientProxy.storeSizes() {
+            applyStoreSizes(sizes)
+        }
+        if case .success(let rooms) = await clientProxy.storageUsageByRoom() {
+            apply(reportedRooms: rooms)
+        }
+    }
+
+    private func applyStoreSizes(_ sizes: StoreSizes) {
+        state.totalBytes = [.messageKeys: sizes.cryptoStore ?? 0,
+                            .roomState: sizes.stateStore ?? 0,
+                            .messages: sizes.eventCacheStore ?? 0,
+                            .media: sizes.mediaStore ?? 0,
+                            .logs: logFiles().reduce(0) { $0 + $1.size }]
+    }
+
+    private func apply(reportedRooms rooms: [StorageUsageRoom]) {
+        // A selected room cleared to nothing is no longer reported: keep it listed (empty)
+        // rather than dropping the selection out from under the user.
+        let reportedIDs = Set(rooms.map(\.id))
+        let emptiedSelection = state.rooms
+            .filter { state.selectedRoomIDs.contains($0.id) && !reportedIDs.contains($0.id) }
+            .map { StorageUsageRoom(id: $0.id, name: $0.name, lastActivity: $0.lastActivity, bytes: [:]) }
+        state.rooms = rooms + emptiedSelection
+        updateListedRooms()
     }
 
     private static let clearingIndicatorID = "\(ManageStorageScreenViewModel.self)-Clearing"
