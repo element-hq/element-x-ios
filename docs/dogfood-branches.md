@@ -4251,3 +4251,8 @@ the tests' single-load call counts; off in the test setup. (4) DS test written
 for the first inline-gallery commit expected non-previewable gallery items
 kept; the fallback has filtered them like the timeline since `b33630f3e`.
 26/26 green. Build 149 = the dedupe x SDK `4ea0801f1`.
+
+**Round 48 bar restyle (build 150).** Both bars are now `MediaProgressBar`: a
+2pt strip flush with the bottom edge of the media (bubble thumbnail / gallery
+grid / viewer page above the caption), transparent track, accent-green
+(`iconAccentPrimary`) fill growing from the leading edge, no padding.

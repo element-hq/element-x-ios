@@ -893,14 +893,10 @@ private struct CaptionView: View {
     var body: some View {
         VStack(spacing: 0) {
             if let mediaItem = currentItem.mediaItem {
-                if mediaItem.fileHandle == nil, let progress = mediaItem.downloadProgress {
-                    // The download's progress, along the bottom of the page (the placeholder/blank
+                if mediaItem.fileHandle == nil {
+                    // The download's progress, flush with the bottom of the page (the placeholder/blank
                     // page above it is QuickLook's; the header says it's loading).
-                    ProgressView(value: progress)
-                        .tint(.compound.iconPrimary)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .accessibilityLabel(L10n.commonLoading)
+                    MediaProgressBar(progress: mediaItem.downloadProgress)
                 }
                 if mediaItem.hasCaption {
                     CaptionScrollView(mediaItem: mediaItem)

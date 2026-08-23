@@ -656,6 +656,13 @@ extension PreviewTests {
     }
 
     @Test
+    func mediaProgressBar() async throws {
+        for (index, preview) in MediaProgressBar_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func mediaUploadPreviewScreen() async throws {
         for (index, preview) in MediaUploadPreviewScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -1407,13 +1414,6 @@ extension PreviewTests {
     @Test
     func timelineMediaPreviewRedactConfirmationView() async throws {
         for (index, preview) in TimelineMediaPreviewRedactConfirmationView_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
-    func timelineMediaUploadProgressBar() async throws {
-        for (index, preview) in TimelineMediaUploadProgressBar_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

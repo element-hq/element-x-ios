@@ -34,7 +34,7 @@ struct GalleryRoomTimelineView: View {
                                     mediaProvider: context?.mediaProvider,
                                     contentScannerService: context?.contentScannerService,
                                     onItemTap: tap)
-                        .overlay(alignment: .bottom) { TimelineMediaUploadProgressBar(progress: timelineItem.properties.uploadProgress) }
+                        .overlay(alignment: .bottom) { MediaProgressBar(progress: timelineItem.properties.uploadProgress) }
                 }
                 
                 if hasMediaCaption {
