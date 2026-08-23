@@ -531,6 +531,14 @@ class TimelineMediaPreviewController: QLPreviewController {
     }
     
     /// Whether the page on display is QuickLook's "content unavailable" placeholder.
+    /// DIAG: existence and size of the file behind a preview item (strip pre-upstream).
+    private static func fileDiagnostics(_ url: URL?) -> String {
+        guard let url else { return "no URL" }
+        let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
+        let size = (attributes?[.size] as? NSNumber)?.intValue
+        return "\(url.lastPathComponent) \(size.map { "\($0) bytes" } ?? "MISSING")"
+    }
+    
     private var isCurrentPageUnavailable: Bool {
         let center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
         return view.firstDescendant { subview in
@@ -705,7 +713,12 @@ class TimelineMediaPreviewController: QLPreviewController {
                     upgradePlaceholderPage(itemID: itemID)
                     return
                 }
-                guard isCurrentPageUnavailable, force || !didRefreshOnArrival else { return }
+                guard isCurrentPageUnavailable else { return }
+                // DIAG: "copy to preview" pages seen on device for items with a file. Says whether the
+                // file QuickLook was handed exists and how big it is, and whether we already reloaded
+                // for it (a second unavailable after a reload = the file itself, not a stale page).
+                MXLog.info("Media viewer: unavailable page for \(itemID): \(Self.fileDiagnostics(item.previewItemURL)), already reloaded on arrival: \(didRefreshOnArrival), forced: \(force)")
+                guard force || !didRefreshOnArrival else { return }
                 if itemID == arrivalItemID {
                     didRefreshOnArrival = true
                 }
@@ -738,6 +751,12 @@ class TimelineMediaPreviewController: QLPreviewController {
             guard let self else { return }
             if rendered {
                 MXLog.info("Media viewer: placeholder swapped")
+                // The user has sat through the download looking at the poster: start a video rather
+                // than asking for another tap.
+                if let playerLayer = renderedPageContentView?.layer as? AVPlayerLayer, let player = playerLayer.player {
+                    MXLog.info("Media viewer: autoplaying the swapped-in video")
+                    player.play()
+                }
             } else if (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID {
                 MXLog.info("Media viewer: placeholder swap not detected for \(itemID), reloading")
                 reloadDataTrackingBlanks()

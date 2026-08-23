@@ -4387,3 +4387,20 @@ retry-on-reachability path), not the SDK. DIAG added (strip pre-upstream):
 load over 500 ms, `Image load failed, retrying on reconnection`, and the
 viewer's "thumbnail … from the store: … after …" elapsed. Next slow one
 names the stage.
+
+**Round 52 (2026-08-23): "copy to preview" pages + autoplay (build 157).**
+User saw many QuickLook "cannot preview / copy to" pages on build 156 and
+suspected a URL handed over before decryption finished. Checked: the SDK
+writes and flushes the whole decrypted file before returning the handle
+(`get_media_file`: `write_all` + flush), the placeholder JPEG is written
+before its URL is set, the placeholder dir is per view model, and the log of
+that session (54 files, 7 blank-landing heals, 2 stale-placeholder rebuilds)
+shows no load errors: nothing names the cause. The only lever QuickLook
+leaves is its ContentUnavailable view, which the arrival check already heals
+once per arrival; a SECOND unavailable after that reload would mean the file
+itself. DIAG added at that point (strip pre-upstream): "unavailable page for
+…: <file> <bytes|MISSING>, already reloaded on arrival: …" so the next
+occurrence says whether the file was there and whole. Autoplay: once the
+thumbnail placeholder is swapped for a video (user sat through the download),
+the page's AVPlayer is started (`AVPlayerLayer.player.play()` on the rendered
+page content).
