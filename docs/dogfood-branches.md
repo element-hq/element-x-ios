@@ -4066,3 +4066,40 @@ room-key stream. Test updated.
 no growth on the initial empty range) look upstreamed by #6045 after all
 (develop's `HomeScreenContent` reports through `didScroll`, the provider
 has the `!range.isEmpty` guard); the merge hunks differed only by comments.
+
+## Round 46: build 140f launched onto placeholders for 8 minutes (the version-bump VACUUM)
+
+First launch of the merged build (`26.08.2` -> `26.08.4`) sat on the
+app-level placeholder skeletons (no nav bar: the home screen was never
+mounted) until the user gave up at +24s; the event cache stall diagnostics
+fired from +10s on (`state (write) held by handle_joined_room_update` for
+40s+, waiters in `run_request` and `root`) and the process was killed in the
+background; the relaunch at +8min came up in 1s.
+
+Root cause (log `console.2026-08-23-09.log`, 08:41:57Z): upstream's
+`performUserSessionMigrations` (EXI `8a1d0fe8b`, Dec 2025) awaits
+`clientProxy.optimizeStores()` on every version change, BEFORE the
+`UserSessionFlowCoordinator` starts. `Client::optimize_stores` is a sqlite
+`VACUUM` of the state, event cache and media stores in turn, and the SDK doc
+on it says "**DO NOT use in production**". On this phone: 295MB state store
+= 11s, then `Optimizing event cache store...` on the 835MB event cache never
+finished (the 485MB media store was still queued). The VACUUM holds the
+event cache's single write connection, so the first sync batch's
+`handle_joined_room_update` parked on `send_updates_to_store` with the
+global StateLock write guard held: that is the stall the diagnostics named
+(holder `handle_joined_room_update`, not a nested-lock bug this time). The
+migration never re-ran because `lastVersionLaunched` is stamped at app
+start, so the VACUUM was simply abandoned (rolled back) on the kill.
+
+Fix (EXI `HEAD`): the `optimizeStores()` call is removed from the migration
+(comment cites the numbers). Upstream note: either drop it, or gate it on
+`PRAGMA freelist_count` (don't rewrite 835MB to reclaim little) AND run it
+detached after the home screen is up; but even detached, a multi-minute
+VACUUM wedges the event cache behind the write connection, so the gate is
+the important half. Build 141 = this EXI x SDK `5140c5839`.
+
+Side observation on the 08:49:54Z relaunch: HomeScreen flashed "Showing
+empty state" for 0.5s before "Showing rooms" (`loaded(maximumNumberOfRooms:
+nil)` at +0.36s while the summaries were still building, `hasRooms` false).
+Our zero-count guard trusts the count only while no rooms are published,
+which is exactly this window; open nit, not a wedge.
