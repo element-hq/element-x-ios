@@ -807,6 +807,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "TimelineMediaPreviewRedactConfirmationView_Previews")
     }
 
+    func testTimelineMediaUploadProgressBar() async throws {
+        try await performAccessibilityAudit(named: "TimelineMediaUploadProgressBar_Previews")
+    }
+
     func testTimelineReactionView() async throws {
         try await performAccessibilityAudit(named: "TimelineReactionView_Previews")
     }
