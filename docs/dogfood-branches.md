@@ -4611,3 +4611,25 @@ mostly page waste (109 MB freelist on top). Levers: bigger page size
 (16 KB → overflow threshold ~4 KB, applied by the Manage-storage VACUUM),
 zstd before the store cipher in `encode_value` (JSON/msgpack 3-5x), and a
 retention policy (none today).
+
+**Round 60 (2026-08-23): event/state cache size (SDK dfb5ed884) + follow-ups
+(build 172).** Two levers on the SDK sqlite stores (both stores, all value
+types, no migration): (1) zstd (level 3) before the store cipher in
+`encode_value`/`decode_value` (ciphertext is incompressible, so it must go
+first); the zstd frame magic marks compressed values, so small values kept
+raw and rows written before the change read back untouched, and
+incompressible media stays raw. (2) 16 KB page size: new DBs created with it
+(before WAL/tables), existing ones converted on the next VACUUM (Manage
+storage optimize) by dropping to a rollback journal for the VACUUM then
+restoring WAL. Most event/state rows exceed the old 4 KB overflow threshold
+(~1 KB) so spilled to a second page; together with zstd this should roughly
+quarter the 875 MB event cache. Option 3 (stripping unsigned.prev_content /
+bundled relations) skipped: zstd subsumes the duplicated-content win and
+editing stored event JSON is risky. SDK tests: event cache 96, state 29,
+codec round-trip added, all green. Also: Select text long-press produced a
+stuck floating drag preview of the text (allowing the long-press in
+selection mode started a text drag that never dismissed); the long-press is
+blocked again and the drag interaction hard-disabled while selecting. Play
+badge now a vector overlay (169/170); the emoji-picker sheet still slides
+(the `animated: false` on the coordinator doesn't reach SwiftUI's `.sheet`;
+a lighter tapback-style overlay would be the real fix, deferred).
