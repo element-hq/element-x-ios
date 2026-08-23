@@ -300,6 +300,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func updateFilter() {
         if state.shouldHideRoomList {
             roomSummaryProvider?.setFilter(.excludeAll)
+            scheduleStuckSearchFocusCheck()
         } else {
             if state.bindings.isSearchFieldFocused {
                 roomSummaryProvider?.setFilter(.search(query: state.bindings.searchQuery))
@@ -311,6 +312,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     roomSummaryProvider?.setFilter(.all(filters: state.bindings.filtersState.activeFilters.set))
                 }
             }
+        }
+    }
+    
+    /// `isSearchFieldFocused` mirrors SwiftUI's `isSearching` environment, which can get
+    /// stuck `true` with no actual search session (known: after cancelling a search; seen:
+    /// cold launch during a sliding-sync session-expiry recovery, dogfood 2026-08-23). While
+    /// stuck, the home list is hidden and filtered to `.excludeAll` = permanently blank.
+    /// Self-heal: hiding the list for an empty-query search only makes sense while the search
+    /// field is actually being edited, so if nothing is a first responder shortly after
+    /// hiding, the flag is stale and gets cleared (the filter subscription then restores it).
+    private func scheduleStuckSearchFocusCheck() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self, state.shouldHideRoomList else { return }
+            
+            guard !(UIResponder.current is UITextField) else { return }
+            
+            MXLog.error("Search focus flag is set with no search field editing; clearing it to unhide the room list")
+            state.bindings.isSearchFieldFocused = false
         }
     }
     
