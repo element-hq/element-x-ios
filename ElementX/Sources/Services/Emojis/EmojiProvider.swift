@@ -26,7 +26,19 @@ class EmojiProvider: EmojiProviderProtocol {
     }
     
     func categories(searchString: String? = nil) async -> [EmojiCategory] {
-        var emojiCategories = await loadIfNeeded()
+        assemble(emojiCategories: await loadIfNeeded(), searchString: searchString)
+    }
+    
+    /// The categories, synchronously, if the datasource has already loaded (it starts
+    /// loading at init). Lets the picker render its grid on first layout instead of a
+    /// beat after the sheet appears.
+    func categoriesIfLoaded(searchString: String? = nil) -> [EmojiCategory]? {
+        guard case .loaded(let emojiCategories) = state else { return nil }
+        return assemble(emojiCategories: emojiCategories, searchString: searchString)
+    }
+    
+    private func assemble(emojiCategories: [EmojiCategory], searchString: String?) -> [EmojiCategory] {
+        var emojiCategories = emojiCategories
         
         let allEmojis = emojiCategories.reduce([]) { partialResult, category in
             partialResult + category.emojis

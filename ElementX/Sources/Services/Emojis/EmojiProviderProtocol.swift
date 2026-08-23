@@ -34,6 +34,7 @@ enum EmojiProviderState {
 
 protocol EmojiProviderProtocol {
     func categories(searchString: String?) async -> [EmojiCategory]
+    func categoriesIfLoaded(searchString: String?) -> [EmojiCategory]?
     
     func frequentlyUsedSystemEmojis() -> [String]
     func markEmojiAsFrequentlyUsed(_ emoji: String)

@@ -639,6 +639,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentRoom(fromState: State,
                              presentationAction: PresentationAction?,
                              animated: Bool) async {
+        // Prewarm the reaction picker so a double-tap presents it instantly, once the
+        // room-opening work is out of the way.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [emojiProvider = flowParameters.emojiProvider] in
+            EmojiPickerScreenCoordinator.prewarm(emojiProvider: emojiProvider)
+        }
+        
         // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
         // through the correct states before presenting the room
         navigationStackCoordinator.setSheetCoordinator(nil)

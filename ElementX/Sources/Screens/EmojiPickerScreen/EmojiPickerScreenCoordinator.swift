@@ -8,6 +8,7 @@
 
 import Combine
 import SwiftUI
+import UIKit
 
 struct EmojiPickerScreenCoordinatorParameters {
     let mode: EmojiPickerScreenMode
@@ -58,5 +59,36 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         AnyView(EmojiPickerScreen(context: viewModel.context))
+    }
+    
+    // MARK: - Prewarming
+    
+    private static var hasPrewarmed = false
+    
+    /// Renders a throwaway picker once, off-screen, so the first real presentation
+    /// doesn't pay for the SwiftUI view building and emoji glyph rasterisation and
+    /// the sheet appears instantly on double-tap.
+    static func prewarm(emojiProvider: EmojiProviderProtocol) {
+        guard !hasPrewarmed else { return }
+        hasPrewarmed = true
+        
+        let startDate = Date()
+        
+        let (_, continuation) = AsyncStream.makeStream(of: String.self)
+        let coordinator = EmojiPickerScreenCoordinator(parameters: .init(mode: .reaction,
+                                                                         selectedEmojis: [],
+                                                                         emojiProvider: emojiProvider,
+                                                                         continuation: continuation))
+        
+        guard let view = UIHostingController(rootView: coordinator.toPresentable()).view else { return }
+        view.frame = CGRect(origin: .zero, size: UIScreen.main.bounds.size)
+        view.layoutIfNeeded()
+        
+        // Layout alone doesn't draw: an actual render warms the emoji glyph caches.
+        _ = UIGraphicsImageRenderer(bounds: view.bounds).image { view.layer.render(in: $0.cgContext) }
+        
+        continuation.finish()
+        
+        MXLog.info("Prewarmed the emoji picker in \(Int(Date().timeIntervalSince(startDate) * 1000))ms")
     }
 }

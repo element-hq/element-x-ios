@@ -54,6 +54,14 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     // MARK: - Private
     
     private func loadEmojis() {
+        // Synchronous fast-path: with the datasource already loaded (it loads at app
+        // start) the grid is part of the sheet's very first layout, instead of popping
+        // in a beat after it appears.
+        if let categories = emojiProvider.categoriesIfLoaded(searchString: nil) {
+            state.categories = convert(emojiCategories: categories)
+            return
+        }
+        
         Task(priority: .userInitiated) { [weak self] in
             guard let self else { return }
             let categories = await self.emojiProvider.categories(searchString: nil)
