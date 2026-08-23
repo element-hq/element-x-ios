@@ -61,10 +61,11 @@ struct ManageStorageScreenViewModelTests {
         // The small room isn't worth listing.
         #expect(context.viewState.listedRooms.map(\.id) == ["!big:example.org", "!medium:example.org"])
 
-        // One room selected: its sizes only; the logs stay session-wide but aren't clearable.
+        // One room selected: its sizes only; the logs have no per-room share so read zero (and
+        // don't set the chart's scale), and aren't clearable.
         context.send(viewAction: .toggleRoom("!medium:example.org"))
         #expect(context.viewState.activeCaches == StorageCacheKind.allCases.filter(\.isPerRoom))
-        #expect(context.viewState.bytes(for: .logs) == 3000)
+        #expect(context.viewState.bytes(for: .logs) == 0)
         #expect(context.viewState.bytes(for: .roomState) == 60_000_000)
         #expect(context.viewState.scopeTitle == "Matrix HQ (95.0 MB)")
         #expect(context.viewState.clearAllTitle == UntranslatedL10n.screenManageStorageClearForRoom("Matrix HQ"))

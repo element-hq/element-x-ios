@@ -43,14 +43,17 @@ struct ManageStorageScreenViewState: BindableState {
     }
 
     /// The caches that apply to the current scope: the logs are session-wide, so they're
-    /// greyed out (shown, not clearable) when rooms are selected.
+    /// greyed out (shown at zero, not clearable) when rooms are selected.
     var activeCaches: [StorageCacheKind] {
         isFiltered ? StorageCacheKind.allCases.filter(\.isPerRoom) : StorageCacheKind.allCases
     }
 
-    /// The size of a cache within the current scope (session-wide caches always show their total).
+    /// The size of a cache within the current scope. A session-wide cache (the logs) has no
+    /// per-room share, so it reads zero when rooms are selected rather than its total, which
+    /// would otherwise also set the chart's scale and squash the rooms' bars after a clear.
     func bytes(for cache: StorageCacheKind) -> UInt64 {
-        guard isFiltered, cache.isPerRoom else { return totalBytes[cache] ?? 0 }
+        guard isFiltered else { return totalBytes[cache] ?? 0 }
+        guard cache.isPerRoom else { return 0 }
         return selectedRooms.reduce(0) { $0 + ($1.bytes[cache] ?? 0) }
     }
 

@@ -4297,3 +4297,11 @@ bar ended short of 100 % after a re-send; reset to zero on re-send. Tests
 `..._resends_tracked_transfer_only_once_stalled` (grace honoured). Also:
 `MediaProgressBar` is 3pt high on a `bgCanvasDefault` track (dark/light with
 the theme) instead of transparent.
+
+**Round 49 follow-up: Manage storage chart with rooms selected (build 152).**
+With rooms selected the greyed-out logs line still read its session-wide
+total, and since the chart scales every bar to the largest value, the (hidden)
+logs bar set the scale: after "Clear for room" the room caches dropped to ~0
+while the logs stayed the maximum, so the remaining bars collapsed to slivers
+although their numbers updated. Session-wide caches now read zero in the
+filtered scope (`bytes(for:)`); test `loadingAndScoping` updated.
