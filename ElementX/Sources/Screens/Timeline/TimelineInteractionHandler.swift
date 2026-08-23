@@ -655,20 +655,10 @@ class TimelineInteractionHandler {
                                                       linkMetadataProvider: linkMetadataProvider,
                                                       timelineControllerFactory: timelineControllerFactory)
             
-            return previewAction(for: item, timelineViewModel: .new(timelineViewModel))
+            return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
         } else {
-            return previewAction(for: item, timelineViewModel: .active)
+            return .displayMediaPreview(item: item, timelineViewModel: .active)
         }
-    }
-    
-    /// A gallery is previewed scoped to its own attachments rather than the wider timeline's media.
-    private func previewAction(for item: EventBasedMessageTimelineItemProtocol,
-                               timelineViewModel: TimelineControllerAction.TimelineViewModelKind) -> TimelineControllerAction {
-        guard let galleryItem = item as? GalleryRoomTimelineItem else {
-            return .displayMediaPreview(item: item, timelineViewModel: timelineViewModel)
-        }
-        
-        return .displayGalleryPreview(galleryItem: galleryItem, timelineViewModel: timelineViewModel)
     }
 }
 

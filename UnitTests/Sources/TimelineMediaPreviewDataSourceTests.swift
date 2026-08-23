@@ -73,11 +73,15 @@ struct TimelineMediaPreviewDataSourceTests {
         let items: [GalleryItem] = [.mockImage(index: 0), .mockFile(index: 1), .mockVideo(index: 2), .mockAudio(index: 3)]
         let gallery = makeGallery(items: items)
         
-        // When opening the preview scoped to that gallery on the second attachment.
-        let dataSource = TimelineMediaPreviewDataSource(galleryItem: gallery, initialIndex: 1)
+        // When opening the preview on the second attachment before the timeline has loaded the gallery.
+        let dataSource = TimelineMediaPreviewDataSource(itemViewStates: [],
+                                                        initialItem: gallery,
+                                                        initialGalleryIndex: 1,
+                                                        initialPadding: 0,
+                                                        paginationState: .initial)
         
-        // Then it is self contained, holding every one of the attachments without filtering any of
-        // them out and with no surrounding pagination…
+        // Then it falls back to the whole gallery, holding every one of the attachments without
+        // filtering any of them out…
         let expectedIDs: [MediaPreviewItemID] = items.map { .galleryItem($0.id) }
         #expect(dataSource.previewItems.map(\.id) == expectedIDs)
         #expect(dataSource.numberOfPreviewItems(in: previewController) == items.count)
@@ -106,7 +110,11 @@ struct TimelineMediaPreviewDataSourceTests {
                                               properties: .init())
         
         // When tapping the first image (index 1 in the full items array).
-        let dataSource = TimelineMediaPreviewDataSource(galleryItem: gallery, initialIndex: 1)
+        let dataSource = TimelineMediaPreviewDataSource(itemViewStates: [],
+                                                        initialItem: gallery,
+                                                        initialGalleryIndex: 1,
+                                                        initialPadding: 0,
+                                                        paginationState: .initial)
         
         // Then every attachment is kept — indices line up 1:1 — and the unknown item has no media source.
         #expect(dataSource.previewItems.count == 3)

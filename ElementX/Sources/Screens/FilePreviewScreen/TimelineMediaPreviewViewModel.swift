@@ -35,7 +35,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     /// Initialises a preview spanning the whole timeline's media, staying in sync with it as it paginates.
+    /// `initialGalleryIndex` picks the tapped attachment when `initialItem` is a gallery.
     init(initialItem: EventBasedMessageTimelineItemProtocol,
+         initialGalleryIndex: Int? = nil,
          timelineViewModel: TimelineViewModelProtocol,
          mediaProvider: MediaProviderProtocol,
          photoLibraryManager: PhotoLibraryManagerProtocol,
@@ -53,6 +55,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(itemViewStates: timelineState.itemViewStates,
                                                                                      initialItem: initialItem,
+                                                                                     initialGalleryIndex: initialGalleryIndex,
                                                                                      paginationState: timelineState.paginationState,
                                                                                      allowedGalleryItemTypes: timelineViewModel.context.viewState.allowedGalleryItemTypes)),
                    mediaProvider: mediaProvider)
@@ -92,37 +95,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 state.dataSource.paginationState = paginationState
                 paginateIfNeeded()
             }
-            .store(in: &cancellables)
-    }
-    
-    /// Initialises the preview scoped to a single gallery's attachments. The data source is
-    /// built from the gallery's items directly and isn't kept in sync with the underlying
-    /// timeline — gallery contents don't change without the event being replaced or redacted.
-    init(galleryItem: GalleryRoomTimelineItem,
-         initialIndex: Int,
-         timelineViewModel: TimelineViewModelProtocol,
-         mediaProvider: MediaProviderProtocol,
-         photoLibraryManager: PhotoLibraryManagerProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appMediator: AppMediatorProtocol,
-         appSettings: AppSettings) {
-        self.timelineViewModel = timelineViewModel
-        self.mediaProvider = mediaProvider
-        self.photoLibraryManager = photoLibraryManager
-        self.userIndicatorController = userIndicatorController
-        self.appMediator = appMediator
-        self.appSettings = appSettings
-        
-        super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(galleryItem: galleryItem,
-                                                                                     initialIndex: initialIndex)),
-                   mediaProvider: mediaProvider)
-        
-        startInitialLoad()
-        rebuildCurrentItemActions()
-        
-        timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
-            .merge(with: timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers))
-            .sink { [weak self] _ in self?.rebuildCurrentItemActions() }
             .store(in: &cancellables)
     }
     

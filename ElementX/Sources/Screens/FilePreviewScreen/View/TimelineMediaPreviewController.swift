@@ -840,10 +840,18 @@ private struct HeaderView: View {
         context.viewState.currentItem
     }
     
+    /// The sender (or "Loading…" over a thumbnail placeholder), with the attachment's place in its
+    /// gallery appended, e.g. "Alice (2 of 3)", now that galleries are browsed inline with other media.
+    private func headerTitle(for mediaItem: TimelineMediaPreviewItem.Media) -> String {
+        let title = mediaItem.isShowingPlaceholder ? L10n.commonLoading : mediaItem.sender.displayName ?? mediaItem.sender.id
+        guard let position = mediaItem.galleryPosition else { return title }
+        return "\(title) (\(L10n.screenRoomPinnedBannerIndicator(String(position.index), String(position.count))))"
+    }
+    
     var body: some View {
         if let mediaItem = currentItem.mediaItem {
             VStack(spacing: 0) {
-                Text(mediaItem.isShowingPlaceholder ? L10n.commonLoading : mediaItem.sender.displayName ?? mediaItem.sender.id)
+                Text(headerTitle(for: mediaItem))
                     .font(.compound.bodySMSemibold)
                     .foregroundStyle(.compound.textPrimary)
                 Text(mediaItem.timestamp.formatted(date: .abbreviated, time: .omitted))
