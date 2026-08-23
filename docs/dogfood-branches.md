@@ -4343,3 +4343,33 @@ SHA-256 check). Not started.
 under 50 kB (labelled "0.0 MB") was still scaled against the largest value, so
 when it was the largest left (after clearing a room) it drew a full bar. Such
 caches now draw empty and don't set the scale (`minimumDrawnBytes`).
+
+**Round 51 (2026-08-23): thumbnail + bar seen on device, three follow-ups
+(build 155).** Log of the 91 MB video (`IMG_5177.mp4`, 57 s download):
+(1) The bar sat at the page bottom (above the toolbar), far below the
+letterboxed placeholder. It now lives in its own hosted view
+(`ProgressBarView`) that the controller frames along the bottom edge of the
+page's content: the displayed image rect (aspect-fit within QuickLook's image
+view, `renderedPageContentView`), re-laid on the existing 100 ms tick since the
+page content comes and goes asynchronously; on a page without content yet it
+falls back to the bottom of the page above the caption.
+(2) The thumbnail was starved by the download: requested alongside it, it
+took ~5 s (14:26:44.8 -> 49.9Z) to land. For files >= 10 MB
+(`placeholderFirstFileSize`) the thumbnail placeholder is now fetched and
+shown BEFORE the download starts (`preload(placeholderFirst:)`, on-display
+load likewise); the initial item presents as soon as the placeholder is up or
+after 1 s. Smaller files keep the 300 ms grace path.
+(3) "Stalled at 100 % until tapped": the swap did run on its own, 0.2 s after
+the file handle landed, but the handle landed 6.3 s after the last byte
+(14:27:41.8 -> 48.1Z): the SDK decrypts, writes the 91 MB blob into the
+(encrypted) media store and writes the temp file after the download. The
+spinner now shows over the placeholder while the bar sits at 100 % so that
+stretch reads as work, not a stall. Trimming it (stream to file, store write
+off the critical path) is an SDK follow-up, not done.
+Found on the way: the thumbnail lookup's timeout was an unstructured Task
+that the task group's `cancelAll()` never cancelled, so the group waited the
+WHOLE timeout however fast the load returned or failed (400 ms every
+placeholder before; 5 s once the on-display wait grew, which would have held
+the placeholder-first download back by 5 s). The sleep now lives in the group
+child; a timed-out load is cancelled. Placeholder-first also requires the
+event to carry a thumbnail source (no server-side video thumbnail attempts).

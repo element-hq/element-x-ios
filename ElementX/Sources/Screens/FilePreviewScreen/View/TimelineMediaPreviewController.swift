@@ -18,6 +18,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     private let headerHostingController: UIHostingController<HeaderView>
     private let detailsButtonHostingController: UIHostingController<DetailsButton>
     private let captionHostingController: UIHostingController<CaptionView>
+    private let progressBarHostingController: UIHostingController<ProgressBarView>
     private let downloadIndicatorHostingController: UIHostingController<DownloadIndicatorView>
     private var detailsHostingController: UIHostingController<TimelineMediaPreviewDetailsView>?
     
@@ -69,6 +70,9 @@ class TimelineMediaPreviewController: QLPreviewController {
         captionHostingController = UIHostingController(rootView: CaptionView(context: context))
         captionHostingController.view.backgroundColor = .clear
         captionHostingController.sizingOptions = .intrinsicContentSize
+        progressBarHostingController = UIHostingController(rootView: ProgressBarView(context: context))
+        progressBarHostingController.view.backgroundColor = .clear
+        progressBarHostingController.view.isUserInteractionEnabled = false
         downloadIndicatorHostingController = UIHostingController(rootView: DownloadIndicatorView(context: context))
         downloadIndicatorHostingController.view.backgroundColor = .clear
         downloadIndicatorHostingController.sizingOptions = .intrinsicContentSize
@@ -79,6 +83,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         view.addSubview(captionView)
         // Constraints added later as the toolbar isn't available yet.
+        view.addSubview(progressBarHostingController.view) // Framed by hand along the content's bottom edge.
         
         view.addSubview(downloadIndicatorHostingController.view)
         downloadIndicatorHostingController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -168,6 +173,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         observePageScrollViewIfNeeded()
         
         updateBarButtons()
+        layoutProgressBar()
         
         // Ridiculous hack to undo the controller's attempt to replace our info button with the list button.
         if barButtonTimer == nil {
@@ -175,6 +181,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                 // The timer is scheduled on the main run loop so it always fires on the main actor.
                 MainActor.assumeIsolated {
                     self?.updateBarButtons()
+                    self?.layoutProgressBar() // The page content QuickLook builds (placeholder, media) comes and goes asynchronously.
                     // Also re-centers the overlay once the scroll view has settled on an item.
                     self?.updateOverlayPosition()
                 }
@@ -609,6 +616,29 @@ class TimelineMediaPreviewController: QLPreviewController {
         }
     }
     
+    private static let progressBarHeight: CGFloat = 3
+    
+    /// Puts the download bar flush with the bottom edge of what QuickLook is showing for the page:
+    /// the placeholder's displayed image rect (aspect-fit within its image view), or, on a page
+    /// without one yet, along the bottom of the page above the caption.
+    private func layoutProgressBar() {
+        let bar = progressBarHostingController.view!
+        let height = Self.progressBarHeight
+        if let imageView = renderedPageContentView as? UIImageView, let image = imageView.image,
+           image.size.width > 0, image.size.height > 0, imageView.bounds.width > 0, imageView.bounds.height > 0 {
+            let bounds = imageView.bounds
+            let scale = min(bounds.width / image.size.width, bounds.height / image.size.height)
+            let fitted = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+            let rect = imageView.convert(CGRect(x: bounds.midX - fitted.width / 2, y: bounds.midY - fitted.height / 2,
+                                                width: fitted.width, height: fitted.height), to: view)
+            bar.frame = CGRect(x: rect.minX, y: rect.maxY - height, width: rect.width, height: height)
+        } else if captionView.constraints.isEmpty {
+            bar.frame = CGRect(x: 0, y: view.bounds.maxY - view.safeAreaInsets.bottom - height, width: view.bounds.width, height: height)
+        } else {
+            bar.frame = CGRect(x: 0, y: captionView.frame.minY - height, width: view.bounds.width, height: height)
+        }
+    }
+    
     /// The view QuickLook is rendering the current page's content with (an image view showing
     /// an image, or a video layer ready for display), or nil while the page is being (re)built.
     /// The page containers are the plain UIViews directly inside the page scroll view.
@@ -892,17 +922,22 @@ private struct CaptionView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if let mediaItem = currentItem.mediaItem {
-                if mediaItem.fileHandle == nil {
-                    // The download's progress, flush with the bottom of the page (the placeholder/blank
-                    // page above it is QuickLook's; the header says it's loading).
-                    MediaProgressBar(progress: mediaItem.downloadProgress)
-                }
-                if mediaItem.hasCaption {
-                    CaptionScrollView(mediaItem: mediaItem)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
+            if let mediaItem = currentItem.mediaItem, mediaItem.hasCaption {
+                CaptionScrollView(mediaItem: mediaItem)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
             }
+        }
+    }
+}
+
+/// The download's progress bar; the controller frames it along the bottom edge of the page's
+/// content (the header says it's loading, the bar how far).
+private struct ProgressBarView: View {
+    @ObservedObject var context: TimelineMediaPreviewViewModel.Context
+    
+    var body: some View {
+        if let mediaItem = context.viewState.currentItem.mediaItem, mediaItem.fileHandle == nil {
+            MediaProgressBar(progress: mediaItem.downloadProgress)
         }
     }
 }
@@ -965,8 +1000,11 @@ private struct DownloadIndicatorView: View {
         case .media(let mediaItem):
             if mediaItem.downloadError != nil {
                 downloadErrorView
-            } else if mediaItem.fileHandle == nil, mediaItem.placeholderURL == nil, mediaItem.downloadProgress == nil {
-                // The placeholder's title says it's loading, the progress bar (CaptionView) shows how far.
+            } else if mediaItem.fileHandle == nil,
+                      mediaItem.placeholderURL == nil && mediaItem.downloadProgress == nil || mediaItem.downloadProgress == 1 {
+                // The placeholder's title says it's loading, the progress bar shows how far. Once every
+                // byte is in, the SDK still decrypts and stores the file (6 s for a 90 MB video), so the
+                // spinner says something is happening while the bar sits at 100 %.
                 loadingIndicator(isScanning: false)
             }
         case .contentScan(let scan):
