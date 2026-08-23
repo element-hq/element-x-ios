@@ -78,6 +78,19 @@ struct ManageStorageScreenViewModelTests {
     }
 
     @Test
+    func searchingListsSmallRooms() async throws {
+        try await waitForLoad()
+
+        // A search matches by name or ID and ignores the size threshold.
+        context.searchQuery = "hq"
+        #expect(context.viewState.listedRooms.map(\.id) == ["!medium:example.org"])
+        context.searchQuery = "small"
+        #expect(context.viewState.listedRooms.map(\.id) == ["!small:example.org"])
+        context.searchQuery = ""
+        #expect(context.viewState.listedRooms.map(\.id) == ["!big:example.org", "!medium:example.org"])
+    }
+
+    @Test
     func clearingSelectedRooms() async throws {
         try await waitForLoad()
         context.send(viewAction: .toggleRoom("!big:example.org"))
@@ -121,8 +134,11 @@ struct ManageStorageScreenViewModelTests {
         clientProxy.clearRoomCachesRoomIDsClosure = { _ in order.append("messages"); return .success(()) }
         context.send(viewAction: .requestClear(.messages))
         #expect(context.viewState.bindings.clearRequest?.message.contains(UntranslatedL10n.screenManageStorageWarningMessagesMedia) == true)
+        // Wait for the reload that follows the clear (the rooms aren't loading at this point, so
+        // waiting for them to finish would return at once).
+        let reloaded = deferFulfillment(context.observe(\.viewState.isLoading)) { $0 }
         context.send(viewAction: .confirmClear)
-        try await waitForLoad()
+        try await reloaded.fulfill()
         
         // Then its media is cleared too, and before the messages (the media is found through them).
         #expect(order == ["media", "messages"])

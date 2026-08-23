@@ -32,10 +32,20 @@ struct ManageStorageScreenViewState: BindableState {
 
     var isFiltered: Bool { !selectedRoomIDs.isEmpty }
 
+    var isSearching: Bool { !bindings.searchQuery.isEmpty }
+
     /// The rooms shown: the ones using more than ``listedRoomMinimumBytes``, and the selected
     /// ones regardless (clearing shrinks them, but they shouldn't vanish from under the selection).
+    /// A search lists every matching room with cached data, however small, so a given room can
+    /// always be found by name (or ID).
     var listedRooms: [StorageUsageRoom] {
-        rooms.filter { $0.totalBytes >= Self.listedRoomMinimumBytes || selectedRoomIDs.contains($0.id) }
+        if isSearching {
+            return rooms.filter {
+                $0.displayName.localizedStandardContains(bindings.searchQuery) ||
+                    $0.id.localizedStandardContains(bindings.searchQuery)
+            }
+        }
+        return rooms.filter { $0.totalBytes >= Self.listedRoomMinimumBytes || selectedRoomIDs.contains($0.id) }
     }
 
     var selectedRooms: [StorageUsageRoom] {
@@ -89,6 +99,7 @@ struct ManageStorageScreenViewState: BindableState {
 }
 
 struct ManageStorageScreenViewStateBindings {
+    var searchQuery = ""
     /// The clear the user is being asked to confirm.
     var clearRequest: ManageStorageClearRequest?
     var alertInfo: AlertInfo<ManageStorageScreenAlert>?

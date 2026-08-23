@@ -68,6 +68,8 @@ internal nonisolated enum UntranslatedL10n {
   internal static func screenManageStorageScopeRooms(_ p1: Int) -> String {
     return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_scope_rooms", p1)
   }
+  /// Find a room
+  internal static var screenManageStorageSearchPrompt: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_search_prompt") }
   /// Manage storage
   internal static var screenManageStorageTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_title") }
   /// View log files

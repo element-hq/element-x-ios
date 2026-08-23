@@ -18,6 +18,11 @@ struct ManageStorageScreen: View {
             roomsSection
         }
         .compoundList()
+        .searchable(text: $context.searchQuery,
+                    placement: .navigationBarDrawer,
+                    prompt: UntranslatedL10n.screenManageStorageSearchPrompt)
+        .compoundSearchField()
+        .autocorrectionDisabled()
         .navigationTitle(UntranslatedL10n.screenManageStorageTitle)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
@@ -89,8 +94,10 @@ struct ManageStorageScreen: View {
                 }
                 .compoundListSectionHeader()
             } footer: {
-                Text(UntranslatedL10n.screenManageStorageRoomsSectionFooter)
-                    .compoundListSectionFooter()
+                if !context.viewState.isSearching {
+                    Text(UntranslatedL10n.screenManageStorageRoomsSectionFooter)
+                        .compoundListSectionFooter()
+                }
             }
         }
     }
