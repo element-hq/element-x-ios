@@ -50,7 +50,7 @@ enum MainThreadSampler {
             folded[line] = entry
         }
         MXLog.info("MTS[\(label)]: \(samples.count) samples over \(Int(duration * 1000))ms")
-        for (line, entry) in folded.sorted(by: { $0.value.count > $1.value.count }) where entry.count > 1 {
+        for (line, entry) in folded.sorted(by: { $0.value.count > $1.value.count }) {
             MXLog.info("MTS[\(label)] \(entry.count)x @\(entry.firstMs)-\(entry.lastMs)ms: \(line)")
         }
     }
