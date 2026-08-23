@@ -4169,3 +4169,16 @@ found from the log; `WindowDebug` now logs each window's
 hidden/alpha/key/root on willEnterForeground + didBecomeActive (strip before
 upstreaming). Reproduce with `devicectl device process launch --no-activate`
 then activate.
+
+**"Loading more…" off a gallery, the actual cause (EXI `HEAD`, build 145).** The
+log (09:37:44Z) showed the merge never happened at all: `Ignoring update:
+unable to find existing preview items range` twice after the media timeline's
+`Reset(3)`. `GalleryItemID`'s synthesised equality covered the whole
+`TimelineItemIdentifier`, including the per-timeline `uniqueID`, so the
+tapped attachment (room timeline) never equalled the media timeline's copy
+(the standalone `MediaPreviewItemID.timelineItem` already keys on the event
+ID for exactly this reason, and the `GalleryItemID` doc comment promised
+cross-timeline identity). Equality/hash now use event-or-transaction ID +
+`mediaIndex` (whole identifier only for virtual items). The fallback filter
+from build 144 stays (clean contiguous-range merge). Build 145 = this x SDK
+`5140c5839`.
