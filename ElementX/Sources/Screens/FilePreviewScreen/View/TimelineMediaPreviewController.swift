@@ -201,6 +201,13 @@ class TimelineMediaPreviewController: QLPreviewController {
             }
         }
         
+        // The controller also swaps its navigation item (and with it our title view) on the same
+        // refreshes, after which it shows the item's filename until the next layout pass; put the
+        // sender/timestamp header back here, on the same trigger as the button.
+        if topItem.titleView !== headerHostingController.view {
+            topItem.titleView = headerHostingController.view
+        }
+        
         if topItem.leftBarButtonItem?.customView == nil {
             let button = UIBarButtonItem(customView: detailsButtonHostingController.view)
             // The controller re-installs its own button after every item refresh (e.g. once the
