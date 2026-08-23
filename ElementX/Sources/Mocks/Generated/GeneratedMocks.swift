@@ -3939,6 +3939,40 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return clearMediaCacheRoomIDsNotAccessedForReturnValue
         }
     }
+    //MARK: - optimizeEventCacheStore
+
+    private let optimizeEventCacheStoreCallsCountLock = NSLock()
+    private nonisolated(unsafe) var optimizeEventCacheStoreUnderlyingCallsCount = 0
+    var optimizeEventCacheStoreCallsCount: Int {
+        get { optimizeEventCacheStoreCallsCountLock.withLock { optimizeEventCacheStoreUnderlyingCallsCount } }
+        set { optimizeEventCacheStoreCallsCountLock.withLock { optimizeEventCacheStoreUnderlyingCallsCount = newValue } }
+    }
+    var optimizeEventCacheStoreCalled: Bool {
+        return optimizeEventCacheStoreCallsCount > 0
+    }
+    nonisolated(unsafe) var optimizeEventCacheStoreClosure: (() async -> Void)?
+
+    @concurrent func optimizeEventCacheStore() async {
+        optimizeEventCacheStoreCallsCountLock.withLock { optimizeEventCacheStoreUnderlyingCallsCount += 1 }
+        await optimizeEventCacheStoreClosure?()
+    }
+    //MARK: - optimizeMediaStore
+
+    private let optimizeMediaStoreCallsCountLock = NSLock()
+    private nonisolated(unsafe) var optimizeMediaStoreUnderlyingCallsCount = 0
+    var optimizeMediaStoreCallsCount: Int {
+        get { optimizeMediaStoreCallsCountLock.withLock { optimizeMediaStoreUnderlyingCallsCount } }
+        set { optimizeMediaStoreCallsCountLock.withLock { optimizeMediaStoreUnderlyingCallsCount = newValue } }
+    }
+    var optimizeMediaStoreCalled: Bool {
+        return optimizeMediaStoreCallsCount > 0
+    }
+    nonisolated(unsafe) var optimizeMediaStoreClosure: (() async -> Void)?
+
+    @concurrent func optimizeMediaStore() async {
+        optimizeMediaStoreCallsCountLock.withLock { optimizeMediaStoreUnderlyingCallsCount += 1 }
+        await optimizeMediaStoreClosure?()
+    }
     //MARK: - fetchMediaPreviewConfiguration
 
     private let fetchMediaPreviewConfigurationCallsCountLock = NSLock()

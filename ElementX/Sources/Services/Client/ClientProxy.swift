@@ -954,6 +954,22 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func optimizeEventCacheStore() async {
+        do {
+            try await client.optimizeEventCacheStore()
+        } catch {
+            MXLog.error("Failed vacuuming the event cache store: \(error)")
+        }
+    }
+    
+    func optimizeMediaStore() async {
+        do {
+            try await client.optimizeMediaStore()
+        } catch {
+            MXLog.error("Failed vacuuming the media store: \(error)")
+        }
+    }
+    
     func clearMediaCache(roomIDs: [String]?, notAccessedFor: TimeInterval?) async -> Result<Void, ClientProxyError> {
         do {
             return try await .success(client.clearMediaCache(roomIds: roomIDs, notAccessedFor: notAccessedFor))

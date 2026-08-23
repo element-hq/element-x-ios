@@ -4404,3 +4404,36 @@ occurrence says whether the file was there and whole. Autoplay: once the
 thumbnail placeholder is swapped for a video (user sat through the download),
 the page's AVPlayer is started (`AVPlayerLayer.player.play()` on the rendered
 page content).
+
+**Round 53 (2026-08-23): "Loading more…" stuck; per-room media clear clears
+nothing (build 158).** (1) Log 15:09:56-15:11:39Z: clamped to the backwards
+placeholder, "undecryptable messages pending behind the oldest media, not
+paginating yet", the 5 s UTD wait gave up at 15:09:59 with NEWER pending UTDs
+still ahead (pending before oldest: true) and then nothing until the user
+swiped away and back. Cause: the UTD-expiry timer is only armed when the
+timeline's items change (`scheduleUTDExpiry()` in the items sink); the expiry
+task itself never re-armed for the later-seen UTDs' expiry. FIXED: re-arm
+after each expiry. (2) Every per-room media clear today logged `Media cache
+cleared num_rooms=N num_uris=0`: `media_uris_by_room` returns no URIs for the
+selected rooms, so `remove_media_contents` gets an empty list and the files
+stay (hence no re-download when reproducing). The index itself isn't empty
+(the storage screen's per-room sizing at 13:46 got URIs for some rooms and
+went on to size them), and insert/lookup hash the room id with the same
+table key, so the selected rooms' media rows simply aren't indexed. Best
+candidate: media events decrypted after insert whose decrypted form never
+reached the store (`event_media` is built from the stored event; a UTD row has
+no URIs). Pulling the phone's event cache DB to confirm before changing the
+SDK; meanwhile the whole-cache clear ("Clear all" with no room selected, or
+the media bar's bin) does remove files (no URI filter).
+
+**Round 53 follow-up: vacuum after a Manage storage clear (build 159).**
+Deleting rows never shrank the store files (SQLite keeps the freed pages), so
+per-room clears left the "Messages"/"Media" totals unchanged and the event
+cache's 835 MB was part genuine volume (5.4k rooms prefilled, deep history in
+a few; no retention policy exists for it) and part free pages from past
+clears. New SDK `Client::optimize_event_cache_store()` /
+`optimize_media_store()` (VACUUM of the one store; the event cache one only
+under a clean cross-process lock) + FFI; `ManageStorageScreenViewModel` calls
+them for the stores it cleared, under the same "please wait" (a big store
+takes a while; the version-bump VACUUM of all three took minutes, which is why
+`optimizeStores()` left the launch path in round 46).

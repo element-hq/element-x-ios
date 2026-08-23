@@ -99,6 +99,9 @@ struct ManageStorageScreenViewModelTests {
         #expect(clientProxy.clearMediaCacheRoomIDsNotAccessedForReceivedArguments?.notAccessedFor == nil)
         // The logs are session-wide: untouched.
         #expect(context.viewState.totalBytes[.logs] == 3000)
+        // The cleared stores are vacuumed so their files shrink.
+        #expect(clientProxy.optimizeEventCacheStoreCalled)
+        #expect(clientProxy.optimizeMediaStoreCalled)
 
         // The cleared room stays listed and selected (empty) rather than vanishing from under the selection.
         try await waitForLoad()

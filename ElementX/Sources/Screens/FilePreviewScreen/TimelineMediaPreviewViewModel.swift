@@ -362,6 +362,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             guard !Task.isCancelled, let self else { return }
             state.dataSource.pendingUTDsExpired()
             paginateIfNeeded()
+            // Newer pending UTDs (seen later, e.g. brought in by the last pagination) have a later
+            // expiry: re-arm for it, or the "Loading more" page waits until the timeline next changes
+            // (it sat there indefinitely until a swipe away and back).
+            scheduleUTDExpiry()
         }
     }
     

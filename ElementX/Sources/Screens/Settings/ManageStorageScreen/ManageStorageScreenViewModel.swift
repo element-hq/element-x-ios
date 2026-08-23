@@ -123,6 +123,8 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
 
         var failed = false
         var restartsApp = false
+        var clearedEventCache = false
+        var clearedMedia = false
 
         for cache in caches {
             switch cache {
@@ -132,12 +134,12 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
                 // The two are cleared together, so once is enough when clearing everything.
                 guard cache == .roomState || !caches.contains(.roomState) else { continue }
                 if let roomIDs {
-                    if case .failure = await clientProxy.clearRoomCaches(roomIDs: roomIDs) { failed = true }
+                    if case .failure = await clientProxy.clearRoomCaches(roomIDs: roomIDs) { failed = true } else { clearedEventCache = true }
                 } else {
                     restartsApp = true // The whole state store: the app clears its caches and restarts.
                 }
             case .media:
-                if case .failure = await clientProxy.clearMediaCache(roomIDs: roomIDs, notAccessedFor: nil) { failed = true }
+                if case .failure = await clientProxy.clearMediaCache(roomIDs: roomIDs, notAccessedFor: nil) { failed = true } else { clearedMedia = true }
             case .logs:
                 deleteLogFiles()
             }
@@ -146,6 +148,16 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         if restartsApp {
             actionsSubject.send(.clearCache)
             return
+        }
+
+        // Deleting rows leaves SQLite's file the same size (the freed pages are kept for reuse), so
+        // the sizes shown wouldn't move: vacuum the stores that were cleared. Takes a while on a big
+        // store, under the same "please wait".
+        if clearedEventCache {
+            await clientProxy.optimizeEventCacheStore()
+        }
+        if clearedMedia {
+            await clientProxy.optimizeMediaStore()
         }
 
         if failed {

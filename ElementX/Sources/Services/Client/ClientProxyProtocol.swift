@@ -277,6 +277,10 @@ protocol ClientProxyProtocol: AnyObject {
     
     /// Deletes the cached media of the given rooms (all when nil), only that not accessed for the given duration when set.
     @discardableResult func clearMediaCache(roomIDs: [String]?, notAccessedFor: TimeInterval?) async -> Result<Void, ClientProxyError>
+    /// Vacuum the event cache store after rooms' events were cleared, so its file actually shrinks.
+    func optimizeEventCacheStore() async
+    /// Vacuum the media store after media was cleared, so its file actually shrinks.
+    func optimizeMediaStore() async
     
     func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError>
     

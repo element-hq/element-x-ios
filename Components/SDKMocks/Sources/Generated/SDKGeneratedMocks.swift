@@ -2575,6 +2575,50 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - optimizeEventCacheStore
+
+    open var optimizeEventCacheStoreThrowableError: Error?
+    private let optimizeEventCacheStoreCallsCountLock = NSLock()
+    private var optimizeEventCacheStoreUnderlyingCallsCount = 0
+    open var optimizeEventCacheStoreCallsCount: Int {
+        get { optimizeEventCacheStoreCallsCountLock.withLock { optimizeEventCacheStoreUnderlyingCallsCount } }
+        set { optimizeEventCacheStoreCallsCountLock.withLock { optimizeEventCacheStoreUnderlyingCallsCount = newValue } }
+    }
+    open var optimizeEventCacheStoreCalled: Bool {
+        return optimizeEventCacheStoreCallsCount > 0
+    }
+    open var optimizeEventCacheStoreClosure: (() async throws -> Void)?
+
+    open override func optimizeEventCacheStore() async throws {
+        if let error = optimizeEventCacheStoreThrowableError {
+            throw error
+        }
+        optimizeEventCacheStoreCallsCountLock.withLock { optimizeEventCacheStoreUnderlyingCallsCount += 1 }
+        try await optimizeEventCacheStoreClosure?()
+    }
+
+    //MARK: - optimizeMediaStore
+
+    open var optimizeMediaStoreThrowableError: Error?
+    private let optimizeMediaStoreCallsCountLock = NSLock()
+    private var optimizeMediaStoreUnderlyingCallsCount = 0
+    open var optimizeMediaStoreCallsCount: Int {
+        get { optimizeMediaStoreCallsCountLock.withLock { optimizeMediaStoreUnderlyingCallsCount } }
+        set { optimizeMediaStoreCallsCountLock.withLock { optimizeMediaStoreUnderlyingCallsCount = newValue } }
+    }
+    open var optimizeMediaStoreCalled: Bool {
+        return optimizeMediaStoreCallsCount > 0
+    }
+    open var optimizeMediaStoreClosure: (() async throws -> Void)?
+
+    open override func optimizeMediaStore() async throws {
+        if let error = optimizeMediaStoreThrowableError {
+            throw error
+        }
+        optimizeMediaStoreCallsCountLock.withLock { optimizeMediaStoreUnderlyingCallsCount += 1 }
+        try await optimizeMediaStoreClosure?()
+    }
+
     //MARK: - optimizeStores
 
     open var optimizeStoresThrowableError: Error?
