@@ -4507,3 +4507,14 @@ until the viewer was closed (the known refresh/reload-mid-swipe wedge). The
 rest predicates checked `isDragging`/`isDecelerating` but not `isTracking`
 (finger down before the pan is recognised): added everywhere, and the swap
 fallback reload now defers to the next rest when a touch is down (build 163).
+
+**Round 56 (2026-08-23): build 162 report (build 164).** (1) "Skipped lots"
+after the clear: the first go shows six prepend rebuilds while the media
+timeline paginated (each a covered reload at rest); no skip visible in the
+log. (3) "Copy to preview" for content that worked the go before: the third
+open's rebuild ran 0.5 s after opening, before the (cached, ~100 ms) files had
+loaded, so it built the pages either side blank, and the neighbour heal is
+once per rest on the same item, which that rebuild had consumed: nothing
+healed them until landing (unavailable pages at 98/95/85/83, all with files).
+Fix: a rebuild resets the once-per-rest heal guard. Also: video posters get a
+play badge (circle + play.fill) like the timeline's thumbnails.

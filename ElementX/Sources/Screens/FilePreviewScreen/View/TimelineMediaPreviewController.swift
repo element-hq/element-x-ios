@@ -592,6 +592,10 @@ class TimelineMediaPreviewController: QLPreviewController {
     /// hides the rebuild behind a snapshot; pass false when the page on display is blank anyway
     /// (a snapshot of it would only delay the media the reload brings in).
     private func reloadDataTrackingBlanks(covered: Bool = true) {
+        // A rebuild is a new build: files landing after it may need a heal of their own, so the
+        // once-per-rest heal guard starts over (a rebuild right after opening built the pages
+        // either side before their cached files had loaded, and nothing healed them until landing).
+        lastHealReloadItemID = nil
         MXLog.info("Media viewer: reloadData (covered: \(covered)) at index \(currentPreviewItemIndex) of \(context.viewState.dataSource.numberOfPreviewItems(in: self)), \(currentPreviewItemDescription)")
         if covered {
             coverReload { reloadData() }

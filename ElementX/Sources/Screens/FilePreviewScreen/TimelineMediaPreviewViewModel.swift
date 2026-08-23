@@ -489,7 +489,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             return
         }
         let written = await Task.detached(priority: .userInitiated) {
-            Self.writePlaceholder(thumbnail, size: size, to: url, in: directory)
+            Self.writePlaceholder(thumbnail, size: size, playIcon: item.kind == .video, to: url, in: directory)
         }.value
         guard written, item.fileHandle == nil, item.placeholderURL == nil else { return }
         item.placeholderURL = url
@@ -545,7 +545,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 guard let self, let (thumbnail, size, url) = await placeholderJob(for: item) else { return nil }
                 let directory = placeholderDirectory
                 let written = await Task.detached(priority: .userInitiated) {
-                    Self.writePlaceholder(thumbnail, size: size, to: url, in: directory)
+                    Self.writePlaceholder(thumbnail, size: size, playIcon: item.kind == .video, to: url, in: directory)
                 }.value
                 return written ? (url, size) : nil
             }
@@ -595,11 +595,26 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         return (thumbnail, size, placeholderDirectory.appendingPathComponent("\(UUID().uuidString).jpg"))
     }
     
-    private nonisolated static func writePlaceholder(_ thumbnail: UIImage, size: CGSize, to url: URL, in directory: URL) -> Bool {
+    private nonisolated static func writePlaceholder(_ thumbnail: UIImage, size: CGSize, playIcon: Bool, to url: URL, in directory: URL) -> Bool {
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
-        let data = UIGraphicsImageRenderer(size: size, format: format).jpegData(withCompressionQuality: 0.8) { _ in
+        let data = UIGraphicsImageRenderer(size: size, format: format).jpegData(withCompressionQuality: 0.8) { context in
             thumbnail.draw(in: CGRect(origin: .zero, size: size))
+            // A video's poster gets the play badge the timeline draws on its thumbnail, so the page
+            // reads as a video while it downloads.
+            if playIcon {
+                let diameter = min(size.width, size.height) * 0.2
+                let circle = CGRect(x: (size.width - diameter) / 2, y: (size.height - diameter) / 2, width: diameter, height: diameter)
+                UIColor.black.withAlphaComponent(0.5).setFill()
+                context.cgContext.fillEllipse(in: circle)
+                let symbol = UIImage(systemName: "play.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: diameter * 0.45, weight: .bold))?
+                    .withTintColor(.white, renderingMode: .alwaysOriginal)
+                if let symbol {
+                    let symbolRect = CGRect(x: circle.midX - symbol.size.width / 2 + diameter * 0.03, y: circle.midY - symbol.size.height / 2,
+                                            width: symbol.size.width, height: symbol.size.height)
+                    symbol.draw(in: symbolRect)
+                }
+            }
         }
         do {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
