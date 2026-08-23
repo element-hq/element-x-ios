@@ -38,14 +38,19 @@ struct ManageStorageScreenViewState: BindableState {
     /// ones regardless (clearing shrinks them, but they shouldn't vanish from under the selection).
     /// A search lists every matching room with cached data, however small, so a given room can
     /// always be found by name (or ID).
-    var listedRooms: [StorageUsageRoom] {
-        if isSearching {
+    ///
+    /// Stored, not computed: it's read per row, and a locale-aware filter over thousands of
+    /// rooms per row per render hung the UI on the first keystroke of a search.
+    var listedRooms: [StorageUsageRoom] = []
+
+    static func listedRooms(in rooms: [StorageUsageRoom], selectedRoomIDs: Set<String>, searchQuery: String) -> [StorageUsageRoom] {
+        if !searchQuery.isEmpty {
             return rooms.filter {
-                $0.displayName.localizedStandardContains(bindings.searchQuery) ||
-                    $0.id.localizedStandardContains(bindings.searchQuery)
+                $0.displayName.localizedStandardContains(searchQuery) ||
+                    $0.id.localizedStandardContains(searchQuery)
             }
         }
-        return rooms.filter { $0.totalBytes >= Self.listedRoomMinimumBytes || selectedRoomIDs.contains($0.id) }
+        return rooms.filter { $0.totalBytes >= listedRoomMinimumBytes || selectedRoomIDs.contains($0.id) }
     }
 
     var selectedRooms: [StorageUsageRoom] {

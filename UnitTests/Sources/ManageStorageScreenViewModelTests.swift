@@ -82,12 +82,13 @@ struct ManageStorageScreenViewModelTests {
         try await waitForLoad()
 
         // A search matches by name or ID and ignores the size threshold.
-        context.searchQuery = "hq"
-        #expect(context.viewState.listedRooms.map(\.id) == ["!medium:example.org"])
-        context.searchQuery = "small"
-        #expect(context.viewState.listedRooms.map(\.id) == ["!small:example.org"])
-        context.searchQuery = ""
-        #expect(context.viewState.listedRooms.map(\.id) == ["!big:example.org", "!medium:example.org"])
+        for (query, expected) in [("hq", ["!medium:example.org"]),
+                                  ("small", ["!small:example.org"]),
+                                  ("", ["!big:example.org", "!medium:example.org"])] {
+            let deferred = deferFulfillment(context.observe(\.viewState.listedRooms)) { $0.map(\.id) == expected }
+            context.searchQuery = query
+            try await deferred.fulfill()
+        }
     }
 
     @Test

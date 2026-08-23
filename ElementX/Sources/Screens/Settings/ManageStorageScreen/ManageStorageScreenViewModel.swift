@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AsyncAlgorithms
 import Combine
 import SwiftUI
 
@@ -16,6 +17,7 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
     private let logsDirectory: URL
 
     private var roomsTask: Task<Void, Never>?
+    private var searchTask: Task<Void, Never>?
 
     private let actionsSubject: PassthroughSubject<ManageStorageScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ManageStorageScreenViewModelAction, Never> {
@@ -31,11 +33,19 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
 
         super.init(initialViewState: ManageStorageScreenViewState())
 
+        let searchQueryStream = context.observe(\.viewState.bindings.searchQuery).removeDuplicates()
+        searchTask = Task { [weak self] in
+            for await _ in searchQueryStream {
+                self?.updateListedRooms()
+            }
+        }
+
         Task { await reload() }
     }
 
     isolated deinit {
         roomsTask?.cancel()
+        searchTask?.cancel()
     }
 
     override func process(viewAction: ManageStorageScreenViewAction) {
@@ -50,6 +60,7 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
             } else {
                 state.selectedRoomIDs.insert(roomID)
             }
+            updateListedRooms()
         case .requestClear(let cache):
             let clearsState = cache == nil || cache == .roomState || cache == .messages
             state.bindings.clearRequest = .init(cache: cache,
@@ -67,6 +78,13 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
     }
 
     // MARK: - Private
+
+    /// Re-filters the listed rooms: once per change to the rooms, the selection or the search query.
+    private func updateListedRooms() {
+        state.listedRooms = ManageStorageScreenViewState.listedRooms(in: state.rooms,
+                                                                     selectedRoomIDs: state.selectedRoomIDs,
+                                                                     searchQuery: state.bindings.searchQuery)
+    }
 
     /// The totals (the stores' sizes on disk, instant) come first; the rooms follow once measured.
     private func reload() async {
@@ -99,6 +117,7 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
                     .filter { state.selectedRoomIDs.contains($0.id) && !reportedIDs.contains($0.id) }
                     .map { StorageUsageRoom(id: $0.id, name: $0.name, lastActivity: $0.lastActivity, bytes: [:]) }
                 state.rooms = rooms + emptiedSelection
+                updateListedRooms()
             case .failure(let error):
                 MXLog.error("Failed measuring the rooms' storage usage: \(error)")
                 state.bindings.alertInfo = .init(id: .failure, title: L10n.errorUnknown, message: String(describing: error))
