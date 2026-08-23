@@ -88,7 +88,7 @@ struct TimelineItemMenuActionProvider {
         }
         
         if item.isCopyable {
-            actions.append(.copy)
+            actions.append(.selectText)
             
             if !ProcessInfo.processInfo.isiOSAppOnMac {
                 // As of macOS 26.2, the sheet isn't presented, but it is easy enough

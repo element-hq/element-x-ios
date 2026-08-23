@@ -563,6 +563,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .showTranslation(let text):
                     self.state.bindings.textToBeTranslated = text
                     self.state.bindings.showTranslation = true
+                case .showTextSelection(let text, let html):
+                    self.state.bindings.textSelection = TimelineTextSelectionInfo(text: text, html: html)
                 }
             }
             .store(in: &cancellables)

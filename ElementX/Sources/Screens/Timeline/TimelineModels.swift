@@ -193,6 +193,8 @@ struct TimelineViewStateBindings {
     
     var showTranslation = false
     var textToBeTranslated: String?
+    /// A message's text presented for selection (the "Select text" menu action).
+    var textSelection: TimelineTextSelectionInfo?
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {
@@ -400,4 +402,13 @@ extension TimelineViewState {
         
         return attributedString.string
     }
+}
+
+struct TimelineTextSelectionInfo: Identifiable, Equatable {
+    let id = UUID()
+    /// The message's body: the markdown-ish source for formatted messages, what a plain-text
+    /// composer wants pasted.
+    let text: String
+    /// The message's formatted body, for a rich-text paste.
+    let html: String?
 }
