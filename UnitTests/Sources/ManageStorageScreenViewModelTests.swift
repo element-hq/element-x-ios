@@ -155,7 +155,7 @@ struct ManageStorageScreenViewModelTests {
         #expect(request.restartsApp)
         #expect(request.message.contains(UntranslatedL10n.screenManageStorageWarningRoomState))
 
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .clearCache }
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .clearCache(alsoClearing: []) }
         context.send(viewAction: .confirmClear)
         try await deferred.fulfill()
         #expect(clientProxy.clearRoomCachesRoomIDsCallsCount == 0)

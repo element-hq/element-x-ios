@@ -14,8 +14,9 @@ struct ManageStorageScreenCoordinatorParameters {
 }
 
 enum ManageStorageScreenCoordinatorAction {
-    /// The whole state store is to be cleared: the app clears its caches and restarts.
-    case clearCache
+    /// The whole state store is to be cleared: the app clears its caches and restarts,
+    /// clearing the given caches (media, message keys) along the way, behind the splash.
+    case clearCache(alsoClearing: [StorageCacheKind])
     case viewLogs
 }
 
@@ -40,8 +41,8 @@ final class ManageStorageScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .clearCache:
-                actionsSubject.send(.clearCache)
+            case .clearCache(let alsoClearing):
+                actionsSubject.send(.clearCache(alsoClearing: alsoClearing))
             case .viewLogs:
                 actionsSubject.send(.viewLogs)
             }

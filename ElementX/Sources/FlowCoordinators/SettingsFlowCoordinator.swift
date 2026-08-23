@@ -11,7 +11,9 @@ import SwiftUI
 
 enum SettingsFlowCoordinatorAction {
     case dismiss
-    case clearCache
+    /// The app clears its caches and restarts, clearing the given caches
+    /// (media, message keys) along the way, behind the splash.
+    case clearCache(alsoClearing: [StorageCacheKind])
     case runLogoutFlow
     /// Logout without a confirmation. The user forgot their PIN.
     case forceLogout
@@ -134,7 +136,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 switch action {
                 case .clearCache:
-                    self?.actionsSubject.send(.clearCache)
+                    self?.actionsSubject.send(.clearCache(alsoClearing: []))
                 }
             }
             .store(in: &cancellables)
@@ -295,8 +297,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actionsPublisher
             .sink { [weak self] action in
                 switch action {
-                case .clearCache:
-                    self?.actionsSubject.send(.clearCache)
+                case .clearCache(let alsoClearing):
+                    self?.actionsSubject.send(.clearCache(alsoClearing: alsoClearing))
                 case .viewLogs:
                     self?.presentLogViewer()
                 }
@@ -331,7 +333,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .clearCache:
-                    actionsSubject.send(.clearCache)
+                    actionsSubject.send(.clearCache(alsoClearing: []))
                 }
             }
             .store(in: &cancellables)

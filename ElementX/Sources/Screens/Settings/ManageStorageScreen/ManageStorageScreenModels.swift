@@ -9,9 +9,10 @@ import Compound
 import Foundation
 import SwiftUI
 
-enum ManageStorageScreenViewModelAction {
-    /// The whole state store is to be cleared: the app clears its caches and restarts.
-    case clearCache
+enum ManageStorageScreenViewModelAction: Equatable {
+    /// The whole state store is to be cleared: the app clears its caches and restarts,
+    /// clearing the given caches (media, message keys) along the way, behind the splash.
+    case clearCache(alsoClearing: [StorageCacheKind])
     case viewLogs
 }
 

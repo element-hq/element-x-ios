@@ -130,15 +130,24 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
 
     /// Clears the requested cache(s) within the current scope (the selected rooms, or everything).
     private func clear(_ request: ManageStorageClearRequest) async {
+        var caches = request.cache.map { [$0] } ?? state.activeCaches
+        // The rooms whose caches are cleared: the selection, or all.
+        let roomIDs: [String]? = state.isFiltered ? Array(state.selectedRoomIDs) : nil
+
+        // The whole state store is to be cleared: the app clears its caches and restarts.
+        // The splash screen covers all of the clearing, so there's no "please wait" modal
+        // to get in its way; media/keys clearing is handed over to ride along behind it.
+        if roomIDs == nil, caches.contains(where: { $0 == .roomState || $0 == .messages }) {
+            if caches.contains(.logs) { deleteLogFiles() }
+            actionsSubject.send(.clearCache(alsoClearing: caches.filter { $0 == .media || $0 == .messageKeys }))
+            return
+        }
+
         userIndicatorController.submitIndicator(UserIndicator(id: Self.clearingIndicatorID,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                               title: L10n.commonPleaseWait,
                                                               persistent: true))
         defer { userIndicatorController.retractIndicatorWithId(Self.clearingIndicatorID) }
-
-        var caches = request.cache.map { [$0] } ?? state.activeCaches
-        // The rooms whose caches are cleared: the selection, or all.
-        let roomIDs: [String]? = state.isFiltered ? Array(state.selectedRoomIDs) : nil
         
         // A room's media is found through its stored messages: once those are cleared the media
         // can't be attributed to the room any more (clearing it afterwards found nothing, every
@@ -150,7 +159,6 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
         caches.sort { lhs, rhs in (lhs == .media ? 0 : 1) < (rhs == .media ? 0 : 1) }
 
         var failed = false
-        var restartsApp = false
         var clearedEventCache = false
         var clearedMedia = false
 
@@ -161,21 +169,13 @@ class ManageStorageScreenViewModel: ManageStorageScreenViewModelType, ManageStor
             case .roomState, .messages:
                 // The two are cleared together, so once is enough when clearing everything.
                 guard cache == .roomState || !caches.contains(.roomState) else { continue }
-                if let roomIDs {
-                    if case .failure = await clientProxy.clearRoomCaches(roomIDs: roomIDs) { failed = true } else { clearedEventCache = true }
-                } else {
-                    restartsApp = true // The whole state store: the app clears its caches and restarts.
-                }
+                guard let roomIDs else { continue } // Unfiltered took the restart path above.
+                if case .failure = await clientProxy.clearRoomCaches(roomIDs: roomIDs) { failed = true } else { clearedEventCache = true }
             case .media:
                 if case .failure = await clientProxy.clearMediaCache(roomIDs: roomIDs, notAccessedFor: nil) { failed = true } else { clearedMedia = true }
             case .logs:
                 deleteLogFiles()
             }
-        }
-
-        if restartsApp {
-            actionsSubject.send(.clearCache)
-            return
         }
 
         // Deleting rows leaves SQLite's file the same size (the freed pages are kept for reuse), so

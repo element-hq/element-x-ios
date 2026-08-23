@@ -14,7 +14,9 @@ import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
     case logout
-    case clearCache
+    /// The app clears its caches and restarts, clearing the given caches
+    /// (media, message keys) along the way, behind the splash.
+    case clearCache(alsoClearing: [StorageCacheKind])
     /// Logout and disable App Lock without any confirmation. The user forgot their PIN.
     case forceLogout
 }
@@ -393,8 +395,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .dismiss:
                 navigationTabCoordinator.setSheetCoordinator(nil)
-            case .clearCache:
-                actionsSubject.send(.clearCache)
+            case .clearCache(let alsoClearing):
+                actionsSubject.send(.clearCache(alsoClearing: alsoClearing))
             case .runLogoutFlow:
                 Task {
                     self.navigationTabCoordinator.setSheetCoordinator(nil)

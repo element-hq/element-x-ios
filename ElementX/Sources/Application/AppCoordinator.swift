@@ -901,7 +901,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 switch action {
                 case .logout:
                     stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: false))
-                case .clearCache:
+                case .clearCache(let alsoClearing):
+                    cachesToClearOnRestart = alsoClearing
                     stateMachine.processEvent(.clearCache)
                 case .forceLogout:
                     stateMachine.processEvent(.signOut(isSoft: false, disableAppLock: true))
@@ -1047,6 +1048,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         .store(in: &cancellables)
     }
     
+    /// The extra caches Manage Storage asked to clear along with the restart, behind the splash.
+    private var cachesToClearOnRestart = [StorageCacheKind]()
+
     private func clearCache() {
         guard let userSession else {
             fatalError("User session not setup")
@@ -1060,9 +1064,26 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
 
+        let alsoClearing = cachesToClearOnRestart
+        cachesToClearOnRestart = []
+
         // Allow for everything to deallocate properly
         Task {
-            await userSession.clientProxy.clearCaches()
+            let clientProxy = userSession.clientProxy
+            if alsoClearing.contains(.media) {
+                _ = await clientProxy.clearMediaCache(roomIDs: nil, notAccessedFor: nil)
+            }
+            if alsoClearing.contains(.messageKeys) {
+                _ = await clientProxy.clearRoomKeys(roomIDs: nil)
+            }
+            await clientProxy.clearCaches()
+            // Deleting rows leaves SQLite's files the same size (the freed pages are kept for
+            // reuse), so Manage Storage would keep reporting the old sizes after the restart:
+            // vacuum the cleared stores. They're near-empty now, so this is quick.
+            await clientProxy.optimizeEventCacheStore()
+            if alsoClearing.contains(.media) {
+                await clientProxy.optimizeMediaStore()
+            }
             stateMachine.processEvent(.startWithExistingSession)
         }
     }
