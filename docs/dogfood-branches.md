@@ -4182,3 +4182,14 @@ cross-timeline identity). Equality/hash now use event-or-transaction ID +
 `mediaIndex` (whole identifier only for virtual items). The fallback filter
 from build 144 stays (clean contiguous-range merge). Build 145 = this x SDK
 `5140c5839`.
+
+**Still no overscroll out of a gallery (EXI `5bc16305b`, build 146).** Build
+145 merged fine (11:22:56Z: count 103 -> 3, current index 0, shape SDM) but
+the media timeline built for a gallery tap was still filtered to
+`msgtypes=[gallery]` (the pre-inline scoping in
+`TimelineInteractionHandler.processItemTap`, comment and all), so in a room
+with one gallery the timeline was that gallery's 3 attachments with both ends
+reached: nothing to swipe onto. The tapped attachment index is now threaded
+into `processItemTap` and a gallery tap filters like an individual tap of
+that attachment's kind would (image/video -> `[image, video, gallery]`,
+audio/file -> `[audio, file, gallery]`). Build 146 = this x SDK `5140c5839`.
