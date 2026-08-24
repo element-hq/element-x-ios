@@ -272,12 +272,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
+        handleAppRoute(appRoute, windowType: windowType, animated: nil)
+    }
+    
+    /// - Parameter animated: `false` jumps straight to the route (a push tap or an
+    ///   external deeplink lands on its target, not on a navigation animation from
+    ///   the room list); `nil` animates when the app is active.
+    func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?, animated: Bool?) {
         Task {
-            await asyncHandleAppRoute(appRoute, windowType: windowType)
+            await asyncHandleAppRoute(appRoute, windowType: windowType, animated: animated)
         }
     }
     
-    private func asyncHandleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) async {
+    private func asyncHandleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?, animated: Bool?) async {
         MXLog.info("Handling app route:  \(appRoute)")
         
         await resumeClientServices()
@@ -288,16 +295,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         var handled = false
+        let animated = animated ?? (appMediator.appState == .active)
         
         switch appRoute {
         case .accountProvisioningLink:
             if let authenticationFlowCoordinator {
-                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: animated)
                 handled = true
             }
         default:
             if let userSessionFlowCoordinator {
-                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: animated)
                 handled = true
             }
         }
@@ -332,7 +340,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case .room(let roomID, let via):
                 if isExternalURL {
                     handleAppRoute(route,
-                                   windowType: windowType)
+                                   windowType: windowType,
+                                   animated: false)
                 } else {
                     handleAppRoute(.childRoom(roomID: roomID, via: via),
                                    windowType: windowType)
@@ -340,7 +349,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case .roomAlias(let alias):
                 if isExternalURL {
                     handleAppRoute(route,
-                                   windowType: windowType)
+                                   windowType: windowType,
+                                   animated: false)
                 } else {
                     handleAppRoute(.childRoomAlias(alias),
                                    windowType: windowType)
@@ -348,7 +358,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case .event(let eventID, let roomID, let via, _):
                 if isExternalURL {
                     handleAppRoute(route,
-                                   windowType: windowType)
+                                   windowType: windowType,
+                                   animated: false)
                 } else {
                     handleAppRoute(.childEvent(eventID: eventID, roomID: roomID, via: via),
                                    windowType: windowType)
@@ -356,7 +367,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             case .eventOnRoomAlias(let eventID, let alias):
                 if isExternalURL {
                     handleAppRoute(route,
-                                   windowType: windowType)
+                                   windowType: windowType,
+                                   animated: false)
                 } else {
                     handleAppRoute(.childEventOnRoomAlias(eventID: eventID, alias: alias),
                                    windowType: windowType)
@@ -453,15 +465,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
 
         if content.categoryIdentifier == NotificationConstants.Category.invite {
-            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
+            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil, animated: false)
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
-            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID), windowType: nil)
+            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID), windowType: nil, animated: false)
         } else if let eventID {
             // Only track main timeline event deeplinking
             analyticsService.signpost.startTransaction(.notificationToMessage)
-            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: [], openLiveIfNewest: true), windowType: nil)
+            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: [], openLiveIfNewest: true), windowType: nil, animated: false)
         } else {
-            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
+            handleAppRoute(.room(roomID: roomID, via: []), windowType: nil, animated: false)
         }
     }
     

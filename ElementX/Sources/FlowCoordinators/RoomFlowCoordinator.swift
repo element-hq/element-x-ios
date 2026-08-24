@@ -358,6 +358,17 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     return
                 }
                 
+                // A permalink shows the room right away, in its focused-timeline
+                // loading state, rather than holding the user on the room list
+                // while the event is checked. Push taps (openLiveIfNewest) resolve
+                // locally in an instant thanks to the NSE prefill, and wait, so
+                // that a tap on the newest message can keep the live timeline.
+                let presentedEarly = !focusEvent.openLiveIfNewest
+                if presentedEarly {
+                    stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
+                    hideLoadingIndicator()
+                }
+
                 // Otherwise check if the focussed event exists to handle a possible error or theaded event.
                 let eventDetails = await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID)
                 guard !Task.isCancelled else { return }
@@ -380,12 +391,18 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                        focusEvent: .init(eventID: focusEvent.eventID,
                                                                                                          shouldSetPin: focusEvent.shouldSetPin))),
                                               userInfo: EventUserInfo(animated: animated))
+                    } else if presentedEarly {
+                        // Already showing the room focused on the event.
                     } else if isNewestKnownEvent {
                         stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
                     } else {
                         stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                     }
                 case .failure:
+                    if presentedEarly {
+                        // The room's own focused-timeline load surfaces the failure.
+                        return
+                    }
                     showErrorIndicator()
                     stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
                 }
