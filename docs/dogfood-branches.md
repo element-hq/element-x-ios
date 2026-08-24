@@ -4842,3 +4842,21 @@ thumbnail (by the event's pixel size, else a small file size), and
 thumbnail-less items are fetched as full content rather than via the
 thumbnail endpoint - which cannot serve encrypted media, so they could
 never get a poster even on display.
+
+**Round 68 addendum 2 (2026-08-24, builds 202-203).** (1) The black flashes
+that survived build 201 were the cover itself: under a reload burst each new
+covered reload re-snapshotted the page mid-rebuild (a snapshot of a
+just-emptied page is black) and the previous reload's watcher then tore down
+the cover the newer reload had just installed, within microseconds. Covers
+now hand over - a standing cover is reused, the old watcher cancelled, only
+the newest may drop it - plus a 600ms floor between heal reloads so arrival
+bursts coalesce (EXI ffd23d71d, build 202, USER-VALIDATED: cover lifetimes
+176-300ms, zero blanks landed on across 66 swipes). (2) The ~100-slot
+phantom padding doubled as a silent browse cap: a spent side bounced exactly
+like the end of the timeline, with further merges landing unreachably. The
+budget is now re-centred before it runs out: at <=10 remaining slots (and
+the timeline genuinely continuing), both paddings restore to 100 at the next
+rest under a covered reload with the index re-derived (EXI dd583295d, build
+203, VALIDATE: browse 100+ media backwards in one sitting, expect "restoring
+the browse budget" with no visible hitch and no false start-of-timeline
+bounce). The full architecture is now written up in docs/media-viewer.md.
