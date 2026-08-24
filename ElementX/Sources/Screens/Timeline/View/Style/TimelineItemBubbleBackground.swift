@@ -18,11 +18,13 @@ extension View {
     func bubbleBackground(isOutgoing: Bool = true,
                           insets: EdgeInsets = .init(top: 8, leading: 12, bottom: 8, trailing: 12),
                           color: @autoclosure @MainActor () -> Color? = .compound.bgSubtleSecondary,
-                          borderColor: @autoclosure @MainActor () -> Color? = nil) -> some View {
+                          borderColor: @autoclosure @MainActor () -> Color? = nil,
+                          clipExpansion: CGFloat = 0) -> some View {
         modifier(TimelineItemBubbleBackgroundModifier(isOutgoing: isOutgoing,
                                                       insets: insets,
                                                       color: color(),
-                                                      borderColor: borderColor()))
+                                                      borderColor: borderColor(),
+                                                      clipExpansion: clipExpansion))
     }
 }
 
@@ -33,12 +35,21 @@ private struct TimelineItemBubbleBackgroundModifier: ViewModifier {
     let insets: EdgeInsets
     var color: Color?
     var borderColor: Color?
+    /// Expands the clip outward ("Select text" mode) so it can't crop the selection
+    /// handles' knobs: the background only paints its own bounds, so this shows nothing.
+    var clipExpansion: CGFloat = 0
     
     func body(content: Content) -> some View {
         content
             .padding(insets)
-            .background(color)
-            .cornerRadius(12, corners: roundedCorners)
+            // The rounding is painted, not clipped: the clip below can then lift
+            // ("Select text") without squaring the bubble's corners.
+            .background {
+                if let color {
+                    RoundedCornerShape(radius: 12, corners: roundedCorners).fill(color)
+                }
+            }
+            .clipShape(RoundedCornerShape(radius: 12, corners: roundedCorners, expansion: clipExpansion))
             .overlay {
                 if let borderColor {
                     RoundedCornerShape(radius: 12, corners: roundedCorners)

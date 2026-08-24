@@ -55,6 +55,19 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate, UIG
         selectedRange = contentRange
     }
 
+    /// The geometry chokepoint the selection interaction drives handle drags through:
+    /// a point over the spacer answers with the content's end, so dragging the trailing
+    /// handle can't select the spacer (the setter/delegate clamps miss these drags, the
+    /// interaction applies its own tracked range).
+    override func closestPosition(to point: CGPoint) -> UITextPosition? {
+        guard let closest = super.closestPosition(to: point) else { return nil }
+        guard let contentEnd = position(from: beginningOfDocument, offset: contentRange.length),
+              offset(from: contentEnd, to: closest) > 0 else {
+            return closest
+        }
+        return contentEnd
+    }
+
     /// Touches on the invisible timestamp spacer never belong to the text: outside
     /// "Select text" they fall through to the bubble, so the spacer behaves like bubble
     /// background (long press menu, double tap to react, scroll) instead of lifting

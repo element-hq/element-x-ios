@@ -11,8 +11,16 @@ import SwiftUI
 struct RoundedCornerShape: Shape {
     let radius: CGFloat
     let corners: UIRectCorner
+    /// Grows the shape outward past its rect on every side. Used to keep a clip's
+    /// rounded identity while (temporarily) not cropping anything near the bounds,
+    /// e.g. text selection handles ("Select text" mode).
+    var expansion: CGFloat = 0
     
     func path(in rect: CGRect) -> Path {
+        if expansion > 0 {
+            return Path(roundedRect: rect.insetBy(dx: -expansion, dy: -expansion), cornerRadius: radius)
+        }
+        
         var path = Path()
         
         let width = rect.size.width

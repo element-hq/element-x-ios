@@ -171,10 +171,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     context.send(viewAction: .endTextSelection)
                 }
             }
-            // A double tap opens the reaction picker (not while the text is being selected: the
-            // text view's double tap selects a word then).
+            // A double tap opens the reaction picker - or, by advanced setting, selects the
+            // message's text (not while it already is: the text view owns double taps then).
             .onDoubleTap(isEnabled: !isSelectingText) {
-                context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
+                if context.viewState.doubleTapToSelectText, timelineItem is EventBasedMessageTimelineItemProtocol {
+                    context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: .selectText))
+                } else {
+                    context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
+                }
             }
             .longPressWithFeedback(isEnabled: !isSelectingText) {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
@@ -184,7 +188,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .foregroundColor(.compound.iconPrimary)
                     .accessibilityHidden(true)
             } shouldStartAction: {
-                timelineItem.canBeRepliedTo
+                // Not while text is being selected: the selection drag would fight the swipe.
+                timelineItem.canBeRepliedTo && context.textSelection == nil
             } action: {
                 context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id,
                                                                        action: .reply(isThread: timelineItem.properties.isThreaded)))
@@ -217,7 +222,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
                               insets: timelineItem.bubbleInsets(hasContentScanningFailure: hasContentScanningFailure),
                               color: hasContentScanningFailure ? .compound.bgCriticalSubtle : timelineItem.bubbleBackgroundColor,
-                              borderColor: hasContentScanningFailure ? .compound.borderCriticalSubtle : nil)
+                              borderColor: hasContentScanningFailure ? .compound.borderCriticalSubtle : nil,
+                              clipExpansion: isSelectingText ? 60 : 0)
     }
     
     var contentWithReply: some View {
@@ -250,7 +256,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // "Select text": the item's text views select in place (see `MessageText`).
                 .environment(\.timelineTextSelection, isSelectingText ? context.textSelection : nil)
                 .timelineBubbleLayoutSize(.natural)
-                .cornerRadius(timelineItem.contentCornerRadius)
+                // While selecting, the clip expands so it can't crop the selection handles'
+                // knobs (the background only paints its own bounds, so this shows nothing).
+                .clipShape(RoundedRectangle(cornerRadius: timelineItem.contentCornerRadius)
+                    .inset(by: isSelectingText ? -60 : 0))
         }
     }
     

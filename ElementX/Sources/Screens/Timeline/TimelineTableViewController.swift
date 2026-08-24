@@ -634,10 +634,24 @@ class TimelineTableViewController: UIViewController {
         dataSource?.defaultRowAnimation = (UIAccessibility.isReduceMotionEnabled ? .none : .top)
         tableView.delegate = self
         
+        // "Select text": a tap outside the selected text ends the selection (taps on
+        // another bubble already end it in the bubble's own tap handler). Passive: it
+        // cancels nothing and recognises alongside everything.
+        let endSelectionTap = UITapGestureRecognizer(target: self, action: #selector(handleEndTextSelectionTap))
+        endSelectionTap.cancelsTouchesInView = false
+        endSelectionTap.delegate = self
+        tableView.addGestureRecognizer(endSelectionTap)
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(accessibilityReduceMotionDidChange),
                                                name: UIAccessibility.reduceMotionStatusDidChangeNotification,
                                                object: nil)
+    }
+    
+    @objc private func handleEndTextSelectionTap(_ recognizer: UITapGestureRecognizer) {
+        guard coordinator.context.textSelection != nil else { return }
+        MXLog.info("Timeline: tap outside the selection ends Select text")
+        coordinator.context.send(viewAction: .endTextSelection)
     }
     
     @objc private func accessibilityReduceMotionDidChange() {
@@ -1015,6 +1029,25 @@ class TimelineTableViewController: UIViewController {
 }
 
 // MARK: - UITableViewDelegate
+
+extension TimelineTableViewController: UIGestureRecognizerDelegate {
+    /// The end-selection tap: never over the selected text itself (caret moves, the
+    /// edit menu), and always alongside every other recogniser.
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard coordinator.context.textSelection != nil else { return false }
+        var view: UIView? = touch.view
+        while let current = view {
+            if current is MessageTextView { return false }
+            view = current.superview
+        }
+        return true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+}
 
 extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
