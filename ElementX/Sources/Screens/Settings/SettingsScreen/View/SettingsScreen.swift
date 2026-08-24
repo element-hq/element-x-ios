@@ -23,7 +23,7 @@ struct SettingsScreen: View {
         Form {
             userSection
             
-            if context.viewState.showUserStatus {
+            if context.viewState.showUserStatusInput {
                 userStatusSection
             }
             
