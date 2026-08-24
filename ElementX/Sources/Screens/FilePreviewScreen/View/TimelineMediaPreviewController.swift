@@ -75,7 +75,6 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         view.addSubview(captionView)
         // Constraints added later as the toolbar isn't available yet.
-        
         view.addSubview(downloadIndicatorHostingController.view)
         downloadIndicatorHostingController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -85,9 +84,16 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         // Observation of currentPreviewItem doesn't work, so use the index instead.
         publisher(for: \.currentPreviewItemIndex)
-            .sink { [weak self] _ in
+            .sink { [weak self] index in
                 // This isn't removing duplicates which may try to download and/or write to disk concurrently????
+                MXLog.info("Media viewer: index \(index) -> \(self?.currentPreviewItemDescription ?? "nil")")
+                self?.isCaptionSuppressed = false // Swiping away and back brings the caption back.
                 self?.loadCurrentItem()
+                self?.checkCurrentItemOnArrival()
+                // A rebuild that found the pages moving re-arms for wherever the swipe lands.
+                if self?.pendingRestRebuild == true {
+                    self?.rebuildWhenResting()
+                }
             }
             .store(in: &cancellables)
         
@@ -116,6 +122,11 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         dataSource = context.viewState.dataSource
         currentPreviewItemIndex = context.viewState.dataSource.initialItemIndex
+        // The geometry QuickLook builds with, so the first count change already shifts the index
+        // (the padding can collapse before the first items update, which used to slip through).
+        lastKnownItemCount = context.viewState.dataSource.numberOfPreviewItems(in: self)
+        lastKnownFirstIndex = context.viewState.dataSource.firstPreviewItemIndex
+        recordBuiltBlankPages() // Seed the blank model from the initial (mostly file-less) build.
     }
     
     @available(*, unavailable) required init?(coder: NSCoder) {
@@ -203,11 +214,18 @@ class TimelineMediaPreviewController: QLPreviewController {
         guard pageWidth > 0 else { return }
         
         // Whilst resting on an item, keep track of the offset that any swipe will start from.
-        if !pageScrollView.isDragging, !pageScrollView.isDecelerating {
+        if !pageScrollView.isTracking, !pageScrollView.isDragging, !pageScrollView.isDecelerating {
             pageScrollViewRestingOffset = pageScrollView.contentOffset.x
+        } else {
+            removeReloadCover(animated: false) // Don't freeze the pages under a swipe.
         }
         
         let delta = pageScrollView.contentOffset.x - pageScrollViewRestingOffset
+        
+        // At the timeline ends QuickLook now bounces natively (the data source drops its phantom
+        // padding once a side is fully paginated), so there's nothing to hard-block here; the
+        // overlay just tracks whatever the scroll view does, bounce included.
+        
         overlayView.transform = CGAffineTransform(translationX: -delta, y: 0)
         // Fade towards the midpoint so the overlay never clashes with the neighbouring item's state.
         overlayView.alpha = max(0, 1 - abs(delta) / (pageWidth / 2))
@@ -218,11 +236,32 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func loadCurrentItem() {
         headerHostingController.view.sizeToFit() // Resizing isn't automatic in the toolbar 😒
         
+        // The clamp transitions set the index and reload; done from inside this index
+        // observation QuickLook drops the index write (observed: the set logged as a no-op),
+        // which toggled clamp/release forever. Defer them to the next run-loop turn. And while
+        // a move is mid-flight (reload done, index set pending) the reload's own index callback
+        // must not re-clamp the page being moved away from (observed: the move then dropped).
+        // The page the reload of a move passes through isn't anyone's current item: handling it
+        // (clamp, the "loading" state's spinner over the cover) is what the user saw as a spinner
+        // over the previous media. The move's landing re-runs this.
+        guard pendingMoveIndex == nil else { return }
         if let previewItem = currentPreviewItem as? TimelineMediaPreviewItem.Media {
+            scheduleWhenResting { $0.releasePlaceholderClamp() }
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
+            // A page QuickLook built as "loading more" whose index now holds a media (items the
+            // padding absorbed since the build): rebuild it rather than treat it as the edge. Once
+            // the pages have stopped moving: refreshing mid-swipe wedges QuickLook (the stuck
+            // blank video), and a covered reload is what reliably rebuilds a page on device.
+            if case .paginating = loadingItem.state,
+               context.viewState.dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
+                MXLog.info("Media viewer: stale placeholder page at index \(currentPreviewItemIndex), rebuilding when resting")
+                rebuildWhenResting()
+                return
+            }
             switch loadingItem.state {
-            case .paginating:
+            case .paginating(let direction):
+                scheduleWhenResting { $0.clampToPlaceholder(direction) }
                 context.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
             case .timelineStart:
                 Task { await returnToIndex(context.viewState.dataSource.firstPreviewItemIndex) }
@@ -239,15 +278,228 @@ class TimelineMediaPreviewController: QLPreviewController {
         try? await Task.sleep(for: .seconds(0.1))
         
         currentPreviewItemIndex = index
-        context.send(viewAction: .timelineEndReached)
+    }
+    
+    /// The QuickLook item count and first-item index at the last update, tracked so we notice
+    /// when a side's phantom padding collapses at end-reached (see the data source). Normal
+    /// pagination keeps the count constant (the padding trick), so these change only at the two
+    /// end transitions, when the items shift and QuickLook's cached count goes stale.
+    private var lastKnownItemCount: Int?
+    private var lastKnownFirstIndex = 0
+    
+    /// The loaded item at the edge the user paged off onto a "loading more" page, so that when
+    /// its items arrive the viewer steps onto the newest of them (the page the placeholder stood for).
+    private var anchoredEdgeItemID: MediaPreviewItemID?
+    
+    /// The user has paged onto a "loading more" placeholder: make it QuickLook's content edge on
+    /// that side (one placeholder page, native bounce beyond it) rather than one of a hundred.
+    /// Clamp transitions in the last second: a toggling loop (clamp, release, clamp…) is stopped
+    /// rather than left to starve the main thread, whatever new way QuickLook finds to cause one.
+    private var clampTransitionTimes = [ContinuousClock.Instant]()
+    private func recordClampTransition() -> Bool {
+        let now = ContinuousClock.now
+        clampTransitionTimes = clampTransitionTimes.filter { now - $0 < .seconds(1) } + [now]
+        if clampTransitionTimes.count > 4 {
+            MXLog.error("Media viewer: placeholder clamp is toggling, leaving it alone")
+            return false
+        }
+        return true
+    }
+    
+    /// How long the user is kept on a "loading more" placeholder once items have arrived beyond it
+    /// while a gap or undecryptable messages remain between (the data source's per-message wait).
+    private static let placeholderHoldLimit: Duration = .seconds(TimelineMediaPreviewDataSource.pendingUTDWait)
+    private var placeholderHoldStarted: ContinuousClock.Instant?
+    private var placeholderHoldRecheckScheduled = false
+    
+    private func clampToPlaceholder(_ direction: PaginationDirection) {
+        let dataSource = context.viewState.dataSource
+        // Still on that placeholder? (Deferred from the index change; the pages may have moved on.)
+        guard let placeholder = currentPreviewItem as? TimelineMediaPreviewItem.Loading,
+              case .paginating(let current) = placeholder.state, current == direction,
+              recordClampTransition() else { return }
+        placeholderHoldStarted = .now
+        switch direction {
+        case .backwards:
+            guard !dataSource.isClampedToBackwardPlaceholder else { return }
+            dataSource.isClampedToBackwardPlaceholder = true
+            anchoredEdgeItemID = dataSource.previewItems.first?.id
+        case .forwards:
+            guard !dataSource.isClampedToForwardPlaceholder else { return }
+            dataSource.isClampedToForwardPlaceholder = true
+            anchoredEdgeItemID = dataSource.previewItems.last?.id
+        }
+        MXLog.info("Media viewer: clamping to the \(direction) placeholder page")
+        handleUpdatedItems() // Count changed: the placeholder keeps its page, the count is re-read on reload.
+    }
+    
+    /// Back on a media page: the padding returns so pagination keeps the indices stable again.
+    private func releasePlaceholderClamp() {
+        let dataSource = context.viewState.dataSource
+        guard dataSource.isClampedToBackwardPlaceholder || dataSource.isClampedToForwardPlaceholder,
+              currentPreviewItem is TimelineMediaPreviewItem.Media,
+              recordClampTransition() else { return }
+        dataSource.isClampedToBackwardPlaceholder = false
+        dataSource.isClampedToForwardPlaceholder = false
+        anchoredEdgeItemID = nil
+        placeholderHoldStarted = nil
+        MXLog.info("Media viewer: releasing the placeholder clamp")
+        handleUpdatedItems()
+    }
+    
+    /// How far below the current index prepended items count as landing inside built pages.
+    private static let placeholderRebuildRadius = 3
+    /// A rebuild of QuickLook's pages is owed (items landed inside or moved under the built pages)
+    /// but the pages were moving: it runs at the next rest, wherever that is. Swiping on used to
+    /// drop it ("that landing's stale-page check takes over", which only covers "loading more"
+    /// pages), leaving stale pages until the viewer was reopened.
+    private var pendingRestRebuild = false
+    
+    private func rebuildWhenResting() {
+        pendingRestRebuild = true
+        let index = currentPreviewItemIndex
+        Task { [weak self] in
+            guard let self, await waitUntilResting(atIndex: index), pendingRestRebuild else { return }
+            pendingRestRebuild = false
+            reloadDataTrackingBlanks()
+        }
+    }
+    
+    /// A re-centre of the browse budget is waiting for the pages to stop moving.
+    private var pendingBudgetRecentre = false
+    
+    /// Restores the phantom padding under a covered reload at the next rest, re-deriving the
+    /// current item's index (a rebase shifts every index by the padding delta). Only from a
+    /// settled media page: the "Loading more" stepping machinery owns the placeholder pages.
+    private func recentreBrowseBudgetWhenResting() {
+        pendingBudgetRecentre = true
+        let index = currentPreviewItemIndex
+        Task { [weak self] in
+            guard let self, await waitUntilResting(atIndex: index), pendingBudgetRecentre else { return }
+            pendingBudgetRecentre = false
+            let dataSource = context.viewState.dataSource
+            guard pendingMoveIndex == nil, dataSource.isBrowseBudgetLow,
+                  let currentItemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id else { return }
+            dataSource.restoreBrowseBudget()
+            guard let newIndex = dataSource.previewIndex(of: currentItemID) else { return }
+            moveToIndexAndReload(newIndex)
+            lastKnownItemCount = dataSource.numberOfPreviewItems(in: self)
+            lastKnownFirstIndex = dataSource.firstPreviewItemIndex
+        }
+    }
+    
+    /// On a clamped "loading more" page whose items have arrived: step onto the newest of them
+    /// (what the placeholder stood for), with the padding restored in the same reload. Returns
+    /// whether it stepped, in which case the caller's own count bookkeeping is already done.
+    private func steppedOffArrivedPlaceholder(_ dataSource: TimelineMediaPreviewDataSource) -> Bool {
+        if let edgeID = anchoredEdgeItemID,
+           let placeholder = currentPreviewItem as? TimelineMediaPreviewItem.Loading,
+           case .paginating(let direction) = placeholder.state,
+           let edgeIndex = dataSource.previewIndex(of: edgeID) {
+            let stepped = direction == .backwards ? edgeIndex - 1 : edgeIndex + 1
+            // Only onto an item adjacent to the edge in the timeline: a backfill can land older
+            // items first with a gap, or messages still waiting on their keys, between them and
+            // the edge (stepping then skipped the ~20 items that filled in afterwards). Until that
+            // resolves, stay on the placeholder.
+            let olderID = direction == .backwards ? dataSource.mediaItem(atPreviewIndex: stepped)?.id : edgeID
+            let gapBetween = olderID.map { dataSource.itemIDsWithGapOnNewerSide.contains($0) } ?? false
+            // The wait is bounded from when the user landed on the placeholder, not per undecryptable
+            // message: a room full of them kept the user on "Loading more" for 13 s as each backfill
+            // brought more (every one restarting the data source's wait) while the items that had
+            // decrypted sat unreachable behind the clamp. Past the bound, step onto what has arrived;
+            // what decrypts later is inserted behind as a reshuffle and rebuilt at rest, reachable.
+            let heldFor = placeholderHoldStarted.map { ContinuousClock.now - $0 } ?? .zero
+            if gapBetween, heldFor < Self.placeholderHoldLimit {
+                MXLog.info("Media viewer: items arrived beyond the \(direction) placeholder but a gap or undecryptable messages remain between, waiting (held \(heldFor))")
+                if !placeholderHoldRecheckScheduled {
+                    placeholderHoldRecheckScheduled = true
+                    Task { [weak self] in
+                        try? await Task.sleep(for: Self.placeholderHoldLimit - heldFor + .milliseconds(50))
+                        self?.placeholderHoldRecheckScheduled = false
+                        guard let self, anchoredEdgeItemID != nil else { return }
+                        handleUpdatedItems()
+                    }
+                }
+            } else if stepped >= dataSource.firstPreviewItemIndex, stepped <= dataSource.lastPreviewItemIndex {
+                if gapBetween {
+                    MXLog.info("Media viewer: held on the \(direction) placeholder for \(heldFor), stepping past the undecryptable messages")
+                }
+                dataSource.isClampedToBackwardPlaceholder = false
+                dataSource.isClampedToForwardPlaceholder = false
+                anchoredEdgeItemID = nil
+                placeholderHoldStarted = nil
+                if let edgeIndex = dataSource.previewIndex(of: edgeID) {
+                    let target = direction == .backwards ? edgeIndex - 1 : edgeIndex + 1
+                    MXLog.info("Media viewer: items arrived beyond the \(direction) placeholder, stepping to index \(target)")
+                    moveToIndexAndReload(target)
+                    lastKnownItemCount = dataSource.numberOfPreviewItems(in: self)
+                    lastKnownFirstIndex = dataSource.firstPreviewItemIndex
+                    return true
+                }
+            }
+        }
+        return false
     }
     
     private func handleUpdatedItems() {
+        let dataSource = context.viewState.dataSource
+        
+        if steppedOffArrivedPlaceholder(dataSource) {
+            return
+        }
+        
+        // When a side reaches the end of the timeline its phantom padding drops to zero so the
+        // last real item becomes QuickLook's content edge (native bounce). That changes the
+        // count and can move the current item's index; QuickLook only re-reads the count on
+        // reloadData, so re-derive the current item's index from the data source and reload
+        // just then. Re-derived, not shifted by the first index's change: a prepend the padding
+        // absorbs moves the first index without moving any page (shifting by it opened the
+        // viewer on an item ~N older than the one tapped).
+        let count = dataSource.numberOfPreviewItems(in: self)
+        let firstIndex = dataSource.firstPreviewItemIndex
+        if let previousCount = lastKnownItemCount, previousCount != count {
+            // QuickLook's own current item, or the item the viewer opens on before it has built.
+            let currentItemID = currentPreviewItem == nil ? dataSource.currentItem.mediaItem?.id : (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id
+            let newIndex = currentItemID.flatMap { dataSource.previewIndex(of: $0) }
+            let newIndexDescription = newIndex.map(String.init) ?? "shift \(firstIndex - lastKnownFirstIndex)"
+            MXLog.info("Media viewer: item count \(previousCount) -> \(count), first index \(lastKnownFirstIndex) -> \(firstIndex), current index \(currentPreviewItemIndex) -> \(newIndexDescription)")
+            // On a placeholder page: follow the padding edge it belongs to, staying in range
+            // (the placeholder vanishes when its side reaches the end: land on the edge item).
+            let target = newIndex ?? min(max(currentPreviewItemIndex + firstIndex - lastKnownFirstIndex, 0), count - 1)
+            moveToIndexAndReload(target)
+        }
+        let reloaded = lastKnownItemCount != count
+        // Items prepended into the pages QuickLook has built (a cold event cache: the pages either
+        // side were built as the "loading more" placeholder before the items arrived, and QuickLook
+        // keeps them): rebuild when resting, rather than only once the user lands on one and rests
+        // there, so the next swipe finds the media.
+        if !reloaded, firstIndex < lastKnownFirstIndex, lastKnownFirstIndex >= currentPreviewItemIndex - Self.placeholderRebuildRadius, !pendingRestRebuild {
+            MXLog.info("Media viewer: items arrived inside the built pages (first index \(lastKnownFirstIndex) -> \(firstIndex)), rebuilding when resting")
+            rebuildWhenResting()
+        }
+        lastKnownItemCount = count
+        lastKnownFirstIndex = firstIndex
+        
+        // A pagination merge has nearly spent a side's browse budget: re-centre it at rest,
+        // before the edge hardens into a false end of the timeline.
+        if dataSource.isBrowseBudgetLow, !pendingBudgetRecentre {
+            MXLog.info("Media viewer: browse budget low, re-centring when resting")
+            recentreBrowseBudgetWhenResting()
+        }
+        
+        // A reshuffle without a count change: the pages still need rebuilding (covered, at rest).
+        if dataSource.needsRebuild {
+            dataSource.needsRebuild = false
+            if !reloaded {
+                MXLog.info("Media viewer: items reshuffled, rebuilding the pages when resting")
+                rebuildWhenResting()
+            }
+        }
+        
         guard let displayedItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading else { return }
         
         // The index may now hold a media, or a different placeholder having reached the end of
         // the timeline, in which case what's on display is stale.
-        let dataSource = context.viewState.dataSource
         if dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) as AnyObject !== displayedItem {
             refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
         }
