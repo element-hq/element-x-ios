@@ -291,12 +291,16 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
             SettingsScreen(context: viewModel.context)
         }
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
+        .frame(height: 1100)
+        .previewLayout(.sizeThatFits)
         .previewDisplayName("Default")
         
         ElementNavigationStack {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
         .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
+        .frame(height: 1050)
+        .previewLayout(.sizeThatFits)
         .previewDisplayName("Bug report disabled")
     }
     
