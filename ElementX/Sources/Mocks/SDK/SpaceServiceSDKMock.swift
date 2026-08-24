@@ -9,16 +9,13 @@ import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
 
-nonisolated extension ClientBuilderSDKMock {
-    struct Configuration {
-        var disableWellKnownLookup = false
-    }
-    
-    enum MockError: Error { case generic }
+nonisolated extension SpaceServiceSDKMock {
+    struct Configuration { }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        disableWellKnownLookupDisableWellKnownLookupClosure = { [unowned self] _ in self }
+        subscribeToTopLevelJoinedSpacesListenerReturnValue = TaskHandleSDKMock()
+        subscribeToSpaceFiltersListenerReturnValue = TaskHandleSDKMock()
     }
 }
