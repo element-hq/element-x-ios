@@ -84,6 +84,8 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenManageStorageTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_title") }
   /// View log files
   internal static var screenManageStorageViewLogs: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_view_logs") }
+  /// This is the beginning of the thread.
+  internal static var screenRoomTimelineBeginningOfThread: String { return UntranslatedL10n.tr("Untranslated", "screen_room_timeline_beginning_of_thread") }
   /// If your message keys aren’t backed up, you may not be able to read older encrypted messages after clearing them.
   internal static var screenManageStorageWarningMessageKeys: String { return UntranslatedL10n.tr("Untranslated", "screen_manage_storage_warning_message_keys") }
   /// The room's cached media is cleared with its messages: once the messages are gone, the media can no longer be told apart from other rooms'.

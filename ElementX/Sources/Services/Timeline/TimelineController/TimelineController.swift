@@ -524,6 +524,7 @@ class TimelineController: TimelineControllerProtocol {
         let isDM = roomProxy.infoPublisher.value.isDM
         let displayName = roomProxy.infoPublisher.value.displayName
         let hasPredecessor = roomProxy.predecessorRoom != nil
+        let timelineKind = timelineKind
         
         var newTimelineItems = await Task.detached { [timelineItemFactory, activeTimeline] in
             var newTimelineItems = [RoomTimelineItemProtocol]()
@@ -535,6 +536,7 @@ class TimelineController: TimelineControllerProtocol {
                 
                 let items = collapsibleChunk.compactMap { itemProxy in
                     self.buildTimelineItem(for: itemProxy,
+                                           timelineKind: timelineKind,
                                            isDM: isDM,
                                            hasPredecessor: hasPredecessor,
                                            roomDisplayName: displayName,
@@ -584,6 +586,7 @@ class TimelineController: TimelineControllerProtocol {
     }
     
     private nonisolated func buildTimelineItem(for itemProxy: TimelineItemProxy,
+                                               timelineKind: TimelineKind,
                                                isDM: Bool,
                                                hasPredecessor: Bool,
                                                roomDisplayName: String?,
@@ -612,6 +615,11 @@ class TimelineController: TimelineControllerProtocol {
             case .gap(let prevToken):
                 return GapRoomTimelineItem(id: .virtual(uniqueID: uniqueID), prevToken: prevToken)
             case .timelineStart:
+                // A thread always displays its start item, as an affordance that this
+                // really is the beginning of the thread rather than failed pagination.
+                guard !timelineKind.isThread else {
+                    return TimelineStartRoomTimelineItem(name: nil)
+                }
                 // We always display the timeline start item, if there is a predecessor room.
                 guard !hasPredecessor else {
                     return TimelineStartRoomTimelineItem(name: roomDisplayName)

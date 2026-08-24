@@ -27,6 +27,7 @@
 "screen_manage_storage_warning_restart" = "The app will restart to clear them.";
 "screen_manage_storage_warning_room_state" = "Cached room state and cached messages are cleared together.";
 "screen_manage_storage_warning_messages_media" = "The room's cached media is cleared with its messages: once the messages are gone, the media can no longer be told apart from other rooms'.";
+"screen_room_timeline_beginning_of_thread" = "This is the beginning of the thread.";
 "screen_search_empty_state_message" = "Search for chats and messages";
 "screen_search_empty_state_title" = "Start searching...";
 "screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";

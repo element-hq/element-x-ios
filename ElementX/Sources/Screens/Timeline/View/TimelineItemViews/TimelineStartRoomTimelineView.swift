@@ -13,13 +13,17 @@ struct TimelineStartRoomTimelineView: View {
     let timelineItem: TimelineStartRoomTimelineItem
     @Environment(\.timelineContext) private var context
     
+    private var isThread: Bool {
+        context?.viewState.timelineKind.isThread == true
+    }
+    
     var body: some View {
         VStack(spacing: 14) {
-            if context?.viewState.hasPredecessor == true {
+            if context?.viewState.hasPredecessor == true, !isThread {
                 upgradeDialogue
             }
-            // We don't display the title for tombstoned DMs
-            if context?.viewState.isDM != true {
+            // We don't display the title for tombstoned DMs (but threads always show theirs)
+            if context?.viewState.isDM != true || isThread {
                 Text(title)
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
@@ -51,6 +55,9 @@ struct TimelineStartRoomTimelineView: View {
     }
     
     private var title: String {
+        if isThread {
+            return UntranslatedL10n.screenRoomTimelineBeginningOfThread
+        }
         var text = L10n.screenRoomTimelineBeginningOfRoomNoName
         if let name = timelineItem.name {
             text = L10n.screenRoomTimelineBeginningOfRoom(name)
