@@ -92,7 +92,7 @@ extension ClientProxyMock {
         loadUserProfileIfNeededReturnValue = .success(())
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserAvatarMediaReturnValue = .success(())
-        isUserStatusSupportedReturnValue = .success(false)
+        isUserStatusSupportedReturnValue = .success(true)
         setUserStatusReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         removeUserAvatarReturnValue = .success(())
         isAliasAvailableReturnValue = .success(true)

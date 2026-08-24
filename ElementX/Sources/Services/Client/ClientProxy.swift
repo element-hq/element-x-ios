@@ -281,8 +281,7 @@ class ClientProxy: ClientProxyProtocol {
         
         try await client.setUtdDelegate(utdDelegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
         
-        let canSubscribeToUserProfile = if appSettings.userStatusEnabled,
-                                           await (try? client.isProfilesSlidingSyncExtensionSupported()) == true {
+        let canSubscribeToUserProfile = if await (try? client.isProfilesSlidingSyncExtensionSupported()) == true {
             true
         } else {
             false
@@ -311,11 +310,9 @@ class ClientProxy: ClientProxyProtocol {
             mediaPreviewConfigListenerTaskHandle = await createMediaPreviewConfigObserver()
         }
         
-        if appSettings.userStatusEnabled {
-            Task {
-                guard case .success(true) = await isUserStatusSupported() else { return }
-                client.enableAutomaticCallStatus(enabled: true)
-            }
+        Task {
+            guard case .success(true) = await isUserStatusSupported() else { return }
+            client.enableAutomaticCallStatus(enabled: true)
         }
         
         liveLocationOwnInfoUpdatesListenerTaskHandle = createLiveLocationOwnInfoUpdatesObserver()
@@ -1531,14 +1528,12 @@ private struct ClientProxyServices {
     init(client: ClientProtocol,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings) async throws {
-        var syncServiceBuilder = client
+        let syncService = try await client
             .syncService()
             .withOfflineMode()
             .withSharePos(enable: true)
-        if appSettings.userStatusEnabled {
-            syncServiceBuilder = syncServiceBuilder.withProfilesExtension()
-        }
-        let syncService = try await syncServiceBuilder.finish()
+            .withProfilesExtension()
+            .finish()
         
         let roomListService = syncService.roomListService()
         

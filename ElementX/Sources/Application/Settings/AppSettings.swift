@@ -446,9 +446,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(key: "clientPausingAndResumingEnabledV2", defaultValue: false, volatile: true)
     var clientPausingAndResumingEnabled: Bool
     
-    @UserPreference(defaultValue: false)
-    var userStatusEnabled: Bool
-    
     @UserPreference(defaultValue: AppBuildType.current != .release)
     var developerOptionsEnabled: Bool
     

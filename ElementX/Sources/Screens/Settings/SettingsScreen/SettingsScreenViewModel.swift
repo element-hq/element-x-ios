@@ -85,8 +85,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .store(in: &cancellables)
         
         Task {
-            if appSettings.userStatusEnabled, case .success(true) = await userSession.clientProxy.isUserStatusSupported() {
-                state.showUserStatus = true
+            if case .success(true) = await userSession.clientProxy.isUserStatusSupported() {
+                state.showUserStatusInput = true
             }
             await userSession.clientProxy.loadUserProfileIfNeeded()
         }
