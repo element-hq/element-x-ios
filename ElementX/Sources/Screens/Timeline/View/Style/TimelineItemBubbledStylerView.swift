@@ -173,8 +173,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             // A double tap opens the reaction picker - or, by advanced setting, selects the
             // message's text (not while it already is: the text view owns double taps then).
+            // Only bubbles with selectable text (the same gate as the menu's Select text
+            // entry) take the setting; media and the like keep the reaction picker.
             .onDoubleTap(isEnabled: !isSelectingText) {
-                if context.viewState.doubleTapToSelectText, timelineItem is EventBasedMessageTimelineItemProtocol {
+                if context.viewState.doubleTapToSelectText, timelineItem.isCopyable {
                     context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: .selectText))
                 } else {
                     context.send(viewAction: .displayEmojiPicker(itemID: timelineItem.id))
