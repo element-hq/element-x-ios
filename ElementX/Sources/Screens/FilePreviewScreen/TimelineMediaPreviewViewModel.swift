@@ -283,11 +283,13 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             preload(items[neighbourIndex])
         }
         
-        // QuickLook builds the pages either side now, from whatever URL each item has: on a cold
-        // cache (a flushed media store, fast swiping) that's nothing, and a page built blank or
-        // "unavailable" only heals on the next rest. Give those pages the item's thumbnail to build
-        // from instead; the media swaps in when it lands.
-        for neighbourIndex in (index - Self.placeholderReach...index + Self.placeholderReach) where neighbourIndex != index && items.indices.contains(neighbourIndex) {
+        // QuickLook is handed EVERY loaded item at each (re)build, caches what it got, and never
+        // re-reads on its own - and at a sustained swipe cadence the heal reload never finds a
+        // quiet gap to run in, so any page built black stays black until landed on. A bounded
+        // reach just moves where that first happens (3 made it the 4th swipe, 8 the 9th): give
+        // every page a thumbnail to build from instead. Jobs are one-shot per item and mostly
+        // memory-cache hits; the media swaps in when it lands.
+        for neighbourIndex in items.indices where neighbourIndex != index {
             let neighbour = items[neighbourIndex]
             // Thumbnails only: the no-thumbnail highres fallback would fetch full-size content
             // for a speculative neighbour (encrypted media can't be server-thumbnailed, and the
@@ -303,13 +305,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    /// How many items either side of the current one get a thumbnail placeholder ahead of their
-    /// media. QuickLook is handed EVERY loaded item at each (re)build and caches what it got, so
-    /// any page built beyond this reach is black until a heal reload - and at a steady swipe
-    /// cadence heals never fit between gestures. 3 made the first item past the undirected
-    /// preload (the 4th) reliably black; matching the deep preload reach keeps a steady swipe
-    /// on thumbnails instead.
-    private static let placeholderReach = 8
     /// Placeholder jobs in flight, so a neighbour isn't rendered twice while swiping around it.
     private var placeholderJobs = Set<MediaPreviewItemID>()
     
