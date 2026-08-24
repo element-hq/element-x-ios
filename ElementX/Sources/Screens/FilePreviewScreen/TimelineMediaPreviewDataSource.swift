@@ -317,7 +317,12 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         } else if index > lastPreviewItemIndex {
             return paginationState.forward == .endReached ? TimelineMediaPreviewItem.Loading.timelineEnd : .paginatingForwards
         } else {
-            return previewItems[arrayIndex]
+            let item = previewItems[arrayIndex]
+            // DIAG (strip pre-upstream): what this page is built from. QuickLook never re-reads a
+            // page on its own, so the flavour at build time is what a swipe lands on.
+            let flavour = item.fileHandle != nil ? "file" : item.placeholderURL != nil ? "thumbnail" : "BLACK"
+            MXLog.info("Media viewer: page \(index) (array \(arrayIndex)) handed to QuickLook as \(flavour)")
+            return item
         }
     }
 }
