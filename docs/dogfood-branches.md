@@ -4920,3 +4920,22 @@ browse-budget re-centre and build 204's read-marker fix, neither yet
 user-validated). VALIDATE: NEW line tracks the other client's reading
 live; thread-from-push shows content not UTD; no snapshot crash under
 gap-resolve + drag.
+
+**Round 69 addendum (2026-08-24, SDK c60d0cae3, build 206).** Rageshake
+7563 resolved once the device logs were pullable: both crashes were
+`EXC_BREAKPOINT: ClientProxy.swift:278: Fatal error: The chunk is not
+found` - EXI's deliberate fatalError on a Rust background-task panic
+from `as_vector.rs:498` via `OrderTracker::map_updates`. This is the
+still-open single-process variant of upstream rust-sdk#5416 (the
+multi-process shrink case, #6757, is already in our base): the order
+tracker's mapper only flushes on ordering queries,
+`updates_as_vector_diffs`, or a shrink, so a room whose timeline is
+never opened keeps its boot seed while syncs create new chunks; a dedup
+then issues a store-only RemoveItem in a mapper-unknown chunk and the
+mapper panics. Both crashes hit during background latest-events backfill
+(touching thousands of unopened rooms) against NSE-written stores -
+which is why this branch hits it reliably. Fix as validated on the
+issue: `map_updates` flushes pending in-band updates before mapping
+out-of-band ones; regression test reproduces the exact production panic
+without it. Consider reporting the confirmation to #5416 when
+upstreaming.
