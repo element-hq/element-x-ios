@@ -752,6 +752,13 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
                 }
                 try? await Task.sleep(for: .milliseconds(16))
             }
+            if rendered, self?.renderedPageContentView is UIImageView {
+                // A new image view's `image` being set doesn't mean it's on glass: a large photo
+                // decodes out of process for ~50-150ms more, and dropping the cover at detection
+                // flashed black under a thumbnail -> high-res upgrade. The cover shows the same
+                // content, so holding it through the decode is invisible.
+                try? await Task.sleep(for: .milliseconds(150))
+            }
             MXLog.info("Media viewer: reload cover down after \(ContinuousClock.now - started), rebuilt page \(rendered ? "rendered" : "not detected")")
             self?.removeReloadCover(animated: false)
             completion?(rendered)
