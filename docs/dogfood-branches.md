@@ -4799,3 +4799,37 @@ touch set (view, phase, age) whenever a touch isn't alone, and self-heals:
 four consecutive track-but-no-drag touches on one scroll view with a frozen
 offset reset its pan recognizer, logging "pan wedged" as the confirmation
 signal.
+
+**Round 68 (2026-08-24): the 4th-swipe black solved (EXI 95a003a3f, build
+200, USER-VALIDATED).** The media viewer's classic swipe-to-black - almost
+always the 4th image at a normal cadence - fell to a page-level diagnostic
+(every `previewItemAt` logs whether the page is handed a file, a thumbnail,
+or the black loading image). It proved two QuickLook facts the code had
+half-guessed: a reload hands over *every* loaded item synchronously, and
+QuickLook *never* re-reads a page between reloads. So on a cold cache the
+first item whose file landed after the open-time rebuild stayed a cached
+black page indefinitely, and the boundary of the open-time reaches made
+that deterministically the 4th (later the 9th) image. Layered fixes, each
+validated against a fresh repro trace: (1) black-built pages heal when
+their *thumbnail* arrives, not only their file - and the heal scan covers
+the whole loaded range instead of ±2, which contradicted its own comment
+and hid the black page until one swipe before impact. (2) The heal's
+one-shot 350ms resting check could never fire at a steady cadence (page
+settle overlaps the next touch); it now coalesces 150ms and waits up to 2s
+for a quiet gap. (3) Thumbnail placeholders are written for *every* loaded
+item rather than a reach - a reach only moves where the first black page
+sits - so every page QuickLook builds has a thumbnail to build from; jobs
+are once-per-item, memory-cache first, thumbnail bytes only. The
+no-thumbnail highres-poster fallback is confined to the item on display:
+for speculative neighbours it would fetch full-size content (encrypted
+media can't be server-thumbnailed) into the wrong cache. Full-file
+preloading is unchanged (≤10MB, 3 undirected / 8 ahead / 2 behind). (4)
+The residual "black flash as the thumbnail became the photo": the reload
+cover dropped when the rebuilt page's image view had an image *set*
+(~17ms), but a large photo decodes out of process for another 50-150ms -
+the cover now holds 150ms past detection (videos already gate on
+`isReadyForDisplay`). Also fixed en route: a repro on a stale process
+showed `devicectl` installs do not kill a backgrounded app - a "still
+broken" report right after an install may be the old build; check for a
+cold start in the log. The per-page hand-off diagnostic is still in place
+and owed a strip before upstreaming.
