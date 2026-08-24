@@ -4738,3 +4738,64 @@ background painting) but the plain no-animation SwiftUI sheet was judged fast
 enough and the cached path reverted; the in-window prewarm, sync category
 load and diagnostics (timing probes, sampler - strip before upstreaming)
 stay.
+
+**Round 65 (2026-08-24): the can't-scroll freeze's first fix + clear-all
+behind the splash (EXI 20b7287fd, build 188).** (1) The timeline freeze
+(drags tracked but never scrolled, jump-to-bottom still worked) was caught
+by the TouchDebug diagnostic: round 64's second-tap block refused the double
+tap's touches to UIKit's `_UIRelationshipGestureRecognizer` plumbing
+(`dragFailureRelationships`, `clickPresentationFailure`, …) - the arbiters
+of failure/exclusion links between gestures. One wedged mid-evaluation left
+the table's pan waiting forever, until a jump to bottom recycled the cells.
+The block (already redundant: the first-responder refusal is the fix that
+matters) was deleted. (2) Clearing the whole state store from Manage Storage
+ran its slow media/keys clearing under a "Please wait" modal that then hung
+over the splash, and the freed SQLite pages meant the stores' reported sizes
+never shrank ("700MB of messages" right after a full clear). The restart
+path now skips the modal entirely - `clearCache(alsoClearing:)` hands
+media/keys to the AppCoordinator to clear behind the splash - and the
+cleared stores are vacuumed (they're near-empty, so it's quick, unlike a
+full-store VACUUM).
+
+**Round 66 (2026-08-24): Select-text polish, live Manage Storage, viewer bar
+inset (EXI 382f407a4, build 190).** (1) Selecting text in a bubble: the
+handles were clipped until a drag re-hosted them (`clipsToBounds` off), the
+selection tint now matches the composer's, dragged handles could still sweep
+up the timestamp spacer (the text-interaction controller bypasses the
+setters; a delegate-level clamp catches it), and touches on the spacer no
+longer hit the text view at all outside "Select text" (`point(inside:)`
+excludes its glyph rect) - they fall through to the bubble, which also kills
+drag-lifts started on the whitespace. Exclusion paths were considered for
+replacing the spacer wholesale but can't express "reserve space at the end
+of the flow" (fixed coordinates vs a layout-dependent position); the real
+alternative - tuck-vs-wrap math in `sizeThatFits` with no spacer characters -
+is held in reserve. (2) Manage Storage re-measures quietly every 3s while
+open, so totals track the post-clear re-sync live. (3) The viewer's download
+progress bar is inset 24pt from the screen edges, clear of the display's
+corner radius.
+
+**Round 67 (2026-08-24): caption-friendly video taps, Select-text round 2,
+double-tap setting, freeze self-heal (EXI cd3db0491, build 193).** (1) A
+video's caption covered the scrubber, and the tap that hid it went to
+QuickLook - hiding all chrome and pausing playback. A viewer-level tap
+recognizer that every single-tap recognizer defers to claims the touch only
+while a caption is on show and hides just the caption; a page change (swipe
+away and back) reshows it. (2) Select text: the right handle could still
+reach the spacer - the selection interaction drives drags through
+`closestPosition(to:)`, so the clamp lives there now; the still-cropped
+handle knobs were the content `cornerRadius` clip and the bubble
+background's clip - both expand outward while selecting, and the bubble's
+rounding is painted by the background shape instead of produced by the
+clip, so nothing squares off; swipe-to-reply is disabled during a
+selection; a tap outside the selected text ends it. (3) New advanced
+setting: double tap selects the message's text instead of opening the
+reaction picker (off by default). (4) The freeze recurred on build 190 -
+without the round-64 block, i.e. the original rageshake-7549 trigger:
+tracked-but-never-dragging touches, frozen offset, and *nothing* visible to
+the window sweep (no active recognizers, no animations); a video had been
+playing in the viewer minutes before. Working theory: a phantom touch whose
+end/cancel a dismissed view swallowed. TouchDebug now dumps the event's full
+touch set (view, phase, age) whenever a touch isn't alone, and self-heals:
+four consecutive track-but-no-drag touches on one scroll view with a frozen
+offset reset its pan recognizer, logging "pan wedged" as the confirmation
+signal.
