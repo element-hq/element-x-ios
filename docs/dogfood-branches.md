@@ -5031,3 +5031,31 @@ Build 209 = EXI 75a654d49+ x SDK 5bc938584. VALIDATE: reopen the
 Salesforce thread - it should walk to the root and show "This is the
 beginning of the thread." above it; if not, the THREADPAG/THREADDUMP
 lines will say exactly why.
+
+**Round 70 addendum 3 (2026-08-24): BUILDS 204-209 SHIPPED A STALE SDK.**
+Build 209 revalidation failed with zero THREADPAG diagnostics in the
+logs; `strings` on the installed app's MatrixRustSDK framework proved it
+was the Aug 23 20:26 build. The ritual has TWO steps - the Rust is
+consumed as a prebuilt `MatrixSDKFFI.xcframework` built by
+`build-xcframework.sh`, and `build-install-exi.sh` only re-embeds
+whatever framework exists (while reporting the fresh git SHA). Only the
+latter was run for rounds 69-70, so NO SDK FIX SINCE AUG 23 WAS EVER ON
+THE PHONE: not the read-marker fix (204), the UTD dedup graft (205),
+the order-tracker panic fix (206), the thread timeline start (207), the
+gap announce fix (208), nor the leading-gap walk (209). The EXI-side
+Swift fixes (snapshot re-entrancy guard, thread start rendering) WERE
+installed. Build 208's apparent improvements were coincidental: the UTD
+healed because the key finally arrived, and the reopened timeline had
+no stale gap item because the (old-SDK) ditch had already removed the
+gap from the store.
+
+Process fix: build-install-exi.sh now always invokes
+build-xcframework.sh first, the framework build writes a
+`.sdk-stamp` (HEAD + dirty marker) next to the xcframework, and the
+install script refuses to ship a framework whose stamp doesn't match
+the SDK checkout HEAD; the final identity line prints the stamp.
+
+Build 210 = the FIRST build actually containing rounds 69-70's SDK
+fixes. VALIDATE everything listed for builds 204-209 against build 210:
+NEW-line read marker, thread-from-push decryption, no snapshot/chunk
+crashes, thread beginning item + gap walk on the Salesforce thread.
