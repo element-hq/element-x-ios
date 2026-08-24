@@ -4833,3 +4833,12 @@ showed `devicectl` installs do not kill a backgrounded app - a "still
 broken" report right after an install may be the old build; check for a
 cold start in the log. The per-page hand-off diagnostic is still in place
 and owed a strip before upstreaming.
+
+**Round 68 addendum (2026-08-24, EXI 0690a1e24, build 201).** Media sent
+without a thumbnail because the original is already thumbnail-sized
+(MSC4409: none required at <=800x600) was starved by the thumbnails-only
+neighbour guard and built black. Such items now count as their own
+thumbnail (by the event's pixel size, else a small file size), and
+thumbnail-less items are fetched as full content rather than via the
+thumbnail endpoint - which cannot serve encrypted media, so they could
+never get a poster even on display.
