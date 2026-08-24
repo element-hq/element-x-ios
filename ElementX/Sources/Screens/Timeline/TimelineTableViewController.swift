@@ -139,6 +139,14 @@ class TimelineTableViewController: UIViewController {
     /// There are pending items in `timelineItemsDictionary` that haven't been applied to the data source.
     private var hasPendingItems = false
 
+    /// An `applySnapshot` is currently in flight. UIKit hard-crashes
+    /// (NSInternalInconsistencyException "Deadlock detected") if
+    /// `dataSource.apply` is re-entered, and an animated apply synchronously
+    /// fires `scrollViewDidScroll` (whose self-heal flush calls back in) as
+    /// well as SwiftUI view updates (which can set `timelineItemsDictionary`)
+    /// mid-batch. Rageshake 7562.
+    private var isApplyingSnapshot = false
+
     /// The gap items rendered by the last applied snapshot, used to animate a gap's resolution.
     private var renderedGapIDs = Set<TimelineItemIdentifier.UniqueID>()
     
@@ -663,7 +671,22 @@ class TimelineTableViewController: UIViewController {
     /// the scroll position will be updated to maintain the position of the last visible item.
     private func applySnapshot() {
         guard let dataSource else { return }
-        
+
+        // Re-entrancy guard: park the update and flush it when the in-flight
+        // apply returns (see isApplyingSnapshot).
+        guard !isApplyingSnapshot else {
+            hasPendingItems = true
+            return
+        }
+        isApplyingSnapshot = true
+        defer {
+            isApplyingSnapshot = false
+            if hasPendingItems, canApplySnapshot {
+                hasPendingItems = false
+                applySnapshot()
+            }
+        }
+
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, TimelineItemIdentifier.UniqueID>()
         
         // We don't want to display the typing notification in this timeline
