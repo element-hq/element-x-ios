@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Fetch the photos and videos either side of the one on show ahead of swiping, using more data
+  internal static var screenAdvancedSettingsPreloadMediaDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_preload_media_description") }
+  /// Preload media in viewer
+  internal static var screenAdvancedSettingsPreloadMediaTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_preload_media_title") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
   /// Search for chats and messages
