@@ -10,7 +10,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum TimelineKind: Equatable {
+nonisolated enum TimelineKind: Equatable {
     case live
     case detached
     case pinned
