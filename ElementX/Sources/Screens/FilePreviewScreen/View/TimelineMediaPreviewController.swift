@@ -569,9 +569,6 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
         }
     }
     
-    /// How far from the current item QuickLook builds pages ahead (observed: the two either side).
-    static let builtPagesRadius = 2
-    
     /// The refresh checks in flight, one per item at most.
     private var refreshChecks = [MediaPreviewItemID: Task<Void, Never>]()
     /// The item last arrived at (index changed to another item), and whether its arrival check
@@ -799,16 +796,18 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     private func healableBlankPageDelta() -> Int? {
         let dataSource = context.viewState.dataSource
         let firstIndex = dataSource.firstPreviewItemIndex
-        for delta in -Self.builtPagesRadius...Self.builtPagesRadius {
-            let arrayIndex = currentPreviewItemIndex + delta - firstIndex
-            guard dataSource.previewItems.indices.contains(arrayIndex) else { continue }
-            let item = dataSource.previewItems[arrayIndex]
+        // The whole loaded range, not a radius around the current item: every (re)build hands
+        // QuickLook every item (seen in the page diagnostics), so a black-built page can sit -
+        // and be swiped into - well outside the couple of pages either side. Scanning only +/-2
+        // was exactly the deterministic 4th-swipe black: the first item whose file landed after
+        // the open-time rebuild was invisible to this check until one swipe before landing on it.
+        for (arrayIndex, item) in dataSource.previewItems.enumerated() {
             // A black-built page heals as soon as it has anything real to show (its thumbnail or
             // the media); a thumbnail-built one only when the media lands.
             let healable = builtBlankItemIDs.contains(item.id) ? item.placeholderURL != nil || item.fileHandle != nil
                 : builtPlaceholderItemIDs.contains(item.id) && item.fileHandle != nil
             if healable {
-                return delta
+                return arrayIndex + firstIndex - currentPreviewItemIndex
             }
         }
         return nil
