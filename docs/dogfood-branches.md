@@ -5006,3 +5006,28 @@ look at.
 Build 208 = EXI 9cd090513 x SDK 4e05eb7e4. VALIDATE: reopen the same
 thread - spinner resolves through the history to the root, then "This
 is the beginning of the thread."; plus round 69/70 carried-over items.
+
+**Round 70 addendum 2 (2026-08-24, SDK 5bc938584, build 209): rootless
+strand.** Build 208 revalidation: spinner gone, UTD healed WITH the edit
+applied, but still no beginning-of-thread item - and no root bubble.
+Root cause: the all-duplicates gap resolution DITCHED the token
+unconditionally ("no use paginating further"). Right for a mid-chunk
+gap (overlap proves it empty), wrong for the LEADING gap of a rootless
+thread: /relations never returns the root (it's only fetched when a
+page has no next-batch token), and the leading gap's item was the only
+affordance for reaching it once the start was claimed. Ditching left
+the thread permanently rootless: no spinner, no start item, client
+told "start reached". FIXED: an all-duplicates page on the leading gap
+of a rootless thread keeps walking (remove+reinsert keeps ordering,
+token followed page by page until the root arrives at the head).
+Regression test walks a leading gap to the root and the start item.
+Also added THREADPAG/THREADDUMP info-level diagnostics (pagination
+decision points + memory chunk dump at thread subscribe) - STRIP before
+upstreaming - because the 15:34 stranded session couldn't be fully
+explained from trace-invisible logs (open question: which path claimed
+start-reached and wrote to the thread store at 15:34:24.8).
+
+Build 209 = EXI 75a654d49+ x SDK 5bc938584. VALIDATE: reopen the
+Salesforce thread - it should walk to the root and show "This is the
+beginning of the thread." above it; if not, the THREADPAG/THREADDUMP
+lines will say exactly why.
