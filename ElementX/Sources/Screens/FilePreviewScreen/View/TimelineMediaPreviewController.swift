@@ -632,9 +632,18 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     private func scheduleHealReloadIfResting() {
         neighbourReloadTask?.cancel()
         neighbourReloadTask = Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(350)) // Coalesce a trickle of neighbour loads into one reload.
-            guard let self, !Task.isCancelled,
-                  let scrollView = pageScrollView, !scrollView.isTracking, !scrollView.isDragging, !scrollView.isDecelerating else { return }
+            try? await Task.sleep(for: .milliseconds(150)) // Coalesce a trickle of neighbour loads into one reload.
+            guard let self, !Task.isCancelled else { return }
+            // Wait (bounded) for a quiet gap rather than giving up when a swipe is in flight: a
+            // one-shot check reliably landed mid-gesture at a steady swipe cadence, so the heal
+            // never ran before the user reached a black-built page. A new trigger restarts this.
+            let started = ContinuousClock.now
+            while ContinuousClock.now - started < .seconds(2),
+                  let scrollView = pageScrollView, scrollView.isTracking || scrollView.isDragging || scrollView.isDecelerating {
+                try? await Task.sleep(for: .milliseconds(50))
+                if Task.isCancelled { return }
+            }
+            guard let scrollView = pageScrollView, !scrollView.isTracking, !scrollView.isDragging, !scrollView.isDecelerating else { return }
             // One reload per rest: a single reloadData rebuilds every page with whatever files are
             // present now, so later arrivals in the same rest need no further reload (they would just
             // re-flash the current page). Files that land after this reload heal on the next rest,

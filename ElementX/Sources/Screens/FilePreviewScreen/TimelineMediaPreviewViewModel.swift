@@ -302,8 +302,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     /// How many items either side of the current one get a thumbnail placeholder ahead of their
-    /// media: QuickLook builds ±2 pages at rest, one more covers a swipe in flight.
-    private static let placeholderReach = 3
+    /// media. QuickLook is handed EVERY loaded item at each (re)build and caches what it got, so
+    /// any page built beyond this reach is black until a heal reload - and at a steady swipe
+    /// cadence heals never fit between gestures. 3 made the first item past the undirected
+    /// preload (the 4th) reliably black; matching the deep preload reach keeps a steady swipe
+    /// on thumbnails instead.
+    private static let placeholderReach = 8
     /// Placeholder jobs in flight, so a neighbour isn't rendered twice while swiping around it.
     private var placeholderJobs = Set<MediaPreviewItemID>()
     
