@@ -77,15 +77,7 @@ struct VideoRoomTimelineView: View {
     }
     
     var playIcon: some View {
-        CompoundIcon(\.playSolid, size: .medium, relativeTo: .compound.headingLG)
-            .foregroundStyle(.compound.iconPrimary)
-            .padding(13)
-            .background {
-                ZStack {
-                    Circle().fill(.compound.bgSubtleSecondary)
-                    Circle().stroke(.compound.borderInteractiveSecondary)
-                }
-            }
+        VideoPlayBadge()
     }
     
     var placeholder: some View {
@@ -143,5 +135,20 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                              thumbnailInfo: .mockVideoThumbnail,
                                              blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"),
                               properties: .init(isEdited: isEdited))
+    }
+}
+
+/// The play badge drawn over video thumbnails, in the timeline and on the media viewer's posters.
+struct VideoPlayBadge: View {
+    var body: some View {
+        CompoundIcon(\.playSolid, size: .medium, relativeTo: .compound.headingLG)
+            .foregroundStyle(.compound.iconPrimary)
+            .padding(13)
+            .background {
+                ZStack {
+                    Circle().fill(.compound.bgSubtleSecondary)
+                    Circle().stroke(.compound.borderInteractiveSecondary)
+                }
+            }
     }
 }
