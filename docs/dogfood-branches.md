@@ -5059,3 +5059,22 @@ Build 210 = the FIRST build actually containing rounds 69-70's SDK
 fixes. VALIDATE everything listed for builds 204-209 against build 210:
 NEW-line read marker, thread-from-push decryption, no snapshot/chunk
 crashes, thread beginning item + gap walk on the Salesforce thread.
+
+**Round 70 result (2026-08-24, build 210): USER-VALIDATED.** Build 210
+(EXI 701a2dcb5 x SDK 5bc938584, framework stamp verified, THREADPAG
+strings confirmed in the installed binary) is the first build genuinely
+carrying rounds 69-70's SDK fixes. The Salesforce thread now walks its
+leading gap back to the root and shows "This is the beginning of the
+thread." - the r70 feature plus both gap fixes confirmed working
+end-to-end. e2ee-rig script hardening committed (d4f4cd7).
+
+Still to VALIDATE on 210 (first genuine exposure): NEW-line read marker
+following the other client live (204/41efd33fd), thread-from-push
+decrypted not UTD (205/fafbf75e6), no "chunk is not found" crash-loop
+during background catch-up (206/c60d0cae3), plus the r68 carry-overs
+(MSC4409 posters on small E2EE images, 100+ deep viewer browse without
+a false start-of-timeline bounce).
+
+STRIP before upstreaming: THREADPAG/THREADDUMP diagnostics
+(thread/pagination.rs + thread/mod.rs subscribe), alongside the
+existing CHUNKDUMP/SYNCDUMP/SendTransition/media-viewer diag list.
