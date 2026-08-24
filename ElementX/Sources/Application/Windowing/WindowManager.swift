@@ -290,6 +290,12 @@ private extension UIWindowScene {
 private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
     private let label: String
 
+    /// Wedged-pan detection (rageshake 7549): consecutive touches on the same scroll
+    /// view that track but never drag, with the offset frozen.
+    private weak var wedgeScrollView: UIScrollView?
+    private var wedgeOffset: CGFloat = 0
+    private var wedgeCount = 0
+
     init(label: String) {
         self.label = label
         super.init(target: nil, action: nil)
@@ -327,10 +333,12 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
         }
         var scroll = ""
         var animating = [String]()
+        var hitScrollView: UIScrollView?
         var ancestor = hitView
         while let current = ancestor {
             if scroll.isEmpty, let scrollView = current as? UIScrollView {
-                scroll = "\(type(of: scrollView)) enabled=\(scrollView.isScrollEnabled) tracking=\(scrollView.isTracking) dragging=\(scrollView.isDragging) decelerating=\(scrollView.isDecelerating) pan=\(scrollView.panGestureRecognizer.state.rawValue)/\(scrollView.panGestureRecognizer.isEnabled) content=\(Int(scrollView.contentSize.height)) bounds=\(Int(scrollView.bounds.height)) offset=\(Int(scrollView.contentOffset.y))"
+                hitScrollView = scrollView
+                scroll = "\(type(of: scrollView)) enabled=\(scrollView.isScrollEnabled) tracking=\(scrollView.isTracking) dragging=\(scrollView.isDragging) decelerating=\(scrollView.isDecelerating) pan=\(scrollView.panGestureRecognizer.state.rawValue)/\(scrollView.panGestureRecognizer.isEnabled)/\(scrollView.panGestureRecognizer.numberOfTouches) content=\(Int(scrollView.contentSize.height)) bounds=\(Int(scrollView.bounds.height)) offset=\(Int(scrollView.contentOffset.y))"
             }
             if let keys = current.layer.animationKeys(), !keys.isEmpty {
                 animating.append("\(type(of: current)):\(keys.joined(separator: ","))")
@@ -339,6 +347,39 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
         }
         if !active.isEmpty || !animating.isEmpty || scroll.contains("tracking=true") || scroll.contains("dragging=true") {
             MXLog.info("TouchDebug[\(label)]: active=\(active) scroll=[\(scroll)] animating=\(animating)")
+        }
+
+        // A phantom touch - one whose end/cancel a dismissed view (the video player?)
+        // swallowed - stays attached to the window's event and poisons every later
+        // gesture. Log the full touch set whenever this touch isn't alone.
+        if let allTouches = event.allTouches, allTouches.count > 1 {
+            let now = ProcessInfo.processInfo.systemUptime
+            let others = allTouches.map { other in
+                "\(type(of: other.view ?? window)) phase=\(other.phase.rawValue) age=\(String(format: "%.1f", now - other.timestamp))s"
+            }
+            MXLog.info("TouchDebug[\(label)]: event carries \(allTouches.count) touches: \(others)")
+        }
+
+        // Self-heal (rageshake 7549): repeated touches on one scroll view that track
+        // but never drag while the offset never moves = the pan recogniser is wedged.
+        // Disabling and re-enabling it drops whatever touches it thinks it is still
+        // tracking and resets its state; the log line is the confirmation signal.
+        if let scrollView = hitScrollView {
+            let pan = scrollView.panGestureRecognizer
+            if pan.state == .possible, scrollView.isTracking, !scrollView.isDragging, !scrollView.isDecelerating,
+               scrollView === wedgeScrollView, scrollView.contentOffset.y == wedgeOffset {
+                wedgeCount += 1
+                if wedgeCount >= 4 {
+                    MXLog.info("TouchDebug[\(label)]: pan wedged after \(wedgeCount) still touches at offset \(Int(wedgeOffset)), resetting \(type(of: scrollView))'s recognizer")
+                    pan.isEnabled = false
+                    pan.isEnabled = true
+                    wedgeCount = 0
+                }
+            } else {
+                wedgeScrollView = scrollView
+                wedgeOffset = scrollView.contentOffset.y
+                wedgeCount = 1
+            }
         }
     }
 }
