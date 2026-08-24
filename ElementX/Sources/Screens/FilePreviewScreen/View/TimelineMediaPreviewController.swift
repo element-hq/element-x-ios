@@ -468,6 +468,29 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
         }
     }
     
+    /// A re-centre of the browse budget is waiting for the pages to stop moving.
+    private var pendingBudgetRecentre = false
+
+    /// Restores the phantom padding under a covered reload at the next rest, re-deriving the
+    /// current item's index (a rebase shifts every index by the padding delta). Only from a
+    /// settled media page: the "Loading more" stepping machinery owns the placeholder pages.
+    private func recentreBrowseBudgetWhenResting() {
+        pendingBudgetRecentre = true
+        let index = currentPreviewItemIndex
+        Task { [weak self] in
+            guard let self, await waitUntilResting(atIndex: index), pendingBudgetRecentre else { return }
+            pendingBudgetRecentre = false
+            let dataSource = context.viewState.dataSource
+            guard pendingMoveIndex == nil, dataSource.isBrowseBudgetLow,
+                  let currentItemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id else { return }
+            dataSource.restoreBrowseBudget()
+            guard let newIndex = dataSource.previewIndex(of: currentItemID) else { return }
+            moveToIndexAndReload(newIndex)
+            lastKnownItemCount = dataSource.numberOfPreviewItems(in: self)
+            lastKnownFirstIndex = dataSource.firstPreviewItemIndex
+        }
+    }
+
     private func handleUpdatedItems() {
         let dataSource = context.viewState.dataSource
         
@@ -551,6 +574,13 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
         lastKnownItemCount = count
         lastKnownFirstIndex = firstIndex
         
+        // A pagination merge has nearly spent a side's browse budget: re-centre it at rest,
+        // before the edge hardens into a false end of the timeline.
+        if dataSource.isBrowseBudgetLow, !pendingBudgetRecentre {
+            MXLog.info("Media viewer: browse budget low, re-centring when resting")
+            recentreBrowseBudgetWhenResting()
+        }
+
         // A reshuffle without a count change: the pages still need rebuilding (covered, at rest).
         if dataSource.needsRebuild {
             dataSource.needsRebuild = false

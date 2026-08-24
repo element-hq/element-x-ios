@@ -32,6 +32,28 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     private var backwardPadding: Int
     private var forwardPadding: Int
+    /// The padding each side starts with: the per-session browse budget, restorable when spent.
+    private let initialPadding: Int
+
+    /// Whether a side's phantom padding is nearly spent while the timeline still has more that
+    /// way. Left alone, the spent side has no "Loading more" page left, so its edge hardens into
+    /// a false "end of the timeline" (and further merges land unreachably below index 0): the
+    /// controller re-centres the budget under a covered reload at the next rest.
+    var isBrowseBudgetLow: Bool {
+        let lowWater = 10
+        if !isClampedToBackwardPlaceholder, paginationState.backward != .endReached, backwardPadding <= lowWater { return true }
+        if !isClampedToForwardPlaceholder, paginationState.forward != .endReached, forwardPadding <= lowWater { return true }
+        return false
+    }
+
+    /// Restores both sides' phantom padding to the initial browse budget. Every preview index
+    /// shifts by the backward delta, so the caller must re-derive the current index and reload
+    /// in the same breath; items a spent side had left unreachable become reachable again.
+    func restoreBrowseBudget() {
+        MXLog.info("Media viewer: restoring the browse budget (padding \(backwardPadding)/\(forwardPadding) -> \(initialPadding))")
+        backwardPadding = initialPadding
+        forwardPadding = initialPadding
+    }
     
     /// While the user is on a "loading more" page, only that one page is reported beyond the loaded
     /// items on its side, so QuickLook's own edge bounce stops the swipe there instead of paging on
@@ -179,6 +201,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         
         backwardPadding = initialPadding
         forwardPadding = initialPadding
+        self.initialPadding = initialPadding
         hasReceivedRealPaginationState = paginationState != .initial
         
         self.paginationState = paginationState

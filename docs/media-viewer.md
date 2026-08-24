@@ -47,19 +47,18 @@ needed as the timeline grows. The padding indices themselves render as
 
 Two consequences worth knowing:
 
-- The padding is also a **per-session browse budget**: once a side's padding
-  is consumed (100 items paginated in beyond what was loaded at open), that
-  side has no phantom indices left, so there is no "Loading more" page to
-  land on any more - the oldest reachable item becomes QuickLook's content
-  edge and the swipe just bounces there, **exactly as if the timeline had
-  ended**. There is no reload-and-recover: further items (the timeline may
-  still paginate underneath, since the edge-proximity prefetch works on array
-  indices) merge into the array below QuickLook index 0, unreachable, and
-  browsing past the budget requires closing and reopening the viewer (which
-  re-centres a fresh +/-100 on the tapped item). If this ever bites in
-  practice, the upgrade path is a deliberate re-centre: rebase both paddings
-  around the current item under a covered `reloadData` + index re-derive at
-  a rest, costing one covered reload per ~100 items browsed.
+- The padding is also a **browse budget**: with a side's padding fully spent
+  there would be no "Loading more" page left to land on, so the oldest
+  reachable item would become QuickLook's content edge and bounce **exactly
+  as if the timeline had ended** (with further items merging unreachably
+  below index 0). The budget is therefore **re-centred before it runs out**:
+  when a pagination merge leaves a side's padding at 10 slots or fewer (and
+  that side hasn't genuinely reached the timeline's end), the controller
+  restores both paddings to their initial 100 at the next rest, under a
+  covered `reloadData` with the current item's index re-derived - one covered
+  reload per ~90 items browsed in one direction. A restore also brings back
+  anything a fully-spent side had briefly left unreachable, since positive
+  padding gives those items indices again.
 - When a side genuinely reaches the timeline's end, its padding collapses to
   0 so the last real item becomes QuickLook's own content edge and the swipe
   gets a native bounce (the affordance for "nothing more this way"). That
@@ -273,24 +272,27 @@ placeholders? No - the working set is bounded by construction:
 
 - The dataset is the media flattened from the timeline's **loaded** item view
   states - what the timeline view has actually paginated in, not the store's
-  full contents. A viewer session opens with typically tens of items.
-- The phantom padding then caps growth at ~100 items per direction per
-  session (see above): items beyond the consumed padding are merged but
-  unreachable. Worst case per session is therefore a few hundred exposed
-  items, not thousands.
+  full contents. A viewer session opens with typically tens of items and
+  grows only as the user actually browses (pagination is demand-driven:
+  triggered by proximity to the loaded edge and by "Loading more" landings).
+- So 10K exposed items means the user swiped through thousands of media in
+  one sitting; the store's 10K cached events alone expose nothing.
 
-Within that bound the linear costs are all small: a (re)build's hand-off is
+The costs that grow linearly with the exposed set: a (re)build's hand-off is
 one cached-property read per item (a few hundred microseconds each, ~25ms
-for a 28-item build including diagnostics); placeholder jobs are one-shot
-per item, mostly memory-cache hits, and their JPEGs (a few hundred at
-30-200KB worst case) die with the view model; the heal scan and shape
-analysis are single linear passes over the exposed items.
+for a 28-item build including diagnostics; a thousand items ~1s of
+main-thread per reload, which at that depth happens once per ~90 items
+browsed for the budget re-centre, plus heals); placeholder jobs are one-shot
+per item, mostly memory-cache hits, with their JPEGs (30-200KB each) living
+until the viewer closes; the heal scan and shape analysis are single linear
+passes per event.
 
-If the browse budget is ever raised substantially, the two things to bound
-are the whole-range placeholder pass (order it nearest-first and cap the live
+If deep-browsing sessions ever matter, the things to bound are the
+whole-range placeholder pass (order it nearest-first, cap the live
 placeholder files with an LRU) and the per-reload hand-off cost (QuickLook
-offers no incremental alternative, so the only lever is keeping the exposed
-range windowed).
+offers no incremental alternative, so the lever is windowing the exposed
+range - dropping items far behind the user the same way the padding
+re-centre already rebases indices).
 
 ## Diagnostics
 
