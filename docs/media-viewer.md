@@ -48,11 +48,18 @@ needed as the timeline grows. The padding indices themselves render as
 Two consequences worth knowing:
 
 - The padding is also a **per-session browse budget**: once a side's padding
-  is consumed (100 items paginated in beyond what was loaded at open), further
-  items still merge into the array but sit below QuickLook index 0 (negative
-  padding), unreachable until the viewer is reopened. In practice a session
-  exposes: the media loaded at open (typically tens) plus at most ~100 more
-  per direction.
+  is consumed (100 items paginated in beyond what was loaded at open), that
+  side has no phantom indices left, so there is no "Loading more" page to
+  land on any more - the oldest reachable item becomes QuickLook's content
+  edge and the swipe just bounces there, **exactly as if the timeline had
+  ended**. There is no reload-and-recover: further items (the timeline may
+  still paginate underneath, since the edge-proximity prefetch works on array
+  indices) merge into the array below QuickLook index 0, unreachable, and
+  browsing past the budget requires closing and reopening the viewer (which
+  re-centres a fresh +/-100 on the tapped item). If this ever bites in
+  practice, the upgrade path is a deliberate re-centre: rebase both paddings
+  around the current item under a covered `reloadData` + index re-derive at
+  a rest, costing one covered reload per ~100 items browsed.
 - When a side genuinely reaches the timeline's end, its padding collapses to
   0 so the last real item becomes QuickLook's own content edge and the swipe
   gets a native bounce (the affordance for "nothing more this way"). That
@@ -176,6 +183,23 @@ current item`: pages several swipes ahead being repaired before arrival.
   reload (the page is blank; a cover would only delay the media).
 - Landing on a "Loading more" page whose index now holds real media
   (pagination absorbed items since the build): rebuilt at rest.
+
+### How far `refreshCurrentPreviewItem` can be trusted
+
+The current-page-only lever has three known caveats (all observed on device):
+
+- Called **while swiping between items it breaks the QLPreviewController
+  outright**, so every refresh path waits for the pages to stop moving first.
+- It **cannot clear a cached "content unavailable" page** - QuickLook's
+  stale negative cache. A page QuickLook built as "unavailable" stays
+  unavailable through a refresh even with a valid file on disk; only
+  `reloadData` clears it, which is why the landed-on-a-blank path reloads
+  (uncovered) instead of refreshing.
+- Even in the good case (swapping a rendered placeholder page for the
+  media), the refresh is **not always honoured**. The upgrade swap therefore
+  verifies: it runs under a cover and watches for the page's content to
+  actually change; if it hasn't shortly after, it falls back to a covered
+  `reloadData` of every page.
 
 ## The cover
 
