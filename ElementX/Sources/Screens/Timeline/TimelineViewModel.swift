@@ -600,6 +600,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.areThreadsEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.doubleTapToSelectTextPublisher
+            .weakAssign(to: \.state.doubleTapToSelectText, on: self)
+            .store(in: &cancellables)
+        
         appSettings.jumpToReadMarkerEnabledPublisher
             .weakAssign(to: \.state.jumpToReadMarkerEnabled, on: self)
             .store(in: &cancellables)

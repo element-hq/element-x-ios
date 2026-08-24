@@ -52,6 +52,10 @@ struct AdvancedSettingsScreen: View {
                 ListRow(label: .plain(title: UntranslatedL10n.screenAdvancedSettingsCancelDownloadsTitle,
                                       description: UntranslatedL10n.screenAdvancedSettingsCancelDownloadsDescription),
                         kind: .toggle($context.cancelMediaDownloadsOnSwipeAway))
+                
+                ListRow(label: .plain(title: UntranslatedL10n.screenAdvancedSettingsDoubleTapSelectTextTitle,
+                                      description: UntranslatedL10n.screenAdvancedSettingsDoubleTapSelectTextDescription),
+                        kind: .toggle($context.doubleTapToSelectText))
             }
             
             Section {

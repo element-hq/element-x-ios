@@ -66,6 +66,7 @@ protocol AdvancedSettingsProtocol: AnyObject {
     var removeNotificationsWhenReadElsewhere: Bool { get set }
     var optimizeMediaUploads: Bool { get set }
     var preloadMediaInViewer: Bool { get set }
+    var doubleTapToSelectText: Bool { get set }
     var cancelMediaDownloadsOnSwipeAway: Bool { get set }
     var liveLocationMinimumDistanceUpdate: Int { get set }
 }

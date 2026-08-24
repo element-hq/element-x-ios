@@ -355,6 +355,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var optimizeMediaUploads: Bool
     
+    /// Double tapping a message selects its text instead of opening the reaction picker.
+    @UserPreference(defaultValue: false)
+    var doubleTapToSelectText: Bool
+    
     @UserPreference(defaultValue: true)
     var preloadMediaInViewer: Bool
     

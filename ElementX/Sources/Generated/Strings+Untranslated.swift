@@ -16,6 +16,10 @@ internal nonisolated enum UntranslatedL10n {
   internal static var screenAdvancedSettingsCancelDownloadsDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_cancel_downloads_description") }
   /// Stop downloads when swiping away
   internal static var screenAdvancedSettingsCancelDownloadsTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_cancel_downloads_title") }
+  /// Double tapping a message selects its text instead of opening the reaction picker.
+  internal static var screenAdvancedSettingsDoubleTapSelectTextDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_double_tap_select_text_description") }
+  /// Double tap to select text
+  internal static var screenAdvancedSettingsDoubleTapSelectTextTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_double_tap_select_text_title") }
   /// Manage storage
   internal static var screenAdvancedSettingsManageStorage: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_manage_storage") }
   /// Fetch the photos and videos either side of the one on show ahead of swiping, using more data

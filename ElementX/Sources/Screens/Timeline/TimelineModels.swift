@@ -129,6 +129,8 @@ struct TimelineViewState: BindableState {
     
     var isViewSourceEnabled: Bool
     var areThreadsEnabled: Bool
+    /// Double tapping a message selects its text instead of opening the reaction picker.
+    var doubleTapToSelectText = false
     var linkPreviewsEnabled: Bool
     var jumpToReadMarkerEnabled: Bool
     
