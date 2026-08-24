@@ -289,7 +289,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         // from instead; the media swaps in when it lands.
         for neighbourIndex in (index - Self.placeholderReach...index + Self.placeholderReach) where neighbourIndex != index && items.indices.contains(neighbourIndex) {
             let neighbour = items[neighbourIndex]
-            guard neighbour.fileHandle == nil, neighbour.placeholderURL == nil, neighbour.kind != .file, neighbour.thumbnailMediaSource != nil,
+            // No `thumbnailMediaSource` check: the job's thumbnail lookup falls back to the media
+            // itself when the event has no thumbnail (a highres poster beats a black page).
+            guard neighbour.fileHandle == nil, neighbour.placeholderURL == nil, neighbour.kind != .file,
                   !placeholderJobs.contains(neighbour.id) else { continue }
             placeholderJobs.insert(neighbour.id)
             Task { [weak self] in

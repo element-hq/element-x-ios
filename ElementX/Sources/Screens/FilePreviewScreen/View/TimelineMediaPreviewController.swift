@@ -689,7 +689,9 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     /// items still missing a file are blank and items that now have one have been rebuilt correctly.
     private func recordBuiltBlankPages() {
         let items = context.viewState.dataSource.previewItems
-        builtBlankItemIDs = Set(items.filter { $0.previewItemURL == nil }.map(\.id))
+        // "Blank" includes pages built from the shared black loading image (no file AND no
+        // thumbnail at build time): they render, but as black, and QuickLook never re-reads them.
+        builtBlankItemIDs = Set(items.filter { $0.fileHandle == nil && $0.placeholderURL == nil }.map(\.id))
         builtPlaceholderItemIDs = Set(items.filter(\.isShowingPlaceholder).map(\.id))
     }
 
@@ -801,7 +803,9 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
             let arrayIndex = currentPreviewItemIndex + delta - firstIndex
             guard dataSource.previewItems.indices.contains(arrayIndex) else { continue }
             let item = dataSource.previewItems[arrayIndex]
-            let healable = builtBlankItemIDs.contains(item.id) ? item.previewItemURL != nil
+            // A black-built page heals as soon as it has anything real to show (its thumbnail or
+            // the media); a thumbnail-built one only when the media lands.
+            let healable = builtBlankItemIDs.contains(item.id) ? item.placeholderURL != nil || item.fileHandle != nil
                 : builtPlaceholderItemIDs.contains(item.id) && item.fileHandle != nil
             if healable {
                 return delta
@@ -875,6 +879,7 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     /// page is rebuilt behind a cover instead.
     private func upgradePlaceholderPage(itemID: MediaPreviewItemID) {
         builtPlaceholderItemIDs.remove(itemID)
+        builtBlankItemIDs.remove(itemID) // A refresh isn't a reload: keep the blank model in step by hand.
         MXLog.info("Media viewer: swapping the placeholder for the media of \(itemID)")
         // Under a page cover: the refresh flashes the page black, so the thumbnail stays up until the
         // media has rendered. The bars are left uncovered: their buttons re-animating is the cue
