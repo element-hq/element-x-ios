@@ -339,8 +339,6 @@ struct MessageText: UIViewRepresentable {
         // The selection handles' knobs extend beyond the zero-inset bounds and get
         // clipped (until a drag re-hosts them in an unclipped container): don't clip.
         textView.clipsToBounds = false
-        // Selection highlight/handles in the same tint as selecting text in the composer.
-        textView.tintColor = .compound.iconAccentTertiary
         textView.contentInset = .zero
         textView.contentInsetAdjustmentBehavior = .never
         textView.textContainerInset = .zero
