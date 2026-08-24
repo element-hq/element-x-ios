@@ -4939,3 +4939,35 @@ issue: `map_updates` flushes pending in-band updates before mapping
 out-of-band ones; regression test reproduces the exact production panic
 without it. Consider reporting the confirmation to #5416 when
 upstreaming.
+
+## Round 70 (2026-08-24, build 207): "This is the beginning of the thread"
+
+Feature request: threads gave no affordance that the top of the timeline
+really is the thread's start rather than failed pagination, unlike
+rooms' "This is the beginning of X." item.
+
+SDK 338bb5c3a: thread timelines now emit the `TimelineStart` virtual
+item. `insert_timeline_start_if_missing` takes the thread root and
+refuses the item until the root leads the known remote events - which
+provably is the thread's start, since nothing can precede a root - on
+top of the existing leading-gap guard. The thread updates task
+re-evaluates it after applying every diff batch (the one choke point all
+thread events flow through, avoiding races between pagination returning
+and the events landing); `handle_timeline_gaps` gets a Thread branch for
+gap-only updates; `init_with_thread_root` covers a cached thread that
+already starts with its root. Regression coverage in the thread
+back-pagination + filtering integration tests. NOTE: the same suite
+caught latent fallout from build 204's read-marker fix
+(`test_send_read_receipts` expected our own receipt NOT to move the
+marker); updated to the new intended behaviour.
+
+EXI 084f46cc3: renders the item in threads with a new untranslated
+string "This is the beginning of the thread." - shown in DMs too (the
+room-level tombstoned-DM suppression doesn't apply) and without the
+predecessor-room upgrade dialogue.
+
+Build 207 = EXI 084f46cc3 x SDK 338bb5c3a. VALIDATE: open a short
+thread - "This is the beginning of the thread." above the root; a long
+thread shows it only after paginating to the root; plus build 205/206's
+carried-over items (NEW line live-tracking, thread-from-push decrypted,
+no snapshot / chunk-panic crashes).
