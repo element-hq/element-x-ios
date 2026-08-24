@@ -702,21 +702,21 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func handleMediaTapped(with itemID: TimelineItemIdentifier, galleryIndex: Int? = nil) async {
-        state.showLoading = true
-        let action = await timelineInteractionHandler.processItemTap(itemID)
+        // Building the media timeline takes ~100ms from the event cache, so only show the
+        // spinner if it's actually slow (an event that needs fetching).
+        let spinner = Task {
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            state.showLoading = true
+        }
+        let action = await timelineInteractionHandler.processItemTap(itemID, galleryIndex: galleryIndex)
+        spinner.cancel()
         
         switch action {
         case .displayMediaPreview(let item, let timelineViewModelKind):
             actionsSubject.send(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
             
-            let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
-            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
-        case .displayGalleryPreview(let galleryItem, let timelineViewModelKind):
-            actionsSubject.send(.composer(action: .removeFocus))
-            
-            let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem,
-                                                                    timelineViewModelKind: timelineViewModelKind,
-                                                                    initialIndex: galleryIndex ?? 0)
+            let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, galleryIndex: galleryIndex, timelineViewModelKind: timelineViewModelKind)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayLocation(let location):
             actionsSubject.send(.displayLocation(location))
@@ -840,25 +840,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func makeMediaPreviewViewModel(item: EventBasedMessageTimelineItemProtocol,
+                                           galleryIndex: Int?,
                                            timelineViewModelKind: TimelineControllerAction.TimelineViewModelKind) -> TimelineMediaPreviewViewModel {
         TimelineMediaPreviewViewModel(initialItem: item,
+                                      initialGalleryIndex: galleryIndex,
                                       timelineViewModel: timelineViewModel(for: timelineViewModelKind),
                                       mediaProvider: userSession.mediaProvider,
                                       photoLibraryManager: PhotoLibraryManager(),
                                       userIndicatorController: userIndicatorController,
-                                      appMediator: appMediator)
-    }
-    
-    private func makeGalleryPreviewViewModel(galleryItem: GalleryRoomTimelineItem,
-                                             timelineViewModelKind: TimelineControllerAction.TimelineViewModelKind,
-                                             initialIndex: Int) -> TimelineMediaPreviewViewModel {
-        TimelineMediaPreviewViewModel(galleryItem: galleryItem,
-                                      initialIndex: initialIndex,
-                                      timelineViewModel: timelineViewModel(for: timelineViewModelKind),
-                                      mediaProvider: userSession.mediaProvider,
-                                      photoLibraryManager: PhotoLibraryManager(),
-                                      userIndicatorController: userIndicatorController,
-                                      appMediator: appMediator)
+                                      appMediator: appMediator,
+                                      appSettings: appSettings)
     }
     
     private func timelineViewModel(for kind: TimelineControllerAction.TimelineViewModelKind) -> TimelineViewModel {
