@@ -4971,3 +4971,38 @@ thread - "This is the beginning of the thread." above the root; a long
 thread shows it only after paginating to the root; plus build 205/206's
 carried-over items (NEW line live-tracking, thread-from-push decrypted,
 no snapshot / chunk-panic crashes).
+
+**Round 70 addendum (2026-08-24, SDK 4e05eb7e4, build 208): thread gap
+infinispinner.** Validation screenshot showed a thread with a
+never-resolving spinner at the bottom, a UTD, and no beginning-of-thread
+item. Three findings:
+
+1. The spinner (real bug, FIXED): the thread's gap was resolved via
+`/relations` entirely to already-known events - a gaps-snapshot change
+with zero event diffs. `send_timeline_updates` suppressed empty-diff
+updates unless `gaps_announced` was armed, and only the
+chunk-loaded storage-pagination path armed it; this gap was rendered
+from the timeline's init-time gaps pull and resolved through an
+early-return path, so the timeline was never told. Stale gap item →
+EXI re-resolved a token the cache no longer knew, "resolved: false"
+every ~2s, forever. Fixed by dropping the gate: every gap change is
+announced (observers that don't render gaps no-op on empty updates).
+Regression test hangs without the fix; two event-cache tests updated to
+expect the now-announced empty update after a from-the-end pagination
+parks its token.
+
+2. No beginning-of-thread item: correct behaviour - the root did not
+lead the timeline (thread history was still unfetched behind the stuck
+gap). With the gap fix, resolving through to the root will surface it.
+
+3. The UTD ("Waiting for this message", Raul 16:01): genuinely missing
+room key at rageshake time (2 min old, no withheld code, not in
+backup, no to-device key by log end 15:05 UTC). Should self-heal via
+the redecryptor when the key arrives; note Raul's edit of it was
+dropped ("replacement invalid: original is m.room.encrypted") - if the
+message stays UTD or heals without the edit, that's the next thing to
+look at.
+
+Build 208 = EXI 9cd090513 x SDK 4e05eb7e4. VALIDATE: reopen the same
+thread - spinner resolves through the history to the root, then "This
+is the beginning of the thread."; plus round 69/70 carried-over items.
