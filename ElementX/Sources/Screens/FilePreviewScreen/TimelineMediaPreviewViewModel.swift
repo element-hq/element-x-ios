@@ -293,9 +293,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             let neighbour = items[neighbourIndex]
             // Thumbnails only: the no-thumbnail highres fallback would fetch full-size content
             // for a speculative neighbour (encrypted media can't be server-thumbnailed, and the
-            // bytes land in the image cache so the file is downloaded again anyway). A rare
-            // thumbnail-less neighbour builds black and gets its poster on display instead.
-            guard neighbour.fileHandle == nil, neighbour.placeholderURL == nil, neighbour.kind != .file, neighbour.thumbnailMediaSource != nil,
+            // bytes land in the image cache so the file is downloaded again anyway). The
+            // exception is media whose sender skipped the thumbnail because the original is
+            // already thumbnail-sized: its full-res costs what the thumbnail would have. A rare
+            // large thumbnail-less neighbour builds black and gets its poster on display instead.
+            guard neighbour.fileHandle == nil, neighbour.placeholderURL == nil, neighbour.kind != .file,
+                  neighbour.thumbnailMediaSource != nil || isThumbnailSized(neighbour),
                   !placeholderJobs.contains(neighbour.id) else { continue }
             placeholderJobs.insert(neighbour.id)
             Task { [weak self] in
@@ -305,6 +308,18 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
+    /// An image whose sender legitimately skipped the thumbnail because the original is already
+    /// thumbnail-sized (MSC4409: none required at <=800x600). Fetching its full-res costs what
+    /// the thumbnail would have, so the placeholder pass treats it as one - by pixel size when
+    /// the event says, else by a small file size.
+    private func isThumbnailSized(_ item: TimelineMediaPreviewItem.Media) -> Bool {
+        guard item.kind == .image, item.thumbnailMediaSource == nil else { return false }
+        if let size = item.mediaSize {
+            return min(size.width, size.height) <= 600 && max(size.width, size.height) <= 800
+        }
+        return item.fileSize.map { $0 <= 1_000_000 } ?? false
+    }
+
     /// Placeholder jobs in flight, so a neighbour isn't rendered twice while swiping around it.
     private var placeholderJobs = Set<MediaPreviewItemID>()
     
@@ -661,7 +676,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             }
         }
         guard let source = item.thumbnailMediaSource ?? item.mediaSource else { return nil }
-        let size = item.thumbnailMediaSource == nil ? item.mediaSize : item.thumbnailSize
+        // A thumbnail-sized original (sent without a thumbnail, MSC4409) is fetched as full
+        // content: passing a size here means the thumbnail endpoint, which cannot serve
+        // encrypted media - these items could never get a poster at all.
+        let size: CGSize? = if item.thumbnailMediaSource == nil {
+            isThumbnailSized(item) ? nil : item.mediaSize
+        } else {
+            item.thumbnailSize
+        }
         let lookupStarted = ContinuousClock.now
         let load = mediaProvider.loadImageRetryingOnReconnection(source, size: size)
         // A poll, not a task-group race: the group waited for its load child, which awaited the
