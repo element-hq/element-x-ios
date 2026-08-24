@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Heb ganfod ap cydnaws i drin y weithred hon.";
 "error_room_address_already_exists" = "Mae'r cyfeiriad ystafell hwn yn bodoli eisoes. Ceisiwch olygu'r maes cyfeiriad ystafell neu newid enw'r ystafell";
 "error_room_address_invalid_symbols" = "Dyw rhai nodau ddim yn cael eu caniatáu. Dim ond llythrennau, digidau a'r symbolau canlynol sy'n cael eu cefnogi ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Nid yw rhai negeseuon wedi'u hanfon";
 "error_unknown" = "Ymddiheuriadau, mae gwall wedi digwydd";
 "error.account_already_logged_in" = "Rydych chi eisoes wedi mewngofnodi ar y ddyfais hon fel %1$@ .";

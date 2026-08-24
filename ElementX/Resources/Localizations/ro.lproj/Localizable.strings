@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Nu a fost găsită nicio aplicație capabilă să gestioneze această acțiune.";
 "error_room_address_already_exists" = "Această adresă de cameră există deja. Încercați să editați câmpul adresei camerei sau să schimbați numele camerei.";
 "error_room_address_invalid_symbols" = "Unele caractere nu sunt permise. Sunt acceptate doar literele, cifrele și următoarele simboluri ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Unele mesaje nu au fost trimise";
 "error_unknown" = "Ne pare rău, a apărut o eroare";
 "error.account_already_logged_in" = "Sunteți deja conectat pe acest dispozitiv ca %1$@.";

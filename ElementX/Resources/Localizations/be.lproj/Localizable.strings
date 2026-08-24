@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Не знойдзена сумяшчальная праграма для выканання гэтага дзеяння.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Некаторыя паведамленні не былі адпраўлены";
 "error_unknown" = "Выбачце, адбылася памылка";
 "error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Не ўдалося наладзіць рэжым, паспрабуйце яшчэ раз.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш хатні сервер не падтрымлівае гэту опцыю ў зашыфраваных пакоях, вы не атрымаеце апавяшчэнне ў гэтым пакоі.";
 "screen_room_notification_settings_mode_all_messages" = "Усе паведамленні";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "У гэтым пакоі паведаміце мяне пра";
 "screen_room_pinned_banner_indicator" = "%1$@ з %2$@";

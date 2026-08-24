@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Der blev ikke fundet nogen kompatibel app til at håndtere denne handling.";
 "error_room_address_already_exists" = "Denne rumadresse er allerede taget. Prøv at redigere rummets adressefelt eller at skifte rummets navn";
 "error_room_address_invalid_symbols" = "Nogle tegn er ikke tilladt. Kun bogstaver, cifre og følgende symboler understøttes! $ & '() * +/; =? @ [] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Nogle beskeder er ikke blevet sendt";
 "error_unknown" = "Beklager, der opstod en fejl";
 "error.account_already_logged_in" = "Du er allerede logget ind på denne enhed som %1$@.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Kunne ikke indstille tilstanden. Prøv igen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hjemmeserver understøtter ikke denne indstilling i krypterede rum, du får ikke besked i dette rum.";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Giv mig besked i dette rum for";
 "screen_room_pinned_banner_indicator" = "%1$@ af %2$@";

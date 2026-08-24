@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Δεν βρέθηκε συμβατή εφαρμογή για να χειριστεί αυτήν την ενέργεια.";
 "error_room_address_already_exists" = "Αυτή η διεύθυνση αίθουσας υπάρχει ήδη. Παρακαλώ δοκιμάστε να επεξεργαστείτε το πεδίο διεύθυνσης αίθουσας ή αλλάξτε το όνομα της αίθουσας";
 "error_room_address_invalid_symbols" = "Ορισμένοι χαρακτήρες δεν επιτρέπονται. Υποστηρίζονται μόνο γράμματα, ψηφία και τα ακόλουθα σύμβολα ! $ & '() * +/; = ? @ [] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Ορισμένα μηνύματα δεν έχουν σταλεί";
 "error_unknown" = "Λυπούμαστε, παρουσιάστηκε σφάλμα";
 "error.account_already_logged_in" = "Έχετε ήδη συνδεθεί σε αυτή τη συσκευή ως %1$@.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Αποτυχία ρύθμισης της λειτουργίας, δοκίμασε ξανά.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ο αρχικός διακομιστής σας δεν υποστηρίζει αυτή την επιλογή σε κρυπτογραφημένες αίθουσες, δεν θα λάβετε ειδοποιήσεις σε αυτή την αίθουσα.";
 "screen_room_notification_settings_mode_all_messages" = "Όλα τα μηνύματα";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Σε αυτήν την αίθουσα, ειδοποιήστε με για";
 "screen_room_pinned_banner_indicator" = "%1$@ από %2$@";

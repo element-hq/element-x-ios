@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Non è stata trovata alcuna app compatibile per gestire questa azione.";
 "error_room_address_already_exists" = "L'indirizzo di questa stanza esiste già. Prova a modificare il campo dell'indirizzo o a cambiare il nome della stanza";
 "error_room_address_invalid_symbols" = "Alcuni caratteri non sono consentiti. Sono supportate solo lettere, cifre e i seguenti simboli ! $ & '() * +/; =? @ [] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Alcuni messaggi non sono stati inviati";
 "error_unknown" = "Siamo spiacenti, si è verificato un errore";
 "error.account_already_logged_in" = "Hai già effettuato l'accesso su questo dispositivo come %1$@ .";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Impossibile impostare la modalità, riprova.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Il tuo homeserver non supporta questa opzione nelle stanze cifrate, quindi non riceverai notifiche in questa stanza.";
 "screen_room_notification_settings_mode_all_messages" = "Tutti i messaggi";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "In questa stanza, avvisami per";
 "screen_room_pinned_banner_indicator" = "%1$@ di %2$@";

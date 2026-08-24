@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Ingen kompatibel app hittades för att hantera den här åtgärden.";
 "error_room_address_already_exists" = "Den här rumsadressen finns redan. Försök att redigera adressfältet för rummet eller ändra rummets namn";
 "error_room_address_invalid_symbols" = "Vissa tecken är inte tillåtna. Endast bokstäver, siffror och följande symboler stöds ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Vissa meddelanden har inte skickats";
 "error_unknown" = "Tyvärr, ett fel uppstod";
 "error.account_already_logged_in" = "Du är redan inloggad på den här enheten som %1$@.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Misslyckades att ställa in läget, vänligen pröva igen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hemserver stöder inte det här alternativet i krypterade rum, du blir inte aviserad i det här rummet.";
 "screen_room_notification_settings_mode_all_messages" = "Alla meddelanden";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "I det här rummet, meddela mig för";
 "screen_room_pinned_banner_indicator" = "%1$@ av %2$@";

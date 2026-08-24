@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "이 동작을 수행할 수 있는 앱을 찾지 못했습니다.";
 "error_room_address_already_exists" = "이 방 주소는 이미 존재합니다. 방 주소 필드를 편집하거나 방 이름을 변경해 보세요.";
 "error_room_address_invalid_symbols" = "일부 문자는 허용되지 않습니다. 로마자, 숫자 및 다음 기호만 지원됩니다! $ &amp; &#39; ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "일부 메시지가 전송되지 않았습니다";
 "error_unknown" = "이런, 오류가 발생했어요";
 "error.account_already_logged_in" = "이 기기에서 이미 %1$@님으로 로그인되어 있습니다.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "모드 설정이 실패했습니다. 다시 시도해 주세요.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "귀하의 홈 서버는 암호화된 방에서 이 옵션을 지원하지 않으므로, 이 방에서 알림을 받지 못합니다.";
 "screen_room_notification_settings_mode_all_messages" = "모든 메시지";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "이 방에서, 알림을 주세요";
 "screen_room_pinned_banner_indicator" = "%2$@ 의 %1$@";

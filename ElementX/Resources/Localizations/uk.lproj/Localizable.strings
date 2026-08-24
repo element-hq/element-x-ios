@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Не знайдено сумісного застосунку для виконання цієї дії.";
 "error_room_address_already_exists" = "Ця адреса кімнати вже існує, будь ласка, спробуйте відредагувати поле адреси кімнати або змінити назву кімнати";
 "error_room_address_invalid_symbols" = "Деякі символи не допускаються. Підтримуються тільки букви, цифри і наступні символи! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Недійсний тип MIME: %@";
+"error_sending_failure_missing_media_content" = "Відсутній медіавміст";
+"error_sending_failure_other" = "Подробиці помилки: %@";
+"error_sending_failure_sending_from_unverified_device" = "Надсилання з незвіреного пристрою";
+"error_sending_failure_unknown" = "Невідома помилка";
 "error_some_messages_have_not_been_sent" = "Деякі повідомлення не були надіслані";
 "error_unknown" = "Вибачте, сталася помилка";
 "error.account_already_logged_in" = "Ви вже ввійшли на цьому пристрої як %1$@.";
@@ -524,7 +529,7 @@
 "notification_invitation_action_reject" = "Відхилити";
 "notification_invite_body" = "Запрошує вас до бесіди";
 "notification_invite_body_with_sender" = "%1$@ запрошує вас до бесіди";
-"notification_knock_request_body" = "Requested to join";
+"notification_knock_request_body" = "Запит на приєднання";
 "notification_live_location_started_body" = "Починає ділитися своїм поточним місцем розташування";
 "notification_mentioned_you_body" = "Вас згадує: %1$@";
 "notification_new_messages" = "Нові повідомлення";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Не вдалося встановити режим, спробуйте ще раз.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті.";
 "screen_room_notification_settings_mode_all_messages" = "Всі повідомлення";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Лише згадки та ключові слова";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Лише згадки та відповіді";
 "screen_room_notification_settings_mode_mute" = "Вимкнути звук";
 "screen_room_notification_settings_room_custom_settings_title" = "У цій кімнаті сповіщати мене про";
 "screen_room_pinned_banner_indicator" = "%1$@ із %2$@";
@@ -1723,7 +1728,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Помилка: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Помилка, неможливо перевірити push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Помилка, час очікування вийшов на push-повідомлення.";
-"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Помилка: шлюз push обмежує швидкість для цього пристрою, тому сповіщення не будуть надійними. Налаштуйте інший шлюз push.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Зворотнє відправлення push-повідомлення, зайняло %1$d мс.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Перевірка зворотного надсилання";
 "troubleshoot_notifications_test_unified_push_description" = "Переконується, що дистриб'ютори UnifiedPush доступні.";

@@ -1136,6 +1136,20 @@ internal nonisolated enum L10n {
   internal static var errorRoomAddressAlreadyExists: String { return L10n.tr("Localizable", "error_room_address_already_exists") }
   /// Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _
   internal static var errorRoomAddressInvalidSymbols: String { return L10n.tr("Localizable", "error_room_address_invalid_symbols") }
+  /// Invalid mime type: %@
+  internal static func errorSendingFailureInvalidMimeType(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_sending_failure_invalid_mime_type", String(describing: p1))
+  }
+  /// Missing media content
+  internal static var errorSendingFailureMissingMediaContent: String { return L10n.tr("Localizable", "error_sending_failure_missing_media_content") }
+  /// Error details: %@
+  internal static func errorSendingFailureOther(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "error_sending_failure_other", String(describing: p1))
+  }
+  /// Sending from unverified device
+  internal static var errorSendingFailureSendingFromUnverifiedDevice: String { return L10n.tr("Localizable", "error_sending_failure_sending_from_unverified_device") }
+  /// Unknown error
+  internal static var errorSendingFailureUnknown: String { return L10n.tr("Localizable", "error_sending_failure_unknown") }
   /// Some messages have not been sent
   internal static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
   /// Sorry, an error occurred
@@ -1747,7 +1761,7 @@ internal nonisolated enum L10n {
   internal static var screenChatBackupRecoveryActionSetupDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup_description") }
   /// Create account
   internal static var screenCreateAccountTitle: String { return L10n.tr("Localizable", "screen_create_account_title") }
-  /// Open %1$@ in a desktop device
+  /// Open %1$@ on a desktop device
   internal static func screenCreateNewRecoveryKeyListItem1(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_1", String(describing: p1))
   }
@@ -3166,7 +3180,7 @@ internal nonisolated enum L10n {
   internal static var screenRoomNotificationSettingsMentionsOnlyDisclaimer: String { return L10n.tr("Localizable", "screen_room_notification_settings_mentions_only_disclaimer") }
   /// All messages
   internal static var screenRoomNotificationSettingsModeAllMessages: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_all_messages") }
-  /// Mentions and Keywords only
+  /// Mentions and replies only
   internal static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
   /// Mute
   internal static var screenRoomNotificationSettingsModeMute: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mute") }
@@ -3337,7 +3351,7 @@ internal nonisolated enum L10n {
   internal static var screenRoomlistFilterRooms: String { return L10n.tr("Localizable", "screen_roomlist_filter_rooms") }
   /// You’re not in any room yet
   internal static var screenRoomlistFilterRoomsEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_rooms_empty_state_title") }
-  /// Unreads
+  /// Unread
   internal static var screenRoomlistFilterUnreads: String { return L10n.tr("Localizable", "screen_roomlist_filter_unreads") }
   /// Congrats!
   /// You don’t have any unread messages!

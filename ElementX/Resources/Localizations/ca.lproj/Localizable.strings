@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "No s'ha trobat cap aplicació compatible per gestionar aquesta acció.";
 "error_room_address_already_exists" = "Aquesta adreça de sala ja existeix. Prova d'editar el camp d'adreça o de canviar el nom de sala";
 "error_room_address_invalid_symbols" = "Alguns caràcters no estan permesos. Només s'admeten lletres, dígits i els símbols següents: ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Alguns missatges no s'han enviat";
 "error_unknown" = "S'ha produït un error";
 "error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "No s'ha pogut configurar el mode. Torna-ho a provar.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "El servidor no admet aquesta opció en sales xifrades, no rebras notificacions en aquesta sala.";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "En aquesta sala, notifica'm en";
 "screen_room_pinned_banner_indicator" = "%1$@ de %2$@";

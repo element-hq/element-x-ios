@@ -24,10 +24,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Gallery, %1$d more media</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>ギャラリー その他メディア %1$d</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -41,7 +39,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>総投票数うち%1$d%%</string>
+			<string>総投票数うち%1$d% パーセント</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -68,10 +66,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d attachment…</string>
 			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$dの添付ファイル...</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -84,10 +80,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d media item…</string>
 			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$dのメディアアイテム...</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -240,10 +234,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Shared %1$d attachment</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>%1$d 個の共有された添付ファイル</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -312,10 +304,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d removed message</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d 件の削除されたメッセージ</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -580,10 +570,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d joined</string>
 			<key>other</key>
-			<string>%1$d joined</string>
+			<string>%1$d が参加</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

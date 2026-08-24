@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Bu amalni bajarish uchun mos ilova topilmadi.";
 "error_room_address_already_exists" = "Bu xona manzili allaqachon mavjud. Xona manzili maydonini tahrirlang yoki xona nomini o‘zgartiring";
 "error_room_address_invalid_symbols" = "Ayrim belgilarga ruxsat berilmagan. Faqat harf, raqam va quyidagi belgilar ishlaydi! $ &’() * + /; =? @ [ ] -. _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Bazi xabarlar yuborilmagan";
 "error_unknown" = "Kechirasiz, xatolik yuz berdi";
 "error.account_already_logged_in" = "Bu qurilmada allaqachon %1$@ hisobiga kirgansiz.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Rejimni o‘rnatib bo‘lmadi, qayta urinib ko‘ring.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Uy serveringiz shifrlangan xonalarda ushbu imkoniyatni qoʻllab-quvvatlamaydi, shuning uchun bu xonadan bildirishnomalar olmaysiz.";
 "screen_room_notification_settings_mode_all_messages" = "Barcha xabarlar";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Bu xonada menga xabar bering";
 "screen_room_pinned_banner_indicator" = "%1$@ʼdan %2$@";
