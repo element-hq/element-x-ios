@@ -629,6 +629,8 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     /// item (not the scroll offset: QuickLook reuses the same offset after a reload, so an offset
     /// key over-fired across different pages and suppressed legitimate heals).
     private var lastHealReloadItemID: MediaPreviewItemID?
+    /// When the last heal reload fired, flooring the gap between consecutive ones.
+    private var lastHealReloadInstant: ContinuousClock.Instant?
     private func scheduleHealReloadIfResting() {
         neighbourReloadTask?.cancel()
         neighbourReloadTask = Task { [weak self] in
@@ -650,10 +652,15 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
             // before the user can swipe to them.
             let currentItemID = (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id
             guard currentItemID != lastHealReloadItemID else { return }
+            // A floor between heal reloads: placeholder/file arrivals can otherwise fire
+            // back-to-back covered reloads (observed 200ms apart), which fight each other and
+            // the swipe. A later trigger re-schedules anything skipped here.
+            if let last = lastHealReloadInstant, ContinuousClock.now - last < .milliseconds(600) { return }
             // Only reload if a built page is actually blank while its file is present: reload is
             // QuickLook's only re-read lever, so skip it when every built page already renders.
             guard let staleBlankDelta = healableBlankPageDelta() else { return }
             lastHealReloadItemID = currentItemID
+            lastHealReloadInstant = ContinuousClock.now
             MXLog.info("Media viewer: healing a page built before its file arrived, \(staleBlankDelta) from the current item")
             reloadDataTrackingBlanks()
         }
@@ -730,21 +737,29 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     /// repopulates it ~20ms (image) to ~100ms (video) later, so the signal is a new content
     /// view under the centre of the screen.
     /// `completion` says whether the rebuilt page was detected.
+    /// The current cover's watcher, so overlapping covered reloads hand the cover over instead
+    /// of fighting: a stale watcher used to tear down the cover a newer reload had just put up
+    /// (exposing the mid-rebuild page), and each new reload re-snapshotted the page mid-rebuild -
+    /// a snapshot of a just-emptied page is black, so the cover itself became the flash.
+    private var reloadCoverTask: Task<Void, Never>?
+
     private func coverReload(_ reload: () -> Void, completion: ((Bool) -> Void)? = nil) {
-        reloadCoverView?.removeFromSuperview()
+        reloadCoverTask?.cancel()
         let previousContent = renderedPageContentView
         let previousImage = (previousContent as? UIImageView)?.image
-        if let pageScrollView, let snapshot = pageScrollView.snapshotView(afterScreenUpdates: false) {
+        // Reuse a cover that's already up: it shows the last settled content, which is exactly
+        // what should stay on screen; a fresh snapshot now would capture the rebuild in flight.
+        if reloadCoverView == nil, let pageScrollView, let snapshot = pageScrollView.snapshotView(afterScreenUpdates: false) {
             snapshot.frame = pageScrollView.frame
             snapshot.isUserInteractionEnabled = false
             pageScrollView.superview?.insertSubview(snapshot, aboveSubview: pageScrollView)
             reloadCoverView = snapshot
         }
         reload()
-        Task { [weak self] in
+        reloadCoverTask = Task { [weak self] in
             let started = ContinuousClock.now
             var rendered = false
-            while let self, reloadCoverView != nil, ContinuousClock.now - started < Self.reloadCoverTimeout {
+            while let self, !Task.isCancelled, reloadCoverView != nil, ContinuousClock.now - started < Self.reloadCoverTimeout {
                 if let content = renderedPageContentView,
                    content !== previousContent || (content as? UIImageView)?.image !== previousImage {
                     rendered = true
@@ -752,12 +767,14 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
                 }
                 try? await Task.sleep(for: .milliseconds(16))
             }
+            if Task.isCancelled { return } // A newer covered reload owns the cover now.
             if rendered, self?.renderedPageContentView is UIImageView {
                 // A new image view's `image` being set doesn't mean it's on glass: a large photo
                 // decodes out of process for ~50-150ms more, and dropping the cover at detection
                 // flashed black under a thumbnail -> high-res upgrade. The cover shows the same
                 // content, so holding it through the decode is invisible.
                 try? await Task.sleep(for: .milliseconds(150))
+                if Task.isCancelled { return }
             }
             MXLog.info("Media viewer: reload cover down after \(ContinuousClock.now - started), rebuilt page \(rendered ? "rendered" : "not detected")")
             self?.removeReloadCover(animated: false)
