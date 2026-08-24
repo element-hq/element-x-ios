@@ -4860,3 +4860,63 @@ rest under a covered reload with the index re-derived (EXI dd583295d, build
 203, VALIDATE: browse 100+ media backwards in one sitting, expect "restoring
 the browse budget" with no visible hitch and no false start-of-timeline
 bounce). The full architecture is now written up in docs/media-viewer.md.
+
+## Round 69 (2026-08-24, builds 204-205): read markers, UTD-on-thread, snapshot crash
+
+**Read-up-to marker predating own messages (SDK 41efd33fd, build 204).**
+The NEW line sat before messages the user had already sent from another
+client. The timeline placed the marker solely from `m.fully_read`, which
+Element X only writes when *leaving* a room - so a client sitting in the
+room chatting never advances it, and this device faithfully rendered the
+stale position; incoming read receipts only fed the unread badge, never
+the marker. `update_read_marker` now places the marker at the later of
+`m.fully_read` and the visible event holding our own latest read receipt
+(public or private), and `handle_explicit_read_receipts` re-runs the
+marker update so receipts from other clients advance the line live.
+Regression test in `timeline/tests/virt.rs`. Upstream candidate. Note
+sending a message still doesn't move the marker when no receipt follows
+(the other client sends receipts whenever the room is open, so this
+covers practice; the own-latest-event floor remains as option 1 if not).
+
+**Rageshake 7561: UTD on thread despite a correct push (SDK fafbf75e6,
+build 205).** The NSE decrypted the pushed thread reply and stored it
+(room + thread chunks). On foreground, a limited/gappy sync returned the
+raw encrypted copy of the same event; deduplication replaced the stored
+decrypted copy with it - memory and store, room and thread chunks alike.
+The room timeline recovered via the redecryptor's event-cache-update
+retries, but the thread cache was cleared+rebuilt by the gappy sync
+(`shrink_to_last_reloaded_chunk`) and its resurrected UTD never healed:
+the thread timeline emitted nothing after the Clear for the 40+ seconds
+until the rageshake. Fix at the choke point: `filter_duplicate_events`
+now grafts the stored decrypted payload onto any incoming UTD already
+known decrypted in the room's store - deliberately checking every
+incoming UTD, not just this chunk's duplicates, since the decrypted copy
+may live in a different chunk (NSE wrote the room chunk; the thread
+chunk ingests the event for the first time). Regression test in
+`deduplicator.rs`. Upstream candidate.
+
+**Rageshake 7562: crash-loop applying diffable snapshots (EXI 985cfdf98,
+build 205).** `NSInternalInconsistencyException: Deadlock detected:
+attempted to apply a snapshot ... while it was already applying a
+snapshot`, twice in a row. An animated `dataSource.apply` fires
+`scrollViewDidScroll` synchronously mid-batch; the self-heal flush added
+for rageshake 7543 (and SwiftUI updates setting
+`timelineItemsDictionary`) could then re-enter `applySnapshot` - hit by
+a gap resolution swapping rows under an active pan. `applySnapshot` now
+parks re-entrant calls in `hasPendingItems` and flushes them after the
+in-flight apply returns.
+
+**Rageshake 7563: crash ~12:57Z, unexplained.** The attached hourly log
+contains only the rageshake moment (25 lines, benign sync); the crash
+killed an earlier process instance and its tail is in an earlier hourly
+log still on the device. 7562's relaunch also queued a second Sentry
+event (`EXC_BREAKPOINT`, `06ad1e2e...`) with no console trace - possibly
+the same crash. VALIDATE: pull `console.2026-08-24-1[123].log` + .ips
+crash reports when the phone is reachable, or read Sentry
+`29593f8ef755482081e0707b75725a89`.
+
+Build 205 = EXI 985cfdf98 x SDK fafbf75e6 (also carries build 203's
+browse-budget re-centre and build 204's read-marker fix, neither yet
+user-validated). VALIDATE: NEW line tracks the other client's reading
+live; thread-from-push shows content not UTD; no snapshot crash under
+gap-resolve + drag.
