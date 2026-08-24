@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
 "error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
@@ -740,7 +745,7 @@
 "screen_chat_backup_recovery_action_setup" = "Get recovery key";
 "screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_account_title" = "Create account";
-"screen_create_new_recovery_key_list_item_1" = "Open %1$@ in a desktop device";
+"screen_create_new_recovery_key_list_item_1" = "Open %1$@ on a desktop device";
 "screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
 "screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
 "screen_create_new_recovery_key_list_item_3_reset_all" = "“Reset all”";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Failed setting the mode, please try again.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "In this room, notify me for";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
@@ -1433,7 +1438,7 @@
 "screen_roomlist_filter_people_empty_state_title" = "You don’t have any DMs yet";
 "screen_roomlist_filter_rooms" = "Rooms";
 "screen_roomlist_filter_rooms_empty_state_title" = "You’re not in any room yet";
-"screen_roomlist_filter_unreads" = "Unreads";
+"screen_roomlist_filter_unreads" = "Unread";
 "screen_roomlist_filter_unreads_empty_state_title" = "Congrats!\nYou don’t have any unread messages!";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_roomlist_main_space_title" = "Chats";

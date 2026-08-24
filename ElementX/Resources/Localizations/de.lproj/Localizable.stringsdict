@@ -27,9 +27,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
+			<string>Galerie, %1$d weitere Mediendatei</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Galerie, %1$d weitere Mediendateien</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -59,9 +59,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Vorherige Nachricht gelesen von %1$@ und %2$d weiteren</string>
+			<string>Vorherige Nachricht gelesen von %1$@ und %2$d weiteren Person</string>
 			<key>other</key>
-			<string>Vorherige Nachricht gelesen von %1$@ und %2$d weiteren</string>
+			<string>Vorherige Nachricht gelesen von %1$@ und %2$d weiteren Personen</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -75,9 +75,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
+			<string>%1$d Anhang…</string>
 			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d Anhänge…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -91,9 +91,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d media item…</string>
+			<string>%1$d Mediendatei…</string>
 			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$d Mediendateien…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -267,9 +267,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
+			<string>Hat %1$d Anhang geteilt</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>Hat %1$d Anhänge geteilt</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -347,9 +347,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
+			<string>%1$d entfernte Nachricht</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d entfernte Nachrichten</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -411,9 +411,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Minimum %1$d character. Do not use your account password</string>
+			<string>Mindestens %1$d Zeichen. Verwende nicht dein Konto-Passwort</string>
 			<key>other</key>
-			<string>Minimum %1$d characters. Do not use your account password</string>
+			<string>Mindestens %1$d Zeichen. Verwende nicht dein Konto-Passwort</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -427,9 +427,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d degree</string>
+			<string>%1$d Grad</string>
 			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>%1$d Grad</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -605,7 +605,7 @@
 			<key>one</key>
 			<string>%1$@, %2$@ und %3$d weitere Person</string>
 			<key>other</key>
-			<string>%1$@, %2$@ und %3$d weitere Person</string>
+			<string>%1$@, %2$@ und %3$d weitere Personen</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -651,9 +651,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d joined</string>
+			<string>%1$d ist beigetreten</string>
 			<key>other</key>
-			<string>%1$d joined</string>
+			<string>%1$d sind beigetreten</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -685,7 +685,7 @@
 			<key>one</key>
 			<string>%1$d Push-Dienst gefunden: %2$@</string>
 			<key>other</key>
-			<string>%1$d Push-Dienst gefunden: %2$@</string>
+			<string>%1$d Push-Dienste gefunden: %2$@</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

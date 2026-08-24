@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Nie znaleziono kompatybilnej aplikacji do obsługi tej akcji.";
 "error_room_address_already_exists" = "Ten adres pokoju już istnieje. Spróbuj zmienić adres lub nazwę pokoju";
 "error_room_address_invalid_symbols" = "Niektóre znaki są niedozwolone. Obsługiwane są tylko litery, cyfry i następujące symbole ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Niektóre wiadomości nie zostały wysłane";
 "error_unknown" = "Przepraszamy, wystąpił błąd";
 "error.account_already_logged_in" = "Jesteś już zalogowany na tym urządzeniu jako %1$@.";
@@ -524,7 +529,7 @@
 "notification_invitation_action_reject" = "Odrzuć";
 "notification_invite_body" = "Zaprosił Cię do czatu";
 "notification_invite_body_with_sender" = "%1$@ zaprosił Cię do czatu";
-"notification_knock_request_body" = "Requested to join";
+"notification_knock_request_body" = "Poprosił o dołączenie";
 "notification_live_location_started_body" = "Rozpoczął udostępnianie swojej lokalizacji";
 "notification_mentioned_you_body" = "Wspomniano o Tobie: %1$@";
 "notification_new_messages" = "Nowe wiadomości";
@@ -1723,7 +1728,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Błąd: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Błąd, nie można przetestować push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Błąd, upłynął limit czasu powiadomienia push.";
-"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Błąd: bramka push posiada ograniczenie ilości powiadomień, co sprawi że mogą nie działać prawidłowo. Prosimy o ustawienie innej bramki push.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Pętla powrotna push zajęła %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Przetestuj pętlę Push back";
 "troubleshoot_notifications_test_unified_push_description" = "Upewnij się, że dystrybutorzy UnifiedPush są dostępni.";

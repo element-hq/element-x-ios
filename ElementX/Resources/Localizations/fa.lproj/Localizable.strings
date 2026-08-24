@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "هیچ برنامه سازگاری برای انجام این عمل یافت نشد.";
 "error_room_address_already_exists" = "این آدرس اتاق از قبل وجود دارد. لطفاً فیلد آدرس اتاق را ویرایش کنید یا نام اتاق را تغییر دهید.";
 "error_room_address_invalid_symbols" = "بعضی از کاراکترها مجاز نیستند. فقط حروف، ارقام و نمادهای زیر پشتیبانی می‌شوند! $ &amp; &#39; ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "برخی پیام‌ها ارسال نشده‌اند";
 "error_unknown" = "متأسفیم ، خطایی رخ داد";
 "error.account_already_logged_in" = "شما قبلاً با نام کاربری %1$@ در این دستگاه وارد سیستم شده‌اید.";

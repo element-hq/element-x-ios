@@ -24,10 +24,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Gallery, %1$d more media</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>圖庫，還有 %1$d 項媒體內容</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

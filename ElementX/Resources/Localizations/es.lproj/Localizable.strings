@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "No se encontró ninguna aplicación compatible con esta acción.";
 "error_room_address_already_exists" = "Esta dirección de sala ya existe. Intenta editar el campo de dirección de sala o cambia el nombre de la sala";
 "error_room_address_invalid_symbols" = "No se permiten algunos caracteres. Solo se admiten letras, dígitos y los siguientes símbolos ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Algunos mensajes no se han enviado";
 "error_unknown" = "Lo siento, se ha producido un error";
 "error.account_already_logged_in" = "Ya has iniciado sesión en este dispositivo como %1$@.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "No se pudo cambiar el modo, por favor inténtalo de nuevo.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Tu servidor base no admite esta opción en salas cifradas, no recibirás notificaciones de esta sala.";
 "screen_room_notification_settings_mode_all_messages" = "Todos los mensajes";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "En esta sala, notificarme por";
 "screen_room_pinned_banner_indicator" = "%1$@ de %2$@";

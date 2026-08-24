@@ -24,10 +24,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Gallery, %1$d more media</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Galeri, %1$d media lainnya</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -240,10 +238,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Shared %1$d attachment</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>Lampiran %1$d yang dibagikan</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

@@ -28,10 +28,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
+			<string>Galerija, %1$d više medija</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Galerija, %1$d više medija</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

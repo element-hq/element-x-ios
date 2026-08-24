@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Nebyla nalezena žádná kompatibilní aplikace, která by tuto akci zpracovala.";
 "error_room_address_already_exists" = "Tato adresa místnosti již existuje, zkuste prosím upravit pole adresy místnosti nebo změnit název místnosti";
 "error_room_address_invalid_symbols" = "Některé znaky nejsou povoleny. Podporovány jsou pouze písmena, číslice a následující symboly ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Některé zprávy nebyly odeslány";
 "error_unknown" = "Omlouváme se, došlo k chybě";
 "error.account_already_logged_in" = "Na tomto zařízení jste již přihlášeni jako %1$@.";

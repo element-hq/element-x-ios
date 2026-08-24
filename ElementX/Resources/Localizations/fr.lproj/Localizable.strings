@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Aucune application compatible n’a été trouvée pour gérer cette action.";
 "error_room_address_already_exists" = "Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d'adresse de salon ou de modifier le nom du salon";
 "error_room_address_invalid_symbols" = "Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Certains messages n’ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur s’est produite";
 "error.account_already_logged_in" = "Vous êtes déjà connecté sur cet appareil en tant que %1$@.";

@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Không tìm thấy ứng dụng tương thích nào để xử lý hành động này.";
 "error_room_address_already_exists" = "Địa chỉ phòng này đã tồn tại. Vui lòng thử chỉnh sửa trường địa chỉ phòng hoặc thay đổi tên phòng.";
 "error_room_address_invalid_symbols" = "Một số ký tự không được phép. Chỉ các chữ cái, chữ số và các ký hiệu sau được hỗ trợ: ! $ &amp; &#39; ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Một số tin nhắn chưa được gửi";
 "error_unknown" = "Rất tiếc, đã có lỗi xảy ra.";
 "error.account_already_logged_in" = "Bạn đã đăng nhập trên thiết bị này với tư cách là%1$@ .";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Không thể thiết lập chế độ, hãy thử lại nhé.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Máy chủ không hỗ trợ tùy chọn này trong phòng mã hóa, bạn sẽ không nhận thông báo ở đây.";
 "screen_room_notification_settings_mode_all_messages" = "All messages";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Trong phòng này, thông báo cho tôi khi";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";

@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Yhteensopivaa sovellusta ei löytynyt käsittelemään tätä toimintoa.";
 "error_room_address_already_exists" = "Tämä huoneen osoite on jo käytössä, yritä muokata huoneen osoitekenttää tai muuta huoneen nimeä";
 "error_room_address_invalid_symbols" = "Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Joitakin viestejä ei ole lähetetty";
 "error_unknown" = "Anteeksi, tapahtui virhe";
 "error.account_already_logged_in" = "Olet jo kirjautuneena tälle laitteelle käyttäjällä %1$@.";

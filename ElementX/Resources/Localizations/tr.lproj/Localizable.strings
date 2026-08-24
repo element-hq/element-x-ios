@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Bu eylemi gerçekleştirecek uyumlu bir uygulama bulunamadı.";
 "error_room_address_already_exists" = "Bu oda adresi zaten mevcut. Lütfen oda adres alanını düzenlemeyi deneyin veya oda adını değiştirin";
 "error_room_address_invalid_symbols" = "Bazı karakterlere izin verilmez. Yalnızca harfler, rakamlar ve aşağıdaki semboller desteklenir ! $ &amp; ' ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Bazı mesajlar gönderilmedi";
 "error_unknown" = "Üzgünüz, bir hata oluştu";
 "error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Ayarlanamadı, lütfen tekrar deneyin.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Ana sunucunuz şifreli odalarda bu seçeneği desteklemiyor, bu odada bildirim almayacaksınız.";
 "screen_room_notification_settings_mode_all_messages" = "Tüm mesajlar";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Bu odada, bana bildir";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";

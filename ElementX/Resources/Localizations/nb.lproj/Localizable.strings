@@ -495,6 +495,11 @@
 "error_no_compatible_app_found" = "Ingen kompatibel app ble funnet for å håndtere denne handlingen.";
 "error_room_address_already_exists" = "Denne romadressen finnes allerede. Prøv å redigere romadressefeltet eller endre romnavnet";
 "error_room_address_invalid_symbols" = "Noen tegn er ikke tillatt. Bare bokstaver, sifre og følgende symboler støttes! $ & '() * +/; =? @ [] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Noen meldinger er ikke sendt";
 "error_unknown" = "Beklager, det oppstod en feil";
 "error.account_already_logged_in" = "Du er allerede logget inn på denne enheten som %1$@.";
@@ -1365,7 +1370,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Innstilling av modus mislyktes, prøv igjen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Hjemmeserveren din støtter ikke dette alternativet i krypterte rom, og du vil ikke bli varslet i dette rommet.";
 "screen_room_notification_settings_mode_all_messages" = "Alle meldinger";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "I dette rommet, varsle meg om";
 "screen_room_pinned_banner_indicator" = "%1$@ av %2$@";
