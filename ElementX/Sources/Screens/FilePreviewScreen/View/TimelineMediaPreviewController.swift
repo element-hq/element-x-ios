@@ -12,7 +12,7 @@ import Compound
 import QuickLook
 import SwiftUI
 
-class TimelineMediaPreviewController: QLPreviewController {
+class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDelegate {
     private let context: TimelineMediaPreviewViewModel.Context
     
     private let headerHostingController: UIHostingController<HeaderView>
@@ -97,6 +97,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             .sink { [weak self] index in
                 // This isn't removing duplicates which may try to download and/or write to disk concurrently????
                 MXLog.info("Media viewer: index \(index) -> \(self?.currentPreviewItemDescription ?? "nil")")
+                self?.isCaptionSuppressed = false // Swiping away and back brings the caption back.
                 self?.loadCurrentItem()
                 self?.checkCurrentItemOnArrival()
                 // A rebuild that found the pages moving re-arms for wherever the swipe lands.
@@ -144,6 +145,67 @@ class TimelineMediaPreviewController: QLPreviewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Caption dismissal
+    
+    /// Set by a tap while the caption is on show: over a video the caption covers the
+    /// scrubber, and QuickLook's own tap would hide the whole chrome (pausing playback)
+    /// with it. The first tap hides just the caption instead; swiping away and back
+    /// (or any page change) brings it back.
+    private var isCaptionSuppressed = false
+    
+    private lazy var captionDismissTap: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleCaptionDismissTap))
+        tap.delegate = self
+        return tap
+    }()
+    
+    /// The recognizers already made to defer to the caption-dismiss tap.
+    private let hookedTapRecognizers = NSHashTable<UITapGestureRecognizer>.weakObjects()
+    
+    /// Whether a tap right now should hide the caption rather than reach QuickLook.
+    private var captionIsOnShow: Bool {
+        !captionView.isHidden && !isCaptionSuppressed && context.viewState.currentItem.mediaItem?.hasCaption == true
+    }
+    
+    /// Makes every single-tap recognizer in the hierarchy (QuickLook's chrome toggle,
+    /// AVKit's controls toggle) wait for the caption-dismiss tap, which only claims the
+    /// touch while a caption is on show. Swept on the existing timer: pages (re)build
+    /// their recognizers continuously.
+    private func hookTapRecognizers() {
+        var stack: [UIView] = [view]
+        while let subview = stack.popLast() {
+            for recognizer in subview.gestureRecognizers ?? [] {
+                guard let tap = recognizer as? UITapGestureRecognizer,
+                      tap !== captionDismissTap,
+                      tap.numberOfTapsRequired == 1, tap.numberOfTouchesRequired == 1,
+                      !hookedTapRecognizers.contains(tap) else { continue }
+                tap.require(toFail: captionDismissTap)
+                hookedTapRecognizers.add(tap)
+            }
+            stack.append(contentsOf: subview.subviews)
+        }
+    }
+    
+    @objc private func handleCaptionDismissTap() {
+        MXLog.info("Media viewer: tap hides the caption")
+        isCaptionSuppressed = true
+        captionView.isHidden = true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard gestureRecognizer === captionDismissTap else { return true }
+        guard captionIsOnShow else { return false }
+        // Leave the chrome's controls, the caption itself (links) and any visible
+        // player controls tappable.
+        if let touchView = touch.view {
+            if touchView is UIControl { return false }
+            if let navigationBar, touchView.isDescendant(of: navigationBar) { return false }
+            if touchView.isDescendant(of: captionView) { return false }
+            if let bottomBarItemsContainer, touchView.isDescendant(of: bottomBarItemsContainer) { return false }
+        }
+        return true
+    }
+    
     // MARK: Layout
     
     override func viewWillLayoutSubviews() {
@@ -151,11 +213,12 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         if let bottomBarItemsContainer {
             // Using the toolbar's visibility doesn't work so check its frame.
-            captionView.isHidden = if #available(iOS 26, *) {
+            let chromeHidden = if #available(iOS 26, *) {
                 navigationBar?.topItem?.leftBarButtonItem?.frame(in: view) == nil
             } else {
                 bottomBarItemsContainer.frame.minY >= view.frame.maxY
             }
+            captionView.isHidden = chromeHidden || isCaptionSuppressed
             
             if captionView.constraints.isEmpty {
                 captionHostingController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -176,6 +239,10 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         navigationBar?.topItem?.titleView = headerHostingController.view
         
+        if captionDismissTap.view == nil {
+            view.addGestureRecognizer(captionDismissTap)
+        }
+        
         observePageScrollViewIfNeeded()
         
         updateBarButtons()
@@ -189,6 +256,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                     self?.updateBarButtons()
                     // Also re-centers the overlay once the scroll view has settled on an item.
                     self?.updateOverlayPosition()
+                    self?.hookTapRecognizers()
                 }
             }
         }
