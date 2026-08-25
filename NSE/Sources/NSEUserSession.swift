@@ -75,7 +75,7 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
             .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)
                     .passphrase(passphrase: credentials.restorationToken.passphrase))
-            .username(username: credentials.userID)
+            .serverNameFromUserId(userId: credentials.userID)
             .homeserverUrl(url: homeserverURL)
         
         baseClient = try await clientBuilder.build()
