@@ -59,5 +59,13 @@ extension ClientFactoryMock {
             }
             return client
         }
+        
+        makeAppClientCredentialsClientSessionDelegateAppSettingsAppHooksClosure = { credentials, _, _, _ in
+            ClientSDKMock(.init(userID: credentials.userID))
+        }
+        
+        makeNSEClientCredentialsRoomIDClientSessionDelegateAppSettingsAppHooksClosure = { credentials, _, _, _, _ in
+            ClientSDKMock(.init(userID: credentials.userID))
+        }
     }
 }

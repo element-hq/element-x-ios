@@ -9,16 +9,17 @@ import Foundation
 import MatrixRustSDK
 import MatrixRustSDKMocks
 
-nonisolated extension ClientBuilderSDKMock {
+nonisolated extension EncryptionSDKMock {
     struct Configuration {
-        var disableWellKnownLookup = false
+        var verificationState: VerificationState = .unknown
     }
-    
-    enum MockError: Error { case generic }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        disableWellKnownLookupDisableWellKnownLookupClosure = { [unowned self] _ in self }
+        verificationStateReturnValue = configuration.verificationState
+        backupStateListenerListenerReturnValue = TaskHandleSDKMock()
+        recoveryStateListenerListenerReturnValue = TaskHandleSDKMock()
+        verificationStateListenerListenerReturnValue = TaskHandleSDKMock()
     }
 }

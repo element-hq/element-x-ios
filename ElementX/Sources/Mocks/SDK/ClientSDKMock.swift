@@ -68,6 +68,22 @@ nonisolated extension ClientSDKMock {
                 throw MockError.generic
             }
         }
+        
+        encryptionReturnValue = EncryptionSDKMock(.init())
+        getNotificationSettingsReturnValue = NotificationSettingsSDKMock()
+        homeserverCapabilitiesReturnValue = HomeserverCapabilitiesSDKMock()
+        spaceServiceReturnValue = SpaceServiceSDKMock(.init())
+        searchServiceReturnValue = SearchServiceSDKMock(.init())
+        syncServiceReturnValue = SyncServiceBuilderSDKMock(.init())
+        
+        setDelegateDelegateReturnValue = TaskHandleSDKMock()
+        subscribeToIgnoredUsersListenerReturnValue = TaskHandleSDKMock()
+        subscribeToSendQueueStatusListenerReturnValue = TaskHandleSDKMock()
+        subscribeToSendQueueUpdatesListenerReturnValue = TaskHandleSDKMock()
+        subscribeToMediaPreviewConfigListenerReturnValue = TaskHandleSDKMock()
+        subscribeToOwnBeaconInfoUpdatesListenerReturnValue = TaskHandleSDKMock()
+        isProfilesSlidingSyncExtensionSupportedReturnValue = false
+        isUserStatusSupportedReturnValue = false
     }
 }
 
