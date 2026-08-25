@@ -142,7 +142,7 @@ class UserSessionStore: UserSessionStoreProtocol {
                     .passphrase(passphrase: credentials.restorationToken.passphrase))
             .withSearchIndexStore(path: credentials.restorationToken.sessionDirectories.dataPath,
                                   password: credentials.restorationToken.passphrase)
-            .username(username: credentials.userID)
+            .serverNameFromUserId(userId: credentials.userID)
             .homeserverUrl(url: homeserverURL)
         
         do {

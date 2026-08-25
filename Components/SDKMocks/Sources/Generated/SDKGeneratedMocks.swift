@@ -6,21 +6,6 @@
 
 import Foundation
 
-open class BackupSecretsSDKMock: MatrixRustSDK.BackupSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -5218,6 +5203,49 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
+    //MARK: - serverNameFromUserId
+
+    private let serverNameFromUserIdUserIdCallsCountLock = NSLock()
+    private var serverNameFromUserIdUserIdUnderlyingCallsCount = 0
+    open var serverNameFromUserIdUserIdCallsCount: Int {
+        get { serverNameFromUserIdUserIdCallsCountLock.withLock { serverNameFromUserIdUserIdUnderlyingCallsCount } }
+        set { serverNameFromUserIdUserIdCallsCountLock.withLock { serverNameFromUserIdUserIdUnderlyingCallsCount = newValue } }
+    }
+    open var serverNameFromUserIdUserIdCalled: Bool {
+        return serverNameFromUserIdUserIdCallsCount > 0
+    }
+    private let serverNameFromUserIdUserIdReceivedUserIdLock = NSLock()
+    private var serverNameFromUserIdUserIdUnderlyingReceivedUserId: String?
+    open var serverNameFromUserIdUserIdReceivedUserId: String? {
+        get { serverNameFromUserIdUserIdReceivedUserIdLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedUserId } }
+        set { serverNameFromUserIdUserIdReceivedUserIdLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedUserId = newValue } }
+    }
+    private let serverNameFromUserIdUserIdReceivedInvocationsLock = NSLock()
+    private var serverNameFromUserIdUserIdUnderlyingReceivedInvocations: [String] = []
+    open var serverNameFromUserIdUserIdReceivedInvocations: [String] {
+        get { serverNameFromUserIdUserIdReceivedInvocationsLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedInvocations } }
+        set { serverNameFromUserIdUserIdReceivedInvocationsLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let serverNameFromUserIdUserIdReturnValueLock = NSLock()
+    open var serverNameFromUserIdUserIdUnderlyingReturnValue: ClientBuilder!
+    open var serverNameFromUserIdUserIdReturnValue: ClientBuilder! {
+        get { serverNameFromUserIdUserIdReturnValueLock.withLock { serverNameFromUserIdUserIdUnderlyingReturnValue } }
+        set { serverNameFromUserIdUserIdReturnValueLock.withLock { serverNameFromUserIdUserIdUnderlyingReturnValue = newValue } }
+    }
+    open var serverNameFromUserIdUserIdClosure: ((String) -> ClientBuilder)?
+
+    open override func serverNameFromUserId(userId: String) -> ClientBuilder {
+        serverNameFromUserIdUserIdCallsCountLock.withLock { serverNameFromUserIdUserIdUnderlyingCallsCount += 1 }
+        serverNameFromUserIdUserIdReceivedUserId = userId
+        serverNameFromUserIdUserIdReceivedInvocationsLock.withLock { serverNameFromUserIdUserIdUnderlyingReceivedInvocations.append(userId) }
+        if let serverNameFromUserIdUserIdClosure = serverNameFromUserIdUserIdClosure {
+            return serverNameFromUserIdUserIdClosure(userId)
+        } else {
+            return serverNameFromUserIdUserIdReturnValue
+        }
+    }
+
     //MARK: - serverNameOrHomeserverUrl
 
     private let serverNameOrHomeserverUrlServerNameOrUrlCallsCountLock = NSLock()
@@ -5548,49 +5576,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
-    //MARK: - username
-
-    private let usernameUsernameCallsCountLock = NSLock()
-    private var usernameUsernameUnderlyingCallsCount = 0
-    open var usernameUsernameCallsCount: Int {
-        get { usernameUsernameCallsCountLock.withLock { usernameUsernameUnderlyingCallsCount } }
-        set { usernameUsernameCallsCountLock.withLock { usernameUsernameUnderlyingCallsCount = newValue } }
-    }
-    open var usernameUsernameCalled: Bool {
-        return usernameUsernameCallsCount > 0
-    }
-    private let usernameUsernameReceivedUsernameLock = NSLock()
-    private var usernameUsernameUnderlyingReceivedUsername: String?
-    open var usernameUsernameReceivedUsername: String? {
-        get { usernameUsernameReceivedUsernameLock.withLock { usernameUsernameUnderlyingReceivedUsername } }
-        set { usernameUsernameReceivedUsernameLock.withLock { usernameUsernameUnderlyingReceivedUsername = newValue } }
-    }
-    private let usernameUsernameReceivedInvocationsLock = NSLock()
-    private var usernameUsernameUnderlyingReceivedInvocations: [String] = []
-    open var usernameUsernameReceivedInvocations: [String] {
-        get { usernameUsernameReceivedInvocationsLock.withLock { usernameUsernameUnderlyingReceivedInvocations } }
-        set { usernameUsernameReceivedInvocationsLock.withLock { usernameUsernameUnderlyingReceivedInvocations = newValue } }
-    }
-
-    private let usernameUsernameReturnValueLock = NSLock()
-    open var usernameUsernameUnderlyingReturnValue: ClientBuilder!
-    open var usernameUsernameReturnValue: ClientBuilder! {
-        get { usernameUsernameReturnValueLock.withLock { usernameUsernameUnderlyingReturnValue } }
-        set { usernameUsernameReturnValueLock.withLock { usernameUsernameUnderlyingReturnValue = newValue } }
-    }
-    open var usernameUsernameClosure: ((String) -> ClientBuilder)?
-
-    open override func username(username: String) -> ClientBuilder {
-        usernameUsernameCallsCountLock.withLock { usernameUsernameUnderlyingCallsCount += 1 }
-        usernameUsernameReceivedUsername = username
-        usernameUsernameReceivedInvocationsLock.withLock { usernameUsernameUnderlyingReceivedInvocations.append(username) }
-        if let usernameUsernameClosure = usernameUsernameClosure {
-            return usernameUsernameClosure(username)
-        } else {
-            return usernameUsernameReturnValue
-        }
-    }
-
     //MARK: - withSearchIndexStore
 
     private let withSearchIndexStorePathPasswordCallsCountLock = NSLock()
@@ -5754,21 +5739,6 @@ open class ContinuationMessageSenderSDKMock: MatrixRustSDK.ContinuationMessageSe
         confirmCallsCountLock.withLock { confirmUnderlyingCallsCount += 1 }
         try await confirmClosure?()
     }
-}
-open class CrossSigningSecretsSDKMock: MatrixRustSDK.CrossSigningSecrets, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     public init() {
@@ -9326,21 +9296,6 @@ open class PasswordStrengthEstimatorSDKMock: MatrixRustSDK.PasswordStrengthEstim
         }
     }
 }
-open class PrivateStringSDKMock: MatrixRustSDK.PrivateString, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-}
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
     public init() {
         super.init(noHandle: .init())
@@ -10777,6 +10732,53 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return try await loadOrFetchEventEventIdClosure(eventId)
         } else {
             return loadOrFetchEventEventIdReturnValue
+        }
+    }
+
+    //MARK: - loadOrFetchEventWithRelations
+
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterThrowableError: Error?
+    private let loadOrFetchEventWithRelationsEventIdRelationFilterCallsCountLock = NSLock()
+    private var loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingCallsCount = 0
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterCallsCount: Int {
+        get { loadOrFetchEventWithRelationsEventIdRelationFilterCallsCountLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingCallsCount } }
+        set { loadOrFetchEventWithRelationsEventIdRelationFilterCallsCountLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingCallsCount = newValue } }
+    }
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterCalled: Bool {
+        return loadOrFetchEventWithRelationsEventIdRelationFilterCallsCount > 0
+    }
+    private let loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArgumentsLock = NSLock()
+    private var loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedArguments: (eventId: String, relationFilter: [RelationType]?)?
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArguments: (eventId: String, relationFilter: [RelationType]?)? {
+        get { loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArgumentsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedArguments } }
+        set { loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArgumentsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedArguments = newValue } }
+    }
+    private let loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocationsLock = NSLock()
+    private var loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedInvocations: [(eventId: String, relationFilter: [RelationType]?)] = []
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocations: [(eventId: String, relationFilter: [RelationType]?)] {
+        get { loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocationsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedInvocations } }
+        set { loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocationsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let loadOrFetchEventWithRelationsEventIdRelationFilterReturnValueLock = NSLock()
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReturnValue: EventWithRelations!
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterReturnValue: EventWithRelations! {
+        get { loadOrFetchEventWithRelationsEventIdRelationFilterReturnValueLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReturnValue } }
+        set { loadOrFetchEventWithRelationsEventIdRelationFilterReturnValueLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReturnValue = newValue } }
+    }
+    open var loadOrFetchEventWithRelationsEventIdRelationFilterClosure: ((String, [RelationType]?) async throws -> EventWithRelations)?
+
+    open override func loadOrFetchEventWithRelations(eventId: String, relationFilter: [RelationType]?) async throws -> EventWithRelations {
+        if let error = loadOrFetchEventWithRelationsEventIdRelationFilterThrowableError {
+            throw error
+        }
+        loadOrFetchEventWithRelationsEventIdRelationFilterCallsCountLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingCallsCount += 1 }
+        loadOrFetchEventWithRelationsEventIdRelationFilterReceivedArguments = (eventId: eventId, relationFilter: relationFilter)
+        loadOrFetchEventWithRelationsEventIdRelationFilterReceivedInvocationsLock.withLock { loadOrFetchEventWithRelationsEventIdRelationFilterUnderlyingReceivedInvocations.append((eventId: eventId, relationFilter: relationFilter)) }
+        if let loadOrFetchEventWithRelationsEventIdRelationFilterClosure = loadOrFetchEventWithRelationsEventIdRelationFilterClosure {
+            return try await loadOrFetchEventWithRelationsEventIdRelationFilterClosure(eventId, relationFilter)
+        } else {
+            return loadOrFetchEventWithRelationsEventIdRelationFilterReturnValue
         }
     }
 
@@ -15053,21 +15055,6 @@ open class SearchServiceSDKMock: MatrixRustSDK.SearchService, @unchecked Sendabl
             return subscribeToResultsListenerReturnValue
         }
     }
-}
-open class SecretsBundleSDKMock: MatrixRustSDK.SecretsBundle, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
 }
 open class SecretsBundleWithUserIdSDKMock: MatrixRustSDK.SecretsBundleWithUserId, @unchecked Sendable {
     public init() {
