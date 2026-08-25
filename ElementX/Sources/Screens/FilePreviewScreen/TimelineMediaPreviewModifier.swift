@@ -50,6 +50,12 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: PreviewHostingController, context: Context) { }
     
+    /// SwiftUI drops the representable when the binding clears or a fresh viewer replaces it (`.id`):
+    /// stop the old viewer's speculative work rather than letting it run on beside the new one.
+    static func dismantleUIViewController(_ uiViewController: PreviewHostingController, coordinator: ()) {
+        uiViewController.viewModel?.cancelBackgroundWork()
+    }
+    
     /// A view controller that hosts the QuickLook preview.
     ///
     /// This wrapper somehow allows the preview controller to do presentation/dismissal
@@ -57,6 +63,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
     class PreviewHostingController: UIViewController, QLPreviewControllerDelegate {
         let onDismiss: () -> Void
         let sourceView = UIView()
+        private(set) weak var viewModel: TimelineMediaPreviewViewModel?
         
         private let previewController: TimelineMediaPreviewController
         private let presentationGate: Task<Void, Never>?
@@ -68,6 +75,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
              dismissalPublisher: PassthroughSubject<Void, Never>,
              onDismiss: @escaping () -> Void) {
             self.onDismiss = onDismiss
+            self.viewModel = viewModel
             previewController = TimelineMediaPreviewController(context: viewModel.context)
             presentationGate = viewModel.initialPresentationGate
             

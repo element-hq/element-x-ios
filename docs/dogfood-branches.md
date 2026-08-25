@@ -5132,3 +5132,25 @@ UnknownPos; the flush INFO line present), and a long backwards viewer browse
 never stops paging. e2ee-rig: build-install-exi.sh resolved its sibling
 build-xcframework.sh relative to the EXI dir after `cd` (broken for relative
 invocations); now uses an absolute SCRIPT_DIR.
+
+**Round 71 follow-up (build 211 report): grid taps don't open the viewer,
+one opens ~30s later.** Every tap created the viewer (data source shape +
+controller logged) but it never presented: the presentation gate's
+`awaitPlaceholderGrace` 300ms/10ms poll reported "ended after 7.07s" and
+"41.6s". Not downloads (zero media `/download` requests during the stall,
+media store idle) and not the pool: the view model is MainActor-isolated and
+the MAIN ACTOR was starved. `thumbnail(for:)` waited for each neighbour's
+thumbnail with a 50ms poll (30s ceiling on display), and the viewer prepares a
+placeholder for EVERY loaded item (~130 in this grid): one viewer = 130 poll
+loops; each tap on a viewer that hadn't appeared made another, and the
+abandoned ones stayed alive (their tasks hold `self`), so eleven viewers x 130
+loops ~= 28k main-actor wakeups/s. 949 placeholder writes logged in the single
+second the jam cleared. Fixes: the thumbnail wait is event-driven (first of
+load / timeout / cancellation resumes a once-only continuation; the fetch is
+cancelled on timeout as before; the "media landed, stop waiting" early exit
+went with the poll); neighbour placeholder tasks and preloads are tracked and
+`cancelBackgroundWork()` runs from the QuickLook representable's
+`dismantleUIViewController` (binding cleared or `.id` replaced by a fresh
+tap), so an abandoned viewer stops competing with the one on screen. Build 212
+VALIDATE: grid taps open the viewer immediately, including after a burst of
+taps.

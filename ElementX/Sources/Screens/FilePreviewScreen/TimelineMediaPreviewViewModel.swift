@@ -301,10 +301,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                   neighbour.thumbnailMediaSource != nil || isThumbnailSized(neighbour),
                   !placeholderJobs.contains(neighbour.id) else { continue }
             placeholderJobs.insert(neighbour.id)
-            Task { [weak self] in
+            backgroundTasks.append(Task { [weak self] in
                 await self?.preparePlaceholder(for: neighbour)
                 self?.placeholderJobs.remove(neighbour.id)
-            }
+            })
         }
     }
     
@@ -522,7 +522,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private func preparePlaceholder(for item: TimelineMediaPreviewItem.Media) async {
         let directory = placeholderDirectory
         guard let (thumbnail, size, url) = await placeholderJob(for: item, thumbnailTimeout: Self.thumbnailTimeoutOnDisplay) else {
-            if item.fileHandle == nil, item.placeholderURL == nil {
+            if item.fileHandle == nil, item.placeholderURL == nil, !Task.isCancelled {
                 MXLog.info("Media viewer: no thumbnail for \(item.id), no placeholder")
             }
             return
@@ -686,25 +686,47 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
         let lookupStarted = ContinuousClock.now
         let load = mediaProvider.loadImageRetryingOnReconnection(source, size: size)
-        // A poll, not a task-group race: the group waited for its load child, which awaited the
-        // unstructured load (not cancelled until after the group returned), so the timeout neither
-        // bounded the wait nor kept a late result: a poster that landed at 17-20 s (its fetch
-        // starved by the video's own download) was dropped and the page stayed black.
-        final class Arrival { var image: UIImage?; var done = false }
+        // Not a task-group race (the group waited for its load child, which awaited the
+        // unstructured load, so the timeout never bounded anything) and not a poll either: one
+        // 50ms poll per neighbour, times every loaded item, times every viewer a frustrated user
+        // opened, was ~28k main-actor wakeups a second - the presentation gate's own wait queued
+        // behind them and the viewer took 7-40s to appear (rageshake 7569 follow-up). First of
+        // load / timeout / cancellation resumes; a late result is dropped with the fetch.
         let arrival = Arrival()
-        Task { arrival.image = try? await load.value; arrival.done = true }
-        // Ends early once the media itself lands: a placeholder is pointless then.
-        while !arrival.done, item.fileHandle == nil, ContinuousClock.now - lookupStarted < timeout {
-            try? await Task.sleep(for: .milliseconds(50))
+        let image: UIImage? = await withTaskCancellationHandler {
+            await withCheckedContinuation { continuation in
+                let once = Once(continuation)
+                arrival.once = once
+                Task { once.resume(try? await load.value) }
+                Task { try? await Task.sleep(for: timeout); once.resume(nil) }
+            }
+        } onCancel: {
+            arrival.once?.resume(nil)
         }
-        let image = arrival.image
-        if !arrival.done {
-            load.cancel() // Timed out, or overtaken by the media: don't keep a fetch going that nothing will use.
+        if image == nil {
+            load.cancel() // Timed out or cancelled: don't keep a fetch going that nothing will use.
         }
         MXLog.info("Media viewer: thumbnail for \(item.id) from the store: \(image != nil) after \(ContinuousClock.now - lookupStarted)")
         return image
     }
     
+    /// Hands the cancellation handler the in-flight thumbnail wait's resumer.
+    private nonisolated final class Arrival: @unchecked Sendable { var once: Once? }
+
+    /// A continuation that resumes at most once, from whichever of load, timeout or cancellation gets there first.
+    private nonisolated final class Once: @unchecked Sendable {
+        private var continuation: CheckedContinuation<UIImage?, Never>?
+        private let lock = NSLock()
+        init(_ continuation: CheckedContinuation<UIImage?, Never>) { self.continuation = continuation }
+        func resume(_ image: UIImage?) {
+            lock.lock()
+            let continuation = self.continuation
+            self.continuation = nil
+            lock.unlock()
+            continuation?.resume(returning: image)
+        }
+    }
+
     /// The media's size capped to `placeholderMaxSide`; with no size on the event, the thumbnail
     /// scaled up to the cap (photos are bigger than the screen, so fit-to-screen is the right bet).
     private static func placeholderSize(mediaSize: CGSize?, thumbnailSize: CGSize) -> CGSize {
@@ -713,6 +735,19 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         guard longest > 0 else { return CGSize(width: placeholderMaxSide, height: placeholderMaxSide) }
         let scale = mediaSize == nil ? placeholderMaxSide / longest : min(1, placeholderMaxSide / longest)
         return CGSize(width: (base.width * scale).rounded(), height: (base.height * scale).rounded())
+    }
+    
+    /// The speculative work a viewer spawns for its neighbours (placeholders, preloads). Cancelled when
+    /// the viewer is torn down: these tasks hold the view model, so an abandoned viewer (the binding
+    /// replaced by a fresh tap, or dismissed) otherwise lives on for up to 30s per item, competing with
+    /// the one on screen (rageshake 7569 follow-up: eleven of them starved the main actor).
+    private var backgroundTasks = [Task<Void, Never>]()
+    
+    func cancelBackgroundWork() {
+        backgroundTasks.forEach { $0.cancel() }
+        backgroundTasks.removeAll()
+        preloads.values.forEach { $0.cancel() }
+        preloads.removeAll()
     }
     
     isolated deinit {
