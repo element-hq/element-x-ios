@@ -73,7 +73,7 @@ extension RoomSummary {
     static func mock(id: String,
                      name: String,
                      canonicalAlias: String? = nil) -> RoomSummary {
-        RoomSummary(room: RoomSDKMock(),
+        RoomSummary(room: RoomSDKMock(.init()),
                     id: id,
                     joinRequestType: nil,
                     name: name,
