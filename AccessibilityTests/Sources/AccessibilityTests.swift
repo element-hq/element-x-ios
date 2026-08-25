@@ -53,6 +53,9 @@ final class AccessibilityTests: XCTestCase {
     private func performAccessibilityAuditForPreview(named name: String) {
         // Alows us to log the name of the preview that is being tested
         XCTContext.runActivity(named: name) { _ in
+            // Previews that focus a text field bring up the system keyboard, which we can't fix.
+            let keyboardFrame = app.keyboards.firstMatch.exists ? app.keyboards.firstMatch.frame : .null
+            
             do {
                 // We have removed `textClipped` and `contrast` for now
                 try app.performAccessibilityAudit(for: [.dynamicType, .elementDetection, .hitRegion, .sufficientElementDescription, .trait]) { issue in
@@ -63,6 +66,11 @@ final class AccessibilityTests: XCTestCase {
                     
                     // Remove false positives for null elements
                     guard let element = issue.element else {
+                        return true
+                    }
+                    
+                    // The system keyboard's own elements aren't ours to fix
+                    if keyboardFrame.contains(element.frame) {
                         return true
                     }
                     
@@ -107,13 +115,7 @@ final class AccessibilityTests: XCTestCase {
     /// Use this array to filter add specific filters to ignore specific tests
     private static let ignoredA11yTest: [String: [FilterType]] = [
         // It's an image rendering test doesn't need to have descriptions
-        "RoomAvatarImage_Previews-0": [.auditType(.sufficientElementDescription)],
-        // Empty container slots of the principal search toolbar, system chrome with nothing to describe
-        "SearchScreen_Previews-Empty": [.emptyContainerDescription],
-        "SearchScreen_Previews-No results": [.emptyContainerDescription],
-        "SearchScreen_Previews-Loaded": [.emptyContainerDescription],
-        // The preview focusses the custom status field, exposing the keyboard's empty prediction bar cells
-        "SettingsScreenUserStatusRow_Previews-0": [.emptyContainerDescription]
+        "RoomAvatarImage_Previews-0": [.auditType(.sufficientElementDescription)]
     ]
 }
 
@@ -122,8 +124,6 @@ private enum FilterType {
     case compactDescription(String)
     /// Filter by the type of the issue
     case auditType(XCUIAccessibilityAuditType)
-    /// Filter "no description" issues on empty container elements (label + identifier empty), e.g. system toolbar slots
-    case emptyContainerDescription
 }
 
 private extension Array where Element == FilterType {
@@ -135,14 +135,6 @@ private extension Array where Element == FilterType {
                 return true
             case .compactDescription(issue.compactDescription):
                 return true
-            case .emptyContainerDescription:
-                if issue.auditType == .sufficientElementDescription,
-                   let element = issue.element,
-                   element.elementType == .other,
-                   element.label.isEmpty,
-                   element.identifier.isEmpty {
-                    return true
-                }
             default:
                 break
             }
