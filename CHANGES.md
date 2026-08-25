@@ -1,3 +1,33 @@
+## Changes in 26.08.4 (2026-08-25)
+
+### What's Changed
+
+✨ Features
+* Enable the User Status feature on supported homeservers. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6059
+
+🐛 Bugfixes
+* Attributed string builder tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6055
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6058
+
+🚧 In development 🚧
+* More tweaks for User Status. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6051
+
+Others
+* Various tweaks and fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6045
+* Update dependency element-hq/compound-design-tokens to v10.2.4 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6048
+* Update the Enterprise submodule by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6053
+* Fix missing back pagination attempt by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6056
+* Stop the integration tests from backgrounding the web authentication session by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6060
+* Preserve the blank lines typed after a list by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6061
+* Update the Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6063
+* Fixed one accessibility test and an UI test snapshot by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6064
+* Update sdk to 26.08.25 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6067
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.08.3...release/26.08.4
+
 ## Changes in 26.08.3 (2026-08-20)
 
 ### What's Changed
