@@ -111,7 +111,9 @@ final class AccessibilityTests: XCTestCase {
         // Empty container slots of the principal search toolbar, system chrome with nothing to describe
         "SearchScreen_Previews-Empty": [.emptyContainerDescription],
         "SearchScreen_Previews-No results": [.emptyContainerDescription],
-        "SearchScreen_Previews-Loaded": [.emptyContainerDescription]
+        "SearchScreen_Previews-Loaded": [.emptyContainerDescription],
+        // The preview focusses the custom status field, exposing the keyboard's empty prediction bar cells
+        "SettingsScreenUserStatusRow_Previews-0": [.emptyContainerDescription]
     ]
 }
 
