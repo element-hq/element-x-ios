@@ -261,7 +261,10 @@ struct SettingsScreen: View {
     }
     
     private var versionText: Text {
-        Text(L10n.settingsVersionNumber(InfoPlistReader.main.bundleShortVersionString, InfoPlistReader.main.bundleVersion))
+        // Let's not snapshot a changing version string.
+        let shortVersion = ProcessInfo.isRunningTests ? "0.0.0" : InfoPlistReader.main.bundleShortVersionString
+        let version = ProcessInfo.isRunningTests ? "1" : InfoPlistReader.main.bundleVersion
+        return Text(L10n.settingsVersionNumber(shortVersion, version))
     }
     
     private var toolbar: some ToolbarContent {
