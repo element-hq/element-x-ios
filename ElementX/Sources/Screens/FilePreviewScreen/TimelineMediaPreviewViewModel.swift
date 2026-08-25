@@ -337,19 +337,19 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         guard item.fileHandle == nil, preloads[item.id] == nil else { return }
         
         let itemID = item.id
-        preloads[itemID] = Task { [mediaProvider] in
+        preloads[itemID] = Task { [weak self, mediaProvider] in
             if placeholderFirst {
-                await self.preparePlaceholder(for: item)
+                await self?.preparePlaceholder(for: item)
             }
             // Failures aren't recorded here: the load on display retries and reports them.
             let result = await mediaProvider.loadFileFromSource(source, filename: item.filename)
-            preloads[itemID] = nil
+            self?.preloads[itemID] = nil
             if case .success(let handle) = result, item.fileHandle == nil {
                 MXLog.info("Media viewer: file for \(itemID): \(handle.url?.lastPathComponent ?? "nil") (filename: \(item.filename ?? "nil"), mime: \(source.mimeType ?? "nil"))")
                 item.fileHandle = handle
                 // Let the controller rebuild QuickLook's page for this item if it built it
                 // blank before the file was ready, so a swipe lands on the media not a blank.
-                state.previewControllerDriver.send(.itemLoaded(itemID))
+                self?.state.previewControllerDriver.send(.itemLoaded(itemID))
             }
             return result
         }

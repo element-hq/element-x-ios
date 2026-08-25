@@ -216,6 +216,8 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
         super.viewWillLayoutSubviews()
         
         if let bottomBarItemsContainer {
+            bottomBarItemsContainer.tintColor = .compound.iconPrimary // See `updateBarButtons`.
+            
             // Using the toolbar's visibility doesn't work so check its frame.
             let chromeHidden = if #available(iOS 26, *) {
                 navigationBar?.topItem?.leftBarButtonItem?.frame(in: view) == nil
@@ -272,6 +274,10 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     
     private func updateBarButtons() {
         guard let topItem = navigationBar?.topItem else { return }
+        
+        // The view's tint (for QuickLook's selection and caret) is inherited by every bar button
+        // item, which would recolour the (i) and the controller's own buttons with it.
+        navigationBar?.tintColor = .compound.iconPrimary
         
         // React to the controller re-installing its list button as it happens (KVO fires
         // synchronously in the setter, before the frame renders) rather than on the timer's
@@ -423,7 +429,6 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
         guard let placeholder = currentPreviewItem as? TimelineMediaPreviewItem.Loading,
               case .paginating(let current) = placeholder.state, current == direction,
               recordClampTransition() else { return }
-        placeholderHoldStarted = .now
         switch direction {
         case .backwards:
             guard !dataSource.isClampedToBackwardPlaceholder else { return }
@@ -434,6 +439,9 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
             dataSource.isClampedToForwardPlaceholder = true
             anchoredEdgeItemID = dataSource.previewItems.last?.id
         }
+        // Set once the clamp is actually taken: a merge whilst clamped re-runs this and restarting
+        // the hold here left the user on "Loading more" indefinitely, which the bound exists to stop.
+        placeholderHoldStarted = .now
         MXLog.info("Media viewer: clamping to the \(direction) placeholder page")
         handleUpdatedItems() // Count changed: the placeholder keeps its page, the count is re-read on reload.
     }
@@ -533,6 +541,8 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
                 dataSource.isClampedToForwardPlaceholder = false
                 anchoredEdgeItemID = nil
                 placeholderHoldStarted = nil
+                // Re-derived, not `stepped`: releasing the clamp above puts the phantom padding
+                // back in place of the single placeholder page, shifting every index by it.
                 if let edgeIndex = dataSource.previewIndex(of: edgeID) {
                     let target = direction == .backwards ? edgeIndex - 1 : edgeIndex + 1
                     MXLog.info("Media viewer: items arrived beyond the \(direction) placeholder, stepping to index \(target)")
@@ -878,7 +888,7 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool, upgrade: Bool = false) {
         guard refreshChecks[itemID] == nil else { return }
         refreshChecks[itemID] = Task { [weak self] in
-            await self?.refreshIfUnavailableWhenResting(itemID: itemID, force: force, upgrade: upgrade)
+            await self?.awaitRestThenRefreshIfUnavailable(itemID: itemID, force: force, upgrade: upgrade)
             self?.refreshChecks[itemID] = nil
         }
     }
@@ -887,7 +897,7 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
     /// there and QuickLook is showing the placeholder instead of it. `force` bypasses the
     /// once-per-arrival limit (for a file that has just arrived). `upgrade` swaps a page built
     /// from the thumbnail placeholder for the media regardless of availability.
-    private func refreshIfUnavailableWhenResting(itemID: MediaPreviewItemID, force: Bool, upgrade: Bool) async {
+    private func awaitRestThenRefreshIfUnavailable(itemID: MediaPreviewItemID, force: Bool, upgrade: Bool) async {
         // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController
         // if it's called whilst swiping between items. So wait for the swipe to settle (the index
         // changes whilst the pages are still decelerating).
@@ -1083,10 +1093,17 @@ private struct HeaderView: View {
         context.viewState.currentItem
     }
     
+    /// Whether the media is still on its way, as opposed to having failed or been held by a scan,
+    /// which the overlay reports for itself (the header would otherwise say "Loading…" over them).
+    private var isLoading: Bool {
+        guard case .media(let mediaItem) = currentItem else { return false }
+        return mediaItem.fileHandle == nil && mediaItem.downloadError == nil
+    }
+    
     /// The sender (or "Loading…" over a thumbnail placeholder), with the attachment's place in its
     /// gallery appended, e.g. "Alice (2 of 3)", now that galleries are browsed inline with other media.
     private func headerTitle(for mediaItem: TimelineMediaPreviewItem.Media) -> String {
-        let title = mediaItem.isShowingPlaceholder ? L10n.commonLoading : mediaItem.sender.displayName ?? mediaItem.sender.id
+        let title = isLoading ? L10n.commonLoading : mediaItem.sender.displayName ?? mediaItem.sender.id
         guard let position = mediaItem.galleryPosition else { return title }
         return "\(title) (\(L10n.screenRoomPinnedBannerIndicator(String(position.index), String(position.count))))"
     }
