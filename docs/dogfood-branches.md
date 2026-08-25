@@ -5078,3 +5078,57 @@ a false start-of-timeline bounce).
 STRIP before upstreaming: THREADPAG/THREADDUMP diagnostics
 (thread/pagination.rs + thread/mod.rs subscribe), alongside the
 existing CHUNKDUMP/SYNCDUMP/SendTransition/media-viewer diag list.
+
+## Round 71 (2026-08-25): rageshake 7569 - stale `pos` cold launch + QuickLook pager wedge
+
+Log: console.2026-08-25-10.log (plain text; the .gz suffix lies).
+
+**"Super slow launch" (LaunchMetrics rooms_shown_ms=5075).** The 09:04
+background refresh advanced the room-list `pos` P0 -> P1 and sent the next
+request with P1. The event cache took 3s to process that response's ~20
+limited rooms, so the ack-gated `pos` write (the deferred-persist design that
+keeps disk `pos` from running ahead of the event cache) was still pending when
+EXI's 10s refresh budget stopped sync and completed the BGTask; iOS froze the
+process within 300ms and P1 never reached disk. Synapse had already deleted P0
+on receiving the P1 request (`DELETE FROM sliding_sync_connection_positions
+WHERE connection_position != ?`). The 09:07:53 launch restored P0 -> `400
+M_UNKNOWN_POS` -> cold sync, room list reset(0); the user force-quit
+(home-indicator swipe, "Application will terminate") and relaunched; the cold
+room-list request then took 4.7s on the server -> rooms at 5.1s.
+
+The deferred-persist premise "disk may lag, replay is safe" only holds until
+the next request is sent; a lag that survives process suspension is a full
+cold sync. Fix (SDK `SlidingSync::flush_pending_pos`): when the sync loop
+receives SyncLoopStop it waits (50ms polls, 5s ceiling) for the persister to
+write the pending `pos`, never writing ahead of the event cache itself (on
+timeout the stale-but-safe `pos` stays and a WARN names it).
+`SyncService::stop` awaits the loop and EXI awaits `pauseClientServices`
+before `setTaskCompleted`, so the flush keeps the process alive exactly as
+long as needed. INFO `Deferred pos flushed before stopping` marks the path.
+Test `test_flushing_waits_for_a_deferred_pos`. Upstream candidate alongside
+the deferred-persist work.
+
+**"QL got stuck failing to overscroll backwards."** Browsing back from page
+100, at page 92 a heal `reloadData` fired 115ms after a touch began on the
+page (TouchDebug), after which ten swipes over 3.5s changed nothing: the pager
+neither tracked nor paged. The heal's rest gate only consulted the pager's
+isTracking/isDragging/isDecelerating, which miss both a finger resting on the
+nested QLPreviewScrollView before its drag and QuickLook's own page-snap
+animation (the code already noted "a reload while QuickLook is still
+decelerating wedges it"). Fix: the heal now waits via `waitUntilResting`
+(offset still for 4 x 50ms) like every other reload path, and
+`waitUntilResting` additionally requires no finger down anywhere
+(`WindowTouches.isAnyDown`, fed by the TouchLogging recogniser's
+began/ended/cancelled; weak table + phase check so a swallowed end can't pin
+a phantom). Diag: the TouchDebug scroll line now always prints for QLPreview
+hits, so a recurrence shows the pager's enabled/pan state.
+
+Not done: a self-heal for an already-wedged pager (candidate: re-reloadData
+after N inert QL touches). Heals fire nearly every page (whole-range blank
+scan, by design), so the rest gate carries the weight.
+
+Build 211 VALIDATE: launch after a background refresh stays warm (no
+UnknownPos; the flush INFO line present), and a long backwards viewer browse
+never stops paging. e2ee-rig: build-install-exi.sh resolved its sibling
+build-xcframework.sh relative to the EXI dir after `cd` (broken for relative
+invocations); now uses an absolute SCRIPT_DIR.

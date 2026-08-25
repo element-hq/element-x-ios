@@ -666,16 +666,19 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
         neighbourReloadTask = Task { [weak self] in
             try? await Task.sleep(for: .milliseconds(150)) // Coalesce a trickle of neighbour loads into one reload.
             guard let self, !Task.isCancelled else { return }
-            // Wait (bounded) for a quiet gap rather than giving up when a swipe is in flight: a
+            // Wait (bounded) for a real rest rather than giving up when a swipe is in flight: a
             // one-shot check reliably landed mid-gesture at a steady swipe cadence, so the heal
             // never ran before the user reached a black-built page. A new trigger restarts this.
-            let started = ContinuousClock.now
-            while ContinuousClock.now - started < .seconds(2),
-                  let scrollView = pageScrollView, scrollView.isTracking || scrollView.isDragging || scrollView.isDecelerating {
-                try? await Task.sleep(for: .milliseconds(50))
+            // A rest is the offset still with no finger down (`waitUntilResting`), not just the
+            // scroll flags: QuickLook's page snap and a finger resting before its drag are invisible
+            // to them, and a reloadData under either wedged the pager (rageshake 7569: page 92,
+            // reload 115ms into a touch, ten more swipes that moved nothing).
+            var rested = false
+            for _ in 0..<3 where !rested {
+                rested = await waitUntilResting(atIndex: currentPreviewItemIndex)
                 if Task.isCancelled { return }
             }
-            guard let scrollView = pageScrollView, !scrollView.isTracking, !scrollView.isDragging, !scrollView.isDecelerating else { return }
+            guard rested else { return }
             // One reload per rest: a single reloadData rebuilds every page with whatever files are
             // present now, so later arrivals in the same rest need no further reload (they would just
             // re-flash the current page). Files that land after this reload heal on the next rest,
@@ -995,7 +998,10 @@ class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDe
         for _ in 0..<60 {
             guard currentPreviewItemIndex == index else { return false }
             if let scrollView = pageScrollView {
-                let isStill = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating && scrollView.contentOffset.x == restingOffset
+                // A finger resting on a page (nested QLPreviewScrollView: the pager isn't tracking yet)
+                // is a swipe about to start; a reload under it wedges QuickLook (rageshake 7569).
+                let isStill = !scrollView.isTracking && !scrollView.isDragging && !scrollView.isDecelerating
+                    && scrollView.contentOffset.x == restingOffset && !WindowTouches.isAnyDown
                 stillPolls = isStill ? stillPolls + 1 : 0
                 restingOffset = scrollView.contentOffset.x
             } else {

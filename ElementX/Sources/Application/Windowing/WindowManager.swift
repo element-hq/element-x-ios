@@ -284,11 +284,23 @@ private extension UIWindowScene {
     }
 }
 
+/// Whether a finger is down anywhere on an observed window (see `TouchLoggingGestureRecognizer`).
+@MainActor
+enum WindowTouches {
+    static var isAnyDown: Bool {
+        TouchLoggingGestureRecognizer.activeTouches.allObjects.contains { $0.phase != .ended && $0.phase != .cancelled }
+    }
+}
+
 /// Dogfood diagnostics: observes (never recognises, never cancels) every touch
 /// delivered to its window and logs where it landed, so a swallowed tap names
 /// the window and view that consumed it. Strip before upstreaming.
 private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
     private let label: String
+
+    /// Every touch currently down on an observed window. Fed by the phases below; the weak table
+    /// plus phase check means a swallowed end can't leave a phantom pinned in it.
+    @MainActor static let activeTouches = NSHashTable<UITouch>.weakObjects()
 
     /// Wedged-pan detection (rageshake 7549): consecutive touches on the same scroll
     /// view that track but never drag, with the offset frozen.
@@ -309,6 +321,7 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
         let hitDescription = hitView.map { String(describing: type(of: $0)) } ?? "nil"
         let responder = (touch.view).map { String(describing: type(of: $0)) } ?? "nil"
         MXLog.info("TouchDebug[\(label)]: began at \(Int(point.x)),\(Int(point.y)) hit=\(hitDescription) touchView=\(responder) interactive=\(window.isUserInteractionEnabled)")
+        touches.forEach { Self.activeTouches.add($0) }
 
         // Rageshake 7549: the timeline stopped responding to drags (programmatic
         // scrolls still worked) until a scroll-to-bottom tap; the log could only
@@ -345,7 +358,9 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
             }
             ancestor = current.superview
         }
-        if !active.isEmpty || !animating.isEmpty || scroll.contains("tracking=true") || scroll.contains("dragging=true") {
+        // QuickLook's pager always: rageshake 7569 wedged it with ten touches that tracked nothing,
+        // and this line's silence hid whether it was disabled, mid-pan or simply inert.
+        if !active.isEmpty || !animating.isEmpty || scroll.contains("tracking=true") || scroll.contains("dragging=true") || scroll.contains("QLPreview") {
             MXLog.info("TouchDebug[\(label)]: active=\(active) scroll=[\(scroll)] animating=\(animating)")
         }
 
@@ -382,4 +397,13 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
             }
         }
     }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
+        touches.forEach { Self.activeTouches.remove($0) }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
+        touches.forEach { Self.activeTouches.remove($0) }
+    }
+
 }
