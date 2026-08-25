@@ -13,17 +13,15 @@ import Testing
 
 @MainActor
 struct UserSessionStoreTests {
-    let keychainController = KeychainControllerMock()
-    let clientFactory = ClientFactoryMock()
+    let keychainController = KeychainControllerMock(.init())
+    let clientFactory = ClientFactoryMock(.init())
     let store: UserSessionStore
     
     init() {
-        keychainController.restorationTokensReturnValue = []
-        
         store = UserSessionStore(keychainController: keychainController,
                                  clientFactory: clientFactory,
                                  appSettings: .volatile(),
-                                 analyticsService: AnalyticsServiceMock(),
+                                 analyticsService: AnalyticsServiceMock(.init()),
                                  appHooks: AppHooks(),
                                  networkMonitor: NetworkMonitorMock(.init()))
     }
@@ -96,7 +94,6 @@ struct UserSessionStoreTests {
         let sessionDirectories = try makeValidSessionDirectories()
         defer { sessionDirectories.delete() }
         keychainController.restorationTokensReturnValue = [makeCredentials(sessionDirectories: sessionDirectories)]
-        clientFactory.makeAppClientCredentialsClientSessionDelegateAppSettingsAppHooksReturnValue = ClientSDKMock(.init(userID: "@alice:matrix.org"))
         
         // When restoring the session.
         guard case .success(let userSession) = await store.restoreUserSession() else {
