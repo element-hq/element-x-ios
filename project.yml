@@ -86,7 +86,7 @@ packages:
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.23.0
+    exactVersion: 0.24.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
@@ -146,16 +146,16 @@ packages:
     minorVersion: 6.28.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.69.1
+    minorVersion: 3.69.6
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 9.24.0
+    minorVersion: 9.26.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.19.4
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
-    minorVersion: 3.4.0
+    minorVersion: 3.5.1
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
     minorVersion: 2.13.7
