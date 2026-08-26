@@ -67,6 +67,30 @@ struct TimelineMediaPreviewViewModelTests {
     }
     
     @Test
+    mutating func displayLoadIsNotDuplicated() async throws {
+        // Given a fresh view model whose media downloads slowly.
+        setupViewModel()
+        let mediaItem = context.viewState.dataSource.previewItems[1]
+        try await Task.sleep(for: .milliseconds(50)) // Let the initial item's own load settle.
+        let loadsBefore = mediaProvider.loadFileFromSourceFilenameCallsCount
+        mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in
+            try? await Task.sleep(for: .milliseconds(300))
+            return .failure(.failedRetrievingFile)
+        }
+        
+        // When QuickLook asks for the same page twice while its download is in flight (it rebuilds
+        // pages as neighbours and placeholders land).
+        let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: .seconds(1)) { $0.isItemLoaded }
+        context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
+        try await Task.sleep(for: .milliseconds(50))
+        context.send(viewAction: .updateCurrentItem(.media(mediaItem)))
+        try await failure.fulfill()
+        
+        // Then the second request joins the first download rather than starting another.
+        #expect(mediaProvider.loadFileFromSourceFilenameCallsCount == loadsBefore + 1)
+    }
+    
+    @Test
     mutating func swipingBetweenItems() async throws {
         // Given a view model with a loaded item.
         try await loadingItem()
@@ -358,6 +382,10 @@ struct TimelineMediaPreviewViewModelTests {
         timelineController = TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: initialItems))
         
         mediaProvider = MediaProviderMock(.init())
+        // No cached/loadable thumbnails: a thumbnail placeholder would itself drive `.itemLoaded`
+        // (QuickLook refreshes the page for it) ~300ms in, which these tests read as the media landing.
+        mediaProvider.imageFromSourceSizeClosure = { _, _ in nil }
+        mediaProvider.loadImageRetryingOnReconnectionSizeClosure = { _, _ in Task { throw MediaProviderError.failedRetrievingImage } }
         photoLibraryManager = PhotoLibraryManagerMock(.init(authorizationDenied: photoLibraryAuthorizationDenied))
         
         viewModel = TimelineMediaPreviewViewModel(initialItem: initialItems[initialItemIndex],
@@ -367,7 +395,16 @@ struct TimelineMediaPreviewViewModelTests {
                                                   mediaProvider: mediaProvider,
                                                   photoLibraryManager: photoLibraryManager,
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  appMediator: AppMediatorMock())
+                                                  appMediator: AppMediatorMock(),
+                                                  appSettings: appSettings)
+    }
+    
+    /// Neighbour preloading off: these tests assert the load of the current item alone (call counts,
+    /// no `.itemLoaded` for items that weren't swiped to).
+    private var appSettings: AppSettings {
+        let appSettings = AppSettings.volatile()
+        appSettings.preloadMediaInViewer = false
+        return appSettings
     }
     
     private func makeItems() -> [EventBasedMessageTimelineItemProtocol] {

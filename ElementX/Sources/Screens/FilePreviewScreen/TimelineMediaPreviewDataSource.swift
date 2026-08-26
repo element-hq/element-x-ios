@@ -280,6 +280,41 @@ enum TimelineMediaPreviewItem: Equatable {
             didSet { updatePreviewItemValues() }
         }
         
+        /// The timeline's cached thumbnail written to a file, shown in place of the media while it
+        /// downloads (the tapped image is otherwise a spinner on black until the full-size file
+        /// lands). Superseded by `fileHandle`; the file dies with the view model.
+        var placeholderURL: URL? {
+            didSet { updatePreviewItemValues() }
+        }
+        
+        /// QuickLook is (or will be) showing a placeholder rather than the media: the thumbnail, or
+        /// the shared loading image every file-less item answers with.
+        var isShowingPlaceholder: Bool {
+            fileHandle == nil && (placeholderURL != nil || Self.loadingPlaceholderURL != nil)
+        }
+        
+        /// What an item without a file or thumbnail hands QuickLook: a black image, so the page is
+        /// built as a placeholder page (swapped when the media lands) rather than from nothing,
+        /// which QuickLook renders as its "unavailable / copy to" page and never re-reads on its
+        /// own. Written once per process into the temp directory.
+        static let loadingPlaceholderURL: URL? = {
+            let size = CGSize(width: 1080, height: 1920)
+            let format = UIGraphicsImageRendererFormat()
+            format.scale = 1
+            let data = UIGraphicsImageRenderer(size: size, format: format).jpegData(withCompressionQuality: 0.5) { context in
+                UIColor.black.setFill()
+                context.fill(CGRect(origin: .zero, size: size))
+            }
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent("media-preview-loading-\(ProcessInfo.processInfo.processIdentifier).jpg")
+            do {
+                try data.write(to: url)
+                return url
+            } catch {
+                MXLog.error("Failed writing the media viewer's loading placeholder: \(error)")
+                return nil
+            }
+        }()
+        
         var downloadError: Error?
         
         /// A stable identifier that's unique per preview item — including individual gallery
@@ -304,6 +339,8 @@ enum TimelineMediaPreviewItem: Equatable {
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
             content = .timelineItem(timelineItem)
             id = MediaPreviewItemID(timelineItem: timelineItem)
+            super.init()
+            updatePreviewItemValues()
         }
         
         init?(roomTimelineItemViewState: RoomTimelineItemViewState) {
@@ -322,6 +359,8 @@ enum TimelineMediaPreviewItem: Equatable {
             }
             content = .timelineItem(timelineItem)
             id = MediaPreviewItemID(timelineItem: timelineItem)
+            super.init()
+            updatePreviewItemValues()
         }
         
         /// Wraps a single attachment of a gallery message. `.other` items have no media source,
@@ -329,6 +368,8 @@ enum TimelineMediaPreviewItem: Equatable {
         init(galleryParent: GalleryRoomTimelineItem, item: GalleryItem) {
             content = .galleryItem(parent: galleryParent, item: item)
             id = .galleryItem(item.id)
+            super.init()
+            updatePreviewItemValues()
         }
         
         // MARK: QLPreviewItem
@@ -344,11 +385,9 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         private func updatePreviewItemValues() {
-            let url = fileHandle?.url
-            _previewItemURL.withLock { $0 = url }
-            
-            // Don't show any background text (" ") while the preview is still loading.
-            _previewItemTitle.withLock { $0 = url == nil ? " " : filename }
+            _previewItemURL.withLock { $0 = fileHandle?.url ?? placeholderURL ?? Self.loadingPlaceholderURL }
+            // No background text until there's something (the file or its placeholder) to show it under.
+            _previewItemTitle.withLock { $0 = fileHandle != nil || placeholderURL != nil ? filename : " " }
         }
         
         // MARK: Event details
@@ -398,6 +437,38 @@ enum TimelineMediaPreviewItem: Equatable {
             }
         }
         
+        /// The media's pixel size from the event, when known.
+        var mediaSize: CGSize? {
+            switch content {
+            case .galleryItem(_, let item):
+                item.size
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.size
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.size
+                default: nil
+                }
+            }
+        }
+        
+        /// The thumbnail's pixel size from the event, when known.
+        var thumbnailSize: CGSize? {
+            switch content {
+            case .galleryItem(_, let item):
+                switch item {
+                case .image(_, let content): content.thumbnailInfo?.size
+                case .video(_, let content): content.thumbnailInfo?.size
+                default: nil
+                }
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.thumbnailInfo?.size
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.thumbnailInfo?.size
+                default: nil
+                }
+            }
+        }
+        
         var thumbnailMediaSource: MediaSourceProxy? {
             switch content {
             case .galleryItem(_, let item):
@@ -428,7 +499,7 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         var fileSize: UInt? {
-            previewItemURL.flatMap { try? FileManager.default.sizeForItem(at: $0) } ?? expectedFileSize
+            fileHandle?.url.flatMap { try? FileManager.default.sizeForItem(at: $0) } ?? expectedFileSize
         }
         
         private var expectedFileSize: UInt? {

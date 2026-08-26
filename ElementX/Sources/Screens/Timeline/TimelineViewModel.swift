@@ -853,7 +853,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                       mediaProvider: userSession.mediaProvider,
                                       photoLibraryManager: PhotoLibraryManager(),
                                       userIndicatorController: userIndicatorController,
-                                      appMediator: appMediator)
+                                      appMediator: appMediator,
+                                      appSettings: appSettings)
     }
     
     private func makeGalleryPreviewViewModel(galleryItem: GalleryRoomTimelineItem,
@@ -865,7 +866,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                       mediaProvider: userSession.mediaProvider,
                                       photoLibraryManager: PhotoLibraryManager(),
                                       userIndicatorController: userIndicatorController,
-                                      appMediator: appMediator)
+                                      appMediator: appMediator,
+                                      appSettings: appSettings)
     }
     
     private func timelineViewModel(for kind: TimelineControllerAction.TimelineViewModelKind) -> TimelineViewModel {

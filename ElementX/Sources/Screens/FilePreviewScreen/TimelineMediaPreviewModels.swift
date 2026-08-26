@@ -29,6 +29,8 @@ enum MediaPreviewItemID: Hashable {
 }
 
 enum TimelineMediaPreviewDriverAction {
+    /// The item's preview URL is now available (its file, or its thumbnail placeholder): QuickLook
+    /// built its page without it and needs refreshing.
     case itemLoaded(MediaPreviewItemID)
     case showItemDetails(TimelineMediaPreviewItem.Media)
     case exportFile(TimelineMediaPreviewFileExportPicker.File)
