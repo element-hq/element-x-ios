@@ -1000,6 +1000,7 @@
 		9DD5AA10E85137140FEA86A3 /* MediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17EFA1D3D09FC2F9C5E1CB2 /* MediaProvider.swift */; };
 		9DD84E014ADFB2DD813022D5 /* RoomDetailsEditScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5B2CBEF8F96424F095508 /* RoomDetailsEditScreenViewModelTests.swift */; };
 		9DE801D278AC34737467F937 /* VoiceMessageMediaManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889DEDD63C68ABDA8AD29812 /* VoiceMessageMediaManagerProtocol.swift */; };
+		9E734D8621CB1F43E8C52BA4 /* VideoPlayBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD146C87807F5E99EBF23286 /* VideoPlayBadge.swift */; };
 		9E838A62918E47BC72D6640D /* UserIndicatorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB54B4F94686CCF0289B72F /* UserIndicatorPresenter.swift */; };
 		9EBDC79CAC9B63A0D626E333 /* LegalInformationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB2CAA266B921D128C35710 /* LegalInformationScreenCoordinator.swift */; };
 		9ED768A43A2A302F9812C5DF /* ContentScannerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0013D4F8EA288D589CFBF37 /* ContentScannerProxy.swift */; };
@@ -2753,6 +2754,7 @@
 		ACA11F7F50A4A3887A18CA5A /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ACD7BD6BEE21264F6677904A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AD0FF64B0E6470F66F42E182 /* EstimatedWaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstimatedWaveformView.swift; sourceTree = "<group>"; };
+		AD146C87807F5E99EBF23286 /* VideoPlayBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayBadge.swift; sourceTree = "<group>"; };
 		AD3521DF92391551E02004D8 /* VoiceMessageMediaEventsTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageMediaEventsTimelineView.swift; sourceTree = "<group>"; };
 		AD378D580A41E42560C60E9C /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AD529C89924EE32CE307F36F /* VisualListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualListItem.swift; sourceTree = "<group>"; };
@@ -3460,6 +3462,7 @@
 				693E16574C6F7F9FA1015A8C /* Search.swift */,
 				832397B5C3D00A4BF52C5F0B /* ShouldScrollOnKeyboardDidShow.swift */,
 				D1D97BAF04AA150C0EF03021 /* VerificationBadge.swift */,
+				AD146C87807F5E99EBF23286 /* VideoPlayBadge.swift */,
 				E2DA161C142B7AB8CC40F752 /* Animation */,
 				CE2FBFD64A89F5DBE4EB30DB /* Layout */,
 				E6E1D07163F8752D62DA4A93 /* Styles */,
@@ -9578,6 +9581,7 @@
 				9707AF8D41667FA9B35E8953 /* UserToInvite.swift in Sources */,
 				2447FADEF13225BB6227B977 /* VerificationBadge.swift in Sources */,
 				5C33976A720B64094CBC56B1 /* VideoMediaEventsTimelineView.swift in Sources */,
+				9E734D8621CB1F43E8C52BA4 /* VideoPlayBadge.swift in Sources */,
 				F07D88421A9BC4D03D4A5055 /* VideoRoomTimelineItem.swift in Sources */,
 				1A83DD22F3E6F76B13B6E2F9 /* VideoRoomTimelineItemContent.swift in Sources */,
 				2CA61BB208CD82EBDB58CD13 /* VideoRoomTimelineView.swift in Sources */,
