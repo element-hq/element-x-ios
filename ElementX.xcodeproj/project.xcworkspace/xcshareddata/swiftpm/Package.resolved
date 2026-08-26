@@ -1,5 +1,5 @@
 {
-  "originHash" : "20b091ffed1191ab205d228b4682ceec9698235e1d8eb82e9aba1703fc8e9f05",
+  "originHash" : "fcbb6b37066bc1bd45f559c3f4c7eed601bf038dd9e298f5edd77ffc2ea8a008",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "f4ff4868a84749005c224af95242e77a90cd8f44",
-        "version" : "0.23.0"
+        "revision" : "13eac3567461a9825018e10e9f4475f68215dae7",
+        "version" : "0.24.0"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "d82bb1c5eb353a593573a5624bb370f5a1f500ce",
-        "version" : "9.24.0"
+        "revision" : "cd213f98af160e6497eeff0707bc3f6a205b159c",
+        "version" : "9.26.0"
       }
     },
     {
@@ -311,8 +311,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tevelee/SwiftUI-Flow.git",
       "state" : {
-        "revision" : "798364823cdfc6afb4aff43eff5a3ddbca89b54f",
-        "version" : "3.4.0"
+        "revision" : "19e86b750b3c67260cbb28c459004c0dfdb11899",
+        "version" : "3.5.1"
       }
     },
     {
