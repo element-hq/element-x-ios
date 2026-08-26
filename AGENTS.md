@@ -14,6 +14,7 @@ PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
 - **SwiftLint** (.swiftlint.yml) + **SwiftFormat** (.swiftformat) enforce style on build. Warnings show in Xcode. Build before **XcodeRefreshCodeIssuesInFile**.
 - Follow [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, Rust SDK wrappers too (`ID` not `Id`, `URL` not `Url`, `configuration` not `config` or `cfg`).
 - File headers live in `IDETemplateMacros.plist`.
+- **Import `SwiftUI`, not `UIKit`** — need `UIPasteboard` etc, `SwiftUI` bring it. `SwiftUI` re-export `Foundation` too, so no `import Foundation` beside it.
 
 ### Comments
 
@@ -52,6 +53,7 @@ PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
 
 ## Pull Request Guidelines
 
+- New branch from `develop` must not track `develop`.
 - Sentence-style titles (no conventional commits).
 - Exactly one `pr-` label (see `.github/release.yml`).
 - Title = changelog entry — descriptive, no "Fixes #…".
