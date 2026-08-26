@@ -21,7 +21,6 @@ struct BlockedUsersScreenViewStateBindings {
 
 enum BlockedUsersScreenViewAction {
     case unblockUser(UserProfile)
-    case copyUserID(UserProfile)
 }
 
 enum BlockedUsersScreenViewStateAlertType: Hashable {

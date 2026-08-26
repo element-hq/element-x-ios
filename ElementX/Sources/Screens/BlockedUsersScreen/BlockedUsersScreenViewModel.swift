@@ -51,12 +51,6 @@ class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsers
                                                  self?.unblockUser(user)
                                              },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
-        case .copyUserID(let user):
-            UIPasteboard.general.string = user.id
-            userIndicatorController.submitIndicator(UserIndicator(id: Self.copiedIndicatorIdentifier,
-                                                                  type: .toast,
-                                                                  title: L10n.commonCopiedToClipboard,
-                                                                  icon: \.check))
         }
     }
     
@@ -114,7 +108,6 @@ class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsers
     // MARK: Loading indicator
     
     private static let loadingIndicatorIdentifier = "\(BlockedUsersScreenViewModel.self)-Loading"
-    private static let copiedIndicatorIdentifier = "\(BlockedUsersScreenViewModel.self)-Copied"
     
     private func showLoadingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
