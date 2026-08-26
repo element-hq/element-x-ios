@@ -66,6 +66,73 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     var isClampedToBackwardPlaceholder = false
     var isClampedToForwardPlaceholder = false
     
+    /// Media with something unresolved between them and the next newer media: a timeline gap, or a
+    /// message we couldn't decrypt yet that may turn out to be media (its key is usually on its way).
+    /// A backfill lands older items before those resolve, so stepping onto them would skip those.
+    private(set) var itemIDsWithGapOnNewerSide: Set<MediaPreviewItemID> = []
+    /// Whether such not-yet-decrypted messages sit older than the oldest media: paginating further
+    /// back would only fetch (and request keys for) older pages ahead of the nearest ones.
+    private(set) var hasPendingUTDsBeforeOldestMedia = false
+    /// When the wait on the oldest pending UTD runs out, if any: the shape wants re-evaluating then.
+    private(set) var nextPendingUTDExpiry: Date?
+    /// How long a UTD of unknown cause counts as "maybe media" before being given up on. Keys come
+    /// from backup within a second or so; one that doesn't come by now isn't coming.
+    static let pendingUTDWait: TimeInterval = 5
+    private var utdFirstSeen: [TimelineItemIdentifier: Date] = [:]
+    private var lastItemViewStates: [RoomTimelineItemViewState] = []
+    
+    private func analyseShape(_ itemViewStates: [RoomTimelineItemViewState]) {
+        lastItemViewStates = itemViewStates
+        let now = Date()
+        var firstSeen = [TimelineItemIdentifier: Date]()
+        var gapped = Set<MediaPreviewItemID>()
+        var lastMediaID: MediaPreviewItemID?
+        var unresolvedSinceLastMedia = false
+        var pendingBeforeOldestMedia = false
+        var nextExpiry: Date?
+        for state in itemViewStates { // Oldest first.
+            switch state.type {
+            case .encrypted(let item) where item.mayStillDecrypt:
+                let seen = utdFirstSeen[item.id] ?? now
+                firstSeen[item.id] = seen
+                let expiry = seen.addingTimeInterval(Self.pendingUTDWait)
+                guard expiry > now else { continue } // Waited long enough: treat it as not media.
+                nextExpiry = min(nextExpiry ?? expiry, expiry)
+                unresolvedSinceLastMedia = true
+                if lastMediaID == nil {
+                    pendingBeforeOldestMedia = true
+                }
+                continue
+            default:
+                break
+            }
+            let media = state.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes)
+            guard let last = media.last else { continue }
+            if unresolvedSinceLastMedia, let lastMediaID {
+                gapped.insert(lastMediaID)
+            }
+            unresolvedSinceLastMedia = false
+            lastMediaID = last.id
+        }
+        utdFirstSeen = firstSeen
+        itemIDsWithGapOnNewerSide = gapped
+        hasPendingUTDsBeforeOldestMedia = pendingBeforeOldestMedia
+        nextPendingUTDExpiry = nextExpiry
+    }
+    
+    /// The wait on some pending UTDs ran out: re-evaluate without them, and let the controller step if it can.
+    func pendingUTDsExpired() {
+        analyseShape(lastItemViewStates)
+        MXLog.info("Media viewer: gave up waiting on undecryptable messages, gapped: \(itemIDsWithGapOnNewerSide.count), pending before oldest: \(hasPendingUTDsBeforeOldestMedia)")
+        previewItemsPaginationPublisher.send()
+    }
+    
+    /// The media at a QuickLook index, or nil for a padding/placeholder index.
+    func mediaItem(atPreviewIndex index: Int) -> TimelineMediaPreviewItem.Media? {
+        let arrayIndex = index - effectiveBackwardPadding
+        return previewItems.indices.contains(arrayIndex) ? previewItems[arrayIndex] : nil
+    }
+    
     /// Whether a real (post-load) pagination state has been seen. `.initial` is `endReached` on
     /// both sides as a "don't paginate yet" sentinel, indistinguishable by value from a genuinely
     /// exhausted small room, so we only collapse the phantom padding (below) once a real state has
@@ -116,6 +183,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         hasReceivedRealPaginationState = paginationState != .initial
         
         self.paginationState = paginationState
+        super.init()
+        analyseShape(itemViewStates)
     }
     
     /// Builds a data source scoped to a single gallery's previewable attachments.
@@ -214,6 +283,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         }
         
         previewItems = newItems
+        analyseShape(itemViewStates)
         
         if hasPaginated {
             previewItemsPaginationPublisher.send()

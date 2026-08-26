@@ -287,6 +287,12 @@ class TimelineMediaPreviewController: QLPreviewController {
         return true
     }
     
+    /// How long the user is kept on a "loading more" placeholder once items have arrived beyond it
+    /// while a gap or undecryptable messages remain between (the data source's per-message wait).
+    private static let placeholderHoldLimit: Duration = .seconds(TimelineMediaPreviewDataSource.pendingUTDWait)
+    private var placeholderHoldStarted: ContinuousClock.Instant?
+    private var placeholderHoldRecheckScheduled = false
+    
     private func clampToPlaceholder(_ direction: PaginationDirection) {
         let dataSource = context.viewState.dataSource
         // Still on that placeholder? (Deferred from the index change; the pages may have moved on.)
@@ -303,6 +309,9 @@ class TimelineMediaPreviewController: QLPreviewController {
             dataSource.isClampedToForwardPlaceholder = true
             anchoredEdgeItemID = dataSource.previewItems.last?.id
         }
+        // Set once the clamp is actually taken: a merge whilst clamped re-runs this and restarting
+        // the hold here left the user on "Loading more" indefinitely, which the bound exists to stop.
+        placeholderHoldStarted = .now
         MXLog.info("Media viewer: clamping to the \(direction) placeholder page")
         handleUpdatedItems() // Count changed: the placeholder keeps its page, the count is re-read on reload.
     }
@@ -316,6 +325,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         dataSource.isClampedToBackwardPlaceholder = false
         dataSource.isClampedToForwardPlaceholder = false
         anchoredEdgeItemID = nil
+        placeholderHoldStarted = nil
         MXLog.info("Media viewer: releasing the placeholder clamp")
         handleUpdatedItems()
     }
@@ -352,10 +362,37 @@ class TimelineMediaPreviewController: QLPreviewController {
            case .paginating(let direction) = placeholder.state,
            let edgeIndex = dataSource.previewIndex(of: edgeID) {
             let stepped = direction == .backwards ? edgeIndex - 1 : edgeIndex + 1
-            if stepped >= dataSource.firstPreviewItemIndex, stepped <= dataSource.lastPreviewItemIndex {
+            // Only onto an item adjacent to the edge in the timeline: a backfill can land older
+            // items first with a gap, or messages still waiting on their keys, between them and
+            // the edge (stepping then skipped the ~20 items that filled in afterwards). Until that
+            // resolves, stay on the placeholder.
+            let olderID = direction == .backwards ? dataSource.mediaItem(atPreviewIndex: stepped)?.id : edgeID
+            let gapBetween = olderID.map { dataSource.itemIDsWithGapOnNewerSide.contains($0) } ?? false
+            // The wait is bounded from when the user landed on the placeholder, not per undecryptable
+            // message: a room full of them kept the user on "Loading more" for 13 s as each backfill
+            // brought more (every one restarting the data source's wait) while the items that had
+            // decrypted sat unreachable behind the clamp. Past the bound, step onto what has arrived;
+            // what decrypts later is inserted behind as a reshuffle and rebuilt at rest, reachable.
+            let heldFor = placeholderHoldStarted.map { ContinuousClock.now - $0 } ?? .zero
+            if gapBetween, heldFor < Self.placeholderHoldLimit {
+                MXLog.info("Media viewer: items arrived beyond the \(direction) placeholder but a gap or undecryptable messages remain between, waiting (held \(heldFor))")
+                if !placeholderHoldRecheckScheduled {
+                    placeholderHoldRecheckScheduled = true
+                    Task { [weak self] in
+                        try? await Task.sleep(for: Self.placeholderHoldLimit - heldFor + .milliseconds(50))
+                        self?.placeholderHoldRecheckScheduled = false
+                        guard let self, anchoredEdgeItemID != nil else { return }
+                        handleUpdatedItems()
+                    }
+                }
+            } else if stepped >= dataSource.firstPreviewItemIndex, stepped <= dataSource.lastPreviewItemIndex {
+                if gapBetween {
+                    MXLog.info("Media viewer: held on the \(direction) placeholder for \(heldFor), stepping past the undecryptable messages")
+                }
                 dataSource.isClampedToBackwardPlaceholder = false
                 dataSource.isClampedToForwardPlaceholder = false
                 anchoredEdgeItemID = nil
+                placeholderHoldStarted = nil
                 // Re-derived, not `stepped`: releasing the clamp above puts the phantom padding
                 // back in place of the single placeholder page, shifting every index by it.
                 if let edgeIndex = dataSource.previewIndex(of: edgeID) {
