@@ -45,6 +45,10 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     /// The gallery attachments to include, so that a gallery only contributes the media being browsed.
     private let allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?
     
+    /// The current identity of the item pinned to `.initialItem`. Tracks it as it moves timeline and
+    /// gets sent — neither of which changes both of its identifiers at once — so it stays recognisable.
+    private var initialItemID: TimelineItemIdentifier
+    
     /// Builds a data source spanning every previewable attachment in the timeline, paginating
     /// as the user swipes past the loaded range. Used when tapping a standalone media message.
     init(itemViewStates: [RoomTimelineItemViewState],
@@ -53,18 +57,20 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
          paginationState: TimelinePaginationState,
          allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]? = nil) {
         self.allowedGalleryItemTypes = allowedGalleryItemTypes
+        initialItemID = initialItem.id
         
-        previewItems = itemViewStates.flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
-        
-        let initialPreviewID = TimelineMediaPreviewItem.Media(timelineItem: initialItem).id
-        if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialPreviewID }) {
+        let loadedItems = itemViewStates.flatMap {
+            $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes, initialItemID: initialItem.id)
+        }
+        if let initialItemArrayIndex = loadedItems.firstIndex(where: { $0.id == .initialItem }) {
+            previewItems = loadedItems
             initialItemIndex = initialItemArrayIndex + initialPadding
             currentItem = .media(previewItems[initialItemArrayIndex])
         } else {
-            // The timeline hasn't loaded the initial item yet, so replace the whatever was loaded with
-            // the item the user wants to preview.
+            // The timeline hasn't loaded the initial item yet, so show the item the user tapped until it
+            // does, pinned to `.initialItem` so it holds its page once the timeline catches up.
             initialItemIndex = initialPadding
-            previewItems = [.init(timelineItem: initialItem)]
+            previewItems = [.init(reidentifying: .init(timelineItem: initialItem), as: .initialItem)]
             currentItem = .media(previewItems[0])
         }
         
@@ -96,6 +102,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             initialItemIndex = 0
             currentItem = .media(previewItems[0])
         }
+        // Unused here — a gallery is self-contained and never bridges timelines — but keeps the ID non-optional.
+        initialItemID = currentItem.mediaItem?.timelineItem.id ?? previewItems[0].timelineItem.id
         
         // And we disable any use of the timeline by configuring the data source as though everything has paginated.
         backwardPadding = 0
@@ -109,8 +117,14 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     func updatePreviewItems(itemViewStates: [RoomTimelineItemViewState]) {
         let newItems: [TimelineMediaPreviewItem.Media] = itemViewStates
-            .flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
+            .flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes, initialItemID: initialItemID) }
             .map { newItem in
+                // The viewer is opened with the item from another timeline instance, whose unique ID
+                // differs, so adopt the feed's identity for it once it appears (stable from here on).
+                if newItem.id == .initialItem {
+                    initialItemID = newItem.timelineItem.id
+                }
+                
                 // If an item already exists use that instead to preserve the file handle, download error etc.
                 if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
                     oldItem.content = newItem.content
@@ -238,7 +252,8 @@ enum TimelineMediaPreviewItem: Equatable {
         var downloadError: Error?
         
         /// A stable identifier that's unique per preview item — including individual gallery
-        /// attachments that would otherwise share their parent event's ID.
+        /// attachments that would otherwise share their parent event's ID. The viewer's initial item
+        /// is pinned to `.initialItem` so it keeps its page across the room→filtered timeline handoff.
         let id: MediaPreviewItemID
         
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
@@ -268,7 +283,14 @@ enum TimelineMediaPreviewItem: Equatable {
         /// so QuickLook falls back to its default unsupported-item screen.
         init(galleryParent: GalleryRoomTimelineItem, item: GalleryItem) {
             content = .galleryItem(parent: galleryParent, item: item)
-            id = .galleryItem(item.id)
+            id = .galleryItem(uniqueID: item.id.timelineItemID.uniqueID, mediaIndex: item.id.mediaIndex)
+        }
+        
+        /// Re-wraps `item`'s content under a fixed ID, used to pin the viewer's initial item to
+        /// `.initialItem` so its identity survives its real unique ID changing between timelines.
+        fileprivate init(reidentifying item: Media, as id: MediaPreviewItemID) {
+            content = item.content
+            self.id = id
         }
         
         // MARK: QLPreviewItem
@@ -449,15 +471,35 @@ enum TimelineMediaPreviewItem: Equatable {
 private extension RoomTimelineItemViewState {
     /// The media of this item that can be previewed, flattening a gallery message into its individual
     /// attachments so that they can be browsed alongside the timeline's other media.
-    /// - Parameter allowedGalleryItemTypes: Restricts a gallery's attachments to the media being
-    ///   browsed, as the SDK can only filter the gallery event as a whole.
-    func previewableMedia(allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?) -> [TimelineMediaPreviewItem.Media] {
-        guard case .gallery(let galleryItem) = type else {
-            return [TimelineMediaPreviewItem.Media(roomTimelineItemViewState: self)].compactMap { $0 }
+    /// - Parameters:
+    ///   - allowedGalleryItemTypes: Restricts a gallery's attachments to the media being browsed, as
+    ///     the SDK can only filter the gallery event as a whole.
+    ///   - initialItemID: The current identity of the viewer's initial item. Its counterpart here is
+    ///     pinned to `.initialItem` so it keeps its page across the room→filtered timeline handoff.
+    func previewableMedia(allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?,
+                          initialItemID: TimelineItemIdentifier) -> [TimelineMediaPreviewItem.Media] {
+        let media: [TimelineMediaPreviewItem.Media] = if case .gallery(let galleryItem) = type {
+            galleryItem.content.items(matching: allowedGalleryItemTypes).map {
+                TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: $0.item)
+            }
+        } else {
+            [TimelineMediaPreviewItem.Media(roomTimelineItemViewState: self)].compactMap { $0 }
         }
         
-        return galleryItem.content.items(matching: allowedGalleryItemTypes).map {
-            TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: $0.item)
+        return media.map { $0.timelineItem.id.matches(initialItemID) ? .init(reidentifying: $0, as: .initialItem) : $0 }
+    }
+}
+
+private extension TimelineItemIdentifier {
+    /// Whether this refers to the same item as `other`, tolerating either identifier changing (but
+    /// not both): the unique ID changes across timeline instances, while the event/transaction ID
+    /// changes when a local echo is sent. Lets the initial item be tracked as it moves between
+    /// timelines and as it's sent, neither of which happens at the same time.
+    func matches(_ other: TimelineItemIdentifier) -> Bool {
+        if uniqueID == other.uniqueID {
+            return true
         }
+        guard let eventOrTransactionID else { return false }
+        return eventOrTransactionID == other.eventOrTransactionID
     }
 }

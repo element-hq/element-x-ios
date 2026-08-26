@@ -30,7 +30,7 @@ struct TimelineMediaPreviewDataSourceTests {
     }
     
     @Test
-    func timelinePreviewFlattensGalleries() throws {
+    func timelinePreviewFlattensGalleries() {
         // Given a timeline containing an image, a gallery of 2 attachments and a gallery of 3, one of
         // which is a file that belongs in the other timeline.
         let image = ImageRoomTimelineItem(id: .randomEvent,
@@ -55,8 +55,7 @@ struct TimelineMediaPreviewDataSourceTests {
         
         // Then the galleries' visual attachments are browsable as though they were individual messages,
         // whilst the file is left to the timeline that shows those.
-        let imageID = try #require(image.id.eventOrTransactionID)
-        let expectedIDs: [MediaPreviewItemID] = [.timelineItem(imageID),
+        let expectedIDs: [MediaPreviewItemID] = [.initialItem, // The tapped image, pinned to a stable ID.
                                                  .galleryItem(firstGalleryItems[0].id),
                                                  .galleryItem(firstGalleryItems[1].id),
                                                  .galleryItem(secondGalleryItems[0].id),
@@ -64,7 +63,7 @@ struct TimelineMediaPreviewDataSourceTests {
         #expect(dataSource.previewItems.map(\.id) == expectedIDs)
         
         // …starting from the tapped image.
-        #expect(dataSource.currentMediaItemID == .timelineItem(imageID))
+        #expect(dataSource.currentMediaItemID == .initialItem)
     }
     
     @Test
@@ -156,8 +155,8 @@ struct TimelineMediaPreviewDataSourceTests {
         
         let previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
         let displayedItem = try #require(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
-        #expect(displayedItem.id == initialMediaItems[initialItemIndex].previewID, "The displayed item should not change.")
-        #expect(dataSource.currentMediaItemID == initialMediaItems[initialItemIndex].previewID, "The current item should not change.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should not change.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should not change.")
         
         #expect(dataSource.previewItems.count == initialMediaViewStates.count, "The number of items should not change.")
         #expect(previewItemCount == initialMediaViewStates.count + (2 * initialPadding), "The padded number of items should not change.")
@@ -180,8 +179,8 @@ struct TimelineMediaPreviewDataSourceTests {
         
         var previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
         var displayedItem = try #require(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
-        #expect(displayedItem.id == initialMediaItems[initialItemIndex].previewID, "The displayed item should not change.")
-        #expect(dataSource.currentMediaItemID == initialMediaItems[initialItemIndex].previewID, "The current item should not change.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should not change.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should not change.")
         #expect(previewItemCount == initialMediaViewStates.count + (2 * initialPadding), "The number of items should not change")
         
         // When more items are loaded in a forward pagination or sync.
@@ -196,8 +195,8 @@ struct TimelineMediaPreviewDataSourceTests {
         
         previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
         displayedItem = try #require(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
-        #expect(displayedItem.id == initialMediaItems[initialItemIndex].previewID, "The displayed item should not change.")
-        #expect(dataSource.currentMediaItemID == initialMediaItems[initialItemIndex].previewID, "The current item should not change.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should not change.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should not change.")
         #expect(previewItemCount == initialMediaViewStates.count + (2 * initialPadding), "The number of items should not change")
     }
     
@@ -220,8 +219,8 @@ struct TimelineMediaPreviewDataSourceTests {
         
         var previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
         var displayedItem = try #require(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
-        #expect(displayedItem.id == initialMediaItems[initialItemIndex].previewID, "The displayed item should not change.")
-        #expect(dataSource.currentMediaItemID == initialMediaItems[initialItemIndex].previewID, "The current item should not change.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should not change.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should not change.")
         #expect(previewItemCount == initialMediaViewStates.count + (2 * initialPadding), "The number of items should not change")
         
         // When paginating forwards by more than the available padding.
@@ -236,8 +235,8 @@ struct TimelineMediaPreviewDataSourceTests {
         
         previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
         displayedItem = try #require(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
-        #expect(displayedItem.id == initialMediaItems[initialItemIndex].previewID, "The displayed item should not change.")
-        #expect(dataSource.currentMediaItemID == initialMediaItems[initialItemIndex].previewID, "The current item should not change.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should not change.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should not change.")
         #expect(previewItemCount == initialMediaViewStates.count + (2 * initialPadding), "The number of items should not change")
     }
     
@@ -260,8 +259,8 @@ struct TimelineMediaPreviewDataSourceTests {
         #expect(previewItemCount == 1 + (2 * initialPadding), "The initial item count should be padded for the preview controller.")
         #expect(dataSource.initialItemIndex == initialPadding, "The initial item index should be padded for the preview controller.")
         
-        #expect(displayedItem.id == initialItem.previewID, "The displayed item should be the initial item.")
-        #expect(dataSource.currentMediaItemID == initialItem.previewID, "The current item should also be the initial item.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should be the initial item.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should also be the initial item.")
         
         // When the timeline loads the initial items.
         let deferred = deferFulfillment(dataSource.previewItemsPaginationPublisher) { _ in true }
@@ -278,8 +277,8 @@ struct TimelineMediaPreviewDataSourceTests {
         #expect(previewItemCount == 1 + (2 * initialPadding), "The item count should not change as the padding will be reduced.")
         #expect(dataSource.initialItemIndex == initialPadding, "The item index should not change.")
         
-        #expect(displayedItem.id == initialMediaItems[initialItemIndex].previewID, "The displayed item should not change.")
-        #expect(dataSource.currentMediaItemID == initialMediaItems[initialItemIndex].previewID, "The current item should not change.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should not change.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should not change.")
     }
     
     @Test
@@ -301,8 +300,8 @@ struct TimelineMediaPreviewDataSourceTests {
         #expect(previewItemCount == 1 + (2 * initialPadding), "The initial item count should be padded for the preview controller.")
         #expect(dataSource.initialItemIndex == initialPadding, "The initial item index should be padded for the preview controller.")
         
-        #expect(displayedItem.id == initialItem.previewID, "The displayed item should be the initial item.")
-        #expect(dataSource.currentMediaItemID == initialItem.previewID, "The current item should also be the initial item.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should be the initial item.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should also be the initial item.")
         
         // When the timeline loads more items but still doesn't include the initial item.
         let failure = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
@@ -319,8 +318,8 @@ struct TimelineMediaPreviewDataSourceTests {
         #expect(previewItemCount == 1 + (2 * initialPadding), "The initial item count should not change.")
         #expect(dataSource.initialItemIndex == initialPadding, "The initial item index should not change.")
         
-        #expect(displayedItem.id == initialItem.previewID, "The displayed item should not change.")
-        #expect(dataSource.currentMediaItemID == initialItem.previewID, "The current item not change.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should not change.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item not change.")
     }
     
     // MARK: Helpers
@@ -343,6 +342,42 @@ struct TimelineMediaPreviewDataSourceTests {
             .filter { !($0 is GalleryRoomTimelineItem) } // Galleries are previewed through their own data source.
     }
     
+    @Test
+    func sentLocalEchoKeepsItsPage() async throws {
+        // Given a viewer opened on an upload in flight: a local echo with a transaction ID.
+        let uniqueID = TimelineItemIdentifier.UniqueID(UUID().uuidString)
+        func makeUpload(id: TimelineItemIdentifier.EventOrTransactionID) -> ImageRoomTimelineItem {
+            ImageRoomTimelineItem(id: .event(uniqueID: uniqueID, eventOrTransactionID: id),
+                                  timestamp: .mock,
+                                  isOutgoing: true,
+                                  isEditable: false,
+                                  canBeRepliedTo: false,
+                                  sender: .init(id: "Alice"),
+                                  content: .init(filename: "upload.jpg", imageInfo: .mockImage, thumbnailInfo: nil, blurhash: nil))
+        }
+        let localEcho = makeUpload(id: .transactionID("t1"))
+        var items = newChunk()
+        items.append(localEcho)
+        let dataSource = TimelineMediaPreviewDataSource(itemViewStates: items.map { RoomTimelineItemViewState(item: $0, groupStyle: .single) },
+                                                        initialItem: localEcho,
+                                                        paginationState: .initial)
+        let page = try #require(dataSource.currentItem.mediaItem)
+        #expect(page.id == .initialItem) // The initial item is pinned to a stable ID.
+        
+        // When the upload completes and the timeline swaps the echo's transaction ID for its event ID.
+        items[items.count - 1] = makeUpload(id: .eventID("$e1"))
+        let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
+        dataSource.updatePreviewItems(itemViewStates: items.map { RoomTimelineItemViewState(item: $0, groupStyle: .single) })
+        try await deferred.fulfill()
+        
+        // Then the same page carries on under its pinned ID (its file came from the local media cache),
+        // nothing rebuilt — the initial item is tracked across the send by its recycled unique ID.
+        #expect(dataSource.currentItem.mediaItem === page)
+        #expect(page.id == .initialItem)
+        #expect(dataSource.previewItems.map(\.id).last == .initialItem)
+        #expect(dataSource.previewItems.count == items.count)
+    }
+    
     @discardableResult
     private func assertInitialDataSource() throws -> TimelineMediaPreviewDataSource {
         // Given a data source built with the initial items.
@@ -358,8 +393,8 @@ struct TimelineMediaPreviewDataSourceTests {
         
         // Then the preview controller should be showing the initial item and the data source should reflect this.
         #expect(dataSource.initialItemIndex == initialItemIndex + initialPadding, "The initial item index should be padded for the preview controller.")
-        #expect(displayedItem.id == initialMediaItems[initialItemIndex].previewID, "The displayed item should be the initial item.")
-        #expect(dataSource.currentMediaItemID == initialMediaItems[initialItemIndex].previewID, "The current item should also be the initial item.")
+        #expect(displayedItem.id == .initialItem, "The displayed item should be the initial item.")
+        #expect(dataSource.currentMediaItemID == .initialItem, "The current item should also be the initial item.")
         
         #expect(dataSource.previewItems.count == initialMediaViewStates.count, "The initial count of preview items should be correct.")
         #expect(previewItemCount == initialMediaViewStates.count + (2 * initialPadding), "The initial item count should be padded for the preview controller.")
@@ -374,10 +409,9 @@ private extension TimelineMediaPreviewDataSource {
     }
 }
 
-private extension EventBasedMessageTimelineItemProtocol {
-    /// Test helper that derives the same preview ID used by `TimelineMediaPreviewItem.Media` —
-    /// avoids reaching into the private encoding from the tests.
-    var previewID: MediaPreviewItemID {
-        TimelineMediaPreviewItem.Media(timelineItem: self).id
+private extension MediaPreviewItemID {
+    /// Test convenience mirroring how `TimelineMediaPreviewItem.Media` builds a gallery attachment's ID.
+    static func galleryItem(_ id: GalleryItemID) -> MediaPreviewItemID {
+        .galleryItem(uniqueID: id.timelineItemID.uniqueID, mediaIndex: id.mediaIndex)
     }
 }

@@ -17,14 +17,19 @@ enum TimelineMediaPreviewViewModelAction: Equatable {
 
 /// Identifies a media preview item — either a whole timeline item or a single gallery attachment.
 enum MediaPreviewItemID: Hashable {
-    case timelineItem(TimelineItemIdentifier.EventOrTransactionID)
-    case galleryItem(GalleryItemID)
+    case timelineItem(TimelineItemIdentifier.UniqueID)
+    case galleryItem(uniqueID: TimelineItemIdentifier.UniqueID, mediaIndex: Int)
     
-    /// Identifies by event/transaction ID only, since the unique ID differs across timelines
-    /// and matching must survive rebuilding a filtered timeline to fetch the other media.
+    /// A sentinel the viewer pins its initial item to, so it keeps its page across the room→filtered
+    /// timeline handoff. A fabricated value rather than a real unique ID, which — being per-timeline —
+    /// could otherwise collide between the two timeline instances.
+    static let initialItem = MediaPreviewItemID.timelineItem(.init("initialMediaPreviewItem"))
+    
+    /// The unique ID is stable within a timeline instance across every state change — including a
+    /// local echo being sent, where the transaction ID gives way to an event ID but the unique ID
+    /// is recycled. Matching across timeline instances is handled separately, at bridge time.
     init(timelineItem: EventBasedMessageTimelineItemProtocol) {
-        guard let id = timelineItem.id.eventOrTransactionID else { fatalError("Virtual items cannot be previewed.") }
-        self = .timelineItem(id)
+        self = .timelineItem(timelineItem.id.uniqueID)
     }
 }
 
