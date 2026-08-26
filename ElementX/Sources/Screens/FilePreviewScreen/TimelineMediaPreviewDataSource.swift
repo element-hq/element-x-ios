@@ -145,6 +145,21 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             if backPaginationCount > 0 || forwardPaginationCount > 0 {
                 hasPaginated = true
             }
+        } else if let anchor = [currentItem.mediaItem?.id].compactMap({ $0 }).first(where: { id in newItems.contains { $0.id == id } })
+            ?? previewItems.first(where: { old in newItems.contains { $0.id == old.id } })?.id,
+            let oldIndex = previewItems.firstIndex(where: { $0.id == anchor }),
+            let newIndex = newItems.firstIndex(where: { $0.id == anchor }) {
+            // The loaded run isn't a contiguous slice of the new list: the timeline reshuffled it
+            // (de-duplication, a backfill landing in the middle). Ignoring such updates froze the
+            // viewer at a handful of items while the timeline went on to the room's start. Keep the
+            // current item (or any shared item) at its index and take the new list; the other pages
+            // are rebuilt by the controller.
+            let oldAfter = previewItems.count - 1 - oldIndex
+            let newAfter = newItems.count - 1 - newIndex
+            backwardPadding -= newIndex - oldIndex
+            forwardPadding -= newAfter - oldAfter
+            hasPaginated = true
+            MXLog.info("Media viewer: items reshuffled (\(previewItems.count) -> \(newItems.count)), re-anchored at \(anchor)")
         } else {
             // When the timeline is loading items from the store and the initial item is the only
             // preview in the array, we don't want to wipe it out, so if the existing items aren't
