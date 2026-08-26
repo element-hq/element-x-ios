@@ -94,5 +94,4 @@ enum TimelineMediaPreviewViewAction {
     case showItemDetails(TimelineMediaPreviewItem.Media)
     case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem.Media)
     case redactConfirmation(item: TimelineMediaPreviewItem.Media)
-    case timelineEndReached
 }

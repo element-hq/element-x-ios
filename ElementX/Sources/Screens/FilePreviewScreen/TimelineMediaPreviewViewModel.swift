@@ -144,8 +144,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             }
         case .redactConfirmation(let item):
             redactItem(item)
-        case .timelineEndReached:
-            showTimelineEndIndicator()
         }
     }
     
@@ -773,12 +771,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
                                                               icon: \.close))
-    }
-    
-    private func showTimelineEndIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
-                                                              type: .toast,
-                                                              title: L10n.screenMediaDetailsNoMoreMediaToShow))
     }
     
     private var statusIndicatorID: String {

@@ -32,6 +32,40 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     private var backwardPadding: Int
     private var forwardPadding: Int
+    /// The padding each side starts with: the per-session browse budget, restorable when spent.
+    private let initialPadding: Int
+    
+    /// Whether a side's phantom padding is nearly spent while the timeline still has more that
+    /// way. Left alone, the spent side has no "Loading more" page left, so its edge hardens into
+    /// a false "end of the timeline" (and further merges land unreachably below index 0): the
+    /// controller re-centres the budget under a covered reload at the next rest.
+    var isBrowseBudgetLow: Bool {
+        let lowWater = 10
+        if !isClampedToBackwardPlaceholder, paginationState.backward != .endReached, backwardPadding <= lowWater {
+            return true
+        }
+        if !isClampedToForwardPlaceholder, paginationState.forward != .endReached, forwardPadding <= lowWater {
+            return true
+        }
+        return false
+    }
+    
+    /// Restores both sides' phantom padding to the initial browse budget. Every preview index
+    /// shifts by the backward delta, so the caller must re-derive the current index and reload
+    /// in the same breath; items a spent side had left unreachable become reachable again.
+    func restoreBrowseBudget() {
+        MXLog.info("Media viewer: restoring the browse budget (padding \(backwardPadding)/\(forwardPadding) -> \(initialPadding))")
+        backwardPadding = initialPadding
+        forwardPadding = initialPadding
+    }
+    
+    /// While the user is on a "loading more" page, only that one page is reported beyond the loaded
+    /// items on its side, so QuickLook's own edge bounce stops the swipe there instead of paging on
+    /// into a run of identical placeholders (the phantom padding is there for index stability, not
+    /// to be browsed). It changes the count, hence needs a reload: the controller drives it.
+    var isClampedToBackwardPlaceholder = false
+    var isClampedToForwardPlaceholder = false
+    
     /// Whether a real (post-load) pagination state has been seen. `.initial` is `endReached` on
     /// both sides as a "don't paginate yet" sentinel, indistinguishable by value from a genuinely
     /// exhausted small room, so we only collapse the phantom padding (below) once a real state has
@@ -78,6 +112,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         
         backwardPadding = initialPadding
         forwardPadding = initialPadding
+        self.initialPadding = initialPadding
         hasReceivedRealPaginationState = paginationState != .initial
         
         self.paginationState = paginationState
@@ -109,6 +144,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         // And we disable any use of the timeline by configuring the data source as though everything has paginated.
         backwardPadding = 0
         forwardPadding = 0
+        initialPadding = 0
         hasReceivedRealPaginationState = true
         paginationState = .init(backward: .endReached, forward: .endReached)
     }
@@ -139,6 +175,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             // Don't worry about negative padding here. Turns out that it just limits
             // the displayable items from growing any more, but makes sure that the
             // current item doesn't jump around so we don't need to reload anything.
+            // That only holds while the padding is in play: collapsed to zero, a prepend
+            // shifts every index and the controller re-derives its index (`previewIndex(of:)`).
             backwardPadding -= backPaginationCount
             forwardPadding -= forwardPaginationCount
             
@@ -193,14 +231,19 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         if hasReceivedRealPaginationState, paginationState.backward == .endReached {
             return 0
         }
-        return backwardPadding
+        return isClampedToBackwardPlaceholder ? 1 : backwardPadding
+    }
+    
+    /// QuickLook's index for the item right now, given the current items and padding.
+    func previewIndex(of itemID: MediaPreviewItemID) -> Int? {
+        previewItems.firstIndex { $0.id == itemID }.map { $0 + effectiveBackwardPadding }
     }
     
     private var effectiveForwardPadding: Int {
         if hasReceivedRealPaginationState, paginationState.forward == .endReached {
             return 0
         }
-        return forwardPadding
+        return isClampedToForwardPlaceholder ? 1 : forwardPadding
     }
     
     var firstPreviewItemIndex: Int {
