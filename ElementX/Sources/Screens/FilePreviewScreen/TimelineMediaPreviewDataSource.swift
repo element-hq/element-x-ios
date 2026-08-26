@@ -159,12 +159,9 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     private let allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]?
     
     /// Builds a data source spanning every previewable attachment in the timeline, paginating
-    /// as the user swipes past the loaded range. Used when tapping a media message, or one
-    /// attachment (`initialGalleryIndex`) of a gallery message: the gallery's attachments sit
-    /// inline amongst the timeline's other media rather than trapping the user in the gallery.
+    /// as the user swipes past the loaded range. Used when tapping a standalone media message.
     init(itemViewStates: [RoomTimelineItemViewState],
          initialItem: EventBasedMessageTimelineItemProtocol,
-         initialGalleryIndex: Int? = nil,
          initialPadding: Int = 100,
          paginationState: TimelinePaginationState,
          allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]? = nil) {
@@ -172,35 +169,16 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         
         previewItems = itemViewStates.flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
         
-        // What to show if the timeline hasn't loaded the initial item yet: the tapped message, or the
-        // tapped gallery's attachments. The gallery is filtered the same way the timeline's own
-        // flattening will be (the filter derives from the tapped attachment's type, so that one is
-        // always kept): the loaded list must then match it as a contiguous range when the timeline
-        // arrives, or the merge takes the re-anchoring path and leaves the padding (and its
-        // "Loading more" pages) in place around the gallery.
-        let fallbackItems: [TimelineMediaPreviewItem.Media]
-        let fallbackIndex: Int
-        if let galleryItem = initialItem as? GalleryRoomTimelineItem,
-           case let galleryItems = galleryItem.content.items(matching: allowedGalleryItemTypes),
-           !galleryItems.isEmpty {
-            fallbackItems = galleryItems.map { .init(galleryParent: galleryItem, item: $0.item) }
-            let tappedID = initialGalleryIndex.flatMap { galleryItem.content.items.indices.contains($0) ? galleryItem.content.items[$0].id : nil }
-            fallbackIndex = galleryItems.firstIndex { $0.item.id == tappedID } ?? 0
-        } else {
-            fallbackItems = [.init(timelineItem: initialItem)]
-            fallbackIndex = 0
-        }
-        let initialPreviewID = fallbackItems[fallbackIndex].id
-        
+        let initialPreviewID = TimelineMediaPreviewItem.Media(timelineItem: initialItem).id
         if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialPreviewID }) {
             initialItemIndex = initialItemArrayIndex + initialPadding
             currentItem = .media(previewItems[initialItemArrayIndex])
         } else {
             // The timeline hasn't loaded the initial item yet, so replace the whatever was loaded with
             // the item the user wants to preview.
-            initialItemIndex = fallbackIndex + initialPadding
-            previewItems = fallbackItems
-            currentItem = .media(previewItems[fallbackIndex])
+            initialItemIndex = initialPadding
+            previewItems = [.init(timelineItem: initialItem)]
+            currentItem = .media(previewItems[0])
         }
         
         backwardPadding = initialPadding
@@ -211,6 +189,37 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         self.paginationState = paginationState
         super.init()
         analyseShape(itemViewStates)
+    }
+    
+    /// Builds a data source scoped to a single gallery's previewable attachments.
+    /// Used when the user taps a tile inside a gallery message — paging is local to that
+    /// gallery and there's no timeline pagination to drive.
+    init(galleryItem: GalleryRoomTimelineItem,
+         initialIndex: Int) {
+        allowedGalleryItemTypes = nil // All of the gallery's attachments are shown.
+        
+        let media = galleryItem.content.items.map { item in
+            TimelineMediaPreviewItem.Media(galleryParent: galleryItem, item: item)
+        }
+        
+        if media.indices.contains(initialIndex) {
+            // We set the entire gallery here up front.
+            previewItems = media
+            initialItemIndex = initialIndex
+            currentItem = .media(media[initialIndex])
+        } else {
+            // Fall back to a synthetic placeholder for empty galleries — shouldn't happen in practice.
+            previewItems = [.init(timelineItem: galleryItem)]
+            initialItemIndex = 0
+            currentItem = .media(previewItems[0])
+        }
+        
+        // And we disable any use of the timeline by configuring the data source as though everything has paginated.
+        backwardPadding = 0
+        forwardPadding = 0
+        initialPadding = 0
+        hasReceivedRealPaginationState = true
+        paginationState = .init(backward: .endReached, forward: .endReached)
     }
     
     func updateCurrentItem(_ item: TimelineMediaPreviewItem) {

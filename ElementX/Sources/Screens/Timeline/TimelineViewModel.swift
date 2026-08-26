@@ -709,14 +709,21 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             guard !Task.isCancelled else { return }
             state.showLoading = true
         }
-        let action = await timelineInteractionHandler.processItemTap(itemID, galleryIndex: galleryIndex)
+        let action = await timelineInteractionHandler.processItemTap(itemID)
         spinner.cancel()
         
         switch action {
         case .displayMediaPreview(let item, let timelineViewModelKind):
             actionsSubject.send(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
             
-            let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, galleryIndex: galleryIndex, timelineViewModelKind: timelineViewModelKind)
+            let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
+            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
+        case .displayGalleryPreview(let galleryItem, let timelineViewModelKind):
+            actionsSubject.send(.composer(action: .removeFocus))
+            
+            let mediaPreviewViewModel = makeGalleryPreviewViewModel(galleryItem: galleryItem,
+                                                                    timelineViewModelKind: timelineViewModelKind,
+                                                                    initialIndex: galleryIndex ?? 0)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayLocation(let location):
             actionsSubject.send(.displayLocation(location))
@@ -840,10 +847,21 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func makeMediaPreviewViewModel(item: EventBasedMessageTimelineItemProtocol,
-                                           galleryIndex: Int?,
                                            timelineViewModelKind: TimelineControllerAction.TimelineViewModelKind) -> TimelineMediaPreviewViewModel {
         TimelineMediaPreviewViewModel(initialItem: item,
-                                      initialGalleryIndex: galleryIndex,
+                                      timelineViewModel: timelineViewModel(for: timelineViewModelKind),
+                                      mediaProvider: userSession.mediaProvider,
+                                      photoLibraryManager: PhotoLibraryManager(),
+                                      userIndicatorController: userIndicatorController,
+                                      appMediator: appMediator,
+                                      appSettings: appSettings)
+    }
+    
+    private func makeGalleryPreviewViewModel(galleryItem: GalleryRoomTimelineItem,
+                                             timelineViewModelKind: TimelineControllerAction.TimelineViewModelKind,
+                                             initialIndex: Int) -> TimelineMediaPreviewViewModel {
+        TimelineMediaPreviewViewModel(galleryItem: galleryItem,
+                                      initialIndex: initialIndex,
                                       timelineViewModel: timelineViewModel(for: timelineViewModelKind),
                                       mediaProvider: userSession.mediaProvider,
                                       photoLibraryManager: PhotoLibraryManager(),
