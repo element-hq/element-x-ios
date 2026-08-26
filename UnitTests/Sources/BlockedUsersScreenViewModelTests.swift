@@ -8,9 +8,8 @@
 
 import Combine
 @testable import ElementX
-import Foundation
+import SwiftUI
 import Testing
-import UIKit
 
 @MainActor
 struct BlockedUsersScreenViewModelTests {
