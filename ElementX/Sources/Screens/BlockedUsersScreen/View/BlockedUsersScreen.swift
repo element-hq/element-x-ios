@@ -38,6 +38,13 @@ struct BlockedUsersScreen: View {
                                            icon: avatar(for: user)),
                             details: .isWaiting(context.viewState.processingUserID == user.id),
                             kind: .button { context.send(viewAction: .unblockUser(user)) })
+                        .contextMenu {
+                            Button {
+                                context.send(viewAction: .copyUserID(user))
+                            } label: {
+                                Label(L10n.actionCopy, icon: \.copy)
+                            }
+                        }
                 }
             }
         }
