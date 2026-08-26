@@ -355,6 +355,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var optimizeMediaUploads: Bool
     
+    /// Fetch the media either side of the one on show so a swipe reveals the media rather than a blank page.
+    @UserPreference(defaultValue: true)
+    var preloadMediaInViewer: Bool
+    
     @UserPreference(defaultValue: AudioPlaybackSpeed.default)
     var voiceMessagePlaybackSpeed: AudioPlaybackSpeed
     
