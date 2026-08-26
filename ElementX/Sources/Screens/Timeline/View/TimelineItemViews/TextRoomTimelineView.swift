@@ -43,6 +43,8 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
                             LinkPreviewView(url: url, metadata: metadata)
                         }
                     }
+                    // Link previews report the full proposed width, which would otherwise stretch the bubble across the timeline.
+                    .frame(maxWidth: TimelineMediaFrame.maxLinkPreviewWidth)
                     .padding(.bottom, 16)
                 }
             }
