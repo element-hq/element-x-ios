@@ -122,8 +122,9 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             .flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
             .map { newItem in
                 // If an item already exists use that instead to preserve the file handle, download error etc.
-                if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
+                if let oldItem = previewItems.first(where: { $0.id == newItem.id || $0.isLocalEcho(of: newItem) }) {
                     oldItem.content = newItem.content
+                    oldItem.id = newItem.id // A sent local echo: transaction ID → event ID.
                     return oldItem
                 }
                 
@@ -267,8 +268,23 @@ enum TimelineMediaPreviewItem: Equatable {
         var downloadError: Error?
         
         /// A stable identifier that's unique per preview item — including individual gallery
-        /// attachments that would otherwise share their parent event's ID.
-        let id: MediaPreviewItemID
+        /// attachments that would otherwise share their parent event's ID. Only changes when a
+        /// local echo is sent and its transaction ID gives way to the event ID.
+        fileprivate(set) var id: MediaPreviewItemID
+        
+        /// Whether this is the local echo that `sentItem` is the remote echo of: sending swaps the
+        /// transaction ID for an event ID (so `id` changes) but the timeline recycles the unique ID.
+        /// Matching on it keeps the page, its file (loaded from the local media cache) and state
+        /// instead of rebuilding the viewer around a "new" item.
+        fileprivate func isLocalEcho(of sentItem: Media) -> Bool {
+            guard timelineItem.id.transactionID != nil, sentItem.timelineItem.id.eventID != nil,
+                  timelineItem.id.uniqueID == sentItem.timelineItem.id.uniqueID else { return false }
+            switch (content, sentItem.content) {
+            case (.timelineItem, .timelineItem): return true
+            case (.galleryItem(_, let item), .galleryItem(_, let sentGalleryItem)): return item.id.mediaIndex == sentGalleryItem.id.mediaIndex
+            default: return false
+            }
+        }
         
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
             content = .timelineItem(timelineItem)
