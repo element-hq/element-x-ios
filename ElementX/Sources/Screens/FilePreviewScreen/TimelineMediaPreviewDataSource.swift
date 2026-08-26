@@ -66,6 +66,10 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     var isClampedToBackwardPlaceholder = false
     var isClampedToForwardPlaceholder = false
     
+    /// The loaded items were reshuffled by the timeline (not a plain prepend/append), so QuickLook's
+    /// built pages no longer match their indices and need a rebuild. Cleared by the controller.
+    var needsRebuild = false
+    
     /// Media with something unresolved between them and the next newer media: a timeline gap, or a
     /// message we couldn't decrypt yet that may turn out to be media (its key is usually on its way).
     /// A backfill lands older items before those resolve, so stepping onto them would skip those.
@@ -265,6 +269,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             let newAfter = newItems.count - 1 - newIndex
             backwardPadding -= newIndex - oldIndex
             forwardPadding -= newAfter - oldAfter
+            needsRebuild = true
             hasPaginated = true
             MXLog.info("Media viewer: items reshuffled (\(previewItems.count) -> \(newItems.count)), re-anchored at \(anchor)")
         } else {

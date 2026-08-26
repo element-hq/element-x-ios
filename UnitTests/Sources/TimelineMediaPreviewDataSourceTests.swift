@@ -403,6 +403,7 @@ struct TimelineMediaPreviewDataSourceTests {
         #expect(page.id == .timelineItem(.eventID("$e1")))
         #expect(dataSource.previewItems.map(\.id).last == .timelineItem(.eventID("$e1")))
         #expect(dataSource.previewItems.count == items.count)
+        #expect(!dataSource.needsRebuild)
     }
     
     @discardableResult
