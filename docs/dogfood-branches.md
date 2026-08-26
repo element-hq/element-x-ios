@@ -5154,3 +5154,31 @@ went with the poll); neighbour placeholder tasks and preloads are tracked and
 tap), so an abandoned viewer stops competing with the one on screen. Build 212
 VALIDATE: grid taps open the viewer immediately, including after a burst of
 taps.
+
+## Round 72 (2026-08-26): timeline drags dead again (rageshake-7549 shape, no rageshake)
+
+Symptom: in a room, dragging the timeline did nothing at all; it came back
+when messages arrived from another client. Log `console.2026-08-26-21.log`
+(UTC inside): scrolling normal until 20:34:44; at 20:34:54 a touch at y=900
+on `HostingView` was followed 100ms later by `Application will resign active`
+(a home-indicator swipe over the composer); foreground 20:35:24; from
+20:35:46 every touch on a cell tracks but never drags with the offset frozen
+at 414 (`pan=0/true/1`: `.possible`, enabled, one touch), `active=[]`,
+`animating=[]`, no phantom touch in the event. Rageshake 7549 began the same
+way (touches at y≈913-917 on `HostingView`, `will resign active`). The
+round-64 self-heal fired at 20:36:29 ("pan wedged after 4 still touches,
+resetting") and did NOT cure it: the 20:37 touches are identical. So the
+wedge is not the pan recogniser's own state. What does cure it, twice now:
+a snapshot apply with an insertion (this time) and the scroll-to-bottom
+button (7549, `scrollToRow(row 0, animated:)`); a plain programmatic scroll
+(status-bar tap in 7549) does not.
+
+Change (build 213, `WindowManager.swift`): the self-heal now also
+`reloadData()`s the wedged table, the cheapest thing that does what the
+cures do (rebuild rows), and its log line lists every recogniser between the
+hit view and the window as `Class@View:state/enabled/touches`, since the
+`.began/.changed` sweep has been empty for both wedges and the blocker, if
+it is a recogniser, must be sitting in `.possible`. VALIDATE: after a
+home-indicator swipe wedges a room, the 4th dead touch logs `pan wedged ...
+reloading SendTransitionTableView; chain=[...]` and the next drag scrolls.
+The chain dump is the lead for the real fix.

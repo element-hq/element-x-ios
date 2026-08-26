@@ -385,9 +385,23 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
                scrollView === wedgeScrollView, scrollView.contentOffset.y == wedgeOffset {
                 wedgeCount += 1
                 if wedgeCount >= 4 {
-                    MXLog.info("TouchDebug[\(label)]: pan wedged after \(wedgeCount) still touches at offset \(Int(wedgeOffset)), resetting \(type(of: scrollView))'s recognizer")
+                    // Name every recogniser between the hit view and the window with its state and
+                    // touch count: the .began/.changed sweep above was empty for both wedges (7549,
+                    // 2026-08-26), so the blocker, if it is a recogniser, sits in .possible.
+                    var chain = [String]()
+                    var view = hitView
+                    while let current = view {
+                        for recognizer in current.gestureRecognizers ?? [] where recognizer !== self {
+                            chain.append("\(type(of: recognizer))@\(type(of: current)):\(recognizer.state.rawValue)/\(recognizer.isEnabled)/\(recognizer.numberOfTouches)")
+                        }
+                        view = current.superview
+                    }
+                    MXLog.info("TouchDebug[\(label)]: pan wedged after \(wedgeCount) still touches at offset \(Int(wedgeOffset)), reloading \(type(of: scrollView)); chain=\(chain)")
+                    // Toggling the pan alone did not cure the 2026-08-26 wedge; what does cure it
+                    // (new messages, the scroll-to-bottom button) rebuilds rows, so reload them.
                     pan.isEnabled = false
                     pan.isEnabled = true
+                    (scrollView as? UITableView)?.reloadData()
                     wedgeCount = 0
                 }
             } else {
