@@ -702,8 +702,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func handleMediaTapped(with itemID: TimelineItemIdentifier, galleryIndex: Int? = nil) async {
-        state.showLoading = true
+        // Building the media timeline takes ~100ms from the event cache, however its possible that
+        // a focussed timeline may hit /context so we need to show a spinner when it's actually slow.
+        let spinner = Task {
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            state.showLoading = true
+        }
         let action = await timelineInteractionHandler.processItemTap(itemID)
+        spinner.cancel()
         
         switch action {
         case .displayMediaPreview(let item, let timelineViewModelKind):
