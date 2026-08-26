@@ -12,7 +12,7 @@ import Compound
 import QuickLook
 import SwiftUI
 
-class TimelineMediaPreviewController: QLPreviewController {
+class TimelineMediaPreviewController: QLPreviewController, UIGestureRecognizerDelegate {
     private let context: TimelineMediaPreviewViewModel.Context
     
     private let headerHostingController: UIHostingController<HeaderView>
@@ -22,6 +22,10 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var detailsHostingController: UIHostingController<TimelineMediaPreviewDetailsView>?
     
     private var barButtonTimer: Timer?
+    /// The navigation item whose left button is being watched, and the watch itself.
+    private var observedNavigationItem: UINavigationItem?
+    private var leftBarButtonObservation: NSKeyValueObservation?
+    
     private var pageScrollViewObservation: AnyCancellable?
     /// The content offset that the page scroll view rests at when showing the current item.
     private var pageScrollViewRestingOffset: CGFloat = 0
@@ -75,7 +79,6 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         view.addSubview(captionView)
         // Constraints added later as the toolbar isn't available yet.
-        
         view.addSubview(downloadIndicatorHostingController.view)
         downloadIndicatorHostingController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -88,6 +91,7 @@ class TimelineMediaPreviewController: QLPreviewController {
             .sink { [weak self] index in
                 // This isn't removing duplicates which may try to download and/or write to disk concurrently????
                 MXLog.info("Media viewer: index \(index) -> \(self?.currentPreviewItemDescription ?? "nil")")
+                self?.isCaptionSuppressed = false // Swiping away and back brings the caption back.
                 self?.loadCurrentItem()
                 self?.checkCurrentItemOnArrival()
                 // A rebuild that found the pages moving re-arms for wherever the swipe lands.
@@ -120,6 +124,10 @@ class TimelineMediaPreviewController: QLPreviewController {
             }
             .store(in: &cancellables)
         
+        // QuickLook's text selection (Live Text, documents) and caret take the view's tint: the
+        // window's primary-text tint reads as a faint grey on dark media, so use the composer's.
+        view.tintColor = .compound.iconAccentTertiary
+        
         dataSource = context.viewState.dataSource
         currentPreviewItemIndex = context.viewState.dataSource.initialItemIndex
         // The geometry QuickLook builds with, so the first count change already shifts the index
@@ -133,18 +141,90 @@ class TimelineMediaPreviewController: QLPreviewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Caption dismissal
+    
+    /// Set by a tap while the caption is on show: over a video the caption covers the
+    /// scrubber, and QuickLook's own tap would hide the whole chrome (pausing playback)
+    /// with it. The first tap hides just the caption instead; swiping away and back
+    /// (or any page change) brings it back.
+    private var isCaptionSuppressed = false
+    
+    private lazy var captionDismissTap: UITapGestureRecognizer = {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleCaptionDismissTap))
+        tap.delegate = self
+        return tap
+    }()
+    
+    /// The recognizers already made to defer to the caption-dismiss tap.
+    private let hookedTapRecognizers = NSHashTable<UITapGestureRecognizer>.weakObjects()
+    
+    /// Whether a tap right now should hide the caption rather than reach QuickLook.
+    private var captionIsOnShow: Bool {
+        !captionView.isHidden && !isCaptionSuppressed && context.viewState.currentItem.mediaItem?.hasCaption == true
+    }
+    
+    /// Makes every single-tap recognizer in the hierarchy (QuickLook's chrome toggle,
+    /// AVKit's controls toggle) wait for the caption-dismiss tap, which only claims the
+    /// touch while a caption is on show. Swept on the existing timer: pages (re)build
+    /// their recognizers continuously.
+    private func hookTapRecognizers() {
+        var stack: [UIView] = [view]
+        while let subview = stack.popLast() {
+            for recognizer in subview.gestureRecognizers ?? [] {
+                guard let tap = recognizer as? UITapGestureRecognizer,
+                      tap !== captionDismissTap,
+                      tap.numberOfTapsRequired == 1, tap.numberOfTouchesRequired == 1,
+                      !hookedTapRecognizers.contains(tap) else { continue }
+                tap.require(toFail: captionDismissTap)
+                hookedTapRecognizers.add(tap)
+            }
+            stack.append(contentsOf: subview.subviews)
+        }
+    }
+    
+    @objc private func handleCaptionDismissTap() {
+        MXLog.info("Media viewer: tap hides the caption")
+        isCaptionSuppressed = true
+        captionView.isHidden = true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard gestureRecognizer === captionDismissTap else { return true }
+        guard captionIsOnShow else { return false }
+        // Leave the chrome's controls, the caption itself (links) and any visible
+        // player controls tappable.
+        if let touchView = touch.view {
+            if touchView is UIControl {
+                return false
+            }
+            if let navigationBar, touchView.isDescendant(of: navigationBar) {
+                return false
+            }
+            if touchView.isDescendant(of: captionView) {
+                return false
+            }
+            if let bottomBarItemsContainer, touchView.isDescendant(of: bottomBarItemsContainer) {
+                return false
+            }
+        }
+        return true
+    }
+    
     // MARK: Layout
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
         if let bottomBarItemsContainer {
+            bottomBarItemsContainer.tintColor = .compound.iconPrimary // See `updateBarButtons`.
+            
             // Using the toolbar's visibility doesn't work so check its frame.
-            captionView.isHidden = if #available(iOS 26, *) {
+            let chromeHidden = if #available(iOS 26, *) {
                 navigationBar?.topItem?.leftBarButtonItem?.frame(in: view) == nil
             } else {
                 bottomBarItemsContainer.frame.minY >= view.frame.maxY
             }
+            captionView.isHidden = chromeHidden || isCaptionSuppressed
             
             if captionView.constraints.isEmpty {
                 captionHostingController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -165,6 +245,10 @@ class TimelineMediaPreviewController: QLPreviewController {
         
         navigationBar?.topItem?.titleView = headerHostingController.view
         
+        if captionDismissTap.view == nil {
+            view.addGestureRecognizer(captionDismissTap)
+        }
+        
         observePageScrollViewIfNeeded()
         
         updateBarButtons()
@@ -177,6 +261,7 @@ class TimelineMediaPreviewController: QLPreviewController {
                     self?.updateBarButtons()
                     // Also re-centers the overlay once the scroll view has settled on an item.
                     self?.updateOverlayPosition()
+                    self?.hookTapRecognizers()
                 }
             }
         }
@@ -190,9 +275,35 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func updateBarButtons() {
         guard let topItem = navigationBar?.topItem else { return }
         
+        // The view's tint (for QuickLook's selection and caret) is inherited by every bar button
+        // item, which would recolour the (i) and the controller's own buttons with it.
+        navigationBar?.tintColor = .compound.iconPrimary
+        
+        // React to the controller re-installing its list button as it happens (KVO fires
+        // synchronously in the setter, before the frame renders) rather than on the timer's
+        // next tick, which left the list button visible for up to 100ms on every item refresh
+        // (a "pulse" of the (i) icon). The timer stays as a fallback.
+        if observedNavigationItem !== topItem {
+            observedNavigationItem = topItem
+            leftBarButtonObservation = topItem.observe(\.leftBarButtonItem) { [weak self] _, _ in
+                MainActor.assumeIsolated { self?.updateBarButtons() }
+            }
+        }
+        
+        // The controller also swaps its navigation item (and with it our title view) on the same
+        // refreshes, after which it shows the item's filename until the next layout pass; put the
+        // sender/timestamp header back here, on the same trigger as the button.
+        if topItem.titleView !== headerHostingController.view {
+            topItem.titleView = headerHostingController.view
+        }
+        
         if topItem.leftBarButtonItem?.customView == nil {
             let button = UIBarButtonItem(customView: detailsButtonHostingController.view)
-            navigationBar?.topItem?.leftBarButtonItem = button
+            // The controller re-installs its own button after every item refresh (e.g. once the
+            // file has loaded), so this swap happens repeatedly; don't animate it back in each time.
+            UIView.performWithoutAnimation {
+                navigationBar?.topItem?.leftBarButtonItem = button
+            }
         }
     }
     
@@ -982,10 +1093,25 @@ private struct HeaderView: View {
         context.viewState.currentItem
     }
     
+    /// Whether the media is still on its way, as opposed to having failed or been held by a scan,
+    /// which the overlay reports for itself (the header would otherwise say "Loading…" over them).
+    private var isLoading: Bool {
+        guard case .media(let mediaItem) = currentItem else { return false }
+        return mediaItem.fileHandle == nil && mediaItem.downloadError == nil
+    }
+    
+    /// The sender (or "Loading…" over a thumbnail placeholder), with the attachment's place in its
+    /// gallery appended, e.g. "Alice (2 of 3)", now that galleries are browsed inline with other media.
+    private func headerTitle(for mediaItem: TimelineMediaPreviewItem.Media) -> String {
+        let title = isLoading ? L10n.commonLoading : mediaItem.sender.displayName ?? mediaItem.sender.id
+        guard let position = mediaItem.galleryPosition else { return title }
+        return "\(title) (\(L10n.screenRoomPinnedBannerIndicator(String(position.index), String(position.count))))"
+    }
+    
     var body: some View {
         if let mediaItem = currentItem.mediaItem {
             VStack(spacing: 0) {
-                Text(mediaItem.sender.displayName ?? mediaItem.sender.id)
+                Text(headerTitle(for: mediaItem))
                     .font(.compound.bodySMSemibold)
                     .foregroundStyle(.compound.textPrimary)
                 Text(mediaItem.timestamp.formatted(date: .abbreviated, time: .omitted))
@@ -1025,9 +1151,11 @@ private struct CaptionView: View {
     }
     
     var body: some View {
-        if let mediaItem = currentItem.mediaItem, mediaItem.hasCaption {
-            CaptionScrollView(mediaItem: mediaItem)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+        VStack(spacing: 0) {
+            if let mediaItem = currentItem.mediaItem, mediaItem.hasCaption {
+                CaptionScrollView(mediaItem: mediaItem)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
     }
 }
@@ -1090,8 +1218,12 @@ private struct DownloadIndicatorView: View {
         case .media(let mediaItem):
             if mediaItem.downloadError != nil {
                 downloadErrorView
-            } else if mediaItem.fileHandle == nil {
+            } else if mediaItem.fileHandle == nil, mediaItem.placeholderURL == nil {
                 loadingIndicator(isScanning: false)
+            } else if mediaItem.fileHandle == nil, mediaItem.placeholderURL != nil, mediaItem.kind == .video {
+                // A video's poster gets the timeline's play badge, as a vector overlay (crisp whatever
+                // the thumbnail's resolution) rather than baked into the poster.
+                VideoPlayBadge()
             }
         case .contentScan(let scan):
             switch scan.state {

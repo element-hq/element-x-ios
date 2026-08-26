@@ -394,6 +394,16 @@ enum TimelineMediaPreviewItem: Equatable {
             }
         }
         
+        /// For a gallery attachment, its 1-based position within the gallery and the gallery's size.
+        var galleryPosition: (index: Int, count: Int)? {
+            guard case .galleryItem(let parent, let item) = content,
+                  let gallery = parent as? GalleryRoomTimelineItem,
+                  let index = gallery.content.items.firstIndex(where: { $0.id == item.id }) else {
+                return nil
+            }
+            return (index + 1, gallery.content.items.count)
+        }
+        
         var fileHandle: MediaFileHandleProxy? {
             didSet { updatePreviewItemValues() }
         }
