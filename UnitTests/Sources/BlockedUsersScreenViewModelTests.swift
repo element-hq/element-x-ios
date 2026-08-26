@@ -10,6 +10,7 @@ import Combine
 @testable import ElementX
 import Foundation
 import Testing
+import UIKit
 
 @MainActor
 struct BlockedUsersScreenViewModelTests {
@@ -41,5 +42,23 @@ struct BlockedUsersScreenViewModelTests {
         
         #expect(!viewModel.context.viewState.blockedUsers.isEmpty)
         #expect(clientProxy.profileForCalled)
+    }
+    
+    @Test
+    func copyUserID() throws {
+        let clientProxy = ClientProxyMock(.init(userID: RoomMemberProxyMock.mockMe.userID))
+        let userIndicatorController = UserIndicatorControllerMock()
+        
+        let viewModel = BlockedUsersScreenViewModel(hideProfiles: true,
+                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                    userIndicatorController: userIndicatorController)
+        
+        let user = try #require(viewModel.context.viewState.blockedUsers.first)
+        UIPasteboard.general.string = ""
+        
+        viewModel.context.send(viewAction: .copyUserID(user))
+        
+        #expect(UIPasteboard.general.string == user.id)
+        #expect(userIndicatorController.submitIndicatorDelayReceivedArguments?.indicator.title == L10n.commonCopiedToClipboard)
     }
 }
