@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 class ClassicAppAccountManager {
     private let cacheFolder: URL
@@ -64,7 +65,7 @@ class ClassicAppAccountManager {
         let userID = mxAccount.userID
         let user = loadUser(for: mxAccount) // We need an MXUser for the profile as MXAccount doesn't contain that data.
         
-        guard let serverName = serverName(for: userID) else { return nil }
+        guard let serverName = try? serverNameFromUserId(userId: userID) else { return nil }
         
         return ClassicAppAccount(userID: userID,
                                  displayName: user?.displayName,
@@ -101,13 +102,6 @@ class ClassicAppAccountManager {
             MXLog.warning("Users group \(groupID) file for \(mxAccount.userID) has been corrupted.")
             return nil
         }
-    }
-    
-    /// The server name extracted from the user's ID.
-    private func serverName(for userID: String) -> String? {
-        let components = userID.components(separatedBy: ":")
-        guard components.count > 1 else { return nil }
-        return components[1] // Directly use [1] as .last may be the port number.
     }
     
     // MARK: - File URLs

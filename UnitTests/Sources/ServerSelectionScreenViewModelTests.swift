@@ -45,6 +45,23 @@ struct ServerSelectionScreenViewModelTests {
     }
     
     @Test
+    mutating func selectForLoginUsingMatrixID() async throws {
+        // Given a view model for login.
+        try setup(authenticationFlow: .login)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        
+        // When entering a Matrix ID instead of an account provider.
+        context.homeserverAddress = "@alice:matrix.org"
+        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
+        context.send(viewAction: .confirm)
+        try await deferred.fulfill()
+        
+        // Then the homeserver from the ID should be used.
+        #expect(clientFactory.makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments?.homeserverAddress == "matrix.org")
+        #expect(service.homeserver.value == .mockMatrixDotOrg)
+    }
+    
+    @Test
     mutating func loginNotSupportedAlert() async throws {
         // Given a view model for login.
         try setup(authenticationFlow: .login)
