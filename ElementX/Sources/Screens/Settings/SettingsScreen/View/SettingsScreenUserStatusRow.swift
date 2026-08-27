@@ -55,7 +55,7 @@ struct SettingsScreenUserStatusRow: View {
                     TextField(L10n.screenSettingsUserStatusCustomHint, text: $customText)
                         .textFieldStyle(.compound(.raised))
                         .focused($isCustomFieldFocused)
-                        .onAppear { isCustomFieldFocused = true }
+                        .onAppear(perform: focusCustomField)
                         .accessibilityLabel(L10n.screenSettingsUserStatusCustomHint)
                         .padding(.vertical, 3)
                     
@@ -99,6 +99,11 @@ struct SettingsScreenUserStatusRow: View {
                 .padding(ListRowPadding.insets)
             })
         }
+    }
+    
+    private func focusCustomField() {
+        guard !ProcessInfo.isRunningTests else { return }
+        isCustomFieldFocused = true
     }
     
     private func saveCustomStatus() {
