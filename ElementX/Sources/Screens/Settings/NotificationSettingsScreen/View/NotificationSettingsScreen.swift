@@ -27,16 +27,8 @@ struct NotificationSettingsScreen: View {
                 if context.enableNotifications {
                     roomsNotificationSection
                     
-                    if context.viewState.settings?.roomMentionsEnabled != nil {
-                        mentionsSection
-                    }
-                    
                     if context.viewState.showCallsSettings, context.viewState.settings?.callsEnabled != nil {
                         callsSection
-                    }
-                    
-                    if context.viewState.settings?.invitationsEnabled != nil {
-                        additionalSettingsSection
                     }
                     
                     if context.viewState.customToneSelectionEnabled {
@@ -123,14 +115,16 @@ struct NotificationSettingsScreen: View {
                     .disabled(context.viewState.settings == nil)
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
-        } header: {
-            Text(L10n.screenNotificationSettingsNotificationSectionTitle)
-                .compoundListSectionHeader()
-        }
-    }
-    
-    private var mentionsSection: some View {
-        Section {
+            // Invitations
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
+                    kind: .toggle($context.invitationsEnabled))
+                .disabled(context.viewState.settings?.invitationsEnabled == nil)
+                .allowsHitTesting(!context.viewState.applyingChange)
+                .onChange(of: context.invitationsEnabled) {
+                    context.send(viewAction: .invitationsChanged)
+                }
+            
+            // @room mentions
             ListRow(label: .plain(title: L10n.screenNotificationSettingsRoomMentionLabel),
                     kind: .toggle($context.roomMentionsEnabled))
                 .disabled(context.viewState.settings?.roomMentionsEnabled == nil)
@@ -138,8 +132,9 @@ struct NotificationSettingsScreen: View {
                 .onChange(of: context.roomMentionsEnabled) {
                     context.send(viewAction: .roomMentionChanged)
                 }
+            
         } header: {
-            Text(L10n.screenNotificationSettingsMentionsSectionTitle)
+            Text(L10n.screenNotificationSettingsNotificationSectionTitle)
                 .compoundListSectionHeader()
         }
     }
@@ -152,21 +147,6 @@ struct NotificationSettingsScreen: View {
                 .allowsHitTesting(!context.viewState.applyingChange)
                 .onChange(of: context.callsEnabled) {
                     context.send(viewAction: .callsChanged)
-                }
-        } header: {
-            Text(L10n.screenNotificationSettingsAdditionalSettingsSectionTitle)
-                .compoundListSectionHeader()
-        }
-    }
-    
-    private var additionalSettingsSection: some View {
-        Section {
-            ListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
-                    kind: .toggle($context.invitationsEnabled))
-                .disabled(context.viewState.settings?.invitationsEnabled == nil)
-                .allowsHitTesting(!context.viewState.applyingChange)
-                .onChange(of: context.invitationsEnabled) {
-                    context.send(viewAction: .invitationsChanged)
                 }
         } header: {
             Text(L10n.screenNotificationSettingsAdditionalSettingsSectionTitle)
