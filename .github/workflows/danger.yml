@@ -11,6 +11,10 @@ jobs:
     name: Danger
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write # The token is still read-only for forks.
+      statuses: write
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
