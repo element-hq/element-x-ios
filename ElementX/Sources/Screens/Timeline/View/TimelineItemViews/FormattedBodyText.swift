@@ -177,7 +177,7 @@ struct FormattedBodyText: View {
         var body: some View {
             VStack(alignment: .leading, spacing: 4) {
                 Button { isExpanded.toggle() } label: {
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    HStack(alignment: .center, spacing: 4) {
                         CompoundIcon(\.chevronRight, size: .xSmall, relativeTo: .compound.bodyLG)
                             .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         Text(summary)
@@ -259,6 +259,7 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
         <blockquote>A</blockquote>
         <pre><code>B</code></pre>
         <p>C</p>
+        <details><summary>D</summary><p>E</p></details>
         """
         
         if let attributedString = attributedStringBuilder.fromHTML(html) {

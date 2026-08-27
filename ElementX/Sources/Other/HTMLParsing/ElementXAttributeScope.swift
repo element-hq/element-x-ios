@@ -8,17 +8,6 @@
 
 import Foundation
 
-enum BlockquoteAttribute: AttributedStringKey {
-    typealias Value = Bool
-    static let name = "MXBlockquoteAttribute"
-}
-
-/// Marks the content of a `<details>` element, carrying its `<summary>` as the value.
-enum DetailsAttribute: AttributedStringKey {
-    typealias Value = String
-    static let name = "MXDetailsAttribute"
-}
-
 enum UserIDAttribute: AttributedStringKey {
     typealias Value = String
     static let name = "MXUserIDAttribute"
@@ -69,6 +58,17 @@ enum EventOnRoomAliasAttribute: AttributedStringKey {
 enum AllUsersMentionAttribute: AttributedStringKey {
     typealias Value = Bool
     static let name = "MXAllUsersMentionAttribute"
+}
+
+enum BlockquoteAttribute: AttributedStringKey {
+    typealias Value = Bool
+    static let name = "MXBlockquoteAttribute"
+}
+
+/// Marks the content of a `<details>` element, carrying its `<summary>` as the value.
+enum DetailsAttribute: AttributedStringKey {
+    typealias Value = String
+    static let name = "MXDetailsAttribute"
 }
 
 enum CodeBlockAttribute: AttributedStringKey {

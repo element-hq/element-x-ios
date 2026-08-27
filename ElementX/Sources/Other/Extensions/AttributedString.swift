@@ -20,7 +20,7 @@ nonisolated extension AttributedString {
         for run in runs[\.blockquote, \.codeBlock, \.details] {
             let isBlockquote = run.0 != nil
             let isCodeBlock = run.1 != nil
-            let summary = run.2
+            let details = run.2
             var attributedString = AttributedString(self[run.3])
             
             // Remove trailing new lines if any
@@ -29,7 +29,7 @@ nonisolated extension AttributedString {
                 attributedString.removeSubrange(range)
             }
             
-            let componentType: AttributedStringBuilderComponent.ComponentType = switch (summary, isBlockquote, isCodeBlock) {
+            let componentType: AttributedStringBuilderComponent.ComponentType = switch (details, isBlockquote, isCodeBlock) {
             case (.some(let summary), _, _):
                 .details(summary: summary)
             case (_, true, _):
