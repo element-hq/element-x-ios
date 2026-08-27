@@ -1080,7 +1080,7 @@
 "screen_notification_settings_mode_all" = "All";
 "screen_notification_settings_mode_mentions" = "Mentions";
 "screen_notification_settings_notification_section_title" = "Notify me for";
-"screen_notification_settings_room_mention_label" = "Notify me on @room";
+"screen_notification_settings_room_mention_label" = "Mentions of @room";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
