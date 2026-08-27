@@ -232,7 +232,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     // MARK: - Notifications
     
     var pusherAppID: String {
-        #if DEBUG
+        // DOGFOOD_SANDBOX_PUSH: dev-signed Release builds carry a sandbox APNs token,
+        // so they must register the sandbox (.ios.dev) sygnal app id like Debug builds do.
+        #if DEBUG || DOGFOOD_SANDBOX_PUSH
         InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
         #else
         InfoPlistReader.main.baseBundleIdentifier + ".ios.prod"
