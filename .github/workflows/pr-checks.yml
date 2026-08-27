@@ -1,0 +1,109 @@
+name: PR Checks
+
+on:
+  # Privilege escalation necessary to comment on pull requests from forks.
+  # 🚨 We must not check out or execute any code here, and be careful around use of user-controlled inputs.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
+    types: [opened, reopened, edited, synchronize, labeled, unlabeled]
+
+permissions: {}
+
+jobs:
+  pr-checks:
+    name: PR Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    concurrency:
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ format('pr-checks-{0}', github.ref) }}
+      cancel-in-progress: true
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Check the pull request
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body ?? "";
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+            const paths = files.map(file => file.filename.toLowerCase());
+
+            const warnings = [];
+            const failures = [];
+
+            if (pr.additions > 1000) {
+              warnings.push("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.");
+            }
+
+            if (!body) {
+              warnings.push("Please provide a description for this PR.");
+            }
+
+            if (paths.some(path => path.includes("/view")) && !body.includes("user-attachments")) {
+              warnings.push("You seem to have made changes to views. Please consider adding screenshots.");
+            }
+
+            if (paths.some(path => path.includes(".xcassets") && path.endsWith(".png"))) {
+              warnings.push("You seem to have made changes to some resource images. Please consider using an SVG or PDF.");
+            }
+
+            if (pr.title.endsWith("…") || /^(Fixes|Fix) #\d+/.test(pr.title) || /^\w+\(\w+\):/.test(pr.title)) {
+              failures.push("Please provide a complete title that can be used as a changelog entry.");
+            }
+
+            if (pr.labels.filter(label => label.name.startsWith("pr-")).length !== 1) {
+              failures.push("Please add a `pr-` label to categorise the changelog entry.");
+            }
+
+            warnings.forEach(warning => core.warning(warning));
+            failures.forEach(failure => core.error(failure));
+
+            // Keep a single comment up to date rather than adding a new one on every run.
+            const marker = "<!-- pr-checks -->";
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number
+            });
+            const existing = comments.find(comment => comment.body.includes(marker));
+
+            if (warnings.length || failures.length) {
+              const lines = [...failures.map(failure => `- ❌ ${failure}`),
+                             ...warnings.map(warning => `- ⚠️ ${warning}`)];
+              const commentBody = `${marker}\n### PR Checks\n\n${lines.join("\n")}`;
+
+              if (existing) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: existing.id,
+                  body: commentBody
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  body: commentBody
+                });
+              }
+            } else if (existing) {
+              await github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id
+              });
+            }
+
+            if (failures.length) {
+              core.setFailed(`${failures.length} check(s) failed, see the comment on the pull request.`);
+            }
