@@ -380,7 +380,7 @@ Same pattern for publishers.
 | `app.yml` | App-level XcodeGen config |
 | `.swiftlint.yml` | SwiftLint rules |
 | `.swiftformat` | SwiftFormat rules |
-| `Dangerfile.swift` | Danger PR checks |
+| `.github/workflows/pr-checks.yml` | PR metadata checks (title, labels, size, screenshots) |
 | `Package.swift` | SPM manifest (Tools CLI) |
 | `localazy.json` | Localazy translation config |
 | `codecov.yml` | Codecov config |

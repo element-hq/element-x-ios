@@ -1,0 +1,60 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize, labeled, unlabeled]
+
+permissions: {}
+
+jobs:
+  pr-checks:
+    name: PR Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    concurrency:
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ format('pr-checks-{0}', github.ref) }}
+      cancel-in-progress: true
+
+    permissions:
+      pull-requests: read
+
+    steps:
+      - name: Check the pull request
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body ?? "";
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+            const paths = files.map(file => file.filename.toLowerCase());
+
+            if (pr.additions > 1000) {
+              core.warning("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.");
+            }
+
+            if (!body) {
+              core.warning("Please provide a description for this PR.");
+            }
+
+            if (paths.some(path => path.includes("/view")) && !body.includes("user-attachments")) {
+              core.warning("You seem to have made changes to views. Please consider adding screenshots.");
+            }
+
+            if (paths.some(path => path.includes(".xcassets") && path.endsWith(".png"))) {
+              core.warning("You seem to have made changes to some resource images. Please consider using an SVG or PDF.");
+            }
+
+            if (pr.title.endsWith("…") || /^(Fixes|Fix) #\d+/.test(pr.title) || /^\w+\(\w+\):/.test(pr.title)) {
+              core.setFailed("Please provide a complete title that can be used as a changelog entry.");
+            }
+
+            if (pr.labels.filter(label => label.name.startsWith("pr-")).length !== 1) {
+              core.setFailed("Please add a `pr-` label to categorise the changelog entry.");
+            }
