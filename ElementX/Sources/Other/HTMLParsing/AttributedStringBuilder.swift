@@ -24,6 +24,7 @@ nonisolated protocol MentionBuilderProtocol: Sendable {
 
 nonisolated extension NSAttributedString.Key {
     static let MatrixBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
+    static let MatrixDetails: NSAttributedString.Key = .init(rawValue: DetailsAttribute.name)
     static let MatrixUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
     static let MatrixUserDisplayName: NSAttributedString.Key = .init(rawValue: UserDisplayNameAttribute.name)
     static let MatrixRoomDisplayName: NSAttributedString.Key = .init(rawValue: RoomDisplayNameAttribute.name)
@@ -202,6 +203,22 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             case "blockquote":
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.MatrixBlockquote, value: true, range: NSRange(location: 0, length: content.length))
+                
+            case "details":
+                // Pull the summary out of the tree so that it isn't rendered inline with the content,
+                // it is used as the title of the collapsed component instead.
+                let summaryElement = childElement.getChildNodes()
+                    .lazy
+                    .compactMap { $0 as? Element }
+                    .first { $0.tagName().lowercased() == "summary" }
+                let summary = summaryElement.flatMap { try? $0.text() } ?? ""
+                try? summaryElement?.remove()
+                
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                
+                // Browsers fall back to a default title when the summary is missing, match them.
+                let title = summary.isEmpty ? L10n.a11yViewDetails : summary
+                content.addAttribute(.MatrixDetails, value: title, range: NSRange(location: 0, length: content.length))
                 
             case "code", "pre":
                 let isCodeBlock = tag == "pre"

@@ -13,6 +13,12 @@ enum BlockquoteAttribute: AttributedStringKey {
     static let name = "MXBlockquoteAttribute"
 }
 
+/// Marks the content of a `<details>` element, carrying its `<summary>` as the value.
+enum DetailsAttribute: AttributedStringKey {
+    typealias Value = String
+    static let name = "MXDetailsAttribute"
+}
+
 enum UserIDAttribute: AttributedStringKey {
     typealias Value = String
     static let name = "MXUserIDAttribute"
@@ -78,6 +84,7 @@ enum InlineCodeAttribute: AttributedStringKey {
 nonisolated extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
         let blockquote: BlockquoteAttribute
+        let details: DetailsAttribute
         
         let userID: UserIDAttribute
         // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
