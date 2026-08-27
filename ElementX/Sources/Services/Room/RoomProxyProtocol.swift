@@ -212,7 +212,7 @@ extension JoinedRoomProxyProtocol {
     func knownServerNames(maxCount: Int) -> any Sequence<String> {
         membersPublisher.value
             .prefix(1000) // No need to go crazy here…
-            .compactMap { $0.userID.split(separator: ":").last.map(String.init) }
+            .compactMap { try? serverNameFromUserId(userId: $0.userID) }
             .uniqued()
             .prefix(maxCount)
     }

@@ -7,6 +7,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias ServerSelectionScreenViewModelType = StateStoreViewModelV2<ServerSelectionScreenViewState, ServerSelectionScreenViewAction>
@@ -101,7 +102,9 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
     
     /// Updates the login flow using the supplied homeserver address, or shows an error when this isn't possible.
     private func configureHomeserver() async {
-        let homeserverAddress = state.bindings.homeserverAddress
+        let userInput = state.bindings.homeserverAddress
+        // People often enter their Matrix ID here, so use the server name from it when they do.
+        let homeserverAddress = (try? serverNameFromUserId(userId: userInput)) ?? userInput
         startLoading()
         
         switch await authenticationService.configure(for: homeserverAddress, flow: authenticationFlow) {
