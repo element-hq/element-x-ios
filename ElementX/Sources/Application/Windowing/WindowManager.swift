@@ -388,20 +388,29 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
                     // Name every recogniser between the hit view and the window with its state and
                     // touch count: the .began/.changed sweep above was empty for both wedges (7549,
                     // 2026-08-26), so the blocker, if it is a recogniser, sits in .possible.
+                    // 2026-08-28 dump: _UISystemGestureGateGestureRecognizer@UIWindow sat in .ended
+                    // with no touches through eight dead drags (the home-indicator swipe handed its
+                    // touch to the system, so it never got reset) and, gating touches-began for
+                    // everything below, kept the pan at zero touches. A recogniser still in a
+                    // terminal state when a fresh touch begins is stale; disabling it resets it.
                     var chain = [String]()
+                    var reset = [String]()
                     var view = hitView
                     while let current = view {
                         for recognizer in current.gestureRecognizers ?? [] where recognizer !== self {
                             chain.append("\(type(of: recognizer))@\(type(of: current)):\(recognizer.state.rawValue)/\(recognizer.isEnabled)/\(recognizer.numberOfTouches)")
+                            if recognizer.isEnabled, recognizer.numberOfTouches == 0,
+                               [.ended, .cancelled, .failed].contains(recognizer.state) {
+                                recognizer.isEnabled = false
+                                recognizer.isEnabled = true
+                                reset.append("\(type(of: recognizer))@\(type(of: current))")
+                            }
                         }
                         view = current.superview
                     }
-                    MXLog.info("TouchDebug[\(label)]: pan wedged after \(wedgeCount) still touches at offset \(Int(wedgeOffset)), reloading \(type(of: scrollView)); chain=\(chain)")
-                    // Toggling the pan alone did not cure the 2026-08-26 wedge; what does cure it
-                    // (new messages, the scroll-to-bottom button) rebuilds rows, so reload them.
+                    MXLog.info("TouchDebug[\(label)]: pan wedged after \(wedgeCount) still touches at offset \(Int(wedgeOffset)) on \(type(of: scrollView)); reset=\(reset) chain=\(chain)")
                     pan.isEnabled = false
                     pan.isEnabled = true
-                    (scrollView as? UITableView)?.reloadData()
                     wedgeCount = 0
                 }
             } else {
