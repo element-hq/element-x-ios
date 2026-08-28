@@ -5182,3 +5182,29 @@ it is a recogniser, must be sitting in `.possible`. VALIDATE: after a
 home-indicator swipe wedges a room, the 4th dead touch logs `pan wedged ...
 reloading SendTransitionTableView; chain=[...]` and the next drag scrolls.
 The chain dump is the lead for the real fix.
+
+## Round 75 (2026-08-28): drag wedge root-caused - stale system gesture gate
+
+Recurred on Obfuscate (`console.2026-08-28-16.log`, 15:56:47-58Z): touch at
+y=918 on the composer `HostingView`, `will resign active` 85ms later (home
+indicator swipe), then eight dead drags. Build 213's heal fired on every one
+of them and `reloadData()` cured nothing.
+
+The chain dump named the blocker. Every dump had
+`_UISystemGestureGateGestureRecognizer@UIWindow:3/true/0` - `.ended`, no
+touches - persisting across all eight drags, while
+`UIScrollViewDelayedTouchesBeganGestureRecognizer@SendTransitionTableView`
+held the new touch (`0/true/1`) and the table's pan had none (`0/true/0`).
+The gate delays touches-began for everything below it; the system took its
+touch mid-swipe so it never got its end-of-event reset, and nothing beneath
+it saw a touch again. Row rebuilds cure it by giving the cells fresh
+recogniser relationships, which is why messages arriving fixed it.
+
+Change (`WindowManager.swift`, EXI `9f2ca4a4b`): on the 4th still touch the
+heal toggles `isEnabled` on every enabled recogniser between hit view and
+window that sits in `.ended/.cancelled/.failed` with zero touches, logging
+`pan wedged ... reset=[...] chain=[...]`; `reloadData()` dropped. VALIDATE:
+home-swipe from a room, return, 4 dead drags ->
+`reset=["_UISystemGestureGateGestureRecognizer@UIWindow"]` and the next drag
+scrolls. If the gate ignores the toggle, next lever is doing the same sweep
+on `didBecomeActive` before any touch lands.
