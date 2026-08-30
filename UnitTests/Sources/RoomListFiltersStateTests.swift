@@ -63,6 +63,14 @@ final class RoomListFiltersStateTests {
     }
     
     @Test
+    func ignoresIncompatibleFilter() {
+        state.activateFilter(.people)
+        state.activateFilter(.invites)
+        
+        #expect(state.activeFilters == [.people])
+    }
+    
+    @Test
     func clearFilters() {
         state.activateFilter(.people)
         #expect(state.activeFilters == [.people])

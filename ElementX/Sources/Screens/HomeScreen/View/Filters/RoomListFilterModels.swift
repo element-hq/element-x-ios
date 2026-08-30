@@ -109,10 +109,8 @@ struct RoomListFiltersState {
     }
     
     mutating func activateFilter(_ filter: RoomListFilter) {
-        filter.incompatibleFilters.forEach { incompatibleFilter in
-            if activeFilters.contains(incompatibleFilter) {
-                fatalError("[RoomListFiltersState] adding mutually exclusive filters is not allowed")
-            }
+        if filter.incompatibleFilters.contains(where: { activeFilters.contains($0) }) {
+            return
         }
         
         // We always want the most recently enabled filter to be at the bottom of the others.
