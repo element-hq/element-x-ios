@@ -208,7 +208,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "Вийти та оновити";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ більше не підтримує старий протокол. Вийдіть і знов увійдіть, щоб продовжити користуватися застосунком.";
 "banner_migrate_to_native_sliding_sync_description" = "Ваш сервер тепер підтримує новий, швидший протокол. Вийдіть із системи та увійдіть знову, щоб оновити систему зараз. Якщо ви зробите це зараз, це допоможе вам уникнути примусового виходу з системи, коли старий протокол буде видалено пізніше.";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "Ваш домашній сервер більше не підтримує старий протокол. Будь ласка, вийдіть і увійдіть знову, щоб продовжити використання програми.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Постачальник вашого облікового запису більше не підтримує старий протокол. Вийдіть і знову ввійдіть, щоб продовжити користуватися застосунком.";
 "banner_migrate_to_native_sliding_sync_title" = "Доступне оновлення";
 "banner_new_sound_message" = "Ваш сигнал сповіщень оновлено — він став чіткішим, швидшим і не таким надокучливим.";
 "banner_new_sound_title" = "Ми оновили ваші звуки";
@@ -483,7 +483,7 @@
 "emoji_picker_category_recent" = "Нещодавні емодзі";
 "emoji_picker_category_symbols" = "Символи";
 "emoji_picker_search_placeholder" = "Пошук емоджі";
-"error_account_creation_not_possible" = "Ваш домашній сервер потрібно оновити, щоб він підтримував службу автентифікації Matrix і створення облікових записів.";
+"error_account_creation_not_possible" = "Постачальника послуг облікового запису потрібно оновити для підтримки Matrix Authentication Service та створення облікових записів.";
 "error_failed_creating_the_permalink" = "Не вдалося створити постійне посилання";
 "error_failed_loading_map" = "%1$@ не може завантажити мапу. Повторіть спробу пізніше.";
 "error_failed_loading_messages" = "Не вдалося завантажити повідомлення";
@@ -543,7 +543,7 @@
 "notification_sender_mention_reply" = "%1$@ згадували або відповідали";
 "notification_space_invite_body" = "Вас запросили приєднатися до простору";
 "notification_space_invite_body_with_sender" = "%1$@ запрошує вас приєднатися до простору";
-"notification_test_push_notification_content" = "Ви переглядаєте сповіщення! Натисніть тут!";
+"notification_test_push_notification_content" = "Ви переглядаєте сповіщення! Торкніться мене!";
 "notification_thread_in_room" = "Гілка в %1$@";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -713,9 +713,9 @@
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Необхідно встановити застосунок Element Pro на %1$@. Завантажте його з магазину.";
 "screen_change_server_error_element_pro_required_title" = "Потрібен Element Pro";
-"screen_change_server_error_invalid_homeserver" = "Не вдалося під'єднатися до цього домашнього сервера. Перевірте правильність введеної URL-адреси домашнього сервера. Якщо URL-адреса правильна, зверніться по додаткову допомогу до адміністратора домашнього сервера.";
+"screen_change_server_error_invalid_homeserver" = "Нам не вдалося зв’язатися з цим постачальником облікового запису. Перевірте, чи правильно ви ввели URL-адресу постачальника облікового запису. Якщо URL-адреса правильна, зверніться до адміністратора постачальника вашого облікового запису по додаткову допомогу.";
 "screen_change_server_error_invalid_well_known" = "Сервер недоступний через помилку у файлі well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Вибраний постачальник облікових записів не підтримує sliding sync. Щоб користуватися %1$@ необхідно оновити сервер.";
+"screen_change_server_error_no_sliding_sync_message" = "Вибраний постачальник облікового запису не підтримує Sliding sync. Для використання функції %1$@ потрібно оновити сервер.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ не дозволено під'єднуватися до %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Цей застосунок налаштовано так, щоб дозволити: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Постачальник облікового запису %1$@ не дозволений.";
@@ -914,7 +914,7 @@
 "screen_join_room_loading_alert_title" = "Ми не можемо показати попередній перегляд цієї кімнати";
 "screen_join_room_space_not_supported_description" = "%1$@ ще не підтримує простори. Ви можете отримати доступ до них у вебверсії.";
 "screen_join_room_space_not_supported_title" = "Простори поки що не підтримуються";
-"screen_join_room_subtitle_knock" = "Натисніть кнопку нижче, і адміністратор кімнати отримає сповіщення. Ви зможете приєднатися до розмови після схвалення.";
+"screen_join_room_subtitle_knock" = "Торкніться кнопки нижче і адміністратор бесіди отримає сповіщення. Ви зможете приєднатися до розмови після схвалення.";
 "screen_join_room_subtitle_no_preview" = "Ви мусите бути учасником цієї кімнати, щоб переглядати історію повідомлень.";
 "screen_join_room_title_knock" = "Хочете приєднатися до цієї кімнати?";
 "screen_join_room_title_no_preview" = "Попередній перегляд недоступний";
@@ -1003,7 +1003,7 @@
 "screen_login_error_invalid_credentials" = "Неправильне ім'я користувача та/або пароль";
 "screen_login_error_invalid_user_id" = "Це недійсний ідентифікатор користувача. Очікуваний формат: '@user:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Цей сервер налаштований на використання оновлюваних токенів. Вони не підтримуються, якщо використовується вхід за допомогою основі пароля.";
-"screen_login_error_unsupported_authentication" = "Обраний домашній сервер не підтримує вхід за допомогою пароля або OAuth. Зверніться до адміністратора або виберіть інший домашній сервер.";
+"screen_login_error_unsupported_authentication" = "Вибраний постачальник облікового запису не підтримує пароль або вхід через OAuth. Зверніться до постачальника облікового запису або виберіть іншого.";
 "screen_login_form_header" = "Введіть свої дані";
 "screen_login_subtitle" = "Matrix — це відкрита мережа для безпечної, децентралізованої комунікації.";
 "screen_login_title" = "З поверненням!";
@@ -1049,7 +1049,7 @@
 "screen_missing_key_backup_open_element_classic" = "Відкрити Element Classic";
 "screen_missing_key_backup_step_1" = "Відкрийте Element Classic на своєму пристрої";
 "screen_missing_key_backup_step_2_ios" = "Перейдіть до «Налаштування користувача» > «Безпека»";
-"screen_missing_key_backup_step_3_ios" = "Прокрутіть вниз до розділу Безпечне резервне копіювання і натисніть Налаштувати.";
+"screen_missing_key_backup_step_3_ios" = "Гортайте вниз до розділу Резервне копіювання бесіди та натисніть Налаштувати";
 "screen_missing_key_backup_step_4" = "Дотримуйтесь інструкцій, щоб увімкнути сховище ключів";
 "screen_missing_key_backup_step_5" = "Повернутися до %1$@";
 "screen_missing_key_backup_title" = "Увімкніть сховище ключів, перш ніж переходити до %1$@";
@@ -1071,7 +1071,7 @@
 "screen_notification_settings_failed_fixing_configuration" = "Конфігурацію не виправлено, спробуйте ще раз.";
 "screen_notification_settings_group_chats" = "Групові бесіди";
 "screen_notification_settings_invite_for_me_label" = "Запрошення";
-"screen_notification_settings_mentions_only_disclaimer" = "Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви можете не отримати сповіщення в деяких кімнатах.";
+"screen_notification_settings_mentions_only_disclaimer" = "Постачальник вашого облікового запису не підтримує цю опцію в зашифрованих бесідах, тому ви можете не отримувати сповіщення в деяких бесідах.";
 "screen_notification_settings_mentions_section_title" = "Згадки";
 "screen_notification_settings_message_sound_dialog_choose_other" = "Обрати інший звук…";
 "screen_notification_settings_message_sound_dialog_current_subtitle" = "Наразі використовується %1$@";
@@ -1080,7 +1080,7 @@
 "screen_notification_settings_mode_all" = "Усі";
 "screen_notification_settings_mode_mentions" = "Згадки";
 "screen_notification_settings_notification_section_title" = "Сповіщати мене про";
-"screen_notification_settings_room_mention_label" = "Сповіщати про @room";
+"screen_notification_settings_room_mention_label" = "Згадки @room";
 "screen_notification_settings_sound_custom_fallback" = "Власний";
 "screen_notification_settings_sound_custom_sound_button_title" = "Користувацький звук...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Помилка видалення файлу";
@@ -1167,7 +1167,7 @@
 "screen_qr_code_login_error_sliding_sync_not_supported_title" = "%1$@ не підтримується";
 "screen_qr_code_login_initial_state_button_title" = "Готовий до сканування";
 "screen_qr_code_login_initial_state_item_1" = "Відкрийте %1$@ на комп'ютері";
-"screen_qr_code_login_initial_state_item_2" = "Натисніть на свою аватарку";
+"screen_qr_code_login_initial_state_item_2" = "Натисніть на свій аватар";
 "screen_qr_code_login_initial_state_item_3" = "Виберіть %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Під'єднати новий пристрій”";
 "screen_qr_code_login_initial_state_item_4" = "Зіскануйте QR-код цим пристроєм";
@@ -1214,11 +1214,11 @@
 "screen_recovery_key_setup_title" = "Отримати ключ відновлення";
 "screen_report_content_block_user" = "Заблокувати користувача";
 "screen_report_content_block_user_hint" = "Перевірте, чи хочете ви приховати всі поточні та майбутні повідомлення від цього користувача";
-"screen_report_content_explanation" = "Це повідомлення буде надіслано адміністраторам вашого домашнього сервера. Вони не зможуть прочитати зашифровані повідомлення.";
+"screen_report_content_explanation" = "Це повідомлення буде передано постачальнику вашого облікового запису. Він не зможе прочитати зашифрованих повідомлень.";
 "screen_report_content_hint" = "Причина скарги на цей вміст";
 "screen_report_room_leave_failed_alert_message" = "Ваша скарга надіслана, але ми зіткнулися з проблемою під час спроби вийти з кімнати. Повторіть спробу.";
 "screen_report_room_leave_failed_alert_title" = "Не вдалося вийти з кімнати";
-"screen_report_room_reason_footer" = "Поскаржтеся на цю кімнату своєму адміністратору. Якщо повідомлення зашифровані, ваш адміністратор не зможе їх прочитати.";
+"screen_report_room_reason_footer" = "Поскаржитися на цю бесіду постачальнику облікового запису. Якщо повідомлення зашифровані, адміністратор не зможе прочитати їх.";
 "screen_report_room_reason_placeholder" = "Опишіть причину…";
 "screen_report_room_title" = "Поскаржитися на кімнату";
 "screen_reset_encryption_confirmation_alert_action" = "Так, скинути зараз";
@@ -1368,7 +1368,7 @@
 "screen_room_notification_settings_error_loading_settings" = "Під час завантаження налаштувань сповіщень сталася помилка.";
 "screen_room_notification_settings_error_restoring_default" = "Не вдалося відновити типовий режим, спробуйте ще раз.";
 "screen_room_notification_settings_error_setting_mode" = "Не вдалося встановити режим, спробуйте ще раз.";
-"screen_room_notification_settings_mentions_only_disclaimer" = "Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Постачальник вашого облікового запису не підтримує цю опцію в зашифрованих бесідах, ви не отримуватимете сповіщення в цій бесіді.";
 "screen_room_notification_settings_mode_all_messages" = "Всі повідомлення";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Лише згадки та відповіді";
 "screen_room_notification_settings_mode_mute" = "Вимкнути звук";
@@ -1577,7 +1577,7 @@
 "screen_space_list_parent_space" = "Простір %1$@";
 "screen_space_list_title" = "Простори";
 "screen_space_menu_action_members" = "Переглянути учасників";
-"screen_space_remove_rooms_confirmation_content" = "Видалення кімнати не вплине на доступ до неї. Щоб змінити доступ, перейдіть до розділу «Налаштування кімнати» > «Безпека та конфіденційність».";
+"screen_space_remove_rooms_confirmation_content" = "Вилучення кімнати не вплине на доступ до неї. Щоб змінити доступ, перейдіть до розділу Відомості про кімнату > Безпека та приватність.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Видалити кімнати з %1$@?";
 "screen_space_settings_leave_space" = "Вийти з простору";
 "screen_space_settings_roles_and_permissions" = "Ролі та дозволи";
@@ -1714,7 +1714,7 @@
 "troubleshoot_notifications_test_display_notification_permission_failure" = "Не вдається показати сповіщення.";
 "troubleshoot_notifications_test_display_notification_success" = "Ви натиснули на сповіщення!";
 "troubleshoot_notifications_test_display_notification_title" = "Показ сповіщення";
-"troubleshoot_notifications_test_display_notification_waiting" = "Натисніть на сповіщення, щоб продовжити тест.";
+"troubleshoot_notifications_test_display_notification_waiting" = "Торкніться сповіщення, щоб продовжити тест.";
 "troubleshoot_notifications_test_firebase_availability_description" = "Переконується, що Firebase доступний.";
 "troubleshoot_notifications_test_firebase_availability_failure" = "Firebase недоступний.";
 "troubleshoot_notifications_test_firebase_availability_success" = "Firebase доступний.";

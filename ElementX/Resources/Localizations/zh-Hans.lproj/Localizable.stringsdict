@@ -53,7 +53,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>上一个消息已被 %1$@ 与 %2$d 及其他人阅读</string>
+			<string>上一个消息已被 %1$@ 与其余 %2$d 人阅读</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

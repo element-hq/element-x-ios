@@ -855,7 +855,7 @@
 "screen_encryption_reset_bullet_3" = "Va trebui să verificați din nou toate dispozitivele și contactele existente";
 "screen_encryption_reset_footer" = "Resetați-vă identitatea digitală numai dacă nu aveți acces la un alt dispozitiv conectat și ați pierdut cheia de recuperare.";
 "screen_encryption_reset_title" = "Nu puteți confirma? Va trebui să vă resetați identitatea digitală.";
-"screen_home_tab_chats" = "Toate conversatiile";
+"screen_home_tab_chats" = "Conversații";
 "screen_home_tab_spaces" = "Spații";
 "screen_identity_confirmation_cannot_confirm" = "Nu puteți confirma?";
 "screen_identity_confirmation_create_new_recovery_key" = "Creați o nouă cheie de recuperare";
@@ -1441,7 +1441,7 @@
 "screen_roomlist_filter_unreads" = "Necitite";
 "screen_roomlist_filter_unreads_empty_state_title" = "Felicitari!\nNu aveți mesaje necitite!";
 "screen_roomlist_knock_event_sent_description" = "Cererea de alăturare a fost trimisă";
-"screen_roomlist_main_space_title" = "Toate conversatiile";
+"screen_roomlist_main_space_title" = "Conversații";
 "screen_roomlist_mark_as_read" = "Marcați ca citită";
 "screen_roomlist_mark_as_unread" = "Marcați ca necitită";
 "screen_roomlist_tombstoned_room_description" = "Această cameră a fost modernizată.";

@@ -208,7 +208,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "注销并升级";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ 不再支持旧协议。请注销并重新登录以继续使用该应用程序。";
 "banner_migrate_to_native_sliding_sync_description" = "你的服务器现在支持更快的新协议。现在注销并重新登录以升级。立即这样做可以避免你在以后删除旧协议时被强制注销。";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "你的主服务器不再支持旧协议。请注销并重新登录以继续使用此 app。";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "你的账户提供者不再支持旧协议。请注销并重新登录以继续使用此 app。";
 "banner_migrate_to_native_sliding_sync_title" = "有可用升级";
 "banner_new_sound_message" = "通知提示音已升级：更清晰、更快速、干扰更少。";
 "banner_new_sound_title" = "我们已更新提示音";
@@ -483,7 +483,7 @@
 "emoji_picker_category_recent" = "最近的 Emoji";
 "emoji_picker_category_symbols" = "符号";
 "emoji_picker_search_placeholder" = "搜索 Emoji";
-"error_account_creation_not_possible" = "你的主服务器需要升级，以支持 Matrix 认证服务和账户创建。";
+"error_account_creation_not_possible" = "你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。";
 "error_failed_creating_the_permalink" = "永久链接创建失败";
 "error_failed_loading_map" = "%1$@ 无法加载地图，请稍后再试。";
 "error_failed_loading_messages" = "消息加载失败";
@@ -713,7 +713,7 @@
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "%1$@ 要求 Element Pro。请从应用商店下载。";
 "screen_change_server_error_element_pro_required_title" = "需要 Element Pro";
-"screen_change_server_error_invalid_homeserver" = "我们无法访问此服务器。请检查输入的服务器 URL 是否正确。如果 URL 正确，请联系服务器管理员寻求进一步帮助。";
+"screen_change_server_error_invalid_homeserver" = "我们无法访问此账户提供者。请检查输入的账户提供者 URL 是否正确。如果 URL 正确，请联系账户提供者管理员寻求进一步帮助。";
 "screen_change_server_error_invalid_well_known" = "由于 .well-known 文件存在问题，服务器不可用：\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "所选账户提供者不支持滑动同步。需要升级服务器才能使用 %1$@。";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ 不允许连接到 %2$@。";
@@ -914,7 +914,7 @@
 "screen_join_room_loading_alert_title" = "无法显示此房间预览";
 "screen_join_room_space_not_supported_description" = "%1$@ 暂不支持空间。你可以通过 Web 客户端访问空间。";
 "screen_join_room_space_not_supported_title" = "空间尚未受到支持";
-"screen_join_room_subtitle_knock" = "点击以下按钮以通知房间管理员。获得批准后你将能加入对话。";
+"screen_join_room_subtitle_knock" = "点击以下按钮聊天管理员将收到通知。获得批准后即可加入对话。";
 "screen_join_room_subtitle_no_preview" = "只有房间成员才能查看消息历史。";
 "screen_join_room_title_knock" = "想加入此房间吗？";
 "screen_join_room_title_no_preview" = "预览不可用";
@@ -1003,7 +1003,7 @@
 "screen_login_error_invalid_credentials" = "用户名与（或）密码不正确";
 "screen_login_error_invalid_user_id" = "这不是合法的用户 ID。预期格式：“@user:homeserver.org”。";
 "screen_login_error_refresh_tokens" = "此服务器使用刷新令牌。使用密码登录时不支持这些功能。";
-"screen_login_error_unsupported_authentication" = "该服务器不支持密码登录与 OAuth 登录。请联系服务器管理员或选择另一服务器。";
+"screen_login_error_unsupported_authentication" = "所选账户提供者不支持密码或 OAuth 登录。请联系账户提供者或选择另一账户提供者。";
 "screen_login_form_header" = "输入详细信息";
 "screen_login_subtitle" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_login_title" = "欢迎回来！";
@@ -1049,7 +1049,7 @@
 "screen_missing_key_backup_open_element_classic" = "打开 Element Classic";
 "screen_missing_key_backup_step_1" = "在你的设备上打开 Element Classic";
 "screen_missing_key_backup_step_2_ios" = "前往“用户设置” > “安全”";
-"screen_missing_key_backup_step_3_ios" = "向下滚动到“安全备份”并点击“设置”。";
+"screen_missing_key_backup_step_3_ios" = "向下滚动到“聊天备份”并点击“设置”。";
 "screen_missing_key_backup_step_4" = "按指示启用密钥存储";
 "screen_missing_key_backup_step_5" = "返回到 %1$@";
 "screen_missing_key_backup_title" = "请先启用密钥存储再继续处理 %1$@";
@@ -1071,7 +1071,7 @@
 "screen_notification_settings_failed_fixing_configuration" = "配置尚未更正，请重试。";
 "screen_notification_settings_group_chats" = "群聊";
 "screen_notification_settings_invite_for_me_label" = "邀请";
-"screen_notification_settings_mentions_only_disclaimer" = "主服务器不支持在加密房间中的此选项，因此在某些房间你可能无法收到通知。";
+"screen_notification_settings_mentions_only_disclaimer" = "你的账户提供者不支持在加密房间中的此选项，因此在某些聊天中你可能无法收到通知。";
 "screen_notification_settings_mentions_section_title" = "提及";
 "screen_notification_settings_message_sound_dialog_choose_other" = "选择其它提示音…";
 "screen_notification_settings_message_sound_dialog_current_subtitle" = "当前正在使用 %1$@";
@@ -1080,7 +1080,7 @@
 "screen_notification_settings_mode_all" = "全部";
 "screen_notification_settings_mode_mentions" = "提及";
 "screen_notification_settings_notification_section_title" = "通知我以下类型";
-"screen_notification_settings_room_mention_label" = "提及所有成员（@room）时通知我";
+"screen_notification_settings_room_mention_label" = "含有 @room 的提及";
 "screen_notification_settings_sound_custom_fallback" = "自定义";
 "screen_notification_settings_sound_custom_sound_button_title" = "自定义提示音…";
 "screen_notification_settings_sound_delete_sound_error_title" = "删除文件时出错";
@@ -1214,11 +1214,11 @@
 "screen_recovery_key_setup_title" = "获取恢复密钥";
 "screen_report_content_block_user" = "屏蔽用户";
 "screen_report_content_block_user_hint" = "请确认是否要隐藏该用户当前和未来的所有消息";
-"screen_report_content_explanation" = "此消息将举报给服务器管理员。他们无法读取任何加密消息。";
+"screen_report_content_explanation" = "此消息将举报给账户提供者。他们无法读取任何加密消息。";
 "screen_report_content_hint" = "举报此内容的理由";
 "screen_report_room_leave_failed_alert_message" = "你的举报已成功提交，但在尝试退出房间时遇到问题。请重试。";
 "screen_report_room_leave_failed_alert_title" = "无法离开房间";
-"screen_report_room_reason_footer" = "向管理员举报此房间。如果消息已加密，管理员将无法读取。";
+"screen_report_room_reason_footer" = "向管理员举报此聊天。如果消息已加密，账户提供者将无法读取。";
 "screen_report_room_reason_placeholder" = "描述举报的理由…";
 "screen_report_room_title" = "举报房间";
 "screen_reset_encryption_confirmation_alert_action" = "是，立即重置";
@@ -1368,7 +1368,7 @@
 "screen_room_notification_settings_error_loading_settings" = "加载通知设置时出错。";
 "screen_room_notification_settings_error_restoring_default" = "恢复默认模式失败，请重试。";
 "screen_room_notification_settings_error_setting_mode" = "设置模式失败，请重试。";
-"screen_room_notification_settings_mentions_only_disclaimer" = "主服务器不支持在加密房间中的此选项，因此在此房间你可能无法收到通知。";
+"screen_room_notification_settings_mentions_only_disclaimer" = "你的账户提供者不支持在加密房间中的此选项，因此在此聊天中你可能无法收到通知。";
 "screen_room_notification_settings_mode_all_messages" = "所有消息";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "仅提及与回复";
 "screen_room_notification_settings_mode_mute" = "静默";
@@ -1577,7 +1577,7 @@
 "screen_space_list_parent_space" = "空间 %1$@";
 "screen_space_list_title" = "空间";
 "screen_space_menu_action_members" = "查看成员";
-"screen_space_remove_rooms_confirmation_content" = "移除房间不会影响其访问权限。要更改访问权限，请转到“房间信息”→“隐私与安全”。";
+"screen_space_remove_rooms_confirmation_content" = "移除房间不会影响其访问权限。要更改访问权限，请转到“房间信息”→“安全与隐私”。";
 "screen_space_remove_rooms_confirmation_title_ios" = "从 %1$@ 移除房间？";
 "screen_space_settings_leave_space" = "离开空间";
 "screen_space_settings_roles_and_permissions" = "角色与权限";
@@ -1649,8 +1649,8 @@
 "state_event_room_none_by_you" = "你未产生任何更改";
 "state_event_room_pinned_events_changed" = "%1$@ 更改了已置顶的消息";
 "state_event_room_pinned_events_changed_by_you" = "你更改了已置顶的消息";
-"state_event_room_pinned_events_pinned" = "%1$@ 置顶了 1 个消息";
-"state_event_room_pinned_events_pinned_by_you" = "你已置顶了 1 个消息";
+"state_event_room_pinned_events_pinned" = "%1$@ 已置顶 1 个消息";
+"state_event_room_pinned_events_pinned_by_you" = "你已置顶 1 个消息";
 "state_event_room_pinned_events_unpinned" = "%1$@ 取消置顶了 1 个消息";
 "state_event_room_pinned_events_unpinned_by_you" = "你取消置顶了 1 个消息";
 "state_event_room_reject" = "%1$@ 拒绝了邀请";
