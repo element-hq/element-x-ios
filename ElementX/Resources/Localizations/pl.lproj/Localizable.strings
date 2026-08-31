@@ -208,7 +208,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "Wyloguj się i zaktualizuj";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ już nie wspiera starego protokołu. Zaloguj się ponownie, aby dalej korzystać z aplikacji.";
 "banner_migrate_to_native_sliding_sync_description" = "Twój serwer wspiera teraz nowy, szybszy protokół. Zaloguj się ponownie, aby zaktualizować. Dzięki temu unikniesz wymuszonego wylogowania, gdy stary protokół zostanie usunięty.";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "Twój serwer domowy już nie wspiera starego protokołu. Zaloguj się ponownie, aby kontynuować korzystanie z aplikacji.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Twój dostawca konta już nie wspiera starego protokołu. Zaloguj się ponownie, aby kontynuować korzystanie z aplikacji.";
 "banner_migrate_to_native_sliding_sync_title" = "Dostępna aktualizacja";
 "banner_new_sound_message" = "Sygnał powiadomień został zaktualizowany — jest wyraźniejszy, szybszy i mniej uciążliwy.";
 "banner_new_sound_title" = "Odświeżyliśmy Twoje dźwięki";
@@ -483,7 +483,7 @@
 "emoji_picker_category_recent" = "Ostatnie emoji";
 "emoji_picker_category_symbols" = "Symbole";
 "emoji_picker_search_placeholder" = "Wyszukaj emoji";
-"error_account_creation_not_possible" = "Twój serwer domowy wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont.";
+"error_account_creation_not_possible" = "Twój dostawca konta wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont.";
 "error_failed_creating_the_permalink" = "Nie udało się utworzyć linku bezpośredniego";
 "error_failed_loading_map" = "%1$@ nie mogło wczytać mapy. Spróbuj ponownie później.";
 "error_failed_loading_messages" = "Nie udało się załadować wiadomości";
@@ -495,11 +495,11 @@
 "error_no_compatible_app_found" = "Nie znaleziono kompatybilnej aplikacji do obsługi tej akcji.";
 "error_room_address_already_exists" = "Ten adres pokoju już istnieje. Spróbuj zmienić adres lub nazwę pokoju";
 "error_room_address_invalid_symbols" = "Niektóre znaki są niedozwolone. Obsługiwane są tylko litery, cyfry i następujące symbole ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
-"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
-"error_sending_failure_missing_media_content" = "Missing media content";
-"error_sending_failure_other" = "Error details: %@";
-"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
-"error_sending_failure_unknown" = "Unknown error";
+"error_sending_failure_invalid_mime_type" = "Nieprawidłowy typ MIME: %@";
+"error_sending_failure_missing_media_content" = "Brak treści multimedialnych";
+"error_sending_failure_other" = "Szczegóły błędu: %@";
+"error_sending_failure_sending_from_unverified_device" = "Wysyłanie z niezweryfikowanego urządzenia";
+"error_sending_failure_unknown" = "Nieznany błąd";
 "error_some_messages_have_not_been_sent" = "Niektóre wiadomości nie zostały wysłane";
 "error_unknown" = "Przepraszamy, wystąpił błąd";
 "error.account_already_logged_in" = "Jesteś już zalogowany na tym urządzeniu jako %1$@.";
@@ -543,7 +543,7 @@
 "notification_sender_mention_reply" = "%1$@ wspomniał lub odpowiedział";
 "notification_space_invite_body" = "Zaprosił Cię do dołączenia do przestrzeni";
 "notification_space_invite_body_with_sender" = "%1$@ zaprosił Cię do dołączenia do przestrzeni";
-"notification_test_push_notification_content" = "Wyświetlasz powiadomienie! Kliknij mnie!";
+"notification_test_push_notification_content" = "Oto powiadomienie! Dotknij mnie!";
 "notification_thread_in_room" = "Wątek w %1$@";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -713,9 +713,9 @@
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Wymagana jest aplikacja Element Pro na %1$@. Znajdziesz ją w sklepie z aplikacjami.";
 "screen_change_server_error_element_pro_required_title" = "Wymagany jest Element Pro";
-"screen_change_server_error_invalid_homeserver" = "Nie mogliśmy połączyć się z tym serwerem domowym. Sprawdź, czy adres URL serwera został wprowadzony poprawnie. Jeśli adres URL jest poprawny, skontaktuj się z administratorem serwera w celu uzyskania dalszej pomocy.";
+"screen_change_server_error_invalid_homeserver" = "Nie mogliśmy połączyć się z dostawcą konta. Sprawdź, czy adres URL serwera został wprowadzony poprawnie. Jeśli adres URL jest poprawny, skontaktuj się z dostawcą konta w celu uzyskania dalszej pomocy.";
 "screen_change_server_error_invalid_well_known" = "Serwer nie jest dostępny z powodu problemu pliku .well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Wybrany dostawca konta nie wspiera synchronizacji przesuwnej. Wymagana jest aktualizacja serwera %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "Wybrany dostawca konta nie wspiera funkcji sliding sync. Wymagana jest aktualizacja, aby korzystać z %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nie posiada zezwolenia na dołączenie do %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Aplikacja została skonfigurowana tak, aby zezwalała na: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Dostawca konta %1$@ jest niedozwolony.";
@@ -855,7 +855,7 @@
 "screen_encryption_reset_bullet_3" = "Wymagana będzie ponowna weryfikacja istniejących urządzeń i kontaktów";
 "screen_encryption_reset_footer" = "Zresetuj swoją tożsamość tylko wtedy, gdy nie posiadasz dostępu do żadnego innego zweryfikowanego urządzenia i straciłeś swój klucz przywracania.";
 "screen_encryption_reset_title" = "Nie możesz potwierdzić? Zresetuj swoją tożsamość cyfrową.";
-"screen_home_tab_chats" = "Wszystkie czaty";
+"screen_home_tab_chats" = "Czaty";
 "screen_home_tab_spaces" = "Przestrzenie";
 "screen_identity_confirmation_cannot_confirm" = "Nie możesz potwierdzić?";
 "screen_identity_confirmation_create_new_recovery_key" = "Utwórz nowy klucz przywracania";
@@ -914,7 +914,7 @@
 "screen_join_room_loading_alert_title" = "Nie udało nam się wyświetlić podglądu tego pokoju";
 "screen_join_room_space_not_supported_description" = "%1$@ jeszcze nie obsługuje przestrzeni. Uzyskaj dostęp do przestrzeni w wersji web.";
 "screen_join_room_space_not_supported_title" = "Przestrzenie nie są jeszcze obsługiwane";
-"screen_join_room_subtitle_knock" = "Kliknij przycisk poniżej, aby powiadomić administratora pokoju. Po zatwierdzeniu będziesz mógł dołączyć do rozmowy.";
+"screen_join_room_subtitle_knock" = "Kliknij przycisk poniżej, aby powiadomić administratora czatu. Po zatwierdzeniu będziesz mógł dołączyć do rozmowy.";
 "screen_join_room_subtitle_no_preview" = "Musisz być członkiem tego pokoju, aby wyświetlić historię wiadomości.";
 "screen_join_room_title_knock" = "Chcesz dołączyć do tego pokoju?";
 "screen_join_room_title_no_preview" = "Podgląd nie jest dostępny";
@@ -1003,7 +1003,7 @@
 "screen_login_error_invalid_credentials" = "Nieprawidłowa nazwa użytkownika i/lub hasło";
 "screen_login_error_invalid_user_id" = "To nie jest prawidłowy identyfikator użytkownika. Oczekiwany format: '@user:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Ten serwer został skonfigurowany do korzystania z tokenów odświeżania. Nie są one obsługiwane, gdy korzystasz z hasła.";
-"screen_login_error_unsupported_authentication" = "Wybrany serwer domowy nie obsługuje uwierzytelniania hasłem, ani OAuth. Skontaktuj się z jego administratorem lub wybierz inny serwer domowy.";
+"screen_login_error_unsupported_authentication" = "Wybrany dostawca konta nie obsługuje uwierzytelniania hasłem, ani OAuth. Spróbuj się z nim skontaktować lub wybierz innego.";
 "screen_login_form_header" = "Wprowadź swoje dane";
 "screen_login_subtitle" = "Matrix to otwarta sieć do bezpiecznej i zdecentralizowanej komunikacji.";
 "screen_login_title" = "Witaj ponownie!";
@@ -1049,7 +1049,7 @@
 "screen_missing_key_backup_open_element_classic" = "Otwórz Element Classic";
 "screen_missing_key_backup_step_1" = "Otwórz Element Classic na swoim urządzeniu";
 "screen_missing_key_backup_step_2_ios" = "Przejdź do Ustawienia użytkownika > Bezpieczeństwo";
-"screen_missing_key_backup_step_3_ios" = "Przewiń do opcji Bezpieczna kopia zapasowa i stuknij ustaw";
+"screen_missing_key_backup_step_3_ios" = "Przewiń do opcji Kopia zapasowa czatów i dotknij ustaw";
 "screen_missing_key_backup_step_4" = "Aby włączyć magazyn kluczy, postępuj zgodnie z instrukcjami";
 "screen_missing_key_backup_step_5" = "Wróć do %1$@";
 "screen_missing_key_backup_title" = "Włącz magazyn kluczy zanim przejdziesz do %1$@";
@@ -1071,7 +1071,7 @@
 "screen_notification_settings_failed_fixing_configuration" = "Konfiguracja nie została poprawiona, spróbuj ponownie.";
 "screen_notification_settings_group_chats" = "Czaty grupowe";
 "screen_notification_settings_invite_for_me_label" = "Zaproszenia";
-"screen_notification_settings_mentions_only_disclaimer" = "Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi.";
+"screen_notification_settings_mentions_only_disclaimer" = "Twój dostawca konta nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi.";
 "screen_notification_settings_mentions_section_title" = "Wzmianki";
 "screen_notification_settings_message_sound_dialog_choose_other" = "Wybierz inny dźwięk…";
 "screen_notification_settings_message_sound_dialog_current_subtitle" = "Aktualnie używany %1$@";
@@ -1167,7 +1167,7 @@
 "screen_qr_code_login_error_sliding_sync_not_supported_title" = "%1$@ nie jest wspierany";
 "screen_qr_code_login_initial_state_button_title" = "Gotowy do skanowania";
 "screen_qr_code_login_initial_state_item_1" = "Otwórz %1$@ na urządzeniu stacjonarnym";
-"screen_qr_code_login_initial_state_item_2" = "Kliknij na swój awatar";
+"screen_qr_code_login_initial_state_item_2" = "Wybierz swój awatar";
 "screen_qr_code_login_initial_state_item_3" = "Wybierz %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Powiąż nowe urządzenie”";
 "screen_qr_code_login_initial_state_item_4" = "Zeskanuj kod QR za pomocą tego urządzenia";
@@ -1214,11 +1214,11 @@
 "screen_recovery_key_setup_title" = "Uzyskaj klucz przywracania";
 "screen_report_content_block_user" = "Zablokuj użytkownika";
 "screen_report_content_block_user_hint" = "Zaznacz, jeśli chcesz ukryć wszystkie bieżące i przyszłe wiadomości od tego użytkownika.";
-"screen_report_content_explanation" = "Ta wiadomość zostanie zgłoszona do administratora Twojego serwera domowego. Nie będzie mógł on przeczytać żadnych zaszyfrowanych wiadomości.";
+"screen_report_content_explanation" = "Wiadomość zostanie zgłoszona do Twojego dostawcy konta. Nie będzie mógł on przeczytać żadnych zaszyfrowanych wiadomości.";
 "screen_report_content_hint" = "Powód zgłoszenia treści";
 "screen_report_room_leave_failed_alert_message" = "Twoje zgłoszenie zostało wysłane pomyślnie, ale napotkaliśmy problem podczas opuszczania pokoju. Spróbuj ponownie.";
 "screen_report_room_leave_failed_alert_title" = "Nie można wyjść z pokoju";
-"screen_report_room_reason_footer" = "Zgłoś ten pokój swojemu administratorowi. Jeśli wiadomości są zaszyfrowane, administrator nie będzie mógł ich odczytać.";
+"screen_report_room_reason_footer" = "Zgłoś ten pokój swojemu dostawcy konta. Jeśli wiadomości są zaszyfrowane, dostawca nie będzie mógł ich odczytać.";
 "screen_report_room_reason_placeholder" = "Opisz powód...";
 "screen_report_room_title" = "Zgłoś pokój";
 "screen_reset_encryption_confirmation_alert_action" = "Tak, zresetuj teraz";
@@ -1368,7 +1368,7 @@
 "screen_room_notification_settings_error_loading_settings" = "Wystąpił błąd podczas ładowania ustawień powiadomień.";
 "screen_room_notification_settings_error_restoring_default" = "Nie udało się przywrócić trybu domyślnego, spróbuj ponownie.";
 "screen_room_notification_settings_error_setting_mode" = "Nie udało się ustawić trybu, spróbuj ponownie.";
-"screen_room_notification_settings_mentions_only_disclaimer" = "Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z tego pokoju.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Twój dostawca konta nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z tego pokoju.";
 "screen_room_notification_settings_mode_all_messages" = "Wszystkie wiadomości";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Tylko wzmianki i słowa kluczowe";
 "screen_room_notification_settings_mode_mute" = "Wycisz";
@@ -1441,7 +1441,7 @@
 "screen_roomlist_filter_unreads" = "Nieprzeczytane";
 "screen_roomlist_filter_unreads_empty_state_title" = "Gratulacje!\nNie masz żadnych nieprzeczytanych wiadomości!";
 "screen_roomlist_knock_event_sent_description" = "Wysłano prośbę o dołączenie";
-"screen_roomlist_main_space_title" = "Wszystkie czaty";
+"screen_roomlist_main_space_title" = "Czaty";
 "screen_roomlist_mark_as_read" = "Oznacz jako przeczytane";
 "screen_roomlist_mark_as_unread" = "Oznacz jako nieprzeczytane";
 "screen_roomlist_tombstoned_room_description" = "Ten pokój został ulepszony";
@@ -1577,7 +1577,7 @@
 "screen_space_list_parent_space" = "Przestrzeń %1$@";
 "screen_space_list_title" = "Przestrzenie";
 "screen_space_menu_action_members" = "Zobacz członków";
-"screen_space_remove_rooms_confirmation_content" = "Usunięcie pokoju nie wpłynie na dostęp do niego. Aby zmienić ustawienia dostępu, przejdź do Ustawienia pokoju > Bezpieczeństwo i prywatność.";
+"screen_space_remove_rooms_confirmation_content" = "Usunięcie pokoju nie wpłynie na dostęp do niego. Aby zmienić ustawienia dostępu, przejdź do Informacje pokoju > Bezpieczeństwo i prywatność.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Usunąć pokoje z %1$@?";
 "screen_space_settings_leave_space" = "Opuść przestrzeń";
 "screen_space_settings_roles_and_permissions" = "Role i uprawnienia";
@@ -1714,7 +1714,7 @@
 "troubleshoot_notifications_test_display_notification_permission_failure" = "Nie można wyświetlić powiadomienia.";
 "troubleshoot_notifications_test_display_notification_success" = "Powiadomienie zostało kliknięte!";
 "troubleshoot_notifications_test_display_notification_title" = "Wyświetl powiadomienie";
-"troubleshoot_notifications_test_display_notification_waiting" = "Kliknij powiadomienie, aby kontynuować test.";
+"troubleshoot_notifications_test_display_notification_waiting" = "Dotknij powiadomienia, aby kontynuować test.";
 "troubleshoot_notifications_test_firebase_availability_description" = "Upewnij się, że Firebase jest dostępny.";
 "troubleshoot_notifications_test_firebase_availability_failure" = "Baza Firebase jest niedostępna.";
 "troubleshoot_notifications_test_firebase_availability_success" = "Baza Firebase jest dostępna.";

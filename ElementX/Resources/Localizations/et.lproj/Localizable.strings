@@ -495,11 +495,11 @@
 "error_no_compatible_app_found" = "Ei õnnestunud leida selle tegevuse jaoks vajalikku välist rakendust.";
 "error_room_address_already_exists" = "Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime";
 "error_room_address_invalid_symbols" = "Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
-"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_invalid_mime_type" = "Vigane MIME-tüüp: %@";
 "error_sending_failure_missing_media_content" = "Missing media content";
-"error_sending_failure_other" = "Error details: %@";
-"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
-"error_sending_failure_unknown" = "Unknown error";
+"error_sending_failure_other" = "Vea üksikasjad: %@";
+"error_sending_failure_sending_from_unverified_device" = "Saadetakse verifitseerimata seadmest";
+"error_sending_failure_unknown" = "Tundmatu viga";
 "error_some_messages_have_not_been_sent" = "Mõned sõnumid on saatmata";
 "error_unknown" = "Vabandust, ilmnes viga";
 "error.account_already_logged_in" = "Sa juba oled sellesse seadmesse sisseloginud kasutajana %1$@.";
@@ -529,7 +529,7 @@
 "notification_invitation_action_reject" = "Keeldu";
 "notification_invite_body" = "Kutse osalema vestluses";
 "notification_invite_body_with_sender" = "%1$@ saatus sulle vestluskutse";
-"notification_knock_request_body" = "Requested to join";
+"notification_knock_request_body" = "Palun võimalust liitumiseks";
 "notification_live_location_started_body" = "Hakkas jagama oma asukohta reaalajas";
 "notification_mentioned_you_body" = "Mainis sind: %1$@";
 "notification_new_messages" = "Uued sõnumid";
@@ -543,7 +543,7 @@
 "notification_sender_mention_reply" = "%1$@ mainis või vastas";
 "notification_space_invite_body" = "Kutsus sind liituma kogukonnaga";
 "notification_space_invite_body_with_sender" = "%1$@ kutsus sind liituma kogukonnaga";
-"notification_test_push_notification_content" = "See ongi teavitus! Klõpsi mind!";
+"notification_test_push_notification_content" = "See ongi teavitus! Klõpsa mind!";
 "notification_thread_in_room" = "Jutulõng „%1$@“ jututoas";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -1080,7 +1080,7 @@
 "screen_notification_settings_mode_all" = "Kõik";
 "screen_notification_settings_mode_mentions" = "Mainimiste alusel";
 "screen_notification_settings_notification_section_title" = "Teavita mind";
-"screen_notification_settings_room_mention_label" = "Teavita mind @jututoa puhul";
+"screen_notification_settings_room_mention_label" = "@jututoa mainimised";
 "screen_notification_settings_sound_custom_fallback" = "Kohandatud";
 "screen_notification_settings_sound_custom_sound_button_title" = "Sinu valitud helin...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Viga faili kustutamisel";
@@ -1167,7 +1167,7 @@
 "screen_qr_code_login_error_sliding_sync_not_supported_title" = "%1$@ pole toetatud";
 "screen_qr_code_login_initial_state_button_title" = "Skaneerimiseks valmis";
 "screen_qr_code_login_initial_state_item_1" = "Ava %1$@ töölauarakenduses";
-"screen_qr_code_login_initial_state_item_2" = "Klõpsi oma tunnuspilti";
+"screen_qr_code_login_initial_state_item_2" = "Klõpsa oma tunnuspilti";
 "screen_qr_code_login_initial_state_item_3" = "Vali %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Seo uus seade“";
 "screen_qr_code_login_initial_state_item_4" = "Skaneeri QR-koodi selle seadmega";
@@ -1370,8 +1370,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Seadistuste muutmine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Sinu koduserver ei toeta seda võimalust krüptitud jututubades, seega sa ei saa selle jututoa kohta teavitusi.";
 "screen_room_notification_settings_mode_all_messages" = "Kõik sõnumid";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
-"screen_room_notification_settings_mode_mute" = "Mute";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mainimiste ja võtmesõnade alusel";
+"screen_room_notification_settings_mode_mute" = "Summuta";
 "screen_room_notification_settings_room_custom_settings_title" = "Selles jututoas teavita mind";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ esiletõstetud sõnumit";
@@ -1714,7 +1714,7 @@
 "troubleshoot_notifications_test_display_notification_permission_failure" = "Teavituse kuvamine ei õnnestu.";
 "troubleshoot_notifications_test_display_notification_success" = "Sa oled teavitust klõpsinud!";
 "troubleshoot_notifications_test_display_notification_title" = "Kuva teavitust";
-"troubleshoot_notifications_test_display_notification_waiting" = "Testiga jätkamiseks palun klõpsi teavitust.";
+"troubleshoot_notifications_test_display_notification_waiting" = "Testiga jätkamiseks palun klõpsa teavitust.";
 "troubleshoot_notifications_test_firebase_availability_description" = "Palun veendu, et Firebase oleks saadaval.";
 "troubleshoot_notifications_test_firebase_availability_failure" = "Firebase pole saadaval.";
 "troubleshoot_notifications_test_firebase_availability_success" = "Firebase on saadaval.";

@@ -715,7 +715,7 @@
 "screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "No s'ha pogut accedir a aquest servidor. Comprova que hagis introduït correctament l'URL del servidor. Si ja és correcte, posa't en contacte amb l'administrador del servidor per a més informació.";
 "screen_change_server_error_invalid_well_known" = "Servidor no disponible a causa d'un problema al fitxer .well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. The server needs to be upgraded to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
@@ -958,11 +958,11 @@
 "screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
-"screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
+"screen_leave_space_subtitle_last_admin" = "You need to assign another administrator for this space before you can leave.";
 "screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
-"screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_leave_space_title_last_admin" = "You are the only administrator for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Escaneja el QR";
@@ -1049,7 +1049,7 @@
 "screen_missing_key_backup_open_element_classic" = "Open Element Classic";
 "screen_missing_key_backup_step_1" = "Open Element Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
@@ -1577,7 +1577,7 @@
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_space_menu_action_members" = "View members";
-"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Security & privacy.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Rols i permisos";

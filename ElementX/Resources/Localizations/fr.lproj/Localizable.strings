@@ -208,7 +208,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "Déconnecter et mettre à niveau";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
 "banner_migrate_to_native_sliding_sync_description" = "Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l'ancien protocole sera supprimé.";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "Votre serveur d’accueil ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Votre fournisseur de compte ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
 "banner_migrate_to_native_sliding_sync_title" = "Mise à niveau disponible";
 "banner_new_sound_message" = "Le son des notifications a été modifié: plus clair, plus court et moins perturbateur.";
 "banner_new_sound_title" = "Nous avons rafraîchi les sons";
@@ -483,7 +483,7 @@
 "emoji_picker_category_recent" = "Emojis récents";
 "emoji_picker_category_symbols" = "Symboles";
 "emoji_picker_search_placeholder" = "Chercher des emojis";
-"error_account_creation_not_possible" = "Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte.";
+"error_account_creation_not_possible" = "Votre fournisseur de compte doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte.";
 "error_failed_creating_the_permalink" = "Échec de la création du permalien";
 "error_failed_loading_map" = "%1$@ n’a pas pu charger la carte. Veuillez réessayer ultérieurement.";
 "error_failed_loading_messages" = "Échec du chargement des messages";
@@ -495,11 +495,11 @@
 "error_no_compatible_app_found" = "Aucune application compatible n’a été trouvée pour gérer cette action.";
 "error_room_address_already_exists" = "Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d'adresse de salon ou de modifier le nom du salon";
 "error_room_address_invalid_symbols" = "Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
-"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
-"error_sending_failure_missing_media_content" = "Missing media content";
-"error_sending_failure_other" = "Error details: %@";
-"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
-"error_sending_failure_unknown" = "Unknown error";
+"error_sending_failure_invalid_mime_type" = "Type MIME invalide : %@";
+"error_sending_failure_missing_media_content" = "Contenu multimédia manquant";
+"error_sending_failure_other" = "Détails de l'erreur : %@";
+"error_sending_failure_sending_from_unverified_device" = "Envoi depuis un appareil non vérifié";
+"error_sending_failure_unknown" = "Erreur inconnue";
 "error_some_messages_have_not_been_sent" = "Certains messages n’ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur s’est produite";
 "error.account_already_logged_in" = "Vous êtes déjà connecté sur cet appareil en tant que %1$@.";
@@ -529,7 +529,7 @@
 "notification_invitation_action_reject" = "Rejeter";
 "notification_invite_body" = "Vous a invité(e) à discuter";
 "notification_invite_body_with_sender" = "%1$@ vous a invité à discuter";
-"notification_knock_request_body" = "Requested to join";
+"notification_knock_request_body" = "A demandé à rejoindre";
 "notification_live_location_started_body" = "A commencé à partager sa position en direct";
 "notification_mentioned_you_body" = "Mentionné(e) : %1$@";
 "notification_new_messages" = "Nouveaux messages";
@@ -713,9 +713,9 @@
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "L'application Element Pro est requise sur %1$@. Veuillez la télécharger depuis le store.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro est requis";
-"screen_change_server_error_invalid_homeserver" = "Nous n’avons pas pu atteindre ce serveur d’accueil. Vérifiez que vous avez correctement saisi l’URL du serveur d’accueil. Si l’URL est correcte, contactez l’administrateur de votre serveur d’accueil pour obtenir de l’aide.";
+"screen_change_server_error_invalid_homeserver" = "Impossible de se connecter à ce fournisseur de compte. Vérifiez que l'URL saisie est correcte. Si c'est le cas, contactez l’administrateur de votre fournisseur de compte pour obtenir de l’aide.";
 "screen_change_server_error_invalid_well_known" = "Ce fournisseur de compte n'est pas disponible en raison d'un problème dans le fichier .well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Le fournisseur de compte sélectionné ne prend pas en charge le sliding sync. Une mise à jour du serveur est nécessaire pour pouvoir utiliser %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "Le fournisseur de compte sélectionné ne prend pas en charge le sliding sync. Le serveur doit être mis à jour pour pouvoir utiliser %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ n'est pas autorisé à se connecter à %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Cette application a été configurée pour autoriser: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Le fournisseur de compte %1$@ n'est pas autorisé.";
@@ -1003,7 +1003,7 @@
 "screen_login_error_invalid_credentials" = "Nom d’utilisateur et/ou mot de passe incorrects";
 "screen_login_error_invalid_user_id" = "Il ne s’agit pas d’un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »";
 "screen_login_error_refresh_tokens" = "Ce serveur est configuré pour utiliser des tokens d'actualisation. Ils ne sont pas pris en charge lors de l'utilisation d'une connexion basée sur un mot de passe.";
-"screen_login_error_unsupported_authentication" = "Le serveur d’accueil sélectionné ne prend pas en charge le mot de passe ou la connexion OAuth. Contactez votre administrateur ou choisissez un autre serveur d’accueil.";
+"screen_login_error_unsupported_authentication" = "Le fournisseur de compte sélectionné ne prend pas en charge la connexion avec mot de passe ni OAuth. Contactez votre administrateur ou choisissez un autre fournisseur de compte.";
 "screen_login_form_header" = "Saisissez vos identifiants";
 "screen_login_subtitle" = "Matrix est un réseau ouvert pour une communication sécurisée et décentralisée.";
 "screen_login_title" = "Content de vous revoir !";
@@ -1071,7 +1071,7 @@
 "screen_notification_settings_failed_fixing_configuration" = "La configuration n’a pas été corrigée, veuillez réessayer.";
 "screen_notification_settings_group_chats" = "Discussions de groupe";
 "screen_notification_settings_invite_for_me_label" = "Invitations";
-"screen_notification_settings_mentions_only_disclaimer" = "Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons.";
+"screen_notification_settings_mentions_only_disclaimer" = "Votre fournisseur de compte ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons.";
 "screen_notification_settings_mentions_section_title" = "Mentions";
 "screen_notification_settings_message_sound_dialog_choose_other" = "Choisir un autre son…";
 "screen_notification_settings_message_sound_dialog_current_subtitle" = "Vous utilisez actuellement %1$@";
@@ -1080,7 +1080,7 @@
 "screen_notification_settings_mode_all" = "Tous";
 "screen_notification_settings_mode_mentions" = "Mentions";
 "screen_notification_settings_notification_section_title" = "Prévenez-moi pour";
-"screen_notification_settings_room_mention_label" = "Prévenez-moi si un message contient \"@room\"";
+"screen_notification_settings_room_mention_label" = "Un message qui contient @room";
 "screen_notification_settings_sound_custom_fallback" = "Personnalisé";
 "screen_notification_settings_sound_custom_sound_button_title" = "Son personnalisé...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Erreur lors de la suppression du fichier";
@@ -1218,7 +1218,7 @@
 "screen_report_content_hint" = "Raison du signalement de ce contenu";
 "screen_report_room_leave_failed_alert_message" = "Votre rapport a été envoyé avec succès, mais nous avons rencontré un problème en essayant de quitter le salon. Veuillez réessayer.";
 "screen_report_room_leave_failed_alert_title" = "Impossible de quitter le salon";
-"screen_report_room_reason_footer" = "Signaler ce salon à votre admin. Si les messages sont chiffrés, votre admin ne pourra pas les lire.";
+"screen_report_room_reason_footer" = "Signaler ce salon à votre fournisseur de compte. Si les messages sont chiffrés, votre fournisseur de compte ne pourra pas les lire.";
 "screen_report_room_reason_placeholder" = "Décrivez la raison du signalement…";
 "screen_report_room_title" = "Signaler le salon";
 "screen_reset_encryption_confirmation_alert_action" = "Oui, réinitialisez maintenant";
@@ -1577,7 +1577,7 @@
 "screen_space_list_parent_space" = "Espace %1$@";
 "screen_space_list_title" = "Espaces";
 "screen_space_menu_action_members" = "Voir les membres";
-"screen_space_remove_rooms_confirmation_content" = "Supprimer un salon n'affectera pas ses paramètres d'accès. Pour modifier l'accès, aller dans les settings du salon puis \"Sécurité & confidentialité\".";
+"screen_space_remove_rooms_confirmation_content" = "Supprimer un salon n'affectera pas ses paramètres d'accès. Pour modifier l'accès, aller dans les paramètres du salon puis \"Sécurité & confidentialité\".";
 "screen_space_remove_rooms_confirmation_title_ios" = "Supprimer les salons de %1$@?";
 "screen_space_settings_leave_space" = "Quitter l’espace";
 "screen_space_settings_roles_and_permissions" = "Rôles & autorisations";
@@ -1728,7 +1728,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Erreur :%1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Erreur, impossible de tester les Push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Erreur, le délai d'attente du Push est dépassé.";
-"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Erreur : la passerelle de notification push limite le nombre de push: les notifications ne seront donc pas fiables. Veuillez configurer une autre passerelle de notification push.";
 "troubleshoot_notifications_test_push_loop_back_success" = "La demande d’envoi de Push et sa réception ont pris %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Tester la réception des Push";
 "troubleshoot_notifications_test_unified_push_description" = "Vérifier qu’au moins un distributeur UnifiedPush est disponible.";

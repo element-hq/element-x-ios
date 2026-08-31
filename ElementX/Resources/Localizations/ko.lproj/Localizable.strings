@@ -1085,7 +1085,7 @@
 "screen_notification_settings_sound_custom_sound_button_title" = "소리 사용자 지정";
 "screen_notification_settings_sound_delete_sound_error_title" = "파일 삭제 오류";
 "screen_notification_settings_sound_element_default" = "Element 기본 설정";
-"screen_notification_settings_sound_element_fade" = "엘리먼트 페이드";
+"screen_notification_settings_sound_element_fade" = "Element Fade";
 "screen_notification_settings_sound_import_sound_error_title" = "파일 가져오기 오류";
 "screen_notification_settings_sound_preview_sound_error_title" = "알림음 미리듣기 문제 발생";
 "screen_notification_settings_sound_section_title" = "소리";
@@ -1132,7 +1132,7 @@
 "screen_onboarding_welcome_back" = "다시 오신 것을 환영합니다";
 "screen_onboarding_welcome_message" = "%1$@ 에 오신 것을 환영합니다. 속도와 단순성을 극대화한 가장 빠른 버전입니다.";
 "screen_onboarding_welcome_subtitle" = "%1$@ 에 오신 것을 환영합니다. 속도와 단순성을 위해 최적화된 앱입니다.";
-"screen_onboarding_welcome_title" = "당신의 엘리먼트에 있어";
+"screen_onboarding_welcome_title" = "가장 나다운 공간, Element에서";
 "screen_pinned_timeline_empty_state_description" = "메시지를 누르고 \"%1$@\" 를 선택하여 여기에 포함합니다.";
 "screen_pinned_timeline_empty_state_headline" = "중요한 메시지를 고정하여 쉽게 찾을 수 있도록 합니다";
 "screen_pinned_timeline_screen_title_empty" = "고정된 메세지";

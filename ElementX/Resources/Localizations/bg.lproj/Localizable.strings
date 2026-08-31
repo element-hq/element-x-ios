@@ -208,7 +208,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your account provider no longer supports the old protocol. Please sign out and sign back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
@@ -483,7 +483,7 @@
 "emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Символи";
 "emoji_picker_search_placeholder" = "Search emojis";
-"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
+"error_account_creation_not_possible" = "Your account provider needs to be upgraded to support Matrix Authentication Service and account creation.";
 "error_failed_creating_the_permalink" = "Неуспешно създаване на постоянна връзка";
 "error_failed_loading_map" = "%1$@ не успя да зареди картата. Моля, опитайте отново по-късно.";
 "error_failed_loading_messages" = "Неуспешно зареждане на съобщения";
@@ -715,7 +715,7 @@
 "screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Не можахме да достигнем този сървър. Моля, проверете дали сте въвели правилно URL адреса на сървъра. Ако URL адресът е правилен, свържете се с администратора на вашия сървър за допълнителна помощ.";
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. The server needs to be upgraded to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
@@ -914,7 +914,7 @@
 "screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
-"screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
+"screen_join_room_subtitle_knock" = "Tap the button below and a chat administrator will be notified. You'll be able to join the conversation once approved.";
 "screen_join_room_subtitle_no_preview" = "You must be a member of this room to view the message history.";
 "screen_join_room_title_knock" = "Want to join this room?";
 "screen_join_room_title_no_preview" = "Preview is not available";
@@ -958,11 +958,11 @@
 "screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
-"screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
+"screen_leave_space_subtitle_last_admin" = "You need to assign another administrator for this space before you can leave.";
 "screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
-"screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_leave_space_title_last_admin" = "You are the only administrator for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Scan the QR code";
@@ -1049,7 +1049,7 @@
 "screen_missing_key_backup_open_element_classic" = "Open Element Classic";
 "screen_missing_key_backup_step_1" = "Open Element Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
@@ -1218,7 +1218,7 @@
 "screen_report_content_hint" = "Причина за докладване на това съдържание";
 "screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
 "screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
-"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_footer" = "Report this chat to your account provider. If the messages are encrypted, your account provider will not be able to read them.";
 "screen_report_room_reason_placeholder" = "Describe the reason to report…";
 "screen_report_room_title" = "Докладване на стаята";
 "screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
@@ -1368,7 +1368,7 @@
 "screen_room_notification_settings_error_loading_settings" = "Възникна грешка при зареждането на настройките за известия.";
 "screen_room_notification_settings_error_restoring_default" = "Неуспешно възстановяване на режима по подразбиране, моля, опитайте отново.";
 "screen_room_notification_settings_error_setting_mode" = "Неуспешно задаване на режима, моля, опитайте отново.";
-"screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Your account provider does not support this option in encrypted chats, you won't get notified in this chat.";
 "screen_room_notification_settings_mode_all_messages" = "Всички съобщения";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
 "screen_room_notification_settings_mode_mute" = "Mute";
@@ -1577,7 +1577,7 @@
 "screen_space_list_parent_space" = "%1$@ пространство";
 "screen_space_list_title" = "Пространства";
 "screen_space_menu_action_members" = "Преглед на членовете";
-"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Security & privacy.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
 "screen_space_settings_leave_space" = "Напускане на пространството";
 "screen_space_settings_roles_and_permissions" = "Роли и разрешения";
