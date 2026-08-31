@@ -59,6 +59,12 @@ class TimelineInteractionHandler {
     
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
     
+    /// The voice message that was last requested for playback.
+    private var requestedVoiceMessageID: TimelineItemIdentifier?
+    /// The voice message that the player has actually started playing, used to autoplay the one following it.
+    private var playingVoiceMessageID: TimelineItemIdentifier?
+    private var audioPlayerActionsCancellable: AnyCancellable?
+    
     private var emojiPickerCancellable: AnyCancellable?
     
     init(roomProxy: JoinedRoomProxyProtocol,
@@ -449,7 +455,19 @@ class TimelineInteractionHandler {
             return
         }
         
+        // Loading a new message tears the player down, which cancels any autoplay that was pending for the previous one.
+        requestedVoiceMessageID = itemID
+        playingVoiceMessageID = nil
+        
         let audioPlayer = mediaPlayerProvider.player
+        
+        // Observe the player lazily so that the mocks used by the previews and the UI tests don't need one.
+        if audioPlayerActionsCancellable == nil {
+            audioPlayerActionsCancellable = audioPlayer.actions
+                .sink { [weak self] action in
+                    Task { await self?.handleAudioPlayerAction(action) }
+                }
+        }
         
         // Stop any recording in progress
         if voiceMessageRecorder.isRecording {
@@ -491,6 +509,33 @@ class TimelineInteractionHandler {
         } else {
             audioPlayer.play()
         }
+    }
+    
+    private func handleAudioPlayerAction(_ action: AudioPlayerAction) async {
+        switch action {
+        case .didStartPlaying:
+            playingVoiceMessageID = requestedVoiceMessageID
+        case .didFinishPlaying:
+            await autoplayVoiceMessageFollowingTheCurrentOne()
+        default:
+            break
+        }
+    }
+    
+    /// Plays the voice message directly following the one that has just finished playing, mirroring the behaviour of other messaging apps.
+    private func autoplayVoiceMessageFollowingTheCurrentOne() async {
+        // A nil ID means that the player was torn down to play something else rather than reaching the end of a message.
+        guard let finishedItemID = playingVoiceMessageID else { return }
+        playingVoiceMessageID = nil
+        
+        // The playback may have been taken over by another player state, such as the recorder's preview.
+        guard audioPlayerState(for: finishedItemID)?.isAttached == true,
+              let nextVoiceMessage = timelineController.timelineItems.voiceMessageDirectlyFollowing(finishedItemID) else {
+            return
+        }
+        
+        MXLog.info("Autoplaying the voice message following itemID \(finishedItemID)")
+        await playPauseAudio(for: nextVoiceMessage.id)
     }
     
     func seekAudio(for itemID: TimelineItemIdentifier, progress: Double) async {
