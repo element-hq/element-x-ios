@@ -274,6 +274,23 @@ struct AudioPlayerStateTests {
     }
     
     @Test
+    mutating func audioPlayerActionsDidFinishPlayingWhenDetachedStraightAway() async throws {
+        await audioPlayerState.updateState(progress: 0.4)
+        audioPlayerState.attachAudioPlayer(audioPlayerMock)
+        
+        let deferred = deferFulfillment(audioPlayerState.$progress) { $0 == 0.0 }
+        
+        // Detaching before the action has been handled is what happens when the following
+        // voice message takes the player over as soon as this one reaches its end.
+        audioPlayerActionsSubject.send(.didFinishPlaying)
+        audioPlayerState.detachAudioPlayer()
+        
+        try await deferred.fulfill()
+        #expect(audioPlayerState.progress == 0.0)
+        #expect(!audioPlayerState.showProgressIndicator)
+    }
+    
+    @Test
     func setPlaybackSpeed() {
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
         

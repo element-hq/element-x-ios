@@ -522,7 +522,7 @@ class TimelineInteractionHandler {
         }
     }
     
-    /// Plays the voice message directly following the one that has just finished playing, mirroring the behaviour of other messaging apps.
+    /// Plays the voice message directly following the one that has just finished playing.
     private func autoplayVoiceMessageFollowingTheCurrentOne() async {
         // A nil ID means that the player was torn down to play something else rather than reaching the end of a message.
         guard let finishedItemID = playingVoiceMessageID else { return }
@@ -535,6 +535,7 @@ class TimelineInteractionHandler {
         }
         
         MXLog.info("Autoplaying the voice message following itemID \(finishedItemID)")
+        mediaPlayerProvider.play(soundEffect: .tink)
         await playPauseAudio(for: nextVoiceMessage.id)
     }
     

@@ -8081,6 +8081,37 @@ nonisolated class MediaPlayerProviderMock: MediaPlayerProviderProtocol, @uncheck
         detachAllStatesExceptReceivedInvocationsLock.withLock { detachAllStatesExceptUnderlyingReceivedInvocations.append(exception) }
         await detachAllStatesExceptClosure?(exception)
     }
+    //MARK: - play
+
+    private let playSoundEffectCallsCountLock = NSLock()
+    private nonisolated(unsafe) var playSoundEffectUnderlyingCallsCount = 0
+    var playSoundEffectCallsCount: Int {
+        get { playSoundEffectCallsCountLock.withLock { playSoundEffectUnderlyingCallsCount } }
+        set { playSoundEffectCallsCountLock.withLock { playSoundEffectUnderlyingCallsCount = newValue } }
+    }
+    var playSoundEffectCalled: Bool {
+        return playSoundEffectCallsCount > 0
+    }
+    private let playSoundEffectReceivedSoundEffectLock = NSLock()
+    private nonisolated(unsafe) var playSoundEffectUnderlyingReceivedSoundEffect: SoundEffect?
+    var playSoundEffectReceivedSoundEffect: SoundEffect? {
+        get { playSoundEffectReceivedSoundEffectLock.withLock { playSoundEffectUnderlyingReceivedSoundEffect } }
+        set { playSoundEffectReceivedSoundEffectLock.withLock { playSoundEffectUnderlyingReceivedSoundEffect = newValue } }
+    }
+    private let playSoundEffectReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var playSoundEffectUnderlyingReceivedInvocations: [SoundEffect] = []
+    var playSoundEffectReceivedInvocations: [SoundEffect] {
+        get { playSoundEffectReceivedInvocationsLock.withLock { playSoundEffectUnderlyingReceivedInvocations } }
+        set { playSoundEffectReceivedInvocationsLock.withLock { playSoundEffectUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var playSoundEffectClosure: ((SoundEffect) -> Void)?
+
+    func play(soundEffect: SoundEffect) {
+        playSoundEffectCallsCountLock.withLock { playSoundEffectUnderlyingCallsCount += 1 }
+        playSoundEffectReceivedSoundEffect = soundEffect
+        playSoundEffectReceivedInvocationsLock.withLock { playSoundEffectUnderlyingReceivedInvocations.append(soundEffect) }
+        playSoundEffectClosure?(soundEffect)
+    }
 }
 nonisolated class MediaProviderMock: MediaProviderProtocol, @unchecked Sendable {
 
