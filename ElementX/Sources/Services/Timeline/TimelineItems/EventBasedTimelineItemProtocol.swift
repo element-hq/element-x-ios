@@ -28,7 +28,7 @@ nonisolated extension EventBasedTimelineItemProtocol {
     }
     
     var isForwardable: Bool {
-        isRemoteMessage && !(self is PollRoomTimelineItem)
+        isRemoteMessage && !(self is PollRoomTimelineItem) && !(self is LiveLocationRoomTimelineItem)
     }
     
     var isRemoteMessage: Bool {
