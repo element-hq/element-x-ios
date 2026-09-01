@@ -5208,3 +5208,29 @@ home-swipe from a room, return, 4 dead drags ->
 `reset=["_UISystemGestureGateGestureRecognizer@UIWindow"]` and the next drag
 scrolls. If the gate ignores the toggle, next lever is doing the same sweep
 on `didBecomeActive` before any touch lands.
+
+## Round 76 (2026-09-01): gate survives the toggle - escalate + foreground sweep
+
+Three more wedges on the round-75 build: rageshakes 7608 (2026-08-29,
+roomlist) and 7625 (2026-08-31, roomlist), plus 7626 (2026-08-31, timeline).
+The 7625/7626 attached logs span one second each (the hour file had just
+rotated); 7608's log is the informative one.
+
+7608 (`console.2026-08-29-14.log`): the heal fired 13 times over 11 minutes
+on `HostingScrollView` (offset frozen at -159) and each time reset the gate,
+yet `_UISystemGestureGateGestureRecognizer@UIWindow:3/true/0` reappeared
+unchanged in the next chain dump: the `isEnabled` toggle does not reset that
+recogniser. Worse, the wedge predated the foreground - app
+`did become active` 13:13:59, the first drags (13:14:00-05) were already
+dead, and the only home swipe in the log came later (13:14:13) - so the
+stale gate survived from before the app last left the foreground.
+
+Change (`WindowManager.swift`, EXI `30808a5b1`): the reset now also drives
+the state machine directly (`state = .failed`) before the `isEnabled`
+toggle, and logs the post-write rawValue per recogniser so the next
+rageshake shows whether either write took; the same sweep now runs over all
+windows on every `didBecomeActive` (`foreground sweep cleared stale
+recognisers [...]`), clearing the gate before the first touch. VALIDATE:
+after a home-swipe wedge plus app switch, the sweep line appears on
+foreground and drags work immediately; if a wedge still occurs, the heal's
+`reset=[...]` entries now carry the post-write state.
