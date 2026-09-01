@@ -371,7 +371,12 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
         var hitScrollView: UIScrollView?
         var ancestor = hitView
         while let current = ancestor {
-            if scroll.isEmpty, let scrollView = current as? UIScrollView {
+            // Skip scroll-disabled scroll views: message bodies are MessageTextView
+            // (a UITextView, so a UIScrollView, with isScrollEnabled = false), and picking
+            // one as the hit scroll view both muted the scroll= diagnostics and reset the
+            // wedge counter - 12 consecutive dead drags on message text in 7626 never
+            // accumulated the 4 still touches the heal needs.
+            if scroll.isEmpty, let scrollView = current as? UIScrollView, scrollView.isScrollEnabled {
                 hitScrollView = scrollView
                 scroll = "\(type(of: scrollView)) enabled=\(scrollView.isScrollEnabled) tracking=\(scrollView.isTracking) dragging=\(scrollView.isDragging) decelerating=\(scrollView.isDecelerating) pan=\(scrollView.panGestureRecognizer.state.rawValue)/\(scrollView.panGestureRecognizer.isEnabled)/\(scrollView.panGestureRecognizer.numberOfTouches) content=\(Int(scrollView.contentSize.height)) bounds=\(Int(scrollView.bounds.height)) offset=\(Int(scrollView.contentOffset.y))"
             }
