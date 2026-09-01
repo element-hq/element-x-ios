@@ -741,24 +741,6 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         await enableAllSendQueuesEnableClosure?(enable)
     }
 
-    //MARK: - enableAutomaticBackpagination
-
-    private let enableAutomaticBackpaginationCallsCountLock = NSLock()
-    private var enableAutomaticBackpaginationUnderlyingCallsCount = 0
-    open var enableAutomaticBackpaginationCallsCount: Int {
-        get { enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount } }
-        set { enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount = newValue } }
-    }
-    open var enableAutomaticBackpaginationCalled: Bool {
-        return enableAutomaticBackpaginationCallsCount > 0
-    }
-    open var enableAutomaticBackpaginationClosure: (() -> Void)?
-
-    open override func enableAutomaticBackpagination() {
-        enableAutomaticBackpaginationCallsCountLock.withLock { enableAutomaticBackpaginationUnderlyingCallsCount += 1 }
-        enableAutomaticBackpaginationClosure?()
-    }
-
     //MARK: - enableAutomaticCallStatus
 
     private let enableAutomaticCallStatusEnabledCallsCountLock = NSLock()
@@ -1579,6 +1561,53 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try await getUrlUrlClosure(url)
         } else {
             return getUrlUrlReturnValue
+        }
+    }
+
+    //MARK: - getUrlPreview
+
+    open var getUrlPreviewUrlTsThrowableError: Error?
+    private let getUrlPreviewUrlTsCallsCountLock = NSLock()
+    private var getUrlPreviewUrlTsUnderlyingCallsCount = 0
+    open var getUrlPreviewUrlTsCallsCount: Int {
+        get { getUrlPreviewUrlTsCallsCountLock.withLock { getUrlPreviewUrlTsUnderlyingCallsCount } }
+        set { getUrlPreviewUrlTsCallsCountLock.withLock { getUrlPreviewUrlTsUnderlyingCallsCount = newValue } }
+    }
+    open var getUrlPreviewUrlTsCalled: Bool {
+        return getUrlPreviewUrlTsCallsCount > 0
+    }
+    private let getUrlPreviewUrlTsReceivedArgumentsLock = NSLock()
+    private var getUrlPreviewUrlTsUnderlyingReceivedArguments: (url: String, ts: UInt64?)?
+    open var getUrlPreviewUrlTsReceivedArguments: (url: String, ts: UInt64?)? {
+        get { getUrlPreviewUrlTsReceivedArgumentsLock.withLock { getUrlPreviewUrlTsUnderlyingReceivedArguments } }
+        set { getUrlPreviewUrlTsReceivedArgumentsLock.withLock { getUrlPreviewUrlTsUnderlyingReceivedArguments = newValue } }
+    }
+    private let getUrlPreviewUrlTsReceivedInvocationsLock = NSLock()
+    private var getUrlPreviewUrlTsUnderlyingReceivedInvocations: [(url: String, ts: UInt64?)] = []
+    open var getUrlPreviewUrlTsReceivedInvocations: [(url: String, ts: UInt64?)] {
+        get { getUrlPreviewUrlTsReceivedInvocationsLock.withLock { getUrlPreviewUrlTsUnderlyingReceivedInvocations } }
+        set { getUrlPreviewUrlTsReceivedInvocationsLock.withLock { getUrlPreviewUrlTsUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let getUrlPreviewUrlTsReturnValueLock = NSLock()
+    open var getUrlPreviewUrlTsUnderlyingReturnValue: String?
+    open var getUrlPreviewUrlTsReturnValue: String? {
+        get { getUrlPreviewUrlTsReturnValueLock.withLock { getUrlPreviewUrlTsUnderlyingReturnValue } }
+        set { getUrlPreviewUrlTsReturnValueLock.withLock { getUrlPreviewUrlTsUnderlyingReturnValue = newValue } }
+    }
+    open var getUrlPreviewUrlTsClosure: ((String, UInt64?) async throws -> String?)?
+
+    open override func getUrlPreview(url: String, ts: UInt64?) async throws -> String? {
+        if let error = getUrlPreviewUrlTsThrowableError {
+            throw error
+        }
+        getUrlPreviewUrlTsCallsCountLock.withLock { getUrlPreviewUrlTsUnderlyingCallsCount += 1 }
+        getUrlPreviewUrlTsReceivedArguments = (url: url, ts: ts)
+        getUrlPreviewUrlTsReceivedInvocationsLock.withLock { getUrlPreviewUrlTsUnderlyingReceivedInvocations.append((url: url, ts: ts)) }
+        if let getUrlPreviewUrlTsClosure = getUrlPreviewUrlTsClosure {
+            return try await getUrlPreviewUrlTsClosure(url, ts)
+        } else {
+            return getUrlPreviewUrlTsReturnValue
         }
     }
 
@@ -4913,6 +4942,49 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return dmRoomDefinitionDmRoomDefinitionClosure(dmRoomDefinition)
         } else {
             return dmRoomDefinitionDmRoomDefinitionReturnValue
+        }
+    }
+
+    //MARK: - enableAutomaticBackPagination
+
+    private let enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCountLock = NSLock()
+    private var enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingCallsCount = 0
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCount: Int {
+        get { enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCountLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingCallsCount } }
+        set { enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCountLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingCallsCount = newValue } }
+    }
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationCalled: Bool {
+        return enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCount > 0
+    }
+    private let enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPaginationLock = NSLock()
+    private var enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedEnableAutomaticBackPagination: Bool?
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPagination: Bool? {
+        get { enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPaginationLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedEnableAutomaticBackPagination } }
+        set { enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPaginationLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedEnableAutomaticBackPagination = newValue } }
+    }
+    private let enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocationsLock = NSLock()
+    private var enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedInvocations: [Bool] = []
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocations: [Bool] {
+        get { enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocationsLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedInvocations } }
+        set { enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocationsLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValueLock = NSLock()
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReturnValue: ClientBuilder!
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValue: ClientBuilder! {
+        get { enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValueLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReturnValue } }
+        set { enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValueLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReturnValue = newValue } }
+    }
+    open var enableAutomaticBackPaginationEnableAutomaticBackPaginationClosure: ((Bool) -> ClientBuilder)?
+
+    open override func enableAutomaticBackPagination(enableAutomaticBackPagination: Bool) -> ClientBuilder {
+        enableAutomaticBackPaginationEnableAutomaticBackPaginationCallsCountLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingCallsCount += 1 }
+        enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedEnableAutomaticBackPagination = enableAutomaticBackPagination
+        enableAutomaticBackPaginationEnableAutomaticBackPaginationReceivedInvocationsLock.withLock { enableAutomaticBackPaginationEnableAutomaticBackPaginationUnderlyingReceivedInvocations.append(enableAutomaticBackPagination) }
+        if let enableAutomaticBackPaginationEnableAutomaticBackPaginationClosure = enableAutomaticBackPaginationEnableAutomaticBackPaginationClosure {
+            return enableAutomaticBackPaginationEnableAutomaticBackPaginationClosure(enableAutomaticBackPagination)
+        } else {
+            return enableAutomaticBackPaginationEnableAutomaticBackPaginationReturnValue
         }
     }
 
@@ -9445,6 +9517,72 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     }
     fileprivate var underlyingHandle: UInt64!
 
+    //MARK: - activeHumanMemberIds
+
+    open var activeHumanMemberIdsThrowableError: Error?
+    private let activeHumanMemberIdsCallsCountLock = NSLock()
+    private var activeHumanMemberIdsUnderlyingCallsCount = 0
+    open var activeHumanMemberIdsCallsCount: Int {
+        get { activeHumanMemberIdsCallsCountLock.withLock { activeHumanMemberIdsUnderlyingCallsCount } }
+        set { activeHumanMemberIdsCallsCountLock.withLock { activeHumanMemberIdsUnderlyingCallsCount = newValue } }
+    }
+    open var activeHumanMemberIdsCalled: Bool {
+        return activeHumanMemberIdsCallsCount > 0
+    }
+
+    private let activeHumanMemberIdsReturnValueLock = NSLock()
+    open var activeHumanMemberIdsUnderlyingReturnValue: [String]!
+    open var activeHumanMemberIdsReturnValue: [String]! {
+        get { activeHumanMemberIdsReturnValueLock.withLock { activeHumanMemberIdsUnderlyingReturnValue } }
+        set { activeHumanMemberIdsReturnValueLock.withLock { activeHumanMemberIdsUnderlyingReturnValue = newValue } }
+    }
+    open var activeHumanMemberIdsClosure: (() async throws -> [String])?
+
+    open override func activeHumanMemberIds() async throws -> [String] {
+        if let error = activeHumanMemberIdsThrowableError {
+            throw error
+        }
+        activeHumanMemberIdsCallsCountLock.withLock { activeHumanMemberIdsUnderlyingCallsCount += 1 }
+        if let activeHumanMemberIdsClosure = activeHumanMemberIdsClosure {
+            return try await activeHumanMemberIdsClosure()
+        } else {
+            return activeHumanMemberIdsReturnValue
+        }
+    }
+
+    //MARK: - activeHumanMemberIdsNoSync
+
+    open var activeHumanMemberIdsNoSyncThrowableError: Error?
+    private let activeHumanMemberIdsNoSyncCallsCountLock = NSLock()
+    private var activeHumanMemberIdsNoSyncUnderlyingCallsCount = 0
+    open var activeHumanMemberIdsNoSyncCallsCount: Int {
+        get { activeHumanMemberIdsNoSyncCallsCountLock.withLock { activeHumanMemberIdsNoSyncUnderlyingCallsCount } }
+        set { activeHumanMemberIdsNoSyncCallsCountLock.withLock { activeHumanMemberIdsNoSyncUnderlyingCallsCount = newValue } }
+    }
+    open var activeHumanMemberIdsNoSyncCalled: Bool {
+        return activeHumanMemberIdsNoSyncCallsCount > 0
+    }
+
+    private let activeHumanMemberIdsNoSyncReturnValueLock = NSLock()
+    open var activeHumanMemberIdsNoSyncUnderlyingReturnValue: [String]!
+    open var activeHumanMemberIdsNoSyncReturnValue: [String]! {
+        get { activeHumanMemberIdsNoSyncReturnValueLock.withLock { activeHumanMemberIdsNoSyncUnderlyingReturnValue } }
+        set { activeHumanMemberIdsNoSyncReturnValueLock.withLock { activeHumanMemberIdsNoSyncUnderlyingReturnValue = newValue } }
+    }
+    open var activeHumanMemberIdsNoSyncClosure: (() async throws -> [String])?
+
+    open override func activeHumanMemberIdsNoSync() async throws -> [String] {
+        if let error = activeHumanMemberIdsNoSyncThrowableError {
+            throw error
+        }
+        activeHumanMemberIdsNoSyncCallsCountLock.withLock { activeHumanMemberIdsNoSyncUnderlyingCallsCount += 1 }
+        if let activeHumanMemberIdsNoSyncClosure = activeHumanMemberIdsNoSyncClosure {
+            return try await activeHumanMemberIdsNoSyncClosure()
+        } else {
+            return activeHumanMemberIdsNoSyncReturnValue
+        }
+    }
+
     //MARK: - activeMembersCount
 
     private let activeMembersCountCallsCountLock = NSLock()
@@ -13594,6 +13732,78 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
         }
     }
 
+    //MARK: - removeRoomSubscriptions
+
+    open var removeRoomSubscriptionsRoomIdsThrowableError: Error?
+    private let removeRoomSubscriptionsRoomIdsCallsCountLock = NSLock()
+    private var removeRoomSubscriptionsRoomIdsUnderlyingCallsCount = 0
+    open var removeRoomSubscriptionsRoomIdsCallsCount: Int {
+        get { removeRoomSubscriptionsRoomIdsCallsCountLock.withLock { removeRoomSubscriptionsRoomIdsUnderlyingCallsCount } }
+        set { removeRoomSubscriptionsRoomIdsCallsCountLock.withLock { removeRoomSubscriptionsRoomIdsUnderlyingCallsCount = newValue } }
+    }
+    open var removeRoomSubscriptionsRoomIdsCalled: Bool {
+        return removeRoomSubscriptionsRoomIdsCallsCount > 0
+    }
+    private let removeRoomSubscriptionsRoomIdsReceivedRoomIdsLock = NSLock()
+    private var removeRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds: [String]?
+    open var removeRoomSubscriptionsRoomIdsReceivedRoomIds: [String]? {
+        get { removeRoomSubscriptionsRoomIdsReceivedRoomIdsLock.withLock { removeRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds } }
+        set { removeRoomSubscriptionsRoomIdsReceivedRoomIdsLock.withLock { removeRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds = newValue } }
+    }
+    private let removeRoomSubscriptionsRoomIdsReceivedInvocationsLock = NSLock()
+    private var removeRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations: [[String]] = []
+    open var removeRoomSubscriptionsRoomIdsReceivedInvocations: [[String]] {
+        get { removeRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { removeRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations } }
+        set { removeRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { removeRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations = newValue } }
+    }
+    open var removeRoomSubscriptionsRoomIdsClosure: (([String]) throws -> Void)?
+
+    open override func removeRoomSubscriptions(roomIds: [String]) throws {
+        if let error = removeRoomSubscriptionsRoomIdsThrowableError {
+            throw error
+        }
+        removeRoomSubscriptionsRoomIdsCallsCountLock.withLock { removeRoomSubscriptionsRoomIdsUnderlyingCallsCount += 1 }
+        removeRoomSubscriptionsRoomIdsReceivedRoomIds = roomIds
+        removeRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { removeRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations.append(roomIds) }
+        try removeRoomSubscriptionsRoomIdsClosure?(roomIds)
+    }
+
+    //MARK: - resetAndAddRoomSubscriptions
+
+    open var resetAndAddRoomSubscriptionsRoomIdsThrowableError: Error?
+    private let resetAndAddRoomSubscriptionsRoomIdsCallsCountLock = NSLock()
+    private var resetAndAddRoomSubscriptionsRoomIdsUnderlyingCallsCount = 0
+    open var resetAndAddRoomSubscriptionsRoomIdsCallsCount: Int {
+        get { resetAndAddRoomSubscriptionsRoomIdsCallsCountLock.withLock { resetAndAddRoomSubscriptionsRoomIdsUnderlyingCallsCount } }
+        set { resetAndAddRoomSubscriptionsRoomIdsCallsCountLock.withLock { resetAndAddRoomSubscriptionsRoomIdsUnderlyingCallsCount = newValue } }
+    }
+    open var resetAndAddRoomSubscriptionsRoomIdsCalled: Bool {
+        return resetAndAddRoomSubscriptionsRoomIdsCallsCount > 0
+    }
+    private let resetAndAddRoomSubscriptionsRoomIdsReceivedRoomIdsLock = NSLock()
+    private var resetAndAddRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds: [String]?
+    open var resetAndAddRoomSubscriptionsRoomIdsReceivedRoomIds: [String]? {
+        get { resetAndAddRoomSubscriptionsRoomIdsReceivedRoomIdsLock.withLock { resetAndAddRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds } }
+        set { resetAndAddRoomSubscriptionsRoomIdsReceivedRoomIdsLock.withLock { resetAndAddRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds = newValue } }
+    }
+    private let resetAndAddRoomSubscriptionsRoomIdsReceivedInvocationsLock = NSLock()
+    private var resetAndAddRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations: [[String]] = []
+    open var resetAndAddRoomSubscriptionsRoomIdsReceivedInvocations: [[String]] {
+        get { resetAndAddRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { resetAndAddRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations } }
+        set { resetAndAddRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { resetAndAddRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations = newValue } }
+    }
+    open var resetAndAddRoomSubscriptionsRoomIdsClosure: (([String]) async throws -> Void)?
+
+    open override func resetAndAddRoomSubscriptions(roomIds: [String]) async throws {
+        if let error = resetAndAddRoomSubscriptionsRoomIdsThrowableError {
+            throw error
+        }
+        resetAndAddRoomSubscriptionsRoomIdsCallsCountLock.withLock { resetAndAddRoomSubscriptionsRoomIdsUnderlyingCallsCount += 1 }
+        resetAndAddRoomSubscriptionsRoomIdsReceivedRoomIds = roomIds
+        resetAndAddRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { resetAndAddRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations.append(roomIds) }
+        try await resetAndAddRoomSubscriptionsRoomIdsClosure?(roomIds)
+    }
+
     //MARK: - room
 
     open var roomRoomIdThrowableError: Error?
@@ -13641,6 +13851,42 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
         }
     }
 
+    //MARK: - setRoomSubscriptions
+
+    open var setRoomSubscriptionsRoomIdsThrowableError: Error?
+    private let setRoomSubscriptionsRoomIdsCallsCountLock = NSLock()
+    private var setRoomSubscriptionsRoomIdsUnderlyingCallsCount = 0
+    open var setRoomSubscriptionsRoomIdsCallsCount: Int {
+        get { setRoomSubscriptionsRoomIdsCallsCountLock.withLock { setRoomSubscriptionsRoomIdsUnderlyingCallsCount } }
+        set { setRoomSubscriptionsRoomIdsCallsCountLock.withLock { setRoomSubscriptionsRoomIdsUnderlyingCallsCount = newValue } }
+    }
+    open var setRoomSubscriptionsRoomIdsCalled: Bool {
+        return setRoomSubscriptionsRoomIdsCallsCount > 0
+    }
+    private let setRoomSubscriptionsRoomIdsReceivedRoomIdsLock = NSLock()
+    private var setRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds: [String]?
+    open var setRoomSubscriptionsRoomIdsReceivedRoomIds: [String]? {
+        get { setRoomSubscriptionsRoomIdsReceivedRoomIdsLock.withLock { setRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds } }
+        set { setRoomSubscriptionsRoomIdsReceivedRoomIdsLock.withLock { setRoomSubscriptionsRoomIdsUnderlyingReceivedRoomIds = newValue } }
+    }
+    private let setRoomSubscriptionsRoomIdsReceivedInvocationsLock = NSLock()
+    private var setRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations: [[String]] = []
+    open var setRoomSubscriptionsRoomIdsReceivedInvocations: [[String]] {
+        get { setRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { setRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations } }
+        set { setRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { setRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations = newValue } }
+    }
+    open var setRoomSubscriptionsRoomIdsClosure: (([String]) async throws -> Void)?
+
+    open override func setRoomSubscriptions(roomIds: [String]) async throws {
+        if let error = setRoomSubscriptionsRoomIdsThrowableError {
+            throw error
+        }
+        setRoomSubscriptionsRoomIdsCallsCountLock.withLock { setRoomSubscriptionsRoomIdsUnderlyingCallsCount += 1 }
+        setRoomSubscriptionsRoomIdsReceivedRoomIds = roomIds
+        setRoomSubscriptionsRoomIdsReceivedInvocationsLock.withLock { setRoomSubscriptionsRoomIdsUnderlyingReceivedInvocations.append(roomIds) }
+        try await setRoomSubscriptionsRoomIdsClosure?(roomIds)
+    }
+
     //MARK: - state
 
     private let stateListenerCallsCountLock = NSLock()
@@ -13682,42 +13928,6 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
         } else {
             return stateListenerReturnValue
         }
-    }
-
-    //MARK: - subscribeToRooms
-
-    open var subscribeToRoomsRoomIdsThrowableError: Error?
-    private let subscribeToRoomsRoomIdsCallsCountLock = NSLock()
-    private var subscribeToRoomsRoomIdsUnderlyingCallsCount = 0
-    open var subscribeToRoomsRoomIdsCallsCount: Int {
-        get { subscribeToRoomsRoomIdsCallsCountLock.withLock { subscribeToRoomsRoomIdsUnderlyingCallsCount } }
-        set { subscribeToRoomsRoomIdsCallsCountLock.withLock { subscribeToRoomsRoomIdsUnderlyingCallsCount = newValue } }
-    }
-    open var subscribeToRoomsRoomIdsCalled: Bool {
-        return subscribeToRoomsRoomIdsCallsCount > 0
-    }
-    private let subscribeToRoomsRoomIdsReceivedRoomIdsLock = NSLock()
-    private var subscribeToRoomsRoomIdsUnderlyingReceivedRoomIds: [String]?
-    open var subscribeToRoomsRoomIdsReceivedRoomIds: [String]? {
-        get { subscribeToRoomsRoomIdsReceivedRoomIdsLock.withLock { subscribeToRoomsRoomIdsUnderlyingReceivedRoomIds } }
-        set { subscribeToRoomsRoomIdsReceivedRoomIdsLock.withLock { subscribeToRoomsRoomIdsUnderlyingReceivedRoomIds = newValue } }
-    }
-    private let subscribeToRoomsRoomIdsReceivedInvocationsLock = NSLock()
-    private var subscribeToRoomsRoomIdsUnderlyingReceivedInvocations: [[String]] = []
-    open var subscribeToRoomsRoomIdsReceivedInvocations: [[String]] {
-        get { subscribeToRoomsRoomIdsReceivedInvocationsLock.withLock { subscribeToRoomsRoomIdsUnderlyingReceivedInvocations } }
-        set { subscribeToRoomsRoomIdsReceivedInvocationsLock.withLock { subscribeToRoomsRoomIdsUnderlyingReceivedInvocations = newValue } }
-    }
-    open var subscribeToRoomsRoomIdsClosure: (([String]) async throws -> Void)?
-
-    open override func subscribeToRooms(roomIds: [String]) async throws {
-        if let error = subscribeToRoomsRoomIdsThrowableError {
-            throw error
-        }
-        subscribeToRoomsRoomIdsCallsCountLock.withLock { subscribeToRoomsRoomIdsUnderlyingCallsCount += 1 }
-        subscribeToRoomsRoomIdsReceivedRoomIds = roomIds
-        subscribeToRoomsRoomIdsReceivedInvocationsLock.withLock { subscribeToRoomsRoomIdsUnderlyingReceivedInvocations.append(roomIds) }
-        try await subscribeToRoomsRoomIdsClosure?(roomIds)
     }
 
     //MARK: - syncIndicator
@@ -15230,34 +15440,48 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
 
     //MARK: - abort
 
-    open var abortThrowableError: Error?
-    private let abortCallsCountLock = NSLock()
-    private var abortUnderlyingCallsCount = 0
-    open var abortCallsCount: Int {
-        get { abortCallsCountLock.withLock { abortUnderlyingCallsCount } }
-        set { abortCallsCountLock.withLock { abortUnderlyingCallsCount = newValue } }
+    open var abortReasonThrowableError: Error?
+    private let abortReasonCallsCountLock = NSLock()
+    private var abortReasonUnderlyingCallsCount = 0
+    open var abortReasonCallsCount: Int {
+        get { abortReasonCallsCountLock.withLock { abortReasonUnderlyingCallsCount } }
+        set { abortReasonCallsCountLock.withLock { abortReasonUnderlyingCallsCount = newValue } }
     }
-    open var abortCalled: Bool {
-        return abortCallsCount > 0
+    open var abortReasonCalled: Bool {
+        return abortReasonCallsCount > 0
+    }
+    private let abortReasonReceivedReasonLock = NSLock()
+    private var abortReasonUnderlyingReceivedReason: String?
+    open var abortReasonReceivedReason: String? {
+        get { abortReasonReceivedReasonLock.withLock { abortReasonUnderlyingReceivedReason } }
+        set { abortReasonReceivedReasonLock.withLock { abortReasonUnderlyingReceivedReason = newValue } }
+    }
+    private let abortReasonReceivedInvocationsLock = NSLock()
+    private var abortReasonUnderlyingReceivedInvocations: [String?] = []
+    open var abortReasonReceivedInvocations: [String?] {
+        get { abortReasonReceivedInvocationsLock.withLock { abortReasonUnderlyingReceivedInvocations } }
+        set { abortReasonReceivedInvocationsLock.withLock { abortReasonUnderlyingReceivedInvocations = newValue } }
     }
 
-    private let abortReturnValueLock = NSLock()
-    open var abortUnderlyingReturnValue: Bool!
-    open var abortReturnValue: Bool! {
-        get { abortReturnValueLock.withLock { abortUnderlyingReturnValue } }
-        set { abortReturnValueLock.withLock { abortUnderlyingReturnValue = newValue } }
+    private let abortReasonReturnValueLock = NSLock()
+    open var abortReasonUnderlyingReturnValue: Bool!
+    open var abortReasonReturnValue: Bool! {
+        get { abortReasonReturnValueLock.withLock { abortReasonUnderlyingReturnValue } }
+        set { abortReasonReturnValueLock.withLock { abortReasonUnderlyingReturnValue = newValue } }
     }
-    open var abortClosure: (() async throws -> Bool)?
+    open var abortReasonClosure: ((String?) async throws -> Bool)?
 
-    open override func abort() async throws -> Bool {
-        if let error = abortThrowableError {
+    open override func abort(reason: String? = nil) async throws -> Bool {
+        if let error = abortReasonThrowableError {
             throw error
         }
-        abortCallsCountLock.withLock { abortUnderlyingCallsCount += 1 }
-        if let abortClosure = abortClosure {
-            return try await abortClosure()
+        abortReasonCallsCountLock.withLock { abortReasonUnderlyingCallsCount += 1 }
+        abortReasonReceivedReason = reason
+        abortReasonReceivedInvocationsLock.withLock { abortReasonUnderlyingReceivedInvocations.append(reason) }
+        if let abortReasonClosure = abortReasonClosure {
+            return try await abortReasonClosure(reason)
         } else {
-            return abortReturnValue
+            return abortReasonReturnValue
         }
     }
 
@@ -17672,6 +17896,53 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         editEventOrTransactionIdNewContentReceivedArguments = (eventOrTransactionId: eventOrTransactionId, newContent: newContent)
         editEventOrTransactionIdNewContentReceivedInvocationsLock.withLock { editEventOrTransactionIdNewContentUnderlyingReceivedInvocations.append((eventOrTransactionId: eventOrTransactionId, newContent: newContent)) }
         try await editEventOrTransactionIdNewContentClosure?(eventOrTransactionId, newContent)
+    }
+
+    //MARK: - editRevisions
+
+    open var editRevisionsEventIdThrowableError: Error?
+    private let editRevisionsEventIdCallsCountLock = NSLock()
+    private var editRevisionsEventIdUnderlyingCallsCount = 0
+    open var editRevisionsEventIdCallsCount: Int {
+        get { editRevisionsEventIdCallsCountLock.withLock { editRevisionsEventIdUnderlyingCallsCount } }
+        set { editRevisionsEventIdCallsCountLock.withLock { editRevisionsEventIdUnderlyingCallsCount = newValue } }
+    }
+    open var editRevisionsEventIdCalled: Bool {
+        return editRevisionsEventIdCallsCount > 0
+    }
+    private let editRevisionsEventIdReceivedEventIdLock = NSLock()
+    private var editRevisionsEventIdUnderlyingReceivedEventId: String?
+    open var editRevisionsEventIdReceivedEventId: String? {
+        get { editRevisionsEventIdReceivedEventIdLock.withLock { editRevisionsEventIdUnderlyingReceivedEventId } }
+        set { editRevisionsEventIdReceivedEventIdLock.withLock { editRevisionsEventIdUnderlyingReceivedEventId = newValue } }
+    }
+    private let editRevisionsEventIdReceivedInvocationsLock = NSLock()
+    private var editRevisionsEventIdUnderlyingReceivedInvocations: [String] = []
+    open var editRevisionsEventIdReceivedInvocations: [String] {
+        get { editRevisionsEventIdReceivedInvocationsLock.withLock { editRevisionsEventIdUnderlyingReceivedInvocations } }
+        set { editRevisionsEventIdReceivedInvocationsLock.withLock { editRevisionsEventIdUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let editRevisionsEventIdReturnValueLock = NSLock()
+    open var editRevisionsEventIdUnderlyingReturnValue: [EditRevisionRecord]!
+    open var editRevisionsEventIdReturnValue: [EditRevisionRecord]! {
+        get { editRevisionsEventIdReturnValueLock.withLock { editRevisionsEventIdUnderlyingReturnValue } }
+        set { editRevisionsEventIdReturnValueLock.withLock { editRevisionsEventIdUnderlyingReturnValue = newValue } }
+    }
+    open var editRevisionsEventIdClosure: ((String) async throws -> [EditRevisionRecord])?
+
+    open override func editRevisions(eventId: String) async throws -> [EditRevisionRecord] {
+        if let error = editRevisionsEventIdThrowableError {
+            throw error
+        }
+        editRevisionsEventIdCallsCountLock.withLock { editRevisionsEventIdUnderlyingCallsCount += 1 }
+        editRevisionsEventIdReceivedEventId = eventId
+        editRevisionsEventIdReceivedInvocationsLock.withLock { editRevisionsEventIdUnderlyingReceivedInvocations.append(eventId) }
+        if let editRevisionsEventIdClosure = editRevisionsEventIdClosure {
+            return try await editRevisionsEventIdClosure(eventId)
+        } else {
+            return editRevisionsEventIdReturnValue
+        }
     }
 
     //MARK: - endPoll

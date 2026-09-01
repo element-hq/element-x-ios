@@ -246,7 +246,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 
                 Task { [weak self] in
                     do {
-                        try await self?.roomListService.subscribeToRooms(roomIds: roomIDs)
+                        try await self?.roomListService.setRoomSubscriptions(roomIds: roomIDs)
                     } catch {
                         MXLog.error("Failed subscribing to rooms with error: \(error)")
                     }
