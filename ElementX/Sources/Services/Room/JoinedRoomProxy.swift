@@ -114,7 +114,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         subscribedForUpdates = true
         
         do {
-            try await roomListService.subscribeToRooms(roomIds: [id])
+            try await roomListService.setRoomSubscriptions(roomIds: [id])
         } catch {
             MXLog.error("Failed subscribing to room with error: \(error)")
         }

@@ -73,9 +73,9 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .rooms:
             return .all(filters: [.category(expect: .group), .joined])
         case .unreads:
-            return .all(filters: [.unread, .joined])
+            return .all(filters: [.readReceipts(expect: .notifications), .joined])
         case .mentions:
-            return .all(filters: [.mentions, .joined])
+            return .all(filters: [.readReceipts(expect: .mentions), .joined])
         case .favourites:
             return .all(filters: [.favourite, .joined])
         case .invites:

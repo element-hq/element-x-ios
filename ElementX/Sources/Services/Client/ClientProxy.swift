@@ -214,11 +214,6 @@ class ClientProxy: ClientProxyProtocol {
         
         userProfileSubject = .init(UserProfile(userID: (try? client.userId()) ?? ""))
         
-        if appSettings.automaticBackPaginationEnabled {
-            // Must be called before creating the sync service, timelines etc.
-            client.enableAutomaticBackpagination()
-        }
-        
         mediaLoader = MediaLoader(client: client)
         
         // Route media downloads through a content scanner when one has been configured for the server,

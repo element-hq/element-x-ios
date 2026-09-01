@@ -45,17 +45,17 @@ final class RoomListFiltersStateTests {
         #expect(state.isFiltering)
         #expect(state.activeFilters == [.people])
         #expect(state.availableFilters == [.unreads, .mentions, .favourites])
-
+        
         state.deactivateFilter(.people)
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
         #expect(state.availableFilters == allCasesWithoutLowPriority)
-
+        
         state.activateFilter(.rooms)
         #expect(state.isFiltering)
         #expect(state.activeFilters == [.rooms])
         #expect(state.availableFilters == [.unreads, .mentions, .favourites])
-
+        
         state.activateFilter(.unreads)
         #expect(state.isFiltering)
         #expect(state.activeFilters == [.rooms, .unreads])
@@ -75,15 +75,15 @@ final class RoomListFiltersStateTests {
         state.activateFilter(.people)
         #expect(state.activeFilters == [.people])
         #expect(state.availableFilters == [.unreads, .mentions, .favourites])
-
+        
         state.activateFilter(.unreads)
         #expect(state.activeFilters == [.people, .unreads])
         #expect(state.availableFilters == [.mentions, .favourites])
-
+        
         state.activateFilter(.favourites)
         #expect(state.activeFilters == [.people, .unreads, .favourites])
         #expect(state.availableFilters == [.mentions])
-
+        
         state.activateFilter(.mentions)
         #expect(state.activeFilters == [.people, .unreads, .favourites, .mentions])
         #expect(state.availableFilters == [])
@@ -99,24 +99,24 @@ final class RoomListFiltersStateTests {
         state.activateFilter(.favourites)
         #expect(state.activeFilters == [.favourites])
         #expect(state.availableFilters == [.unreads, .mentions, .people, .rooms])
-
+        
         state.deactivateFilter(.favourites)
         #expect(state.activeFilters == [])
         #expect(state.availableFilters == allCasesWithoutLowPriority)
-
+        
         state.activateFilter(.rooms)
         #expect(state.activeFilters == [.rooms])
         #expect(state.availableFilters == [.unreads, .mentions, .favourites])
-
+        
         state.activateFilter(.unreads)
         #expect(state.activeFilters == [.rooms, .unreads])
         #expect(state.availableFilters == [.mentions, .favourites])
-
+        
         state.deactivateFilter(.unreads)
         #expect(state.activeFilters == [.rooms])
         #expect(state.availableFilters == [.unreads, .mentions, .favourites])
     }
-
+    
     @Test
     func mentionsFilter() {
         state.activateFilter(.mentions)
