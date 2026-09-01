@@ -11,16 +11,6 @@ import Foundation
 // MARK: - Custom URLs
 
 nonisolated extension URL {
-    /// The directory holding the sounds that iOS uses for its own interface.
-    static let systemSoundsDirectory: URL = {
-        let systemRoot = if let simulatorRoot = ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] {
-            URL(filePath: simulatorRoot)
-        } else {
-            URL(filePath: "/")
-        }
-        return systemRoot.appending(components: "System", "Library", "Audio", "UISounds", directoryHint: .isDirectory)
-    }()
-    
     /// The URL of the primary app group container.
     static var appGroupContainerDirectory: URL {
         guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.main.appGroupIdentifier) else {
@@ -102,6 +92,16 @@ nonisolated extension URL {
         
         return url
     }
+    
+    /// The directory holding the sounds that iOS uses for its own interface.
+    static let systemSoundsDirectory: URL = {
+        let systemRoot = if let simulatorRoot = ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] {
+            URL(filePath: simulatorRoot)
+        } else {
+            URL(filePath: "/")
+        }
+        return systemRoot.appending(components: "System", "Library", "Audio", "UISounds", directoryHint: .isDirectory)
+    }()
     
     var globalProxy: String? {
         guard let proxySettings = CFNetworkCopySystemProxySettings()?.takeRetainedValue() else {

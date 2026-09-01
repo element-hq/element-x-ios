@@ -8,8 +8,6 @@
 
 import Foundation
 
-/// Short sounds played on top of whatever the app is already playing. They go through the app's
-/// own audio session, so unlike the sounds built into iOS they are heard in silent mode too.
 enum SoundEffect {
     /// A short, light blip.
     case tink
@@ -29,6 +27,8 @@ protocol MediaPlayerProviderProtocol {
     func unregister(audioPlayerState: AudioPlayerState)
     func detachAllStates(except exception: AudioPlayerState?) async
     
+    /// Plays a short sound on top of whatever is already playing. It goes through the app's own
+    /// audio session, so unlike the sounds built into iOS it is heard in silent mode too.
     func play(soundEffect: SoundEffect)
 }
 
