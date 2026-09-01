@@ -5248,3 +5248,32 @@ isScrollEnabled=false), which the ancestor walk picked as the hit scroll
 view, resetting the wedge counter each time. EXI `75660dfc0` walks past
 scroll-disabled scroll views so the counter tracks the table. The round-76
 foreground sweep should pre-empt both cases at did-become-active.
+
+## Rounds 73-74 backfill, and tracker sync (2026-09-01)
+
+Rounds 73-74 (2026-08-27/28) landed without doc sections; for the record:
+
+**Round 73 (rageshakes 7588/7589): thread-reply previews downgraded to
+UTD.** A gappy sync of a thread root built the root's bundled
+`latest_event` as a UTD (servers only bundle ciphertext) and saving it
+overwrote the reply's already-decrypted store copy, so the room-list
+preview showed "Waiting for this message" until the room was opened. Fix
+SDK `57b2a36d0`: skip the bundled save when it is a UTD of an event the
+cache already knows decrypted (regression test; upstream candidate).
+Secondary gap SDK `7f0888734`: the redecryptor heal was dropped for rooms
+unregistered at cold start; registration now recomputes restored
+unable-to-decrypt latest-event values. Builds 214-215.
+
+**Round 74: no pushes / no NSE logs after delete+reinstall.** Dev-signed
+Release builds hold a sandbox APNs token but registered the `.ios.prod`
+pusher (`pusherAppID` only switches under `#if DEBUG`); a stale production
+token had been masking it until the reinstall invalidated it. Fix EXI
+`85a9c41b5`: `#if DEBUG || DOGFOOD_SANDBOX_PUSH` around the pusher id;
+build-install-exi.sh passes the flag. Build 216.
+
+**element-meta#3290 synced through round 76** (2026-09-01): appended six
+sections covering rounds 71-76 - the deferred-pos flush (`b1066622a`), the
+round-71 viewer fixes (`6cee95732`, `a444f0a49`), the scroll-wedge arc
+rounds 72-76 (`dd417146d`, `9f2ca4a4b`, `30808a5b1`, `75660dfc0`), round
+73 (`57b2a36d0`, `7f0888734`), round 74 (`85a9c41b5`), plus stragglers
+`1dda0a80c`, `9cd090513` and SDK `391bbbd93`.
