@@ -14,7 +14,8 @@ struct TimelineItemMenuActionProviderTests {
         let item = makeLiveLocationItem(isLive: true)
         let actions = try #require(makeActions(for: item))
         
-        #expect(!actions.actions.contains(where: \.isForward))
+        let hasForward = actions.actions.contains(where: \.isForward)
+        #expect(!hasForward)
     }
     
     @Test
@@ -22,7 +23,8 @@ struct TimelineItemMenuActionProviderTests {
         let item = makeLiveLocationItem(isLive: false)
         let actions = try #require(makeActions(for: item))
         
-        #expect(!actions.actions.contains(where: \.isForward))
+        let hasForward = actions.actions.contains(where: \.isForward)
+        #expect(!hasForward)
     }
     
     @Test
@@ -30,7 +32,8 @@ struct TimelineItemMenuActionProviderTests {
         let item = PollRoomTimelineItem.mock(poll: .emptyDisclosed)
         let actions = try #require(makeActions(for: item))
         
-        #expect(!actions.actions.contains(where: \.isForward))
+        let hasForward = actions.actions.contains(where: \.isForward)
+        #expect(!hasForward)
     }
     
     @Test
@@ -44,7 +47,8 @@ struct TimelineItemMenuActionProviderTests {
                                         content: .init(body: "Hello"))
         let actions = try #require(makeActions(for: item))
         
-        #expect(actions.actions.contains(where: \.isForward))
+        let hasForward = actions.actions.contains(where: \.isForward)
+        #expect(hasForward)
     }
     
     // MARK: - Helpers
