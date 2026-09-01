@@ -5234,3 +5234,17 @@ recognisers [...]`), clearing the gate before the first touch. VALIDATE:
 after a home-swipe wedge plus app switch, the sweep line appears on
 foreground and drags work immediately; if a wedge still occurs, the heal's
 `reset=[...]` entries now carry the post-write state.
+
+**Round 76 addendum (full phone log for 7625/7626,
+`console.2026-09-01-00.log`):** both wedges followed home-swipe cycles and
+both self-cleared after the rageshake sheet's modal round-trip (another "row
+rebuild" cure). 7625 (roomlist, 23:20Z): heal fired 3x and reset BOTH window
+gate instances (`.ended` and `.failed`) - drags stayed dead, re-confirming
+the isEnabled toggle is not enough on the r75 build. 7626 (timeline,
+23:22Z): different signature - `pan=0/true/1`, the pan holds the touch but
+never leaves .possible - and the heal never fired: 12 consecutive dead drags
+landed on `MessageTextView`, a UITextView (hence UIScrollView,
+isScrollEnabled=false), which the ancestor walk picked as the hit scroll
+view, resetting the wedge counter each time. EXI `75660dfc0` walks past
+scroll-disabled scroll views so the counter tracks the table. The round-76
+foreground sweep should pre-empt both cases at did-become-active.
