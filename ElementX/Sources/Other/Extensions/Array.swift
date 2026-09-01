@@ -64,4 +64,18 @@ nonisolated extension Array where Element == RoomTimelineItemProtocol {
     func firstUsingStableID(_ id: TimelineItemIdentifier) -> Element? {
         first { $0.id.uniqueID == id.uniqueID }
     }
+    
+    /// The voice message that directly follows the item with the given ID, if there is one.
+    ///
+    /// Decorations such as date separators and the read marker are ignored, but any other
+    /// kind of item in between means that no voice message directly follows.
+    func voiceMessageDirectlyFollowing(_ id: TimelineItemIdentifier) -> VoiceMessageRoomTimelineItem? {
+        guard let index = firstIndex(where: { $0.id.uniqueID == id.uniqueID }) else { return nil }
+        
+        for item in self[index...].dropFirst() where !(item is DecorationTimelineItemProtocol) {
+            return item as? VoiceMessageRoomTimelineItem
+        }
+        
+        return nil
+    }
 }
