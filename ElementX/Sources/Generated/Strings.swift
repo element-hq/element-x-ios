@@ -3339,6 +3339,10 @@ internal nonisolated enum L10n {
   internal static var screenRoomlistFilterLowPriority: String { return L10n.tr("Localizable", "screen_roomlist_filter_low_priority") }
   /// You don’t have any low priority chats yet
   internal static var screenRoomlistFilterLowPriorityEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_low_priority_empty_state_title") }
+  /// Mention
+  internal static var screenRoomlistFilterMention: String { return L10n.tr("Localizable", "screen_roomlist_filter_mention") }
+  /// You don’t have any unread mentions
+  internal static var screenRoomlistFilterMentionEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_mention_empty_state_title") }
   /// You can deselect filters in order to see your other chats
   internal static var screenRoomlistFilterMixedEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_mixed_empty_state_subtitle") }
   /// You don’t have chats for this selection

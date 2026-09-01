@@ -37,7 +37,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .unreads:
             return L10n.screenRoomlistFilterUnreads
         case .mentions:
-            return UntranslatedL10n.screenRoomlistFilterMentions
+            return L10n.screenRoomlistFilterMention
         case .favourites:
             return L10n.screenRoomlistFilterFavourites
         case .invites:
@@ -101,6 +101,10 @@ struct RoomListFiltersState {
         
         if !appSettings.lowPriorityFilterEnabled {
             availableFilters.remove(.lowPriority)
+        }
+        
+        if !appSettings.mentionsFilterEnabled {
+            availableFilters.remove(.mentions)
         }
         
         for filter in activeFilters {

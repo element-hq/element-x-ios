@@ -75,6 +75,10 @@ struct DeveloperOptionsScreen: View {
                     Text("Low priority filter")
                 }
                 
+                Toggle(isOn: $context.mentionsFilterEnabled) {
+                    Text("Mentions filter")
+                }
+                
                 Toggle(isOn: $context.automaticBackPaginationEnabled) {
                     Text("Automatic back pagination")
                     Text("Requires app reboot")

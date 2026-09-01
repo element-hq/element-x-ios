@@ -17,7 +17,7 @@ struct RoomListFiltersEmptyStateView: View {
             case .unreads:
                 return L10n.screenRoomlistFilterUnreadsEmptyStateTitle
             case .mentions:
-                return UntranslatedL10n.screenRoomlistFilterMentionsEmptyStateTitle
+                return L10n.screenRoomlistFilterMentionEmptyStateTitle
             case .people:
                 return L10n.screenRoomlistFilterPeopleEmptyStateTitle
             case .rooms:
