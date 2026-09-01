@@ -95,13 +95,35 @@ class WindowManager: SecureWindowManagerProtocol {
         for name in [UIApplication.willEnterForegroundNotification, UIApplication.didBecomeActiveNotification] {
             let trigger = name.rawValue
             NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
-                MainActor.assumeIsolated { self?.logWindowState(trigger: trigger) }
+                MainActor.assumeIsolated {
+                    self?.logWindowState(trigger: trigger)
+                    if name == UIApplication.didBecomeActiveNotification {
+                        self?.resetStaleRecognisersInAllWindows()
+                    }
+                }
             }
         }
         
         delegate?.windowManagerDidConfigureWindows(self)
     }
     
+    // 7608: the room list was already wedged on the first touch after didBecomeActive - the
+    // stale system gesture gate survived from before the app left the foreground. Clear it
+    // before the user touches anything. Strip before upstreaming (with the rest of TouchDebug).
+    private func resetStaleRecognisersInAllWindows() {
+        var reset = [String]()
+        for window in windows {
+            var stack: [UIView] = [window]
+            while let view = stack.popLast() {
+                reset += TouchLoggingGestureRecognizer.resetStaleRecognisers(on: view)
+                stack.append(contentsOf: view.subviews)
+            }
+        }
+        if !reset.isEmpty {
+            MXLog.info("TouchDebug: foreground sweep cleared stale recognisers \(reset)")
+        }
+    }
+
     private func logWindowState(trigger: String) {
         let sceneState = mainScene.map { String(describing: $0.activationState) } ?? "no scene"
         let sceneWindows = mainScene?.windows.count ?? -1
@@ -399,13 +421,8 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
                     while let current = view {
                         for recognizer in current.gestureRecognizers ?? [] where recognizer !== self {
                             chain.append("\(type(of: recognizer))@\(type(of: current)):\(recognizer.state.rawValue)/\(recognizer.isEnabled)/\(recognizer.numberOfTouches)")
-                            if recognizer.isEnabled, recognizer.numberOfTouches == 0,
-                               [.ended, .cancelled, .failed].contains(recognizer.state) {
-                                recognizer.isEnabled = false
-                                recognizer.isEnabled = true
-                                reset.append("\(type(of: recognizer))@\(type(of: current))")
-                            }
                         }
+                        reset += Self.resetStaleRecognisers(on: current, excluding: self)
                         view = current.superview
                     }
                     MXLog.info("TouchDebug[\(label)]: pan wedged after \(wedgeCount) still touches at offset \(Int(wedgeOffset)) on \(type(of: scrollView)); reset=\(reset) chain=\(chain)")
@@ -419,6 +436,26 @@ private final class TouchLoggingGestureRecognizer: UIGestureRecognizer {
                 wedgeCount = 1
             }
         }
+    }
+
+    /// Clears recognisers stuck in a terminal state with no touches. A recogniser still in
+    /// .ended/.cancelled/.failed when a fresh event arrives never got its end-of-event reset
+    /// (the home-indicator swipe hands its touch to the system) and blocks everything that
+    /// waits on it. The isEnabled toggle alone provably did not clear
+    /// _UISystemGestureGateGestureRecognizer (7608: still .ended in the next chain dump after
+    /// every toggle), so drive the state machine directly as well; the logged rawValue after
+    /// the writes shows whether either took.
+    static func resetStaleRecognisers(on view: UIView, excluding excluded: UIGestureRecognizer? = nil) -> [String] {
+        var reset = [String]()
+        for recognizer in view.gestureRecognizers ?? [] where recognizer !== excluded {
+            guard recognizer.isEnabled, recognizer.numberOfTouches == 0,
+                  [.ended, .cancelled, .failed].contains(recognizer.state) else { continue }
+            recognizer.state = .failed
+            recognizer.isEnabled = false
+            recognizer.isEnabled = true
+            reset.append("\(type(of: recognizer))@\(type(of: view)):\(recognizer.state.rawValue)")
+        }
+        return reset
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
