@@ -24,7 +24,7 @@ struct AuthenticationStartScreenViewState: BindableState {
     /// The presentation anchor used for OAuth authentication.
     var window: UIWindow?
     
-    let serverName: String?
+    let serverNameOrBaseURL: String?
     let showCreateAccountButton: Bool
     let showQRCodeLoginButton: Bool
     
@@ -36,8 +36,8 @@ struct AuthenticationStartScreenViewState: BindableState {
     var bindings = AuthenticationStartScreenViewStateBindings()
     
     var loginButtonTitle: String {
-        if let serverName {
-            L10n.screenOnboardingSignInTo(serverName)
+        if let serverNameOrBaseURL {
+            L10n.screenOnboardingSignInTo(serverNameOrBaseURL)
         } else if showQRCodeLoginButton {
             L10n.screenOnboardingSignInManually
         } else {
