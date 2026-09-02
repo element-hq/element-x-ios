@@ -465,7 +465,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private func userHasSignedIn(userSession: UserSessionProtocol) {
         delegate?.authenticationFlowCoordinator(didLoginWithSession: userSession)
         
-        let newServer = authenticationService.homeserver.value.address
+        let newServer = authenticationService.homeserver.value.serverNameOrBaseURL
         homeserverHistoryManager.addServerToList(newServer)
     }
 }
