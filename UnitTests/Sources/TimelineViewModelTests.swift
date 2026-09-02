@@ -599,27 +599,30 @@ final class TimelineViewModelTests {
     // MARK: - Redaction
     
     @Test
-    func redactionAsksForConfirmation() {
+    func redactionAsksForConfirmation() async throws {
         // Given a timeline containing a message that has been sent.
         let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
         let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // When choosing to remove it.
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.bindings.redactConfirmationInfo?.id == item.id }
         viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
         
         // Then a confirmation should be shown without anything being redacted yet.
-        #expect(viewModel.context.redactConfirmationInfo?.id == item.id)
+        try await deferred.fulfill()
         #expect(!timelineController.redactReasonCalled)
     }
     
     @Test
-    func redactionSendsTheReason() async {
+    func redactionSendsTheReason() async throws {
         // Given a timeline showing a redaction confirmation.
         let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
         let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
         let viewModel = makeViewModel(timelineController: timelineController)
+        let deferredConfirmation = deferFulfillment(viewModel.context.$viewState) { $0.bindings.redactConfirmationInfo != nil }
         viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
+        try await deferredConfirmation.fulfill()
         
         // When confirming the removal with a reason.
         // The redaction runs in an unstructured task, so wait for the call rather than asserting straight after.
@@ -651,13 +654,14 @@ final class TimelineViewModelTests {
     }
     
     @Test
-    func redactionCanBeCancelled() {
+    func redactionCanBeCancelled() async throws {
         // Given a timeline showing a redaction confirmation.
         let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
         let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
         let viewModel = makeViewModel(timelineController: timelineController)
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.bindings.redactConfirmationInfo != nil }
         viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
-        #expect(viewModel.context.redactConfirmationInfo != nil)
+        try await deferred.fulfill()
         
         // When dismissing the sheet without confirming.
         viewModel.context.redactConfirmationInfo = nil
