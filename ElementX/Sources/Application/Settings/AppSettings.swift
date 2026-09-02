@@ -420,9 +420,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var threadsEnabled: Bool
     
-    @UserPreference(defaultValue: false)
-    var roomThreadListEnabled: Bool
-    
     @UserPreference(defaultValue: ProcessInfo().isiOSAppOnMac)
     var globalSearchEnabled: Bool
     
