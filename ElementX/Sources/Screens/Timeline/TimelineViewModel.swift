@@ -197,17 +197,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
-            // A message that was never sent has nobody to give a reason to, so it is removed without asking.
-            if case .redact = action, case .event(_, .eventID) = itemID {
-                state.bindings.redactConfirmationInfo = .init(id: itemID)
-            } else {
-                timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
-            }
+            timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
         case .redactConfirmed(let itemID, let reason):
             state.bindings.redactConfirmationInfo = nil
             // A blank reason is no reason at all, so don't send one.
-            timelineInteractionHandler.handleTimelineItemMenuAction(.redact(isMedia: false, reason: reason?.isBlank == false ? reason : nil),
-                                                                    itemID: itemID)
+            timelineInteractionHandler.redact(itemID, reason: reason?.isBlank == false ? reason : nil)
         case .tappedOnSenderDetails(let sender):
             handleTappedOnSenderDetails(sender: sender)
         case .displayEmojiPicker(let itemID):
@@ -543,6 +537,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     } else {
                         self.state.bindings.actionMenuInfo = actionMenuInfo
                     }
+                case .showRedactConfirmation(let itemID):
+                    state.bindings.redactConfirmationInfo = .init(id: itemID)
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
                 case .viewInRoomTimeline(let eventID):
@@ -1131,7 +1127,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              verticalButtons: sendHandle.map { sendHandle in
                                                  [.init(title: L10n.actionRetry) { [weak self] in self?.retrySending(sendHandle) },
                                                   .init(title: L10n.actionRemoveMessage, role: .destructive) { [weak self] in
-                                                      self?.timelineInteractionHandler.handleTimelineItemMenuAction(.redact(isMedia: false), itemID: sendHandle.itemID)
+                                                      self?.timelineInteractionHandler.redact(sendHandle.itemID, reason: nil)
                                                   }]
                                              })
         case .encryptionAuthenticity(let message):
