@@ -11988,34 +11988,34 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
     }
     //MARK: - redact
 
-    private let redactCallsCountLock = NSLock()
-    private nonisolated(unsafe) var redactUnderlyingCallsCount = 0
-    var redactCallsCount: Int {
-        get { redactCallsCountLock.withLock { redactUnderlyingCallsCount } }
-        set { redactCallsCountLock.withLock { redactUnderlyingCallsCount = newValue } }
+    private let redactReasonCallsCountLock = NSLock()
+    private nonisolated(unsafe) var redactReasonUnderlyingCallsCount = 0
+    var redactReasonCallsCount: Int {
+        get { redactReasonCallsCountLock.withLock { redactReasonUnderlyingCallsCount } }
+        set { redactReasonCallsCountLock.withLock { redactReasonUnderlyingCallsCount = newValue } }
     }
-    var redactCalled: Bool {
-        return redactCallsCount > 0
+    var redactReasonCalled: Bool {
+        return redactReasonCallsCount > 0
     }
-    private let redactReceivedEventOrTransactionIDLock = NSLock()
-    private nonisolated(unsafe) var redactUnderlyingReceivedEventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID?
-    var redactReceivedEventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID? {
-        get { redactReceivedEventOrTransactionIDLock.withLock { redactUnderlyingReceivedEventOrTransactionID } }
-        set { redactReceivedEventOrTransactionIDLock.withLock { redactUnderlyingReceivedEventOrTransactionID = newValue } }
+    private let redactReasonReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var redactReasonUnderlyingReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?)?
+    var redactReasonReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?)? {
+        get { redactReasonReceivedArgumentsLock.withLock { redactReasonUnderlyingReceivedArguments } }
+        set { redactReasonReceivedArgumentsLock.withLock { redactReasonUnderlyingReceivedArguments = newValue } }
     }
-    private let redactReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var redactUnderlyingReceivedInvocations: [TimelineItemIdentifier.EventOrTransactionID] = []
-    var redactReceivedInvocations: [TimelineItemIdentifier.EventOrTransactionID] {
-        get { redactReceivedInvocationsLock.withLock { redactUnderlyingReceivedInvocations } }
-        set { redactReceivedInvocationsLock.withLock { redactUnderlyingReceivedInvocations = newValue } }
+    private let redactReasonReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var redactReasonUnderlyingReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?)] = []
+    var redactReasonReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?)] {
+        get { redactReasonReceivedInvocationsLock.withLock { redactReasonUnderlyingReceivedInvocations } }
+        set { redactReasonReceivedInvocationsLock.withLock { redactReasonUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var redactClosure: ((TimelineItemIdentifier.EventOrTransactionID) async -> Void)?
+    nonisolated(unsafe) var redactReasonClosure: ((TimelineItemIdentifier.EventOrTransactionID, String?) async -> Void)?
 
-    @concurrent func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
-        redactCallsCountLock.withLock { redactUnderlyingCallsCount += 1 }
-        redactReceivedEventOrTransactionID = eventOrTransactionID
-        redactReceivedInvocationsLock.withLock { redactUnderlyingReceivedInvocations.append(eventOrTransactionID) }
-        await redactClosure?(eventOrTransactionID)
+    @concurrent func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?) async {
+        redactReasonCallsCountLock.withLock { redactReasonUnderlyingCallsCount += 1 }
+        redactReasonReceivedArguments = (eventOrTransactionID: eventOrTransactionID, reason: reason)
+        redactReasonReceivedInvocationsLock.withLock { redactReasonUnderlyingReceivedInvocations.append((eventOrTransactionID: eventOrTransactionID, reason: reason)) }
+        await redactReasonClosure?(eventOrTransactionID, reason)
     }
     //MARK: - pin
 

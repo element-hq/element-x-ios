@@ -596,6 +596,95 @@ final class TimelineViewModelTests {
     
     // MARK: - Helpers
     
+    // MARK: - Redaction
+    
+    @Test
+    func redactionAsksForConfirmation() {
+        // Given a timeline containing a message that has been sent.
+        let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        // When choosing to remove it.
+        viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
+        
+        // Then a confirmation should be shown without anything being redacted yet.
+        #expect(viewModel.context.redactConfirmationInfo?.id == item.id)
+        #expect(!timelineController.redactReasonCalled)
+    }
+    
+    @Test
+    func redactionSendsTheReason() async {
+        // Given a timeline showing a redaction confirmation.
+        let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
+        
+        // When confirming the removal with a reason.
+        // The redaction runs in an unstructured task, so wait for the call rather than asserting straight after.
+        await waitForConfirmation { confirmation in
+            timelineController.redactReasonClosure = { _, _ in confirmation() }
+            viewModel.context.send(viewAction: .redactConfirmed(itemID: item.id, reason: "Posted in the wrong room"))
+        }
+        
+        // Then the reason should be sent with the redaction and the confirmation dismissed.
+        #expect(timelineController.redactReasonReceivedArguments?.reason == "Posted in the wrong room")
+        #expect(viewModel.context.redactConfirmationInfo == nil)
+    }
+    
+    @Test
+    func redactionIgnoresABlankReason() async {
+        // Given a timeline containing a message that has been sent.
+        let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        // When confirming the removal without typing a reason.
+        await waitForConfirmation { confirmation in
+            timelineController.redactReasonClosure = { _, _ in confirmation() }
+            viewModel.context.send(viewAction: .redactConfirmed(itemID: item.id, reason: "   "))
+        }
+        
+        // Then no reason should be sent, behaving exactly as it did before the confirmation existed.
+        #expect(timelineController.redactReasonReceivedArguments?.reason == nil)
+    }
+    
+    @Test
+    func redactionCanBeCancelled() {
+        // Given a timeline showing a redaction confirmation.
+        let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
+        #expect(viewModel.context.redactConfirmationInfo != nil)
+        
+        // When dismissing the sheet without confirming.
+        viewModel.context.redactConfirmationInfo = nil
+        
+        // Then nothing should be redacted.
+        #expect(!timelineController.redactReasonCalled)
+    }
+    
+    @Test
+    func redactionOfAnUnsentMessageSkipsTheConfirmation() async {
+        // Given a message that was never sent, so has nobody to give a reason to.
+        let timelineController = TimelineControllerMock(.init(timelineItems: []))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        let itemID = TimelineItemIdentifier.event(uniqueID: .init(UUID().uuidString),
+                                                  eventOrTransactionID: .transactionID(UUID().uuidString))
+        
+        // When choosing to remove it.
+        await waitForConfirmation { confirmation in
+            timelineController.redactReasonClosure = { _, _ in confirmation() }
+            viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: itemID, action: .redact(isMedia: false)))
+        }
+        
+        // Then it should be redacted immediately, with no reason and no confirmation.
+        #expect(viewModel.context.redactConfirmationInfo == nil)
+        #expect(timelineController.redactReasonReceivedArguments?.reason == nil)
+    }
+    
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
                                timelineController: TimelineControllerProtocol) -> TimelineViewModel {

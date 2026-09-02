@@ -91,6 +91,6 @@ enum TimelineMediaPreviewViewAction {
     case updateCurrentItem(TimelineMediaPreviewItem)
     case showItemDetails(TimelineMediaPreviewItem.Media)
     case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem.Media)
-    case redactConfirmation(item: TimelineMediaPreviewItem.Media)
+    case redactConfirmation(item: TimelineMediaPreviewItem.Media, reason: String)
     case timelineEndReached
 }

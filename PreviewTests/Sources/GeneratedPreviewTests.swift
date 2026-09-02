@@ -859,6 +859,13 @@ extension PreviewTests {
     }
 
     @Test
+    func redactConfirmationView() async throws {
+        for (index, preview) in RedactConfirmationView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func redactedRoomTimelineView() async throws {
         for (index, preview) in RedactedRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
