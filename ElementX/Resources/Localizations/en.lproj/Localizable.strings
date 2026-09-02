@@ -950,6 +950,8 @@
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";

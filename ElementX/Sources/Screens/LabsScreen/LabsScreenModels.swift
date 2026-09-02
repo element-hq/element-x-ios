@@ -36,6 +36,7 @@ struct LabsScreenViewStateBindings {
 
 protocol LabsOptionsProtocol: AnyObject {
     var threadsEnabled: Bool { get set }
+    var galleryEnabled: Bool { get set }
 }
 
 extension AppSettings: LabsOptionsProtocol { }
