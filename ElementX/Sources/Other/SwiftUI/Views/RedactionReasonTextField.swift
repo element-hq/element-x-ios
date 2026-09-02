@@ -14,7 +14,7 @@ struct RedactionReasonTextField: View {
     @Binding var reason: String
     
     var body: some View {
-        TextField(UntranslatedL10n.screenRoomConfirmRemovalReasonPlaceholder, text: $reason)
-            .textFieldStyle(.compound(labelText: UntranslatedL10n.screenRoomConfirmRemovalReasonLabel))
+        TextField(L10n.screenRoomConfirmRemovalReasonPlaceholder, text: $reason)
+            .textFieldStyle(.compound(labelText: L10n.screenRoomConfirmRemovalReasonLabel))
     }
 }
