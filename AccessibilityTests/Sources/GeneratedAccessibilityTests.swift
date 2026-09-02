@@ -491,6 +491,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ReadReceiptsSummaryView_Previews")
     }
 
+    func testRedactConfirmationView() async throws {
+        try await performAccessibilityAudit(named: "RedactConfirmationView_Previews")
+    }
+
     func testRedactedRoomTimelineView() async throws {
         try await performAccessibilityAudit(named: "RedactedRoomTimelineView_Previews")
     }

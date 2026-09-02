@@ -64,7 +64,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case removeCaption
     case editPoll
     case copyPermalink
-    case redact(isMedia: Bool)
+    case redact(isMedia: Bool, reason: String? = nil)
     case reply(isThread: Bool)
     case replyInThread
     case forward(itemID: TimelineItemIdentifier)
@@ -169,7 +169,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionReplyInThread, icon: \.threads)
         case .forward:
             Label(L10n.actionForward, icon: \.forward)
-        case .redact(let isMedia):
+        case .redact(let isMedia, _):
             Label(isMedia ? L10n.actionDeleteFile : L10n.actionRemoveMessage, icon: \.delete)
         case .viewSource:
             Label(L10n.actionViewSource, icon: \.code)

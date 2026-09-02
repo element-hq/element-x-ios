@@ -197,7 +197,17 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
-            timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
+            // A message that was never sent has nobody to give a reason to, so it is removed without asking.
+            if case .redact = action, case .event(_, .eventID) = itemID {
+                state.bindings.redactConfirmationInfo = .init(id: itemID)
+            } else {
+                timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
+            }
+        case .redactConfirmed(let itemID, let reason):
+            state.bindings.redactConfirmationInfo = nil
+            // A blank reason is no reason at all, so don't send one.
+            timelineInteractionHandler.handleTimelineItemMenuAction(.redact(isMedia: false, reason: reason?.isBlank == false ? reason : nil),
+                                                                    itemID: itemID)
         case .tappedOnSenderDetails(let sender):
             handleTappedOnSenderDetails(sender: sender)
         case .displayEmojiPicker(let itemID):

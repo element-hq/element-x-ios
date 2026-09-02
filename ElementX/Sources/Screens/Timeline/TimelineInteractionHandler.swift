@@ -118,9 +118,9 @@ class TimelineInteractionHandler {
     func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         // Redacting needs the event alone, so it works even when the item isn't part of this timeline,
         // such as one held by a media preview that was built from a different one.
-        if case .redact = action {
+        if case .redact(_, let reason) = action {
             guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
-            Task { await timelineController.redact(eventOrTransactionID) }
+            Task { await timelineController.redact(eventOrTransactionID, reason: reason) }
             return
         }
         
