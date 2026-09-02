@@ -101,11 +101,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Jump to unread")
                     Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")
                 }
-                
-                Toggle(isOn: $context.knockingEnabled) {
-                    Text("Knocking")
-                    Text("Ask to join rooms")
-                }
             }
             
             Section {
