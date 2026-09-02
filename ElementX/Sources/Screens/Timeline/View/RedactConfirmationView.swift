@@ -53,11 +53,11 @@ struct RedactConfirmationView: View {
     
     private var header: some View {
         VStack(spacing: 8) {
-            Text(UntranslatedL10n.screenRoomConfirmRemovalTitle)
+            Text(L10n.screenRoomConfirmRemovalTitle)
                 .font(.compound.headingMDBold)
                 .foregroundStyle(.compound.textPrimary)
             
-            Text(UntranslatedL10n.screenRoomConfirmRemovalMessage)
+            Text(L10n.screenRoomConfirmRemovalMessage)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textSecondary)
         }

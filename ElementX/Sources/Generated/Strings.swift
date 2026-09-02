@@ -2224,6 +2224,14 @@ internal nonisolated enum L10n {
   internal static var screenKnockRequestsListInitialLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_initial_loading_title") }
   /// Requests to join
   internal static var screenKnockRequestsListTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_title") }
+  /// Gallery messages
+  internal static var screenLabsEnableGallery: String { return L10n.tr("Localizable", "screen_labs_enable_gallery") }
+  /// Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.
+  internal static var screenLabsEnableGalleryDescription: String { return L10n.tr("Localizable", "screen_labs_enable_gallery_description") }
+  /// Ask to join
+  internal static var screenLabsEnableKnocking: String { return L10n.tr("Localizable", "screen_labs_enable_knocking") }
+  /// Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.
+  internal static var screenLabsEnableKnockingDescription: String { return L10n.tr("Localizable", "screen_labs_enable_knocking_description") }
   /// Enable thread replies
   internal static var screenLabsEnableThreads: String { return L10n.tr("Localizable", "screen_labs_enable_threads") }
   /// The app will restart to apply this change.
@@ -2984,6 +2992,14 @@ internal nonisolated enum L10n {
   internal static var screenRoomChangeRoleUnsavedChangesDescription: String { return L10n.tr("Localizable", "screen_room_change_role_unsaved_changes_description") }
   /// Save changes?
   internal static var screenRoomChangeRoleUnsavedChangesTitle: String { return L10n.tr("Localizable", "screen_room_change_role_unsaved_changes_title") }
+  /// Are you sure you wish to remove this message?
+  internal static var screenRoomConfirmRemovalMessage: String { return L10n.tr("Localizable", "screen_room_confirm_removal_message") }
+  /// Reason (optional)
+  internal static var screenRoomConfirmRemovalReasonLabel: String { return L10n.tr("Localizable", "screen_room_confirm_removal_reason_label") }
+  /// Enter…
+  internal static var screenRoomConfirmRemovalReasonPlaceholder: String { return L10n.tr("Localizable", "screen_room_confirm_removal_reason_placeholder") }
+  /// Confirm removal
+  internal static var screenRoomConfirmRemovalTitle: String { return L10n.tr("Localizable", "screen_room_confirm_removal_title") }
   /// Add topic
   internal static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
   /// Encrypted
