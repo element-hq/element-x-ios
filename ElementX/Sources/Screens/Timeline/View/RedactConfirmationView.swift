@@ -36,19 +36,15 @@ struct RedactConfirmationView: View {
         }
         .scrollBounceBehavior(.basedOnSize)
         .presentationDetents([.height(sheetHeight)])
+        .presentationDragIndicator(.hidden)
         .presentationBackground(.compound.bgCanvasDefault)
+        .interactiveDismissDisabled()
     }
     
     private var closeButton: some View {
-        Button { dismiss() } label: {
-            CompoundIcon(\.close, size: .medium, relativeTo: .compound.bodyLG)
-                .foregroundStyle(.compound.iconPrimary)
-                .padding(8)
-                .background(.compound.bgSubtleSecondary, in: Circle())
-        }
-        .frame(maxWidth: .infinity, alignment: .trailing)
-        .padding(.top, 16)
-        .accessibilityLabel(L10n.actionClose)
+        ToolbarButton(role: .close) { dismiss() }
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding(.top, 16)
     }
     
     private var header: some View {
@@ -62,7 +58,6 @@ struct RedactConfirmationView: View {
                 .foregroundStyle(.compound.textSecondary)
         }
         .multilineTextAlignment(.center)
-        .frame(maxWidth: .infinity)
         .padding(.top, 8)
         .padding(.bottom, 24)
     }
