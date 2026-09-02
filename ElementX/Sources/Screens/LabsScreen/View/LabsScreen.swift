@@ -17,6 +17,7 @@ struct LabsScreen: View {
             header
             threadsSection
             gallerySection
+            knockingSection
         }
         .compoundList()
         .navigationTitle(L10n.screenLabsTitle)
@@ -68,6 +69,17 @@ struct LabsScreen: View {
                     kind: .toggle($context.galleryEnabled))
         } footer: {
             Text(L10n.screenLabsEnableGalleryDescription)
+                .compoundListSectionFooter()
+        }
+    }
+    
+    private var knockingSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.screenLabsEnableKnocking,
+                                    icon: \.askToJoin),
+                    kind: .toggle($context.knockingEnabled))
+        } footer: {
+            Text(L10n.screenLabsEnableKnockingDescription)
                 .compoundListSectionFooter()
         }
     }

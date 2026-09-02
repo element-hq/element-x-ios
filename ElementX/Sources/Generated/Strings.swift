@@ -2228,6 +2228,10 @@ internal nonisolated enum L10n {
   internal static var screenLabsEnableGallery: String { return L10n.tr("Localizable", "screen_labs_enable_gallery") }
   /// Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.
   internal static var screenLabsEnableGalleryDescription: String { return L10n.tr("Localizable", "screen_labs_enable_gallery_description") }
+  /// Ask to join
+  internal static var screenLabsEnableKnocking: String { return L10n.tr("Localizable", "screen_labs_enable_knocking") }
+  /// Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.
+  internal static var screenLabsEnableKnockingDescription: String { return L10n.tr("Localizable", "screen_labs_enable_knocking_description") }
   /// Enable thread replies
   internal static var screenLabsEnableThreads: String { return L10n.tr("Localizable", "screen_labs_enable_threads") }
   /// The app will restart to apply this change.
