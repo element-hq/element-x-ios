@@ -2224,6 +2224,10 @@ internal nonisolated enum L10n {
   internal static var screenKnockRequestsListInitialLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_initial_loading_title") }
   /// Requests to join
   internal static var screenKnockRequestsListTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_title") }
+  /// Gallery messages
+  internal static var screenLabsEnableGallery: String { return L10n.tr("Localizable", "screen_labs_enable_gallery") }
+  /// Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.
+  internal static var screenLabsEnableGalleryDescription: String { return L10n.tr("Localizable", "screen_labs_enable_gallery_description") }
   /// Enable thread replies
   internal static var screenLabsEnableThreads: String { return L10n.tr("Localizable", "screen_labs_enable_threads") }
   /// The app will restart to apply this change.

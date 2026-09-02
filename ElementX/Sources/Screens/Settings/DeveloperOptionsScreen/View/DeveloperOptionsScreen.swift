@@ -97,11 +97,6 @@ struct DeveloperOptionsScreen: View {
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
                 
-                Toggle(isOn: $context.galleryEnabled) {
-                    Text("Gallery messages")
-                    Text("Allows sending multiple media in a single message. Received galleries always render regardless of this setting.")
-                }
-                
                 Toggle(isOn: $context.jumpToReadMarkerEnabled) {
                     Text("Jump to unread")
                     Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")
