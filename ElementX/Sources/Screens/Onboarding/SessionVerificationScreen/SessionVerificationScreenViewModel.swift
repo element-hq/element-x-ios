@@ -24,6 +24,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     }
     
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
+         secureBackupController: SecureBackupControllerProtocol,
          flow: SessionVerificationScreenFlow,
          appSettings: AppSettings,
          mediaProvider: MediaProviderProtocol,
@@ -35,10 +36,18 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         
         super.init(initialViewState: .init(flow: flow,
                                            learnMoreURL: appSettings.encryptionURL,
-                                           verificationState: verificationState),
+                                           verificationState: verificationState,
+                                           isMissingSecrets: secureBackupController.recoveryState.value == .incomplete),
                    mediaProvider: mediaProvider)
         
         setupStateMachine()
+        
+        secureBackupController.recoveryState
+            .map { $0 == .incomplete }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.isMissingSecrets, on: self)
+            .store(in: &cancellables)
         
         sessionVerificationControllerProxy.actions
             .receive(on: DispatchQueue.main)

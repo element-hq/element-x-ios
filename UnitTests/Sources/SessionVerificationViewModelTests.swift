@@ -20,6 +20,7 @@ struct SessionVerificationViewModelTests {
     init() throws {
         sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
         viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController,
+                                                       secureBackupController: SecureBackupControllerMock(.init()),
                                                        flow: .deviceInitiator,
                                                        appSettings: .volatile(),
                                                        mediaProvider: MediaProviderMock(.init()))
@@ -108,7 +109,45 @@ struct SessionVerificationViewModelTests {
         #expect(sessionVerificationController.declineVerificationCallsCount == 1)
     }
     
+    @Test
+    func missingSecretsMakesVerificationUnavailable() async throws {
+        let sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
+        let viewModel = makeResponderViewModel(sessionVerificationController: sessionVerificationController,
+                                               recoveryState: .incomplete)
+        
+        #expect(viewModel.context.viewState.isUnavailable)
+        #expect(viewModel.context.viewState.title == UntranslatedL10n.screenSessionVerificationUnavailableTitle)
+        #expect(viewModel.context.viewState.message == UntranslatedL10n.screenSessionVerificationUnavailableSubtitle)
+        
+        try await Task.sleep(for: .milliseconds(100))
+        #expect(sessionVerificationController.acceptVerificationRequestCallsCount == 0)
+    }
+    
+    @Test
+    func holdingSecretsAllowsVerification() {
+        let viewModel = makeResponderViewModel(sessionVerificationController: SessionVerificationControllerProxyMock.configureMock(),
+                                               recoveryState: .enabled)
+        
+        #expect(!viewModel.context.viewState.isUnavailable)
+        #expect(viewModel.context.viewState.title == L10n.screenSessionVerificationRequestTitle)
+    }
+    
     // MARK: - Private
+    
+    private func makeResponderViewModel(sessionVerificationController: SessionVerificationControllerProxyMock,
+                                        recoveryState: SecureBackupRecoveryState) -> SessionVerificationScreenViewModelProtocol {
+        let details = SessionVerificationRequestDetails(senderProfile: UserProfile(userID: "@bob:matrix.org"),
+                                                        flowID: "flow-id",
+                                                        deviceID: "CODEMISTAKE",
+                                                        deviceDisplayName: "Bob's Element X iOS",
+                                                        firstSeenDate: .init(timeIntervalSince1970: 0))
+        
+        return SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController,
+                                                  secureBackupController: SecureBackupControllerMock(.init(recoveryState: recoveryState)),
+                                                  flow: .deviceResponder(requestDetails: details),
+                                                  appSettings: .volatile(),
+                                                  mediaProvider: MediaProviderMock(.init()))
+    }
     
     private mutating func setupChallengeReceived() async throws {
         let actionsPublisher = sessionVerificationController.actions.delay(for: .seconds(0.1), scheduler: DispatchQueue.main)

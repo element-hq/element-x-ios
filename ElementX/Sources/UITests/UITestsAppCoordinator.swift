@@ -604,6 +604,7 @@ class MockScreen: Identifiable {
             var sessionVerificationControllerProxy = SessionVerificationControllerProxyMock.configureMock(otherDeviceStartsSasVerification: true,
                                                                                                           requestDelay: .seconds(5))
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
+                                                                            secureBackupController: SecureBackupControllerMock(.init()),
                                                                             flow: .deviceInitiator,
                                                                             appSettings: appSettings,
                                                                             mediaProvider: MediaProviderMock(.init()))

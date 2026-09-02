@@ -32,6 +32,7 @@ enum SessionVerificationScreenFlow {
 
 struct SessionVerificationScreenCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
+    let secureBackupController: SecureBackupControllerProtocol
     let flow: SessionVerificationScreenFlow
     let appSettings: AppSettings
     let mediaProvider: MediaProviderProtocol
@@ -49,6 +50,7 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: SessionVerificationScreenCoordinatorParameters) {
         viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy,
+                                                       secureBackupController: parameters.secureBackupController,
                                                        flow: parameters.flow,
                                                        appSettings: parameters.appSettings,
                                                        mediaProvider: parameters.mediaProvider)

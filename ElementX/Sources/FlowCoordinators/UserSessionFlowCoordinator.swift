@@ -431,6 +431,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let navigationStackCoordinator = NavigationStackCoordinator()
         
         let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
+                                                                        secureBackupController: userSession.clientProxy.secureBackupController,
                                                                         flow: flow,
                                                                         appSettings: flowParameters.appSettings,
                                                                         mediaProvider: userSession.mediaProvider)

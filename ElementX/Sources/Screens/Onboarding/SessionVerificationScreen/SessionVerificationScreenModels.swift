@@ -30,7 +30,19 @@ struct SessionVerificationScreenViewState: BindableState {
     
     var verificationState: SessionVerificationScreenStateMachine.State
     
+    /// Whether this session is missing the secrets it would need to verify another one.
+    var isMissingSecrets: Bool
+    
+    /// Whether the user should be told that this session can't be used to verify the one asking.
+    var isUnavailable: Bool {
+        isMissingSecrets && flow.isResponder && verificationState == .initial
+    }
+    
     var headerIcon: (keyPath: KeyPath<CompoundIcons, Image>, style: BigIcon.Style) {
+        if isUnavailable {
+            return (\.errorSolid, .alertSolid)
+        }
+        
         switch verificationState {
         case .initial, .acceptingVerificationRequest, .requestingVerification,
              .verificationRequestAccepted, .startingSasVerification, .sasVerificationStarted,
@@ -59,6 +71,10 @@ struct SessionVerificationScreenViewState: BindableState {
     }
     
     var title: String? {
+        if isUnavailable {
+            return UntranslatedL10n.screenSessionVerificationUnavailableTitle
+        }
+        
         switch verificationState {
         case .initial, .acceptingVerificationRequest, .requestingVerification,
              .verificationRequestAccepted, .startingSasVerification, .sasVerificationStarted,
@@ -90,6 +106,10 @@ struct SessionVerificationScreenViewState: BindableState {
     }
     
     var message: String {
+        if isUnavailable {
+            return UntranslatedL10n.screenSessionVerificationUnavailableSubtitle
+        }
+        
         switch verificationState {
         case .initial, .acceptingVerificationRequest, .requestingVerification,
              .verificationRequestAccepted, .startingSasVerification, .sasVerificationStarted,
