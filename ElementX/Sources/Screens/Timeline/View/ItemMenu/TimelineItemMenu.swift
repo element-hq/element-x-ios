@@ -339,6 +339,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
                                                       pinnedEventIDs: [],
                                                       isViewSourceEnabled: true,
                                                       areThreadsEnabled: true,
+                                                      isMultiSelectEnabled: true,
                                                       timelineKind: .live,
                                                       emojiProvider: EmojiProvider(appSettings: .volatile()))
         guard let actions = provider.makeActions() else { return nil }

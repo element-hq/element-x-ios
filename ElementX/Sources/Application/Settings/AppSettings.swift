@@ -423,6 +423,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var threadsEnabled: Bool
     
+    @UserPreference(defaultValue: false)
+    var messageMultiSelectEnabled: Bool
+    
     @UserPreference(defaultValue: ProcessInfo().isiOSAppOnMac)
     var globalSearchEnabled: Bool
     

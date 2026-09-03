@@ -17,6 +17,7 @@ struct TimelineItemMenuActionProvider {
     let pinnedEventIDs: Set<String>
     let isViewSourceEnabled: Bool
     let areThreadsEnabled: Bool
+    let isMultiSelectEnabled: Bool
     let timelineKind: TimelineKind
     let emojiProvider: EmojiProviderProtocol
     
@@ -33,7 +34,7 @@ struct TimelineItemMenuActionProvider {
         }
         
         if timelineItem is EncryptedRoomTimelineItem {
-            return makeEncryptedItemActions()
+            return makeEncryptedItemActions(for: item)
         }
         
         var actions: [TimelineItemMenuAction] = []
@@ -63,6 +64,10 @@ struct TimelineItemMenuActionProvider {
         
         if item.isForwardable {
             actions.append(.forward(itemID: item.id))
+        }
+        
+        if isMultiSelectEnabled, item.isBulkSelectable {
+            actions.append(.select)
         }
         
         if item.isEditable, canCurrentUserSendMessage {
@@ -147,8 +152,12 @@ struct TimelineItemMenuActionProvider {
         return .init(isReactable: isReactable, actions: actions, secondaryActions: secondaryActions, emojiProvider: emojiProvider)
     }
     
-    private func makeEncryptedItemActions() -> TimelineItemMenuActions? {
+    private func makeEncryptedItemActions(for item: EventBasedTimelineItemProtocol) -> TimelineItemMenuActions? {
         var actions: [TimelineItemMenuAction] = [.copyPermalink]
+        
+        if isMultiSelectEnabled, item.isBulkSelectable {
+            actions.append(.select)
+        }
         
         if isViewSourceEnabled {
             actions.append(.viewSource)

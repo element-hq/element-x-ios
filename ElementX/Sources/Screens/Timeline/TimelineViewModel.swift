@@ -20,6 +20,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         static let detachedTimelineSize: UInt16 = 100
         static let focusTimelineToastIndicatorID = "RoomScreenFocusTimelineToastIndicator"
         static let toastErrorID = "RoomScreenToastError"
+        static let selectionCapIndicatorID = "RoomScreenSelectionCapIndicator"
     }
     
     private let roomProxy: JoinedRoomProxyProtocol
@@ -102,6 +103,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        areThreadsEnabled: appSettings.threadsEnabled,
                                                        linkPreviewsEnabled: appSettings.linkPreviewsEnabled,
                                                        jumpToReadMarkerEnabled: appSettings.jumpToReadMarkerEnabled,
+                                                       selection: .init(isEnabled: appSettings.messageMultiSelectEnabled),
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
@@ -196,12 +198,20 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
+        case .handleTimelineItemMenuAction(let itemID, .select):
+            enterSelection(itemID: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
         case .redactConfirmed(let itemID, let reason):
             state.bindings.redactConfirmationInfo = nil
             // A blank reason is no reason at all, so don't send one.
             timelineInteractionHandler.redact(itemID, reason: reason?.isBlank == false ? reason : nil)
+        case .enterSelection(let itemID):
+            enterSelection(itemID: itemID)
+        case .toggleSelection(let itemID):
+            toggleSelection(itemID: itemID)
+        case .clearSelection:
+            state.selection.selectedEventIDs.removeAll()
         case .tappedOnSenderDetails(let sender):
             handleTappedOnSenderDetails(sender: sender)
         case .displayEmojiPicker(let itemID):
@@ -582,6 +592,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         appSettings.jumpToReadMarkerEnabledPublisher
             .weakAssign(to: \.state.jumpToReadMarkerEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.messageMultiSelectEnabledPublisher
+            .sink { [weak self] isEnabled in
+                self?.state.selection.isEnabled = isEnabled
+                if !isEnabled {
+                    self?.state.selection.selectedEventIDs.removeAll()
+                }
+            }
             .store(in: &cancellables)
         
         userSession.clientProxy.timelineMediaVisibilityPublisher
@@ -1169,6 +1188,51 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                               type: .toast,
                                                               title: title,
                                                               icon: \.close))
+    }
+}
+
+// MARK: - Selection
+
+extension TimelineViewModel {
+    private func enterSelection(itemID: TimelineItemIdentifier) {
+        guard state.canSelectMessages, let eventID = selectableEventID(for: itemID) else { return }
+        
+        actionsSubject.send(.composer(action: .removeFocus))
+        
+        guard !state.selection.isAtCap || state.selection.selectedEventIDs.contains(eventID) else {
+            showSelectionCapToast()
+            return
+        }
+        
+        state.selection.selectedEventIDs.insert(eventID)
+    }
+    
+    private func toggleSelection(itemID: TimelineItemIdentifier) {
+        guard state.selection.isActive, let eventID = selectableEventID(for: itemID) else { return }
+        
+        if state.selection.selectedEventIDs.contains(eventID) {
+            state.selection.selectedEventIDs.remove(eventID)
+        } else if state.selection.isAtCap {
+            showSelectionCapToast()
+        } else {
+            state.selection.selectedEventIDs.insert(eventID)
+        }
+    }
+    
+    /// The event ID of the item, when it is part of this timeline and can be bulk selected.
+    private func selectableEventID(for itemID: TimelineItemIdentifier) -> String? {
+        guard let item = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedTimelineItemProtocol,
+              item.isBulkSelectable else {
+            return nil
+        }
+        return item.id.eventID
+    }
+    
+    private func showSelectionCapToast() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Constants.selectionCapIndicatorID,
+                                                              type: .toast,
+                                                              title: UntranslatedL10n.screenRoomSelectionCapReached,
+                                                              icon: \.info))
     }
 }
 
