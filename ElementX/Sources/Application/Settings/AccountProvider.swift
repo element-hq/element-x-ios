@@ -15,12 +15,27 @@ nonisolated enum AccountProvider: Equatable {
     
     /// The account provider's string value, shown in the UI and used to build a `Client` with.
     var serverNameOrBaseURL: String {
-        switch self {
+        let serverNameOrBaseURL = switch self {
         case .generic(let serverNameOrBaseURL):
             serverNameOrBaseURL
         case .managed(let serverName, let baseURL, let canUseServerName):
             canUseServerName ? serverName : baseURL.absoluteString
         }
+        
+        return sanitize(serverNameOrBaseURL)
+    }
+    
+    /// Sanitizes an address with the following rules:
+    /// - Trim any whitespace.
+    /// - Lowercase the address.
+    /// - Removes an https scheme (treating it as implicit).
+    /// - Remove any trailing slashes.
+    private func sanitize(_ serverNameOrBaseURL: String) -> String {
+        serverNameOrBaseURL
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+            .trimmingPrefix("https://") // Intentionally continue to show http:// as an indicator (and for history).
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
     }
 }
 

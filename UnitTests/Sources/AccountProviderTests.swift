@@ -11,6 +11,22 @@ import Testing
 
 struct AccountProviderTests {
     @Test
+    func genericAddressIsSanitized() {
+        // Lowercased, whitespace trimmed, https:// dropped and trailing slashes removed.
+        #expect(AccountProvider.generic("Matrix.org").serverNameOrBaseURL == "matrix.org")
+        #expect(AccountProvider.generic("  matrix.org  ").serverNameOrBaseURL == "matrix.org")
+        #expect(AccountProvider.generic("https://matrix.org").serverNameOrBaseURL == "matrix.org")
+        #expect(AccountProvider.generic("https://matrix.org/").serverNameOrBaseURL == "matrix.org")
+        #expect(AccountProvider.generic("HTTPS://Matrix.org///").serverNameOrBaseURL == "matrix.org")
+    }
+    
+    @Test
+    func genericAddressKeepsHTTPScheme() {
+        #expect(AccountProvider.generic("http://localhost:8008").serverNameOrBaseURL == "http://localhost:8008",
+                "The http:// scheme should be preserved as an indicator")
+    }
+    
+    @Test
     func managedUsesServerNameWhenPresent() {
         let provider = AccountProvider.managed(serverName: "Matrix.org",
                                                baseURL: "https://matrix-client.matrix.org",

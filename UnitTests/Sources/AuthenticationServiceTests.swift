@@ -75,7 +75,7 @@ struct AuthenticationServiceTests {
         }
         
         #expect(service.flow == .login)
-        #expect(service.homeserver.value == .init(serverNameOrBaseURL: "matrix.org", loginMode: .unknown))
+        #expect(service.homeserver.value == .init(accountProvider: .generic("matrix.org"), loginMode: .unknown))
     }
     
     @Test
