@@ -16,6 +16,7 @@ struct HomeScreenRoomCell: View {
     
     let room: HomeScreenRoom
     var roomListActivityVisibility: RoomListActivityVisibility = .show
+    var roomListNotificationCountEnabled = false
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
@@ -155,9 +156,22 @@ struct HomeScreenRoomCell: View {
                 }
                 
                 if room.badges.isDotShown {
-                    Circle()
-                        .frame(width: 12, height: 12)
-                        .accessibilityLabel(L10n.a11yNotificationsNewMessages)
+                    if roomListNotificationCountEnabled, room.isHighlighted, room.badges.notificationCount > 0 {
+                        Text(formattedNotificationCount)
+                            .font(.compound.bodySMSemibold)
+                            .foregroundColor(.compound.textOnSolidPrimary)
+                            .lineLimit(1)
+                            .padding(.horizontal, 6)
+                            .frame(minWidth: 20, minHeight: 20)
+                            .background {
+                                Capsule().fill(Color.compound.iconAccentTertiary)
+                            }
+                            .accessibilityLabel(L10n.a11yNotificationsNewMessages)
+                    } else {
+                        Circle()
+                            .frame(width: 12, height: 12)
+                            .accessibilityLabel(L10n.a11yNotificationsNewMessages)
+                    }
                 }
             }
             .foregroundColor(room.isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
@@ -167,6 +181,10 @@ struct HomeScreenRoomCell: View {
     private var mentionIcon: some View {
         CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
             .accessibilityLabel(L10n.a11yNotificationsNewMentions)
+    }
+    
+    private var formattedNotificationCount: String {
+        room.badges.notificationCount > 99 ? "99+" : "\(room.badges.notificationCount)"
     }
     
     @ViewBuilder
@@ -235,7 +253,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         
         VStack(spacing: 0) {
             ForEach(notificationsStateRooms) { room in
-                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
+                HomeScreenRoomCell(room: room, roomListNotificationCountEnabled: true, isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
             }
         }
         .previewLayout(.sizeThatFits)

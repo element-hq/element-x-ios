@@ -347,6 +347,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: RoomListActivityVisibility.show)
     var roomListActivityVisibility: RoomListActivityVisibility
     
+    @UserPreference(defaultValue: false)
+    var roomListNotificationCountEnabled: Bool
+    
     // MARK: - Room Screen
     
     @UserPreference(defaultValue: AppBuildType.current == .debug)
