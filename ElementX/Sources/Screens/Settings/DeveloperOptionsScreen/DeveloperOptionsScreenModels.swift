@@ -59,6 +59,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var automaticBackPaginationEnabled: Bool { get set }
     
     var roomListActivityVisibility: RoomListActivityVisibility { get set }
+    var roomListNotificationCountEnabled: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
     
     var fuzzyRoomListSearchEnabled: Bool { get set }

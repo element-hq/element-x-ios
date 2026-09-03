@@ -67,6 +67,10 @@ struct DeveloperOptionsScreen: View {
                     }
                 }
                 
+                Toggle(isOn: $context.roomListNotificationCountEnabled) {
+                    Text("Show unread notification count")
+                }
+                
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")
                 }
