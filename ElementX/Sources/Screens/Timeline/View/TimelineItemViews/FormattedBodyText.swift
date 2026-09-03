@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct FormattedBodyText: View {
@@ -50,10 +51,15 @@ struct FormattedBodyText: View {
                   boostFontSize: boostFontSize)
     }
     
+    /// Details components contain a control that VoiceOver needs to reach, so their children can't be merged away.
+    private var containsDetails: Bool {
+        attributedString.runs[\.details].contains { $0.0 != nil }
+    }
+    
     var body: some View {
         layout
             .tint(.compound.textLinkExternal)
-            .accessibilityElement(children: .ignore)
+            .accessibilityElement(children: containsDetails ? .contain : .ignore)
             .accessibilityLabel(Text(attributedString))
     }
     
@@ -90,6 +96,10 @@ struct FormattedBodyText: View {
                                 UIPasteboard.general.string = component.attributedString.string
                             }
                         }
+                case .details(let summary):
+                    DetailsView(summary: summary, attributedString: component.attributedString)
+                        .padding(.horizontal, 4)
+                        .timelineBubbleLayoutSize(.natural)
                 case .plainText:
                     MessageText(attributedString: component.attributedString,
                                 trailingReservedSize: index == lastPlainTextIndex ? trailingReservedSize : .zero)
@@ -111,7 +121,7 @@ struct FormattedBodyText: View {
                     CodeBlockView(attributedString: component.attributedString, mode: .layout)
                         .timelineBubbleLayoutSize(.bubbleWidth(mode: .layout))
                         .hidden()
-                case .plainText:
+                case .details, .plainText:
                     EmptyView()
                 }
             }
@@ -154,6 +164,34 @@ struct FormattedBodyText: View {
             container.foregroundColor = UIColor.compound.textSecondary
             
             return container
+        }
+    }
+    
+    /// The view used to render a `<details>` component, collapsing its content behind its `<summary>`.
+    private struct DetailsView: View {
+        let summary: String
+        let attributedString: AttributedString
+        
+        @State private var isExpanded = false
+        
+        var body: some View {
+            VStack(alignment: .leading, spacing: 4) {
+                Button { isExpanded.toggle() } label: {
+                    HStack(alignment: .center, spacing: 4) {
+                        CompoundIcon(\.chevronRight, size: .xSmall, relativeTo: .compound.bodyLG)
+                            .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                        Text(summary)
+                    }
+                    .font(.compound.bodyLGSemibold)
+                    .foregroundStyle(.compound.textPrimary)
+                }
+                .buttonStyle(.plain)
+                
+                if isExpanded {
+                    MessageText(attributedString: attributedString)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
         }
     }
     
@@ -221,6 +259,7 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
         <blockquote>A</blockquote>
         <pre><code>B</code></pre>
         <p>C</p>
+        <details><summary>D</summary><p>E</p></details>
         """
         
         if let attributedString = attributedStringBuilder.fromHTML(html) {

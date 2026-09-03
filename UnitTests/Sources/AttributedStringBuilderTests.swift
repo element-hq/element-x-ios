@@ -243,6 +243,31 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
+    func detailsAndSummary() throws {
+        let htmlString = "Before<details><summary>Expand me</summary><p>Hidden content</p></details>After"
+        
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "BeforeHidden content\nAfter")
+        
+        let components = attributedString.formattedComponents
+        
+        #expect(components.count == 3)
+        #expect(components.map(\.type) == [.plainText, .details(summary: "Expand me"), .plainText])
+        #expect(components[1].attributedString.string == "Hidden content")
+    }
+    
+    @Test
+    func detailsWithoutSummary() throws {
+        let htmlString = "<details><p>Content</p></details>"
+        
+        let attributedString = try #require(attributedStringBuilder.fromHTML(htmlString), "Could not build the attributed string")
+        
+        #expect(String(attributedString.characters) == "Content")
+        #expect(attributedString.formattedComponents.map(\.type) == [.details(summary: L10n.a11yViewDetails)])
+    }
+    
+    @Test
     func singleBlockquote() throws {
         let htmlString = "<blockquote>Blockquote</blockquote><p>Another paragraph</p>"
         

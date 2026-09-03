@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum BlockquoteAttribute: AttributedStringKey {
-    typealias Value = Bool
-    static let name = "MXBlockquoteAttribute"
-}
-
 enum UserIDAttribute: AttributedStringKey {
     typealias Value = String
     static let name = "MXUserIDAttribute"
@@ -65,6 +60,17 @@ enum AllUsersMentionAttribute: AttributedStringKey {
     static let name = "MXAllUsersMentionAttribute"
 }
 
+enum BlockquoteAttribute: AttributedStringKey {
+    typealias Value = Bool
+    static let name = "MXBlockquoteAttribute"
+}
+
+/// Marks the content of a `<details>` element, carrying its `<summary>` as the value.
+enum DetailsAttribute: AttributedStringKey {
+    typealias Value = String
+    static let name = "MXDetailsAttribute"
+}
+
 enum CodeBlockAttribute: AttributedStringKey {
     typealias Value = Bool
     static let name = "MXCodeBlockAttribute"
@@ -78,6 +84,7 @@ enum InlineCodeAttribute: AttributedStringKey {
 nonisolated extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
         let blockquote: BlockquoteAttribute
+        let details: DetailsAttribute
         
         let userID: UserIDAttribute
         // periphery:ignore - required to make NSAttributedString to AttributedString conversion even if not used directly

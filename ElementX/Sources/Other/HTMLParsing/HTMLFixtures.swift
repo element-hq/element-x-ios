@@ -19,6 +19,7 @@ nonisolated enum HTMLFixtures: String, CaseIterable {
     case wideCodeBlock
     case unorderedList
     case orderedList
+    case details
     
     var rawValue: String {
         switch self {
@@ -122,6 +123,13 @@ nonisolated enum HTMLFixtures: String, CaseIterable {
             <li>Starburst</li>
             <li>Skittles</li>
             </ol>
+            """
+        case .details:
+            """
+            Text before the details\
+            <details><summary>Expand me</summary><p>Hidden <b>content</b> with a <a href="https://www.matrix.org">link</a> in it.</p></details>\
+            <details><p>These details have no summary.</p></details>\
+            Text after the details
             """
         }
     }
