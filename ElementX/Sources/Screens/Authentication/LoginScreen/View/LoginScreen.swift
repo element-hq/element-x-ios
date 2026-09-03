@@ -50,7 +50,7 @@ struct LoginScreen: View {
             BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 8)
             
-            Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.serverNameOrBaseURL))
+            Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.accountProvider.serverNameOrBaseURL))
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)

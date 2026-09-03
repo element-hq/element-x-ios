@@ -44,7 +44,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         let serverNameOrBaseURL = if case .picker(let providers) = mode {
             providers[0]
         } else {
-            authenticationService.homeserver.value.serverNameOrBaseURL
+            authenticationService.homeserver.value.accountProvider.serverNameOrBaseURL
         }
         let bindings = ServerSelectionScreenBindings(serverNameOrBaseURL: serverNameOrBaseURL)
         super.init(initialViewState: ServerSelectionScreenViewState(mode: mode, authenticationFlow: authenticationFlow, bindings: bindings))
