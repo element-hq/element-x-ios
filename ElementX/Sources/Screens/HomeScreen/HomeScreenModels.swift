@@ -104,7 +104,7 @@ struct HomeScreenViewState: BindableState {
     
     var hideInviteAvatars = false
     
-    var roomListActivityVisibility: RoomListActivityVisibility = .current
+    var roomListActivityVisibility: RoomListActivityVisibility = .show
     
     var reportRoomEnabled = false
     
@@ -254,16 +254,16 @@ struct HomeScreenRoom: Identifiable, Equatable {
 
 extension HomeScreenRoom {
     init(summary: RoomSummary,
-         roomListActivityVisibility: RoomListActivityVisibility = .current,
+         roomListActivityVisibility: RoomListActivityVisibility = .show,
          seenInvites: Set<String> = []) {
         let roomID = summary.id
         
         let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
         
         let isDotShown = switch roomListActivityVisibility {
-        case .current:
+        case .show:
             summary.hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
-        case .hide, .show:
+        case .hide:
             (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.isMarkedUnread || isUnseenInvite
         }
         

@@ -15,7 +15,7 @@ struct HomeScreenRoomCell: View {
     @Environment(\.redactionReasons) private var redactionReasons
     
     let room: HomeScreenRoom
-    var roomListActivityVisibility: RoomListActivityVisibility = .current
+    var roomListActivityVisibility: RoomListActivityVisibility = .show
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
@@ -96,8 +96,6 @@ struct HomeScreenRoomCell: View {
     
     private var headerFont: Font {
         switch roomListActivityVisibility {
-        case .current:
-            .compound.bodyLGSemibold
         case .show:
             room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG
         case .hide:
@@ -182,8 +180,6 @@ struct HomeScreenRoomCell: View {
     
     private var lastMessageFont: Font {
         switch roomListActivityVisibility {
-        case .current:
-            .compound.bodyMD
         case .show:
             room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD
         case .hide:

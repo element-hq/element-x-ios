@@ -197,7 +197,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .mentionsAndKeywordsOnly,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, roomListActivityVisibility: .show)
+        let room = HomeScreenRoom(summary: roomSummary, roomListActivityVisibility: .hide)
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
