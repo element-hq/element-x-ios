@@ -120,6 +120,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        appSettings.roomListNotificationCountEnabledPublisher
+            .weakAssign(to: \.state.roomListNotificationCountEnabled, on: self)
+            .store(in: &cancellables)
+        
         appSettings.seenInvitesPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
