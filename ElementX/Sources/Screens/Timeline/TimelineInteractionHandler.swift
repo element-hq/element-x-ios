@@ -214,6 +214,8 @@ class TimelineInteractionHandler {
             actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
         case .downloadMedia:
             break // Handled inline in the media preview screen.
+        case .select:
+            break // Handled by the TimelineViewModel before reaching here.
         case .translate:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
             actionsSubject.send(.showTranslation(text: messageTimelineItem.body))
