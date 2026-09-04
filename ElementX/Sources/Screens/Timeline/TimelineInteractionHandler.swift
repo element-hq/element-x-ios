@@ -362,6 +362,13 @@ class TimelineInteractionHandler {
         await voiceMessageRecorder.stopRecording()
     }
     
+    /// Stops an in-progress recording so it isn't left running while the composer is out of
+    /// sight. The recording is kept and the composer moves to the preview state.
+    func stopRecordingVoiceMessageIfNeeded() async {
+        guard voiceMessageRecorder.isRecording else { return }
+        await voiceMessageRecorder.stopRecording()
+    }
+    
     func cancelRecordingVoiceMessage() async {
         await voiceMessageRecorder.cancelRecording()
         voiceMessageRecorderObserver = nil

@@ -1185,6 +1185,8 @@ extension TimelineViewModel {
     private func enterSelection(itemID: TimelineItemIdentifier) {
         guard state.canSelectMessages, let eventID = selectableEventID(for: itemID) else { return }
         
+        // The composer is collapsed while selecting, so don't leave the microphone open behind it.
+        Task { await timelineInteractionHandler.stopRecordingVoiceMessageIfNeeded() }
         actionsSubject.send(.composer(action: .removeFocus))
         
         guard !state.selection.isAtCap || state.selection.selectedEventIDs.contains(eventID) else {
