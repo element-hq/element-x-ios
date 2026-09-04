@@ -317,6 +317,11 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @State private var isFullScreen = true
     @State private var isRailVisible = true
     @State private var railBackgroundColor: Color = .compound.bgCanvasDefault
+    @State private var containerWidth: CGFloat = 0
+    /// The container width at which the rail and the split view's sidebar have been shown not to fit together.
+    @State private var railBlockedWidth: CGFloat?
+    /// When the rail was last shown, used to spot the split view collapsing as a direct result of it.
+    @State private var railShownDate = Date.distantPast
     
     var body: some View {
         tabView
@@ -385,8 +390,13 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
             }
         }
         .onGeometryChange(for: CGSize.self) { geometry in
-            geometry.size // We don't need the size, but it's a signal to re-compute.
-        } action: { _ in
+            geometry.size
+        } action: { size in
+            if size.width != containerWidth {
+                containerWidth = size.width
+                railBlockedWidth = nil // The rail and the sidebar may well fit at the new width.
+            }
+            
             guard let newValue = window?.isFullScreen else { return }
             
             if newValue != isFullScreen {
@@ -399,7 +409,21 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
             // feedback loop that locks up the app while resizing.
             //
             // Use a stored value (instead of a computed value) that is updated on the next run loop to break the loop.
-            DispatchQueue.main.async { isRailVisible = selectedTabSplitColumnVisibility != .detailOnly }
+            DispatchQueue.main.async {
+                if selectedTabSplitColumnVisibility == .detailOnly {
+                    // A collapse this soon after showing the rail was caused by the rail's own width, so
+                    // showing it again would only collapse the split view again, flickering forever. Note
+                    // that the two don't fit at this width and leave the rail hidden until that changes.
+                    if railShownDate.timeIntervalSinceNow > -0.5 {
+                        railBlockedWidth = containerWidth
+                    }
+                    
+                    isRailVisible = false
+                } else if !isRailVisible, railBlockedWidth != containerWidth {
+                    isRailVisible = true
+                    railShownDate = .now
+                }
+            }
         }
     }
     
