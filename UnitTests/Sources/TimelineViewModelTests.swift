@@ -715,6 +715,43 @@ final class TimelineViewModelTests {
     }
     
     @Test
+    func selectionIsPrunedWhenItemsBecomeUnselectable() async throws {
+        let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
+        let timelineController = TimelineControllerMock(.init(timelineItems: items))
+        let viewModel = makeSelectionViewModel(timelineController: timelineController)
+        
+        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
+        #expect(viewModel.state.selection.count == 2)
+        
+        // The first message gets redacted by someone else.
+        let redacted = RedactedRoomTimelineItem(id: items[0].id,
+                                                body: "Message removed",
+                                                timestamp: .mock,
+                                                isOutgoing: false,
+                                                isEditable: false,
+                                                canBeRepliedTo: false,
+                                                sender: .init(id: "@alice:matrix.org"))
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.selection.selectedEventIDs == ["$2"] }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [redacted, items[1]], isSwitchingTimelines: false))
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func selectionIsClearedWhenSwitchingTimelines() async throws {
+        let items = [TextRoomTimelineItem(eventID: "$1")]
+        let timelineController = TimelineControllerMock(.init(timelineItems: items))
+        let viewModel = makeSelectionViewModel(timelineController: timelineController)
+        
+        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        #expect(viewModel.state.selection.isActive)
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.selection.isActive }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: items, isSwitchingTimelines: true))
+        try await deferred.fulfill()
+    }
+    
+    @Test
     func disablingTheFlagClearsTheSelection() async throws {
         let items = [TextRoomTimelineItem(eventID: "$1")]
         let appSettings = AppSettings.volatile()
@@ -752,9 +789,15 @@ final class TimelineViewModelTests {
     
     private func makeSelectionViewModel(items: [RoomTimelineItemProtocol],
                                         userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
+        makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)),
+                               userIndicatorController: userIndicatorController)
+    }
+    
+    private func makeSelectionViewModel(timelineController: TimelineControllerProtocol,
+                                        userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
         let appSettings = AppSettings.volatile()
         appSettings.messageMultiSelectEnabled = true
-        return makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)),
+        return makeViewModel(timelineController: timelineController,
                              userIndicatorController: userIndicatorController,
                              appSettings: appSettings)
     }

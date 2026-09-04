@@ -90,6 +90,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
         .padding(.leading, 8)
         .transition(.move(edge: .leading).combined(with: .opacity))
+        .accessibilityHidden(true) // The bubble itself carries the selected state.
     }
     
     /// Captures every touch while selecting so the content's own gestures can't fire.
@@ -177,7 +178,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // Figma overlaps reactions by 3
         VStack(alignment: alignment, spacing: -3) {
             messageBubbleWithActions
-                .timelineItemAccessibility(timelineItem) {
+                .timelineItemAccessibility(timelineItem, selection: isSelectionActive ? .selecting(isSelected: isSelected) : .none) {
                     if isSelectionActive {
                         toggleSelection()
                     } else {
@@ -194,6 +195,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                       isLayoutRTL: timelineItem.isOutgoing)
                     // Workaround to stop the message long press stealing the touch from the reaction buttons
                     .onTapGesture { }
+                    .accessibilityHidden(isSelectionActive)
             }
             
             if context.viewState.areThreadsEnabled,
@@ -203,6 +205,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     context.send(viewAction: .displayThread(itemID: timelineItem.id))
                 }
                 .padding(5)
+                .accessibilityHidden(isSelectionActive)
             }
         }
     }
@@ -215,9 +218,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // is no longer an issue on iOS 18. Note: it's fine for this to be empty, we handle
                 // specific taps within the timeline views themselves.
             }
-            .longPressWithFeedback {
-                // The UIKit recogniser still receives touches through the selection overlay.
-                guard !isSelectionActive else { return }
+            // The UIKit recogniser would still receive touches through the selection overlay.
+            .longPressWithFeedback(isEnabled: !isSelectionActive) {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
             .swipeRightAction {
@@ -231,23 +233,30 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                                        action: .reply(isThread: timelineItem.properties.isThreaded)))
             }
             .contextMenu {
-                let provider = TimelineItemMenuActionProvider(timelineItem: timelineItem,
-                                                              canCurrentUserSendMessage: context.viewState.canCurrentUserSendMessage,
-                                                              canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
-                                                              canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
-                                                              canCurrentUserPin: context.viewState.canCurrentUserPin,
-                                                              pinnedEventIDs: context.viewState.pinnedEventIDs,
-                                                              isViewSourceEnabled: context.viewState.isViewSourceEnabled,
-                                                              areThreadsEnabled: context.viewState.areThreadsEnabled,
-                                                              isMultiSelectEnabled: context.viewState.canSelectMessages,
-                                                              timelineKind: context.viewState.timelineKind,
-                                                              emojiProvider: context.viewState.emojiProvider)
-                TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
-                    context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: action))
+                if !isSelectionActive {
+                    macContextMenu
                 }
             }
             .pinnedIndicator(isPinned: isPinned, isOutgoing: timelineItem.isOutgoing)
             .padding(.top, messageBubbleTopPadding)
+    }
+    
+    @ViewBuilder
+    private var macContextMenu: some View {
+        let provider = TimelineItemMenuActionProvider(timelineItem: timelineItem,
+                                                      canCurrentUserSendMessage: context.viewState.canCurrentUserSendMessage,
+                                                      canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
+                                                      canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
+                                                      canCurrentUserPin: context.viewState.canCurrentUserPin,
+                                                      pinnedEventIDs: context.viewState.pinnedEventIDs,
+                                                      isViewSourceEnabled: context.viewState.isViewSourceEnabled,
+                                                      areThreadsEnabled: context.viewState.areThreadsEnabled,
+                                                      isMultiSelectEnabled: context.viewState.canSelectMessages,
+                                                      timelineKind: context.viewState.timelineKind,
+                                                      emojiProvider: context.viewState.emojiProvider)
+        TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
+            context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: action))
+        }
     }
     
     var messageBubble: some View {

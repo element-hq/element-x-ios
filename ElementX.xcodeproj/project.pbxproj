@@ -964,6 +964,7 @@
 		97189E495F0E47805D1868DB /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 2B43F2AF7456567FE37270A7 /* KeychainAccess */; };
 		973C48F9E4EFB808F61BE401 /* LocationRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED49073BB1C1FC649DAC2CCD /* LocationRoomTimelineView.swift */; };
 		97550ECE8A1D28FEF74FBACC /* HomeserverCapabilitiesProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E8591F06B2DAA284181308 /* HomeserverCapabilitiesProxyProtocol.swift */; };
+		975E83CD5D5FFBDE4C71CD71 /* CollapsedModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F236566D6DA67720C0932DBA /* CollapsedModifier.swift */; };
 		978BB24F2A5D31EE59EEC249 /* UserSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4134FEFE4EB55759017408 /* UserSessionProtocol.swift */; };
 		97969EF0B9C412CD38E5CA93 /* AppLockScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4005D82E9D27BAF006A8FE1 /* AppLockScreenViewModel.swift */; };
 		97BAEDD9054FB5F233EE928B /* EncryptionResetScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 306AB507E1027D6C5C147EB6 /* EncryptionResetScreenModels.swift */; };
@@ -3171,6 +3172,7 @@
 		F17EFA1D3D09FC2F9C5E1CB2 /* MediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProvider.swift; sourceTree = "<group>"; };
 		F1B8500C152BC59445647DA8 /* UnsupportedRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsupportedRoomTimelineItem.swift; sourceTree = "<group>"; };
 		F229480685F30BCB96C439EC /* AdvancedSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsScreen.swift; sourceTree = "<group>"; };
+		F236566D6DA67720C0932DBA /* CollapsedModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsedModifier.swift; sourceTree = "<group>"; };
 		F276F31C1AEC19E52B951B62 /* SendInviteConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInviteConfirmationView.swift; sourceTree = "<group>"; };
 		F2B94F1B0B5D9D42B15AA6E8 /* ChatsTabFlowCoordinatorStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsTabFlowCoordinatorStateMachine.swift; sourceTree = "<group>"; };
 		F2DC502B1A566E99969D34DD /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -3459,6 +3461,7 @@
 			isa = PBXGroup;
 			children = (
 				76A46ABD27628CB5FC402541 /* Backports.swift */,
+				F236566D6DA67720C0932DBA /* CollapsedModifier.swift */,
 				F03AEAA2F66E796C365EFD58 /* ElementNavigationStack.swift */,
 				55BA4D3DFEA16CDD3FE99064 /* InverseMask.swift */,
 				5DB56ABD78E60920ACE43087 /* PreviewScrollView.swift */,
@@ -8682,6 +8685,7 @@
 				DDFBDEE1DC32BDD5488F898C /* ClientProxyMock.swift in Sources */,
 				24BDDD09A90B8BFE3793F3AA /* ClientProxyProtocol.swift in Sources */,
 				41C5DA0C06F30311A221E85B /* ClientSDKMock.swift in Sources */,
+				975E83CD5D5FFBDE4C71CD71 /* CollapsedModifier.swift in Sources */,
 				0C797CD650DFD2876BEC5173 /* CollapsibleReactionLayout.swift in Sources */,
 				78A3D84BA47DAC69B4D0A34C /* CollapsibleRoomTimelineView.swift in Sources */,
 				0DC815CA24E1BD7F408F37D3 /* CollapsibleTimelineItem.swift in Sources */,

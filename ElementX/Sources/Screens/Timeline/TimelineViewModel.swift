@@ -471,6 +471,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 switch callback {
                 case .updatedTimelineItems(let updatedItems, let isSwitchingTimelines):
                     buildTimelineViews(timelineItems: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
+                    reconcileSelection(with: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
                     
                     if !updatedItems.isEmpty {
                         analyticsService.signpost.finishTransaction(.openRoom)
@@ -1204,6 +1205,23 @@ extension TimelineViewModel {
         } else {
             state.selection.selectedEventIDs.insert(eventID)
         }
+    }
+    
+    /// Drops selected items that are no longer selectable (e.g. redacted), or the whole selection
+    /// when the timeline is swapped, so the selection always refers to items that are on screen.
+    private func reconcileSelection(with timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool) {
+        guard state.selection.isActive else { return }
+        
+        if isSwitchingTimelines {
+            state.selection.selectedEventIDs.removeAll()
+            return
+        }
+        
+        let selectableEventIDs = timelineItems.compactMap { item -> String? in
+            guard let item = item as? EventBasedTimelineItemProtocol, item.isBulkSelectable else { return nil }
+            return item.id.eventID
+        }
+        state.selection.selectedEventIDs.formIntersection(selectableEventIDs)
     }
     
     /// The event ID of the item, when it is part of this timeline and can be bulk selected.

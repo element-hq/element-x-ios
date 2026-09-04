@@ -8,11 +8,39 @@
 
 import SwiftUI
 
+/// How a timeline item takes part in an active multi-selection, for accessibility purposes.
+enum TimelineItemAccessibilitySelection {
+    /// No selection is active, the item offers its regular message actions.
+    case none
+    /// A selection is active, the item acts as a toggle when it can be selected.
+    case selecting(isSelected: Bool)
+}
+
 private struct TimelineItemAccessibilityModifier: ViewModifier {
     let timelineItem: RoomTimelineItemProtocol
+    let selection: TimelineItemAccessibilitySelection
     let action: () -> Void
     
     func body(content: Content) -> some View {
+        switch selection {
+        case .selecting(let isSelected):
+            if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isBulkSelectable {
+                content
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+                    .accessibilityAction(.default, action)
+            } else {
+                // Items that can't be selected are inert while selecting.
+                content
+                    .accessibilityElement(children: .combine)
+            }
+        case .none:
+            regularBody(content: content)
+        }
+    }
+    
+    @ViewBuilder
+    private func regularBody(content: Content) -> some View {
         switch timelineItem {
         case is PollRoomTimelineItem:
             content
@@ -61,7 +89,9 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
 }
 
 extension View {
-    func timelineItemAccessibility(_ timelineItem: RoomTimelineItemProtocol, action: @escaping () -> Void) -> some View {
-        modifier(TimelineItemAccessibilityModifier(timelineItem: timelineItem, action: action))
+    func timelineItemAccessibility(_ timelineItem: RoomTimelineItemProtocol,
+                                   selection: TimelineItemAccessibilitySelection = .none,
+                                   action: @escaping () -> Void) -> some View {
+        modifier(TimelineItemAccessibilityModifier(timelineItem: timelineItem, selection: selection, action: action))
     }
 }
