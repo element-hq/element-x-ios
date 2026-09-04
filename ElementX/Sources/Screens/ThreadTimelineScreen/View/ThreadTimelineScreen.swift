@@ -44,15 +44,14 @@ struct ThreadTimelineScreen: View {
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                if !isSelectionActive {
-                    composer
-                        .padding(.top, 8)
-                        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                        .environmentObject(timelineContext)
-                        .environment(\.timelineContext, timelineContext)
-                        // Make sure the reply header honours the hideTimelineMedia setting too.
-                        .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
-                }
+                composer
+                    .padding(.top, 8)
+                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                    .environmentObject(timelineContext)
+                    .environment(\.timelineContext, timelineContext)
+                    // Make sure the reply header honours the hideTimelineMedia setting too.
+                    .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
+                    .collapsed(isSelectionActive)
             }
     }
     
