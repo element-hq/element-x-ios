@@ -343,6 +343,69 @@ struct TimelineMediaPreviewDataSourceTests {
             .filter { !($0 is GalleryRoomTimelineItem) } // Galleries are previewed through their own data source.
     }
     
+    @Test
+    func endReachedCollapsesPhantomPadding() throws {
+        // Given a loaded data source that hasn't yet seen a real (non-initial) pagination state.
+        let dataSource = try assertInitialDataSource()
+        let itemCount = initialMediaViewStates.count
+        
+        // When the forward side reaches the end of the timeline (backward still loadable).
+        dataSource.paginationState = .init(backward: .idle, forward: .endReached)
+        
+        // Then only the forward phantom padding collapses, so QuickLook bounces at the newest item
+        // whilst the older side keeps its padding to paginate into.
+        #expect(dataSource.firstPreviewItemIndex == initialPadding)
+        #expect(dataSource.lastPreviewItemIndex == initialPadding + itemCount - 1)
+        #expect(dataSource.numberOfPreviewItems(in: previewController) == itemCount + initialPadding)
+        
+        // When the backward side also reaches the end.
+        dataSource.paginationState = .init(backward: .endReached, forward: .endReached)
+        
+        // Then both sides collapse: the real items are the whole of QuickLook's content, so it
+        // bounces natively at either end, and the current item survives the index shift.
+        #expect(dataSource.firstPreviewItemIndex == 0)
+        #expect(dataSource.lastPreviewItemIndex == itemCount - 1)
+        #expect(dataSource.numberOfPreviewItems(in: previewController) == itemCount)
+        let currentItem = try #require(dataSource.previewController(previewController, previewItemAt: initialItemIndex) as? TimelineMediaPreviewItem.Media)
+        #expect(currentItem.id == initialMediaItems[initialItemIndex].previewID)
+    }
+    
+    @Test
+    func sentLocalEchoKeepsItsPage() async throws {
+        // Given a viewer opened on an upload in flight: a local echo with a transaction ID.
+        let uniqueID = TimelineItemIdentifier.UniqueID(UUID().uuidString)
+        func makeUpload(id: TimelineItemIdentifier.EventOrTransactionID) -> ImageRoomTimelineItem {
+            ImageRoomTimelineItem(id: .event(uniqueID: uniqueID, eventOrTransactionID: id),
+                                  timestamp: .mock,
+                                  isOutgoing: true,
+                                  isEditable: false,
+                                  canBeRepliedTo: false,
+                                  sender: .init(id: "Alice"),
+                                  content: .init(filename: "upload.jpg", imageInfo: .mockImage, thumbnailInfo: nil, blurhash: nil))
+        }
+        let localEcho = makeUpload(id: .transactionID("t1"))
+        var items = newChunk()
+        items.append(localEcho)
+        let dataSource = TimelineMediaPreviewDataSource(itemViewStates: items.map { RoomTimelineItemViewState(item: $0, groupStyle: .single) },
+                                                        initialItem: localEcho,
+                                                        paginationState: .initial)
+        let page = try #require(dataSource.currentItem.mediaItem)
+        #expect(page.id == .timelineItem(.transactionID("t1")))
+        
+        // When the upload completes and the timeline swaps the echo's transaction ID for its event ID.
+        items[items.count - 1] = makeUpload(id: .eventID("$e1"))
+        let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: .seconds(1)) { _ in true }
+        dataSource.updatePreviewItems(itemViewStates: items.map { RoomTimelineItemViewState(item: $0, groupStyle: .single) })
+        try await deferred.fulfill()
+        
+        // Then the same page carries on under the new ID (its file came from the local media cache), nothing rebuilt.
+        #expect(dataSource.currentItem.mediaItem === page)
+        #expect(page.id == .timelineItem(.eventID("$e1")))
+        #expect(dataSource.previewItems.map(\.id).last == .timelineItem(.eventID("$e1")))
+        #expect(dataSource.previewItems.count == items.count)
+        #expect(!dataSource.needsRebuild)
+    }
+    
     @discardableResult
     private func assertInitialDataSource() throws -> TimelineMediaPreviewDataSource {
         // Given a data source built with the initial items.

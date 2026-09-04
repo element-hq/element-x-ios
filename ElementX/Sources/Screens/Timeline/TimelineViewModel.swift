@@ -702,8 +702,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func handleMediaTapped(with itemID: TimelineItemIdentifier, galleryIndex: Int? = nil) async {
-        state.showLoading = true
+        // Building the media timeline takes ~100ms from the event cache, so only show the
+        // spinner if it's actually slow (an event that needs fetching).
+        let spinner = Task {
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            state.showLoading = true
+        }
         let action = await timelineInteractionHandler.processItemTap(itemID)
+        spinner.cancel()
         
         switch action {
         case .displayMediaPreview(let item, let timelineViewModelKind):
@@ -846,7 +853,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                       mediaProvider: userSession.mediaProvider,
                                       photoLibraryManager: PhotoLibraryManager(),
                                       userIndicatorController: userIndicatorController,
-                                      appMediator: appMediator)
+                                      appMediator: appMediator,
+                                      appSettings: appSettings)
     }
     
     private func makeGalleryPreviewViewModel(galleryItem: GalleryRoomTimelineItem,
@@ -858,7 +866,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                       mediaProvider: userSession.mediaProvider,
                                       photoLibraryManager: PhotoLibraryManager(),
                                       userIndicatorController: userIndicatorController,
-                                      appMediator: appMediator)
+                                      appMediator: appMediator,
+                                      appSettings: appSettings)
     }
     
     private func timelineViewModel(for kind: TimelineControllerAction.TimelineViewModelKind) -> TimelineViewModel {

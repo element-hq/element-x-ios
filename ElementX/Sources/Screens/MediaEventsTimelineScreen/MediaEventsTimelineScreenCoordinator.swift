@@ -68,7 +68,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        filesTimelineViewModel: filesTimelineViewModel,
                                                        mediaProvider: parameters.userSession.mediaProvider,
                                                        userIndicatorController: parameters.userIndicatorController,
-                                                       appMediator: parameters.appMediator)
+                                                       appMediator: parameters.appMediator,
+                                                       appSettings: parameters.appSettings)
         
         viewModel.actionsPublisher
             .sink { [weak self] action in

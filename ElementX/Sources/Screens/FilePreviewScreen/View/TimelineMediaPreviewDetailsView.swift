@@ -223,13 +223,24 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         let timelineKind = TimelineKind.media(isPresentedOnRoomScreen ? .roomScreenLive : .mediaFilesScreen)
         let timelineController = TimelineControllerMock(.init(timelineKind: timelineKind, timelineItems: [item]))
         
+        let mediaProvider = MediaProviderMock(.init())
+        if !isDownloaded {
+            // The view model loads the initial item as it is created, so the download needs to
+            // hang for the item to stay in its loading state.
+            mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in
+                try? await Task.sleep(for: .seconds(3600))
+                return .failure(.failedRetrievingFile)
+            }
+        }
+        
         let viewModel = TimelineMediaPreviewViewModel(initialItem: item,
                                                       timelineViewModel: TimelineViewModel.mock(timelineKind: timelineKind,
                                                                                                 timelineController: timelineController),
-                                                      mediaProvider: MediaProviderMock(.init()),
+                                                      mediaProvider: mediaProvider,
                                                       photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      appMediator: AppMediatorMock())
+                                                      appMediator: AppMediatorMock(),
+                                                      appSettings: AppSettings.volatile())
         
         if isDownloaded {
             viewModel.context.send(viewAction: .updateCurrentItem(viewModel.state.currentItem))
