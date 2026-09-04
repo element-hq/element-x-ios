@@ -21,7 +21,7 @@ struct AuthenticationServiceTests {
     
     @Test
     mutating func passwordLogin() async throws {
-        try await setup(serverAddress: "example.com")
+        try await setup(serverNameOrBaseURL: "example.com")
         
         switch await service.configure(for: "example.com", flow: .login) {
         case .success:
@@ -67,15 +67,15 @@ struct AuthenticationServiceTests {
     @Test
     @MainActor
     mutating func configureRegisterNoSupport() async throws {
-        let homeserverAddress = "example.com"
-        try await setup(serverAddress: homeserverAddress)
+        let serverNameOrBaseURL = "example.com"
+        try await setup(serverNameOrBaseURL: serverNameOrBaseURL)
         
         try await #require(throws: AuthenticationServiceError.registrationNotSupported) {
-            try await service.configure(for: homeserverAddress, flow: .register).get()
+            try await service.configure(for: serverNameOrBaseURL, flow: .register).get()
         }
         
         #expect(service.flow == .login)
-        #expect(service.homeserver.value == .init(address: "matrix.org", loginMode: .unknown))
+        #expect(service.homeserver.value == .init(accountProvider: .generic("matrix.org"), loginMode: .unknown))
     }
     
     @Test
@@ -132,13 +132,13 @@ struct AuthenticationServiceTests {
     
     // MARK: - Helpers
     
-    private mutating func setup(serverAddress: String = "matrix.org",
+    private mutating func setup(serverNameOrBaseURL: String = "matrix.org",
                                 classicAppAccounts: [ClassicAppAccount] = [],
                                 availableSecrets: ClassicAppAccount.AvailableSecrets = .complete) async throws {
         let configuration: ClientFactoryMock.Configuration = .init()
         let clientFactory = ClientFactoryMock(configuration)
         
-        client = configuration.homeserverClients[serverAddress]
+        client = configuration.homeserverClients[serverNameOrBaseURL]
         encryption = EncryptionSDKMock()
         client.encryptionReturnValue = encryption
         

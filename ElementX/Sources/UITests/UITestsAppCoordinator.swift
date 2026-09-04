@@ -150,7 +150,12 @@ class MockScreen: Identifiable {
             let appSettings: AppSettings! = appSettings
             
             if id == .singleProviderAuthenticationFlow || id == .multipleProvidersAuthenticationFlow {
-                let accountProviders = id == .singleProviderAuthenticationFlow ? ["example.com"] : ["guest.example.com", "example.com"]
+                let accountProviders: [AccountProvider] = if id == .singleProviderAuthenticationFlow {
+                    [.managed(serverName: "example.com", baseURL: "https://matrix.example.com")]
+                } else {
+                    [.managed(serverName: "guest.example.com", baseURL: "https://matrix.guest.example.com"),
+                     .managed(serverName: "example.com", baseURL: "https://matrix.example.com")]
+                }
                 appSettings.override(accountProviders: accountProviders,
                                      allowOtherAccountProviders: false,
                                      hideBrandChrome: false,

@@ -64,17 +64,17 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
         
         // When updating these, don't forget to update the reset method too.
-        homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultServer, loginMode: .unknown))
+        homeserverSubject = .init(LoginHomeserver(accountProvider: appSettings.defaultAccountProvider, loginMode: .unknown))
         flow = .login
     }
     
     // MARK: - Public
     
-    func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError> {
+    func configure(for serverNameOrBaseURL: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError> {
         do {
-            var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
+            var homeserver = LoginHomeserver(accountProvider: .generic(serverNameOrBaseURL), loginMode: .unknown)
             
-            let client = try await makeClient(homeserverAddress: homeserverAddress)
+            let client = try await makeClient(serverNameOrBaseURL: serverNameOrBaseURL)
             let loginDetails = await client.homeserverLoginDetails()
             
             homeserver.loginMode = if loginDetails.supportsOauthLogin() {
@@ -106,7 +106,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             return .failure(.elementProRequired(serverName: serverName))
         } catch {
             MXLog.error("Failed configuring a server: \(error)")
-            return .failure(.invalidHomeserverAddress)
+            return .failure(.invalidServerNameOrBaseURL)
         }
     }
     
@@ -192,8 +192,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         // n.b. We rely on the SDK checking that the intent of the QR is suitable for us to login with.
         
-        // Future versions of the QR should always give us the baseUrl
-        guard let scannedServerNameOrBaseUrl = qrData.baseUrl() ?? qrData.serverName() else {
+        // Future versions of the QR should always give us the baseURL
+        guard let scannedServerNameOrBaseURL = qrData.baseUrl() ?? qrData.serverName() else {
             // With the older version of QR we treat the presence of serverName as meaning that the other device
             // is not signed in.
             MXLog.error("The QR code is from a device that is not yet signed in.")
@@ -201,7 +201,19 @@ class AuthenticationService: AuthenticationServiceProtocol {
             return progressSubject.asCurrentValuePublisher()
         }
         
-        // n.b. We deliberatley don't check whether the received server is in our appSettings.accountProviders
+        // When account provider selection is restricted, make sure the scanned server is allowed.
+        if !appSettings.allowOtherAccountProviders {
+            // A base URL from the QR code is expected to be a valid URL when present.
+            let scannedBaseURL = qrData.baseUrl().flatMap(URL.init(string:))
+            
+            guard appSettings.accountProviders.contains(serverName: qrData.serverName(), orBaseURL: scannedBaseURL) else {
+                MXLog.error("The scanned QR code is for an account provider that isn't allowed.")
+                let error = QRCodeLoginError.providerNotAllowed(scannedProvider: scannedServerNameOrBaseURL,
+                                                                allowedProviders: appSettings.accountProviders.map(\.serverNameOrBaseURL))
+                progressSubject.send(completion: .failure(.qrCodeError(error)))
+                return progressSubject.asCurrentValuePublisher()
+            }
+        }
         
         // The SDK calls the listener from arbitrary threads; onMainActor forwards the progress
         // updates on the main actor in FIFO order.
@@ -212,7 +224,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         Task {
             do {
-                let client = try await makeClient(homeserverAddress: scannedServerNameOrBaseUrl)
+                let client = try await makeClient(serverNameOrBaseURL: scannedServerNameOrBaseURL)
                 let qrCodeHandler = client.newLoginWithQrCodeHandler(oauthConfiguration: appSettings.oAuthConfiguration.rustValue)
                 try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
                 
@@ -240,19 +252,19 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     func reset() {
-        homeserverSubject.send(LoginHomeserver(address: appSettings.defaultServer, loginMode: .unknown))
+        homeserverSubject.send(LoginHomeserver(accountProvider: appSettings.defaultAccountProvider, loginMode: .unknown))
         flow = .login
         client = nil
     }
     
     // MARK: - Private
     
-    private func makeClient(homeserverAddress: String) async throws -> ClientProtocol {
+    private func makeClient(serverNameOrBaseURL: String) async throws -> ClientProtocol {
         // Use a fresh session directory each time the user enters a different server
         // so that caches (e.g. server versions) are always fresh for the new server.
         rotateSessionDirectory()
         
-        let client = try await clientFactory.makeAuthenticationClient(homeserverAddress: homeserverAddress,
+        let client = try await clientFactory.makeAuthenticationClient(serverNameOrBaseURL: serverNameOrBaseURL,
                                                                       sessionDirectories: sessionDirectories,
                                                                       passphrase: passphrase,
                                                                       clientSessionDelegate: userSessionStore.clientSessionDelegate,
@@ -286,7 +298,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         MXLog.info("Checking Classic app account: \(classicAppAccount)")
         
         do {
-            let client = try await clientFactory.makeInMemoryClient(homeserverAddress: classicAppAccount.homeserverURL.absoluteString,
+            let client = try await clientFactory.makeInMemoryClient(serverNameOrBaseURL: classicAppAccount.homeserverURL.absoluteString,
                                                                     clientSessionDelegate: userSessionStore.clientSessionDelegate,
                                                                     appSettings: appSettings,
                                                                     appHooks: appHooks)
