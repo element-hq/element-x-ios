@@ -97,6 +97,11 @@ struct DeveloperOptionsScreen: View {
                     Text("Jump to unread")
                     Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")
                 }
+                
+                Toggle(isOn: $context.messageMultiSelectEnabled) {
+                    Text("Multi-select messages")
+                    Text("Adds a Select action to the message menu to pick several messages at once.")
+                }
             }
             
             Section {

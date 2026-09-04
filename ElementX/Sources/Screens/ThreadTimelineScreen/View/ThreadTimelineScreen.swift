@@ -30,6 +30,7 @@ struct ThreadTimelineScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
+            .navigationBarBackButtonHidden(isSelectionActive)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .overlay(alignment: .top) {
                 FloatingDateBadge(dateText: timelineContext.floatingDate?.formattedDateSeparator()) {
@@ -50,7 +51,12 @@ struct ThreadTimelineScreen: View {
                     .environment(\.timelineContext, timelineContext)
                     // Make sure the reply header honours the hideTimelineMedia setting too.
                     .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
+                    .collapsed(isSelectionActive)
             }
+    }
+    
+    private var isSelectionActive: Bool {
+        timelineContext.viewState.selection.isActive
     }
     
     @ViewBuilder
@@ -64,16 +70,22 @@ struct ThreadTimelineScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        // .principal + .primaryAction works better than .navigation leading + trailing
-        // as the latter disables interaction in the action button for rooms with long names
-        ToolbarItem(placement: .principal) {
-            RoomHeaderView(roomName: L10n.commonThread,
-                           roomSubtitle: context.viewState.roomTitle,
-                           roomAvatar: context.viewState.roomAvatar,
-                           dmRecipientDetails: context.viewState.dmRecipientDetails,
-                           roomHistorySharingState: context.viewState.roomHistorySharingState,
-                           mediaProvider: context.mediaProvider) {
-                // There is no action but the iOS 26 designs have it looking like a button.
+        if isSelectionActive {
+            TimelineSelectionToolbar(count: timelineContext.viewState.selection.count) {
+                timelineContext.send(viewAction: .clearSelection)
+            }
+        } else {
+            // .principal + .primaryAction works better than .navigation leading + trailing
+            // as the latter disables interaction in the action button for rooms with long names
+            ToolbarItem(placement: .principal) {
+                RoomHeaderView(roomName: L10n.commonThread,
+                               roomSubtitle: context.viewState.roomTitle,
+                               roomAvatar: context.viewState.roomAvatar,
+                               dmRecipientDetails: context.viewState.dmRecipientDetails,
+                               roomHistorySharingState: context.viewState.roomHistorySharingState,
+                               mediaProvider: context.mediaProvider) {
+                    // There is no action but the iOS 26 designs have it looking like a button.
+                }
             }
         }
     }
