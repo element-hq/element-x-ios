@@ -171,7 +171,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .forward:
             Label(L10n.actionForward, icon: \.forward)
         case .select:
-            Label(UntranslatedL10n.actionSelectMessages, icon: \.check)
+            Label(L10n.actionSelect, icon: \.check)
         case .redact(let isMedia):
             Label(isMedia ? L10n.actionDeleteFile : L10n.actionRemoveMessage, icon: \.delete)
         case .viewSource:

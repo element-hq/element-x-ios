@@ -19,7 +19,7 @@ struct TimelineSelectionToolbar: ToolbarContent {
         }
         
         ToolbarItem(placement: .principal) {
-            Text(UntranslatedL10n.screenRoomSelectionCount(count))
+            Text(L10n.screenRoomSelectionCount(count))
                 .font(.compound.bodyLGSemibold)
                 .foregroundStyle(.compound.textPrimary)
         }
