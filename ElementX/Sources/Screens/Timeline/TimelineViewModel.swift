@@ -1238,7 +1238,7 @@ extension TimelineViewModel {
     private func showSelectionCapToast() {
         userIndicatorController.submitIndicator(UserIndicator(id: Constants.selectionCapIndicatorID,
                                                               type: .toast,
-                                                              title: UntranslatedL10n.screenRoomSelectionCapReached,
+                                                              title: L10n.screenRoomMaximumMessagesSelected,
                                                               icon: \.info))
     }
 }
