@@ -159,6 +159,30 @@ struct TimelineInteractionHandlerTests {
         #expect(loadedSourceURLs == [Self.firstSourceURL, Self.secondSourceURL, Self.firstSourceURL])
     }
     
+    // MARK: - Voice message recording
+    
+    @Test
+    func stopRecordingIfNeededStopsAnActiveRecording() async {
+        let voiceMessageRecorder = VoiceMessageRecorderMock()
+        voiceMessageRecorder.isRecording = true
+        let handler = makeHandler(timelineItems: [Self.textMessage], voiceMessageRecorder: voiceMessageRecorder)
+        
+        await handler.stopRecordingVoiceMessageIfNeeded()
+        
+        #expect(voiceMessageRecorder.stopRecordingCallsCount == 1)
+    }
+    
+    @Test
+    func stopRecordingIfNeededIgnoresAnIdleRecorder() async {
+        let voiceMessageRecorder = VoiceMessageRecorderMock()
+        voiceMessageRecorder.isRecording = false
+        let handler = makeHandler(timelineItems: [Self.textMessage], voiceMessageRecorder: voiceMessageRecorder)
+        
+        await handler.stopRecordingVoiceMessageIfNeeded()
+        
+        #expect(!voiceMessageRecorder.stopRecordingCalled)
+    }
+    
     // MARK: - Helpers
     
     private var loadedSourceURLs: [URL] {
@@ -172,9 +196,13 @@ struct TimelineInteractionHandlerTests {
         }
     }
     
-    private func makeHandler(timelineItems: [RoomTimelineItemProtocol]) -> TimelineInteractionHandler {
-        let voiceMessageRecorder = VoiceMessageRecorderMock()
-        voiceMessageRecorder.isRecording = false
+    private func makeHandler(timelineItems: [RoomTimelineItemProtocol],
+                             voiceMessageRecorder: VoiceMessageRecorderMock? = nil) -> TimelineInteractionHandler {
+        let voiceMessageRecorder = voiceMessageRecorder ?? {
+            let recorder = VoiceMessageRecorderMock()
+            recorder.isRecording = false
+            return recorder
+        }()
         
         let voiceMessageMediaManager = VoiceMessageMediaManagerMock()
         voiceMessageMediaManager.loadVoiceMessageFromSourceBodyReturnValue = URL("file:///voice-message.m4a")
