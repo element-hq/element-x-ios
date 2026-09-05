@@ -126,6 +126,6 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
             return
         }
         
-        await timelineController.redact(.eventID(pollStartID))
+        await timelineController.redact(.eventID(pollStartID), reason: nil)
     }
 }

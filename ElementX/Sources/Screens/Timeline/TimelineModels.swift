@@ -66,6 +66,8 @@ enum TimelineViewAction {
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
+    /// The user has confirmed the removal of an item, optionally giving a reason.
+    case redactConfirmed(itemID: TimelineItemIdentifier, reason: String?)
     
     case tappedOnSenderDetails(sender: TimelineItemSender)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
@@ -189,6 +191,8 @@ struct TimelineViewStateBindings {
     
     var manageMemberViewModel: ManageRoomMemberSheetViewModel?
     
+    var redactConfirmationInfo: RedactConfirmationInfo?
+    
     var showTranslation = false
     var textToBeTranslated: String?
 }
@@ -216,6 +220,11 @@ struct ReactionSummaryInfo: Identifiable {
 
 struct ReadReceiptSummaryInfo: Identifiable {
     let orderedReceipts: [ReadReceipt]
+    let id: TimelineItemIdentifier
+}
+
+/// The item that the user has asked to remove and must confirm, optionally giving a reason.
+struct RedactConfirmationInfo: Identifiable {
     let id: TimelineItemIdentifier
 }
 

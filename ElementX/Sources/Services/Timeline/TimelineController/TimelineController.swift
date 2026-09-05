@@ -211,10 +211,10 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
-    func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
+    func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?) async {
         MXLog.info("Send redaction in \(roomID)")
         
-        switch await activeTimeline.redact(eventOrTransactionID, reason: nil) {
+        switch await activeTimeline.redact(eventOrTransactionID, reason: reason) {
         case .success:
             MXLog.info("Finished redacting message")
         case .failure(let error):

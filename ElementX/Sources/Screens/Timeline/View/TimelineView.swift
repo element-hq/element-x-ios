@@ -27,6 +27,11 @@ struct TimelineView: View {
                 ManageRoomMemberSheetView(context: $0.context)
             }
             .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
+            .sheet(item: $timelineContext.redactConfirmationInfo) { info in
+                RedactConfirmationView { reason in
+                    timelineContext.send(viewAction: .redactConfirmed(itemID: info.id, reason: reason))
+                }
+            }
             .sheet(item: $timelineContext.actionMenuInfo) { info in
                 let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
                                                              canCurrentUserSendMessage: timelineContext.viewState.canCurrentUserSendMessage,

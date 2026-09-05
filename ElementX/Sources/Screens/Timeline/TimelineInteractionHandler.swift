@@ -19,6 +19,7 @@ enum TimelineInteractionHandlerAction {
     case displayEditPollForm(eventID: String, poll: Poll)
     
     case showActionMenu(TimelineItemActionMenuInfo)
+    case showRedactConfirmation(itemID: TimelineItemIdentifier)
     case showDebugInfo(TimelineItemDebugInfo)
     
     case displayAudioRecorderPermissionError
@@ -114,13 +115,23 @@ class TimelineInteractionHandler {
         }
     }
     
+    /// Redacting needs the event alone, so it works even when the item isn't part of this timeline,
+    /// such as one held by a media preview that was built from a different one.
+    func redact(_ itemID: TimelineItemIdentifier, reason: String?) {
+        guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
+        Task { await timelineController.redact(eventOrTransactionID, reason: reason) }
+    }
+    
     // swiftlint:disable:next cyclomatic_complexity
     func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
-        // Redacting needs the event alone, so it works even when the item isn't part of this timeline,
-        // such as one held by a media preview that was built from a different one.
         if case .redact = action {
-            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
-            Task { await timelineController.redact(eventOrTransactionID) }
+            // The server hasn't accepted this message yet, it is still sending or has failed,
+            // so there is nobody to give a reason to.
+            if case .event(_, .eventID) = itemID {
+                actionsSubject.send(.showRedactConfirmation(itemID: itemID))
+            } else {
+                redact(itemID, reason: nil)
+            }
             return
         }
         
