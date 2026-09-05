@@ -37,6 +37,7 @@ struct HomeScreenRoomList: View {
                 
                 HomeScreenRoomCell(room: room,
                                    roomListActivityVisibility: context.viewState.roomListActivityVisibility,
+                                   roomListNotificationCountEnabled: context.viewState.roomListNotificationCountEnabled,
                                    isSelected: isSelected,
                                    mediaProvider: context.mediaProvider,
                                    action: context.send)

@@ -344,8 +344,11 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     // MARK: - Home Screen
     
-    @UserPreference(defaultValue: RoomListActivityVisibility.current)
+    @UserPreference(defaultValue: RoomListActivityVisibility.show)
     var roomListActivityVisibility: RoomListActivityVisibility
+    
+    @UserPreference(defaultValue: false)
+    var roomListNotificationCountEnabled: Bool
     
     // MARK: - Room Screen
     

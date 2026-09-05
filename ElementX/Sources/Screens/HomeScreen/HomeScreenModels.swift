@@ -104,7 +104,9 @@ struct HomeScreenViewState: BindableState {
     
     var hideInviteAvatars = false
     
-    var roomListActivityVisibility: RoomListActivityVisibility = .current
+    var roomListActivityVisibility: RoomListActivityVisibility = .show
+    
+    var roomListNotificationCountEnabled = false
     
     var reportRoomEnabled = false
     
@@ -193,6 +195,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     let badges: Badges
     struct Badges: Equatable {
         let isDotShown: Bool
+        let notificationCount: UInt
         let isMentionShown: Bool
         let isMuteShown: Bool
         let callBadgeType: CallBadgeType
@@ -237,7 +240,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
         HomeScreenRoom(id: UUID().uuidString,
                        roomID: nil,
                        type: .placeholder,
-                       badges: .init(isDotShown: false, isMentionShown: false, isMuteShown: false, callBadgeType: .none),
+                       badges: .init(isDotShown: false, notificationCount: 0, isMentionShown: false, isMuteShown: false, callBadgeType: .none),
                        name: "Placeholder room name",
                        isDirect: false,
                        isHighlighted: false,
@@ -254,16 +257,16 @@ struct HomeScreenRoom: Identifiable, Equatable {
 
 extension HomeScreenRoom {
     init(summary: RoomSummary,
-         roomListActivityVisibility: RoomListActivityVisibility = .current,
+         roomListActivityVisibility: RoomListActivityVisibility = .show,
          seenInvites: Set<String> = []) {
         let roomID = summary.id
         
         let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
         
         let isDotShown = switch roomListActivityVisibility {
-        case .current:
+        case .show:
             summary.hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
-        case .hide, .show:
+        case .hide:
             (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.isMarkedUnread || isUnseenInvite
         }
         
@@ -287,6 +290,7 @@ extension HomeScreenRoom {
                   roomID: summary.id,
                   type: type,
                   badges: .init(isDotShown: isDotShown,
+                                notificationCount: summary.unreadNotificationsCount,
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
                                 callBadgeType: callBadge),

@@ -60,6 +60,7 @@ struct HomeScreenRoomTests {
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
+        #expect(room.badges.notificationCount == 0)
         #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
@@ -78,6 +79,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
+        #expect(room.badges.notificationCount == 5)
         #expect(room.badges.callBadgeType == .video)
         #expect(!room.badges.isMuteShown)
         #expect(room.badges.isMentionShown)
@@ -111,6 +113,7 @@ struct HomeScreenRoomTests {
         
         #expect(!room.isHighlighted)
         #expect(room.badges.isDotShown)
+        #expect(room.badges.notificationCount == 0)
         #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
@@ -129,6 +132,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
+        #expect(room.badges.notificationCount == 5)
         #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
@@ -147,6 +151,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
+        #expect(room.badges.notificationCount == 0)
         #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(room.badges.isMentionShown)
@@ -197,7 +202,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .mentionsAndKeywordsOnly,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, roomListActivityVisibility: .show)
+        let room = HomeScreenRoom(summary: roomSummary, roomListActivityVisibility: .hide)
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)
@@ -221,6 +226,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
+        #expect(room.badges.notificationCount == 0)
         #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
@@ -239,6 +245,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
+        #expect(room.badges.notificationCount == 0)
         #expect(room.badges.callBadgeType == .none)
         #expect(!room.badges.isMuteShown)
         #expect(room.badges.isMentionShown)
@@ -257,6 +264,7 @@ struct HomeScreenRoomTests {
         
         #expect(room.isHighlighted)
         #expect(room.badges.isDotShown)
+        #expect(room.badges.notificationCount == 5)
         #expect(room.badges.callBadgeType == .video)
         #expect(room.badges.isMuteShown)
         #expect(!room.badges.isMentionShown)
