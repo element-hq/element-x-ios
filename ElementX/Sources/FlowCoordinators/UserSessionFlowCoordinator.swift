@@ -9,6 +9,7 @@
 import AVKit
 import Combine
 import Compound
+import MatrixRtcKit
 import SwiftState
 import SwiftUI
 
@@ -318,11 +319,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         flowParameters.elementCallService.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
-                switch action {
-                case .endCall:
-                    self?.dismissCallScreenIfNeeded()
-                default:
-                    break
+                self?.handleElementCallServiceAction(action)
+            }
+            .store(in: &cancellables)
+        
+        flowParameters.appSettings.nativeCallEnabledPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                guard let self else { return }
+                flowParameters.elementCallService.setNativeCallModeEnabled(isEnabled)
+                // Created with the session, not with the first call: media keys arrive over
+                // to-device and cannot be caught up on.
+                if isEnabled, nativeCallController == nil {
+                    startNativeCallStack()
                 }
             }
             .store(in: &cancellables)
@@ -476,7 +485,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentCallScreen(configuration: ElementCallConfiguration) {
         guard flowParameters.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
-            callScreenPictureInPictureController?.stopPictureInPicture()
+            if let nativeCallController, nativeCallController.isInCall {
+                restoreNativeCallScreen()
+            } else {
+                callScreenPictureInPictureController?.stopPictureInPicture()
+            }
+            return
+        }
+        
+        if flowParameters.appSettings.nativeCallEnabled {
+            presentNativeCallScreen(configuration: configuration)
             return
         }
         
@@ -510,7 +528,97 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         flowParameters.analytics.track(screen: .RoomCall)
     }
     
+    private func handleElementCallServiceAction(_ action: ElementCallServiceAction) {
+        switch action {
+        case .endCall:
+            if nativeCallController?.isInCall == true {
+                nativeCallController?.hangUp()
+            } else {
+                dismissCallScreenIfNeeded()
+            }
+        case .setAudioEnabled(let enabled, _):
+            // The web call screen handles its own; the native controller mirrors CallKit's mute.
+            nativeCallController?.applyCallKitMute(!enabled)
+        case .audioSessionActivated:
+            nativeCallController?.audioSessionDidActivate()
+        case .audioSessionDeactivated:
+            nativeCallController?.audioSessionDidDeactivate()
+        default:
+            break
+        }
+    }
+    
+    // MARK: - Native calls
+    
+    private var matrixRtcService: MatrixRtcService?
+    private var nativeCallController: NativeCallController?
+    
+    private func startNativeCallStack() {
+        guard let transport = MatrixRtcTransportAdapter(clientProxy: userSession.clientProxy) else {
+            MXLog.error("NativeCall: no device ID, cannot start the RTC core")
+            return
+        }
+        MatrixRtcLogBridge.install()
+        let rtcService = MatrixRtcService(transport: transport)
+        matrixRtcService = rtcService
+        let controller = NativeCallController(rtcService: rtcService,
+                                              clientProxy: userSession.clientProxy,
+                                              elementCallService: flowParameters.elementCallService)
+        nativeCallController = controller
+        
+        Task { await rtcService.start() }
+    }
+    
+    private func presentNativeCallScreen(configuration: ElementCallConfiguration) {
+        if nativeCallController == nil {
+            startNativeCallStack()
+        }
+        guard let nativeCallController else { return }
+        
+        let roomProxy = configuration.roomProxy
+        let roomInfo = roomProxy.infoPublisher.value
+        let callData = NativeCallData(roomID: roomProxy.id,
+                                      roomDisplayName: roomInfo.displayName ?? roomInfo.rawName ?? roomInfo.canonicalAlias ?? roomProxy.id,
+                                      isDirect: roomInfo.isDirect,
+                                      isAudioCall: configuration.voiceOnly,
+                                      isStartingCall: !roomInfo.hasRoomCall)
+        nativeCallController.startCall(callData)
+        
+        let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: nativeCallController,
+                                                                        roomProxy: roomProxy,
+                                                                        mediaProvider: userSession.mediaProvider))
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .minimize:
+                    minimizeNativeCallScreen()
+                case .dismiss:
+                    navigationTabCoordinator.setOverlayCoordinator(nil)
+                    nativeCallController.reset()
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
+        flowParameters.analytics.track(screen: .RoomCall)
+    }
+    
+    /// Shrinks the call; it carries on in the controller and the room's call button brings it back.
+    private func minimizeNativeCallScreen() {
+        navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+    }
+    
+    private func restoreNativeCallScreen() {
+        navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
+    }
+    
     private func hideCallScreenOverlay() {
+        if let nativeCallController, nativeCallController.isInCall, navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
+            minimizeNativeCallScreen()
+            return
+        }
+        
         guard let callScreenPictureInPictureController else {
             MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
             dismissCallScreenIfNeeded()
@@ -523,7 +631,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func dismissCallScreenIfNeeded() {
-        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator else {
+        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator || navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator else {
             return
         }
         

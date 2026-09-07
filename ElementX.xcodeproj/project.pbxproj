@@ -303,6 +303,7 @@
 		2D45A04699BB6BA3B3A0CB9A /* TracingHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A95C9B8299A36A6495DECA6 /* TracingHook.swift */; };
 		2D463F34BB7EDFD3CE71321B /* WidgetMatrixBridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCE12583E705E5F31459303 /* WidgetMatrixBridgeTests.swift */; };
 		2D76463CE5A9238B5BB5F393 /* TimelineItemKeyForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6F137B69DCB59353E37B80 /* TimelineItemKeyForwarder.swift */; };
+		2D77236B66808B661731BC07 /* NativeCallScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55421139EC9E8C2D8218AC57 /* NativeCallScreenCoordinator.swift */; };
 		2DA27D78560D5F79B917E163 /* AudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E44E35AA87F49503E7B3BF6E /* AudioConverter.swift */; };
 		2DD9D0FE7CB5CFC80D071451 /* AppLockScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3E67E09FE5A35D73818C39 /* AppLockScreenModels.swift */; };
 		2E073ABFC6062D1DF727E2BC /* preview_avatar_room.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 690915157A874D1F21ADE70C /* preview_avatar_room.jpg */; };
@@ -901,6 +902,7 @@
 		8A2B2836B1B0CCA3CC140560 /* ChatsSpaceFiltersScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 859F51637DA710BBE7B70D6D /* ChatsSpaceFiltersScreenViewModel.swift */; };
 		8A5064CAC8E5F3B18645621D /* CallNotificationRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E082B0507FB28F966516A /* CallNotificationRoomTimelineView.swift */; };
 		8A83D715940378B9BA9F739E /* RoomInviterLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB58E4E8D6D634C246AD5C2 /* RoomInviterLabel.swift */; };
+		8A8E26EF680D4DEFB263EF47 /* NativeCallScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E489F8CD73CDB02C12FB6399 /* NativeCallScreen.swift */; };
 		8AA84EF202F2EFC8453A97BD /* SecureBackupRecoveryKeyScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645E027C112740573D27765C /* SecureBackupRecoveryKeyScreenModels.swift */; };
 		8AAE2EB68802E837F568163C /* SignallingTimelineItemProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE61568A225F7AA068583AA7 /* SignallingTimelineItemProviderMock.swift */; };
 		8AB8ED1051216546CB35FA0E /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5E9C044BEB7C70B1378E91 /* UserSession.swift */; };
@@ -1159,6 +1161,7 @@
 		B245583C63F8F90357B87FAE /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = CCE5BF78B125320CBF3BB834 /* PostHog */; };
 		B2F8E01ABA1BA30265B4ECBE /* RoundedCornerShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839E2C35DF3F9C7B54C3CE49 /* RoundedCornerShape.swift */; };
 		B2FDF69AC0C316F12142F91A /* RoomMembershipDetailsProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B09A94C519227264A41208 /* RoomMembershipDetailsProxy.swift */; };
+		B3113AF9FCA1470076D8FABC /* NativeCallScreenPreviewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB234390DAC553EA6AFC8A7 /* NativeCallScreenPreviewFactory.swift */; };
 		B34BEE84697F27A03AC4AB95 /* MatrixRtcTransportAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E110889C205CD3254AA10C98 /* MatrixRtcTransportAdapter.swift */; };
 		B3D652AA1654270742072FB3 /* DeveloperOptionsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A6F283BC574FDB96ABBB07 /* DeveloperOptionsScreenViewModel.swift */; };
 		B3D8AA9988F8A000B162DCB5 /* TombstonedAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D353E10A64172D863769BF /* TombstonedAvatarImage.swift */; };
@@ -1630,6 +1633,7 @@
 		FBC07D0E510235155CA227DB /* MicrophoneCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D602B8318F6C15889AFFF2 /* MicrophoneCapturer.swift */; };
 		FBD402E3170EB1ED0D1AA672 /* EncryptionKeyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2355398E4A55DA5A89128AD1 /* EncryptionKeyProvider.swift */; };
 		FBF09B6C900415800DDF2A21 /* EmojiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C113E0CB7E15E9765B1817A /* EmojiProvider.swift */; };
+		FBF833E5371582613990DB15 /* NativeCallController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC73E322E87F69F143F2AAC7 /* NativeCallController+Preview.swift */; };
 		FC10228E73323BDC09526F97 /* LRUCache in Frameworks */ = {isa = PBXBuildFile; productRef = 1081D3630AAD3ACEDDEC3A98 /* LRUCache */; };
 		FC31493979ED1FDF7D5EA3F9 /* KeychainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36CB905A2B9EC2C92A2DA7C /* KeychainController.swift */; };
 		FC771B1B1E3A3596DB5901AC /* MatrixRtcKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F05CDBAAEECB2F64B8CCFE79 /* MatrixRtcKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -2328,6 +2332,7 @@
 		54A7923F0115CF17ABC8047F /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/SAS.strings; sourceTree = "<group>"; };
 		54AD70D6E03D2031AE1B5A52 /* TimelineReactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineReactionsView.swift; sourceTree = "<group>"; };
 		54C4E7B46099462F12000C91 /* DeveloperOptionsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperOptionsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		55421139EC9E8C2D8218AC57 /* NativeCallScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeCallScreenCoordinator.swift; sourceTree = "<group>"; };
 		5557DDA438841AF5DC003D0B /* SpaceListScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceListScreenViewModelTests.swift; sourceTree = "<group>"; };
 		558AA5B376CE8C3982A9557F /* AnalyticsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceProtocol.swift; sourceTree = "<group>"; };
 		559EE7C08AA645C5D39AC80B /* AudioFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFormat.swift; sourceTree = "<group>"; };
@@ -2850,6 +2855,7 @@
 		AC4F10BDD56FA77FEC742333 /* VoiceMessageMediaManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageMediaManagerTests.swift; sourceTree = "<group>"; };
 		AC5F5209279A752D98AAC4B2 /* CollapsibleFlowLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleFlowLayoutTests.swift; sourceTree = "<group>"; };
 		AC73285743189AE4498A51DD /* StateMachineFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachineFactory.swift; sourceTree = "<group>"; };
+		AC73E322E87F69F143F2AAC7 /* NativeCallController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NativeCallController+Preview.swift"; sourceTree = "<group>"; };
 		AC86DBE92A579D81B409B791 /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
 		AC9104846487244648D32C6D /* AudioPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerProtocol.swift; sourceTree = "<group>"; };
 		ACA11F7F50A4A3887A18CA5A /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2962,6 +2968,7 @@
 		BCDA016D05107DED3B9495CB /* TimelineItemDebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemDebugView.swift; sourceTree = "<group>"; };
 		BD5480F03306234FC086E93B /* HomeScreenNewSoundBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNewSoundBanner.swift; sourceTree = "<group>"; };
 		BDB0DD6E869B4764958CD7AB /* test_animated_image.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = test_animated_image.gif; sourceTree = "<group>"; };
+		BDB234390DAC553EA6AFC8A7 /* NativeCallScreenPreviewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeCallScreenPreviewFactory.swift; sourceTree = "<group>"; };
 		BDBB8E5436E1BE0D6814BB7D /* PlaybackSpeedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackSpeedButton.swift; sourceTree = "<group>"; };
 		BDE3EDEA7E64D68FEB828F83 /* SpaceSettingsFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceSettingsFlowCoordinator.swift; sourceTree = "<group>"; };
 		BE148A4FFEE853C5A281500C /* UNNotificationContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNNotificationContent.swift; sourceTree = "<group>"; };
@@ -3199,6 +3206,7 @@
 		E44E35AA87F49503E7B3BF6E /* AudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioConverter.swift; sourceTree = "<group>"; };
 		E45EBAFF1A83538D54ABDF92 /* ServerSelectionScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreenViewModelTests.swift; sourceTree = "<group>"; };
 		E461B3C8BBBFCA400B268D14 /* AppRouteURLParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouteURLParserTests.swift; sourceTree = "<group>"; };
+		E489F8CD73CDB02C12FB6399 /* NativeCallScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeCallScreen.swift; sourceTree = "<group>"; };
 		E48C91C8BE55CAE1A3DBC3BC /* TimelineItemIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemIdentifier.swift; sourceTree = "<group>"; };
 		E5272BC4A60B6AD7553BACA1 /* BlurHashDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurHashDecode.swift; sourceTree = "<group>"; };
 		E53BFB7E4F329621C844E8C3 /* AnalyticsPromptScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptScreen.swift; sourceTree = "<group>"; };
@@ -4289,6 +4297,7 @@
 				936085D12BB0094F78E1FB67 /* MatrixRtcRoomBridgeProtocol.swift */,
 				E110889C205CD3254AA10C98 /* MatrixRtcTransportAdapter.swift */,
 				18304AC6FE1E4B59C985EE8E /* NativeCallController.swift */,
+				AC73E322E87F69F143F2AAC7 /* NativeCallController+Preview.swift */,
 				4AA11B9CC13DAE6E297BBEAE /* NativeCallModels.swift */,
 				0A0069A4D4ECBF63B2974641 /* RTCTransportDiscovery.swift */,
 				9964009E0A18BE38FADB062B /* Widget */,
@@ -5268,6 +5277,8 @@
 			isa = PBXGroup;
 			children = (
 				B0422F933274B4F3F83F7259 /* NativeCallControlsView.swift */,
+				E489F8CD73CDB02C12FB6399 /* NativeCallScreen.swift */,
+				BDB234390DAC553EA6AFC8A7 /* NativeCallScreenPreviewFactory.swift */,
 				9A0610F3FDED4B26749AB9D5 /* NativeCallTileView.swift */,
 			);
 			path = View;
@@ -7180,6 +7191,7 @@
 		DE07A244ACE83E40D894EDF3 /* NativeCallScreen */ = {
 			isa = PBXGroup;
 			children = (
+				55421139EC9E8C2D8218AC57 /* NativeCallScreenCoordinator.swift */,
 				C440CFD2ED8DA1C773031F5B /* NativeCallScreenModels.swift */,
 				57DA7A8EA74AAA546DFED0EA /* NativeCallScreenViewModel.swift */,
 				852EEC661B81FD50070917C5 /* NativeCallScreenViewModelProtocol.swift */,
@@ -9346,10 +9358,14 @@
 				551E03A935A6B73158A1AB4A /* NSEUserSessionMock.swift in Sources */,
 				F9842667B68DC6FA1F9ECCBB /* NSItemProvider.swift in Sources */,
 				EA01A06EEDFEF4AE7652E5F3 /* NSRegularExpresion.swift in Sources */,
+				FBF833E5371582613990DB15 /* NativeCallController+Preview.swift in Sources */,
 				D38159E25477BA1BEB051E9B /* NativeCallController.swift in Sources */,
 				4690D0810DDF514160ABA226 /* NativeCallControlsView.swift in Sources */,
 				2B87402F4AB61D864754457A /* NativeCallModels.swift in Sources */,
+				8A8E26EF680D4DEFB263EF47 /* NativeCallScreen.swift in Sources */,
+				2D77236B66808B661731BC07 /* NativeCallScreenCoordinator.swift in Sources */,
 				63E81B3F525B077C33EC5F39 /* NativeCallScreenModels.swift in Sources */,
+				B3113AF9FCA1470076D8FABC /* NativeCallScreenPreviewFactory.swift in Sources */,
 				645BD041B96D17BB0AF37CEF /* NativeCallScreenViewModel.swift in Sources */,
 				5FF7E19FAB4AF161ACC21001 /* NativeCallScreenViewModelProtocol.swift in Sources */,
 				0902D78A62FA0442BECA4377 /* NativeCallTileView.swift in Sources */,

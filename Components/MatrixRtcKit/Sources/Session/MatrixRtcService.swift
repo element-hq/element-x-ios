@@ -25,10 +25,15 @@ public final class MatrixRtcService {
         self.transport = transport
     }
     
-    /// Idempotent. Also called from `joinSession`, so a caller that forgets still gets a working call —
+    /// Starts the core ahead of the first call so media keys sent meanwhile are not missed.
+    /// Idempotent.
+    public func start() async {
+        _ = await startManager()
+    }
+    
+    /// Also called from `joinSession`, so a caller that forgets `start()` still gets a working call —
     /// one that may have missed keys.
-    @discardableResult
-    func start() async -> RtcSessionManagerHandle {
+    private func startManager() async -> RtcSessionManagerHandle {
         if let manager {
             return manager
         }
@@ -72,7 +77,7 @@ public final class MatrixRtcService {
         if let existing = sessions[roomID] {
             throw MatrixRtcError.alreadyJoined(roomID: existing.roomID)
         }
-        let manager = await start()
+        let manager = await startManager()
         
         // Nothing enforces this on the way in, and a malformed slot id looks healthy from our side
         // while a conformant peer refuses the membership on sight.
