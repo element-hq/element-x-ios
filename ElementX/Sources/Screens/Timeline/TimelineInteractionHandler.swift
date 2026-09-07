@@ -115,9 +115,9 @@ class TimelineInteractionHandler {
         }
     }
     
-    /// Redacting needs the event alone, so it works even when the item isn't part of this timeline,
-    /// such as one held by a media preview that was built from a different one.
     func redact(_ itemID: TimelineItemIdentifier, reason: String?) {
+        // Redacting needs the event alone, so it works even when the item isn't part of this timeline,
+        // such as one held by a media preview that was built from a different one.
         guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
         Task { await timelineController.redact(eventOrTransactionID, reason: reason) }
     }
@@ -125,8 +125,9 @@ class TimelineInteractionHandler {
     // swiftlint:disable:next cyclomatic_complexity
     func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         if case .redact = action {
-            // The server hasn't accepted this message yet, it is still sending or has failed,
-            // so there is nobody to give a reason to.
+            // An unsent message is only dropped from the send queue. No redaction event reaches
+            // the server, so there is nothing to attach a reason to, and asking for one would
+            // only delay the abort while the message might still go out.
             if case .event(_, .eventID) = itemID {
                 actionsSubject.send(.showRedactConfirmation(itemID: itemID))
             } else {

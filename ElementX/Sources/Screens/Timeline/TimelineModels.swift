@@ -191,7 +191,7 @@ struct TimelineViewStateBindings {
     
     var manageMemberViewModel: ManageRoomMemberSheetViewModel?
     
-    var redactConfirmationInfo: RedactConfirmationInfo?
+    var redactConfirmationInfo: TimelineRedactConfirmationInfo?
     
     var showTranslation = false
     var textToBeTranslated: String?
@@ -224,7 +224,7 @@ struct ReadReceiptSummaryInfo: Identifiable {
 }
 
 /// The item that the user has asked to remove and must confirm, optionally giving a reason.
-struct RedactConfirmationInfo: Identifiable {
+struct TimelineRedactConfirmationInfo: Identifiable {
     let id: TimelineItemIdentifier
 }
 

@@ -268,7 +268,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     private func redactItem(_ item: TimelineMediaPreviewItem.Media, reason: String) {
-        // This sheet is the confirmation, so don't ask again in the timeline.
         timelineViewModel.context.send(viewAction: .redactConfirmed(itemID: item.timelineItem.id, reason: reason))
         state.bindings.redactConfirmationItem = nil
         state.previewControllerDriver.send(.dismissDetailsSheet)

@@ -25,7 +25,8 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
             VStack(spacing: 0) {
                 header
                 preview
-                RedactionReasonTextField(reason: $reason)
+                TextField(L10n.screenRoomConfirmRemovalReasonPlaceholder, text: $reason)
+                    .textFieldStyle(.compound(labelText: L10n.screenRoomConfirmRemovalReasonLabel))
                     .padding(.horizontal, 24)
                     .padding(.bottom, 40)
                 buttons

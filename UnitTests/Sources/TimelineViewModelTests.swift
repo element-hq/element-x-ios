@@ -594,8 +594,6 @@ final class TimelineViewModelTests {
         #expect(viewModel.state.bindings.alertInfo?.verticalButtons == nil)
     }
     
-    // MARK: - Helpers
-    
     // MARK: - Redaction
     
     @Test
@@ -688,6 +686,8 @@ final class TimelineViewModelTests {
         #expect(viewModel.context.redactConfirmationInfo == nil)
         #expect(timelineController.redactReasonReceivedArguments?.reason == nil)
     }
+    
+    // MARK: - Helpers
     
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,

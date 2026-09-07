@@ -12,39 +12,36 @@ import SwiftUI
 struct RedactConfirmationView: View {
     @Environment(\.dismiss) private var dismiss
     
+    @State var reason = ""
     let confirm: (String) -> Void
     
-    @State private var reason: String
     @State private var sheetHeight: CGFloat = .zero
-    
-    init(reason: String = "", confirm: @escaping (String) -> Void) {
-        _reason = State(initialValue: reason)
-        self.confirm = confirm
-    }
+    private let topPadding: CGFloat = 44 // For the navigation bar
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                closeButton
-                header
-                RedactionReasonTextField(reason: $reason)
-                buttons
+        ElementNavigationStack {
+            ScrollView {
+                VStack(spacing: 0) {
+                    header
+                    TextField(L10n.screenRoomConfirmRemovalReasonPlaceholder, text: $reason)
+                        .textFieldStyle(.compound(labelText: L10n.screenRoomConfirmRemovalReasonLabel))
+                    buttons
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 16)
+                .readHeight($sheetHeight)
             }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 16)
-            .readHeight($sheetHeight)
+            .scrollBounceBehavior(.basedOnSize)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    ToolbarButton(role: .close) { dismiss() }
+                }
+            }
         }
-        .scrollBounceBehavior(.basedOnSize)
-        .presentationDetents([.height(sheetHeight)])
+        .presentationDetents([.height(sheetHeight + topPadding)])
         .presentationDragIndicator(.hidden)
         .presentationBackground(.compound.bgCanvasDefault)
         .interactiveDismissDisabled()
-    }
-    
-    private var closeButton: some View {
-        ToolbarButton(role: .close) { dismiss() }
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.top, 16)
     }
     
     private var header: some View {
@@ -63,18 +60,32 @@ struct RedactConfirmationView: View {
     }
     
     private var buttons: some View {
-        HStack(spacing: 12) {
-            Button(L10n.actionCancel) {
-                dismiss()
+        ViewThatFits {
+            HStack(spacing: 12) {
+                cancelButton
+                removeButton
             }
-            .buttonStyle(.compound(.secondary))
             
-            Button(L10n.actionRemove, role: .destructive) {
-                confirm(reason)
+            VStack(spacing: 16) {
+                removeButton
+                cancelButton
             }
-            .buttonStyle(.compound(.primary))
         }
         .padding(.top, 24)
+    }
+    
+    private var cancelButton: some View {
+        Button(L10n.actionCancel) {
+            dismiss()
+        }
+        .buttonStyle(.compound(.secondary))
+    }
+    
+    private var removeButton: some View {
+        Button(L10n.actionRemove, role: .destructive) {
+            confirm(reason)
+        }
+        .buttonStyle(.compound(.primary))
     }
 }
 
