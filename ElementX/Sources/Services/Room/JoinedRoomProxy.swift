@@ -663,6 +663,30 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    /// Temporary: drives the SDK widget driver in-process as the bridge for bindings the released
+    /// package lacks (delayed events, a room-state feed, to-device messaging). The driver needs the
+    /// concrete `Room`.
+    func matrixRtcRoomBridge() -> MatrixRtcRoomBridgeProtocol? {
+        guard let room = room as? Room else { return nil }
+        let widgetID = UUID().uuidString
+        // Negotiation starts at `run()` rather than on a `content_loaded` no web view will send; the
+        // URL only has to parse, nothing loads it.
+        let settings = WidgetSettings(widgetId: widgetID, initAfterContentLoad: false, rawUrl: "https://call.element.io/")
+        let driverAndHandle: WidgetDriverAndHandle
+        do {
+            driverAndHandle = try makeWidgetDriver(settings: settings)
+        } catch {
+            MXLog.error("MatrixRTC: cannot make a widget driver for \(id): \(error)")
+            return nil
+        }
+        // The closure must not hold the handle: the driver only stops once the handle is released.
+        let driver = driverAndHandle.driver
+        let grant = WidgetCapabilityGrant()
+        return WidgetMatrixBridge(roomID: id, widgetID: widgetID, channel: driverAndHandle.handle) {
+            await driver.run(room: room, capabilitiesProvider: grant)
+        }
+    }
+    
     /// Logs and wraps an SDK failure; the message never includes content.
     private func sdkCall<T>(_ description: String, _ body: () async throws -> T) async -> Result<T, RoomProxyError> {
         do {

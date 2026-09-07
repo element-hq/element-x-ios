@@ -449,6 +449,14 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: AppBuildType.current != .release)
     var developerOptionsEnabled: Bool
     
+    /// Runs calls through the native matrix-rust-rtc stack instead of the Element Call web view.
+    @UserPreference(defaultValue: false)
+    var nativeCallEnabled: Bool
+    
+    /// Shows minimized native video calls in the system Picture in Picture window.
+    @UserPreference(defaultValue: true)
+    var nativeCallPictureInPictureEnabled: Bool
+    
     init(store: UserDefaultsProtocol) {
         self.store = store
     }

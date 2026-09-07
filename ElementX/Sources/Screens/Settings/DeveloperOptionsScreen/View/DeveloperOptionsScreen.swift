@@ -125,6 +125,22 @@ struct DeveloperOptionsScreen: View {
                     }
             }
             
+            Section {
+                Toggle(isOn: $context.nativeCallEnabled) {
+                    Text("Native calls")
+                    Text("Uses the matrix-rust-rtc stack instead of the Element Call web view.")
+                }
+                
+                Toggle(isOn: $context.nativeCallPictureInPictureEnabled) {
+                    Text("Picture in Picture")
+                    Text("Minimized video calls use the system window; off, they use the bar.")
+                }
+            } header: {
+                Text("Native call")
+            } footer: {
+                Text("Experimental. Joins in Element Call state-event compatibility mode for interop with Element Web.")
+            }
+            
             Section("Notifications") {
                 Toggle(isOn: $context.hideQuietNotificationAlerts) {
                     Text("Hide quiet alerts")

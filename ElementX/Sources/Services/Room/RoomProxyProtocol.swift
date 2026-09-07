@@ -170,6 +170,9 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func sendStateEventRaw(eventType: String, stateKey: String, contentJSON: String) async -> Result<String, RoomProxyError>
     func sendRaw(eventType: String, contentJSON: String) async -> Result<Void, RoomProxyError>
     func redact(eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
+    /// The stand-in for the SDK bindings the native call stack still lacks (delayed events, state
+    /// feed, to-device), or nil when the room cannot host one.
+    func matrixRtcRoomBridge() -> MatrixRtcRoomBridgeProtocol?
     
     // MARK: - Permalinks
     

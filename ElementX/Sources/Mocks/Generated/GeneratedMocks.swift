@@ -6964,6 +6964,34 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
             return redactEventIDReasonReturnValue
         }
     }
+    //MARK: - matrixRtcRoomBridge
+
+    private let matrixRtcRoomBridgeCallsCountLock = NSLock()
+    private nonisolated(unsafe) var matrixRtcRoomBridgeUnderlyingCallsCount = 0
+    var matrixRtcRoomBridgeCallsCount: Int {
+        get { matrixRtcRoomBridgeCallsCountLock.withLock { matrixRtcRoomBridgeUnderlyingCallsCount } }
+        set { matrixRtcRoomBridgeCallsCountLock.withLock { matrixRtcRoomBridgeUnderlyingCallsCount = newValue } }
+    }
+    var matrixRtcRoomBridgeCalled: Bool {
+        return matrixRtcRoomBridgeCallsCount > 0
+    }
+
+    private let matrixRtcRoomBridgeReturnValueLock = NSLock()
+    private nonisolated(unsafe) var matrixRtcRoomBridgeUnderlyingReturnValue: MatrixRtcRoomBridgeProtocol?
+    var matrixRtcRoomBridgeReturnValue: MatrixRtcRoomBridgeProtocol? {
+        get { matrixRtcRoomBridgeReturnValueLock.withLock { matrixRtcRoomBridgeUnderlyingReturnValue } }
+        set { matrixRtcRoomBridgeReturnValueLock.withLock { matrixRtcRoomBridgeUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var matrixRtcRoomBridgeClosure: (() -> MatrixRtcRoomBridgeProtocol?)?
+
+    func matrixRtcRoomBridge() -> MatrixRtcRoomBridgeProtocol? {
+        matrixRtcRoomBridgeCallsCountLock.withLock { matrixRtcRoomBridgeUnderlyingCallsCount += 1 }
+        if let matrixRtcRoomBridgeClosure = matrixRtcRoomBridgeClosure {
+            return matrixRtcRoomBridgeClosure()
+        } else {
+            return matrixRtcRoomBridgeReturnValue
+        }
+    }
     //MARK: - matrixToPermalink
 
     private let matrixToPermalinkCallsCountLock = NSLock()
