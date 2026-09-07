@@ -198,17 +198,44 @@ struct PollFormScreenViewModelTests {
         
         try await deferredFailure.fulfill()
         #expect(context.alertInfo != nil, "An alert should be shown before deleting the poll.")
+        #expect(context.alertInfo?.textFields?.count == 1, "The alert should let the user give a reason.")
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
         
         await waitForConfirmation(timeout: .seconds(1)) { confirmation in
-            timelineProxy.redactReasonClosure = { eventID, _ in
+            timelineProxy.redactReasonClosure = { eventID, reason in
                 defer {
                     confirmation()
                 }
                 #expect(eventID == .eventID("foo"))
+                #expect(reason == nil, "A blank reason shouldn't be sent.")
                 return .success(())
             }
+            context.alertInfo?.textFields?.first?.text.wrappedValue = "   "
+            context.alertInfo?.secondaryButton?.action?()
+        }
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    mutating func deletePollWithReason() async throws {
+        setupViewModel(mode: .edit(eventID: "foo", poll: .emptyDisclosed))
+        
+        context.send(viewAction: .delete)
+        #expect(context.alertInfo != nil, "An alert should be shown before deleting the poll.")
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .close }
+        
+        await waitForConfirmation(timeout: .seconds(1)) { confirmation in
+            timelineProxy.redactReasonClosure = { eventID, reason in
+                defer {
+                    confirmation()
+                }
+                #expect(eventID == .eventID("foo"))
+                #expect(reason == "Posted in the wrong room.")
+                return .success(())
+            }
+            context.alertInfo?.textFields?.first?.text.wrappedValue = "Posted in the wrong room."
             context.alertInfo?.secondaryButton?.action?()
         }
         try await deferred.fulfill()
