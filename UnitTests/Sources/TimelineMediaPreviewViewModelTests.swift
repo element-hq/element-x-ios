@@ -154,7 +154,7 @@ struct TimelineMediaPreviewViewModelTests {
         // Given a view model with a loaded item.
         try await loadingItem()
         #expect(context.redactConfirmationItem == nil)
-        #expect(!timelineController.redactCalled)
+        #expect(!timelineController.redactReasonCalled)
         guard case let .media(mediaItem) = context.viewState.currentItem else {
             Issue.record("There should be a current item.")
             return
@@ -177,18 +177,19 @@ struct TimelineMediaPreviewViewModelTests {
         
         // Then the confirmation sheet should be presented.
         #expect(context.redactConfirmationItem == mediaItem)
-        #expect(!timelineController.redactCalled)
+        #expect(!timelineController.redactReasonCalled)
         
         // When confirming the redaction.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         
         // The redaction runs in an unstructured task, so wait for the call rather than asserting after the dismiss.
         await waitForConfirmation { confirmation in
-            timelineController.redactClosure = { _ in confirmation() }
-            context.send(viewAction: .redactConfirmation(item: mediaItem))
+            timelineController.redactReasonClosure = { _, _ in confirmation() }
+            context.send(viewAction: .redactConfirmation(item: mediaItem, reason: "Wrong file"))
         }
         
-        // Then the item should be redacted and the view should be dismissed.
+        // Then the item should be redacted with the reason and the view should be dismissed.
+        #expect(timelineController.redactReasonReceivedArguments?.reason == "Wrong file")
         try await deferred.fulfill()
     }
     

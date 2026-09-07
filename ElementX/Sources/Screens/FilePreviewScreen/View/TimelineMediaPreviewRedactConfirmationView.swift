@@ -16,6 +16,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     var preferredColorScheme: ColorScheme? = .dark
     
+    @State private var reason = ""
     @State private var sheetHeight: CGFloat = .zero
     private let topPadding: CGFloat = 19
     
@@ -24,6 +25,10 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
             VStack(spacing: 0) {
                 header
                 preview
+                TextField(L10n.screenRoomConfirmRemovalReasonPlaceholder, text: $reason)
+                    .textFieldStyle(.compound(labelText: L10n.screenRoomConfirmRemovalReasonLabel))
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 40)
                 buttons
             }
             .readHeight($sheetHeight)
@@ -95,13 +100,13 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 24)
-        .padding(.bottom, 40)
+        .padding(.bottom, 24)
     }
     
     private var buttons: some View {
         VStack(spacing: 16) {
             Button(L10n.actionRemove, role: .destructive) {
-                context.send(viewAction: .redactConfirmation(item: item))
+                context.send(viewAction: .redactConfirmation(item: item, reason: reason))
             }
             .buttonStyle(.compound(.primary))
             

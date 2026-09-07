@@ -19,6 +19,7 @@ enum TimelineInteractionHandlerAction {
     case displayEditPollForm(eventID: String, poll: Poll)
     
     case showActionMenu(TimelineItemActionMenuInfo)
+    case showRedactConfirmation(itemID: TimelineItemIdentifier)
     case showDebugInfo(TimelineItemDebugInfo)
     
     case displayAudioRecorderPermissionError
@@ -114,13 +115,24 @@ class TimelineInteractionHandler {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
-    func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
+    func redact(_ itemID: TimelineItemIdentifier, reason: String?) {
         // Redacting needs the event alone, so it works even when the item isn't part of this timeline,
         // such as one held by a media preview that was built from a different one.
+        guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
+        Task { await timelineController.redact(eventOrTransactionID, reason: reason) }
+    }
+    
+    // swiftlint:disable:next cyclomatic_complexity
+    func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         if case .redact = action {
-            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
-            Task { await timelineController.redact(eventOrTransactionID) }
+            // An unsent message is only dropped from the send queue. No redaction event reaches
+            // the server, so there is nothing to attach a reason to, and asking for one would
+            // only delay the abort while the message might still go out.
+            if case .event(_, .eventID) = itemID {
+                actionsSubject.send(.showRedactConfirmation(itemID: itemID))
+            } else {
+                redact(itemID, reason: nil)
+            }
             return
         }
         
