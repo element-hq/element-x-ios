@@ -97,6 +97,7 @@
 		0C797CD650DFD2876BEC5173 /* CollapsibleReactionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7C6DDBB5D12F6EF6A3D6E1 /* CollapsibleReactionLayout.swift */; };
 		0C88044649BAEE6C49BFC43A /* SecureBackupControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C21A715237F2B6D6E80998C /* SecureBackupControllerProtocol.swift */; };
 		0C932A5158C1D0604DFC5750 /* ComposerToolbarViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA29952595B804DA221A0C1D /* ComposerToolbarViewModelTests.swift */; };
+		0CDF28EF1AD76D952D6DA63E /* MatrixRtcService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751A114F015E62F21DD18FF4 /* MatrixRtcService.swift */; };
 		0D4EB2ABAA5FE8CB10FDBCB8 /* TimelineItemFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA3AF94A06D319BB37E52DA /* TimelineItemFactoryTests.swift */; };
 		0D617A152D099D94271D3BA8 /* SecurityAndPrivacyScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D046ABB22E680F7C5054441B /* SecurityAndPrivacyScreenViewModelProtocol.swift */; };
 		0DAB08C117E0391F3ADB2031 /* SpaceRoomListProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2B564CA6570E1487A7C7CC /* SpaceRoomListProxy.swift */; };
@@ -1514,6 +1515,7 @@
 		EC236C92F6FA50062273AEE1 /* MatrixRtcRoomBridgeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936085D12BB0094F78E1FB67 /* MatrixRtcRoomBridgeProtocol.swift */; };
 		EC3320639828BED8B3E5F2C6 /* EncryptionResetScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5875F7C0A2398E9F134B1284 /* EncryptionResetScreenViewModel.swift */; };
 		EC5B6D717560B9E275A0EA2F /* landscape_test_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 028CAFDBB60E2DBB24C3F621 /* landscape_test_image.jpg */; };
+		EC7C7F2AB5126997270C36B6 /* MatrixRtcSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65055EDE45A72BAD6671562 /* MatrixRtcSession.swift */; };
 		ECE4E03D17E309724013F825 /* TimelineInteractionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C65A839BC897F6C236E8A5 /* TimelineInteractionHandlerTests.swift */; };
 		ED2BEDA7B074542A4D217ADF /* StaticLocationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFB21A2FF41CF0E118790DD /* StaticLocationData.swift */; };
 		ED3E91E6166E4923791ACA84 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56852036214ABA9D7D305768 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift */; };
@@ -2501,6 +2503,7 @@
 		74E08B8A66948E9690F38B94 /* SecureBackupLogoutConfirmationScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupLogoutConfirmationScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		74FCAA90142DFBFA1E3E4216 /* SpaceAddRoomsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceAddRoomsScreenCoordinator.swift; sourceTree = "<group>"; };
 		7509AB72755DCC4B4E721B36 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/SAS.strings; sourceTree = "<group>"; };
+		751A114F015E62F21DD18FF4 /* MatrixRtcService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRtcService.swift; sourceTree = "<group>"; };
 		751C3DC87817362097287DCC /* HomeserverCapabilitiesProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeserverCapabilitiesProxy.swift; sourceTree = "<group>"; };
 		752A0EB49BF5BCEA37EDF7A3 /* Signposter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signposter.swift; sourceTree = "<group>"; };
 		753B4C6C0EDDCBF0708DC384 /* TimelineItemSendInfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemSendInfoLabel.swift; sourceTree = "<group>"; };
@@ -3194,6 +3197,7 @@
 		E60757AFE04391B43EA568B8 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E63072981793CCA84EE12798 /* ChatsSpaceFiltersScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsSpaceFiltersScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		E6372DD10DED30E7AD7BCE21 /* RoomListFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListFiltersView.swift; sourceTree = "<group>"; };
+		E65055EDE45A72BAD6671562 /* MatrixRtcSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRtcSession.swift; sourceTree = "<group>"; };
 		E66763BD54A3A1D9C6E6F2F1 /* PinnedItemsIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedItemsIndicatorView.swift; sourceTree = "<group>"; };
 		E6935A55AB3B0C94BC566DD6 /* EncryptionResetPasswordScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetPasswordScreenCoordinator.swift; sourceTree = "<group>"; };
 		E6E6BDF9D26DB05C88901416 /* RedactedRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedactedRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -4946,6 +4950,8 @@
 				E3EBB4F8D3DA4CD7F772CF2A /* MatrixRtcCommandSender.swift */,
 				D57B7AE0E195E737317E87FD /* MatrixRtcLog.swift */,
 				649FCD89E514713DC785F91D /* MatrixRtcLogging.swift */,
+				751A114F015E62F21DD18FF4 /* MatrixRtcService.swift */,
+				E65055EDE45A72BAD6671562 /* MatrixRtcSession.swift */,
 				1D742BDC7819B045C83A6588 /* RoomStateFeeder.swift */,
 				9F87A9DA8EABF5ADBFA67535 /* SessionKeyFeeder.swift */,
 			);
@@ -8761,6 +8767,8 @@
 				C8B3100A1CC12F9FFDC64937 /* MatrixRtcLogging.swift in Sources */,
 				6F2925C185654654802C36C1 /* MatrixRtcMatrixTransport.swift in Sources */,
 				6D04ED80374F085C20AF8FC7 /* MatrixRtcModels.swift in Sources */,
+				0CDF28EF1AD76D952D6DA63E /* MatrixRtcService.swift in Sources */,
+				EC7C7F2AB5126997270C36B6 /* MatrixRtcSession.swift in Sources */,
 				FBC07D0E510235155CA227DB /* MicrophoneCapturer.swift in Sources */,
 				0E6ED509548F367AE52CEAF7 /* PCMRingBuffer.swift in Sources */,
 				6C408E7E641533FABC9C41CC /* RoomStateFeeder.swift in Sources */,
