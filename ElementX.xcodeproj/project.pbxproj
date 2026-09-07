@@ -1411,6 +1411,7 @@
 		DC08ADC41E792086A340A8B3 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */; };
 		DC68E866D6E664B0D2B06E74 /* MockImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1DA29A5A041CC0BACA7CB0 /* MockImageCache.swift */; };
 		DC77E9DB2CFBE84A2BDF20C5 /* RoomRolesAndPermissionsFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0833F51229E166BCA141D004 /* RoomRolesAndPermissionsFlowCoordinator.swift */; };
+		DCEB55DDD4D9E166C19BD762 /* MatrixRtcCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D36FFDFF7C73193741003D /* MatrixRtcCall.swift */; };
 		DCFE7CB3B9A104330BBB96AD /* AnalyticsPromptScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B67DF223EEB8DCAF178A1D4 /* AnalyticsPromptScreenCoordinator.swift */; };
 		DD21CE51DF9BD04FC8155972 /* LeaveSpaceHandleSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580BDCD23DD02481AB5FFB47 /* LeaveSpaceHandleSDKMock.swift */; };
 		DD4D8B5D668197D345A3ED42 /* TimelineControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F933BB25FC426D5C67E1D812 /* TimelineControllerMock.swift */; };
@@ -2977,6 +2978,7 @@
 		C258C9C815272911A5B132C3 /* FormattedBodyText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedBodyText.swift; sourceTree = "<group>"; };
 		C2886615BEBAE33A0AA4D5F8 /* RoomScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenModels.swift; sourceTree = "<group>"; };
 		C2B8AA3199BAAD066E36CB07 /* RoomListSDKMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListSDKMock.swift; sourceTree = "<group>"; };
+		C2D36FFDFF7C73193741003D /* MatrixRtcCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRtcCall.swift; sourceTree = "<group>"; };
 		C2E9B841EE4878283ECDB554 /* InviteUsersScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreen.swift; sourceTree = "<group>"; };
 		C30F45308428A4D9FFDB2FB8 /* BannedRoomProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannedRoomProxy.swift; sourceTree = "<group>"; };
 		C3141EE5B2CBEC45270E01EB /* CreateRoomSpaceSelectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomSpaceSelectionSheet.swift; sourceTree = "<group>"; };
@@ -4940,6 +4942,7 @@
 			children = (
 				09B9FCEB43FD29D422409981 /* EncryptionKeyMapper.swift */,
 				B0D181FBD3D73887CDF42718 /* Mappers.swift */,
+				C2D36FFDFF7C73193741003D /* MatrixRtcCall.swift */,
 				E3EBB4F8D3DA4CD7F772CF2A /* MatrixRtcCommandSender.swift */,
 				D57B7AE0E195E737317E87FD /* MatrixRtcLog.swift */,
 				649FCD89E514713DC785F91D /* MatrixRtcLogging.swift */,
@@ -8752,6 +8755,7 @@
 				68A3CC4BDA906C45230E7111 /* CallAudioSessionConfigurator.swift in Sources */,
 				9F6EFBB1D710D34236F87430 /* EncryptionKeyMapper.swift in Sources */,
 				365D4AB2BD42729490C93146 /* Mappers.swift in Sources */,
+				DCEB55DDD4D9E166C19BD762 /* MatrixRtcCall.swift in Sources */,
 				5EFAB767D88D3D44E9AE89A4 /* MatrixRtcCommandSender.swift in Sources */,
 				B63D2F54666E6BF9B7C35024 /* MatrixRtcLog.swift in Sources */,
 				C8B3100A1CC12F9FFDC64937 /* MatrixRtcLogging.swift in Sources */,
