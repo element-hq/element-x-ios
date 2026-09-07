@@ -1,0 +1,45 @@
+# The native MatrixRTC stack, split out of the app so it is the only image linking the
+# matrix-rust-rtc static archive: that archive needs `-ObjC` (libwebrtc's Objective-C
+# categories are dead-stripped otherwise) and the flag must not weaken the app's own
+# dead-stripping. It also makes the linked size delta of the library trivially measurable.
+#
+# Named MatrixRtcKit because the library's own Swift module is MatrixRtc.
+name: MatrixRtcKit
+
+targets:
+  MatrixRtcKit:
+    type: framework
+    platform: iOS
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).matrix-rtc-kit
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: 6.2
+        SWIFT_APPROACHABLE_CONCURRENCY: YES
+        SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
+        OTHER_LDFLAGS:
+        - $(inherited)
+        - -ObjC
+        - -lc++
+
+    dependencies:
+    # The uniffi bindings and the xcframework (Rust core + statically linked libwebrtc).
+    - package: MatrixRtc
+      product: MatrixRtc
+      embed: false
+    # System frameworks the statically linked libwebrtc resolves against.
+    - sdk: AVFoundation.framework
+    - sdk: AudioToolbox.framework
+    - sdk: CoreMedia.framework
+    - sdk: CoreVideo.framework
+    - sdk: VideoToolbox.framework
+    - sdk: Metal.framework
+    - sdk: MetalKit.framework
+    - sdk: QuartzCore.framework
+    - sdk: CoreGraphics.framework
+    - sdk: UIKit.framework
+    - sdk: Network.framework
+
+    sources:
+    - path: ../Sources

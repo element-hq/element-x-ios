@@ -260,6 +260,9 @@ targets:
       implicit: true
       link: false
       embed: true
+    # The native call stack, the only image linking the matrix-rust-rtc archive.
+    - target: MatrixRtcKit
+      embed: true
     - package: PostHog
     - package: SwiftState
     - package: GZIP

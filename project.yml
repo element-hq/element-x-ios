@@ -54,6 +54,8 @@ settings:
   MARKETING_VERSION: 26.09.0
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
+  # MatrixRtcFFI.xcframework (libwebrtc) has no Intel simulator slice.
+  EXCLUDED_ARCHS[sdk=iphonesimulator*]: x86_64
 
 include:
 - path: app.yml
@@ -68,6 +70,7 @@ include:
 - path: Components/MapLibre/MapLibreInterface/SupportingFiles/target.yml
 - path: Components/MapLibre/MapLibreShim/SupportingFiles/target.yml
 - path: Components/SDKMocks/SupportingFiles/target.yml
+- path: Components/MatrixRtcKit/SupportingFiles/target.yml
 # - path: MyAppVariant/override.yml
 
 packages:
@@ -76,6 +79,9 @@ packages:
     url: https://github.com/element-hq/matrix-rust-components-swift
     exactVersion: 26.09.07
     # path: ../matrix-rust-sdk
+  MatrixRtc:
+    url: https://github.com/BillCarsonFr/matrix-rust-rtc
+    exactVersion: 0.2.0-rc.1
   Compound:
     path: compound-ios
   BuildExtensions:

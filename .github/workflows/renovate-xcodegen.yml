@@ -48,7 +48,7 @@ jobs:
         run: xcodebuild -scheme ElementX -project ElementX.xcodeproj -destination 'generic/platform=iOS Simulator' build
 
       - name: Update Acknowledgements
-        run: swift-package-list ElementX.xcodeproj --requires-license --ignore-package compound-ios --ignore-package compound-design-tokens --ignore-package matrix-rich-text-editor-swift --ignore-package element-call-swift --output-type settings-bundle --output-path ElementX/SupportingFiles
+        run: swift-package-list ElementX.xcodeproj --requires-license --ignore-package compound-ios --ignore-package compound-design-tokens --ignore-package matrix-rich-text-editor-swift --ignore-package element-call-swift --ignore-package matrix-rust-rtc --output-type settings-bundle --output-path ElementX/SupportingFiles
 
       - name: Commit and push changes
         run: |

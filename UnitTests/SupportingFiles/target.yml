@@ -32,6 +32,8 @@ targets:
     dependencies:
     - target: ElementX
     - target: MapLibreInterface
+    - target: MatrixRtcKit
+      embed: false
     - package: MatrixRustSDK
     - package: AsyncAlgorithms
     - package: Dynamic
