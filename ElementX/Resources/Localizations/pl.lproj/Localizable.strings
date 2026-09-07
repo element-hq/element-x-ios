@@ -46,7 +46,7 @@
 "a11y_react_with_other_emojis" = "Zareaguj innym emoji";
 "a11y_read_receipts_multiple" = "Poprzednia wiadomość przeczytana przez %1$@ i %2$@";
 "a11y_read_receipts_single" = "Poprzednia wiadomość przeczytana przez %1$@";
-"a11y_read_receipts_tap_to_show_all_ios" = "Stuknij, aby pokazać wszystkich";
+"a11y_read_receipts_tap_to_show_all_ios" = "Dotknij, aby pokazać wszystkich";
 "a11y_remove_reaction" = "Usuń reakcję %1$@";
 "a11y_remove_reaction_with" = "Usuń reakcję z %1$@";
 "a11y_send_files" = "Wyślij pliki";
@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Ponów próbę odszyfrowania";
 "action_save" = "Zapisz";
 "action_search" = "Szukaj";
+"action_select" = "Zaznacz";
 "action_select_all" = "Zaznacz wszystko";
 "action_send" = "Wyślij";
 "action_send_edited_message" = "Wyślij edytowaną wiadomość";
@@ -191,10 +192,10 @@
 "action_start_chat" = "Rozpocznij chat";
 "action_start_over" = "Zacznij od nowa";
 "action_start_verification" = "Rozpocznij weryfikację";
-"action_static_map_load" = "Stuknij, aby załadować mapę";
+"action_static_map_load" = "Dotknij, aby załadować mapę";
 "action_stop" = "Zatrzymaj";
 "action_take_photo" = "Zrób zdjęcie";
-"action_tap_for_options" = "Stuknij, by wyświetlić opcje";
+"action_tap_for_options" = "Dotknij, by wyświetlić opcje";
 "action_translate" = "Przetłumacz";
 "action_try_again" = "Spróbuj ponownie";
 "action_unpin" = "Odepnij";
@@ -713,9 +714,9 @@
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Wymagana jest aplikacja Element Pro na %1$@. Znajdziesz ją w sklepie z aplikacjami.";
 "screen_change_server_error_element_pro_required_title" = "Wymagany jest Element Pro";
-"screen_change_server_error_invalid_homeserver" = "Nie mogliśmy połączyć się z dostawcą konta. Sprawdź, czy adres URL serwera został wprowadzony poprawnie. Jeśli adres URL jest poprawny, skontaktuj się z dostawcą konta w celu uzyskania dalszej pomocy.";
+"screen_change_server_error_invalid_homeserver" = "Nie mogliśmy połączyć się z dostawcą konta. Sprawdź, czy adres URL serwera został wprowadzony poprawnie. Jeśli adres URL jest poprawny, skontaktuj się z administratorem dostawcy konta w celu uzyskania dalszej pomocy.";
 "screen_change_server_error_invalid_well_known" = "Serwer nie jest dostępny z powodu problemu pliku .well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Wybrany dostawca konta nie wspiera funkcji sliding sync. Wymagana jest aktualizacja, aby korzystać z %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "Wybrany dostawca konta nie wspiera funkcji sliding sync. Wymagana jest aktualizacja serwera, aby korzystać z %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nie posiada zezwolenia na dołączenie do %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Aplikacja została skonfigurowana tak, aby zezwalała na: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Dostawca konta %1$@ jest niedozwolony.";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Dołączyć mogą tylko zaproszone osoby.";
 "screen_create_room_private_option_title" = "Prywatny";
 "screen_create_room_public_option_description" = "Każdy może znaleźć ten pokój.\nMożesz to zmienić w ustawieniach pokoju.";
-"screen_create_room_public_option_short_description" = "Każdy może dołączyć.";
+"screen_create_room_public_option_short_description" = "Każdy może dołączyć, w tym osoby spoza Twojej organizacji.";
 "screen_create_room_public_option_title" = "Publiczny";
 "screen_create_room_room_access_section_knocking_option_description" = "Każdy może poprosić o dołączenie, ale administrator lub moderator musi to zaakceptować.";
 "screen_create_room_room_access_section_knocking_option_title" = "Zezwól na prośbę o dołączenie";
@@ -785,7 +786,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Poproś o dołączenie";
 "screen_create_room_room_access_section_private_option_description" = "Dołączyć mogą tylko zaproszone osoby.";
 "screen_create_room_room_access_section_private_option_title" = "Prywatny";
-"screen_create_room_room_access_section_public_option_description" = "Każdy może dołączyć.";
+"screen_create_room_room_access_section_public_option_description" = "Każdy może dołączyć, w tym osoby spoza Twojej organizacji.";
 "screen_create_room_room_access_section_public_option_title" = "Publiczny";
 "screen_create_room_room_access_section_restricted_option_description" = "Każdy w %1$@ może dołączyć.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standardowy";
@@ -914,7 +915,7 @@
 "screen_join_room_loading_alert_title" = "Nie udało nam się wyświetlić podglądu tego pokoju";
 "screen_join_room_space_not_supported_description" = "%1$@ jeszcze nie obsługuje przestrzeni. Uzyskaj dostęp do przestrzeni w wersji web.";
 "screen_join_room_space_not_supported_title" = "Przestrzenie nie są jeszcze obsługiwane";
-"screen_join_room_subtitle_knock" = "Kliknij przycisk poniżej, aby powiadomić administratora czatu. Po zatwierdzeniu będziesz mógł dołączyć do rozmowy.";
+"screen_join_room_subtitle_knock" = "Dotknij przycisku poniżej, aby powiadomić administratora czatu. Po zatwierdzeniu będziesz mógł dołączyć do rozmowy.";
 "screen_join_room_subtitle_no_preview" = "Musisz być członkiem tego pokoju, aby wyświetlić historię wiadomości.";
 "screen_join_room_title_knock" = "Chcesz dołączyć do tego pokoju?";
 "screen_join_room_title_no_preview" = "Podgląd nie jest dostępny";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Brak oczekujących próśb o dołączenie";
 "screen_knock_requests_list_initial_loading_title" = "Wczytywanie próśb o dołączenie...";
 "screen_knock_requests_list_title" = "Prośby o dołączenie";
+"screen_labs_enable_gallery" = "Wiadomości z galerii";
+"screen_labs_enable_gallery_description" = "Wysyłaj wiele obrazów lub filmów jednocześnie. Funkcja jest stabilna na urządzeniach mobilnych, lecz nie jest dostępna w przeglądarce.";
+"screen_labs_enable_knocking" = "Poproś o dołączenie";
+"screen_labs_enable_knocking_description" = "Użytkownicy mogą poprosić o dostęp do pokoju, który jest zamknięty dla wszystkich. Funkcja działa stabilnie na urządzeniach mobilnych, wersja internetowa istnieje, lecz jest eksperymentalna.";
 "screen_labs_enable_threads" = "Włącz odpowiedzi w wątkach";
 "screen_labs_enable_threads_description" = "Aplikacja uruchomi się ponownie, aby zastosować tę zmianę.";
 "screen_labs_header_description" = "Wypróbuj nasze najnowsze pomysły w fazie rozwoju. Funkcje te nie są jeszcze sfinalizowane; mogą być niestabilne i ulec zmianie.";
@@ -1080,7 +1085,7 @@
 "screen_notification_settings_mode_all" = "Wszystkie";
 "screen_notification_settings_mode_mentions" = "Wzmianki";
 "screen_notification_settings_notification_section_title" = "Powiadamiaj mnie przez";
-"screen_notification_settings_room_mention_label" = "Powiadom mnie na @pokój";
+"screen_notification_settings_room_mention_label" = "Wzmianki @room";
 "screen_notification_settings_sound_custom_fallback" = "Własny";
 "screen_notification_settings_sound_custom_sound_button_title" = "Własny dźwięk...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Błąd usuwania pliku";
@@ -1167,7 +1172,7 @@
 "screen_qr_code_login_error_sliding_sync_not_supported_title" = "%1$@ nie jest wspierany";
 "screen_qr_code_login_initial_state_button_title" = "Gotowy do skanowania";
 "screen_qr_code_login_initial_state_item_1" = "Otwórz %1$@ na urządzeniu stacjonarnym";
-"screen_qr_code_login_initial_state_item_2" = "Wybierz swój awatar";
+"screen_qr_code_login_initial_state_item_2" = "Kliknij na swój awatar";
 "screen_qr_code_login_initial_state_item_3" = "Wybierz %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Powiąż nowe urządzenie”";
 "screen_qr_code_login_initial_state_item_4" = "Zeskanuj kod QR za pomocą tego urządzenia";
@@ -1203,7 +1208,7 @@
 "screen_recovery_key_generating_key" = "Generuję...";
 "screen_recovery_key_save_action" = "Zapisz klucz przywracania";
 "screen_recovery_key_save_description" = "Zapisz klucz przywracania w bezpiecznym miejscu, np. w menedżerze haseł, notatce szyfrowanej lub sejfie.";
-"screen_recovery_key_save_key_description" = "Stuknij, by skopiować klucz przywracania";
+"screen_recovery_key_save_key_description" = "Dotknij, by skopiować klucz przywracania";
 "screen_recovery_key_save_title" = "Zapisz klucz przywracania";
 "screen_recovery_key_setup_confirmation_description" = "Po tym kroku nie będziesz mieć dostępu do nowego klucza przywracania.";
 "screen_recovery_key_setup_confirmation_title" = "Czy zapisałeś swój klucz przywracania?";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Członków";
 "screen_room_change_role_unsaved_changes_description" = "Masz niezapisane zmiany.";
 "screen_room_change_role_unsaved_changes_title" = "Zapisać zmiany?";
+"screen_room_confirm_removal_message" = "Czy na pewno chcesz usunąć wiadomość?";
+"screen_room_confirm_removal_reason_label" = "Powód (opcjonalne)";
+"screen_room_confirm_removal_reason_placeholder" = "Powód...";
+"screen_room_confirm_removal_title" = "Potwierdź usunięcie";
 "screen_room_details_add_topic_title" = "Dodaj temat";
 "screen_room_details_badge_encrypted" = "Szyfrowany";
 "screen_room_details_badge_not_encrypted" = "Nieszyfrowany";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Czy chcesz zaprosić ich z powrotem?";
 "screen_room_invite_again_alert_title" = "Jesteś sam na tym czacie";
 "screen_room_live_location_banner" = "Udostępnianie lokalizacji na żywo";
+"screen_room_maximum_messages_selected" = "Zaznaczono maksymalną liczbę wiadomości";
 "screen_room_member_details_block_alert_action" = "Zablokuj";
 "screen_room_member_details_block_alert_description" = "Zablokowani użytkownicy nie będą mogli wysyłać Ci wiadomości, a wszystkie ich wiadomości zostaną ukryte. Możesz odblokować ich w dowolnym momencie.";
 "screen_room_member_details_block_user" = "Zablokuj użytkownika";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Nie masz żadnych oczekujących zaproszeń.";
 "screen_roomlist_filter_low_priority" = "Niski priorytet";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Nie masz jeszcze żadnych czatów o niskim priorytecie";
+"screen_roomlist_filter_mention" = "Wzmianka";
+"screen_roomlist_filter_mention_empty_state_title" = "Nie masz żadnych nieprzeczytanych wzmianek";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Wyczyść filtry, aby zobaczyć pozostałe czaty";
 "screen_roomlist_filter_mixed_empty_state_title" = "Brak czatów dla podanych kryteriów";
 "screen_roomlist_filter_people" = "Osoby";
@@ -1457,7 +1469,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Po włączeniu szyfrowania nie można wyłączyć.";
 "screen_security_and_privacy_encryption_section_header" = "Szyfrowanie";
 "screen_security_and_privacy_encryption_toggle_title" = "Włącz szyfrowanie end-to-end";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Każdy może dołączyć.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Każdy może dołączyć, w tym osoby spoza Twojej organizacji.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Każdy";
 "screen_security_and_privacy_room_access_footer" = "Wybierz, którzy członkowie przestrzeni mogą dołączyć do tego pokoju bez zaproszenia. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Zarządzaj przestrzeniami";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Zażądano weryfikacji";
 "screen_session_verification_they_dont_match" = "Nie pasują do siebie";
 "screen_session_verification_they_match" = "Pasują do siebie";
+"screen_session_verification_unavailable_subtitle" = "Użyj innego urządzenia lub klucza przywracania.";
+"screen_session_verification_unavailable_title" = "Weryfikacja za pomocą tego urządzenia jest obecnie niedostępna";
 "screen_session_verification_use_another_device_subtitle" = "Upewnij się, że aplikacja jest otwarta na drugim urządzeniu przed rozpoczęciem weryfikacji.";
 "screen_session_verification_use_another_device_title" = "Otwórz aplikację na drugim zweryfikowanym urządzeniu";
 "screen_session_verification_user_initiator_subtitle" = "Dla dodatkowej ochrony, zweryfikuj tego użytkownika, porównując zestaw emoji na obu urządzeniach. Zrób to, korzystając z zaufanej metody komunikacji.";

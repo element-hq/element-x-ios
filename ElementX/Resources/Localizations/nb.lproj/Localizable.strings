@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Prøv dekryptering på nytt";
 "action_save" = "Lagre";
 "action_search" = "Søke";
+"action_select" = "Select";
 "action_select_all" = "Velg alle";
 "action_send" = "Sende";
 "action_send_edited_message" = "Send redigert melding";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Ingen ventende forespørsel om å bli med";
 "screen_knock_requests_list_initial_loading_title" = "Laster inn forespørsler om å bli med...";
 "screen_knock_requests_list_title" = "Forespørsler om å bli med";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Aktiver trådsvar";
 "screen_labs_enable_threads_description" = "Appen vil starte på nytt for å implementere denne endringen.";
 "screen_labs_header_description" = "Prøv ut våre nyeste ideer under utvikling. Disse funksjonene er ikke ferdig utviklet; de kan være ustabile og kan endres.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Medlemmer";
 "screen_room_change_role_unsaved_changes_description" = "Du har endringer som ikke er lagret.";
 "screen_room_change_role_unsaved_changes_title" = "Lagre endringer?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Legg til emne";
 "screen_room_details_badge_encrypted" = "Kryptert";
 "screen_room_details_badge_not_encrypted" = "Ikke kryptert";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Vil du invitere dem tilbake?";
 "screen_room_invite_again_alert_title" = "Du er alene i denne chatten";
 "screen_room_live_location_banner" = "Deler lokasjon i sanntid";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Blokker";
 "screen_room_member_details_block_alert_description" = "Blokkerte brukere vil ikke kunne sende deg meldinger, og alle meldingene deres vil være skjult. Du kan oppheve blokkeringen når som helst.";
 "screen_room_member_details_block_user" = "Blokker bruker";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Du har ingen ventende invitasjoner.";
 "screen_roomlist_filter_low_priority" = "Lav prioritet";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Du har ingen lavprioriterte chatter ennå";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Du kan velge bort filtre for å se de andre chattene dine";
 "screen_roomlist_filter_mixed_empty_state_title" = "Du har ikke chatter for dette utvalget";
 "screen_roomlist_filter_people" = "Personer";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verifisering forespurt";
 "screen_session_verification_they_dont_match" = "De matcher ikke";
 "screen_session_verification_they_match" = "De matcher";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Sørg for at du har appen åpen på den andre enheten før du starter verifiseringen herfra.";
 "screen_session_verification_use_another_device_title" = "Åpne appen på en annen bekreftet enhet";
 "screen_session_verification_user_initiator_subtitle" = "For ekstra sikkerhet, verifiser denne brukeren ved å sammenligne et sett med emojier på enhetene dine. Gjør dette ved å bruke en pålitelig måte å kommunisere på.";

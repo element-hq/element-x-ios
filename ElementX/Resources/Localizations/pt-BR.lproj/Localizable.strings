@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Tentar descriptografar novamente";
 "action_save" = "Salvar";
 "action_search" = "Pesquisar";
+"action_select" = "Select";
 "action_select_all" = "Selecionar tudo";
 "action_send" = "Enviar";
 "action_send_edited_message" = "Enviar mensagem editada";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Nenhum pedido de entrada pendente";
 "screen_knock_requests_list_initial_loading_title" = "Carregando solicitações de entrada...";
 "screen_knock_requests_list_title" = "Pedidos de entrada";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Ativar respostas de tópicos";
 "screen_labs_enable_threads_description" = "O app será reiniciado para aplicar esta mudança.";
 "screen_labs_header_description" = "Teste as nossas mais novas ideias em desenvolvimento. Esses recursos não estão finalizados; podem estar instáveis, e podem mudar.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Membros";
 "screen_room_change_role_unsaved_changes_description" = "Você tem alterações não salvas.";
 "screen_room_change_role_unsaved_changes_title" = "Salvar alterações?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Adicionar tópico";
 "screen_room_details_badge_encrypted" = "Criptografado";
 "screen_room_details_badge_not_encrypted" = "Não criptografado";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Gostaria de convidá-los de volta?";
 "screen_room_invite_again_alert_title" = "Você está sozinho nesta conversa";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Bloquear";
 "screen_room_member_details_block_alert_description" = "Usuários bloqueados não poderão enviar mensagens para você e todas as mensagens deles serão ocultadas. Você pode desbloqueá-los a qualquer momento.";
 "screen_room_member_details_block_user" = "Bloquear usuário";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Você não tem nenhum convite pendente.";
 "screen_roomlist_filter_low_priority" = "Baixa prioridade";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Você ainda não tem nenhuma conversa de baixa prioridade";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Você pode desmarcar filtros para ver suas outras conversas";
 "screen_roomlist_filter_mixed_empty_state_title" = "Você não tem conversas para esta seleção";
 "screen_roomlist_filter_people" = "Pessoas";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verificação solicitada";
 "screen_session_verification_they_dont_match" = "Eles não combinam";
 "screen_session_verification_they_match" = "Eles combinam";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Certifique-se de que você tenha o app aberto no outro dispositivo antes de iniciar a verificação por aqui.";
 "screen_session_verification_use_another_device_title" = "Abra o aplicativo em outro dispositivo verificado";
 "screen_session_verification_user_initiator_subtitle" = "Para maior segurança, verifique esse usuário comparando um conjunto de emojis em seus dispositivos. Faça isso usando uma maneira confiável de se comunicar.";

@@ -174,6 +174,7 @@
 "action_retry_decryption" = "復号化を再試行";
 "action_save" = "保存";
 "action_search" = "検索";
+"action_select" = "Select";
 "action_select_all" = "すべて選択";
 "action_send" = "送信";
 "action_send_edited_message" = "編集したメッセージを送信";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "参加リクエストがありません";
 "screen_knock_requests_list_initial_loading_title" = "参加リクエストを読み込み中";
 "screen_knock_requests_list_title" = "参加のリクエスト";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "スレッドへの返信を有効化";
 "screen_labs_enable_threads_description" = "変更を適用するためにアプリケーションは再起動します。";
 "screen_labs_header_description" = "開発段階の最新機能を試すことができます。未完成のため、変更や不安定な挙動が生じる可能性があります。";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "メンバー";
 "screen_room_change_role_unsaved_changes_description" = "未保存の変更内容があります。";
 "screen_room_change_role_unsaved_changes_title" = "変更を保存しますか？";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "トピックを追加";
 "screen_room_details_badge_encrypted" = "暗号化済み";
 "screen_room_details_badge_not_encrypted" = "暗号化されていません";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "招待し直しますか？";
 "screen_room_invite_again_alert_title" = "このチャットにはあなた一人だけです";
 "screen_room_live_location_banner" = "ライブ位置情報を共有中";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "ブロック";
 "screen_room_member_details_block_alert_description" = "ブロックしたユーザーのメッセージは非表示になり、新しく送信することもできません。ブロックはいつでも解除することができます。";
 "screen_room_member_details_block_user" = "ユーザーをブロック";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "承認待ちの招待はありません";
 "screen_roomlist_filter_low_priority" = "低い優先度";
 "screen_roomlist_filter_low_priority_empty_state_title" = "低い優先度のチャットはまだありません";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "フィルターを解除して他のチャットを表示できます";
 "screen_roomlist_filter_mixed_empty_state_title" = "この選択中にチャットがありません";
 "screen_roomlist_filter_people" = "ユーザー";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "検証をリクエスト済み";
 "screen_session_verification_they_dont_match" = "一致しません";
 "screen_session_verification_they_match" = "一致します";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "検証を開始する前に、他の端末でアプリケーションを開いてください。";
 "screen_session_verification_use_another_device_title" = "検証済みの他の端末でアプリケーションを開いてください";
 "screen_session_verification_user_initiator_subtitle" = "安全性を高めるために、絵文字の組み合わせを使用してこのユーザーを検証してください。これにより安全にやり取りを行うことができるようになります。";

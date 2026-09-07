@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Visszafejtés újbóli megpróbálása";
 "action_save" = "Mentés";
 "action_search" = "Keresés";
+"action_select" = "Select";
 "action_select_all" = "Összes kijelölése";
 "action_send" = "Küldés";
 "action_send_edited_message" = "Szerkesztett üzenet küldése";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Nincs függőben lévő csatlakozási kérelem";
 "screen_knock_requests_list_initial_loading_title" = "Csatlakozási kérések betöltése…";
 "screen_knock_requests_list_title" = "Csatlakozási kérelem";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Üzenetszál válaszok engedélyezése";
 "screen_labs_enable_threads_description" = "Az alkalmazás újraindul, hogy a változás érvénybe lépjen.";
 "screen_labs_header_description" = "Próbálja ki legújabb fejlesztéseinket. Ezek a funkciók még nem véglegesek, instabilak lehetnek és változhatnak.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Tagok";
 "screen_room_change_role_unsaved_changes_description" = "Mentetlen módosításai vannak.";
 "screen_room_change_role_unsaved_changes_title" = "Menti a módosításokat?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Téma hozzáadása";
 "screen_room_details_badge_encrypted" = "Titkosított";
 "screen_room_details_badge_not_encrypted" = "Nem titkosított";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Visszahívja?";
 "screen_room_invite_again_alert_title" = "Egyedül van ebben a csevegésben";
 "screen_room_live_location_banner" = "Élő helymegosztás";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Letiltás";
 "screen_room_member_details_block_alert_description" = "A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat.";
 "screen_room_member_details_block_user" = "Felhasználó letiltása";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Nincsenek függőben lévő meghívásai.";
 "screen_roomlist_filter_low_priority" = "Alacsony prioritás";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Még nincsenek alacsony prioritású csevegései";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez";
 "screen_roomlist_filter_mixed_empty_state_title" = "Ehhez a kiválasztáshoz nem tartoznak csevegések";
 "screen_roomlist_filter_people" = "Emberek";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Ellenőrzés kérve";
 "screen_session_verification_they_dont_match" = "Nem egyeznek";
 "screen_session_verification_they_match" = "Megegyeznek";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Győződjön meg róla, hogy az alkalmazás nyitva van a másik eszközön, mielőtt innen elindítja az ellenőrzést.";
 "screen_session_verification_use_another_device_title" = "Nyissa meg az alkalmazást egy másik ellenőrzött eszközön";
 "screen_session_verification_user_initiator_subtitle" = "A fokozott biztonság érdekében ellenőrizze ezt a felhasználót az eszközökön megjelenő emodzsik összehasonlításával. Ehhez használjon megbízható kommunikációs csatornát.";

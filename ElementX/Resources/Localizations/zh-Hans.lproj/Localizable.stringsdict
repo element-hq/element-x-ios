@@ -39,7 +39,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>占总投票的 %1$d%</string>
+			<string>占总投票的 %1$d%%</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -474,6 +474,20 @@
 			<string>d</string>
 			<key>other</key>
 			<string>%1$@、%2$d 及其他人想加入此房间</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_room_selection_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>已选择 %1$d 个消息</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

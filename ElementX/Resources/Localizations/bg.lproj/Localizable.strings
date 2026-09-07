@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Повторен опит за разшифроване";
 "action_save" = "Запазване";
 "action_search" = "Търсене";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Изпращане";
 "action_send_edited_message" = "Send edited message";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Само поканени хора имат достъп до тази стая. Всички съобщения са шифровани от край до край.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Всеки може да намери тази стая.\nМожете да промените това по всяко време в настройките на стаята.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Allow ask to join";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Включване на отговори в нишка";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Членове";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Добавяне на тема";
 "screen_room_details_badge_encrypted" = "С шифроване";
 "screen_room_details_badge_not_encrypted" = "Без шифроване";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Искате ли да ги поканите обратно?";
 "screen_room_invite_again_alert_title" = "Вие сте сами в този чат";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Блокиране";
 "screen_room_member_details_block_alert_description" = "Блокираните потребители няма да могат да ви изпращат съобщения и всички техни съобщения ще бъдат скрити. Можете да ги отблокирате по всяко време.";
 "screen_room_member_details_block_user" = "Блокиране на потребителя";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Нямате чакащи покани.";
 "screen_roomlist_filter_low_priority" = "Нисък приоритет";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Можете да премахнете избора на филтрите, за да видите другите си чатове";
 "screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";
 "screen_roomlist_filter_people" = "Хора";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Поискано е потвърждение";
 "screen_session_verification_they_dont_match" = "Те не съвпадат";
 "screen_session_verification_they_match" = "Те съвпадат";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Уверете се, че приложението е отворено на другото устройство, преди да започнете потвърждението оттук.";
 "screen_session_verification_use_another_device_title" = "Отворете приложението на друго потвърдено устройство";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";

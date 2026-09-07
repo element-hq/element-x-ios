@@ -174,6 +174,7 @@
 "action_retry_decryption" = "重试解密";
 "action_save" = "保存";
 "action_search" = "搜索";
+"action_select" = "选择";
 "action_select_all" = "全选";
 "action_send" = "发送";
 "action_send_edited_message" = "发送编辑后的消息";
@@ -505,7 +506,7 @@
 "error.account_already_logged_in" = "你已在此设备以 %1$@ 的身份登录。";
 "full_screen_intent_banner_message" = "为确保你不会错过重要来电，请更改设置以允许锁屏时的全屏通知。";
 "full_screen_intent_banner_title" = "提升通话体验";
-"invite_friends_rich_title" = "🔐️ 在 %1$@ 中与我一起";
+"invite_friends_rich_title" = "🔐️ 在 %1$@ 中与我聊天";
 "invite_friends_text" = "嗨！请通过 %1$@ 与我联系：%2$@";
 "leave_conversation_alert_subtitle" = "你确定要离开此对话？此对话不公开，你将无法在未经邀请的情况下重新加入。";
 "leave_room_alert_empty_subtitle" = "确定要离开此房间？此处只有你一个人。如果离开，包括你在内的所有人都将无法加入。";
@@ -540,7 +541,7 @@
 "notification_room_invite_body" = "邀请你加入房间";
 "notification_room_invite_body_with_sender" = "%1$@ 已邀请你加入房间";
 "notification_sender_me" = "我";
-"notification_sender_mention_reply" = "%1$@ 个提及或回复";
+"notification_sender_mention_reply" = "你被 %1$@ 提及或回复";
 "notification_space_invite_body" = "已邀请你加入空间";
 "notification_space_invite_body_with_sender" = "%1$@ 邀请你加入空间";
 "notification_test_push_notification_content" = "你正在查看通知！点击我！";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "仅限受邀人员加入。";
 "screen_create_room_private_option_title" = "私密";
 "screen_create_room_public_option_description" = "任何人都能找到此房间。\n你可以随时在房间设置中更改。";
-"screen_create_room_public_option_short_description" = "任何人都可以加入";
+"screen_create_room_public_option_short_description" = "任何人都可以加入，包括你的组织之外的人员。";
 "screen_create_room_public_option_title" = "公共";
 "screen_create_room_room_access_section_knocking_option_description" = "任何人都可申请加入，但需由管理员或协管员批准申请。";
 "screen_create_room_room_access_section_knocking_option_title" = "申请加入";
@@ -785,7 +786,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "申请加入";
 "screen_create_room_room_access_section_private_option_description" = "仅限受邀人员加入。";
 "screen_create_room_room_access_section_private_option_title" = "私密";
-"screen_create_room_room_access_section_public_option_description" = "任何人都可以加入。";
+"screen_create_room_room_access_section_public_option_description" = "任何人都可以加入，包括你的组织之外的人员。";
 "screen_create_room_room_access_section_public_option_title" = "公共";
 "screen_create_room_room_access_section_restricted_option_description" = "%1$@ 中的任何人都可以加入。";
 "screen_create_room_room_access_section_restricted_option_title" = "标准";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "暂无待处理的加入申请";
 "screen_knock_requests_list_initial_loading_title" = "正在加载加入申请…";
 "screen_knock_requests_list_title" = "申请加入";
+"screen_labs_enable_gallery" = "含有媒体组的消息";
+"screen_labs_enable_gallery_description" = "一次性发送多个图像或视频。此功能已在移动客户端稳定运行，但 Web 客户端尚未支持。";
+"screen_labs_enable_knocking" = "申请加入";
+"screen_labs_enable_knocking_description" = "用户可以申请加入一个不对任何人开放的房间。此功能已在移动客户端稳定运行，在 Web 客户端也已推出，但尚处于实验阶段。";
 "screen_labs_enable_threads" = "启用消息列中的回复";
 "screen_labs_enable_threads_description" = "App 将重启以应用此更改。";
 "screen_labs_header_description" = "尝试我们最新的开发理念。这些功能尚未最终确定，可能不稳定，也可能会发生变化。";
@@ -1027,8 +1032,8 @@
 "screen_media_browser_title" = "媒体与文件";
 "screen_media_details_file_format" = "文件格式";
 "screen_media_details_filename" = "文件名";
-"screen_media_details_no_more_files_to_show" = "没有更多文件可显示了";
-"screen_media_details_no_more_media_to_show" = "没有更多媒体可显示了";
+"screen_media_details_no_more_files_to_show" = "没有更多可展示的文件";
+"screen_media_details_no_more_media_to_show" = "没有更多可展示的媒体";
 "screen_media_details_title" = "文件信息";
 "screen_media_details_uploaded_by" = "上传者：";
 "screen_media_details_uploaded_on" = "上传于";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "成员";
 "screen_room_change_role_unsaved_changes_description" = "你有未保存的更改。";
 "screen_room_change_role_unsaved_changes_title" = "保存更改？";
+"screen_room_confirm_removal_message" = "确定要移除此消息？";
+"screen_room_confirm_removal_reason_label" = "理由（可选）";
+"screen_room_confirm_removal_reason_placeholder" = "输入...";
+"screen_room_confirm_removal_title" = "确认移除";
 "screen_room_details_add_topic_title" = "添加主题";
 "screen_room_details_badge_encrypted" = "已加密";
 "screen_room_details_badge_not_encrypted" = "未加密";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "你想邀请他们回来吗？";
 "screen_room_invite_again_alert_title" = "此聊天中只有你一人";
 "screen_room_live_location_banner" = "正在共享实时位置";
+"screen_room_maximum_messages_selected" = "选择的消息已达到最大数量";
 "screen_room_member_details_block_alert_action" = "屏蔽";
 "screen_room_member_details_block_alert_description" = "被屏蔽的用户无法给你发消息，并且他们的消息会被隐藏。你可以随时解除屏蔽。";
 "screen_room_member_details_block_user" = "屏蔽用户";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "没有待处理的邀请。";
 "screen_roomlist_filter_low_priority" = "低优先级";
 "screen_roomlist_filter_low_priority_empty_state_title" = "你暂无任何低优先级聊天";
+"screen_roomlist_filter_mention" = "提及";
+"screen_roomlist_filter_mention_empty_state_title" = "你没有任何未读提及";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "你可以取消选择筛选器以查看其它对话";
 "screen_roomlist_filter_mixed_empty_state_title" = "你暂无适用于此选项的聊天";
 "screen_roomlist_filter_people" = "人员";
@@ -1457,7 +1469,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "加密一旦启用，就无法禁用。";
 "screen_security_and_privacy_encryption_section_header" = "加密";
 "screen_security_and_privacy_encryption_toggle_title" = "启用端到端加密";
-"screen_security_and_privacy_room_access_anyone_option_description" = "任何人都可以加入。";
+"screen_security_and_privacy_room_access_anyone_option_description" = "任何人都可以加入，包括你的组织之外的人员。";
 "screen_security_and_privacy_room_access_anyone_option_title" = "任何人";
 "screen_security_and_privacy_room_access_footer" = "选择哪些无需邀请即可加入此房间的空间成员。%1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "管理空间";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "已请求验证";
 "screen_session_verification_they_dont_match" = "不匹配";
 "screen_session_verification_they_match" = "匹配";
+"screen_session_verification_unavailable_subtitle" = "请使用另一设备或恢复密钥。";
+"screen_session_verification_unavailable_title" = "目前无法使用此设备进行验证";
 "screen_session_verification_use_another_device_subtitle" = "从此处开始验证之前请确保你已在其它设备上打开了 app。";
 "screen_session_verification_use_another_device_title" = "在另一台验证的设备上打开应用";
 "screen_session_verification_user_initiator_subtitle" = "为提高安全性，请通过比较设备上的一组 Emoji 以验证此用户。通过使用安全的方式比如面对面来实施此步骤。";
@@ -1651,7 +1665,7 @@
 "state_event_room_pinned_events_changed_by_you" = "你更改了已置顶的消息";
 "state_event_room_pinned_events_pinned" = "%1$@ 已置顶 1 个消息";
 "state_event_room_pinned_events_pinned_by_you" = "你已置顶 1 个消息";
-"state_event_room_pinned_events_unpinned" = "%1$@ 取消置顶了 1 个消息";
+"state_event_room_pinned_events_unpinned" = "%1$@ 已取消置顶 1 个消息";
 "state_event_room_pinned_events_unpinned_by_you" = "你取消置顶了 1 个消息";
 "state_event_room_reject" = "%1$@ 拒绝了邀请";
 "state_event_room_reject_by_you" = "你拒绝了邀请";

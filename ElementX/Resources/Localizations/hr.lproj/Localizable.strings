@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Ponovno pokušaj dešifrirati";
 "action_save" = "Spremi";
 "action_search" = "Pretraži";
+"action_select" = "Select";
 "action_select_all" = "Odaberi sve";
 "action_send" = "Pošalji";
 "action_send_edited_message" = "Pošalji uređenu poruku";
@@ -713,7 +714,7 @@
 "screen_change_server_error_element_pro_required_action_ios" = "Trgovina aplikacija";
 "screen_change_server_error_element_pro_required_message" = "Potrebna je aplikacija Element Pro na %1$@. Molimo vas da je preuzmete iz trgovine.";
 "screen_change_server_error_element_pro_required_title" = "Potreban je Element Pro";
-"screen_change_server_error_invalid_homeserver" = "Nismo mogli pristupiti ovom matičnom poslužitelju. Provjerite jeste li ispravno unijeli URL matičnog poslužitelja. Ako je URL ispravan, obratite se administratoru matičnog poslužitelja za daljnju pomoć.";
+"screen_change_server_error_invalid_homeserver" = "Nismo mogli kontaktirati ovog davatelja računa. Provjerite jeste li ispravno unijeli URL davatelja računa. Ako je URL ispravan, obratite se administratoru davatelja računa za daljnju pomoć.";
 "screen_change_server_error_invalid_well_known" = "Poslužitelj nije dostupan zbog problema u .well-known datoteci:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Odabrani davatelj usluga računa ne podržava sliding sync. Za korištenje je potrebna nadogradnja poslužitelja %1$@sliding sync.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nije dopušteno povezivanje s %2$@.";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Nema zahtjeva za pridruživanje koji su na čekanju";
 "screen_knock_requests_list_initial_loading_title" = "Učitavanje zahtjeva za pridruživanje…";
 "screen_knock_requests_list_title" = "Zahtjevi za pridruživanje";
+"screen_labs_enable_gallery" = "Poruke iz galerije";
+"screen_labs_enable_gallery_description" = "Pošaljite više slika ili videozapisa odjednom. Stabilno na mobilnim uređajima, ali još nije podržano na webu.";
+"screen_labs_enable_knocking" = "Zatraži pridruživanje";
+"screen_labs_enable_knocking_description" = "Korisnici mogu zatražiti pristup sobi kojoj se nitko ne može pridružiti. Stabilno na mobilnim uređajima, web implementacija postoji, ali je eksperimentalna.";
 "screen_labs_enable_threads" = "Omogući odgovore u nizu";
 "screen_labs_enable_threads_description" = "Aplikacija će se ponovno pokrenuti kako bi se primijenila ova promjena.";
 "screen_labs_header_description" = "Isprobajte naše najnovije ideje u razvoju. Ove značajke nisu finalizirane; mogu biti nestabilne i mijenjati se.";
@@ -1003,7 +1008,7 @@
 "screen_login_error_invalid_credentials" = "Netočno korisničko ime i/ili zaporka";
 "screen_login_error_invalid_user_id" = "To nije valjani identifikator korisnika. Očekivani oblik: ‘@korisnik:matičniposlužitelj.org’";
 "screen_login_error_refresh_tokens" = "Ovaj je poslužitelj konfiguriran za korištenje tokena za osvježavanje. Oni nisu podržani kada se upotrebljava prijava temeljena na zaporki.";
-"screen_login_error_unsupported_authentication" = "Odabrani matični poslužitelj ne podržava zaporku ili OAuth prijavu. Obratite se administratoru ili odaberite drugi matični poslužitelj.";
+"screen_login_error_unsupported_authentication" = "Odabrani pružatelj usluga računa ne podržava prijavu putem lozinke ili OAuth. Obratite se pružatelju usluga računa ili odaberite drugog.";
 "screen_login_form_header" = "Unesite svoje podatke";
 "screen_login_subtitle" = "Matrix je otvorena mreža za sigurnu, decentraliziranu komunikaciju.";
 "screen_login_title" = "Dobro došli natrag!";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Članovi";
 "screen_room_change_role_unsaved_changes_description" = "Niste spremili sve promjene.";
 "screen_room_change_role_unsaved_changes_title" = "Želite li spremiti promjene?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Dodaj temu";
 "screen_room_details_badge_encrypted" = "Šifrirano";
 "screen_room_details_badge_not_encrypted" = "Nije šifrirano";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Želite li ih pozvati natrag?";
 "screen_room_invite_again_alert_title" = "Sami ste u ovom razgovoru";
 "screen_room_live_location_banner" = "Dijeljenje lokacije uživo";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Blokiraj";
 "screen_room_member_details_block_alert_description" = "Blokirani korisnici neće vam moći slati poruke i sve njihove poruke bit će skrivene. Možete ih odblokirati u bilo kojem trenutku.";
 "screen_room_member_details_block_user" = "Blokiraj korisnika";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Nemate pozivnica na čekanju.";
 "screen_roomlist_filter_low_priority" = "Nizak prioritet";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Još nemate razgovora niskog prioriteta";
+"screen_roomlist_filter_mention" = "Spomeni";
+"screen_roomlist_filter_mention_empty_state_title" = "Nemate nepročitanih spominjanja";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Možete poništiti odabir filtara kako biste vidjeli ostale razgovore";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nemate razgovora za ovaj odabir";
 "screen_roomlist_filter_people" = "Osobe";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Zatražena je provjera";
 "screen_session_verification_they_dont_match" = "Ne podudaraju se";
 "screen_session_verification_they_match" = "Podudaraju se";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Prije nego što odavde započnete provjeru, provjerite jeste li otvorili aplikaciju na drugom uređaju.";
 "screen_session_verification_use_another_device_title" = "Otvorite aplikaciju na drugom potvrđenom uređaju";
 "screen_session_verification_user_initiator_subtitle" = "Radi dodatne sigurnosti potvrdite ovog korisnika tako da usporedite skup emotikona na svojim uređajima. Učinite to koristeći se pouzdanim načinom komunikacije.";

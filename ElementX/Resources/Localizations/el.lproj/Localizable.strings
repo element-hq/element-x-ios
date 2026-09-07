@@ -18,7 +18,7 @@
 "a11y_gallery_scanning" = "Gallery, scanning %1$d";
 "a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Απόκρυψη κωδικού πρόσβασης";
-"a11y_info" = "Info";
+"a11y_info" = "Πληροφορίες";
 "a11y_join_call" = "Συμμετοχή στην κλήση";
 "a11y_jump_to_bottom" = "Άλμα προς τα κάτω";
 "a11y_jump_to_unread" = "Jump to unread";
@@ -52,7 +52,7 @@
 "a11y_send_files" = "Αποστολή αρχείων";
 "a11y_sender_location" = "Τοποθεσία αποστολέα";
 "a11y_session_verification_time_limited_action_required" = "Απαιτείται ενέργεια περιορισμένης χρονικής διάρκειας, έχετε ένα λεπτό για επαλήθευση.";
-"a11y_settings_with_required_action" = "Settings, action required";
+"a11y_settings_with_required_action" = "Ρυθμίσεις, απαιτείται ενέργεια";
 "a11y_show_password" = "Εμφάνιση κωδικού πρόσβασης";
 "a11y_start_call" = "Ξεκίνησε μια κλήση";
 "a11y_start_video_call" = "Ξεκινήστε μια βιντεοκλήση";
@@ -83,7 +83,7 @@
 "action_call" = "Κάλεσε";
 "action_cancel" = "Άκυρο";
 "action_cancel_for_now" = "Ακύρωση προς το παρόν";
-"action_choose_file" = "Choose file";
+"action_choose_file" = "Επιλέξτε αρχείο";
 "action_choose_photo" = "Επιλογή φωτογραφίας";
 "action_clear" = "Εκκαθάριση";
 "action_close" = "Κλείσιμο";
@@ -103,8 +103,8 @@
 "action_deactivate_account" = "Απενεργοποίηση λογαριασμού";
 "action_decline" = "Απόρριψη";
 "action_decline_and_block" = "Απόρριψη και αποκλεισμός";
-"action_delete" = "Delete";
-"action_delete_account" = "Delete account";
+"action_delete" = "Διαγραφή";
+"action_delete_account" = "Διαγραφή λογαριασμού";
 "action_delete_file" = "Delete file";
 "action_delete_poll" = "Διαγραφή Δημοσκόπησης";
 "action_deselect_all" = "Αποεπιλογή όλων";
@@ -112,7 +112,7 @@
 "action_discard" = "Απόρριψη";
 "action_dismiss" = "Παράβλεψη";
 "action_done" = "Έγινε";
-"action_download" = "Download";
+"action_download" = "Λήψη";
 "action_edit" = "Επεξεργασία";
 "action_edit_caption" = "Επεξεργασία λεζάντας";
 "action_edit_poll" = "Επεξεργασία δημοσκόπησης";
@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Επανάληψη αποκρυπτογράφησης";
 "action_save" = "Αποθήκευση";
 "action_search" = "Αναζήτηση";
+"action_select" = "Select";
 "action_select_all" = "Επιλογή όλων";
 "action_send" = "Αποστολή";
 "action_send_edited_message" = "Αποστολή επεξεργασμένου μηνύματος";
@@ -208,7 +209,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "Αποσύνδεση & Αναβάθμιση";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "Το %1$@ δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδεθείτε και συνδεθείτε ξανά για να συνεχίσετε να χρησιμοποιείτε την εφαρμογή.";
 "banner_migrate_to_native_sliding_sync_description" = "Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα.";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "Ο οικιακός διακομιστής σου δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για να συνεχίσεις να χρησιμοποιείς την εφαρμογή.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Ο πάροχος του λογαριασμού σας δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδεθείτε και συνδεθείτε ξανά για να συνεχίσετε να χρησιμοποιείτε την εφαρμογή.";
 "banner_migrate_to_native_sliding_sync_title" = "Διαθέσιμη αναβάθμιση";
 "banner_new_sound_message" = "Το ping ειδοποιήσεών σας έχει ενημερωθεί—είναι πιο σαφές, πιο γρήγορο και λιγότερο ενοχλητικό.";
 "banner_new_sound_title" = "Ανανεώσαμε τους ήχους σας";
@@ -231,10 +232,10 @@
 "common_beta" = "Δοκιμαστική";
 "common_blocked_users" = "Αποκλεισμένοι χρήστες";
 "common_bubbles" = "Φυσαλίδες";
-"common_call_declined" = "Call declined";
+"common_call_declined" = "Η κλήση απορρίφθηκε";
 "common_call_in_progress" = "Call in progress";
 "common_call_started" = "Η κλήση ξεκίνησε";
-"common_call_you_declined" = "You declined a call";
+"common_call_you_declined" = "Απορρίψατε μια κλήση";
 "common_chat_backup" = "Αντίγραφο ασφαλείας συνομιλίας";
 "common_copied_to_clipboard" = "Αντιγράφηκε στο πρόχειρο";
 "common_copyright" = "Πνευματικά δικαιώματα";
@@ -483,7 +484,7 @@
 "emoji_picker_category_recent" = "Πρόσφατα emoji";
 "emoji_picker_category_symbols" = "Σύμβολα";
 "emoji_picker_search_placeholder" = "Αναζήτηση emoji";
-"error_account_creation_not_possible" = "Ο οικιακός διακομιστής σου πρέπει να αναβαθμιστεί για να υποστηρίζει το Matrix Authentication Service και τη δημιουργία λογαριασμού.";
+"error_account_creation_not_possible" = "Ο πάροχος του λογαριασμού σας πρέπει να πραγματοποιήσει αναβάθμιση ώστε να υποστηρίζει την υπηρεσία Matrix Authentication Service και τη δημιουργία λογαριασμού.";
 "error_failed_creating_the_permalink" = "Αποτυχία δημιουργίας του μόνιμου συνδέσμου";
 "error_failed_loading_map" = "%1$@ δεν ήταν δυνατή η φόρτωση του χάρτη. Παρακαλώ δοκίμασε ξανά αργότερα.";
 "error_failed_loading_messages" = "Αποτυχία φόρτωσης μηνυμάτων";
@@ -543,7 +544,7 @@
 "notification_sender_mention_reply" = "Ο χρήστης %1$@ αναφέρθηκε ή απάντησε";
 "notification_space_invite_body" = "Σας προσκάλεσε να συμμετάσχετε στον χώρο";
 "notification_space_invite_body_with_sender" = "%1$@ σας προσκάλεσε να συμμετάσχετε στον χώρο";
-"notification_test_push_notification_content" = "Βλέπεις την ειδοποίηση! Κάνε μου κλικ!";
+"notification_test_push_notification_content" = "Προβάλλετε την ειδοποίηση! Πατήστε εδώ!";
 "notification_thread_in_room" = "Νήμα στο %1$@";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -598,8 +599,8 @@
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Απόκρυψη προεπισκοπήσεων πολυμέσων στο timeline";
 "screen_advanced_settings_labs" = "Εργαστήρια";
 "screen_advanced_settings_live_location_section_description" = "Η απόσταση που πρέπει να διανύσετε για να ενεργοποιήσετε μια ενημέρωση.";
-"screen_advanced_settings_live_location_section_footer" = "Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$@.";
-"screen_advanced_settings_live_location_section_footer_link" = "App Settings";
+"screen_advanced_settings_live_location_section_footer" = "Βεβαιωθείτε ότι η επιλογή «Ακριβής Τοποθεσία» είναι ενεργοποιημένη για αυτήν την εφαρμογή. Για να αλλάξετε την άδεια, μεταβείτε στο %1$@.";
+"screen_advanced_settings_live_location_section_footer_link" = "Ρυθμίσεις Εφαρμογής";
 "screen_advanced_settings_live_location_section_title" = "Ζωντανές ενημερώσεις της τοποθεσίας";
 "screen_advanced_settings_media_compression_description" = "Ανέβασε φωτογραφίες και βίντεο γρηγορότερα και μείωσε τη χρήση δεδομένων";
 "screen_advanced_settings_media_compression_title" = "Βελτιστοποίηση ποιότητας των μέσων";
@@ -713,9 +714,9 @@
 "screen_change_server_error_element_pro_required_action_ios" = "Κατάστημα εφαρμογών";
 "screen_change_server_error_element_pro_required_message" = "Η εφαρμογή Element Pro απαιτείται στο %1$@. Παρακαλώ κατεβάστε την από το κατάστημα.";
 "screen_change_server_error_element_pro_required_title" = "Απαιτείται το Element Pro";
-"screen_change_server_error_invalid_homeserver" = "Δεν μπορούσαμε να επικοινωνήσουμε με αυτόν τον οικιακό διακομιστή. Βεβαιώσου ότι έχεις εισαγάγει σωστά τη διεύθυνση URL του αρχικού διακομιστή. Εάν η διεύθυνση URL είναι σωστή, επικοινώνησε με τον διαχειριστή του κεντρικού διακομιστή για περαιτέρω βοήθεια.";
+"screen_change_server_error_invalid_homeserver" = "Δεν ήταν δυνατή η επικοινωνία με αυτόν τον πάροχο λογαριασμού. Ελέγξτε ότι έχετε εισαγάγει σωστά τη διεύθυνση URL του παρόχου λογαριασμού. Εάν η διεύθυνση URL είναι σωστή, επικοινωνήστε με τον διαχειριστή του παρόχου λογαριασμού σας για περαιτέρω βοήθεια.";
 "screen_change_server_error_invalid_well_known" = "Ο διακομιστής δεν είναι διαθέσιμος λόγω προβλήματος στο αρχείο .well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Ο επιλεγμένος πάροχος λογαριασμού δεν υποστηρίζει sliding sync. Απαιτείται αναβάθμιση στο διακομιστή για χρήση του %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "Ο επιλεγμένος πάροχος λογαριασμού δεν υποστηρίζει sliding sync. Απαιτείται αναβάθμιση του διακομιστή για χρήση του %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ δεν επιτρέπεται να συνδεθεί με %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Αυτή η εφαρμογή έχει ρυθμιστεί ώστε να επιτρέπει: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Ο πάροχος %1$@ λογαριασμού δεν επιτρέπεται.";
@@ -914,7 +915,7 @@
 "screen_join_room_loading_alert_title" = "Δεν μπορέσαμε να εμφανίσουμε αυτή την προεπισκόπηση αίθουσας";
 "screen_join_room_space_not_supported_description" = "Το %1$@ δεν υποστηρίζει ακόμα χώρους. Μπορείς να έχεις πρόσβαση σε χώρους στον ιστό.";
 "screen_join_room_space_not_supported_title" = "Οι Χώροι δεν υποστηρίζονται ακόμα";
-"screen_join_room_subtitle_knock" = "Κάντε κλικ στο παρακάτω κουμπί και θα ειδοποιηθεί ένας διαχειριστής της αίθουσας. Μόλις εγκριθείτε, θα μπορείτε να συμμετάσχετε στη συζήτηση.";
+"screen_join_room_subtitle_knock" = "Πατήστε το παρακάτω κουμπί και θα ειδοποιηθεί ένας διαχειριστής της συνομιλίας. Θα μπορείτε να συμμετάσχετε στη συζήτηση μόλις εγκριθεί η αίτησή σας.";
 "screen_join_room_subtitle_no_preview" = "Πρέπει να είστε μέλος αυτής της αίθουσας για να δείτε το ιστορικό των μηνυμάτων.";
 "screen_join_room_title_knock" = "Θέλετε να συμμετάσχετε σε αυτή την αίθουσα;";
 "screen_join_room_title_no_preview" = "Η προεπισκόπηση δεν είναι διαθέσιμη";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Δεν υπάρχει εκκρεμές αίτημα συμμετοχής";
 "screen_knock_requests_list_initial_loading_title" = "Φόρτωση αιτημάτων συμμετοχής...";
 "screen_knock_requests_list_title" = "Αιτήματα συμμετοχής";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Ενεργοποίηση απαντήσεων σε νήμα";
 "screen_labs_enable_threads_description" = "Η εφαρμογή θα επανεκκινηθεί για να εφαρμοστεί αυτήν την αλλαγή.";
 "screen_labs_header_description" = "Δοκιμάστε τις τελευταίες μας ιδέες που βρίσκονται σε φάση ανάπτυξης. Αυτές οι λειτουργίες δεν είναι τελικές, ενδέχεται να είναι ασταθείς ή να αλλάξουν.";
@@ -1003,7 +1008,7 @@
 "screen_login_error_invalid_credentials" = "Λανθασμένο όνομα χρήστη ή κωδικός πρόσβασης";
 "screen_login_error_invalid_user_id" = "Αυτό δεν είναι έγκυρο αναγνωριστικό χρήστη. Αναμενόμενη μορφή: '@χρήστης:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Αυτός ο διακομιστής έχει ρυθμιστεί ώστε να χρησιμοποιεί διακριτικά ανανέωσης. Αυτά δεν υποστηρίζονται όταν χρησιμοποιείς σύνδεση μέσω κωδικού πρόσβασης.";
-"screen_login_error_unsupported_authentication" = "Ο επιλεγμένος οικιακός διακομιστής δεν υποστηρίζει κωδικό πρόσβασης ή σύνδεση OAuth. Επικοινωνήστε με τον διαχειριστή σου ή επέλεξε άλλο οικιακό διακομιστή.";
+"screen_login_error_unsupported_authentication" = "Ο επιλεγμένος πάροχος λογαριασμού δεν υποστηρίζει σύνδεση με κωδικό πρόσβασης ή OAuth. Παρακαλούμε επικοινωνήστε με τον πάροχο του λογαριασμού σας ή επιλέξτε διαφορετικό.";
 "screen_login_form_header" = "Εισήγαγε τα στοιχεία σου";
 "screen_login_subtitle" = "Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία.";
 "screen_login_title" = "Καλωσόρισες ξανά!";
@@ -1029,7 +1034,7 @@
 "screen_media_details_filename" = "Όνομα αρχείου";
 "screen_media_details_no_more_files_to_show" = "Δεν υπάρχουν άλλα αρχεία για εμφάνιση";
 "screen_media_details_no_more_media_to_show" = "Δεν υπάρχουν άλλα μέσα για εμφάνιση";
-"screen_media_details_title" = "File info";
+"screen_media_details_title" = "Πληροφορίες αρχείου";
 "screen_media_details_uploaded_by" = "Μεταφορτώθηκε από";
 "screen_media_details_uploaded_on" = "Μεταφορτώθηκε στις";
 "screen_media_picker_error_failed_selection" = "Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά.";
@@ -1049,7 +1054,7 @@
 "screen_missing_key_backup_open_element_classic" = "Άνοιγμα του Element Classic";
 "screen_missing_key_backup_step_1" = "Ανοίξτε το Element Classic στη συσκευή σας.";
 "screen_missing_key_backup_step_2_ios" = "Μεταβείτε στις Ρυθμίσεις χρήστη &gt; Ασφάλεια";
-"screen_missing_key_backup_step_3_ios" = "Κάντε κύλιση προς τα κάτω στην επιλογή Ασφαλές αντίγραφο ασφαλείας και πατήστε Ρύθμιση";
+"screen_missing_key_backup_step_3_ios" = "Κάντε κύλιση προς τα κάτω στην επιλογή Δημιουργία Αντιγράφου Ασφαλείας Συνομιλίας και πατήστε Ρύθμιση";
 "screen_missing_key_backup_step_4" = "Ακολουθήστε τις οδηγίες για να ενεργοποιήσετε την αποθήκευση κλειδιών";
 "screen_missing_key_backup_step_5" = "Επιστρέψτε στο %1$@";
 "screen_missing_key_backup_title" = "Ενεργοποιήστε την αποθήκευση κλειδιών σας πριν προχωρήσετε στο %1$@";
@@ -1071,7 +1076,7 @@
 "screen_notification_settings_failed_fixing_configuration" = "Η διαμόρφωση δεν έχει διορθωθεί, δοκίμασε ξανά.";
 "screen_notification_settings_group_chats" = "Ομαδικές συνομιλίες";
 "screen_notification_settings_invite_for_me_label" = "Προσκλήσεις";
-"screen_notification_settings_mentions_only_disclaimer" = "Ο αρχικός διακομιστής σας δεν υποστηρίζει αυτή την επιλογή σε κρυπτογραφημένες αίθουσες, ενδέχεται να μην λαμβάνετε ειδοποιήσεις σε ορισμένες αίθουσες.";
+"screen_notification_settings_mentions_only_disclaimer" = "Ο πάροχος του λογαριασμού σας δεν υποστηρίζει αυτήν την επιλογή σε κρυπτογραφημένες συνομιλίες. Ενδέχεται να μην λαμβάνετε ειδοποιήσεις σε ορισμένες συνομιλίες.";
 "screen_notification_settings_mentions_section_title" = "Αναφορές";
 "screen_notification_settings_message_sound_dialog_choose_other" = "Choose another sound…";
 "screen_notification_settings_message_sound_dialog_current_subtitle" = "Currently using %1$@";
@@ -1080,7 +1085,7 @@
 "screen_notification_settings_mode_all" = "Όλα";
 "screen_notification_settings_mode_mentions" = "Αναφορές";
 "screen_notification_settings_notification_section_title" = "Ειδοποίησέ με για";
-"screen_notification_settings_room_mention_label" = "Ειδοποίηση για @room";
+"screen_notification_settings_room_mention_label" = "Αναφορές στην @αίθουσα";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1167,7 +1172,7 @@
 "screen_qr_code_login_error_sliding_sync_not_supported_title" = "Το %1$@ δεν υποστηρίζεται";
 "screen_qr_code_login_initial_state_button_title" = "Έτοιμο για σάρωση";
 "screen_qr_code_login_initial_state_item_1" = "Άνοιγμα %1$@ σε υπολογιστή";
-"screen_qr_code_login_initial_state_item_2" = "Κάνε κλικ στο avatar σου";
+"screen_qr_code_login_initial_state_item_2" = "Κάντε κλικ στο προφίλ σας";
 "screen_qr_code_login_initial_state_item_3" = "Επιλογή %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "«Σύνδεση νέας συσκευής»";
 "screen_qr_code_login_initial_state_item_4" = "Σάρωσε τον κωδικό QR με αυτήν τη συσκευή";
@@ -1214,11 +1219,11 @@
 "screen_recovery_key_setup_title" = "Λήψη κλειδιού ανάκτησης";
 "screen_report_content_block_user" = "Αποκλεισμός χρήστη";
 "screen_report_content_block_user_hint" = "Επέλεξε εάν θες να αποκρύψεις όλα τα τρέχοντα και μελλοντικά μηνύματα από αυτόν τον χρήστη";
-"screen_report_content_explanation" = "Αυτό το μήνυμα θα αναφερθεί στον διαχειριστή του οικιακού διακομιστή σας. Δεν θα μπορεί να διαβάσει κρυπτογραφημένα μηνύματα.";
+"screen_report_content_explanation" = "Αυτό το μήνυμα θα αναφερθεί στον πάροχο του λογαριασμού σας. Δεν θα μπορεί να διαβάσει κανένα κρυπτογραφημένο μήνυμα.";
 "screen_report_content_hint" = "Λόγος αναφοράς αυτού του περιεχομένου";
 "screen_report_room_leave_failed_alert_message" = "Η αναφορά σας υποβλήθηκε με επιτυχία, αλλά αντιμετωπίσαμε ένα πρόβλημα κατά την προσπάθεια εξόδου από την αίθουσα. Παρακαλώ προσπαθήστε ξανά.";
 "screen_report_room_leave_failed_alert_title" = "Δεν είναι δυνατή η έξοδος από την αίθουσα";
-"screen_report_room_reason_footer" = "Αναφέρετε αυτήν την αίθουσα στον διαχειριστή σας. Εάν τα μηνύματα είναι κρυπτογραφημένα, ο διαχειριστής σας δεν θα μπορεί να τα διαβάσει.";
+"screen_report_room_reason_footer" = "Αναφέρετε αυτή τη συνομιλία στον πάροχο του λογαριασμού σας. Εάν τα μηνύματα είναι κρυπτογραφημένα, ο πάροχος του λογαριασμού σας δεν θα μπορεί να τα διαβάσει.";
 "screen_report_room_reason_placeholder" = "Περιγράψτε τον λόγο αναφοράς...";
 "screen_report_room_title" = "Αναφορά αίθουσας";
 "screen_reset_encryption_confirmation_alert_action" = "Ναι, επαναφορά τώρα";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Μέλη";
 "screen_room_change_role_unsaved_changes_description" = "Έχεις μη αποθηκευμένες αλλαγές.";
 "screen_room_change_role_unsaved_changes_title" = "Αποθήκευση αλλαγών;";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Προσθήκη θέματος";
 "screen_room_details_badge_encrypted" = "Κρυπτογραφημένο";
 "screen_room_details_badge_not_encrypted" = "Μη κρυπτογραφημένο";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Θα ήθελες να τους προσκαλέσεις και συ;";
 "screen_room_invite_again_alert_title" = "Είσαι μόνος σε αυτή τη συνομιλία";
 "screen_room_live_location_banner" = "Κοινοποιείς την τοποθεσία σε πραγματικό χρόνο";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Αποκλεισμός";
 "screen_room_member_details_block_alert_description" = "Οι αποκλεισμένοι χρήστες δεν θα μπορούν να σου στέλνουν μηνύματα και όλα τα μηνύματά τους θα είναι κρυμμένα. Μπορείς να τα ξεμπλοκάρεις ανά πάσα στιγμή.";
 "screen_room_member_details_block_user" = "Αποκλεισμός χρήστη";
@@ -1368,7 +1378,7 @@
 "screen_room_notification_settings_error_loading_settings" = "Παρουσιάστηκε σφάλμα κατά τη φόρτωση των ρυθμίσεων ειδοποίησης.";
 "screen_room_notification_settings_error_restoring_default" = "Αποτυχία επαναφοράς της προεπιλεγμένης λειτουργίας, δοκίμασε ξανά.";
 "screen_room_notification_settings_error_setting_mode" = "Αποτυχία ρύθμισης της λειτουργίας, δοκίμασε ξανά.";
-"screen_room_notification_settings_mentions_only_disclaimer" = "Ο αρχικός διακομιστής σας δεν υποστηρίζει αυτή την επιλογή σε κρυπτογραφημένες αίθουσες, δεν θα λάβετε ειδοποιήσεις σε αυτή την αίθουσα.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Ο πάροχος του λογαριασμού σας δεν υποστηρίζει αυτήν την επιλογή σε κρυπτογραφημένες συνομιλίες. Δεν θα ειδοποιηθείτε σε αυτήν τη συνομιλία.";
 "screen_room_notification_settings_mode_all_messages" = "Όλα τα μηνύματα";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Μόνο για αναφορές και απαντήσεις";
 "screen_room_notification_settings_mode_mute" = "Mute";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Δεν έχεις εκκρεμείς προσκλήσεις.";
 "screen_roomlist_filter_low_priority" = "Χαμηλής Προτεραιότητας";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Δεν έχετε ακόμη συνομιλίες χαμηλής προτεραιότητας";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Μπορείς να καταργήσεις την επιλογή φίλτρων για να δεις τις άλλες συνομιλίες σου";
 "screen_roomlist_filter_mixed_empty_state_title" = "Δεν έχεις συνομιλίες για αυτήν την επιλογή";
 "screen_roomlist_filter_people" = "Άτομα";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Ζητήθηκε επαλήθευση";
 "screen_session_verification_they_dont_match" = "Δεν ταιριάζουν";
 "screen_session_verification_they_match" = "Ταιριάζουν";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Βεβαιώσου ότι έχεις ανοιχτή την εφαρμογή στην άλλη συσκευή πριν ξεκινήσεις την επαλήθευση από εδώ.";
 "screen_session_verification_use_another_device_title" = "Άνοιξε την εφαρμογή σε άλλη επαληθευμένη συσκευή";
 "screen_session_verification_user_initiator_subtitle" = "Για επιπλέον ασφάλεια, επαληθεύστε αυτόν το χρήστη συγκρίνοντας ένα σύνολο emoji στις συσκευές σας. Κάντε το αυτό χρησιμοποιώντας έναν αξιόπιστο τρόπο επικοινωνίας.";
@@ -1714,7 +1728,7 @@
 "troubleshoot_notifications_test_display_notification_permission_failure" = "Δεν είναι δυνατή η εμφάνιση της ειδοποίησης.";
 "troubleshoot_notifications_test_display_notification_success" = "Έγινε κλικ στην ειδοποίηση!";
 "troubleshoot_notifications_test_display_notification_title" = "Εμφάνιση ειδοποίησης";
-"troubleshoot_notifications_test_display_notification_waiting" = "Κάνε κλικ στην ειδοποίηση για να συνεχίσεις τη δοκιμή.";
+"troubleshoot_notifications_test_display_notification_waiting" = "Παρακαλώ πατήστε την ειδοποίηση για να συνεχίσετε τη δοκιμή.";
 "troubleshoot_notifications_test_firebase_availability_description" = "Βεβαιώσου ότι το Firebase είναι διαθέσιμο.";
 "troubleshoot_notifications_test_firebase_availability_failure" = "Το Firebase δεν είναι διαθέσιμο.";
 "troubleshoot_notifications_test_firebase_availability_success" = "Το Firebase είναι διαθέσιμο.";

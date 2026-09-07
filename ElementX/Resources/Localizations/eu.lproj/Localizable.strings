@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Saiatu berriro deszifratzen";
 "action_save" = "Gorde";
 "action_search" = "Bilatu";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Bidali";
 "action_send_edited_message" = "Bidali editatutako mezua";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Gonbidatutako jendea soilik sar daiteke gelara. Mezu guztiak daude ertzetik ertzera zifratuta.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Edonork aurki dezake gela hau.\nGelaren ezarpenetan aldatu dezakezu hobespena.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Allow ask to join";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
 "screen_knock_requests_list_title" = "Sartzeko eskaerak";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Kideak";
 "screen_room_change_role_unsaved_changes_description" = "Gorde gabeko aldaketak dituzu.";
 "screen_room_change_role_unsaved_changes_title" = "Aldaketak gorde?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Gehitu hizketagaia";
 "screen_room_details_badge_encrypted" = "Zifratuta";
 "screen_room_details_badge_not_encrypted" = "Zifratu gabe";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Berriro gonbidatu nahi al dituzu?";
 "screen_room_invite_again_alert_title" = "Bakarrik zaude txat honetan";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Blokeatu";
 "screen_room_member_details_block_alert_description" = "Blokeatutako erabiltzaileek ezingo dizute mezurik bidali eta beren mezuak ezkutatuko dira. Edozein unetan desblokeatu ditzakezu.";
 "screen_room_member_details_block_user" = "Blokeatu erabiltzailea";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Ez duzu gonbidapenik zain.";
 "screen_roomlist_filter_low_priority" = "Lehentasun baxua";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Iragazkiak desautatu ditzakezu gainerako txatak ikusteko";
 "screen_roomlist_filter_mixed_empty_state_title" = "Ez duzu hautaketa betetzen duen txatik";
 "screen_roomlist_filter_people" = "Jendea";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Egiaztapena eskatu da";
 "screen_session_verification_they_dont_match" = "Ez datoz bat";
 "screen_session_verification_they_match" = "Bat datoz";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Ziurtatu aplikazioa irekita duzula beste gailuan hemendik egiaztatzea hasi aurretik.";
 "screen_session_verification_use_another_device_title" = "Ireki aplikazioa egiaztatutako beste gailu batean";
 "screen_session_verification_user_initiator_subtitle" = "Segurtasun handiagorako, egiaztatu erabiltzailea emoji multzo bat alderatuz. Egin hau komunikatzeko modu fidagarri bat erabiliz.";
