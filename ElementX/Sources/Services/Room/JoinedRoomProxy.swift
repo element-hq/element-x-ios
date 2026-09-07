@@ -643,6 +643,36 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    // MARK: - Native calls (MatrixRTC)
+    
+    func sendStateEventRaw(eventType: String, stateKey: String, contentJSON: String) async -> Result<String, RoomProxyError> {
+        await sdkCall("sendStateEventRaw(\(eventType))") {
+            try await room.sendStateEventRaw(eventType: eventType, stateKey: stateKey, content: contentJSON)
+        }
+    }
+    
+    func sendRaw(eventType: String, contentJSON: String) async -> Result<Void, RoomProxyError> {
+        await sdkCall("sendRaw(\(eventType))") {
+            try await room.sendRaw(eventType: eventType, content: contentJSON)
+        }
+    }
+    
+    func redact(eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
+        await sdkCall("redact") {
+            try await room.redact(eventId: eventID, reason: reason)
+        }
+    }
+    
+    /// Logs and wraps an SDK failure; the message never includes content.
+    private func sdkCall<T>(_ description: String, _ body: () async throws -> T) async -> Result<T, RoomProxyError> {
+        do {
+            return try await .success(body())
+        } catch {
+            MXLog.error("MatrixRTC: \(description) failed in \(id) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Permalinks
     
     func matrixToPermalink() async -> Result<URL, RoomProxyError> {

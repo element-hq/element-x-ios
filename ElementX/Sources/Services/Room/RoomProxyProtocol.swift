@@ -165,6 +165,12 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func declineCall(notificationID: String) async -> Result<Void, RoomProxyError>
     func subscribeToCallDeclineEvents(rtcNotificationEventID: String, listener: CallDeclineListener) -> Result<TaskHandle, RoomProxyError>
     
+    // MARK: - Native calls (MatrixRTC)
+    
+    func sendStateEventRaw(eventType: String, stateKey: String, contentJSON: String) async -> Result<String, RoomProxyError>
+    func sendRaw(eventType: String, contentJSON: String) async -> Result<Void, RoomProxyError>
+    func redact(eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
+    
     // MARK: - Permalinks
     
     func matrixToPermalink() async -> Result<URL, RoomProxyError>

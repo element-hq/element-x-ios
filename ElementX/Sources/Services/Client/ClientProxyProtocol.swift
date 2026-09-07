@@ -35,6 +35,14 @@ enum ClientProxyPresence: Equatable, Sendable {
     case offline
 }
 
+/// An OpenID token proving this Matrix identity to a third party (the RTC authorisation service).
+nonisolated struct OpenIDToken: Sendable {
+    let accessToken: String
+    let tokenType: String
+    let matrixServerName: String
+    let expiresIn: TimeInterval
+}
+
 enum ClientProxyError: Error {
     case sdkError(Error)
     case forbiddenAccess
@@ -167,6 +175,12 @@ protocol ClientProxyProtocol: AnyObject {
     
     var isReportRoomSupported: Bool { get async }
     var isLiveKitRTCSupported: Bool { get async }
+    
+    // MARK: Native calls (MatrixRTC)
+    
+    func requestOpenIDToken() async -> Result<OpenIDToken, ClientProxyError>
+    /// Authenticated GET of an arbitrary URL (transport discovery).
+    func getURL(_ url: String) async -> Result<Data, ClientProxyError>
     
     var isLoginWithQRCodeSupported: Bool { get async }
     

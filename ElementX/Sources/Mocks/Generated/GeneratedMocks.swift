@@ -2448,6 +2448,76 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingLiveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never>!
 
+    //MARK: - requestOpenIDToken
+
+    private let requestOpenIDTokenCallsCountLock = NSLock()
+    private nonisolated(unsafe) var requestOpenIDTokenUnderlyingCallsCount = 0
+    var requestOpenIDTokenCallsCount: Int {
+        get { requestOpenIDTokenCallsCountLock.withLock { requestOpenIDTokenUnderlyingCallsCount } }
+        set { requestOpenIDTokenCallsCountLock.withLock { requestOpenIDTokenUnderlyingCallsCount = newValue } }
+    }
+    var requestOpenIDTokenCalled: Bool {
+        return requestOpenIDTokenCallsCount > 0
+    }
+
+    private let requestOpenIDTokenReturnValueLock = NSLock()
+    private nonisolated(unsafe) var requestOpenIDTokenUnderlyingReturnValue: Result<OpenIDToken, ClientProxyError>!
+    var requestOpenIDTokenReturnValue: Result<OpenIDToken, ClientProxyError>! {
+        get { requestOpenIDTokenReturnValueLock.withLock { requestOpenIDTokenUnderlyingReturnValue } }
+        set { requestOpenIDTokenReturnValueLock.withLock { requestOpenIDTokenUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var requestOpenIDTokenClosure: (() async -> Result<OpenIDToken, ClientProxyError>)?
+
+    @concurrent func requestOpenIDToken() async -> Result<OpenIDToken, ClientProxyError> {
+        requestOpenIDTokenCallsCountLock.withLock { requestOpenIDTokenUnderlyingCallsCount += 1 }
+        if let requestOpenIDTokenClosure = requestOpenIDTokenClosure {
+            return await requestOpenIDTokenClosure()
+        } else {
+            return requestOpenIDTokenReturnValue
+        }
+    }
+    //MARK: - getURL
+
+    private let getURLCallsCountLock = NSLock()
+    private nonisolated(unsafe) var getURLUnderlyingCallsCount = 0
+    var getURLCallsCount: Int {
+        get { getURLCallsCountLock.withLock { getURLUnderlyingCallsCount } }
+        set { getURLCallsCountLock.withLock { getURLUnderlyingCallsCount = newValue } }
+    }
+    var getURLCalled: Bool {
+        return getURLCallsCount > 0
+    }
+    private let getURLReceivedUrlLock = NSLock()
+    private nonisolated(unsafe) var getURLUnderlyingReceivedUrl: String?
+    var getURLReceivedUrl: String? {
+        get { getURLReceivedUrlLock.withLock { getURLUnderlyingReceivedUrl } }
+        set { getURLReceivedUrlLock.withLock { getURLUnderlyingReceivedUrl = newValue } }
+    }
+    private let getURLReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var getURLUnderlyingReceivedInvocations: [String] = []
+    var getURLReceivedInvocations: [String] {
+        get { getURLReceivedInvocationsLock.withLock { getURLUnderlyingReceivedInvocations } }
+        set { getURLReceivedInvocationsLock.withLock { getURLUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let getURLReturnValueLock = NSLock()
+    private nonisolated(unsafe) var getURLUnderlyingReturnValue: Result<Data, ClientProxyError>!
+    var getURLReturnValue: Result<Data, ClientProxyError>! {
+        get { getURLReturnValueLock.withLock { getURLUnderlyingReturnValue } }
+        set { getURLReturnValueLock.withLock { getURLUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var getURLClosure: ((String) async -> Result<Data, ClientProxyError>)?
+
+    @concurrent func getURL(_ url: String) async -> Result<Data, ClientProxyError> {
+        getURLCallsCountLock.withLock { getURLUnderlyingCallsCount += 1 }
+        getURLReceivedUrl = url
+        getURLReceivedInvocationsLock.withLock { getURLUnderlyingReceivedInvocations.append(url) }
+        if let getURLClosure = getURLClosure {
+            return await getURLClosure(url)
+        } else {
+            return getURLReturnValue
+        }
+    }
     //MARK: - isOnlyDeviceLeft
 
     private let isOnlyDeviceLeftCallsCountLock = NSLock()
@@ -6766,6 +6836,132 @@ nonisolated class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Senda
             return subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure(rtcNotificationEventID, listener)
         } else {
             return subscribeToCallDeclineEventsRtcNotificationEventIDListenerReturnValue
+        }
+    }
+    //MARK: - sendStateEventRaw
+
+    private let sendStateEventRawEventTypeStateKeyContentJSONCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendStateEventRawEventTypeStateKeyContentJSONUnderlyingCallsCount = 0
+    var sendStateEventRawEventTypeStateKeyContentJSONCallsCount: Int {
+        get { sendStateEventRawEventTypeStateKeyContentJSONCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingCallsCount } }
+        set { sendStateEventRawEventTypeStateKeyContentJSONCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingCallsCount = newValue } }
+    }
+    var sendStateEventRawEventTypeStateKeyContentJSONCalled: Bool {
+        return sendStateEventRawEventTypeStateKeyContentJSONCallsCount > 0
+    }
+    private let sendStateEventRawEventTypeStateKeyContentJSONReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReceivedArguments: (eventType: String, stateKey: String, contentJSON: String)?
+    var sendStateEventRawEventTypeStateKeyContentJSONReceivedArguments: (eventType: String, stateKey: String, contentJSON: String)? {
+        get { sendStateEventRawEventTypeStateKeyContentJSONReceivedArgumentsLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReceivedArguments } }
+        set { sendStateEventRawEventTypeStateKeyContentJSONReceivedArgumentsLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReceivedArguments = newValue } }
+    }
+    private let sendStateEventRawEventTypeStateKeyContentJSONReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReceivedInvocations: [(eventType: String, stateKey: String, contentJSON: String)] = []
+    var sendStateEventRawEventTypeStateKeyContentJSONReceivedInvocations: [(eventType: String, stateKey: String, contentJSON: String)] {
+        get { sendStateEventRawEventTypeStateKeyContentJSONReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReceivedInvocations } }
+        set { sendStateEventRawEventTypeStateKeyContentJSONReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendStateEventRawEventTypeStateKeyContentJSONReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReturnValue: Result<String, RoomProxyError>!
+    var sendStateEventRawEventTypeStateKeyContentJSONReturnValue: Result<String, RoomProxyError>! {
+        get { sendStateEventRawEventTypeStateKeyContentJSONReturnValueLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReturnValue } }
+        set { sendStateEventRawEventTypeStateKeyContentJSONReturnValueLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var sendStateEventRawEventTypeStateKeyContentJSONClosure: ((String, String, String) async -> Result<String, RoomProxyError>)?
+
+    @concurrent func sendStateEventRaw(eventType: String, stateKey: String, contentJSON: String) async -> Result<String, RoomProxyError> {
+        sendStateEventRawEventTypeStateKeyContentJSONCallsCountLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingCallsCount += 1 }
+        sendStateEventRawEventTypeStateKeyContentJSONReceivedArguments = (eventType: eventType, stateKey: stateKey, contentJSON: contentJSON)
+        sendStateEventRawEventTypeStateKeyContentJSONReceivedInvocationsLock.withLock { sendStateEventRawEventTypeStateKeyContentJSONUnderlyingReceivedInvocations.append((eventType: eventType, stateKey: stateKey, contentJSON: contentJSON)) }
+        if let sendStateEventRawEventTypeStateKeyContentJSONClosure = sendStateEventRawEventTypeStateKeyContentJSONClosure {
+            return await sendStateEventRawEventTypeStateKeyContentJSONClosure(eventType, stateKey, contentJSON)
+        } else {
+            return sendStateEventRawEventTypeStateKeyContentJSONReturnValue
+        }
+    }
+    //MARK: - sendRaw
+
+    private let sendRawEventTypeContentJSONCallsCountLock = NSLock()
+    private nonisolated(unsafe) var sendRawEventTypeContentJSONUnderlyingCallsCount = 0
+    var sendRawEventTypeContentJSONCallsCount: Int {
+        get { sendRawEventTypeContentJSONCallsCountLock.withLock { sendRawEventTypeContentJSONUnderlyingCallsCount } }
+        set { sendRawEventTypeContentJSONCallsCountLock.withLock { sendRawEventTypeContentJSONUnderlyingCallsCount = newValue } }
+    }
+    var sendRawEventTypeContentJSONCalled: Bool {
+        return sendRawEventTypeContentJSONCallsCount > 0
+    }
+    private let sendRawEventTypeContentJSONReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var sendRawEventTypeContentJSONUnderlyingReceivedArguments: (eventType: String, contentJSON: String)?
+    var sendRawEventTypeContentJSONReceivedArguments: (eventType: String, contentJSON: String)? {
+        get { sendRawEventTypeContentJSONReceivedArgumentsLock.withLock { sendRawEventTypeContentJSONUnderlyingReceivedArguments } }
+        set { sendRawEventTypeContentJSONReceivedArgumentsLock.withLock { sendRawEventTypeContentJSONUnderlyingReceivedArguments = newValue } }
+    }
+    private let sendRawEventTypeContentJSONReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var sendRawEventTypeContentJSONUnderlyingReceivedInvocations: [(eventType: String, contentJSON: String)] = []
+    var sendRawEventTypeContentJSONReceivedInvocations: [(eventType: String, contentJSON: String)] {
+        get { sendRawEventTypeContentJSONReceivedInvocationsLock.withLock { sendRawEventTypeContentJSONUnderlyingReceivedInvocations } }
+        set { sendRawEventTypeContentJSONReceivedInvocationsLock.withLock { sendRawEventTypeContentJSONUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let sendRawEventTypeContentJSONReturnValueLock = NSLock()
+    private nonisolated(unsafe) var sendRawEventTypeContentJSONUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var sendRawEventTypeContentJSONReturnValue: Result<Void, RoomProxyError>! {
+        get { sendRawEventTypeContentJSONReturnValueLock.withLock { sendRawEventTypeContentJSONUnderlyingReturnValue } }
+        set { sendRawEventTypeContentJSONReturnValueLock.withLock { sendRawEventTypeContentJSONUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var sendRawEventTypeContentJSONClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
+
+    @concurrent func sendRaw(eventType: String, contentJSON: String) async -> Result<Void, RoomProxyError> {
+        sendRawEventTypeContentJSONCallsCountLock.withLock { sendRawEventTypeContentJSONUnderlyingCallsCount += 1 }
+        sendRawEventTypeContentJSONReceivedArguments = (eventType: eventType, contentJSON: contentJSON)
+        sendRawEventTypeContentJSONReceivedInvocationsLock.withLock { sendRawEventTypeContentJSONUnderlyingReceivedInvocations.append((eventType: eventType, contentJSON: contentJSON)) }
+        if let sendRawEventTypeContentJSONClosure = sendRawEventTypeContentJSONClosure {
+            return await sendRawEventTypeContentJSONClosure(eventType, contentJSON)
+        } else {
+            return sendRawEventTypeContentJSONReturnValue
+        }
+    }
+    //MARK: - redact
+
+    private let redactEventIDReasonCallsCountLock = NSLock()
+    private nonisolated(unsafe) var redactEventIDReasonUnderlyingCallsCount = 0
+    var redactEventIDReasonCallsCount: Int {
+        get { redactEventIDReasonCallsCountLock.withLock { redactEventIDReasonUnderlyingCallsCount } }
+        set { redactEventIDReasonCallsCountLock.withLock { redactEventIDReasonUnderlyingCallsCount = newValue } }
+    }
+    var redactEventIDReasonCalled: Bool {
+        return redactEventIDReasonCallsCount > 0
+    }
+    private let redactEventIDReasonReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var redactEventIDReasonUnderlyingReceivedArguments: (eventID: String, reason: String?)?
+    var redactEventIDReasonReceivedArguments: (eventID: String, reason: String?)? {
+        get { redactEventIDReasonReceivedArgumentsLock.withLock { redactEventIDReasonUnderlyingReceivedArguments } }
+        set { redactEventIDReasonReceivedArgumentsLock.withLock { redactEventIDReasonUnderlyingReceivedArguments = newValue } }
+    }
+    private let redactEventIDReasonReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var redactEventIDReasonUnderlyingReceivedInvocations: [(eventID: String, reason: String?)] = []
+    var redactEventIDReasonReceivedInvocations: [(eventID: String, reason: String?)] {
+        get { redactEventIDReasonReceivedInvocationsLock.withLock { redactEventIDReasonUnderlyingReceivedInvocations } }
+        set { redactEventIDReasonReceivedInvocationsLock.withLock { redactEventIDReasonUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let redactEventIDReasonReturnValueLock = NSLock()
+    private nonisolated(unsafe) var redactEventIDReasonUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var redactEventIDReasonReturnValue: Result<Void, RoomProxyError>! {
+        get { redactEventIDReasonReturnValueLock.withLock { redactEventIDReasonUnderlyingReturnValue } }
+        set { redactEventIDReasonReturnValueLock.withLock { redactEventIDReasonUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var redactEventIDReasonClosure: ((String, String?) async -> Result<Void, RoomProxyError>)?
+
+    @concurrent func redact(eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
+        redactEventIDReasonCallsCountLock.withLock { redactEventIDReasonUnderlyingCallsCount += 1 }
+        redactEventIDReasonReceivedArguments = (eventID: eventID, reason: reason)
+        redactEventIDReasonReceivedInvocationsLock.withLock { redactEventIDReasonUnderlyingReceivedInvocations.append((eventID: eventID, reason: reason)) }
+        if let redactEventIDReasonClosure = redactEventIDReasonClosure {
+            return await redactEventIDReasonClosure(eventID, reason)
+        } else {
+            return redactEventIDReasonReturnValue
         }
     }
     //MARK: - matrixToPermalink

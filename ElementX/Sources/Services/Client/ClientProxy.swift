@@ -370,6 +370,30 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    // MARK: Native calls (MatrixRTC)
+    
+    func requestOpenIDToken() async -> Result<OpenIDToken, ClientProxyError> {
+        do {
+            let token = try await client.requestOpenidToken()
+            return .success(OpenIDToken(accessToken: token.accessToken,
+                                        tokenType: token.tokenType,
+                                        matrixServerName: token.matrixServerName,
+                                        expiresIn: TimeInterval(token.expiresInSeconds)))
+        } catch {
+            MXLog.error("Failed requesting an OpenID token with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func getURL(_ url: String) async -> Result<Data, ClientProxyError> {
+        do {
+            return try await .success(client.getUrl(url: url))
+        } catch {
+            MXLog.info("Failed fetching \(url) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     var isLoginWithQRCodeSupported: Bool {
         get async {
             do {
