@@ -136,6 +136,88 @@ final class ElementCallServiceTests {
         #expect(reason == .unanswered, "Call should have ended as unanswered")
     }
     
+    // MARK: - Native calls
+    
+    @Test
+    func nativeCallSessionReportsTheRoomNameAndVideoToCallKit() async {
+        await service.startNativeCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        
+        #expect(callProvider.reportCallWithUpdatedCalled)
+        if let args = callProvider.reportCallWithUpdatedReceivedArguments {
+            #expect(args.update.localizedCallerName == "welcome")
+            #expect(args.update.hasVideo == true)
+            #expect(args.update.remoteHandle?.value == "!room:example.com")
+        } else {
+            Issue.record("Expected reportCallWithUpdatedReceivedArguments to be captured")
+        }
+        
+        // Connected is only reported for the call that is actually ongoing.
+        service.reportNativeCallConnected(roomID: "!other:example.com")
+        #expect(!callProvider.reportOutgoingCallWithConnectedAtCalled)
+        service.reportNativeCallConnected(roomID: "!room:example.com")
+        #expect(callProvider.reportOutgoingCallWithConnectedAtCalled)
+        #expect(callProvider.reportOutgoingCallWithConnectedAtReceivedArguments?.uuid == callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
+        
+        // Ending clears the session, so a later connected report has nothing to attach to.
+        service.endNativeCallSession(roomID: "!room:example.com")
+        service.reportNativeCallConnected(roomID: "!room:example.com")
+        #expect(callProvider.reportOutgoingCallWithConnectedAtReceivedInvocations.count == 1)
+    }
+    
+    @Test
+    func nativeModeReportsVoiceCallsWithoutVideo() async {
+        service.setNativeCallModeEnabled(true)
+        
+        await waitForConfirmation { confirmation in
+            let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
+                .updateIsVoice(true)
+            
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
+                confirmation()
+            }
+        }
+        
+        // The native stack streams from the background, so an audio call can stay in the system UI:
+        // no need for the web view's "always video" workaround.
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.hasVideo == false)
+    }
+    
+    @Test
+    func answeringAnIncomingNativeCallKeepsTheCallKitCall() async throws {
+        service.setNativeCallModeEnabled(true)
+        
+        await waitForConfirmation { confirmation in
+            let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
+                confirmation()
+            }
+        }
+        let incomingUUID = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        
+        let deferredStart = deferFulfillment(service.actions) { action in
+            if case .startCall = action {
+                return true
+            }
+            return false
+        }
+        service.provider(CXProvider(configuration: .init()), perform: CXAnswerCallAction(call: incomingUUID))
+        let action = try await deferredStart.fulfill()
+        guard case .startCall(let roomID, let isVoiceCall) = action else {
+            Issue.record("Expected a start call action")
+            return
+        }
+        #expect(roomID == "!room:example.com")
+        #expect(!isVoiceCall)
+        // The web view path ends the CallKit call right after answering; the native path keeps it.
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+        
+        // The controller then attaches to the ringing call rather than starting a second one.
+        await service.startNativeCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        #expect(!callProvider.reportCallWithUpdatedCalled)
+        service.reportNativeCallConnected(roomID: "!room:example.com")
+        #expect(callProvider.reportOutgoingCallWithConnectedAtReceivedArguments?.uuid == incomingUUID)
+    }
+    
     @Test
     func callIntentRawValues() {
         // Test to ensure that the implicit rawValue of the string enum matches the MSC values
