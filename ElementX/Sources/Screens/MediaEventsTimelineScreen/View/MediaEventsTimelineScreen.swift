@@ -297,7 +297,8 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                            initialScreenMode: screenMode,
                                            mediaProvider: MediaProviderMock(.init()),
                                            userIndicatorController: UserIndicatorControllerMock(),
-                                           appMediator: AppMediatorMock())
+                                           appMediator: AppMediatorMock(),
+                                           appSettings: AppSettings.volatile())
     }
     
     private static func makeTimelineViewModel(empty: Bool, screenMode: MediaEventsTimelineScreenMode) -> TimelineViewModel {

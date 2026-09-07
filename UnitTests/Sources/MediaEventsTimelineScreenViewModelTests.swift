@@ -19,7 +19,8 @@ struct MediaEventsTimelineScreenViewModelTests {
                                                            filesTimelineViewModel: filesTimelineViewModel,
                                                            mediaProvider: MediaProviderMock(.init()),
                                                            userIndicatorController: UserIndicatorControllerMock(),
-                                                           appMediator: AppMediatorMock(.init()))
+                                                           appMediator: AppMediatorMock(.init()),
+                                                           appSettings: AppSettings.volatile())
         let context = viewModel.context
         
         // Initially the media timeline is active, showing only images and videos.

@@ -32,12 +32,125 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     private var backwardPadding: Int
     private var forwardPadding: Int
+    /// The padding each side starts with: the per-session browse budget, restorable when spent.
+    private let initialPadding: Int
+    
+    /// Whether a side's phantom padding is nearly spent while the timeline still has more that
+    /// way. Left alone, the spent side has no "Loading more" page left, so its edge hardens into
+    /// a false "end of the timeline" (and further merges land unreachably below index 0): the
+    /// controller re-centres the budget under a covered reload at the next rest.
+    var isBrowseBudgetLow: Bool {
+        let lowWater = 10
+        if !isClampedToBackwardPlaceholder, paginationState.backward != .endReached, backwardPadding <= lowWater {
+            return true
+        }
+        if !isClampedToForwardPlaceholder, paginationState.forward != .endReached, forwardPadding <= lowWater {
+            return true
+        }
+        return false
+    }
+    
+    /// Restores both sides' phantom padding to the initial browse budget. Every preview index
+    /// shifts by the backward delta, so the caller must re-derive the current index and reload
+    /// in the same breath; items a spent side had left unreachable become reachable again.
+    func restoreBrowseBudget() {
+        MXLog.info("Media viewer: restoring the browse budget (padding \(backwardPadding)/\(forwardPadding) -> \(initialPadding))")
+        backwardPadding = initialPadding
+        forwardPadding = initialPadding
+    }
+    
+    /// While the user is on a "loading more" page, only that one page is reported beyond the loaded
+    /// items on its side, so QuickLook's own edge bounce stops the swipe there instead of paging on
+    /// into a run of identical placeholders (the phantom padding is there for index stability, not
+    /// to be browsed). It changes the count, hence needs a reload: the controller drives it.
+    var isClampedToBackwardPlaceholder = false
+    var isClampedToForwardPlaceholder = false
+    
+    /// The loaded items were reshuffled by the timeline (not a plain prepend/append), so QuickLook's
+    /// built pages no longer match their indices and need a rebuild. Cleared by the controller.
+    var needsRebuild = false
+    
+    /// Media with something unresolved between them and the next newer media: a timeline gap, or a
+    /// message we couldn't decrypt yet that may turn out to be media (its key is usually on its way).
+    /// A backfill lands older items before those resolve, so stepping onto them would skip those.
+    private(set) var itemIDsWithGapOnNewerSide: Set<MediaPreviewItemID> = []
+    /// Whether such not-yet-decrypted messages sit older than the oldest media: paginating further
+    /// back would only fetch (and request keys for) older pages ahead of the nearest ones.
+    private(set) var hasPendingUTDsBeforeOldestMedia = false
+    /// When the wait on the oldest pending UTD runs out, if any: the shape wants re-evaluating then.
+    private(set) var nextPendingUTDExpiry: Date?
+    /// How long a UTD of unknown cause counts as "maybe media" before being given up on. Keys come
+    /// from backup within a second or so; one that doesn't come by now isn't coming.
+    static let pendingUTDWait: TimeInterval = 5
+    private var utdFirstSeen: [TimelineItemIdentifier: Date] = [:]
+    private var lastItemViewStates: [RoomTimelineItemViewState] = []
+    
+    private func analyseShape(_ itemViewStates: [RoomTimelineItemViewState]) {
+        lastItemViewStates = itemViewStates
+        let now = Date()
+        var firstSeen = [TimelineItemIdentifier: Date]()
+        var gapped = Set<MediaPreviewItemID>()
+        var lastMediaID: MediaPreviewItemID?
+        var unresolvedSinceLastMedia = false
+        var pendingBeforeOldestMedia = false
+        var nextExpiry: Date?
+        for state in itemViewStates { // Oldest first.
+            switch state.type {
+            case .encrypted(let item) where item.mayStillDecrypt:
+                let seen = utdFirstSeen[item.id] ?? now
+                firstSeen[item.id] = seen
+                let expiry = seen.addingTimeInterval(Self.pendingUTDWait)
+                guard expiry > now else { continue } // Waited long enough: treat it as not media.
+                nextExpiry = min(nextExpiry ?? expiry, expiry)
+                unresolvedSinceLastMedia = true
+                if lastMediaID == nil {
+                    pendingBeforeOldestMedia = true
+                }
+                continue
+            default:
+                break
+            }
+            let media = state.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes)
+            guard let last = media.last else { continue }
+            if unresolvedSinceLastMedia, let lastMediaID {
+                gapped.insert(lastMediaID)
+            }
+            unresolvedSinceLastMedia = false
+            lastMediaID = last.id
+        }
+        utdFirstSeen = firstSeen
+        itemIDsWithGapOnNewerSide = gapped
+        hasPendingUTDsBeforeOldestMedia = pendingBeforeOldestMedia
+        nextPendingUTDExpiry = nextExpiry
+    }
+    
+    /// The wait on some pending UTDs ran out: re-evaluate without them, and let the controller step if it can.
+    func pendingUTDsExpired() {
+        analyseShape(lastItemViewStates)
+        MXLog.info("Media viewer: gave up waiting on undecryptable messages, gapped: \(itemIDsWithGapOnNewerSide.count), pending before oldest: \(hasPendingUTDsBeforeOldestMedia)")
+        previewItemsPaginationPublisher.send()
+    }
+    
+    /// The media at a QuickLook index, or nil for a padding/placeholder index.
+    func mediaItem(atPreviewIndex index: Int) -> TimelineMediaPreviewItem.Media? {
+        let arrayIndex = index - effectiveBackwardPadding
+        return previewItems.indices.contains(arrayIndex) ? previewItems[arrayIndex] : nil
+    }
+    
+    /// Whether a real (post-load) pagination state has been seen. `.initial` is `endReached` on
+    /// both sides as a "don't paginate yet" sentinel, indistinguishable by value from a genuinely
+    /// exhausted small room, so we only collapse the phantom padding (below) once a real state has
+    /// arrived; until then the padding stays, keeping room to paginate.
+    private var hasReceivedRealPaginationState: Bool
     
     /// Reaching the end of the timeline changes which placeholder an index shows, so a change
     /// needs to be published too, not only the arrival of new items.
     var paginationState: TimelinePaginationState {
         didSet {
             guard paginationState != oldValue else { return }
+            if paginationState != .initial {
+                hasReceivedRealPaginationState = true
+            }
             previewItemsPaginationPublisher.send()
         }
     }
@@ -70,8 +183,12 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         
         backwardPadding = initialPadding
         forwardPadding = initialPadding
+        self.initialPadding = initialPadding
+        hasReceivedRealPaginationState = paginationState != .initial
         
         self.paginationState = paginationState
+        super.init()
+        analyseShape(itemViewStates)
     }
     
     /// Builds a data source scoped to a single gallery's previewable attachments.
@@ -100,6 +217,8 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         // And we disable any use of the timeline by configuring the data source as though everything has paginated.
         backwardPadding = 0
         forwardPadding = 0
+        initialPadding = 0
+        hasReceivedRealPaginationState = true
         paginationState = .init(backward: .endReached, forward: .endReached)
     }
     
@@ -112,8 +231,9 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             .flatMap { $0.previewableMedia(allowedGalleryItemTypes: allowedGalleryItemTypes) }
             .map { newItem in
                 // If an item already exists use that instead to preserve the file handle, download error etc.
-                if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
+                if let oldItem = previewItems.first(where: { $0.id == newItem.id || $0.isLocalEcho(of: newItem) }) {
                     oldItem.content = newItem.content
+                    oldItem.id = newItem.id // A sent local echo: transaction ID → event ID.
                     return oldItem
                 }
                 
@@ -128,12 +248,30 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             // Don't worry about negative padding here. Turns out that it just limits
             // the displayable items from growing any more, but makes sure that the
             // current item doesn't jump around so we don't need to reload anything.
+            // That only holds while the padding is in play: collapsed to zero, a prepend
+            // shifts every index and the controller re-derives its index (`previewIndex(of:)`).
             backwardPadding -= backPaginationCount
             forwardPadding -= forwardPaginationCount
             
             if backPaginationCount > 0 || forwardPaginationCount > 0 {
                 hasPaginated = true
             }
+        } else if let anchor = [currentItem.mediaItem?.id].compactMap({ $0 }).first(where: { id in newItems.contains { $0.id == id } })
+            ?? previewItems.first(where: { old in newItems.contains { $0.id == old.id } })?.id,
+            let oldIndex = previewItems.firstIndex(where: { $0.id == anchor }),
+            let newIndex = newItems.firstIndex(where: { $0.id == anchor }) {
+            // The loaded run isn't a contiguous slice of the new list: the timeline reshuffled it
+            // (de-duplication, a backfill landing in the middle). Ignoring such updates froze the
+            // viewer at a handful of items while the timeline went on to the room's start. Keep the
+            // current item (or any shared item) at its index and take the new list; the other pages
+            // are rebuilt by the controller.
+            let oldAfter = previewItems.count - 1 - oldIndex
+            let newAfter = newItems.count - 1 - newIndex
+            backwardPadding -= newIndex - oldIndex
+            forwardPadding -= newAfter - oldAfter
+            needsRebuild = true
+            hasPaginated = true
+            MXLog.info("Media viewer: items reshuffled (\(previewItems.count) -> \(newItems.count)), re-anchored at \(anchor)")
         } else {
             // When the timeline is loading items from the store and the initial item is the only
             // preview in the array, we don't want to wipe it out, so if the existing items aren't
@@ -150,6 +288,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         }
         
         previewItems = newItems
+        analyseShape(itemViewStates)
         
         if hasPaginated {
             previewItemsPaginationPublisher.send()
@@ -158,20 +297,44 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     
     // MARK: - QLPreviewControllerDataSource
     
+    /// Once a direction is fully paginated we drop its phantom padding to zero, so the last
+    /// real item becomes QuickLook's own content edge and its scroll view bounces natively there
+    /// (the affordance for "nothing more this way") instead of us hard-blocking the swipe.
+    /// This only changes the reported count at the two end-reached transitions, so the padding
+    /// invariant (constant count during normal pagination) still holds everywhere else.
+    private var effectiveBackwardPadding: Int {
+        if hasReceivedRealPaginationState, paginationState.backward == .endReached {
+            return 0
+        }
+        return isClampedToBackwardPlaceholder ? 1 : backwardPadding
+    }
+    
+    /// QuickLook's index for the item right now, given the current items and padding.
+    func previewIndex(of itemID: MediaPreviewItemID) -> Int? {
+        previewItems.firstIndex { $0.id == itemID }.map { $0 + effectiveBackwardPadding }
+    }
+    
+    private var effectiveForwardPadding: Int {
+        if hasReceivedRealPaginationState, paginationState.forward == .endReached {
+            return 0
+        }
+        return isClampedToForwardPlaceholder ? 1 : forwardPadding
+    }
+    
     var firstPreviewItemIndex: Int {
-        backwardPadding
+        effectiveBackwardPadding
     }
     
     var lastPreviewItemIndex: Int {
-        backwardPadding + previewItems.count - 1
+        effectiveBackwardPadding + previewItems.count - 1
     }
     
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-        previewItems.count + backwardPadding + forwardPadding
+        previewItems.count + effectiveBackwardPadding + effectiveForwardPadding
     }
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> any QLPreviewItem {
-        let arrayIndex = index - backwardPadding
+        let arrayIndex = index - effectiveBackwardPadding
         
         if index < firstPreviewItemIndex {
             return paginationState.backward == .endReached ? TimelineMediaPreviewItem.Loading.timelineStart : .paginatingBackwards
@@ -231,19 +394,81 @@ enum TimelineMediaPreviewItem: Equatable {
             }
         }
         
+        /// For a gallery attachment, its 1-based position within the gallery and the gallery's size.
+        var galleryPosition: (index: Int, count: Int)? {
+            guard case .galleryItem(let parent, let item) = content,
+                  let gallery = parent as? GalleryRoomTimelineItem,
+                  let index = gallery.content.items.firstIndex(where: { $0.id == item.id }) else {
+                return nil
+            }
+            return (index + 1, gallery.content.items.count)
+        }
+        
         var fileHandle: MediaFileHandleProxy? {
             didSet { updatePreviewItemValues() }
         }
         
+        /// The timeline's cached thumbnail written to a file, shown in place of the media while it
+        /// downloads (the tapped image is otherwise a spinner on black until the full-size file
+        /// lands). Superseded by `fileHandle`; the file dies with the view model.
+        var placeholderURL: URL? {
+            didSet { updatePreviewItemValues() }
+        }
+        
+        /// QuickLook is (or will be) showing a placeholder rather than the media: the thumbnail, or
+        /// the shared loading image every file-less item answers with.
+        var isShowingPlaceholder: Bool {
+            fileHandle == nil && (placeholderURL != nil || Self.loadingPlaceholderURL != nil)
+        }
+        
+        /// What an item without a file or thumbnail hands QuickLook: a black image, so the page is
+        /// built as a placeholder page (swapped when the media lands) rather than from nothing,
+        /// which QuickLook renders as its "unavailable / copy to" page and never re-reads on its
+        /// own. Written once per process into the temp directory.
+        static let loadingPlaceholderURL: URL? = {
+            let size = CGSize(width: 1080, height: 1920)
+            let format = UIGraphicsImageRendererFormat()
+            format.scale = 1
+            let data = UIGraphicsImageRenderer(size: size, format: format).jpegData(withCompressionQuality: 0.5) { context in
+                UIColor.black.setFill()
+                context.fill(CGRect(origin: .zero, size: size))
+            }
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent("media-preview-loading-\(ProcessInfo.processInfo.processIdentifier).jpg")
+            do {
+                try data.write(to: url)
+                return url
+            } catch {
+                MXLog.error("Failed writing the media viewer's loading placeholder: \(error)")
+                return nil
+            }
+        }()
+        
         var downloadError: Error?
         
         /// A stable identifier that's unique per preview item — including individual gallery
-        /// attachments that would otherwise share their parent event's ID.
-        let id: MediaPreviewItemID
+        /// attachments that would otherwise share their parent event's ID. Only changes when a
+        /// local echo is sent and its transaction ID gives way to the event ID.
+        fileprivate(set) var id: MediaPreviewItemID
+        
+        /// Whether this is the local echo that `sentItem` is the remote echo of: sending swaps the
+        /// transaction ID for an event ID (so `id` changes) but the timeline recycles the unique ID.
+        /// Matching on it keeps the page, its file (loaded from the local media cache) and state
+        /// instead of rebuilding the viewer around a "new" item.
+        fileprivate func isLocalEcho(of sentItem: Media) -> Bool {
+            guard timelineItem.id.transactionID != nil, sentItem.timelineItem.id.eventID != nil,
+                  timelineItem.id.uniqueID == sentItem.timelineItem.id.uniqueID else { return false }
+            switch (content, sentItem.content) {
+            case (.timelineItem, .timelineItem): return true
+            case (.galleryItem(_, let item), .galleryItem(_, let sentGalleryItem)): return item.id.mediaIndex == sentGalleryItem.id.mediaIndex
+            default: return false
+            }
+        }
         
         init(timelineItem: EventBasedMessageTimelineItemProtocol) {
             content = .timelineItem(timelineItem)
             id = MediaPreviewItemID(timelineItem: timelineItem)
+            super.init()
+            updatePreviewItemValues()
         }
         
         init?(roomTimelineItemViewState: RoomTimelineItemViewState) {
@@ -262,6 +487,8 @@ enum TimelineMediaPreviewItem: Equatable {
             }
             content = .timelineItem(timelineItem)
             id = MediaPreviewItemID(timelineItem: timelineItem)
+            super.init()
+            updatePreviewItemValues()
         }
         
         /// Wraps a single attachment of a gallery message. `.other` items have no media source,
@@ -269,6 +496,8 @@ enum TimelineMediaPreviewItem: Equatable {
         init(galleryParent: GalleryRoomTimelineItem, item: GalleryItem) {
             content = .galleryItem(parent: galleryParent, item: item)
             id = .galleryItem(item.id)
+            super.init()
+            updatePreviewItemValues()
         }
         
         // MARK: QLPreviewItem
@@ -284,11 +513,9 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         private func updatePreviewItemValues() {
-            let url = fileHandle?.url
-            _previewItemURL.withLock { $0 = url }
-            
-            // Don't show any background text (" ") while the preview is still loading.
-            _previewItemTitle.withLock { $0 = url == nil ? " " : filename }
+            _previewItemURL.withLock { $0 = fileHandle?.url ?? placeholderURL ?? Self.loadingPlaceholderURL }
+            // No background text until there's something (the file or its placeholder) to show it under.
+            _previewItemTitle.withLock { $0 = fileHandle != nil || placeholderURL != nil ? filename : " " }
         }
         
         // MARK: Event details
@@ -338,6 +565,38 @@ enum TimelineMediaPreviewItem: Equatable {
             }
         }
         
+        /// The media's pixel size from the event, when known.
+        var mediaSize: CGSize? {
+            switch content {
+            case .galleryItem(_, let item):
+                item.size
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.imageInfo.size
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.videoInfo.size
+                default: nil
+                }
+            }
+        }
+        
+        /// The thumbnail's pixel size from the event, when known.
+        var thumbnailSize: CGSize? {
+            switch content {
+            case .galleryItem(_, let item):
+                switch item {
+                case .image(_, let content): content.thumbnailInfo?.size
+                case .video(_, let content): content.thumbnailInfo?.size
+                default: nil
+                }
+            case .timelineItem(let timelineItem):
+                switch timelineItem {
+                case let imageItem as ImageRoomTimelineItem: imageItem.content.thumbnailInfo?.size
+                case let videoItem as VideoRoomTimelineItem: videoItem.content.thumbnailInfo?.size
+                default: nil
+                }
+            }
+        }
+        
         var thumbnailMediaSource: MediaSourceProxy? {
             switch content {
             case .galleryItem(_, let item):
@@ -368,7 +627,7 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         var fileSize: UInt? {
-            previewItemURL.flatMap { try? FileManager.default.sizeForItem(at: $0) } ?? expectedFileSize
+            fileHandle?.url.flatMap { try? FileManager.default.sizeForItem(at: $0) } ?? expectedFileSize
         }
         
         private var expectedFileSize: UInt? {

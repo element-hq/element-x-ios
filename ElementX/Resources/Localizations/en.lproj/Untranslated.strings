@@ -1,3 +1,5 @@
+"screen_advanced_settings_preload_media_title" = "Preload media in viewer";
+"screen_advanced_settings_preload_media_description" = "Fetch the photos and videos either side of the one on show ahead of swiping, using more data";
 "screen_home_tab_search" = "Search";
 "screen_search_empty_state_message" = "Search for chats and messages";
 "screen_search_empty_state_title" = "Start searching...";

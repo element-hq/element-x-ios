@@ -77,15 +77,7 @@ struct VideoRoomTimelineView: View {
     }
     
     var playIcon: some View {
-        CompoundIcon(\.playSolid, size: .medium, relativeTo: .compound.headingLG)
-            .foregroundStyle(.compound.iconPrimary)
-            .padding(13)
-            .background {
-                ZStack {
-                    Circle().fill(.compound.bgSubtleSecondary)
-                    Circle().stroke(.compound.borderInteractiveSecondary)
-                }
-            }
+        VideoPlayBadge()
     }
     
     var placeholder: some View {

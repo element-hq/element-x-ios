@@ -149,6 +149,7 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                              mediaProvider: MediaProviderMock(.init()),
                                              photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock(),
-                                             appMediator: AppMediatorMock())
+                                             appMediator: AppMediatorMock(),
+                                             appSettings: AppSettings.volatile())
     }
 }

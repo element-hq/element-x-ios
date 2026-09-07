@@ -40,6 +40,10 @@ struct AdvancedSettingsScreen: View {
                     .onChange(of: context.optimizeMediaUploads) {
                         context.send(viewAction: .optimizeMediaUploadsChanged)
                     }
+                
+                ListRow(label: .plain(title: UntranslatedL10n.screenAdvancedSettingsPreloadMediaTitle,
+                                      description: UntranslatedL10n.screenAdvancedSettingsPreloadMediaDescription),
+                        kind: .toggle($context.preloadMediaInViewer))
             }
             
             moderationAndSafetySection

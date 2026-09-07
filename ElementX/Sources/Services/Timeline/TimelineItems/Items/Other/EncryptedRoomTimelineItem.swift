@@ -37,4 +37,13 @@ nonisolated struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Eq
     let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
+    
+    /// Whether the key may still turn up (typically from backup): the other causes are final.
+    var mayStillDecrypt: Bool {
+        if case .megolmV1AesSha2(_, cause: .unknown) = encryptionType {
+            true
+        } else {
+            false
+        }
+    }
 }

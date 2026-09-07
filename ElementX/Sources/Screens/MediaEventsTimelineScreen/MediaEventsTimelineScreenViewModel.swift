@@ -17,6 +17,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
+    private let appSettings: AppSettings
     
     private var isOldestItemVisible = false
     
@@ -43,12 +44,14 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
          initialScreenMode: MediaEventsTimelineScreenMode = .media,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appMediator: AppMediatorProtocol) {
+         appMediator: AppMediatorProtocol,
+         appSettings: AppSettings) {
         self.mediaTimelineViewModel = mediaTimelineViewModel
         self.filesTimelineViewModel = filesTimelineViewModel
         self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        self.appSettings = appSettings
         
         let activeTimelineContext = switch initialScreenMode {
         case .media: mediaTimelineViewModel.context
@@ -165,7 +168,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                                                        mediaProvider: mediaProvider,
                                                        photoLibraryManager: PhotoLibraryManager(),
                                                        userIndicatorController: userIndicatorController,
-                                                       appMediator: appMediator)
+                                                       appMediator: appMediator,
+                                                       appSettings: appSettings)
         sheetModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
