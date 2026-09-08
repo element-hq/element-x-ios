@@ -2322,6 +2322,11 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingHideInviteAvatarsPublisher: CurrentValuePublisher<Bool, Never>!
     nonisolated(unsafe) var pusherNotificationClientIdentifier: String?
+    var totalUnreadNotifications: UInt64 {
+        get { return underlyingTotalUnreadNotifications }
+        set(value) { underlyingTotalUnreadNotifications = value }
+    }
+    nonisolated(unsafe) var underlyingTotalUnreadNotifications: UInt64!
     var mediaLoader: MediaLoaderProtocol {
         get { return underlyingMediaLoader }
         set(value) { underlyingMediaLoader = value }
@@ -8663,6 +8668,23 @@ nonisolated class NotificationManagerMock: NotificationManagerProtocol, @uncheck
         removeDeliveredNotificationsForFullyReadRoomsReceivedInvocationsLock.withLock { removeDeliveredNotificationsForFullyReadRoomsUnderlyingReceivedInvocations.append(rooms) }
         await removeDeliveredNotificationsForFullyReadRoomsClosure?(rooms)
     }
+    //MARK: - updateAppBadgeCount
+
+    private let updateAppBadgeCountCallsCountLock = NSLock()
+    private nonisolated(unsafe) var updateAppBadgeCountUnderlyingCallsCount = 0
+    var updateAppBadgeCountCallsCount: Int {
+        get { updateAppBadgeCountCallsCountLock.withLock { updateAppBadgeCountUnderlyingCallsCount } }
+        set { updateAppBadgeCountCallsCountLock.withLock { updateAppBadgeCountUnderlyingCallsCount = newValue } }
+    }
+    var updateAppBadgeCountCalled: Bool {
+        return updateAppBadgeCountCallsCount > 0
+    }
+    nonisolated(unsafe) var updateAppBadgeCountClosure: (() async -> Void)?
+
+    @concurrent func updateAppBadgeCount() async {
+        updateAppBadgeCountCallsCountLock.withLock { updateAppBadgeCountUnderlyingCallsCount += 1 }
+        await updateAppBadgeCountClosure?()
+    }
 }
 nonisolated class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @unchecked Sendable {
     var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> {
@@ -14102,6 +14124,41 @@ nonisolated class UserNotificationCenterMock: UserNotificationCenterProtocol, @u
         removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers = identifiers
         removeDeliveredNotificationsWithIdentifiersReceivedInvocationsLock.withLock { removeDeliveredNotificationsWithIdentifiersUnderlyingReceivedInvocations.append(identifiers) }
         removeDeliveredNotificationsWithIdentifiersClosure?(identifiers)
+    }
+    //MARK: - setBadgeCount
+
+    nonisolated(unsafe) var setBadgeCountThrowableError: Error?
+    private let setBadgeCountCallsCountLock = NSLock()
+    private nonisolated(unsafe) var setBadgeCountUnderlyingCallsCount = 0
+    var setBadgeCountCallsCount: Int {
+        get { setBadgeCountCallsCountLock.withLock { setBadgeCountUnderlyingCallsCount } }
+        set { setBadgeCountCallsCountLock.withLock { setBadgeCountUnderlyingCallsCount = newValue } }
+    }
+    var setBadgeCountCalled: Bool {
+        return setBadgeCountCallsCount > 0
+    }
+    private let setBadgeCountReceivedNewBadgeCountLock = NSLock()
+    private nonisolated(unsafe) var setBadgeCountUnderlyingReceivedNewBadgeCount: Int?
+    var setBadgeCountReceivedNewBadgeCount: Int? {
+        get { setBadgeCountReceivedNewBadgeCountLock.withLock { setBadgeCountUnderlyingReceivedNewBadgeCount } }
+        set { setBadgeCountReceivedNewBadgeCountLock.withLock { setBadgeCountUnderlyingReceivedNewBadgeCount = newValue } }
+    }
+    private let setBadgeCountReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var setBadgeCountUnderlyingReceivedInvocations: [Int] = []
+    var setBadgeCountReceivedInvocations: [Int] {
+        get { setBadgeCountReceivedInvocationsLock.withLock { setBadgeCountUnderlyingReceivedInvocations } }
+        set { setBadgeCountReceivedInvocationsLock.withLock { setBadgeCountUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var setBadgeCountClosure: ((Int) async throws -> Void)?
+
+    @concurrent func setBadgeCount(_ newBadgeCount: Int) async throws {
+        if let error = setBadgeCountThrowableError {
+            throw error
+        }
+        setBadgeCountCallsCountLock.withLock { setBadgeCountUnderlyingCallsCount += 1 }
+        setBadgeCountReceivedNewBadgeCount = newBadgeCount
+        setBadgeCountReceivedInvocationsLock.withLock { setBadgeCountUnderlyingReceivedInvocations.append(newBadgeCount) }
+        try await setBadgeCountClosure?(newBadgeCount)
     }
     //MARK: - setNotificationCategories
 

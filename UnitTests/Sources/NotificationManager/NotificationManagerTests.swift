@@ -237,6 +237,37 @@ final class NotificationManagerTests {
         await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         #expect(notificationTappedDelegateCalled)
     }
+    
+    @Test
+    func updatingAppBadgeCountUsesTheClientSideCount() async {
+        appSettings.roomListNotificationCountEnabled = true
+        clientProxy.totalUnreadNotifications = 7
+        
+        await notificationManager.updateAppBadgeCount()
+        
+        #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 7)
+        #expect(appSettings.lastKnownBadgeCount == 7)
+    }
+    
+    @Test
+    func updatingAppBadgeCountWithoutASessionDoesNothing() async {
+        appSettings.roomListNotificationCountEnabled = true
+        notificationManager.setUserSession(nil)
+        
+        await notificationManager.updateAppBadgeCount()
+        
+        #expect(!notificationCenter.setBadgeCountCalled)
+    }
+    
+    @Test
+    func updatingAppBadgeCountWithFeatureDisabledDoesNothing() async {
+        appSettings.roomListNotificationCountEnabled = false
+        clientProxy.totalUnreadNotifications = 7
+        
+        await notificationManager.updateAppBadgeCount()
+        
+        #expect(!notificationCenter.setBadgeCountCalled)
+    }
 }
 
 extension NotificationManagerTests: @MainActor NotificationManagerDelegate {
