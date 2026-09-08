@@ -15,6 +15,8 @@ PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
 - Follow [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, Rust SDK wrappers too (`ID` not `Id`, `URL` not `Url`, `configuration` not `config` or `cfg`).
 - File headers live in `IDETemplateMacros.plist`.
 - **Import `SwiftUI`, not `UIKit`** — need `UIPasteboard` etc, `SwiftUI` bring it. `SwiftUI` re-export `Foundation` too, so no `import Foundation` beside it.
+- **Clean Code** (Robert C. Martin) Newspaper order: headline first, detail down. Stepdown rule: caller above callee, calls point down. Tests: test cases first, helpers below. Swift idiom always win on clash.
+- **Member order in type**: properties (stored + computed, public + private) → `init` → functions. `View` types: properties → `init` → views (`body` first) → functions.
 
 ### Comments
 
