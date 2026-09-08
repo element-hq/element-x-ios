@@ -6,9 +6,7 @@
 //
 
 nonisolated enum RoomListActivityVisibility: String, CaseIterable, Codable {
-    /// Show unread badges for all unread messages (the default).
-    case current
-    /// Don't show badges but bold unread room names and their latest message
+    /// Show unread badges and bold unread room names and their latest message (the default).
     case show
     /// Don't show badges and don't bold room names and messages
     case hide
