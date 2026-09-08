@@ -334,9 +334,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        // Created with the session rather than with the first call: media keys arrive over to-device
-        // and cannot be caught up on, so a stack started when the user taps the call button has
-        // already missed keys sent while the room was ringing.
+        // Created with the session rather than with the first call: to-device delivery has no
+        // catch-up, so subscribing only after our own membership goes out can miss keys sent in that
+        // window. Peers re-distribute on join, so it recovers, but avoiding the race means the first
+        // frames decrypt rather than arriving black for a moment.
         flowParameters.appSettings.nativeCallEnabledPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isEnabled in
