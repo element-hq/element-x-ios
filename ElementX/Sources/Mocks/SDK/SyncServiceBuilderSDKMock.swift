@@ -19,7 +19,6 @@ nonisolated extension SyncServiceBuilderSDKMock {
         
         withOfflineModeClosure = { [unowned self] in self }
         withSharePosEnableClosure = { [unowned self] _ in self }
-        withProfilesExtensionClosure = { [unowned self] in self }
         finishReturnValue = configuration.syncService
     }
 }

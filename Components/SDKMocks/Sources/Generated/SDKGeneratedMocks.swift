@@ -17293,35 +17293,6 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
         }
     }
 
-    //MARK: - withProfilesExtension
-
-    private let withProfilesExtensionCallsCountLock = NSLock()
-    private var withProfilesExtensionUnderlyingCallsCount = 0
-    open var withProfilesExtensionCallsCount: Int {
-        get { withProfilesExtensionCallsCountLock.withLock { withProfilesExtensionUnderlyingCallsCount } }
-        set { withProfilesExtensionCallsCountLock.withLock { withProfilesExtensionUnderlyingCallsCount = newValue } }
-    }
-    open var withProfilesExtensionCalled: Bool {
-        return withProfilesExtensionCallsCount > 0
-    }
-
-    private let withProfilesExtensionReturnValueLock = NSLock()
-    open var withProfilesExtensionUnderlyingReturnValue: SyncServiceBuilder!
-    open var withProfilesExtensionReturnValue: SyncServiceBuilder! {
-        get { withProfilesExtensionReturnValueLock.withLock { withProfilesExtensionUnderlyingReturnValue } }
-        set { withProfilesExtensionReturnValueLock.withLock { withProfilesExtensionUnderlyingReturnValue = newValue } }
-    }
-    open var withProfilesExtensionClosure: (() -> SyncServiceBuilder)?
-
-    open override func withProfilesExtension() -> SyncServiceBuilder {
-        withProfilesExtensionCallsCountLock.withLock { withProfilesExtensionUnderlyingCallsCount += 1 }
-        if let withProfilesExtensionClosure = withProfilesExtensionClosure {
-            return withProfilesExtensionClosure()
-        } else {
-            return withProfilesExtensionReturnValue
-        }
-    }
-
     //MARK: - withRoomListConnectionId
 
     private let withRoomListConnectionIdConnectionIdCallsCountLock = NSLock()
@@ -19344,24 +19315,6 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
         } else {
             return timestampReturnValue
         }
-    }
-}
-open class TimelineEventFilterSDKMock: MatrixRustSDK.TimelineEventFilter, @unchecked Sendable {
-    public init() {
-        super.init(noHandle: .init())
-    }
-
-    public required init(unsafeFromHandle handle: UInt64) {
-        fatalError("init(unsafeFromHandle:) has not been implemented")
-    }
-
-    fileprivate var handle: UInt64 {
-        get { return underlyingHandle }
-        set(value) { underlyingHandle = value }
-    }
-    fileprivate var underlyingHandle: UInt64!
-    static func reset()
-    {
     }
 }
 open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable {
