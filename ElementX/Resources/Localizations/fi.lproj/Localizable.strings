@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Yritä salauksen purkamista uudelleen";
 "action_save" = "Tallenna";
 "action_search" = "Hae";
+"action_select" = "Select";
 "action_select_all" = "Valitse kaikki";
 "action_send" = "Lähetä";
 "action_send_edited_message" = "Lähetä muokattu viesti";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Ei odottavia liittymispyyntöjä";
 "screen_knock_requests_list_initial_loading_title" = "Ladataan liittymispyyntöjä…";
 "screen_knock_requests_list_title" = "Liittymispyynnöt";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Ota käyttöön viestiketjuvastaukset";
 "screen_labs_enable_threads_description" = "Sovellus käynnistyy uudelleen muutoksen käyttöönottamiseksi.";
 "screen_labs_header_description" = "Kokeile uusimpia kehitteillä olevia ideoitamme. Nämä ominaisuudet eivät ole vielä valmiita; ne voivat olla epävakaita ja muuttua.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Jäsenet";
 "screen_room_change_role_unsaved_changes_description" = "Sinulla on tallentamattomia muutoksia";
 "screen_room_change_role_unsaved_changes_title" = "Tallennetaanko muutokset?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Lisää aihe";
 "screen_room_details_badge_encrypted" = "Salattu";
 "screen_room_details_badge_not_encrypted" = "Ei salattu";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Haluatko kutsua heidät takaisin?";
 "screen_room_invite_again_alert_title" = "Olet yksin tässä keskustelussa";
 "screen_room_live_location_banner" = "Jaetaan reaaliaikaista sijaintia";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Estä";
 "screen_room_member_details_block_alert_description" = "Estetyt käyttäjät eivät voi lähettää sinulle viestejä ja kaikki heidän viestit piilotetaan. Voit poistaa eston milloin tahansa.";
 "screen_room_member_details_block_user" = "Estä käyttäjä";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Sinulla ei ole yhtään odottavaa kutsua.";
 "screen_roomlist_filter_low_priority" = "Matala prioriteetti";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Sinulla ei ole vielä yhtään matalan prioriteetin keskustelua";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Voit poistaa suodattimien valinnan nähdäksesi muut keskustelusi.";
 "screen_roomlist_filter_mixed_empty_state_title" = "Sinulla ei ole sopivia keskusteluja tähän valintaan";
 "screen_roomlist_filter_people" = "Ihmiset";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Vahvistus pyydetty";
 "screen_session_verification_they_dont_match" = "Ne eivät täsmää";
 "screen_session_verification_they_match" = "Ne täsmäävät";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Varmista, että sovellus on avoinna toisessa laitteessa, ennen kuin aloitat vahvistuksen tästä.";
 "screen_session_verification_use_another_device_title" = "Avaa sovellus toisella vahvistetulla laitteella";
 "screen_session_verification_user_initiator_subtitle" = "Vahvista tämä käyttäjä turvallisuuden lisäämiseksi vertaamalla emojeja laitteillanne. Tee tämä käyttämällä luotettavaa viestintätapaa.";

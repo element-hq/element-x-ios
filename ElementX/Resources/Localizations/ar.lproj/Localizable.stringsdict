@@ -34,10 +34,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>معرض الصور، %1$d من الوسائط زيادة</string>
+			<key>many</key>
+			<string>معرض الصور، %1$d من الوسائط زيادة</string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
+			<string>معرض الصور، %1$d من الوسائط زيادة</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>معرض الصور، %1$d من الوسائط زيادة</string>
+			<key>two</key>
+			<string>معرض الصور، %1$d من الوسائط زيادة</string>
+			<key>zero</key>
+			<string>معرض الصور، %1$d من الوسائط زيادة</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -98,10 +106,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d مرفق…</string>
+			<key>many</key>
+			<string>%1$d مرفق…</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
+			<string>%1$d مرفق…</string>
 			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d مرفق…</string>
+			<key>two</key>
+			<string>%1$d مرفقان…</string>
+			<key>zero</key>
+			<string>%1$d مرفق…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -114,10 +130,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d عنصر وسائط…</string>
+			<key>many</key>
+			<string>%1$d عنصر وسائط…</string>
 			<key>one</key>
-			<string>%1$d media item…</string>
+			<string>%1$d عنصر وسائط…</string>
 			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$d عنصر وسائط…</string>
+			<key>two</key>
+			<string>%1$d عنصرا وسائط…</string>
+			<key>zero</key>
+			<string>%1$d عنصر وسائط…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -370,10 +394,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>شارك %1$d مرفق</string>
+			<key>many</key>
+			<string>شارك %1$d مرفق</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
+			<string>شارك %1$d مرفق</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>شارك %1$d مرفق</string>
+			<key>two</key>
+			<string>شارك %1$d مرفق</string>
+			<key>zero</key>
+			<string>شارك %1$d مرفق</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -482,10 +514,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d رسالة محذوفة</string>
+			<key>many</key>
+			<string>%1$d رسالة محذوفة</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
+			<string>%1$d رسالة محذوفة</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d رسالة محذوفة</string>
+			<key>two</key>
+			<string>%1$d رسالة محذوفة</string>
+			<key>zero</key>
+			<string>%1$d رسالة محذوفة</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -774,6 +814,22 @@
 			<string>%1$@ +%2$d آخران يريدون الانضمام إلى هذه الغرفة</string>
 			<key>zero</key>
 			<string>%1$@ يريد الانضمام إلى هذه الغرفة</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_room_selection_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d message selected</string>
+			<key>other</key>
+			<string>%1$d messages selected</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

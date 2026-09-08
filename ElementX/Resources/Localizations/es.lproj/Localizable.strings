@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Reintentar descifrado";
 "action_save" = "Guardar";
 "action_search" = "Buscar";
+"action_select" = "Select";
 "action_select_all" = "Seleccionar todo";
 "action_send" = "Enviar";
 "action_send_edited_message" = "Enviar mensaje editado";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "No hay ninguna solicitud de unión pendiente";
 "screen_knock_requests_list_initial_loading_title" = "Cargando solicitudes de unión…";
 "screen_knock_requests_list_title" = "Solicitudes de unión";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Activar respuestas en hilo";
 "screen_labs_enable_threads_description" = "La aplicación se reiniciará para aplicar este cambio.";
 "screen_labs_header_description" = "Prueba nuestras últimas ideas en desarrollo. Estas funciones aún no están terminadas; pueden ser inestables y están sujetas a cambios.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Miembros";
 "screen_room_change_role_unsaved_changes_description" = "Tienes cambios sin guardar.";
 "screen_room_change_role_unsaved_changes_title" = "¿Guardar cambios?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Añadir tema";
 "screen_room_details_badge_encrypted" = "Cifrada";
 "screen_room_details_badge_not_encrypted" = "No cifrada";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "¿Quieres volver a invitarlos?";
 "screen_room_invite_again_alert_title" = "Estás solo en este chat";
 "screen_room_live_location_banner" = "Compartiendo ubicación en tiempo real";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Bloquear";
 "screen_room_member_details_block_alert_description" = "Los usuarios bloqueados no podrán enviarte mensajes y todos sus mensajes se ocultarán. Puedes desbloquearlos cuando quieras.";
 "screen_room_member_details_block_user" = "Bloquear usuario";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "No tienes ninguna invitación pendiente.";
 "screen_roomlist_filter_low_priority" = "Prioridad baja";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Aún no tienes ningún chat de prioridad baja";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Puedes deseleccionar filtros para ver tus otros chats.";
 "screen_roomlist_filter_mixed_empty_state_title" = "No tienes chats para esta selección";
 "screen_roomlist_filter_people" = "Personas";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verificación solicitada";
 "screen_session_verification_they_dont_match" = "No coinciden";
 "screen_session_verification_they_match" = "Coinciden";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Asegúrate de tener la aplicación abierta en el otro dispositivo antes de iniciar la verificación desde aquí.";
 "screen_session_verification_use_another_device_title" = "Abre la aplicación en otro dispositivo verificado";
 "screen_session_verification_user_initiator_subtitle" = "Para mayor seguridad, verifica a este usuario comparando un conjunto de emojis en vuestros dispositivos. Hazlo utilizando una forma de comunicación de confianza.";

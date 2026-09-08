@@ -174,6 +174,7 @@
 "action_retry_decryption" = "복호화 재시도";
 "action_save" = "저장";
 "action_search" = "검색";
+"action_select" = "Select";
 "action_select_all" = "전체 선택";
 "action_send" = "보내기";
 "action_send_edited_message" = "편집한 메시지 보내기";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "보류 중인 가입 요청이 없습니다.";
 "screen_knock_requests_list_initial_loading_title" = "가입 요청을 로딩 중…";
 "screen_knock_requests_list_title" = "참여 요청";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "스레드 답글 활성화";
 "screen_labs_enable_threads_description" = "이 변경 사항을 적용하려면 앱을 다시 시작해야 합니다.";
 "screen_labs_header_description" = "개발 중인 최신 아이디어들을 미리 체험해 보세요. 이 기능들은 아직 완성되지 않았으므로 불안정할 수 있으며, 언제든 변경될 수 있습니다.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "회원들";
 "screen_room_change_role_unsaved_changes_description" = "저장되지 않은 변경 사항이 있습니다.";
 "screen_room_change_role_unsaved_changes_title" = "변경 사항을 저장하시겠습니까?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "화제 추가";
 "screen_room_details_badge_encrypted" = "암호화됨";
 "screen_room_details_badge_not_encrypted" = "암호화되지 않음";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "그들을 다시 초대하시겠습니까?";
 "screen_room_invite_again_alert_title" = "이 채팅에는 귀하만 있습니다.";
 "screen_room_live_location_banner" = "실시간 위치 공유 중";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "차단";
 "screen_room_member_details_block_alert_description" = "차단된 사용자는 메시지를 보낼 수 없으며, 그들의 모든 메시지는 숨겨집니다. 언제든지 차단 해제할 수 있습니다.";
 "screen_room_member_details_block_user" = "사용자 차단하기";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "보류 중인 초대가 없습니다.";
 "screen_roomlist_filter_low_priority" = "낮은 우선순위";
 "screen_roomlist_filter_low_priority_empty_state_title" = "아직 낮은 우선순위 채팅이 없습니다.";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "다른 채팅을 보려면 필터 선택을 해제하세요.";
 "screen_roomlist_filter_mixed_empty_state_title" = "이 선택 항목에 대한 채팅이 없습니다.";
 "screen_roomlist_filter_people" = "사람";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "검증 요청";
 "screen_session_verification_they_dont_match" = "일치하지 않습니다";
 "screen_session_verification_they_match" = "일치합니다";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "여기에서 검증을 시작하기 전에 다른 기기에서 앱이 실행되어 있는지 확인하십시오.";
 "screen_session_verification_use_another_device_title" = "다른 검증된 장치에서 앱을 실행하세요";
 "screen_session_verification_user_initiator_subtitle" = "보안을 강화하려면, 기기에 표시된 이모티콘을 비교하여 이 사용자를 확인하세요. 신뢰할 수 있는 통신 수단을 사용하여 확인하시기 바랍니다.";

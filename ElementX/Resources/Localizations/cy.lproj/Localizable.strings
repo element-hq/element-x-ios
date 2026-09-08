@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Cynnig arall ar ddadgryptio";
 "action_save" = "Cadw";
 "action_search" = "Chwilio";
+"action_select" = "Select";
 "action_select_all" = "Dewis y cyfan";
 "action_send" = "Anfon";
 "action_send_edited_message" = "Anfon neges wedi'i golygu";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Dim ond pobl wahoddwyd all gael mynediad i'r ystafell hon. Mae pob neges wedi'i hamgryptio o'r dechrau i'r diwedd.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Gall unrhyw un ddod o hyd i'r ystafell hon.\nGallwch newid hyn unrhyw bryd yng ngosodiadau ystafell.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Gall unrhyw un ofyn am gael ymuno â'r ystafell ond bydd rhaid i weinyddwr neu gymedrolwr dderbyn y cais";
 "screen_create_room_room_access_section_knocking_option_title" = "Gofyn i gael ymuno";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Dim cais i ymuno yn disgwyl";
 "screen_knock_requests_list_initial_loading_title" = "Yn llwytho ceisiadau i ymuno…";
 "screen_knock_requests_list_title" = "Ceisiadau i ymuno";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Aelodau";
 "screen_room_change_role_unsaved_changes_description" = "Mae gennych newidiadau heb eu cadw.";
 "screen_room_change_role_unsaved_changes_title" = "Cadw'r newidiadau?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Ychwanegu pwnc";
 "screen_room_details_badge_encrypted" = "Wedi'i amgryptio";
 "screen_room_details_badge_not_encrypted" = "Heb ei amgryptio";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Hoffech chi eu gwahodd yn ôl?";
 "screen_room_invite_again_alert_title" = "Rydych chi ar eich pen eich hun yn y sgwrs hon";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Rhwystro";
 "screen_room_member_details_block_alert_description" = "Fydd defnyddwyr sydd wedi'u rhwystro ddim yn gallu anfon negeseuon atoch a bydd eu holl negeseuon yn cael eu cuddio. Gallwch eu dadrwystro unrhyw bryd.";
 "screen_room_member_details_block_user" = "Rhwystro defnyddiwr";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Does gennych chi ddim gwahoddiadau yn aros.";
 "screen_roomlist_filter_low_priority" = "Blaenoriaeth Isel";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Does gennych chi ddim sgyrsiau blaenoriaeth isel eto";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill";
 "screen_roomlist_filter_mixed_empty_state_title" = "Does gennych chi ddim sgyrsiau ar gyfer y dewis hwn";
 "screen_roomlist_filter_people" = "Pobl";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Gofynnwyd am ddilysiad";
 "screen_session_verification_they_dont_match" = "Dy'n nhw ddim yn cyfateb";
 "screen_session_verification_they_match" = "Maen nhw'n cyfateb";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Gwnewch yn siŵr fod gennych yr ap ar agor yn y ddyfais arall cyn dechrau dilysu o'r fan hon.";
 "screen_session_verification_use_another_device_title" = "Agorwch yr ap ar ddyfais arall sydd wedi'i gwirio";
 "screen_session_verification_user_initiator_subtitle" = "Er mwyn sicrhau diogelwch ychwanegol, gwiriwch y defnyddiwr hwn trwy gymharu set o emojis ar eich dyfeisiau. Gwnewch hyn trwy ddefnyddio ffordd ddibynadwy o gyfathrebu.";

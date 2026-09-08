@@ -4,8 +4,8 @@
 "a11y_avatar" = "Profil resmi";
 "a11y_clear_search_field" = "Clear search field";
 "a11y_collapse_message_text_field" = "Mesaj metin alanını küçült";
-"a11y_create_poll_votes_allowed_decrease" = "Decrease votes allowed per person";
-"a11y_create_poll_votes_allowed_increase" = "Increase votes allowed per person";
+"a11y_create_poll_votes_allowed_decrease" = "Kişi başı oy sayısını azalt.";
+"a11y_create_poll_votes_allowed_increase" = "Kişi başı oy sayısını artır.";
 "a11y_custom_emoji" = "Custom emoji";
 "a11y_delete" = "Sil";
 "a11y_duration" = "Süre: %1$@";
@@ -15,7 +15,7 @@
 "a11y_gallery_attachment" = "Gallery, attachment %1$d";
 "a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
 "a11y_gallery_image" = "Gallery, image %1$d";
-"a11y_gallery_scanning" = "Gallery, scanning %1$d";
+"a11y_gallery_scanning" = "Galeri, taranıyor%1$d";
 "a11y_gallery_video" = "Gallery, video %1$d";
 "a11y_hide_password" = "Şifreyi gizle";
 "a11y_info" = "Bilgi";
@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Şifre çözmeyi tekrar deneyin";
 "action_save" = "Kaydet";
 "action_search" = "Ara";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Gönder";
 "action_send_edited_message" = "Send edited message";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Bu odaya yalnızca davet edilen kişiler erişebilir. Tüm mesajlar uçtan uca şifrelenir.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Bu odayı herkes bulabilir.\nBunu istediğiniz zaman oda ayarlarından değiştirebilirsiniz.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Herkes odaya katılmayı isteyebilir ancak bir yönetici veya moderatörün isteği kabul etmesi gerekecektir";
 "screen_create_room_room_access_section_knocking_option_title" = "Katılmak için sor";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Bekleyen katılım isteği yok";
 "screen_knock_requests_list_initial_loading_title" = "Katılma istekleri yükleniyor…";
 "screen_knock_requests_list_title" = "Katılma istekleri";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Konu yanıtlarını etkinleştir";
 "screen_labs_enable_threads_description" = "Bu değişikliği uygulamak için uygulama yeniden başlatılacak.";
 "screen_labs_header_description" = "Geliştirme aşamasındaki en yeni fikirlerimizi deneyin. Bu özellikler henüz tamamlanmamıştır ve kararsız olabilir.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Üyeler";
 "screen_room_change_role_unsaved_changes_description" = "Kaydedilmemiş değişiklikleriniz var.";
 "screen_room_change_role_unsaved_changes_title" = "Değişiklikleri Kaydet?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Konu ekle";
 "screen_room_details_badge_encrypted" = "Şifrelenmiş";
 "screen_room_details_badge_not_encrypted" = "Şifrelenmemiş";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Onları geri davet etmek ister misin?";
 "screen_room_invite_again_alert_title" = "Bu sohbette yalnızsın";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Engelle";
 "screen_room_member_details_block_alert_description" = "Engellenen kullanıcılar size mesaj gönderemez ve tüm mesajları gizlenir. İstediğiniz zaman engellemelerini kaldırabilirsiniz.";
 "screen_room_member_details_block_user" = "Kullanıcıyı engelle";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Bekleyen davetiniz yok.";
 "screen_roomlist_filter_low_priority" = "Düşük Öncelikli";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Diğer sohbetlerinizi görmek için filtrelerin seçimini kaldırabilirsiniz";
 "screen_roomlist_filter_mixed_empty_state_title" = "Bu seçim için sohbetiniz yok";
 "screen_roomlist_filter_people" = "Kişiler";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Doğrulama talep edildi";
 "screen_session_verification_they_dont_match" = "Eşleşmiyorlar";
 "screen_session_verification_they_match" = "Eşleşiyorlar";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Buradan doğrulamaya başlamadan önce uygulamanın diğer cihazda açık olduğundan emin olun.";
 "screen_session_verification_use_another_device_title" = "Uygulamayı doğrulanmış başka bir cihazda açın";
 "screen_session_verification_user_initiator_subtitle" = "Daha fazla güvenlik için, cihazlarınızdaki bir dizi emojiyi karşılaştırarak bu kullanıcıyı doğrulayın. Bunu, iletişim kurmak için güvenilir bir yol kullanarak yapın.";

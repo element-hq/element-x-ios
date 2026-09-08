@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Torna a intentar desxifrar";
 "action_save" = "Desa";
 "action_search" = "Cerca";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Envia";
 "action_send_edited_message" = "Send edited message";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Només s'hi poden unir les persones convidades.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Tothom pot trobar aquesta sala.\nPots canviar-ho en qualsevol moment a la configuració de sala.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Qualsevol persona pot sol·licitar unir-s'hi però un administrador o moderador l'haurà d'acceptar";
 "screen_create_room_room_access_section_knocking_option_title" = "Permet sol·licituds d'unió";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "No hi ha sol·licituds d'unió pendents";
 "screen_knock_requests_list_initial_loading_title" = "Carregant sol·licituds d'unió…";
 "screen_knock_requests_list_title" = "Sol·licituds d'unió";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Membres";
 "screen_room_change_role_unsaved_changes_description" = "Hi ha canvis sense desar.";
 "screen_room_change_role_unsaved_changes_title" = "Desar canvis?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Afegeix tema";
 "screen_room_details_badge_encrypted" = "Xifrada";
 "screen_room_details_badge_not_encrypted" = "No xifrada";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Vols tornar-los a convidar-los?";
 "screen_room_invite_again_alert_title" = "No hi ha ningú més al xat";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Bloqueja";
 "screen_room_member_details_block_alert_description" = "Els usuaris bloquejats no podran enviar-te missatges i tots els seus missatges s'amagaran. Pots desbloquejar-los en qualsevol moment.";
 "screen_room_member_details_block_user" = "Bloqueja usuari";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "No tens cap invitació pendent.";
 "screen_roomlist_filter_low_priority" = "Prioritat baixa";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Pots desseleccionar els filtres per veure els altres xats";
 "screen_roomlist_filter_mixed_empty_state_title" = "Cap xats per a aquesta selecció";
 "screen_roomlist_filter_people" = "Persones";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verificació sol·licitada";
 "screen_session_verification_they_dont_match" = "No coincideixen";
 "screen_session_verification_they_match" = "Coincideixen";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Assegura't que tens l'aplicació oberta a l'altre dispositiu abans d'inicar la verificació des d'aquí.";
 "screen_session_verification_use_another_device_title" = "Obre l'aplicació en un altre dispositiu verificat";
 "screen_session_verification_user_initiator_subtitle" = "Per a més seguretat, verifica aquest usuari comparant un conjunt d'emoticones vostres dispositius. Fes-ho a través d'un mitjà de comunicació fiable, o en persona.";

@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Thử giải mã lại";
 "action_save" = "Lưu";
 "action_search" = "Tìm kiếm";
+"action_select" = "Select";
 "action_select_all" = "Chọn tất cả";
 "action_send" = "Gửi";
 "action_send_edited_message" = "Gửi tin nhắn đã chỉnh sửa";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Chỉ những người được mời mới có thể tham gia.";
 "screen_create_room_private_option_title" = "Riêng tư";
 "screen_create_room_public_option_description" = "Bất kỳ ai cũng có thể tìm thấy phòng này. \nBạn có thể thay đổi cài đặt phòng bất cứ lúc nào.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Công cộng";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Allow ask to join";
@@ -785,7 +786,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Riêng tư";
-"screen_create_room_room_access_section_public_option_description" = "Anyone can join.";
+"screen_create_room_room_access_section_public_option_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_room_access_section_public_option_title" = "Công cộng";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Không có yêu cầu tham gia nào đang chờ xử lý";
 "screen_knock_requests_list_initial_loading_title" = "Đang tải các yêu cầu tham gia…";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Cho phép trả lời theo chủ đề";
 "screen_labs_enable_threads_description" = "Ứng dụng sẽ khởi động lại để áp dụng thay đổi này.";
 "screen_labs_header_description" = "Hãy thử các ý tưởng mới nhất đang được phát triển. Các tính năng này chưa hoàn thiện; có thể không ổn định và có thể thay đổi.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Thành viên";
 "screen_room_change_role_unsaved_changes_description" = "Bạn có thay đổi chưa được lưu.";
 "screen_room_change_role_unsaved_changes_title" = "Lưu thay đổi?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Thêm chủ đề";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Bạn có muốn mời họ quay lại không?";
 "screen_room_invite_again_alert_title" = "Bạn đang một mình trong cuộc trò chuyện này";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Chặn";
 "screen_room_member_details_block_alert_description" = "Người dùng bị chặn sẽ không thể gửi tin nhắn cho bạn và tất cả tin nhắn của họ sẽ bị ẩn. Bạn có thể bỏ chặn họ bất cứ lúc nào.";
 "screen_room_member_details_block_user" = "Chặn người dùng";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Ưu tiên thấp";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Bạn có thể bỏ chọn bộ lọc để xem các cuộc trò chuyện khác";
 "screen_roomlist_filter_mixed_empty_state_title" = "Bạn không có cuộc trò chuyện nào cho lựa chọn này";
 "screen_roomlist_filter_people" = "Danh bạ";
@@ -1457,7 +1469,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Once enabled, encryption cannot be disabled.";
 "screen_security_and_privacy_encryption_section_header" = "Mã hóa";
 "screen_security_and_privacy_encryption_toggle_title" = "Enable end-to-end encryption";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join, including people outside your organisation.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Chúng không khớp nhau";
 "screen_session_verification_they_match" = "Chúng khớp với nhau";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";

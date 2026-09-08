@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Tentar decifragem novamente";
 "action_save" = "Guardar";
 "action_search" = "Pesquisar";
+"action_select" = "Select";
 "action_select_all" = "Selecionar tudo";
 "action_send" = "Enviar";
 "action_send_edited_message" = "Enviar mensagem editada";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Apenas as pessoas convidadas podem entrar.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Qualquer um pode encontrar esta sala. \nPode alterar esta opção nas definições da sala.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Qualquer pessoa pode pedir para entrar, mas um administrador ou um moderador terá de aceitar o pedido.";
 "screen_create_room_room_access_section_knocking_option_title" = "Pedir para participar";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Sem pedidos de entrada";
 "screen_knock_requests_list_initial_loading_title" = "A carregar pedidos de entrada…";
 "screen_knock_requests_list_title" = "Pedidos de entrada";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Ativar respostas em tópicos";
 "screen_labs_enable_threads_description" = "A aplicação será reiniciada para aplicar esta alteração.";
 "screen_labs_header_description" = "Experimenta as nossas mais recentes ideias ainda em desenvolvimento. Estas funcionalidades não estão finalizadas e por isso podem ser instáveis ou acabarem alteradas.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Participantes";
 "screen_room_change_role_unsaved_changes_description" = "Tens alterações por guardar.";
 "screen_room_change_role_unsaved_changes_title" = "Guardar alterações?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Adicionar descrição";
 "screen_room_details_badge_encrypted" = "Cifrada";
 "screen_room_details_badge_not_encrypted" = "Não cifrada";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Gostarias de convidá-lo de volta?";
 "screen_room_invite_again_alert_title" = "Estás sozinho nesta conversa";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Bloquear";
 "screen_room_member_details_block_alert_description" = "Os utilizadores bloqueados não poderão enviar-te mensagens e todas as suas mensagens ficarão ocultas. Podes desbloqueá-los em qualquer altura.";
 "screen_room_member_details_block_user" = "Bloquear utilizador";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Não tens nenhum convite pendente.";
 "screen_roomlist_filter_low_priority" = "Prioridade baixa";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Ainda não tens conversas de prioridade baixa";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Podes anular a seleção dos filtros para veres as tuas outras conversas";
 "screen_roomlist_filter_mixed_empty_state_title" = "Não tens nenhuma conversa selecionada";
 "screen_roomlist_filter_people" = "Pessoas";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verificação solicitada";
 "screen_session_verification_they_dont_match" = "Não correspondem";
 "screen_session_verification_they_match" = "Correspondem";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Certifica-te de que tens a aplicação aberta no outro dispositivo antes de iniciares a verificação aqui.";
 "screen_session_verification_use_another_device_title" = "Abre a aplicação noutro dispositivo verificado";
 "screen_session_verification_user_initiator_subtitle" = "Para maior segurança, verifica este utilizador comparando um conjunto de emojis nos teus dispositivos. Faz isto utilizando uma forma de comunicação de confiança.";

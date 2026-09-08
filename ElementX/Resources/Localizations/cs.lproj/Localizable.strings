@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Opakovat dešifrování";
 "action_save" = "Uložit";
 "action_search" = "Hledat";
+"action_select" = "Select";
 "action_select_all" = "Vybrat vše";
 "action_send" = "Odeslat";
 "action_send_edited_message" = "Odeslat upravenou zprávu";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Žádná čekající žádost o vstup";
 "screen_knock_requests_list_initial_loading_title" = "Načítání žádostí o vstup...";
 "screen_knock_requests_list_title" = "Žádosti o vstup";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Povolit odpovědi ve vlákně";
 "screen_labs_enable_threads_description" = "Aplikace se restartuje, aby se tato změna projevila.";
 "screen_labs_header_description" = "Vyzkoušejte naše nejnovější nápady, které jsou ve vývoji. Tyto funkce nejsou finalizované; mohou být nestabilní a mohou se změnit.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Členové";
 "screen_room_change_role_unsaved_changes_description" = "Máte neuložené změny.";
 "screen_room_change_role_unsaved_changes_title" = "Uložit změny?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Přidat téma";
 "screen_room_details_badge_encrypted" = "Šifrováno";
 "screen_room_details_badge_not_encrypted" = "Není šifrováno";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Chtěli byste je pozvat zpět?";
 "screen_room_invite_again_alert_title" = "V tomto chatu jste sami";
 "screen_room_live_location_banner" = "Sdílení aktuální polohy";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Zablokovat";
 "screen_room_member_details_block_alert_description" = "Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat.";
 "screen_room_member_details_block_user" = "Zablokovat uživatele";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Nemáte žádné nevyřízené pozvánky.";
 "screen_roomlist_filter_low_priority" = "Nízká priorita";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Zatím nemáte žádné chaty s nízkou prioritou";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Můžete zrušit výběr filtrů, abyste viděli své další chaty";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nemáte chaty pro tento výběr";
 "screen_roomlist_filter_people" = "Lidé";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Požadováno ověření";
 "screen_session_verification_they_dont_match" = "Neshodují se";
 "screen_session_verification_they_match" = "Shodují se";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Před zahájením ověřování se ujistěte, že máte aplikaci otevřenou na druhém zařízení.";
 "screen_session_verification_use_another_device_title" = "Otevřete aplikaci na jiném ověřeném zařízení";
 "screen_session_verification_user_initiator_subtitle" = "Pro větší bezpečnost ověřte tohoto uživatele porovnáním sady emotikonů na svých zařízeních. Proveďte to pomocí důvěryhodného způsobu komunikace.";

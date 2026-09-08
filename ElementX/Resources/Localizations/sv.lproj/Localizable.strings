@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Försök att avkryptera igen";
 "action_save" = "Spara";
 "action_search" = "Sök";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Skicka";
 "action_send_edited_message" = "Skicka redigerat message";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "Endast inbjudna personer kan gå med.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Vem som helst kan hitta det här rummet.\nDu kan ändra detta när som helst i rumsinställningarna.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Vem som helst kan be om att gå med men en administratör eller en moderator måste acceptera begäran";
 "screen_create_room_room_access_section_knocking_option_title" = "Tillåt att be om att gå med";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Ingen väntande begäran om att gå med";
 "screen_knock_requests_list_initial_loading_title" = "Laddar förfrågningar om att gå med …";
 "screen_knock_requests_list_title" = "Begäran om att gå med";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Medlemmar";
 "screen_room_change_role_unsaved_changes_description" = "Du har osparade ändringar.";
 "screen_room_change_role_unsaved_changes_title" = "Spara ändringar?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Lägg till ämne";
 "screen_room_details_badge_encrypted" = "Krypterat";
 "screen_room_details_badge_not_encrypted" = "Inte krypterat";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Vill du bjuda tillbaka dem?";
 "screen_room_invite_again_alert_title" = "Du är ensam i den här chatten";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Blockera";
 "screen_room_member_details_block_alert_description" = "Blockerade användare kommer inte att kunna skicka meddelanden till dig och alla deras meddelanden kommer att döljas. Du kan avblockera dem när som helst.";
 "screen_room_member_details_block_user" = "Blockera användare";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Du har inga väntande inbjudningar.";
 "screen_roomlist_filter_low_priority" = "Låg prioritet";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Du har inga lågprioriterade chattar ännu";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Du kan avmarkera filter för att se dina andra chattar";
 "screen_roomlist_filter_mixed_empty_state_title" = "Du har inga chattar för det här valet";
 "screen_roomlist_filter_people" = "Personer";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verifiering begärd";
 "screen_session_verification_they_dont_match" = "De matchar inte";
 "screen_session_verification_they_match" = "De matchar";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Se till att du har appen öppen på den andra enheten innan du startar verifieringen härifrån.";
 "screen_session_verification_use_another_device_title" = "Öppna appen på en annan verifierad enhet";
 "screen_session_verification_user_initiator_subtitle" = "För extra säkerhet, verifiera den här användaren genom att jämföra en uppsättning emojier på dina enheter. Gör detta med hjälp av ett betrott kommunikationssätt.";

@@ -174,6 +174,7 @@
 "action_retry_decryption" = "გაშიფვრის ხელახლა ცდა";
 "action_save" = "შენახვა";
 "action_search" = "ძიება";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "გაგზავნა";
 "action_send_edited_message" = "Send edited message";
@@ -777,7 +778,7 @@
 "screen_create_room_private_option_description" = "ამ ოთახში შეტყობინებები დაშიფრულია. შემდგომ დაშიფვრის გამორთვა შეუძლებელია.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "ყველას ამ ოთახის მოძებნა შეუძლია.\nთქვენ ნებისმიერ დროს შეგიძლიათ ამის შეცვლა ოთახის პარამეტრებში.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Allow ask to join";
@@ -785,7 +786,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
-"screen_create_room_room_access_section_public_option_description" = "Anyone can join.";
+"screen_create_room_room_access_section_public_option_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "წევრები";
 "screen_room_change_role_unsaved_changes_description" = "თქვენ გაქვთ შეუნახავი ცვლილებები";
 "screen_room_change_role_unsaved_changes_title" = "შენახვა?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "თემის დამატება";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "გსურთ მათი კვლავ მოწვევა?";
 "screen_room_invite_again_alert_title" = "თქვენ მარტო ხართ ამ ჩატში";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "დაბლოკვა";
 "screen_room_member_details_block_alert_description" = "დაბლოკილი მომხმარებლები ვერ შეძლებენ თქვენთვის შეტყობინების გაგზავნას და ყველა მათი შეტყობინება თქვენთვის დამალული იქნება. თქვენ მათი განბლოკვა ნებისმეირ დროს შეგიძლიათ.";
 "screen_room_member_details_block_user" = "მომხმარებლის დაბლოკვა";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "დაბალი პრიორიტეტი";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "თქვენ შეგიძლიათ წაშალოთ ფილტრები სხვა ჩეთების გამოსაჩენად";
 "screen_roomlist_filter_mixed_empty_state_title" = "თქვენ არ გაქვთ ოთახები ამ არჩევნისთვის";
 "screen_roomlist_filter_people" = "ხალხი";
@@ -1457,7 +1469,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Once enabled, encryption cannot be disabled.";
 "screen_security_and_privacy_encryption_section_header" = "Encryption";
 "screen_security_and_privacy_encryption_toggle_title" = "Enable end-to-end encryption";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join, including people outside your organisation.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "ისინი არ ემთხვევიან ერთმანეთს";
 "screen_session_verification_they_match" = "ისინი ემთხვევიან ერთმანეთს";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";

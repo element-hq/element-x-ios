@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Повторити спробу розшифрування";
 "action_save" = "Зберегти";
 "action_search" = "Шукати";
+"action_select" = "Select";
 "action_select_all" = "Вибрати все";
 "action_send" = "Надіслати";
 "action_send_edited_message" = "Надіслати змінене повідомлення";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Немає нерозглянутих запитів на приєднання";
 "screen_knock_requests_list_initial_loading_title" = "Завантаження запитів на приєднання…";
 "screen_knock_requests_list_title" = "Запити на приєднання";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Увімкнути відповіді в гілках";
 "screen_labs_enable_threads_description" = "Застосунок перезапуститься, щоб застосувати цю зміну.";
 "screen_labs_header_description" = "Випробуйте найновіші ідеї наших розробників. Ці функції ще не завершені, вони можуть бути нестабільними та змінюватись.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Учасники";
 "screen_room_change_role_unsaved_changes_description" = "У вас є не збережені зміни.";
 "screen_room_change_role_unsaved_changes_title" = "Зберегти зміни?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Додати тему";
 "screen_room_details_badge_encrypted" = "Зашифровано";
 "screen_room_details_badge_not_encrypted" = "Не зашифровано";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Чи хотіли б ви запросити їх знову?";
 "screen_room_invite_again_alert_title" = "Ви одні в цій бесіді";
 "screen_room_live_location_banner" = "Спільний доступ до місцезнаходження у реальному часі";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Заблокувати";
 "screen_room_member_details_block_alert_description" = "Заблоковані користувачі не зможуть надсилати вам повідомлення, і всі їхні повідомлення будуть приховані. Ви можете розблокувати їх у будь-який час.";
 "screen_room_member_details_block_user" = "Заблокувати користувача";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "У вас немає запрошень, що очікують на розгляд.";
 "screen_roomlist_filter_low_priority" = "Низький пріоритет";
 "screen_roomlist_filter_low_priority_empty_state_title" = "У вас ще немає неважливих бесід";
+"screen_roomlist_filter_mention" = "Згадка";
+"screen_roomlist_filter_mention_empty_state_title" = "У вас немає непрочитаних згадок";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Ви можете зняти фільтри, щоб побачити інші ваші бесіди";
 "screen_roomlist_filter_mixed_empty_state_title" = "Ви не маєте бесід для цієї категорії";
 "screen_roomlist_filter_people" = "Люди";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Запит на звіряння";
 "screen_session_verification_they_dont_match" = "Вони не збігаються";
 "screen_session_verification_they_match" = "Вони збігаються";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Перш ніж розпочати звіряння звідси, переконайтеся, що ви відкрили застосунок на іншому пристрої.";
 "screen_session_verification_use_another_device_title" = "Відкрийте застосунок на іншому звіреному пристрої";
 "screen_session_verification_user_initiator_subtitle" = "Для додаткової безпеки звірте цього користувача, порівнявши набір емоджі на ваших пристроях. Зробіть це, використовуючи надійний спосіб спілкування.";

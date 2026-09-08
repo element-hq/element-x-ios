@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Reîncercați decriptarea";
 "action_save" = "Salvați";
 "action_search" = "Căutați";
+"action_select" = "Select";
 "action_select_all" = "Selectați tot";
 "action_send" = "Trimiteți";
 "action_send_edited_message" = "Trimiteți mesajul editat";
@@ -950,6 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Nu există cereri de alăturare în așteptare";
 "screen_knock_requests_list_initial_loading_title" = "Se încarcă cererile de alăturare...";
 "screen_knock_requests_list_title" = "Cereri de alăturare";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Activați răspunsurile în fir";
 "screen_labs_enable_threads_description" = "Aplicația va reporni pentru a aplica această modificare.";
 "screen_labs_header_description" = "Încercați cele mai noi idei în curs de dezvoltare. Aceste funcții nu sunt finalizate; pot fi instabile și pot suferi modificări.";
@@ -1285,6 +1290,10 @@
 "screen_room_change_role_section_users" = "Membri";
 "screen_room_change_role_unsaved_changes_description" = "Aveți modificări nesalvate.";
 "screen_room_change_role_unsaved_changes_title" = "Salvați modificările?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Adăugare subiect";
 "screen_room_details_badge_encrypted" = "Criptat";
 "screen_room_details_badge_not_encrypted" = "Necriptat";
@@ -1330,6 +1339,7 @@
 "screen_room_invite_again_alert_message" = "Doriți să îi invitați înapoi?";
 "screen_room_invite_again_alert_title" = "Sunteți singur în această cameră";
 "screen_room_live_location_banner" = "Se partajează locația în timp real";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Blocați";
 "screen_room_member_details_block_alert_description" = "Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând.";
 "screen_room_member_details_block_user" = "Blocați utilizatorul";
@@ -1432,6 +1442,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Nu aveți invitații în așteptare.";
 "screen_roomlist_filter_low_priority" = "Prioritate scăzută";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Nu aveți încă niciun chat cu prioritate scăzută.";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Puteți deselecta filtrele pentru a vedea celelalte chat-uri";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nu aveți chat-uri pentru această selecție";
 "screen_roomlist_filter_people" = "Persoane";
@@ -1518,6 +1530,8 @@
 "screen_session_verification_request_title" = "Verificare cerută";
 "screen_session_verification_they_dont_match" = "Nu se potrivesc";
 "screen_session_verification_they_match" = "Se potrivesc";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Asigurați-vă că aplicația este deschisă pe celălalt dispozitiv înainte de a începe verificarea de aici.";
 "screen_session_verification_use_another_device_title" = "Deschideți aplicația pe un alt dispozitiv verificat";
 "screen_session_verification_user_initiator_subtitle" = "Pentru securitate suplimentară, verificați acest utilizator comparând un set de emoji-uri pe dispozitivele dvs. Faceți acest lucru utilizând o metodă de comunicare de încredere.";
