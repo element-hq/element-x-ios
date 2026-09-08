@@ -47,7 +47,8 @@ struct RoomStateEventStringBuilderTests {
                                                             previousDisplayName: oldName,
                                                             avatarURLString: nil,
                                                             previousAvatarURLString: nil,
-                                                            member: sender.id,
+                                                            memberID: sender.id,
+                                                            memberDisplayName: sender.disambiguatedDisplayName ?? sender.id,
                                                             memberIsYou: sender.id == userID)
         #expect(string == expectedString)
     }
@@ -76,12 +77,14 @@ struct RoomStateEventStringBuilderTests {
     private func validateAvatarChange(senderID: String, senderName: String? = nil,
                                       oldAvatarURL: String?, newAvatarURL: String?,
                                       expectedString: String) {
+        // The SDK only includes the display name when it changed, so it is nil for an avatar-only change.
         let sender = TimelineItemSender(id: senderID, displayName: senderName)
-        let string = stringBuilder.buildProfileChangeString(displayName: senderName,
-                                                            previousDisplayName: senderName,
+        let string = stringBuilder.buildProfileChangeString(displayName: nil,
+                                                            previousDisplayName: nil,
                                                             avatarURLString: newAvatarURL,
                                                             previousAvatarURLString: oldAvatarURL,
-                                                            member: sender.id,
+                                                            memberID: sender.id,
+                                                            memberDisplayName: sender.disambiguatedDisplayName ?? sender.id,
                                                             memberIsYou: sender.id == userID)
         #expect(string == expectedString)
     }
