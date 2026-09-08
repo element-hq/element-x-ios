@@ -21,69 +21,70 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
     let selection: TimelineItemAccessibilitySelection
     let action: () -> Void
     
-    func body(content: Content) -> some View {
-        switch selection {
-        case .selecting(let isSelected):
-            if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isBulkSelectable {
-                content
-                    .accessibilityElement(children: .combine)
-                    .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
-                    .accessibilityAction(.default, action)
-            } else {
-                // Items that can't be selected are inert while selecting.
-                content
-                    .accessibilityElement(children: .combine)
-            }
-        case .none:
-            regularBody(content: content)
+    private var isSelecting: Bool {
+        if case .selecting = selection {
+            return true
         }
+        return false
     }
     
-    @ViewBuilder
-    private func regularBody(content: Content) -> some View {
+    func body(content: Content) -> some View {
         switch timelineItem {
         case is PollRoomTimelineItem:
-            content
-                .accessibilityActions {
-                    Button(L10n.commonMessageActions) {
-                        action()
-                    }
-                }
+            // The answers stay traversable on their own, unless the whole poll acts as a selection toggle.
+            if isSelecting {
+                interactions(for: content.accessibilityElement(children: .combine))
+            } else {
+                interactions(for: content)
+            }
         // A gallery is a container so that each of its attachments can be focussed on its own.
         // Everything that isn't an attachment is announced when entering it, as the caption and
         // the send info are hidden where they're shown to avoid being read twice.
         case let timelineItem as GalleryRoomTimelineItem:
-            content
-                .accessibilityElement(children: .contain)
+            interactions(for: content
+                .accessibilityElement(children: isSelecting ? .combine : .contain)
                 .accessibilityLabel { _ in
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                     if let caption = timelineItem.content.caption, !caption.isBlank {
                         Text(caption)
                     }
                     Text(timelineItem.localizedSendInfo)
-                }
-                .accessibilityActions {
-                    Button(L10n.commonMessageActions) {
-                        action()
-                    }
-                }
+                })
         case let timelineItem as EventBasedTimelineItemProtocol:
-            content
+            interactions(for: content
                 .accessibilityRepresentation {
                     VStack(spacing: 8) {
                         Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         content
                     }
                 }
+                .accessibilityElement(children: .combine))
+        default:
+            content
                 .accessibilityElement(children: .combine)
+        }
+    }
+    
+    /// Offers the message actions, or turns the item into a selection toggle while selecting.
+    @ViewBuilder
+    private func interactions(for view: some View) -> some View {
+        switch selection {
+        case .none:
+            view
                 .accessibilityActions {
                     Button(L10n.commonMessageActions) {
                         action()
                     }
                 }
-        default:
-            content
-                .accessibilityElement(children: .combine)
+        case .selecting(let isSelected):
+            if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isBulkSelectable {
+                view
+                    .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+                    .accessibilityAction(.default, action)
+            } else {
+                // Items that can't be selected are inert while selecting.
+                view
+            }
         }
     }
 }
