@@ -5,7 +5,7 @@
 ✨ Features
 * Autoplay the next voice message if it is the next timeline item. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6089
 * Add a Mentions room list filter by @ara4n in https://github.com/element-hq/element-x-ios/pull/5885
-* Add support for <details> and <summary> tags by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6077
+* Add support for `<details>` and `<summary>` tags by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6077
 * Redaction reason by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6098
 
 🙌 Improvements
