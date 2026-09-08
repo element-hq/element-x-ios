@@ -135,6 +135,31 @@ struct DeveloperOptionsScreen: View {
                     }
             }
             
+            Section {
+                Toggle(isOn: $context.nativeCallEnabled) {
+                    Text("Native calls")
+                    Text("Uses the matrix-rust-rtc stack instead of the Element Call web view.")
+                }
+                
+                Toggle(isOn: $context.nativeCallPictureInPictureEnabled) {
+                    Text("Picture in Picture")
+                    Text("Minimized video calls use the system window; off, they use the bar.")
+                }
+                
+                Picker("Element Call compatibility", selection: $context.nativeCallElementCallCompat) {
+                    ForEach(NativeCallElementCallCompat.allCases, id: \.self) { compat in
+                        Text(compat.title).tag(compat)
+                    }
+                }
+                // Sticky-event modes need SDK bindings the released package lacks; calls use the
+                // state-event mode regardless of this setting for now.
+                .disabled(true)
+            } header: {
+                Text("Native call")
+            } footer: {
+                Text("Experimental. Joins in Element Call state-event compatibility mode for interop with Element Web.")
+            }
+            
             Section("Notifications") {
                 Toggle(isOn: $context.hideQuietNotificationAlerts) {
                     Text("Hide quiet alerts")
@@ -218,6 +243,16 @@ struct DeveloperOptionsScreen: View {
                     Button(L10n.actionDone, action: dismiss.callAsFunction)
                 }
             }
+        }
+    }
+}
+
+private extension NativeCallElementCallCompat {
+    var title: String {
+        switch self {
+        case .off: "MSC4143 (off)"
+        case .stickyEvents: "Sticky events"
+        case .stateEvents: "State events (Element Web)"
         }
     }
 }

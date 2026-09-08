@@ -9,6 +9,8 @@
 import AVKit
 import Combine
 import Compound
+import ElementCall
+import ElementCallUI
 import SwiftState
 import SwiftUI
 
@@ -318,11 +320,30 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         flowParameters.elementCallService.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
+                guard let self else { return }
                 switch action {
                 case .endCall:
-                    self?.dismissCallScreenIfNeeded()
+                    // The native controller hears this through its own system port and tears the
+                    // call down itself, so only the web-view screen needs dismissing here.
+                    if elementCallController?.isInCall != true {
+                        dismissCallScreenIfNeeded()
+                    }
                 default:
                     break
+                }
+            }
+            .store(in: &cancellables)
+        
+        // Created with the session rather than with the first call: media keys arrive over to-device
+        // and cannot be caught up on, so a stack started when the user taps the call button has
+        // already missed keys sent while the room was ringing.
+        flowParameters.appSettings.nativeCallEnabledPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                guard let self else { return }
+                flowParameters.elementCallService.setNativeCallModeEnabled(isEnabled)
+                if isEnabled, elementCallStack == nil {
+                    startElementCallStack()
                 }
             }
             .store(in: &cancellables)
@@ -476,7 +497,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentCallScreen(configuration: ElementCallConfiguration) {
         guard flowParameters.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
-            callScreenPictureInPictureController?.stopPictureInPicture()
+            if let elementCallController, elementCallController.isInCall {
+                restoreElementCallScreen()
+            } else {
+                callScreenPictureInPictureController?.stopPictureInPicture()
+            }
+            return
+        }
+        
+        if flowParameters.appSettings.nativeCallEnabled {
+            presentElementCallScreen(configuration: configuration)
             return
         }
         
@@ -511,6 +541,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func hideCallScreenOverlay() {
+        if let elementCallController, elementCallController.isInCall,
+           navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
+            // The controller decides whether a system window is available and says so through its
+            // actions, so there is nothing to choose between here.
+            elementCallController.requestMinimize()
+            navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+            return
+        }
+        
         guard let callScreenPictureInPictureController else {
             MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
             dismissCallScreenIfNeeded()
@@ -522,11 +561,105 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationTabCoordinator.setOverlayPresentationMode(.minimized)
     }
     
-    private func dismissCallScreenIfNeeded() {
-        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator else {
+    // MARK: - Native calls
+    
+    private var elementCallStack: ElementCallStack?
+    
+    private var elementCallController: ElementCallController? {
+        elementCallStack?.controller
+    }
+    
+    /// Builds the call stack for this session. Everything the package needs is supplied here, which
+    /// is the whole of the integration surface: a transport, the system call provider, settings, the
+    /// look, and a log sink.
+    private func startElementCallStack() {
+        MatrixRtcLogBridge.install()
+        
+        guard let transport = userSession.clientProxy.makeElementCallTransport() else {
+            MXLog.error("Cannot start the native call stack without a transport")
             return
         }
         
+        let style = ElementCallStyle(theme: ElementCallCompoundTheme(),
+                                     icons: ElementCallCompoundIcons(),
+                                     avatars: ElementCallCompoundAvatars(mediaProvider: userSession.mediaProvider),
+                                     strings: .init(you: L10n.commonYou,
+                                                    error: L10n.commonError,
+                                                    stop: L10n.actionStop,
+                                                    back: L10n.actionBack))
+        
+        let stack = ElementCallStack(transport: transport,
+                                     system: ElementCallSystemAdapter(service: flowParameters.elementCallService),
+                                     options: ElementCallOptionsAdapter(appSettings: flowParameters.appSettings),
+                                     style: style,
+                                     logger: ElementCallLoggerAdapter())
+        elementCallStack = stack
+        
+        stack.controller.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .minimizeRequested:
+                    navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+                case .restoreRequested:
+                    restoreElementCallScreen()
+                case .ended:
+                    navigationTabCoordinator.setMinimizedOverlayAccessory(nil)
+                    navigationTabCoordinator.setOverlayCoordinator(nil)
+                    stack.controller.reset()
+                case .pictureInPictureStarted:
+                    // Also reached when the system started the window on backgrounding, so whatever
+                    // is in the minimized slot has to come down whether we asked or not.
+                    navigationTabCoordinator.setMinimizedOverlayAccessory(nil)
+                    navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+                case .pictureInPictureUnavailable:
+                    showMinimizedCallBar(for: stack.controller)
+                }
+            }
+            .store(in: &cancellables)
+        
+        Task { await stack.start() }
+    }
+    
+    private func presentElementCallScreen(configuration: ElementCallConfiguration) {
+        if elementCallStack == nil {
+            startElementCallStack()
+        }
+        guard let controller = elementCallController else { return }
+        
+        let roomProxy = configuration.roomProxy
+        // Starting rings the room; joining one already running happens quietly.
+        let callData = ElementCallData(isAudioCall: configuration.voiceOnly,
+                                       isStartingCall: !roomProxy.infoPublisher.value.hasRoomCall)
+        controller.startCall(callData, room: ElementCallRoomContextAdapter(roomProxy: roomProxy))
+        
+        let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: controller))
+        navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
+        flowParameters.analytics.track(screen: .RoomCall)
+    }
+    
+    /// The bar the app shows while a call is minimized with no system window: an audio call, or a
+    /// video call whose window could not open.
+    private func showMinimizedCallBar(for controller: ElementCallController) {
+        navigationTabCoordinator.setMinimizedOverlayAccessory(AnyView(ElementCallMinimizedBar(controller: controller) { [weak self] in
+            self?.restoreElementCallScreen()
+        }))
+    }
+    
+    private func restoreElementCallScreen() {
+        elementCallController?.restore()
+        navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
+        navigationTabCoordinator.setMinimizedOverlayAccessory(nil)
+    }
+    
+    private func dismissCallScreenIfNeeded() {
+        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator
+            || navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator else {
+            return
+        }
+        
+        navigationTabCoordinator.setMinimizedOverlayAccessory(nil)
         navigationTabCoordinator.setOverlayCoordinator(nil)
     }
     

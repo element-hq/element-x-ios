@@ -147,6 +147,14 @@ targets:
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
+        # Required by the call package's media library. libwebrtc's Objective-C categories are
+        # dead-stripped out of its static archive without this, and the app then aborts at runtime
+        # with an unrecognised selector rather than failing to build. See the package's README.
+        #
+        # Measure the binary size delta when changing this: `-ObjC` loads every object file in a
+        # static archive that contains Objective-C, and `-force_load` on the archive alone is the
+        # documented fallback if the delta is worse than expected.
+        OTHER_LDFLAGS: [$(inherited), -ObjC]
         DEVELOPMENT_ASSET_PATHS: Components/DevelopmentAssets/Media
         SWIFT_VERSION: 6.2
         SWIFT_APPROACHABLE_CONCURRENCY: YES
@@ -260,6 +268,16 @@ targets:
       implicit: true
       link: false
       embed: true
+    # The native call stack. ElementCallMatrix is the only one that touches the Matrix SDK; the
+    # other three know nothing about it.
+    - package: ElementCall
+      product: ElementCallKit
+    - package: ElementCall
+      product: ElementCall
+    - package: ElementCall
+      product: ElementCallUI
+    - package: ElementCall
+      product: ElementCallMatrix
     - package: PostHog
     - package: SwiftState
     - package: GZIP

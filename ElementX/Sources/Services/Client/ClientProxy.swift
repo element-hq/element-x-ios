@@ -8,6 +8,7 @@
 
 @preconcurrency import Combine
 import CryptoKit
+import ElementCallMatrix
 import Foundation
 import MatrixRustSDK
 import OrderedCollections
@@ -372,6 +373,16 @@ class ClientProxy: ClientProxyProtocol {
                 return false
             }
         }
+    }
+    
+    // MARK: Native calls
+    
+    func makeElementCallTransport() -> ElementCallSDKTransport? {
+        guard let client = client as? Client else {
+            MXLog.warning("Cannot make an Element Call transport without a real SDK client")
+            return nil
+        }
+        return ElementCallSDKTransport(client: client, logger: ElementCallLoggerAdapter())
     }
     
     var isLoginWithQRCodeSupported: Bool {

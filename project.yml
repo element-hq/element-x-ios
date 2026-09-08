@@ -54,6 +54,9 @@ settings:
   MARKETING_VERSION: 26.09.2
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
+  # The call package's media xcframework (libwebrtc) has no Intel simulator slice, and a package
+  # cannot declare this for the projects that consume it.
+  EXCLUDED_ARCHS[sdk=iphonesimulator*]: x86_64
 
 include:
 - path: app.yml
@@ -78,6 +81,9 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
+  # By path until element-call-ios has a remote, then url + exactVersion. Same idiom as Compound.
+  ElementCall:
+    path: ../element-call-ios
   BuildExtensions:
     path: Components/BuildExtensions
   AnalyticsEvents:

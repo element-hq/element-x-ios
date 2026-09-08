@@ -7,6 +7,7 @@
 //
 
 import Combine
+import ElementCallMatrix
 import Foundation
 import MatrixRustSDK
 
@@ -170,6 +171,19 @@ protocol ClientProxyProtocol: AnyObject {
     
     var isReportRoomSupported: Bool { get async }
     var isLiveKitRTCSupported: Bool { get async }
+    
+    // MARK: Native calls
+    
+    /// A ready-made Matrix transport for the call package, or nil when this proxy is not backed by a
+    /// real SDK client, which is the case in mocks and previews.
+    ///
+    /// The package supplies the implementation; all this does is hand it the client. The downcast to
+    /// the concrete SDK type stays in here rather than leaking through the protocol, which is the
+    /// same shape the content scanner already uses.
+    ///
+    /// Concrete rather than existential, and taking no logger, because Sourcery cannot generate a
+    /// mock for `(any Protocol)?` and the logger has nothing to configure.
+    func makeElementCallTransport() -> ElementCallSDKTransport?
     
     var isLoginWithQRCodeSupported: Bool { get async }
     

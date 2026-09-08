@@ -13,6 +13,9 @@ enum ElementCallServiceAction {
     case startCall(roomID: String, isVoiceCall: Bool)
     case endCall(roomID: String)
     case setAudioEnabled(_ enabled: Bool, roomID: String)
+    /// CallKit activated the audio session: a native call may start its audio engine now.
+    case audioSessionActivated
+    case audioSessionDeactivated
 }
 
 // sourcery: AutoMockable
@@ -28,4 +31,14 @@ protocol ElementCallServiceProtocol {
     func tearDownCallSession()
     
     func setAudioEnabled(_ enabled: Bool, roomID: String)
+    
+    // MARK: Native calls
+    
+    /// Whether an answered incoming call is handed to the native stack (kept alive in CallKit)
+    /// rather than to the web view (ended right after answering).
+    func setNativeCallModeEnabled(_ enabled: Bool)
+    /// Reports an outgoing native call to CallKit, or attaches to the ringing call it answers.
+    func startNativeCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async
+    func reportNativeCallConnected(roomID: String)
+    func endNativeCallSession(roomID: String)
 }

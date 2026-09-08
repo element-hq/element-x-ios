@@ -461,6 +461,18 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: AppBuildType.current != .release)
     var developerOptionsEnabled: Bool
     
+    /// Runs calls through the native matrix-rust-rtc stack instead of the Element Call web view.
+    @UserPreference(defaultValue: false)
+    var nativeCallEnabled: Bool
+    
+    /// Shows minimized native video calls in the system Picture in Picture window.
+    @UserPreference(defaultValue: true)
+    var nativeCallPictureInPictureEnabled: Bool
+    
+    /// How native calls publish their membership; state events is what Element Web speaks today.
+    @UserPreference(defaultValue: NativeCallElementCallCompat.stateEvents)
+    var nativeCallElementCallCompat: NativeCallElementCallCompat
+    
     init(store: UserDefaultsProtocol) {
         self.store = store
     }
@@ -471,3 +483,8 @@ final nonisolated class AppSettings: @unchecked Sendable {
 }
 
 nonisolated extension AppSettings: CommonSettingsProtocol { }
+
+/// Mirrors `MatrixRtcElementCallCompat` without the app's shared code depending on the RTC framework.
+enum NativeCallElementCallCompat: String, Codable, CaseIterable {
+    case off, stickyEvents, stateEvents
+}

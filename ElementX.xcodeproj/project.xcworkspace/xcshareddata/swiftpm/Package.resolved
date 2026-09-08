@@ -172,6 +172,15 @@
       }
     },
     {
+      "identity" : "matrix-rust-rtc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/BillCarsonFr/matrix-rust-rtc",
+      "state" : {
+        "revision" : "9736f0f6dc47808aadfb35c3307791f0f5803848",
+        "version" : "0.2.0-rc.1"
+      }
+    },
+    {
       "identity" : "ogg-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/ogg-swift.git",

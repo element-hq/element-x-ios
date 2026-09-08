@@ -7,6 +7,11 @@
 import AnalyticsEvents
 import AVFoundation
 import CallKit
+// The call package appears in mocked protocol signatures, notably the transport factory on
+// ClientProxyProtocol.
+import ElementCall
+import ElementCallKit
+import ElementCallMatrix
 import Foundation
 import LocalAuthentication
 import Photos

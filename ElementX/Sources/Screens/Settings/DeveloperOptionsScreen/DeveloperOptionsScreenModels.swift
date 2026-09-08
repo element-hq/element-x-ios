@@ -74,6 +74,10 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var linkNewDeviceEnabled: Bool { get set }
     
     var globalSearchEnabled: Bool { get set }
+    
+    var nativeCallEnabled: Bool { get set }
+    var nativeCallPictureInPictureEnabled: Bool { get set }
+    var nativeCallElementCallCompat: NativeCallElementCallCompat { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
