@@ -34,7 +34,7 @@ struct TimelineItemMenuActionProvider {
         }
         
         if timelineItem is EncryptedRoomTimelineItem {
-            return makeEncryptedItemActions(for: item)
+            return makeEncryptedItemActions()
         }
         
         var actions: [TimelineItemMenuAction] = []
@@ -67,7 +67,7 @@ struct TimelineItemMenuActionProvider {
         }
         
         if isMultiSelectEnabled, item.isBulkSelectable {
-            actions.append(.select)
+            actions.append(.selectMessages)
         }
         
         if item.isEditable, canCurrentUserSendMessage {
@@ -152,12 +152,8 @@ struct TimelineItemMenuActionProvider {
         return .init(isReactable: isReactable, actions: actions, secondaryActions: secondaryActions, emojiProvider: emojiProvider)
     }
     
-    private func makeEncryptedItemActions(for item: EventBasedTimelineItemProtocol) -> TimelineItemMenuActions? {
+    private func makeEncryptedItemActions() -> TimelineItemMenuActions? {
         var actions: [TimelineItemMenuAction] = [.copyPermalink]
-        
-        if isMultiSelectEnabled, item.isBulkSelectable {
-            actions.append(.select)
-        }
         
         if isViewSourceEnabled {
             actions.append(.viewSource)

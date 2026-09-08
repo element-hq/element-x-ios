@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Collapses the view to zero height while keeping it in the hierarchy, so that its state is
 /// preserved and no `onAppear`/`onDisappear` side effects fire, unlike an `if` statement.
-private struct CollapsedModifier: ViewModifier {
+private struct CollapsedInPlaceModifier: ViewModifier {
     let isCollapsed: Bool
     
     func body(content: Content) -> some View {
@@ -22,7 +22,7 @@ private struct CollapsedModifier: ViewModifier {
 }
 
 extension View {
-    func collapsed(_ isCollapsed: Bool) -> some View {
-        modifier(CollapsedModifier(isCollapsed: isCollapsed))
+    func collapsedInPlace(_ isCollapsed: Bool) -> some View {
+        modifier(CollapsedInPlaceModifier(isCollapsed: isCollapsed))
     }
 }

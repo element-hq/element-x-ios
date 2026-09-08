@@ -68,7 +68,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case reply(isThread: Bool)
     case replyInThread
     case forward(itemID: TimelineItemIdentifier)
-    case select
+    case selectMessages
     case viewSource
     case report
     case react
@@ -170,7 +170,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionReplyInThread, icon: \.threads)
         case .forward:
             Label(L10n.actionForward, icon: \.forward)
-        case .select:
+        case .selectMessages:
             Label(L10n.actionSelect, icon: \.check)
         case .redact(let isMedia):
             Label(isMedia ? L10n.actionDeleteFile : L10n.actionRemoveMessage, icon: \.delete)

@@ -700,7 +700,7 @@ final class TimelineViewModelTests {
             }
             return false
         }
-        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .select))
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .selectMessages))
         try await deferred.fulfill()
         
         #expect(viewModel.state.selection.isActive)
@@ -712,8 +712,8 @@ final class TimelineViewModelTests {
         let items = [TextRoomTimelineItem(eventID: "$1")]
         let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)))
         
-        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .select))
-        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .selectMessages))
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
         
         #expect(!viewModel.state.selection.isActive)
     }
@@ -727,7 +727,7 @@ final class TimelineViewModelTests {
         viewModel.process(viewAction: .toggleSelection(itemID: items[0].id))
         #expect(!viewModel.state.selection.isActive)
         
-        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
         viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
         #expect(viewModel.state.selection.selectedEventIDs == ["$1", "$2"])
         #expect(viewModel.state.selection.count == 2)
@@ -745,7 +745,7 @@ final class TimelineViewModelTests {
         let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
         let viewModel = makeSelectionViewModel(items: items)
         
-        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
         viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
         viewModel.process(viewAction: .clearSelection)
         
@@ -780,10 +780,10 @@ final class TimelineViewModelTests {
         let nonSelectableItems: [RoomTimelineItemProtocol] = [state, redacted, localEcho]
         let viewModel = makeSelectionViewModel(items: [text] + nonSelectableItems)
         
-        viewModel.process(viewAction: .enterSelection(itemID: state.id))
+        viewModel.process(viewAction: .startSelection(itemID: state.id))
         #expect(!viewModel.state.selection.isActive)
         
-        viewModel.process(viewAction: .enterSelection(itemID: text.id))
+        viewModel.process(viewAction: .startSelection(itemID: text.id))
         for item in nonSelectableItems {
             viewModel.process(viewAction: .toggleSelection(itemID: item.id))
         }
@@ -791,19 +791,19 @@ final class TimelineViewModelTests {
     }
     
     @Test
-    func selectionIsCapped() {
-        let items = (0...TimelineSelectionState.maxCount).map { TextRoomTimelineItem(eventID: "$\($0)") }
+    func selectionIsLimited() {
+        let items = (0...TimelineSelectionState.limit).map { TextRoomTimelineItem(eventID: "$\($0)") }
         let userIndicatorController = UserIndicatorControllerMock()
         let viewModel = makeSelectionViewModel(items: items, userIndicatorController: userIndicatorController)
         
-        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
         for item in items.dropFirst() {
             viewModel.process(viewAction: .toggleSelection(itemID: item.id))
         }
         
-        #expect(viewModel.state.selection.count == TimelineSelectionState.maxCount)
-        #expect(viewModel.state.selection.isAtCap)
-        #expect(!viewModel.state.selection.isSelected(items.last?.id.eventID))
+        #expect(viewModel.state.selection.count == TimelineSelectionState.limit)
+        #expect(viewModel.state.selection.isAtLimit)
+        #expect(!viewModel.state.selection.contains(items.last?.id.eventID))
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1)
     }
     
@@ -813,7 +813,7 @@ final class TimelineViewModelTests {
         let timelineController = TimelineControllerMock(.init(timelineItems: items))
         let viewModel = makeSelectionViewModel(timelineController: timelineController)
         
-        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
         viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
         #expect(viewModel.state.selection.count == 2)
         
@@ -836,7 +836,7 @@ final class TimelineViewModelTests {
         let timelineController = TimelineControllerMock(.init(timelineItems: items))
         let viewModel = makeSelectionViewModel(timelineController: timelineController)
         
-        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
         #expect(viewModel.state.selection.isActive)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.selection.isActive }
@@ -851,7 +851,7 @@ final class TimelineViewModelTests {
         appSettings.messageMultiSelectEnabled = true
         let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)), appSettings: appSettings)
         
-        viewModel.process(viewAction: .enterSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
         #expect(viewModel.state.selection.isActive)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.selection.isEnabled && !$0.selection.isActive }

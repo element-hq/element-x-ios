@@ -226,7 +226,7 @@ class TimelineInteractionHandler {
             actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
         case .downloadMedia:
             break // Handled inline in the media preview screen.
-        case .select:
+        case .selectMessages:
             break // Handled by the TimelineViewModel before reaching here.
         case .translate:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
@@ -374,8 +374,7 @@ class TimelineInteractionHandler {
         await voiceMessageRecorder.stopRecording()
     }
     
-    /// Stops an in-progress recording so it isn't left running while the composer is out of
-    /// sight. The recording is kept and the composer moves to the preview state.
+    /// Stops the recording when one is in progress, moving the composer to the preview state.
     func stopRecordingVoiceMessageIfNeeded() async {
         guard voiceMessageRecorder.isRecording else { return }
         await voiceMessageRecorder.stopRecording()

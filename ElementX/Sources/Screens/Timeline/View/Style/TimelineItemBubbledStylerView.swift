@@ -47,12 +47,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     private var isSelected: Bool {
-        context.viewState.selection.isSelected(timelineItem.id.eventID)
-    }
-    
-    private func toggleSelection() {
-        guard timelineItem.isBulkSelectable else { return }
-        context.send(viewAction: .toggleSelection(itemID: timelineItem.id))
+        context.viewState.selection.contains(timelineItem.id.eventID)
     }
     
     /// The base padding applied to bubbles on either side.
@@ -301,6 +296,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .timelineBubbleLayoutSize(.natural)
                 .cornerRadius(timelineItem.contentCornerRadius)
         }
+    }
+    
+    private func toggleSelection() {
+        guard timelineItem.isBulkSelectable else { return }
+        context.send(viewAction: .toggleSelection(itemID: timelineItem.id))
     }
     
     private var messageBubbleTopPadding: CGFloat {

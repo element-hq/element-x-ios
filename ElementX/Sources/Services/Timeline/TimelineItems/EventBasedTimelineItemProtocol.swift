@@ -35,6 +35,7 @@ nonisolated extension EventBasedTimelineItemProtocol {
     var isBulkSelectable: Bool {
         isRemoteMessage
             && !isRedacted
+            && !hasFailedDecryption
             && !(self is StateRoomTimelineItem)
             && !(self is UnsupportedRoomTimelineItem)
             && !(self is LiveLocationRoomTimelineItem)

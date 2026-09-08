@@ -51,7 +51,7 @@ struct ThreadTimelineScreen: View {
                     .environment(\.timelineContext, timelineContext)
                     // Make sure the reply header honours the hideTimelineMedia setting too.
                     .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
-                    .collapsed(isSelectionActive)
+                    .collapsedInPlace(isSelectionActive)
             }
     }
     

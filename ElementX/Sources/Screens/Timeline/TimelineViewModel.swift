@@ -20,7 +20,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         static let detachedTimelineSize: UInt16 = 100
         static let focusTimelineToastIndicatorID = "RoomScreenFocusTimelineToastIndicator"
         static let toastErrorID = "RoomScreenToastError"
-        static let selectionCapIndicatorID = "RoomScreenSelectionCapIndicator"
+        static let selectionLimitIndicatorID = "RoomScreenSelectionLimitIndicator"
     }
     
     private let roomProxy: JoinedRoomProxyProtocol
@@ -198,16 +198,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
-        case .handleTimelineItemMenuAction(let itemID, .select):
-            enterSelection(itemID: itemID)
+        case .handleTimelineItemMenuAction(let itemID, .selectMessages):
+            startSelection(itemID: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
         case .redactConfirmed(let itemID, let reason):
             state.bindings.redactConfirmationInfo = nil
             // A blank reason is no reason at all, so don't send one.
             timelineInteractionHandler.redact(itemID, reason: reason?.isBlank == false ? reason : nil)
-        case .enterSelection(let itemID):
-            enterSelection(itemID: itemID)
+        case .startSelection(let itemID):
+            startSelection(itemID: itemID)
         case .toggleSelection(let itemID):
             toggleSelection(itemID: itemID)
         case .clearSelection:
@@ -1195,15 +1195,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 // MARK: - Selection
 
 extension TimelineViewModel {
-    private func enterSelection(itemID: TimelineItemIdentifier) {
+    private func startSelection(itemID: TimelineItemIdentifier) {
         guard state.canSelectMessages, let eventID = selectableEventID(for: itemID) else { return }
         
         // The composer is collapsed while selecting, so don't leave the microphone open behind it.
         Task { await timelineInteractionHandler.stopRecordingVoiceMessageIfNeeded() }
         actionsSubject.send(.composer(action: .removeFocus))
         
-        guard !state.selection.isAtCap || state.selection.selectedEventIDs.contains(eventID) else {
-            showSelectionCapToast()
+        guard !state.selection.isAtLimit || state.selection.selectedEventIDs.contains(eventID) else {
+            showSelectionLimitToast()
             return
         }
         
@@ -1215,8 +1215,8 @@ extension TimelineViewModel {
         
         if state.selection.selectedEventIDs.contains(eventID) {
             state.selection.selectedEventIDs.remove(eventID)
-        } else if state.selection.isAtCap {
-            showSelectionCapToast()
+        } else if state.selection.isAtLimit {
+            showSelectionLimitToast()
         } else {
             state.selection.selectedEventIDs.insert(eventID)
         }
@@ -1248,8 +1248,8 @@ extension TimelineViewModel {
         return item.id.eventID
     }
     
-    private func showSelectionCapToast() {
-        userIndicatorController.submitIndicator(UserIndicator(id: Constants.selectionCapIndicatorID,
+    private func showSelectionLimitToast() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Constants.selectionLimitIndicatorID,
                                                               type: .toast,
                                                               title: L10n.screenRoomMaximumMessagesSelected,
                                                               icon: \.info))

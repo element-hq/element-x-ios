@@ -56,36 +56,36 @@ struct TimelineItemMenuActionProviderTests {
     @Test
     func selectIsShownForRemoteMessageWhenEnabled() throws {
         let actions = try #require(makeActions(for: makeTextItem(), isMultiSelectEnabled: true))
-        #expect(actions.actions.contains(.select))
+        #expect(actions.actions.contains(.selectMessages))
     }
     
     @Test
     func selectIsHiddenWhenDisabled() throws {
         let actions = try #require(makeActions(for: makeTextItem()))
-        #expect(!actions.actions.contains(.select))
+        #expect(!actions.actions.contains(.selectMessages))
     }
     
     @Test
     func selectIsHiddenInPinnedTimeline() throws {
         let actions = try #require(makeActions(for: makeTextItem(), isMultiSelectEnabled: true, timelineKind: .pinned))
-        #expect(!actions.actions.contains(.select))
+        #expect(!actions.actions.contains(.selectMessages))
     }
     
     @Test
     func selectIsHiddenForLocalEcho() throws {
         let item = makeTextItem(id: .event(uniqueID: .init("local"), eventOrTransactionID: .transactionID("txn")))
         let actions = try #require(makeActions(for: item, isMultiSelectEnabled: true))
-        #expect(!actions.actions.contains(.select))
+        #expect(!actions.actions.contains(.selectMessages))
     }
     
     @Test
     func selectIsHiddenForLiveLocationShare() throws {
         let actions = try #require(makeActions(for: makeLiveLocationItem(isLive: true), isMultiSelectEnabled: true))
-        #expect(!actions.actions.contains(.select))
+        #expect(!actions.actions.contains(.selectMessages))
     }
     
     @Test
-    func selectIsShownForEncryptedItemWhenEnabled() throws {
+    func selectIsHiddenForEncryptedItem() throws {
         let item = EncryptedRoomTimelineItem(id: .randomEvent,
                                              body: "",
                                              encryptionType: .unknown,
@@ -95,7 +95,7 @@ struct TimelineItemMenuActionProviderTests {
                                              canBeRepliedTo: false,
                                              sender: .init(id: "@alice:matrix.org"))
         let actions = try #require(makeActions(for: item, isMultiSelectEnabled: true))
-        #expect(actions.actions.contains(.select))
+        #expect(!actions.actions.contains(.selectMessages))
     }
     
     // MARK: - Helpers

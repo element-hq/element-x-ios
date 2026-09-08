@@ -70,7 +70,7 @@ enum TimelineViewAction {
     case redactConfirmed(itemID: TimelineItemIdentifier, reason: String?)
     
     /// Start a multi-selection with the specified item.
-    case enterSelection(itemID: TimelineItemIdentifier)
+    case startSelection(itemID: TimelineItemIdentifier)
     /// Add or remove an item from the active multi-selection.
     case toggleSelection(itemID: TimelineItemIdentifier)
     case clearSelection
@@ -207,9 +207,9 @@ struct TimelineViewStateBindings {
 
 /// The state of the multi-selection of messages, active as soon as an item is selected.
 struct TimelineSelectionState: Equatable {
-    static let maxCount = 30
+    static let limit = 30
     
-    /// Mirrors the `messageMultiSelectEnabled` labs flag.
+    /// Mirrors the `messageMultiSelectEnabled` feature flag.
     var isEnabled = false
     /// The event IDs of the selected items. Only remote messages can be selected.
     var selectedEventIDs: Set<String> = []
@@ -222,11 +222,11 @@ struct TimelineSelectionState: Equatable {
         selectedEventIDs.count
     }
     
-    var isAtCap: Bool {
-        count >= Self.maxCount
+    var isAtLimit: Bool {
+        count >= Self.limit
     }
     
-    func isSelected(_ eventID: String?) -> Bool {
+    func contains(_ eventID: String?) -> Bool {
         guard let eventID else { return false }
         return selectedEventIDs.contains(eventID)
     }
@@ -357,9 +357,9 @@ extension TimelineViewState {
     /// Multi-selection is only offered in the room and thread timelines.
     var canSelectMessages: Bool {
         guard selection.isEnabled else { return false }
-        switch timelineKind {
-        case .live, .detached, .thread: return true
-        case .pinned, .media: return false
+        return switch timelineKind {
+        case .live, .detached, .thread: true
+        case .pinned, .media: false
         }
     }
     
