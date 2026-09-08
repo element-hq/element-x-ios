@@ -339,6 +339,10 @@ class ClientProxy: ClientProxyProtocol {
         client.canDeactivateAccount()
     }
     
+    var totalUnreadNotifications: UInt64 {
+        client.totalUnreadNotifications()
+    }
+    
     var userIDServerName: String? {
         do {
             return try client.userIdServerName()
