@@ -73,7 +73,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         .highlightedTimelineItem(isFocussed)
         .overlay { selectionOverlay }
         .animation(.elementDefault.disabledDuringTests(), value: isSelectionActive)
-        .geometryGroup()
         .onPreferenceChange(ContentScanningFailurePreferenceKey.self) { contentScanningFailure = $0 }
     }
     

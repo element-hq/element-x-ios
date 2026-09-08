@@ -15,7 +15,7 @@ private struct CollapsedInPlaceModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .frame(height: isCollapsed ? 0 : nil, alignment: .top)
-            .clipped()
+            .opacity(isCollapsed ? 0 : 1)
             .allowsHitTesting(!isCollapsed)
             .accessibilityHidden(isCollapsed)
     }
