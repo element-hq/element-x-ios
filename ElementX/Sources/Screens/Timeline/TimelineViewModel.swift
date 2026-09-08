@@ -595,14 +595,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.jumpToReadMarkerEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.messageMultiSelectEnabledPublisher
-            .sink { [weak self] isEnabled in
-                self?.state.selection.isEnabled = isEnabled
-                if !isEnabled {
-                    self?.state.selection.selectedEventIDs.removeAll()
-                }
-            }
-            .store(in: &cancellables)
+        setupSelectionSubscriptions()
         
         userSession.clientProxy.timelineMediaVisibilityPublisher
             .removeDuplicates()
@@ -1195,6 +1188,17 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 // MARK: - Selection
 
 extension TimelineViewModel {
+    private func setupSelectionSubscriptions() {
+        appSettings.messageMultiSelectEnabledPublisher
+            .sink { [weak self] isEnabled in
+                self?.state.selection.isEnabled = isEnabled
+                if !isEnabled {
+                    self?.state.selection.selectedEventIDs.removeAll()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
     private func startSelection(itemID: TimelineItemIdentifier) {
         guard state.canSelectMessages, let eventID = selectableEventID(for: itemID) else { return }
         
