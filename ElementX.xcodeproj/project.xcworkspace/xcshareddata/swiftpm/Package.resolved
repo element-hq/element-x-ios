@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "13eac3567461a9825018e10e9f4475f68215dae7",
-        "version" : "0.24.0"
+        "revision" : "48ba4408d60d75006c9648ecc79ee56b39f8aaae",
+        "version" : "0.25.0"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "410984bf301f4fa224fe56277b3f8672cc465c79",
-        "version" : "8.11.0"
+        "revision" : "be0d257b9bd47a4e6e1265fc8c237411825f107a",
+        "version" : "8.12.0"
       }
     },
     {
@@ -122,8 +122,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/LRUCache",
       "state" : {
-        "revision" : "cb5b2bd0da83ad29c0bec762d39f41c8ad0eaf3e",
-        "version" : "1.2.1"
+        "revision" : "f0570e943ea4445d258113ba73f50cb2b7e564ac",
+        "version" : "1.3.0"
       }
     },
     {
@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
       "state" : {
-        "revision" : "5ee345ca5d65238a6fce29bba87816204be7df20",
-        "version" : "6.28.0"
+        "revision" : "86992aabad3e89ce8818adec2e8b9d03177d69da",
+        "version" : "6.29.0"
       }
     },
     {
@@ -194,8 +194,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "c0218386c49115cce6b05a50b41f4f60bc995acb",
-        "version" : "3.69.6"
+        "revision" : "d933f3050645b5df9fe86862110c1726e0c5b135",
+        "version" : "3.71.0"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "cd213f98af160e6497eeff0707bc3f6a205b159c",
-        "version" : "9.26.0"
+        "revision" : "a00a9784fff7193cbb0f9fae509fec8107e07744",
+        "version" : "9.26.1"
       }
     },
     {
@@ -293,8 +293,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "8d6ad267714cac3ae747cefdd21f7a6665006e1f",
-        "version" : "2.13.7"
+        "revision" : "18b80329749eca5ea29fc50211dca5c7eff5bfec",
+        "version" : "2.13.9"
       }
     },
     {
