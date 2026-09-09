@@ -4115,6 +4115,35 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - totalUnreadNotifications
+
+    private let totalUnreadNotificationsCallsCountLock = NSLock()
+    private var totalUnreadNotificationsUnderlyingCallsCount = 0
+    open var totalUnreadNotificationsCallsCount: Int {
+        get { totalUnreadNotificationsCallsCountLock.withLock { totalUnreadNotificationsUnderlyingCallsCount } }
+        set { totalUnreadNotificationsCallsCountLock.withLock { totalUnreadNotificationsUnderlyingCallsCount = newValue } }
+    }
+    open var totalUnreadNotificationsCalled: Bool {
+        return totalUnreadNotificationsCallsCount > 0
+    }
+
+    private let totalUnreadNotificationsReturnValueLock = NSLock()
+    open var totalUnreadNotificationsUnderlyingReturnValue: UInt64!
+    open var totalUnreadNotificationsReturnValue: UInt64! {
+        get { totalUnreadNotificationsReturnValueLock.withLock { totalUnreadNotificationsUnderlyingReturnValue } }
+        set { totalUnreadNotificationsReturnValueLock.withLock { totalUnreadNotificationsUnderlyingReturnValue = newValue } }
+    }
+    open var totalUnreadNotificationsClosure: (() -> UInt64)?
+
+    open override func totalUnreadNotifications() -> UInt64 {
+        totalUnreadNotificationsCallsCountLock.withLock { totalUnreadNotificationsUnderlyingCallsCount += 1 }
+        if let totalUnreadNotificationsClosure = totalUnreadNotificationsClosure {
+            return totalUnreadNotificationsClosure()
+        } else {
+            return totalUnreadNotificationsReturnValue
+        }
+    }
+
     //MARK: - trackRecentlyVisitedRoom
 
     open var trackRecentlyVisitedRoomRoomThrowableError: Error?
