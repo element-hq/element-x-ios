@@ -27,7 +27,7 @@ struct MediaEventsTimelineScreen: View {
                 if let mediaItem = sheet.state.currentItem.mediaItem {
                     TimelineMediaPreviewDetailsView(item: mediaItem,
                                                     context: sheet.context,
-                                                    preferredColorScheme: nil,
+                                                    interfaceStyle: .unspecified,
                                                     sheetHeight: $sheetHeight)
                         .presentationDetents([.height(sheetHeight)])
                 }
