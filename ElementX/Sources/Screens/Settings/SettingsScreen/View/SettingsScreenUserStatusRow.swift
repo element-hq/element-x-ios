@@ -56,6 +56,11 @@ struct SettingsScreenUserStatusRow: View {
                         .textFieldStyle(.compound(.raised))
                         .focused($isCustomFieldFocused)
                         .onAppear(perform: focusCustomField)
+                        .onChange(of: customText) { _, newValue in
+                            if newValue.count > 30 {
+                                customText = String(newValue.prefix(30))
+                            }
+                        }
                         .accessibilityLabel(L10n.screenSettingsUserStatusCustomHint)
                         .padding(.vertical, 3)
                     
