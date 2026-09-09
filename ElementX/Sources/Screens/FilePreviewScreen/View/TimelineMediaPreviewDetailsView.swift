@@ -12,7 +12,7 @@ import SwiftUI
 struct TimelineMediaPreviewDetailsView: View {
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    var interfaceStyle: UIUserInterfaceStyle = .dark
+    var preferredColorScheme: ColorScheme? = .dark
     @Binding var sheetHeight: CGFloat
     
     /// Approximate height of the navigation bar.
@@ -35,11 +35,11 @@ struct TimelineMediaPreviewDetailsView: View {
         .presentationDetents([.height(sheetHeight)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
-        .presentationInterfaceStyle(interfaceStyle)
+        .presentationColorScheme(preferredColorScheme)
         .sheet(item: $context.redactConfirmationItem) { item in
             TimelineMediaPreviewRedactConfirmationView(item: item,
                                                        context: context,
-                                                       interfaceStyle: interfaceStyle)
+                                                       preferredColorScheme: preferredColorScheme)
         }
     }
     

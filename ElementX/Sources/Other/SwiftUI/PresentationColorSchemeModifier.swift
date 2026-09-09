@@ -8,25 +8,25 @@
 import SwiftUI
 
 extension View {
-    /// Forces the interface style of the sheet or popover containing this view without touching the
-    /// rest of the app. Does nothing when the view isn't presented modally.
+    /// Forces the colour scheme of the sheet or popover containing this view without touching the
+    /// rest of the app. Does nothing when the view isn't presented modally or the scheme is `nil`.
     ///
     /// Prefer this over `preferredColorScheme` for modals: SwiftUI applies that modifier to the whole
     /// window and can leave it applied when the presentation is torn down abnormally (#6093).
-    func presentationInterfaceStyle(_ style: UIUserInterfaceStyle) -> some View {
-        background(PresentationInterfaceStyleView(style: style))
+    func presentationColorScheme(_ colorScheme: ColorScheme?) -> some View {
+        background(PresentationColorSchemeView(colorScheme: colorScheme))
     }
 }
 
-private struct PresentationInterfaceStyleView: UIViewRepresentable {
-    let style: UIUserInterfaceStyle
+private struct PresentationColorSchemeView: UIViewRepresentable {
+    let colorScheme: ColorScheme?
     
     func makeUIView(context: Context) -> InterfaceStyleView {
-        InterfaceStyleView(style: style)
+        InterfaceStyleView(style: UIUserInterfaceStyle(colorScheme))
     }
     
     func updateUIView(_ uiView: InterfaceStyleView, context: Context) {
-        uiView.style = style
+        uiView.style = UIUserInterfaceStyle(colorScheme)
     }
     
     class InterfaceStyleView: UIView {
@@ -57,16 +57,23 @@ private struct PresentationInterfaceStyleView: UIViewRepresentable {
         
         /// The view controller that was actually presented, so the override covers its navigation bar too.
         private var targetViewController: UIViewController? {
-            var responder = next
-            while let current = responder {
+            guard let next else { return nil }
+            return sequence(first: next) { $0.next }
+                .lazy
+                .compactMap { $0 as? UIViewController }
                 // Children of a presented controller also report a presentingViewController, so check the parent.
-                if let viewController = current as? UIViewController,
-                   viewController.presentingViewController != nil, viewController.parent == nil {
-                    return viewController
-                }
-                responder = current.next
-            }
-            return nil
+                .first { $0.presentingViewController != nil && $0.parent == nil }
+        }
+    }
+}
+
+private extension UIUserInterfaceStyle {
+    init(_ colorScheme: ColorScheme?) {
+        self = switch colorScheme {
+        case .light: .light
+        case .dark: .dark
+        case .none: .unspecified
+        @unknown default: .unspecified
         }
     }
 }

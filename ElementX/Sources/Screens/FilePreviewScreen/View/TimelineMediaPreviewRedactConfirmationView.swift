@@ -14,7 +14,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    var interfaceStyle: UIUserInterfaceStyle = .dark
+    var preferredColorScheme: ColorScheme? = .dark
     
     @State private var reason = ""
     @State private var sheetHeight: CGFloat = .zero
@@ -38,7 +38,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
         .presentationDetents([.height(sheetHeight + topPadding)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
-        .presentationInterfaceStyle(interfaceStyle)
+        .presentationColorScheme(preferredColorScheme)
     }
     
     private var header: some View {
