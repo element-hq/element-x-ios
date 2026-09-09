@@ -81,9 +81,10 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
-  # By path until element-call-ios has a remote, then url + exactVersion. Same idiom as Compound.
   ElementCall:
-    path: ../element-call-ios
+    url: https://github.com/element-hq/element-call-ios
+    exactVersion: 0.1.0-rc.1
+    # path: ../element-call-ios
   BuildExtensions:
     path: Components/BuildExtensions
   AnalyticsEvents:

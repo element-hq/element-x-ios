@@ -2645,7 +2645,6 @@
 		969694F67E844FCA51F7E051 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		96C4762F8D6112E43117DB2F /* CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStringConvertible.swift; sourceTree = "<group>"; };
 		97287090CA64DAA95386ECED /* ResolveVerifiedUserSendFailureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolveVerifiedUserSendFailureScreen.swift; sourceTree = "<group>"; };
-		9747BB2AED10527B81B0E432 /* element-call-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "element-call-ios"; path = "../element-call-ios"; sourceTree = SOURCE_ROOT; };
 		974AEAF3FE0C577A6C04AD6E /* RoomPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPermissions.swift; sourceTree = "<group>"; };
 		976ED77B772F50C4BAD757E7 /* MediaEventsTimelineScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaEventsTimelineScreenViewModel.swift; sourceTree = "<group>"; };
 		9780389F8A53E4D26E23DD03 /* LoginScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -5930,7 +5929,6 @@
 			children = (
 				DEF8766F9B1A5CEB15FD0935 /* BuildExtensions */,
 				174E4AEF3DED300AA81046EC /* compound-ios */,
-				9747BB2AED10527B81B0E432 /* element-call-ios */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -7899,6 +7897,7 @@
 				4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */,
 				D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */,
 				75CC627F59499C9E93D8FDAD /* XCRemoteSwiftPackageReference "Dynamic" */,
+				24D50023D92B93BBFF6E14FD /* XCRemoteSwiftPackageReference "element-call-ios" */,
 				8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */,
 				821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */,
 				701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */,
@@ -7921,7 +7920,6 @@
 				EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
 				5041EBEAA51463D649A3CF31 /* XCLocalSwiftPackageReference "Components/BuildExtensions" */,
 				C89CF7729E028671C5DC461E /* XCLocalSwiftPackageReference "compound-ios" */,
-				6C5E6EDA64F19372EDA20E99 /* XCLocalSwiftPackageReference "../element-call-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 681566846AF307E9BA4C72C6 /* Products */;
@@ -10820,10 +10818,6 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Components/BuildExtensions;
 		};
-		6C5E6EDA64F19372EDA20E99 /* XCLocalSwiftPackageReference "../element-call-ios" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../element-call-ios";
-		};
 		C89CF7729E028671C5DC461E /* XCLocalSwiftPackageReference "compound-ios" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "compound-ios";
@@ -10837,6 +10831,14 @@
 			requirement = {
 				kind = exactVersion;
 				version = 6.29.0;
+			};
+		};
+		24D50023D92B93BBFF6E14FD /* XCRemoteSwiftPackageReference "element-call-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/element-hq/element-call-ios";
+			requirement = {
+				kind = exactVersion;
+				version = "0.1.0-rc.1";
 			};
 		};
 		395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */ = {
@@ -11228,6 +11230,7 @@
 		};
 		78CF9431C4BCA57272A99323 /* ElementCallMatrix */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 24D50023D92B93BBFF6E14FD /* XCRemoteSwiftPackageReference "element-call-ios" */;
 			productName = ElementCallMatrix;
 		};
 		7B6BC3219ADD8AA0311D2B86 /* SnapshotTesting */ = {
@@ -11252,6 +11255,7 @@
 		};
 		86D1134E0900F3C445F9FC2C /* ElementCallKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 24D50023D92B93BBFF6E14FD /* XCRemoteSwiftPackageReference "element-call-ios" */;
 			productName = ElementCallKit;
 		};
 		886A0A498FA01E8EDD451D05 /* Sentry */ = {
@@ -11276,10 +11280,12 @@
 		};
 		99391BE6341C5A1401B81DF7 /* ElementCallUI */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 24D50023D92B93BBFF6E14FD /* XCRemoteSwiftPackageReference "element-call-ios" */;
 			productName = ElementCallUI;
 		};
 		99570A04BD7A395538321E94 /* ElementCall */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 24D50023D92B93BBFF6E14FD /* XCRemoteSwiftPackageReference "element-call-ios" */;
 			productName = ElementCall;
 		};
 		997C7385E1A07E061D7E2100 /* GZIP */ = {

@@ -140,12 +140,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Native calls")
                     Text("Uses the matrix-rust-rtc stack instead of the Element Call web view.")
                 }
-                
-                Toggle(isOn: $context.nativeCallPictureInPictureEnabled) {
-                    Text("Picture in Picture")
-                    Text("Minimized video calls use the system window; off, they use the bar.")
-                }
-                
                 Picker("Element Call compatibility", selection: $context.nativeCallElementCallCompat) {
                     ForEach(NativeCallElementCallCompat.allCases, id: \.self) { compat in
                         Text(compat.title).tag(compat)

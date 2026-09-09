@@ -465,10 +465,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var nativeCallEnabled: Bool
     
-    /// Shows minimized native video calls in the system Picture in Picture window.
-    @UserPreference(defaultValue: true)
-    var nativeCallPictureInPictureEnabled: Bool
-    
     /// How native calls publish their membership; state events is what Element Web speaks today.
     @UserPreference(defaultValue: NativeCallElementCallCompat.stateEvents)
     var nativeCallElementCallCompat: NativeCallElementCallCompat

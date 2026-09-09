@@ -56,6 +56,15 @@
       }
     },
     {
+      "identity" : "element-call-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/element-hq/element-call-ios",
+      "state" : {
+        "revision" : "3e7f45ed8e941aeb0aeba2a8530e942b8dd82ce6",
+        "version" : "0.1.0-rc.1"
+      }
+    },
+    {
       "identity" : "element-call-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",

@@ -76,7 +76,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var globalSearchEnabled: Bool { get set }
     
     var nativeCallEnabled: Bool { get set }
-    var nativeCallPictureInPictureEnabled: Bool { get set }
     var nativeCallElementCallCompat: NativeCallElementCallCompat { get set }
 }
 

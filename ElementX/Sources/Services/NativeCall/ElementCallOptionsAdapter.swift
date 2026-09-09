@@ -15,8 +15,9 @@ import ElementCallKit
 struct ElementCallOptionsAdapter: ElementCallOptions {
     let appSettings: AppSettings
     
+    /// We hold the background mode entitlement, so minimized video calls always use the system window.
     var isPictureInPictureEnabled: Bool {
-        appSettings.nativeCallPictureInPictureEnabled
+        true
     }
     
     var elementCallCompatibility: MatrixRtcElementCallCompat {
