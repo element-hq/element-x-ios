@@ -86,7 +86,7 @@ packages:
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.24.0
+    exactVersion: 0.25.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
@@ -128,7 +128,7 @@ packages:
     exactVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    exactVersion: 8.11.0
+    exactVersion: 8.12.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     exactVersion: 1.2.0
@@ -137,19 +137,19 @@ packages:
     exactVersion: 2.2.3
   LRUCache:
     url: https://github.com/nicklockwood/LRUCache
-    exactVersion: 1.2.1
+    exactVersion: 1.3.0
   Mantis:
     url: https://github.com/guoyingtao/Mantis
     exactVersion: 3.1.0
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    exactVersion: 6.28.0
+    exactVersion: 6.29.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    exactVersion: 3.69.6
+    exactVersion: 3.71.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    exactVersion: 9.26.0
+    exactVersion: 9.26.1
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     exactVersion: 1.19.4
@@ -158,7 +158,7 @@ packages:
     exactVersion: 3.5.1
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
-    exactVersion: 2.13.7
+    exactVersion: 2.13.9
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     exactVersion: 6.0.1
