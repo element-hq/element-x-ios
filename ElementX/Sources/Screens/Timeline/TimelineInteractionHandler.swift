@@ -224,8 +224,8 @@ class TimelineInteractionHandler {
             analyticsService.trackInteraction(name: .PinnedMessageListViewTimeline)
             guard let eventID = itemID.eventID else { return }
             actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
-        case .downloadMedia:
-            break // Handled inline in the media preview screen.
+        case .downloadMedia, .selectMessages:
+            break // Handled by the media preview screen and the TimelineViewModel respectively.
         case .translate:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
             actionsSubject.send(.showTranslation(text: messageTimelineItem.body))
@@ -369,6 +369,12 @@ class TimelineInteractionHandler {
     }
     
     func stopRecordingVoiceMessage() async {
+        await voiceMessageRecorder.stopRecording()
+    }
+    
+    /// Stops the recording when one is in progress, moving the composer to the preview state.
+    func stopRecordingVoiceMessageIfNeeded() async {
+        guard voiceMessageRecorder.isRecording else { return }
         await voiceMessageRecorder.stopRecording()
     }
     
