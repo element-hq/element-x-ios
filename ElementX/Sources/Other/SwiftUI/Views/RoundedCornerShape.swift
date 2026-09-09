@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct RoundedCornerShape: Shape {
+nonisolated struct RoundedCornerShape: Shape {
     let radius: CGFloat
     let corners: UIRectCorner
     
