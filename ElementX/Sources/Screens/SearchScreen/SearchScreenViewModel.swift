@@ -183,7 +183,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         switch mode {
         case .rooms:
             searchedQueries[mode] = searchQuery
-            roomSummaryProvider.setFilter(.search(query: searchQuery))
+            roomSummaryProvider.setFilter(.search(query: searchQuery, joinedOnly: true))
         case .messages:
             setQueryTask = Task { [weak self] in
                 // Debounce message queries; superseded keystrokes cancel this before it commits.
