@@ -69,6 +69,25 @@ struct SearchScreenViewModelTests {
     }
     
     @Test
+    func searchingExcludesRoomsThatAreNotJoined() async throws {
+        let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms + .mockInvites)))
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.searchService = searchService
+        let viewModel = SearchScreenViewModel(roomSummaryProvider: roomSummaryProvider,
+                                              clientProxy: clientProxy,
+                                              mediaProvider: MediaProviderMock(.init()),
+                                              userIndicatorController: userIndicatorController,
+                                              appSettings: appSettings)
+        
+        let deferred = deferFulfillment(viewModel.context.observe(\.viewState.rooms)) { !$0.isEmpty }
+        viewModel.context.searchQuery = "room"
+        try await deferred.fulfill()
+        
+        #expect(roomSummaryProvider.setFilterReceivedFilter == .search(query: "room", joinedOnly: true))
+        #expect(!viewModel.context.viewState.rooms.contains { $0.title == "First room" })
+    }
+    
+    @Test
     func messageSearch() async throws {
         let deferred = deferFulfillment(setQuerySubject) { $0 == "Foundation" }
         context.searchMode = .messages
