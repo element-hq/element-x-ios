@@ -31,6 +31,7 @@ enum SearchScreenMode: CaseIterable, Identifiable {
 struct SearchScreenViewState: BindableState {
     var rooms = [SearchScreenRoom]()
     var messages = [SearchScreenMessage]()
+    var breadcrumbs = [SearchScreenBreadcrumb]()
     var isLoadingRooms = false
     var isLoadingMessages = false
     var bindings: SearchScreenViewStateBindings
@@ -59,6 +60,32 @@ struct SearchScreenRoom: Identifiable, Equatable {
     let title: String
     let description: String
     let avatar: RoomAvatar
+    
+    init(_ summary: RoomSummary) {
+        let identifier = if summary.isDirect {
+            summary.heroes.first?.id ?? summary.canonicalAlias
+        } else {
+            summary.canonicalAlias
+        }
+        
+        id = summary.id
+        title = summary.name
+        description = identifier ?? ""
+        avatar = summary.avatar
+    }
+}
+
+/// An entry in the search history shown before the user has typed a query.
+enum SearchScreenBreadcrumb: Identifiable, Equatable {
+    case query(String)
+    case room(SearchScreenRoom)
+    
+    var id: String {
+        switch self {
+        case .query(let query): "query-\(query)"
+        case .room(let room): "room-\(room.id)"
+        }
+    }
 }
 
 struct SearchScreenMessage: Identifiable, Equatable {

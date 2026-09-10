@@ -20,6 +20,8 @@ internal nonisolated enum UntranslatedL10n {
   internal static func screenSearchNoResultsMessage(_ p1: Any) -> String {
     return UntranslatedL10n.tr("Untranslated", "screen_search_no_results_message", String(describing: p1))
   }
+  /// Recent searches
+  internal static var screenSearchRecentSearches: String { return UntranslatedL10n.tr("Untranslated", "screen_search_recent_searches") }
   /// Chats
   internal static var screenSearchTabChats: String { return UntranslatedL10n.tr("Untranslated", "screen_search_tab_chats") }
   /// Messages
