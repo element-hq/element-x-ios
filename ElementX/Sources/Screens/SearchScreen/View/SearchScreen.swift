@@ -40,14 +40,17 @@ struct SearchScreen: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
             
-            Picker(L10n.actionSearch, selection: $context.searchMode) {
-                ForEach(SearchScreenMode.allCases) { mode in
-                    Text(mode.title).tag(mode)
+            // There's nothing to switch between until the user searches for something.
+            if context.viewState.isSearching {
+                Picker(L10n.actionSearch, selection: $context.searchMode) {
+                    ForEach(SearchScreenMode.allCases) { mode in
+                        Text(mode.title).tag(mode)
+                    }
                 }
+                .pickerStyle(.segmented)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
             }
-            .pickerStyle(.segmented)
-            .padding(.horizontal, 16)
-            .padding(.bottom, 8)
             
             switch context.viewState.bindings.searchMode {
             case .rooms:
