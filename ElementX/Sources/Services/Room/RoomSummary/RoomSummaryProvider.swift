@@ -153,12 +153,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         switch filter {
         case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .none)
-        case let .search(query):
-            let filters = if appSettings.fuzzyRoomListSearchEnabled {
-                [.fuzzyMatchRoomName(pattern: query)] + baseFilter
-            } else {
-                [.normalizedMatchRoomName(pattern: query)] + baseFilter
-            }
+        case let .search(query, joinedOnly):
+            let filters = nameFilter(for: query) + baseFilter + (joinedOnly ? [.joined] : [])
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         case .rooms(let roomIDs, let filters):
             var rustFilters = filters.map(\.rustFilter) + baseFilter
@@ -182,6 +178,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     // MARK: - Private
+    
+    private func nameFilter(for query: String) -> [RoomListEntriesDynamicFilterKind] {
+        appSettings.fuzzyRoomListSearchEnabled ? [.fuzzyMatchRoomName(pattern: query)] : [.normalizedMatchRoomName(pattern: query)]
+    }
     
     private func setupVisibleRangeObservers() {
         // Unthrottled to add another page half way through the last one
