@@ -1,3 +1,25 @@
+## Changes in 26.09.1 (2026-09-10)
+
+### What's Changed
+
+✨ Features
+* Add a developer option and selection mode for timeline messages by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6102
+
+🐛 Bugfixes
+* Limit the custom status input to 30 characters. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6139
+* Scope dark mode change only to the presenting sheet by @Velin92 in https://github.com/element-hq/element-x-ios/pull/6144
+
+🚧 In development 🚧
+* Show message counts on room list notification badges by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6132
+
+Others
+* Fix start chat UI test snapshots following copy changes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6137
+* Add a couple of points about code style/ordering to the AGENTS.md by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6133
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6147
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.09.0...release/26.09.1
+
 ## Changes in 26.09.0 (2026-09-08)
 
 ### What's Changed
