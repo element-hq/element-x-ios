@@ -79,7 +79,7 @@ struct GalleryItemTileView: View {
                           size: item.size,
                           mediaProvider: mediaProvider) { imageView in
                 imageView
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
             } placeholder: {
                 placeholder
             }
