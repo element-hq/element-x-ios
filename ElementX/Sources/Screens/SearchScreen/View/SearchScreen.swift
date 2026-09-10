@@ -97,13 +97,18 @@ struct SearchScreen: View {
         .searchResultsKeyboardNavigation(moveUp: { moveSelection(backwards: true) },
                                          moveDown: { moveSelection(backwards: false) },
                                          cancel: { context.send(viewAction: .cancel) })
-        // The TabView calls onAppear each time the search tab is selected, so the field re-focuses
-        // and the selection resets on every switch.
+        // The TabView calls onAppear/onDisappear each time the search tab is selected/deselected,
+        // so the query is cleared and the selection resets on every switch.
         .onAppear {
             context.send(viewAction: .appeared)
             isSearchFieldFocused = true
             selectedID = selectableIDs.first
             updateHardwareKeyboardConnected()
+        }
+        .onDisappear {
+            // Previews and snapshot tests mount and unmount the view, don't clear their fixed state.
+            guard !ProcessInfo.isXcodePreview, !ProcessInfo.isRunningTests else { return }
+            context.searchQuery = ""
         }
         .onReceive(NotificationCenter.default.publisher(for: .GCKeyboardDidConnect)) { _ in
             updateHardwareKeyboardConnected()
