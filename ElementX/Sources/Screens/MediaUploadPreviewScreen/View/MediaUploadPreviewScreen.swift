@@ -16,8 +16,6 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct MediaUploadPreviewScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
     @Bindable var context: MediaUploadPreviewScreenViewModel.Context
     
     @State private var captionWarningFrame: CGRect = .zero
@@ -28,8 +26,10 @@ struct MediaUploadPreviewScreen: View {
         ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : ""
     }
     
-    private var colorSchemeOverride: ColorScheme {
-        ProcessInfo.processInfo.isiOSAppOnMac ? colorScheme : .dark
+    /// Matches the dark chrome of the QLPreviewController. Scoped to the sheet rather than
+    /// using `preferredColorScheme` which leaks into the whole app if the sheet fails to present.
+    private var colorSchemeOverride: ColorScheme? {
+        ProcessInfo.processInfo.isiOSAppOnMac ? nil : .dark
     }
     
     var body: some View {
@@ -49,7 +49,7 @@ struct MediaUploadPreviewScreen: View {
             .disabled(context.viewState.shouldDisableInteraction)
             .interactiveDismissDisabled()
             .presentationBackground(.background) // Fix a bug introduced by the caption warning.
-            .preferredColorScheme(colorSchemeOverride)
+            .presentationColorScheme(colorSchemeOverride)
             .onAppear(perform: focusComposerIfHardwareKeyboardConnected)
             .alert(item: $context.alertInfo)
             .sheet(isPresented: $context.isPresentingMediaEditor) {
@@ -60,6 +60,7 @@ struct MediaUploadPreviewScreen: View {
                     context.isPresentingMediaEditor = false
                 }
                 .ignoresSafeArea()
+                .presentationColorScheme(colorSchemeOverride)
                 // Make sure out of bound error alerts are shown even if the sheet is presented
                 .alert(item: $context.alertInfo)
             }
@@ -131,7 +132,7 @@ struct MediaUploadPreviewScreen: View {
                 .presentationDragIndicator(.visible)
                 .padding(.top, 19) // For the drag indicator
                 .presentationBackground(.compound.bgCanvasDefault)
-                .preferredColorScheme(colorSchemeOverride)
+                .presentationColorScheme(colorSchemeOverride)
         }
     }
     
@@ -165,9 +166,6 @@ struct MediaUploadPreviewScreen: View {
             Button { context.send(viewAction: .cancel) } label: {
                 Text(L10n.actionCancel)
             }
-            // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
-            // follow the dark colour scheme on devices running with dark mode disabled.
-            .tint(.compound.textActionPrimary)
         }
         
         if isCurrentMediaImage {
@@ -175,9 +173,6 @@ struct MediaUploadPreviewScreen: View {
                 Button { context.isPresentingMediaEditor = true } label: {
                     CompoundIcon(\.crop)
                 }
-                // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
-                // follow the dark colour scheme on devices running with dark mode disabled.
-                .tint(.compound.textActionPrimary)
             }
         }
     }

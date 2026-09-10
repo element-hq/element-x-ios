@@ -38,7 +38,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
         .presentationDetents([.height(sheetHeight + topPadding)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
-        .preferredColorScheme(preferredColorScheme)
+        .presentationColorScheme(preferredColorScheme)
     }
     
     private var header: some View {
