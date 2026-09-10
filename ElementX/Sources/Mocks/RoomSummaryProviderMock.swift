@@ -43,8 +43,8 @@ extension RoomSummaryProviderMock {
         
         setFilterClosure = { [initialRooms, roomListSubject] filter in
             switch filter {
-            case let .search(query):
-                var rooms = initialRooms
+            case let .search(query, joinedOnly):
+                var rooms = joinedOnly ? initialRooms.filter { $0.joinRequestType == nil } : initialRooms
                 
                 if !query.isEmpty {
                     rooms = rooms.filter { $0.name.localizedCaseInsensitiveContains(query) }
