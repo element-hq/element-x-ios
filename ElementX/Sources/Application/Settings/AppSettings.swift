@@ -73,6 +73,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     func resetSessionSpecificSettings() {
         MXLog.warning("Resetting the user session specific AppSettings.")
         resetHasRunIdentityConfirmationOnboarding()
+        resetSearchBreadcrumbs()
     }
     
     // MARK: - Hooks
@@ -355,6 +356,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     @UserPreference(defaultValue: false)
     var roomListNotificationCountEnabled: Bool
+    
+    // MARK: - Search Screen
+    
+    /// The queries the user searched for and the rooms they opened from the results, most recent first.
+    @UserPreference(defaultValue: [SearchBreadcrumb]())
+    var searchBreadcrumbs: [SearchBreadcrumb]
     
     // MARK: - Room Screen
     

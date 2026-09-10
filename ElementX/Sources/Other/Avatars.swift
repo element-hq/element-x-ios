@@ -136,6 +136,7 @@ enum RoomAvatarSizeOnScreen {
     case leaveSpace
     case messageForwarding
     case search
+    case searchHistory
     case roomSelection
     case details
     case editRoomDetails
@@ -153,7 +154,7 @@ enum RoomAvatarSizeOnScreen {
         switch self {
         case .timeline, .leaveSpace, .notificationSettings, .roomDirectorySearch,
              .completionSuggestions, .authorizedSpaces, .createRoomSelectSpace,
-             .spaceFilters:
+             .spaceFilters, .searchHistory:
             32
         case .messageForwarding, .roomSelection,
              .spaceAddRooms:

@@ -21,9 +21,14 @@ struct SearchScreen: View {
     /// The selection is only meaningful with a hardware keyboard, so don't highlight anything otherwise.
     @State private var isHardwareKeyboardConnected = false
     
-    /// The ids of the results in the active tab, in display order.
+    /// The ids of the rows the user can select, in display order. These are the breadcrumbs
+    /// until a query is entered, after which they're the active tab's results.
     private var selectableIDs: [String] {
-        switch context.viewState.bindings.searchMode {
+        guard context.viewState.isSearching else {
+            return context.viewState.breadcrumbs.map(\.id)
+        }
+        
+        return switch context.viewState.bindings.searchMode {
         case .rooms: context.viewState.rooms.map(\.id)
         case .messages: context.viewState.messages.map(\.id)
         }
@@ -126,6 +131,8 @@ struct SearchScreen: View {
                          iconStyle: .defaultSolid)
                 .frame(maxWidth: .infinity)
                 .padding(40)
+        } else if !context.viewState.breadcrumbs.isEmpty {
+            breadcrumbsList
         } else {
             TitleAndIcon(title: UntranslatedL10n.screenSearchEmptyStateTitle,
                          subtitle: UntranslatedL10n.screenSearchEmptyStateMessage,
@@ -176,6 +183,27 @@ struct SearchScreen: View {
         .compoundList(.plain)
     }
     
+    private var breadcrumbsList: some View {
+        List {
+            Section {
+                ForEach(context.viewState.breadcrumbs) { breadcrumb in
+                    let isSelected = isHardwareKeyboardConnected && selectedID == breadcrumb.id
+                    
+                    switch breadcrumb {
+                    case .query(let query):
+                        SearchScreenQueryCell(query: query, isSelected: isSelected) { context.searchQuery = query }
+                    case .room(let room):
+                        SearchScreenRoomCell(room: room, context: context, isSelected: isSelected, avatarSize: .searchHistory)
+                    }
+                }
+            } header: {
+                Text(UntranslatedL10n.screenSearchRecentSearches)
+                    .compoundListSectionHeader()
+            }
+        }
+        .compoundList(.plain)
+    }
+    
     /// Hidden buttons that switch tabs via ⌘1/⌘2, the common shortcut for jumping to tab N.
     private var tabShortcuts: some View {
         ForEach(Array(SearchScreenMode.allCases.enumerated()), id: \.element) { index, mode in
@@ -201,6 +229,19 @@ struct SearchScreen: View {
     
     private func selectCurrent() {
         guard let selectedID else { return }
+        
+        guard context.viewState.isSearching else {
+            switch context.viewState.breadcrumbs.first(where: { $0.id == selectedID }) {
+            case .query(let query):
+                context.searchQuery = query
+            case .room(let room):
+                context.send(viewAction: .selectRoom(roomID: room.id))
+            case nil:
+                break
+            }
+            return
+        }
+        
         switch context.viewState.bindings.searchMode {
         case .rooms:
             context.send(viewAction: .selectRoom(roomID: selectedID))
@@ -230,6 +271,7 @@ private struct SearchScreenRoomCell: View {
     let room: SearchScreenRoom
     let context: SearchScreenViewModel.Context
     let isSelected: Bool
+    var avatarSize: RoomAvatarSizeOnScreen = .search
     
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
@@ -268,7 +310,7 @@ private struct SearchScreenRoomCell: View {
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
-                            avatarSize: .room(on: .search),
+                            avatarSize: .room(on: avatarSize),
                             mediaProvider: context.mediaProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
@@ -284,6 +326,42 @@ private struct SearchScreenRoomCellButtonStyle: ButtonStyle {
             .background(isSelected || configuration.isPressed ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
             .contentShape(Rectangle())
             .animation(isSelected ? .none : .easeOut(duration: 0.1).disabledDuringTests(), value: isSelected)
+    }
+}
+
+private struct SearchScreenQueryCell: View {
+    let query: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                CompoundIcon(\.history, size: .small, relativeTo: .compound.bodyLG)
+                    .foregroundStyle(.compound.iconPrimary)
+                    .scaledFrame(width: 32, height: 32)
+                    .background(.compound.bgSubtleSecondary, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .accessibilityHidden(true)
+                
+                ZStack(alignment: .leading) {
+                    // Hidden text with 2 lines to match the height of the room rows, scaling with dynamic text.
+                    Text(verbatim: " \n ")
+                        .font(.compound.bodyLG)
+                    
+                    Text(query)
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
+                        .lineLimit(1)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+        }
+        .buttonStyle(SearchScreenRoomCellButtonStyle(isSelected: isSelected))
+        .listRowInsets(.init())
+        .listRowSeparator(.hidden)
+        .rowDivider()
     }
 }
 
@@ -471,35 +549,55 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()),
-                                                      userIndicatorController: UserIndicatorControllerMock())
+                                                      userIndicatorController: UserIndicatorControllerMock(),
+                                                      appSettings: AppSettings.volatile())
     static let noResultsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                           clientProxy: makeClientProxy(),
                                                           mediaProvider: MediaProviderMock(.init()),
                                                           userIndicatorController: UserIndicatorControllerMock(),
+                                                          appSettings: AppSettings.volatile(),
                                                           initialSearchQuery: "John Doe")
     static let roomsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
+                                                      appSettings: AppSettings.volatile(),
                                                       initialSearchQuery: "Foundation")
     static let messagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                          clientProxy: makeClientProxy(searchService: makeSearchService(results: .mockResults)),
                                                          mediaProvider: MediaProviderMock(.init()),
                                                          userIndicatorController: UserIndicatorControllerMock(),
+                                                         appSettings: AppSettings.volatile(),
                                                          initialSearchQuery: "Foundation",
                                                          initialSearchMode: .messages)
     static let loadingMessagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                                 clientProxy: makeClientProxy(searchService: makeSearchService(paginationState: .loading)),
                                                                 mediaProvider: MediaProviderMock(.init()),
                                                                 userIndicatorController: UserIndicatorControllerMock(),
+                                                                appSettings: AppSettings.volatile(),
                                                                 initialSearchQuery: "Foundation",
                                                                 initialSearchMode: .messages)
+    
+    static let breadcrumbsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
+                                                            clientProxy: makeClientProxy(),
+                                                            mediaProvider: MediaProviderMock(.init()),
+                                                            userIndicatorController: UserIndicatorControllerMock(),
+                                                            appSettings: makeAppSettings(breadcrumbs: [.room(roomID: "!room1:matrix.org"),
+                                                                                                       .query("Bob"),
+                                                                                                       .room(roomID: "!room5:matrix.org"),
+                                                                                                       .query("Element HR"),
+                                                                                                       .query("Alice")]))
     
     static var previews: some View {
         ElementNavigationStack {
             SearchScreen(context: emptyViewModel.context)
         }
         .previewDisplayName("Empty")
+        
+        ElementNavigationStack {
+            SearchScreen(context: breadcrumbsViewModel.context)
+        }
+        .previewDisplayName("Recent searches")
         
         ElementNavigationStack {
             SearchScreen(context: noResultsViewModel.context)
@@ -530,13 +628,22 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
         return mock
     }
     
+    private static func makeAppSettings(breadcrumbs: [SearchBreadcrumb]) -> AppSettings {
+        let appSettings = AppSettings.volatile()
+        appSettings.searchBreadcrumbs = breadcrumbs
+        return appSettings
+    }
+    
     private static func makeClientProxy(searchService: SearchServiceProxyMock = makeSearchService()) -> ClientProxyMock {
         let mock = ClientProxyMock(.init(userID: "@alice:matrix.org"))
         mock.searchService = searchService
         let names: [String: String] = ["!room1:matrix.org": "Alice", "!room2:matrix.org": "Bob", "!room3:matrix.org": "Coline",
                                        "!room4:matrix.org": "Bob", "!room5:matrix.org": "Office", "!room6:matrix.org": "Data analytics",
                                        "!room7:matrix.org": "Alice", "!room8:matrix.org": "Bob", "!room9:matrix.org": "Coline"]
-        mock.roomSummaryForIdentifierClosure = { id in .mock(id: id, name: names[id] ?? id) }
+        mock.roomSummaryForIdentifierClosure = { id in
+            let name = names[id] ?? id
+            return .mock(id: id, name: name, canonicalAlias: "#\(name.lowercased()):matrix.org")
+        }
         return mock
     }
 }
