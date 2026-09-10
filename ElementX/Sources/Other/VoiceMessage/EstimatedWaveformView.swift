@@ -84,7 +84,7 @@ private struct ViewSizeKey: PreferenceKey {
     }
 }
 
-private struct WaveformShape: Shape {
+private nonisolated struct WaveformShape: Shape {
     let lineWidth: CGFloat
     let linePadding: CGFloat
     let waveformData: [Float]
