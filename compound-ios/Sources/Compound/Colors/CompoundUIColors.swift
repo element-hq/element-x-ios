@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-@preconcurrency import CompoundDesignTokens
+import CompoundDesignTokens
 import Synchronization
 import UIKit
 
