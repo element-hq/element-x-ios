@@ -125,7 +125,7 @@ private struct GalleryListRow: View {
                           size: item.size,
                           mediaProvider: mediaProvider) { imageView in
                 imageView
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
             } placeholder: {
                 Color.compound.bgSubtleSecondary
             }

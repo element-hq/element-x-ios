@@ -74,7 +74,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
                                       mediaProvider: context.mediaProvider) {
                             Color.compound.bgSubtleSecondary
                         }
-                        .aspectRatio(contentMode: .fill)
+                        .scaledToFill()
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .accessibilityHidden(true)

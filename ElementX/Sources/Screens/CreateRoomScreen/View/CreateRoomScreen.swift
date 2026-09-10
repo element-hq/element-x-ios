@@ -113,7 +113,7 @@ struct CreateRoomScreen: View {
             if let avatarImage = context.viewState.avatarImage {
                 Image(uiImage: avatarImage)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
                     .scaledFrame(size: 70, relativeTo: .title)
                     .avatarShape(context.viewState.isSpace ? .roundedRect : .circle, size: 70)
                     .overlay(alignment: .bottomTrailing) {
