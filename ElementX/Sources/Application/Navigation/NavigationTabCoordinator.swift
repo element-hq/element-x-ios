@@ -228,13 +228,6 @@ import SwiftUI
     enum OverlayPresentationMode { case fullScreen, minimized }
     fileprivate var overlayPresentationMode: OverlayPresentationMode = .minimized
     
-    /// A compact view shown at the top while the overlay is minimized (e.g. an ongoing call bar).
-    fileprivate var minimizedOverlayAccessory: AnyView?
-    
-    func setMinimizedOverlayAccessory(_ view: AnyView?) {
-        minimizedOverlayAccessory = view
-    }
-    
     /// Present an overlay on top of the tab view
     /// - Parameters:
     ///   - coordinator: the coordinator to display
@@ -390,14 +383,6 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                 }
                 .animation(.elementDefault, value: navigationTabCoordinator.overlayPresentationMode)
                 .animation(.elementDefault, value: navigationTabCoordinator.overlayModule)
-            }
-            .overlay(alignment: .top) {
-                if navigationTabCoordinator.overlayModule != nil,
-                   navigationTabCoordinator.overlayPresentationMode == .minimized,
-                   let accessory = navigationTabCoordinator.minimizedOverlayAccessory {
-                    accessory
-                        .transition(.move(edge: .top).combined(with: .opacity))
-                }
             }
     }
     

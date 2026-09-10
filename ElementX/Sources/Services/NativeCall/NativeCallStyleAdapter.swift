@@ -6,7 +6,7 @@
 //
 
 import Compound
-import ElementCall
+import ElementCallAll
 import SwiftUI
 
 // Colours, icons and avatars for the call, read from this app's Compound rather than the package's
@@ -18,7 +18,7 @@ import SwiftUI
 // deployment would get a stock-coloured call screen. Every member below is a computed property, so
 // each read goes to the live instance.
 
-struct ElementCallCompoundTheme: ElementCallTheme {
+struct NativeCallCompoundTheme: ElementCallTheme {
     var bgCanvasDefault: Color {
         .compound.bgCanvasDefault
     }
@@ -96,7 +96,7 @@ struct ElementCallCompoundTheme: ElementCallTheme {
     }
 }
 
-struct ElementCallCompoundIcons: ElementCallIconRendering {
+struct NativeCallCompoundIcons: ElementCallIconRendering {
     func icon(_ icon: ElementCallIcon, size: ElementCallIconSize, relativeTo textStyle: ElementCallTextStyle?) -> AnyView {
         // CompoundIcon handles Dynamic Type scaling, which is why the package asks for a text style
         // rather than a point size.
@@ -129,6 +129,8 @@ struct ElementCallCompoundIcons: ElementCallIconRendering {
         }
     }
     
+    // Not redundant despite the target's default isolation: a static member of a type conforming to
+    // a nonisolated, Sendable port is nonisolated, and `Font.compound` is main actor-isolated.
     @MainActor
     private static func font(for textStyle: ElementCallTextStyle?) -> Font {
         switch textStyle {
@@ -141,7 +143,7 @@ struct ElementCallCompoundIcons: ElementCallIconRendering {
 }
 
 /// Keeps avatars looking like the rest of the app, and keeps media loading out of the package.
-struct ElementCallCompoundAvatars: ElementCallAvatarRendering {
+struct NativeCallCompoundAvatars: ElementCallAvatarRendering {
     let mediaProvider: MediaProviderProtocol?
     
     func avatar(userID: String, displayName: String?, avatarURL: URL?, size: ElementCallAvatarSize) -> AnyView {

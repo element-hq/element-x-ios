@@ -140,14 +140,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Native calls")
                     Text("Uses the matrix-rust-rtc stack instead of the Element Call web view.")
                 }
-                Picker("Element Call compatibility", selection: $context.nativeCallElementCallCompat) {
-                    ForEach(NativeCallElementCallCompat.allCases, id: \.self) { compat in
-                        Text(compat.title).tag(compat)
-                    }
-                }
-                // Sticky-event modes need SDK bindings the released package lacks; calls use the
-                // state-event mode regardless of this setting for now.
-                .disabled(true)
             } header: {
                 Text("Native call")
             } footer: {
@@ -237,16 +229,6 @@ struct DeveloperOptionsScreen: View {
                     Button(L10n.actionDone, action: dismiss.callAsFunction)
                 }
             }
-        }
-    }
-}
-
-private extension NativeCallElementCallCompat {
-    var title: String {
-        switch self {
-        case .off: "MSC4143 (off)"
-        case .stickyEvents: "Sticky events"
-        case .stateEvents: "State events (Element Web)"
         }
     }
 }

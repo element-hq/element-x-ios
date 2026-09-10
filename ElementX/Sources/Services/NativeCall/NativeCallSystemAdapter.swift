@@ -6,14 +6,13 @@
 //
 
 import Combine
-import ElementCall
+import ElementCallAll
 
 /// Serves the call package's system-call port from `ElementCallService`.
 ///
 /// This stays app-side because the provider is process-wide and shared with the web-view call path:
 /// the same `CXProvider` and VoIP push registry answer both, so it cannot be handed over.
-@MainActor
-final class ElementCallSystemAdapter: ElementCallSystemProviding {
+final class NativeCallSystemAdapter: ElementCallSystemProviding {
     private let service: ElementCallServiceProtocol
     
     init(service: ElementCallServiceProtocol) {

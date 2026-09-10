@@ -6,7 +6,7 @@
 //
 
 import Combine
-import ElementCall
+import ElementCallAll
 
 /// Serves the call package's room port from a room proxy.
 ///
@@ -17,8 +17,7 @@ import ElementCall
 ///
 /// The display name is also a product decision rather than protocol, which is the other reason it
 /// belongs here.
-@MainActor
-final class ElementCallRoomContextAdapter: ElementCallRoomContext {
+final class NativeCallRoomContextAdapter: ElementCallRoomContext {
     private let roomProxy: JoinedRoomProxyProtocol
     
     init(roomProxy: JoinedRoomProxyProtocol) {

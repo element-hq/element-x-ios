@@ -9,8 +9,7 @@
 import AVKit
 import Combine
 import Compound
-import ElementCall
-import ElementCallUI
+import ElementCallAll
 import SwiftState
 import SwiftUI
 
@@ -228,7 +227,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    // swiftlint:disable:next function_body_length
     private func setupObservers() {
         chatsTabFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
@@ -317,37 +315,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        flowParameters.elementCallService.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .endCall:
-                    // The native controller hears this through its own system port and tears the
-                    // call down itself, so only the web-view screen needs dismissing here.
-                    if elementCallController?.isInCall != true {
-                        dismissCallScreenIfNeeded()
-                    }
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
-        
-        // Created with the session rather than with the first call: to-device delivery has no
-        // catch-up, so subscribing only after our own membership goes out can miss keys sent in that
-        // window. Peers re-distribute on join, so it recovers, but avoiding the race means the first
-        // frames decrypt rather than arriving black for a moment.
-        flowParameters.appSettings.nativeCallEnabledPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isEnabled in
-                guard let self else { return }
-                flowParameters.elementCallService.setNativeCallModeEnabled(isEnabled)
-                if isEnabled, elementCallStack == nil {
-                    startElementCallStack()
-                }
-            }
-            .store(in: &cancellables)
+        setupCallObservers()
         
         searchScreenCoordinator?.actionsPublisher
             .sink { [weak self] action in
@@ -498,8 +466,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentCallScreen(configuration: ElementCallConfiguration) {
         guard flowParameters.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
-            if let elementCallController, elementCallController.isInCall {
-                restoreElementCallScreen()
+            if let nativeCallController, nativeCallController.isInCall {
+                restoreNativeCallScreen()
             } else {
                 callScreenPictureInPictureController?.stopPictureInPicture()
             }
@@ -507,7 +475,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         if flowParameters.appSettings.nativeCallEnabled {
-            presentElementCallScreen(configuration: configuration)
+            presentNativeCallScreen(configuration: configuration)
             return
         }
         
@@ -542,12 +510,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func hideCallScreenOverlay() {
-        if let elementCallController, elementCallController.isInCall,
+        if let nativeCallController, nativeCallController.isInCall,
            navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
             // The controller decides whether a system window is available and says so through its
-            // actions, so there is nothing to choose between here.
-            elementCallController.requestMinimize()
-            navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+            // actions, so the screen only comes down once one has actually started.
+            nativeCallController.requestMinimize()
             return
         }
         
@@ -564,37 +531,71 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Native calls
     
-    private var elementCallStack: ElementCallStack?
+    private func setupCallObservers() {
+        flowParameters.elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .endCall:
+                    // The native controller hears this through its own system port and tears the
+                    // call down itself, so only the web-view screen needs dismissing here.
+                    if nativeCallController?.isInCall != true {
+                        dismissCallScreenIfNeeded()
+                    }
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
+        // The stack is created with the session rather than with the first call: to-device delivery
+        // has no catch-up, so subscribing only after our own membership goes out can miss keys sent
+        // in that window. Peers re-distribute on join, so it recovers, but avoiding the race means
+        // the first frames decrypt rather than arriving black for a moment.
+        flowParameters.appSettings.nativeCallEnabledPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                guard let self else { return }
+                flowParameters.elementCallService.setNativeCallModeEnabled(isEnabled)
+                if isEnabled, nativeCallStack == nil {
+                    startNativeCallStack()
+                }
+            }
+            .store(in: &cancellables)
+    }
     
-    private var elementCallController: ElementCallController? {
-        elementCallStack?.controller
+    private var nativeCallStack: ElementCallStack?
+    
+    private var nativeCallController: ElementCallController? {
+        nativeCallStack?.controller
     }
     
     /// Builds the call stack for this session. Everything the package needs is supplied here, which
     /// is the whole of the integration surface: a transport, the system call provider, settings, the
     /// look, and a log sink.
-    private func startElementCallStack() {
-        MatrixRtcLogBridge.install()
+    private func startNativeCallStack() {
+        MatrixRTCLogBridge.install()
         
-        guard let transport = userSession.clientProxy.makeElementCallTransport() else {
+        guard let transport = userSession.clientProxy.makeNativeCallTransport() else {
             MXLog.error("Cannot start the native call stack without a transport")
             return
         }
         
-        let style = ElementCallStyle(theme: ElementCallCompoundTheme(),
-                                     icons: ElementCallCompoundIcons(),
-                                     avatars: ElementCallCompoundAvatars(mediaProvider: userSession.mediaProvider),
+        let style = ElementCallStyle(theme: NativeCallCompoundTheme(),
+                                     icons: NativeCallCompoundIcons(),
+                                     avatars: NativeCallCompoundAvatars(mediaProvider: userSession.mediaProvider),
                                      strings: .init(you: L10n.commonYou,
                                                     error: L10n.commonError,
                                                     stop: L10n.actionStop,
                                                     back: L10n.actionBack))
         
         let stack = ElementCallStack(transport: transport,
-                                     system: ElementCallSystemAdapter(service: flowParameters.elementCallService),
-                                     options: ElementCallOptionsAdapter(appSettings: flowParameters.appSettings),
+                                     system: NativeCallSystemAdapter(service: flowParameters.elementCallService),
+                                     options: NativeCallOptionsAdapter(appSettings: flowParameters.appSettings),
                                      style: style,
-                                     logger: ElementCallLoggerAdapter())
-        elementCallStack = stack
+                                     logger: NativeCallLoggerAdapter())
+        nativeCallStack = stack
         
         stack.controller.actions
             .receive(on: DispatchQueue.main)
@@ -602,20 +603,24 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .minimizeRequested:
-                    navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+                    // Nothing to do until we know what the call is minimizing into: the controller
+                    // follows this with either window or no window.
+                    break
                 case .restoreRequested:
-                    restoreElementCallScreen()
+                    restoreNativeCallScreen()
                 case .ended:
-                    navigationTabCoordinator.setMinimizedOverlayAccessory(nil)
                     navigationTabCoordinator.setOverlayCoordinator(nil)
                     stack.controller.reset()
                 case .pictureInPictureStarted:
-                    // Also reached when the system started the window on backgrounding, so whatever
-                    // is in the minimized slot has to come down whether we asked or not.
-                    navigationTabCoordinator.setMinimizedOverlayAccessory(nil)
+                    // Also reached when the system started the window on backgrounding, so this
+                    // isn't necessarily a minimize we asked for.
                     navigationTabCoordinator.setOverlayPresentationMode(.minimized)
                 case .pictureInPictureUnavailable:
-                    showMinimizedCallBar(for: stack.controller)
+                    // Without a window there is nothing to minimize into, and hiding the screen
+                    // anyway would leave the call running with no way back to mute or hang up. The
+                    // bar that belongs here comes with its own PR.
+                    MXLog.info("Staying on the call screen: no system window is available.")
+                    restoreNativeCallScreen()
                 }
             }
             .store(in: &cancellables)
@@ -623,35 +628,26 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         Task { await stack.start() }
     }
     
-    private func presentElementCallScreen(configuration: ElementCallConfiguration) {
-        if elementCallStack == nil {
-            startElementCallStack()
+    private func presentNativeCallScreen(configuration: ElementCallConfiguration) {
+        if nativeCallStack == nil {
+            startNativeCallStack()
         }
-        guard let controller = elementCallController else { return }
+        guard let controller = nativeCallController else { return }
         
         let roomProxy = configuration.roomProxy
         // Starting rings the room; joining one already running happens quietly.
         let callData = ElementCallData(isAudioCall: configuration.voiceOnly,
                                        isStartingCall: !roomProxy.infoPublisher.value.hasRoomCall)
-        controller.startCall(callData, room: ElementCallRoomContextAdapter(roomProxy: roomProxy))
+        controller.startCall(callData, room: NativeCallRoomContextAdapter(roomProxy: roomProxy))
         
         let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: controller))
         navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
         flowParameters.analytics.track(screen: .RoomCall)
     }
     
-    /// The bar the app shows while a call is minimized with no system window: an audio call, or a
-    /// video call whose window could not open.
-    private func showMinimizedCallBar(for controller: ElementCallController) {
-        navigationTabCoordinator.setMinimizedOverlayAccessory(AnyView(ElementCallMinimizedBar(controller: controller) { [weak self] in
-            self?.restoreElementCallScreen()
-        }))
-    }
-    
-    private func restoreElementCallScreen() {
-        elementCallController?.restore()
+    private func restoreNativeCallScreen() {
+        nativeCallController?.restore()
         navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
-        navigationTabCoordinator.setMinimizedOverlayAccessory(nil)
     }
     
     private func dismissCallScreenIfNeeded() {
@@ -660,7 +656,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        navigationTabCoordinator.setMinimizedOverlayAccessory(nil)
         navigationTabCoordinator.setOverlayCoordinator(nil)
     }
     

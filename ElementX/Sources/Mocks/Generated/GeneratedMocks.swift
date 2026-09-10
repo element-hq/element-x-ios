@@ -10,11 +10,7 @@
 import AnalyticsEvents
 import AVFoundation
 import CallKit
-// The call package appears in mocked protocol signatures, notably the transport factory on
-// ClientProxyProtocol.
-import ElementCall
-import ElementCallKit
-import ElementCallMatrix
+import ElementCallAll
 import Foundation
 import LocalAuthentication
 import Photos
@@ -2551,32 +2547,32 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingLiveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never>!
 
-    //MARK: - makeElementCallTransport
+    //MARK: - makeNativeCallTransport
 
-    private let makeElementCallTransportCallsCountLock = NSLock()
-    private nonisolated(unsafe) var makeElementCallTransportUnderlyingCallsCount = 0
-    var makeElementCallTransportCallsCount: Int {
-        get { makeElementCallTransportCallsCountLock.withLock { makeElementCallTransportUnderlyingCallsCount } }
-        set { makeElementCallTransportCallsCountLock.withLock { makeElementCallTransportUnderlyingCallsCount = newValue } }
+    private let makeNativeCallTransportCallsCountLock = NSLock()
+    private nonisolated(unsafe) var makeNativeCallTransportUnderlyingCallsCount = 0
+    var makeNativeCallTransportCallsCount: Int {
+        get { makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount } }
+        set { makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount = newValue } }
     }
-    var makeElementCallTransportCalled: Bool {
-        return makeElementCallTransportCallsCount > 0
+    var makeNativeCallTransportCalled: Bool {
+        return makeNativeCallTransportCallsCount > 0
     }
 
-    private let makeElementCallTransportReturnValueLock = NSLock()
-    private nonisolated(unsafe) var makeElementCallTransportUnderlyingReturnValue: ElementCallSDKTransport?
-    var makeElementCallTransportReturnValue: ElementCallSDKTransport? {
-        get { makeElementCallTransportReturnValueLock.withLock { makeElementCallTransportUnderlyingReturnValue } }
-        set { makeElementCallTransportReturnValueLock.withLock { makeElementCallTransportUnderlyingReturnValue = newValue } }
+    private let makeNativeCallTransportReturnValueLock = NSLock()
+    private nonisolated(unsafe) var makeNativeCallTransportUnderlyingReturnValue: ElementCallSDKTransport?
+    var makeNativeCallTransportReturnValue: ElementCallSDKTransport? {
+        get { makeNativeCallTransportReturnValueLock.withLock { makeNativeCallTransportUnderlyingReturnValue } }
+        set { makeNativeCallTransportReturnValueLock.withLock { makeNativeCallTransportUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var makeElementCallTransportClosure: (() -> ElementCallSDKTransport?)?
+    nonisolated(unsafe) var makeNativeCallTransportClosure: (() -> ElementCallSDKTransport?)?
 
-    func makeElementCallTransport() -> ElementCallSDKTransport? {
-        makeElementCallTransportCallsCountLock.withLock { makeElementCallTransportUnderlyingCallsCount += 1 }
-        if let makeElementCallTransportClosure = makeElementCallTransportClosure {
-            return makeElementCallTransportClosure()
+    func makeNativeCallTransport() -> ElementCallSDKTransport? {
+        makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount += 1 }
+        if let makeNativeCallTransportClosure = makeNativeCallTransportClosure {
+            return makeNativeCallTransportClosure()
         } else {
-            return makeElementCallTransportReturnValue
+            return makeNativeCallTransportReturnValue
         }
     }
     //MARK: - isOnlyDeviceLeft

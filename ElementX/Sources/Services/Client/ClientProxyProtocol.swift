@@ -7,7 +7,7 @@
 //
 
 import Combine
-import ElementCallMatrix
+import ElementCallAll
 import Foundation
 import MatrixRustSDK
 
@@ -183,7 +183,7 @@ protocol ClientProxyProtocol: AnyObject {
     ///
     /// Concrete rather than existential, and taking no logger, because Sourcery cannot generate a
     /// mock for `(any Protocol)?` and the logger has nothing to configure.
-    func makeElementCallTransport() -> ElementCallSDKTransport?
+    func makeNativeCallTransport() -> ElementCallSDKTransport?
     
     var isLoginWithQRCodeSupported: Bool { get async }
     

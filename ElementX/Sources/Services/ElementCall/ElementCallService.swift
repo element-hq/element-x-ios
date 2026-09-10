@@ -147,6 +147,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     // MARK: - Native calls
     
     func startNativeCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async {
+        MXLog.info("Starting a native call session, video: \(isVideo), replacing an ongoing call: \(ongoingCallID != nil)")
+        
         if ongoingCallID != nil {
             tearDownCallSession()
         }
@@ -184,7 +186,13 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func reportNativeCallConnected(roomID: String) {
-        guard let ongoingCallID, ongoingCallID.roomID == roomID, ongoingCallID.isNative else { return }
+        guard let ongoingCallID, ongoingCallID.roomID == roomID, ongoingCallID.isNative else {
+            // The system ends an outgoing call that never reports connecting, so a silent guard
+            // here shows up much later as a call that hangs itself up.
+            MXLog.warning("Not reporting a native call as connected, no matching ongoing call")
+            return
+        }
+        MXLog.info("Reporting the native call as connected")
         callProvider.reportOutgoingCall(with: ongoingCallID.callKitID, connectedAt: nil)
     }
     
@@ -390,6 +398,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // This gets called for no reason on simulators, where CallKit
         // isn't even supported, ignore it.
         #else
+        // Logged because the system ends a call for reasons of its own, and a native call that
+        // disappears looks like the app's doing until you can see this line.
+        MXLog.info("Call provider performed an end call action, ongoing: \(ongoingCallID != nil), incoming: \(incomingCallID != nil)")
+        
         if let ongoingCallID {
             actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
         }
@@ -414,6 +426,9 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private func tearDownCallSession(sendEndCallAction: Bool = true) {
         if sendEndCallAction, let ongoingCallID {
+            // Logged so that the end call action the provider performs next can be told apart from
+            // one the system raised by itself, which otherwise look identical.
+            MXLog.info("Requesting an end call action for the ongoing call")
             let transaction = CXTransaction(action: CXEndCallAction(call: ongoingCallID.callKitID))
             callController.request(transaction) { error in
                 if let error {
