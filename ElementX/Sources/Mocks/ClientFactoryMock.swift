@@ -46,14 +46,14 @@ extension ClientFactoryMock {
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        makeAuthenticationClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _, _, _ in
+        makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _, _, _ in
             guard let client = configuration.homeserverClients[address] else {
                 throw ClientBuildError.ServerUnreachable(message: "Not a known homeserver.")
             }
             return client
         }
         
-        makeInMemoryClientHomeserverAddressClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _ in
+        makeInMemoryClientServerNameOrBaseURLClientSessionDelegateAppSettingsAppHooksClosure = { address, _, _, _ in
             guard let client = configuration.homeserverClients[address] else {
                 throw ClientBuildError.ServerUnreachable(message: "Not a known homeserver.")
             }

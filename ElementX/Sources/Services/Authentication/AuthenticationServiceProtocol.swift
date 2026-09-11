@@ -26,7 +26,7 @@ enum AuthenticationServiceError: Error, Equatable {
     
     case invalidServer
     case invalidCredentials
-    case invalidHomeserverAddress
+    case invalidServerNameOrBaseURL
     case invalidWellKnown(String)
     case slidingSyncNotAvailable
     case loginNotSupported
@@ -43,8 +43,8 @@ protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     /// The type of flow the service is currently configured with.
     var flow: AuthenticationFlow { get }
     
-    /// Sets up the service for login on the specified homeserver address.
-    func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
+    /// Sets up the service for login or registration using the supplied server name or base URL.
+    func configure(for serverNameOrBaseURL: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OAuth for the current homeserver.
     func urlForOAuthLogin(loginHint: String?) async -> Result<OAuthAuthorizationDataProxy, AuthenticationServiceError>
     /// Asks the SDK to abort an ongoing OAuth login if we didn't get a callback to complete the request with.
