@@ -59,6 +59,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var endUnansweredCallTask: Task<Void, Never>?
     
+    /// A call answered for the native stack, until the stack takes it over.
+    private var answeredNativeCallID: CallID?
+    private var endUnattachedCallTask: Task<Void, Never>?
+    
     private var ongoingCallID: CallID? {
         didSet { ongoingCallRoomIDSubject.send(ongoingCallID?.roomID) }
     }
@@ -197,8 +201,17 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     }
     
     func endNativeCallSession(roomID: String) {
-        guard ongoingCallID?.roomID == roomID else { return }
-        tearDownCallSession(sendEndCallAction: true)
+        if ongoingCallID?.roomID == roomID {
+            tearDownCallSession(sendEndCallAction: true)
+            return
+        }
+        
+        // Answered and handed over, but the stack couldn't take it. Ending it here rather than
+        // waiting for the watchdog takes the system call UI away straight away.
+        if answeredNativeCallID?.roomID == roomID {
+            MXLog.warning("Ending an answered call the native call stack didn't take over")
+            endUnattachedCall()
+        }
     }
     
     func setAudioEnabled(_ enabled: Bool, roomID: String) {
@@ -367,6 +380,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             // The native stack owns media in this process, so the CallKit call stays up: the
             // controller attaches to it in `startNativeCallSession`.
             endUnansweredCallTask?.cancel()
+            endCallIfLeftUnattached(incomingCallID)
             actionsSubject.send(.startCall(roomID: incomingCallID.roomID, isVoiceCall: incomingCallID.isVoiceCall))
             return
         }
@@ -473,6 +487,36 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
     }
     
+    /// Ends an answered call that the native stack never took over.
+    ///
+    /// Nothing else would. The call is deliberately left up for the controller to attach to in
+    /// `startNativeCallSession`, so any way that hand-off falls through — the room isn't joined,
+    /// there's no transport, another call is already running — leaves the system showing a call
+    /// the app knows nothing about and can no longer hang up.
+    private func endCallIfLeftUnattached(_ callID: CallID) {
+        answeredNativeCallID = callID
+        
+        endUnattachedCallTask = Task { [weak self] in
+            try? await self?.timeProvider.clock.sleep(for: .seconds(30))
+            
+            guard let self, !Task.isCancelled, answeredNativeCallID == callID else {
+                return
+            }
+            
+            MXLog.error("The native call stack never took over the answered call, ending it")
+            endUnattachedCall()
+        }
+    }
+    
+    private func endUnattachedCall() {
+        guard let answeredNativeCallID else {
+            return
+        }
+        
+        callProvider.reportCall(with: answeredNativeCallID.callKitID, endedAt: nil, reason: .failed)
+        clearIncomingCallState()
+    }
+    
     private func sendDeclineCallEvent(_ incomingCallID: CallID) async {
         guard let rtcNotificationID = incomingCallID.rtcNotificationID else {
             MXLog.info("No rtc notification event to decline.")
@@ -574,6 +618,9 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     private func clearIncomingCallState() {
         endUnansweredCallTask?.cancel()
         endUnansweredCallTask = nil
+        endUnattachedCallTask?.cancel()
+        endUnattachedCallTask = nil
+        answeredNativeCallID = nil
         declineListenerHandle?.cancel()
         declineListenerHandle = nil
         incomingCallRoomInfoCancellable = nil
