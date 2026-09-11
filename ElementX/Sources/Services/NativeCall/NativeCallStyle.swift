@@ -9,14 +9,11 @@ import Compound
 import ElementCallAll
 import SwiftUI
 
-// Colours, icons and avatars for the call, read from this app's Compound rather than the package's
-// default tokens.
+// Colours, icons and avatars for the call, read from this app's Compound.
 //
-// This is the whole reason the package takes a theme rather than depending on Compound itself.
-// `Color.compound` is a single shared instance that Element Pro re-brands at runtime from remote
-// settings, so a second copy linked inside the package would never see the override and a branded
-// deployment would get a stock-coloured call screen. Every member below is a computed property, so
-// each read goes to the live instance.
+// Why the package takes a theme instead of linking Compound itself: `Color.compound` is a single
+// shared instance that Element Pro re-brands at runtime, and a second copy inside the package would
+// never see the override. Every member is computed so each read goes to the live instance.
 
 struct NativeCallTheme: ElementCallTheme {
     var bgCanvasDefault: Color {
@@ -98,8 +95,7 @@ struct NativeCallTheme: ElementCallTheme {
 
 struct NativeCallIcons: ElementCallIconRendering {
     func icon(_ icon: ElementCallIcon, size: ElementCallIconSize, relativeTo textStyle: ElementCallTextStyle?) -> AnyView {
-        // CompoundIcon handles Dynamic Type scaling, which is why the package asks for a text style
-        // rather than a point size.
+        // The package asks for a text style rather than a point size so CompoundIcon can scale it.
         AnyView(CompoundIcon(Self.keyPath(for: icon), size: Self.size(for: size), relativeTo: Self.font(for: textStyle)))
     }
     

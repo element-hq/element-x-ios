@@ -7,12 +7,10 @@
 
 import ElementCallAll
 
-/// Sends the call package's own log lines to `MXLog`, so they land in the same rageshake as
-/// everything else the app writes. The Rust core's output is installed separately by
-/// `MatrixRTCLogBridge`.
+/// Sends the call package's log lines to `MXLog`. The Rust core's own output is bridged separately
+/// by `MatrixRTCLogBridge`.
 struct NativeCallLogger: ElementCallLogging {
-    /// The record carries the package's own `#fileID` and line, so these read like any other line
-    /// the app writes rather than pointing back at here.
+    /// Passes the record's file and line through so entries point at the package, not at here.
     func log(_ record: ElementCallLogRecord) {
         switch record.level {
         case .debug: MXLog.debug(record.message, file: record.file, line: record.line)

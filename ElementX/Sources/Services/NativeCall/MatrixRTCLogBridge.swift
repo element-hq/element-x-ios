@@ -12,8 +12,7 @@ nonisolated enum MatrixRTCLogBridge {
     /// Idempotent, must run before any other use of the call package.
     static func install() {
         MatrixRTCLogging.install { record in
-            // The core's own position when it has one, so a line points into the Rust source rather
-            // than in here; its module path otherwise, which at least says where the record is from.
+            // The core's own position when it has one, its module path otherwise.
             let file = record.file ?? record.target
             let line = Int(record.line ?? 0)
             switch record.level {

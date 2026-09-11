@@ -7,10 +7,8 @@
 
 import ElementCallAll
 
-/// Serves the call package's settings port from `AppSettings`.
-///
-/// Every member reads the setting on access rather than capturing it, so a developer flipping a
-/// toggle mid-session is seen by the next call without restarting anything.
+/// Serves the call package's settings port from `AppSettings`, reading on access so that a toggle
+/// flipped mid-session is picked up by the next call.
 struct NativeCallOptions: ElementCallOptions {
     let appSettings: AppSettings
     
@@ -19,8 +17,7 @@ struct NativeCallOptions: ElementCallOptions {
         true
     }
     
-    /// Pinned rather than a setting: this has to match the other clients in the room, so it isn't a
-    /// choice a user can usefully make, and it likely belongs to the call package rather than here.
+    /// Pinned rather than a setting: it has to match the other clients in the room.
     var elementCallCompatibility: MatrixRTCElementCallCompat {
         .stateEvents
     }

@@ -10,10 +10,8 @@ import ElementCallAll
 
 /// Serves the call package's room port from a room proxy.
 ///
-/// Deliberately not in the package, even though the underlying data is all in the SDK. The proxy is
-/// an asset rather than a wrapper: it keeps a cached current value for room info and members,
-/// refreshed off the SDK's own subscription, and reads members from disk before the network. A
-/// version built on the raw SDK would re-derive all of that and lose the caching.
+/// Built on the proxy rather than in the package so that the call reuses its caching: current values
+/// for room info and members, refreshed off the SDK's subscription, read from disk before the network.
 final class NativeCallRoomContext: ElementCallRoomContext {
     private let roomProxy: JoinedRoomProxyProtocol
     

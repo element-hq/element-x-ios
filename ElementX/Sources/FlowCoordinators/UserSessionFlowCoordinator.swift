@@ -543,8 +543,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .endCall:
-                    // The native controller hears this through its own system port and tears the
-                    // call down itself, so only the web-view screen needs dismissing here.
+                    // The native controller hears this on its own port and tears the call down itself.
                     if nativeCallController?.isInCall != true {
                         dismissCallScreenIfNeeded()
                     }
@@ -554,10 +553,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        // The stack is created with the session rather than with the first call: to-device delivery
-        // has no catch-up, so subscribing only after our own membership goes out can miss keys sent
-        // in that window. Peers re-distribute on join, so it recovers, but avoiding the race means
-        // the first frames decrypt rather than arriving black for a moment.
+        // Created with the session, not with the first call: to-device delivery has no catch-up, so
+        // subscribing after our membership goes out can miss keys sent in that window and the first
+        // frames arrive black until peers re-distribute on join.
         flowParameters.appSettings.nativeCallEnabledPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isEnabled in
@@ -580,9 +578,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         nativeCallStack?.controller
     }
     
-    /// Builds the call stack for this session. Everything the package needs is supplied here, which
-    /// is the whole of the integration surface: a transport, the system call provider, settings, the
-    /// look, and a log sink.
+    /// Builds the call stack for this session. The arguments are the whole integration surface: a
+    /// transport, the system call provider, settings, the look and a log sink.
     private func startNativeCallStack() {
         MatrixRTCLogBridge.install()
         
@@ -626,9 +623,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     // isn't necessarily a minimize we asked for.
                     navigationTabCoordinator.setOverlayPresentationMode(.minimized)
                 case .pictureInPictureUnavailable:
-                    // Without a window there is nothing to minimize into, and hiding the screen
-                    // anyway would leave the call running with no way back to mute or hang up. The
-                    // bar that belongs here comes with its own PR.
+                    // Hiding the screen without a window to minimize into would leave the call
+                    // running with no way back to mute or hang up.
                     MXLog.info("Staying on the call screen: no system window is available.")
                     restoreNativeCallScreen()
                 }
@@ -678,8 +674,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
             
-            // The controller ignores a second call, so this one waits for the running call to
-            // leave its room properly rather than being dropped the way the web view drops it.
+            // The controller ignores a second call, so wait for the running one to leave its room.
             MXLog.info("Leaving the ongoing call to start the one requested in another room.")
             pendingNativeCallConfiguration = configuration
             controller.hangUp()

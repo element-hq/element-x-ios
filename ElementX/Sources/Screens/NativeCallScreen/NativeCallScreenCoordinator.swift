@@ -16,10 +16,9 @@ struct NativeCallScreenCoordinatorParameters {
 
 /// Hosts the call package's screen.
 ///
-/// Deliberately thin. There is no view model of its own and no actions to forward, because the call
-/// is a fact about the session rather than about this screen, and the flow coordinator listens to
-/// the controller directly. All this owns is the package view model's lifetime, which is why the
-/// package takes one rather than building its own.
+/// No view model or actions of its own: the call belongs to the session, not to this screen, and the
+/// flow coordinator listens to the controller directly. All this owns is the package view model's
+/// lifetime.
 final class NativeCallScreenCoordinator: CoordinatorProtocol {
     private let viewModel: ElementCallScreenViewModel
     

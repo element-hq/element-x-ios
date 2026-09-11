@@ -10,8 +10,8 @@ import ElementCallAll
 
 /// Serves the call package's system-call port from `ElementCallService`.
 ///
-/// This stays app-side because the provider is process-wide and shared with the web-view call path:
-/// the same `CXProvider` and VoIP push registry answer both, so it cannot be handed over.
+/// Stays app-side because the same `CXProvider` and VoIP push registry serve the web-view call path
+/// too, so ownership can't be handed to the package.
 final class NativeCallSystem: ElementCallSystemProviding {
     private let service: ElementCallServiceProtocol
     
@@ -32,9 +32,8 @@ final class NativeCallSystem: ElementCallSystemProviding {
                     .microphoneMuteChanged(isMuted: !enabled)
                 case .endCall(let roomID):
                     .endCallRequested(roomID: roomID)
-                // Neither is this port's business. Answering a push is navigation, so the flow
-                // coordinator handles it and the call arrives here as an ordinary start; an
-                // incoming request only means the system is ringing.
+                // Both are navigation, handled by the flow coordinator. The call reaches this port
+                // later, as an ordinary start.
                 case .startCall, .receivedIncomingCallRequest:
                     nil
                 }
