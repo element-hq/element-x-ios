@@ -18,7 +18,7 @@ import SwiftUI
 // deployment would get a stock-coloured call screen. Every member below is a computed property, so
 // each read goes to the live instance.
 
-struct NativeCallCompoundTheme: ElementCallTheme {
+struct NativeCallTheme: ElementCallTheme {
     var bgCanvasDefault: Color {
         .compound.bgCanvasDefault
     }
@@ -96,7 +96,7 @@ struct NativeCallCompoundTheme: ElementCallTheme {
     }
 }
 
-struct NativeCallCompoundIcons: ElementCallIconRendering {
+struct NativeCallIcons: ElementCallIconRendering {
     func icon(_ icon: ElementCallIcon, size: ElementCallIconSize, relativeTo textStyle: ElementCallTextStyle?) -> AnyView {
         // CompoundIcon handles Dynamic Type scaling, which is why the package asks for a text style
         // rather than a point size.
@@ -143,7 +143,7 @@ struct NativeCallCompoundIcons: ElementCallIconRendering {
 }
 
 /// Keeps avatars looking like the rest of the app, and keeps media loading out of the package.
-struct NativeCallCompoundAvatars: ElementCallAvatarRendering {
+struct NativeCallAvatars: ElementCallAvatarRendering {
     let mediaProvider: MediaProviderProtocol?
     
     func avatar(userID: String, displayName: String?, avatarURL: URL?, size: ElementCallAvatarSize) -> AnyView {

@@ -12,7 +12,7 @@ import ElementCallAll
 ///
 /// This stays app-side because the provider is process-wide and shared with the web-view call path:
 /// the same `CXProvider` and VoIP push registry answer both, so it cannot be handed over.
-final class NativeCallSystemAdapter: ElementCallSystemProviding {
+final class NativeCallSystem: ElementCallSystemProviding {
     private let service: ElementCallServiceProtocol
     
     init(service: ElementCallServiceProtocol) {

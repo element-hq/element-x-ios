@@ -14,7 +14,7 @@ import ElementCallAll
 /// an asset rather than a wrapper: it keeps a cached current value for room info and members,
 /// refreshed off the SDK's own subscription, and reads members from disk before the network. A
 /// version built on the raw SDK would re-derive all of that and lose the caching.
-final class NativeCallRoomContextAdapter: ElementCallRoomContext {
+final class NativeCallRoomContext: ElementCallRoomContext {
     private let roomProxy: JoinedRoomProxyProtocol
     
     init(roomProxy: JoinedRoomProxyProtocol) {

@@ -586,19 +586,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let style = ElementCallStyle(theme: NativeCallCompoundTheme(),
-                                     icons: NativeCallCompoundIcons(),
-                                     avatars: NativeCallCompoundAvatars(mediaProvider: userSession.mediaProvider),
+        let style = ElementCallStyle(theme: NativeCallTheme(),
+                                     icons: NativeCallIcons(),
+                                     avatars: NativeCallAvatars(mediaProvider: userSession.mediaProvider),
                                      strings: .init(you: L10n.commonYou,
                                                     error: L10n.commonError,
                                                     stop: L10n.actionStop,
                                                     back: L10n.actionBack))
         
         let stack = ElementCallStack(transport: transport,
-                                     system: NativeCallSystemAdapter(service: flowParameters.elementCallService),
-                                     options: NativeCallOptionsAdapter(appSettings: flowParameters.appSettings),
+                                     system: NativeCallSystem(service: flowParameters.elementCallService),
+                                     options: NativeCallOptions(appSettings: flowParameters.appSettings),
                                      style: style,
-                                     logger: NativeCallLoggerAdapter())
+                                     logger: NativeCallLogger())
         nativeCallStack = stack
         
         stack.controller.actions
@@ -667,7 +667,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         // Starting rings the room; joining one already running happens quietly.
         let callData = ElementCallData(isAudioCall: configuration.voiceOnly,
                                        isStartingCall: !roomProxy.infoPublisher.value.hasRoomCall)
-        controller.startCall(callData, room: NativeCallRoomContextAdapter(roomProxy: roomProxy))
+        controller.startCall(callData, room: NativeCallRoomContext(roomProxy: roomProxy))
         
         let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: controller))
         navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
