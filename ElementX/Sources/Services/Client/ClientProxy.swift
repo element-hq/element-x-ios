@@ -22,6 +22,7 @@ class ClientProxy: ClientProxyProtocol {
     
     let mediaLoader: MediaLoaderProtocol
     let contentScanner: ContentScannerProxyProtocol?
+    let nativeCallTransport: ElementCallMatrixTransport?
     
     private var roomListService: RoomListService
     // periphery: ignore - only for retain
@@ -227,6 +228,8 @@ class ClientProxy: ClientProxyProtocol {
             contentScanner = nil
         }
         
+        nativeCallTransport = (client as? Client).flatMap { ElementCallSDKTransport(client: $0) }
+        
         notificationSettings = await NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
@@ -373,16 +376,6 @@ class ClientProxy: ClientProxyProtocol {
                 return false
             }
         }
-    }
-    
-    // MARK: Native calls
-    
-    func makeNativeCallTransport() -> ElementCallSDKTransport? {
-        guard let client = client as? Client else {
-            MXLog.warning("Cannot make an Element Call transport without a real SDK client")
-            return nil
-        }
-        return ElementCallSDKTransport(client: client, logger: NativeCallLoggerAdapter())
     }
     
     var isLoginWithQRCodeSupported: Bool {

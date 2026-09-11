@@ -581,7 +581,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func startNativeCallStack() {
         MatrixRTCLogBridge.install()
         
-        guard let transport = userSession.clientProxy.makeNativeCallTransport() else {
+        guard let transport = userSession.clientProxy.nativeCallTransport else {
             MXLog.error("Cannot start the native call stack without a transport")
             return
         }

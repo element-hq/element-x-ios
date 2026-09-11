@@ -2507,6 +2507,7 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingIsLiveKitRTCSupported: Bool!
     nonisolated(unsafe) var isLiveKitRTCSupportedClosure: (() async -> Bool)?
+    nonisolated(unsafe) var nativeCallTransport: ElementCallMatrixTransport?
     nonisolated(unsafe) var isLoginWithQRCodeSupportedCallsCount = 0
     var isLoginWithQRCodeSupportedCalled: Bool {
         return isLoginWithQRCodeSupportedCallsCount > 0
@@ -2547,34 +2548,6 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingLiveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never>!
 
-    //MARK: - makeNativeCallTransport
-
-    private let makeNativeCallTransportCallsCountLock = NSLock()
-    private nonisolated(unsafe) var makeNativeCallTransportUnderlyingCallsCount = 0
-    var makeNativeCallTransportCallsCount: Int {
-        get { makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount } }
-        set { makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount = newValue } }
-    }
-    var makeNativeCallTransportCalled: Bool {
-        return makeNativeCallTransportCallsCount > 0
-    }
-
-    private let makeNativeCallTransportReturnValueLock = NSLock()
-    private nonisolated(unsafe) var makeNativeCallTransportUnderlyingReturnValue: ElementCallSDKTransport?
-    var makeNativeCallTransportReturnValue: ElementCallSDKTransport? {
-        get { makeNativeCallTransportReturnValueLock.withLock { makeNativeCallTransportUnderlyingReturnValue } }
-        set { makeNativeCallTransportReturnValueLock.withLock { makeNativeCallTransportUnderlyingReturnValue = newValue } }
-    }
-    nonisolated(unsafe) var makeNativeCallTransportClosure: (() -> ElementCallSDKTransport?)?
-
-    func makeNativeCallTransport() -> ElementCallSDKTransport? {
-        makeNativeCallTransportCallsCountLock.withLock { makeNativeCallTransportUnderlyingCallsCount += 1 }
-        if let makeNativeCallTransportClosure = makeNativeCallTransportClosure {
-            return makeNativeCallTransportClosure()
-        } else {
-            return makeNativeCallTransportReturnValue
-        }
-    }
     //MARK: - isOnlyDeviceLeft
 
     private let isOnlyDeviceLeftCallsCountLock = NSLock()
