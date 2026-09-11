@@ -377,6 +377,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     if let coordinator = navigationTabCoordinator.overlayModule?.coordinator {
                         coordinator.toPresentable()
                             .opacity(navigationTabCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
+                            .allowsHitTesting(navigationTabCoordinator.overlayPresentationMode == .fullScreen)
                             .transition(.opacity)
                     }
                 }

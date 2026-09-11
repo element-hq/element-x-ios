@@ -113,7 +113,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         userIndicatorController = UserIndicatorController()
         
-        elementCallService = ElementCallService()
+        elementCallService = ElementCallService(appSettings: appSettings)
         
         navigationRootCoordinator = NavigationRootCoordinator()
         

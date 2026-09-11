@@ -8,6 +8,7 @@
 
 @preconcurrency import Combine
 import CryptoKit
+import ElementCallAll
 import Foundation
 import MatrixRustSDK
 import OrderedCollections
@@ -21,6 +22,7 @@ class ClientProxy: ClientProxyProtocol {
     
     let mediaLoader: MediaLoaderProtocol
     let contentScanner: ContentScannerProxyProtocol?
+    let nativeCallTransport: ElementCallMatrixTransport?
     
     private var roomListService: RoomListService
     // periphery: ignore - only for retain
@@ -225,6 +227,8 @@ class ClientProxy: ClientProxyProtocol {
         } else {
             contentScanner = nil
         }
+        
+        nativeCallTransport = (client as? Client).flatMap { ElementCallSDKTransport(client: $0) }
         
         notificationSettings = await NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
