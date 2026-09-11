@@ -611,6 +611,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .ended:
                     navigationTabCoordinator.setOverlayCoordinator(nil)
                     stack.controller.reset()
+                    presentPendingNativeCallScreen()
                 case .pictureInPictureStarted:
                     // Also reached when the system started the window on backgrounding, so this
                     // isn't necessarily a minimize we asked for.
@@ -628,11 +629,31 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         Task { await stack.start() }
     }
     
+    /// A call requested while another one was still running, started once that one has ended.
+    private var pendingNativeCallConfiguration: ElementCallConfiguration?
+    
     private func presentNativeCallScreen(configuration: ElementCallConfiguration) {
         if nativeCallStack == nil {
             startNativeCallStack()
         }
         guard let controller = nativeCallController else { return }
+        
+        if controller.isInCall {
+            guard controller.room?.roomID != configuration.callRoomID else {
+                // Reached while the call is still joining, before the service has an ongoing call
+                // for the guard in `presentCallScreen` to match against.
+                MXLog.info("Returning to the call already starting in this room.")
+                restoreNativeCallScreen()
+                return
+            }
+            
+            // The controller ignores a second call, so this one waits for the running call to
+            // leave its room properly rather than being dropped the way the web view drops it.
+            MXLog.info("Leaving the ongoing call to start the one requested in another room.")
+            pendingNativeCallConfiguration = configuration
+            controller.hangUp()
+            return
+        }
         
         let roomProxy = configuration.roomProxy
         // Starting rings the room; joining one already running happens quietly.
@@ -643,6 +664,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: controller))
         navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
         flowParameters.analytics.track(screen: .RoomCall)
+    }
+    
+    private func presentPendingNativeCallScreen() {
+        guard let configuration = pendingNativeCallConfiguration else { return }
+        pendingNativeCallConfiguration = nil
+        presentNativeCallScreen(configuration: configuration)
     }
     
     private func restoreNativeCallScreen() {
