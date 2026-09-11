@@ -196,7 +196,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
             
             await elementCallService.setupCallSession(roomID: configuration.roomProxy.id,
-                                                      roomDisplayName: configuration.roomProxy.infoPublisher.value.displayName ?? configuration.roomProxy.id)
+                                                      roomDisplayName: configuration.roomProxy.infoPublisher.value.displayNameOrID)
         }
         
         timeoutTask = Task { [weak self] in

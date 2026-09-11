@@ -14,9 +14,6 @@ import ElementCallAll
 /// an asset rather than a wrapper: it keeps a cached current value for room info and members,
 /// refreshed off the SDK's own subscription, and reads members from disk before the network. A
 /// version built on the raw SDK would re-derive all of that and lose the caching.
-///
-/// The display name is also a product decision rather than protocol, which is the other reason it
-/// belongs here.
 final class NativeCallRoomContextAdapter: ElementCallRoomContext {
     private let roomProxy: JoinedRoomProxyProtocol
     
@@ -30,12 +27,12 @@ final class NativeCallRoomContextAdapter: ElementCallRoomContext {
     }
     
     var displayName: String {
-        Self.name(from: roomProxy.infoPublisher.value, roomID: roomProxy.id)
+        roomProxy.infoPublisher.value.displayNameOrID
     }
     
     var displayNamePublisher: AnyPublisher<String, Never> {
         roomProxy.infoPublisher
-            .map { [id = roomProxy.id] in Self.name(from: $0, roomID: id) }
+            .map(\.displayNameOrID)
             .removeDuplicates()
             .eraseToAnyPublisher()
     }
@@ -54,12 +51,6 @@ final class NativeCallRoomContextAdapter: ElementCallRoomContext {
     
     var memberProfilesPublisher: AnyPublisher<[String: ElementCallMemberProfile], Never> {
         roomProxy.membersPublisher.map(Self.profiles).eraseToAnyPublisher()
-    }
-    
-    /// The app's fallback chain, which is why this is not in the package: what to call a room with
-    /// no name is Element's opinion, not something the protocol settles.
-    private static func name(from info: RoomInfoProxyProtocol, roomID: String) -> String {
-        info.displayName ?? info.rawName ?? info.canonicalAlias ?? roomID
     }
     
     private static func profiles(from members: [RoomMemberProxyProtocol]) -> [String: ElementCallMemberProfile] {
