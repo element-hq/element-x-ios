@@ -15,7 +15,7 @@ struct NativeCallLogger: ElementCallLogging {
     /// the app writes rather than pointing back at here.
     func log(_ record: ElementCallLogRecord) {
         switch record.level {
-        case .debug: MXLog.verbose(record.message, file: record.file, line: record.line)
+        case .debug: MXLog.debug(record.message, file: record.file, line: record.line)
         case .info: MXLog.info(record.message, file: record.file, line: record.line)
         case .warning: MXLog.warning(record.message, file: record.file, line: record.line)
         case .error: MXLog.error(record.message, file: record.file, line: record.line)
