@@ -553,9 +553,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        // Created with the session, not with the first call: to-device delivery has no catch-up, so
-        // subscribing after our membership goes out can miss keys sent in that window and the first
-        // frames arrive black until peers re-distribute on join.
+        // Created with the session, not with the first call.
         flowParameters.appSettings.nativeCallEnabledPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isEnabled in
