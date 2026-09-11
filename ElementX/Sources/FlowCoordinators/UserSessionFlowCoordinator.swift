@@ -143,6 +143,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     func stop() {
         chatsTabFlowCoordinator.stop()
+        stopNativeCallStack()
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -562,8 +563,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] isEnabled in
                 guard let self else { return }
                 flowParameters.elementCallService.setNativeCallModeEnabled(isEnabled)
-                if isEnabled, nativeCallStack == nil {
-                    startNativeCallStack()
+                if isEnabled {
+                    if nativeCallStack == nil {
+                        startNativeCallStack()
+                    }
+                } else {
+                    stopNativeCallStack()
                 }
             }
             .store(in: &cancellables)
@@ -631,6 +636,24 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         Task { await stack.start() }
+    }
+    
+    /// Releases the stack along with the to-device subscription it holds open for key delivery.
+    /// Nothing else does: the coordinator has no deinit, so without this the stack outlives a logout.
+    private func stopNativeCallStack() {
+        guard let stack = nativeCallStack else { return }
+        nativeCallStack = nil
+        
+        MXLog.info("Stopping the native call stack, in a call: \(stack.controller.isInCall)")
+        
+        // Best effort: the leave this starts may not finish before the core stops, but the
+        // alternative is walking away from the call without telling the room at all.
+        if stack.controller.isInCall {
+            stack.controller.hangUp()
+        }
+        
+        stack.stop()
+        dismissCallScreenIfNeeded()
     }
     
     /// A call requested while another one was still running, started once that one has ended.
