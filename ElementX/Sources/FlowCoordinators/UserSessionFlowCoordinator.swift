@@ -449,7 +449,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             // An answered call is left up for the native stack, so it has to be ended here rather
             // than leaving the system with a call this room can no longer serve.
             MXLog.error("Cannot present the call screen, \(roomID) isn't a joined room")
-            flowParameters.elementCallService.endNativeCallSession(roomID: roomID)
+            flowParameters.elementCallService.tearDownCallSession(roomID: roomID)
             return
         }
         
@@ -558,7 +558,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isEnabled in
                 guard let self else { return }
-                flowParameters.elementCallService.setNativeCallModeEnabled(isEnabled)
                 if isEnabled {
                     if nativeCallStack == nil {
                         startNativeCallStack()
@@ -659,7 +658,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         guard let controller = nativeCallController else {
             MXLog.error("Cannot present a native call without a call stack")
-            flowParameters.elementCallService.endNativeCallSession(roomID: configuration.callRoomID)
+            flowParameters.elementCallService.tearDownCallSession(roomID: configuration.callRoomID)
             return
         }
         

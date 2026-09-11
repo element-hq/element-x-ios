@@ -12,6 +12,7 @@ import Testing
 
 @MainActor
 final class ElementCallServiceTests {
+    private var appSettings: AppSettings!
     private var callProvider: CXProviderMock!
     private var currentDate: Date!
     private var clock: ManualClock!
@@ -19,6 +20,7 @@ final class ElementCallServiceTests {
     private var service: ElementCallService!
     
     init() {
+        appSettings = AppSettings.volatile()
         pushRegistry = PKPushRegistry(queue: nil)
         callProvider = CXProviderMock(.init())
         currentDate = Date()
@@ -26,10 +28,13 @@ final class ElementCallServiceTests {
         let dateProvider: () -> Date = {
             self.currentDate
         }
-        service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: clock, now: dateProvider))
+        service = ElementCallService(appSettings: appSettings,
+                                     callProvider: callProvider,
+                                     timeProvider: TimeProvider(clock: clock, now: dateProvider))
     }
     
     isolated deinit {
+        appSettings = nil
         callProvider = nil
         currentDate = nil
         clock = nil
@@ -196,7 +201,7 @@ final class ElementCallServiceTests {
         
         // Simulate the answer flow handing off to setupCallSession, which must cancel
         // the pending endUnansweredCallTask as part of clearing the incoming state.
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome")
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         
         var unansweredFired = false
         callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
@@ -229,7 +234,7 @@ final class ElementCallServiceTests {
     @Test
     func duplicateRoomPushReportsCallAsHandled() async {
         // A duplicate push for an ongoing call is reported as handled, leaving the ongoing call alone.
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome")
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
         await expectImmediatelyEndedCallReported(forPayload: pushPayload, expectedReason: .answeredElsewhere)
         
@@ -240,13 +245,38 @@ final class ElementCallServiceTests {
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
     }
     
+    @Test
+    func webViewCallSessionIsNotTrackedByCallKit() async {
+        // CallKit tracking a call gives this process exclusive media access, which starves the web
+        // view. So a web view call is only ever tracked on the app side.
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        service.reportCallSessionConnected(roomID: "!room:example.com")
+        
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(!callProvider.reportCallWithUpdatedCalled)
+        #expect(!callProvider.reportOutgoingCallWithConnectedAtCalled)
+    }
+    
+    @Test
+    func tearingDownAnotherRoomLeavesTheOngoingCallUp() async {
+        // A call screen that is dismissed after another room's call replaced it must not take the
+        // new call down with it.
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        
+        service.tearDownCallSession(roomID: "!other:example.com")
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        
+        service.tearDownCallSession(roomID: "!room:example.com")
+        #expect(service.ongoingCallRoomIDPublisher.value == nil)
+    }
+    
     // MARK: - Native calls
     
     @Test
     func nativeModeReportsVoiceCallsWithoutVideo() async {
         // The native stack streams from the background, so the webview workaround doesn't apply and
         // a voice call can ring as one.
-        service.setNativeCallModeEnabled(true)
+        appSettings.nativeCallEnabled = true
         
         await reportIncomingPush(isVoiceCall: true)
         
@@ -255,7 +285,7 @@ final class ElementCallServiceTests {
     
     @Test
     func nativeModeStillReportsVideoCallsWithVideo() async {
-        service.setNativeCallModeEnabled(true)
+        appSettings.nativeCallEnabled = true
         
         await reportIncomingPush(isVoiceCall: false)
         
@@ -264,7 +294,7 @@ final class ElementCallServiceTests {
     
     @Test
     func answeringInNativeModeKeepsTheCallUp() async throws {
-        service.setNativeCallModeEnabled(true)
+        appSettings.nativeCallEnabled = true
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
         
@@ -277,7 +307,7 @@ final class ElementCallServiceTests {
     
     @Test
     func answeredNativeCallEndsWhenNothingTakesItOver() async throws {
-        service.setNativeCallModeEnabled(true)
+        appSettings.nativeCallEnabled = true
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
         
@@ -301,13 +331,13 @@ final class ElementCallServiceTests {
     
     @Test
     func nativeCallSessionTakesOverTheAnsweredCall() async throws {
-        service.setNativeCallModeEnabled(true)
+        appSettings.nativeCallEnabled = true
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
         
         let answeredUUID = try await answerReportedCall()
         
-        await service.startNativeCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         
         // Taking the answered call over means keeping its identifier rather than reporting a new
         // outgoing call, which is what the update below would be part of.
@@ -329,18 +359,22 @@ final class ElementCallServiceTests {
     
     @Test
     func nativeCallSessionForAnotherRoomReportsANewCall() async throws {
-        service.setNativeCallModeEnabled(true)
+        appSettings.nativeCallEnabled = true
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
         
         let answeredUUID = try await answerReportedCall()
         
-        await service.startNativeCallSession(roomID: "!other:example.com", roomDisplayName: "other", isVideo: true)
+        await service.setupCallSession(roomID: "!other:example.com", roomDisplayName: "other", isVideo: true)
         
         let update = try #require(callProvider.reportCallWithUpdatedReceivedArguments)
         #expect(update.uuid != answeredUUID)
         #expect(update.update.localizedCallerName == "other")
         #expect(service.ongoingCallRoomIDPublisher.value == "!other:example.com")
+        
+        // Unlike a web view call, a native one is tracked by CallKit, so it gets the connected report too.
+        service.reportCallSessionConnected(roomID: "!other:example.com")
+        #expect(callProvider.reportOutgoingCallWithConnectedAtReceivedArguments?.uuid == update.uuid)
     }
     
     /// Delivers a VoIP push and waits for it to be reported, returning once the call is ringing.

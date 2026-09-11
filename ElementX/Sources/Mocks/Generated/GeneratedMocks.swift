@@ -4971,51 +4971,96 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
     }
     //MARK: - setupCallSession
 
-    private let setupCallSessionRoomIDRoomDisplayNameCallsCountLock = NSLock()
-    private nonisolated(unsafe) var setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount = 0
-    var setupCallSessionRoomIDRoomDisplayNameCallsCount: Int {
-        get { setupCallSessionRoomIDRoomDisplayNameCallsCountLock.withLock { setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount } }
-        set { setupCallSessionRoomIDRoomDisplayNameCallsCountLock.withLock { setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount = newValue } }
+    private let setupCallSessionRoomIDRoomDisplayNameIsVideoCallsCountLock = NSLock()
+    private nonisolated(unsafe) var setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingCallsCount = 0
+    var setupCallSessionRoomIDRoomDisplayNameIsVideoCallsCount: Int {
+        get { setupCallSessionRoomIDRoomDisplayNameIsVideoCallsCountLock.withLock { setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingCallsCount } }
+        set { setupCallSessionRoomIDRoomDisplayNameIsVideoCallsCountLock.withLock { setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingCallsCount = newValue } }
     }
-    var setupCallSessionRoomIDRoomDisplayNameCalled: Bool {
-        return setupCallSessionRoomIDRoomDisplayNameCallsCount > 0
+    var setupCallSessionRoomIDRoomDisplayNameIsVideoCalled: Bool {
+        return setupCallSessionRoomIDRoomDisplayNameIsVideoCallsCount > 0
     }
-    private let setupCallSessionRoomIDRoomDisplayNameReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var setupCallSessionRoomIDRoomDisplayNameUnderlyingReceivedArguments: (roomID: String, roomDisplayName: String)?
-    var setupCallSessionRoomIDRoomDisplayNameReceivedArguments: (roomID: String, roomDisplayName: String)? {
-        get { setupCallSessionRoomIDRoomDisplayNameReceivedArgumentsLock.withLock { setupCallSessionRoomIDRoomDisplayNameUnderlyingReceivedArguments } }
-        set { setupCallSessionRoomIDRoomDisplayNameReceivedArgumentsLock.withLock { setupCallSessionRoomIDRoomDisplayNameUnderlyingReceivedArguments = newValue } }
+    private let setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedArguments: (roomID: String, roomDisplayName: String, isVideo: Bool)?
+    var setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedArguments: (roomID: String, roomDisplayName: String, isVideo: Bool)? {
+        get { setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedArgumentsLock.withLock { setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedArguments } }
+        set { setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedArgumentsLock.withLock { setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedArguments = newValue } }
     }
-    private let setupCallSessionRoomIDRoomDisplayNameReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var setupCallSessionRoomIDRoomDisplayNameUnderlyingReceivedInvocations: [(roomID: String, roomDisplayName: String)] = []
-    var setupCallSessionRoomIDRoomDisplayNameReceivedInvocations: [(roomID: String, roomDisplayName: String)] {
-        get { setupCallSessionRoomIDRoomDisplayNameReceivedInvocationsLock.withLock { setupCallSessionRoomIDRoomDisplayNameUnderlyingReceivedInvocations } }
-        set { setupCallSessionRoomIDRoomDisplayNameReceivedInvocationsLock.withLock { setupCallSessionRoomIDRoomDisplayNameUnderlyingReceivedInvocations = newValue } }
+    private let setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedInvocations: [(roomID: String, roomDisplayName: String, isVideo: Bool)] = []
+    var setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocations: [(roomID: String, roomDisplayName: String, isVideo: Bool)] {
+        get { setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocationsLock.withLock { setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedInvocations } }
+        set { setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocationsLock.withLock { setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var setupCallSessionRoomIDRoomDisplayNameClosure: ((String, String) async -> Void)?
+    nonisolated(unsafe) var setupCallSessionRoomIDRoomDisplayNameIsVideoClosure: ((String, String, Bool) async -> Void)?
 
-    @concurrent func setupCallSession(roomID: String, roomDisplayName: String) async {
-        setupCallSessionRoomIDRoomDisplayNameCallsCountLock.withLock { setupCallSessionRoomIDRoomDisplayNameUnderlyingCallsCount += 1 }
-        setupCallSessionRoomIDRoomDisplayNameReceivedArguments = (roomID: roomID, roomDisplayName: roomDisplayName)
-        setupCallSessionRoomIDRoomDisplayNameReceivedInvocationsLock.withLock { setupCallSessionRoomIDRoomDisplayNameUnderlyingReceivedInvocations.append((roomID: roomID, roomDisplayName: roomDisplayName)) }
-        await setupCallSessionRoomIDRoomDisplayNameClosure?(roomID, roomDisplayName)
+    @concurrent func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async {
+        setupCallSessionRoomIDRoomDisplayNameIsVideoCallsCountLock.withLock { setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingCallsCount += 1 }
+        setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedArguments = (roomID: roomID, roomDisplayName: roomDisplayName, isVideo: isVideo)
+        setupCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocationsLock.withLock { setupCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedInvocations.append((roomID: roomID, roomDisplayName: roomDisplayName, isVideo: isVideo)) }
+        await setupCallSessionRoomIDRoomDisplayNameIsVideoClosure?(roomID, roomDisplayName, isVideo)
+    }
+    //MARK: - reportCallSessionConnected
+
+    private let reportCallSessionConnectedRoomIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var reportCallSessionConnectedRoomIDUnderlyingCallsCount = 0
+    var reportCallSessionConnectedRoomIDCallsCount: Int {
+        get { reportCallSessionConnectedRoomIDCallsCountLock.withLock { reportCallSessionConnectedRoomIDUnderlyingCallsCount } }
+        set { reportCallSessionConnectedRoomIDCallsCountLock.withLock { reportCallSessionConnectedRoomIDUnderlyingCallsCount = newValue } }
+    }
+    var reportCallSessionConnectedRoomIDCalled: Bool {
+        return reportCallSessionConnectedRoomIDCallsCount > 0
+    }
+    private let reportCallSessionConnectedRoomIDReceivedRoomIDLock = NSLock()
+    private nonisolated(unsafe) var reportCallSessionConnectedRoomIDUnderlyingReceivedRoomID: String?
+    var reportCallSessionConnectedRoomIDReceivedRoomID: String? {
+        get { reportCallSessionConnectedRoomIDReceivedRoomIDLock.withLock { reportCallSessionConnectedRoomIDUnderlyingReceivedRoomID } }
+        set { reportCallSessionConnectedRoomIDReceivedRoomIDLock.withLock { reportCallSessionConnectedRoomIDUnderlyingReceivedRoomID = newValue } }
+    }
+    private let reportCallSessionConnectedRoomIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var reportCallSessionConnectedRoomIDUnderlyingReceivedInvocations: [String] = []
+    var reportCallSessionConnectedRoomIDReceivedInvocations: [String] {
+        get { reportCallSessionConnectedRoomIDReceivedInvocationsLock.withLock { reportCallSessionConnectedRoomIDUnderlyingReceivedInvocations } }
+        set { reportCallSessionConnectedRoomIDReceivedInvocationsLock.withLock { reportCallSessionConnectedRoomIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var reportCallSessionConnectedRoomIDClosure: ((String) -> Void)?
+
+    func reportCallSessionConnected(roomID: String) {
+        reportCallSessionConnectedRoomIDCallsCountLock.withLock { reportCallSessionConnectedRoomIDUnderlyingCallsCount += 1 }
+        reportCallSessionConnectedRoomIDReceivedRoomID = roomID
+        reportCallSessionConnectedRoomIDReceivedInvocationsLock.withLock { reportCallSessionConnectedRoomIDUnderlyingReceivedInvocations.append(roomID) }
+        reportCallSessionConnectedRoomIDClosure?(roomID)
     }
     //MARK: - tearDownCallSession
 
-    private let tearDownCallSessionCallsCountLock = NSLock()
-    private nonisolated(unsafe) var tearDownCallSessionUnderlyingCallsCount = 0
-    var tearDownCallSessionCallsCount: Int {
-        get { tearDownCallSessionCallsCountLock.withLock { tearDownCallSessionUnderlyingCallsCount } }
-        set { tearDownCallSessionCallsCountLock.withLock { tearDownCallSessionUnderlyingCallsCount = newValue } }
+    private let tearDownCallSessionRoomIDCallsCountLock = NSLock()
+    private nonisolated(unsafe) var tearDownCallSessionRoomIDUnderlyingCallsCount = 0
+    var tearDownCallSessionRoomIDCallsCount: Int {
+        get { tearDownCallSessionRoomIDCallsCountLock.withLock { tearDownCallSessionRoomIDUnderlyingCallsCount } }
+        set { tearDownCallSessionRoomIDCallsCountLock.withLock { tearDownCallSessionRoomIDUnderlyingCallsCount = newValue } }
     }
-    var tearDownCallSessionCalled: Bool {
-        return tearDownCallSessionCallsCount > 0
+    var tearDownCallSessionRoomIDCalled: Bool {
+        return tearDownCallSessionRoomIDCallsCount > 0
     }
-    nonisolated(unsafe) var tearDownCallSessionClosure: (() -> Void)?
+    private let tearDownCallSessionRoomIDReceivedRoomIDLock = NSLock()
+    private nonisolated(unsafe) var tearDownCallSessionRoomIDUnderlyingReceivedRoomID: String?
+    var tearDownCallSessionRoomIDReceivedRoomID: String? {
+        get { tearDownCallSessionRoomIDReceivedRoomIDLock.withLock { tearDownCallSessionRoomIDUnderlyingReceivedRoomID } }
+        set { tearDownCallSessionRoomIDReceivedRoomIDLock.withLock { tearDownCallSessionRoomIDUnderlyingReceivedRoomID = newValue } }
+    }
+    private let tearDownCallSessionRoomIDReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var tearDownCallSessionRoomIDUnderlyingReceivedInvocations: [String] = []
+    var tearDownCallSessionRoomIDReceivedInvocations: [String] {
+        get { tearDownCallSessionRoomIDReceivedInvocationsLock.withLock { tearDownCallSessionRoomIDUnderlyingReceivedInvocations } }
+        set { tearDownCallSessionRoomIDReceivedInvocationsLock.withLock { tearDownCallSessionRoomIDUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var tearDownCallSessionRoomIDClosure: ((String) -> Void)?
 
-    func tearDownCallSession() {
-        tearDownCallSessionCallsCountLock.withLock { tearDownCallSessionUnderlyingCallsCount += 1 }
-        tearDownCallSessionClosure?()
+    func tearDownCallSession(roomID: String) {
+        tearDownCallSessionRoomIDCallsCountLock.withLock { tearDownCallSessionRoomIDUnderlyingCallsCount += 1 }
+        tearDownCallSessionRoomIDReceivedRoomID = roomID
+        tearDownCallSessionRoomIDReceivedInvocationsLock.withLock { tearDownCallSessionRoomIDUnderlyingReceivedInvocations.append(roomID) }
+        tearDownCallSessionRoomIDClosure?(roomID)
     }
     //MARK: - setAudioEnabled
 
@@ -5047,130 +5092,6 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         setAudioEnabledRoomIDReceivedArguments = (enabled: enabled, roomID: roomID)
         setAudioEnabledRoomIDReceivedInvocationsLock.withLock { setAudioEnabledRoomIDUnderlyingReceivedInvocations.append((enabled: enabled, roomID: roomID)) }
         setAudioEnabledRoomIDClosure?(enabled, roomID)
-    }
-    //MARK: - setNativeCallModeEnabled
-
-    private let setNativeCallModeEnabledCallsCountLock = NSLock()
-    private nonisolated(unsafe) var setNativeCallModeEnabledUnderlyingCallsCount = 0
-    var setNativeCallModeEnabledCallsCount: Int {
-        get { setNativeCallModeEnabledCallsCountLock.withLock { setNativeCallModeEnabledUnderlyingCallsCount } }
-        set { setNativeCallModeEnabledCallsCountLock.withLock { setNativeCallModeEnabledUnderlyingCallsCount = newValue } }
-    }
-    var setNativeCallModeEnabledCalled: Bool {
-        return setNativeCallModeEnabledCallsCount > 0
-    }
-    private let setNativeCallModeEnabledReceivedEnabledLock = NSLock()
-    private nonisolated(unsafe) var setNativeCallModeEnabledUnderlyingReceivedEnabled: Bool?
-    var setNativeCallModeEnabledReceivedEnabled: Bool? {
-        get { setNativeCallModeEnabledReceivedEnabledLock.withLock { setNativeCallModeEnabledUnderlyingReceivedEnabled } }
-        set { setNativeCallModeEnabledReceivedEnabledLock.withLock { setNativeCallModeEnabledUnderlyingReceivedEnabled = newValue } }
-    }
-    private let setNativeCallModeEnabledReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var setNativeCallModeEnabledUnderlyingReceivedInvocations: [Bool] = []
-    var setNativeCallModeEnabledReceivedInvocations: [Bool] {
-        get { setNativeCallModeEnabledReceivedInvocationsLock.withLock { setNativeCallModeEnabledUnderlyingReceivedInvocations } }
-        set { setNativeCallModeEnabledReceivedInvocationsLock.withLock { setNativeCallModeEnabledUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var setNativeCallModeEnabledClosure: ((Bool) -> Void)?
-
-    func setNativeCallModeEnabled(_ enabled: Bool) {
-        setNativeCallModeEnabledCallsCountLock.withLock { setNativeCallModeEnabledUnderlyingCallsCount += 1 }
-        setNativeCallModeEnabledReceivedEnabled = enabled
-        setNativeCallModeEnabledReceivedInvocationsLock.withLock { setNativeCallModeEnabledUnderlyingReceivedInvocations.append(enabled) }
-        setNativeCallModeEnabledClosure?(enabled)
-    }
-    //MARK: - startNativeCallSession
-
-    private let startNativeCallSessionRoomIDRoomDisplayNameIsVideoCallsCountLock = NSLock()
-    private nonisolated(unsafe) var startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingCallsCount = 0
-    var startNativeCallSessionRoomIDRoomDisplayNameIsVideoCallsCount: Int {
-        get { startNativeCallSessionRoomIDRoomDisplayNameIsVideoCallsCountLock.withLock { startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingCallsCount } }
-        set { startNativeCallSessionRoomIDRoomDisplayNameIsVideoCallsCountLock.withLock { startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingCallsCount = newValue } }
-    }
-    var startNativeCallSessionRoomIDRoomDisplayNameIsVideoCalled: Bool {
-        return startNativeCallSessionRoomIDRoomDisplayNameIsVideoCallsCount > 0
-    }
-    private let startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedArguments: (roomID: String, roomDisplayName: String, isVideo: Bool)?
-    var startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedArguments: (roomID: String, roomDisplayName: String, isVideo: Bool)? {
-        get { startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedArgumentsLock.withLock { startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedArguments } }
-        set { startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedArgumentsLock.withLock { startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedArguments = newValue } }
-    }
-    private let startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedInvocations: [(roomID: String, roomDisplayName: String, isVideo: Bool)] = []
-    var startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocations: [(roomID: String, roomDisplayName: String, isVideo: Bool)] {
-        get { startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocationsLock.withLock { startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedInvocations } }
-        set { startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocationsLock.withLock { startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var startNativeCallSessionRoomIDRoomDisplayNameIsVideoClosure: ((String, String, Bool) async -> Void)?
-
-    @concurrent func startNativeCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async {
-        startNativeCallSessionRoomIDRoomDisplayNameIsVideoCallsCountLock.withLock { startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingCallsCount += 1 }
-        startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedArguments = (roomID: roomID, roomDisplayName: roomDisplayName, isVideo: isVideo)
-        startNativeCallSessionRoomIDRoomDisplayNameIsVideoReceivedInvocationsLock.withLock { startNativeCallSessionRoomIDRoomDisplayNameIsVideoUnderlyingReceivedInvocations.append((roomID: roomID, roomDisplayName: roomDisplayName, isVideo: isVideo)) }
-        await startNativeCallSessionRoomIDRoomDisplayNameIsVideoClosure?(roomID, roomDisplayName, isVideo)
-    }
-    //MARK: - reportNativeCallConnected
-
-    private let reportNativeCallConnectedRoomIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var reportNativeCallConnectedRoomIDUnderlyingCallsCount = 0
-    var reportNativeCallConnectedRoomIDCallsCount: Int {
-        get { reportNativeCallConnectedRoomIDCallsCountLock.withLock { reportNativeCallConnectedRoomIDUnderlyingCallsCount } }
-        set { reportNativeCallConnectedRoomIDCallsCountLock.withLock { reportNativeCallConnectedRoomIDUnderlyingCallsCount = newValue } }
-    }
-    var reportNativeCallConnectedRoomIDCalled: Bool {
-        return reportNativeCallConnectedRoomIDCallsCount > 0
-    }
-    private let reportNativeCallConnectedRoomIDReceivedRoomIDLock = NSLock()
-    private nonisolated(unsafe) var reportNativeCallConnectedRoomIDUnderlyingReceivedRoomID: String?
-    var reportNativeCallConnectedRoomIDReceivedRoomID: String? {
-        get { reportNativeCallConnectedRoomIDReceivedRoomIDLock.withLock { reportNativeCallConnectedRoomIDUnderlyingReceivedRoomID } }
-        set { reportNativeCallConnectedRoomIDReceivedRoomIDLock.withLock { reportNativeCallConnectedRoomIDUnderlyingReceivedRoomID = newValue } }
-    }
-    private let reportNativeCallConnectedRoomIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var reportNativeCallConnectedRoomIDUnderlyingReceivedInvocations: [String] = []
-    var reportNativeCallConnectedRoomIDReceivedInvocations: [String] {
-        get { reportNativeCallConnectedRoomIDReceivedInvocationsLock.withLock { reportNativeCallConnectedRoomIDUnderlyingReceivedInvocations } }
-        set { reportNativeCallConnectedRoomIDReceivedInvocationsLock.withLock { reportNativeCallConnectedRoomIDUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var reportNativeCallConnectedRoomIDClosure: ((String) -> Void)?
-
-    func reportNativeCallConnected(roomID: String) {
-        reportNativeCallConnectedRoomIDCallsCountLock.withLock { reportNativeCallConnectedRoomIDUnderlyingCallsCount += 1 }
-        reportNativeCallConnectedRoomIDReceivedRoomID = roomID
-        reportNativeCallConnectedRoomIDReceivedInvocationsLock.withLock { reportNativeCallConnectedRoomIDUnderlyingReceivedInvocations.append(roomID) }
-        reportNativeCallConnectedRoomIDClosure?(roomID)
-    }
-    //MARK: - endNativeCallSession
-
-    private let endNativeCallSessionRoomIDCallsCountLock = NSLock()
-    private nonisolated(unsafe) var endNativeCallSessionRoomIDUnderlyingCallsCount = 0
-    var endNativeCallSessionRoomIDCallsCount: Int {
-        get { endNativeCallSessionRoomIDCallsCountLock.withLock { endNativeCallSessionRoomIDUnderlyingCallsCount } }
-        set { endNativeCallSessionRoomIDCallsCountLock.withLock { endNativeCallSessionRoomIDUnderlyingCallsCount = newValue } }
-    }
-    var endNativeCallSessionRoomIDCalled: Bool {
-        return endNativeCallSessionRoomIDCallsCount > 0
-    }
-    private let endNativeCallSessionRoomIDReceivedRoomIDLock = NSLock()
-    private nonisolated(unsafe) var endNativeCallSessionRoomIDUnderlyingReceivedRoomID: String?
-    var endNativeCallSessionRoomIDReceivedRoomID: String? {
-        get { endNativeCallSessionRoomIDReceivedRoomIDLock.withLock { endNativeCallSessionRoomIDUnderlyingReceivedRoomID } }
-        set { endNativeCallSessionRoomIDReceivedRoomIDLock.withLock { endNativeCallSessionRoomIDUnderlyingReceivedRoomID = newValue } }
-    }
-    private let endNativeCallSessionRoomIDReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var endNativeCallSessionRoomIDUnderlyingReceivedInvocations: [String] = []
-    var endNativeCallSessionRoomIDReceivedInvocations: [String] {
-        get { endNativeCallSessionRoomIDReceivedInvocationsLock.withLock { endNativeCallSessionRoomIDUnderlyingReceivedInvocations } }
-        set { endNativeCallSessionRoomIDReceivedInvocationsLock.withLock { endNativeCallSessionRoomIDUnderlyingReceivedInvocations = newValue } }
-    }
-    nonisolated(unsafe) var endNativeCallSessionRoomIDClosure: ((String) -> Void)?
-
-    func endNativeCallSession(roomID: String) {
-        endNativeCallSessionRoomIDCallsCountLock.withLock { endNativeCallSessionRoomIDUnderlyingCallsCount += 1 }
-        endNativeCallSessionRoomIDReceivedRoomID = roomID
-        endNativeCallSessionRoomIDReceivedInvocationsLock.withLock { endNativeCallSessionRoomIDUnderlyingReceivedInvocations.append(roomID) }
-        endNativeCallSessionRoomIDClosure?(roomID)
     }
 }
 nonisolated class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked Sendable {

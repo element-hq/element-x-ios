@@ -26,19 +26,14 @@ protocol ElementCallServiceProtocol {
     
     func setClientProxy(_ clientProxy: ClientProxyProtocol)
     
-    func setupCallSession(roomID: String, roomDisplayName: String) async
+    /// Registers the call with CallKit, adopting the ringing incoming call for the room if there is one.
+    func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async
     
-    func tearDownCallSession()
+    /// Tells CallKit the call is connected. Does nothing for web view calls, which CallKit never tracks.
+    func reportCallSessionConnected(roomID: String)
+    
+    /// Ends the call for the room, including an answered call the native stack never took over.
+    func tearDownCallSession(roomID: String)
     
     func setAudioEnabled(_ enabled: Bool, roomID: String)
-    
-    // MARK: Native calls
-    
-    /// Whether an answered incoming call is handed to the native stack (kept alive in CallKit)
-    /// rather than to the web view (ended right after answering).
-    func setNativeCallModeEnabled(_ enabled: Bool)
-    /// Reports an outgoing native call to CallKit, or attaches to the ringing call it answers.
-    func startNativeCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async
-    func reportNativeCallConnected(roomID: String)
-    func endNativeCallSession(roomID: String)
 }

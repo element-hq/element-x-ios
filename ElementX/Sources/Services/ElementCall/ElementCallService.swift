@@ -30,12 +30,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         var isNative = false
     }
     
-    private var isNativeCallModeEnabled = false
-    
-    func setNativeCallModeEnabled(_ enabled: Bool) {
-        isNativeCallModeEnabled = enabled
-    }
-    
+    private let appSettings: AppSettings
     private let pushRegistry: PKPushRegistry
     private let callController = CXCallController()
     private let callProvider: CXProviderProtocol
@@ -79,7 +74,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var declineListenerHandle: TaskHandle?
     
-    init(callProvider: CXProviderProtocol? = nil, timeProvider: TimeProvider? = nil) {
+    init(appSettings: AppSettings, callProvider: CXProviderProtocol? = nil, timeProvider: TimeProvider? = nil) {
+        self.appSettings = appSettings
         pushRegistry = PKPushRegistry(queue: nil)
         
         self.timeProvider = timeProvider ?? TimeProvider(clock: ContinuousClock(), now: Date.init)
@@ -113,62 +109,39 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         self.clientProxy = clientProxy
     }
     
-    func setupCallSession(roomID: String, roomDisplayName: String) async {
+    func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async {
+        let isNative = appSettings.nativeCallEnabled
+        MXLog.info("Setting up a call session, native: \(isNative), video: \(isVideo), replacing an ongoing call: \(ongoingCallID != nil)")
+        
         // Drop any ongoing calls when starting a new one
         if ongoingCallID != nil {
-            tearDownCallSession()
+            tearDownCallSession(sendEndCallAction: true)
         }
         
         // If this starting from a ring reuse those identifiers
         // Make sure the roomID matches
-        let callID = if let incomingCallID, incomingCallID.roomID == roomID {
+        var callID = if let incomingCallID, incomingCallID.roomID == roomID {
             incomingCallID
         } else {
-            CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil, isVoiceCall: false)
+            CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil, isVoiceCall: !isVideo)
         }
+        callID.isNative = isNative
+        let isAnsweringIncomingCall = callID.rtcNotificationID != nil
         
         clearIncomingCallState()
         ongoingCallID = callID
         
-        // Don't bother starting another CallKit session as it won't work properly
+        // A web view call must not be tracked by CallKit, as that gives this process exclusive
+        // access to media and the web view runs in another (see `CXAnswerCallAction`).
         // https://developer.apple.com/forums//thread/767949?answerId=812951022#812951022
-        
-        // let handle = CXHandle(type: .generic, value: roomDisplayName)
-        // let startCallAction = CXStartCallAction(call: callID.callKitID, handle: handle)
-        // startCallAction.isVideo = true
-        
-        // do {
-        //     try await callController.request(CXTransaction(action: startCallAction))
-        // } catch {
-        //     MXLog.error("Failed requesting start call action with error: \(error)")
-        // }
-    }
-    
-    func tearDownCallSession() {
-        tearDownCallSession(sendEndCallAction: true)
-    }
-    
-    // MARK: - Native calls
-    
-    func startNativeCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async {
-        MXLog.info("Starting a native call session, video: \(isVideo), replacing an ongoing call: \(ongoingCallID != nil)")
-        
-        if ongoingCallID != nil {
-            tearDownCallSession()
-        }
-        
-        if let incomingCallID, incomingCallID.roomID == roomID {
-            // Answering the ringing call: it is already reported, keep it.
-            var callID = incomingCallID
-            callID.isNative = true
-            clearIncomingCallState()
-            ongoingCallID = callID
+        guard isNative else {
             return
         }
         
-        let callID = CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil, isVoiceCall: !isVideo, isNative: true)
-        clearIncomingCallState()
-        ongoingCallID = callID
+        // Answering the ringing call: it is already reported, keep it.
+        guard !isAnsweringIncomingCall else {
+            return
+        }
         
         let handle = CXHandle(type: .generic, value: roomID)
         let startCallAction = CXStartCallAction(call: callID.callKitID, handle: handle)
@@ -189,18 +162,24 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         callProvider.reportCall(with: callID.callKitID, updated: update)
     }
     
-    func reportNativeCallConnected(roomID: String) {
-        guard let ongoingCallID, ongoingCallID.roomID == roomID, ongoingCallID.isNative else {
+    func reportCallSessionConnected(roomID: String) {
+        guard let ongoingCallID, ongoingCallID.roomID == roomID else {
             // The system ends an outgoing call that never reports connecting, so a silent guard
             // here shows up much later as a call that hangs itself up.
-            MXLog.warning("Not reporting a native call as connected, no matching ongoing call")
+            MXLog.warning("Not reporting the call as connected, no matching ongoing call")
             return
         }
-        MXLog.info("Reporting the native call as connected")
+        
+        guard ongoingCallID.isNative else {
+            MXLog.info("Not reporting a web view call as connected, CallKit doesn't track it")
+            return
+        }
+        
+        MXLog.info("Reporting the call as connected")
         callProvider.reportOutgoingCall(with: ongoingCallID.callKitID, connectedAt: nil)
     }
     
-    func endNativeCallSession(roomID: String) {
+    func tearDownCallSession(roomID: String) {
         if ongoingCallID?.roomID == roomID {
             tearDownCallSession(sendEndCallAction: true)
             return
@@ -211,7 +190,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         if answeredNativeCallID?.roomID == roomID {
             MXLog.warning("Ending an answered call the native call stack didn't take over")
             endUnattachedCall()
+            return
         }
+        
+        MXLog.info("Not tearing down the call session, no call for room \(roomID)")
     }
     
     func setAudioEnabled(_ enabled: Bool, roomID: String) {
@@ -295,7 +277,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // but once Element Call is launched it will correctly route to a voice-only call.
         // The native stack streams from the background like any VoIP app, so an audio call answered
         // from the lock screen stays in the system UI and only a video call opens the app.
-        update.hasVideo = isNativeCallModeEnabled ? !isVoiceCall : true
+        update.hasVideo = appSettings.nativeCallEnabled ? !isVoiceCall : true
         update.localizedCallerName = roomDisplayName
         // https://stackoverflow.com/a/41230020/730924
         update.remoteHandle = .init(type: .generic, value: roomID)
@@ -376,9 +358,9 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // First fullfill the action
         action.fulfill()
         
-        if isNativeCallModeEnabled {
+        if appSettings.nativeCallEnabled {
             // The native stack owns media in this process, so the CallKit call stays up: the
-            // controller attaches to it in `startNativeCallSession`.
+            // controller attaches to it in `setupCallSession`.
             endUnansweredCallTask?.cancel()
             endCallIfLeftUnattached(incomingCallID)
             actionsSubject.send(.startCall(roomID: incomingCallID.roomID, isVoiceCall: incomingCallID.isVoiceCall))
@@ -490,7 +472,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     /// Ends an answered call that the native stack never took over.
     ///
     /// Nothing else would. The call is deliberately left up for the controller to attach to in
-    /// `startNativeCallSession`, so any way that hand-off falls through — the room isn't joined,
+    /// `setupCallSession`, so any way that hand-off falls through — the room isn't joined,
     /// there's no transport, another call is already running — leaves the system showing a call
     /// the app knows nothing about and can no longer hang up.
     private func endCallIfLeftUnattached(_ callID: CallID) {

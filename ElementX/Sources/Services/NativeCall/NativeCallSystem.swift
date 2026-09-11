@@ -42,15 +42,15 @@ final class NativeCallSystem: ElementCallSystemProviding {
     }
     
     func startCall(roomID: String, displayName: String, isVideo: Bool) async {
-        await service.startNativeCallSession(roomID: roomID, roomDisplayName: displayName, isVideo: isVideo)
+        await service.setupCallSession(roomID: roomID, roomDisplayName: displayName, isVideo: isVideo)
     }
     
     func reportConnected(roomID: String) {
-        service.reportNativeCallConnected(roomID: roomID)
+        service.reportCallSessionConnected(roomID: roomID)
     }
     
     func endCall(roomID: String) {
-        service.endNativeCallSession(roomID: roomID)
+        service.tearDownCallSession(roomID: roomID)
     }
     
     func setMicrophoneEnabled(_ enabled: Bool, roomID: String) {
