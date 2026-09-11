@@ -83,7 +83,7 @@ packages:
     path: compound-ios
   ElementCall:
     url: https://github.com/element-hq/element-call-ios
-    exactVersion: 0.1.0-rc.2
+    exactVersion: 0.1.0-rc.3
     # path: ../element-call-ios
   BuildExtensions:
     path: Components/BuildExtensions
