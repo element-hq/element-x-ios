@@ -17,7 +17,6 @@ final class NativeCallRoomContext: ElementCallRoomContext {
     
     init(roomProxy: JoinedRoomProxyProtocol) {
         self.roomProxy = roomProxy
-        Task { await roomProxy.updateMembers() }
     }
     
     var roomID: String {
