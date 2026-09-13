@@ -13,12 +13,22 @@ struct PinnedEventsTimelineScreen: View {
     @ObservedObject var context: PinnedEventsTimelineScreenViewModel.Context
     @ObservedObject var timelineContext: TimelineViewModel.Context
     
+    private var visiblePinnedEventIDs: Set<String> {
+        Set(timelineContext.viewState.timelineState.itemViewStates.compactMap(\.identifier.eventID))
+    }
+    
     private var title: String {
-        let pinnedEventIDs = timelineContext.viewState.pinnedEventIDs
-        guard !pinnedEventIDs.isEmpty else {
+        if timelineContext.viewState.showLoading {
+            let pinnedEventIDs = timelineContext.viewState.pinnedEventIDs
+            guard !pinnedEventIDs.isEmpty else {
+                return L10n.screenPinnedTimelineScreenTitleEmpty
+            }
+            return L10n.screenPinnedTimelineScreenTitle(pinnedEventIDs.count)
+        }
+        guard !visiblePinnedEventIDs.isEmpty else {
             return L10n.screenPinnedTimelineScreenTitleEmpty
         }
-        return L10n.screenPinnedTimelineScreenTitle(pinnedEventIDs.count)
+        return L10n.screenPinnedTimelineScreenTitle(visiblePinnedEventIDs.count)
     }
     
     var body: some View {
@@ -33,7 +43,7 @@ struct PinnedEventsTimelineScreen: View {
     
     @ViewBuilder
     private var content: some View {
-        if timelineContext.viewState.pinnedEventIDs.isEmpty {
+        if !timelineContext.viewState.showLoading, visiblePinnedEventIDs.isEmpty {
             VStack(spacing: 16) {
                 BigIcon(icon: \.pin)
                 Text(L10n.screenPinnedTimelineEmptyStateHeadline)
@@ -91,7 +101,8 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         ElementNavigationStack {
-            PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: emptyTimelineViewModel.context)
+            PinnedEventsTimelineScreen(context: viewModel.context,
+                                       timelineContext: emptyTimelineViewModel.context)
         }
         .previewDisplayName("Empty")
     }
