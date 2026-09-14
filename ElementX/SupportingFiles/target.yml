@@ -260,6 +260,10 @@ targets:
       implicit: true
       link: false
       embed: true
+    # The native call stack. The umbrella re-exports the package's four modules, whose split is
+    # what keeps the Matrix SDK confined to ElementCallMatrix.
+    - package: ElementCall
+      product: ElementCallAll
     - package: PostHog
     - package: SwiftState
     - package: GZIP

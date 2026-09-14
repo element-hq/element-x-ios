@@ -9,6 +9,7 @@
 import AVKit
 import Combine
 import Compound
+import ElementCallAll
 import SwiftState
 import SwiftUI
 
@@ -142,6 +143,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     func stop() {
         chatsTabFlowCoordinator.stop()
+        stopNativeCallStack()
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -226,7 +228,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    // swiftlint:disable:next function_body_length
     private func setupObservers() {
         chatsTabFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
@@ -315,17 +316,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        flowParameters.elementCallService.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                switch action {
-                case .endCall:
-                    self?.dismissCallScreenIfNeeded()
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
+        setupCallObservers()
         
         searchScreenCoordinator?.actionsPublisher
             .sink { [weak self] action in
@@ -455,6 +446,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentCallScreen(roomID: String, isVoiceCall: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            // An answered call is left up for the native stack, so it has to be ended here rather
+            // than leaving the system with a call this room can no longer serve.
+            MXLog.error("Cannot present the call screen, \(roomID) isn't a joined room")
+            flowParameters.elementCallService.tearDownCallSession(roomID: roomID)
             return
         }
         
@@ -476,7 +471,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentCallScreen(configuration: ElementCallConfiguration) {
         guard flowParameters.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
-            callScreenPictureInPictureController?.stopPictureInPicture()
+            if let nativeCallController, nativeCallController.isInCall {
+                restoreNativeCallScreen()
+            } else {
+                callScreenPictureInPictureController?.stopPictureInPicture()
+            }
+            return
+        }
+        
+        if flowParameters.appSettings.nativeCallEnabled {
+            presentNativeCallScreen(configuration: configuration)
             return
         }
         
@@ -511,6 +515,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func hideCallScreenOverlay() {
+        if let nativeCallController, nativeCallController.isInCall,
+           navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
+            // The controller decides whether a system window is available and says so through its
+            // actions, so the screen only comes down once one has actually started.
+            nativeCallController.requestMinimize()
+            return
+        }
+        
         guard let callScreenPictureInPictureController else {
             MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
             dismissCallScreenIfNeeded()
@@ -522,8 +534,175 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationTabCoordinator.setOverlayPresentationMode(.minimized)
     }
     
+    // MARK: - Native calls
+    
+    private func setupCallObservers() {
+        flowParameters.elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .endCall:
+                    // The native controller hears this on its own port and tears the call down itself.
+                    if nativeCallController?.isInCall != true {
+                        dismissCallScreenIfNeeded()
+                    }
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
+        // Created with the session, not with the first call.
+        flowParameters.appSettings.nativeCallEnabledPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                guard let self else { return }
+                if isEnabled {
+                    if nativeCallStack == nil {
+                        startNativeCallStack()
+                    }
+                } else {
+                    stopNativeCallStack()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private var nativeCallStack: ElementCallStack?
+    
+    private var nativeCallController: ElementCallController? {
+        nativeCallStack?.controller
+    }
+    
+    /// Builds the call stack for this session. The arguments are the whole integration surface: a
+    /// transport, the system call provider, settings, the look and a log sink.
+    private func startNativeCallStack() {
+        MatrixRTCLogBridge.install()
+        
+        guard let transport = userSession.clientProxy.nativeCallTransport else {
+            MXLog.error("Cannot start the native call stack without a transport")
+            return
+        }
+        
+        let style = ElementCallStyle(theme: NativeCallTheme(),
+                                     icons: NativeCallIcons(),
+                                     avatars: NativeCallAvatars(mediaProvider: userSession.mediaProvider),
+                                     strings: .init(you: L10n.commonYou,
+                                                    error: L10n.commonError,
+                                                    stop: L10n.actionStop,
+                                                    back: L10n.actionBack))
+        
+        let stack = ElementCallStack(transport: transport,
+                                     system: NativeCallSystem(service: flowParameters.elementCallService),
+                                     options: NativeCallOptions(appSettings: flowParameters.appSettings),
+                                     style: style,
+                                     logger: NativeCallLogger())
+        nativeCallStack = stack
+        
+        stack.controller.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .minimizeRequested:
+                    // Nothing to do until we know what the call is minimizing into: the controller
+                    // follows this with either window or no window.
+                    break
+                case .restoreRequested:
+                    restoreNativeCallScreen()
+                case .ended:
+                    navigationTabCoordinator.setOverlayCoordinator(nil)
+                    stack.controller.reset()
+                    presentPendingNativeCallScreen()
+                case .pictureInPictureStarted:
+                    // Also reached when the system started the window on backgrounding, so this
+                    // isn't necessarily a minimize we asked for.
+                    navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+                case .pictureInPictureUnavailable:
+                    // Hiding the screen without a window to minimize into would leave the call
+                    // running with no way back to mute or hang up.
+                    MXLog.info("Staying on the call screen: no system window is available.")
+                    restoreNativeCallScreen()
+                }
+            }
+            .store(in: &cancellables)
+        
+        Task { await stack.start() }
+    }
+    
+    /// Releases the stack along with the to-device subscription it holds open for key delivery.
+    /// Nothing else does: the coordinator has no deinit, so without this the stack outlives a logout.
+    private func stopNativeCallStack() {
+        guard let stack = nativeCallStack else { return }
+        nativeCallStack = nil
+        
+        MXLog.info("Stopping the native call stack, in a call: \(stack.controller.isInCall)")
+        
+        // Best effort: the leave this starts may not finish before the core stops, but the
+        // alternative is walking away from the call without telling the room at all.
+        if stack.controller.isInCall {
+            stack.controller.hangUp()
+        }
+        
+        stack.stop()
+        dismissCallScreenIfNeeded()
+    }
+    
+    /// A call requested while another one was still running, started once that one has ended.
+    private var pendingNativeCallConfiguration: ElementCallConfiguration?
+    
+    private func presentNativeCallScreen(configuration: ElementCallConfiguration) {
+        if nativeCallStack == nil {
+            startNativeCallStack()
+        }
+        guard let controller = nativeCallController else {
+            MXLog.error("Cannot present a native call without a call stack")
+            flowParameters.elementCallService.tearDownCallSession(roomID: configuration.callRoomID)
+            return
+        }
+        
+        if controller.isInCall {
+            guard controller.room?.roomID != configuration.callRoomID else {
+                // Reached while the call is still joining, before the service has an ongoing call
+                // for the guard in `presentCallScreen` to match against.
+                MXLog.info("Returning to the call already starting in this room.")
+                restoreNativeCallScreen()
+                return
+            }
+            
+            // The controller ignores a second call, so wait for the running one to leave its room.
+            MXLog.info("Leaving the ongoing call to start the one requested in another room.")
+            pendingNativeCallConfiguration = configuration
+            controller.hangUp()
+            return
+        }
+        
+        let roomProxy = configuration.roomProxy
+        // Starting rings the room; joining one already running happens quietly.
+        let callData = ElementCallData(isAudioCall: configuration.voiceOnly,
+                                       isStartingCall: !roomProxy.infoPublisher.value.hasRoomCall)
+        controller.startCall(callData, room: NativeCallRoomContext(roomProxy: roomProxy))
+        
+        let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: controller))
+        navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
+        flowParameters.analytics.track(screen: .RoomCall)
+    }
+    
+    private func presentPendingNativeCallScreen() {
+        guard let configuration = pendingNativeCallConfiguration else { return }
+        pendingNativeCallConfiguration = nil
+        presentNativeCallScreen(configuration: configuration)
+    }
+    
+    private func restoreNativeCallScreen() {
+        nativeCallController?.restore()
+        navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
+    }
+    
     private func dismissCallScreenIfNeeded() {
-        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator else {
+        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator
+            || navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator else {
             return
         }
         
