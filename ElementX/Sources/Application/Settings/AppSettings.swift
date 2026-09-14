@@ -189,7 +189,11 @@ final nonisolated class AppSettings: @unchecked Sendable {
     var previousServers: [String]
     
     var defaultAccountProvider: AccountProvider {
-        previousServers.first.map { .generic($0) } ?? accountProviders[0]
+        if allowOtherAccountProviders {
+            previousServers.first.map { .generic($0) } ?? accountProviders[0]
+        } else {
+            accountProviders[0]
+        }
     }
     
     // MARK: - Security
