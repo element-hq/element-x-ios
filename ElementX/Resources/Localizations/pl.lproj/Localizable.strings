@@ -1293,6 +1293,7 @@
 "screen_room_confirm_removal_message" = "Czy na pewno chcesz usunąć wiadomość?";
 "screen_room_confirm_removal_reason_label" = "Powód (opcjonalne)";
 "screen_room_confirm_removal_reason_placeholder" = "Powód...";
+"screen_room_confirm_removal_reason_supporting_text" = "(Opcjonalne)";
 "screen_room_confirm_removal_title" = "Potwierdź usunięcie";
 "screen_room_details_add_topic_title" = "Dodaj temat";
 "screen_room_details_badge_encrypted" = "Szyfrowany";

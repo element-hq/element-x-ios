@@ -174,7 +174,7 @@
 "action_retry_decryption" = "Повторити спробу розшифрування";
 "action_save" = "Зберегти";
 "action_search" = "Шукати";
-"action_select" = "Select";
+"action_select" = "Вибрати";
 "action_select_all" = "Вибрати все";
 "action_send" = "Надіслати";
 "action_send_edited_message" = "Надіслати змінене повідомлення";
@@ -778,7 +778,7 @@
 "screen_create_room_private_option_description" = "Можуть приєднатися лише запрошені люди.";
 "screen_create_room_private_option_title" = "Приватний";
 "screen_create_room_public_option_description" = "Будь-хто може знайти цю кімнату. \nВи можете змінити це в будь-який час у налаштуваннях кімнати.";
-"screen_create_room_public_option_short_description" = "Приєднатися може будь-хто.";
+"screen_create_room_public_option_short_description" = "Приєднатися може будь-хто, у тому числі й особи, які не належать до вашої організації.";
 "screen_create_room_public_option_title" = "Публічний";
 "screen_create_room_room_access_section_knocking_option_description" = "Будь-хто може подати запит на приєднання, але адміністратор або модератор повинен схвалити запит.";
 "screen_create_room_room_access_section_knocking_option_title" = "Дозволити запит на приєднання";
@@ -786,7 +786,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Запит на приєднання";
 "screen_create_room_room_access_section_private_option_description" = "Приєднатися можуть лише запрошені особи.";
 "screen_create_room_room_access_section_private_option_title" = "Приватний";
-"screen_create_room_room_access_section_public_option_description" = "Приєднатися може будь-хто.";
+"screen_create_room_room_access_section_public_option_description" = "Приєднатися може будь-хто, у тому числі й особи, які не належать до вашої організації.";
 "screen_create_room_room_access_section_public_option_title" = "Публічний";
 "screen_create_room_room_access_section_restricted_option_description" = "Приєднатися може будь-хто з %1$@.";
 "screen_create_room_room_access_section_restricted_option_title" = "Стандартний";
@@ -951,10 +951,10 @@
 "screen_knock_requests_list_empty_state_title" = "Немає нерозглянутих запитів на приєднання";
 "screen_knock_requests_list_initial_loading_title" = "Завантаження запитів на приєднання…";
 "screen_knock_requests_list_title" = "Запити на приєднання";
-"screen_labs_enable_gallery" = "Gallery messages";
-"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
-"screen_labs_enable_knocking" = "Ask to join";
-"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
+"screen_labs_enable_gallery" = "Галерея повідомлень";
+"screen_labs_enable_gallery_description" = "Одночасне надсилання кількох зображень або відео. Функція працює стабільно на мобільних пристроях, але поки що не підтримується у вебверсії.";
+"screen_labs_enable_knocking" = "Запит на приєднання";
+"screen_labs_enable_knocking_description" = "Користувачі можуть подати запит на доступ до кімнати, яка не відкрита для загального доступу. Стабільна робота на мобільних пристроях; вебверсія існує, але перебуває на експериментальній стадії.";
 "screen_labs_enable_threads" = "Увімкнути відповіді в гілках";
 "screen_labs_enable_threads_description" = "Застосунок перезапуститься, щоб застосувати цю зміну.";
 "screen_labs_header_description" = "Випробуйте найновіші ідеї наших розробників. Ці функції ще не завершені, вони можуть бути нестабільними та змінюватись.";
@@ -1290,10 +1290,11 @@
 "screen_room_change_role_section_users" = "Учасники";
 "screen_room_change_role_unsaved_changes_description" = "У вас є не збережені зміни.";
 "screen_room_change_role_unsaved_changes_title" = "Зберегти зміни?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
-"screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_message" = "Ви впевнені, що хочете вилучити це повідомлення?";
+"screen_room_confirm_removal_reason_label" = "Причина (необов'язково)";
+"screen_room_confirm_removal_reason_placeholder" = "Ввести…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Необов'язково)";
+"screen_room_confirm_removal_title" = "Підтвердити вилучення";
 "screen_room_details_add_topic_title" = "Додати тему";
 "screen_room_details_badge_encrypted" = "Зашифровано";
 "screen_room_details_badge_not_encrypted" = "Не зашифровано";
@@ -1339,7 +1340,7 @@
 "screen_room_invite_again_alert_message" = "Чи хотіли б ви запросити їх знову?";
 "screen_room_invite_again_alert_title" = "Ви одні в цій бесіді";
 "screen_room_live_location_banner" = "Спільний доступ до місцезнаходження у реальному часі";
-"screen_room_maximum_messages_selected" = "Maximum messages selected";
+"screen_room_maximum_messages_selected" = "Вибрано максимальну кількість повідомлень";
 "screen_room_member_details_block_alert_action" = "Заблокувати";
 "screen_room_member_details_block_alert_description" = "Заблоковані користувачі не зможуть надсилати вам повідомлення, і всі їхні повідомлення будуть приховані. Ви можете розблокувати їх у будь-який час.";
 "screen_room_member_details_block_user" = "Заблокувати користувача";
@@ -1469,7 +1470,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Після ввімкнення шифрування неможливо вимкнути.";
 "screen_security_and_privacy_encryption_section_header" = "Шифрування";
 "screen_security_and_privacy_encryption_toggle_title" = "Увімкнути наскрізне шифрування";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Будь-хто може приєднатися.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Приєднатися може будь-хто, у тому числі й особи, які не належать до вашої організації.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Будь-хто";
 "screen_security_and_privacy_room_access_footer" = "Виберіть, учасники яких просторів можуть приєднатися до цієї кімнати без запрошення. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Керувати просторами";
@@ -1530,8 +1531,8 @@
 "screen_session_verification_request_title" = "Запит на звіряння";
 "screen_session_verification_they_dont_match" = "Вони не збігаються";
 "screen_session_verification_they_match" = "Вони збігаються";
-"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
-"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
+"screen_session_verification_unavailable_subtitle" = "Скористайтеся іншим пристроєм або ключем відновлення.";
+"screen_session_verification_unavailable_title" = "Звірення за допомогою цього пристрою наразі недоступне";
 "screen_session_verification_use_another_device_subtitle" = "Перш ніж розпочати звіряння звідси, переконайтеся, що ви відкрили застосунок на іншому пристрої.";
 "screen_session_verification_use_another_device_title" = "Відкрийте застосунок на іншому звіреному пристрої";
 "screen_session_verification_user_initiator_subtitle" = "Для додаткової безпеки звірте цього користувача, порівнявши набір емоджі на ваших пристроях. Зробіть це, використовуючи надійний спосіб спілкування.";
