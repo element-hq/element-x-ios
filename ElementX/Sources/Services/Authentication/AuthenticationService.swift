@@ -22,6 +22,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let appHooks: AppHooks
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
+    /// The currently configured homeserver.
+    ///
+    /// **Note:** The value's `accountProvider` will always be `.generic` after calling `configure(for:flow:)`.
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> {
         homeserverSubject.asCurrentValuePublisher()
     }

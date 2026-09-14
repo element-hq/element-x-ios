@@ -39,6 +39,8 @@ enum AuthenticationServiceError: Error, Equatable {
 
 protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     /// The currently configured homeserver.
+    ///
+    /// **Note:** The value's `accountProvider` will always be `.generic` after calling `configure(for:flow:)`.
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
     /// The type of flow the service is currently configured with.
     var flow: AuthenticationFlow { get }
