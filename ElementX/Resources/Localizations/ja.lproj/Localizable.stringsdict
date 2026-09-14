@@ -486,10 +486,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d message selected</string>
 			<key>other</key>
-			<string>%1$d messages selected</string>
+			<string>%1$d件のメッセージを選択中</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

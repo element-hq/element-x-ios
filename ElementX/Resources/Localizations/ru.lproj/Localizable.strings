@@ -94,7 +94,7 @@
 "action_copy" = "Копировать";
 "action_copy_caption" = "Скопировать подпись";
 "action_copy_link" = "Скопировать ссылку";
-"action_copy_link_to_message" = "Скопировать ссылку в сообщение";
+"action_copy_link_to_message" = "Скопировать ссылку на сообщение";
 "action_copy_text" = "Копировать текст";
 "action_create" = "Создать";
 "action_create_room" = "Создать комнату";
@@ -1293,6 +1293,7 @@
 "screen_room_confirm_removal_message" = "Вы уверены, что хотите удалить это сообщение?";
 "screen_room_confirm_removal_reason_label" = "Причина (необязательно)";
 "screen_room_confirm_removal_reason_placeholder" = "Введите...";
+"screen_room_confirm_removal_reason_supporting_text" = "(Необязательно)";
 "screen_room_confirm_removal_title" = "Подтвердите удаление";
 "screen_room_details_add_topic_title" = "Добавить тему";
 "screen_room_details_badge_encrypted" = "Зашифровано";

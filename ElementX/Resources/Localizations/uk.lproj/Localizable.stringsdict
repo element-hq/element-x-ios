@@ -622,10 +622,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Вибрано %1$d повідомлення</string>
+			<key>many</key>
+			<string>Вибрано %1$d повідомлень</string>
 			<key>one</key>
-			<string>%1$d message selected</string>
-			<key>other</key>
-			<string>%1$d messages selected</string>
+			<string>Вибрано %1$d повідомлення</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
