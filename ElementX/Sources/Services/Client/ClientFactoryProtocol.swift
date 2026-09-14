@@ -12,14 +12,14 @@ nonisolated protocol ClientFactoryProtocol {
     // MARK: Authentication
     
     #if IS_MAIN_APP
-    func makeAuthenticationClient(homeserverAddress: String,
+    func makeAuthenticationClient(serverNameOrBaseURL: String,
                                   sessionDirectories: SessionDirectories,
                                   passphrase: String,
                                   clientSessionDelegate: ClientSessionDelegate,
                                   appSettings: AppSettings,
                                   appHooks: AppHooks) async throws -> ClientProtocol
     
-    func makeInMemoryClient(homeserverAddress: String,
+    func makeInMemoryClient(serverNameOrBaseURL: String,
                             clientSessionDelegate: ClientSessionDelegate,
                             appSettings: AppSettings,
                             appHooks: AppHooks) async throws -> ClientProtocol

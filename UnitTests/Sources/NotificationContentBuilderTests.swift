@@ -17,14 +17,14 @@ nonisolated struct NotificationContentBuilderTests {
     var mediaProvider: MediaProviderMock
     var notificationContent: UNMutableNotificationContent
     
-    init() {
+    init() async {
         notificationContent = .init()
         let stringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
                                                           style: .plain)
         mediaProvider = MediaProviderMock(.init())
-        notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: stringBuilder,
-                                                                notificationSoundName: UNNotificationSoundName("message.caf"),
-                                                                userSession: NSEUserSessionMock(.init()))
+        notificationContentBuilder = await NotificationContentBuilder(messageEventStringBuilder: stringBuilder,
+                                                                      notificationSoundName: UNNotificationSoundName("message.caf"),
+                                                                      userSession: NSEUserSessionMock(.init()))
     }
     
     @Test

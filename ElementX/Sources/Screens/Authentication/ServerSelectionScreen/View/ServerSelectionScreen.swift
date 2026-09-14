@@ -67,7 +67,7 @@ struct ServerSelectionScreen: View {
         VStack(alignment: .leading, spacing: 24) {
             switch context.viewState.mode {
             case .userInput:
-                TextField(L10n.screenChangeServerTextfieldPlaceholder, text: $context.homeserverAddress, selection: $context.homeserverSelection)
+                TextField(L10n.screenChangeServerTextfieldPlaceholder, text: $context.serverNameOrBaseURL, selection: $context.serverNameOrBaseURLSelection)
                     .textFieldStyle(.compound(labelText: Text(L10n.screenChangeServerTextfieldHeader),
                                               footerText: Text(context.viewState.footerMessage),
                                               state: context.viewState.isShowingFooterError ? .error : .default,
@@ -78,13 +78,13 @@ struct ServerSelectionScreen: View {
                     .introspect(.textField, on: .supportedVersions) {
                         context.send(viewAction: .updateTextField($0))
                     }
-                    .onChange(of: context.homeserverAddress) { context.send(viewAction: .clearFooterError) }
+                    .onChange(of: context.serverNameOrBaseURL) { context.send(viewAction: .clearFooterError) }
                     .submitLabel(.done)
                     .onSubmit(submit)
             case .picker(let providers):
                 FakeInlinePicker(items: providers,
                                  icon: \.host,
-                                 selection: $context.homeserverAddress)
+                                 selection: $context.serverNameOrBaseURL)
                     .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.serverPicker)
             }
         }
@@ -140,10 +140,10 @@ private struct FakeInlinePicker: View {
 
 @available(iOS 26.0, *)
 struct ServerSelection_Previews: PreviewProvider, TestablePreview {
-    static let matrixViewModel = makeViewModel(mode: .userInput, homeserverAddress: "matrix.org")
-    static let emptyViewModel = makeViewModel(mode: .userInput, homeserverAddress: "")
-    static let invalidViewModel = makeViewModel(mode: .userInput, homeserverAddress: "thisisbad")
-    static let pickerViewModel = makeViewModel(mode: .picker(["matrix.org", "foo.bar", "baz.me"]), homeserverAddress: "foo.bar")
+    static let matrixViewModel = makeViewModel(mode: .userInput, serverNameOrBaseURL: "matrix.org")
+    static let emptyViewModel = makeViewModel(mode: .userInput, serverNameOrBaseURL: "")
+    static let invalidViewModel = makeViewModel(mode: .userInput, serverNameOrBaseURL: "thisisbad")
+    static let pickerViewModel = makeViewModel(mode: .picker(["matrix.org", "foo.bar", "baz.me"]), serverNameOrBaseURL: "foo.bar")
     
     static var previews: some View {
         ElementNavigationStack {
@@ -168,7 +168,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Picker")
     }
     
-    static func makeViewModel(mode: ServerSelectionScreenMode = .userInput, homeserverAddress: String) -> ServerSelectionScreenViewModel {
+    static func makeViewModel(mode: ServerSelectionScreenMode = .userInput, serverNameOrBaseURL: String) -> ServerSelectionScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
         let appSettings = AppSettings.volatile()
@@ -179,8 +179,8 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
                                                        appSettings: appSettings,
                                                        homeserverHistoryManager: HomeserverHistoryManager(appSettings: appSettings),
                                                        userIndicatorController: UserIndicatorControllerMock())
-        viewModel.context.homeserverAddress = homeserverAddress
-        if case .userInput = mode, homeserverAddress == "thisisbad" {
+        viewModel.context.serverNameOrBaseURL = serverNameOrBaseURL
+        if case .userInput = mode, serverNameOrBaseURL == "thisisbad" {
             viewModel.context.send(viewAction: .confirm)
         }
         return viewModel

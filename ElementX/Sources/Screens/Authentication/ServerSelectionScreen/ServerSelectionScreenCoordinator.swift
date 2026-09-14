@@ -41,7 +41,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
         let mode: ServerSelectionScreenMode = if parameters.appSettings.allowOtherAccountProviders {
             .userInput
         } else {
-            .picker(parameters.appSettings.accountProviders)
+            .picker(parameters.appSettings.accountProviders.map(\.serverNameOrBaseURL))
         }
         
         viewModel = ServerSelectionScreenViewModel(authenticationService: parameters.authenticationService,

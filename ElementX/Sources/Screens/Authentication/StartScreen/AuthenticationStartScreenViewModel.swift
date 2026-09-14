@@ -40,27 +40,30 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         canReportProblem = isBugReportServiceEnabled
         
         let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
-        let classicAppAccountProvider = authenticationService.classicAppAccount?.serverName
-        let isClassicAppAccountAllowed = classicAppAccountProvider.map { appSettings.accountProviders.contains($0) } ?? false
+        let isClassicAppAccountAllowed = if let classicAppAccount = authenticationService.classicAppAccount {
+            appSettings.accountProviders.contains(serverName: classicAppAccount.serverName, orBaseURL: classicAppAccount.homeserverURL)
+        } else {
+            false
+        }
         
         let initialViewState = if !appSettings.allowOtherAccountProviders {
             // We don't show the create account button when custom providers are disallowed.
             // The assumption here being that if you're running a custom app, your users will already be created.
-            AuthenticationStartScreenViewState(serverName: appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0] : nil,
+            AuthenticationStartScreenViewState(serverNameOrBaseURL: appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0].serverNameOrBaseURL : nil,
                                                showCreateAccountButton: false,
                                                showQRCodeLoginButton: isQRCodeScanningSupported,
                                                classicAppMode: isClassicAppAccountAllowed ? authenticationService.classicAppAccount.map { .welcomeBack($0) } : nil,
                                                hideBrandChrome: appSettings.hideBrandChrome)
         } else if let provisioningParameters {
             // We only show the "Sign in to …" button when using a provisioning link.
-            AuthenticationStartScreenViewState(serverName: provisioningParameters.accountProvider,
+            AuthenticationStartScreenViewState(serverNameOrBaseURL: provisioningParameters.accountProvider,
                                                showCreateAccountButton: false,
                                                showQRCodeLoginButton: false,
                                                classicAppMode: nil,
                                                hideBrandChrome: appSettings.hideBrandChrome)
         } else {
             // The default configuration.
-            AuthenticationStartScreenViewState(serverName: nil,
+            AuthenticationStartScreenViewState(serverNameOrBaseURL: nil,
                                                showCreateAccountButton: appSettings.showCreateAccountButton,
                                                showQRCodeLoginButton: isQRCodeScanningSupported,
                                                classicAppMode: authenticationService.classicAppAccount.map { .welcomeBack($0) },
@@ -114,22 +117,22 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             if classicAppAccount.state.availableSecrets == .requiresBackup {
                 state.bindings.showClassicAppBackupInstructions = true
             } else {
-                await configureAccountProvider(classicAppAccount.serverName,
-                                               loginHint: "mxid:\(classicAppAccount.userID)",
-                                               fallbackHomeserverURL: classicAppAccount.homeserverURL)
+                await loginDirectly(using: classicAppAccount.serverName,
+                                    loginHint: "mxid:\(classicAppAccount.userID)",
+                                    fallbackHomeserverURL: classicAppAccount.homeserverURL)
             }
-        } else if let serverName = state.serverName {
-            await configureAccountProvider(serverName, loginHint: provisioningParameters?.loginHint)
+        } else if let serverNameOrBaseURL = state.serverNameOrBaseURL {
+            await loginDirectly(using: serverNameOrBaseURL, loginHint: provisioningParameters?.loginHint)
         } else {
             actionsSubject.send(.login) // No need to configure anything here, continue the flow.
         }
     }
     
-    private func configureAccountProvider(_ accountProvider: String, loginHint: String? = nil, fallbackHomeserverURL: URL? = nil) async {
+    private func loginDirectly(using serverNameOrBaseURL: String, loginHint: String? = nil, fallbackHomeserverURL: URL? = nil) async {
         startLoading()
         defer { stopLoading() }
         
-        if case .failure = await authenticationService.configure(for: accountProvider, flow: .login) {
+        if case .failure = await authenticationService.configure(for: serverNameOrBaseURL, flow: .login) {
             // Try the fallback URL before showing an error.
             if let fallbackHomeserverURL,
                case .success = await authenticationService.configure(for: fallbackHomeserverURL.absoluteString, flow: .login) {

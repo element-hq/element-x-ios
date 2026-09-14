@@ -14,7 +14,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
     // MARK: Authentication
     
     #if IS_MAIN_APP
-    func makeAuthenticationClient(homeserverAddress: String,
+    func makeAuthenticationClient(serverNameOrBaseURL: String,
                                   sessionDirectories: SessionDirectories,
                                   passphrase: String,
                                   clientSessionDelegate: ClientSessionDelegate,
@@ -29,12 +29,12 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             .enableAutomaticBackPagination(enableAutomaticBackPagination: appSettings.automaticBackPaginationEnabled)
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
                 .passphrase(passphrase: passphrase))
-            .serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress)
+            .serverNameOrHomeserverUrl(serverNameOrUrl: serverNameOrBaseURL)
         
         return try await build(builder, for: .authentication, appHooks: appHooks)
     }
     
-    func makeInMemoryClient(homeserverAddress: String,
+    func makeInMemoryClient(serverNameOrBaseURL: String,
                             clientSessionDelegate: ClientSessionDelegate,
                             appSettings: AppSettings,
                             appHooks: AppHooks) async throws -> ClientProtocol {
@@ -45,7 +45,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
                                       enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
                                       threadsEnabled: appSettings.threadsEnabled)
             .inMemoryStore()
-            .serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress)
+            .serverNameOrHomeserverUrl(serverNameOrUrl: serverNameOrBaseURL)
         
         return try await build(builder, for: .classicAppAccount, appHooks: appHooks)
     }

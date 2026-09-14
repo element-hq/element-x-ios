@@ -226,7 +226,7 @@ struct LoginScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private mutating func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
+    private mutating func setupViewModel(serverNameOrBaseURL: String = "example.com", loginHint: String? = nil) async {
         let appSettings = AppSettings.volatile()
         
         clientFactory = ClientFactoryMock(.init())
@@ -238,7 +238,7 @@ struct LoginScreenViewModelTests {
                                         appHooks: AppHooks())
         
         guard case .success = await service
-            .configure(for: homeserverAddress, flow: .login) else {
+            .configure(for: serverNameOrBaseURL, flow: .login) else {
             Issue.record("A valid server should be configured for the test.")
             return
         }

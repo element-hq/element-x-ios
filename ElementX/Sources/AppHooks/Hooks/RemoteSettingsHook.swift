@@ -37,7 +37,7 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
             let wellKnown = try JSONDecoder().decode(ElementWellKnown.self, from: wellKnownData)
             if wellKnown.enforceElementPro == true {
                 let serverName = client.server() ?? client.homeserver()
-                let displayableServerName = LoginHomeserver(address: serverName, loginMode: .unknown).address
+                let displayableServerName = AccountProvider.generic(serverName).serverNameOrBaseURL
                 return .failure(.elementProRequired(serverName: displayableServerName))
             } else {
                 return .success(())
