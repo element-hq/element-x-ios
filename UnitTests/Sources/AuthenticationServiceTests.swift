@@ -65,7 +65,6 @@ struct AuthenticationServiceTests {
     }
     
     @Test
-    @MainActor
     mutating func configureRegisterNoSupport() async throws {
         let serverNameOrBaseURL = "example.com"
         try await setup(serverNameOrBaseURL: serverNameOrBaseURL)
@@ -75,11 +74,11 @@ struct AuthenticationServiceTests {
         }
         
         #expect(service.flow == .login)
-        #expect(service.homeserver.value == .init(accountProvider: .generic("matrix.org"), loginMode: .unknown))
+        #expect(service.homeserver.value == .init(accountProvider: .managed(serverName: "matrix.org", baseURL: "https://matrix-client.matrix.org"),
+                                                  loginMode: .unknown))
     }
     
     @Test
-    @MainActor
     mutating func classicAppAccountSecretsBundleIsUsed() async throws {
         // Given an authentication service with an Element Classic account for Alice.
         try await setup(classicAppAccounts: [.mockAlice])
@@ -96,7 +95,6 @@ struct AuthenticationServiceTests {
     }
     
     @Test
-    @MainActor
     mutating func classicAppAccountSecretsBundleIsIgnoredWhenUnavailable() async throws {
         // Given an authentication service with an Element Classic account for Alice
         // which isn't configured with any available secrets.
@@ -114,7 +112,6 @@ struct AuthenticationServiceTests {
     }
     
     @Test
-    @MainActor
     mutating func classicAppAccountSecretsBundleIsIgnoredForDifferentUser() async throws {
         // Given an authentication service with an Element Classic account for Dan.
         try await setup(classicAppAccounts: [.mockDan])
