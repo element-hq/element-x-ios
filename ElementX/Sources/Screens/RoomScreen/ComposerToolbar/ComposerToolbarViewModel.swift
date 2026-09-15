@@ -42,6 +42,21 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     
     private var currentLinkData: WysiwygLinkData?
     
+    private struct ComposerContent: Equatable {
+        let plain: String
+        let html: String?
+    }
+    
+    private var originalEditContent: ComposerContent?
+    
+    private var currentContent: ComposerContent {
+        if context.composerFormattingEnabled {
+            .init(plain: wysiwygViewModel.content.markdown, html: wysiwygViewModel.content.html)
+        } else {
+            .init(plain: plainComposerContent.text, html: nil)
+        }
+    }
+    
     private var replyLoadingTask: Task<Void, Never>?
     
     init(initialText: String? = nil,
@@ -192,6 +207,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             case .recordVoiceMessage:
                 MXLog.warning("Ignoring send action while recording a voice message.")
             default:
+                if state.composerMode.isEdit, currentContent == originalEditContent {
+                    MXLog.info("Edit content is unchanged, cancelling the edit instead of sending it.")
+                    cancelEdit()
+                    return
+                }
+                
                 if context.composerFormattingEnabled {
                     actionsSubject.send(.sendMessage(plain: wysiwygViewModel.content.markdown,
                                                      html: wysiwygViewModel.content.html,
@@ -206,13 +227,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .cancelReply:
             set(mode: .default)
         case .cancelEdit:
-            if let draft = draftService.loadVolatileDraft() {
-                handleLoadDraft(draft)
-                draftService.clearVolatileDraft()
-            } else {
-                set(text: "")
-                set(mode: .default)
-            }
+            cancelEdit()
         case .attach(let attachment):
             state.bindings.composerFocused = false
             actionsSubject.send(.attach(attachment))
@@ -264,6 +279,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 set(text: htmlText)
             } else {
                 set(text: plainText)
+            }
+            
+            if state.composerMode.isEdit {
+                originalEditContent = currentContent
             }
         case .setFocus:
             state.bindings.composerFocused = true
@@ -453,6 +472,16 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                                          intentionalMentions: .init(userIDs: plainComposerContent.mentionedUserIDs, atRoom: plainComposerContent.containsAtRoomMention)))
     }
     
+    private func cancelEdit() {
+        if let draft = draftService.loadVolatileDraft() {
+            handleLoadDraft(draft)
+            draftService.clearVolatileDraft()
+        } else {
+            set(text: "")
+            set(mode: .default)
+        }
+    }
+    
     private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
         switch action {
         case .startRecording:
@@ -576,6 +605,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         guard mode != state.composerMode else { return }
         
         state.composerMode = mode
+        originalEditContent = nil
         switch mode {
         case .default:
             break
