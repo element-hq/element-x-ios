@@ -159,7 +159,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
     private func build(_ builder: ClientBuilder,
                        for mode: BuildMode,
                        appHooks: AppHooks) async throws -> ClientProtocol {
-        var client: ClientProtocol = try await appHooks.clientFactoryHook.configure(builder, toRestore: mode.session).build()
+        let client: ClientProtocol = try await appHooks.clientFactoryHook.configure(builder, toRestore: mode.session).build()
         
         switch mode {
         case .authentication:

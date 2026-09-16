@@ -461,6 +461,7 @@ class TimelineInteractionHandler {
         audioPlayerState(for: itemID)?.setPlaybackSpeed(nextSpeed)
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     func playPauseAudio(for itemID: TimelineItemIdentifier) async {
         MXLog.info("Toggle play/pause audio for itemID \(itemID)")
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
