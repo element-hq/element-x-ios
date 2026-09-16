@@ -1920,6 +1920,37 @@ nonisolated class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
     }
     //MARK: - reportOutgoingCall
 
+    private let reportOutgoingCallWithStartedConnectingAtCallsCountLock = NSLock()
+    private nonisolated(unsafe) var reportOutgoingCallWithStartedConnectingAtUnderlyingCallsCount = 0
+    var reportOutgoingCallWithStartedConnectingAtCallsCount: Int {
+        get { reportOutgoingCallWithStartedConnectingAtCallsCountLock.withLock { reportOutgoingCallWithStartedConnectingAtUnderlyingCallsCount } }
+        set { reportOutgoingCallWithStartedConnectingAtCallsCountLock.withLock { reportOutgoingCallWithStartedConnectingAtUnderlyingCallsCount = newValue } }
+    }
+    var reportOutgoingCallWithStartedConnectingAtCalled: Bool {
+        return reportOutgoingCallWithStartedConnectingAtCallsCount > 0
+    }
+    private let reportOutgoingCallWithStartedConnectingAtReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var reportOutgoingCallWithStartedConnectingAtUnderlyingReceivedArguments: (uuid: UUID, startedConnectingAt: Date?)?
+    var reportOutgoingCallWithStartedConnectingAtReceivedArguments: (uuid: UUID, startedConnectingAt: Date?)? {
+        get { reportOutgoingCallWithStartedConnectingAtReceivedArgumentsLock.withLock { reportOutgoingCallWithStartedConnectingAtUnderlyingReceivedArguments } }
+        set { reportOutgoingCallWithStartedConnectingAtReceivedArgumentsLock.withLock { reportOutgoingCallWithStartedConnectingAtUnderlyingReceivedArguments = newValue } }
+    }
+    private let reportOutgoingCallWithStartedConnectingAtReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var reportOutgoingCallWithStartedConnectingAtUnderlyingReceivedInvocations: [(uuid: UUID, startedConnectingAt: Date?)] = []
+    var reportOutgoingCallWithStartedConnectingAtReceivedInvocations: [(uuid: UUID, startedConnectingAt: Date?)] {
+        get { reportOutgoingCallWithStartedConnectingAtReceivedInvocationsLock.withLock { reportOutgoingCallWithStartedConnectingAtUnderlyingReceivedInvocations } }
+        set { reportOutgoingCallWithStartedConnectingAtReceivedInvocationsLock.withLock { reportOutgoingCallWithStartedConnectingAtUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var reportOutgoingCallWithStartedConnectingAtClosure: ((UUID, Date?) -> Void)?
+
+    func reportOutgoingCall(with uuid: UUID, startedConnectingAt: Date?) {
+        reportOutgoingCallWithStartedConnectingAtCallsCountLock.withLock { reportOutgoingCallWithStartedConnectingAtUnderlyingCallsCount += 1 }
+        reportOutgoingCallWithStartedConnectingAtReceivedArguments = (uuid: uuid, startedConnectingAt: startedConnectingAt)
+        reportOutgoingCallWithStartedConnectingAtReceivedInvocationsLock.withLock { reportOutgoingCallWithStartedConnectingAtUnderlyingReceivedInvocations.append((uuid: uuid, startedConnectingAt: startedConnectingAt)) }
+        reportOutgoingCallWithStartedConnectingAtClosure?(uuid, startedConnectingAt)
+    }
+    //MARK: - reportOutgoingCall
+
     private let reportOutgoingCallWithConnectedAtCallsCountLock = NSLock()
     private nonisolated(unsafe) var reportOutgoingCallWithConnectedAtUnderlyingCallsCount = 0
     var reportOutgoingCallWithConnectedAtCallsCount: Int {
@@ -1948,6 +1979,37 @@ nonisolated class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
         reportOutgoingCallWithConnectedAtReceivedArguments = (uuid: uuid, connectedAt: connectedAt)
         reportOutgoingCallWithConnectedAtReceivedInvocationsLock.withLock { reportOutgoingCallWithConnectedAtUnderlyingReceivedInvocations.append((uuid: uuid, connectedAt: connectedAt)) }
         reportOutgoingCallWithConnectedAtClosure?(uuid, connectedAt)
+    }
+    //MARK: - reportCall
+
+    private let reportCallWithUpdatedCallsCountLock = NSLock()
+    private nonisolated(unsafe) var reportCallWithUpdatedUnderlyingCallsCount = 0
+    var reportCallWithUpdatedCallsCount: Int {
+        get { reportCallWithUpdatedCallsCountLock.withLock { reportCallWithUpdatedUnderlyingCallsCount } }
+        set { reportCallWithUpdatedCallsCountLock.withLock { reportCallWithUpdatedUnderlyingCallsCount = newValue } }
+    }
+    var reportCallWithUpdatedCalled: Bool {
+        return reportCallWithUpdatedCallsCount > 0
+    }
+    private let reportCallWithUpdatedReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var reportCallWithUpdatedUnderlyingReceivedArguments: (uuid: UUID, update: CXCallUpdate)?
+    var reportCallWithUpdatedReceivedArguments: (uuid: UUID, update: CXCallUpdate)? {
+        get { reportCallWithUpdatedReceivedArgumentsLock.withLock { reportCallWithUpdatedUnderlyingReceivedArguments } }
+        set { reportCallWithUpdatedReceivedArgumentsLock.withLock { reportCallWithUpdatedUnderlyingReceivedArguments = newValue } }
+    }
+    private let reportCallWithUpdatedReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var reportCallWithUpdatedUnderlyingReceivedInvocations: [(uuid: UUID, update: CXCallUpdate)] = []
+    var reportCallWithUpdatedReceivedInvocations: [(uuid: UUID, update: CXCallUpdate)] {
+        get { reportCallWithUpdatedReceivedInvocationsLock.withLock { reportCallWithUpdatedUnderlyingReceivedInvocations } }
+        set { reportCallWithUpdatedReceivedInvocationsLock.withLock { reportCallWithUpdatedUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var reportCallWithUpdatedClosure: ((UUID, CXCallUpdate) -> Void)?
+
+    func reportCall(with uuid: UUID, updated update: CXCallUpdate) {
+        reportCallWithUpdatedCallsCountLock.withLock { reportCallWithUpdatedUnderlyingCallsCount += 1 }
+        reportCallWithUpdatedReceivedArguments = (uuid: uuid, update: update)
+        reportCallWithUpdatedReceivedInvocationsLock.withLock { reportCallWithUpdatedUnderlyingReceivedInvocations.append((uuid: uuid, update: update)) }
+        reportCallWithUpdatedClosure?(uuid, update)
     }
     //MARK: - reportCall
 
@@ -4875,37 +4937,81 @@ nonisolated class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked
         set(value) { underlyingOngoingCallRoomIDPublisher = value }
     }
     nonisolated(unsafe) var underlyingOngoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>!
+    nonisolated(unsafe) var nativeCallController: ElementCallController?
 
-    //MARK: - setClientProxy
+    //MARK: - setUserSession
 
-    private let setClientProxyCallsCountLock = NSLock()
-    private nonisolated(unsafe) var setClientProxyUnderlyingCallsCount = 0
-    var setClientProxyCallsCount: Int {
-        get { setClientProxyCallsCountLock.withLock { setClientProxyUnderlyingCallsCount } }
-        set { setClientProxyCallsCountLock.withLock { setClientProxyUnderlyingCallsCount = newValue } }
+    private let setUserSessionCallsCountLock = NSLock()
+    private nonisolated(unsafe) var setUserSessionUnderlyingCallsCount = 0
+    var setUserSessionCallsCount: Int {
+        get { setUserSessionCallsCountLock.withLock { setUserSessionUnderlyingCallsCount } }
+        set { setUserSessionCallsCountLock.withLock { setUserSessionUnderlyingCallsCount = newValue } }
     }
-    var setClientProxyCalled: Bool {
-        return setClientProxyCallsCount > 0
+    var setUserSessionCalled: Bool {
+        return setUserSessionCallsCount > 0
     }
-    private let setClientProxyReceivedClientProxyLock = NSLock()
-    private nonisolated(unsafe) var setClientProxyUnderlyingReceivedClientProxy: ClientProxyProtocol?
-    var setClientProxyReceivedClientProxy: ClientProxyProtocol? {
-        get { setClientProxyReceivedClientProxyLock.withLock { setClientProxyUnderlyingReceivedClientProxy } }
-        set { setClientProxyReceivedClientProxyLock.withLock { setClientProxyUnderlyingReceivedClientProxy = newValue } }
+    private let setUserSessionReceivedUserSessionLock = NSLock()
+    private nonisolated(unsafe) var setUserSessionUnderlyingReceivedUserSession: UserSessionProtocol?
+    var setUserSessionReceivedUserSession: UserSessionProtocol? {
+        get { setUserSessionReceivedUserSessionLock.withLock { setUserSessionUnderlyingReceivedUserSession } }
+        set { setUserSessionReceivedUserSessionLock.withLock { setUserSessionUnderlyingReceivedUserSession = newValue } }
     }
-    private let setClientProxyReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var setClientProxyUnderlyingReceivedInvocations: [ClientProxyProtocol] = []
-    var setClientProxyReceivedInvocations: [ClientProxyProtocol] {
-        get { setClientProxyReceivedInvocationsLock.withLock { setClientProxyUnderlyingReceivedInvocations } }
-        set { setClientProxyReceivedInvocationsLock.withLock { setClientProxyUnderlyingReceivedInvocations = newValue } }
+    private let setUserSessionReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var setUserSessionUnderlyingReceivedInvocations: [UserSessionProtocol?] = []
+    var setUserSessionReceivedInvocations: [UserSessionProtocol?] {
+        get { setUserSessionReceivedInvocationsLock.withLock { setUserSessionUnderlyingReceivedInvocations } }
+        set { setUserSessionReceivedInvocationsLock.withLock { setUserSessionUnderlyingReceivedInvocations = newValue } }
     }
-    nonisolated(unsafe) var setClientProxyClosure: ((ClientProxyProtocol) -> Void)?
+    nonisolated(unsafe) var setUserSessionClosure: ((UserSessionProtocol?) -> Void)?
 
-    func setClientProxy(_ clientProxy: ClientProxyProtocol) {
-        setClientProxyCallsCountLock.withLock { setClientProxyUnderlyingCallsCount += 1 }
-        setClientProxyReceivedClientProxy = clientProxy
-        setClientProxyReceivedInvocationsLock.withLock { setClientProxyUnderlyingReceivedInvocations.append(clientProxy) }
-        setClientProxyClosure?(clientProxy)
+    func setUserSession(_ userSession: UserSessionProtocol?) {
+        setUserSessionCallsCountLock.withLock { setUserSessionUnderlyingCallsCount += 1 }
+        setUserSessionReceivedUserSession = userSession
+        setUserSessionReceivedInvocationsLock.withLock { setUserSessionUnderlyingReceivedInvocations.append(userSession) }
+        setUserSessionClosure?(userSession)
+    }
+    //MARK: - handleNativeCallRequest
+
+    private let handleNativeCallRequestRoomProxyIsVoiceCallCallsCountLock = NSLock()
+    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingCallsCount = 0
+    var handleNativeCallRequestRoomProxyIsVoiceCallCallsCount: Int {
+        get { handleNativeCallRequestRoomProxyIsVoiceCallCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingCallsCount } }
+        set { handleNativeCallRequestRoomProxyIsVoiceCallCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingCallsCount = newValue } }
+    }
+    var handleNativeCallRequestRoomProxyIsVoiceCallCalled: Bool {
+        return handleNativeCallRequestRoomProxyIsVoiceCallCallsCount > 0
+    }
+    private let handleNativeCallRequestRoomProxyIsVoiceCallReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)?
+    var handleNativeCallRequestRoomProxyIsVoiceCallReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)? {
+        get { handleNativeCallRequestRoomProxyIsVoiceCallReceivedArgumentsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedArguments } }
+        set { handleNativeCallRequestRoomProxyIsVoiceCallReceivedArgumentsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedArguments = newValue } }
+    }
+    private let handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)] = []
+    var handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)] {
+        get { handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedInvocations } }
+        set { handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let handleNativeCallRequestRoomProxyIsVoiceCallReturnValueLock = NSLock()
+    private nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReturnValue: Bool!
+    var handleNativeCallRequestRoomProxyIsVoiceCallReturnValue: Bool! {
+        get { handleNativeCallRequestRoomProxyIsVoiceCallReturnValueLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReturnValue } }
+        set { handleNativeCallRequestRoomProxyIsVoiceCallReturnValueLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var handleNativeCallRequestRoomProxyIsVoiceCallClosure: ((JoinedRoomProxyProtocol, Bool) -> Bool)?
+
+    @discardableResult
+    func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool {
+        handleNativeCallRequestRoomProxyIsVoiceCallCallsCountLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingCallsCount += 1 }
+        handleNativeCallRequestRoomProxyIsVoiceCallReceivedArguments = (roomProxy: roomProxy, isVoiceCall: isVoiceCall)
+        handleNativeCallRequestRoomProxyIsVoiceCallReceivedInvocationsLock.withLock { handleNativeCallRequestRoomProxyIsVoiceCallUnderlyingReceivedInvocations.append((roomProxy: roomProxy, isVoiceCall: isVoiceCall)) }
+        if let handleNativeCallRequestRoomProxyIsVoiceCallClosure = handleNativeCallRequestRoomProxyIsVoiceCallClosure {
+            return handleNativeCallRequestRoomProxyIsVoiceCallClosure(roomProxy, isVoiceCall)
+        } else {
+            return handleNativeCallRequestRoomProxyIsVoiceCallReturnValue
+        }
     }
     //MARK: - setupCallSession
 

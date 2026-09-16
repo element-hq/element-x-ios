@@ -40,7 +40,7 @@ final class NativeCallSystem: ElementCallSystemProviding {
                     .endCallRequested(roomID: roomID)
                 // All navigation, handled by the flow coordinator. The call reaches this port later,
                 // as an ordinary start.
-                case .startCall, .receivedIncomingCallRequest:
+                case .startCall, .receivedIncomingCallRequest, .nativeCall:
                     nil
                 }
             }
