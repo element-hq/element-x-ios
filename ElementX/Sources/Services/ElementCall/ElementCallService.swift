@@ -32,7 +32,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private let appSettings: AppSettings
     private let pushRegistry: PKPushRegistry
-    private let callController = CXCallController()
+    private let callController: CXCallControllerProtocol
     private let callProvider: CXProviderProtocol
     private let timeProvider: TimeProvider
     
@@ -87,8 +87,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     init(appSettings: AppSettings,
          callProvider: CXProviderProtocol? = nil,
+         callController: CXCallControllerProtocol? = nil,
          timeProvider: TimeProvider? = nil) {
         self.appSettings = appSettings
+        self.callController = callController ?? CXCallController()
         pushRegistry = PKPushRegistry(queue: nil)
         
         self.timeProvider = timeProvider ?? TimeProvider(clock: ContinuousClock(), now: Date.init)
@@ -190,11 +192,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         // Awaited because our membership goes out straight after: a peer that sees it before the
         // system knows about the call reads the call as answered elsewhere.
-        do {
-            try await callController.request(CXTransaction(action: startCallAction))
-        } catch {
-            MXLog.error("Failed requesting start call action with error: \(error)")
-        }
+        await requestTransaction(CXTransaction(action: startCallAction), describedAs: "start call")
         
         // Without this the system call UI shows the handle, i.e. the room ID.
         let update = CXCallUpdate()
@@ -486,27 +484,52 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // This gets called for no reason on simulators, where CallKit
         // isn't even supported, ignore it.
         #else
-        if let ongoingCallID {
-            actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
-        }
-        
-        if let incomingCallID {
-            Task {
-                await sendDeclineCallEvent(incomingCallID)
-            }
-        }
-        
-        if incomingCallID?.callKitID == action.callUUID {
-            clearIncomingCallState()
-        }
-        
-        tearDownCallSession(sendEndCallAction: false)
-        
+        endCall(withCallKitID: action.callUUID)
         action.fulfill()
         #endif
     }
     
+    /// Ends the call the system identified, whether that's the ongoing one, the ringing one, or
+    /// neither because it has already been replaced.
+    ///
+    /// Kept out of the delegate method so that it's reachable on the simulator, where the provider
+    /// performs end call actions of its own and the delegate has to ignore them.
+    func endCall(withCallKitID callKitID: UUID) {
+        MXLog.info("Ending the call for \(callKitID), ongoing: \(ongoingCallID != nil), incoming: \(incomingCallID != nil)")
+        
+        // Both branches are gated on the identifier. Leaving a call to start one in another room
+        // requests an end call action for the old call and replaces `ongoingCallID` before the
+        // system gets round to performing it, so an ungated handler reads it as the new call ending
+        // and hangs up the call that was just started.
+        if let ongoingCallID, ongoingCallID.callKitID == callKitID {
+            actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
+            tearDownCallSession(sendEndCallAction: false)
+        }
+        
+        if let incomingCallID, incomingCallID.callKitID == callKitID {
+            Task {
+                await sendDeclineCallEvent(incomingCallID)
+            }
+            
+            clearIncomingCallState()
+        }
+    }
+    
     // MARK: - Private
+    
+    /// Bridges the controller's completion handler, which is all ``CXCallControllerProtocol`` can
+    /// carry, back to an awaitable call.
+    private func requestTransaction(_ transaction: CXTransaction, describedAs description: String) async {
+        await withCheckedContinuation { continuation in
+            callController.request(transaction) { error in
+                if let error {
+                    MXLog.error("Failed requesting \(description) action with error: \(error)")
+                }
+                
+                continuation.resume()
+            }
+        }
+    }
     
     private func tearDownCallSession(sendEndCallAction: Bool = true) {
         if sendEndCallAction, let ongoingCallID {

@@ -1854,6 +1854,40 @@ nonisolated class CLLocationManagerMock: CLLocationManagerProtocol, @unchecked S
         stopUpdatingLocationClosure?()
     }
 }
+nonisolated class CXCallControllerMock: CXCallControllerProtocol, @unchecked Sendable {
+
+    //MARK: - request
+
+    private let requestCompletionCallsCountLock = NSLock()
+    private nonisolated(unsafe) var requestCompletionUnderlyingCallsCount = 0
+    var requestCompletionCallsCount: Int {
+        get { requestCompletionCallsCountLock.withLock { requestCompletionUnderlyingCallsCount } }
+        set { requestCompletionCallsCountLock.withLock { requestCompletionUnderlyingCallsCount = newValue } }
+    }
+    var requestCompletionCalled: Bool {
+        return requestCompletionCallsCount > 0
+    }
+    private let requestCompletionReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var requestCompletionUnderlyingReceivedArguments: (transaction: CXTransaction, completion: (Error?) -> Void)?
+    var requestCompletionReceivedArguments: (transaction: CXTransaction, completion: (Error?) -> Void)? {
+        get { requestCompletionReceivedArgumentsLock.withLock { requestCompletionUnderlyingReceivedArguments } }
+        set { requestCompletionReceivedArgumentsLock.withLock { requestCompletionUnderlyingReceivedArguments = newValue } }
+    }
+    private let requestCompletionReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var requestCompletionUnderlyingReceivedInvocations: [(transaction: CXTransaction, completion: (Error?) -> Void)] = []
+    var requestCompletionReceivedInvocations: [(transaction: CXTransaction, completion: (Error?) -> Void)] {
+        get { requestCompletionReceivedInvocationsLock.withLock { requestCompletionUnderlyingReceivedInvocations } }
+        set { requestCompletionReceivedInvocationsLock.withLock { requestCompletionUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var requestCompletionClosure: ((CXTransaction, @Sendable @escaping (Error?) -> Void) -> Void)?
+
+    func request(_ transaction: CXTransaction, completion: @Sendable @escaping (Error?) -> Void) {
+        requestCompletionCallsCountLock.withLock { requestCompletionUnderlyingCallsCount += 1 }
+        requestCompletionReceivedArguments = (transaction: transaction, completion: completion)
+        requestCompletionReceivedInvocationsLock.withLock { requestCompletionUnderlyingReceivedInvocations.append((transaction: transaction, completion: completion)) }
+        requestCompletionClosure?(transaction, completion)
+    }
+}
 nonisolated class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
 
     //MARK: - setDelegate

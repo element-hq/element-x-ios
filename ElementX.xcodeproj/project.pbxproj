@@ -498,6 +498,7 @@
 		4E9782D683660463804C2DC3 /* UserIdentityProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F793C422BDACE0C60C774F4 /* UserIdentityProxyProtocol.swift */; };
 		4E9ED3E6E979C6C7FEC1D011 /* AnalyticsConsentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353024006CB726E9F9187B3A /* AnalyticsConsentState.swift */; };
 		4EA1CE0E88EA68E862FF0EA2 /* NotificationSettingsEditScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B564D748B67A156F413CD97 /* NotificationSettingsEditScreenModels.swift */; };
+		4EAC1586FF01F6AB8B8D59F9 /* CXCallControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6943C2B0925AB90ECAFE59F /* CXCallControllerProtocol.swift */; };
 		4EAC427267424192964B16B3 /* AppSettingsHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BE9781699FB510E9263192 /* AppSettingsHook.swift */; };
 		4ED764A24F2A715C25CF07F1 /* TimelineMediaPreviewFileExportPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30856520F3263D0E195710D7 /* TimelineMediaPreviewFileExportPicker.swift */; };
 		4EF76B21E1128FA18F8FB7A9 /* SearchBreadcrumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095B8ED0CA87F4A0A4858719 /* SearchBreadcrumb.swift */; };
@@ -952,6 +953,7 @@
 		93BA4A81B6D893271101F9F0 /* AnalyticsEvents in Frameworks */ = {isa = PBXBuildFile; productRef = 2A3F7BCCB18C15B30CCA39A9 /* AnalyticsEvents */; };
 		93BAF04D9CCBC0A8841414D0 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D67E616BCA82D8A1258D488 /* NetworkMonitor.swift */; };
 		93DC8297B8287B50B2A4B57D /* ExpiringTaskRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25F959A434BB9923A3223F /* ExpiringTaskRunner.swift */; };
+		93DED70DA65F7B6889D60CD8 /* CXCallControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E858B68153E2C6E5800336AB /* CXCallControllerMock.swift */; };
 		9408CE8B8865C0C8DD4C9869 /* NoticeRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD51B4D5173F7FC886F5360 /* NoticeRoomTimelineItemContent.swift */; };
 		9415ED7F6200904F2E179EF9 /* RoomListSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B8AA3199BAAD066E36CB07 /* RoomListSDKMock.swift */; };
 		944EAB7BC2408B2C6570E722 /* AppHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E4AB573FAEBB7B853DD04C /* AppHooks.swift */; };
@@ -3133,6 +3135,7 @@
 		E6372DD10DED30E7AD7BCE21 /* RoomListFiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListFiltersView.swift; sourceTree = "<group>"; };
 		E66763BD54A3A1D9C6E6F2F1 /* PinnedItemsIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedItemsIndicatorView.swift; sourceTree = "<group>"; };
 		E6935A55AB3B0C94BC566DD6 /* EncryptionResetPasswordScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetPasswordScreenCoordinator.swift; sourceTree = "<group>"; };
+		E6943C2B0925AB90ECAFE59F /* CXCallControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXCallControllerProtocol.swift; sourceTree = "<group>"; };
 		E6E6BDF9D26DB05C88901416 /* RedactedRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedactedRoomTimelineItem.swift; sourceTree = "<group>"; };
 		E6F5D66F158A6662F953733E /* NotificationSettingsProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsProxy.swift; sourceTree = "<group>"; };
 		E7495E1119753B06FF2C2279 /* PhotoLibraryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryManager.swift; sourceTree = "<group>"; };
@@ -3141,6 +3144,7 @@
 		E7C3B926E1BBC7569AC6C682 /* TimelineSelectionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineSelectionToolbar.swift; sourceTree = "<group>"; };
 		E8294DB9E95C0C0630418466 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E8495F37D6245AD0CFA1F60B /* AppLockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockTests.swift; sourceTree = "<group>"; };
+		E858B68153E2C6E5800336AB /* CXCallControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXCallControllerMock.swift; sourceTree = "<group>"; };
 		E8A1F98AE670377B20679FF5 /* MediaPlayerProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerProvider.swift; sourceTree = "<group>"; };
 		E8AE4B3273BA189FDCD4055C /* UserIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicator.swift; sourceTree = "<group>"; };
 		E944F717FC10A428D027074D /* RoomPowerLevelsProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPowerLevelsProxyMock.swift; sourceTree = "<group>"; };
@@ -4060,6 +4064,7 @@
 				C723327DC4A3093CD9675B27 /* CLLocationManagerMock.swift */,
 				4E600B315B920B9687F8EE1B /* ComposerDraftServiceMock.swift */,
 				EC446234C8E5031F36F1BBE2 /* ContentScannerServiceMock.swift */,
+				E858B68153E2C6E5800336AB /* CXCallControllerMock.swift */,
 				86E1BAA7232081635662A83F /* CXProviderMock.swift */,
 				E321E840DCC63790049984F4 /* ElementCallServiceMock.swift */,
 				3A21027F05874B1BCC3E452B /* InvitedRoomProxyMock.swift */,
@@ -5906,6 +5911,7 @@
 		92E99C57D7F92ED16F73282C /* ElementCall */ = {
 			isa = PBXGroup;
 			children = (
+				E6943C2B0925AB90ECAFE59F /* CXCallControllerProtocol.swift */,
 				5E68CA59F66CE43B66D129E9 /* CXProviderProtocol.swift */,
 				CC437C491EA6996513B1CEAB /* ElementCallConfiguration.swift */,
 				33AE897D86784CCA5E4E9227 /* ElementCallService.swift */,
@@ -8724,6 +8730,8 @@
 				783FFA8F0DB76A1CB23B0ECE /* CLLocationCoordinate2D.swift in Sources */,
 				6A5FDF9306CBD62C7EDDB552 /* CLLocationManagerMock.swift in Sources */,
 				1D2D713A5A269072D103AE37 /* CLLocationManagerProtocol.swift in Sources */,
+				93DED70DA65F7B6889D60CD8 /* CXCallControllerMock.swift in Sources */,
+				4EAC1586FF01F6AB8B8D59F9 /* CXCallControllerProtocol.swift in Sources */,
 				5470E62F65AE1803BBF3D528 /* CXProviderMock.swift in Sources */,
 				3D0DAED550E967AB49F1758C /* CXProviderProtocol.swift in Sources */,
 				E81E8B7A8ADDB2A912A609F6 /* CallIntent.swift in Sources */,

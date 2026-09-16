@@ -15,6 +15,7 @@ import Testing
 final class ElementCallServiceTests {
     private var appSettings: AppSettings!
     private var callProvider: CXProviderMock!
+    private var callController: CXCallControllerMock!
     private var currentDate: Date!
     private var clock: ManualClock!
     private var pushRegistry: PKPushRegistry!
@@ -25,6 +26,7 @@ final class ElementCallServiceTests {
         appSettings = AppSettings.volatile()
         pushRegistry = PKPushRegistry(queue: nil)
         callProvider = CXProviderMock(.init())
+        callController = CXCallControllerMock(.init())
         currentDate = Date()
         clock = ManualClock()
         let dateProvider: () -> Date = {
@@ -32,12 +34,14 @@ final class ElementCallServiceTests {
         }
         service = ElementCallService(appSettings: appSettings,
                                      callProvider: callProvider,
+                                     callController: callController,
                                      timeProvider: TimeProvider(clock: clock, now: dateProvider))
     }
     
     isolated deinit {
         appSettings = nil
         callProvider = nil
+        callController = nil
         currentDate = nil
         clock = nil
         pushRegistry = nil
@@ -256,6 +260,39 @@ final class ElementCallServiceTests {
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
         #expect(!callProvider.reportCallWithUpdatedCalled)
         #expect(!callProvider.reportOutgoingCallWithConnectedAtCalled)
+    }
+    
+    @Test
+    func endingAReplacedCallLeavesTheCallThatReplacedItUp() async throws {
+        enableNativeCalls()
+        
+        // Leaving a call to start one in another room requests an end call action for the first,
+        // then starts the second before the system performs it.
+        await service.setupCallSession(roomID: "!first:example.com", roomDisplayName: "first", isVideo: true)
+        let firstCallID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
+        
+        service.tearDownCallSession(roomID: "!first:example.com")
+        await service.setupCallSession(roomID: "!second:example.com", roomDisplayName: "second", isVideo: true)
+        
+        var endedRooms: [String] = []
+        let cancellable = service.actions.sink { action in
+            if case .endCall(let roomID) = action {
+                endedRooms.append(roomID)
+            }
+        }
+        defer { cancellable.cancel() }
+        
+        service.endCall(withCallKitID: firstCallID)
+        
+        #expect(endedRooms.isEmpty, "The first call's end action must not hang up the second call")
+        #expect(service.ongoingCallRoomIDPublisher.value == "!second:example.com")
+        
+        // And the second call still ends when it's the one the system means.
+        let secondCallID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
+        service.endCall(withCallKitID: secondCallID)
+        
+        #expect(endedRooms == ["!second:example.com"])
+        #expect(service.ongoingCallRoomIDPublisher.value == nil)
     }
     
     @Test
