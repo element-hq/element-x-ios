@@ -339,6 +339,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                         handleAppRoute(.room(roomID: roomID, via: []), animated: true)
                     }
                 case .cancel:
+                    // The search screen is also dismissed when leaving the tab, ignore it in that case.
+                    guard navigationTabCoordinator.selectedTab == .search else { return }
                     // Return to the tab the user came from, but never back into search.
                     navigationTabCoordinator.selectedTab = navigationTabCoordinator.previousTab == .search ? .chats : navigationTabCoordinator.previousTab ?? .chats
                 }
