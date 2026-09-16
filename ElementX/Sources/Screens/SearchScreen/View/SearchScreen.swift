@@ -79,6 +79,9 @@ struct SearchScreen: View {
                     messagesList
                 }
             }
+            
+            // Dismissing the search field (the tab bar's close button) leaves the tab.
+            SearchDismissalObserver { context.send(viewAction: .cancel) }
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .background(Color.compound.bgCanvasDefault)
@@ -99,7 +102,7 @@ struct SearchScreen: View {
                                          moveDown: { moveSelection(backwards: false) },
                                          cancel: { context.send(viewAction: .cancel) })
         // The TabView calls onAppear/onDisappear each time the search tab is selected/deselected,
-        // so the query is cleared and the selection resets on every switch.
+        // so the field re-focuses, the query is cleared and the selection resets on every switch.
         .onAppear {
             context.send(viewAction: .appeared)
             isSearchFieldFocused = true
@@ -321,6 +324,23 @@ private struct SearchScreenRoomCell: View {
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
+    }
+}
+
+/// Reports the search field being dismissed, which `isSearching` only exposes to the searchable view's children.
+private struct SearchDismissalObserver: View {
+    @Environment(\.isSearching) private var isSearching
+    
+    let action: () -> Void
+    
+    var body: some View {
+        Color.clear
+            .frame(width: 0, height: 0)
+            .onChange(of: isSearching) { _, isSearching in
+                if !isSearching {
+                    action()
+                }
+            }
     }
 }
 
