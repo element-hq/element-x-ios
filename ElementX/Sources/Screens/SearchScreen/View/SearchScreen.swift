@@ -85,6 +85,7 @@ struct SearchScreen: View {
         .conditionalSearchable(searchQuery: $context.searchQuery)
         .searchFocused($isSearchFieldFocused)
         .autocorrectionDisabled(true)
+        .scrollDismissesKeyboard(.immediately)
         .background(tabShortcuts)
         .onSubmit(of: .search) {
             // A software keyboard's submit/search button just dismisses; only a hardware return selects.
