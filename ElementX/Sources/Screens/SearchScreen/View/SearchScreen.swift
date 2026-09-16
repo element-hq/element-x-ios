@@ -240,7 +240,8 @@ struct SearchScreen: View {
         guard let selectedID else { return }
         
         guard context.viewState.isSearching else {
-            switch context.viewState.breadcrumbs.first(where: { $0.id == selectedID }) {
+            let breadcrumb = context.viewState.breadcrumbs.first { $0.id == selectedID }
+            switch breadcrumb {
             case .query(let query):
                 context.searchQuery = query
             case .room(let room):
