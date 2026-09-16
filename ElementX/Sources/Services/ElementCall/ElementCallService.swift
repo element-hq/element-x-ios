@@ -26,6 +26,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let roomID: String
         let rtcNotificationID: String?
         let isVoiceCall: Bool
+        var isNative = false
     }
     
     private let pushRegistry: PKPushRegistry
@@ -101,10 +102,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         self.clientProxy = clientProxy
     }
     
-    func setupCallSession(roomID: String, roomDisplayName: String) async {
+    func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async {
         // Drop any ongoing calls when starting a new one
         if ongoingCallID != nil {
-            tearDownCallSession()
+            tearDownCallSession(sendEndCallAction: true)
         }
         
         // If this starting from a ring reuse those identifiers
@@ -112,27 +113,40 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let callID = if let incomingCallID, incomingCallID.roomID == roomID {
             incomingCallID
         } else {
-            CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil, isVoiceCall: false)
+            CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil, isVoiceCall: !isVideo)
         }
         
         clearIncomingCallState()
         ongoingCallID = callID
         
-        // Don't bother starting another CallKit session as it won't work properly
+        // A web view call must not be tracked by CallKit, as that gives this process exclusive
+        // access to media and the web view runs in another.
         // https://developer.apple.com/forums//thread/767949?answerId=812951022#812951022
-        
-        // let handle = CXHandle(type: .generic, value: roomDisplayName)
-        // let startCallAction = CXStartCallAction(call: callID.callKitID, handle: handle)
-        // startCallAction.isVideo = true
-        
-        // do {
-        //     try await callController.request(CXTransaction(action: startCallAction))
-        // } catch {
-        //     MXLog.error("Failed requesting start call action with error: \(error)")
-        // }
     }
     
-    func tearDownCallSession() {
+    func reportCallSessionConnected(roomID: String) {
+        guard let ongoingCallID, ongoingCallID.roomID == roomID else {
+            // The system ends an outgoing call that never reports connecting, so a silent guard
+            // here shows up much later as a call that hangs itself up.
+            MXLog.warning("Not reporting the call as connected, no matching ongoing call")
+            return
+        }
+        
+        guard ongoingCallID.isNative else {
+            MXLog.info("Not reporting a web view call as connected, CallKit doesn't track it")
+            return
+        }
+        
+        MXLog.info("Reporting the call as connected")
+        callProvider.reportOutgoingCall(with: ongoingCallID.callKitID, connectedAt: nil)
+    }
+    
+    func tearDownCallSession(roomID: String) {
+        guard ongoingCallID?.roomID == roomID else {
+            MXLog.info("Not tearing down the call session, no call for room \(roomID)")
+            return
+        }
+        
         tearDownCallSession(sendEndCallAction: true)
     }
     
@@ -253,10 +267,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
         MXLog.info("Call provider did activate audio session")
+        actionsSubject.send(.audioSessionActivated)
     }
     
     func provider(_ provider: CXProvider, didDeactivate audioSession: AVAudioSession) {
         MXLog.info("Call provider did deactivate audio session")
+        actionsSubject.send(.audioSessionDeactivated)
     }
     
     func providerDidReset(_ provider: CXProvider) {

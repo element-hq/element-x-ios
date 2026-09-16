@@ -123,6 +123,11 @@ extension RoomInfoProxyProtocol {
         isDirect && activeMembersCount == 1
     }
     
+    /// The room's name, falling back to its identifier when it doesn't have one.
+    var displayNameOrID: String {
+        displayName ?? id
+    }
+    
     /// Find the first alias that matches the given homeserver
     /// - Parameters:
     ///   - serverName: the homserver in question

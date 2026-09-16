@@ -196,7 +196,7 @@ final class ElementCallServiceTests {
         
         // Simulate the answer flow handing off to setupCallSession, which must cancel
         // the pending endUnansweredCallTask as part of clearing the incoming state.
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome")
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         
         var unansweredFired = false
         callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
@@ -229,7 +229,7 @@ final class ElementCallServiceTests {
     @Test
     func duplicateRoomPushReportsCallAsHandled() async {
         // A duplicate push for an ongoing call is reported as handled, leaving the ongoing call alone.
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome")
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
         await expectImmediatelyEndedCallReported(forPayload: pushPayload, expectedReason: .answeredElsewhere)
         
