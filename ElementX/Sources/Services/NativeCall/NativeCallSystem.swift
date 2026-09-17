@@ -12,7 +12,7 @@ import ElementCall
 ///
 /// Stays app-side because the same `CXProvider` and VoIP push registry serve the web-view call path
 /// too, so ownership can't be handed to the package.
-final class NativeCallSystem: ElementCallSystemProviding {
+final class NativeCallSystem: ElementCallSystemProvidingProtocol {
     /// Weak because the service owns the call stack, which owns the controller holding this port.
     private weak var service: ElementCallServiceProtocol?
     

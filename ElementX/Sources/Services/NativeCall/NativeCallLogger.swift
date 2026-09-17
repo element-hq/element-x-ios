@@ -9,7 +9,7 @@ import ElementCall
 
 /// Sends the call package's log lines to `MXLog`. The Rust core's own output is bridged separately
 /// by `MatrixRTCLogBridge`.
-struct NativeCallLogger: ElementCallLogging {
+struct NativeCallLogger: ElementCallLoggingProtocol {
     /// Passes the record's file and line through so entries point at the package, not at here.
     func log(_ record: ElementCallLogRecord) {
         switch record.level {

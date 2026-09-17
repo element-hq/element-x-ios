@@ -2541,7 +2541,7 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingIsLiveKitRTCSupported: Bool!
     nonisolated(unsafe) var isLiveKitRTCSupportedClosure: (() async -> Bool)?
-    nonisolated(unsafe) var nativeCallTransport: ElementCallMatrixTransport?
+    nonisolated(unsafe) var nativeCallTransport: ElementCallMatrixTransportProtocol?
     nonisolated(unsafe) var isLoginWithQRCodeSupportedCallsCount = 0
     var isLoginWithQRCodeSupportedCalled: Bool {
         return isLoginWithQRCodeSupportedCallsCount > 0

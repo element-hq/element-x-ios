@@ -1278,7 +1278,6 @@
 		C9F5B48D15B9BCAE1F8D564E /* RoomNotificationModeProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1511766C534367700C8DD75 /* RoomNotificationModeProxy.swift */; };
 		CA12AE0DCD57D49CD96C699A /* WaveformCursorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9EABCA9348DFA27439A809 /* WaveformCursorView.swift */; };
 		CA2BFC5504AD91A028CFA45B /* AnalyticsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2397174D0DC3918A7A8A7B /* AnalyticsConfiguration.swift */; };
-		CA8D9BEA7902602C23874651 /* NativeCallOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E981F99382D54B944FBA06 /* NativeCallOptions.swift */; };
 		CAEE1AF71E8C13756D572CF4 /* DSWaveformImageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 2A4106A0A96DC4C273128AA5 /* DSWaveformImageViews */; };
 		CB07184D37D5D65327A5A693 /* AuthenticationFlowCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F46CC4FD89ECF4CF26391A /* AuthenticationFlowCoordinatorTests.swift */; };
 		CB137BFB3E083C33E398A6CB /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = A7CA6F33C553805035C3B114 /* DeviceKit */; };
@@ -2761,7 +2760,6 @@
 		A8558D41DD4B553A752C868A /* StackedAvatarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedAvatarsView.swift; sourceTree = "<group>"; };
 		A861DA5932B128FE1DCB5CE2 /* InviteUsersScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenCoordinator.swift; sourceTree = "<group>"; };
 		A8DF55467ED4CE76B7AE9A33 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A8E981F99382D54B944FBA06 /* NativeCallOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeCallOptions.swift; sourceTree = "<group>"; };
 		A8F48EB9B52E70285A4BCB07 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9873374E72AA53260AE90A2 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9B069D7772DDF6513E0F1B8 /* AuthenticationFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationFlowCoordinator.swift; sourceTree = "<group>"; };
@@ -4177,7 +4175,6 @@
 			children = (
 				565F60CC498E1DAA6FE98493 /* MatrixRTCLogBridge.swift */,
 				3B53AB76C2D6A6F13CAF0B87 /* NativeCallLogger.swift */,
-				A8E981F99382D54B944FBA06 /* NativeCallOptions.swift */,
 				F288457CD4C821DF48C1B6EE /* NativeCallRoomContext.swift */,
 				6DA93C4BD8EBCAB5CA265F57 /* NativeCallSession.swift */,
 				02A84AEC7D5644B3F83B5333 /* NativeCallStyle.swift */,
@@ -9109,7 +9106,6 @@
 				F9842667B68DC6FA1F9ECCBB /* NSItemProvider.swift in Sources */,
 				EA01A06EEDFEF4AE7652E5F3 /* NSRegularExpresion.swift in Sources */,
 				DBFFB7BD50C9007CA7AEFFC8 /* NativeCallLogger.swift in Sources */,
-				CA8D9BEA7902602C23874651 /* NativeCallOptions.swift in Sources */,
 				2C8926703BDDD3ECF2AC028D /* NativeCallRoomContext.swift in Sources */,
 				2D77236B66808B661731BC07 /* NativeCallScreenCoordinator.swift in Sources */,
 				E7503FB5E048D9408436CCD9 /* NativeCallSession.swift in Sources */,
@@ -10871,7 +10867,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-ios";
 			requirement = {
 				kind = exactVersion;
-				version = "0.1.0-rc.5";
+				version = "0.1.0-rc.6";
 			};
 		};
 		395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */ = {

@@ -34,11 +34,11 @@ final class NativeCallSession {
     
     /// The arguments are the whole integration surface: a transport, the system call provider,
     /// settings, the look and a log sink.
-    init(transport: any ElementCallMatrixTransport,
-         system: any ElementCallSystemProviding,
-         options: any ElementCallOptions,
+    init(transport: any ElementCallMatrixTransportProtocol,
+         system: any ElementCallSystemProvidingProtocol,
+         options: ElementCallOptions,
          style: ElementCallStyle,
-         logger: (any ElementCallLogging)?) {
+         logger: (any ElementCallLoggingProtocol)?) {
         stack = ElementCallStack(transport: transport,
                                  system: system,
                                  options: options,

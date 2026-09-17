@@ -15,7 +15,7 @@ import SwiftUI
 // shared instance that Element Pro re-brands at runtime, and a second copy inside the package would
 // never see the override. Every member is computed so each read goes to the live instance.
 
-struct NativeCallTheme: ElementCallTheme {
+struct NativeCallTheme: ElementCallThemeProtocol {
     var bgCanvasDefault: Color {
         .compound.bgCanvasDefault
     }
@@ -93,7 +93,7 @@ struct NativeCallTheme: ElementCallTheme {
     }
 }
 
-struct NativeCallIcons: ElementCallIconRendering {
+struct NativeCallIcons: ElementCallIconRenderingProtocol {
     func icon(_ icon: ElementCallIcon, size: ElementCallIconSize, relativeTo textStyle: ElementCallTextStyle?) -> AnyView {
         // The package asks for a text style rather than a point size so CompoundIcon can scale it.
         AnyView(CompoundIcon(Self.keyPath(for: icon), size: Self.size(for: size), relativeTo: Self.font(for: textStyle)))
@@ -139,7 +139,7 @@ struct NativeCallIcons: ElementCallIconRendering {
 }
 
 /// Keeps avatars looking like the rest of the app, and keeps media loading out of the package.
-struct NativeCallAvatars: ElementCallAvatarRendering {
+struct NativeCallAvatars: ElementCallAvatarRenderingProtocol {
     let mediaProvider: MediaProviderProtocol?
     
     func avatar(userID: String, displayName: String?, avatarURL: URL?, size: ElementCallAvatarSize) -> AnyView {

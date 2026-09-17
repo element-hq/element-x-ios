@@ -22,7 +22,7 @@ class ClientProxy: ClientProxyProtocol {
     
     let mediaLoader: MediaLoaderProtocol
     let contentScanner: ContentScannerProxyProtocol?
-    let nativeCallTransport: ElementCallMatrixTransport?
+    let nativeCallTransport: ElementCallMatrixTransportProtocol?
     
     private var roomListService: RoomListService
     // periphery: ignore - only for retain

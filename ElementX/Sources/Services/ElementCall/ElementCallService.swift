@@ -281,9 +281,13 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
                                                     stop: L10n.actionStop,
                                                     back: L10n.actionBack))
         
+        // The stats overlay is raw RTP counters, so it follows whatever already reveals developer
+        // surface. Screen sharing stays off until the broadcast extension that makes it work lands.
+        let options = ElementCallOptions(isDeveloperModeEnabled: appSettings.developerOptionsEnabled)
+        
         let session = NativeCallSession(transport: transport,
                                         system: NativeCallSystem(service: self),
-                                        options: NativeCallOptions(appSettings: appSettings),
+                                        options: options,
                                         style: style,
                                         logger: NativeCallLogger())
         nativeCallSession = session

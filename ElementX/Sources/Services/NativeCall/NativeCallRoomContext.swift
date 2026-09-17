@@ -12,7 +12,7 @@ import ElementCall
 ///
 /// Built on the proxy rather than in the package so that the call reuses its caching: current values
 /// for room info and members, refreshed off the SDK's subscription, read from disk before the network.
-final class NativeCallRoomContext: ElementCallRoomContext {
+final class NativeCallRoomContext: ElementCallRoomContextProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     
     init(roomProxy: JoinedRoomProxyProtocol) {
