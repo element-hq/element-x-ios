@@ -585,12 +585,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
     }
     
-    /// Ends an answered call that the native stack never took over.
-    ///
-    /// Nothing else would. The call is deliberately left up for the controller to attach to in
-    /// `setupCallSession`, so any way that hand-off falls through — the room isn't joined,
-    /// there's no transport, another call is already running — leaves the system showing a call
-    /// the app knows nothing about and can no longer hang up.
+    /// Ends an answered call that the native stack never took over, which nothing else would: the
+    /// call is deliberately left up for the controller to attach to in `setupCallSession`.
     private func endCallIfLeftPending(_ callID: CallID) {
         answeredNativeCallID = callID
         
