@@ -158,6 +158,10 @@ final nonisolated class EventTimelineItemProxy: Sendable {
     var readReceipts: [String: Receipt] {
         item.readReceipts
     }
+    
+    var reactions: [Reaction] {
+        item.reactions
+    }
 }
 
 nonisolated struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
