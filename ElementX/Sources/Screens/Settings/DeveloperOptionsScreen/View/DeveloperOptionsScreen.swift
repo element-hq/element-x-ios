@@ -135,7 +135,6 @@ struct DeveloperOptionsScreen: View {
                     }
                 Toggle(isOn: $context.nativeCallEnabled) {
                     Text("Experimental native calls")
-                    Text("Requires app reboot")
                 }
             } header: {
                 Text("Calls")

@@ -422,6 +422,16 @@ final class ElementCallServiceTests {
     }
     
     @Test
+    func turningTheSettingOnMidSessionBuildsTheStack() {
+        service.setUserSession(nativeUserSession())
+        #expect(service.nativeCallController == nil)
+        
+        // The transport is built on demand, so the setting takes effect without an app restart.
+        appSettings.nativeCallEnabled = true
+        #expect(service.nativeCallController != nil)
+    }
+    
+    @Test
     func aNewSessionGetsANewStack() {
         appSettings.nativeCallEnabled = true
         service.setUserSession(nativeUserSession())
@@ -450,7 +460,7 @@ final class ElementCallServiceTests {
     /// service only keeps a weak reference, as the app owns the session.
     private func nativeUserSession() -> UserSessionMock {
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.nativeCallTransport = ElementCallFakeTransport()
+        clientProxy.makeNativeCallTransportReturnValue = ElementCallFakeTransport()
         let session = UserSessionMock(.init(clientProxy: clientProxy))
         userSession = session
         return session

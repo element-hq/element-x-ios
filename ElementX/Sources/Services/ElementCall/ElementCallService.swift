@@ -266,10 +266,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         guard nativeCallSession == nil else { return }
         
-        guard let transport = clientProxy.nativeCallTransport else {
-            // The client proxy only builds one when the setting was already on, so this is what
-            // turning it on mid-session looks like until the app is restarted.
-            MXLog.info("Cannot start the native call stack without a transport")
+        guard let transport = clientProxy.makeNativeCallTransport() else {
+            MXLog.error("Cannot start the native call stack without a transport")
             return
         }
         

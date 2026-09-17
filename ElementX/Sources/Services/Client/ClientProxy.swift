@@ -22,7 +22,6 @@ class ClientProxy: ClientProxyProtocol {
     
     let mediaLoader: MediaLoaderProtocol
     let contentScanner: ContentScannerProxyProtocol?
-    let nativeCallTransport: ElementCallMatrixTransportProtocol?
     
     private var roomListService: RoomListService
     // periphery: ignore - only for retain
@@ -228,9 +227,6 @@ class ClientProxy: ClientProxyProtocol {
             contentScanner = nil
         }
         
-        // Read once, so turning native calls on takes an app restart, as the developer option says.
-        nativeCallTransport = appSettings.nativeCallEnabled ? (client as? Client).flatMap { ElementCallSDKTransport(client: $0) } : nil
-        
         notificationSettings = await NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
@@ -377,6 +373,10 @@ class ClientProxy: ClientProxyProtocol {
                 return false
             }
         }
+    }
+    
+    func makeNativeCallTransport() -> ElementCallMatrixTransportProtocol? {
+        (client as? Client).flatMap { ElementCallSDKTransport(client: $0) }
     }
     
     var isLoginWithQRCodeSupported: Bool {
