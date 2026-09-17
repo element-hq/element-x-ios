@@ -9,14 +9,15 @@ import Combine
 import ElementCall
 import Foundation
 
-/// Owns the call package's stack for one logged-in session, and turns what the call does into the
+/// The call package's stack for one logged-in session, turning what the call does into the
 /// navigation the host owes it.
 ///
 /// Built with the session rather than with the first call: the core's to-device subscription has no
 /// catch-up, so a stack that starts only once a call does can miss the keys sent while it was
 /// joining.
 @MainActor
-final class NativeCallSession {
+final class NativeCallStack {
+    /// The call itself, for the screen that is built from it. Everything else asks this type.
     var controller: ElementCallController {
         stack.controller
     }
@@ -91,6 +92,16 @@ final class NativeCallSession {
                                        isStartingCall: !roomProxy.infoPublisher.value.hasRoomCall)
         controller.startCall(callData, room: NativeCallRoomContext(roomProxy: roomProxy))
         actionsSubject.send(.present)
+    }
+    
+    /// Asks the call to minimize. The screen only comes down once the controller says a system
+    /// window has started, which it answers through ``actions``.
+    func minimize() {
+        controller.requestMinimize()
+    }
+    
+    func restore() {
+        controller.restore()
     }
     
     // MARK: - Private

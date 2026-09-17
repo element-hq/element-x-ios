@@ -514,11 +514,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func hideCallScreenOverlay() {
-        if let nativeCallController = flowParameters.elementCallService.nativeCallController,
-           navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
-            // The controller decides whether a system window is available and says so through the
-            // service's actions, so the screen only comes down once one has actually started.
-            nativeCallController.requestMinimize()
+        if navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator {
+            flowParameters.elementCallService.minimizeNativeCall()
             return
         }
         
@@ -586,7 +583,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func restoreNativeCallScreen() {
-        flowParameters.elementCallService.nativeCallController?.restore()
+        flowParameters.elementCallService.restoreNativeCall()
         navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
     }
     

@@ -75,12 +75,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     private var declineListenerHandle: TaskHandle?
     
     /// The native call stack, for as long as there's a session running calls through it.
-    private var nativeCallSession: NativeCallSession?
+    private var nativeCallStack: NativeCallStack?
     private var nativeCallCancellable: AnyCancellable?
     private var mediaProvider: MediaProviderProtocol?
     
     var nativeCallController: ElementCallController? {
-        nativeCallSession?.controller
+        nativeCallStack?.controller
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -121,7 +121,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         appSettings.nativeCallEnabledPublisher
             .sink { [weak self] _ in
-                self?.updateNativeCallSession()
+                self?.updateNativeCallStack()
             }
             .store(in: &cancellables)
     }
@@ -130,29 +130,37 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // A stack is built against one client proxy and can't be handed to another, which is what a
         // soft logout or a cache clear brings: a new session without the sign out that drops this one.
         if userSession?.clientProxy !== clientProxy {
-            stopNativeCallSession()
+            stopNativeCallStack()
         }
         
         clientProxy = userSession?.clientProxy
         mediaProvider = userSession?.mediaProvider
         
-        updateNativeCallSession()
+        updateNativeCallStack()
     }
     
     @discardableResult
     func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool {
-        guard let nativeCallSession else {
+        guard let nativeCallStack else {
             return false
         }
         
-        nativeCallSession.handleCallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
+        nativeCallStack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: isVoiceCall)
         return true
+    }
+    
+    func minimizeNativeCall() {
+        nativeCallStack?.minimize()
+    }
+    
+    func restoreNativeCall() {
+        nativeCallStack?.restore()
     }
     
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async {
         // Unlike the push handling below, this always runs with a session, so the stack itself is
         // the answer rather than the setting that would have built one.
-        let isNative = nativeCallSession != nil
+        let isNative = nativeCallStack != nil
         MXLog.info("Setting up a call session, native: \(isNative), video: \(isVideo), replacing an ongoing call: \(ongoingCallID != nil)")
         
         // Drop any ongoing calls when starting a new one
@@ -258,13 +266,13 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     // MARK: - Native calls
     
     /// Builds or releases the call stack to match the session and the setting.
-    private func updateNativeCallSession() {
+    private func updateNativeCallStack() {
         guard appSettings.nativeCallEnabled, let clientProxy else {
-            stopNativeCallSession()
+            stopNativeCallStack()
             return
         }
         
-        guard nativeCallSession == nil else { return }
+        guard nativeCallStack == nil else { return }
         
         guard let transport = clientProxy.makeNativeCallTransport() else {
             MXLog.error("Cannot start the native call stack without a transport")
@@ -283,26 +291,26 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // surface. Screen sharing stays off until the broadcast extension that makes it work lands.
         let options = ElementCallOptions(isDeveloperModeEnabled: appSettings.developerOptionsEnabled)
         
-        let session = NativeCallSession(transport: transport,
-                                        system: NativeCallSystem(service: self),
-                                        options: options,
-                                        style: style)
-        nativeCallSession = session
+        let stack = NativeCallStack(transport: transport,
+                                    system: NativeCallSystem(service: self),
+                                    options: options,
+                                    style: style)
+        nativeCallStack = stack
         
-        nativeCallCancellable = session.actions
+        nativeCallCancellable = stack.actions
             .sink { [weak self] presentation in
                 self?.actionsSubject.send(.nativeCall(presentation))
             }
         
-        Task { await session.start() }
+        Task { await stack.start() }
     }
     
-    private func stopNativeCallSession() {
-        guard let nativeCallSession else { return }
-        self.nativeCallSession = nil
+    private func stopNativeCallStack() {
+        guard let nativeCallStack else { return }
+        self.nativeCallStack = nil
         nativeCallCancellable = nil
         
-        nativeCallSession.stop()
+        nativeCallStack.stop()
         actionsSubject.send(.nativeCall(.dismiss))
     }
     

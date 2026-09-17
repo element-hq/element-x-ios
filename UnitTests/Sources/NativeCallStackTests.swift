@@ -11,18 +11,18 @@ import ElementCall
 import Testing
 
 @MainActor
-final class NativeCallSessionTests {
-    private let session: NativeCallSession
+final class NativeCallStackTests {
+    private let stack: NativeCallStack
     private var presentations: [NativeCallPresentation] = []
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        session = NativeCallSession(transport: ElementCallFakeTransport(),
-                                    system: ElementCallFakeSystem(),
-                                    options: ElementCallOptions(),
-                                    style: .stock)
+        stack = NativeCallStack(transport: ElementCallFakeTransport(),
+                                system: ElementCallFakeSystem(),
+                                options: ElementCallOptions(),
+                                style: .stock)
         
-        session.actions
+        stack.actions
             .sink { [weak self] presentation in
                 self?.presentations.append(presentation)
             }
@@ -31,25 +31,25 @@ final class NativeCallSessionTests {
     
     @Test
     func startingACallAsksForItsScreen() {
-        session.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false)
         
         #expect(presentations == [.present])
-        #expect(session.controller.room?.roomID == "!room:example.com")
+        #expect(stack.controller.room?.roomID == "!room:example.com")
     }
     
     @Test
     func aCallStartsARoomWithoutOneAndJoinsARoomWithOne() {
-        session.handleCallRequest(roomProxy: roomProxy(id: "!empty:example.com", hasOngoingCall: false), isVoiceCall: true)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!empty:example.com", hasOngoingCall: false), isVoiceCall: true)
         // Starting rings the room; joining one already running happens quietly.
-        #expect(session.controller.callData?.isStartingCall == true)
-        #expect(session.controller.callData?.isAudioCall == true)
+        #expect(stack.controller.callData?.isStartingCall == true)
+        #expect(stack.controller.callData?.isAudioCall == true)
         
-        session.stop()
+        stack.stop()
         
-        let joining = NativeCallSession(transport: ElementCallFakeTransport(),
-                                        system: ElementCallFakeSystem(),
-                                        options: ElementCallOptions(),
-                                        style: .stock)
+        let joining = NativeCallStack(transport: ElementCallFakeTransport(),
+                                      system: ElementCallFakeSystem(),
+                                      options: ElementCallOptions(),
+                                      style: .stock)
         joining.handleCallRequest(roomProxy: roomProxy(id: "!busy:example.com", hasOngoingCall: true), isVoiceCall: true)
         #expect(joining.controller.callData?.isStartingCall == false)
     }
@@ -57,37 +57,37 @@ final class NativeCallSessionTests {
     @Test
     func askingForTheCallYouAreAlreadyInRestoresItsScreen() {
         let roomProxy = roomProxy(id: "!room:example.com")
-        session.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false)
         presentations.removeAll()
         
         // Reached while the call is still joining, before the service has an ongoing call of its own.
-        session.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy, isVoiceCall: false)
         
         #expect(presentations == [.restore])
     }
     
     @Test
     func aCallInAnotherRoomWaitsForTheRunningOneToEnd() async throws {
-        session.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!first:example.com"), isVoiceCall: false)
         presentations.removeAll()
         
         // The controller ignores a second call, so this one is queued behind a hang up.
-        session.handleCallRequest(roomProxy: roomProxy(id: "!second:example.com"), isVoiceCall: false)
-        #expect(session.controller.room?.roomID == "!first:example.com")
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!second:example.com"), isVoiceCall: false)
+        #expect(stack.controller.room?.roomID == "!first:example.com")
         
         try await waitForPresentations([.dismiss, .present])
-        #expect(session.controller.room?.roomID == "!second:example.com")
+        #expect(stack.controller.room?.roomID == "!second:example.com")
     }
     
     @Test
     func endingACallDismissesItsScreen() async throws {
-        session.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false)
+        stack.handleCallRequest(roomProxy: roomProxy(id: "!room:example.com"), isVoiceCall: false)
         presentations.removeAll()
         
-        session.controller.hangUp()
+        stack.controller.hangUp()
         
         try await waitForPresentations([.dismiss])
-        #expect(session.controller.room == nil, "The controller is reset so the next call starts clean")
+        #expect(stack.controller.room == nil, "The controller is reset so the next call starts clean")
     }
     
     // MARK: - Helpers
@@ -97,7 +97,7 @@ final class NativeCallSessionTests {
     }
     
     private func waitForPresentations(_ expected: [NativeCallPresentation]) async throws {
-        let deferred = deferFulfillment(session.actions) { [weak self] _ in
+        let deferred = deferFulfillment(stack.actions) { [weak self] _ in
             self?.presentations == expected
         }
         

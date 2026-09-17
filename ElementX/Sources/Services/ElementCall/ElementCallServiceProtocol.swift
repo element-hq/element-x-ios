@@ -50,6 +50,13 @@ protocol ElementCallServiceProtocol: AnyObject {
     @discardableResult
     func handleNativeCallRequest(roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool) -> Bool
     
+    /// Asks the native call to minimize. The screen only comes down once a system window has
+    /// started, which arrives as ``ElementCallServiceAction/nativeCall(_:)``.
+    func minimizeNativeCall()
+    
+    /// Brings the native call back out of its system window.
+    func restoreNativeCall()
+    
     /// Registers the call with CallKit, adopting the ringing incoming call for the room if there is one.
     func setupCallSession(roomID: String, roomDisplayName: String, isVideo: Bool) async
     

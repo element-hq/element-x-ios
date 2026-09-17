@@ -366,7 +366,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func nativeCallSessionTakesOverTheAnsweredCall() async throws {
+    func nativeCallStackTakesOverTheAnsweredCall() async throws {
         enableNativeCalls()
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
@@ -388,7 +388,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func nativeCallSessionForAnotherRoomReportsANewCall() async throws {
+    func nativeCallStackForAnotherRoomReportsANewCall() async throws {
         enableNativeCalls()
         await reportIncomingPush(isVoiceCall: false)
         await clock.waitForScheduledSleep()
