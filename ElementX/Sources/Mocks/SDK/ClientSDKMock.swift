@@ -26,10 +26,12 @@ nonisolated extension ClientSDKMock {
         // MARK: Session
         
         var userID: String?
+        static let defaultDeviceID = "ABCDEFGH"
+        var deviceID = defaultDeviceID
         var session = Session(accessToken: UUID().uuidString,
                               refreshToken: nil,
                               userId: "@alice:matrix.org",
-                              deviceId: UUID().uuidString,
+                              deviceId: defaultDeviceID,
                               homeserverUrl: "https://matrix-client.matrix.org",
                               oauthData: nil,
                               slidingSyncVersion: .native)
@@ -59,6 +61,7 @@ nonisolated extension ClientSDKMock {
         }
         
         userIdReturnValue = configuration.userID
+        deviceIdReturnValue = configuration.deviceID
         sessionReturnValue = configuration.session
         getUrlUrlClosure = { url in
             guard url.contains(".well-known/element/element.json") else { throw MockError.generic }

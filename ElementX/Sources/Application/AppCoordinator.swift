@@ -113,7 +113,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         userIndicatorController = UserIndicatorController()
         
-        elementCallService = ElementCallService()
+        elementCallService = ElementCallService(appSettings: appSettings)
         
         navigationRootCoordinator = NavigationRootCoordinator()
         
@@ -826,6 +826,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         Task { await pauseClientServices(isBackgroundTask: false) }
         userSessionFlowCoordinator?.stop()
+        // Leaves any ongoing call and releases the native call stack, which a soft logout would
+        // otherwise leave running against a session that can no longer reach the server.
+        elementCallService.setUserSession(nil)
         
         guard !isSoft else {
             stateMachine.processEvent(.showSoftLogout)
@@ -895,7 +898,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        elementCallService.setClientProxy(userSession.clientProxy)
+        elementCallService.setUserSession(userSession)
     }
     
     private func configureNotificationManager() {

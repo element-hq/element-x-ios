@@ -7,6 +7,7 @@
 //
 
 import Combine
+import ElementCall
 import Foundation
 import MatrixRustSDK
 
@@ -170,6 +171,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     var isReportRoomSupported: Bool { get async }
     var isLiveKitRTCSupported: Bool { get async }
+    
+    /// Builds a Matrix transport for the call package, `nil` when not backed by a real SDK client.
+    func makeNativeCallTransport() -> ElementCallMatrixTransportProtocol?
     
     var isLoginWithQRCodeSupported: Bool { get async }
     

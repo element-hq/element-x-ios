@@ -6,34 +6,46 @@
 //
 
 import CallKit
+import ElementCall
 @testable import ElementX
 import PushKit
 import Testing
 
 @MainActor
 final class ElementCallServiceTests {
+    private var appSettings: AppSettings!
     private var callProvider: CXProviderMock!
+    private var callController: CXCallControllerMock!
     private var currentDate: Date!
     private var clock: ManualClock!
     private var pushRegistry: PKPushRegistry!
     private var service: ElementCallService!
+    private var userSession: UserSessionMock!
     
     init() {
+        appSettings = AppSettings.volatile()
         pushRegistry = PKPushRegistry(queue: nil)
         callProvider = CXProviderMock(.init())
+        callController = CXCallControllerMock(.init())
         currentDate = Date()
         clock = ManualClock()
         let dateProvider: () -> Date = {
             self.currentDate
         }
-        service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: clock, now: dateProvider))
+        service = ElementCallService(appSettings: appSettings,
+                                     callProvider: callProvider,
+                                     callController: callController,
+                                     timeProvider: TimeProvider(clock: clock, now: dateProvider))
     }
     
     isolated deinit {
+        appSettings = nil
         callProvider = nil
+        callController = nil
         currentDate = nil
         clock = nil
         pushRegistry = nil
+        userSession = nil
     }
     
     @Test
@@ -182,7 +194,7 @@ final class ElementCallServiceTests {
     }
     
     @Test
-    func setupCallSessionCancelsPendingUnansweredTimeout() async {
+    func setupCallSessionCancelsPendingUnansweredTimeout() async throws {
         // Schedule the 60s unanswered timer via an incoming push
         await waitForConfirmation { confirmation in
             let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
@@ -196,22 +208,20 @@ final class ElementCallServiceTests {
         
         // Simulate the answer flow handing off to setupCallSession, which must cancel
         // the pending endUnansweredCallTask as part of clearing the incoming state.
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome")
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         
-        var unansweredFired = false
+        let (endedCalls, endedCallsContinuation) = AsyncStream<CXCallEndedReason>.makeStream()
         callProvider.reportCallWithEndedAtReasonClosure = { _, _, reason in
-            if reason == .unanswered {
-                unansweredFired = true
-            }
+            endedCallsContinuation.yield(reason)
         }
+        let deferredUnansweredCall = deferFailure(endedCalls,
+                                                  timeout: .milliseconds(100),
+                                                  message: "endUnansweredCallTask should have been cancelled by setupCallSession") { $0 == .unanswered }
         
         // Advance past what would have been the 60s unanswered timeout
         clock.advance(by: .seconds(120))
-        for _ in 0..<3 {
-            await Task.yield()
-        }
         
-        #expect(!unansweredFired, "endUnansweredCallTask should have been cancelled by setupCallSession")
+        try await deferredUnansweredCall.fulfill()
     }
     
     @Test
@@ -229,7 +239,7 @@ final class ElementCallServiceTests {
     @Test
     func duplicateRoomPushReportsCallAsHandled() async {
         // A duplicate push for an ongoing call is reported as handled, leaving the ongoing call alone.
-        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome")
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
         let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
         await expectImmediatelyEndedCallReported(forPayload: pushPayload, expectedReason: .answeredElsewhere)
         
@@ -238,6 +248,251 @@ final class ElementCallServiceTests {
         #expect(update?.localizedCallerName == "welcome")
         
         #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+    }
+    
+    @Test
+    func webViewCallSessionIsNotTrackedByCallKit() async {
+        // CallKit tracking a call gives this process exclusive media access, which starves the web
+        // view. So a web view call is only ever tracked on the app side.
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        service.reportCallSessionConnected(roomID: "!room:example.com")
+        
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        #expect(!callProvider.reportCallWithUpdatedCalled)
+        #expect(!callProvider.reportOutgoingCallWithConnectedAtCalled)
+    }
+    
+    @Test
+    func endingAReplacedCallLeavesTheCallThatReplacedItUp() async throws {
+        enableNativeCalls()
+        
+        // Leaving a call to start one in another room requests an end call action for the first,
+        // then starts the second before the system performs it.
+        await service.setupCallSession(roomID: "!first:example.com", roomDisplayName: "first", isVideo: true)
+        let firstCallID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
+        
+        service.tearDownCallSession(roomID: "!first:example.com")
+        await service.setupCallSession(roomID: "!second:example.com", roomDisplayName: "second", isVideo: true)
+        
+        var endedRooms: [String] = []
+        let cancellable = service.actions.sink { action in
+            if case .endCall(let roomID) = action {
+                endedRooms.append(roomID)
+            }
+        }
+        defer { cancellable.cancel() }
+        
+        service.endCall(withCallKitID: firstCallID)
+        
+        #expect(endedRooms.isEmpty, "The first call's end action must not hang up the second call")
+        #expect(service.ongoingCallRoomIDPublisher.value == "!second:example.com")
+        
+        // And the second call still ends when it's the one the system means.
+        let secondCallID = try #require(callProvider.reportCallWithUpdatedReceivedArguments?.uuid)
+        service.endCall(withCallKitID: secondCallID)
+        
+        #expect(endedRooms == ["!second:example.com"])
+        #expect(service.ongoingCallRoomIDPublisher.value == nil)
+    }
+    
+    @Test
+    func tearingDownAnotherRoomLeavesTheOngoingCallUp() async {
+        // A call screen that is dismissed after another room's call replaced it must not take the
+        // new call down with it.
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        
+        service.tearDownCallSession(roomID: "!other:example.com")
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        
+        service.tearDownCallSession(roomID: "!room:example.com")
+        #expect(service.ongoingCallRoomIDPublisher.value == nil)
+    }
+    
+    // MARK: - Native calls
+    
+    @Test
+    func nativeModeReportsVoiceCallsWithoutVideo() async {
+        appSettings.nativeCallEnabled = true
+        
+        await reportIncomingPush(isVoiceCall: true)
+        
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.hasVideo == false)
+    }
+    
+    @Test
+    func nativeModeStillReportsVideoCallsWithVideo() async {
+        appSettings.nativeCallEnabled = true
+        
+        await reportIncomingPush(isVoiceCall: false)
+        
+        #expect(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.update.hasVideo == true)
+    }
+    
+    @Test
+    func answeringInNativeModeKeepsTheCallUp() async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false)
+        await clock.waitForScheduledSleep()
+        
+        try await answerReportedCall()
+        
+        // The webview path ends the call a second after answering so that `setupCallSession` can
+        // start a new one. The native stack takes this one over instead, so it has to survive.
+        #expect(!callProvider.reportCallWithEndedAtReasonCalled)
+    }
+    
+    @Test
+    func answeredNativeCallEndsWhenNothingTakesItOver() async throws {
+        appSettings.nativeCallEnabled = true
+        await reportIncomingPush(isVoiceCall: false)
+        await clock.waitForScheduledSleep()
+        
+        let answeredUUID = try await answerReportedCall()
+        
+        let (endedCalls, endedCallsContinuation) = AsyncStream<(UUID, CXCallEndedReason)>.makeStream()
+        callProvider.reportCallWithEndedAtReasonClosure = { uuid, _, reason in
+            endedCallsContinuation.yield((uuid, reason))
+        }
+        let deferredEndedCall = deferFulfillment(endedCalls) { _ in true }
+        
+        // Answering swaps the unanswered timer for the watchdog that catches a hand-off that never
+        // happens — the room isn't joined, there's no transport, a call is already running.
+        #expect(await clock.waitForScheduledSleep() == .seconds(30))
+        clock.advance(by: .seconds(30))
+        
+        let (uuid, reason) = try await deferredEndedCall.fulfill()
+        #expect(uuid == answeredUUID)
+        #expect(reason == .failed)
+    }
+    
+    @Test
+    func nativeCallStackTakesOverTheAnsweredCall() async throws {
+        enableNativeCalls()
+        await reportIncomingPush(isVoiceCall: false)
+        await clock.waitForScheduledSleep()
+        
+        try await answerReportedCall()
+        
+        // Answering starts the watchdog, so wait for it before asserting that the hand-over stops it.
+        await clock.waitForScheduledSleep()
+        
+        await service.setupCallSession(roomID: "!room:example.com", roomDisplayName: "welcome", isVideo: true)
+        
+        // Taking the answered call over means keeping its identifier rather than reporting a new
+        // outgoing call, which is what the update below would be part of.
+        #expect(!callProvider.reportCallWithUpdatedCalled)
+        #expect(service.ongoingCallRoomIDPublisher.value == "!room:example.com")
+        
+        // And the watchdog must be gone, otherwise it ends the call that was just taken over.
+        #expect(!clock.hasPendingSleep, "The watchdog must not outlive the hand-over")
+    }
+    
+    @Test
+    func nativeCallStackForAnotherRoomReportsANewCall() async throws {
+        enableNativeCalls()
+        await reportIncomingPush(isVoiceCall: false)
+        await clock.waitForScheduledSleep()
+        
+        let answeredUUID = try await answerReportedCall()
+        
+        await service.setupCallSession(roomID: "!other:example.com", roomDisplayName: "other", isVideo: true)
+        
+        let update = try #require(callProvider.reportCallWithUpdatedReceivedArguments)
+        #expect(update.uuid != answeredUUID)
+        #expect(update.update.localizedCallerName == "other")
+        #expect(service.ongoingCallRoomIDPublisher.value == "!other:example.com")
+        
+        // Unlike a web view call, a native one is tracked by CallKit, so it gets the connected report too.
+        service.reportCallSessionConnected(roomID: "!other:example.com")
+        #expect(callProvider.reportOutgoingCallWithConnectedAtReceivedArguments?.uuid == update.uuid)
+    }
+    
+    @Test
+    func nativeCallStackNeedsBothTheSettingAndASession() {
+        #expect(service.nativeCallController == nil)
+        
+        appSettings.nativeCallEnabled = true
+        #expect(service.nativeCallController == nil, "The setting alone has no transport to run a call over")
+        
+        service.setUserSession(nativeUserSession())
+        #expect(service.nativeCallController != nil)
+        
+        service.setUserSession(nil)
+        #expect(service.nativeCallController == nil, "Signing out has to release the stack's to-device subscription")
+    }
+    
+    @Test
+    func turningTheSettingOnMidSessionBuildsTheStack() {
+        service.setUserSession(nativeUserSession())
+        #expect(service.nativeCallController == nil)
+        
+        // The transport is built on demand, so the setting takes effect without an app restart.
+        appSettings.nativeCallEnabled = true
+        #expect(service.nativeCallController != nil)
+    }
+    
+    @Test
+    func aNewSessionGetsANewStack() {
+        appSettings.nativeCallEnabled = true
+        service.setUserSession(nativeUserSession())
+        let firstController = service.nativeCallController
+        
+        // A soft logout or a cache clear brings a new session without the sign out that drops this
+        // one, and the stack is built against the client proxy it was given.
+        service.setUserSession(nativeUserSession())
+        
+        #expect(service.nativeCallController !== firstController)
+    }
+    
+    @Test
+    func callsFallBackToTheWebViewWithoutAStack() {
+        let roomProxy = JoinedRoomProxyMock(.init(id: "!room:example.com"))
+        
+        #expect(!service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
+        
+        appSettings.nativeCallEnabled = true
+        service.setUserSession(nativeUserSession())
+        
+        #expect(service.handleNativeCallRequest(roomProxy: roomProxy, isVoiceCall: false))
+    }
+    
+    /// Builds a session whose client proxy can serve the native call stack, and holds on to it: the
+    /// service only keeps a weak reference, as the app owns the session.
+    private func nativeUserSession() -> UserSessionMock {
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.makeNativeCallTransportReturnValue = ElementCallFakeTransport()
+        let session = UserSessionMock(.init(clientProxy: clientProxy))
+        userSession = session
+        return session
+    }
+    
+    /// Puts the service in native mode, with the stack the CallKit paths check for.
+    private func enableNativeCalls() {
+        appSettings.nativeCallEnabled = true
+        service.setUserSession(nativeUserSession())
+    }
+    
+    /// Delivers a VoIP push and waits for it to be reported, returning once the call is ringing.
+    private func reportIncomingPush(isVoiceCall: Bool) async {
+        await waitForConfirmation { confirmation in
+            let payload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 60)
+                .updateIsVoice(isVoiceCall)
+            
+            service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: payload, for: .voIP) {
+                confirmation()
+            }
+        }
+    }
+    
+    /// Answers the call the provider last reported, returning its identifier.
+    @discardableResult
+    private func answerReportedCall() async throws -> UUID {
+        let uuid = try #require(callProvider.reportNewIncomingCallWithUpdateCompletionReceivedArguments?.uuid)
+        let provider = CXProvider(configuration: CXProviderConfiguration())
+        
+        service.provider(provider, perform: CXAnswerCallAction(call: uuid))
+        
+        return uuid
     }
     
     private func expectImmediatelyEndedCallReported(forPayload payload: PKPushPayloadMock,

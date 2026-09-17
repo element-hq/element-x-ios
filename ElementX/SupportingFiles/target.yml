@@ -260,6 +260,8 @@ targets:
       implicit: true
       link: false
       embed: true
+    - package: ElementCall
+      product: ElementCall
     - package: PostHog
     - package: SwiftState
     - package: GZIP

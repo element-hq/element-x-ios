@@ -45,6 +45,12 @@ final nonisolated class ManualClock: Clock {
         state.withLock { $0.now }
     }
     
+    /// Whether a sleep is waiting on ``advance(by:)``, which is how a test asserts that a timer has
+    /// been cancelled rather than advancing the clock and watching for what it doesn't do.
+    var hasPendingSleep: Bool {
+        state.withLock { $0.sleep != nil }
+    }
+    
     /// Suspends until ``advance(by:)`` moves the clock to `deadline`, or the calling task is
     /// cancelled, in which case this throws a `CancellationError`. Deadlines that have already
     /// passed return without suspending. `tolerance` is ignored.
