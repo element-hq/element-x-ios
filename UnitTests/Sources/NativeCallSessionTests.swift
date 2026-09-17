@@ -20,8 +20,7 @@ final class NativeCallSessionTests {
         session = NativeCallSession(transport: ElementCallFakeTransport(),
                                     system: ElementCallFakeSystem(),
                                     options: ElementCallOptions(),
-                                    style: .stock,
-                                    logger: nil)
+                                    style: .stock)
         
         session.actions
             .sink { [weak self] presentation in
@@ -50,8 +49,7 @@ final class NativeCallSessionTests {
         let joining = NativeCallSession(transport: ElementCallFakeTransport(),
                                         system: ElementCallFakeSystem(),
                                         options: ElementCallOptions(),
-                                        style: .stock,
-                                        logger: nil)
+                                        style: .stock)
         joining.handleCallRequest(roomProxy: roomProxy(id: "!busy:example.com", hasOngoingCall: true), isVoiceCall: true)
         #expect(joining.controller.callData?.isStartingCall == false)
     }

@@ -32,18 +32,15 @@ final class NativeCallSession {
     /// A call requested while another one was still running, started once that one has ended.
     private var pendingCallRequest: (roomProxy: JoinedRoomProxyProtocol, isVoiceCall: Bool)?
     
-    /// The arguments are the whole integration surface: a transport, the system call provider,
-    /// settings, the look and a log sink.
     init(transport: any ElementCallMatrixTransportProtocol,
          system: any ElementCallSystemProvidingProtocol,
          options: ElementCallOptions,
-         style: ElementCallStyle,
-         logger: (any ElementCallLoggingProtocol)?) {
+         style: ElementCallStyle) {
         stack = ElementCallStack(transport: transport,
                                  system: system,
                                  options: options,
                                  style: style,
-                                 logger: logger)
+                                 logger: Logger())
         
         stack.controller.actions
             .receive(on: DispatchQueue.main)
@@ -54,7 +51,7 @@ final class NativeCallSession {
     }
     
     func start() async {
-        MatrixRTCLogBridge.install()
+        Self.installRTCLogBridge()
         await stack.start()
     }
     
@@ -126,5 +123,35 @@ final class NativeCallSession {
         guard let pendingCallRequest else { return }
         self.pendingCallRequest = nil
         handleCallRequest(roomProxy: pendingCallRequest.roomProxy, isVoiceCall: pendingCallRequest.isVoiceCall)
+    }
+    
+    /// Sends the call package's log lines to `MXLog`, keeping the package's own file and line so
+    /// entries point at its source rather than at here.
+    private struct Logger: ElementCallLoggingProtocol {
+        func log(_ record: ElementCallLogRecord) {
+            switch record.level {
+            case .debug: MXLog.debug(record.message, file: record.file, line: record.line)
+            case .info: MXLog.info(record.message, file: record.file, line: record.line)
+            case .warning: MXLog.warning(record.message, file: record.file, line: record.line)
+            case .error: MXLog.error(record.message, file: record.file, line: record.line)
+            }
+        }
+    }
+    
+    /// Feeds the Rust RTC core's own records into `MXLog` too, so they end up in rageshakes next to
+    /// the SDK's. Idempotent, and must run before anything else uses the call package.
+    private static func installRTCLogBridge() {
+        MatrixRTCLogging.install { record in
+            // The core's own position when it has one, its module path otherwise.
+            let file = record.file ?? record.target
+            let line = Int(record.line ?? 0)
+            switch record.level {
+            case .error: MXLog.error(record.message, file: file, line: line)
+            case .warning: MXLog.warning(record.message, file: file, line: line)
+            case .info: MXLog.info(record.message, file: file, line: line)
+            case .debug: MXLog.debug(record.message, file: file, line: line)
+            case .verbose: MXLog.verbose(record.message, file: file, line: line)
+            }
+        }
     }
 }

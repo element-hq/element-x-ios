@@ -286,8 +286,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let session = NativeCallSession(transport: transport,
                                         system: NativeCallSystem(service: self),
                                         options: options,
-                                        style: style,
-                                        logger: NativeCallLogger())
+                                        style: style)
         nativeCallSession = session
         
         nativeCallCancellable = session.actions
