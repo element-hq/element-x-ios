@@ -479,7 +479,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         if let ongoingCallID {
             actionsSubject.send(.setAudioEnabled(!action.isMuted, roomID: ongoingCallID.roomID))
         } else {
-            // CallKit un-mutes a call as it ends, so this is expected right after a hang-up.
             MXLog.info("Ignoring a mute action without an ongoing call")
         }
         
