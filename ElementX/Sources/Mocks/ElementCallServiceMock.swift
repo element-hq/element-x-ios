@@ -19,7 +19,6 @@ extension ElementCallServiceMock {
         
         actions = PassthroughSubject().eraseToAnyPublisher()
         ongoingCallRoomIDPublisher = .init(.init(configuration.ongoingCallRoomID))
-        // No stack, so calls fall through to the Element Call web view.
         handleNativeCallRequestRoomProxyIsVoiceCallReturnValue = false
     }
 }

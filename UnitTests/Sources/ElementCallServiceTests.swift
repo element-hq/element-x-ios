@@ -312,8 +312,6 @@ final class ElementCallServiceTests {
     
     @Test
     func nativeModeReportsVoiceCallsWithoutVideo() async {
-        // The native stack streams from the background, so the webview workaround doesn't apply and
-        // a voice call can ring as one.
         appSettings.nativeCallEnabled = true
         
         await reportIncomingPush(isVoiceCall: true)

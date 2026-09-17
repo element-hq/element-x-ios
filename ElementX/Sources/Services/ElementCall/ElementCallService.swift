@@ -365,8 +365,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // If not for audio call the app will not be put to foreground and the webview won't be able to handle the call...
         // Consequence: The call will be presented to the user as a video call in CallKit UI,
         // but once Element Call is launched it will correctly route to a voice-only call.
-        // The native stack streams from the background like any VoIP app, so an audio call answered
-        // from the lock screen stays in the system UI and only a video call opens the app.
         update.hasVideo = appSettings.nativeCallEnabled ? !isVoiceCall : true
         update.localizedCallerName = roomDisplayName
         // https://stackoverflow.com/a/41230020/730924
