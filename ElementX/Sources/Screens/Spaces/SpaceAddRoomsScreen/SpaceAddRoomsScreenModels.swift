@@ -66,7 +66,7 @@ extension SpaceAddRoomsScreenRoom {
     
     init(roomProxy: JoinedRoomProxyProtocol) {
         self.init(id: roomProxy.id,
-                  title: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
+                  title: roomProxy.infoPublisher.value.displayNameOrID,
                   description: roomProxy.infoPublisher.value.roomListDescription,
                   avatar: roomProxy.infoPublisher.value.avatar)
     }

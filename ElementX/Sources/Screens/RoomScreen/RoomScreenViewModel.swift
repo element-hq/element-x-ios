@@ -67,7 +67,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
         
-        let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
+        let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayNameOrID,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
                                             isDM: roomProxy.infoPublisher.value.isDM,
@@ -336,7 +336,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
-        state.roomTitle = roomInfo.displayName ?? roomProxy.id
+        state.roomTitle = roomInfo.displayNameOrID
         state.roomAvatar = roomInfo.avatar
         state.dmRecipientDetails.statusEmoji = roomInfo.statusEmoji
         state.hasOngoingCall = roomInfo.hasRoomCall
