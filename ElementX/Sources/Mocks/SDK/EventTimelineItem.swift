@@ -21,7 +21,6 @@ nonisolated struct EventTimelineItemSDKMockConfiguration {
     var isEditable = false
     var canBeRepliedTo = false
     var content: TimelineItemContent = .msgLike(content: .init(kind: .redacted,
-                                                               reactions: [],
                                                                inReplyTo: nil,
                                                                threadRoot: nil,
                                                                threadSummary: nil))
@@ -42,6 +41,7 @@ nonisolated extension EventTimelineItem {
                   isOwn: configuration.isOwn,
                   isEditable: configuration.isEditable,
                   content: configuration.content,
+                  reactions: [],
                   eventTypeRaw: nil,
                   timestamp: UInt64(Date.mock.timeIntervalSince1970 * 1000),
                   localSendState: nil,
@@ -60,7 +60,6 @@ nonisolated extension EventTimelineItem {
                                                                                                body: body,
                                                                                                isEdited: false,
                                                                                                mentions: nil)),
-                                                                 reactions: [],
                                                                  inReplyTo: nil,
                                                                  threadRoot: nil,
                                                                  threadSummary: nil))

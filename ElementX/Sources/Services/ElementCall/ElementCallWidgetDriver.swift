@@ -167,7 +167,7 @@ final class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidg
             return .failure(.driverNotSetup)
         }
         
-        let result = await widgetDriver.handle.send(msg: message)
+        let result = widgetDriver.handle.send(msg: message)
         MXLog.debug("Sent message: \(message) with result: \(result)")
         
         handleMessageIfNeeded(message)
