@@ -213,6 +213,36 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    func retrySend(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget) async -> Result<Bool, TimelineProxyError> {
+        MXLog.info("Retrying \(target) send on timeline item: \(eventOrTransactionID)")
+        
+        do {
+            let hadPendingSend = try await timeline.retrySend(itemId: eventOrTransactionID.rustValue, target: target)
+            
+            MXLog.info("Retried \(target) send on timeline item: \(eventOrTransactionID), had one pending: \(hadPendingSend)")
+            
+            return .success(hadPendingSend)
+        } catch {
+            MXLog.error("Failed retrying \(target) send on timeline item: \(eventOrTransactionID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func abortSend(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget) async -> Result<Bool, TimelineProxyError> {
+        MXLog.info("Aborting \(target) send on timeline item: \(eventOrTransactionID)")
+        
+        do {
+            let hadPendingSend = try await timeline.abortSend(itemId: eventOrTransactionID.rustValue, target: target)
+            
+            MXLog.info("Aborted \(target) send on timeline item: \(eventOrTransactionID), had one pending: \(hadPendingSend)")
+            
+            return .success(hadPendingSend)
+        } catch {
+            MXLog.error("Failed aborting \(target) send on timeline item: \(eventOrTransactionID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, TimelineProxyError> {
         do {
             return try await .success(timeline.loadReplyDetails(eventIdStr: eventID))

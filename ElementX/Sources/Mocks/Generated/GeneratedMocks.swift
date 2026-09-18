@@ -12506,6 +12506,110 @@ nonisolated class TimelineControllerMock: TimelineControllerProtocol, @unchecked
             return sendHandleForReturnValue
         }
     }
+    //MARK: - pendingSendTarget
+
+    private let pendingSendTargetForCallsCountLock = NSLock()
+    private nonisolated(unsafe) var pendingSendTargetForUnderlyingCallsCount = 0
+    var pendingSendTargetForCallsCount: Int {
+        get { pendingSendTargetForCallsCountLock.withLock { pendingSendTargetForUnderlyingCallsCount } }
+        set { pendingSendTargetForCallsCountLock.withLock { pendingSendTargetForUnderlyingCallsCount = newValue } }
+    }
+    var pendingSendTargetForCalled: Bool {
+        return pendingSendTargetForCallsCount > 0
+    }
+    private let pendingSendTargetForReceivedItemIDLock = NSLock()
+    private nonisolated(unsafe) var pendingSendTargetForUnderlyingReceivedItemID: TimelineItemIdentifier?
+    var pendingSendTargetForReceivedItemID: TimelineItemIdentifier? {
+        get { pendingSendTargetForReceivedItemIDLock.withLock { pendingSendTargetForUnderlyingReceivedItemID } }
+        set { pendingSendTargetForReceivedItemIDLock.withLock { pendingSendTargetForUnderlyingReceivedItemID = newValue } }
+    }
+    private let pendingSendTargetForReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var pendingSendTargetForUnderlyingReceivedInvocations: [TimelineItemIdentifier] = []
+    var pendingSendTargetForReceivedInvocations: [TimelineItemIdentifier] {
+        get { pendingSendTargetForReceivedInvocationsLock.withLock { pendingSendTargetForUnderlyingReceivedInvocations } }
+        set { pendingSendTargetForReceivedInvocationsLock.withLock { pendingSendTargetForUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let pendingSendTargetForReturnValueLock = NSLock()
+    private nonisolated(unsafe) var pendingSendTargetForUnderlyingReturnValue: SendTarget?
+    var pendingSendTargetForReturnValue: SendTarget? {
+        get { pendingSendTargetForReturnValueLock.withLock { pendingSendTargetForUnderlyingReturnValue } }
+        set { pendingSendTargetForReturnValueLock.withLock { pendingSendTargetForUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var pendingSendTargetForClosure: ((TimelineItemIdentifier) -> SendTarget?)?
+
+    func pendingSendTarget(for itemID: TimelineItemIdentifier) -> SendTarget? {
+        pendingSendTargetForCallsCountLock.withLock { pendingSendTargetForUnderlyingCallsCount += 1 }
+        pendingSendTargetForReceivedItemID = itemID
+        pendingSendTargetForReceivedInvocationsLock.withLock { pendingSendTargetForUnderlyingReceivedInvocations.append(itemID) }
+        if let pendingSendTargetForClosure = pendingSendTargetForClosure {
+            return pendingSendTargetForClosure(itemID)
+        } else {
+            return pendingSendTargetForReturnValue
+        }
+    }
+    //MARK: - retrySend
+
+    private let retrySendTargetCallsCountLock = NSLock()
+    private nonisolated(unsafe) var retrySendTargetUnderlyingCallsCount = 0
+    var retrySendTargetCallsCount: Int {
+        get { retrySendTargetCallsCountLock.withLock { retrySendTargetUnderlyingCallsCount } }
+        set { retrySendTargetCallsCountLock.withLock { retrySendTargetUnderlyingCallsCount = newValue } }
+    }
+    var retrySendTargetCalled: Bool {
+        return retrySendTargetCallsCount > 0
+    }
+    private let retrySendTargetReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var retrySendTargetUnderlyingReceivedArguments: (itemID: TimelineItemIdentifier, target: SendTarget)?
+    var retrySendTargetReceivedArguments: (itemID: TimelineItemIdentifier, target: SendTarget)? {
+        get { retrySendTargetReceivedArgumentsLock.withLock { retrySendTargetUnderlyingReceivedArguments } }
+        set { retrySendTargetReceivedArgumentsLock.withLock { retrySendTargetUnderlyingReceivedArguments = newValue } }
+    }
+    private let retrySendTargetReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var retrySendTargetUnderlyingReceivedInvocations: [(itemID: TimelineItemIdentifier, target: SendTarget)] = []
+    var retrySendTargetReceivedInvocations: [(itemID: TimelineItemIdentifier, target: SendTarget)] {
+        get { retrySendTargetReceivedInvocationsLock.withLock { retrySendTargetUnderlyingReceivedInvocations } }
+        set { retrySendTargetReceivedInvocationsLock.withLock { retrySendTargetUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var retrySendTargetClosure: ((TimelineItemIdentifier, SendTarget) async -> Void)?
+
+    @concurrent func retrySend(_ itemID: TimelineItemIdentifier, target: SendTarget) async {
+        retrySendTargetCallsCountLock.withLock { retrySendTargetUnderlyingCallsCount += 1 }
+        retrySendTargetReceivedArguments = (itemID: itemID, target: target)
+        retrySendTargetReceivedInvocationsLock.withLock { retrySendTargetUnderlyingReceivedInvocations.append((itemID: itemID, target: target)) }
+        await retrySendTargetClosure?(itemID, target)
+    }
+    //MARK: - abortSend
+
+    private let abortSendTargetCallsCountLock = NSLock()
+    private nonisolated(unsafe) var abortSendTargetUnderlyingCallsCount = 0
+    var abortSendTargetCallsCount: Int {
+        get { abortSendTargetCallsCountLock.withLock { abortSendTargetUnderlyingCallsCount } }
+        set { abortSendTargetCallsCountLock.withLock { abortSendTargetUnderlyingCallsCount = newValue } }
+    }
+    var abortSendTargetCalled: Bool {
+        return abortSendTargetCallsCount > 0
+    }
+    private let abortSendTargetReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var abortSendTargetUnderlyingReceivedArguments: (itemID: TimelineItemIdentifier, target: SendTarget)?
+    var abortSendTargetReceivedArguments: (itemID: TimelineItemIdentifier, target: SendTarget)? {
+        get { abortSendTargetReceivedArgumentsLock.withLock { abortSendTargetUnderlyingReceivedArguments } }
+        set { abortSendTargetReceivedArgumentsLock.withLock { abortSendTargetUnderlyingReceivedArguments = newValue } }
+    }
+    private let abortSendTargetReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var abortSendTargetUnderlyingReceivedInvocations: [(itemID: TimelineItemIdentifier, target: SendTarget)] = []
+    var abortSendTargetReceivedInvocations: [(itemID: TimelineItemIdentifier, target: SendTarget)] {
+        get { abortSendTargetReceivedInvocationsLock.withLock { abortSendTargetUnderlyingReceivedInvocations } }
+        set { abortSendTargetReceivedInvocationsLock.withLock { abortSendTargetUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var abortSendTargetClosure: ((TimelineItemIdentifier, SendTarget) async -> Void)?
+
+    @concurrent func abortSend(_ itemID: TimelineItemIdentifier, target: SendTarget) async {
+        abortSendTargetCallsCountLock.withLock { abortSendTargetUnderlyingCallsCount += 1 }
+        abortSendTargetReceivedArguments = (itemID: itemID, target: target)
+        abortSendTargetReceivedInvocationsLock.withLock { abortSendTargetUnderlyingReceivedInvocations.append((itemID: itemID, target: target)) }
+        await abortSendTargetClosure?(itemID, target)
+    }
     //MARK: - eventTimestamp
 
     private let eventTimestampForCallsCountLock = NSLock()
@@ -13290,6 +13394,90 @@ nonisolated class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable 
             return await redactReasonClosure(eventOrTransactionID, reason)
         } else {
             return redactReasonReturnValue
+        }
+    }
+    //MARK: - retrySend
+
+    private let retrySendTargetCallsCountLock = NSLock()
+    private nonisolated(unsafe) var retrySendTargetUnderlyingCallsCount = 0
+    var retrySendTargetCallsCount: Int {
+        get { retrySendTargetCallsCountLock.withLock { retrySendTargetUnderlyingCallsCount } }
+        set { retrySendTargetCallsCountLock.withLock { retrySendTargetUnderlyingCallsCount = newValue } }
+    }
+    var retrySendTargetCalled: Bool {
+        return retrySendTargetCallsCount > 0
+    }
+    private let retrySendTargetReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var retrySendTargetUnderlyingReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget)?
+    var retrySendTargetReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget)? {
+        get { retrySendTargetReceivedArgumentsLock.withLock { retrySendTargetUnderlyingReceivedArguments } }
+        set { retrySendTargetReceivedArgumentsLock.withLock { retrySendTargetUnderlyingReceivedArguments = newValue } }
+    }
+    private let retrySendTargetReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var retrySendTargetUnderlyingReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget)] = []
+    var retrySendTargetReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget)] {
+        get { retrySendTargetReceivedInvocationsLock.withLock { retrySendTargetUnderlyingReceivedInvocations } }
+        set { retrySendTargetReceivedInvocationsLock.withLock { retrySendTargetUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let retrySendTargetReturnValueLock = NSLock()
+    private nonisolated(unsafe) var retrySendTargetUnderlyingReturnValue: Result<Bool, TimelineProxyError>!
+    var retrySendTargetReturnValue: Result<Bool, TimelineProxyError>! {
+        get { retrySendTargetReturnValueLock.withLock { retrySendTargetUnderlyingReturnValue } }
+        set { retrySendTargetReturnValueLock.withLock { retrySendTargetUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var retrySendTargetClosure: ((TimelineItemIdentifier.EventOrTransactionID, SendTarget) async -> Result<Bool, TimelineProxyError>)?
+
+    @concurrent func retrySend(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget) async -> Result<Bool, TimelineProxyError> {
+        retrySendTargetCallsCountLock.withLock { retrySendTargetUnderlyingCallsCount += 1 }
+        retrySendTargetReceivedArguments = (eventOrTransactionID: eventOrTransactionID, target: target)
+        retrySendTargetReceivedInvocationsLock.withLock { retrySendTargetUnderlyingReceivedInvocations.append((eventOrTransactionID: eventOrTransactionID, target: target)) }
+        if let retrySendTargetClosure = retrySendTargetClosure {
+            return await retrySendTargetClosure(eventOrTransactionID, target)
+        } else {
+            return retrySendTargetReturnValue
+        }
+    }
+    //MARK: - abortSend
+
+    private let abortSendTargetCallsCountLock = NSLock()
+    private nonisolated(unsafe) var abortSendTargetUnderlyingCallsCount = 0
+    var abortSendTargetCallsCount: Int {
+        get { abortSendTargetCallsCountLock.withLock { abortSendTargetUnderlyingCallsCount } }
+        set { abortSendTargetCallsCountLock.withLock { abortSendTargetUnderlyingCallsCount = newValue } }
+    }
+    var abortSendTargetCalled: Bool {
+        return abortSendTargetCallsCount > 0
+    }
+    private let abortSendTargetReceivedArgumentsLock = NSLock()
+    private nonisolated(unsafe) var abortSendTargetUnderlyingReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget)?
+    var abortSendTargetReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget)? {
+        get { abortSendTargetReceivedArgumentsLock.withLock { abortSendTargetUnderlyingReceivedArguments } }
+        set { abortSendTargetReceivedArgumentsLock.withLock { abortSendTargetUnderlyingReceivedArguments = newValue } }
+    }
+    private let abortSendTargetReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var abortSendTargetUnderlyingReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget)] = []
+    var abortSendTargetReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget)] {
+        get { abortSendTargetReceivedInvocationsLock.withLock { abortSendTargetUnderlyingReceivedInvocations } }
+        set { abortSendTargetReceivedInvocationsLock.withLock { abortSendTargetUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let abortSendTargetReturnValueLock = NSLock()
+    private nonisolated(unsafe) var abortSendTargetUnderlyingReturnValue: Result<Bool, TimelineProxyError>!
+    var abortSendTargetReturnValue: Result<Bool, TimelineProxyError>! {
+        get { abortSendTargetReturnValueLock.withLock { abortSendTargetUnderlyingReturnValue } }
+        set { abortSendTargetReturnValueLock.withLock { abortSendTargetUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var abortSendTargetClosure: ((TimelineItemIdentifier.EventOrTransactionID, SendTarget) async -> Result<Bool, TimelineProxyError>)?
+
+    @concurrent func abortSend(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, target: SendTarget) async -> Result<Bool, TimelineProxyError> {
+        abortSendTargetCallsCountLock.withLock { abortSendTargetUnderlyingCallsCount += 1 }
+        abortSendTargetReceivedArguments = (eventOrTransactionID: eventOrTransactionID, target: target)
+        abortSendTargetReceivedInvocationsLock.withLock { abortSendTargetUnderlyingReceivedInvocations.append((eventOrTransactionID: eventOrTransactionID, target: target)) }
+        if let abortSendTargetClosure = abortSendTargetClosure {
+            return await abortSendTargetClosure(eventOrTransactionID, target)
+        } else {
+            return abortSendTargetReturnValue
         }
     }
     //MARK: - pin

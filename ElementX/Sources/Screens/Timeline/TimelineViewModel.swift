@@ -765,8 +765,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         if case let .sendingFailed(.unknown(reason)) = eventTimelineItem.properties.deliveryStatus {
-            // A missing send handle only costs the retry/remove actions, the reason is still worth showing.
-            displayAlert(.sendingFailed(reason: reason, sendHandle: timelineController.sendHandle(for: itemID)))
+            // A missing target only costs the retry/remove actions, the reason is still worth showing.
+            displayAlert(.sendingFailed(reason: reason, itemID: itemID, target: timelineController.pendingSendTarget(for: itemID)))
         } else if case let .sendingFailed(.verifiedUser(failure)) = eventTimelineItem.properties.deliveryStatus {
             guard let sendHandle = timelineController.sendHandle(for: itemID) else {
                 MXLog.error("Cannot find send handle for \(itemID).")
@@ -783,13 +783,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
     
-    private func retrySending(_ sendHandle: SendHandleProxy) {
-        Task {
-            if case .failure(let error) = await sendHandle.resend() {
-                MXLog.error("Failed retrying to send \(sendHandle.itemID): \(error)")
-                displayErrorToast(L10n.errorUnknown)
-            }
-        }
+    private func retrySending(_ itemID: TimelineItemIdentifier, target: SendTarget) {
+        Task { await timelineController.retrySend(itemID, target: target) }
+    }
+    
+    private func abortSending(_ itemID: TimelineItemIdentifier, target: SendTarget) {
+        Task { await timelineController.abortSend(itemID, target: target) }
     }
     
     private func slashCommand(message: String) -> SlashCommand? {
@@ -1139,15 +1138,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              message: L10n.commonPollEndConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
                                              secondaryButton: .init(title: L10n.actionOk) { self.timelineInteractionHandler.endPoll(pollStartID: pollStartID) })
-        case .sendingFailed(let reason, let sendHandle):
+        case .sendingFailed(let reason, let itemID, let target):
             state.bindings.alertInfo = .init(id: type,
                                              title: L10n.commonSendingFailed,
                                              message: reason,
-                                             primaryButton: .init(title: sendHandle == nil ? L10n.actionOk : L10n.actionCancel, role: .cancel, action: nil),
-                                             verticalButtons: sendHandle.map { sendHandle in
-                                                 [.init(title: L10n.actionRetry) { [weak self] in self?.retrySending(sendHandle) },
-                                                  .init(title: L10n.actionRemoveMessage, role: .destructive) { [weak self] in
-                                                      self?.timelineInteractionHandler.redact(sendHandle.itemID, reason: nil)
+                                             primaryButton: .init(title: target == nil ? L10n.actionOk : L10n.actionCancel, role: .cancel, action: nil),
+                                             verticalButtons: target.map { target in
+                                                 [.init(title: L10n.actionRetry) { [weak self] in self?.retrySending(itemID, target: target) },
+                                                  .init(title: target == .event ? L10n.actionRemoveMessage : L10n.actionDiscard, role: .destructive) { [weak self] in
+                                                      self?.abortSending(itemID, target: target)
                                                   }]
                                              })
         case .encryptionAuthenticity(let message):

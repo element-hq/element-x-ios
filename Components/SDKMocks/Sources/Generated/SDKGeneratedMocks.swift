@@ -18060,6 +18060,53 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     }
     fileprivate var underlyingHandle: UInt64!
 
+    //MARK: - abortSend
+
+    open var abortSendItemIdTargetThrowableError: Error?
+    private let abortSendItemIdTargetCallsCountLock = NSLock()
+    private var abortSendItemIdTargetUnderlyingCallsCount = 0
+    open var abortSendItemIdTargetCallsCount: Int {
+        get { abortSendItemIdTargetCallsCountLock.withLock { abortSendItemIdTargetUnderlyingCallsCount } }
+        set { abortSendItemIdTargetCallsCountLock.withLock { abortSendItemIdTargetUnderlyingCallsCount = newValue } }
+    }
+    open var abortSendItemIdTargetCalled: Bool {
+        return abortSendItemIdTargetCallsCount > 0
+    }
+    private let abortSendItemIdTargetReceivedArgumentsLock = NSLock()
+    private var abortSendItemIdTargetUnderlyingReceivedArguments: (itemId: EventOrTransactionId, target: SendTarget)?
+    open var abortSendItemIdTargetReceivedArguments: (itemId: EventOrTransactionId, target: SendTarget)? {
+        get { abortSendItemIdTargetReceivedArgumentsLock.withLock { abortSendItemIdTargetUnderlyingReceivedArguments } }
+        set { abortSendItemIdTargetReceivedArgumentsLock.withLock { abortSendItemIdTargetUnderlyingReceivedArguments = newValue } }
+    }
+    private let abortSendItemIdTargetReceivedInvocationsLock = NSLock()
+    private var abortSendItemIdTargetUnderlyingReceivedInvocations: [(itemId: EventOrTransactionId, target: SendTarget)] = []
+    open var abortSendItemIdTargetReceivedInvocations: [(itemId: EventOrTransactionId, target: SendTarget)] {
+        get { abortSendItemIdTargetReceivedInvocationsLock.withLock { abortSendItemIdTargetUnderlyingReceivedInvocations } }
+        set { abortSendItemIdTargetReceivedInvocationsLock.withLock { abortSendItemIdTargetUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let abortSendItemIdTargetReturnValueLock = NSLock()
+    open var abortSendItemIdTargetUnderlyingReturnValue: Bool!
+    open var abortSendItemIdTargetReturnValue: Bool! {
+        get { abortSendItemIdTargetReturnValueLock.withLock { abortSendItemIdTargetUnderlyingReturnValue } }
+        set { abortSendItemIdTargetReturnValueLock.withLock { abortSendItemIdTargetUnderlyingReturnValue = newValue } }
+    }
+    open var abortSendItemIdTargetClosure: ((EventOrTransactionId, SendTarget) async throws -> Bool)?
+
+    open override func abortSend(itemId: EventOrTransactionId, target: SendTarget) async throws -> Bool {
+        if let error = abortSendItemIdTargetThrowableError {
+            throw error
+        }
+        abortSendItemIdTargetCallsCountLock.withLock { abortSendItemIdTargetUnderlyingCallsCount += 1 }
+        abortSendItemIdTargetReceivedArguments = (itemId: itemId, target: target)
+        abortSendItemIdTargetReceivedInvocationsLock.withLock { abortSendItemIdTargetUnderlyingReceivedInvocations.append((itemId: itemId, target: target)) }
+        if let abortSendItemIdTargetClosure = abortSendItemIdTargetClosure {
+            return try await abortSendItemIdTargetClosure(itemId, target)
+        } else {
+            return abortSendItemIdTargetReturnValue
+        }
+    }
+
     //MARK: - addListener
 
     private let addListenerListenerCallsCountLock = NSLock()
@@ -18721,6 +18768,53 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         retryDecryptionSessionIdsReceivedSessionIds = sessionIds
         retryDecryptionSessionIdsReceivedInvocationsLock.withLock { retryDecryptionSessionIdsUnderlyingReceivedInvocations.append(sessionIds) }
         retryDecryptionSessionIdsClosure?(sessionIds)
+    }
+
+    //MARK: - retrySend
+
+    open var retrySendItemIdTargetThrowableError: Error?
+    private let retrySendItemIdTargetCallsCountLock = NSLock()
+    private var retrySendItemIdTargetUnderlyingCallsCount = 0
+    open var retrySendItemIdTargetCallsCount: Int {
+        get { retrySendItemIdTargetCallsCountLock.withLock { retrySendItemIdTargetUnderlyingCallsCount } }
+        set { retrySendItemIdTargetCallsCountLock.withLock { retrySendItemIdTargetUnderlyingCallsCount = newValue } }
+    }
+    open var retrySendItemIdTargetCalled: Bool {
+        return retrySendItemIdTargetCallsCount > 0
+    }
+    private let retrySendItemIdTargetReceivedArgumentsLock = NSLock()
+    private var retrySendItemIdTargetUnderlyingReceivedArguments: (itemId: EventOrTransactionId, target: SendTarget)?
+    open var retrySendItemIdTargetReceivedArguments: (itemId: EventOrTransactionId, target: SendTarget)? {
+        get { retrySendItemIdTargetReceivedArgumentsLock.withLock { retrySendItemIdTargetUnderlyingReceivedArguments } }
+        set { retrySendItemIdTargetReceivedArgumentsLock.withLock { retrySendItemIdTargetUnderlyingReceivedArguments = newValue } }
+    }
+    private let retrySendItemIdTargetReceivedInvocationsLock = NSLock()
+    private var retrySendItemIdTargetUnderlyingReceivedInvocations: [(itemId: EventOrTransactionId, target: SendTarget)] = []
+    open var retrySendItemIdTargetReceivedInvocations: [(itemId: EventOrTransactionId, target: SendTarget)] {
+        get { retrySendItemIdTargetReceivedInvocationsLock.withLock { retrySendItemIdTargetUnderlyingReceivedInvocations } }
+        set { retrySendItemIdTargetReceivedInvocationsLock.withLock { retrySendItemIdTargetUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let retrySendItemIdTargetReturnValueLock = NSLock()
+    open var retrySendItemIdTargetUnderlyingReturnValue: Bool!
+    open var retrySendItemIdTargetReturnValue: Bool! {
+        get { retrySendItemIdTargetReturnValueLock.withLock { retrySendItemIdTargetUnderlyingReturnValue } }
+        set { retrySendItemIdTargetReturnValueLock.withLock { retrySendItemIdTargetUnderlyingReturnValue = newValue } }
+    }
+    open var retrySendItemIdTargetClosure: ((EventOrTransactionId, SendTarget) async throws -> Bool)?
+
+    open override func retrySend(itemId: EventOrTransactionId, target: SendTarget) async throws -> Bool {
+        if let error = retrySendItemIdTargetThrowableError {
+            throw error
+        }
+        retrySendItemIdTargetCallsCountLock.withLock { retrySendItemIdTargetUnderlyingCallsCount += 1 }
+        retrySendItemIdTargetReceivedArguments = (itemId: itemId, target: target)
+        retrySendItemIdTargetReceivedInvocationsLock.withLock { retrySendItemIdTargetUnderlyingReceivedInvocations.append((itemId: itemId, target: target)) }
+        if let retrySendItemIdTargetClosure = retrySendItemIdTargetClosure {
+            return try await retrySendItemIdTargetClosure(itemId, target)
+        } else {
+            return retrySendItemIdTargetReturnValue
+        }
     }
 
     //MARK: - send
