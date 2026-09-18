@@ -549,7 +549,7 @@ final class TimelineViewModelTests {
         // Given a room with a message that failed to send for a known reason
         let items = [TextRoomTimelineItem(eventID: "t1", sendFailure: .unknown(reason: "M_TOO_LARGE"))]
         let timelineController = TimelineControllerMock(.init(timelineItems: items))
-        timelineController.sendHandleForReturnValue = .mock
+        timelineController.pendingSendTargetForReturnValue = .event
         let viewModel = makeViewModel(timelineController: timelineController)
         
         viewModel.process(viewAction: .itemSendInfoTapped(itemID: items[0].id))

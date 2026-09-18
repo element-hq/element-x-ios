@@ -99,6 +99,12 @@ protocol TimelineProxyProtocol: Sendable {
     func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
                 reason: String?) async -> Result<Void, TimelineProxyError>
     
+    func retrySend(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
+                   target: SendTarget) async -> Result<Bool, TimelineProxyError>
+    
+    func abortSend(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
+                   target: SendTarget) async -> Result<Bool, TimelineProxyError>
+    
     func pin(eventID: String) async -> Result<Bool, TimelineProxyError>
     
     func unpin(eventID: String) async -> Result<Bool, TimelineProxyError>
