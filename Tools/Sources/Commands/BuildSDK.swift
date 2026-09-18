@@ -17,6 +17,9 @@ enum Target: String, ExpressibleByArgument, CaseIterable {
 struct BuildSDK: AsyncParsableCommand {
     static let configuration = CommandConfiguration(abstract: "A tool to checkout and build MatrixRustSDK locally for development.")
     
+    /// The name of the symlink to the SDK, which must match the identity of the released package.
+    static let symlinkName = "matrix-rust-components-swift"
+    
     @Argument(help: "An optional argument to specify a branch of the SDK.")
     var branch: String?
     
@@ -111,8 +114,18 @@ struct BuildSDK: AsyncParsableCommand {
     
     /// Update the Xcode project to use the build of the SDK.
     func updateXcodeProject() throws {
+        try makeSymlinkIfNeeded()
         try updateProjectYAML()
         try Zsh.run(command: "xcodegen")
+    }
+    
+    /// Symlink the SDK as `matrix-rust-components-swift`. SwiftPM derives a local package's
+    /// identity from its directory name, so the link is what allows the build to override the
+    /// released components in both this project and its dependencies (such as ElementCall).
+    func makeSymlinkIfNeeded() throws {
+        let symlinkURL = URL.projectDirectory.appendingPathComponent(Self.symlinkName)
+        guard !FileManager.default.fileExists(atPath: symlinkURL.path) else { return }
+        try FileManager.default.createSymbolicLink(at: symlinkURL, withDestinationURL: .sdkDirectory)
     }
     
     /// Update project.yml with the local path of the SDK.
@@ -121,7 +134,7 @@ struct BuildSDK: AsyncParsableCommand {
         let yamlString = try String(contentsOf: yamlURL, encoding: .utf8)
         guard var projectConfig = try Yams.compose(yaml: yamlString) else { throw Error.failureParsingProjectYAML }
         
-        projectConfig["packages"]?.mapping?["MatrixRustSDK"]? = ["path": "../matrix-rust-sdk"]
+        projectConfig["packages"]?.mapping?["MatrixRustSDK"]? = ["path": Node(Self.symlinkName)]
         
         let updatedYAMLString = try Yams.serialize(node: projectConfig)
         try updatedYAMLString.write(to: yamlURL, atomically: true, encoding: .utf8)
