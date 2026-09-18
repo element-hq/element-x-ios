@@ -84,11 +84,11 @@ final nonisolated class EventTimelineItemProxy: Sendable {
     }
     
     var deliveryStatus: TimelineItemDeliveryStatus? {
-        guard let localSendState = item.localSendState else {
+        guard let pendingSend else {
             return nil
         }
         
-        switch localSendState {
+        switch pendingSend.state {
         case .sendingFailed(let error, _):
             switch error {
             case .identityViolations(let users):
@@ -104,6 +104,19 @@ final nonisolated class EventTimelineItemProxy: Sendable {
             return .sending
         case .sent:
             return .sent
+        }
+    }
+    
+    /// The item's own pending send or, when it has already gone out, our pending edit or redaction of it.
+    var pendingSend: (target: SendTarget, state: EventSendState)? {
+        if let state = item.localSendState {
+            (.event, state)
+        } else if let state = item.editSendState {
+            (.edit, state)
+        } else if let state = item.redactionSendState {
+            (.redaction, state)
+        } else {
+            nil
         }
     }
     
