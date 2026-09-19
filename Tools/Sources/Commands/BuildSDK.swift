@@ -11,9 +11,7 @@ enum Profile: String, ExpressibleByArgument {
 enum Target: String, ExpressibleByArgument, CaseIterable {
     case iOS = "aarch64-apple-ios"
     case simulatorARM64 = "aarch64-apple-ios-sim"
-    case simulatorIntel = "x86_64-apple-ios"
     case macARM64 = "aarch64-apple-darwin"
-    case macIntel = "x86_64-apple-darwin"
 }
 
 struct BuildSDK: AsyncParsableCommand {
@@ -104,12 +102,7 @@ struct BuildSDK: AsyncParsableCommand {
         if device > 0 {
             buildCommand.append(" --target \(Target.iOS.rawValue)")
         } else if simulator > 0 {
-            let hostArchitecture = try Zsh.run(command: "arch")
-            if hostArchitecture?.trimmingCharacters(in: .whitespacesAndNewlines) == "arm64" {
-                buildCommand.append(" --target \(Target.simulatorARM64.rawValue)")
-            } else {
-                buildCommand.append(" --target \(Target.simulatorIntel.rawValue)")
-            }
+            buildCommand.append(" --target \(Target.simulatorARM64.rawValue)")
         } else if !target.isEmpty {
             target.forEach { buildCommand.append(" --target \($0.rawValue)") }
         }

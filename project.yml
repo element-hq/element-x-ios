@@ -54,9 +54,7 @@ settings:
   MARKETING_VERSION: 26.09.2
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
-  # The call package's media xcframework (libwebrtc) has no Intel simulator slice, and a package
-  # cannot declare this for the projects that consume it.
-  EXCLUDED_ARCHS[sdk=iphonesimulator*]: x86_64
+  ARCHS: arm64
 
 include:
 - path: app.yml
