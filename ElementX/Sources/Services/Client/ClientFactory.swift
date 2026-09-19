@@ -28,7 +28,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
                                       threadsEnabled: appSettings.threadsEnabled)
             .enableAutomaticBackPagination(enableAutomaticBackPagination: appSettings.automaticBackPaginationEnabled)
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
-                .passphrase(passphrase: passphrase))
+                .highEntropyPassphrase(passphrase: Data(base64Encoded: passphrase), base64Variant: .padded))
             .serverNameOrHomeserverUrl(serverNameOrUrl: serverNameOrBaseURL)
         
         return try await build(builder, for: .authentication, appHooks: appHooks)
@@ -67,7 +67,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             .enableAutomaticBackPagination(enableAutomaticBackPagination: appSettings.automaticBackPaginationEnabled)
             .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)
-                    .passphrase(passphrase: credentials.restorationToken.passphrase))
+                    .highEntropyPassphrase(passphrase: Data(base64Encoded: credentials.restorationToken.passphrase), base64Variant: .padded))
             .withSearchIndexStore(path: credentials.restorationToken.sessionDirectories.dataPath,
                                   password: credentials.restorationToken.passphrase)
             .homeserverUrl(url: homeserverURL)
@@ -95,7 +95,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             .systemIsMemoryConstrained()
             .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)
-                    .passphrase(passphrase: credentials.restorationToken.passphrase))
+                    .highEntropyPassphrase(passphrase: Data(base64Encoded: credentials.restorationToken.passphrase), base64Variant: .padded))
             .homeserverUrl(url: homeserverURL)
         
         return try await build(builder, for: .restoration(credentials.restorationToken.session, .one(roomId: roomID)), appHooks: appHooks)
