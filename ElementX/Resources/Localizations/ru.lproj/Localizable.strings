@@ -376,6 +376,7 @@
 "common_success" = "Успешно";
 "common_suggested" = "Рекомендуемые";
 "common_suggestions" = "Предложения";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Синхронизация";
 "common_text" = "Текст";
 "common_third_party_notices" = "Уведомления о третьих лицах";

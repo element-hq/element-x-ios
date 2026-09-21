@@ -622,10 +622,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>%1$d message selected</string>
+			<string>Odabrana je poruka %1$d</string>
 			<key>other</key>
-			<string>%1$d messages selected</string>
+			<string>Odabrano je %1$d poruka</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

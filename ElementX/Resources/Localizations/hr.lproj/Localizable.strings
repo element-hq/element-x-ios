@@ -174,7 +174,7 @@
 "action_retry_decryption" = "Ponovno pokušaj dešifrirati";
 "action_save" = "Spremi";
 "action_search" = "Pretraži";
-"action_select" = "Select";
+"action_select" = "Odaberite";
 "action_select_all" = "Odaberi sve";
 "action_send" = "Pošalji";
 "action_send_edited_message" = "Pošalji uređenu poruku";
@@ -376,6 +376,7 @@
 "common_success" = "Uspjeh";
 "common_suggested" = "Preporučeno";
 "common_suggestions" = "Prijedlozi";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Sinkronizacija";
 "common_text" = "Tekst";
 "common_third_party_notices" = "Obavijesti trećih strana";
@@ -778,7 +779,7 @@
 "screen_create_room_private_option_description" = "Samo pozvane osobe mogu se pridružiti.";
 "screen_create_room_private_option_title" = "Privatno";
 "screen_create_room_public_option_description" = "Svatko može pronaći ovu sobu.\nTo možete u svakom trenutku promijeniti u postavkama sobe.";
-"screen_create_room_public_option_short_description" = "Svatko se može pridružiti.";
+"screen_create_room_public_option_short_description" = "Svatko se može pridružiti, uključujući i osobe izvan vaše organizacije.";
 "screen_create_room_public_option_title" = "Javno";
 "screen_create_room_room_access_section_knocking_option_description" = "Svatko može zatražiti pridruživanje sobi, ali administrator ili moderator morat će prihvatiti zahtjev.";
 "screen_create_room_room_access_section_knocking_option_title" = "Dopusti traženje pridruživanja";
@@ -786,7 +787,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Zatraži pridruživanje";
 "screen_create_room_room_access_section_private_option_description" = "Samo pozvane osobe mogu pristupiti ovoj sobi. Sve su poruke sveobuhvatno šifrirane.";
 "screen_create_room_room_access_section_private_option_title" = "Privatno";
-"screen_create_room_room_access_section_public_option_description" = "Svatko se može pridružiti.";
+"screen_create_room_room_access_section_public_option_description" = "Svatko se može pridružiti, uključujući i osobe izvan vaše organizacije.";
 "screen_create_room_room_access_section_public_option_title" = "Javno";
 "screen_create_room_room_access_section_restricted_option_description" = "Svatko u %1$@ može se pridružiti.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
@@ -1290,11 +1291,11 @@
 "screen_room_change_role_section_users" = "Članovi";
 "screen_room_change_role_unsaved_changes_description" = "Niste spremili sve promjene.";
 "screen_room_change_role_unsaved_changes_title" = "Želite li spremiti promjene?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
-"screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
-"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_message" = "Jeste li sigurni da želite ukloniti ovu poruku?";
+"screen_room_confirm_removal_reason_label" = "Razlog (neobavezno)";
+"screen_room_confirm_removal_reason_placeholder" = "Unesite…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Neobavezno)";
+"screen_room_confirm_removal_title" = "Potvrdite uklanjanje";
 "screen_room_details_add_topic_title" = "Dodaj temu";
 "screen_room_details_badge_encrypted" = "Šifrirano";
 "screen_room_details_badge_not_encrypted" = "Nije šifrirano";
@@ -1340,7 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Želite li ih pozvati natrag?";
 "screen_room_invite_again_alert_title" = "Sami ste u ovom razgovoru";
 "screen_room_live_location_banner" = "Dijeljenje lokacije uživo";
-"screen_room_maximum_messages_selected" = "Maximum messages selected";
+"screen_room_maximum_messages_selected" = "Odabran je maksimalan broj poruka";
 "screen_room_member_details_block_alert_action" = "Blokiraj";
 "screen_room_member_details_block_alert_description" = "Blokirani korisnici neće vam moći slati poruke i sve njihove poruke bit će skrivene. Možete ih odblokirati u bilo kojem trenutku.";
 "screen_room_member_details_block_user" = "Blokiraj korisnika";
@@ -1470,7 +1471,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Nakon što se šifriranje omogući, više se neće moći onemogućiti.";
 "screen_security_and_privacy_encryption_section_header" = "Šifriranje";
 "screen_security_and_privacy_encryption_toggle_title" = "Omogući sveobuhvatno šifriranje";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Svatko se može pridružiti.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Svatko se može pridružiti, uključujući i osobe izvan vaše organizacije.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Bilo tko";
 "screen_security_and_privacy_room_access_footer" = "Odaberite iz kojih se prostora članovi mogu pridružiti ovoj sobi bez pozivnice. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Upravljaj prostorima";
@@ -1531,8 +1532,8 @@
 "screen_session_verification_request_title" = "Zatražena je provjera";
 "screen_session_verification_they_dont_match" = "Ne podudaraju se";
 "screen_session_verification_they_match" = "Podudaraju se";
-"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
-"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
+"screen_session_verification_unavailable_subtitle" = "Molimo koristite drugi uređaj ili ključ za oporavak.";
+"screen_session_verification_unavailable_title" = "Verifikacija s ovim uređajem trenutno nije dostupna";
 "screen_session_verification_use_another_device_subtitle" = "Prije nego što odavde započnete provjeru, provjerite jeste li otvorili aplikaciju na drugom uređaju.";
 "screen_session_verification_use_another_device_title" = "Otvorite aplikaciju na drugom potvrđenom uređaju";
 "screen_session_verification_user_initiator_subtitle" = "Radi dodatne sigurnosti potvrdite ovog korisnika tako da usporedite skup emotikona na svojim uređajima. Učinite to koristeći se pouzdanim načinom komunikacije.";

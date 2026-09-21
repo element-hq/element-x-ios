@@ -22,7 +22,7 @@
 "a11y_join_call" = "加入通话";
 "a11y_jump_to_bottom" = "跳转到底部";
 "a11y_jump_to_unread" = "跳转到未读";
-"a11y_jump_to_unread_messages" = "跳转到首个未读消息";
+"a11y_jump_to_unread_messages" = "跳转到首条未读消息";
 "a11y_notifications_mentions_only" = "仅提及";
 "a11y_notifications_muted" = "通知已关闭";
 "a11y_notifications_new_mentions" = "新提及";
@@ -44,8 +44,8 @@
 "a11y_qr_code" = "二维码";
 "a11y_react_with" = "使用 %1$@ 反应";
 "a11y_react_with_other_emojis" = "使用其它 Emoji 做出反应";
-"a11y_read_receipts_multiple" = "上一个消息已被 %1$@ 与 %2$@ 阅读";
-"a11y_read_receipts_single" = "上一个消息已被 %1$@ 阅读";
+"a11y_read_receipts_multiple" = "上一条消息已被 %1$@ 与 %2$@ 阅读";
+"a11y_read_receipts_single" = "上一条消息已被 %1$@ 阅读";
 "a11y_read_receipts_tap_to_show_all_ios" = "点击以显示全部";
 "a11y_remove_reaction" = "移除反应：%1$@";
 "a11y_remove_reaction_with" = "移除反应：%1$@";
@@ -376,6 +376,7 @@
 "common_success" = "成功";
 "common_suggested" = "建议";
 "common_suggestions" = "建议";
+"common_switch_accounts" = "切换账户";
 "common_syncing" = "正在同步";
 "common_text" = "文本";
 "common_third_party_notices" = "第三方通知";
@@ -1385,7 +1386,7 @@
 "screen_room_notification_settings_mode_mute" = "静默";
 "screen_room_notification_settings_room_custom_settings_title" = "在此房间通知我以下类型";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
-"screen_room_pinned_banner_indicator_description" = "%1$@ 个已置顶的消息";
+"screen_room_pinned_banner_indicator_description" = "%1$@ 条已置顶的消息";
 "screen_room_pinned_banner_loading_description" = "正在加载消息…";
 "screen_room_pinned_banner_view_all_button_title" = "查看全部";
 "screen_room_retry_send_menu_send_again_action" = "再次发送";
@@ -1664,10 +1665,10 @@
 "state_event_room_none_by_you" = "你未产生任何更改";
 "state_event_room_pinned_events_changed" = "%1$@ 更改了已置顶的消息";
 "state_event_room_pinned_events_changed_by_you" = "你更改了已置顶的消息";
-"state_event_room_pinned_events_pinned" = "%1$@ 已置顶 1 个消息";
-"state_event_room_pinned_events_pinned_by_you" = "你已置顶 1 个消息";
-"state_event_room_pinned_events_unpinned" = "%1$@ 已取消置顶 1 个消息";
-"state_event_room_pinned_events_unpinned_by_you" = "你已取消置顶 1 个消息";
+"state_event_room_pinned_events_pinned" = "%1$@ 已置顶 1 条消息";
+"state_event_room_pinned_events_pinned_by_you" = "你已置顶 1 条消息";
+"state_event_room_pinned_events_unpinned" = "%1$@ 已取消置顶 1 条消息";
+"state_event_room_pinned_events_unpinned_by_you" = "你已取消置顶 1 条消息";
 "state_event_room_reject" = "%1$@ 拒绝了邀请";
 "state_event_room_reject_by_you" = "你拒绝了邀请";
 "state_event_room_remove" = "%1$@ 已移除 %2$@";

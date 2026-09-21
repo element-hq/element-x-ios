@@ -174,7 +174,7 @@
 "action_retry_decryption" = "Yritä salauksen purkamista uudelleen";
 "action_save" = "Tallenna";
 "action_search" = "Hae";
-"action_select" = "Select";
+"action_select" = "Valitse";
 "action_select_all" = "Valitse kaikki";
 "action_send" = "Lähetä";
 "action_send_edited_message" = "Lähetä muokattu viesti";
@@ -209,7 +209,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "Kirjaudu Ulos & Päivitä";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ei enää tue vanhaa protokollaa. Kirjaudu ulos ja takaisin sisään jatkaaksesi sovelluksen käyttöä.";
 "banner_migrate_to_native_sliding_sync_description" = "Palvelimesi tukee nyt uutta, nopeampaa protokollaa. Kirjaudu ulos ja takaisin sisään päivittääksesi nyt. Jos teet tämän nyt, voit välttää pakotetun uloskirjautumisen, kun vanha protokolla poistetaan myöhemmin.";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "Kotipalvelimesi ei enää tue vanhaa protokollaa. Kirjaudu ulos ja takaisin sisään jatkaaksesi sovelluksen käyttöä.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Palveluntarjoajasi ei enää tue vanhaa protokollaa. Kirjaudu ulos ja takaisin sisään jatkaaksesi sovelluksen käyttöä.";
 "banner_migrate_to_native_sliding_sync_title" = "Päivitys saatavilla";
 "banner_new_sound_message" = "Ilmoitusääni on päivitetty — selkeämpi, nopeampi ja vähemmän häiritsevä.";
 "banner_new_sound_title" = "Olemme päivittäneet äänesi";
@@ -376,6 +376,7 @@
 "common_success" = "Onnistui";
 "common_suggested" = "Ehdotettu";
 "common_suggestions" = "Ehdotukset";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Synkronoidaan";
 "common_text" = "Teksti";
 "common_third_party_notices" = "Kolmannen osapuolen ilmoitukset";
@@ -484,7 +485,7 @@
 "emoji_picker_category_recent" = "Viimeaikaiset emojit";
 "emoji_picker_category_symbols" = "Symbolit";
 "emoji_picker_search_placeholder" = "Etsi emojeja";
-"error_account_creation_not_possible" = "Kotipalvelimesi on päivitettävä tukemaan Matrix Authentication Serviceä ja tilin luomista.";
+"error_account_creation_not_possible" = "Palveluntarjoajasi on päivitettävä tukemaan Matrix Authentication Serviceä ja tilin luomista.";
 "error_failed_creating_the_permalink" = "Pysyvän linkin luominen epäonnistui";
 "error_failed_loading_map" = "%1$@ ei pystynyt lataamaan karttaa. Yritä myöhemmin uudelleen.";
 "error_failed_loading_messages" = "Viestien lataaminen epäonnistui";
@@ -496,11 +497,11 @@
 "error_no_compatible_app_found" = "Yhteensopivaa sovellusta ei löytynyt käsittelemään tätä toimintoa.";
 "error_room_address_already_exists" = "Tämä huoneen osoite on jo käytössä, yritä muokata huoneen osoitekenttää tai muuta huoneen nimeä";
 "error_room_address_invalid_symbols" = "Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
-"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
-"error_sending_failure_missing_media_content" = "Missing media content";
-"error_sending_failure_other" = "Error details: %@";
-"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
-"error_sending_failure_unknown" = "Unknown error";
+"error_sending_failure_invalid_mime_type" = "Virheellinen MIME-tyyppi: %@";
+"error_sending_failure_missing_media_content" = "Mediasisältö puuttuu";
+"error_sending_failure_other" = "Virheen tiedot: %@";
+"error_sending_failure_sending_from_unverified_device" = "Lähetetään vahvistamattomasta laitteesta";
+"error_sending_failure_unknown" = "Tuntematon virhe";
 "error_some_messages_have_not_been_sent" = "Joitakin viestejä ei ole lähetetty";
 "error_unknown" = "Anteeksi, tapahtui virhe";
 "error.account_already_logged_in" = "Olet jo kirjautuneena tälle laitteelle käyttäjällä %1$@.";
@@ -530,7 +531,7 @@
 "notification_invitation_action_reject" = "Hylkää";
 "notification_invite_body" = "Kutsui sinut keskustelemaan";
 "notification_invite_body_with_sender" = "%1$@ kutsui sinut keskustelemaan";
-"notification_knock_request_body" = "Requested to join";
+"notification_knock_request_body" = "Pyytää liittymistä";
 "notification_live_location_started_body" = "Aloitti reaaliaikaisen sijainnin jakamisen";
 "notification_mentioned_you_body" = "Mainitsi sinut: %1$@";
 "notification_new_messages" = "Uusia viestejä";
@@ -544,7 +545,7 @@
 "notification_sender_mention_reply" = "%1$@ mainitsi tai vastasi";
 "notification_space_invite_body" = "Kutsui sinut liittymään tilaan";
 "notification_space_invite_body_with_sender" = "%1$@ kutsui sinut liittymään tilaan";
-"notification_test_push_notification_content" = "Katselet ilmoitusta! Klikkaa minua!";
+"notification_test_push_notification_content" = "Katselet ilmoitusta! Napauta minua!";
 "notification_thread_in_room" = "Viestiketju huoneessa %1$@";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -714,7 +715,7 @@
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Element Pro -sovellus on pakollinen %1$@ -palvelimella. Lataa se sovelluskaupasta.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro vaaditaan";
-"screen_change_server_error_invalid_homeserver" = "Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään.";
+"screen_change_server_error_invalid_homeserver" = "Palveluntarjoajaan ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palveluntarjoajasi ylläpitäjään.";
 "screen_change_server_error_invalid_well_known" = "Palvelin ei ole saatavilla .well-known tiedostossa olevan ongelman vuoksi:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Valitsemasi palveluntarjoaja ei tue sliding syncia. Palvelimen päivitys tarvitaan %1$@ -sovelluksen käyttämiseen.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ ei saa yhdistää %2$@ -palvelimeen.";
@@ -778,7 +779,7 @@
 "screen_create_room_private_option_description" = "Vain kutsutut henkilöt voivat liittyä.";
 "screen_create_room_private_option_title" = "Yksityinen";
 "screen_create_room_public_option_description" = "Kuka tahansa voi löytää tämän huoneen.\nVoit muuttaa tämän milloin tahansa huoneen asetuksista.";
-"screen_create_room_public_option_short_description" = "Kuka tahansa voi liittyä.";
+"screen_create_room_public_option_short_description" = "Kuka tahansa voi liittyä, myös organisaatiosi ulkopuoliset henkilöt.";
 "screen_create_room_public_option_title" = "Julkinen";
 "screen_create_room_room_access_section_knocking_option_description" = "Kuka tahansa voi pyytää saada liittyä huoneeseen, mutta ylläpitäjän tai valvojan on hyväksyttävä pyyntö.";
 "screen_create_room_room_access_section_knocking_option_title" = "Salli liittymispyynnöt";
@@ -786,7 +787,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Pyydä liittymistä";
 "screen_create_room_room_access_section_private_option_description" = "Vain kutsutut henkilöt voivat liittyä.";
 "screen_create_room_room_access_section_private_option_title" = "Yksityinen";
-"screen_create_room_room_access_section_public_option_description" = "Kuka tahansa voi liittyä.";
+"screen_create_room_room_access_section_public_option_description" = "Kuka tahansa voi liittyä, myös organisaatiosi ulkopuoliset henkilöt.";
 "screen_create_room_room_access_section_public_option_title" = "Julkinen";
 "screen_create_room_room_access_section_restricted_option_description" = "Kuka tahansa tilassa %1$@ voi liittyä.";
 "screen_create_room_room_access_section_restricted_option_title" = "Vakio";
@@ -915,7 +916,7 @@
 "screen_join_room_loading_alert_title" = "Emme voineet näyttää tämän huoneen esikatselua";
 "screen_join_room_space_not_supported_description" = "%1$@ ei tue vielä tiloja. Voit käyttää tiloja selainversiolla.";
 "screen_join_room_space_not_supported_title" = "Tiloja ei vielä tueta";
-"screen_join_room_subtitle_knock" = "Paina alla olevaa nappia ja huoneen ylläpitäjä saa ilmoituksen. Voit liittyä keskusteluun kun pyyntösi on hyväksytty.";
+"screen_join_room_subtitle_knock" = "Paina alla olevaa nappia ja keskustelun ylläpitäjä saa ilmoituksen. Voit liittyä keskusteluun kun pyyntösi on hyväksytty.";
 "screen_join_room_subtitle_no_preview" = "Sinun on oltava tämän huoneen jäsen, jotta voit nähdä viestihistorian.";
 "screen_join_room_title_knock" = "Haluatko liittyä tähän huoneeseen?";
 "screen_join_room_title_no_preview" = "Esikatselu ei ole saatavilla";
@@ -951,10 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "Ei odottavia liittymispyyntöjä";
 "screen_knock_requests_list_initial_loading_title" = "Ladataan liittymispyyntöjä…";
 "screen_knock_requests_list_title" = "Liittymispyynnöt";
-"screen_labs_enable_gallery" = "Gallery messages";
-"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
-"screen_labs_enable_knocking" = "Ask to join";
-"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
+"screen_labs_enable_gallery" = "Galleriaviestit";
+"screen_labs_enable_gallery_description" = "Lähetä useita kuvia tai videoita kerralla. Toimii mobiililaitteilla, mutta ei vielä tuettu selainversiossa.";
+"screen_labs_enable_knocking" = "Pyydä liittymistä";
+"screen_labs_enable_knocking_description" = "Käyttäjät voivat pyytää pääsyä huoneeseen, johon kuka tahansa ei voi liittyä. Toimii mobiililaitteilla. Selainversio on olemassa, mutta se on vielä kokeiluvaiheessa.";
 "screen_labs_enable_threads" = "Ota käyttöön viestiketjuvastaukset";
 "screen_labs_enable_threads_description" = "Sovellus käynnistyy uudelleen muutoksen käyttöönottamiseksi.";
 "screen_labs_header_description" = "Kokeile uusimpia kehitteillä olevia ideoitamme. Nämä ominaisuudet eivät ole vielä valmiita; ne voivat olla epävakaita ja muuttua.";
@@ -1008,7 +1009,7 @@
 "screen_login_error_invalid_credentials" = "Väärä käyttäjänimi ja/tai salasana";
 "screen_login_error_invalid_user_id" = "Tämä ei ole kelvollinen käyttäjätunnus. Odotettu muoto: '@käyttäjä:kotipalvelin.fi'";
 "screen_login_error_refresh_tokens" = "Tämä palvelin on määritetty käyttämään refresh tokeneja. Näitä ei tueta salasanapohjaisen kirjautumisen kanssa.";
-"screen_login_error_unsupported_authentication" = "Valitsemasi kotipalvelin ei tue salasana- tai OAuth-kirjautumista. Ota yhteyttä palvelimesi ylläpitäjään tai valitse toinen kotipalvelin.";
+"screen_login_error_unsupported_authentication" = "Valitsemasi palveluntarjoaja ei tue salasana- tai OAuth-kirjautumista. Ota yhteyttä palveluntarjoajaasi tai valitse toinen.";
 "screen_login_form_header" = "Anna tietosi";
 "screen_login_subtitle" = "Matrix on avoin verkko turvallista, hajautettua viestintää varten.";
 "screen_login_title" = "Tervetuloa takaisin!";
@@ -1076,7 +1077,7 @@
 "screen_notification_settings_failed_fixing_configuration" = "Määritystä ei ole korjattu, yritä uudelleen.";
 "screen_notification_settings_group_chats" = "Ryhmäkeskusteluissa";
 "screen_notification_settings_invite_for_me_label" = "Kutsut";
-"screen_notification_settings_mentions_only_disclaimer" = "Kotipalvelimesi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et ehkä saa ilmoitusta joissakin huoneissa.";
+"screen_notification_settings_mentions_only_disclaimer" = "Palveluntarjoajasi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et ehkä saa ilmoitusta joissakin huoneissa.";
 "screen_notification_settings_mentions_section_title" = "Maininnat";
 "screen_notification_settings_message_sound_dialog_choose_other" = "Valitse toinen ääni…";
 "screen_notification_settings_message_sound_dialog_current_subtitle" = "Käytössä tällä hetkellä %1$@";
@@ -1085,7 +1086,7 @@
 "screen_notification_settings_mode_all" = "Kaikki";
 "screen_notification_settings_mode_mentions" = "Maininnat";
 "screen_notification_settings_notification_section_title" = "Ilmoita minulle";
-"screen_notification_settings_room_mention_label" = "Ilmoita minulle @room-maininnoista";
+"screen_notification_settings_room_mention_label" = "@room-maininnat";
 "screen_notification_settings_sound_custom_fallback" = "Mukautettu";
 "screen_notification_settings_sound_custom_sound_button_title" = "Mukautettu ääni...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Virhe tiedoston poistamisessa";
@@ -1172,7 +1173,7 @@
 "screen_qr_code_login_error_sliding_sync_not_supported_title" = "%1$@ -sovellusta ei tueta";
 "screen_qr_code_login_initial_state_button_title" = "Valmis skannaamaan";
 "screen_qr_code_login_initial_state_item_1" = "Avaa %1$@ tietokoneella";
-"screen_qr_code_login_initial_state_item_2" = "Napsauta avatariasi";
+"screen_qr_code_login_initial_state_item_2" = "Klikkaa avatariasi";
 "screen_qr_code_login_initial_state_item_3" = "Valitse %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Yhdistä uusi laite”";
 "screen_qr_code_login_initial_state_item_4" = "Skannaa QR-koodi tällä laitteella";
@@ -1219,11 +1220,11 @@
 "screen_recovery_key_setup_title" = "Hanki palautusavain";
 "screen_report_content_block_user" = "Estä käyttäjä";
 "screen_report_content_block_user_hint" = "Valitse tämä, jos haluat piilottaa kaikki nykyiset ja tulevat viestit tältä käyttäjältä";
-"screen_report_content_explanation" = "Tämä viesti ilmoitetaan kotipalvelimesi ylläpitäjälle. Ylläpitäjä ei pysty lukemaan salattuja viestejä.";
+"screen_report_content_explanation" = "Tämä viesti ilmoitetaan palveluntarjoajallesi. He eivät pysty lukemaan salattuja viestejä.";
 "screen_report_content_hint" = "Syy tämän sisällön ilmoittamiseen";
 "screen_report_room_leave_failed_alert_message" = "Ilmoituksesi lähetettiin onnistuneesti, mutta kohtasimme ongelman yrittäessämme poistua huoneesta. Yritä uudelleen.";
 "screen_report_room_leave_failed_alert_title" = "Huoneesta poistuminen epäonnistui";
-"screen_report_room_reason_footer" = "Ilmoita tästä huoneesta palvelimesi ylläpitäjälle. Jos viestit on salattu, ylläpitäjäsi ei voi lukea niitä.";
+"screen_report_room_reason_footer" = "Ilmoita tästä keskustelusta palveluntarjoajallesi. Jos viestit on salattu, palveluntarjoajasi ei voi lukea niitä.";
 "screen_report_room_reason_placeholder" = "Kuvaile syytä...";
 "screen_report_room_title" = "Ilmoita huoneesta";
 "screen_reset_encryption_confirmation_alert_action" = "Kyllä, nollaa nyt";
@@ -1290,11 +1291,11 @@
 "screen_room_change_role_section_users" = "Jäsenet";
 "screen_room_change_role_unsaved_changes_description" = "Sinulla on tallentamattomia muutoksia";
 "screen_room_change_role_unsaved_changes_title" = "Tallennetaanko muutokset?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
-"screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
-"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_message" = "Oletko varma, että haluat poistaa tämän viestin?";
+"screen_room_confirm_removal_reason_label" = "Syy (valinnainen)";
+"screen_room_confirm_removal_reason_placeholder" = "Kirjoita...";
+"screen_room_confirm_removal_reason_supporting_text" = "(Valinnainen)";
+"screen_room_confirm_removal_title" = "Vahvista poistaminen";
 "screen_room_details_add_topic_title" = "Lisää aihe";
 "screen_room_details_badge_encrypted" = "Salattu";
 "screen_room_details_badge_not_encrypted" = "Ei salattu";
@@ -1340,7 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Haluatko kutsua heidät takaisin?";
 "screen_room_invite_again_alert_title" = "Olet yksin tässä keskustelussa";
 "screen_room_live_location_banner" = "Jaetaan reaaliaikaista sijaintia";
-"screen_room_maximum_messages_selected" = "Maximum messages selected";
+"screen_room_maximum_messages_selected" = "Enimmäismäärä viestejä valittu";
 "screen_room_member_details_block_alert_action" = "Estä";
 "screen_room_member_details_block_alert_description" = "Estetyt käyttäjät eivät voi lähettää sinulle viestejä ja kaikki heidän viestit piilotetaan. Voit poistaa eston milloin tahansa.";
 "screen_room_member_details_block_user" = "Estä käyttäjä";
@@ -1379,9 +1380,9 @@
 "screen_room_notification_settings_error_loading_settings" = "Ilmoitusasetusten lataamisessa tapahtui virhe.";
 "screen_room_notification_settings_error_restoring_default" = "Oletustilan palauttaminen epäonnistui, yritä uudelleen.";
 "screen_room_notification_settings_error_setting_mode" = "Tilan asettaminen epäonnistui, yritä uudelleen.";
-"screen_room_notification_settings_mentions_only_disclaimer" = "Kotipalvelimesi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et saa ilmoituksia tästä huoneesta.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Palveluntarjoajasi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et saa ilmoituksia tästä huoneesta.";
 "screen_room_notification_settings_mode_all_messages" = "Kaikista viesteistä";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Vain maininnoista ja avainsanoista";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Vain maininnoista ja vastauksista";
 "screen_room_notification_settings_mode_mute" = "Mykistä";
 "screen_room_notification_settings_room_custom_settings_title" = "Ilmoita minulle tässä huoneessa";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
@@ -1443,8 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Sinulla ei ole yhtään odottavaa kutsua.";
 "screen_roomlist_filter_low_priority" = "Matala prioriteetti";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Sinulla ei ole vielä yhtään matalan prioriteetin keskustelua";
-"screen_roomlist_filter_mention" = "Mention";
-"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
+"screen_roomlist_filter_mention" = "Maininnat";
+"screen_roomlist_filter_mention_empty_state_title" = "Sinulla ei ole lukemattomia mainintoja";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Voit poistaa suodattimien valinnan nähdäksesi muut keskustelusi.";
 "screen_roomlist_filter_mixed_empty_state_title" = "Sinulla ei ole sopivia keskusteluja tähän valintaan";
 "screen_roomlist_filter_people" = "Ihmiset";
@@ -1470,7 +1471,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Kun salaus on kerran otettu käyttöön, sitä ei voi poistaa käytöstä.";
 "screen_security_and_privacy_encryption_section_header" = "Salaus";
 "screen_security_and_privacy_encryption_toggle_title" = "Ota päästä päähän -salaus käyttöön";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Kuka tahansa voi liittyä.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Kuka tahansa voi liittyä, myös organisaatiosi ulkopuoliset henkilöt.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Kuka tahansa";
 "screen_security_and_privacy_room_access_footer" = "Valitse, minkä tilojen jäsenet voivat liittyä tähän huoneeseen ilman kutsua. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Hallitse tiloja";
@@ -1531,8 +1532,8 @@
 "screen_session_verification_request_title" = "Vahvistus pyydetty";
 "screen_session_verification_they_dont_match" = "Ne eivät täsmää";
 "screen_session_verification_they_match" = "Ne täsmäävät";
-"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
-"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
+"screen_session_verification_unavailable_subtitle" = "Käytä toista laitetta tai palautusavainta.";
+"screen_session_verification_unavailable_title" = "Vahvistus tällä laitteella ei ole tällä hetkellä käytettävissä";
 "screen_session_verification_use_another_device_subtitle" = "Varmista, että sovellus on avoinna toisessa laitteessa, ennen kuin aloitat vahvistuksen tästä.";
 "screen_session_verification_use_another_device_title" = "Avaa sovellus toisella vahvistetulla laitteella";
 "screen_session_verification_user_initiator_subtitle" = "Vahvista tämä käyttäjä turvallisuuden lisäämiseksi vertaamalla emojeja laitteillanne. Tee tämä käyttämällä luotettavaa viestintätapaa.";
@@ -1729,7 +1730,7 @@
 "troubleshoot_notifications_test_display_notification_permission_failure" = "Ilmoitusta ei voida näyttää.";
 "troubleshoot_notifications_test_display_notification_success" = "Ilmoitusta on klikattu!";
 "troubleshoot_notifications_test_display_notification_title" = "Ilmoituksen näyttäminen";
-"troubleshoot_notifications_test_display_notification_waiting" = "Klikkaa ilmoitusta jatkaaksesi testiä.";
+"troubleshoot_notifications_test_display_notification_waiting" = "Napauta ilmoitusta jatkaaksesi testiä.";
 "troubleshoot_notifications_test_firebase_availability_description" = "Varmistaa, että Firebase on käytettävissä.";
 "troubleshoot_notifications_test_firebase_availability_failure" = "Firebase ei ole saatavilla.";
 "troubleshoot_notifications_test_firebase_availability_success" = "Firebase on saatavilla.";
@@ -1743,7 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Virhe: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Virhe, push-ilmoitusta ei voi testata.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Virhe, aikakatkaisu push-ilmoitusta odotellessa.";
-"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Virhe: push-yhdyskäytävä rajoittaa tätä laittetta, joten ilmoitukset eivät ole luotettavia. Määritä toinen push-yhdyskäytävä.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push-ilmoituksella kesti %1$d ms palata takaisin.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testaa push-ilmoituksen paluu";
 "troubleshoot_notifications_test_unified_push_description" = "Varmistas, että UnifiedPush-jakelijat ovat käytettävissä.";

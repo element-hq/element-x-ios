@@ -376,6 +376,7 @@
 "common_success" = "Lyckades";
 "common_suggested" = "Suggested";
 "common_suggestions" = "Förslag";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Synkar";
 "common_text" = "Text";
 "common_third_party_notices" = "Meddelanden från tredje part";
@@ -544,7 +545,7 @@
 "notification_sender_mention_reply" = "%1$@ nämnde eller svarade";
 "notification_space_invite_body" = "Invited you to join the space";
 "notification_space_invite_body_with_sender" = "%1$@ invited you to join the space";
-"notification_test_push_notification_content" = "Du tittar på aviseringen! Klicka på mig!";
+"notification_test_push_notification_content" = "Du tittar på aviseringen! Tryck på mig!";
 "notification_thread_in_room" = "Thread in %1$@";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -714,7 +715,7 @@
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
 "screen_change_server_error_element_pro_required_message" = "Element Pro-appen krävs på %1$@. Ladda ner den från butiken.";
 "screen_change_server_error_element_pro_required_title" = "Element Pro krävs";
-"screen_change_server_error_invalid_homeserver" = "Vi kunde inte nå den här hemservern. Kontrollera att du har angett hemserverns URL korrekt. Om URL:en är korrekt kontaktar du administratören för hemservern för ytterligare hjälp.";
+"screen_change_server_error_invalid_homeserver" = "Vi kunde inte nå den här kontoleverantören. Kontrollera att du har angett kontoleverantörens URL korrekt. Om URL:en är korrekt kontaktar du administratören för kontoleverantören för ytterligare hjälp.";
 "screen_change_server_error_invalid_well_known" = "Sliding Sync är inte tillgängligt på grund av ett problem i .well-known-filen:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Den valda kontoleverantören stöder inte sliding sync. En uppgradering till servern behövs för att använda %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ får inte ansluta till %2$@.";
@@ -856,7 +857,7 @@
 "screen_encryption_reset_bullet_3" = "Du måste verifiera alla dina befintliga enheter och kontakter igen";
 "screen_encryption_reset_footer" = "Återställ bara din identitet om du inte har tillgång till en annan inloggad enhet och du har tappat bort din återställningsnyckel.";
 "screen_encryption_reset_title" = "Återställ din identitet ifall du inte kan bekräfta på annat sätt";
-"screen_home_tab_chats" = "Alla chattar";
+"screen_home_tab_chats" = "Chattar";
 "screen_home_tab_spaces" = "Utrymmen";
 "screen_identity_confirmation_cannot_confirm" = "Kan du inte bekräfta?";
 "screen_identity_confirmation_create_new_recovery_key" = "Skapa en ny återställningsnyckel";
@@ -1008,7 +1009,7 @@
 "screen_login_error_invalid_credentials" = "Felaktigt användarnamn och/eller lösenord";
 "screen_login_error_invalid_user_id" = "Detta är inte en giltig användaridentifierare. Förväntat format: '@användare:hemserver.org'";
 "screen_login_error_refresh_tokens" = "Den här servern är konfigurerad för att använda uppdateringstokens. Dessa stöds inte när du använder lösenordsbaserad inloggning.";
-"screen_login_error_unsupported_authentication" = "Den valda hemservern stöder inte lösenord eller OAuth-inloggning. Kontakta administratören eller välj en annan hemserver.";
+"screen_login_error_unsupported_authentication" = "Den valda kontoleverantören stöder inte lösenords- eller OAuth-inloggning. Kontakta kontoleverantören eller välj en annan.";
 "screen_login_form_header" = "Ange dina uppgifter";
 "screen_login_subtitle" = "Matrix är ett öppet nätverk för säker, decentraliserad kommunikation.";
 "screen_login_title" = "Välkommen tillbaka!";
@@ -1085,7 +1086,7 @@
 "screen_notification_settings_mode_all" = "Alla";
 "screen_notification_settings_mode_mentions" = "Omnämnanden";
 "screen_notification_settings_notification_section_title" = "Meddela mig för";
-"screen_notification_settings_room_mention_label" = "Meddela mig på @room";
+"screen_notification_settings_room_mention_label" = "Omnämnanden av @rum";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1219,7 +1220,7 @@
 "screen_recovery_key_setup_title" = "Ställ in återställning";
 "screen_report_content_block_user" = "Blockera användare";
 "screen_report_content_block_user_hint" = "Markera om du vill dölja alla nuvarande och framtida meddelanden från denna användare";
-"screen_report_content_explanation" = "Det här meddelandet kommer att rapporteras till din hemservers administratör. Denne kommer inte att kunna läsa några krypterade meddelanden.";
+"screen_report_content_explanation" = "Det här meddelandet kommer att rapporteras till din kontoleverantör. Denne kommer inte att kunna läsa några krypterade meddelanden.";
 "screen_report_content_hint" = "Anledning till att rapportera detta innehåll";
 "screen_report_room_leave_failed_alert_message" = "Din anmälan skickades in framgångsrikt, men vi stötte på ett problem när vi försökte lämna rummet. Vänligen försök igen.";
 "screen_report_room_leave_failed_alert_title" = "Kunde inte lämna rummet";
@@ -1381,7 +1382,7 @@
 "screen_room_notification_settings_error_setting_mode" = "Misslyckades att ställa in läget, vänligen pröva igen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hemserver stöder inte det här alternativet i krypterade rum, du blir inte aviserad i det här rummet.";
 "screen_room_notification_settings_mode_all_messages" = "Alla meddelanden";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Endast omnämnanden och nyckelord";
 "screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "I det här rummet, meddela mig för";
 "screen_room_pinned_banner_indicator" = "%1$@ av %2$@";
@@ -1454,7 +1455,7 @@
 "screen_roomlist_filter_unreads" = "Olästa";
 "screen_roomlist_filter_unreads_empty_state_title" = "Grattis!\nDu har inga olästa meddelanden!";
 "screen_roomlist_knock_event_sent_description" = "Begäran om att gå med skickad";
-"screen_roomlist_main_space_title" = "Alla chattar";
+"screen_roomlist_main_space_title" = "Chattar";
 "screen_roomlist_mark_as_read" = "Markera som läst";
 "screen_roomlist_mark_as_unread" = "Markera som oläst";
 "screen_roomlist_tombstoned_room_description" = "Det här rummet har uppgraderats";
