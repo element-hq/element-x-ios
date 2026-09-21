@@ -41,11 +41,13 @@ nonisolated enum AppBuildType {
         #if DEBUG
         return .debug
         #else
-        if InfoPlistReader.main.isNightlyBuild {
-            .nightly
-        } else {
-            .release
-        }
+        // :tchap: remove nightly build type check for tchap
+//        if InfoPlistReader.main.isNightlyBuild {
+//            .nightly
+//        } else {
+//            .release
+//        }
+        return .release
         #endif
     }
 }
