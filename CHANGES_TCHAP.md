@@ -1,3 +1,21 @@
+Tchap iOS v26.09.0
+=============================
+
+## Qu'est-ce qui a changé ?
+
+### 🙌 Améliorations
+* Afficher l'icône « authenticité non garantie » uniquement en mode debug by @Sianay in https://github.com/tchapgouv/tchap-x-ios/pull/406
+* Cacher la bannière "Nous avons rafraîchi les sons" by @Sianay in https://github.com/tchapgouv/tchap-x-ios/pull/408
+* Utiliser le badge Default pour les informations accessibilité Historique by @Sianay in https://github.com/tchapgouv/tchap-x-ios/pull/409
+* Masquer le bandeau indiquant une réinitialisation d'identité d'un membre   by @Sianay in https://github.com/tchapgouv/tchap-x-ios/pull/410
+### Autres
+* Merge Element X 26.08.2 by @Sianay in https://github.com/tchapgouv/tchap-x-ios/pull/405
+* Suppression de la partie BWI Content Scanner  by @Sianay in https://github.com/tchapgouv/tchap-x-ios/pull/403
+* Ajout traduction pour les sondages à choix multiples by @Sianay in https://github.com/tchapgouv/tchap-x-ios/pull/407
+
+
+**Full Changelog**: https://github.com/tchapgouv/tchap-x-ios/compare/tchap_v26.08.0...tchap_v26.09.0
+
 Tchap iOS v26.08.0
 =============================
 
