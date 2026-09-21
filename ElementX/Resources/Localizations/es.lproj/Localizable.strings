@@ -376,6 +376,7 @@
 "common_success" = "Terminado";
 "common_suggested" = "Sugerido";
 "common_suggestions" = "Sugerencias";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Sincronizando";
 "common_text" = "Texto";
 "common_third_party_notices" = "Avisos de terceros";

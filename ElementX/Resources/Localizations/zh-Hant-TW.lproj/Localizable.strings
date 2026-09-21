@@ -209,7 +209,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "登出並升級";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ 不再支援舊版通訊協定。請登出並重新登入以繼續使用應用程式。";
 "banner_migrate_to_native_sliding_sync_description" = "您的伺服器現在支援新的、更快的協定。立即登出並重新登入以進行升級。現在這樣做將協助您避免在稍後移除舊協定時被強制登出。";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "您的家伺服器不再支援舊協定。請登出並重新登入以繼續使用應用程式。";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "您的帳號服務提供者已不再支援舊版通訊協定。請先登出，然後重新登入，以繼續使用此應用程式。";
 "banner_migrate_to_native_sliding_sync_title" = "可升級";
 "banner_new_sound_message" = "您的通知提示音已更新，更清晰、更快、更不易分心。";
 "banner_new_sound_title" = "我們已更新您的音效設定";
@@ -376,6 +376,7 @@
 "common_success" = "成功";
 "common_suggested" = "已建議";
 "common_suggestions" = "建議";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "同步中";
 "common_text" = "文字";
 "common_third_party_notices" = "第三方通知";
@@ -484,7 +485,7 @@
 "emoji_picker_category_recent" = "最近使用的表情符號";
 "emoji_picker_category_symbols" = "標誌";
 "emoji_picker_search_placeholder" = "搜尋表情符號";
-"error_account_creation_not_possible" = "您的家伺服器需要升級才能支援 Matrix Authentication Service 與帳號建立。";
+"error_account_creation_not_possible" = "您的帳號服務提供者需要進行升級，才能支援 Matrix Authentication Service 及帳號建立功能。";
 "error_failed_creating_the_permalink" = "無法建立永久連結";
 "error_failed_loading_map" = "%1$@無法載入地圖。請稍後再試。";
 "error_failed_loading_messages" = "無法載入訊息";
@@ -544,7 +545,7 @@
 "notification_sender_mention_reply" = "%1$@ 提及或回覆";
 "notification_space_invite_body" = "已邀請您加入空間";
 "notification_space_invite_body_with_sender" = "%1$@ 已邀請您的加入此空間";
-"notification_test_push_notification_content" = "您正在查看通知！點我！";
+"notification_test_push_notification_content" = "您正在檢視通知！點我！";
 "notification_thread_in_room" = "在 %1$@ 的討論串";
 "notification_ticker_text_dm" = "%1$@：%2$@";
 "notification_ticker_text_group" = "%1$@：%2$@ %3$@";
@@ -714,7 +715,7 @@
 "screen_change_server_error_element_pro_required_action_ios" = "應用程式商店";
 "screen_change_server_error_element_pro_required_message" = "%1$@ 需要 Element Pro 應用程式。請從商店下載。";
 "screen_change_server_error_element_pro_required_title" = "需要 Element Pro";
-"screen_change_server_error_invalid_homeserver" = "我們無法連線至此家伺服器。請檢查您是否已正確輸入家伺服器 URL。若 URL 正確，請聯絡您家伺服器的管理員以取得進一步協助。";
+"screen_change_server_error_invalid_homeserver" = "我們無法連線至此帳號提供者。請確認您輸入的帳號提供者網址是否正確。如果網址正確，請聯絡您的帳號提供者管理員以取得進一步協助。";
 "screen_change_server_error_invalid_well_known" = "因為 well-known 檔案的問題，伺服器不可用：\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "選定的帳號提供者不支援 sliding sync。必須升級伺服器才能使用 %1$@。";
 "screen_change_server_error_unauthorized_homeserver" = "不允許 %1$@ 連線至 %2$@。";
@@ -786,7 +787,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "要求加入";
 "screen_create_room_room_access_section_private_option_description" = "僅被邀請的人才可以加入。";
 "screen_create_room_room_access_section_private_option_title" = "私人";
-"screen_create_room_room_access_section_public_option_description" = "任何人都可以加入";
+"screen_create_room_room_access_section_public_option_description" = "任何人都可以加入，包括貴組織以外的人士。";
 "screen_create_room_room_access_section_public_option_title" = "公開";
 "screen_create_room_room_access_section_restricted_option_description" = "在 %1$@ 中的任何人都可以加入。";
 "screen_create_room_room_access_section_restricted_option_title" = "標準";
@@ -856,7 +857,7 @@
 "screen_encryption_reset_bullet_3" = "您將需要再次驗證所有現有裝置與聯絡人";
 "screen_encryption_reset_footer" = "僅當您無法存取其他已驗證的裝置且沒有還原金鑰時才重設您的數位身份。";
 "screen_encryption_reset_title" = "無法確認？您需要重設數位身份。";
-"screen_home_tab_chats" = "所有聊天室";
+"screen_home_tab_chats" = "聊天";
 "screen_home_tab_spaces" = "空間";
 "screen_identity_confirmation_cannot_confirm" = "無法確認？";
 "screen_identity_confirmation_create_new_recovery_key" = "建立新的復原金鑰";
@@ -915,7 +916,7 @@
 "screen_join_room_loading_alert_title" = "我們無法顯示此聊天室的預覽";
 "screen_join_room_space_not_supported_description" = "%1$@ 尚未支援空間。您可以在網頁上存取空間。";
 "screen_join_room_space_not_supported_title" = "尚未支援空間";
-"screen_join_room_subtitle_knock" = "點選下方按鈕將會通知聊天試管里員。一旦核准，您就可以加入對話。";
+"screen_join_room_subtitle_knock" = "輕點下方的按鈕，系統將通知聊天室管理員。經核准後，您即可加入對話。";
 "screen_join_room_subtitle_no_preview" = "您必須是此聊天室的成員才能檢視訊息歷史紀錄。";
 "screen_join_room_title_knock" = "想要加入此聊天室？";
 "screen_join_room_title_no_preview" = "無法使用預覽";
@@ -1008,7 +1009,7 @@
 "screen_login_error_invalid_credentials" = "不正確的使用者名稱或密碼";
 "screen_login_error_invalid_user_id" = "此非有效的使用者識別字串。預期的格式：‘@user:homeserver.org’";
 "screen_login_error_refresh_tokens" = "此伺服器已設定為使用重新整理權杖。使用以密碼為基礎的登入方式時，不支援這些功能。";
-"screen_login_error_unsupported_authentication" = "選定的家伺服器不支援密碼或 OAuth 登入。請聯絡您的管理員或選擇其他家伺服器。";
+"screen_login_error_unsupported_authentication" = "您選擇的帳號提供者不支援密碼或 OAuth 登入。請聯絡您的帳號提供者，或選擇其他帳號提供者。";
 "screen_login_form_header" = "輸入您的詳細資料";
 "screen_login_subtitle" = "Matrix 是一個開放網路，為了安全且去中心化的通訊而生。";
 "screen_login_title" = "歡迎回來！";
@@ -1076,7 +1077,7 @@
 "screen_notification_settings_failed_fixing_configuration" = "組態尚未更正，請再試一次。";
 "screen_notification_settings_group_chats" = "群組聊天";
 "screen_notification_settings_invite_for_me_label" = "邀請";
-"screen_notification_settings_mentions_only_disclaimer" = "您的家伺服器在加密聊天室中不支援此選項，可能無法收到部份聊天室的通知。";
+"screen_notification_settings_mentions_only_disclaimer" = "您的帳號服務提供者不支援加密聊天中的此項功能，因此在某些聊天中您可能不會收到通知。";
 "screen_notification_settings_mentions_section_title" = "提及";
 "screen_notification_settings_message_sound_dialog_choose_other" = "選擇其他音效⋯⋯";
 "screen_notification_settings_message_sound_dialog_current_subtitle" = "目前正在使用 %1$@";
@@ -1085,7 +1086,7 @@
 "screen_notification_settings_mode_all" = "全部";
 "screen_notification_settings_mode_mentions" = "提及";
 "screen_notification_settings_notification_section_title" = "通知我";
-"screen_notification_settings_room_mention_label" = "於 @room 通知我";
+"screen_notification_settings_room_mention_label" = "提及 @room";
 "screen_notification_settings_sound_custom_fallback" = "自訂";
 "screen_notification_settings_sound_custom_sound_button_title" = "自訂音效⋯⋯";
 "screen_notification_settings_sound_delete_sound_error_title" = "刪除檔案時發生錯誤";
@@ -1219,11 +1220,11 @@
 "screen_recovery_key_setup_title" = "取得還原金鑰";
 "screen_report_content_block_user" = "封鎖使用者";
 "screen_report_content_block_user_hint" = "檢查您是否要隱藏所有來自此使用者的目前及未來的訊息";
-"screen_report_content_explanation" = "此訊息將會回報給您的家伺服器管理員。他們將無法讀取任何已加密的訊息。";
+"screen_report_content_explanation" = "這則訊息將會通報給您的帳號服務提供者。他們將無法閱讀任何加密訊息。";
 "screen_report_content_hint" = "檢舉這個內容的原因";
 "screen_report_room_leave_failed_alert_message" = "您的回報已成功遞交，但我們嘗試離開聊天室時遇到了問題。請再試一次。";
 "screen_report_room_leave_failed_alert_title" = "無法離開聊天室";
-"screen_report_room_reason_footer" = "將此聊天室回報給您的管理員。若訊息已加密，您的管理員將無法讀取它們。";
+"screen_report_room_reason_footer" = "請向您的帳號服務提供者回報這則聊天紀錄。如果訊息經過加密，您的帳號服務提供者將無法閱讀這些訊息。";
 "screen_report_room_reason_placeholder" = "說明回報的原因……";
 "screen_report_room_title" = "回報聊天室";
 "screen_reset_encryption_confirmation_alert_action" = "是的，立刻重設";
@@ -1379,7 +1380,7 @@
 "screen_room_notification_settings_error_loading_settings" = "載入通知設定時發生錯誤。";
 "screen_room_notification_settings_error_restoring_default" = "無法重設為預設模式，請再試一次。";
 "screen_room_notification_settings_error_setting_mode" = "無法設定模式，請再試一次。";
-"screen_room_notification_settings_mentions_only_disclaimer" = "您的家伺服器在加密聊天室中不支援此選項，您將不會收到此聊天室的通知。";
+"screen_room_notification_settings_mentions_only_disclaimer" = "您的帳號服務提供者不支援加密聊天中的此項功能，因此您將不會在此聊天中收到通知。";
 "screen_room_notification_settings_mode_all_messages" = "所有訊息";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "僅提及與回覆";
 "screen_room_notification_settings_mode_mute" = "靜音";
@@ -1454,7 +1455,7 @@
 "screen_roomlist_filter_unreads" = "未讀";
 "screen_roomlist_filter_unreads_empty_state_title" = "恭喜！\n您沒有任何未讀的訊息！";
 "screen_roomlist_knock_event_sent_description" = "已傳送加入請求";
-"screen_roomlist_main_space_title" = "所有聊天室";
+"screen_roomlist_main_space_title" = "聊天";
 "screen_roomlist_mark_as_read" = "標為已讀";
 "screen_roomlist_mark_as_unread" = "標為未讀";
 "screen_roomlist_tombstoned_room_description" = "此聊天室已升級";
@@ -1470,7 +1471,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "一旦啟用就無法停用加密。";
 "screen_security_and_privacy_encryption_section_header" = "加密";
 "screen_security_and_privacy_encryption_toggle_title" = "啟用端到端加密";
-"screen_security_and_privacy_room_access_anyone_option_description" = "任何人都可以加入。";
+"screen_security_and_privacy_room_access_anyone_option_description" = "任何人都可以加入，包括貴組織以外的人士。";
 "screen_security_and_privacy_room_access_anyone_option_title" = "任何人";
 "screen_security_and_privacy_room_access_footer" = "選擇哪些空間的成員不需要邀請就可以加入此聊天室。%1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "管理空間";
@@ -1729,7 +1730,7 @@
 "troubleshoot_notifications_test_display_notification_permission_failure" = "無法顯示通知。";
 "troubleshoot_notifications_test_display_notification_success" = "已點選通知！";
 "troubleshoot_notifications_test_display_notification_title" = "顯示通知";
-"troubleshoot_notifications_test_display_notification_waiting" = "請點選通知以繼續測試。";
+"troubleshoot_notifications_test_display_notification_waiting" = "請輕點通知以繼續測試。";
 "troubleshoot_notifications_test_firebase_availability_description" = "確保 Firebase 可用。";
 "troubleshoot_notifications_test_firebase_availability_failure" = "Firebase 不可用。";
 "troubleshoot_notifications_test_firebase_availability_success" = "Firebase 可用。";

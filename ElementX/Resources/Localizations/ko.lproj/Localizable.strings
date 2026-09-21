@@ -376,6 +376,7 @@
 "common_success" = "성공";
 "common_suggested" = "공유된 스페이스";
 "common_suggestions" = "제안";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "동기화 중";
 "common_text" = "글자";
 "common_third_party_notices" = "제3자 고지";

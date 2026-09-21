@@ -375,6 +375,7 @@
 "common_success" = "تمت العملية بنجاح";
 "common_suggested" = "مقترح";
 "common_suggestions" = "اقتراحات";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "تتم المزامنة";
 "common_text" = "نص";
 "common_third_party_notices" = "إشعارات الجهات الخارجية";

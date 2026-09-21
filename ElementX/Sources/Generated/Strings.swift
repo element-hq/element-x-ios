@@ -856,6 +856,8 @@ internal nonisolated enum L10n {
   internal static var commonSuggested: String { return L10n.tr("Localizable", "common_suggested") }
   /// Suggestions
   internal static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
+  /// Switch accounts
+  internal static var commonSwitchAccounts: String { return L10n.tr("Localizable", "common_switch_accounts") }
   /// Syncing
   internal static var commonSyncing: String { return L10n.tr("Localizable", "common_syncing") }
   /// Text

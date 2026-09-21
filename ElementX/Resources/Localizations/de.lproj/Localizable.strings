@@ -174,7 +174,7 @@
 "action_retry_decryption" = "Entschlüsselung wiederholen";
 "action_save" = "Speichern";
 "action_search" = "Suchen";
-"action_select" = "Select";
+"action_select" = "Auswählen";
 "action_select_all" = "Alles auswählen";
 "action_send" = "Senden";
 "action_send_edited_message" = "Bearbeitete Nachricht senden";
@@ -376,6 +376,7 @@
 "common_success" = "Erfolg";
 "common_suggested" = "Empfohlen";
 "common_suggestions" = "Vorschläge";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Wird synchronisiert";
 "common_text" = "Text";
 "common_third_party_notices" = "Hinweise von Drittanbietern";
@@ -778,7 +779,7 @@
 "screen_create_room_private_option_description" = "Nur eingeladene Personen haben Zutritt zu diesem Chat.";
 "screen_create_room_private_option_title" = "Privat";
 "screen_create_room_public_option_description" = "Jeder kann diesen Chat finden.\nDu kannst dies jederzeit in den Einstellungen des Chats ändern.";
-"screen_create_room_public_option_short_description" = "Alle können beitreten.";
+"screen_create_room_public_option_short_description" = "Alle können beitreten, auch Personen außerhalb deiner Organisation.";
 "screen_create_room_public_option_title" = "Öffentlich";
 "screen_create_room_room_access_section_knocking_option_description" = "Jeder kann den Beitritt zum Chat erbitten, aber ein Admin oder Moderator muss die Anfrage akzeptieren.";
 "screen_create_room_room_access_section_knocking_option_title" = "Anfrage zum Beitritt zulassen";
@@ -786,7 +787,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Beitritt anfragen";
 "screen_create_room_room_access_section_private_option_description" = "Nur eingeladene Personen können beitreten.";
 "screen_create_room_room_access_section_private_option_title" = "Privat";
-"screen_create_room_room_access_section_public_option_description" = "Alle können beitreten.";
+"screen_create_room_room_access_section_public_option_description" = "Alle können beitreten, auch Personen außerhalb deiner Organisation.";
 "screen_create_room_room_access_section_public_option_title" = "Öffentlich";
 "screen_create_room_room_access_section_restricted_option_description" = "Jeder in %1$@ kann beitreten.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
@@ -951,10 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "Keine ausstehende Beitrittsanfrage";
 "screen_knock_requests_list_initial_loading_title" = "Beitrittsanfragen werden geladen …";
 "screen_knock_requests_list_title" = "Beitrittsanfragen";
-"screen_labs_enable_gallery" = "Gallery messages";
-"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
-"screen_labs_enable_knocking" = "Ask to join";
-"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
+"screen_labs_enable_gallery" = "Galerie-Nachrichten";
+"screen_labs_enable_gallery_description" = "Sende mehrere Bilder oder Videos auf einmal. Auf Mobilgeräten stabil, von der Web-Version aber noch nicht unterstützt.";
+"screen_labs_enable_knocking" = "Beitritt anfragen";
+"screen_labs_enable_knocking_description" = "Nutzer können Zugang zu einem Chat anfragen, der nicht öffentlich zugänglich ist. Auf Mobilgeräten stabil, die Web-Implementierung existiert, ist aber experimentell.";
 "screen_labs_enable_threads" = "Thread-Antworten aktivieren";
 "screen_labs_enable_threads_description" = "Die App wird neu gestartet, um diese Änderung zu übernehmen.";
 "screen_labs_header_description" = "Probier unsere neuesten Ideen in der Entwicklung aus. Diese Funktionen sind noch nicht fertiggestellt; sie können instabil sein und sich noch ändern.";
@@ -1290,11 +1291,11 @@
 "screen_room_change_role_section_users" = "Mitglieder";
 "screen_room_change_role_unsaved_changes_description" = "Du hast nicht gespeicherte Änderungen.";
 "screen_room_change_role_unsaved_changes_title" = "Änderungen speichern?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
-"screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_message" = "Möchtest du diese Nachricht wirklich entfernen?";
+"screen_room_confirm_removal_reason_label" = "Grund (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Eingeben …";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Entfernen bestätigen";
 "screen_room_details_add_topic_title" = "Thema hinzufügen";
 "screen_room_details_badge_encrypted" = "Verschlüsselt";
 "screen_room_details_badge_not_encrypted" = "Nicht verschlüsselt";
@@ -1340,7 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Möchtest du sie wieder einladen?";
 "screen_room_invite_again_alert_title" = "Du bist allein in diesem Chat";
 "screen_room_live_location_banner" = "Live-Standort wird geteilt";
-"screen_room_maximum_messages_selected" = "Maximum messages selected";
+"screen_room_maximum_messages_selected" = "Maximale Anzahl an Nachrichten ausgewählt";
 "screen_room_member_details_block_alert_action" = "Blockieren";
 "screen_room_member_details_block_alert_description" = "Blockierte Nutzer können dir keine Nachrichten senden und alle ihre Nachrichten werden ausgeblendet. Du kannst die Blockierung jederzeit wieder aufheben.";
 "screen_room_member_details_block_user" = "Nutzer blockieren";
@@ -1443,8 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Du hast keine ausstehenden Einladungen.";
 "screen_roomlist_filter_low_priority" = "Niedrige Priorität";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Du hast noch keine Chats mit niedriger Priorität";
-"screen_roomlist_filter_mention" = "Mention";
-"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
+"screen_roomlist_filter_mention" = "Erwähnungen";
+"screen_roomlist_filter_mention_empty_state_title" = "Du hast keine ungelesenen Erwähnungen";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Entferne Filter, um Chats zu sehen";
 "screen_roomlist_filter_mixed_empty_state_title" = "Für diese Auswahl hast du keinen Chat";
 "screen_roomlist_filter_people" = "Personen";
@@ -1470,7 +1471,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Einmal angeschaltet kann die Verschlüsselung nicht mehr deaktiviert werden.";
 "screen_security_and_privacy_encryption_section_header" = "Verschlüsselung";
 "screen_security_and_privacy_encryption_toggle_title" = "Ende-zu-Ende-Verschlüsselung aktivieren";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Alle können beitreten.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Alle können beitreten, auch Personen außerhalb deiner Organisation.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Jeder";
 "screen_security_and_privacy_room_access_footer" = "Wähle aus, welche Spaces ihren Mitgliedern ermöglichen sollen, dieser Gruppe ohne Einladung beitreten zu können. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Spaces verwalten";
@@ -1531,8 +1532,8 @@
 "screen_session_verification_request_title" = "Verifizierung angefordert";
 "screen_session_verification_they_dont_match" = "Sie stimmen nicht überein";
 "screen_session_verification_they_match" = "Sie stimmen überein";
-"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
-"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
+"screen_session_verification_unavailable_subtitle" = "Bitte verwende ein anderes Gerät oder deinen Wiederherstellungsschlüssel.";
+"screen_session_verification_unavailable_title" = "Verifizierung mit diesem Gerät ist derzeit nicht möglich";
 "screen_session_verification_use_another_device_subtitle" = "Öffne die App auf dem anderen Gerät, bevor du die Verifizierung auf diesem Gerät startest.";
 "screen_session_verification_use_another_device_title" = "Öffne die App auf einem anderen verifizierten Gerät";
 "screen_session_verification_user_initiator_subtitle" = "Verifiziere diesen Nutzer für zusätzliche Sicherheit durch den Vergleich einer Reihe von Emojis auf den Geräten. Verwende dazu einen vertraulichen Kommunikationskanal.";

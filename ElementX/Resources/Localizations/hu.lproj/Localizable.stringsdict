@@ -27,9 +27,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
+			<string>Galéria, %1$d további médiatartalom</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Galéria, %1$d további médiatartalom</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -265,9 +265,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
+			<string>Megosztott %1$d melléklet</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>Megosztott %1$d melléklet</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -553,9 +553,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d message selected</string>
+			<string>%1$d üzenet kijelölve</string>
 			<key>other</key>
-			<string>%1$d messages selected</string>
+			<string>%1$d üzenet kijelölve</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

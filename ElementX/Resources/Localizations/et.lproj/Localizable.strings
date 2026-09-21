@@ -376,6 +376,7 @@
 "common_success" = "Õnnestus";
 "common_suggested" = "Soovitatud";
 "common_suggestions" = "Soovitused";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Sünkroniseerime";
 "common_text" = "Tekst";
 "common_third_party_notices" = "Kolmandate osapoolte teatised";
