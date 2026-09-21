@@ -26,6 +26,9 @@ final class NativeCallStack {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    /// Prefix for native call related logs
+    nonisolated static let logPrefix = "[NativeCall]"
+    
     private let stack: ElementCallStack
     private let actionsSubject = PassthroughSubject<NativeCallPresentation, Never>()
     private var cancellables = Set<AnyCancellable>()
@@ -58,7 +61,7 @@ final class NativeCallStack {
     
     /// Releases the stack along with the to-device subscription it holds open for key delivery.
     func stop() {
-        MXLog.info("Stopping the native call stack, in a call: \(controller.isInCall)")
+        MXLog.info("\(Self.logPrefix) Stopping the native call stack, in a call: \(controller.isInCall)")
         
         // Best effort: the leave this starts may not finish before the core stops, but the
         // alternative is walking away from the call without telling the room at all.
@@ -75,13 +78,13 @@ final class NativeCallStack {
             guard controller.room?.roomID != roomProxy.id else {
                 // Reached while the call is still joining, before the service has an ongoing call
                 // for its own room check to match against.
-                MXLog.info("Returning to the call already starting in this room.")
+                MXLog.info("\(Self.logPrefix) Returning to the call already starting in this room.")
                 actionsSubject.send(.restore)
                 return
             }
             
             // The controller ignores a second call, so wait for the running one to leave its room.
-            MXLog.info("Leaving the ongoing call to start the one requested in another room.")
+            MXLog.info("\(Self.logPrefix) Leaving the ongoing call to start the one requested in another room.")
             pendingCallRequest = (roomProxy, isVoiceCall)
             controller.hangUp()
             return
@@ -125,7 +128,7 @@ final class NativeCallStack {
         case .pictureInPictureUnavailable:
             // Hiding the screen without a window to minimize into would leave the call running with
             // no way back to mute or hang up.
-            MXLog.info("Staying on the call screen: no system window is available.")
+            MXLog.info("\(Self.logPrefix) Staying on the call screen: no system window is available.")
             actionsSubject.send(.restore)
         }
     }
@@ -140,11 +143,12 @@ final class NativeCallStack {
     /// entries point at its source rather than at here.
     private struct Logger: ElementCallLoggingProtocol {
         func log(_ record: ElementCallLogRecord) {
+            let message = "\(NativeCallStack.logPrefix) \(record.message)"
             switch record.level {
-            case .debug: MXLog.debug(record.message, file: record.file, line: record.line)
-            case .info: MXLog.info(record.message, file: record.file, line: record.line)
-            case .warning: MXLog.warning(record.message, file: record.file, line: record.line)
-            case .error: MXLog.error(record.message, file: record.file, line: record.line)
+            case .debug: MXLog.debug(message, file: record.file, line: record.line)
+            case .info: MXLog.info(message, file: record.file, line: record.line)
+            case .warning: MXLog.warning(message, file: record.file, line: record.line)
+            case .error: MXLog.error(message, file: record.file, line: record.line)
             }
         }
     }
@@ -156,12 +160,13 @@ final class NativeCallStack {
             // The core's own position when it has one, its module path otherwise.
             let file = record.file ?? record.target
             let line = Int(record.line ?? 0)
+            let message = "\(logPrefix) \(record.target): \(record.message)"
             switch record.level {
-            case .error: MXLog.error(record.message, file: file, line: line)
-            case .warning: MXLog.warning(record.message, file: file, line: line)
-            case .info: MXLog.info(record.message, file: file, line: line)
-            case .debug: MXLog.debug(record.message, file: file, line: line)
-            case .verbose: MXLog.verbose(record.message, file: file, line: line)
+            case .error: MXLog.error(message, file: file, line: line)
+            case .warning: MXLog.warning(message, file: file, line: line)
+            case .info: MXLog.info(message, file: file, line: line)
+            case .debug: MXLog.debug(message, file: file, line: line)
+            case .verbose: MXLog.verbose(message, file: file, line: line)
             }
         }
     }
