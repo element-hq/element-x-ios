@@ -1,5 +1,5 @@
 {
-  "originHash" : "d67cd8d83bc81d99691ee1fabd9369d308f1dc701490e2b260a4527744e8d9d7",
+  "originHash" : "5942a87ceb7a384102a812ab21b7f014b30094ecb863c77b0c91b9b92e06299c",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-ios",
       "state" : {
-        "revision" : "3f6491aa34077da23862651c5eb1e119cd947d66",
-        "version" : "0.1.0-rc.6"
+        "revision" : "5b1d72d9ca99ac3a7fc5d6f08bece1aa9f9c9505",
+        "version" : "0.1.0-rc.7"
       }
     },
     {
@@ -183,10 +183,10 @@
     {
       "identity" : "matrix-rust-rtc",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/BillCarsonFr/matrix-rust-rtc",
+      "location" : "https://github.com/element-hq/matrix-rust-rtc",
       "state" : {
-        "revision" : "9736f0f6dc47808aadfb35c3307791f0f5803848",
-        "version" : "0.2.0-rc.1"
+        "revision" : "cc1754f2245ded60d3ea515ff2fbc516900a31ea",
+        "version" : "0.3.0-rc.1"
       }
     },
     {
