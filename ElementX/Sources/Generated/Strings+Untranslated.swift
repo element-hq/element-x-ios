@@ -12,6 +12,12 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Push to talk
+  internal static var screenRoomAudioPushToTalk: String { return UntranslatedL10n.tr("Untranslated", "screen_room_audio_push_to_talk") }
+  /// Room Audio
+  internal static var screenRoomAudioTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_room_audio_title") }
+  /// Video calls
+  internal static var screenRoomAudioVideoCalls: String { return UntranslatedL10n.tr("Untranslated", "screen_room_audio_video_calls") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...
