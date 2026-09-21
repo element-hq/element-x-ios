@@ -113,13 +113,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        appSettings.roomListActivityVisibilityPublisher
-            .sink { [weak self] value in
-                self?.state.roomListActivityVisibility = value
-                self?.updateRooms()
-            }
-            .store(in: &cancellables)
-        
         appSettings.seenInvitesPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
@@ -375,9 +368,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         let seenInvites = appSettings.seenInvites
         
         for summary in roomSummaryProvider.roomListPublisher.value {
-            let room = HomeScreenRoom(summary: summary,
-                                      roomListActivityVisibility: appSettings.roomListActivityVisibility,
-                                      seenInvites: seenInvites)
+            let room = HomeScreenRoom(summary: summary, seenInvites: seenInvites)
             rooms.append(room)
         }
         

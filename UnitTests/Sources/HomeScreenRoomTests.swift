@@ -193,24 +193,6 @@ struct HomeScreenRoomTests {
         #expect(!room.badges.isMentionShown)
     }
     
-    @Test
-    mutating func mentionAndKeywordsUnhighlightedDotHidden() {
-        setupRoomSummary(isMarkedUnread: false,
-                         unreadMessagesCount: 10,
-                         unreadMentionsCount: 0,
-                         unreadNotificationsCount: 0,
-                         notificationMode: .mentionsAndKeywordsOnly,
-                         hasOngoingCall: false)
-        
-        let room = HomeScreenRoom(summary: roomSummary, roomListActivityVisibility: .show)
-        
-        #expect(!room.isHighlighted)
-        #expect(!room.badges.isDotShown)
-        #expect(room.badges.callBadgeType == .none)
-        #expect(!room.badges.isMuteShown)
-        #expect(!room.badges.isMentionShown)
-    }
-    
     // MARK: - Mark unread
     
     @Test

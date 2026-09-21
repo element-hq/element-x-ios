@@ -60,13 +60,6 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Room List") {
-                Picker("Room list activity visibility", selection: $context.roomListActivityVisibility) {
-                    ForEach(RoomListActivityVisibility.allCases, id: \.self) { visibility in
-                        Text(visibility.rawValue.capitalized)
-                            .tag(visibility)
-                    }
-                }
-                
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")
                 }

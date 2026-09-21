@@ -36,7 +36,6 @@ struct HomeScreenRoomList: View {
                 let isSelected = context.viewState.selectedRoomID == room.id
                 
                 HomeScreenRoomCell(room: room,
-                                   roomListActivityVisibility: context.viewState.roomListActivityVisibility,
                                    isSelected: isSelected,
                                    mediaProvider: context.mediaProvider,
                                    action: context.send)
