@@ -16,7 +16,7 @@ enum RestorationTokenError: Error {
 nonisolated struct RestorationToken: Equatable {
     let session: MatrixRustSDK.Session
     let sessionDirectories: SessionDirectories
-    let passphrase: String
+    let passphrase: Data
     let pusherNotificationClientIdentifier: String?
     
     enum CodingKeys: CodingKey {
@@ -42,9 +42,14 @@ nonisolated extension RestorationToken: Codable {
             SessionDirectories(dataDirectory: dataDirectory)
         }
         
+        let base64Passphrase = try container.decode(String.self, forKey: .passphrase)
+        guard let passphrase = Data(base64Encoded: base64Passphrase) else {
+            throw DecodingError.dataCorruptedError(forKey: .passphrase, in: container, debugDescription: "The passphrase isn't valid base64.")
+        }
+        
         self = try .init(session: session,
                          sessionDirectories: sessionDirectories,
-                         passphrase: container.decode(String.self, forKey: .passphrase),
+                         passphrase: passphrase,
                          pusherNotificationClientIdentifier: container.decodeIfPresent(String.self, forKey: .pusherNotificationClientIdentifier))
     }
     
@@ -53,7 +58,7 @@ nonisolated extension RestorationToken: Codable {
         try container.encode(session, forKey: .session)
         try container.encode(sessionDirectories.dataDirectory, forKey: .sessionDirectory)
         try container.encode(sessionDirectories.cacheDirectory, forKey: .cacheDirectory)
-        try container.encode(passphrase, forKey: .passphrase)
+        try container.encode(passphrase.base64EncodedString(), forKey: .passphrase)
         try container.encode(pusherNotificationClientIdentifier, forKey: .pusherNotificationClientIdentifier)
     }
 }

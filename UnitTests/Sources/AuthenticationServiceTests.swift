@@ -37,8 +37,7 @@ struct AuthenticationServiceTests {
         case .success:
             #expect(client.loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount == 1)
             #expect(userSessionStore.userSessionForSessionDirectoriesPassphraseCallsCount == 1)
-            #expect(userSessionStore.userSessionForSessionDirectoriesPassphraseReceivedArguments?.passphrase ==
-                encryptionKeyProvider.generateKey().base64EncodedString())
+            #expect(userSessionStore.userSessionForSessionDirectoriesPassphraseReceivedArguments?.passphrase == encryptionKeyProvider.generateKey())
         case .failure(let error):
             Issue.record("Unexpected failure: \(error)")
         }
