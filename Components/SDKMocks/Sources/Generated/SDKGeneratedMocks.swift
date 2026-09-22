@@ -3697,6 +3697,49 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - subscribeToCustomToDeviceMessages
+
+    private let subscribeToCustomToDeviceMessagesEventTypesListenerCallsCountLock = NSLock()
+    private var subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingCallsCount = 0
+    open var subscribeToCustomToDeviceMessagesEventTypesListenerCallsCount: Int {
+        get { subscribeToCustomToDeviceMessagesEventTypesListenerCallsCountLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingCallsCount } }
+        set { subscribeToCustomToDeviceMessagesEventTypesListenerCallsCountLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingCallsCount = newValue } }
+    }
+    open var subscribeToCustomToDeviceMessagesEventTypesListenerCalled: Bool {
+        return subscribeToCustomToDeviceMessagesEventTypesListenerCallsCount > 0
+    }
+    private let subscribeToCustomToDeviceMessagesEventTypesListenerReceivedArgumentsLock = NSLock()
+    private var subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReceivedArguments: (eventTypes: [String], listener: ToDeviceMessageListener)?
+    open var subscribeToCustomToDeviceMessagesEventTypesListenerReceivedArguments: (eventTypes: [String], listener: ToDeviceMessageListener)? {
+        get { subscribeToCustomToDeviceMessagesEventTypesListenerReceivedArgumentsLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReceivedArguments } }
+        set { subscribeToCustomToDeviceMessagesEventTypesListenerReceivedArgumentsLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReceivedArguments = newValue } }
+    }
+    private let subscribeToCustomToDeviceMessagesEventTypesListenerReceivedInvocationsLock = NSLock()
+    private var subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReceivedInvocations: [(eventTypes: [String], listener: ToDeviceMessageListener)] = []
+    open var subscribeToCustomToDeviceMessagesEventTypesListenerReceivedInvocations: [(eventTypes: [String], listener: ToDeviceMessageListener)] {
+        get { subscribeToCustomToDeviceMessagesEventTypesListenerReceivedInvocationsLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReceivedInvocations } }
+        set { subscribeToCustomToDeviceMessagesEventTypesListenerReceivedInvocationsLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let subscribeToCustomToDeviceMessagesEventTypesListenerReturnValueLock = NSLock()
+    open var subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToCustomToDeviceMessagesEventTypesListenerReturnValue: TaskHandle! {
+        get { subscribeToCustomToDeviceMessagesEventTypesListenerReturnValueLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReturnValue } }
+        set { subscribeToCustomToDeviceMessagesEventTypesListenerReturnValueLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReturnValue = newValue } }
+    }
+    open var subscribeToCustomToDeviceMessagesEventTypesListenerClosure: (([String], ToDeviceMessageListener) -> TaskHandle)?
+
+    open override func subscribeToCustomToDeviceMessages(eventTypes: [String], listener: ToDeviceMessageListener) -> TaskHandle {
+        subscribeToCustomToDeviceMessagesEventTypesListenerCallsCountLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingCallsCount += 1 }
+        subscribeToCustomToDeviceMessagesEventTypesListenerReceivedArguments = (eventTypes: eventTypes, listener: listener)
+        subscribeToCustomToDeviceMessagesEventTypesListenerReceivedInvocationsLock.withLock { subscribeToCustomToDeviceMessagesEventTypesListenerUnderlyingReceivedInvocations.append((eventTypes: eventTypes, listener: listener)) }
+        if let subscribeToCustomToDeviceMessagesEventTypesListenerClosure = subscribeToCustomToDeviceMessagesEventTypesListenerClosure {
+            return subscribeToCustomToDeviceMessagesEventTypesListenerClosure(eventTypes, listener)
+        } else {
+            return subscribeToCustomToDeviceMessagesEventTypesListenerReturnValue
+        }
+    }
+
     //MARK: - subscribeToDuplicateKeyUploadErrors
 
     private let subscribeToDuplicateKeyUploadErrorsListenerCallsCountLock = NSLock()
@@ -12546,6 +12589,53 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - stateEvents
+
+    open var stateEventsEventTypeThrowableError: Error?
+    private let stateEventsEventTypeCallsCountLock = NSLock()
+    private var stateEventsEventTypeUnderlyingCallsCount = 0
+    open var stateEventsEventTypeCallsCount: Int {
+        get { stateEventsEventTypeCallsCountLock.withLock { stateEventsEventTypeUnderlyingCallsCount } }
+        set { stateEventsEventTypeCallsCountLock.withLock { stateEventsEventTypeUnderlyingCallsCount = newValue } }
+    }
+    open var stateEventsEventTypeCalled: Bool {
+        return stateEventsEventTypeCallsCount > 0
+    }
+    private let stateEventsEventTypeReceivedEventTypeLock = NSLock()
+    private var stateEventsEventTypeUnderlyingReceivedEventType: StateEventType?
+    open var stateEventsEventTypeReceivedEventType: StateEventType? {
+        get { stateEventsEventTypeReceivedEventTypeLock.withLock { stateEventsEventTypeUnderlyingReceivedEventType } }
+        set { stateEventsEventTypeReceivedEventTypeLock.withLock { stateEventsEventTypeUnderlyingReceivedEventType = newValue } }
+    }
+    private let stateEventsEventTypeReceivedInvocationsLock = NSLock()
+    private var stateEventsEventTypeUnderlyingReceivedInvocations: [StateEventType] = []
+    open var stateEventsEventTypeReceivedInvocations: [StateEventType] {
+        get { stateEventsEventTypeReceivedInvocationsLock.withLock { stateEventsEventTypeUnderlyingReceivedInvocations } }
+        set { stateEventsEventTypeReceivedInvocationsLock.withLock { stateEventsEventTypeUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let stateEventsEventTypeReturnValueLock = NSLock()
+    open var stateEventsEventTypeUnderlyingReturnValue: [RoomStateEvent]!
+    open var stateEventsEventTypeReturnValue: [RoomStateEvent]! {
+        get { stateEventsEventTypeReturnValueLock.withLock { stateEventsEventTypeUnderlyingReturnValue } }
+        set { stateEventsEventTypeReturnValueLock.withLock { stateEventsEventTypeUnderlyingReturnValue = newValue } }
+    }
+    open var stateEventsEventTypeClosure: ((StateEventType) async throws -> [RoomStateEvent])?
+
+    open override func stateEvents(eventType: StateEventType) async throws -> [RoomStateEvent] {
+        if let error = stateEventsEventTypeThrowableError {
+            throw error
+        }
+        stateEventsEventTypeCallsCountLock.withLock { stateEventsEventTypeUnderlyingCallsCount += 1 }
+        stateEventsEventTypeReceivedEventType = eventType
+        stateEventsEventTypeReceivedInvocationsLock.withLock { stateEventsEventTypeUnderlyingReceivedInvocations.append(eventType) }
+        if let stateEventsEventTypeClosure = stateEventsEventTypeClosure {
+            return try await stateEventsEventTypeClosure(eventType)
+        } else {
+            return stateEventsEventTypeReturnValue
+        }
+    }
+
     //MARK: - stopLiveLocationShare
 
     open var stopLiveLocationShareThrowableError: Error?
@@ -12796,6 +12886,49 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return try await subscribeToSendQueueUpdatesListenerClosure(listener)
         } else {
             return subscribeToSendQueueUpdatesListenerReturnValue
+        }
+    }
+
+    //MARK: - subscribeToStateEvents
+
+    private let subscribeToStateEventsEventTypeListenerCallsCountLock = NSLock()
+    private var subscribeToStateEventsEventTypeListenerUnderlyingCallsCount = 0
+    open var subscribeToStateEventsEventTypeListenerCallsCount: Int {
+        get { subscribeToStateEventsEventTypeListenerCallsCountLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingCallsCount } }
+        set { subscribeToStateEventsEventTypeListenerCallsCountLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingCallsCount = newValue } }
+    }
+    open var subscribeToStateEventsEventTypeListenerCalled: Bool {
+        return subscribeToStateEventsEventTypeListenerCallsCount > 0
+    }
+    private let subscribeToStateEventsEventTypeListenerReceivedArgumentsLock = NSLock()
+    private var subscribeToStateEventsEventTypeListenerUnderlyingReceivedArguments: (eventType: StateEventType, listener: RoomStateEventsListener)?
+    open var subscribeToStateEventsEventTypeListenerReceivedArguments: (eventType: StateEventType, listener: RoomStateEventsListener)? {
+        get { subscribeToStateEventsEventTypeListenerReceivedArgumentsLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingReceivedArguments } }
+        set { subscribeToStateEventsEventTypeListenerReceivedArgumentsLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingReceivedArguments = newValue } }
+    }
+    private let subscribeToStateEventsEventTypeListenerReceivedInvocationsLock = NSLock()
+    private var subscribeToStateEventsEventTypeListenerUnderlyingReceivedInvocations: [(eventType: StateEventType, listener: RoomStateEventsListener)] = []
+    open var subscribeToStateEventsEventTypeListenerReceivedInvocations: [(eventType: StateEventType, listener: RoomStateEventsListener)] {
+        get { subscribeToStateEventsEventTypeListenerReceivedInvocationsLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingReceivedInvocations } }
+        set { subscribeToStateEventsEventTypeListenerReceivedInvocationsLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingReceivedInvocations = newValue } }
+    }
+
+    private let subscribeToStateEventsEventTypeListenerReturnValueLock = NSLock()
+    open var subscribeToStateEventsEventTypeListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToStateEventsEventTypeListenerReturnValue: TaskHandle! {
+        get { subscribeToStateEventsEventTypeListenerReturnValueLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingReturnValue } }
+        set { subscribeToStateEventsEventTypeListenerReturnValueLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingReturnValue = newValue } }
+    }
+    open var subscribeToStateEventsEventTypeListenerClosure: ((StateEventType, RoomStateEventsListener) -> TaskHandle)?
+
+    open override func subscribeToStateEvents(eventType: StateEventType, listener: RoomStateEventsListener) -> TaskHandle {
+        subscribeToStateEventsEventTypeListenerCallsCountLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingCallsCount += 1 }
+        subscribeToStateEventsEventTypeListenerReceivedArguments = (eventType: eventType, listener: listener)
+        subscribeToStateEventsEventTypeListenerReceivedInvocationsLock.withLock { subscribeToStateEventsEventTypeListenerUnderlyingReceivedInvocations.append((eventType: eventType, listener: listener)) }
+        if let subscribeToStateEventsEventTypeListenerClosure = subscribeToStateEventsEventTypeListenerClosure {
+            return subscribeToStateEventsEventTypeListenerClosure(eventType, listener)
+        } else {
+            return subscribeToStateEventsEventTypeListenerReturnValue
         }
     }
 
