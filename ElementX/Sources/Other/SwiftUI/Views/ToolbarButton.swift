@@ -44,7 +44,7 @@ struct ToolbarButton: View {
         var tint: Color {
             switch self {
             case .cancel:
-                .compound.bgCanvasDefault
+                .clear
             case .confirm:
                 .compound.bgAccentRest
             case .destructive:
