@@ -416,6 +416,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         }
         // Match the rail's background to the colour of the split view's detail (or the root if there isn't a split).
         .onPreferenceChange(CompoundBackgroundPreferenceKey.self) { background in
+            guard #unavailable(iOS 27) else { return } // The background is only necessary for iOS 26's inset sidebar.
             railBackgroundColor = background?.colorValue ?? .compound.bgCanvasDefault
         }
         .introspect(.window, on: .supportedVersions) { window in
@@ -488,6 +489,14 @@ struct TabRailView<Tag: Hashable>: View {
         isFullScreen || ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 48
     }
     
+    var trailingPadding: CGFloat {
+        if #available(iOS 27, *) {
+            8
+        } else {
+            0
+        }
+    }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -508,6 +517,7 @@ struct TabRailView<Tag: Hashable>: View {
                 }
             }
             .padding(.leading, 8)
+            .padding(.trailing, trailingPadding)
             .padding(.top, topPadding)
             .padding(.bottom)
         }
