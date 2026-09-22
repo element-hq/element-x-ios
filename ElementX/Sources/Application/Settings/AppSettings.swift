@@ -354,6 +354,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     // MARK: - Home Screen
     
+    @UserPreference(defaultValue: true)
+    var showAllRoomListActivity: Bool
+    
     // MARK: - Search Screen
     
     /// The queries the user searched for and the rooms they opened from the results, most recent first.

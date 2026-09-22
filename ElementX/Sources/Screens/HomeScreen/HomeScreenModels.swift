@@ -251,12 +251,17 @@ struct HomeScreenRoom: Identifiable, Equatable {
 
 extension HomeScreenRoom {
     init(summary: RoomSummary,
+         showAllActivity: Bool = true,
          seenInvites: Set<String> = []) {
         let roomID = summary.id
         
         let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
         
-        let isDotShown = summary.hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
+        let isDotShown = if showAllActivity {
+            summary.hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
+        } else {
+            (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.isMarkedUnread || isUnseenInvite
+        }
         
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
