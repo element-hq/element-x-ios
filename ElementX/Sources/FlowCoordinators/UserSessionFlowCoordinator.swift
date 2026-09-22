@@ -578,8 +578,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         let coordinator = NativeCallScreenCoordinator(parameters: .init(controller: controller))
-        navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
-        flowParameters.analytics.track(screen: .RoomCall)
+        
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            flowParameters.appMediator.windowManager.registerCoordinator(coordinator, flowCoordinator: nil, forWindowType: .call)
+        } else {
+            navigationTabCoordinator.setOverlayCoordinator(coordinator, animated: true)
+            flowParameters.analytics.track(screen: .RoomCall)
+        }
     }
     
     private func restoreNativeCallScreen() {
@@ -588,12 +593,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func dismissCallScreenIfNeeded() {
-        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator
-            || navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator else {
-            return
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            flowParameters.appMediator.windowManager.closeSecondaryWindow(forType: .call)
+        } else {
+            guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator
+                || navigationTabCoordinator.overlayCoordinator is NativeCallScreenCoordinator else {
+                return
+            }
+            
+            navigationTabCoordinator.setOverlayCoordinator(nil)
         }
-        
-        navigationTabCoordinator.setOverlayCoordinator(nil)
     }
     
     // MARK: - Logout

@@ -11,6 +11,7 @@ import SwiftUI
 enum SecondaryWindowType: Hashable, Codable {
     case room(roomID: String)
     case settings
+    case call
 }
 
 protocol SecureWindowManagerDelegate: AnyObject {
