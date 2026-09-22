@@ -2219,14 +2219,14 @@ nonisolated class ClientFactoryMock: ClientFactoryProtocol, @unchecked Sendable 
         return makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount > 0
     }
     private let makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReceivedArguments: (serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)?
-    var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments: (serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)? {
+    private nonisolated(unsafe) var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReceivedArguments: (serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: Data, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)?
+    var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments: (serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: Data, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)? {
         get { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArgumentsLock.withLock { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReceivedArguments } }
         set { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArgumentsLock.withLock { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReceivedArguments = newValue } }
     }
     private let makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReceivedInvocations: [(serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)] = []
-    var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocations: [(serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)] {
+    private nonisolated(unsafe) var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReceivedInvocations: [(serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: Data, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)] = []
+    var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocations: [(serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: Data, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)] {
         get { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocationsLock.withLock { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReceivedInvocations } }
         set { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocationsLock.withLock { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReceivedInvocations = newValue } }
     }
@@ -2237,9 +2237,9 @@ nonisolated class ClientFactoryMock: ClientFactoryProtocol, @unchecked Sendable 
         get { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValueLock.withLock { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue } }
         set { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValueLock.withLock { makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure: ((String, SessionDirectories, String, ClientSessionDelegate, AppSettings, AppHooks) async throws -> ClientProtocol)?
+    nonisolated(unsafe) var makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure: ((String, SessionDirectories, Data, ClientSessionDelegate, AppSettings, AppHooks) async throws -> ClientProtocol)?
 
-    @concurrent func makeAuthenticationClient(serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks) async throws -> ClientProtocol {
+    @concurrent func makeAuthenticationClient(serverNameOrBaseURL: String, sessionDirectories: SessionDirectories, passphrase: Data, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks) async throws -> ClientProtocol {
         if let error = makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksThrowableError {
             throw error
         }
@@ -14631,14 +14631,14 @@ nonisolated class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sen
         return userSessionForSessionDirectoriesPassphraseCallsCount > 0
     }
     private let userSessionForSessionDirectoriesPassphraseReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var userSessionForSessionDirectoriesPassphraseUnderlyingReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String)?
-    var userSessionForSessionDirectoriesPassphraseReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String)? {
+    private nonisolated(unsafe) var userSessionForSessionDirectoriesPassphraseUnderlyingReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data)?
+    var userSessionForSessionDirectoriesPassphraseReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data)? {
         get { userSessionForSessionDirectoriesPassphraseReceivedArgumentsLock.withLock { userSessionForSessionDirectoriesPassphraseUnderlyingReceivedArguments } }
         set { userSessionForSessionDirectoriesPassphraseReceivedArgumentsLock.withLock { userSessionForSessionDirectoriesPassphraseUnderlyingReceivedArguments = newValue } }
     }
     private let userSessionForSessionDirectoriesPassphraseReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var userSessionForSessionDirectoriesPassphraseUnderlyingReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String)] = []
-    var userSessionForSessionDirectoriesPassphraseReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String)] {
+    private nonisolated(unsafe) var userSessionForSessionDirectoriesPassphraseUnderlyingReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data)] = []
+    var userSessionForSessionDirectoriesPassphraseReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data)] {
         get { userSessionForSessionDirectoriesPassphraseReceivedInvocationsLock.withLock { userSessionForSessionDirectoriesPassphraseUnderlyingReceivedInvocations } }
         set { userSessionForSessionDirectoriesPassphraseReceivedInvocationsLock.withLock { userSessionForSessionDirectoriesPassphraseUnderlyingReceivedInvocations = newValue } }
     }
@@ -14649,9 +14649,9 @@ nonisolated class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sen
         get { userSessionForSessionDirectoriesPassphraseReturnValueLock.withLock { userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue } }
         set { userSessionForSessionDirectoriesPassphraseReturnValueLock.withLock { userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var userSessionForSessionDirectoriesPassphraseClosure: ((ClientProtocol, SessionDirectories, String) async -> Result<UserSessionProtocol, UserSessionStoreError>)?
+    nonisolated(unsafe) var userSessionForSessionDirectoriesPassphraseClosure: ((ClientProtocol, SessionDirectories, Data) async -> Result<UserSessionProtocol, UserSessionStoreError>)?
 
-    @concurrent func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+    @concurrent func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError> {
         userSessionForSessionDirectoriesPassphraseCallsCountLock.withLock { userSessionForSessionDirectoriesPassphraseUnderlyingCallsCount += 1 }
         userSessionForSessionDirectoriesPassphraseReceivedArguments = (client: client, sessionDirectories: sessionDirectories, passphrase: passphrase)
         userSessionForSessionDirectoriesPassphraseReceivedInvocationsLock.withLock { userSessionForSessionDirectoriesPassphraseUnderlyingReceivedInvocations.append((client: client, sessionDirectories: sessionDirectories, passphrase: passphrase)) }

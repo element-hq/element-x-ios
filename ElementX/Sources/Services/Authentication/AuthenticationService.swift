@@ -13,7 +13,7 @@ import MatrixRustSDK
 class AuthenticationService: AuthenticationServiceProtocol {
     private var client: ClientProtocol?
     private var sessionDirectories: SessionDirectories
-    private let passphrase: String
+    private let passphrase: Data
     
     private let userSessionStore: UserSessionStoreProtocol
     private let classicAppManager: ClassicAppManagerProtocol?
@@ -40,7 +40,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
          appSettings: AppSettings,
          appHooks: AppHooks) {
         sessionDirectories = .init()
-        passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
+        passphrase = encryptionKeyProvider.generateKey()
         
         self.userSessionStore = userSessionStore
         self.classicAppManager = classicAppManager
