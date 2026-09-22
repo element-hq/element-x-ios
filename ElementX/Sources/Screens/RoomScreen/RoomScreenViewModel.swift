@@ -69,6 +69,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayNameOrID,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
+                                            isNativeCallingEnabled: appSettings.nativeCallEnabled,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
                                             isDM: roomProxy.infoPublisher.value.isDM,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,

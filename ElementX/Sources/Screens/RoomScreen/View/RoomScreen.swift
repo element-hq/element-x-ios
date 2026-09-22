@@ -316,7 +316,7 @@ struct RoomScreen: View {
             }
         }
         
-        if !ProcessInfo.processInfo.isiOSAppOnMac {
+        if !ProcessInfo.processInfo.isiOSAppOnMac || context.viewState.isNativeCallingEnabled {
             if context.viewState.shouldShowCallButton {
                 RoomCallControlsToolbar(viewState: context.viewState) { isVoiceCall in
                     context.send(viewAction: .displayCall(isVoiceCall: isVoiceCall))

@@ -30,6 +30,7 @@ struct RoomDetailsScreenViewModelTests {
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -43,6 +44,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -63,6 +65,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -84,6 +87,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -142,6 +146,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -163,6 +168,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -195,6 +201,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -226,6 +233,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -258,6 +266,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -291,6 +300,7 @@ struct RoomDetailsScreenViewModelTests {
                                                   powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -308,6 +318,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", members: mockedMembers, joinRule: .public))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -356,6 +367,7 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -391,6 +403,7 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -426,6 +439,7 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -446,6 +460,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -466,6 +481,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, members: mockedMembers))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -484,6 +500,7 @@ struct RoomDetailsScreenViewModelTests {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError = NotificationSettingsError.Generic(msg: "error")
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -692,6 +709,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -713,6 +731,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, knockRequestsState: .loading, joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -736,6 +755,7 @@ struct RoomDetailsScreenViewModelTests {
                                                   powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -759,6 +779,7 @@ struct RoomDetailsScreenViewModelTests {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, members: mockedMembers, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
@@ -786,6 +807,7 @@ struct RoomDetailsScreenViewModelTests {
         
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                userSession: UserSessionMock(.init()),
+                                               appSettings: AppSettings.volatile(),
                                                appHooks: AppHooks(),
                                                analyticsService: AnalyticsServiceMock(.init()),
                                                userIndicatorController: UserIndicatorControllerMock(),
