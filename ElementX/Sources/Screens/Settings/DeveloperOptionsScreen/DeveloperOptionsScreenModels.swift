@@ -73,6 +73,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var globalSearchEnabled: Bool { get set }
     
     var nativeCallEnabled: Bool { get set }
+    
+    var snowEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

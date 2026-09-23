@@ -471,6 +471,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var nativeCallEnabled: Bool
     
+    /// Lets it snow on top of the whole app.
+    @UserPreference(defaultValue: false)
+    var snowEnabled: Bool
+    
     init(store: UserDefaultsProtocol) {
         self.store = store
     }
