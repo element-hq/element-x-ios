@@ -45,12 +45,6 @@ nonisolated class NotificationHandler {
     func processEvent(_ eventID: String, roomID: String) async {
         MXLog.info("\(tag) Processing event: \(eventID) in room: \(roomID)")
         
-        if !settings.roomListNotificationCountEnabled {
-            // Copy over the unread information provided by the push payload to the notification badge.
-            notificationContent.badge = notificationContent.unreadCount as NSNumber?
-            MXLog.info("\(tag) New badge value: \(notificationContent.badge?.stringValue ?? "nil")")
-        }
-        
         guard let notificationItemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
             MXLog.error("\(tag) Failed retrieving notification item")
             discardNotification()
@@ -84,12 +78,8 @@ nonisolated class NotificationHandler {
     // MARK: - Private
     
     private func deliverNotification() {
-        if settings.roomListNotificationCountEnabled {
-            notificationContent.badge = NSNumber(value: incrementBadgeCount())
-            MXLog.info("\(tag) Delivering notification, new badge value: \(settings.lastKnownBadgeCount)")
-        } else {
-            MXLog.info("\(tag) Delivering notification")
-        }
+        notificationContent.badge = NSNumber(value: incrementBadgeCount())
+        MXLog.info("\(tag) Delivering notification, new badge value: \(settings.lastKnownBadgeCount)")
         contentHandler(notificationContent)
     }
     
@@ -109,12 +99,8 @@ nonisolated class NotificationHandler {
         MXLog.info("\(tag) Discarding notification")
         
         let content = UNMutableNotificationContent()
-        if settings.roomListNotificationCountEnabled {
-            // Nothing new is shown to the user, so leave the badge where the app last put it.
-            content.badge = NSNumber(value: settings.lastKnownBadgeCount)
-        } else {
-            content.badge = notificationContent.unreadCount as NSNumber?
-        }
+        // Nothing new is shown to the user, so leave the badge where the app last put it.
+        content.badge = NSNumber(value: settings.lastKnownBadgeCount)
         MXLog.info("\(tag) New badge value: \(content.badge?.stringValue ?? "nil")")
         
         contentHandler(content)
@@ -149,9 +135,7 @@ nonisolated class NotificationHandler {
                 
                 if let targetNotification = deliveredNotifications.first(where: { $0.request.content.eventID == redactedEventID }) {
                     UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [targetNotification.request.identifier])
-                    if settings.roomListNotificationCountEnabled {
-                        settings.lastKnownBadgeCount = max(0, settings.lastKnownBadgeCount - 1)
-                    }
+                    settings.lastKnownBadgeCount = max(0, settings.lastKnownBadgeCount - 1)
                 }
                 
                 return .processedShouldDiscard

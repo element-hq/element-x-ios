@@ -258,9 +258,6 @@ actor NotificationServiceExtensionActor {
         
         let content = UNMutableNotificationContent()
         content.body = L10n.notificationReceivedWhileOfflineIos
-        if !settings.roomListNotificationCountEnabled {
-            content.badge = originalRequest.content.unreadCount as NSNumber?
-        }
         content.sound = settings.notificationSound
         
         let request = UNNotificationRequest(identifier: Self.receivedWhileOfflineNotificationID, content: content, trigger: nil)

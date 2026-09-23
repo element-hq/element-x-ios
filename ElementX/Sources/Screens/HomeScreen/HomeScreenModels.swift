@@ -106,8 +106,6 @@ struct HomeScreenViewState: BindableState {
     
     var roomListActivityVisibility: RoomListActivityVisibility = .current
     
-    var roomListNotificationCountEnabled = false
-    
     var reportRoomEnabled = false
     
     var shouldShowSpaceFilters = false
