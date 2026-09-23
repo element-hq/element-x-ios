@@ -109,6 +109,49 @@ struct MessageForwardingScreenViewModelTests {
     }
     
     @Test
+    mutating func forwardingToSeveralRoomsShowsAToast() async throws {
+        let userIndicatorController = UserIndicatorControllerMock()
+        viewModel = makeViewModel(userIndicatorController: userIndicatorController)
+        context = viewModel.context
+        
+        context.send(viewAction: .selectRoom(roomID: "2"))
+        context.send(viewAction: .selectRoom(roomID: "3"))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .sent = action {
+                return true
+            }
+            return false
+        }
+        context.send(viewAction: .send)
+        try await deferred.fulfill()
+        
+        let titles = userIndicatorController.submitIndicatorDelayReceivedInvocations.map(\.indicator.title)
+        #expect(titles == [UntranslatedL10n.screenRoomMessagesForwarded])
+    }
+    
+    @Test
+    mutating func forwardingToOneRoomDoesNotShowAToast() async throws {
+        let userIndicatorController = UserIndicatorControllerMock()
+        viewModel = makeViewModel(userIndicatorController: userIndicatorController)
+        context = viewModel.context
+        
+        context.send(viewAction: .selectRoom(roomID: "2"))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .sent = action {
+                return true
+            }
+            return false
+        }
+        context.send(viewAction: .send)
+        try await deferred.fulfill()
+        
+        // The flow opens the room instead.
+        #expect(userIndicatorController.submitIndicatorDelayCallsCount == 0)
+    }
+    
+    @Test
     mutating func forwardingReportsRoomsThatCouldNotBeReached() async throws {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.roomForIdentifierClosure = { roomID in
@@ -134,5 +177,17 @@ struct MessageForwardingScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1)
+    }
+    
+    // MARK: - Helpers
+    
+    private func makeViewModel(userIndicatorController: UserIndicatorControllerProtocol) -> MessageForwardingScreenViewModelProtocol {
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.roomForIdentifierClosure = { .joined(JoinedRoomProxyMock(.init(id: $0))) }
+        
+        return MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
+                                                userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                userIndicatorController: userIndicatorController)
     }
 }

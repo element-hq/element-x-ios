@@ -145,6 +145,10 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         
         if hasFailures {
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+        } else if succeededRoomIdentifiers.count > 1 {
+            // The flow opens the room when there is a single one, otherwise the user stays here and needs to know it worked.
+            let title = forwardingItem.contents.count == 1 ? UntranslatedL10n.screenRoomMessageForwarded : UntranslatedL10n.screenRoomMessagesForwarded
+            userIndicatorController.submitIndicator(UserIndicator(title: title))
         }
         
         if !succeededRoomIdentifiers.isEmpty {
