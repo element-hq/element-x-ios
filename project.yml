@@ -87,11 +87,11 @@ packages:
     path: Components/BuildExtensions
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    exactVersion: 0.37.0
+    exactVersion: 0.38.0
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.25.0
+    exactVersion: 0.26.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
@@ -103,7 +103,7 @@ packages:
     # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
-    exactVersion: 2.42.0
+    exactVersion: 2.42.1
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
   
   # External dependencies
@@ -148,16 +148,16 @@ packages:
     exactVersion: 3.1.0
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    exactVersion: 6.29.0
+    exactVersion: 6.31.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    exactVersion: 3.71.0
+    exactVersion: 3.76.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    exactVersion: 9.26.1
+    exactVersion: 9.28.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    exactVersion: 1.19.4
+    exactVersion: 1.19.5
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
     exactVersion: 3.5.1
