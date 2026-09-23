@@ -50,6 +50,7 @@ struct TimelineReactionsView: View {
                 } showReactionSummary: { key in
                     context.send(viewAction: .displayReactionSummary(itemID: itemID, key: key))
                 }
+                .background { reactionEffectTrigger(for: reaction) }
                 .reactionLayoutItem(.reaction)
                 .environment(\.layoutDirection, layoutDirection)
             }
@@ -79,6 +80,17 @@ struct TimelineReactionsView: View {
     
     // MARK: - Private
     
+    @ViewBuilder
+    private func reactionEffectTrigger(for reaction: AggregatedReaction) -> some View {
+        // The unique ID survives the local echo being replaced by the remote one.
+        if reaction.isHighlighted,
+           let pendingReactionEffect = context.viewState.pendingReactionEffect,
+           pendingReactionEffect.itemID.uniqueID == itemID.uniqueID,
+           pendingReactionEffect.key == reaction.key {
+            ReactionEffectTrigger(context: context)
+        }
+    }
+    
     private var isCollapsible: Bool {
         reactions.count > 5
     }
@@ -96,6 +108,26 @@ struct TimelineReactionsView: View {
 }
 
 /// The pill shape for the label that surrounds both the reaction and collapse buttons.
+/// Reports a reaction's position once it has settled on screen so that its effect can play from it.
+private struct ReactionEffectTrigger: View {
+    let context: TimelineViewModel.Context
+    
+    @State private var frame = CGRect.zero
+    
+    var body: some View {
+        Color.clear
+            .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame = $0 }
+            .task {
+                // Lets the cell finish resizing and any sheet the reaction was picked from finish dismissing.
+                guard await (try? Task.sleep(for: .milliseconds(500))) != nil else { return }
+                
+                // Collapsed reactions are hidden at `CollapsibleReactionLayout.pointOffscreen`, far above the screen.
+                let origin = frame.maxY < 0 ? nil : CGPoint(x: frame.midX, y: frame.midY)
+                context.send(viewAction: .playReactionEffect(origin: origin))
+            }
+    }
+}
+
 struct TimelineReactionButtonLabel<Content: View>: View {
     var isHighlighted = false
     @ViewBuilder var content: () -> Content

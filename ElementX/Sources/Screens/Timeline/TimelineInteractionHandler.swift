@@ -13,6 +13,7 @@ enum TimelineInteractionHandlerAction {
     case composer(action: TimelineComposerAction)
     
     case displayEmojiPicker(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
+    case willAddReaction(key: String, itemID: TimelineItemIdentifier)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
     case displayMediaUploadPreviewScreen(mediaURLs: [URL])
@@ -205,8 +206,7 @@ class TimelineInteractionHandler {
         case .react:
             displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
-            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
-            Task { await timelineController.toggleReaction(key, to: eventOrTransactionID) }
+            Task { await toggleReaction(key, on: itemID) }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
@@ -600,7 +600,7 @@ class TimelineInteractionHandler {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               timelineItem.isReactable,
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol,
-              case let .event(_, eventOrTransactionID) = itemID else {
+              case .event = itemID else {
             return
         }
         let selectedEmojis = Set(eventTimelineItem.properties.reactions.compactMap { $0.isHighlighted ? $0.key : nil })
@@ -610,10 +610,22 @@ class TimelineInteractionHandler {
         
         emojiPickerCancellable = Task { [weak self] in
             for await emoji in stream {
-                await self?.timelineController.toggleReaction(emoji, to: eventOrTransactionID)
+                await self?.toggleReaction(emoji, on: itemID)
             }
         }
         .asCancellable()
+    }
+    
+    func toggleReaction(_ key: String, on itemID: TimelineItemIdentifier) async {
+        guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
+        
+        // Checked before toggling, the local echo would otherwise make an added reaction look like a removed one.
+        let item = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedTimelineItemProtocol
+        if item?.properties.reactions.contains(where: { $0.key == key && $0.isHighlighted }) != true {
+            actionsSubject.send(.willAddReaction(key: key, itemID: itemID))
+        }
+        
+        await timelineController.toggleReaction(key, to: eventOrTransactionID)
     }
     
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> TimelineControllerAction {

@@ -380,6 +380,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var jumpToReadMarkerEnabled: Bool
     
+    @UserPreference(defaultValue: AppBuildType.current != .release)
+    var reactionCelebrationsEnabled: Bool
+    
     @UserPreference(defaultValue: false)
     var linkNewDeviceEnabled: Bool
     
