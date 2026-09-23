@@ -29,6 +29,8 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             .enableAutomaticBackPagination(enableAutomaticBackPagination: appSettings.automaticBackPaginationEnabled)
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
                 .highEntropyPassphrase(passphrase: passphrase, base64Variant: .padded))
+            .withSearchIndexStore(path: sessionDirectories.dataPath,
+                                  password: passphrase.base64EncodedString())
             .serverNameOrHomeserverUrl(serverNameOrUrl: serverNameOrBaseURL)
         
         return try await build(builder, for: .authentication, appHooks: appHooks)
