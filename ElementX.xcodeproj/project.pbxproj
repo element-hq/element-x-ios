@@ -10851,7 +10851,7 @@
 			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
 			requirement = {
 				kind = exactVersion;
-				version = 6.29.0;
+				version = 6.31.0;
 			};
 		};
 		24D50023D92B93BBFF6E14FD /* XCRemoteSwiftPackageReference "element-call-ios" */ = {
@@ -10947,7 +10947,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 0.25.0;
+				version = 0.26.0;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
@@ -10963,7 +10963,7 @@
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
 			requirement = {
 				kind = exactVersion;
-				version = 3.71.0;
+				version = 3.76.0;
 			};
 		};
 		A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
@@ -10971,7 +10971,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 9.26.1;
+				version = 9.28.0;
 			};
 		};
 		AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -10987,7 +10987,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-analytics-events";
 			requirement = {
 				kind = exactVersion;
-				version = 0.37.0;
+				version = 0.38.0;
 			};
 		};
 		CCD235515AFCEE6D2005B705 /* XCRemoteSwiftPackageReference "LRUCache" */ = {
@@ -11035,7 +11035,7 @@
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
 			requirement = {
 				kind = exactVersion;
-				version = 1.19.4;
+				version = 1.19.5;
 			};
 		};
 		EBD512E01D6AED903C15C5F5 /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */ = {
@@ -11059,7 +11059,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rich-text-editor-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 2.42.0;
+				version = 2.42.1;
 			};
 		};
 		F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */ = {

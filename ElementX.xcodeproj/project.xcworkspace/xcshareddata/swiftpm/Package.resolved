@@ -1,5 +1,5 @@
 {
-  "originHash" : "7f0f4d6b8ad5f932983be916083a4b6a5b17a693f1bb30ed788b96b2f85718fd",
+  "originHash" : "5c6bcc2859e70b49586d7ec1462002514bef97be4571473da96f9d650a3a6c04",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "48ba4408d60d75006c9648ecc79ee56b39f8aaae",
-        "version" : "0.25.0"
+        "revision" : "0c8c78913eb91bbe7fce2c7761f66bc9b0791ce3",
+        "version" : "0.26.0"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
       "state" : {
-        "revision" : "86992aabad3e89ce8818adec2e8b9d03177d69da",
-        "version" : "6.29.0"
+        "revision" : "13e41ab3d77ff5113e7e5d4ee87803b1f81f5683",
+        "version" : "6.31.0"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-analytics-events",
       "state" : {
-        "revision" : "4b143b14a16a231bd4fc3c6705845f852177abe3",
-        "version" : "0.37.0"
+        "revision" : "7d668b3e4be493843805b8a1ff4e13b261a19965",
+        "version" : "0.38.0"
       }
     },
     {
@@ -167,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rich-text-editor-swift",
       "state" : {
-        "revision" : "c0877fb9323d1ec2de56e4fe2da97f73cac36c38",
-        "version" : "2.42.0"
+        "revision" : "56077711bf495db926ec3f3efd36ed127fb9ceb1",
+        "version" : "2.42.1"
       }
     },
     {
@@ -212,8 +212,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "d933f3050645b5df9fe86862110c1726e0c5b135",
-        "version" : "3.71.0"
+        "revision" : "143d8337e9d39156f00fb5bde6c191a57febef1e",
+        "version" : "3.76.0"
       }
     },
     {
@@ -221,8 +221,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "a00a9784fff7193cbb0f9fae509fec8107e07744",
-        "version" : "9.26.1"
+        "revision" : "61e8cb02434b26fb34c58126d883e5663cfde238",
+        "version" : "9.28.0"
       }
     },
     {
