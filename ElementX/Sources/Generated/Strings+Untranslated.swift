@@ -10,10 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
-  /// Show all activity in the room list (show gray dots)
-  internal static var screenAdvancedSettingsShowAllRoomListActivity: String { return UntranslatedL10n.tr("Untranslated", "screen_advanced_settings_show_all_room_list_activity") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Show all activity in the room list (dots or number of unread messages)
+  internal static var screenNotificationSettingsShowAllRoomListActivity: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_show_all_room_list_activity") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...

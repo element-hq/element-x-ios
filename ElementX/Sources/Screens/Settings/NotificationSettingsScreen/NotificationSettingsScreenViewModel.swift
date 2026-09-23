@@ -38,7 +38,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
         notificationTonePreviewer = AudioPlayer()
         self.notificationToneManager = notificationToneManager
         
-        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications)
+        let bindings = NotificationSettingsScreenViewStateBindings(enableNotifications: appSettings.enableNotifications,
+                                                                   showAllRoomListActivity: appSettings.showAllRoomListActivity)
         super.init(initialViewState: NotificationSettingsScreenViewState(bindings: bindings,
                                                                          isModallyPresented: isModallyPresented,
                                                                          selectedAlertTone: appSettings.selectedNotificationTone ?? NotificationToneManager.defaultElementXMessageTone,
@@ -102,6 +103,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                 return
             }
             Task { await enableInvitations(state.bindings.invitationsEnabled) }
+        case .showAllRoomListActivityChanged:
+            appSettings.showAllRoomListActivity = state.bindings.showAllRoomListActivity
         case .close:
             actionsSubject.send(.close)
         case .fixConfigurationMismatchTapped:

@@ -40,9 +40,6 @@ struct AdvancedSettingsScreen: View {
                     .onChange(of: context.optimizeMediaUploads) {
                         context.send(viewAction: .optimizeMediaUploadsChanged)
                     }
-                
-                ListRow(label: .plain(title: UntranslatedL10n.screenAdvancedSettingsShowAllRoomListActivity),
-                        kind: .toggle($context.showAllRoomListActivity))
             }
             
             moderationAndSafetySection
