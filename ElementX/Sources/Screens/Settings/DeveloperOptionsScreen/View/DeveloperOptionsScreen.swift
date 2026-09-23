@@ -14,7 +14,8 @@ struct DeveloperOptionsScreen: View {
     
     @Bindable var context: DeveloperOptionsScreenViewModel.Context
     
-    @State private var showConfetti = false
+    @State private var particleEffect: ParticleEmitterType?
+    @State private var particleEffectTrigger = 0
     @State private var elementCallURLOverrideString: String
     
     init(context: DeveloperOptionsScreenViewModel.Context) {
@@ -158,7 +159,8 @@ struct DeveloperOptionsScreen: View {
             
             Section {
                 Button {
-                    showConfetti = true
+                    particleEffect = .confetti
+                    particleEffectTrigger += 1
                 } label: {
                     Text("🥳")
                         .frame(maxWidth: .infinity)
@@ -177,25 +179,18 @@ struct DeveloperOptionsScreen: View {
                 }
             }
         }
-        .overlay(effectsView)
+        .particleEffect(particleEffect, trigger: particleEffectTrigger)
+        .task(id: particleEffectTrigger) { await removeParticleEffectAfterDelay() }
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
     
-    @ViewBuilder
-    private var effectsView: some View {
-        if showConfetti {
-            EffectsView(effect: .confetti)
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
-                .task { await removeConfettiAfterDelay() }
-        }
-    }
-    
-    private func removeConfettiAfterDelay() async {
+    private func removeParticleEffectAfterDelay() async {
+        guard particleEffect != nil else { return }
+        
         try? await Task.sleep(for: .seconds(4))
-        showConfetti = false
+        particleEffect = nil
     }
     
     @ToolbarContentBuilder
