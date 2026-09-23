@@ -16,7 +16,6 @@ struct HomeScreenRoomCell: View {
     
     let room: HomeScreenRoom
     var roomListActivityVisibility: RoomListActivityVisibility = .current
-    var roomListNotificationCountEnabled = false
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
@@ -158,7 +157,7 @@ struct HomeScreenRoomCell: View {
                 }
                 
                 if room.badges.isDotShown {
-                    if roomListNotificationCountEnabled, room.isHighlighted, room.badges.notificationCount > 0 {
+                    if room.isHighlighted, room.badges.notificationCount > 0 {
                         Text(formattedNotificationCount)
                             .font(.compound.bodySMSemibold)
                             .foregroundColor(.compound.textOnSolidPrimary)
@@ -255,7 +254,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         
         VStack(spacing: 0) {
             ForEach(notificationsStateRooms) { room in
-                HomeScreenRoomCell(room: room, roomListNotificationCountEnabled: true, isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: MediaProviderMock(.init())) { _ in }
             }
         }
         .previewLayout(.sizeThatFits)

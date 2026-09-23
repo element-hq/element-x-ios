@@ -67,11 +67,6 @@ struct DeveloperOptionsScreen: View {
                     }
                 }
                 
-                Toggle(isOn: $context.roomListNotificationCountEnabled) {
-                    Text("Show unread notification count")
-                    Text("Also makes the app icon badge use the SDK's own unread notification count")
-                }
-                
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")
                 }

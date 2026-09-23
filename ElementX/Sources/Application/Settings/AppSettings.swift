@@ -31,7 +31,6 @@ nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var threadsEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
-    var roomListNotificationCountEnabled: Bool { get }
 }
 
 nonisolated enum AppBuildType {
@@ -357,9 +356,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     @UserPreference(defaultValue: RoomListActivityVisibility.current)
     var roomListActivityVisibility: RoomListActivityVisibility
-    
-    @UserPreference(defaultValue: false)
-    var roomListNotificationCountEnabled: Bool
     
     // MARK: - Search Screen
     

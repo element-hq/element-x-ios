@@ -159,7 +159,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func updateAppBadgeCount() async {
-        guard let userSession, appSettings.roomListNotificationCountEnabled else { return }
+        guard let userSession else { return }
         
         let badgeCount = Int(userSession.clientProxy.totalUnreadNotifications)
         

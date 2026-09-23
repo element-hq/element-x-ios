@@ -29,10 +29,6 @@ nonisolated extension UNNotificationContent {
     @objc var threadRootEventID: String? {
         userInfo[NotificationConstants.UserInfoKey.threadRootEventIdentifier] as? String
     }
-    
-    var unreadCount: Int? {
-        userInfo[NotificationConstants.UserInfoKey.unreadCount] as? Int
-    }
 }
 
 nonisolated extension UNMutableNotificationContent {
