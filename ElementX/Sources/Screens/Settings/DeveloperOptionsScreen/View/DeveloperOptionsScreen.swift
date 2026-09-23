@@ -157,6 +157,10 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section {
+                Toggle(isOn: $context.snowEnabled) {
+                    Text("Let it snow")
+                }
+                
                 Text("🥳")
                     .frame(maxWidth: .infinity)
                     .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
@@ -177,6 +181,8 @@ struct DeveloperOptionsScreen: View {
             }
         }
         .particleEffect(confetti)
+        // This screen is presented over the app's own snow, which it would otherwise hide.
+        .particleEffect(context.snowEnabled ? .snow : nil)
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }

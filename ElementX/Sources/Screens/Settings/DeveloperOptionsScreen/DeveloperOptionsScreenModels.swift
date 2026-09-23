@@ -76,6 +76,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var hasSeenMultiAccountAnnouncement: Bool { get set }
     
     var nativeCallEnabled: Bool { get set }
+    
+    var snowEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
