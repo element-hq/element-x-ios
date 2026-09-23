@@ -114,7 +114,7 @@ struct UserSessionStoreTests {
         let sessionDirectories = SessionDirectories()
         
         // When creating a user session for it.
-        guard case .success(let userSession) = await store.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: Data("passphrase".utf8)) else {
+        guard case .success(let userSession) = await store.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: RestorationTokenFixtures.passphrase) else {
             Issue.record("Creating the session should succeed.")
             return
         }
@@ -122,7 +122,7 @@ struct UserSessionStoreTests {
         // Then the session should be built and its restoration token persisted.
         #expect(userSession.clientProxy.userID == "@alice:matrix.org")
         #expect(keychainController.setRestorationTokenForUsernameReceivedArguments?.forUsername == "@alice:matrix.org")
-        #expect(keychainController.setRestorationTokenForUsernameReceivedArguments?.restorationToken.passphrase == Data("passphrase".utf8))
+        #expect(keychainController.setRestorationTokenForUsernameReceivedArguments?.restorationToken.passphrase == RestorationTokenFixtures.passphrase)
     }
     
     @Test
@@ -132,7 +132,7 @@ struct UserSessionStoreTests {
         client.sessionThrowableError = TestError.generic
         
         // When creating a user session for it.
-        guard case .failure(.failedSettingUpSession) = await store.userSession(for: client, sessionDirectories: .init(), passphrase: Data("passphrase".utf8)) else {
+        guard case .failure(.failedSettingUpSession) = await store.userSession(for: client, sessionDirectories: .init(), passphrase: RestorationTokenFixtures.passphrase) else {
             Issue.record("Creating the session should fail.")
             return
         }
@@ -177,7 +177,7 @@ struct UserSessionStoreTests {
                               slidingSyncVersion: .native)
         let restorationToken = RestorationToken(session: session,
                                                 sessionDirectories: sessionDirectories,
-                                                passphrase: Data("passphrase".utf8),
+                                                passphrase: RestorationTokenFixtures.passphrase,
                                                 pusherNotificationClientIdentifier: nil)
         return KeychainCredentials(userID: userID, restorationToken: restorationToken)
     }

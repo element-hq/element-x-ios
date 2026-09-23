@@ -23,7 +23,7 @@ struct RestorationTokenTests {
                                                                   oidcData: "data-from-mas",
                                                                   slidingSyncVersion: .proxy(url: "https://sync.example.com")),
                                                sessionDirectory: .sessionsBaseDirectory.appending(component: UUID().uuidString),
-                                               passphrase: Data("passphrase".utf8).base64EncodedString(),
+                                               passphrase: RestorationTokenFixtures.base64Passphrase,
                                                pusherNotificationClientIdentifier: "pusher-identifier")
         let data = try JSONEncoder().encode(originalToken)
         
@@ -46,7 +46,7 @@ struct RestorationTokenTests {
                                                                   oidcData: "data-from-mas",
                                                                   slidingSyncVersion: .native),
                                                sessionDirectory: .sessionsBaseDirectory.appending(component: sessionDirectoryName),
-                                               passphrase: Data("passphrase".utf8).base64EncodedString(),
+                                               passphrase: RestorationTokenFixtures.base64Passphrase,
                                                pusherNotificationClientIdentifier: "pusher-identifier")
         let data = try JSONEncoder().encode(originalToken)
         
@@ -77,7 +77,7 @@ struct RestorationTokenTests {
                                                                   slidingSyncVersion: .native),
                                                sessionDirectory: .sessionsBaseDirectory.appending(component: sessionDirectoryName),
                                                cacheDirectory: .sessionCachesBaseDirectory.appending(component: sessionDirectoryName),
-                                               passphrase: Data("passphrase".utf8).base64EncodedString(),
+                                               passphrase: RestorationTokenFixtures.base64Passphrase,
                                                pusherNotificationClientIdentifier: "pusher-identifier")
         let data = try JSONEncoder().encode(originalToken)
         
@@ -106,7 +106,7 @@ struct RestorationTokenTests {
                                                               oauthData: "data-from-mas",
                                                               slidingSyncVersion: .native),
                                              sessionDirectories: .init(),
-                                             passphrase: Data("passphrase".utf8),
+                                             passphrase: RestorationTokenFixtures.passphrase,
                                              pusherNotificationClientIdentifier: "pusher-identifier")
         let data = try JSONEncoder().encode(originalToken)
         
@@ -128,6 +128,11 @@ struct RestorationTokenTests {
 }
 
 // MARK: - Token formats
+
+enum RestorationTokenFixtures {
+    static let passphrase = Data("passphrase".utf8)
+    static let base64Passphrase = passphrase.base64EncodedString()
+}
 
 struct RestorationTokenV4: Equatable, Codable {
     let session: SessionV1
