@@ -1178,10 +1178,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 // MARK: - Message forwarding
 
 extension TimelineViewModel {
-    func makeForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem? {
-        await makeForwardingItem(for: [itemID])
-    }
-    
     func makeForwardingItem(for itemIDs: [TimelineItemIdentifier]) async -> MessageForwardingItem? {
         var ids = [TimelineItemIdentifier]()
         var contents = [RoomMessageEventContentWithoutRelation]()
@@ -1196,7 +1192,7 @@ extension TimelineViewModel {
     }
     
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
-        guard let forwardingItem = await makeForwardingItem(for: itemID) else { return }
+        guard let forwardingItem = await makeForwardingItem(for: [itemID]) else { return }
         actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
     }
 }

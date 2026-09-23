@@ -52,16 +52,6 @@ struct MessageForwardingItem: Hashable {
     /// The contents to be forwarded, in timeline order.
     let contents: [RoomMessageEventContentWithoutRelation]
     
-    init(ids: [TimelineItemIdentifier], roomID: String, contents: [RoomMessageEventContentWithoutRelation]) {
-        self.ids = ids
-        self.roomID = roomID
-        self.contents = contents
-    }
-    
-    init(id: TimelineItemIdentifier, roomID: String, content: RoomMessageEventContentWithoutRelation) {
-        self.init(ids: [id], roomID: roomID, contents: [content])
-    }
-    
     static func == (lhs: MessageForwardingItem, rhs: MessageForwardingItem) -> Bool {
         lhs.ids == rhs.ids && lhs.roomID == rhs.roomID
     }

@@ -19,9 +19,7 @@ protocol TimelineViewModelProtocol {
     func focusOnEvent(eventID: String) async
     /// Stops the current live location sharing
     func stopLiveLocationSharing() async
-    /// Handles getting the content to forward an item given its item ID.
-    func makeForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem?
-    /// Handles getting the contents to forward several items, keeping the order of the given IDs.
+    /// Handles getting the contents to forward the given items, keeping the order of the given IDs.
     func makeForwardingItem(for itemIDs: [TimelineItemIdentifier]) async -> MessageForwardingItem?
     /// Ends the message selection, e.g. once the selected messages have been forwarded.
     func clearSelection()

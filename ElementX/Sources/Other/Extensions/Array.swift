@@ -78,4 +78,20 @@ nonisolated extension Array where Element == RoomTimelineItemProtocol {
         
         return nil
     }
+    
+    /// The items that can be forwarded, in timeline order.
+    var forwardableItems: [EventBasedTimelineItemProtocol] {
+        compactMap { item in
+            guard let item = item as? EventBasedTimelineItemProtocol, item.isForwardable else { return nil }
+            return item
+        }
+    }
+    
+    /// The selected items in timeline order, whatever the order they were selected in.
+    func selectedItems(_ selectedEventIDs: Set<String>) -> [EventBasedTimelineItemProtocol] {
+        forwardableItems.filter { item in
+            guard let eventID = item.id.eventID else { return false }
+            return selectedEventIDs.contains(eventID)
+        }
+    }
 }

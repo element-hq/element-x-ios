@@ -5,19 +5,15 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Compound
 import SwiftUI
 
-/// The trailing navigation bar item shown while messages are being selected in a timeline.
+/// The trailing navigation bar item that cancels the selection of messages in a timeline.
 struct TimelineSelectionToolbar: ToolbarContent {
-    let onClose: () -> Void
+    let onCancel: () -> Void
     
     var body: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            Button(action: onClose) {
-                CompoundIcon(\.close)
-            }
-            .accessibilityLabel(L10n.actionClose)
+            ToolbarButton(role: .cancel, action: onCancel)
         }
     }
 }

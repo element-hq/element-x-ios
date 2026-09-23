@@ -133,20 +133,14 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             }
             
             // The contents are already in timeline order and the send queue preserves it.
-            var hasSentToRoom = false
             for content in forwardingItem.contents {
-                switch await targetRoomProxy.timeline.sendMessageEventContent(content) {
-                case .success:
-                    hasSentToRoom = true
-                case .failure(let error):
+                if case .failure(let error) = await targetRoomProxy.timeline.sendMessageEventContent(content) {
                     MXLog.error("Failed forwarding message with error: \(error)")
                     hasFailures = true
                 }
             }
             
-            if hasSentToRoom {
-                succeededRoomIdentifiers.append(roomID)
-            }
+            succeededRoomIdentifiers.append(roomID)
         }
         
         if hasFailures {

@@ -307,6 +307,7 @@ struct RoomScreen: View {
                            mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .displayRoomDetails)
             }
+            .disabled(isSelectionActive) // The room details would cover the selection.
         }
         
         if isSelectionActive {

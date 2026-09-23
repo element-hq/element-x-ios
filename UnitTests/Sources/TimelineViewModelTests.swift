@@ -725,6 +725,23 @@ final class TimelineViewModelTests {
     }
     
     @Test
+    func forwardMenuActionForwardsTheMessageInThePinnedTimeline() async throws {
+        let items = [TextRoomTimelineItem(eventID: "$1")]
+        let viewModel = makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineKind: .pinned, timelineItems: items)))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .displayMessageForwarding(let forwardingItem) = action {
+                return forwardingItem.ids == [items[0].id]
+            }
+            return false
+        }
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .forward(itemID: items[0].id)))
+        try await deferred.fulfill()
+        
+        #expect(!viewModel.state.selection.isActive)
+    }
+    
+    @Test
     func forwardSelectionUsesTimelineOrder() async throws {
         let items = (1...4).map { TextRoomTimelineItem(eventID: "$\($0)") }
         let viewModel = makeSelectionViewModel(items: items)

@@ -28,7 +28,7 @@ struct TimelineSelectionActionBar: View {
 
 struct TimelineSelectionActionBar_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
-        let viewModel = TimelineViewModel.mock
+        let viewModel = TimelineViewModel.mock() // A fresh instance so the shared mock isn't left selecting.
         viewModel.state.selection.selectedEventIDs = ["$1", "$2", "$3"]
         return viewModel
     }()
