@@ -14,7 +14,7 @@ struct DeveloperOptionsScreen: View {
     
     @Bindable var context: DeveloperOptionsScreenViewModel.Context
     
-    @State private var showConfetti = false
+    @State private var confetti: ParticleEffect?
     @State private var elementCallURLOverrideString: String
     
     init(context: DeveloperOptionsScreenViewModel.Context) {
@@ -157,13 +157,12 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section {
-                Button {
-                    showConfetti = true
-                } label: {
-                    Text("🥳")
-                        .frame(maxWidth: .infinity)
-                        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
-                }
+                Text("🥳")
+                    .frame(maxWidth: .infinity)
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
+                    .contentShape(.rect)
+                    .accessibilityAddTraits(.isButton)
+                    .onTapGesture(coordinateSpace: .global) { confetti = .confetti(from: $0) }
             }
             
             if context.viewState.isSignedIn {
@@ -177,25 +176,10 @@ struct DeveloperOptionsScreen: View {
                 }
             }
         }
-        .overlay(effectsView)
+        .particleEffect(confetti)
         .navigationTitle(L10n.commonDeveloperOptions)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-    }
-    
-    @ViewBuilder
-    private var effectsView: some View {
-        if showConfetti {
-            EffectsView(effect: .confetti)
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
-                .task { await removeConfettiAfterDelay() }
-        }
-    }
-    
-    private func removeConfettiAfterDelay() async {
-        try? await Task.sleep(for: .seconds(4))
-        showConfetti = false
     }
     
     @ToolbarContentBuilder
