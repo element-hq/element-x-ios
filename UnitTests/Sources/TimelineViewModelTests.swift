@@ -911,6 +911,67 @@ final class TimelineViewModelTests {
         try await deferred.fulfill()
     }
     
+    // MARK: - Celebrations
+    
+    @Test
+    func celebrateAddedTadaReaction() {
+        // Given a message the user hasn't reacted to.
+        let item = TextRoomTimelineItem(text: "Message", sender: "bob")
+        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: [item])))
+        
+        // When adding a tada reaction to it.
+        viewModel.process(viewAction: .toggleReaction(key: "🎉", itemID: item.id))
+        
+        // Then the reaction is flagged for celebration and bursts once it reports its position.
+        #expect(viewModel.state.pendingCelebration?.itemID == item.id)
+        #expect(viewModel.state.pendingCelebration?.key == "🎉")
+        
+        viewModel.process(viewAction: .celebrateReaction(origin: CGPoint(x: 10, y: 20)))
+        
+        #expect(viewModel.state.pendingCelebration == nil)
+        #expect(viewModel.state.celebration?.origin == CGPoint(x: 10, y: 20))
+    }
+    
+    @Test
+    func celebrateOnlyAddedTadaReactions() {
+        // Given a message the user has already sent a tada reaction to.
+        let sender = "@bob:server.com"
+        let reactions = [AggregatedReaction(accountOwnerID: sender, key: "🎉", senders: [.init(id: sender, timestamp: .mock)])]
+        let item = TextRoomTimelineItem(id: .randomEvent,
+                                        timestamp: .mock,
+                                        isOutgoing: true,
+                                        isEditable: true,
+                                        canBeRepliedTo: true,
+                                        sender: .init(id: sender, displayName: "bob"),
+                                        content: .init(body: "Message"),
+                                        properties: RoomTimelineItemProperties(reactions: reactions))
+        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: [item])))
+        
+        // When removing that reaction, or adding a different one.
+        viewModel.process(viewAction: .toggleReaction(key: "🎉", itemID: item.id))
+        #expect(viewModel.state.pendingCelebration == nil)
+        
+        viewModel.process(viewAction: .toggleReaction(key: "🦄", itemID: item.id))
+        
+        // Then nothing is celebrated.
+        #expect(viewModel.state.pendingCelebration == nil)
+    }
+    
+    @Test
+    func celebrationsInQuickSuccession() async throws {
+        let item = TextRoomTimelineItem(text: "Message", sender: "bob")
+        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: [item])))
+        
+        // When celebrating twice within the lifetime of the first celebration.
+        viewModel.process(viewAction: .celebrateReaction(origin: CGPoint(x: 1, y: 1)))
+        viewModel.process(viewAction: .celebrateReaction(origin: CGPoint(x: 2, y: 2)))
+        
+        // Then the second one isn't cleared by the first one being cancelled.
+        try await Task.sleep(for: .milliseconds(100))
+        
+        #expect(viewModel.state.celebration?.origin == CGPoint(x: 2, y: 2))
+    }
+    
     // MARK: - Helpers
     
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,

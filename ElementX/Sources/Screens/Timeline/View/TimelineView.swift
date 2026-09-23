@@ -17,6 +17,9 @@ struct TimelineView: View {
     var body: some View {
         TimelineViewRepresentable()
             .id(timelineContext.viewState.roomID)
+            .particleEffect(timelineContext.viewState.celebration == nil ? nil : .confetti,
+                            origin: timelineContext.viewState.celebration?.origin,
+                            trigger: timelineContext.viewState.celebration?.id)
             // It is tempting to inject these environment values last to avoid also injecting them into the sheets,
             // and that approach works great on iOS. But it doesn't work on macOS (as of 15.5) where the app goes 💥
             .environmentObject(timelineContext)

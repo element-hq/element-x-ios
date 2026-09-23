@@ -56,6 +56,8 @@ enum TimelineViewAction {
     case galleryItemTapped(GalleryItemID)
     case itemSendInfoTapped(itemID: TimelineItemIdentifier)
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
+    /// Sent by a reaction once it is on screen, so that a celebration can burst from it.
+    case celebrateReaction(origin: CGPoint)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
     case paginateForwards
@@ -165,7 +167,25 @@ struct TimelineViewState: BindableState {
     
     var stoppedLiveLocationIDs: Set<TimelineItemIdentifier> = []
     
+    /// The reaction the user has just added that should be celebrated once its pill is on screen.
+    var pendingCelebration: PendingCelebration?
+    
+    /// The celebration currently bursting in the timeline.
+    var celebration: Celebration?
+    
     var bindings: TimelineViewStateBindings
+    
+    /// Both of these are identified so that repeating a celebration always counts as a new one.
+    struct PendingCelebration: Equatable {
+        let id = UUID()
+        let itemID: TimelineItemIdentifier
+        let key: String
+    }
+    
+    struct Celebration: Equatable {
+        let id = UUID()
+        let origin: CGPoint
+    }
 }
 
 struct TimelineViewStateBindings {
