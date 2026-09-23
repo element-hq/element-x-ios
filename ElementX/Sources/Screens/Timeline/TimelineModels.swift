@@ -360,8 +360,8 @@ extension TimelineViewState {
     var canSelectMessages: Bool {
         guard selection.isEnabled else { return false }
         return switch timelineKind {
-        case .live, .detached, .thread: true
-        case .pinned, .media: false
+        case .live, .detached, .thread, .pinned: true
+        case .media: false
         }
     }
     
