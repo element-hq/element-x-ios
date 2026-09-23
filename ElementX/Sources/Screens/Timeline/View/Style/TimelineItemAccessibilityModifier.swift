@@ -77,7 +77,7 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
                     }
                 }
         case .selecting(let isSelected):
-            if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isBulkSelectable {
+            if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isForwardable {
                 view
                     .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
                     .accessibilityAction(.default, action)

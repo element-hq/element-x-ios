@@ -74,6 +74,8 @@ enum TimelineViewAction {
     /// Add or remove an item from the active multi-selection.
     case toggleSelection(itemID: TimelineItemIdentifier)
     case clearSelection
+    /// Forward the selected messages, in timeline order.
+    case forwardSelection
     
     case tappedOnSenderDetails(sender: TimelineItemSender)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
@@ -207,7 +209,7 @@ struct TimelineViewStateBindings {
 
 /// The state of the multi-selection of messages, active as soon as an item is selected.
 struct TimelineSelectionState: Equatable {
-    static let limit = 30
+    static let limit = 10
     
     /// Mirrors the `messageMultiSelectEnabled` feature flag.
     var isEnabled = false

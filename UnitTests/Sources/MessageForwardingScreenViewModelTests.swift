@@ -13,9 +13,11 @@ import Testing
 
 @MainActor
 struct MessageForwardingScreenViewModelTests {
-    let forwardingItem = MessageForwardingItem(id: .event(uniqueID: .init("t1"), eventOrTransactionID: .eventID("t1")),
+    let forwardingItem = MessageForwardingItem(ids: [.event(uniqueID: .init("t1"), eventOrTransactionID: .eventID("t1")),
+                                                     .event(uniqueID: .init("t2"), eventOrTransactionID: .eventID("t2"))],
                                                roomID: "1",
-                                               content: RoomMessageEventContentWithoutRelationSDKMock())
+                                               contents: [RoomMessageEventContentWithoutRelationSDKMock(),
+                                                          RoomMessageEventContentWithoutRelationSDKMock()])
     var viewModel: MessageForwardingScreenViewModelProtocol!
     var context: MessageForwardingScreenViewModelType.Context!
     
@@ -69,5 +71,68 @@ struct MessageForwardingScreenViewModelTests {
         context.send(viewAction: .send)
         
         try await deferred.fulfill()
+    }
+    
+    @Test
+    mutating func forwardingSendsEveryMessageToEveryRoomInOrder() async throws {
+        let clientProxy = ClientProxyMock(.init())
+        var roomProxies = [String: JoinedRoomProxyMock]()
+        clientProxy.roomForIdentifierClosure = { roomID in
+            let roomProxy = JoinedRoomProxyMock(.init(id: roomID))
+            roomProxies[roomID] = roomProxy
+            return .joined(roomProxy)
+        }
+        viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                     userIndicatorController: UserIndicatorControllerMock())
+        context = viewModel.context
+        
+        context.send(viewAction: .selectRoom(roomID: "2"))
+        context.send(viewAction: .selectRoom(roomID: "3"))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .sent(let roomIDs) = action {
+                return Set(roomIDs) == ["2", "3"]
+            }
+            return false
+        }
+        context.send(viewAction: .send)
+        try await deferred.fulfill()
+        
+        let expectedContents = forwardingItem.contents.map { ObjectIdentifier($0) }
+        for roomID in ["2", "3"] {
+            let timeline = try #require(roomProxies[roomID]?.timeline as? TimelineProxyMock)
+            let sentContents = timeline.sendMessageEventContentReceivedInvocations.map { ObjectIdentifier($0) }
+            #expect(sentContents == expectedContents)
+        }
+    }
+    
+    @Test
+    mutating func forwardingReportsRoomsThatCouldNotBeReached() async throws {
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.roomForIdentifierClosure = { roomID in
+            roomID == "3" ? nil : .joined(JoinedRoomProxyMock(.init(id: roomID)))
+        }
+        let userIndicatorController = UserIndicatorControllerMock()
+        viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                     userIndicatorController: userIndicatorController)
+        context = viewModel.context
+        
+        context.send(viewAction: .selectRoom(roomID: "2"))
+        context.send(viewAction: .selectRoom(roomID: "3"))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .sent(let roomIDs) = action {
+                return roomIDs == ["2"]
+            }
+            return false
+        }
+        context.send(viewAction: .send)
+        try await deferred.fulfill()
+        
+        #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1)
     }
 }

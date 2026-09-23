@@ -61,7 +61,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 10) {
             if isSelectionActive {
                 selectionIndicator
             }
@@ -69,7 +69,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             bubble
         }
         .padding(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
-        .background(isSelected ? Color.compound.bgAccentSelected : .clear)
         .highlightedTimelineItem(isFocussed)
         .overlay { selectionOverlay }
         .animation(.elementDefault.disabledDuringTests(), value: isSelectionActive)
@@ -80,7 +79,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // The ZStack keeps the transition on the indicator's appearance rather than its checked state.
         ZStack {
             ListRowAccessory.multiSelection(isSelected)
-                .opacity(timelineItem.isBulkSelectable ? 1 : 0) // Keeps the bubbles aligned.
+                .opacity(timelineItem.isForwardable ? 1 : 0) // Keeps the bubbles aligned.
         }
         .padding(.leading, 8)
         .transition(.move(edge: .leading).combined(with: .opacity))
@@ -245,7 +244,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                       pinnedEventIDs: context.viewState.pinnedEventIDs,
                                                       isViewSourceEnabled: context.viewState.isViewSourceEnabled,
                                                       areThreadsEnabled: context.viewState.areThreadsEnabled,
-                                                      isMultiSelectEnabled: context.viewState.canSelectMessages,
                                                       timelineKind: context.viewState.timelineKind,
                                                       emojiProvider: context.viewState.emojiProvider)
         TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
@@ -298,7 +296,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     private func toggleSelection() {
-        guard timelineItem.isBulkSelectable else { return }
+        guard timelineItem.isForwardable else { return }
         context.send(viewAction: .toggleSelection(itemID: timelineItem.id))
     }
     

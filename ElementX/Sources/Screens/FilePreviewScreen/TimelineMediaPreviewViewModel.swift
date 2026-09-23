@@ -231,7 +231,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                            pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                            isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
                                            areThreadsEnabled: timelineContext.viewState.areThreadsEnabled,
-                                           isMultiSelectEnabled: timelineContext.viewState.canSelectMessages,
                                            timelineKind: timelineContext.viewState.timelineKind,
                                            emojiProvider: timelineContext.viewState.emojiProvider)
                 .makeActions()

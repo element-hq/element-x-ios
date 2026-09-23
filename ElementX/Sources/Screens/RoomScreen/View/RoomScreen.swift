@@ -111,6 +111,10 @@ struct RoomScreen: View {
                         // Make sure the reply header honours the hideTimelineMedia setting too.
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
                         .collapsedInPlace(isSelectionActive)
+                    
+                    if isSelectionActive {
+                        TimelineSelectionActionBar(context: timelineContext)
+                    }
                 }
             }
             .navigationBarBackButtonHidden(isSelectionActive)
@@ -293,17 +297,6 @@ struct RoomScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if isSelectionActive {
-            TimelineSelectionToolbar(count: timelineContext.viewState.selection.count) {
-                timelineContext.send(viewAction: .clearSelection)
-            }
-        } else {
-            roomToolbar
-        }
-    }
-    
-    @ToolbarContentBuilder
-    private var roomToolbar: some ToolbarContent {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
@@ -316,6 +309,17 @@ struct RoomScreen: View {
             }
         }
         
+        if isSelectionActive {
+            TimelineSelectionToolbar {
+                timelineContext.send(viewAction: .clearSelection)
+            }
+        } else {
+            roomActions
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var roomActions: some ToolbarContent {
         if !ProcessInfo.processInfo.isiOSAppOnMac || context.viewState.isNativeCallingEnabled {
             if context.viewState.shouldShowCallButton {
                 RoomCallControlsToolbar(viewState: context.viewState) { isVoiceCall in

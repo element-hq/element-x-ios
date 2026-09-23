@@ -8,20 +8,16 @@
 import Compound
 import SwiftUI
 
-/// The navigation bar content shown while messages are being selected in a timeline.
+/// The trailing navigation bar item shown while messages are being selected in a timeline.
 struct TimelineSelectionToolbar: ToolbarContent {
-    let count: Int
-    let onCancel: () -> Void
+    let onClose: () -> Void
     
     var body: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel, role: .cancel, action: onCancel)
-        }
-        
-        ToolbarItem(placement: .principal) {
-            Text(L10n.screenRoomSelectionCount(count))
-                .font(.compound.bodyLGSemibold)
-                .foregroundStyle(.compound.textPrimary)
+        ToolbarItem(placement: .primaryAction) {
+            Button(action: onClose) {
+                CompoundIcon(\.close)
+            }
+            .accessibilityLabel(L10n.actionClose)
         }
     }
 }

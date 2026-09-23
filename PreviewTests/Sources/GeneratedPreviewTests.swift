@@ -1433,6 +1433,13 @@ extension PreviewTests {
     }
 
     @Test
+    func timelineSelectionActionBar() async throws {
+        for (index, preview) in TimelineSelectionActionBar_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func timelineStartRoomTimelineView() async throws {
         for (index, preview) in TimelineStartRoomTimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

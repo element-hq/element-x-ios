@@ -123,21 +123,34 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         }
         
         var succeededRoomIdentifiers = [String]()
+        var hasFailures = false
         
         for roomID in state.selectedRoomIDs {
             guard case let .joined(targetRoomProxy) = await clientProxy.roomForIdentifier(roomID) else {
                 MXLog.error("Failed retrieving room to forward to with id: \(roomID)")
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                hasFailures = true
                 continue
             }
             
-            if case .failure(let error) = await targetRoomProxy.timeline.sendMessageEventContent(forwardingItem.content) {
-                MXLog.error("Failed forwarding message with error: \(error)")
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                continue
+            // The contents are already in timeline order and the send queue preserves it.
+            var hasSentToRoom = false
+            for content in forwardingItem.contents {
+                switch await targetRoomProxy.timeline.sendMessageEventContent(content) {
+                case .success:
+                    hasSentToRoom = true
+                case .failure(let error):
+                    MXLog.error("Failed forwarding message with error: \(error)")
+                    hasFailures = true
+                }
             }
             
-            succeededRoomIdentifiers.append(roomID)
+            if hasSentToRoom {
+                succeededRoomIdentifiers.append(roomID)
+            }
+        }
+        
+        if hasFailures {
+            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
         }
         
         if !succeededRoomIdentifiers.isEmpty {

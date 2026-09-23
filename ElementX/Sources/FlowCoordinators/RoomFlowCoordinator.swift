@@ -438,8 +438,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                    emojiPickerContinuation: continuation,
                                    animated: animated)
                 
-            case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
-                presentMessageForwarding(with: forwardingItem)
+            case (let fromState, .presentMessageForwarding(let forwardingItem), .messageForwarding):
+                presentMessageForwarding(with: forwardingItem, from: fromState)
                 
             case (_, .presentMapNavigator(let mode), .mapNavigator):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
@@ -1262,7 +1262,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentMessageForwarding(with forwardingItem: MessageForwardingItem) {
+    private func presentMessageForwarding(with forwardingItem: MessageForwardingItem, from fromState: State) {
         let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let stackCoordinator = NavigationStackCoordinator()
@@ -1281,6 +1281,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .sent(let roomIDs):
                 navigationStackCoordinator.setSheetCoordinator(nil)
+                clearSelection(in: fromState)
                 processPostMessageForwardingTo(rooms: roomIDs)
             }
         }
@@ -1290,6 +1291,18 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMessageForwarding)
+        }
+    }
+    
+    /// Ends the message selection in the timeline that started the forwarding, now that it has completed.
+    private func clearSelection(in state: State) {
+        switch state {
+        case .room:
+            roomScreenCoordinator?.clearSelection()
+        case .thread:
+            childThreadScreenCoordinators.last?.clearSelection()
+        default:
+            break
         }
     }
     

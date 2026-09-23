@@ -198,7 +198,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
         case .displayTimelineItemMenu(let itemID):
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
-        case .handleTimelineItemMenuAction(let itemID, .selectMessages):
+        case .handleTimelineItemMenuAction(let itemID, .forward) where state.canSelectMessages:
             startSelection(itemID: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
@@ -211,7 +211,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .toggleSelection(let itemID):
             toggleSelection(itemID: itemID)
         case .clearSelection:
-            state.selection.selectedEventIDs.removeAll()
+            clearSelection()
+        case .forwardSelection:
+            forwardSelection()
         case .tappedOnSenderDetails(let sender):
             handleTappedOnSenderDetails(sender: sender)
         case .displayEmojiPicker(let itemID):
@@ -311,11 +313,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     func stopLiveLocationSharing() async {
         await userSession.liveLocationManager.stopLiveLocation(roomID: roomProxy.id)
-    }
-    
-    func makeForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem? {
-        guard let content = await timelineController.messageEventContent(for: itemID) else { return nil }
-        return .init(id: itemID, roomID: roomProxy.id, content: content)
     }
     
     // MARK: - Private
@@ -1059,13 +1056,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         state.bindings.readReceiptsSummaryInfo = .init(orderedReceipts: eventTimelineItem.properties.orderedReadReceipts, id: eventTimelineItem.id)
     }
     
-    // MARK: - Message forwarding
-    
-    private func forwardMessage(itemID: TimelineItemIdentifier) async {
-        guard let forwardingItem = await makeForwardingItem(for: itemID) else { return }
-        actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
-    }
-    
     // MARK: Pills
     
     private func pillContextUpdater(_ pillContext: PillContext) {
@@ -1185,6 +1175,32 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 }
 
+// MARK: - Message forwarding
+
+extension TimelineViewModel {
+    func makeForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem? {
+        await makeForwardingItem(for: [itemID])
+    }
+    
+    func makeForwardingItem(for itemIDs: [TimelineItemIdentifier]) async -> MessageForwardingItem? {
+        var ids = [TimelineItemIdentifier]()
+        var contents = [RoomMessageEventContentWithoutRelation]()
+        for itemID in itemIDs {
+            guard let content = await timelineController.messageEventContent(for: itemID) else { continue }
+            ids.append(itemID)
+            contents.append(content)
+        }
+        
+        guard !contents.isEmpty else { return nil }
+        return .init(ids: ids, roomID: roomProxy.id, contents: contents)
+    }
+    
+    private func forwardMessage(itemID: TimelineItemIdentifier) async {
+        guard let forwardingItem = await makeForwardingItem(for: itemID) else { return }
+        actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
+    }
+}
+
 // MARK: - Selection
 
 extension TimelineViewModel {
@@ -1236,17 +1252,33 @@ extension TimelineViewModel {
             return
         }
         
-        let selectableEventIDs = timelineItems.compactMap { item -> String? in
-            guard let item = item as? EventBasedTimelineItemProtocol, item.isBulkSelectable else { return nil }
-            return item.id.eventID
-        }
-        state.selection.selectedEventIDs.formIntersection(selectableEventIDs)
+        let forwardableEventIDs = timelineItems.forwardableItems.compactMap(\.id.eventID)
+        state.selection.selectedEventIDs.formIntersection(forwardableEventIDs)
     }
     
-    /// The event ID of the item, when it is part of this timeline and can be bulk selected.
+    /// Ends the selection, either from the close button or once the selected messages have been forwarded.
+    func clearSelection() {
+        state.selection.selectedEventIDs.removeAll()
+    }
+    
+    /// Forwards the selection in timeline order, which is unrelated to the order the messages were selected in.
+    /// The selection is kept until the forwarding completes, so cancelling the picker returns to it.
+    private func forwardSelection() {
+        let itemIDs = timelineController.timelineItems.selectedItems(state.selection.selectedEventIDs).map(\.id)
+        
+        Task {
+            guard let forwardingItem = await makeForwardingItem(for: itemIDs) else {
+                displayErrorToast(L10n.errorUnknown)
+                return
+            }
+            actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
+        }
+    }
+    
+    /// The event ID of the item, when it is part of this timeline and can be forwarded.
     private func selectableEventID(for itemID: TimelineItemIdentifier) -> String? {
         guard let item = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedTimelineItemProtocol,
-              item.isBulkSelectable else {
+              item.isForwardable else {
             return nil
         }
         return item.id.eventID

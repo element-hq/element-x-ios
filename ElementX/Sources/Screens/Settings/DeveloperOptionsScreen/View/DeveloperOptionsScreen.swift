@@ -88,7 +88,7 @@ struct DeveloperOptionsScreen: View {
                 
                 Toggle(isOn: $context.messageMultiSelectEnabled) {
                     Text("Multi-select messages")
-                    Text("Adds a Select action to the message menu to pick several messages at once.")
+                    Text("Forward starts a selection so several messages can be forwarded at once.")
                 }
             }
             

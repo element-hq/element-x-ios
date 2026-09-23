@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Plural format key: "%#@COUNT@"
+  internal static func actionForwardMessages(_ p1: Int) -> String {
+    return UntranslatedL10n.tr("Untranslated", "action_forward_messages", p1)
+  }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
   /// Show all activity in the room list (dots or number of unread messages)
