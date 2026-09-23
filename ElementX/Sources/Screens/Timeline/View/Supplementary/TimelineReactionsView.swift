@@ -50,6 +50,7 @@ struct TimelineReactionsView: View {
                 } showReactionSummary: { key in
                     context.send(viewAction: .displayReactionSummary(itemID: itemID, key: key))
                 }
+                .background { celebrationTrigger(for: reaction) }
                 .reactionLayoutItem(.reaction)
                 .environment(\.layoutDirection, layoutDirection)
             }
@@ -78,6 +79,26 @@ struct TimelineReactionsView: View {
     }
     
     // MARK: - Private
+    
+    /// Reports the reaction's position once it is on screen so that a celebration can burst from it.
+    @ViewBuilder
+    private func celebrationTrigger(for reaction: AggregatedReaction) -> some View {
+        if reaction.isHighlighted {
+            GeometryReader { geometry in
+                Color.clear
+                    .task(id: context.viewState.pendingCelebration) {
+                        guard let pendingCelebration = context.viewState.pendingCelebration,
+                              pendingCelebration.itemID == itemID,
+                              pendingCelebration.key == reaction.key else { return }
+                        
+                        let frame = geometry.frame(in: .global)
+                        // Collapsed reactions are placed far above the screen (x is mirrored in RTL, y isn't).
+                        let origin = frame.maxY < 0 ? nil : CGPoint(x: frame.midX, y: frame.midY)
+                        context.send(viewAction: .celebrateReaction(origin: origin))
+                    }
+            }
+        }
+    }
     
     private var isCollapsible: Bool {
         reactions.count > 5

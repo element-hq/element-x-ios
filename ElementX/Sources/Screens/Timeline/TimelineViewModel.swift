@@ -21,6 +21,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         static let focusTimelineToastIndicatorID = "RoomScreenFocusTimelineToastIndicator"
         static let toastErrorID = "RoomScreenToastError"
         static let selectionLimitIndicatorID = "RoomScreenSelectionLimitIndicator"
+        static let celebrationReactionKey = "🎉"
+        static let celebrationDuration = Duration.seconds(4)
     }
     
     private let roomProxy: JoinedRoomProxyProtocol
@@ -46,6 +48,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
+    @CancellableTask private var celebrationTask: Task<Void, Never>?
     
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
@@ -170,7 +173,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 fatalError()
             }
             
+            prepareCelebration(of: emoji, on: itemID)
+            
             Task { await timelineController.toggleReaction(emoji, to: eventOrTransactionID) }
+        case .celebrateReaction(let origin):
+            celebrate(at: origin)
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .paginateBackwards:
@@ -530,6 +537,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     displayErrorToast(title)
                 case .displayEmojiPicker(let selectedEmojis, let continuation):
                     actionsSubject.send(.displayEmojiPicker(selectedEmojis: selectedEmojis, continuation: continuation))
+                case .willToggleReaction(let key, let itemID):
+                    prepareCelebration(of: key, on: itemID)
                 case .displayMessageForwarding(let itemID):
                     Task { await self.forwardMessage(itemID: itemID) }
                 case .displayEditPollForm(let eventID, let poll):
@@ -1195,6 +1204,40 @@ extension TimelineViewModel {
 }
 
 // MARK: - Selection
+
+private extension TimelineViewModel {
+    /// Flags the reaction for celebration when it is added, but not when it is removed.
+    func prepareCelebration(of key: String, on itemID: TimelineItemIdentifier) {
+        guard key == Constants.celebrationReactionKey, !hasReacted(with: key, to: itemID) else { return }
+        
+        state.pendingCelebration = .init(itemID: itemID, key: key)
+    }
+    
+    func celebrate(at origin: CGPoint?) {
+        state.pendingCelebration = nil
+        
+        guard let origin else { return }
+        
+        state.celebration = .init(origin: origin)
+        
+        celebrationTask = Task {
+            try? await Task.sleep(for: Constants.celebrationDuration)
+            
+            // Another celebration cancelled this one, it owns the origin now.
+            guard !Task.isCancelled else { return }
+            
+            state.celebration = nil
+        }
+    }
+    
+    func hasReacted(with key: String, to itemID: TimelineItemIdentifier) -> Bool {
+        guard let item = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedTimelineItemProtocol else {
+            return false
+        }
+        
+        return item.properties.reactions.contains { $0.key == key && $0.isHighlighted }
+    }
+}
 
 extension TimelineViewModel {
     private func startSelection(itemID: TimelineItemIdentifier) {
