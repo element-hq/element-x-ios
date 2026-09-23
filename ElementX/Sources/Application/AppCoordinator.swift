@@ -214,7 +214,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     // Unfortunately .preferredColorScheme doesn't propagate properly throughout the app when changed
                     window.overrideUserInterfaceStyle = appAppearance.interfaceStyle
                 }
-            })
+            }
+            .modifier(SnowEffect(isEnabledPublisher: appSettings.snowEnabledPublisher)))
     }
     
     func handlePotentialPhishingAttempt(url: URL, openURLAction: @escaping (URL) -> Void) -> Bool {
@@ -1527,4 +1528,17 @@ private struct PendingInlineReplyDetails {
     let userID: String
     let roomID: String
     let message: String
+}
+
+/// Shows the snow for as long as its developer option is enabled.
+private struct SnowEffect: ViewModifier {
+    let isEnabledPublisher: AnyPublisher<Bool, Never>
+    
+    @State private var isEnabled = false
+    
+    func body(content: Content) -> some View {
+        content
+            .particleEffect(isEnabled ? .snow : nil)
+            .onReceive(isEnabledPublisher) { isEnabled = $0 }
+    }
 }

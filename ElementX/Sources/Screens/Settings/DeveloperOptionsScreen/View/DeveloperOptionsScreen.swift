@@ -158,6 +158,10 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section {
+                Toggle(isOn: $context.snowEnabled) {
+                    Text("Let it snow")
+                }
+                
                 Button {
                     particleEffect = .confetti
                     particleEffectTrigger += 1

@@ -400,6 +400,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// can't add a second account while signing out of one isn't safe yet. Only set it to `true` locally, for development.
     let addAccountFlowEnabled = false
     
+    /// Lets it snow on top of the whole app.
+    @UserPreference(defaultValue: false)
+    var snowEnabled: Bool
+    
     init(store: UserDefaultsProtocol) {
         self.store = store
     }
