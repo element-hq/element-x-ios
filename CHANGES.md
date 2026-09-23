@@ -1,3 +1,44 @@
+## Changes in 26.09.2 (2026-09-23)
+
+### What's Changed
+
+🙌 Improvements
+* Add an `AccountProvider` type and use it within the authentication flow. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6103
+* Update the Start Chat button's icon. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6179
+
+🐛 Bugfixes
+* Update the read marker colour to match the Figma. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6146
+* Fix some isolation errors when compiling with Swift 6.4. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6148
+* Cancel message edit if content remains unchanged by @thepearl in https://github.com/element-hq/element-x-ios/pull/6153
+* Fix HDR UI bugs on iOS 27.0. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6177
+* Fix the split view layout on iOS 27. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6180
+* Only make toolbar buttons prominent when tinted. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6188
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6151
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/6164
+
+🚧 In development 🚧
+* Introduce a local mechanism for managing the app's badge count by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6135
+* Various search tab tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6157
+* Add experimental native calls behind a developer flag by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/6159
+* Bump element-call-ios to 0.1.0-rc.7 by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/6168
+* Add specific prefix for native call logs by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/6169
+* Bump element-call native to 0.1.0-rc.8 by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/6181
+
+Others
+* Update Project Dependencies by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6136
+* Fix some SwiftLint warnings. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6149
+* Update zizmorcore/zizmor-action action to v0.6.4 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6155
+* Bump the RustSDK to v26.09.17 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6160
+* Update codecov/codecov-action action to v7.1.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6176
+* Update dependency siteline/SwiftUI-Introspect to v27 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/6175
+* Drop Intel device support from the build scripts and project by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/6171
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/6182
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/26.09.1...release/26.09.2
+
 ## Changes in 26.09.1 (2026-09-10)
 
 ### What's Changed
