@@ -21,6 +21,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         static let focusTimelineToastIndicatorID = "RoomScreenFocusTimelineToastIndicator"
         static let toastErrorID = "RoomScreenToastError"
         static let selectionLimitIndicatorID = "RoomScreenSelectionLimitIndicator"
+        static let reactionEffects: [String: ParticleEmitterType] = ["🎉": .confetti]
+        static let particleEffectDuration = Duration.seconds(5)
+        static let pendingReactionEffectTimeout = Duration.seconds(2)
     }
     
     private let roomProxy: JoinedRoomProxyProtocol
@@ -46,6 +49,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
+    @CancellableTask private var particleEffectTask: Task<Void, Never>?
+    @CancellableTask private var pendingReactionEffectTask: Task<Void, Never>?
     
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
@@ -165,12 +170,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):
             emojiProvider.markEmojiAsFrequentlyUsed(emoji)
-            
-            guard case let .event(_, eventOrTransactionID) = itemID else {
-                fatalError()
-            }
-            
-            Task { await timelineController.toggleReaction(emoji, to: eventOrTransactionID) }
+            Task { await timelineInteractionHandler.toggleReaction(emoji, on: itemID) }
+        case .playReactionEffect(let origin):
+            playReactionEffect(at: origin)
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .paginateBackwards:
@@ -530,6 +532,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     displayErrorToast(title)
                 case .displayEmojiPicker(let selectedEmojis, let continuation):
                     actionsSubject.send(.displayEmojiPicker(selectedEmojis: selectedEmojis, continuation: continuation))
+                case .willAddReaction(let key, let itemID):
+                    prepareReactionEffect(for: key, on: itemID)
                 case .displayMessageForwarding(let itemID):
                     Task { await self.forwardMessage(itemID: itemID) }
                 case .displayEditPollForm(let eventID, let poll):
@@ -1191,6 +1195,43 @@ extension TimelineViewModel {
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
         guard let forwardingPayload = await makeForwardingPayload(for: [itemID]) else { return }
         actionsSubject.send(.displayMessageForwarding(forwardingPayload: forwardingPayload))
+    }
+}
+
+// MARK: - Reaction effects
+
+private extension TimelineViewModel {
+    func prepareReactionEffect(for key: String, on itemID: TimelineItemIdentifier) {
+        guard userSettings.app.reactionCelebrationsEnabled,
+              !UIAccessibility.isReduceMotionEnabled,
+              !ProcessInfo.processInfo.isLowPowerModeEnabled,
+              let type = Constants.reactionEffects[key] else {
+            return
+        }
+        
+        state.pendingReactionEffect = .init(itemID: itemID, key: key, type: type)
+        
+        // Otherwise a reaction that never shows up on screen (failed to send, scrolled away)
+        // would play its effect whenever its pill is next displayed.
+        pendingReactionEffectTask = Task {
+            guard await (try? Task.sleep(for: Constants.pendingReactionEffectTimeout)) != nil else { return }
+            state.pendingReactionEffect = nil
+        }
+    }
+    
+    func playReactionEffect(at origin: CGPoint?) {
+        guard let pendingReactionEffect = state.pendingReactionEffect else { return }
+        state.pendingReactionEffect = nil
+        
+        guard let origin else { return }
+        
+        state.particleEffect = ParticleEffect(type: pendingReactionEffect.type, origin: origin)
+        
+        // Cleared so that a rebuilt timeline doesn't play it again. A newer effect cancels this one.
+        particleEffectTask = Task {
+            guard await (try? Task.sleep(for: Constants.particleEffectDuration)) != nil else { return }
+            state.particleEffect = nil
+        }
     }
 }
 

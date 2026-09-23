@@ -56,6 +56,7 @@ enum TimelineViewAction {
     case galleryItemTapped(GalleryItemID)
     case itemSendInfoTapped(itemID: TimelineItemIdentifier)
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
+    case playReactionEffect(origin: CGPoint?)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)
     case paginateBackwards
     case paginateForwards
@@ -165,7 +166,16 @@ struct TimelineViewState: BindableState {
     
     var stoppedLiveLocationIDs: Set<TimelineItemIdentifier> = []
     
+    var pendingReactionEffect: PendingReactionEffect?
+    var particleEffect: ParticleEffect?
+    
     var bindings: TimelineViewStateBindings
+    
+    struct PendingReactionEffect: Equatable {
+        let itemID: TimelineItemIdentifier
+        let key: String
+        let type: ParticleEmitterType
+    }
 }
 
 struct TimelineViewStateBindings {

@@ -117,6 +117,7 @@ struct RoomScreen: View {
                     }
                 }
             }
+            .particleEffect(timelineContext.viewState.particleEffect)
             .navigationBarBackButtonHidden(isMessageSelectionActive)
             .toolbarRole(RoomHeaderView.toolbarRole)
             .fixesTitleViewOnCancelledPop()

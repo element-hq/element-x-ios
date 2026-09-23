@@ -60,6 +60,7 @@ struct ThreadTimelineScreen: View {
                     }
                 }
             }
+            .particleEffect(timelineContext.viewState.particleEffect)
     }
     
     private var isMessageSelectionActive: Bool {
