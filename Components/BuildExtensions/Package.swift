@@ -13,7 +13,7 @@ let package = Package(
         .library(name: "Macros", targets: ["Macros"])
     ],
     dependencies: [
-        .package(url: "https://github.com/swiftlang/swift-syntax", from: "603.0.2")
+        .package(url: "https://github.com/swiftlang/swift-syntax", from: "604.0.0")
     ],
     targets: [
         // The public macro declarations imported by the app.
