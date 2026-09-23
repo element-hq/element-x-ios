@@ -83,11 +83,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.mentionsFilterEnabled) {
                     Text("Mentions filter")
                 }
-                
-                Toggle(isOn: $context.automaticBackPaginationEnabled) {
-                    Text("Automatic back pagination")
-                    Text("Requires app reboot")
-                }
             }
             
             Section("Room") {

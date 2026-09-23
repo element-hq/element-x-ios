@@ -26,7 +26,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
                                       appHooks: appHooks,
                                       enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
                                       threadsEnabled: appSettings.threadsEnabled)
-            .enableAutomaticBackPagination(enableAutomaticBackPagination: appSettings.automaticBackPaginationEnabled)
+            .enableAutomaticBackPagination(enableAutomaticBackPagination: true)
             .sqliteStore(config: .init(dataPath: sessionDirectories.dataPath, cachePath: sessionDirectories.cachePath)
                 .passphrase(passphrase: passphrase))
             .serverNameOrHomeserverUrl(serverNameOrUrl: serverNameOrBaseURL)
@@ -64,7 +64,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
                                       appHooks: appHooks,
                                       enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
                                       threadsEnabled: appSettings.threadsEnabled)
-            .enableAutomaticBackPagination(enableAutomaticBackPagination: appSettings.automaticBackPaginationEnabled)
+            .enableAutomaticBackPagination(enableAutomaticBackPagination: true)
             .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)
                     .passphrase(passphrase: credentials.restorationToken.passphrase))

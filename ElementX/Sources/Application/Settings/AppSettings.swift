@@ -463,9 +463,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var linkNewDeviceEnabled: Bool
     
-    @UserPreference(defaultValue: false)
-    var automaticBackPaginationEnabled: Bool
-    
     @UserPreference(key: "clientPausingAndResumingEnabledV2", defaultValue: false, volatile: true)
     var clientPausingAndResumingEnabled: Bool
     
