@@ -359,7 +359,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
             TabRailView(navigationTabCoordinator: navigationTabCoordinator, isFullScreen: isFullScreen)
                 .background(railBackgroundColor.ignoresSafeArea())
                 .animation(.easeInOut(duration: 0.4).disabledDuringTests(), value: railBackgroundColor)
-                .overlay(alignment: .trailing) { SidebarDivider() }
+                .overlay(alignment: .trailing) { NavigationSidebarDivider() }
                 .zIndex(1)
             
             if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
@@ -430,14 +430,6 @@ struct TabRailView<Tag: Hashable>: View {
         isFullScreen || ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 48
     }
     
-    var trailingPadding: CGFloat {
-        if #available(iOS 27, *) {
-            8
-        } else {
-            0
-        }
-    }
-    
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -457,8 +449,7 @@ struct TabRailView<Tag: Hashable>: View {
                     .badge(10) // TODO: Check if this works.
                 }
             }
-            .padding(.leading, 8)
-            .padding(.trailing, trailingPadding)
+            .padding(.horizontal, 8)
             .padding(.top, topPadding)
             .padding(.bottom)
         }
