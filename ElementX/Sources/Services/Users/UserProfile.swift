@@ -124,7 +124,7 @@ nonisolated extension UserStatus {
 nonisolated extension UserStatus.Raw {
     init(rustStatus: MatrixRustSDK.UserStatus) {
         text = rustStatus.text
-        emoji = Character(rustStatus.emoji)
+        emoji = rustStatus.emoji.first ?? .space
     }
     
     // periphery:ignore - might be useful to have
