@@ -16,7 +16,7 @@ struct TimelineSelectionActionBar: View {
         Button {
             context.send(viewAction: .forwardSelection)
         } label: {
-            Label(UntranslatedL10n.actionForwardMessages(context.viewState.selection.count), icon: \.forward)
+            Label(L10n.actionForwardMessages(context.viewState.selection.count), icon: \.forward)
         }
         .buttonStyle(.compound(.primary))
         .padding(16)

@@ -206,8 +206,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.bindings.redactConfirmationInfo = nil
             // A blank reason is no reason at all, so don't send one.
             timelineInteractionHandler.redact(itemID, reason: reason?.isBlank == false ? reason : nil)
-        case .startSelection(let itemID):
-            startSelection(itemID: itemID)
         case .toggleSelection(let itemID):
             toggleSelection(itemID: itemID)
         case .clearSelection:
@@ -1212,7 +1210,7 @@ extension TimelineViewModel {
     }
     
     private func startSelection(itemID: TimelineItemIdentifier) {
-        guard state.canSelectMessages, let eventID = selectableEventID(for: itemID) else { return }
+        guard let eventID = selectableEventID(for: itemID) else { return }
         
         // The composer is collapsed while selecting, so don't leave the microphone open behind it.
         Task { await timelineInteractionHandler.stopRecordingVoiceMessageIfNeeded() }

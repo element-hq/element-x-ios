@@ -127,7 +127,7 @@ struct MessageForwardingScreenViewModelTests {
         try await deferred.fulfill()
         
         let titles = userIndicatorController.submitIndicatorDelayReceivedInvocations.map(\.indicator.title)
-        #expect(titles == [UntranslatedL10n.screenRoomMessagesForwarded])
+        #expect(titles == [L10n.screenRoomMessagesForwarded(2)])
     }
     
     @Test

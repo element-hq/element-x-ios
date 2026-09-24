@@ -69,8 +69,6 @@ enum TimelineViewAction {
     /// The user has confirmed the removal of an item, optionally giving a reason.
     case redactConfirmed(itemID: TimelineItemIdentifier, reason: String?)
     
-    /// Start a multi-selection with the specified item.
-    case startSelection(itemID: TimelineItemIdentifier)
     /// Add or remove an item from the active multi-selection.
     case toggleSelection(itemID: TimelineItemIdentifier)
     case clearSelection
@@ -211,9 +209,7 @@ struct TimelineViewStateBindings {
 struct TimelineSelectionState: Equatable {
     static let limit = 10
     
-    /// Mirrors the `messageMultiSelectEnabled` feature flag.
     var isEnabled = false
-    /// The event IDs of the selected items. Only remote messages can be selected.
     var selectedEventIDs: Set<String> = []
     
     var isActive: Bool {

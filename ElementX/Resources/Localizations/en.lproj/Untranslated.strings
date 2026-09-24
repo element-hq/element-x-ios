@@ -1,6 +1,4 @@
 "screen_home_tab_search" = "Search";
-"screen_room_message_forwarded" = "Message forwarded";
-"screen_room_messages_forwarded" = "Messages forwarded";
 "screen_search_empty_state_message" = "Search for chats and messages";
 "screen_search_empty_state_title" = "Start searching...";
 "screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";

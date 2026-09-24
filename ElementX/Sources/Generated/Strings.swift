@@ -292,6 +292,10 @@ internal nonisolated enum L10n {
   internal static var actionForgotPassword: String { return L10n.tr("Localizable", "action_forgot_password") }
   /// Forward
   internal static var actionForward: String { return L10n.tr("Localizable", "action_forward") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func actionForwardMessages(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "action_forward_messages", p1)
+  }
   /// Go back
   internal static var actionGoBack: String { return L10n.tr("Localizable", "action_go_back") }
   /// Go to roles & permissions
@@ -398,8 +402,6 @@ internal nonisolated enum L10n {
   internal static var actionSave: String { return L10n.tr("Localizable", "action_save") }
   /// Search
   internal static var actionSearch: String { return L10n.tr("Localizable", "action_search") }
-  /// Select
-  internal static var actionSelect: String { return L10n.tr("Localizable", "action_select") }
   /// Select all
   internal static var actionSelectAll: String { return L10n.tr("Localizable", "action_select_all") }
   /// Send
@@ -3174,6 +3176,10 @@ internal nonisolated enum L10n {
   internal static var screenRoomMentionsAtRoomSubtitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_subtitle") }
   /// Everyone
   internal static var screenRoomMentionsAtRoomTitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_title") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenRoomMessagesForwarded(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_messages_forwarded", p1)
+  }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomMultipleKnockRequestsTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_multiple_knock_requests_title", p1)

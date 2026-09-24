@@ -438,8 +438,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                    emojiPickerContinuation: continuation,
                                    animated: animated)
                 
-            case (let fromState, .presentMessageForwarding(let forwardingItem), .messageForwarding):
-                presentMessageForwarding(with: forwardingItem, from: fromState)
+            case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
+                presentMessageForwarding(with: forwardingItem)
                 
             case (_, .presentMapNavigator(let mode), .mapNavigator):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
@@ -1262,7 +1262,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentMessageForwarding(with forwardingItem: MessageForwardingItem, from fromState: State) {
+    private func presentMessageForwarding(with forwardingItem: MessageForwardingItem) {
         let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let stackCoordinator = NavigationStackCoordinator()
@@ -1281,7 +1281,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .sent(let roomIDs):
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                clearSelection(in: fromState)
+                clearSelection()
                 processPostMessageForwardingTo(rooms: roomIDs)
             }
         }
@@ -1294,16 +1294,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    /// Ends the message selection in the timeline that started the forwarding, now that it has completed.
-    private func clearSelection(in state: State) {
-        switch state {
-        case .room:
-            roomScreenCoordinator?.clearSelection()
-        case .thread:
-            childThreadScreenCoordinators.last?.clearSelection()
-        default:
-            break
-        }
+    /// Ends the message selection now that the forwarding has completed. Only one timeline can be selecting at a time.
+    private func clearSelection() {
+        roomScreenCoordinator?.clearSelection()
+        childThreadScreenCoordinators.forEach { $0.clearSelection() }
     }
     
     private func presentNotificationSettingsScreen() {

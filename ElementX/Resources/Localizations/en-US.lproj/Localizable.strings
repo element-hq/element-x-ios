@@ -174,7 +174,6 @@
 "action_retry_decryption" = "Retry decryption";
 "action_save" = "Save";
 "action_search" = "Search";
-"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Send";
 "action_send_edited_message" = "Send edited message";
