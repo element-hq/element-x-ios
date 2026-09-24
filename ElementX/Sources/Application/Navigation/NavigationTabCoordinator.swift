@@ -359,6 +359,8 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
             TabRailView(navigationTabCoordinator: navigationTabCoordinator, isFullScreen: isFullScreen)
                 .background(railBackgroundColor.ignoresSafeArea())
                 .animation(.easeInOut(duration: 0.4).disabledDuringTests(), value: railBackgroundColor)
+                .overlay(alignment: .trailing) { SidebarDivider() }
+                .zIndex(1)
             
             if let module = navigationTabCoordinator.tabModules.first(where: { $0.details.tag == navigationTabCoordinator.selectedTab }) {
                 module.coordinator?.toPresentable()
