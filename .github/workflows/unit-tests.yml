@@ -60,7 +60,7 @@ jobs:
       - name: Upload coverage to Codecov
         # Skip if not successful and in forks
         if: ${{ success() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
-        uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4 # v7.1.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           report_type: coverage
           files: test_output/unit-cobertura.xml,test_output/preview-cobertura.xml
@@ -72,7 +72,7 @@ jobs:
       - name: Upload test results to Codecov
         # Skip if cancelled and in forks
         if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
-        uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4 # v7.1.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         continue-on-error: true
         with:
           report_type: test_results
