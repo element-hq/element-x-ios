@@ -9,14 +9,14 @@ import Compound
 import SwiftUI
 
 /// Replaces the composer while messages are being selected, offering the action to take on them.
-struct TimelineSelectionActionBar: View {
+struct TimelineMessageSelectionActionBar: View {
     @ObservedObject var context: TimelineViewModelType.Context
     
     var body: some View {
         Button {
-            context.send(viewAction: .forwardSelection)
+            context.send(viewAction: .forwardMessageSelection)
         } label: {
-            Label(L10n.actionForwardMessages(context.viewState.selection.count), icon: \.forward)
+            Label(L10n.actionForwardMessages(context.viewState.messageSelection.count), icon: \.forward)
         }
         .buttonStyle(.compound(.primary))
         .padding(16)
@@ -26,15 +26,15 @@ struct TimelineSelectionActionBar: View {
 
 // MARK: - Previews
 
-struct TimelineSelectionActionBar_Previews: PreviewProvider, TestablePreview {
+struct TimelineMessageSelectionActionBar_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
         let viewModel = TimelineViewModel.mock() // A fresh instance so the shared mock isn't left selecting.
-        viewModel.state.selection.selectedEventIDs = ["$1", "$2", "$3"]
+        viewModel.state.messageSelection.selectedEventIDs = ["$1", "$2", "$3"]
         return viewModel
     }()
     
     static var previews: some View {
-        TimelineSelectionActionBar(context: viewModel.context)
+        TimelineMessageSelectionActionBar(context: viewModel.context)
             .previewLayout(.sizeThatFits)
     }
 }

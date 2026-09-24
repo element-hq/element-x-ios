@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// The trailing navigation bar item that cancels the selection of messages in a timeline.
-struct TimelineSelectionToolbar: ToolbarContent {
+struct TimelineMessageSelectionToolbar: ToolbarContent {
     let onCancel: () -> Void
     
     var body: some ToolbarContent {

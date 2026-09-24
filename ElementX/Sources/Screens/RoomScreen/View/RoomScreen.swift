@@ -110,14 +110,14 @@ struct RoomScreen: View {
                         .environment(\.timelineContext, timelineContext)
                         // Make sure the reply header honours the hideTimelineMedia setting too.
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
-                        .collapsedInPlace(isSelectionActive)
+                        .collapsedInPlace(isMessageSelectionActive)
                     
-                    if isSelectionActive {
-                        TimelineSelectionActionBar(context: timelineContext)
+                    if isMessageSelectionActive {
+                        TimelineMessageSelectionActionBar(context: timelineContext)
                     }
                 }
             }
-            .navigationBarBackButtonHidden(isSelectionActive)
+            .navigationBarBackButtonHidden(isMessageSelectionActive)
             .toolbarRole(RoomHeaderView.toolbarRole)
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
@@ -291,8 +291,8 @@ struct RoomScreen: View {
         }
     }
     
-    private var isSelectionActive: Bool {
-        timelineContext.viewState.selection.isActive
+    private var isMessageSelectionActive: Bool {
+        timelineContext.viewState.messageSelection.isActive
     }
     
     @ToolbarContentBuilder
@@ -307,12 +307,12 @@ struct RoomScreen: View {
                            mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .displayRoomDetails)
             }
-            .disabled(isSelectionActive) // The room details would cover the selection.
+            .disabled(isMessageSelectionActive) // The room details would cover the selection.
         }
         
-        if isSelectionActive {
-            TimelineSelectionToolbar {
-                timelineContext.send(viewAction: .clearSelection)
+        if isMessageSelectionActive {
+            TimelineMessageSelectionToolbar {
+                timelineContext.send(viewAction: .clearMessageSelection)
             }
         } else {
             roomActions
@@ -384,7 +384,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                        composerToolbar: ComposerToolbar(context: composerViewModel.context))
         }
         .previewDisplayName("Selecting")
-        .snapshotPreferences(expect: selectingViewModels.timeline.context.$viewState.map(\.selection.isActive))
+        .snapshotPreferences(expect: selectingViewModels.timeline.context.$viewState.map(\.messageSelection.isActive))
     }
     
     static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false, isSelecting: Bool = false) -> ViewModels {
@@ -413,7 +413,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         
         if isSelecting {
             let eventIDs = timelineController.timelineItems.compactMap { ($0 as? EventBasedTimelineItemProtocol)?.id.eventID }
-            timelineViewModel.state.selection.selectedEventIDs = Set(eventIDs.prefix(2))
+            timelineViewModel.state.messageSelection.selectedEventIDs = Set(eventIDs.prefix(2))
         }
         
         return .init(room: roomViewModel, timeline: timelineViewModel)

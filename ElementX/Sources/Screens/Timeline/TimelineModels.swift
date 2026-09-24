@@ -70,10 +70,10 @@ enum TimelineViewAction {
     case redactConfirmed(itemID: TimelineItemIdentifier, reason: String?)
     
     /// Add or remove an item from the active multi-selection.
-    case toggleSelection(itemID: TimelineItemIdentifier)
-    case clearSelection
+    case toggleMessageSelection(itemID: TimelineItemIdentifier)
+    case clearMessageSelection
     /// Forward the selected messages, in timeline order.
-    case forwardSelection
+    case forwardMessageSelection
     
     case tappedOnSenderDetails(sender: TimelineItemSender)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
@@ -137,7 +137,7 @@ struct TimelineViewState: BindableState {
     var linkPreviewsEnabled: Bool
     var jumpToReadMarkerEnabled: Bool
     
-    var selection: TimelineSelectionState
+    var messageSelection: TimelineMessageSelectionState
     
     let hasPredecessor: Bool
     
@@ -206,7 +206,7 @@ struct TimelineViewStateBindings {
 }
 
 /// The state of the multi-selection of messages, active as soon as an item is selected.
-struct TimelineSelectionState: Equatable {
+struct TimelineMessageSelectionState: Equatable {
     static let limit = 10
     
     var isEnabled = false
@@ -352,9 +352,9 @@ enum ScrollDirection: Equatable {
 }
 
 extension TimelineViewState {
-    /// Multi-selection is only offered in the room and thread timelines.
+    /// Multi-selection is offered everywhere but the media timelines.
     var canSelectMessages: Bool {
-        guard selection.isEnabled else { return false }
+        guard messageSelection.isEnabled else { return false }
         return switch timelineKind {
         case .live, .detached, .thread, .pinned: true
         case .media: false

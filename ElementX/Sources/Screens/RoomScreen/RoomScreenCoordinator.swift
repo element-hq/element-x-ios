@@ -238,8 +238,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         composerViewModel.process(timelineAction: .setFocus)
     }
     
-    func clearSelection() {
-        timelineViewModel.clearSelection()
+    func clearMessageSelection() {
+        timelineViewModel.clearMessageSelection()
     }
     
     func stop() {

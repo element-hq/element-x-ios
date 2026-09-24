@@ -1281,7 +1281,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .sent(let roomIDs):
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                clearSelection()
+                clearMessageSelection()
                 processPostMessageForwardingTo(rooms: roomIDs)
             }
         }
@@ -1295,9 +1295,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     /// Ends the message selection now that the forwarding has completed. Only one timeline can be selecting at a time.
-    private func clearSelection() {
-        roomScreenCoordinator?.clearSelection()
-        childThreadScreenCoordinators.forEach { $0.clearSelection() }
+    private func clearMessageSelection() {
+        roomScreenCoordinator?.clearMessageSelection()
+        childThreadScreenCoordinators.forEach { $0.clearMessageSelection() }
     }
     
     private func presentNotificationSettingsScreen() {

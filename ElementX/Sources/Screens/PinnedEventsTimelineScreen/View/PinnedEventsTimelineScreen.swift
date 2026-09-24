@@ -13,8 +13,8 @@ struct PinnedEventsTimelineScreen: View {
     @ObservedObject var context: PinnedEventsTimelineScreenViewModel.Context
     @ObservedObject var timelineContext: TimelineViewModel.Context
     
-    private var isSelectionActive: Bool {
-        timelineContext.viewState.selection.isActive
+    private var isMessageSelectionActive: Bool {
+        timelineContext.viewState.messageSelection.isActive
     }
     
     private var title: String {
@@ -31,8 +31,8 @@ struct PinnedEventsTimelineScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                if isSelectionActive {
-                    TimelineSelectionActionBar(context: timelineContext)
+                if isMessageSelectionActive {
+                    TimelineMessageSelectionActionBar(context: timelineContext)
                 }
             }
             .background(.compound.bgCanvasDefault)
@@ -64,9 +64,9 @@ struct PinnedEventsTimelineScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if isSelectionActive {
-            TimelineSelectionToolbar {
-                timelineContext.send(viewAction: .clearSelection)
+        if isMessageSelectionActive {
+            TimelineMessageSelectionToolbar {
+                timelineContext.send(viewAction: .clearMessageSelection)
             }
         } else {
             ToolbarItem(placement: .confirmationAction) {
@@ -99,7 +99,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
             PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: selectingTimelineViewModel.context)
         }
         .previewDisplayName("Selecting")
-        .snapshotPreferences(expect: selectingTimelineViewModel.context.$viewState.map(\.selection.isActive))
+        .snapshotPreferences(expect: selectingTimelineViewModel.context.$viewState.map(\.messageSelection.isActive))
     }
     
     static func makeTimelineViewModel(timelineItems: [RoomTimelineItemProtocol], isSelecting: Bool = false) -> TimelineViewModel {
@@ -122,7 +122,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         if isSelecting {
-            timelineViewModel.state.selection.selectedEventIDs = Set(eventIDs.prefix(2))
+            timelineViewModel.state.messageSelection.selectedEventIDs = Set(eventIDs.prefix(2))
         }
         
         return timelineViewModel

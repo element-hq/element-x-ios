@@ -103,7 +103,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        areThreadsEnabled: appSettings.threadsEnabled,
                                                        linkPreviewsEnabled: appSettings.linkPreviewsEnabled,
                                                        jumpToReadMarkerEnabled: appSettings.jumpToReadMarkerEnabled,
-                                                       selection: .init(isEnabled: appSettings.messageMultiSelectEnabled),
+                                                       messageSelection: .init(isEnabled: appSettings.messageMultiSelectEnabled),
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
@@ -206,11 +206,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.bindings.redactConfirmationInfo = nil
             // A blank reason is no reason at all, so don't send one.
             timelineInteractionHandler.redact(itemID, reason: reason?.isBlank == false ? reason : nil)
-        case .toggleSelection(let itemID):
+        case .toggleMessageSelection(let itemID):
             toggleSelection(itemID: itemID)
-        case .clearSelection:
-            clearSelection()
-        case .forwardSelection:
+        case .clearMessageSelection:
+            clearMessageSelection()
+        case .forwardMessageSelection:
             forwardSelection()
         case .tappedOnSenderDetails(let sender):
             handleTappedOnSenderDetails(sender: sender)
@@ -1201,9 +1201,9 @@ extension TimelineViewModel {
     private func setupSelectionSubscriptions() {
         appSettings.messageMultiSelectEnabledPublisher
             .sink { [weak self] isEnabled in
-                self?.state.selection.isEnabled = isEnabled
+                self?.state.messageSelection.isEnabled = isEnabled
                 if !isEnabled {
-                    self?.state.selection.selectedEventIDs.removeAll()
+                    self?.state.messageSelection.selectedEventIDs.removeAll()
                 }
             }
             .store(in: &cancellables)
@@ -1216,49 +1216,49 @@ extension TimelineViewModel {
         Task { await timelineInteractionHandler.stopRecordingVoiceMessageIfNeeded() }
         actionsSubject.send(.composer(action: .removeFocus))
         
-        guard !state.selection.isAtLimit || state.selection.selectedEventIDs.contains(eventID) else {
+        guard !state.messageSelection.isAtLimit || state.messageSelection.selectedEventIDs.contains(eventID) else {
             showSelectionLimitToast()
             return
         }
         
-        state.selection.selectedEventIDs.insert(eventID)
+        state.messageSelection.selectedEventIDs.insert(eventID)
     }
     
     private func toggleSelection(itemID: TimelineItemIdentifier) {
-        guard state.selection.isActive, let eventID = selectableEventID(for: itemID) else { return }
+        guard state.messageSelection.isActive, let eventID = selectableEventID(for: itemID) else { return }
         
-        if state.selection.selectedEventIDs.contains(eventID) {
-            state.selection.selectedEventIDs.remove(eventID)
-        } else if state.selection.isAtLimit {
+        if state.messageSelection.selectedEventIDs.contains(eventID) {
+            state.messageSelection.selectedEventIDs.remove(eventID)
+        } else if state.messageSelection.isAtLimit {
             showSelectionLimitToast()
         } else {
-            state.selection.selectedEventIDs.insert(eventID)
+            state.messageSelection.selectedEventIDs.insert(eventID)
         }
     }
     
     /// Drops selected items that are no longer selectable (e.g. redacted), or the whole selection
     /// when the timeline is swapped, so the selection always refers to items that are on screen.
     private func reconcileSelection(with timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool) {
-        guard state.selection.isActive else { return }
+        guard state.messageSelection.isActive else { return }
         
         if isSwitchingTimelines {
-            state.selection.selectedEventIDs.removeAll()
+            state.messageSelection.selectedEventIDs.removeAll()
             return
         }
         
         let forwardableEventIDs = timelineItems.forwardableItems.compactMap(\.id.eventID)
-        state.selection.selectedEventIDs.formIntersection(forwardableEventIDs)
+        state.messageSelection.selectedEventIDs.formIntersection(forwardableEventIDs)
     }
     
     /// Ends the selection, either from the close button or once the selected messages have been forwarded.
-    func clearSelection() {
-        state.selection.selectedEventIDs.removeAll()
+    func clearMessageSelection() {
+        state.messageSelection.selectedEventIDs.removeAll()
     }
     
     /// Forwards the selection in timeline order, which is unrelated to the order the messages were selected in.
     /// The selection is kept until the forwarding completes, so cancelling the picker returns to it.
     private func forwardSelection() {
-        let itemIDs = timelineController.timelineItems.selectedItems(state.selection.selectedEventIDs).map(\.id)
+        let itemIDs = timelineController.timelineItems.selectedItems(state.messageSelection.selectedEventIDs).map(\.id)
         
         Task {
             guard let forwardingItem = await makeForwardingItem(for: itemIDs) else {

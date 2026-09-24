@@ -180,7 +180,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
         Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
     }
     
-    func clearSelection() {
-        timelineViewModel.clearSelection()
+    func clearMessageSelection() {
+        timelineViewModel.clearMessageSelection()
     }
 }

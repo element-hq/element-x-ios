@@ -30,7 +30,7 @@ struct ThreadTimelineScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
-            .navigationBarBackButtonHidden(isSelectionActive)
+            .navigationBarBackButtonHidden(isMessageSelectionActive)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .overlay(alignment: .top) {
                 FloatingDateBadge(dateText: timelineContext.floatingDate?.formattedDateSeparator()) {
@@ -52,17 +52,17 @@ struct ThreadTimelineScreen: View {
                         .environment(\.timelineContext, timelineContext)
                         // Make sure the reply header honours the hideTimelineMedia setting too.
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
-                        .collapsedInPlace(isSelectionActive)
+                        .collapsedInPlace(isMessageSelectionActive)
                     
-                    if isSelectionActive {
-                        TimelineSelectionActionBar(context: timelineContext)
+                    if isMessageSelectionActive {
+                        TimelineMessageSelectionActionBar(context: timelineContext)
                     }
                 }
             }
     }
     
-    private var isSelectionActive: Bool {
-        timelineContext.viewState.selection.isActive
+    private var isMessageSelectionActive: Bool {
+        timelineContext.viewState.messageSelection.isActive
     }
     
     @ViewBuilder
@@ -89,9 +89,9 @@ struct ThreadTimelineScreen: View {
             }
         }
         
-        if isSelectionActive {
-            TimelineSelectionToolbar {
-                timelineContext.send(viewAction: .clearSelection)
+        if isMessageSelectionActive {
+            TimelineMessageSelectionToolbar {
+                timelineContext.send(viewAction: .clearMessageSelection)
             }
         }
     }

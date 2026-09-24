@@ -22,5 +22,5 @@ protocol TimelineViewModelProtocol {
     /// Handles getting the contents to forward the given items, keeping the order of the given IDs.
     func makeForwardingItem(for itemIDs: [TimelineItemIdentifier]) async -> MessageForwardingItem?
     /// Ends the message selection, e.g. once the selected messages have been forwarded.
-    func clearSelection()
+    func clearMessageSelection()
 }
