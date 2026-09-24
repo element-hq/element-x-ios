@@ -44,7 +44,7 @@ struct MessageForwardingRoom: Identifiable, Equatable {
     let avatar: RoomAvatar
 }
 
-struct MessageForwardingItem: Hashable {
+struct MessageForwardingPayload: Hashable {
     /// The source items' timeline IDs. Only necessary for a rough Hashable conformance.
     let ids: [TimelineItemIdentifier]
     /// The source items' room ID.
@@ -52,7 +52,7 @@ struct MessageForwardingItem: Hashable {
     /// The contents to be forwarded, in timeline order.
     let contents: [RoomMessageEventContentWithoutRelation]
     
-    static func == (lhs: MessageForwardingItem, rhs: MessageForwardingItem) -> Bool {
+    static func == (lhs: MessageForwardingPayload, rhs: MessageForwardingPayload) -> Bool {
         lhs.ids == rhs.ids && lhs.roomID == rhs.roomID
     }
     

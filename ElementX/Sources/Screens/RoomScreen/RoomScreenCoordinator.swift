@@ -43,7 +43,7 @@ enum RoomScreenCoordinatorAction {
     case presentLiveLocationViewer(sender: TimelineItemSender?, initialLiveLocationShare: LiveLocationShare?)
     case presentEmojiPicker(selectedEmojis: Set<String>, continuation: EmojiPickerScreenContinuation)
     case presentRoomMemberDetails(userID: String)
-    case presentMessageForwarding(forwardingItem: MessageForwardingItem)
+    case presentMessageForwarding(forwardingPayload: MessageForwardingPayload)
     case presentCallScreen(isVoiceCall: Bool)
     case presentPinnedEventsTimeline
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
@@ -146,8 +146,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                                          caption: composerViewModel.context.plainComposerText))
                 case .displaySenderDetails(userID: let userID):
                     actionsSubject.send(.presentRoomMemberDetails(userID: userID))
-                case .displayMessageForwarding(let forwardingItem):
-                    actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
+                case .displayMessageForwarding(let forwardingPayload):
+                    actionsSubject.send(.presentMessageForwarding(forwardingPayload: forwardingPayload))
                 case .displayLocation(let location):
                     actionsSubject.send(.presentLocationViewer(location))
                 case .displayLiveLocation(let sender, let initialLiveLocationShare):
@@ -200,8 +200,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentKnockRequestsList)
                 case .displayRoom(let roomID, let via):
                     actionsSubject.send(.presentRoom(roomID: roomID, via: via))
-                case .displayMessageForwarding(let forwardingItem):
-                    actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
+                case .displayMessageForwarding(let forwardingPayload):
+                    actionsSubject.send(.presentMessageForwarding(forwardingPayload: forwardingPayload))
                 case .displayThreadList:
                     actionsSubject.send(.presentThreadList)
                 case .displayThread(let threadRootEventID, let focussedEventID):

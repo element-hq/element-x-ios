@@ -13,11 +13,11 @@ import Testing
 
 @MainActor
 struct MessageForwardingScreenViewModelTests {
-    let forwardingItem = MessageForwardingItem(ids: [.event(uniqueID: .init("t1"), eventOrTransactionID: .eventID("t1")),
-                                                     .event(uniqueID: .init("t2"), eventOrTransactionID: .eventID("t2"))],
-                                               roomID: "1",
-                                               contents: [RoomMessageEventContentWithoutRelationSDKMock(),
-                                                          RoomMessageEventContentWithoutRelationSDKMock()])
+    let forwardingPayload = MessageForwardingPayload(ids: [.event(uniqueID: .init("t1"), eventOrTransactionID: .eventID("t1")),
+                                                           .event(uniqueID: .init("t2"), eventOrTransactionID: .eventID("t2"))],
+                                                     roomID: "1",
+                                                     contents: [RoomMessageEventContentWithoutRelationSDKMock(),
+                                                                RoomMessageEventContentWithoutRelationSDKMock()])
     var viewModel: MessageForwardingScreenViewModelProtocol!
     var context: MessageForwardingScreenViewModelType.Context!
     
@@ -25,7 +25,7 @@ struct MessageForwardingScreenViewModelTests {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.roomForIdentifierClosure = { .joined(JoinedRoomProxyMock(.init(id: $0))) }
         
-        viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
+        viewModel = MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
                                                      userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                      roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                      userIndicatorController: UserIndicatorControllerMock())
@@ -34,7 +34,7 @@ struct MessageForwardingScreenViewModelTests {
     
     @Test
     func initialState() {
-        #expect(!context.viewState.rooms.contains { $0.id == forwardingItem.roomID }, "The source room ID shouldn't be shown")
+        #expect(!context.viewState.rooms.contains { $0.id == forwardingPayload.roomID }, "The source room ID shouldn't be shown")
     }
     
     @Test
@@ -82,7 +82,7 @@ struct MessageForwardingScreenViewModelTests {
             roomProxies[roomID] = roomProxy
             return .joined(roomProxy)
         }
-        viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
+        viewModel = MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
                                                      userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                      roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                      userIndicatorController: UserIndicatorControllerMock())
@@ -100,7 +100,7 @@ struct MessageForwardingScreenViewModelTests {
         context.send(viewAction: .send)
         try await deferred.fulfill()
         
-        let expectedContents = forwardingItem.contents.map { ObjectIdentifier($0) }
+        let expectedContents = forwardingPayload.contents.map { ObjectIdentifier($0) }
         for roomID in ["2", "3"] {
             let timeline = try #require(roomProxies[roomID]?.timeline as? TimelineProxyMock)
             let sentContents = timeline.sendMessageEventContentReceivedInvocations.map { ObjectIdentifier($0) }
@@ -158,7 +158,7 @@ struct MessageForwardingScreenViewModelTests {
             roomID == "3" ? nil : .joined(JoinedRoomProxyMock(.init(id: roomID)))
         }
         let userIndicatorController = UserIndicatorControllerMock()
-        viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
+        viewModel = MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
                                                      userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                      roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                      userIndicatorController: userIndicatorController)
@@ -185,7 +185,7 @@ struct MessageForwardingScreenViewModelTests {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.roomForIdentifierClosure = { .joined(JoinedRoomProxyMock(.init(id: $0))) }
         
-        return MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
+        return MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
                                                 userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                 roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                 userIndicatorController: userIndicatorController)

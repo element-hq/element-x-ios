@@ -1176,7 +1176,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 // MARK: - Message forwarding
 
 extension TimelineViewModel {
-    func makeForwardingItem(for itemIDs: [TimelineItemIdentifier]) async -> MessageForwardingItem? {
+    func makeForwardingPayload(for itemIDs: [TimelineItemIdentifier]) async -> MessageForwardingPayload? {
         var ids = [TimelineItemIdentifier]()
         var contents = [RoomMessageEventContentWithoutRelation]()
         for itemID in itemIDs {
@@ -1190,8 +1190,8 @@ extension TimelineViewModel {
     }
     
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
-        guard let forwardingItem = await makeForwardingItem(for: [itemID]) else { return }
-        actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
+        guard let forwardingPayload = await makeForwardingPayload(for: [itemID]) else { return }
+        actionsSubject.send(.displayMessageForwarding(forwardingPayload: forwardingPayload))
     }
 }
 
@@ -1261,11 +1261,11 @@ extension TimelineViewModel {
         let itemIDs = timelineController.timelineItems.selectedItems(state.messageSelection.selectedEventIDs).map(\.id)
         
         Task {
-            guard let forwardingItem = await makeForwardingItem(for: itemIDs) else {
+            guard let forwardingPayload = await makeForwardingPayload(for: itemIDs) else {
                 displayErrorToast(L10n.errorUnknown)
                 return
             }
-            actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
+            actionsSubject.send(.displayMessageForwarding(forwardingPayload: forwardingPayload))
         }
     }
     

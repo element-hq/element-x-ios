@@ -12,7 +12,7 @@ import SwiftUI
 typealias MessageForwardingScreenViewModelType = StateStoreViewModel<MessageForwardingScreenViewState, MessageForwardingScreenViewAction>
 
 class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, MessageForwardingScreenViewModelProtocol {
-    private let forwardingItem: MessageForwardingItem
+    private let forwardingPayload: MessageForwardingPayload
     private let clientProxy: ClientProxyProtocol
     private let roomSummaryProvider: RoomSummaryProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -23,11 +23,11 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(forwardingItem: MessageForwardingItem,
+    init(forwardingPayload: MessageForwardingPayload,
          userSession: UserSessionProtocol,
          roomSummaryProvider: RoomSummaryProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.forwardingItem = forwardingItem
+        self.forwardingPayload = forwardingPayload
         clientProxy = userSession.clientProxy
         self.roomSummaryProvider = roomSummaryProvider
         self.userIndicatorController = userIndicatorController
@@ -86,7 +86,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         var rooms = [MessageForwardingRoom]()
         
         for summary in roomSummaryProvider.roomListPublisher.value {
-            if summary.id == forwardingItem.roomID {
+            if summary.id == forwardingPayload.roomID {
                 continue
             }
             
@@ -133,7 +133,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             }
             
             // The contents are already in timeline order and the send queue preserves it.
-            for content in forwardingItem.contents {
+            for content in forwardingPayload.contents {
                 if case .failure(let error) = await targetRoomProxy.timeline.sendMessageEventContent(content) {
                     MXLog.error("Failed forwarding message with error: \(error)")
                     hasFailures = true
@@ -147,7 +147,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
         } else if succeededRoomIdentifiers.count > 1 {
             // The flow opens the room when there is a single one, otherwise the user stays here and needs to know it worked.
-            userIndicatorController.submitIndicator(UserIndicator(title: L10n.screenRoomMessagesForwarded(forwardingItem.contents.count)))
+            userIndicatorController.submitIndicator(UserIndicator(title: L10n.screenRoomMessagesForwarded(forwardingPayload.contents.count)))
         }
         
         if !succeededRoomIdentifiers.isEmpty {

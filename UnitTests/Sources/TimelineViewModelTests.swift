@@ -713,8 +713,8 @@ final class TimelineViewModelTests {
         let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .displayMessageForwarding(let forwardingItem) = action {
-                return forwardingItem.ids == [items[0].id] && forwardingItem.contents.count == 1
+            if case .displayMessageForwarding(let forwardingPayload) = action {
+                return forwardingPayload.ids == [items[0].id] && forwardingPayload.contents.count == 1
             }
             return false
         }
@@ -740,8 +740,8 @@ final class TimelineViewModelTests {
         let viewModel = makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: items)))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .displayMessageForwarding(let forwardingItem) = action {
-                return forwardingItem.ids == [items[0].id]
+            if case .displayMessageForwarding(let forwardingPayload) = action {
+                return forwardingPayload.ids == [items[0].id]
             }
             return false
         }
@@ -761,8 +761,8 @@ final class TimelineViewModelTests {
         viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
-            if case .displayMessageForwarding(let forwardingItem) = action {
-                return forwardingItem.ids == [items[1].id, items[3].id] && forwardingItem.contents.count == 2
+            if case .displayMessageForwarding(let forwardingPayload) = action {
+                return forwardingPayload.ids == [items[1].id, items[3].id] && forwardingPayload.contents.count == 2
             }
             return false
         }

@@ -11,7 +11,7 @@ import SwiftUI
 
 enum TimelineMediaPreviewViewModelAction: Equatable {
     case viewInRoomTimeline(TimelineItemIdentifier)
-    case displayMessageForwarding(MessageForwardingItem)
+    case displayMessageForwarding(MessageForwardingPayload)
     case dismiss
 }
 

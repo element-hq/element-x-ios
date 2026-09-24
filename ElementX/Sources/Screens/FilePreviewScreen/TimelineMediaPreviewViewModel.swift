@@ -136,9 +136,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     private func forwardItem(itemID: TimelineItemIdentifier) async {
-        guard let forwardingItem = await timelineViewModel.makeForwardingItem(for: [itemID]) else { return }
+        guard let forwardingPayload = await timelineViewModel.makeForwardingPayload(for: [itemID]) else { return }
         state.previewControllerDriver.send(.dismissDetailsSheet)
-        actionsSubject.send(.displayMessageForwarding(forwardingItem))
+        actionsSubject.send(.displayMessageForwarding(forwardingPayload))
     }
     
     private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
