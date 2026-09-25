@@ -114,6 +114,9 @@ struct PreviewsWrapperView: View {
     
     private(set) var isDone = false
     
+    /// On iOS 27, releasing an ImageRenderer that rendered a preview crashes SwiftUI, so keep them alive for the app's lifetime.
+    @ObservationIgnored private var imageRenderers = [AnyObject]()
+    
     var previewName: String {
         "\(name)-\(currentPreview.displayName ?? String(currentIndex))"
     }
@@ -134,8 +137,9 @@ struct PreviewsWrapperView: View {
         let preferenceReadingView = newPreview.content.onPreferenceChange(SnapshotFulfillmentPreferenceKey.self) { fulfillmentSource = $0?.source }
         
         // Render an image of the view in order to trigger the preference updates to occur.
-        // Release the renderer straight away: on iOS 27, releasing it after the awaits below crashes SwiftUI.
-        _ = ImageRenderer(content: preferenceReadingView).uiImage
+        let imageRenderer = ImageRenderer(content: preferenceReadingView)
+        _ = imageRenderer.uiImage
+        imageRenderers.append(imageRenderer)
         
         switch fulfillmentSource {
         case .publisher(let publisher):
