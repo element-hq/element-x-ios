@@ -438,8 +438,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                    emojiPickerContinuation: continuation,
                                    animated: animated)
                 
-            case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
-                presentMessageForwarding(with: forwardingItem)
+            case (_, .presentMessageForwarding(let forwardingPayload), .messageForwarding):
+                presentMessageForwarding(with: forwardingPayload)
                 
             case (_, .presentMapNavigator(let mode), .mapNavigator):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
@@ -723,8 +723,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentRoomMemberDetails(userID: let userID):
                     stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
-                case .presentMessageForwarding(let forwardingItem):
-                    stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
+                case .presentMessageForwarding(let forwardingPayload):
+                    stateMachine.tryEvent(.presentMessageForwarding(forwardingPayload: forwardingPayload))
                 case .presentCallScreen(let isVoiceCall):
                     actionsSubject.send(.presentCallScreen(roomProxy: roomProxy, isVoiceCall: isVoiceCall))
                 case .presentPinnedEventsTimeline:
@@ -835,8 +835,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                       userInfo: EventUserInfo(animated: animated, emojiPickerContinuation: continuation))
             case .presentRoomMemberDetails(let userID):
                 stateMachine.tryEvent(.startMembersFlow(entryPoint: .roomMember(userID: userID)))
-            case .presentMessageForwarding(let forwardingItem):
-                stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
+            case .presentMessageForwarding(let forwardingPayload):
+                stateMachine.tryEvent(.presentMessageForwarding(forwardingPayload: forwardingPayload))
             case .presentResolveSendFailure(let failure, let sendHandle):
                 stateMachine.tryEvent(.presentResolveSendFailure(failure: failure,
                                                                  sendHandle: sendHandle))
@@ -1262,12 +1262,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentMessageForwarding(with forwardingItem: MessageForwardingItem) {
+    private func presentMessageForwarding(with forwardingPayload: MessageForwardingPayload) {
         let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let stackCoordinator = NavigationStackCoordinator()
         
-        let parameters = MessageForwardingScreenCoordinatorParameters(forwardingItem: forwardingItem,
+        let parameters = MessageForwardingScreenCoordinatorParameters(forwardingPayload: forwardingPayload,
                                                                       userSession: userSession,
                                                                       roomSummaryProvider: roomSummaryProvider,
                                                                       userIndicatorController: flowParameters.userIndicatorController)
@@ -1281,6 +1281,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .sent(let roomIDs):
                 navigationStackCoordinator.setSheetCoordinator(nil)
+                clearMessageSelection()
                 processPostMessageForwardingTo(rooms: roomIDs)
             }
         }
@@ -1291,6 +1292,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMessageForwarding)
         }
+    }
+    
+    /// Ends the message selection now that the forwarding has completed. Only one timeline can be selecting at a time.
+    private func clearMessageSelection() {
+        roomScreenCoordinator?.clearMessageSelection()
+        childThreadScreenCoordinators.forEach { $0.clearMessageSelection() }
     }
     
     private func presentNotificationSettingsScreen() {
@@ -1628,8 +1635,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                       userInfo: EventUserInfo(animated: false)) // No animation so the timeline visible when the preview animates away.
             case .finished:
                 stateMachine.tryEvent(.dismissMediaEventsTimeline)
-            case .displayMessageForwarding(let forwardingItem):
-                stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
+            case .displayMessageForwarding(let forwardingPayload):
+                stateMachine.tryEvent(.presentMessageForwarding(forwardingPayload: forwardingPayload))
             }
         }
         .store(in: &cancellables)

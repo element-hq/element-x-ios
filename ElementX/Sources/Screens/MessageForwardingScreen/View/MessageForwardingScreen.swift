@@ -99,9 +99,9 @@ private struct MessageForwardingListRow: View {
 struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-        let viewModel = MessageForwardingScreenViewModel(forwardingItem: .init(id: .randomEvent,
-                                                                               roomID: "",
-                                                                               content: RoomMessageEventContentWithoutRelationSDKMock()),
+        let viewModel = MessageForwardingScreenViewModel(forwardingPayload: .init(ids: [.randomEvent],
+                                                                                  roomID: "",
+                                                                                  contents: [RoomMessageEventContentWithoutRelationSDKMock()]),
                                                          userSession: UserSessionMock(.init()),
                                                          roomSummaryProvider: summaryProvider,
                                                          userIndicatorController: UserIndicatorControllerMock())

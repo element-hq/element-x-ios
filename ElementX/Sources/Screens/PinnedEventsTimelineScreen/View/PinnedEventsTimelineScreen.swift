@@ -13,6 +13,10 @@ struct PinnedEventsTimelineScreen: View {
     @ObservedObject var context: PinnedEventsTimelineScreenViewModel.Context
     @ObservedObject var timelineContext: TimelineViewModel.Context
     
+    private var isMessageSelectionActive: Bool {
+        timelineContext.viewState.messageSelection.isActive
+    }
+    
     private var title: String {
         let pinnedEventIDs = timelineContext.viewState.pinnedEventIDs
         guard !pinnedEventIDs.isEmpty else {
@@ -26,6 +30,11 @@ struct PinnedEventsTimelineScreen: View {
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if isMessageSelectionActive {
+                    TimelineMessageSelectionActionBar(context: timelineContext)
+                }
+            }
             .background(.compound.bgCanvasDefault)
             .interactiveDismissDisabled()
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
@@ -55,9 +64,15 @@ struct PinnedEventsTimelineScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionClose) {
-                context.send(viewAction: .close)
+        if isMessageSelectionActive {
+            TimelineMessageSelectionToolbar {
+                timelineContext.send(viewAction: .clearMessageSelection)
+            }
+        } else {
+            ToolbarItem(placement: .confirmationAction) {
+                Button(L10n.actionClose) {
+                    context.send(viewAction: .close)
+                }
             }
         }
     }
@@ -71,28 +86,45 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                                                appSettings: .volatile(),
                                                                analyticsService: AnalyticsServiceMock(.init()))
     
-    static let emptyTimelineViewModel: TimelineViewModel = {
-        let timelineController = TimelineControllerMock(.init(timelineKind: .pinned, timelineItems: []))
-        
-        let appSettings = AppSettings.volatile()
-        
-        return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
-                                 timelineController: timelineController,
-                                 userSession: UserSessionMock(.init()),
-                                 mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 userIndicatorController: UserIndicatorControllerMock(),
-                                 appMediator: AppMediatorMock(.init()),
-                                 appSettings: appSettings,
-                                 analyticsService: AnalyticsServiceMock(.init()),
-                                 emojiProvider: EmojiProvider(appSettings: appSettings),
-                                 linkMetadataProvider: LinkMetadataProvider(),
-                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-    }()
+    static let emptyTimelineViewModel = makeTimelineViewModel(timelineItems: [])
+    static let selectingTimelineViewModel = makeTimelineViewModel(timelineItems: TimelineFixtures.default, isSelecting: true)
     
     static var previews: some View {
         ElementNavigationStack {
             PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: emptyTimelineViewModel.context)
         }
         .previewDisplayName("Empty")
+        
+        ElementNavigationStack {
+            PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: selectingTimelineViewModel.context)
+        }
+        .previewDisplayName("Selecting")
+        .snapshotPreferences(expect: selectingTimelineViewModel.context.$viewState.map(\.messageSelection.isActive))
+    }
+    
+    static func makeTimelineViewModel(timelineItems: [RoomTimelineItemProtocol], isSelecting: Bool = false) -> TimelineViewModel {
+        let eventIDs = timelineItems.compactMap { ($0 as? EventBasedTimelineItemProtocol)?.id.eventID }
+        let timelineController = TimelineControllerMock(.init(timelineKind: .pinned, timelineItems: timelineItems))
+        
+        let appSettings = AppSettings.volatile()
+        appSettings.messageMultiSelectEnabled = isSelecting
+        
+        let timelineViewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room", pinnedEventIDs: Set(eventIDs))),
+                                                  timelineController: timelineController,
+                                                  userSession: UserSessionMock(.init()),
+                                                  mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appMediator: AppMediatorMock(.init()),
+                                                  appSettings: appSettings,
+                                                  analyticsService: AnalyticsServiceMock(.init()),
+                                                  emojiProvider: EmojiProvider(appSettings: appSettings),
+                                                  linkMetadataProvider: LinkMetadataProvider(),
+                                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+        
+        if isSelecting {
+            timelineViewModel.state.messageSelection.selectedEventIDs = Set(eventIDs.prefix(2))
+        }
+        
+        return timelineViewModel
     }
 }

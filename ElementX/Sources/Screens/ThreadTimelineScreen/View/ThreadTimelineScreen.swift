@@ -30,7 +30,7 @@ struct ThreadTimelineScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
-            .navigationBarBackButtonHidden(isSelectionActive)
+            .navigationBarBackButtonHidden(isMessageSelectionActive)
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .overlay(alignment: .top) {
                 FloatingDateBadge(dateText: timelineContext.floatingDate?.formattedDateSeparator()) {
@@ -44,19 +44,25 @@ struct ThreadTimelineScreen: View {
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                composer
-                    .padding(.top, 8)
-                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                    .environmentObject(timelineContext)
-                    .environment(\.timelineContext, timelineContext)
-                    // Make sure the reply header honours the hideTimelineMedia setting too.
-                    .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
-                    .collapsedInPlace(isSelectionActive)
+                VStack(spacing: 0) {
+                    composer
+                        .padding(.top, 8)
+                        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                        .environmentObject(timelineContext)
+                        .environment(\.timelineContext, timelineContext)
+                        // Make sure the reply header honours the hideTimelineMedia setting too.
+                        .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
+                        .collapsedInPlace(isMessageSelectionActive)
+                    
+                    if isMessageSelectionActive {
+                        TimelineMessageSelectionActionBar(context: timelineContext)
+                    }
+                }
             }
     }
     
-    private var isSelectionActive: Bool {
-        timelineContext.viewState.selection.isActive
+    private var isMessageSelectionActive: Bool {
+        timelineContext.viewState.messageSelection.isActive
     }
     
     @ViewBuilder
@@ -70,22 +76,22 @@ struct ThreadTimelineScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if isSelectionActive {
-            TimelineSelectionToolbar(count: timelineContext.viewState.selection.count) {
-                timelineContext.send(viewAction: .clearSelection)
+        // .principal + .primaryAction works better than .navigation leading + trailing
+        // as the latter disables interaction in the action button for rooms with long names
+        ToolbarItem(placement: .principal) {
+            RoomHeaderView(roomName: L10n.commonThread,
+                           roomSubtitle: context.viewState.roomTitle,
+                           roomAvatar: context.viewState.roomAvatar,
+                           dmRecipientDetails: context.viewState.dmRecipientDetails,
+                           roomHistorySharingState: context.viewState.roomHistorySharingState,
+                           mediaProvider: context.mediaProvider) {
+                // There is no action but the iOS 26 designs have it looking like a button.
             }
-        } else {
-            // .principal + .primaryAction works better than .navigation leading + trailing
-            // as the latter disables interaction in the action button for rooms with long names
-            ToolbarItem(placement: .principal) {
-                RoomHeaderView(roomName: L10n.commonThread,
-                               roomSubtitle: context.viewState.roomTitle,
-                               roomAvatar: context.viewState.roomAvatar,
-                               dmRecipientDetails: context.viewState.dmRecipientDetails,
-                               roomHistorySharingState: context.viewState.roomHistorySharingState,
-                               mediaProvider: context.mediaProvider) {
-                    // There is no action but the iOS 26 designs have it looking like a button.
-                }
+        }
+        
+        if isMessageSelectionActive {
+            TimelineMessageSelectionToolbar {
+                timelineContext.send(viewAction: .clearMessageSelection)
             }
         }
     }

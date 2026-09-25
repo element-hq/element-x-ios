@@ -690,7 +690,7 @@ final class TimelineViewModelTests {
     // MARK: - Selection
     
     @Test
-    func selectMenuActionEntersSelection() async throws {
+    func forwardMenuActionStartsSelection() async throws {
         let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
         let viewModel = makeSelectionViewModel(items: items)
         
@@ -700,22 +700,89 @@ final class TimelineViewModelTests {
             }
             return false
         }
-        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .selectMessages))
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .forward(itemID: items[0].id)))
         try await deferred.fulfill()
         
-        #expect(viewModel.state.selection.isActive)
-        #expect(viewModel.state.selection.selectedEventIDs == ["$1"])
+        #expect(viewModel.state.messageSelection.isActive)
+        #expect(viewModel.state.messageSelection.selectedEventIDs == ["$1"])
     }
     
     @Test
-    func selectIsIgnoredWhenFlagIsOff() {
+    func forwardMenuActionForwardsTheMessageWhenFlagIsOff() async throws {
         let items = [TextRoomTimelineItem(eventID: "$1")]
         let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)))
         
-        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .selectMessages))
-        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .displayMessageForwarding(let forwardingPayload) = action {
+                return forwardingPayload.ids == [items[0].id] && forwardingPayload.contents.count == 1
+            }
+            return false
+        }
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .forward(itemID: items[0].id)))
+        try await deferred.fulfill()
         
-        #expect(!viewModel.state.selection.isActive)
+        #expect(!viewModel.state.messageSelection.isActive)
+    }
+    
+    @Test
+    func forwardMenuActionStartsSelectionInThePinnedTimeline() {
+        let items = [TextRoomTimelineItem(eventID: "$1")]
+        let viewModel = makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineKind: .pinned, timelineItems: items)))
+        
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .forward(itemID: items[0].id)))
+        
+        #expect(viewModel.state.messageSelection.selectedEventIDs == ["$1"])
+    }
+    
+    @Test
+    func forwardMenuActionForwardsTheMessageInTheMediaTimeline() async throws {
+        let items = [TextRoomTimelineItem(eventID: "$1")]
+        let viewModel = makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineKind: .media(.mediaFilesScreen), timelineItems: items)))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .displayMessageForwarding(let forwardingPayload) = action {
+                return forwardingPayload.ids == [items[0].id]
+            }
+            return false
+        }
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .forward(itemID: items[0].id)))
+        try await deferred.fulfill()
+        
+        #expect(!viewModel.state.messageSelection.isActive)
+    }
+    
+    @Test
+    func forwardSelectionUsesTimelineOrder() async throws {
+        let items = (1...4).map { TextRoomTimelineItem(eventID: "$\($0)") }
+        let viewModel = makeSelectionViewModel(items: items)
+        
+        // Select the last message first, then the second one.
+        startSelection(items[3].id, in: viewModel)
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .displayMessageForwarding(let forwardingPayload) = action {
+                return forwardingPayload.ids == [items[1].id, items[3].id] && forwardingPayload.contents.count == 2
+            }
+            return false
+        }
+        viewModel.process(viewAction: .forwardMessageSelection)
+        try await deferred.fulfill()
+        
+        // The selection is kept until the forwarding completes, so cancelling the picker returns to it.
+        #expect(viewModel.state.messageSelection.selectedEventIDs == ["$2", "$4"])
+    }
+    
+    @Test
+    func forwardingCompletionClearsTheSelection() {
+        let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
+        let viewModel = makeSelectionViewModel(items: items)
+        
+        startSelection(items[0].id, in: viewModel)
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
+        viewModel.clearMessageSelection()
+        
+        #expect(!viewModel.state.messageSelection.isActive)
     }
     
     @Test
@@ -724,33 +791,33 @@ final class TimelineViewModelTests {
         let viewModel = makeSelectionViewModel(items: items)
         
         // Toggling before entering the selection does nothing.
-        viewModel.process(viewAction: .toggleSelection(itemID: items[0].id))
-        #expect(!viewModel.state.selection.isActive)
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[0].id))
+        #expect(!viewModel.state.messageSelection.isActive)
         
-        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
-        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
-        #expect(viewModel.state.selection.selectedEventIDs == ["$1", "$2"])
-        #expect(viewModel.state.selection.count == 2)
+        startSelection(items[0].id, in: viewModel)
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
+        #expect(viewModel.state.messageSelection.selectedEventIDs == ["$1", "$2"])
+        #expect(viewModel.state.messageSelection.count == 2)
         
-        viewModel.process(viewAction: .toggleSelection(itemID: items[0].id))
-        #expect(viewModel.state.selection.selectedEventIDs == ["$2"])
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[0].id))
+        #expect(viewModel.state.messageSelection.selectedEventIDs == ["$2"])
         
         // Deselecting the last item ends the selection.
-        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
-        #expect(!viewModel.state.selection.isActive)
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
+        #expect(!viewModel.state.messageSelection.isActive)
     }
     
     @Test
-    func clearSelectionEndsTheSelection() {
+    func clearMessageSelectionEndsTheSelection() {
         let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
         let viewModel = makeSelectionViewModel(items: items)
         
-        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
-        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
-        viewModel.process(viewAction: .clearSelection)
+        startSelection(items[0].id, in: viewModel)
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
+        viewModel.process(viewAction: .clearMessageSelection)
         
-        #expect(!viewModel.state.selection.isActive)
-        #expect(viewModel.state.selection.selectedEventIDs.isEmpty)
+        #expect(!viewModel.state.messageSelection.isActive)
+        #expect(viewModel.state.messageSelection.selectedEventIDs.isEmpty)
     }
     
     @Test
@@ -777,33 +844,34 @@ final class TimelineViewModelTests {
                                              canBeRepliedTo: true,
                                              sender: .init(id: "@bob:matrix.org"),
                                              content: .init(body: "Sending"))
-        let nonSelectableItems: [RoomTimelineItemProtocol] = [state, redacted, localEcho]
+        let poll = PollRoomTimelineItem.mock(poll: .emptyDisclosed)
+        let nonSelectableItems: [RoomTimelineItemProtocol] = [state, redacted, localEcho, poll]
         let viewModel = makeSelectionViewModel(items: [text] + nonSelectableItems)
         
-        viewModel.process(viewAction: .startSelection(itemID: state.id))
-        #expect(!viewModel.state.selection.isActive)
+        startSelection(state.id, in: viewModel)
+        #expect(!viewModel.state.messageSelection.isActive)
         
-        viewModel.process(viewAction: .startSelection(itemID: text.id))
+        startSelection(text.id, in: viewModel)
         for item in nonSelectableItems {
-            viewModel.process(viewAction: .toggleSelection(itemID: item.id))
+            viewModel.process(viewAction: .toggleMessageSelection(itemID: item.id))
         }
-        #expect(viewModel.state.selection.selectedEventIDs == ["$1"])
+        #expect(viewModel.state.messageSelection.selectedEventIDs == ["$1"])
     }
     
     @Test
     func selectionIsLimited() {
-        let items = (0...TimelineSelectionState.limit).map { TextRoomTimelineItem(eventID: "$\($0)") }
+        let items = (0...TimelineMessageSelectionState.limit).map { TextRoomTimelineItem(eventID: "$\($0)") }
         let userIndicatorController = UserIndicatorControllerMock()
         let viewModel = makeSelectionViewModel(items: items, userIndicatorController: userIndicatorController)
         
-        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        startSelection(items[0].id, in: viewModel)
         for item in items.dropFirst() {
-            viewModel.process(viewAction: .toggleSelection(itemID: item.id))
+            viewModel.process(viewAction: .toggleMessageSelection(itemID: item.id))
         }
         
-        #expect(viewModel.state.selection.count == TimelineSelectionState.limit)
-        #expect(viewModel.state.selection.isAtLimit)
-        #expect(!viewModel.state.selection.contains(items.last?.id.eventID))
+        #expect(viewModel.state.messageSelection.count == TimelineMessageSelectionState.limit)
+        #expect(viewModel.state.messageSelection.isAtLimit)
+        #expect(!viewModel.state.messageSelection.contains(items.last?.id.eventID))
         #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1)
     }
     
@@ -813,9 +881,9 @@ final class TimelineViewModelTests {
         let timelineController = TimelineControllerMock(.init(timelineItems: items))
         let viewModel = makeSelectionViewModel(timelineController: timelineController)
         
-        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
-        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
-        #expect(viewModel.state.selection.count == 2)
+        startSelection(items[0].id, in: viewModel)
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
+        #expect(viewModel.state.messageSelection.count == 2)
         
         // The first message gets redacted by someone else.
         let redacted = RedactedRoomTimelineItem(id: items[0].id,
@@ -825,7 +893,7 @@ final class TimelineViewModelTests {
                                                 isEditable: false,
                                                 canBeRepliedTo: false,
                                                 sender: .init(id: "@alice:matrix.org"))
-        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.selection.selectedEventIDs == ["$2"] }
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.messageSelection.selectedEventIDs == ["$2"] }
         timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [redacted, items[1]], isSwitchingTimelines: false))
         try await deferred.fulfill()
     }
@@ -836,10 +904,10 @@ final class TimelineViewModelTests {
         let timelineController = TimelineControllerMock(.init(timelineItems: items))
         let viewModel = makeSelectionViewModel(timelineController: timelineController)
         
-        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
-        #expect(viewModel.state.selection.isActive)
+        startSelection(items[0].id, in: viewModel)
+        #expect(viewModel.state.messageSelection.isActive)
         
-        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.selection.isActive }
+        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.messageSelection.isActive }
         timelineController.callbacks.send(.updatedTimelineItems(timelineItems: items, isSwitchingTimelines: true))
         try await deferred.fulfill()
     }
@@ -851,10 +919,10 @@ final class TimelineViewModelTests {
         appSettings.messageMultiSelectEnabled = true
         let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)), appSettings: appSettings)
         
-        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
-        #expect(viewModel.state.selection.isActive)
+        startSelection(items[0].id, in: viewModel)
+        #expect(viewModel.state.messageSelection.isActive)
         
-        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.selection.isEnabled && !$0.selection.isActive }
+        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.messageSelection.isEnabled && !$0.messageSelection.isActive }
         appSettings.messageMultiSelectEnabled = false
         try await deferred.fulfill()
     }
@@ -878,6 +946,11 @@ final class TimelineViewModelTests {
                           emojiProvider: EmojiProvider(appSettings: appSettings),
                           linkMetadataProvider: LinkMetadataProvider(),
                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+    }
+    
+    /// Starts a selection the way the app does, by choosing Forward on the item.
+    private func startSelection(_ itemID: TimelineItemIdentifier, in viewModel: TimelineViewModel) {
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: itemID, action: .forward(itemID: itemID)))
     }
     
     private func makeSelectionViewModel(items: [RoomTimelineItemProtocol],

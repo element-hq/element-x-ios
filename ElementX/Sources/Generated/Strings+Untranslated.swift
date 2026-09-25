@@ -12,8 +12,6 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
-  /// Show all activity in the room list (dots or number of unread messages)
-  internal static var screenNotificationSettingsShowAllRoomListActivity: String { return UntranslatedL10n.tr("Untranslated", "screen_notification_settings_show_all_room_list_activity") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...

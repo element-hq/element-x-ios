@@ -9,7 +9,7 @@
 import SwiftUI
 
 /// How a timeline item takes part in an active multi-selection, for accessibility purposes.
-enum TimelineItemAccessibilitySelection {
+enum TimelineItemAccessibilityMessageSelection {
     /// No selection is active, the item offers its regular message actions.
     case none
     /// A selection is active, the item acts as a toggle when it can be selected.
@@ -18,7 +18,7 @@ enum TimelineItemAccessibilitySelection {
 
 private struct TimelineItemAccessibilityModifier: ViewModifier {
     let timelineItem: RoomTimelineItemProtocol
-    let selection: TimelineItemAccessibilitySelection
+    let selection: TimelineItemAccessibilityMessageSelection
     let action: () -> Void
     
     private var isSelecting: Bool {
@@ -77,7 +77,7 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
                     }
                 }
         case .selecting(let isSelected):
-            if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isBulkSelectable {
+            if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isForwardable {
                 view
                     .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
                     .accessibilityAction(.default, action)
@@ -91,7 +91,7 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
 
 extension View {
     func timelineItemAccessibility(_ timelineItem: RoomTimelineItemProtocol,
-                                   selection: TimelineItemAccessibilitySelection = .none,
+                                   selection: TimelineItemAccessibilityMessageSelection = .none,
                                    action: @escaping () -> Void) -> some View {
         modifier(TimelineItemAccessibilityModifier(timelineItem: timelineItem, selection: selection, action: action))
     }

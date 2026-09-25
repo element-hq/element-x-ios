@@ -17,7 +17,7 @@ enum MessageForwardingScreenViewModelAction {
 struct MessageForwardingScreenViewState: BindableState {
     var rooms: [MessageForwardingRoom] = []
     var selectedRoomIDs: Set<String> = []
-    let maxRoomSelectionCount = 10
+    let maxRoomSelectionCount = 5
     var bindings = MessageForwardingScreenViewStateBindings()
     
     var isAtRoomSelectionLimit: Bool {
@@ -44,20 +44,20 @@ struct MessageForwardingRoom: Identifiable, Equatable {
     let avatar: RoomAvatar
 }
 
-struct MessageForwardingItem: Hashable {
-    /// The source item's timeline ID. Only necessary for a rough Hashable conformance.
-    let id: TimelineItemIdentifier
-    /// The source item's room ID.
+struct MessageForwardingPayload: Hashable {
+    /// The source items' timeline IDs. Only necessary for a rough Hashable conformance.
+    let ids: [TimelineItemIdentifier]
+    /// The source items' room ID.
     let roomID: String
-    /// The item's content to be forwarded.
-    let content: RoomMessageEventContentWithoutRelation
+    /// The contents to be forwarded, in timeline order.
+    let contents: [RoomMessageEventContentWithoutRelation]
     
-    static func == (lhs: MessageForwardingItem, rhs: MessageForwardingItem) -> Bool {
-        lhs.id == rhs.id && lhs.roomID == rhs.roomID
+    static func == (lhs: MessageForwardingPayload, rhs: MessageForwardingPayload) -> Bool {
+        lhs.ids == rhs.ids && lhs.roomID == rhs.roomID
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(ids)
         hasher.combine(roomID)
     }
 }

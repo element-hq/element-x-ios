@@ -91,8 +91,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentLiveLocationViewer(let sender, let initialLiveLocationShare):
                     presentMapNavigator(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialLiveLocationShare),
                                         timelineController: timelineController)
-                case .displayMessageForwarding(let forwardingItem):
-                    presentMessageForwarding(with: forwardingItem)
+                case .displayMessageForwarding(let forwardingPayload):
+                    presentMessageForwarding(with: forwardingPayload)
                 case .displayRoomScreenWithFocussedPin(let eventID, let threadRootEventID):
                     actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID, threadRootEventID: threadRootEventID))
                 }
@@ -132,12 +132,12 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
     }
     
-    private func presentMessageForwarding(with forwardingItem: MessageForwardingItem) {
+    private func presentMessageForwarding(with forwardingPayload: MessageForwardingPayload) {
         let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let stackCoordinator = NavigationStackCoordinator()
         
-        let parameters = MessageForwardingScreenCoordinatorParameters(forwardingItem: forwardingItem,
+        let parameters = MessageForwardingScreenCoordinatorParameters(forwardingPayload: forwardingPayload,
                                                                       userSession: userSession,
                                                                       roomSummaryProvider: roomSummaryProvider,
                                                                       userIndicatorController: flowParameters.userIndicatorController)

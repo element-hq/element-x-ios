@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 struct MessageForwardingScreenCoordinatorParameters {
-    let forwardingItem: MessageForwardingItem
+    let forwardingPayload: MessageForwardingPayload
     let userSession: UserSessionProtocol
     let roomSummaryProvider: RoomSummaryProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -31,7 +31,7 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: MessageForwardingScreenCoordinatorParameters) {
-        viewModel = MessageForwardingScreenViewModel(forwardingItem: parameters.forwardingItem,
+        viewModel = MessageForwardingScreenViewModel(forwardingPayload: parameters.forwardingPayload,
                                                      userSession: parameters.userSession,
                                                      roomSummaryProvider: parameters.roomSummaryProvider,
                                                      userIndicatorController: parameters.userIndicatorController)
