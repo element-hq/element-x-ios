@@ -145,7 +145,7 @@ struct NotificationSettingsScreen: View {
     
     private var roomListActivitySection: some View {
         Section {
-            ListRow(label: .plain(title: UntranslatedL10n.screenNotificationSettingsShowAllRoomListActivity),
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsShowAllActivity),
                     kind: .toggle($context.showAllRoomListActivity))
                 .onChange(of: context.showAllRoomListActivity) {
                     context.send(viewAction: .showAllRoomListActivityChanged)
