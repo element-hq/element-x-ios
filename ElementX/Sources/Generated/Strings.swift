@@ -2544,6 +2544,8 @@ internal nonisolated enum L10n {
   internal static var screenNotificationSettingsNotificationSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_notification_section_title") }
   /// Mentions of @room
   internal static var screenNotificationSettingsRoomMentionLabel: String { return L10n.tr("Localizable", "screen_notification_settings_room_mention_label") }
+  /// Show all activity in the room list (dots or number of unread messages)
+  internal static var screenNotificationSettingsShowAllActivity: String { return L10n.tr("Localizable", "screen_notification_settings_show_all_activity") }
   /// Custom
   internal static var screenNotificationSettingsSoundCustomFallback: String { return L10n.tr("Localizable", "screen_notification_settings_sound_custom_fallback") }
   /// Custom sound...

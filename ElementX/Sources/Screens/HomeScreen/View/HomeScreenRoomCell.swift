@@ -15,7 +15,6 @@ struct HomeScreenRoomCell: View {
     @Environment(\.redactionReasons) private var redactionReasons
     
     let room: HomeScreenRoom
-    var roomListActivityVisibility: RoomListActivityVisibility = .current
     let isSelected: Bool
     let mediaProvider: MediaProviderProtocol!
     let action: (HomeScreenViewAction) -> Void
@@ -82,7 +81,7 @@ struct HomeScreenRoomCell: View {
                     Text(String(statusEmoji))
                 }
             }
-            .font(headerFont)
+            .font(.compound.bodyLGSemibold)
             .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity, alignment: .leading)
             
@@ -91,17 +90,6 @@ struct HomeScreenRoomCell: View {
                     .font(room.isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
                     .foregroundColor(room.isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
             }
-        }
-    }
-    
-    private var headerFont: Font {
-        switch roomListActivityVisibility {
-        case .current:
-            .compound.bodyLGSemibold
-        case .show:
-            room.hasUnreads ? .compound.bodyLGSemibold : .compound.bodyLG
-        case .hide:
-            room.isHighlighted ? .compound.bodyLGSemibold : .compound.bodyLG
         }
     }
     
@@ -190,19 +178,8 @@ struct HomeScreenRoomCell: View {
     private var lastMessage: some View {
         if let displayedLastMessage = room.displayedLastMessage {
             Text(displayedLastMessage)
-                .font(lastMessageFont)
+                .font(.compound.bodyMD)
                 .lastMessageFormatting(hasFailed: room.lastMessageState == .failed)
-        }
-    }
-    
-    private var lastMessageFont: Font {
-        switch roomListActivityVisibility {
-        case .current:
-            .compound.bodyMD
-        case .show:
-            room.hasUnreads ? .compound.bodyMDSemibold : .compound.bodyMD
-        case .hide:
-            room.isHighlighted ? .compound.bodyMDSemibold : .compound.bodyMD
         }
     }
 }

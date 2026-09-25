@@ -194,7 +194,7 @@ struct HomeScreenRoomTests {
     }
     
     @Test
-    mutating func mentionAndKeywordsUnhighlightedDotHidden() {
+    mutating func mentionAndKeywordsUnhighlightedDotHiddenWhenNotShowingAllActivity() {
         setupRoomSummary(isMarkedUnread: false,
                          unreadMessagesCount: 10,
                          unreadMentionsCount: 0,
@@ -202,7 +202,7 @@ struct HomeScreenRoomTests {
                          notificationMode: .mentionsAndKeywordsOnly,
                          hasOngoingCall: false)
         
-        let room = HomeScreenRoom(summary: roomSummary, roomListActivityVisibility: .show)
+        let room = HomeScreenRoom(summary: roomSummary, showAllActivity: false)
         
         #expect(!room.isHighlighted)
         #expect(!room.badges.isDotShown)

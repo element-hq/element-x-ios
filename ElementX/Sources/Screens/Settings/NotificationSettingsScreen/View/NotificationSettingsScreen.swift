@@ -26,7 +26,11 @@ struct NotificationSettingsScreen: View {
                 
                 if context.enableNotifications {
                     roomsNotificationSection
-                    
+                }
+                
+                roomListActivitySection
+                
+                if context.enableNotifications {
                     if context.viewState.showCallsSettings, context.viewState.settings?.callsEnabled != nil {
                         callsSection
                     }
@@ -136,6 +140,16 @@ struct NotificationSettingsScreen: View {
         } header: {
             Text(L10n.screenNotificationSettingsNotificationSectionTitle)
                 .compoundListSectionHeader()
+        }
+    }
+    
+    private var roomListActivitySection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsShowAllActivity),
+                    kind: .toggle($context.showAllRoomListActivity))
+                .onChange(of: context.showAllRoomListActivity) {
+                    context.send(viewAction: .showAllRoomListActivityChanged)
+                }
         }
     }
     

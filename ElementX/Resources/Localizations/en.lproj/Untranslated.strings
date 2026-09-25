@@ -1,4 +1,5 @@
 "screen_home_tab_search" = "Search";
+"screen_notification_settings_show_all_room_list_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_search_empty_state_message" = "Search for chats and messages";
 "screen_search_empty_state_title" = "Start searching...";
 "screen_search_no_results_message" = "There are no results for “%1$@.” Try a new search term.";
