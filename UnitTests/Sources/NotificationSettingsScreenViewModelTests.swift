@@ -15,7 +15,7 @@ import Testing
 struct NotificationSettingsScreenViewModelTests {
     private var viewModel: NotificationSettingsScreenViewModelProtocol
     private var context: NotificationSettingsScreenViewModelType.Context
-    private var appSettings: AppSettings
+    private var userSettings: UserSettings
     private var userNotificationCenter: UserNotificationCenterMock
     private var notificationSettingsProxy: NotificationSettingsProxyMock
     private var toneManager: NotificationToneManagerMock
@@ -23,7 +23,7 @@ struct NotificationSettingsScreenViewModelTests {
     init() throws {
         userNotificationCenter = UserNotificationCenterMock()
         userNotificationCenter.authorizationStatusReturnValue = .authorized
-        appSettings = AppSettings.volatile()
+        userSettings = UserSettings.volatile()
         notificationSettingsProxy = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         notificationSettingsProxy.getDefaultRoomNotificationModeIsEncryptedIsOneToOneReturnValue = .allMessages
         notificationSettingsProxy.isRoomMentionEnabledReturnValue = true
@@ -31,7 +31,7 @@ struct NotificationSettingsScreenViewModelTests {
         toneManager = NotificationToneManagerMock()
         toneManager.customTonesReturnValue = []
         
-        viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
+        viewModel = NotificationSettingsScreenViewModel(userSettings: userSettings,
                                                         userNotificationCenter: userNotificationCenter,
                                                         notificationToneManager: toneManager,
                                                         notificationSettingsProxy: notificationSettingsProxy,
@@ -42,16 +42,16 @@ struct NotificationSettingsScreenViewModelTests {
     
     @Test
     func enableNotifications() {
-        appSettings.enableNotifications = false
+        userSettings.enableNotifications = false
         context.send(viewAction: .changedEnableNotifications)
-        #expect(appSettings.enableNotifications)
+        #expect(userSettings.enableNotifications)
     }
     
     @Test
     func disableNotifications() {
-        appSettings.enableNotifications = true
+        userSettings.enableNotifications = true
         context.send(viewAction: .changedEnableNotifications)
-        #expect(!appSettings.enableNotifications)
+        #expect(!userSettings.enableNotifications)
     }
     
     @Test
@@ -410,8 +410,8 @@ struct NotificationSettingsScreenViewModelTests {
     func selectingAlertTonePersistsSelection() {
         // Given a tone and a manager that persists the selection to app settings
         let tone = NotificationTone.createBundledSound(label: "Test", filename: "test.caf")
-        toneManager.setSelectedToneClosure = { [appSettings] selectedTone in
-            appSettings.selectedNotificationTone = selectedTone
+        toneManager.setSelectedToneClosure = { [userSettings] selectedTone in
+            userSettings.selectedNotificationTone = selectedTone
             return NotificationToneManager.libraryLocation
         }
         
@@ -419,21 +419,21 @@ struct NotificationSettingsScreenViewModelTests {
         context.send(viewAction: .selectAlertTone(tone))
         
         // Then it is reflected in app settings
-        #expect(appSettings.selectedNotificationTone == tone)
+        #expect(userSettings.selectedNotificationTone == tone)
     }
     
     @Test
     func deletingActiveToneResetsSelection() {
         // Given the active tone is a custom tone
         let customTone = NotificationTone.createCustomUserSound(filename: "custom.caf")
-        appSettings.selectedNotificationTone = customTone
+        userSettings.selectedNotificationTone = customTone
         toneManager.customTonesReturnValue = [customTone]
         
         // When that tone is deleted
         context.send(viewAction: .deleteCustomAlertTones([customTone]))
         
         // Then the selection is cleared, falling back to the default
-        #expect(appSettings.selectedNotificationTone == nil)
+        #expect(userSettings.selectedNotificationTone == nil)
     }
     
     @Test
@@ -441,14 +441,14 @@ struct NotificationSettingsScreenViewModelTests {
         // Given a custom tone is active and a different custom tone also exists
         let activeTone = NotificationTone.createCustomUserSound(filename: "active.caf")
         let otherTone = NotificationTone.createCustomUserSound(filename: "other.caf")
-        appSettings.selectedNotificationTone = activeTone
+        userSettings.selectedNotificationTone = activeTone
         toneManager.customTonesReturnValue = [activeTone, otherTone]
         
         // When the non-active tone is deleted
         context.send(viewAction: .deleteCustomAlertTones([otherTone]))
         
         // Then the active selection is unchanged
-        #expect(appSettings.selectedNotificationTone == activeTone)
+        #expect(userSettings.selectedNotificationTone == activeTone)
     }
     
     @Test
@@ -457,7 +457,7 @@ struct NotificationSettingsScreenViewModelTests {
         let customTone = NotificationTone.createCustomUserSound(filename: "custom.caf")
         var remainingTones = [customTone]
         toneManager.customTonesClosure = { remainingTones }
-        let localVM = NotificationSettingsScreenViewModel(appSettings: appSettings,
+        let localVM = NotificationSettingsScreenViewModel(userSettings: userSettings,
                                                           userNotificationCenter: userNotificationCenter,
                                                           notificationToneManager: toneManager,
                                                           notificationSettingsProxy: notificationSettingsProxy,
@@ -476,7 +476,7 @@ struct NotificationSettingsScreenViewModelTests {
     func deleteCustomToneFailurePreservesSelection() {
         // Given the active tone is a custom tone and deletion will fail
         let customTone = NotificationTone.createCustomUserSound(filename: "custom.caf")
-        appSettings.selectedNotificationTone = customTone
+        userSettings.selectedNotificationTone = customTone
         toneManager.deleteCustomToneThrowableError = NSError(domain: "test", code: 1)
         toneManager.customTonesReturnValue = [customTone]
         
@@ -484,7 +484,7 @@ struct NotificationSettingsScreenViewModelTests {
         context.send(viewAction: .deleteCustomAlertTones([customTone]))
         
         // Then the selection is unchanged
-        #expect(appSettings.selectedNotificationTone == customTone)
+        #expect(userSettings.selectedNotificationTone == customTone)
     }
     
     @Test

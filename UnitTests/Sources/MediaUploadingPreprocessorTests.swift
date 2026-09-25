@@ -13,13 +13,13 @@ import UniformTypeIdentifiers
 
 final class MediaUploadingPreprocessorTests {
     let maxUploadSize: UInt = 100 * 1024 * 1024
-    var appSettings: AppSettings!
+    var userSettings: UserSettings!
     var mediaUploadingPreprocessor: MediaUploadingPreprocessor!
     
     init() {
-        appSettings = AppSettings.volatile()
-        appSettings.optimizeMediaUploads = false
-        mediaUploadingPreprocessor = MediaUploadingPreprocessor(appSettings: appSettings)
+        userSettings = UserSettings.volatile()
+        userSettings.optimizeMediaUploads = false
+        mediaUploadingPreprocessor = MediaUploadingPreprocessor(userSettings: userSettings)
     }
     
     @Test
@@ -80,7 +80,7 @@ final class MediaUploadingPreprocessorTests {
     func landscapeMovVideoOptimizedProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil), "Failed retrieving test asset")
         
-        appSettings.optimizeMediaUploads = true
+        userSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .video(optimizedVideoURL, _, optimizedVideoInfo) = optimizedResult else {
@@ -139,7 +139,7 @@ final class MediaUploadingPreprocessorTests {
     func portraitMp4VideoOptimizedProcessing() async throws {
         let url = try #require(Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil), "Failed retrieving test asset")
         
-        appSettings.optimizeMediaUploads = true
+        userSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .video(optimizedVideoURL, _, optimizedVideoInfo) = optimizedResult else {
@@ -184,7 +184,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(imageInfo.thumbnailInfo?.height == 344)
         
         // Repeat with optimised media setting
-        appSettings.optimizeMediaUploads = true
+        userSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
@@ -228,7 +228,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(imageInfo.thumbnailInfo?.height == 800)
         
         // Repeat with optimised media setting
-        appSettings.optimizeMediaUploads = true
+        userSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
@@ -274,7 +274,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(imageInfo.thumbnailInfo?.height == 240)
         
         // Repeat with optimised media setting
-        appSettings.optimizeMediaUploads = true
+        userSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, _, optimizedImageInfo) = optimizedResult else {
@@ -325,7 +325,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(imageInfo.thumbnailInfo?.height == 800)
         
         // Repeat with optimised media setting
-        appSettings.optimizeMediaUploads = true
+        userSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
@@ -377,7 +377,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(imageInfo.thumbnailInfo?.height == 472)
         
         // Repeat with optimised media setting
-        appSettings.optimizeMediaUploads = true
+        userSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, _, optimizedImageInfo) = optimizedResult else {
@@ -419,7 +419,7 @@ final class MediaUploadingPreprocessorTests {
         #expect(imageInfo.thumbnailInfo?.height == 800)
         
         // Repeat with optimised media setting
-        appSettings.optimizeMediaUploads = true
+        userSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
@@ -453,7 +453,7 @@ final class MediaUploadingPreprocessorTests {
             fatalError()
         }
         
-        if appSettings.optimizeMediaUploads {
+        if userSettings.optimizeMediaUploads {
             // Check that new image has been scaled within the requirements for an optimised image
             #expect(convertedImage.size.width <= MediaUploadingPreprocessor.Constants.optimizedMaxPixelSize)
             #expect(convertedImage.size.height <= MediaUploadingPreprocessor.Constants.optimizedMaxPixelSize)

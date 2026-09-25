@@ -457,9 +457,9 @@ final class SecurityAndPrivacyScreenViewModelTests {
                                 topLevelSpaces: [SpaceServiceRoom] = [],
                                 joinRule: ElementX.JoinRule,
                                 forceDisableE2EE: Bool = false) {
-        let appSettings = AppSettings.volatile()
-        appSettings.knockingEnabled = true
-        appSettings.forceDisableE2EE.applyRemoteValue(forceDisableE2EE)
+        let userSettings = UserSettings.volatile()
+        userSettings.knockingEnabled = true
+        userSettings.forceDisableE2EE.applyRemoteValue(forceDisableE2EE)
         roomProxy = JoinedRoomProxyMock(.init(isEncrypted: false,
                                               canonicalAlias: "#room:matrix.org",
                                               members: .allMembersAsCreator,
@@ -473,6 +473,6 @@ final class SecurityAndPrivacyScreenViewModelTests {
                                                                                          spaceServiceConfiguration: .init(topLevelSpaces: topLevelSpaces,
                                                                                                                           joinedParentSpaces: joinedParentSpaces))),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      appSettings: appSettings)
+                                                      userSettings: userSettings)
     }
 }

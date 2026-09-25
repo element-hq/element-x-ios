@@ -17,7 +17,7 @@ final class RoomSummaryProviderTests {
                                                                                   .all(filters: [.space, .invite])]),
                                                                    .deduplicateVersions]
     
-    var appSettings: AppSettings!
+    var userSettings: UserSettings!
     var roomList: RoomListSDKMock!
     var dynamicEntriesController: RoomListDynamicEntriesControllerSDKMock!
     var roomSummaryProvider: RoomSummaryProvider!
@@ -90,8 +90,8 @@ final class RoomSummaryProviderTests {
     // MARK: - Helpers
     
     private func setup(isLowPriorityFilterEnabled: Bool = false) {
-        appSettings = AppSettings.volatile()
-        appSettings.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
+        userSettings = UserSettings.volatile()
+        userSettings.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
         
         let stateEventStringBuilder = RoomStateEventStringBuilder(userID: "@me:matrix.org")
         let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
@@ -104,7 +104,7 @@ final class RoomSummaryProviderTests {
                                                   eventStringBuilder: eventStringBuilder,
                                                   name: "Test",
                                                   notificationSettings: NotificationSettingsProxyMock(with: .init()),
-                                                  appSettings: appSettings)
+                                                  userSettings: userSettings)
         
         dynamicEntriesController = RoomListDynamicEntriesControllerSDKMock()
         dynamicEntriesController.setFilterKindReturnValue = true
