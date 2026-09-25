@@ -20,11 +20,11 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, appSettings: AppSettings, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(userSession: UserSessionProtocol, userSettings: UserSettings, userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: appSettings.deviceVerificationURL))
+        super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: userSettings.deviceVerificationURL))
         
         Task { [weak self] in
             for await state in userSession.sessionSecurityStatePublisher.values {

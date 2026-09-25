@@ -17,7 +17,7 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private let clientProxy: ClientProxyProtocol
     private let roomProxy: JoinedRoomProxyProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let analyticsService: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -54,13 +54,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          roomProxy: JoinedRoomProxyProtocol,
          initialSelectedPinnedEventID: String?,
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
-         appSettings: AppSettings,
          appHooks: AppHooks,
          analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         clientProxy = userSession.clientProxy
         self.roomProxy = roomProxy
-        self.appSettings = appSettings
+        userSettings = userSession.userSettings
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         
@@ -69,7 +68,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayNameOrID,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
-                                            isNativeCallingEnabled: appSettings.nativeCallEnabled,
+                                            isNativeCallingEnabled: userSettings.nativeCallEnabled,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
                                             isDM: roomProxy.infoPublisher.value.isDM,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
@@ -128,7 +127,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         Task {
             // When navigating away from the room, we need to mark the room as both read
             // and fully read for Synapse to clear this room from the app's badge count.
-            _ = await roomProxy.markAsRead(receiptType: appSettings.sharePresence ? .read : .readPrivate)
+            _ = await roomProxy.markAsRead(receiptType: userSettings.sharePresence ? .read : .readPrivate)
             _ = await roomProxy.markAsRead(receiptType: .fullyRead)
         }
         // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
@@ -167,11 +166,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
-        appSettings.threadsEnabledPublisher
+        userSettings.threadsEnabledPublisher
             .weakAssign(to: \.state.roomThreadListEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.liveLocationSharingSessionsByRoomIDPublisher
+        userSettings.liveLocationSharingSessionsByRoomIDPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] sessionsByRoomID in
                 guard let self else { return }
@@ -265,10 +264,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         if let member = identityVerificationViolations.values.first {
             state.footerDetails = .verificationViolation(member: member,
-                                                         learnMoreURL: appSettings.identityPinningViolationDetailsURL)
+                                                         learnMoreURL: userSettings.identityPinningViolationDetailsURL)
         } else if let member = identityPinningViolations.values.first {
             state.footerDetails = .pinViolation(member: member,
-                                                learnMoreURL: appSettings.identityPinningViolationDetailsURL)
+                                                learnMoreURL: userSettings.identityPinningViolationDetailsURL)
         } else {
             state.footerDetails = nil
         }
@@ -429,7 +428,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task {
                 switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
                 case .success(let event):
-                    if appSettings.threadsEnabled,
+                    if userSettings.threadsEnabled,
                        let threadRootEventID = event.threadRootEventId() {
                         actionsSubject.send(.focusEvent(eventID: threadRootEventID))
                         actionsSubject.send(.displayThread(threadRootEventID: threadRootEventID, focussedEventID: eventID))
@@ -466,7 +465,6 @@ extension RoomScreenViewModel {
                             roomProxy: roomProxyMock,
                             initialSelectedPinnedEventID: nil,
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
-                            appSettings: .volatile(),
                             appHooks: appHooks,
                             analyticsService: AnalyticsServiceMock(.init()),
                             userIndicatorController: UserIndicatorControllerMock())

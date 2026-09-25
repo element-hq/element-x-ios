@@ -13,7 +13,7 @@ struct SearchScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let appSettings: AppSettings
+    let userSettings: UserSettings
 }
 
 enum SearchScreenCoordinatorAction {
@@ -36,7 +36,7 @@ final class SearchScreenCoordinator: CoordinatorProtocol {
                                           clientProxy: parameters.clientProxy,
                                           mediaProvider: parameters.mediaProvider,
                                           userIndicatorController: parameters.userIndicatorController,
-                                          appSettings: parameters.appSettings)
+                                          userSettings: parameters.userSettings)
     }
     
     func start() {

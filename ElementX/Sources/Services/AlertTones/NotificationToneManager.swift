@@ -29,7 +29,7 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
         case bufferCreationFailed
     }
     
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     /// The default Element X bundled message tone.
     static let defaultElementXMessageTone: NotificationTone = .createBundledSound(label: L10n.screenNotificationSettingsSoundElementDefault,
@@ -45,8 +45,8 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
     nonisolated static let libraryLocation = URL.libraryDirectory.appending(components: "Sounds", "AvailableSounds", directoryHint: .isDirectory)
     
     /// Creates the manager and ensures required library directories exist.
-    init(appSettings: AppSettings) {
-        self.appSettings = appSettings
+    init(userSettings: UserSettings) {
+        self.userSettings = userSettings
         
         do {
             try FileManager.default.createDirectory(at: NotificationToneManager.libraryLocation, withIntermediateDirectories: true)
@@ -67,12 +67,12 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
             try? FileManager.default.removeItem(at: Self.selectedToneLocation)
             let toneLocation = Self.toneLocation(for: alertTone)
             try FileManager.default.copyItem(at: toneLocation, to: Self.selectedToneLocation)
-            appSettings.selectedNotificationTone = alertTone
+            userSettings.selectedNotificationTone = alertTone
             return Self.selectedToneLocation
         } catch {
             if (try? Self.selectedToneLocation.checkResourceIsReachable()) != true {
                 // make sure the selected tone is reset if there's no custom tone present
-                appSettings.selectedNotificationTone = nil
+                userSettings.selectedNotificationTone = nil
             }
             throw error
         }

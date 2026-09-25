@@ -83,7 +83,7 @@ struct PinnedEventsTimelineScreen: View {
 struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = PinnedEventsTimelineScreenViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                                                userIndicatorController: UserIndicatorControllerMock(),
-                                                               appSettings: .volatile(),
+                                                               userSettings: .volatile(),
                                                                analyticsService: AnalyticsServiceMock(.init()))
     
     static let emptyTimelineViewModel = makeTimelineViewModel(timelineItems: [])

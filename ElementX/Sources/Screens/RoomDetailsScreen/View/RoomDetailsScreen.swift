@@ -441,7 +441,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     appSettings: AppSettings.volatile(),
+                     userSettings: UserSettings.volatile(),
                      appHooks: AppHooks(),
                      analyticsService: AnalyticsServiceMock(.init()),
                      userIndicatorController: UserIndicatorControllerMock(),
@@ -470,7 +470,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init()),
-                     appSettings: AppSettings.volatile(),
+                     userSettings: UserSettings.volatile(),
                      appHooks: AppHooks(),
                      analyticsService: AnalyticsServiceMock(.init()),
                      userIndicatorController: UserIndicatorControllerMock(),
@@ -509,7 +509,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         return .init(roomProxy: roomProxy,
                      userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
-                     appSettings: AppSettings.volatile(),
+                     userSettings: UserSettings.volatile(),
                      appHooks: AppHooks(),
                      analyticsService: AnalyticsServiceMock(.init()),
                      userIndicatorController: UserIndicatorControllerMock(),

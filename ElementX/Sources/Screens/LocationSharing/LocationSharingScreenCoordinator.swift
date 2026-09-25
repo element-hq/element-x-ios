@@ -15,7 +15,7 @@ struct LocationSharingScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let timelineController: TimelineControllerProtocol
     let liveLocationManager: LiveLocationManagerProtocol
-    let appSettings: AppSettings
+    let userSettings: UserSettings
     let appMediator: AppMediatorProtocol
     let analytics: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -45,7 +45,7 @@ final class LocationSharingScreenCoordinator: CoordinatorProtocol {
                                                    roomProxy: parameters.roomProxy,
                                                    timelineController: parameters.timelineController,
                                                    liveLocationManager: parameters.liveLocationManager,
-                                                   appSettings: parameters.appSettings,
+                                                   userSettings: parameters.userSettings,
                                                    analytics: parameters.analytics,
                                                    userIndicatorController: parameters.userIndicatorController,
                                                    mediaProvider: parameters.mediaProvider)

@@ -79,21 +79,16 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
         .mockMe
     ]
     
-    static let viewModel = {
-        let appSettings = AppSettings.volatile()
-        
-        return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Test", members: members)),
-                                 timelineController: TimelineControllerMock(.init()),
-                                 userSession: UserSessionMock(.init()),
-                                 mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 userIndicatorController: UserIndicatorControllerMock(),
-                                 appMediator: AppMediatorMock(.init()),
-                                 appSettings: appSettings,
-                                 analyticsService: AnalyticsServiceMock(.init()),
-                                 emojiProvider: EmojiProvider(appSettings: appSettings),
-                                 linkMetadataProvider: LinkMetadataProvider(),
-                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-    }()
+    static let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Test", members: members)),
+                                             timelineController: TimelineControllerMock(.init()),
+                                             userSession: UserSessionMock(.init()),
+                                             mediaPlayerProvider: MediaPlayerProviderMock(),
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             appMediator: AppMediatorMock(.init()),
+                                             analyticsService: AnalyticsServiceMock(.init()),
+                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                             linkMetadataProvider: LinkMetadataProvider(),
+                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),

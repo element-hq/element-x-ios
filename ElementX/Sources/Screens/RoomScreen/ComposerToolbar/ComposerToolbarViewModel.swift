@@ -65,7 +65,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          analyticsService: AnalyticsServiceProtocol,
          composerDraftService: ComposerDraftServiceProtocol) {
         self.initialText = initialText
@@ -80,7 +80,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         super.init(initialViewState: ComposerToolbarViewState(wysiwygViewModel: wysiwygViewModel,
                                                               isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
-                                                              isLocationSharingEnabled: appSettings.mapTilerConfiguration.publisher.value.isEnabled,
+                                                              isLocationSharingEnabled: userSettings.mapTilerConfiguration.publisher.value.isEnabled,
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)
         
@@ -852,7 +852,7 @@ extension ComposerToolbarViewModel {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
                                                  mediaProvider: MediaProviderMock(.init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                                 appSettings: .volatile(),
+                                                 userSettings: .volatile(),
                                                  analyticsService: AnalyticsServiceMock(.init()),
                                                  composerDraftService: ComposerDraftServiceMock(.init()))
         viewModel.state.bindings.composerFocused = focused

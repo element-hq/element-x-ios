@@ -17,7 +17,7 @@ class TimelineController: TimelineControllerProtocol {
     private let liveTimelineItemProvider: TimelineItemProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()
     
@@ -51,14 +51,14 @@ class TimelineController: TimelineControllerProtocol {
          initialFocussedEventID: String?,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          allowedGalleryItemTypes: [TimelineAllowedGalleryItemType]? = nil) {
         self.allowedGalleryItemTypes = allowedGalleryItemTypes
         self.roomProxy = roomProxy
         liveTimelineItemProvider = timelineProxy.timelineItemProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         
         activeTimeline = timelineProxy
         activeTimelineItemProvider = liveTimelineItemProvider
@@ -127,7 +127,7 @@ class TimelineController: TimelineControllerProtocol {
     }
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async {
-        let receiptType: MatrixRustSDK.ReceiptType = appSettings.sharePresence ? .read : .readPrivate
+        let receiptType: MatrixRustSDK.ReceiptType = userSettings.sharePresence ? .read : .readPrivate
         
         guard let eventID = itemID.eventID else {
             return

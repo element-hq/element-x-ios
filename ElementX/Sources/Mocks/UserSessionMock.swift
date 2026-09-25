@@ -11,6 +11,7 @@ import Foundation
 
 struct UserSessionMockConfiguration {
     var clientProxy: ClientProxyProtocol = ClientProxyMock(.init())
+    var userSettings: UserSettings = .volatile()
     var contentScannerService: ContentScannerServiceProtocol?
 }
 
@@ -19,6 +20,8 @@ struct UserSessionMockConfiguration {
         self.init()
         
         clientProxy = configuration.clientProxy
+        userSettings = configuration.userSettings
+        
         mediaProvider = MediaProviderMock(.init())
         voiceMessageMediaManager = VoiceMessageMediaManagerMock()
         contentScannerService = configuration.contentScannerService

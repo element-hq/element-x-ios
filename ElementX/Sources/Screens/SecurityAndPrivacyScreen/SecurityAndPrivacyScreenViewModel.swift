@@ -16,7 +16,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     private let roomProxy: JoinedRoomProxyProtocol
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     private let actionsSubject: PassthroughSubject<SecurityAndPrivacyScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SecurityAndPrivacyScreenViewModelAction, Never> {
@@ -26,18 +26,18 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     init(roomProxy: JoinedRoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appSettings: AppSettings) {
+         userSettings: UserSettings) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
                                                                        isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,
                                                                        historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
                                                                        isSpace: roomProxy.infoPublisher.value.isSpace,
-                                                                       isKnockingEnabled: appSettings.knockingEnabled,
-                                                                       historySharingDetailsURL: appSettings.historySharingDetailsURL))
+                                                                       isKnockingEnabled: userSettings.knockingEnabled,
+                                                                       historySharingDetailsURL: userSettings.historySharingDetailsURL))
         
         if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
             setupPermissions(powerLevels: powerLevels)
@@ -151,7 +151,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             .weakAssign(to: \.state.isSpace, on: self)
             .store(in: &cancellables)
         
-        appSettings.knockingEnabledPublisher
+        userSettings.knockingEnabledPublisher
             .weakAssign(to: \.state.isKnockingEnabled, on: self)
             .store(in: &cancellables)
     }
@@ -160,7 +160,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         state.canEditAddress = powerLevels.canOwnUser(sendStateEvent: .roomCanonicalAlias)
         state.canEditJoinRule = powerLevels.canOwnUser(sendStateEvent: .roomJoinRules)
         state.canEditHistoryVisibility = powerLevels.canOwnUser(sendStateEvent: .roomHistoryVisibility)
-        state.canEnableEncryption = powerLevels.canOwnUser(sendStateEvent: .roomEncryption) && !appSettings.forceDisableE2EE.publisher.value
+        state.canEnableEncryption = powerLevels.canOwnUser(sendStateEvent: .roomEncryption) && !userSettings.forceDisableE2EE.publisher.value
     }
     
     private func setupRoomDirectoryVisibility() {

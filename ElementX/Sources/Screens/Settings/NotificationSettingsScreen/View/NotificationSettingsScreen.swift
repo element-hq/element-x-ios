@@ -261,7 +261,7 @@ struct NotificationSettingsScreen: View {
 @available(iOS 26.0, *)
 struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel: NotificationSettingsScreenViewModel = {
-        let appSettings = AppSettings.volatile()
+        let userSettings = UserSettings.volatile()
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
@@ -278,7 +278,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe"))))
         
-        var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
+        var viewModel = NotificationSettingsScreenViewModel(userSettings: userSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationToneManager: NotificationToneManagerMock(.init()),
                                                             notificationSettingsProxy: notificationSettingsProxy,
@@ -289,7 +289,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let viewModelConfigurationMismatch: NotificationSettingsScreenViewModel = {
-        let appSettings = AppSettings.volatile()
+        let userSettings = UserSettings.volatile()
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
@@ -308,7 +308,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
         
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe"))))
         
-        var viewModel = NotificationSettingsScreenViewModel(appSettings: appSettings,
+        var viewModel = NotificationSettingsScreenViewModel(userSettings: userSettings,
                                                             userNotificationCenter: notificationCenter,
                                                             notificationToneManager: NotificationToneManagerMock(.init()),
                                                             notificationSettingsProxy: notificationSettingsProxy,

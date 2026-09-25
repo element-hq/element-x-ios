@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 struct LabsScreenCoordinatorParameters {
-    let appSettings: AppSettings
+    let userSettings: UserSettings
 }
 
 enum LabsScreenCoordinatorAction {
@@ -28,7 +28,7 @@ final class LabsScreenCoordinator: CoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     init(parameters: LabsScreenCoordinatorParameters) {
-        viewModel = LabsScreenViewModel(labsOptions: parameters.appSettings)
+        viewModel = LabsScreenViewModel(labsOptions: parameters.userSettings.app)
     }
     
     func start() {
