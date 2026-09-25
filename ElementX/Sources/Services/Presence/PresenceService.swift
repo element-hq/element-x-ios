@@ -11,7 +11,7 @@ import UIKit
 
 final class PresenceService {
     private let clientProxy: ClientProxyProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let notificationCenter: NotificationCenter
     
     private var isForegroundActive: Bool
@@ -22,11 +22,11 @@ final class PresenceService {
     private var cancellables = Set<AnyCancellable>()
     
     init(clientProxy: ClientProxyProtocol,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          notificationCenter: NotificationCenter = .default,
          initialApplicationState: UIApplication.State = UIApplication.shared.applicationState) {
         self.clientProxy = clientProxy
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         self.notificationCenter = notificationCenter
         isForegroundActive = initialApplicationState == .active
         
@@ -41,7 +41,7 @@ final class PresenceService {
     }
     
     private var desiredPresence: ClientProxyPresence {
-        switch (isForegroundActive, appSettings.sharePresence) {
+        switch (isForegroundActive, userSettings.sharePresence) {
         case (true, true):
             .online
         case (true, false):
@@ -68,7 +68,7 @@ final class PresenceService {
     }
     
     private func observeSharePresence() {
-        appSettings.sharePresencePublisher
+        userSettings.sharePresencePublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.reportCurrentState()

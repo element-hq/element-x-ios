@@ -17,7 +17,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
     private let liveLocationManager: LiveLocationManagerProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let analytics: AnalyticsServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let notificationCenter: NotificationCenter
@@ -37,7 +37,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
          roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
          liveLocationManager: LiveLocationManagerProtocol,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -45,7 +45,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.liveLocationManager = liveLocationManager
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenter = notificationCenter
@@ -173,7 +173,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         }
         .store(in: &cancellables)
         
-        appSettings.liveLocationSharingSessionsByRoomIDPublisher
+        userSettings.liveLocationSharingSessionsByRoomIDPublisher
             .map { [roomID = roomProxy.id] sessions in sessions[roomID] != nil }
             .removeDuplicates()
             .sink { [weak self] isSharingLiveLocationOnThisDevice in
@@ -261,14 +261,14 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     }
     
     private func showLiveLocationFlow() {
-        if appSettings.liveLocationDisclaimerDisplayed {
+        if userSettings.liveLocationDisclaimerDisplayed {
             showLiveLocationDurationPicker()
         } else {
             state.bindings.alertInfo = .init(alertID: .liveLocationDisclaimer,
                                              primaryButton: .init(title: L10n.actionDecline, role: .cancel, action: nil),
                                              secondaryButton: .init(title: L10n.actionAccept) { [weak self] in
                                                  guard let self else { return }
-                                                 appSettings.liveLocationDisclaimerDisplayed = true
+                                                 userSettings.liveLocationDisclaimerDisplayed = true
                                                  // Delay so SwiftUI finishes dismissing the current alert
                                                  // before presenting the next one.
                                                  DispatchQueue.main.async {
@@ -432,14 +432,14 @@ extension LocationSharingScreenViewModel {
         let roomProxy = JoinedRoomProxyMock(.init(members: .allMembers, ownUserID: RoomMemberProxyMock.mockMe.userID))
         roomProxy.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
-        let appSettings = AppSettings.volatile()
+        let userSettings = UserSettings.volatile()
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
-                                              mapURLBuilder: appSettings.mapTilerConfiguration.publisher.value,
+                                              mapURLBuilder: userSettings.mapTilerConfiguration.publisher.value,
                                               roomProxy: roomProxy,
                                               timelineController: TimelineControllerMock(.init()),
                                               liveLocationManager: LiveLocationManagerMock(),
-                                              appSettings: appSettings,
+                                              userSettings: userSettings,
                                               analytics: AnalyticsServiceMock(.init()),
                                               userIndicatorController: UserIndicatorControllerMock(),
                                               mediaProvider: MediaProviderMock(.init()))

@@ -16,7 +16,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let appMediator: AppMediatorProtocol
-    let appSettings: AppSettings
+    let userSettings: UserSettings
     let analytics: AnalyticsServiceProtocol
     let emojiProvider: EmojiProviderProtocol
     let linkMetadataProvider: LinkMetadataProviderProtocol
@@ -46,7 +46,6 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
                                                        userIndicatorController: parameters.userIndicatorController,
                                                        appMediator: parameters.appMediator,
-                                                       appSettings: parameters.appSettings,
                                                        analyticsService: parameters.analytics,
                                                        emojiProvider: parameters.emojiProvider,
                                                        linkMetadataProvider: parameters.linkMetadataProvider,
@@ -58,7 +57,6 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
                                                        userIndicatorController: parameters.userIndicatorController,
                                                        appMediator: parameters.appMediator,
-                                                       appSettings: parameters.appSettings,
                                                        analyticsService: parameters.analytics,
                                                        emojiProvider: parameters.emojiProvider,
                                                        linkMetadataProvider: parameters.linkMetadataProvider,

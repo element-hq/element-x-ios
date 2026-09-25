@@ -577,31 +577,31 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      appSettings: AppSettings.volatile())
+                                                      userSettings: UserSettings.volatile())
     static let noResultsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                           clientProxy: makeClientProxy(),
                                                           mediaProvider: MediaProviderMock(.init()),
                                                           userIndicatorController: UserIndicatorControllerMock(),
-                                                          appSettings: AppSettings.volatile(),
+                                                          userSettings: UserSettings.volatile(),
                                                           initialSearchQuery: "John Doe")
     static let roomsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      appSettings: AppSettings.volatile(),
+                                                      userSettings: UserSettings.volatile(),
                                                       initialSearchQuery: "Foundation")
     static let messagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                          clientProxy: makeClientProxy(searchService: makeSearchService(results: .mockResults)),
                                                          mediaProvider: MediaProviderMock(.init()),
                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                         appSettings: AppSettings.volatile(),
+                                                         userSettings: UserSettings.volatile(),
                                                          initialSearchQuery: "Foundation",
                                                          initialSearchMode: .messages)
     static let loadingMessagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                                 clientProxy: makeClientProxy(searchService: makeSearchService(paginationState: .loading)),
                                                                 mediaProvider: MediaProviderMock(.init()),
                                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                                appSettings: AppSettings.volatile(),
+                                                                userSettings: UserSettings.volatile(),
                                                                 initialSearchQuery: "Foundation",
                                                                 initialSearchMode: .messages)
     
@@ -609,11 +609,11 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
                                                             clientProxy: makeClientProxy(),
                                                             mediaProvider: MediaProviderMock(.init()),
                                                             userIndicatorController: UserIndicatorControllerMock(),
-                                                            appSettings: makeAppSettings(breadcrumbs: [.room(roomID: "!room1:matrix.org"),
-                                                                                                       .query("Bob"),
-                                                                                                       .room(roomID: "!room5:matrix.org"),
-                                                                                                       .query("Element HR"),
-                                                                                                       .query("Alice")]))
+                                                            userSettings: makeUserSettings(breadcrumbs: [.room(roomID: "!room1:matrix.org"),
+                                                                                                         .query("Bob"),
+                                                                                                         .room(roomID: "!room5:matrix.org"),
+                                                                                                         .query("Element HR"),
+                                                                                                         .query("Alice")]))
     
     static var previews: some View {
         ElementNavigationStack {
@@ -655,10 +655,10 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
         return mock
     }
     
-    private static func makeAppSettings(breadcrumbs: [SearchBreadcrumb]) -> AppSettings {
-        let appSettings = AppSettings.volatile()
-        appSettings.searchBreadcrumbs = breadcrumbs
-        return appSettings
+    private static func makeUserSettings(breadcrumbs: [SearchBreadcrumb]) -> UserSettings {
+        let userSettings = UserSettings.volatile()
+        userSettings.searchBreadcrumbs = breadcrumbs
+        return userSettings
     }
     
     private static func makeClientProxy(searchService: SearchServiceProxyMock = makeSearchService()) -> ClientProxyMock {

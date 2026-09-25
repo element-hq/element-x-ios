@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 struct AdvancedSettingsScreenCoordinatorParameters {
-    let appSettings: AppSettings
+    let userSettings: UserSettings
     let analytics: AnalyticsServiceProtocol
     let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -20,7 +20,7 @@ final class AdvancedSettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: AdvancedSettingsScreenViewModelProtocol
     
     init(parameters: AdvancedSettingsScreenCoordinatorParameters) {
-        viewModel = AdvancedSettingsScreenViewModel(advancedSettings: parameters.appSettings,
+        viewModel = AdvancedSettingsScreenViewModel(advancedSettings: parameters.userSettings.app,
                                                     analytics: parameters.analytics,
                                                     clientProxy: parameters.clientProxy,
                                                     userIndicatorController: parameters.userIndicatorController)

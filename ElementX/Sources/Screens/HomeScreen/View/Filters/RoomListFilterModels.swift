@@ -89,21 +89,21 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
-    init(activeFilters: OrderedSet<RoomListFilter> = [], appSettings: AppSettings) {
+    init(activeFilters: OrderedSet<RoomListFilter> = [], userSettings: UserSettings) {
         self.activeFilters = .init(activeFilters)
-        self.appSettings = appSettings
+        self.userSettings = userSettings
     }
     
     var availableFilters: [RoomListFilter] {
         var availableFilters = OrderedSet(RoomListFilter.availableFilters)
         
-        if !appSettings.lowPriorityFilterEnabled {
+        if !userSettings.lowPriorityFilterEnabled {
             availableFilters.remove(.lowPriority)
         }
         
-        if !appSettings.mentionsFilterEnabled {
+        if !userSettings.mentionsFilterEnabled {
             availableFilters.remove(.mentions)
         }
         

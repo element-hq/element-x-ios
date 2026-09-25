@@ -19,7 +19,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     private let clientProxy: ClientProxyProtocol
     private let searchService: SearchServiceProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private var searchQueryObservationTask: Task<Void, Never>?
     private var searchModeObservationTask: Task<Void, Never>?
     private var loadingObservationTask: Task<Void, Never>?
@@ -36,14 +36,14 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          initialSearchQuery: String = "",
          initialSearchMode: SearchScreenMode = .rooms) {
         self.roomSummaryProvider = roomSummaryProvider
         self.clientProxy = clientProxy
         searchService = clientProxy.searchService
         self.userIndicatorController = userIndicatorController
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         
         super.init(initialViewState: SearchScreenViewState(bindings: .init(searchQuery: initialSearchQuery, searchMode: initialSearchMode)),
                    mediaProvider: mediaProvider)
@@ -73,7 +73,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
             .store(in: &cancellables)
         
         // The room list is empty on a cold start, so the room breadcrumbs are re-resolved as it loads.
-        appSettings.searchBreadcrumbsPublisher
+        userSettings.searchBreadcrumbsPublisher
             .combineLatest(clientProxy.staticRoomSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] storedBreadcrumbs, _ in
@@ -118,7 +118,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         }
         
         updateRooms(with: roomSummaryProvider.roomListPublisher.value)
-        state.breadcrumbs = makeBreadcrumbs(from: appSettings.searchBreadcrumbs)
+        state.breadcrumbs = makeBreadcrumbs(from: userSettings.searchBreadcrumbs)
     }
     
     isolated deinit {
@@ -215,13 +215,13 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         let searchQuery = state.bindings.searchQuery
         let newBreadcrumbs: [SearchBreadcrumb] = searchQuery.isEmpty ? [.room(roomID: roomID)] : [.query(searchQuery), .room(roomID: roomID)]
         
-        var breadcrumbs = appSettings.searchBreadcrumbs
+        var breadcrumbs = userSettings.searchBreadcrumbs
         for breadcrumb in newBreadcrumbs {
             breadcrumbs.removeAll { $0 == breadcrumb }
             breadcrumbs.insert(breadcrumb, at: 0)
         }
         
-        appSettings.searchBreadcrumbs = Array(breadcrumbs.prefix(Self.maximumBreadcrumbCount))
+        userSettings.searchBreadcrumbs = Array(breadcrumbs.prefix(Self.maximumBreadcrumbCount))
     }
     
     private func setActiveTabLoading(_ isLoading: Bool) {

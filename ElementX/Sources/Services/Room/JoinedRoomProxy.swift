@@ -14,7 +14,7 @@ import UIKit
 class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
     private let room: RoomProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let analyticsService: AnalyticsServiceProtocol
     private let eventStringBuilder: RoomEventStringBuilder
     
@@ -71,19 +71,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     init(roomListService: RoomListServiceProtocol,
          room: RoomProtocol,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          analyticsService: AnalyticsServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder) async throws {
         self.roomListService = roomListService
         self.room = room
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         self.analyticsService = analyticsService
         self.eventStringBuilder = eventStringBuilder
         
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
         
         let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .openRoom)
-        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
+        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: userSettings.threadsEnabled),
                                                                                                          filter: .eventFilter(filter: Self.excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
                                                                                                          dateDividerMode: .daily,
@@ -150,7 +150,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .notificationToMessage)
             let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID,
                                                                                                           numContextEvents: numberOfEvents,
-                                                                                                          threadMode: .automatic(hideThreadedEvents: appSettings.threadsEnabled)),
+                                                                                                          threadMode: .automatic(hideThreadedEvents: userSettings.threadsEnabled)),
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,

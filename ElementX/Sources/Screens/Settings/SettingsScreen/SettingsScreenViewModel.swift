@@ -12,7 +12,7 @@ import SwiftUI
 typealias SettingsScreenViewModelType = StateStoreViewModelV2<SettingsScreenViewState, SettingsScreenViewAction>
 
 class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewModelProtocol {
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -22,26 +22,26 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, appSettings: AppSettings, isBugReportServiceEnabled: Bool, isInSecondaryWindow: Bool, userIndicatorController: UserIndicatorControllerProtocol) {
-        self.appSettings = appSettings
+    init(userSession: UserSessionProtocol, userSettings: UserSettings, isBugReportServiceEnabled: Bool, isInSecondaryWindow: Bool, userIndicatorController: UserIndicatorControllerProtocol) {
+        self.userSettings = userSettings
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userProfile: userSession.clientProxy.userProfilePublisher.value,
-                                           showLinkNewDeviceButton: appSettings.linkNewDeviceEnabled,
+                                           showLinkNewDeviceButton: userSettings.linkNewDeviceEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
-                                           showDeveloperOptions: appSettings.developerOptionsEnabled,
-                                           showAnalyticsSettings: appSettings.canPromptForAnalytics,
+                                           showDeveloperOptions: userSettings.developerOptionsEnabled,
+                                           showAnalyticsSettings: userSettings.canPromptForAnalytics,
                                            isBugReportServiceEnabled: isBugReportServiceEnabled,
                                            navigationBarVisibility: isInSecondaryWindow ? .hidden : .automatic),
                    mediaProvider: userSession.mediaProvider)
         
-        appSettings.developerOptionsEnabledPublisher
+        userSettings.developerOptionsEnabledPublisher
             .weakAssign(to: \.state.showDeveloperOptions, on: self)
             .store(in: &cancellables)
         
-        appSettings.linkNewDeviceEnabledPublisher
+        userSettings.linkNewDeviceEnabledPublisher
             .weakAssign(to: \.state.showLinkNewDeviceButton, on: self)
             .store(in: &cancellables)
         
@@ -138,7 +138,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         case .labs:
             actionsSubject.send(.labs)
         case .enableDeveloperOptions:
-            appSettings.developerOptionsEnabled.toggle()
+            userSettings.developerOptionsEnabled.toggle()
         case .developerOptions:
             actionsSubject.send(.developerOptions)
         case .deactivateAccount:

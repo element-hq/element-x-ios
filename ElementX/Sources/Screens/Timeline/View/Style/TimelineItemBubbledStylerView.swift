@@ -421,39 +421,39 @@ private extension TimelineItemKeyForwarder {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
-        let appSettings = AppSettings.volatile()
-        appSettings.threadsEnabled = true
+        let userSettings = UserSettings.volatile()
+        userSettings.threadsEnabled = true
+        let userSession = UserSessionMock(.init(userSettings: userSettings))
         
         let roomProxy = JoinedRoomProxyMock(.init())
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: TimelineControllerMock(.init()),
-                                 userSession: UserSessionMock(.init()),
+                                 userSession: userSession,
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock(.init()),
-                                 appSettings: appSettings,
                                  analyticsService: AnalyticsServiceMock(.init()),
-                                 emojiProvider: EmojiProvider(appSettings: appSettings),
+                                 emojiProvider: EmojiProvider(userSettings: userSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
     
     static let viewModelWithPins: TimelineViewModel = {
-        let appSettings = AppSettings.volatile()
-        appSettings.threadsEnabled = true
+        let userSettings = UserSettings.volatile()
+        userSettings.threadsEnabled = true
+        let userSession = UserSessionMock(.init(userSettings: userSettings))
         
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: ["pinned"]))
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: TimelineControllerMock(.init()),
-                                 userSession: UserSessionMock(.init()),
+                                 userSession: userSession,
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock(.init()),
-                                 appSettings: appSettings,
                                  analyticsService: AnalyticsServiceMock(.init()),
-                                 emojiProvider: EmojiProvider(appSettings: appSettings),
+                                 emojiProvider: EmojiProvider(userSettings: userSettings),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
@@ -461,19 +461,19 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static let unsafeViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
     
     static let selectingViewModel: TimelineViewModel = {
-        let appSettings = AppSettings.volatile()
-        appSettings.messageMultiSelectEnabled = true
+        let userSettings = UserSettings.volatile()
+        userSettings.messageMultiSelectEnabled = true
+        let userSession = UserSessionMock(.init(userSettings: userSettings))
         
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                           focussedEventID: nil,
                                           timelineController: TimelineControllerMock(.init()),
-                                          userSession: UserSessionMock(.init()),
+                                          userSession: userSession,
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           userIndicatorController: UserIndicatorControllerMock(),
                                           appMediator: AppMediatorMock(.init()),
-                                          appSettings: appSettings,
                                           analyticsService: AnalyticsServiceMock(.init()),
-                                          emojiProvider: EmojiProvider(appSettings: appSettings),
+                                          emojiProvider: EmojiProvider(userSettings: userSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         viewModel.state.messageSelection.selectedEventIDs = ["selected"]

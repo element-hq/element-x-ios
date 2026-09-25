@@ -21,7 +21,7 @@ struct ThreadTimelineScreenCoordinatorParameters {
     let linkMetadataProvider: LinkMetadataProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
-    let appSettings: AppSettings
+    let userSettings: UserSettings
     let analytics: AnalyticsServiceProtocol
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
@@ -46,7 +46,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     private let viewModel: ThreadTimelineScreenViewModelProtocol
     private let timelineViewModel: TimelineViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModelProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -56,7 +56,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: ThreadTimelineScreenCoordinatorParameters) {
-        appSettings = parameters.appSettings
+        userSettings = parameters.userSettings
         
         viewModel = ThreadTimelineScreenViewModel(roomProxy: parameters.roomProxy, userSession: parameters.userSession)
         
@@ -67,7 +67,6 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               userIndicatorController: parameters.userIndicatorController,
                                               appMediator: parameters.appMediator,
-                                              appSettings: parameters.appSettings,
                                               analyticsService: parameters.analytics,
                                               emojiProvider: parameters.emojiProvider,
                                               linkMetadataProvider: parameters.linkMetadataProvider,
@@ -84,7 +83,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                                      completionSuggestionService: parameters.completionSuggestionService,
                                                      mediaProvider: parameters.userSession.mediaProvider,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
-                                                     appSettings: parameters.appSettings,
+                                                     userSettings: parameters.userSettings,
                                                      analyticsService: parameters.analytics,
                                                      composerDraftService: parameters.composerDraftService)
     }
@@ -110,13 +109,13 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .displayCameraPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .multiple(galleryEnabled: appSettings.galleryEnabled)),
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .multiple(galleryEnabled: userSettings.galleryEnabled)),
                                                                   caption: composerViewModel.context.plainComposerText))
                 case .displayMediaPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple(galleryEnabled: appSettings.galleryEnabled)),
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple(galleryEnabled: userSettings.galleryEnabled)),
                                                                   caption: composerViewModel.context.plainComposerText))
                 case .displayDocumentPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents(), selectionType: .multiple(galleryEnabled: appSettings.galleryEnabled)),
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents(), selectionType: .multiple(galleryEnabled: userSettings.galleryEnabled)),
                                                                   caption: composerViewModel.context.plainComposerText))
                 case .displayMediaPreview(let mediaPreviewViewModel):
                     viewModel.displayMediaPreview(mediaPreviewViewModel)

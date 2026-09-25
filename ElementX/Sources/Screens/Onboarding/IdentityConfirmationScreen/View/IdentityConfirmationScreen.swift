@@ -142,7 +142,7 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         userSession.sessionSecurityStatePublisher = CurrentValuePublisher<SessionSecurityState, Never>(.init(verificationState: .unverified, recoveryState: recoveryState))
         
         return IdentityConfirmationScreenViewModel(userSession: userSession,
-                                                   appSettings: .volatile(),
+                                                   userSettings: .volatile(),
                                                    userIndicatorController: UserIndicatorControllerMock())
     }
 }

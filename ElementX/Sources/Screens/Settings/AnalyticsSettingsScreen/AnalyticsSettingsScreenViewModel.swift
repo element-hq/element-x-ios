@@ -14,16 +14,16 @@ typealias AnalyticsSettingsScreenViewModelType = StateStoreViewModelV2<Analytics
 class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, AnalyticsSettingsScreenViewModelProtocol {
     private let analytics: AnalyticsServiceProtocol
     
-    init(appSettings: AppSettings, analytics: AnalyticsServiceProtocol) {
+    init(userSettings: UserSettings, analytics: AnalyticsServiceProtocol) {
         self.analytics = analytics
         
-        let strings = AnalyticsSettingsScreenStrings(termsURL: appSettings.analyticsTermsURL)
+        let strings = AnalyticsSettingsScreenStrings(termsURL: userSettings.analyticsTermsURL)
         let bindings = AnalyticsSettingsScreenViewStateBindings(enableAnalytics: analytics.isEnabled)
         let state = AnalyticsSettingsScreenViewState(strings: strings, bindings: bindings)
         
         super.init(initialViewState: state)
         
-        appSettings.analyticsConsentStatePublisher
+        userSettings.analyticsConsentStatePublisher
             .map { $0 == .optedIn }
             .weakAssign(to: \.state.bindings.enableAnalytics, on: self)
             .store(in: &cancellables)

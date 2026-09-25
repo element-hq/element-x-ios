@@ -160,13 +160,10 @@ private extension AppAppearance {
 // MARK: - Previews
 
 struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = {
-        let appSettings = AppSettings.volatile()
-        return AdvancedSettingsScreenViewModel(advancedSettings: appSettings,
-                                               analytics: AnalyticsServiceMock(.init()),
-                                               clientProxy: ClientProxyMock(.init()),
-                                               userIndicatorController: UserIndicatorControllerMock())
-    }()
+    static let viewModel = AdvancedSettingsScreenViewModel(advancedSettings: AppSettings.volatile(),
+                                                           analytics: AnalyticsServiceMock(.init()),
+                                                           clientProxy: ClientProxyMock(.init()),
+                                                           userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
         ElementNavigationStack {

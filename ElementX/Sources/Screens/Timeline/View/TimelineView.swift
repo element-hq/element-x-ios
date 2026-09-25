@@ -155,21 +155,16 @@ struct TimelineView_Previews: PreviewProvider { // Not testable as this preview 
                                                          name: "Preview room"))
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let composerViewModel = ComposerToolbarViewModel.mock()
-    static let timelineViewModel = {
-        let appSettings = AppSettings.volatile()
-        
-        return TimelineViewModel(roomProxy: roomProxyMock,
-                                 timelineController: TimelineControllerMock(.init()),
-                                 userSession: UserSessionMock(.init()),
-                                 mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 userIndicatorController: UserIndicatorControllerMock(),
-                                 appMediator: AppMediatorMock(.init()),
-                                 appSettings: appSettings,
-                                 analyticsService: AnalyticsServiceMock(.init()),
-                                 emojiProvider: EmojiProvider(appSettings: appSettings),
-                                 linkMetadataProvider: LinkMetadataProvider(),
-                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
-    }()
+    static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
+                                                     timelineController: TimelineControllerMock(.init()),
+                                                     userSession: UserSessionMock(.init()),
+                                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                     userIndicatorController: UserIndicatorControllerMock(),
+                                                     appMediator: AppMediatorMock(.init()),
+                                                     analyticsService: AnalyticsServiceMock(.init()),
+                                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                     linkMetadataProvider: LinkMetadataProvider(),
+                                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     
     static var previews: some View {
         ElementNavigationStack {

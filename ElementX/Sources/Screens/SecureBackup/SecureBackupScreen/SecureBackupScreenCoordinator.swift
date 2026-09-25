@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 struct SecureBackupScreenCoordinatorParameters {
-    let appSettings: AppSettings
+    let userSettings: UserSettings
     let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -33,7 +33,7 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
     init(parameters: SecureBackupScreenCoordinatorParameters) {
         viewModel = SecureBackupScreenViewModel(secureBackupController: parameters.clientProxy.secureBackupController,
                                                 userIndicatorController: parameters.userIndicatorController,
-                                                chatBackupDetailsURL: parameters.appSettings.chatBackupDetailsURL)
+                                                chatBackupDetailsURL: parameters.userSettings.chatBackupDetailsURL)
     }
     
     func start() {

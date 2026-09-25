@@ -383,7 +383,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
-                                                         appSettings: flowParameters.appSettings,
+                                                         userSettings: flowParameters.userSettings,
                                                          analyticsService: flowParameters.analytics,
                                                          notificationManager: flowParameters.notificationManager,
                                                          userIndicatorController: flowParameters.userIndicatorController)
@@ -687,7 +687,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let parameters = EncryptionResetFlowCoordinatorParameters(userSession: userSession,
                                                                   appMediator: flowParameters.appMediator,
-                                                                  appSettings: flowParameters.appSettings,
                                                                   appHooks: flowParameters.appHooks,
                                                                   userIndicatorController: flowParameters.userIndicatorController,
                                                                   navigationStackCoordinator: sheetNavigationStackCoordinator,

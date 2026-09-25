@@ -13,7 +13,7 @@ struct SecurityAndPrivacyScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let appSetting: AppSettings
+    let appSetting: UserSettings
 }
 
 enum SecurityAndPrivacyScreenCoordinatorAction {
@@ -36,7 +36,7 @@ final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
         viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: parameters.roomProxy,
                                                       clientProxy: parameters.clientProxy,
                                                       userIndicatorController: parameters.userIndicatorController,
-                                                      appSettings: parameters.appSetting)
+                                                      userSettings: parameters.appSetting)
     }
     
     func start() {

@@ -17,7 +17,7 @@ nonisolated protocol NSEUserSessionProtocol {
 }
 
 final nonisolated class NSEUserSession: NSEUserSessionProtocol {
-    private let appSettings: CommonSettingsProtocol
+    private let userSettings: CommonSettingsProtocol
     private let baseClient: ClientProtocol
     private let notificationClient: NotificationClient
     private let userID: String
@@ -49,22 +49,22 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
     }
     
     var threadsEnabled: Bool {
-        appSettings.threadsEnabled
+        userSettings.threadsEnabled
     }
     
     init(credentials: KeychainCredentials,
          roomID: String,
          clientSessionDelegate: ClientSessionDelegate,
          clientFactory: ClientFactoryProtocol = ClientFactory(),
-         appSettings: CommonSettingsProtocol,
+         userSettings: CommonSettingsProtocol,
          appHooks: AppHooks) async throws {
         userID = credentials.userID
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         
         baseClient = try await clientFactory.makeNSEClient(credentials: credentials,
                                                            roomID: roomID,
                                                            clientSessionDelegate: clientSessionDelegate,
-                                                           appSettings: appSettings,
+                                                           userSettings: userSettings,
                                                            appHooks: appHooks)
         
         do {
@@ -75,7 +75,7 @@ final nonisolated class NSEUserSession: NSEUserSessionProtocol {
         delegateHandle = try baseClient.setDelegate(delegate: ClientDelegateWrapper())
         
         // Inject the content scanner so the SDK gates the media it downloads whilst building the notification.
-        if let contentScannerURL = appSettings.contentScannerURL.publisher.value {
+        if let contentScannerURL = userSettings.contentScannerURL.publisher.value {
             let contentScanner = ContentScanner(scannerUrl: contentScannerURL.absoluteString)
             await baseClient.setContentScanner(contentScanner: contentScanner)
         }

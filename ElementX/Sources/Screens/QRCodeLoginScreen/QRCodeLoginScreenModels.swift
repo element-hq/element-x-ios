@@ -46,7 +46,7 @@ struct QRCodeLoginScreenViewState: BindableState {
     var state: QRCodeLoginState
     let mode: QRCodeLoginScreenMode
     /// Whether or not it is possible for the screen to start the manual sign in flow. This was added to avoid
-    /// having to handle server configuration when ``AppSettings.allowOtherAccountProviders`` is false.
+    /// having to handle server configuration when ``UserSettings.allowOtherAccountProviders`` is false.
     let canSignInManually: Bool
     
     let instructions = QRCodeLoginScreenInstructions()

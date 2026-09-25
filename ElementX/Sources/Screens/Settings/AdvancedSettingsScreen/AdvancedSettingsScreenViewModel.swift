@@ -48,7 +48,7 @@ class AdvancedSettingsScreenViewModel: AdvancedSettingsScreenViewModelType, Adva
     override func process(viewAction: AdvancedSettingsScreenViewAction) {
         switch viewAction {
         case .optimizeMediaUploadsChanged:
-            // Note: Using a view action here as sinking the AppSettings publisher tracks the initial value.
+            // Note: Using a view action here as sinking the UserSettings publisher tracks the initial value.
             analytics.trackInteraction(name: state.bindings.optimizeMediaUploads ? .MobileSettingsOptimizeMediaUploadsEnabled : .MobileSettingsOptimizeMediaUploadsDisabled)
         case let .updateHideInviteAvatars(value):
             hideInviteAvatarsTask = Task { [weak self] in await self?.updateHideInviteAvatars(value) }

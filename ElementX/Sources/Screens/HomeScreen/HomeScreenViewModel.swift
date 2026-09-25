@@ -18,7 +18,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsServiceProtocol
     private let bugReportService: BugReportServiceProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -32,7 +32,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          analyticsService: AnalyticsServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
@@ -40,7 +40,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.userSession = userSession
         self.analyticsService = analyticsService
         self.bugReportService = bugReportService
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
         
@@ -49,10 +49,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: .init(userProfile: userSession.clientProxy.userProfilePublisher.value,
-                                           bindings: .init(filtersState: .init(appSettings: appSettings))),
+                                           bindings: .init(filtersState: .init(userSettings: userSettings))),
                    mediaProvider: userSession.mediaProvider)
         
-        if appSettings.globalSearchEnabled, #available(iOS 26.0, *) {
+        if userSettings.globalSearchEnabled, #available(iOS 26.0, *) {
             state.isRoomListSearchEnabled = false
         }
         
@@ -113,21 +113,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        appSettings.showAllRoomListActivityPublisher
+        userSettings.showAllRoomListActivityPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.updateRooms()
             }
             .store(in: &cancellables)
         
-        appSettings.seenInvitesPublisher
+        userSettings.seenInvitesPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.updateRooms()
             }
             .store(in: &cancellables)
         
-        appSettings.hasSeenNewSoundBannerPublisher
+        userSettings.hasSeenNewSoundBannerPublisher
             .sink { [weak self] hasSeenNewSoundBanner in
                 self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner
             }
@@ -210,7 +210,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .skipRecoveryKeyConfirmation:
             state.securityBannerMode = .dismissed
         case .dismissNewSoundBanner:
-            appSettings.hasSeenNewSoundBanner = true
+            userSettings.hasSeenNewSoundBanner = true
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
@@ -260,7 +260,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .success:
                     analyticsService.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                     
-                    if case .failure(let error) = await roomProxy.markAsRead(receiptType: appSettings.sharePresence ? .read : .readPrivate) {
+                    if case .failure(let error) = await roomProxy.markAsRead(receiptType: userSettings.sharePresence ? .read : .readPrivate) {
                         MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
                     }
                 case .failure(let error):
@@ -372,11 +372,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         var rooms = [HomeScreenRoom]()
-        let seenInvites = appSettings.seenInvites
+        let seenInvites = userSettings.seenInvites
         
         for summary in roomSummaryProvider.roomListPublisher.value {
             let room = HomeScreenRoom(summary: summary,
-                                      showAllActivity: appSettings.showAllRoomListActivity,
+                                      showAllActivity: userSettings.showAllRoomListActivity,
                                       seenInvites: seenInvites)
             rooms.append(room)
         }
@@ -513,7 +513,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
                                          isSpace: roomProxy.info.isSpace,
                                          activeMemberCount: UInt(roomProxy.info.activeMembersCount))
-        appSettings.seenInvites.remove(roomProxy.id)
+        userSettings.seenInvites.remove(roomProxy.id)
     }
     
     private func showDeclineInviteConfirmationAlert(roomID: String) async {
@@ -563,7 +563,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch result {
         case .success:
             await notificationManager.removeDeliveredMessageNotifications(for: roomID) // Normally handled by the room flow, but that's never presented in this case.
-            appSettings.seenInvites.remove(roomID)
+            userSettings.seenInvites.remove(roomID)
         case .failure:
             displayError()
         }

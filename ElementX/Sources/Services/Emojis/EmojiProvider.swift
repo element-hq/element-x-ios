@@ -12,13 +12,13 @@ import Foundation
 class EmojiProvider: EmojiProviderProtocol {
     private let maxFrequentEmojis = 20
     private let loader: EmojiLoaderProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     private(set) var state: EmojiProviderState = .notLoaded
     
-    init(loader: EmojiLoaderProtocol = EmojibaseDatasource(), appSettings: AppSettings) {
+    init(loader: EmojiLoaderProtocol = EmojibaseDatasource(), userSettings: UserSettings) {
         self.loader = loader
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         
         Task {
             await loadIfNeeded()
@@ -61,7 +61,7 @@ class EmojiProvider: EmojiProviderProtocol {
             return []
         }
         
-        return appSettings.frequentlyUsedSystemEmojis.map(\.key)
+        return userSettings.frequentlyUsedSystemEmojis.map(\.key)
     }
     
     func markEmojiAsFrequentlyUsed(_ emoji: String) {
@@ -70,9 +70,9 @@ class EmojiProvider: EmojiProviderProtocol {
         }
         
         let frequentlyUsed = if !frequentlyUsedSystemEmojis().contains(emoji) {
-            appSettings.frequentlyUsedSystemEmojis + [.init(count: 0, key: emoji)]
+            userSettings.frequentlyUsedSystemEmojis + [.init(count: 0, key: emoji)]
         } else {
-            appSettings.frequentlyUsedSystemEmojis.map { frequentlyUsedEmoji in
+            userSettings.frequentlyUsedSystemEmojis.map { frequentlyUsedEmoji in
                 if frequentlyUsedEmoji.key == emoji {
                     return FrequentlyUsedEmoji(count: frequentlyUsedEmoji.count + 1, key: emoji)
                 }
@@ -81,7 +81,7 @@ class EmojiProvider: EmojiProviderProtocol {
             }
         }
         
-        appSettings.frequentlyUsedSystemEmojis = frequentlyUsed.sorted { $0.count > $1.count }
+        userSettings.frequentlyUsedSystemEmojis = frequentlyUsed.sorted { $0.count > $1.count }
     }
     
     // MARK: - Private
