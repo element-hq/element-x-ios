@@ -97,7 +97,7 @@ If you make changes to the UI you may cause existing UI and Preview test snapsho
 
 To run the preview tests:
 
-1. Use an iPhone SE (3rd generation) simulator running iOS 26.5.
+1. Use an iPhone SE (3rd generation) simulator running iOS 27.0.
 2. On that simulator, go to Settings -> General -> Language & Region and select United States as the region, with English (US) as the only preferred language. This is a one time setup, as long as you keep using the same simulator.
 3. Select the `PreviewTests` scheme and run the tests.
 

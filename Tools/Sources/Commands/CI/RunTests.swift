@@ -9,7 +9,7 @@ struct RunTests: AsyncParsableCommand {
                                                     
                                                     Examples:
                                                       swift run tools run-tests --scheme UnitTests
-                                                      swift run tools run-tests --scheme UITests --device iPhone --os-version 26.5
+                                                      swift run tools run-tests --scheme UITests --device iPhone --os-version 27.0
                                                       swift run tools run-tests --scheme PreviewTests --create-simulator-name "iPhone SE (3rd generation)" \
                                                         --create-simulator-type com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation
                                                     """)
@@ -20,7 +20,7 @@ struct RunTests: AsyncParsableCommand {
     @Option(help: "The simulator device name to run tests on (e.g. 'iPhone 17').")
     var device = "iPhone 17"
     
-    @Option(help: "The iOS version to use for the simulator runtime (e.g. '26.5').")
+    @Option(help: "The iOS version to use for the simulator runtime (e.g. '27.0').")
     var osVersion = CI.defaultOSVersion
     
     var runtime: String {

@@ -9,7 +9,7 @@ permissions: {}
 
 jobs:
   open-translations-pr:
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 15
 
     # Skip in forks

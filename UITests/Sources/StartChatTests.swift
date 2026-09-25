@@ -33,6 +33,10 @@ class StartChatTests: XCTestCase {
         
         startChatSearchField.clearAndTypeText("\n", app: app)
         app.buttons[A11yIdentifiers.startChatScreen.createRoom].firstMatch.tap()
+        // On iPad the search field keeps focus on iOS 27, so the first tap can be swallowed while it resigns.
+        if !app.textFields[A11yIdentifiers.createRoomScreen.roomName].waitForExistence(timeout: 2.0) {
+            app.buttons[A11yIdentifiers.startChatScreen.createRoom].firstMatch.tap()
+        }
         XCTAssertTrue(app.textFields[A11yIdentifiers.createRoomScreen.roomName].waitForExistence(timeout: 1.0))
         try await app.assertScreenshot(step: Step.createRoom)
         

@@ -19,7 +19,7 @@ struct PreviewTests {
     }
     
     private let simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
-    private let requiredOSVersion = (major: 26, minor: 5)
+    private let requiredOSVersion = (major: 27, minor: 0)
     /// The key is the name we will give to the snapshot
     /// The value is the actual device that will be used to render the preview
     private let snapshotDevices: [SnapshotDevice] = [.init(name: "iPhone", device: "iPhone 17"),
@@ -216,6 +216,8 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
                     controller = UIHostingController(rootView: view)
                 } else {
                     let hostingController = UIHostingController(rootView: view)
+                    // iOS 27 applies the window's safe area when rendering, which sizeThatFits ignores, clipping the content.
+                    hostingController.safeAreaRegions = []
                     
                     let maxSize = CGSize.zero
                     config.size = hostingController.sizeThatFits(in: maxSize)
