@@ -15,11 +15,11 @@ class UserSession: UserSessionProtocol {
     private var authErrorCancellable: AnyCancellable?
     
     let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSettings: UserSettings
     
+    let mediaProvider: MediaProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let liveLocationManager: LiveLocationManagerProtocol
-    
     /// Scans media content, `nil` when no content scanner is configured for the server.
     let contentScannerService: ContentScannerServiceProtocol?
     
@@ -30,8 +30,14 @@ class UserSession: UserSessionProtocol {
         sessionSecurityStateSubject.asCurrentValuePublisher()
     }
     
-    init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol, voiceMessageMediaManager: VoiceMessageMediaManagerProtocol, liveLocationManager: LiveLocationManagerProtocol) {
+    init(clientProxy: ClientProxyProtocol,
+         userSettings: UserSettings,
+         mediaProvider: MediaProviderProtocol,
+         voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
+         liveLocationManager: LiveLocationManagerProtocol) {
         self.clientProxy = clientProxy
+        self.userSettings = userSettings
+        
         self.mediaProvider = mediaProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
         self.liveLocationManager = liveLocationManager

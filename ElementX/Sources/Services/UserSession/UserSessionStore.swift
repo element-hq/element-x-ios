@@ -59,9 +59,11 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.missingCredentials)
         }
         
-        switch await restorePreviousLogin(credentials) {
+        let userSettings = UserSettings(appSettings: appSettings, accountSettings: .init())
+        
+        switch await restorePreviousLogin(credentials, userSettings: userSettings) {
         case .success(let clientProxy):
-            return await .success(buildUserSessionWithClient(clientProxy))
+            return await .success(buildUserSessionWithClient(clientProxy, userSettings: userSettings))
         case .failure(let error):
             MXLog.error("Failed restoring login with error: \(error)")
             
@@ -77,7 +79,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         do {
             let session = try client.session()
             let userID = try client.userId()
-            let clientProxy = try await setupProxyForClient(client)
+            let userSettings = UserSettings(appSettings: appSettings, accountSettings: .init())
+            let clientProxy = try await setupProxyForClient(client, userSettings: userSettings)
             
             keychainController.setRestorationToken(RestorationToken(session: session,
                                                                     sessionDirectories: sessionDirectories,
@@ -87,7 +90,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             MXLog.info("Set up session for user \(userID) at: \(sessionDirectories)")
             
-            return await .success(buildUserSessionWithClient(clientProxy))
+            return await .success(buildUserSessionWithClient(clientProxy, userSettings: userSettings))
         } catch {
             MXLog.error("Failed creating user session with error: \(error)")
             return .failure(.failedSettingUpSession)
@@ -106,7 +109,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     // MARK: - Private
     
-    private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) async -> UserSessionProtocol {
+    private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol, userSettings: UserSettings) async -> UserSessionProtocol {
         let mediaProvider = MediaProvider(mediaLoader: clientProxy.mediaLoader,
                                           imageCache: .onlyInMemory,
                                           homeserverReachabilityPublisher: clientProxy.homeserverReachabilityPublisher)
@@ -115,16 +118,17 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let liveLocationManager = await MainActor.run {
             LiveLocationManager(clientProxy: clientProxy,
-                                appSettings: appSettings)
+                                userSettings: userSettings)
         }
         
         return UserSession(clientProxy: clientProxy,
+                           userSettings: userSettings,
                            mediaProvider: mediaProvider,
                            voiceMessageMediaManager: voiceMessageMediaManager,
                            liveLocationManager: liveLocationManager)
     }
     
-    private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
+    private func restorePreviousLogin(_ credentials: KeychainCredentials, userSettings: UserSettings) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
         guard credentials.restorationToken.sessionDirectories.isNonTransientUserDataValid() else {
             MXLog.error("Failed restoring login, missing non-transient user data")
             return .failure(.failedRestoringLogin)
@@ -142,7 +146,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             Task(priority: .low) { await appHooks.remoteSettingsHook.updateCache(using: client) }
             
-            return try await .success(setupProxyForClient(client))
+            return try await .success(setupProxyForClient(client, userSettings: userSettings))
         } catch UserSessionStoreError.failedSettingUpClientProxy(let error) {
             // If this has failed, there is likely something wrong with the creation of the sync service
             // There is nothing we can do, but at the same time we don't want the user to the get logged out
@@ -154,11 +158,11 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    private func setupProxyForClient(_ client: ClientProtocol) async throws -> ClientProxyProtocol {
+    private func setupProxyForClient(_ client: ClientProtocol, userSettings: UserSettings) async throws -> ClientProxyProtocol {
         do {
             return try await ClientProxy(client: client,
                                          networkMonitor: networkMonitor,
-                                         appSettings: appSettings,
+                                         userSettings: userSettings,
                                          analyticsService: analyticsService)
         } catch {
             throw UserSessionStoreError.failedSettingUpClientProxy(error)
