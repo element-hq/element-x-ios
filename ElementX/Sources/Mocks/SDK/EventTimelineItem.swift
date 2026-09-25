@@ -45,6 +45,8 @@ nonisolated extension EventTimelineItem {
                   eventTypeRaw: nil,
                   timestamp: UInt64(Date.mock.timeIntervalSince1970 * 1000),
                   localSendState: nil,
+                  editSendState: nil,
+                  redactionSendState: nil,
                   localCreatedAt: nil,
                   readReceipts: [:],
                   origin: nil,

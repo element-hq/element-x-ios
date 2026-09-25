@@ -10,11 +10,12 @@ import Foundation
 import MatrixRustSDK
 
 nonisolated enum TraceLogPack: Codable, CaseIterable {
-    case eventCache, sendQueue, timeline, notificationClient, syncProfiling, latestEvents, search
+    case eventCache, backPagination, sendQueue, timeline, notificationClient, syncProfiling, latestEvents, search
     
     var title: String {
         switch self {
         case .eventCache: "Event cache"
+        case .backPagination: "Back pagination"
         case .sendQueue: "Send queue"
         case .timeline: "Timeline"
         case .notificationClient: "Notification client"
@@ -30,6 +31,7 @@ nonisolated extension TraceLogPack {
     init(rustLogPack: MatrixRustSDK.TraceLogPacks) {
         self = switch rustLogPack {
         case .eventCache: .eventCache
+        case .backPagination: .backPagination
         case .sendQueue: .sendQueue
         case .timeline: .timeline
         case .notificationClient: .notificationClient
@@ -42,6 +44,7 @@ nonisolated extension TraceLogPack {
     var rustLogPack: MatrixRustSDK.TraceLogPacks {
         switch self {
         case .eventCache: .eventCache
+        case .backPagination: .backPagination
         case .sendQueue: .sendQueue
         case .timeline: .timeline
         case .notificationClient: .notificationClient
