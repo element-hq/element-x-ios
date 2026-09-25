@@ -10,8 +10,8 @@ permissions: {}
 jobs:
   record-snapshots:
     name: Record Preview Snapshots
-    runs-on: macos-26
-    timeout-minutes: 45
+    runs-on: xcode-27
+    timeout-minutes: 60
 
     if: >
       github.event.label.name == 'record-snapshots' &&
