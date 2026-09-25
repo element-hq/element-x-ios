@@ -96,6 +96,12 @@ protocol TimelineControllerProtocol: Sendable {
     
     func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy?
     
+    func pendingSendTarget(for itemID: TimelineItemIdentifier) -> SendTarget?
+    
+    func retrySend(_ itemID: TimelineItemIdentifier, target: SendTarget) async
+    
+    func abortSend(_ itemID: TimelineItemIdentifier, target: SendTarget) async
+    
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date?
     
     // MARK: - Sending

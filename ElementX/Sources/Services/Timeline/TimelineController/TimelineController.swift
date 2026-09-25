@@ -288,6 +288,53 @@ class TimelineController: TimelineControllerProtocol {
         return nil
     }
     
+    func pendingSendTarget(for itemID: TimelineItemIdentifier) -> SendTarget? {
+        for timelineItemProxy in activeTimelineItemProvider.itemProxies {
+            switch timelineItemProxy {
+            case .event(let item):
+                if item.id == itemID {
+                    return item.pendingSend?.target
+                }
+            default:
+                continue
+            }
+        }
+        
+        return nil
+    }
+    
+    func retrySend(_ itemID: TimelineItemIdentifier, target: SendTarget) async {
+        guard let eventOrTransactionID = itemID.eventOrTransactionID else {
+            MXLog.error("Cannot retry sending on \(itemID).")
+            return
+        }
+        
+        MXLog.info("Retry \(target) send in \(roomID)")
+        
+        switch await activeTimeline.retrySend(eventOrTransactionID, target: target) {
+        case .success(let hadPendingSend):
+            MXLog.info("Finished retrying send, had one pending: \(hadPendingSend)")
+        case .failure(let error):
+            MXLog.error("Failed retrying send with error: \(error)")
+        }
+    }
+    
+    func abortSend(_ itemID: TimelineItemIdentifier, target: SendTarget) async {
+        guard let eventOrTransactionID = itemID.eventOrTransactionID else {
+            MXLog.error("Cannot abort sending on \(itemID).")
+            return
+        }
+        
+        MXLog.info("Abort \(target) send in \(roomID)")
+        
+        switch await activeTimeline.abortSend(eventOrTransactionID, target: target) {
+        case .success(let hadPendingSend):
+            MXLog.info("Finished aborting send, had one pending: \(hadPendingSend)")
+        case .failure(let error):
+            MXLog.error("Failed aborting send with error: \(error)")
+        }
+    }
+    
     // MARK: - Sending
     
     func sendMessage(_ message: String,
