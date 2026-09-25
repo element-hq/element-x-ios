@@ -11,8 +11,6 @@ import SwiftUI
 struct SpaceAddRoomsScreen: View {
     @Bindable var context: SpaceAddRoomsScreenViewModel.Context
     
-    @State private var formWidth = CGFloat.zero
-    
     var showTopSection: Bool {
         !context.viewState.selectedRooms.isEmpty
     }
@@ -32,7 +30,7 @@ struct SpaceAddRoomsScreen: View {
                     if showTopSection {
                         selectedRoomsSection
                             .textCase(.none)
-                            .frame(width: formWidth)
+                            .containerRelativeFrame(.horizontal)
                             .padding(.bottom, -8)
                     }
                 }
@@ -51,7 +49,6 @@ struct SpaceAddRoomsScreen: View {
         .compoundSearchField()
         .disableAutocorrection(true)
         .onChange(of: context.searchQuery) { context.send(viewAction: .searchQueryChanged) }
-        .readWidth($formWidth)
     }
     
     @ScaledMetric private var selectedRoomCellWidth: CGFloat = 80
@@ -177,11 +174,17 @@ struct SpaceAddRoomsScreen_Previews: PreviewProvider, TestablePreview {
             SpaceAddRoomsScreen(context: searchingViewModel.context)
         }
         .previewDisplayName("Searching")
+        .snapshotPreferences(expect: searchingViewModel.context.observe(\.viewState.roomsSection).map {
+            $0.type == .searchResults && !$0.rooms.isEmpty
+        }, precision: 0.999) // The search field's clear button renders inconsistently in snapshots.
         
         ElementNavigationStack {
             SpaceAddRoomsScreen(context: selectedViewModel.context)
         }
         .previewDisplayName("Selected")
+        .snapshotPreferences(expect: selectedViewModel.context.observe(\.viewState.roomsSection).map {
+            $0.type == .searchResults && !$0.rooms.isEmpty
+        }, precision: 0.999) // The search field's clear button renders inconsistently in snapshots.
     }
     
     static func makeViewModel(searchQuery: String? = nil, hasSelection: Bool = false) -> SpaceAddRoomsScreenViewModel {
