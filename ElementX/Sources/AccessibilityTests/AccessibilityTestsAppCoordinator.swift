@@ -134,8 +134,8 @@ struct PreviewsWrapperView: View {
         let preferenceReadingView = newPreview.content.onPreferenceChange(SnapshotFulfillmentPreferenceKey.self) { fulfillmentSource = $0?.source }
         
         // Render an image of the view in order to trigger the preference updates to occur.
-        let imageRenderer = ImageRenderer(content: preferenceReadingView)
-        _ = imageRenderer.uiImage
+        // Release the renderer straight away: on iOS 27, releasing it after the awaits below crashes SwiftUI.
+        _ = ImageRenderer(content: preferenceReadingView).uiImage
         
         switch fulfillmentSource {
         case .publisher(let publisher):
