@@ -89,6 +89,7 @@ class LinkNewDeviceFlowCoordinator: FlowCoordinatorProtocol {
                     continuation.resume(returning: false)
                     navigationStackCoordinator.setFullScreenCoverCoordinator(nil)
                 case .forceLogout:
+                    continuation.resume(returning: false)
                     actionsSubject.send(.forceLogout)
                 }
             }
