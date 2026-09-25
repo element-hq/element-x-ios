@@ -20,7 +20,6 @@ enum EncryptionResetFlowCoordinatorAction: Equatable {
 struct EncryptionResetFlowCoordinatorParameters {
     let userSession: UserSessionProtocol
     let appMediator: AppMediatorProtocol
-    let appSettings: AppSettings
     let appHooks: AppHooks
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
@@ -30,7 +29,7 @@ struct EncryptionResetFlowCoordinatorParameters {
 class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appMediator: AppMediatorProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let appHooks: AppHooks
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -67,7 +66,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     init(parameters: EncryptionResetFlowCoordinatorParameters) {
         userSession = parameters.userSession
         appMediator = parameters.appMediator
-        appSettings = parameters.appSettings
+        userSettings = parameters.userSession.userSettings
         appHooks = parameters.appHooks
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
@@ -165,7 +164,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         accountSettingsPresenter = OAuthAccountSettingsPresenter(accountURL: url,
                                                                  presentationAnchor: windowManager.mainWindow,
                                                                  appMediator: appMediator,
-                                                                 appSettings: appSettings,
+                                                                 userSettings: userSettings,
                                                                  appHooks: appHooks)
         accountSettingsPresenter?.start()
     }

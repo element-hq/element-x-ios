@@ -69,7 +69,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   userSession: userSession,
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   appMediator: flowParameters.appMediator,
-                                                                                  appSettings: flowParameters.appSettings,
+                                                                                  userSettings: flowParameters.userSettings,
                                                                                   analytics: flowParameters.analytics,
                                                                                   emojiProvider: flowParameters.emojiProvider,
                                                                                   linkMetadataProvider: flowParameters.linkMetadataProvider,
@@ -107,11 +107,11 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
-                                                                mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration.publisher.value,
+                                                                mapURLBuilder: flowParameters.userSettings.mapTilerConfiguration.publisher.value,
                                                                 roomProxy: roomProxy,
                                                                 timelineController: timelineController,
                                                                 liveLocationManager: flowParameters.userSession.liveLocationManager,
-                                                                appSettings: flowParameters.appSettings,
+                                                                userSettings: flowParameters.userSettings,
                                                                 appMediator: flowParameters.appMediator,
                                                                 analytics: flowParameters.analytics,
                                                                 userIndicatorController: flowParameters.userIndicatorController,

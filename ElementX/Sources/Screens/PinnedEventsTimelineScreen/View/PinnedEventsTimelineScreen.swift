@@ -83,7 +83,7 @@ struct PinnedEventsTimelineScreen: View {
 struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = PinnedEventsTimelineScreenViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                                                userIndicatorController: UserIndicatorControllerMock(),
-                                                               appSettings: .volatile(),
+                                                               userSettings: .volatile(),
                                                                analyticsService: AnalyticsServiceMock(.init()))
     
     static let emptyTimelineViewModel = makeTimelineViewModel(timelineItems: [])
@@ -106,18 +106,18 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         let eventIDs = timelineItems.compactMap { ($0 as? EventBasedTimelineItemProtocol)?.id.eventID }
         let timelineController = TimelineControllerMock(.init(timelineKind: .pinned, timelineItems: timelineItems))
         
-        let appSettings = AppSettings.volatile()
-        appSettings.messageMultiSelectEnabled = isSelecting
+        let userSettings = UserSettings.volatile()
+        userSettings.messageMultiSelectEnabled = isSelecting
+        let userSession = UserSessionMock(.init(userSettings: userSettings))
         
         let timelineViewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room", pinnedEventIDs: Set(eventIDs))),
                                                   timelineController: timelineController,
-                                                  userSession: UserSessionMock(.init()),
+                                                  userSession: userSession,
                                                   mediaPlayerProvider: MediaPlayerProviderMock(),
                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                   appMediator: AppMediatorMock(.init()),
-                                                  appSettings: appSettings,
                                                   analyticsService: AnalyticsServiceMock(.init()),
-                                                  emojiProvider: EmojiProvider(appSettings: appSettings),
+                                                  emojiProvider: EmojiProvider(userSettings: .volatile()),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         

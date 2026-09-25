@@ -15,7 +15,7 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let appMediator: AppMediatorProtocol
-    let appSettings: AppSettings
+    let userSettings: UserSettings
     let analytics: AnalyticsServiceProtocol
     let emojiProvider: EmojiProviderProtocol
     let linkMetadataProvider: LinkMetadataProviderProtocol
@@ -46,7 +46,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
     init(parameters: PinnedEventsTimelineScreenCoordinatorParameters) {
         viewModel = PinnedEventsTimelineScreenViewModel(roomProxy: parameters.roomProxy,
                                                         userIndicatorController: parameters.userIndicatorController,
-                                                        appSettings: parameters.appSettings,
+                                                        userSettings: parameters.userSettings,
                                                         analyticsService: parameters.analytics)
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               timelineController: parameters.timelineController,
@@ -54,7 +54,6 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               userIndicatorController: parameters.userIndicatorController,
                                               appMediator: parameters.appMediator,
-                                              appSettings: parameters.appSettings,
                                               analyticsService: parameters.analytics,
                                               emojiProvider: parameters.emojiProvider,
                                               linkMetadataProvider: parameters.linkMetadataProvider,

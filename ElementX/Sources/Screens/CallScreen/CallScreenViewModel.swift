@@ -17,7 +17,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private let elementCallService: ElementCallServiceProtocol
     private let configuration: ElementCallConfiguration
     private let isPictureInPictureAllowed: Bool
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let analyticsService: AnalyticsServiceProtocol
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
@@ -39,11 +39,11 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          analyticsService: AnalyticsServiceProtocol) {
         self.elementCallService = elementCallService
         self.configuration = configuration
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         self.analyticsService = analyticsService
         isPictureInPictureAllowed = allowPictureInPicture
         
@@ -165,13 +165,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             
             // We only set the analytics configuration if analytics are enabled
             let analyticsConfiguration: ElementCallAnalyticsConfiguration? = if analyticsService.isEnabled {
-                .init(posthogAPIHost: appSettings.elementCallPosthogAPIHost,
-                      posthogAPIKey: appSettings.elementCallPosthogAPIKey,
-                      sentryDSN: appSettings.elementCallPosthogSentryDSN)
+                .init(posthogAPIHost: userSettings.elementCallPosthogAPIHost,
+                      posthogAPIKey: userSettings.elementCallPosthogAPIKey,
+                      sentryDSN: userSettings.elementCallPosthogSentryDSN)
             } else {
                 nil
             }
-            let rageshakeURL: String? = if case let .url(baseURL) = appSettings.bugReportRageshakeURL.publisher.value {
+            let rageshakeURL: String? = if case let .url(baseURL) = userSettings.bugReportRageshakeURL.publisher.value {
                 baseURL.absoluteString
             } else {
                 nil

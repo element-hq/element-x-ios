@@ -103,7 +103,7 @@ struct EmojiPickerScreen: View {
 @available(iOS 26.0, *)
 struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = EmojiPickerScreenViewModel(selectedEmojis: ["😀", "😄"],
-                                                      emojiProvider: EmojiProvider(appSettings: .volatile()),
+                                                      emojiProvider: EmojiProvider(userSettings: .volatile()),
                                                       continuation: AsyncStream<String>.makeStream().continuation)
     
     static var previews: some View {
@@ -115,7 +115,7 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
 
 struct EmojiPickerScreenSheet_Previews: PreviewProvider {
     static let viewModel = EmojiPickerScreenViewModel(selectedEmojis: ["😀", "😄"],
-                                                      emojiProvider: EmojiProvider(appSettings: .volatile()),
+                                                      emojiProvider: EmojiProvider(userSettings: .volatile()),
                                                       continuation: AsyncStream<String>.makeStream().continuation)
     
     static var previews: some View {

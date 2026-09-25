@@ -64,7 +64,7 @@ extension ClientFactoryMock {
             ClientSDKMock(.init(userID: credentials.userID))
         }
         
-        makeNSEClientCredentialsRoomIDClientSessionDelegateAppSettingsAppHooksClosure = { credentials, _, _, _, _ in
+        makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksClosure = { credentials, _, _, _, _ in
             ClientSDKMock(.init(userID: credentials.userID))
         }
     }

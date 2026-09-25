@@ -11,7 +11,7 @@ import CoreLocation
 class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationManagerDelegate {
     private let clientProxy: ClientProxyProtocol
     private let locationManager: CLLocationManagerProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     private let authorizationStatusSubject: CurrentValueSubject<CLAuthorizationStatus, Never>
     var authorizationStatus: CurrentValuePublisher<CLAuthorizationStatus, Never> {
@@ -42,10 +42,10 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     private var lastLocation: CLLocationCoordinate2D?
     
     init(clientProxy: ClientProxyProtocol,
-         appSettings: AppSettings,
+         userSettings: UserSettings,
          locationManager: @autoclosure @MainActor () -> CLLocationManagerProtocol = CLLocationManager()) {
         self.clientProxy = clientProxy
-        self.appSettings = appSettings
+        self.userSettings = userSettings
         // Very important, the CLLocationManager needs to be initialised on the main thread
         // or the delegate functions won't be handled!
         // https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate
@@ -64,7 +64,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         // https://developer.apple.com/documentation/corelocation/cllocationmanager/pauseslocationupdatesautomatically
         self.locationManager.pausesLocationUpdatesAutomatically = false
         
-        setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: appSettings.liveLocationMinimumDistanceUpdate)
+        setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: userSettings.liveLocationMinimumDistanceUpdate)
         setupSubscriptions()
     }
     
@@ -72,8 +72,8 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     
     @discardableResult
     func requestAlwaysAuthorizationIfPossible() -> Bool {
-        guard !appSettings.hasRequestedLocationAlwaysLocationAuthorization else { return false }
-        appSettings.hasRequestedLocationAlwaysLocationAuthorization = true
+        guard !userSettings.hasRequestedLocationAlwaysLocationAuthorization else { return false }
+        userSettings.hasRequestedLocationAlwaysLocationAuthorization = true
         locationManager.requestAlwaysAuthorization()
         return true
     }
@@ -81,7 +81,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     func startLiveLocation(roomID: String, duration: Duration) async -> Result<Void, LiveLocationManagerError> {
         // Stop any existing session for this room first
         var didAlreadyStopLocalSession = false
-        if appSettings.liveLocationSharingSessionsByRoomID[roomID] != nil
+        if userSettings.liveLocationSharingSessionsByRoomID[roomID] != nil
             || startingLiveLocationSharingSessionsByRoomID[roomID] != nil {
             await stopLiveLocation(roomID: roomID)
             didAlreadyStopLocalSession = true
@@ -114,7 +114,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         var roomProxy: JoinedRoomProxyProtocol?
         let cachedRoomProxy = activeRoomProxies[roomID]
         startingLiveLocationSharingSessionsByRoomID.removeValue(forKey: roomID)
-        appSettings.liveLocationSharingSessionsByRoomID.removeValue(forKey: roomID)
+        userSettings.liveLocationSharingSessionsByRoomID.removeValue(forKey: roomID)
         
         if let cachedRoomProxy {
             roomProxy = cachedRoomProxy
@@ -137,7 +137,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         // If the system resets authorization to notDetermined (e.g. after app reinstall or
         // settings reset), clear the flag so we can request again.
         if manager.authorizationStatus == .notDetermined {
-            appSettings.hasRequestedLocationAlwaysLocationAuthorization = false
+            userSettings.hasRequestedLocationAlwaysLocationAuthorization = false
         }
         
         // If authorization was revoked, stop all active sessions.
@@ -146,7 +146,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         }
         
         // Accuracy authorization may have changed, reapply new accuracy settings.
-        setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: appSettings.liveLocationMinimumDistanceUpdate)
+        setupMinimumDistanceUpdatesAndAccuracy(minimumDistance: userSettings.liveLocationMinimumDistanceUpdate)
         
         authorizationStatusSubject.send(manager.authorizationStatus)
     }
@@ -183,7 +183,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             }
             .store(in: &cancellables)
         
-        appSettings.liveLocationSharingSessionsByRoomIDPublisher
+        userSettings.liveLocationSharingSessionsByRoomIDPublisher
             .removeDuplicates()
             .sink { [weak self] sessions in
                 guard let self else { return }
@@ -197,7 +197,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
             }
             .store(in: &cancellables)
         
-        appSettings.liveLocationMinimumDistanceUpdatePublisher
+        userSettings.liveLocationMinimumDistanceUpdatePublisher
             .removeDuplicates()
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .sink { [weak self] newValue in
@@ -210,7 +210,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         // A new beaconInfo has been received in a room with existing active session.
         // This is either a new start or a new stop from a different device, so we
         // should remove the session from the current local one.
-        appSettings.liveLocationSharingSessionsByRoomID.removeValue(forKey: update.roomID)
+        userSettings.liveLocationSharingSessionsByRoomID.removeValue(forKey: update.roomID)
         
         // Instead if we receive a new isLiveUpdate
         guard update.isLive else { return }
@@ -224,7 +224,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
         // This means the server has echoed the start of the session and we can safely promote it
         // to a started session and start sending live locations.
         startingLiveLocationSharingSessionsByRoomID.removeValue(forKey: update.roomID)
-        appSettings.liveLocationSharingSessionsByRoomID[update.roomID] = session
+        userSettings.liveLocationSharingSessionsByRoomID[update.roomID] = session
         
         if isUpdatingLocation, let lastLocation {
             locationUpdateSubject.send(lastLocation)
@@ -281,7 +281,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     /// discarding any intermediate updates while always keeping the last one.
     private func processLocationUpdateIfNeeded() {
         guard !isProcessingLocationUpdate, let location = latestPendingLocation else { return }
-        guard !appSettings.liveLocationSharingSessionsByRoomID.isEmpty else { return }
+        guard !userSettings.liveLocationSharingSessionsByRoomID.isEmpty else { return }
         
         latestPendingLocation = nil
         isProcessingLocationUpdate = true
@@ -306,7 +306,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     }
     
     private func sendLocationToActiveRooms(_ coordinate: CLLocationCoordinate2D) async {
-        let sessions = appSettings.liveLocationSharingSessionsByRoomID
+        let sessions = userSettings.liveLocationSharingSessionsByRoomID
         let geoURI = GeoURI(coordinate: coordinate, uncertainty: nil)
         
         for (roomID, session) in sessions {
@@ -351,7 +351,7 @@ class LiveLocationManager: NSObject, LiveLocationManagerProtocol, CLLocationMana
     }
     
     private func stopAllSessions() {
-        let roomIDs = Array(Set(appSettings.liveLocationSharingSessionsByRoomID.keys)
+        let roomIDs = Array(Set(userSettings.liveLocationSharingSessionsByRoomID.keys)
             .union(startingLiveLocationSharingSessionsByRoomID.keys))
         Task { [weak self] in
             guard let self else { return }

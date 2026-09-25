@@ -313,7 +313,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    displayName: "Alice Liddell",
                                                                                    status: .mockFocussing))))
         return SettingsScreenViewModel(userSession: userSession,
-                                       appSettings: .volatile(),
+                                       userSettings: .volatile(),
                                        isBugReportServiceEnabled: isBugReportServiceEnabled,
                                        isInSecondaryWindow: false,
                                        userIndicatorController: UserIndicatorControllerMock())

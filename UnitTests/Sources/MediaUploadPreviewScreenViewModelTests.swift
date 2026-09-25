@@ -15,7 +15,7 @@ final class MediaUploadPreviewScreenViewModelTests {
     var timelineProxy: TimelineProxyMock!
     var clientProxy: ClientProxyMock!
     var userIndicatorController: UserIndicatorControllerMock
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     var viewModel: MediaUploadPreviewScreenViewModel!
     var context: MediaUploadPreviewScreenViewModel.Context {
@@ -28,8 +28,8 @@ final class MediaUploadPreviewScreenViewModelTests {
     }
     
     init() {
-        appSettings = AppSettings.volatile()
-        appSettings.optimizeMediaUploads = false
+        userSettings = UserSettings.volatile()
+        userSettings.optimizeMediaUploads = false
         
         userIndicatorController = UserIndicatorControllerMock()
     }
@@ -322,7 +322,7 @@ final class MediaUploadPreviewScreenViewModelTests {
                                                       title: "Some File",
                                                       shouldShowCaptionWarning: true,
                                                       galleryEnabled: galleryEnabled,
-                                                      mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                      mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: userSettings),
                                                       timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),
                                                       clientProxy: clientProxy,
                                                       userIndicatorController: userIndicatorController)

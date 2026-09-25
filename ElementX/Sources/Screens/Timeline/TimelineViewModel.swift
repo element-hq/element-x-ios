@@ -29,7 +29,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     private let analyticsService: AnalyticsServiceProtocol
     private let emojiProvider: EmojiProviderProtocol
     
@@ -54,7 +54,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
-         appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol,
          emojiProvider: EmojiProviderProtocol,
          linkMetadataProvider: LinkMetadataProviderProtocol,
@@ -63,7 +62,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.timelineController = timelineController
         self.userSession = userSession
         self.mediaPlayerProvider = mediaPlayerProvider
-        self.appSettings = appSettings
+        userSettings = userSession.userSettings
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
@@ -78,7 +77,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 voiceMessageRecorder: voiceMessageRecorder,
                                                                 userIndicatorController: userIndicatorController,
                                                                 appMediator: appMediator,
-                                                                appSettings: appSettings,
                                                                 analyticsService: analyticsService,
                                                                 emojiProvider: emojiProvider,
                                                                 linkMetadataProvider: linkMetadataProvider,
@@ -99,16 +97,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        hideTimelineMedia: hideTimelineMedia,
-                                                       isViewSourceEnabled: appSettings.viewSourceEnabled,
-                                                       areThreadsEnabled: appSettings.threadsEnabled,
-                                                       linkPreviewsEnabled: appSettings.linkPreviewsEnabled,
-                                                       jumpToReadMarkerEnabled: appSettings.jumpToReadMarkerEnabled,
-                                                       messageSelection: .init(isEnabled: appSettings.messageMultiSelectEnabled),
+                                                       isViewSourceEnabled: userSettings.viewSourceEnabled,
+                                                       areThreadsEnabled: userSettings.threadsEnabled,
+                                                       linkPreviewsEnabled: userSettings.linkPreviewsEnabled,
+                                                       jumpToReadMarkerEnabled: userSettings.jumpToReadMarkerEnabled,
+                                                       messageSelection: .init(isEnabled: userSettings.messageMultiSelectEnabled),
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
                                                        linkMetadataProvider: hideTimelineMedia ? nil : linkMetadataProvider,
-                                                       mapTilerConfiguration: appSettings.mapTilerConfiguration.publisher.value,
+                                                       mapTilerConfiguration: userSettings.mapTilerConfiguration.publisher.value,
                                                        bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: userSession.mediaProvider,
                    contentScannerService: userSession.contentScannerService)
@@ -274,7 +272,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .voiceMessage(let voiceMessageAction):
             processVoiceMessageAction(voiceMessageAction)
         case .contentChanged(let isEmpty):
-            guard appSettings.sharePresence else {
+            guard userSettings.sharePresence else {
                 return
             }
             
@@ -501,7 +499,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
             .store(in: &cancellables)
         
-        setupAppSettingsSubscriptions()
+        setupUserSettingsSubscriptions()
         
         roomProxy.membersPublisher
             .receive(on: DispatchQueue.main)
@@ -510,7 +508,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         roomProxy.typingMembersPublisher
             .receive(on: DispatchQueue.main)
-            .filter { [weak self] _ in self?.appSettings.sharePresence ?? false }
+            .filter { [weak self] _ in self?.userSettings.sharePresence ?? false }
             .weakAssign(to: \.state.typingMembers, on: self)
             .store(in: &cancellables)
         
@@ -562,7 +560,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     func viewInRoomTimeline(eventID: String) async {
         switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
         case .success(let event):
-            let threadRootEventID: String? = if appSettings.threadsEnabled {
+            let threadRootEventID: String? = if userSettings.threadsEnabled {
                 event.threadRootEventId()
             } else {
                 nil
@@ -573,20 +571,20 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
     
-    private func setupAppSettingsSubscriptions() {
-        appSettings.sharePresencePublisher
+    private func setupUserSettingsSubscriptions() {
+        userSettings.sharePresencePublisher
             .weakAssign(to: \.state.showReadReceipts, on: self)
             .store(in: &cancellables)
         
-        appSettings.viewSourceEnabledPublisher
+        userSettings.viewSourceEnabledPublisher
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.threadsEnabledPublisher
+        userSettings.threadsEnabledPublisher
             .weakAssign(to: \.state.areThreadsEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.jumpToReadMarkerEnabledPublisher
+        userSettings.jumpToReadMarkerEnabledPublisher
             .weakAssign(to: \.state.jumpToReadMarkerEnabled, on: self)
             .store(in: &cancellables)
         
@@ -1148,7 +1146,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              primaryButton: .init(title: L10n.actionOk, action: nil),
                                              secondaryButton: .init(title: L10n.actionLearnMore) { [weak self] in
                                                  guard let self else { return }
-                                                 appMediator.open(appSettings.historySharingDetailsURL)
+                                                 appMediator.open(userSettings.historySharingDetailsURL)
                                              })
         case .inviteAgain:
             state.bindings.alertInfo = .init(id: .inviteAgain,
@@ -1199,7 +1197,7 @@ extension TimelineViewModel {
 
 extension TimelineViewModel {
     private func setupSelectionSubscriptions() {
-        appSettings.messageMultiSelectEnabledPublisher
+        userSettings.messageMultiSelectEnabledPublisher
             .sink { [weak self] isEnabled in
                 self?.state.messageSelection.isEnabled = isEnabled
                 if !isEnabled {
@@ -1300,8 +1298,6 @@ extension TimelineViewModel {
         clientProxyMock.roomSummaryForIdentifierReturnValue = .mock(id: "!room:matrix.org", name: "Room", canonicalAlias: "#room:matrix.org")
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview room", predecessor: hasPredecessor ? .init(roomId: UUID().uuidString) : nil))
         
-        let appSettings = AppSettings.volatile()
-        
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: timelineController ?? TimelineControllerMock(.init(timelineKind: timelineKind)),
@@ -1309,9 +1305,8 @@ extension TimelineViewModel {
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock(.init()),
-                                 appSettings: appSettings,
                                  analyticsService: AnalyticsServiceMock(.init()),
-                                 emojiProvider: EmojiProvider(appSettings: appSettings),
+                                 emojiProvider: EmojiProvider(userSettings: .volatile()),
                                  linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }

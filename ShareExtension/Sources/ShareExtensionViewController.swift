@@ -12,7 +12,7 @@ import SwiftUI
 
 class ShareExtensionViewController: UIViewController {
     private static var targetConfiguration: Target.ConfigurationResult?
-    private let appSettings: CommonSettingsProtocol = {
+    private let userSettings: CommonSettingsProtocol = {
         guard let userDefaults = TrackedUserDefaults(suiteName: AppSettings.suiteName) else {
             fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
         }
@@ -33,10 +33,10 @@ class ShareExtensionViewController: UIViewController {
         appHooks.setUp()
         
         if Self.targetConfiguration == nil {
-            Self.targetConfiguration = Target.shareExtension.configure(logLevel: appSettings.logLevel,
-                                                                       traceLogPacks: appSettings.traceLogPacks,
+            Self.targetConfiguration = Target.shareExtension.configure(logLevel: userSettings.logLevel,
+                                                                       traceLogPacks: userSettings.traceLogPacks,
                                                                        sentryURL: nil,
-                                                                       rageshakeURL: appSettings.bugReportRageshakeURL,
+                                                                       rageshakeURL: userSettings.bugReportRageshakeURL,
                                                                        appHooks: appHooks)
         }
         
@@ -50,7 +50,7 @@ class ShareExtensionViewController: UIViewController {
         
         if let credentials = keychainController.restorationTokens().first {
             let homeserverURL = credentials.restorationToken.session.homeserverUrl
-            appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
+            appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: userSettings)
         } else {
             // We should really show a different state when there isn't a logged in user, but for now this is fine.
             MXLog.error("Not logged in, launching app to show the authentication flow.")

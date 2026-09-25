@@ -15,7 +15,6 @@ import Testing
 struct PillContextTests {
     @Test
     func user() async {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let id = "@test:matrix.org"
@@ -28,9 +27,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
@@ -49,7 +47,6 @@ struct PillContextTests {
     
     @Test
     func ownUser() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let id = "@test:matrix.org"
@@ -62,9 +59,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
@@ -74,7 +70,6 @@ struct PillContextTests {
     
     @Test
     func allUsers() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let avatarURL = URL(string: "https://matrix.jpg")
@@ -88,9 +83,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
@@ -101,7 +95,6 @@ struct PillContextTests {
     
     @Test
     func roomIDMention() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -114,9 +107,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
@@ -128,7 +120,6 @@ struct PillContextTests {
     
     @Test
     func roomIDMentionMissingRoom() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -139,9 +130,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
@@ -153,7 +143,6 @@ struct PillContextTests {
     
     @Test
     func roomAliasMention() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -168,9 +157,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
@@ -182,7 +170,6 @@ struct PillContextTests {
     
     @Test
     func roomAliasMentionMissingRoom() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -193,9 +180,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
@@ -207,7 +193,6 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomIDMention() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -220,9 +205,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
@@ -234,7 +218,6 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomIDMentionMissingRoom() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -245,9 +228,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
@@ -259,7 +241,6 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomAliasMention() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -274,9 +255,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
@@ -288,7 +268,6 @@ struct PillContextTests {
     
     @Test
     func eventOnRoomAliasMentionMissingRoom() {
-        let appSettings = AppSettings.volatile()
         let userIndicatorController = UserIndicatorControllerMock()
         
         let proxyMock = JoinedRoomProxyMock(.init())
@@ -299,9 +278,8 @@ struct PillContextTests {
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      userIndicatorController: userIndicatorController,
                                      appMediator: AppMediatorMock(.init()),
-                                     appSettings: appSettings,
                                      analyticsService: AnalyticsServiceMock(.init()),
-                                     emojiProvider: EmojiProvider(appSettings: appSettings),
+                                     emojiProvider: EmojiProvider(userSettings: .volatile()),
                                      linkMetadataProvider: LinkMetadataProvider(),
                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
