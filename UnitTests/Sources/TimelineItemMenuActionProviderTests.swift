@@ -123,7 +123,7 @@ struct TimelineItemMenuActionProviderTests {
                                        isViewSourceEnabled: true,
                                        areThreadsEnabled: true,
                                        timelineKind: timelineKind,
-                                       emojiProvider: EmojiProvider(appSettings: .volatile()))
+                                       emojiProvider: EmojiProvider(userSettings: .volatile()))
             .makeActions()
     }
 }

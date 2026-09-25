@@ -17,14 +17,14 @@ final class CreateRoomScreenViewModelTests {
     var spaceService: SpaceServiceProxyMock!
     var userSession: UserSessionMock!
     
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     var context: CreateRoomScreenViewModel.Context {
         viewModel.context
     }
     
     init() {
-        appSettings = AppSettings.volatile()
+        userSettings = UserSettings.volatile()
     }
     
     isolated deinit {
@@ -85,14 +85,14 @@ final class CreateRoomScreenViewModelTests {
                                             spaceServiceConfiguration: .init(spaceRoomLists: ["1": .init()])))
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        appSettings.knockingEnabled = true
+        userSettings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: true,
                                                   spaceSelectionMode: .none,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  appSettings: appSettings)
+                                                  userSettings: userSettings)
         self.viewModel = viewModel
         
         // Given a form with a blank topic.
@@ -335,14 +335,14 @@ final class CreateRoomScreenViewModelTests {
         clientProxy.spaceService = spaceService
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        appSettings.knockingEnabled = true
+        userSettings.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: isSpace,
                                                   spaceSelectionMode: spacesSelectionMode,
                                                   shouldShowCancelButton: false,
                                                   userSession: userSession,
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  appSettings: appSettings)
+                                                  userSettings: userSettings)
         self.viewModel = viewModel
     }
 }

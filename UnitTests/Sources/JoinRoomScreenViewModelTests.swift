@@ -31,10 +31,10 @@ final class JoinRoomScreenViewModelTests {
         viewModel.context
     }
     
-    private let appSettings: AppSettings
+    private let userSettings: UserSettings
     
     init() {
-        appSettings = AppSettings.volatile()
+        userSettings = UserSettings.volatile()
     }
     
     isolated deinit {
@@ -45,12 +45,12 @@ final class JoinRoomScreenViewModelTests {
     
     @Test
     func interaction() async throws {
-        #expect(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+        #expect(userSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         
         setupViewModel()
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .joinable }.fulfill()
         
-        #expect(appSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
+        #expect(userSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .joined(.roomID("1")) }
         context.send(viewAction: .join)
@@ -59,28 +59,28 @@ final class JoinRoomScreenViewModelTests {
     
     @Test
     func acceptInviteInteraction() async throws {
-        #expect(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+        #expect(userSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         
         setupViewModel(mode: .invited)
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .invited(isDM: false) }.fulfill()
         
-        #expect(appSettings.seenInvites == ["1"], "The invited room's ID should be registered as a seen invite.")
+        #expect(userSettings.seenInvites == ["1"], "The invited room's ID should be registered as a seen invite.")
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .joined(.roomID("1")) }
         context.send(viewAction: .acceptInvite)
         try await deferred.fulfill()
         
-        #expect(appSettings.seenInvites.isEmpty, "The after accepting an invite the invite should be forgotten in case the user leaves.")
+        #expect(userSettings.seenInvites.isEmpty, "The after accepting an invite the invite should be forgotten in case the user leaves.")
     }
     
     @Test
     func declineInviteInteraction() async throws {
-        #expect(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+        #expect(userSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         
         setupViewModel(mode: .invited)
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .invited(isDM: false) }.fulfill()
-        #expect(appSettings.seenInvites == ["1"], "The invited room's ID should be registered as a seen invite.")
+        #expect(userSettings.seenInvites == ["1"], "The invited room's ID should be registered as a seen invite.")
         
         context.send(viewAction: .declineInvite)
         
@@ -89,17 +89,17 @@ final class JoinRoomScreenViewModelTests {
         context.alertInfo?.secondaryButton?.action?()
         try await deferred.fulfill()
         
-        #expect(appSettings.seenInvites.isEmpty, "The after declining an invite the invite should be forgotten in case another invite is received.")
+        #expect(userSettings.seenInvites.isEmpty, "The after declining an invite the invite should be forgotten in case another invite is received.")
     }
     
     @Test
     func knockedState() async throws {
-        #expect(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+        #expect(userSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         setupViewModel(mode: .knocked)
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .knocked }.fulfill()
         
-        #expect(appSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
+        #expect(userSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
     }
     
     @Test
@@ -237,7 +237,7 @@ final class JoinRoomScreenViewModelTests {
         }
         
         viewModel = JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
-                                            appSettings: appSettings,
+                                            userSettings: userSettings,
                                             userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                             userIndicatorController: UserIndicatorControllerMock())
     }

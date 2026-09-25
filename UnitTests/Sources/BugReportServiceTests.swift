@@ -13,12 +13,12 @@ import Testing
 
 @MainActor
 final class BugReportServiceTests {
-    var appSettings: AppSettings!
+    var userSettings: UserSettings!
     var bugReportService: BugReportServiceProtocol!
     
     init() throws {
-        appSettings = AppSettings.volatile()
-        appSettings.bugReportRageshakeURL.reset()
+        userSettings = UserSettings.volatile()
+        userSettings.bugReportRageshakeURL.reset()
         
         let bugReportServiceMock = BugReportServiceMock()
         bugReportServiceMock.lastCrashEventIDSubject = .init(nil)
@@ -27,7 +27,7 @@ final class BugReportServiceTests {
     }
     
     deinit {
-        appSettings.bugReportRageshakeURL.reset()
+        userSettings.bugReportRageshakeURL.reset()
     }
     
     @Test
@@ -104,22 +104,22 @@ final class BugReportServiceTests {
     @Test
     @MainActor
     func configurations() async throws {
-        guard case let .url(initialURL) = appSettings.bugReportRageshakeURL.publisher.value else {
+        guard case let .url(initialURL) = userSettings.bugReportRageshakeURL.publisher.value else {
             Issue.record("Unexpected initial configuration.")
             return
         }
         
-        let service = BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
+        let service = BugReportService(rageshakeURLPublisher: userSettings.bugReportRageshakeURL.publisher,
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        session: .mock,
                                        appHooks: AppHooks())
         #expect(service.isEnabled)
         
-        appSettings.bugReportRageshakeURL.applyRemoteValue(.disabled)
+        userSettings.bugReportRageshakeURL.applyRemoteValue(.disabled)
         #expect(!service.isEnabled)
         
-        appSettings.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
+        userSettings.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
         #expect(service.isEnabled)
         
         let bugReport = BugReport(userID: "@mock:client.com",
@@ -136,7 +136,7 @@ final class BugReportServiceTests {
         
         #expect(customConfigurationResponse.reportURL == "https://bugs.server.net/123")
         
-        appSettings.bugReportRageshakeURL.reset()
+        userSettings.bugReportRageshakeURL.reset()
         #expect(service.isEnabled)
         
         let defaultConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()

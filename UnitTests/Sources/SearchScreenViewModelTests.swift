@@ -14,7 +14,7 @@ struct SearchScreenViewModelTests {
     let viewModel: SearchScreenViewModelProtocol
     let searchService: SearchServiceProxyMock
     let userIndicatorController: UserIndicatorControllerMock
-    let appSettings: AppSettings
+    let userSettings: UserSettings
     /// The rooms known to the client, empty until the room list loads.
     let staticRoomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
     /// Fires with the query each time the (async, debounced) message search runs.
@@ -49,13 +49,13 @@ struct SearchScreenViewModelTests {
             staticRoomListSubject.value.first { $0.id == identifier }
         }
         
-        appSettings = AppSettings.volatile()
+        userSettings = UserSettings.volatile()
         
         viewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                           clientProxy: clientProxy,
                                           mediaProvider: MediaProviderMock(.init()),
                                           userIndicatorController: userIndicatorController,
-                                          appSettings: appSettings)
+                                          userSettings: userSettings)
     }
     
     @Test
@@ -77,7 +77,7 @@ struct SearchScreenViewModelTests {
                                               clientProxy: clientProxy,
                                               mediaProvider: MediaProviderMock(.init()),
                                               userIndicatorController: userIndicatorController,
-                                              appSettings: appSettings)
+                                              userSettings: userSettings)
         
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState.rooms)) { !$0.isEmpty }
         viewModel.context.searchQuery = "room"
@@ -130,13 +130,13 @@ struct SearchScreenViewModelTests {
         context.searchQuery = "Second"
         context.send(viewAction: .selectRoom(roomID: "2"))
         
-        #expect(appSettings.searchBreadcrumbs == [.room(roomID: "2"), .query("Second")])
+        #expect(userSettings.searchBreadcrumbs == [.room(roomID: "2"), .query("Second")])
         
         // Selecting the same room again from the empty state only bumps it back to the top.
         context.searchQuery = ""
         context.send(viewAction: .selectRoom(roomID: "2"))
         
-        #expect(appSettings.searchBreadcrumbs == [.room(roomID: "2"), .query("Second")])
+        #expect(userSettings.searchBreadcrumbs == [.room(roomID: "2"), .query("Second")])
     }
     
     @Test
@@ -144,7 +144,7 @@ struct SearchScreenViewModelTests {
         staticRoomListSubject.send([.mock(id: "2", name: "Second")])
         
         let deferred = deferFulfillment(context.observe(\.viewState.breadcrumbs)) { $0.count == 2 }
-        appSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
+        userSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
         try await deferred.fulfill()
         
         #expect(context.viewState.breadcrumbs.map(\.id) == ["query-Second", "room-2"])
@@ -154,7 +154,7 @@ struct SearchScreenViewModelTests {
     @Test
     func roomBreadcrumbsAreDisplayedAfterTheRoomListLoads() async throws {
         var deferred = deferFulfillment(context.observe(\.viewState.breadcrumbs)) { $0.count == 1 }
-        appSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
+        userSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
         try await deferred.fulfill()
         
         #expect(context.viewState.breadcrumbs.map(\.id) == ["query-Second"])

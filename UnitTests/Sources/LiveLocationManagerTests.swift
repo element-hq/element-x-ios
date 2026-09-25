@@ -16,7 +16,7 @@ final class LiveLocationManagerTests {
     private var clientProxy: ClientProxyMock!
     private var locationManagerMock: CLLocationManagerMock!
     private var manager: LiveLocationManager!
-    private var appSettings: AppSettings!
+    private var userSettings: UserSettings!
     private var beaconInfoSubject: PassthroughSubject<LiveLocationOwnInfoUpdate, Never>!
     
     // MARK: - startLiveLocation
@@ -41,11 +41,11 @@ final class LiveLocationManagerTests {
         
         try result.get()
         #expect(callOrder == ["stop", "start"])
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
         
         try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
         
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
         #expect(locationManagerMock.startUpdatingLocationCalled)
     }
     
@@ -54,7 +54,7 @@ final class LiveLocationManagerTests {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$old_event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$old_event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         var callOrder: [String] = []
         roomProxy.stopLiveLocationShareClosure = {
@@ -73,7 +73,7 @@ final class LiveLocationManagerTests {
         
         try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
         
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
     }
     
     @Test
@@ -82,12 +82,12 @@ final class LiveLocationManagerTests {
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
         
-        appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        userSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         _ = await manager.startLiveLocation(roomID: "!room1:matrix.org", duration: .seconds(300))
         
         #expect(roomProxy.stopLiveLocationShareCalled)
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
     }
     
     @Test
@@ -98,7 +98,7 @@ final class LiveLocationManagerTests {
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
         #expect(throws: LiveLocationManagerError.roomNotJoined) { try result.get() }
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
     }
     
     @Test
@@ -111,7 +111,7 @@ final class LiveLocationManagerTests {
         let result = await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300))
         
         #expect(throws: LiveLocationManagerError.startFailed) { try result.get() }
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
     }
     
     @Test
@@ -127,7 +127,7 @@ final class LiveLocationManagerTests {
         
         try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
         
-        let storedSession = try #require(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"])
+        let storedSession = try #require(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"])
         let expectedMinTimeout = beforeStart.addingTimeInterval(TimeInterval(duration.seconds))
         let expectedMaxTimeout = afterStart.addingTimeInterval(TimeInterval(duration.seconds))
         
@@ -142,12 +142,12 @@ final class LiveLocationManagerTests {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         await manager.stopLiveLocation(roomID: "!room:matrix.org")
         
         #expect(roomProxy.stopLiveLocationShareCalled)
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
         // Setting the timeout date above starts tracking; removing it stops tracking.
         #expect(locationManagerMock.startUpdatingLocationCalled)
         #expect(locationManagerMock.stopUpdatingLocationCalled)
@@ -169,13 +169,13 @@ final class LiveLocationManagerTests {
         setUp()
         let roomProxy = makeRoomProxy(roomID: "!room1:matrix.org")
         clientProxy.roomForIdentifierClosure = { _ in .joined(roomProxy) }
-        appSettings.liveLocationSharingSessionsByRoomID["!room1:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
-        appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        userSettings.liveLocationSharingSessionsByRoomID["!room1:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
+        userSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] = LiveLocationSession(eventID: "$event:matrix.org", expirationDate: Date().addingTimeInterval(300))
         
         await manager.stopLiveLocation(roomID: "!room1:matrix.org")
         
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room1:matrix.org"] == nil)
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room1:matrix.org"] == nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room2:matrix.org"] != nil)
     }
     
     // MARK: - Beacon info updates
@@ -188,13 +188,13 @@ final class LiveLocationManagerTests {
         
         try await manager.startLiveLocation(roomID: "!room:matrix.org", duration: .seconds(300)).get()
         try await simulateBeaconEcho(roomID: "!room:matrix.org", eventID: "$event:matrix.org")
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] != nil)
         
-        let deferred = deferFulfillment(appSettings.liveLocationSharingSessionsByRoomIDPublisher) { $0["!room:matrix.org"] == nil }
+        let deferred = deferFulfillment(userSettings.liveLocationSharingSessionsByRoomIDPublisher) { $0["!room:matrix.org"] == nil }
         beaconInfoSubject.send(LiveLocationOwnInfoUpdate(roomID: "!room:matrix.org", eventID: "$external_event:matrix.org", isLive: true))
         try await deferred.fulfill()
         
-        #expect(appSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
+        #expect(userSettings.liveLocationSharingSessionsByRoomID["!room:matrix.org"] == nil)
     }
     
     // MARK: - Reduced accuracy
@@ -228,16 +228,16 @@ final class LiveLocationManagerTests {
     }
     
     private func setUp(accuracyAuthorization: CLAccuracyAuthorization = .fullAccuracy) {
-        appSettings = AppSettings.volatile()
+        userSettings = UserSettings.volatile()
         clientProxy = ClientProxyMock(.init())
         beaconInfoSubject = PassthroughSubject<LiveLocationOwnInfoUpdate, Never>()
         clientProxy.liveLocationOwnInfoUpdatesPublisher = beaconInfoSubject.eraseToAnyPublisher()
         locationManagerMock = CLLocationManagerMock(.init(accuracyAuthorization: accuracyAuthorization))
-        manager = LiveLocationManager(clientProxy: clientProxy, appSettings: appSettings, locationManager: locationManagerMock)
+        manager = LiveLocationManager(clientProxy: clientProxy, userSettings: userSettings, locationManager: locationManagerMock)
     }
     
     private func simulateBeaconEcho(roomID: String, eventID: String) async throws {
-        let deferred = deferFulfillment(appSettings.liveLocationSharingSessionsByRoomIDPublisher) { $0[roomID] != nil }
+        let deferred = deferFulfillment(userSettings.liveLocationSharingSessionsByRoomIDPublisher) { $0[roomID] != nil }
         beaconInfoSubject.send(LiveLocationOwnInfoUpdate(roomID: roomID, eventID: eventID, isLive: true))
         try await deferred.fulfill()
     }
