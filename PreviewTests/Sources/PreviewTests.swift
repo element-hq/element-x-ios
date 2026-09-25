@@ -216,6 +216,8 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
                     controller = UIHostingController(rootView: view)
                 } else {
                     let hostingController = UIHostingController(rootView: view)
+                    // iOS 27 applies the window's safe area when rendering, which sizeThatFits ignores, clipping the content.
+                    hostingController.safeAreaRegions = []
                     
                     let maxSize = CGSize.zero
                     config.size = hostingController.sizeThatFits(in: maxSize)
