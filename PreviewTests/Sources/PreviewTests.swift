@@ -19,7 +19,7 @@ struct PreviewTests {
     }
     
     private let simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
-    private let requiredOSVersion = (major: 26, minor: 5)
+    private let requiredOSVersion = (major: 27, minor: 0)
     /// The key is the name we will give to the snapshot
     /// The value is the actual device that will be used to render the preview
     private let snapshotDevices: [SnapshotDevice] = [.init(name: "iPhone", device: "iPhone 17"),
