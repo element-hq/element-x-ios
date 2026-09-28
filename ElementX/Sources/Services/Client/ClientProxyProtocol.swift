@@ -187,6 +187,12 @@ protocol ClientProxyProtocol: AnyObject {
     
     func pauseServices() async
     
+    func startSearchBackfill(strategy: SearchBackfillStrategy)
+    
+    func stopSearchBackfill()
+    
+    var isSearchBackfillRunning: Bool { get }
+    
     func expireSyncSessions() async
     
     func accountURL(action: AccountManagementAction) async -> URL?

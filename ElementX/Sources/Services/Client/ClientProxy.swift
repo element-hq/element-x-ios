@@ -56,6 +56,8 @@ class ClientProxy: ClientProxyProtocol {
     
     private var delegateHandle: TaskHandle?
     
+    private var searchBackfillTaskHandle: TaskHandle?
+    
     // These following summary providers both operate on the same allRooms() list but
     // can apply their own filtering and pagination
     private(set) var roomSummaryProvider: RoomSummaryProviderProtocol
@@ -471,6 +473,25 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         await transitionServices(to: .suspended).value
+    }
+    
+    func startSearchBackfill(strategy: SearchBackfillStrategy) {
+        if strategy == .foreground, isSearchBackfillRunning {
+            return
+        }
+        
+        MXLog.info("Starting search backfill with strategy: \(strategy)")
+        searchBackfillTaskHandle?.cancel()
+        searchBackfillTaskHandle = client.runSearchBackfill(strategy: strategy)
+    }
+    
+    func stopSearchBackfill() {
+        searchBackfillTaskHandle?.cancel()
+        searchBackfillTaskHandle = nil
+    }
+    
+    var isSearchBackfillRunning: Bool {
+        searchBackfillTaskHandle?.isFinished() == false
     }
     
     func expireSyncSessions() async {
@@ -1187,6 +1208,8 @@ class ClientProxy: ClientProxyProtocol {
             sendQueueStatusSubject.send(sendQueueStatusSubject.value)
         case .suspended:
             updateHomeserverReachability()
+            
+            stopSearchBackfill()
             
             MXLog.info("Stopping sync")
             await syncService.stop()

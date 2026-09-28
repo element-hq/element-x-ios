@@ -2575,6 +2575,11 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     nonisolated(unsafe) var underlyingMaxMediaUploadSize: Result<UInt, ClientProxyError>!
     nonisolated(unsafe) var maxMediaUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)?
+    var isSearchBackfillRunning: Bool {
+        get { return underlyingIsSearchBackfillRunning }
+        set(value) { underlyingIsSearchBackfillRunning = value }
+    }
+    nonisolated(unsafe) var underlyingIsSearchBackfillRunning: Bool!
     var liveLocationOwnInfoUpdatesPublisher: AnyPublisher<LiveLocationOwnInfoUpdate, Never> {
         get { return underlyingLiveLocationOwnInfoUpdatesPublisher }
         set(value) { underlyingLiveLocationOwnInfoUpdatesPublisher = value }
@@ -2698,6 +2703,54 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     @concurrent func pauseServices() async {
         pauseServicesCallsCountLock.withLock { pauseServicesUnderlyingCallsCount += 1 }
         await pauseServicesClosure?()
+    }
+    //MARK: - startSearchBackfill
+
+    private let startSearchBackfillStrategyCallsCountLock = NSLock()
+    private nonisolated(unsafe) var startSearchBackfillStrategyUnderlyingCallsCount = 0
+    var startSearchBackfillStrategyCallsCount: Int {
+        get { startSearchBackfillStrategyCallsCountLock.withLock { startSearchBackfillStrategyUnderlyingCallsCount } }
+        set { startSearchBackfillStrategyCallsCountLock.withLock { startSearchBackfillStrategyUnderlyingCallsCount = newValue } }
+    }
+    var startSearchBackfillStrategyCalled: Bool {
+        return startSearchBackfillStrategyCallsCount > 0
+    }
+    private let startSearchBackfillStrategyReceivedStrategyLock = NSLock()
+    private nonisolated(unsafe) var startSearchBackfillStrategyUnderlyingReceivedStrategy: SearchBackfillStrategy?
+    var startSearchBackfillStrategyReceivedStrategy: SearchBackfillStrategy? {
+        get { startSearchBackfillStrategyReceivedStrategyLock.withLock { startSearchBackfillStrategyUnderlyingReceivedStrategy } }
+        set { startSearchBackfillStrategyReceivedStrategyLock.withLock { startSearchBackfillStrategyUnderlyingReceivedStrategy = newValue } }
+    }
+    private let startSearchBackfillStrategyReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var startSearchBackfillStrategyUnderlyingReceivedInvocations: [SearchBackfillStrategy] = []
+    var startSearchBackfillStrategyReceivedInvocations: [SearchBackfillStrategy] {
+        get { startSearchBackfillStrategyReceivedInvocationsLock.withLock { startSearchBackfillStrategyUnderlyingReceivedInvocations } }
+        set { startSearchBackfillStrategyReceivedInvocationsLock.withLock { startSearchBackfillStrategyUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var startSearchBackfillStrategyClosure: ((SearchBackfillStrategy) -> Void)?
+
+    func startSearchBackfill(strategy: SearchBackfillStrategy) {
+        startSearchBackfillStrategyCallsCountLock.withLock { startSearchBackfillStrategyUnderlyingCallsCount += 1 }
+        startSearchBackfillStrategyReceivedStrategy = strategy
+        startSearchBackfillStrategyReceivedInvocationsLock.withLock { startSearchBackfillStrategyUnderlyingReceivedInvocations.append(strategy) }
+        startSearchBackfillStrategyClosure?(strategy)
+    }
+    //MARK: - stopSearchBackfill
+
+    private let stopSearchBackfillCallsCountLock = NSLock()
+    private nonisolated(unsafe) var stopSearchBackfillUnderlyingCallsCount = 0
+    var stopSearchBackfillCallsCount: Int {
+        get { stopSearchBackfillCallsCountLock.withLock { stopSearchBackfillUnderlyingCallsCount } }
+        set { stopSearchBackfillCallsCountLock.withLock { stopSearchBackfillUnderlyingCallsCount = newValue } }
+    }
+    var stopSearchBackfillCalled: Bool {
+        return stopSearchBackfillCallsCount > 0
+    }
+    nonisolated(unsafe) var stopSearchBackfillClosure: (() -> Void)?
+
+    func stopSearchBackfill() {
+        stopSearchBackfillCallsCountLock.withLock { stopSearchBackfillUnderlyingCallsCount += 1 }
+        stopSearchBackfillClosure?()
     }
     //MARK: - expireSyncSessions
 
