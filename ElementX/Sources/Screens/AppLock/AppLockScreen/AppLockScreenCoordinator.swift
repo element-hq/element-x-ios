@@ -26,7 +26,7 @@ enum AppLockScreenCoordinatorAction {
 }
 
 final class AppLockScreenCoordinator: CoordinatorProtocol {
-    private(set) var viewModel: AppLockScreenViewModelProtocol
+    private var viewModel: AppLockScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AppLockScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     

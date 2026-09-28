@@ -22,7 +22,7 @@ struct LinkNewDeviceScreenCoordinatorParameters {
 }
 
 final class LinkNewDeviceScreenCoordinator: CoordinatorProtocol {
-    let viewModel: LinkNewDeviceScreenViewModelProtocol
+    private let viewModel: LinkNewDeviceScreenViewModelProtocol
     private let orientationManager: OrientationManagerProtocol
     
     private var cancellables = Set<AnyCancellable>()
