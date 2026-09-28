@@ -170,6 +170,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         observeAppLockChanges()
         
         registerBackgroundAppRefresh()
+        registerSearchBackfill()
         
         appSettings.analyticsConsentStatePublisher
             .dropFirst() // Sentry is configured during init; only reconfigure when consent state actually changes
@@ -1189,6 +1190,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         scheduleDelayedPauseServices()
         scheduleBackgroundAppRefresh()
+        scheduleSearchBackfill()
     }
     
     @objc
@@ -1323,5 +1325,65 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     task.setTaskCompleted(success: true)
                 }
             }
+    }
+}
+
+// MARK: Search backfill
+
+private extension AppCoordinator {
+    func registerSearchBackfill() {
+        let result = BGTaskScheduler.shared.register(forTaskWithIdentifier: appSettings.searchBackfillTaskIdentifier, using: .main) { [weak self] task in
+            guard let task = task as? BGProcessingTask else {
+                MXLog.error("Invalid search backfill configuration")
+                return
+            }
+            
+            Task {
+                await self?.handleSearchBackfill(task)
+            }
+        }
+        
+        MXLog.info("Register search backfill with result: \(result)")
+    }
+    
+    func scheduleSearchBackfill() {
+        guard let userSession, userSession.userSettings.globalSearchEnabled, #available(iOS 26.0, *) else {
+            return
+        }
+        
+        let request = BGProcessingTaskRequest(identifier: appSettings.searchBackfillTaskIdentifier)
+        request.requiresExternalPower = true
+        request.requiresNetworkConnectivity = true
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            MXLog.info("Successfully scheduled search backfill task")
+        } catch {
+            MXLog.error("Failed scheduling search backfill with error: \(error)")
+        }
+    }
+    
+    func handleSearchBackfill(_ task: BGProcessingTask) async {
+        MXLog.info("Started search backfill task")
+        
+        guard let clientProxy = userSession?.clientProxy else {
+            task.setTaskCompleted(success: false)
+            return
+        }
+        
+        task.expirationHandler = { @Sendable [weak self] in
+            MXLog.info("Search backfill task is about to expire.")
+            Task { @MainActor in self?.userSession?.clientProxy.stopSearchBackfill() }
+        }
+        
+        clientProxy.startSearchBackfill(strategy: .background)
+        
+        // TaskHandle can't be awaited, so poll until the sweep finishes or is stopped on expiry.
+        while clientProxy.isSearchBackfillRunning {
+            try? await Task.sleep(for: .seconds(1))
+        }
+        
+        MXLog.info("Marking search backfill task as complete.")
+        task.setTaskCompleted(success: true)
     }
 }

@@ -100,7 +100,8 @@ targets:
           location
         ]
         BGTaskSchedulerPermittedIdentifiers: [
-          io.element.elementx.background.refresh
+          io.element.elementx.background.refresh,
+          io.element.elementx.background.search-backfill
         ]
         UTExportedTypeDeclarations:
         - UTTypeConformsTo: [public.text]
