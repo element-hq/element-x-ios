@@ -49,7 +49,6 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     }
     
     var body: some View {
-<<<<<<< HEAD
         GeometryReader { _ in
             // Tchap: use MapTiler Snapshotter to request bitmap rendering of preview maps.
 //            if let url = mapURLBuilder.staticMapTileImageURL(for: colorScheme.mapStyle,
@@ -65,7 +64,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
 //                        ZStack {
 //                            image
 //                                .resizable()
-//                                .aspectRatio(contentMode: .fill)
+//                                .scaledToFill()
 //                            pinAnnotationView
 //                        }
 //                    case .failure(let error):
@@ -84,47 +83,10 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
                                                                 zoom: zoomLevel,
                                                                 size: mapSize,
                                                                 attribution: mapTilerAttributionPlacement)
-//            TchapStaticMapLoader(mapUrlBuilder: mapURLBuilder,
-//                                                 style: colorScheme.mapStyle,
-//                                                 location: coordinates,
-//                                                 zoom: zoomLevel,
-//                                                 size: mapSize,
-//                                                 attribution: mapTilerAttributionPlacement)
             TchapStaticMapView(mapLoader: mapLoader,
                                placeholderView: placeholderImage,
                                pinAnnotationView: pinAnnotationView,
                                errorView: errorView)
-=======
-        GeometryReader { geometry in
-            if let url = mapURLBuilder.staticMapTileImageURL(for: colorScheme.mapStyle,
-                                                             coordinates: coordinates,
-                                                             zoomLevel: zoomLevel,
-                                                             size: mapSize, // temporary using a fixed size since the refresh doesn't work properly on the UITableView based timeline
-                                                             attribution: mapTilerAttributionPlacement) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .empty:
-                        placeholderImage
-                    case .success(let image):
-                        ZStack {
-                            image
-                                .resizable()
-                                .scaledToFill()
-                            pinAnnotationView
-                        }
-                    case .failure(let error):
-                        let _ = MXLog.error("Failed retrieving tile with error: \(error.localizedDescription)")
-                        errorView
-                    @unknown default:
-                        EmptyView()
-                    }
-                }
-                .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).midY)
-                .id(fetchAttempt)
-            } else {
-                placeholderImage
-            }
->>>>>>> release/26.09.2
         }
     }
     

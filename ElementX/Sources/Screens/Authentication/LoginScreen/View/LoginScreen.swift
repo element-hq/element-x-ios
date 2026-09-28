@@ -49,14 +49,9 @@ struct LoginScreen: View {
         VStack(spacing: 8) {
             BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 8)
-<<<<<<< HEAD
             // Tchap: [Beta DINUM] Customize login title
-//            Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
+ //           Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.accountProvider.serverNameOrBaseURL))
             Text(TchapL10n.screenLoginTitleLogin)
-=======
-            
-            Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.accountProvider.serverNameOrBaseURL))
->>>>>>> release/26.09.2
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)

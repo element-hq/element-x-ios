@@ -142,7 +142,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var hasSeenNewSoundBanner: Bool
     
-<<<<<<< HEAD
+    // TODO : accountProviders
     // The initial set of account providers shown to the user in the authentication flow.
     //
     // Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
@@ -178,15 +178,8 @@ final nonisolated class AppSettings: @unchecked Sendable {
     #elseif IS_TCHAP_UNIT_TESTS
     private(set) var accountProviders = ["agent.dinum.tchap.gouv.fr"]
     #else
-    private(set) var accountProviders = ["matrix.org"]
-    #endif
-=======
-    /// The initial set of account providers shown to the user in the authentication flow.
-    ///
-    /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
-    /// match the last part of the user ID. For example `example.com` and not `https://matrix.example.com`.
     private(set) var accountProviders: [AccountProvider] = [.managed(serverName: "matrix.org", baseURL: "https://matrix-client.matrix.org")]
->>>>>>> release/26.09.2
+    #endif
     /// Whether or not the user is allowed to manually enter their own account provider or must select from one of `defaultAccountProviders`.
     private(set) var allowOtherAccountProviders = true
     /// Whether the components surrounding the app brand/logo should be hidden or not

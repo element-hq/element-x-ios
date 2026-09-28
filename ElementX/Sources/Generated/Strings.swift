@@ -2472,11 +2472,7 @@ internal nonisolated enum L10n {
   internal static var screenMissingKeyBackupStep1: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_1") }
   /// Go to User settings > Security > Encrypted messages and devices
   internal static var screenMissingKeyBackupStep2Ios: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_2_ios") }
-<<<<<<< HEAD
   /// Activate Secure Backup (or Restore from backup)
-=======
-  /// Scroll down to Chat Backup and tap on Set up
->>>>>>> release/26.09.2
   internal static var screenMissingKeyBackupStep3Ios: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_3_ios") }
   /// Follow the instructions to enable your key storage
   internal static var screenMissingKeyBackupStep4: String { return L10n.tr("Localizable", "screen_missing_key_backup_step_4") }

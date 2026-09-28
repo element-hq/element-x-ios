@@ -162,17 +162,6 @@ struct SpacesScreen: View {
         }
         .backportSharedBackgroundVisibility(.hidden)
         
-<<<<<<< HEAD
-        ToolbarItem(placement: .navigationBarTrailing) {
-            // :tchap: Remove create space action
-//            Button {
-//                context.send(viewAction: .createSpace)
-//            } label: {
-//                CompoundIcon(\.plus)
-//                    .accessibilityHidden(true)
-//            }
-//            .accessibilityLabel(L10n.actionCreateSpace) :tchap:end
-=======
         // No need to hide the title on iOS 26, as we use the .title placement for the settings
         // button to workaround a weird liquid glass transition.
         if #unavailable(iOS 26) {
@@ -183,14 +172,14 @@ struct SpacesScreen: View {
         }
         
         ToolbarItem(placement: .primaryAction) {
-            Button {
-                context.send(viewAction: .createSpace)
-            } label: {
-                CompoundIcon(\.plus)
-                    .accessibilityHidden(true)
-            }
-            .accessibilityLabel(L10n.actionCreateSpace)
->>>>>>> release/26.09.2
+            // :tchap: Remove create space action
+//            Button {
+//                context.send(viewAction: .createSpace)
+//            } label: {
+//                CompoundIcon(\.plus)
+//                    .accessibilityHidden(true)
+//            }
+//            .accessibilityLabel(L10n.actionCreateSpace) :tchap:end
         }
     }
 }

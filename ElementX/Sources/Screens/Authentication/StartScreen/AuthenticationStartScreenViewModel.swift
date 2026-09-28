@@ -117,8 +117,10 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             if classicAppAccount.state.availableSecrets == .requiresBackup {
                 state.bindings.showClassicAppBackupInstructions = true
             } else {
-<<<<<<< HEAD
-                // :tchap: custom loginHint
+                await loginDirectly(using: classicAppAccount.serverName,
+                                    loginHint: "mxid:\(classicAppAccount.userID)",
+                                    fallbackHomeserverURL: classicAppAccount.homeserverURL)
+                // :tchap: custom loginHint TODO
 //                await configureAccountProvider(classicAppAccount.serverName,
 //                                                               loginHint: "mxid:\(classicAppAccount.userID)",
 //                                                               fallbackHomeserverURL: classicAppAccount.homeserverURL)
@@ -127,11 +129,6 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
                                                loginHint: loginHint,
                                                fallbackHomeserverURL: classicAppAccount.homeserverURL)
                 // :tchap:end:
-=======
-                await loginDirectly(using: classicAppAccount.serverName,
-                                    loginHint: "mxid:\(classicAppAccount.userID)",
-                                    fallbackHomeserverURL: classicAppAccount.homeserverURL)
->>>>>>> release/26.09.2
             }
         } else if let serverNameOrBaseURL = state.serverNameOrBaseURL {
             await loginDirectly(using: serverNameOrBaseURL, loginHint: provisioningParameters?.loginHint)
@@ -140,7 +137,6 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         }
     }
     
-<<<<<<< HEAD
     // :tchap: Convert Matrix ID format to Tchap email format
     // passing it directly as mxid:@username-domain:homeserver does not seems to convert correctly in tchap email format
     // we only convert when the local part contains exactly ONE hyphen,
@@ -175,10 +171,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         return email
     } // :tchap:end
     
-    private func configureAccountProvider(_ accountProvider: String, loginHint: String? = nil, fallbackHomeserverURL: URL? = nil) async {
-=======
     private func loginDirectly(using serverNameOrBaseURL: String, loginHint: String? = nil, fallbackHomeserverURL: URL? = nil) async {
->>>>>>> release/26.09.2
         startLoading()
         defer { stopLoading() }
         

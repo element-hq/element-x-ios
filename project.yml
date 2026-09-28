@@ -74,9 +74,8 @@ include:
 packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
-<<<<<<< HEAD
 #    url: https://github.com/element-hq/matrix-rust-components-swift
-#    exactVersion: 26.08.11
+#    exactVersion: 26.09.22
 #
 # Tchap
 #
@@ -85,11 +84,6 @@ packages:
     exactVersion: 26.08.2
 # Use the local version of Tchap Matrix-rust-SDK
 #    path: ../matrix-rust-sdk-tchap/matrix-rust-components-swift
-=======
-    url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 26.09.22
-    # path: ../matrix-rust-sdk
->>>>>>> release/26.09.2
   Compound:
     path: compound-ios
   ElementCall:

@@ -6,16 +6,11 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-<<<<<<< HEAD
-import Combine
-
 // Tchap: specify target for unit tests
 // @testable import ElementX
 #if IS_TCHAP_UNIT_TESTS
 @testable import TchapX_Production
 #else
-=======
->>>>>>> release/26.09.2
 @testable import ElementX
 #endif
 import Testing

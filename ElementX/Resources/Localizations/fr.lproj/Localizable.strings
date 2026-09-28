@@ -59,13 +59,8 @@
 "a11y_start_voice_call" = "Lancer un appel vocal";
 "a11y_status" = "Statut";
 "a11y_tombstoned_room" = "Salon clôturé";
-<<<<<<< HEAD
 "a11y_user_menu" = "Menu membre"; // Tchap
-"a11y_video_preview" = "Video preview";
-=======
-"a11y_user_menu" = "Menu utilisateur";
 "a11y_video_preview" = "Aperçu vidéo";
->>>>>>> release/26.09.2
 "a11y_view_avatar" = "Voir l'avatar";
 "a11y_view_details" = "Afficher les détails";
 "a11y_voice_message" = "Message vocal, durée: %1$@";
@@ -400,13 +395,8 @@
 "common_unmute" = "Réactiver"; // Tchap
 "common_unsupported_call" = "Appel non pris en charge";
 "common_unsupported_event" = "Événement non pris en charge";
-<<<<<<< HEAD
-"common_user_started_a_call" = "%1$@ started a call";
-"common_username" = "Nom de membre"; // Tchap
-=======
 "common_user_started_a_call" = "%1$@ a commencé un appel";
-"common_username" = "Nom d’utilisateur";
->>>>>>> release/26.09.2
+"common_username" = "Nom de membre"; // Tchap
 "common_verification_cancelled" = "Vérification annulée";
 "common_verification_complete" = "Vérification terminée";
 "common_verification_failed" = "Échec de la vérification";
@@ -778,11 +768,7 @@
 "screen_create_poll_remove_accessibility_label" = "Supprimer %1$@";
 "screen_create_poll_settings_section_title" = "Paramètres";
 "screen_create_poll_title" = "Créer un sondage";
-<<<<<<< HEAD
-"screen_create_poll_votes_allowed_per_person" = "Nombre de votes autorisés par personne"; // Tchap
-=======
 "screen_create_poll_votes_allowed_per_person" = "Nombre de votes autorisés par personne";
->>>>>>> release/26.09.2
 "screen_create_room_action_create_room" = "Nouveau salon";
 "screen_create_room_add_people_title" = "Inviter des amis";
 "screen_create_room_error_creating_room" = "Une erreur s’est produite lors de la création du salon";

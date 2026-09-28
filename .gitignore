@@ -37,11 +37,6 @@ build
 test_output
 
 # Only commit Pkl packages (there may be other caches in here).
-<<<<<<< HEAD
-Secrets/vendor/*
-!Secrets/vendor/package-2
-Secrets/Secrets.swift
-=======
 Components/Secrets/vendor/*
 !Components/Secrets/vendor/package-2
->>>>>>> release/26.09.2
+Secrets/Secrets.swift

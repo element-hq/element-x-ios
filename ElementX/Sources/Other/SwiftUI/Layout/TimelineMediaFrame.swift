@@ -23,17 +23,7 @@ extension View {
     /// Constrains the max height of a media item in the timeline, whilst preserving its aspect ratio.
     @ViewBuilder
     func timelineMediaFrame(imageInfo: ImageInfoProxy?) -> some View {
-<<<<<<< HEAD
-        let defaultMediaSize = 100.0
-        let minMediaHeight = 100.0
-        // Tchap: BWI content-scanner
-//        let maxMediaHeight = 300.0
-        let maxMediaHeight = 520.0
-
-        if let contentHeight = imageInfo?.size?.height, contentHeight < minMediaHeight { // Special case very small images
-=======
         if let contentHeight = imageInfo?.size?.height, contentHeight < TimelineMediaFrame.minMediaHeight { // Special case very small images
->>>>>>> release/26.09.2
             aspectRatio(imageInfo?.aspectRatio, contentMode: .fit)
                 .frame(minHeight: TimelineMediaFrame.minMediaHeight, maxHeight: TimelineMediaFrame.minMediaHeight)
         } else {

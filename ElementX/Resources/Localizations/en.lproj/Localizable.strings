@@ -1052,17 +1052,10 @@
 "screen_media_upload_preview_title" = "Add media";
 "screen_migration_message" = "This is a one time process, thanks for waiting.";
 "screen_migration_title" = "Setting up your account.";
-<<<<<<< HEAD
 "screen_missing_key_backup_open_element_classic" = "Open Tchap Classique"; // Tchap
 "screen_missing_key_backup_step_1" = "Open Tchap Classique on your device"; // Tchap
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security > Encrypted messages and devices"; // Tchap
 "screen_missing_key_backup_step_3_ios" = "Activate Secure Backup (or Restore from backup)"; // Tchap
-=======
-"screen_missing_key_backup_open_element_classic" = "Open Element Classic";
-"screen_missing_key_backup_step_1" = "Open Element Classic on your device";
-"screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
->>>>>>> release/26.09.2
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";

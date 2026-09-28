@@ -14,12 +14,8 @@ import Combine
 @testable import TchapX_Production
 #else
 @testable import ElementX
-<<<<<<< HEAD
 #endif
-import Foundation
-=======
 import SwiftUI
->>>>>>> release/26.09.2
 import Testing
 
 @MainActor

@@ -6,17 +6,13 @@
 //
 
 import CallKit
-<<<<<<< HEAD
-import Clocks
+import ElementCall
 
 // Tchap: specify target for unit tests
 // @testable import ElementX
 #if IS_TCHAP_UNIT_TESTS
 @testable import TchapX_Production
 #else
-=======
-import ElementCall
->>>>>>> release/26.09.2
 @testable import ElementX
 #endif
 import PushKit
