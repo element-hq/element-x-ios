@@ -21,6 +21,15 @@ extension PostHogConfig {
         
         // We only want to track the events provided by the AnalyticsEvents package
         postHogConfiguration.enableSwizzling = false
+        postHogConfiguration.captureApplicationLifecycleEvents = false
+        
+        // We don't use PostHog feature flags, don't fetch them
+        postHogConfiguration.preloadFeatureFlags = false
+        
+        // Off by default but spelled out so a PostHog default flip doesn't silently enable them
+        postHogConfiguration.sessionReplay = false
+        postHogConfiguration.captureElementInteractions = false
+        postHogConfiguration.errorTrackingConfig.autoCapture = false
         
         return postHogConfiguration
     }
