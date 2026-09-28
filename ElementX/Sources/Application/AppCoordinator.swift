@@ -1007,6 +1007,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // Doesn't seem to work at all well with SwiftUI
         options.enableAutoBreadcrumbTracking = false
         
+        // Release health, we want the crash free rates it powers
+        options.enableAutoSessionTracking = true
+        
+        // Off by default but spelled out so a Sentry default flip doesn't silently enable them
+        options.sessionReplay.sessionSampleRate = 0
+        options.sessionReplay.onErrorSampleRate = 0
+        options.attachScreenshot = false
+        options.attachViewHierarchy = false
+        options.sendDefaultPii = false
+        options.enableMetricKit = false
+        
         // Experimental. Stitches stack traces of asynchronous code together
         options.swiftAsyncStacktraces = true
         
