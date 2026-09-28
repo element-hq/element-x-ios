@@ -34,6 +34,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
     
+    private var backgroundRefreshSyncObserver: AnyCancellable?
+    
     private var userSessionMigrationsOldVersion: Version?
     private var userSession: UserSessionProtocol? {
         didSet {
@@ -1239,10 +1241,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         appMediator.endBackgroundTask(backgroundTask)
         self.backgroundTask = nil
     }
-    
-    // MARK: Background app refresh
-    
-    private func registerBackgroundAppRefresh() {
+}
+
+// MARK: Background app refresh
+
+private extension AppCoordinator {
+    func registerBackgroundAppRefresh() {
         let result = BGTaskScheduler.shared.register(forTaskWithIdentifier: appSettings.backgroundAppRefreshTaskIdentifier, using: .main) { [weak self] task in
             guard let task = task as? BGAppRefreshTask else {
                 MXLog.error("Invalid background app refresh configuration")
@@ -1257,7 +1261,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         MXLog.info("Register background app refresh with result: \(result)")
     }
     
-    private func scheduleBackgroundAppRefresh() {
+    func scheduleBackgroundAppRefresh() {
         let request = BGAppRefreshTaskRequest(identifier: appSettings.backgroundAppRefreshTaskIdentifier)
         
         // We have other background tasks that keep the app alive
@@ -1271,8 +1275,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private var backgroundRefreshSyncObserver: AnyCancellable?
-    private func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) async {
+    func handleBackgroundAppRefresh(_ task: BGAppRefreshTask) async {
         MXLog.info("Started background app refresh")
         
         // This is important for the app to keep refreshing in the background
