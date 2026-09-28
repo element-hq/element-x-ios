@@ -35,7 +35,7 @@ struct PollOptionView: View {
                         if isFinalWinningOption {
                             HStack(spacing: 4) {
                                 CompoundIcon(asset: Asset.Images.pollWinner)
-                                    .foregroundColor(.compound.iconAccentTertiary)
+                                    .foregroundColor(.compound.iconAccentPrimary)
                                     .accessibilityLabel(L10n.a11yPollsWinningAnswer)
                                 
                                 Text(L10n.commonPollVotesCount(pollOption.votes))

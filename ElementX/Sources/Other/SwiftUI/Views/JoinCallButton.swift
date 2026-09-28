@@ -53,7 +53,7 @@ struct JoinCallButton: View {
                 .padding(.horizontal, 16.0)
                 .padding(.vertical, 4.0)
                 .foregroundColor(.compound.bgCanvasDefault)
-                .background(Color.compound.iconAccentTertiary)
+                .background(Color.compound.iconAccentPrimary)
                 .clipShape(Capsule())
         }
     }

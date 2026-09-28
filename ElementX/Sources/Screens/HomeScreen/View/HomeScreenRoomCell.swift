@@ -152,7 +152,7 @@ struct HomeScreenRoomCell: View {
                             .lineLimit(1)
                             .padding(.horizontal, 6)
                             .frame(minWidth: 20, minHeight: 20)
-                            .background(.compound.iconAccentTertiary, in: .capsule)
+                            .background(.compound.iconAccentPrimary, in: .capsule)
                             .accessibilityLabel(L10n.a11yNotificationsNewMessages)
                     } else {
                         Circle()
@@ -161,7 +161,7 @@ struct HomeScreenRoomCell: View {
                     }
                 }
             }
-            .foregroundColor(room.isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+            .foregroundColor(room.isHighlighted ? .compound.iconAccentPrimary : .compound.iconQuaternary)
         }
     }
     
