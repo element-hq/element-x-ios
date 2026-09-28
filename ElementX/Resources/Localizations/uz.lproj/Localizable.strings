@@ -96,6 +96,7 @@
 "action_copy_link" = "Havolani nusxalash";
 "action_copy_link_to_message" = "Havolani xabaraga nusxalash";
 "action_copy_text" = "Matnni nusxalash";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Yaratmoq";
 "action_create_room" = "Xonani yaratish";
 "action_create_space" = "Maydon yaratish";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Shifrni ochishni qayta urinish";
 "action_save" = "Saqlash";
 "action_search" = "Qidirmoq";
-"action_select" = "Select";
 "action_select_all" = "Barchasini tanlash";
 "action_send" = "Yuborish";
 "action_send_edited_message" = "Tahrirlangan xabarni yuboring";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ushbu Android versiyasida Bluetooth audio qurilmalaridan foydalanishni qoʻllab-quvvatlamaydi. Iltimos, boshqa audio qurilmani tanlang.";
 "common_about" = "Haqida";
 "common_acceptable_use_policy" = "Qabul qilinadigan foydalanish siyosati";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Hisob qo‘shish";
 "common_add_another_account" = "Boshqa hisob qo‘shish";
 "common_adding_caption" = "Sarlavha qoʻshish";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analitika";
 "common_android_shortcuts_remove_reason_left_room" = "Siz xonani tark etdingiz";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Siz sessiyadan chiqdingiz";
+"common_app_settings" = "App settings";
 "common_appearance" = "Ko'rinish";
 "common_audio" = "Audio";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Qoʻngʻiroq boshlandi";
 "common_call_you_declined" = "Siz qoʻngʻiroqni rad etdingiz";
 "common_chat_backup" = "Chatning zaxira nusxasi";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Buferga nusxa koʻchirildi";
 "common_copyright" = "Mualliflik huquqi";
 "common_creating_room" = "Xona yaratilmoqda…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Jonli joylashuv tugadi";
 "common_loading" = "Yuklanmoqda…";
 "common_loading_more" = "Batafsil yuklanmoqda…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Xabar";
 "common_message_actions" = "Xabar harakatlari";
 "common_message_failed_to_send" = "Xabar yuborilmadi";
 "common_message_layout" = "Xabar tartibi";
 "common_message_removed" = "Xabar ochirib tashlandi";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Zamonaviy";
 "common_mute" = "Ovozsiz qilish";
 "common_name" = "Ism";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Jonli joylashuv kutilmoqda...";
 "common_world_readable_history" = "Tarixni hamma ko‘rishi mumkin";
 "common_you" = "Siz";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Kalit saqlash joyingiz va xabarlar tarixingizga kirishni saqlab qolish uchun tiklash kalitingizni tasdiqlang.";
 "confirm_recovery_key_banner_primary_button_title" = "Qayta tiklash kalitingizni kiriting";
 "confirm_recovery_key_banner_secondary_button_title" = "Tiklash kalitini unutdingizmi?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Kalit xotirasini yoqish uchun ko‘rsatmalarga amal qiling";
 "screen_missing_key_backup_step_5" = "%1$@ga qaytish";
 "screen_missing_key_backup_title" = "%1$@ xizmatiga o‘tishdan oldin kalit xotirasini yoqing";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Sozlamalaringizni keyinroq o'zgartirishingiz mumkin.";
 "screen_notification_optin_title" = "Bildirishnomalarga ruxsat bering va hech qachon xabarni o'tkazib yubormang";
 "screen_notification_settings_additional_settings_section_title" = "Qo'shimcha sozlamalar";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Eslatmalar";
 "screen_notification_settings_notification_section_title" = "Menga xabar bering";
 "screen_notification_settings_room_mention_label" = "Menga @room orqali xabar bering";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Maxsus";
 "screen_notification_settings_sound_custom_sound_button_title" = "Maxsus ovoz...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Faylni oʻchirishda xatolik yuz berdi";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Azolar";
 "screen_room_change_role_unsaved_changes_description" = "Sizda saqlanmagan oʻzgarishlar bor";
 "screen_room_change_role_unsaved_changes_title" = "O‘zgartirishlarni saqlaysizmi?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Mavzu qo'shish";
 "screen_room_details_badge_encrypted" = "Shifrlangan";
 "screen_room_details_badge_not_encrypted" = "Shifrlanmagan";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Qo‘shilish uchun so‘rovlar";
 "screen_room_details_roles_and_permissions" = "Rollar va ruxsatlar";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Ism";
 "screen_room_details_security_and_privacy_title" = "Xavfsizlik va maxfiylik";
 "screen_room_details_security_title" = "Xavfsizlik";

@@ -96,6 +96,7 @@
 "action_copy_link" = "Bağlantıyı kopyala";
 "action_copy_link_to_message" = "Mesaj bağlantısını kopyala";
 "action_copy_text" = "Metni kopyala";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Oluştur";
 "action_create_room" = "Bir oda oluştur";
 "action_create_space" = "Create space";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Şifre çözmeyi tekrar deneyin";
 "action_save" = "Kaydet";
 "action_search" = "Ara";
-"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Gönder";
 "action_send_edited_message" = "Send edited message";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Araması, bu Android sürümünde Bluetooth ses cihazlarını desteklemiyor. Lütfen farklı bir ses cihazı seçin.";
 "common_about" = "Hakkında";
 "common_acceptable_use_policy" = "Kabul edilebilir kullanım politikası";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Hesap ekle";
 "common_add_another_account" = "Başka bir hesap ekle";
 "common_adding_caption" = "Açıklama ekleme";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analizler";
 "common_android_shortcuts_remove_reason_left_room" = "Odadan ayrıldın.";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
+"common_app_settings" = "App settings";
 "common_appearance" = "Görünüm";
 "common_audio" = "Ses";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Çağrı başladı";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Sohbet yedekleme";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Panoya kopyalandı";
 "common_copyright" = "Telif Hakkı";
 "common_creating_room" = "Oda yaratmak...";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Live location ended";
 "common_loading" = "Yükleniyor...";
 "common_loading_more" = "Daha fazla yükleniyor...";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Mesaj";
 "common_message_actions" = "Mesaj eylemleri";
 "common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Mesaj düzeni";
 "common_message_removed" = "Mesaj kaldırıldı";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Modern";
 "common_mute" = "Sessiz";
 "common_name" = "Name";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Sen";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Anahtar depolama alanınıza ve mesaj geçmişinize erişimi sürdürmek için kurtarma anahtarınızı onaylayın.";
 "confirm_recovery_key_banner_primary_button_title" = "Kurtarma anahtarınızı girin";
 "confirm_recovery_key_banner_secondary_button_title" = "Kurtarma anahtarınızı mı unuttunuz?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Ayarlarınızı daha sonra değiştirebilirsiniz.";
 "screen_notification_optin_title" = "Bildirimlere izin verin ve hiçbir mesajı kaçırmayın";
 "screen_notification_settings_additional_settings_section_title" = "Ek ayarlar";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Bahsetmeler";
 "screen_notification_settings_notification_section_title" = "Bana bildir";
 "screen_notification_settings_room_mention_label" = "Bana @room'da bildir";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Üyeler";
 "screen_room_change_role_unsaved_changes_description" = "Kaydedilmemiş değişiklikleriniz var.";
 "screen_room_change_role_unsaved_changes_title" = "Değişiklikleri Kaydet?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Konu ekle";
 "screen_room_details_badge_encrypted" = "Şifrelenmiş";
 "screen_room_details_badge_not_encrypted" = "Şifrelenmemiş";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Katılma istekleri";
 "screen_room_details_roles_and_permissions" = "Roller ve izinler";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_and_privacy_title" = "Güvenlik ve gizlilik";
 "screen_room_details_security_title" = "Güvenlik";

@@ -96,6 +96,7 @@
 "action_copy_link" = "Скопировать ссылку";
 "action_copy_link_to_message" = "Скопировать ссылку на сообщение";
 "action_copy_text" = "Копировать текст";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Создать";
 "action_create_room" = "Создать комнату";
 "action_create_space" = "Создать пространство";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Повторите расшифровку";
 "action_save" = "Сохранить";
 "action_search" = "Поиск";
-"action_select" = "Выбрать";
 "action_select_all" = "Выбрать все";
 "action_send" = "Отправить";
 "action_send_edited_message" = "Отправить отредактированное сообщение";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call не поддерживает использование устройств Bluetooth в данной версии Android. Пожалуйста, выберите другое устройство.";
 "common_about" = "О приложении";
 "common_acceptable_use_policy" = "Политика допустимого использования";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Добавить аккаунт";
 "common_add_another_account" = "Добавить другой аккаунт";
 "common_adding_caption" = "Добавление подписи";
@@ -227,6 +228,7 @@
 "common_analytics" = "Аналитика";
 "common_android_shortcuts_remove_reason_left_room" = "Вы покинули комнату";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Вы вышли из сессии";
+"common_app_settings" = "App settings";
 "common_appearance" = "Внешний вид";
 "common_audio" = "Аудио";
 "common_beta" = "Бета-версия";
@@ -237,6 +239,7 @@
 "common_call_started" = "Звонок начат";
 "common_call_you_declined" = "Ты отклонил звонок";
 "common_chat_backup" = "Резервная копия чатов";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Скопировано в буфер обмена";
 "common_copyright" = "Авторское право";
 "common_creating_room" = "Создание комнаты…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Трансляция местоположения завершена";
 "common_loading" = "Загрузка…";
 "common_loading_more" = "Загрузить больше...";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Сообщение";
 "common_message_actions" = "Действия с сообщением";
 "common_message_failed_to_send" = "Ошибка отправки сообщения";
 "common_message_layout" = "Оформление сообщения";
 "common_message_removed" = "Сообщение удалено";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Современный";
 "common_mute" = "Выкл. звук";
 "common_name" = "Имя";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Ожидание трансляции местоположения...";
 "common_world_readable_history" = "Любой может видеть историю";
 "common_you" = "Вы";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Подтвердите ключ восстановления, чтобы сохранить доступ к хранилищу ключей и истории сообщений.";
 "confirm_recovery_key_banner_primary_button_title" = "Введите ключ восстановления";
 "confirm_recovery_key_banner_secondary_button_title" = "Забыли ключ восстановления?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Следуйте инструкциям, чтобы активировать хранилище ключей";
 "screen_missing_key_backup_step_5" = "Вернитесь к %1$@";
 "screen_missing_key_backup_title" = "Перед продолжением активируйте хранилище ключей %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Вы можете изменить настройки позже.";
 "screen_notification_optin_title" = "Разрешите отправку уведомлений";
 "screen_notification_settings_additional_settings_section_title" = "Дополнительные параметры";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Упоминания";
 "screen_notification_settings_notification_section_title" = "Уведомлять меня";
 "screen_notification_settings_room_mention_label" = "Упоминания @room";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Пользовательский";
 "screen_notification_settings_sound_custom_sound_button_title" = "Пользовательский звук...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Ошибка при удалении файла";
@@ -1291,7 +1302,6 @@
 "screen_room_change_role_section_users" = "Участники";
 "screen_room_change_role_unsaved_changes_description" = "У Вас есть несохраненные изменения.";
 "screen_room_change_role_unsaved_changes_title" = "Сохранить изменения?";
-"screen_room_confirm_removal_message" = "Вы уверены, что хотите удалить это сообщение?";
 "screen_room_confirm_removal_reason_label" = "Причина (необязательно)";
 "screen_room_confirm_removal_reason_placeholder" = "Введите...";
 "screen_room_confirm_removal_reason_supporting_text" = "(Необязательно)";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Профиль";
 "screen_room_details_requests_to_join_title" = "Запросы на вступление";
 "screen_room_details_roles_and_permissions" = "Роли и разрешения";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Имя";
 "screen_room_details_security_and_privacy_title" = "Безопасность и конфиденциальность";
 "screen_room_details_security_title" = "Безопасность";

@@ -96,6 +96,7 @@
 "action_copy_link" = "Copia l'enllaç";
 "action_copy_link_to_message" = "Copia l'enllaç al missatge";
 "action_copy_text" = "Copia text";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Crea";
 "action_create_room" = "Crea sala";
 "action_create_space" = "Create space";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Torna a intentar desxifrar";
 "action_save" = "Desa";
 "action_search" = "Cerca";
-"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Envia";
 "action_send_edited_message" = "Send edited message";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Sobre l'aplicació";
 "common_acceptable_use_policy" = "Política d'ús a acceptar";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Add an account";
 "common_add_another_account" = "Add account";
 "common_adding_caption" = "Afegint llegenda";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analítiques";
 "common_android_shortcuts_remove_reason_left_room" = "Has sortit de la sala";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
+"common_app_settings" = "App settings";
 "common_appearance" = "Aspecte";
 "common_audio" = "Àudio";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Trucada iniciada";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Còpia de seguretat de xat";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Copiat al porta-retalls";
 "common_copyright" = "Drets d'autor";
 "common_creating_room" = "Creant sala…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Live location ended";
 "common_loading" = "S'està carregant…";
 "common_loading_more" = "Carregant més…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Missatge";
 "common_message_actions" = "Accions de missatge";
 "common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Estil dels missatges";
 "common_message_removed" = "Missatge eliminat";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Modern";
 "common_mute" = "Silencia";
 "common_name" = "Name";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Tu";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Confirma la clau de recuperació per mantenir l'accés a l'emmagatzematge de claus i a l'historial de missatges.";
 "confirm_recovery_key_banner_primary_button_title" = "Introdueix clau de recuperació";
 "confirm_recovery_key_banner_secondary_button_title" = "Has oblidat la clau de recuperació?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Pots canviar la configuració més tard.";
 "screen_notification_optin_title" = "Permet les notificacions i no perdis cap missatge";
 "screen_notification_settings_additional_settings_section_title" = "Configuració addicional";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Mencions";
 "screen_notification_settings_notification_section_title" = "Notifica'm a";
 "screen_notification_settings_room_mention_label" = "Notifica'm a @sala";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Membres";
 "screen_room_change_role_unsaved_changes_description" = "Hi ha canvis sense desar.";
 "screen_room_change_role_unsaved_changes_title" = "Desar canvis?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Afegeix tema";
 "screen_room_details_badge_encrypted" = "Xifrada";
 "screen_room_details_badge_not_encrypted" = "No xifrada";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Perfil";
 "screen_room_details_requests_to_join_title" = "Sol·licituds d'unió";
 "screen_room_details_roles_and_permissions" = "Rols i permisos";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_and_privacy_title" = "Seguretat i privadesa";
 "screen_room_details_security_title" = "Seguretat";

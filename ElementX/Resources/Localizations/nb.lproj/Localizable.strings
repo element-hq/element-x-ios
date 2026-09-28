@@ -96,6 +96,7 @@
 "action_copy_link" = "Kopier lenke";
 "action_copy_link_to_message" = "Kopier lenke til melding";
 "action_copy_text" = "Kopier tekst";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Opprett";
 "action_create_room" = "Opprett rom";
 "action_create_space" = "Opprett område";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Prøv dekryptering på nytt";
 "action_save" = "Lagre";
 "action_search" = "Søke";
-"action_select" = "Select";
 "action_select_all" = "Velg alle";
 "action_send" = "Sende";
 "action_send_edited_message" = "Send redigert melding";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call støtter ikke bruk av Bluetooth-lydenheter i denne Android-versjonen. Velg en annen lydenhet.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Retningslinjer for akseptabel bruk";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Legg til en konto";
 "common_add_another_account" = "Legg til en annen konto";
 "common_adding_caption" = "Legger til bildetekst";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analyse";
 "common_android_shortcuts_remove_reason_left_room" = "Du forlot rommet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du ble logget ut av økten";
+"common_app_settings" = "App settings";
 "common_appearance" = "Utseende";
 "common_audio" = "Lyd";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Samtale startet";
 "common_call_you_declined" = "Du avviste en samtale";
 "common_chat_backup" = "Chat backup";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopiert til utklippstavlen";
 "common_copyright" = "Opphavsrett";
 "common_creating_room" = "Oppretter rom …";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Sanntidslokasjon er avsluttet";
 "common_loading" = "Laster inn...";
 "common_loading_more" = "Laster inn mer...";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Melding";
 "common_message_actions" = "Meldingshandlinger";
 "common_message_failed_to_send" = "Sending av beskjed feilet";
 "common_message_layout" = "Meldingsoppsett";
 "common_message_removed" = "Melding fjernet";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Moderne";
 "common_mute" = "Demp";
 "common_name" = "Navn";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Venter på sanntidslokasjon…";
 "common_world_readable_history" = "Alle kan se historikk";
 "common_you" = "Du";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Verifiser gjenopprettingsnøkkelen for å opprettholde tilgangen til nøkkellageret og meldingshistorikken.";
 "confirm_recovery_key_banner_primary_button_title" = "Skriv inn gjenopprettingsnøkkelen din";
 "confirm_recovery_key_banner_secondary_button_title" = "Har du glemt din gjenopprettingsnøkkel?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Følg instruksjonene for å aktivere nøkkellagringen din";
 "screen_missing_key_backup_step_5" = "Kom tilbake til %1$@";
 "screen_missing_key_backup_title" = "Aktiver nøkkellagringen din før du går videre til %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Du kan endre innstillingene dine senere.";
 "screen_notification_optin_title" = "Tillat varslinger og gå aldri glipp av en melding";
 "screen_notification_settings_additional_settings_section_title" = "Ytterligere innstillinger";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Omtaler";
 "screen_notification_settings_notification_section_title" = "Varsle meg om";
 "screen_notification_settings_room_mention_label" = "Gi meg varsel på @room";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Egendefinert";
 "screen_notification_settings_sound_custom_sound_button_title" = "Tilpasset lyd...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Feil ved sletting av fil";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Medlemmer";
 "screen_room_change_role_unsaved_changes_description" = "Du har endringer som ikke er lagret.";
 "screen_room_change_role_unsaved_changes_title" = "Lagre endringer?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Legg til emne";
 "screen_room_details_badge_encrypted" = "Kryptert";
 "screen_room_details_badge_not_encrypted" = "Ikke kryptert";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Forespørsler om å bli med";
 "screen_room_details_roles_and_permissions" = "Roller og tillatelser";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Navn";
 "screen_room_details_security_and_privacy_title" = "Sikkerhet og personvern";
 "screen_room_details_security_title" = "Sikkerhet";

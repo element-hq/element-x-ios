@@ -238,6 +238,8 @@ internal nonisolated enum L10n {
   internal static var actionCopyLinkToMessage: String { return L10n.tr("Localizable", "action_copy_link_to_message") }
   /// Copy text
   internal static var actionCopyText: String { return L10n.tr("Localizable", "action_copy_text") }
+  /// Copy to clipboard
+  internal static var actionCopyToClipboard: String { return L10n.tr("Localizable", "action_copy_to_clipboard") }
   /// Create
   internal static var actionCreate: String { return L10n.tr("Localizable", "action_create") }
   /// Create room
@@ -492,6 +494,8 @@ internal nonisolated enum L10n {
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
   internal static var commonAcceptableUsePolicy: String { return L10n.tr("Localizable", "common_acceptable_use_policy") }
+  /// Account settings
+  internal static var commonAccountSettings: String { return L10n.tr("Localizable", "common_account_settings") }
   /// Add an account
   internal static var commonAddAccount: String { return L10n.tr("Localizable", "common_add_account") }
   /// Add account
@@ -508,6 +512,8 @@ internal nonisolated enum L10n {
   internal static var commonAndroidShortcutsRemoveReasonLeftRoom: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_left_room") }
   /// You were logged out of the session
   internal static var commonAndroidShortcutsRemoveReasonSessionLoggedOut: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_session_logged_out") }
+  /// App settings
+  internal static var commonAppSettings: String { return L10n.tr("Localizable", "common_app_settings") }
   /// Appearance
   internal static var commonAppearance: String { return L10n.tr("Localizable", "common_appearance") }
   /// Audio
@@ -528,6 +534,8 @@ internal nonisolated enum L10n {
   internal static var commonCallYouDeclined: String { return L10n.tr("Localizable", "common_call_you_declined") }
   /// Chat backup
   internal static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
+  /// Code block
+  internal static var commonCodeBlock: String { return L10n.tr("Localizable", "common_code_block") }
   /// Copied to clipboard
   internal static var commonCopiedToClipboard: String { return L10n.tr("Localizable", "common_copied_to_clipboard") }
   /// Copyright
@@ -650,10 +658,14 @@ internal nonisolated enum L10n {
   internal static var commonLoading: String { return L10n.tr("Localizable", "common_loading") }
   /// Loading more…
   internal static var commonLoadingMore: String { return L10n.tr("Localizable", "common_loading_more") }
+  /// Location sharing
+  internal static var commonLocationSharing: String { return L10n.tr("Localizable", "common_location_sharing") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonManyMembers(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_many_members", p1)
   }
+  /// Media upload quality
+  internal static var commonMediaUploadQuality: String { return L10n.tr("Localizable", "common_media_upload_quality") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonMemberCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_member_count", p1)
@@ -668,6 +680,8 @@ internal nonisolated enum L10n {
   internal static var commonMessageLayout: String { return L10n.tr("Localizable", "common_message_layout") }
   /// Message removed
   internal static var commonMessageRemoved: String { return L10n.tr("Localizable", "common_message_removed") }
+  /// Moderation & safety
+  internal static var commonModerationAndSafety: String { return L10n.tr("Localizable", "common_moderation_and_safety") }
   /// Modern
   internal static var commonModern: String { return L10n.tr("Localizable", "common_modern") }
   /// Mute
@@ -942,6 +956,8 @@ internal nonisolated enum L10n {
   internal static var commonWorldReadableHistory: String { return L10n.tr("Localizable", "common_world_readable_history") }
   /// You
   internal static var commonYou: String { return L10n.tr("Localizable", "common_you") }
+  /// Your account
+  internal static var commonYourAccount: String { return L10n.tr("Localizable", "common_your_account") }
   /// Confirm your recovery key to maintain access to your key storage and message history.
   internal static var confirmRecoveryKeyBannerMessage: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_message") }
   /// Enter your recovery key
@@ -1466,9 +1482,9 @@ internal nonisolated enum L10n {
   internal static var screenAdvancedSettingsShowMediaTimelineAlwaysHide: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_always_hide") }
   /// Always show
   internal static var screenAdvancedSettingsShowMediaTimelineAlwaysShow: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_always_show") }
-  /// In private rooms
+  /// Show in private rooms
   internal static var screenAdvancedSettingsShowMediaTimelinePrivateRooms: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_private_rooms") }
-  /// A hidden media can always be shown by tapping on it
+  /// Hidden media can always be shown by tapping on it.
   internal static var screenAdvancedSettingsShowMediaTimelineSubtitle: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_subtitle") }
   /// Show media in timeline
   internal static var screenAdvancedSettingsShowMediaTimelineTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_title") }
@@ -2486,6 +2502,12 @@ internal nonisolated enum L10n {
   internal static func screenMissingKeyBackupTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_missing_key_backup_title", String(describing: p1))
   }
+  /// Invites
+  internal static var screenModerationAndSafetyInvitesHeading: String { return L10n.tr("Localizable", "screen_moderation_and_safety_invites_heading") }
+  /// Other users
+  internal static var screenModerationAndSafetyOtherUsersHeading: String { return L10n.tr("Localizable", "screen_moderation_and_safety_other_users_heading") }
+  /// Your appearance
+  internal static var screenModerationAndSafetySharePresenceHeading: String { return L10n.tr("Localizable", "screen_moderation_and_safety_share_presence_heading") }
   /// You can change your settings later.
   internal static var screenNotificationOptinSubtitle: String { return L10n.tr("Localizable", "screen_notification_optin_subtitle") }
   /// Allow notifications and never miss a message
@@ -3000,15 +3022,13 @@ internal nonisolated enum L10n {
   internal static var screenRoomChangeRoleUnsavedChangesDescription: String { return L10n.tr("Localizable", "screen_room_change_role_unsaved_changes_description") }
   /// Save changes?
   internal static var screenRoomChangeRoleUnsavedChangesTitle: String { return L10n.tr("Localizable", "screen_room_change_role_unsaved_changes_title") }
-  /// Are you sure you wish to remove this message?
-  internal static var screenRoomConfirmRemovalMessage: String { return L10n.tr("Localizable", "screen_room_confirm_removal_message") }
   /// Reason (optional)
   internal static var screenRoomConfirmRemovalReasonLabel: String { return L10n.tr("Localizable", "screen_room_confirm_removal_reason_label") }
-  /// Enter…
+  /// Enter reason…
   internal static var screenRoomConfirmRemovalReasonPlaceholder: String { return L10n.tr("Localizable", "screen_room_confirm_removal_reason_placeholder") }
   /// (Optional)
   internal static var screenRoomConfirmRemovalReasonSupportingText: String { return L10n.tr("Localizable", "screen_room_confirm_removal_reason_supporting_text") }
-  /// Confirm removal
+  /// Remove message?
   internal static var screenRoomConfirmRemovalTitle: String { return L10n.tr("Localizable", "screen_room_confirm_removal_title") }
   /// Add topic
   internal static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }

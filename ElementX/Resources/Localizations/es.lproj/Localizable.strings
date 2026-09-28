@@ -96,6 +96,7 @@
 "action_copy_link" = "Copiar enlace";
 "action_copy_link_to_message" = "Copiar enlace al mensaje";
 "action_copy_text" = "Copiar texto";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Crear";
 "action_create_room" = "Crear una sala";
 "action_create_space" = "Crear espacio";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Reintentar descifrado";
 "action_save" = "Guardar";
 "action_search" = "Buscar";
-"action_select" = "Select";
 "action_select_all" = "Seleccionar todo";
 "action_send" = "Enviar";
 "action_send_edited_message" = "Enviar mensaje editado";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call no soporta dispositivos de audio Bluetooth en esta versión de Android. Selecciona otro dispositivo de audio.";
 "common_about" = "Acerca de";
 "common_acceptable_use_policy" = "Política de uso aceptable";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Añadir una cuenta";
 "common_add_another_account" = "Añadir cuenta";
 "common_adding_caption" = "Añadiendo leyenda";
@@ -227,6 +228,7 @@
 "common_analytics" = "Estadísticas";
 "common_android_shortcuts_remove_reason_left_room" = "Saliste de la sala";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Se te ha desconectado de la sesión";
+"common_app_settings" = "App settings";
 "common_appearance" = "Apariencia";
 "common_audio" = "Sonido";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Llamada iniciada";
 "common_call_you_declined" = "Rechazaste una llamada";
 "common_chat_backup" = "Copia de seguridad del chat";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Copiado al portapapeles";
 "common_copyright" = "Derechos de autor";
 "common_creating_room" = "Creando sala…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "La ubicación en tiempo real ha terminado";
 "common_loading" = "Cargando…";
 "common_loading_more" = "Cargando más…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Mensaje";
 "common_message_actions" = "Acciones del mensaje";
 "common_message_failed_to_send" = "El mensaje no se pudo enviar";
 "common_message_layout" = "Diseño de los mensajes";
 "common_message_removed" = "Mensaje eliminado";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Moderno";
 "common_mute" = "Silenciar";
 "common_name" = "Nombre";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Esperando la ubicación en directo…";
 "common_world_readable_history" = "Cualquiera puede ver el historial";
 "common_you" = "Tú";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Confirma tu clave de recuperación para mantener el acceso a tu almacén de claves y al historial de mensajes.";
 "confirm_recovery_key_banner_primary_button_title" = "Introduce tu clave de recuperación";
 "confirm_recovery_key_banner_secondary_button_title" = "¿Olvidaste tu clave de recuperación?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Sigue las instrucciones para activar tu almacén de claves";
 "screen_missing_key_backup_step_5" = "Vuelve a %1$@";
 "screen_missing_key_backup_title" = "Activa tu almacén de claves antes de continuar con %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Puedes cambiar la configuración más tarde.";
 "screen_notification_optin_title" = "Activa las notificaciones y nunca te pierdas un mensaje";
 "screen_notification_settings_additional_settings_section_title" = "Ajustes adicionales";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Menciones";
 "screen_notification_settings_notification_section_title" = "Notificarme para";
 "screen_notification_settings_room_mention_label" = "Notificarme con @room";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Personalizado";
 "screen_notification_settings_sound_custom_sound_button_title" = "Sonido personalizado…";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error al eliminar el archivo";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Miembros";
 "screen_room_change_role_unsaved_changes_description" = "Tienes cambios sin guardar.";
 "screen_room_change_role_unsaved_changes_title" = "¿Guardar cambios?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Añadir tema";
 "screen_room_details_badge_encrypted" = "Cifrada";
 "screen_room_details_badge_not_encrypted" = "No cifrada";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Perfil";
 "screen_room_details_requests_to_join_title" = "Solicitudes de unión";
 "screen_room_details_roles_and_permissions" = "Roles y permisos";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Nombre";
 "screen_room_details_security_and_privacy_title" = "Seguridad y privacidad";
 "screen_room_details_security_title" = "Seguridad";

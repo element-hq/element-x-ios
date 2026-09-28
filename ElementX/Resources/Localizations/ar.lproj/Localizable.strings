@@ -95,6 +95,7 @@
 "action_copy_link" = "نسخ الرابط";
 "action_copy_link_to_message" = "نسخ رابط الرسالة";
 "action_copy_text" = "انسخ النص";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "إنشاء";
 "action_create_room" = "إنشاء غرفة";
 "action_create_space" = "إنشاء مساحة";
@@ -173,7 +174,6 @@
 "action_retry_decryption" = "أعد محاولة فك التشفير";
 "action_save" = "حفظ";
 "action_search" = "بحث";
-"action_select" = "Select";
 "action_select_all" = "تحديد الكل";
 "action_send" = "ارسال";
 "action_send_edited_message" = "إرسال الرسالة المعدّلة";
@@ -218,6 +218,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "لا يدعم Element Call استخدام أجهزة الصوت عبر Bluetooth في إصدار Android هذا. يرجى اختيار جهاز صوت آخر.";
 "common_about" = "حول التطبيق";
 "common_acceptable_use_policy" = "سياسة الاستخدام المقبول";
+"common_account_settings" = "Account settings";
 "common_add_account" = "إضافة حساب";
 "common_add_another_account" = "إضافة حساب آخر";
 "common_adding_caption" = "جارٍ إضافة تعليق توضيحي";
@@ -226,6 +227,7 @@
 "common_analytics" = "التحليلات";
 "common_android_shortcuts_remove_reason_left_room" = "قمتَ بمغادرة المجموعة";
 "common_android_shortcuts_remove_reason_session_logged_out" = "تم تسجيل خروجك من الجلسة";
+"common_app_settings" = "App settings";
 "common_appearance" = "المظهر";
 "common_audio" = "الصوت";
 "common_beta" = "تجريبي";
@@ -236,6 +238,7 @@
 "common_call_started" = "بدأت المكالمة";
 "common_call_you_declined" = "رفضت مكالمة";
 "common_chat_backup" = "النسخ الاحتياطي للدردشة";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "تم النسخ إلى الحافظة";
 "common_copyright" = "حقوق الملكية";
 "common_creating_room" = "يتم إنشاء الغرفة...";
@@ -289,11 +292,14 @@
 "common_live_location_ended" = "انتهت مشاركة الموقع المباشر";
 "common_loading" = "جارٍ التحميل…";
 "common_loading_more" = "جارٍ تحميل المزيد…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "رسالة";
 "common_message_actions" = "إجراءات الرسالة";
 "common_message_failed_to_send" = "فشل إرسال الرسالة";
 "common_message_layout" = "مظهر الرسائل";
 "common_message_removed" = "حُذِفت الرسالة";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "حديث";
 "common_mute" = "كتم";
 "common_name" = "الاسم";
@@ -416,6 +422,7 @@
 "common_waiting_live_location" = "في انتظار الموقع المباشر…";
 "common_world_readable_history" = "يمكن لأي شخص رؤية السجل";
 "common_you" = "أنت";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "أكّد مفتاح الاسترداد الخاص بك للحفاظ على الوصول إلى تخزين المفاتيح وسجل الرسائل.";
 "confirm_recovery_key_banner_primary_button_title" = "أدخل مفتاح الاسترداد";
 "confirm_recovery_key_banner_secondary_button_title" = "هل نسيت مفتاح الاسترداد؟";
@@ -1058,6 +1065,9 @@
 "screen_missing_key_backup_step_4" = "اتبع التعليمات لتفعيل تخزين مفاتيحك";
 "screen_missing_key_backup_step_5" = "عُد إلى %1$@";
 "screen_missing_key_backup_title" = "فعّل تخزين مفاتيحك قبل المتابعة إلى %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "يمكنك تغيير إعداداتك لاحقاً.";
 "screen_notification_optin_title" = "السماح بالإشعارات وعدم تفويت أي رسالة";
 "screen_notification_settings_additional_settings_section_title" = "إعدادات إضافية";
@@ -1086,6 +1096,7 @@
 "screen_notification_settings_mode_mentions" = "الإشارات";
 "screen_notification_settings_notification_section_title" = "أرسل لي إشعارات لـ";
 "screen_notification_settings_room_mention_label" = "أرسل لي إشعاراً عندما يُكتب @room";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "مخصص";
 "screen_notification_settings_sound_custom_sound_button_title" = "صوت مخصص...";
 "screen_notification_settings_sound_delete_sound_error_title" = "خطأ في حذف الملف";
@@ -1290,11 +1301,10 @@
 "screen_room_change_role_section_users" = "الأعضاء";
 "screen_room_change_role_unsaved_changes_description" = "لديك تغييرات غير محفوظة.";
 "screen_room_change_role_unsaved_changes_title" = "حفظ التغييرات؟";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "إضافة موضوع";
 "screen_room_details_badge_encrypted" = "مشفّرة";
 "screen_room_details_badge_not_encrypted" = "غير مشفّرة";
@@ -1321,6 +1331,9 @@
 "screen_room_details_profile_row_title" = "الملف الشخصي";
 "screen_room_details_requests_to_join_title" = "طلبات الانضمام";
 "screen_room_details_roles_and_permissions" = "الأدوار والصلاحيات";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "الاسم";
 "screen_room_details_security_and_privacy_title" = "الأمان والخصوصية";
 "screen_room_details_security_title" = "الأمان";

@@ -66,6 +66,22 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>action_forward_messages</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Forward %1$d message</string>
+			<key>other</key>
+			<string>Forward %1$d messages</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>common_gallery_reply_attachments</key>
 	<dict>
 		<key>COUNT</key>
@@ -75,9 +91,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
+			<string>%1$d συνημμένο…</string>
 			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d συνημμένα…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -91,9 +107,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d media item…</string>
+			<string>%1$d στοιχείο πολυμέσων…</string>
 			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$d στοιχεία πολυμέσων…</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -347,9 +363,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
+			<string>%1$d μήνυμα αφαιρέθηκε</string>
 			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d μηνύματα αφαιρέθηκαν</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -411,9 +427,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Minimum %1$d character. Do not use your account password</string>
+			<string>Ελάχιστος αριθμός χαρακτήρων: %1$d. Μην χρησιμοποιείτε τον κωδικό πρόσβασης του λογαριασμού σας</string>
 			<key>other</key>
-			<string>Minimum %1$d characters. Do not use your account password</string>
+			<string>Ελάχιστος αριθμός χαρακτήρων: %1$d. Μην χρησιμοποιείτε τον κωδικό πρόσβασης του λογαριασμού σας</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -427,9 +443,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d degree</string>
+			<string>%1$d μοίρα</string>
 			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>%1$d μοίρες</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -526,6 +542,22 @@
 			<string>%1$d Προσκλήθηκε</string>
 			<key>other</key>
 			<string>%1$d Προσκλήθηκαν</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_room_messages_forwarded</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d message forwarded</string>
+			<key>other</key>
+			<string>%1$d messages forwarded</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -667,9 +699,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d joined</string>
+			<string>%1$d συμμετέχον</string>
 			<key>other</key>
-			<string>%1$d joined</string>
+			<string>%1$d συμμετέχοντες</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

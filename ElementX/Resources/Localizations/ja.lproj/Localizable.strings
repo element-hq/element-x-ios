@@ -96,6 +96,7 @@
 "action_copy_link" = "リンクをコピー";
 "action_copy_link_to_message" = "リンクをメッセージにコピー";
 "action_copy_text" = "テキストをコピー";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "作成";
 "action_create_room" = "ルームを作成";
 "action_create_space" = "スペースを作成";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "復号化を再試行";
 "action_save" = "保存";
 "action_search" = "検索";
-"action_select" = "選択";
 "action_select_all" = "すべて選択";
 "action_send" = "送信";
 "action_send_edited_message" = "編集したメッセージを送信";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element CallはこのAndroidバージョンにおいて、Bluetoothオーディオデバイスの使用をサポートしていません。別のオーディオデバイスを選択してください。";
 "common_about" = "アプリケーションについて";
 "common_acceptable_use_policy" = "利用規定";
+"common_account_settings" = "Account settings";
 "common_add_account" = "アカウントを追加";
 "common_add_another_account" = "別のアカウントを追加";
 "common_adding_caption" = "キャプションを追加";
@@ -227,6 +228,7 @@
 "common_analytics" = "分析";
 "common_android_shortcuts_remove_reason_left_room" = "あなたがルームを退出";
 "common_android_shortcuts_remove_reason_session_logged_out" = "セッションからログアウトされました";
+"common_app_settings" = "App settings";
 "common_appearance" = "テーマ";
 "common_audio" = "音声";
 "common_beta" = "ベータ版";
@@ -237,6 +239,7 @@
 "common_call_started" = "通話を開始しました";
 "common_call_you_declined" = "通話を拒否しました";
 "common_chat_backup" = "チャットをバックアップ";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "クリップボードにコピーしました";
 "common_copyright" = "著作権";
 "common_creating_room" = "ルームを作成中...";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "ライブ位置情報が終了しました";
 "common_loading" = "読み込み中...";
 "common_loading_more" = "読み込み中…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "メッセージ";
 "common_message_actions" = "メッセージアクション";
 "common_message_failed_to_send" = "メッセージの送信に失敗";
 "common_message_layout" = "メッセージのレイアウト";
 "common_message_removed" = "メッセージが削除されました";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "モダン";
 "common_mute" = "ミュート";
 "common_name" = "名前";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "ライブ位置情報を待機中...";
 "common_world_readable_history" = "誰でも過去のメッセージを閲覧できます";
 "common_you" = "あなた";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "鍵の保管庫と過去のメッセージにアクセスするために、回復鍵を認証してください。";
 "confirm_recovery_key_banner_primary_button_title" = "回復鍵を入力してください";
 "confirm_recovery_key_banner_secondary_button_title" = "回復鍵を忘れましたか？";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "指示に従って、鍵の保管庫を有効化してください";
 "screen_missing_key_backup_step_5" = "%1$@ に戻ってください";
 "screen_missing_key_backup_title" = "%1$@ に続行する前に、鍵の保管庫を有効化してください";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "設定は後で変更することができます。";
 "screen_notification_optin_title" = "メッセージを見逃さないために通知を許可しましょう";
 "screen_notification_settings_additional_settings_section_title" = "追加設定";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "メンション";
 "screen_notification_settings_notification_section_title" = "以下を通知";
 "screen_notification_settings_room_mention_label" = "@ルームのメンション";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "カスタム";
 "screen_notification_settings_sound_custom_sound_button_title" = "カスタム着信音";
 "screen_notification_settings_sound_delete_sound_error_title" = "ファイルの削除に失敗";
@@ -1291,7 +1302,6 @@
 "screen_room_change_role_section_users" = "メンバー";
 "screen_room_change_role_unsaved_changes_description" = "未保存の変更内容があります。";
 "screen_room_change_role_unsaved_changes_title" = "変更を保存しますか？";
-"screen_room_confirm_removal_message" = "このメッセージを削除しますか？";
 "screen_room_confirm_removal_reason_label" = "理由 (任意)";
 "screen_room_confirm_removal_reason_placeholder" = "入力...";
 "screen_room_confirm_removal_reason_supporting_text" = "(任意)";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "プロフィール";
 "screen_room_details_requests_to_join_title" = "参加のリクエスト";
 "screen_room_details_roles_and_permissions" = "役割と権限";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "名前";
 "screen_room_details_security_and_privacy_title" = "セキュリティとプライバシー";
 "screen_room_details_security_title" = "セキュリティ";

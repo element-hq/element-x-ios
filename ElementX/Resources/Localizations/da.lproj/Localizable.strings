@@ -96,6 +96,7 @@
 "action_copy_link" = "Kopiér link";
 "action_copy_link_to_message" = "Kopiér link til besked";
 "action_copy_text" = "Kopiér tekst";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Opret";
 "action_create_room" = "Opret et rum";
 "action_create_space" = "Opret en klynge";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Prøv at dekryptere igen";
 "action_save" = "Gem";
 "action_search" = "Søg";
-"action_select" = "Select";
 "action_select_all" = "Vælg alle";
 "action_send" = "Send";
 "action_send_edited_message" = "Send redigeret besked";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call understøtter desværre ikke brug af Bluetooth-lydenheder i denne Android-version. Vælg venligst en anden lydenhed.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Politik for acceptabel brug";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Tilføj en konto";
 "common_add_another_account" = "Tilføj en anden konto";
 "common_adding_caption" = "Tilføjelse af billedtekst";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analyse-værktøj";
 "common_android_shortcuts_remove_reason_left_room" = "Du forlod rummet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du blev logget ud af sessionen";
+"common_app_settings" = "App settings";
 "common_appearance" = "Udseende";
 "common_audio" = "Lyd";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Opkald startet";
 "common_call_you_declined" = "Du afviste et opkald";
 "common_chat_backup" = "Backup af samtale";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopieret til udklipsholder";
 "common_copyright" = "Ophavsret";
 "common_creating_room" = "Opretter rum...";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Aktuel position afsluttet";
 "common_loading" = "Indlæser...";
 "common_loading_more" = "Indlæser flere...";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Besked";
 "common_message_actions" = "Beskedhandlinger";
 "common_message_failed_to_send" = "Beskeden blev ikke sendt";
 "common_message_layout" = "Layout på beskeder";
 "common_message_removed" = "Beskeden er fjernet";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Moderne";
 "common_mute" = "Lydløs";
 "common_name" = "Navn";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Venter på aktuel position...";
 "common_world_readable_history" = "Alle kan se historikken";
 "common_you" = "Dig";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Bekræft din gendannelsesnøgle for at bevare adgangen til nøglelager og meddelelseshistorik.";
 "confirm_recovery_key_banner_primary_button_title" = "Indtast din gendannelsesnøgle";
 "confirm_recovery_key_banner_secondary_button_title" = "Har du glemt din gendannelsesnøgle?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Følg instruktionerne for at aktivere dit nøglelager";
 "screen_missing_key_backup_step_5" = "Gå tilbage til %1$@";
 "screen_missing_key_backup_title" = "Aktivér dit nøglelager, før du fortsætter til %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Du kan ændre dine indstillinger senere.";
 "screen_notification_optin_title" = "Tillad notifikationer, og gå aldrig glip af en besked";
 "screen_notification_settings_additional_settings_section_title" = "Yderligere indstillinger";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Omtaler";
 "screen_notification_settings_notification_section_title" = "Giv mig besked om";
 "screen_notification_settings_room_mention_label" = "Giv mig besked ved @room";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Medlemmer";
 "screen_room_change_role_unsaved_changes_description" = "Du har ændringer, der ikke er gemt.";
 "screen_room_change_role_unsaved_changes_title" = "Gem ændringer?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Tilføj emne";
 "screen_room_details_badge_encrypted" = "Krypteret";
 "screen_room_details_badge_not_encrypted" = "Ikke krypteret";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Anmodninger om at deltage";
 "screen_room_details_roles_and_permissions" = "Roller og tilladelser";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Navn";
 "screen_room_details_security_and_privacy_title" = "Sikkerhed og privatliv";
 "screen_room_details_security_title" = "Sikkerhed";

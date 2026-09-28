@@ -96,6 +96,7 @@
 "action_copy_link" = "Скопіювати посилання";
 "action_copy_link_to_message" = "Скопіювати посилання на повідомлення";
 "action_copy_text" = "Скопіювати текст";
+"action_copy_to_clipboard" = "Копіювати в буфер обміну";
 "action_create" = "Створити";
 "action_create_room" = "Створити кімнату";
 "action_create_space" = "Створити простір";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Повторити спробу розшифрування";
 "action_save" = "Зберегти";
 "action_search" = "Шукати";
-"action_select" = "Вибрати";
 "action_select_all" = "Вибрати все";
 "action_send" = "Надіслати";
 "action_send_edited_message" = "Надіслати змінене повідомлення";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call не підтримує використання аудіопристроїв Bluetooth у цій версії Android. Виберіть інший аудіопристрій.";
 "common_about" = "Відомості";
 "common_acceptable_use_policy" = "Політика прийнятного використання";
+"common_account_settings" = "Налаштування облікового запису";
 "common_add_account" = "Додати обліковий запис";
 "common_add_another_account" = "Додати ще один обліковий запис";
 "common_adding_caption" = "Додавання підпису";
@@ -227,6 +228,7 @@
 "common_analytics" = "Аналітика";
 "common_android_shortcuts_remove_reason_left_room" = "Ви вийшли з кімнати";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Ви вийшли з сеансу";
+"common_app_settings" = "Налаштування застосунку";
 "common_appearance" = "Вигляд";
 "common_audio" = "Аудіо";
 "common_beta" = "Бета-версія";
@@ -237,6 +239,7 @@
 "common_call_started" = "Виклик розпочато";
 "common_call_you_declined" = "Ви відхилили виклик";
 "common_chat_backup" = "Резервне копіювання бесіди";
+"common_code_block" = "Блок коду";
 "common_copied_to_clipboard" = "Скопійовано до буферу обміну";
 "common_copyright" = "Авторське право";
 "common_creating_room" = "Створення кімнати...";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Показ місцеперебування наживо завершено";
 "common_loading" = "Завантаження";
 "common_loading_more" = "Завантаження наступних…";
+"common_location_sharing" = "Обмін даними про розташування";
+"common_media_upload_quality" = "Якість вивантажуваних медіа";
 "common_message" = "Повідомлення";
 "common_message_actions" = "Дії з повідомленнями";
 "common_message_failed_to_send" = "Не вдалося надіслати повідомлення";
 "common_message_layout" = "Макет повідомлень";
 "common_message_removed" = "Повідомлення вилучено";
+"common_moderation_and_safety" = "Модерування та безпека";
 "common_modern" = "Модерн";
 "common_mute" = "Вимкнути звук";
 "common_name" = "Назва";
@@ -376,7 +382,7 @@
 "common_success" = "Успіх";
 "common_suggested" = "Запропоновано";
 "common_suggestions" = "Пропозиції";
-"common_switch_accounts" = "Switch accounts";
+"common_switch_accounts" = "Змінити обліковий запис";
 "common_syncing" = "Синхронізація";
 "common_text" = "Текст";
 "common_third_party_notices" = "Повідомлення третіх сторін";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Очікування геолокації…";
 "common_world_readable_history" = "Будь-хто може переглянути історію";
 "common_you" = "Ви";
+"common_your_account" = "Ваш обліковий запис";
 "confirm_recovery_key_banner_message" = "Підтвердіть свій ключ відновлення, щоб мати доступ до сховища ключів та історії повідомлень.";
 "confirm_recovery_key_banner_primary_button_title" = "Введіть ключ відновлення";
 "confirm_recovery_key_banner_secondary_button_title" = "Забули ключ відновлення?";
@@ -620,8 +627,8 @@
 "screen_advanced_settings_share_presence_description" = "Якщо вимкнути цю функцію, ви не зможете надсилати чи отримувати підтвердження прочитання або сповіщення про набір тексту.";
 "screen_advanced_settings_show_media_timeline_always_hide" = "Завжди ховати";
 "screen_advanced_settings_show_media_timeline_always_show" = "Завжди показувати";
-"screen_advanced_settings_show_media_timeline_private_rooms" = "У приватних кімнатах";
-"screen_advanced_settings_show_media_timeline_subtitle" = "Сховані медіа завжди можна переглянути, натиснувши на нього";
+"screen_advanced_settings_show_media_timeline_private_rooms" = "Показувати в приватних кімнатах";
+"screen_advanced_settings_show_media_timeline_subtitle" = "Приховані медіафайли завжди можна переглянути, натиснувши на них.";
 "screen_advanced_settings_show_media_timeline_title" = "Показувати медіа у стрічці";
 "screen_advanced_settings_view_source_description" = "Увімкнення цього параметра уможливить перегляд джерела повідомлень зі стрічки.";
 "screen_analytics_prompt_data_usage" = "Ми не записуватимемо та не профілюватимемо жодні персональні дані";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Дотримуйтесь інструкцій, щоб увімкнути сховище ключів";
 "screen_missing_key_backup_step_5" = "Повернутися до %1$@";
 "screen_missing_key_backup_title" = "Увімкніть сховище ключів, перш ніж переходити до %1$@";
+"screen_moderation_and_safety_invites_heading" = "Запрошення";
+"screen_moderation_and_safety_other_users_heading" = "Інші користувачі";
+"screen_moderation_and_safety_share_presence_heading" = "Як вас бачать інші";
 "screen_notification_optin_subtitle" = "Ви можете змінити свої налаштування пізніше.";
 "screen_notification_optin_title" = "Дозволити сповіщення і ніколи не пропускати повідомлення";
 "screen_notification_settings_additional_settings_section_title" = "Додаткові налаштування";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Згадки";
 "screen_notification_settings_notification_section_title" = "Сповіщати мене про";
 "screen_notification_settings_room_mention_label" = "Згадки @room";
+"screen_notification_settings_show_all_activity" = "Показати всю діяльність у списку кімнат (крапки або кількість непрочитаних повідомлень)";
 "screen_notification_settings_sound_custom_fallback" = "Власний";
 "screen_notification_settings_sound_custom_sound_button_title" = "Користувацький звук...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Помилка видалення файлу";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Учасники";
 "screen_room_change_role_unsaved_changes_description" = "У вас є не збережені зміни.";
 "screen_room_change_role_unsaved_changes_title" = "Зберегти зміни?";
-"screen_room_confirm_removal_message" = "Ви впевнені, що хочете вилучити це повідомлення?";
 "screen_room_confirm_removal_reason_label" = "Причина (необов'язково)";
-"screen_room_confirm_removal_reason_placeholder" = "Ввести…";
+"screen_room_confirm_removal_reason_placeholder" = "Ввести причину…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Необов'язково)";
-"screen_room_confirm_removal_title" = "Підтвердити вилучення";
+"screen_room_confirm_removal_title" = "Вилучити повідомлення?";
 "screen_room_details_add_topic_title" = "Додати тему";
 "screen_room_details_badge_encrypted" = "Зашифровано";
 "screen_room_details_badge_not_encrypted" = "Не зашифровано";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Профіль";
 "screen_room_details_requests_to_join_title" = "Запити на приєднання";
 "screen_room_details_roles_and_permissions" = "Ролі та дозволи";
+"screen_room_details_room_audio_ptt" = "Натисніть, щоб говорити";
+"screen_room_details_room_audio_title" = "Аудіо в кімнаті";
+"screen_room_details_room_audio_video_calls" = "Відеовиклики";
 "screen_room_details_room_name_label" = "Назва";
 "screen_room_details_security_and_privacy_title" = "Безпека й приватність";
 "screen_room_details_security_title" = "Безпека";

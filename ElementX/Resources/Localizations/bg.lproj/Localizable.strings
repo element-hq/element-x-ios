@@ -96,6 +96,7 @@
 "action_copy_link" = "Копиране на връзката";
 "action_copy_link_to_message" = "Копиране на връзката към съобщението";
 "action_copy_text" = "Копиране на текста";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Създаване";
 "action_create_room" = "Създаване на стая";
 "action_create_space" = "Create space";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Повторен опит за разшифроване";
 "action_save" = "Запазване";
 "action_search" = "Търсене";
-"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Изпращане";
 "action_send_edited_message" = "Send edited message";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Относно";
 "common_acceptable_use_policy" = "Политика за приемлива употреба";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Добавяне на акаунт";
 "common_add_another_account" = "Добавяне на друг акаунт";
 "common_adding_caption" = "Adding caption";
@@ -227,6 +228,7 @@
 "common_analytics" = "Статистика";
 "common_android_shortcuts_remove_reason_left_room" = "Вие напуснахте стаята";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
+"common_app_settings" = "App settings";
 "common_appearance" = "Облик";
 "common_audio" = "Аудио";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Започнато обаждане";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Резервно копие на чатовете";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Copied to clipboard";
 "common_copyright" = "Авторски права";
 "common_creating_room" = "Създаване на стая…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Live location ended";
 "common_loading" = "Зарежда се…";
 "common_loading_more" = "Зарежда се още…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Съобщение";
 "common_message_actions" = "Message actions";
 "common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Оформление на съобщенията";
 "common_message_removed" = "Съобщението е премахнато";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Модерно";
 "common_mute" = "Заглушаване";
 "common_name" = "Name";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Вие";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Потвърдете ключа си за възстановяване, за да запазите достъп до хранилището за ключове и историята на съобщенията си.";
 "confirm_recovery_key_banner_primary_button_title" = "Въведете ключа си за възстановяване";
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Можете да промените настройките си по-късно.";
 "screen_notification_optin_title" = "Разрешете известията и никога не пропускайте съобщение";
 "screen_notification_settings_additional_settings_section_title" = "Допълнителни настройки";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Споменавания";
 "screen_notification_settings_notification_section_title" = "Да бъда известяван за";
 "screen_notification_settings_room_mention_label" = "Известяване за @room";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Членове";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Добавяне на тема";
 "screen_room_details_badge_encrypted" = "С шифроване";
 "screen_room_details_badge_not_encrypted" = "Без шифроване";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Профил";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_roles_and_permissions" = "Роли и разрешения";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_and_privacy_title" = "Защита и поверителност";
 "screen_room_details_security_title" = "Защита";

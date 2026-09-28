@@ -96,6 +96,7 @@
 "action_copy_link" = "Salin tautan";
 "action_copy_link_to_message" = "Salin tautan ke pesan";
 "action_copy_text" = "Salin teks";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Buat";
 "action_create_room" = "Buat room";
 "action_create_space" = "Ciptakan ruang";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Coba dekripsi ulang";
 "action_save" = "Simpan";
 "action_search" = "Cari";
-"action_select" = "Select";
 "action_select_all" = "Pilih semua";
 "action_send" = "Kirim";
 "action_send_edited_message" = "Kirim pesan tersunting";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call tidak mendukung penggunaan perangkat audio Bluetooth di versi Android ini. Silakan pilih perangkat audio yang berbeda.";
 "common_about" = "Tentang";
 "common_acceptable_use_policy" = "Kebijakan penggunaan wajar";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Tambahkan akun";
 "common_add_another_account" = "Tambahkan akun lainnya";
 "common_adding_caption" = "Menambahkan keterangan";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analitik";
 "common_android_shortcuts_remove_reason_left_room" = "Anda keluar dari ruangan";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Anda telah keluar dari sesi.";
+"common_app_settings" = "App settings";
 "common_appearance" = "Penampilan";
 "common_audio" = "Audio";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Panggilan dimulai";
 "common_call_you_declined" = "Anda menolak panggilan";
 "common_chat_backup" = "Pencadangan percakapan";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Disalin ke papan klip";
 "common_copyright" = "Hak cipta";
 "common_creating_room" = "Membuat ruangan...";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Lokasi langsung berakhir";
 "common_loading" = "Memuat…";
 "common_loading_more" = "Memuat lebih banyak...";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Pesan";
 "common_message_actions" = "Tindakan pesan";
 "common_message_failed_to_send" = "Pesan Gagal Terkitim";
 "common_message_layout" = "Tata letak pesan";
 "common_message_removed" = "Pesan dihapus";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Modern";
 "common_mute" = "Bisukan";
 "common_name" = "Nama";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Menunggu lokasi real-time…";
 "common_world_readable_history" = "Siapa pun dapat melihat riwayat";
 "common_you" = "Anda";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda.";
 "confirm_recovery_key_banner_primary_button_title" = "Masukkan kunci pemulihan Anda";
 "confirm_recovery_key_banner_secondary_button_title" = "Lupa kunci pemulihan Anda?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Ikuti petunjuk berikut untuk mengaktifkan penyimpanan kunci Anda";
 "screen_missing_key_backup_step_5" = "Kembali ke %1$@";
 "screen_missing_key_backup_title" = "Aktifkan penyimpanan kunci Anda sebelum melanjutkan ke %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Anda dapat mengubah pengaturan Anda nanti.";
 "screen_notification_optin_title" = "Izinkan pemberitahuan dan jangan pernah melewatkan pesan";
 "screen_notification_settings_additional_settings_section_title" = "Pengaturan tambahan";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Sebutan";
 "screen_notification_settings_notification_section_title" = "Beri tahu saya tentang";
 "screen_notification_settings_room_mention_label" = "Beri tahu saya pada @room";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Kustom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Suara kustom";
 "screen_notification_settings_sound_delete_sound_error_title" = "Terjadi kesalahan saat menghapus file.";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Anggota";
 "screen_room_change_role_unsaved_changes_description" = "Anda memiliki perubahan yang belum disimpan.";
 "screen_room_change_role_unsaved_changes_title" = "Simpan perubahan?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Tambahkan topik";
 "screen_room_details_badge_encrypted" = "Terenkripsi";
 "screen_room_details_badge_not_encrypted" = "Tidak terenkripsi";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Permintaan untuk bergabung";
 "screen_room_details_roles_and_permissions" = "Peran dan perizinan";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Nama";
 "screen_room_details_security_and_privacy_title" = "Keamanan & privasi";
 "screen_room_details_security_title" = "Keamanan";

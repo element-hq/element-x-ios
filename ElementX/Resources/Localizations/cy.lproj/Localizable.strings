@@ -96,6 +96,7 @@
 "action_copy_link" = "Copïo dolen";
 "action_copy_link_to_message" = "Copïo dolen i'r neges";
 "action_copy_text" = "Copïo testun";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Creu";
 "action_create_room" = "Creu ystafell";
 "action_create_space" = "Create space";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Cynnig arall ar ddadgryptio";
 "action_save" = "Cadw";
 "action_search" = "Chwilio";
-"action_select" = "Select";
 "action_select_all" = "Dewis y cyfan";
 "action_send" = "Anfon";
 "action_send_edited_message" = "Anfon neges wedi'i golygu";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Nid yw Element Call yn cefnogi defnyddio dyfeisiau sain Bluetooth yn y fersiwn Android hon. Dewiswch ddyfais sain wahanol.";
 "common_about" = "Ynghylch";
 "common_acceptable_use_policy" = "Polisi defnydd derbyniol";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Ychwanegu cyfrif";
 "common_add_another_account" = "Ychwanegu cyfrif arall";
 "common_adding_caption" = "Ychwanegu capsiwn";
@@ -227,6 +228,7 @@
 "common_analytics" = "Dadansoddeg";
 "common_android_shortcuts_remove_reason_left_room" = "Rydych wedi gadael yr ystafell";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Rydych wedi'ch allgofnodi o'r sesiwn";
+"common_app_settings" = "App settings";
 "common_appearance" = "Gwedd";
 "common_audio" = "Sain";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Galwad wedi dechrau";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Sgwrs wrth gefn";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Wedi'i gopïo i'r clipfwrdd";
 "common_copyright" = "Hawlfraint";
 "common_creating_room" = "Wrthi'n creu ystafell…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Live location ended";
 "common_loading" = "Yn Llwytho…";
 "common_loading_more" = "Wrthi'n llwytho mwy…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Neges";
 "common_message_actions" = "Gweithredoedd neges";
 "common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Cynllun y neges";
 "common_message_removed" = "Neges wedi'i thynnu";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Cyfoes";
 "common_mute" = "Tewi";
 "common_name" = "Name";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Chi";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Cadarnhewch eich allwedd adfer i gynnal mynediad i'ch storfa allweddi a'ch hanes negeseuon.";
 "confirm_recovery_key_banner_primary_button_title" = "Rhowch eich allwedd adfer";
 "confirm_recovery_key_banner_secondary_button_title" = "Wedi anghofio'ch allwedd adfer?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Gallwch newid eich gosodiadau yn nes ymlaen.";
 "screen_notification_optin_title" = "Caniatáu hysbysiadau a pheidio byth â cholli neges";
 "screen_notification_settings_additional_settings_section_title" = "Gosodiadau ychwanegol";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Crybwyll";
 "screen_notification_settings_notification_section_title" = "Rhoi gwybod i mi am";
 "screen_notification_settings_room_mention_label" = "Rhoi gwybod i mi ar @ystafell";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Aelodau";
 "screen_room_change_role_unsaved_changes_description" = "Mae gennych newidiadau heb eu cadw.";
 "screen_room_change_role_unsaved_changes_title" = "Cadw'r newidiadau?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Ychwanegu pwnc";
 "screen_room_details_badge_encrypted" = "Wedi'i amgryptio";
 "screen_room_details_badge_not_encrypted" = "Heb ei amgryptio";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Proffil";
 "screen_room_details_requests_to_join_title" = "Ceisiadau i ymuno";
 "screen_room_details_roles_and_permissions" = "Rolau a chaniatâd";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_and_privacy_title" = "Diogelwch a phreifatrwydd";
 "screen_room_details_security_title" = "Diogelwch";
