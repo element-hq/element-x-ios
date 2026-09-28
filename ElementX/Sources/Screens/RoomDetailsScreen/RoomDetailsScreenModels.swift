@@ -40,6 +40,7 @@ struct DMRecipientInfo {
 }
 
 struct RoomDetailsScreenViewState: BindableState {
+    let appHooks: AppHooks
     var details: RoomDetails
     
     var isEncrypted: Bool

@@ -3062,6 +3062,12 @@ internal nonisolated enum L10n {
   internal static var screenRoomDetailsRequestsToJoinTitle: String { return L10n.tr("Localizable", "screen_room_details_requests_to_join_title") }
   /// Roles & permissions
   internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
+  /// Push to talk
+  internal static var screenRoomDetailsRoomAudioPtt: String { return L10n.tr("Localizable", "screen_room_details_room_audio_ptt") }
+  /// Room Audio
+  internal static var screenRoomDetailsRoomAudioTitle: String { return L10n.tr("Localizable", "screen_room_details_room_audio_title") }
+  /// Video calls
+  internal static var screenRoomDetailsRoomAudioVideoCalls: String { return L10n.tr("Localizable", "screen_room_details_room_audio_video_calls") }
   /// Name
   internal static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
   /// Security & privacy
