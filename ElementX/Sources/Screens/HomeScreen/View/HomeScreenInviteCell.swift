@@ -147,7 +147,7 @@ struct HomeScreenInviteCell: View {
         if room.badges.isDotShown {
             Circle()
                 .scaledFrame(size: 12)
-                .foregroundColor(.compound.iconAccentTertiary) // The badge is always green, no need to check isHighlighted here.
+                .foregroundColor(.compound.iconAccentPrimary) // The badge is always green, no need to check isHighlighted here.
         }
     }
 }
