@@ -1,6 +1,6 @@
 "NSCameraUsageDescription" = "Per catturare foto o video e inviarli come messaggio, Element X deve accedere alla fotocamera.";
 "NSFaceIDUsageDescription" = "Face ID viene utilizzato per proteggere l'accesso al tuo account.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Per condividere la tua posizione in tempo reale, Element X necessita dell'accesso alla posizione quando l'app è in background.";
-"NSLocationWhenInUseUsageDescription" = "Concedi l'accesso alla localizzazione in modo che Element X possa condividere la tua posizione.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Per condividere la tua posizione in tempo reale nelle conversazioni, è necessario l'accesso alla posizione quando l'app è in background.";
+"NSLocationWhenInUseUsageDescription" = "Questo ti permette di inviare la tua posizione attuale o i luoghi vicini nelle conversazioni.";
 "NSMicrophoneUsageDescription" = "Per registrare e inviare messaggi audio, Element X deve accedere al microfono.";
 "NSPhotoLibraryUsageDescription" = "Consente di salvare foto e video nella tua libreria.";

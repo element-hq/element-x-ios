@@ -126,6 +126,7 @@ enum TestablePreviewsDictionary {
             "ReadMarkerRoomTimelineView_Previews" : ReadMarkerRoomTimelineView_Previews.self,
             "ReadReceiptCell_Previews" : ReadReceiptCell_Previews.self,
             "ReadReceiptsSummaryView_Previews" : ReadReceiptsSummaryView_Previews.self,
+            "RedactConfirmationView_Previews" : RedactConfirmationView_Previews.self,
             "RedactedRoomTimelineView_Previews" : RedactedRoomTimelineView_Previews.self,
             "ReportContentScreen_Previews" : ReportContentScreen_Previews.self,
             "ReportRoomScreen_Previews" : ReportRoomScreen_Previews.self,

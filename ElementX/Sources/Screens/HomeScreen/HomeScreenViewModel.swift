@@ -17,6 +17,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let userSession: UserSessionProtocol
     private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsServiceProtocol
+    private let bugReportService: BugReportServiceProtocol
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -33,10 +34,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
          analyticsService: AnalyticsServiceProtocol,
+         bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.analyticsService = analyticsService
+        self.bugReportService = bugReportService
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
@@ -127,6 +130,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        appSettings.roomListNotificationCountEnabledPublisher
+            .weakAssign(to: \.state.roomListNotificationCountEnabled, on: self)
+            .store(in: &cancellables)
+        
         appSettings.seenInvitesPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
@@ -149,6 +156,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         spaceFilterSubject
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.selectedSpaceFilter, on: self)
+            .store(in: &cancellables)
+        
+        bugReportService.lastCrashEventIDSubject
+            .compactMap { $0 }
+            .first()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.presentCrashedLastRunAlert()
+            }
             .store(in: &cancellables)
         
         Task {
@@ -174,6 +190,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         setupRoomListSubscriptions()
         
         updateRooms()
+        
+        if let roomSummaryProvider {
+            updateRoomListMode(with: roomSummaryProvider.statePublisher.value,
+                               hasRooms: !roomSummaryProvider.roomListPublisher.value.isEmpty)
+        }
     }
     
     // MARK: - Public
@@ -316,34 +337,32 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
+        // Combined so that the mode and the rooms are always updated from the same pair of
+        // values: the state can report loaded before the first summaries have published and
+        // flipping to .rooms then would flash an empty list.
         roomSummaryProvider.statePublisher
+            .combineLatest(roomSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
+            .sink { [weak self] state, rooms in
                 guard let self else { return }
                 
-                updateRoomListMode(with: state)
-            }
-            .store(in: &cancellables)
-        
-        roomSummaryProvider.roomListPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateRooms()
+                updateRooms()
+                updateRoomListMode(with: state, hasRooms: !rooms.isEmpty)
             }
             .store(in: &cancellables)
     }
     
-    private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState) {
-        let isLoadingData = !roomSummaryProviderState.isLoaded
-        let hasNoRooms = roomSummaryProviderState.isLoaded && roomSummaryProviderState.totalNumberOfRooms == 0
-        
-        var roomListMode = state.roomListMode
-        if isLoadingData {
-            roomListMode = .skeletons
-        } else if hasNoRooms {
-            roomListMode = .empty
+    private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState, hasRooms: Bool) {
+        let roomListMode: HomeScreenRoomListMode = if !roomSummaryProviderState.isLoaded {
+            .skeletons // Still loading.
+        } else if roomSummaryProviderState.totalNumberOfRooms == 0 {
+            .empty // Loaded, there are no rooms at all.
+        } else if hasRooms {
+            .rooms // Loaded and the summaries have published.
+        } else if state.roomListMode == .skeletons {
+            .skeletons // Loaded but nothing published yet, flipping to .rooms would flash an empty list.
         } else {
-            roomListMode = .rooms
+            .rooms
         }
         
         guard roomListMode != state.roomListMode else {

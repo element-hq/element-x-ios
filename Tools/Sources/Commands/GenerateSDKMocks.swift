@@ -26,7 +26,7 @@ struct GenerateSDKMocks: AsyncParsableCommand {
     
     /// Generates the SDK mocks using Sourcery.
     func generateSDKMocks(ffiPath: String) throws {
-        try Zsh.run(command: "sourcery --sources \(ffiPath) --templates Tools/Sourcery/SDKAutoMockable.stencil --output SDKMocks/Sources/Generated/SDKGeneratedMocks.swift")
+        try Zsh.run(command: "sourcery --sources \(ffiPath) --templates Tools/Sourcery/SDKAutoMockable.stencil --output Components/SDKMocks/Sources/Generated/SDKGeneratedMocks.swift")
     }
     
     /// Downloads the specified version of the `matrix_sdk_ffi.swift` file and returns the path to the downloaded file.

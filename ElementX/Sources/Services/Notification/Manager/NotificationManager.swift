@@ -158,6 +158,22 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
     
+    func updateAppBadgeCount() async {
+        guard let userSession, appSettings.roomListNotificationCountEnabled else { return }
+        
+        let badgeCount = Int(userSession.clientProxy.totalUnreadNotifications)
+        
+        appSettings.lastKnownBadgeCount = badgeCount
+        
+        MXLog.debug("Updating app badge count to \(badgeCount)")
+        
+        do {
+            try await notificationCenter.setBadgeCount(badgeCount)
+        } catch {
+            MXLog.error("Failed updating the app badge count with error: \(error)")
+        }
+    }
+    
     private func removeReceivedWhileOfflineNotification() {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: [NotificationServiceExtensionActor.receivedWhileOfflineNotificationID])
     }

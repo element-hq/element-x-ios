@@ -35,7 +35,7 @@ struct TimelineMediaPreviewDetailsView: View {
         .presentationDetents([.height(sheetHeight)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
-        .preferredColorScheme(preferredColorScheme)
+        .presentationColorScheme(preferredColorScheme)
         .sheet(item: $context.redactConfirmationItem) { item in
             TimelineMediaPreviewRedactConfirmationView(item: item,
                                                        context: context,

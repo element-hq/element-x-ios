@@ -20,6 +20,9 @@ nonisolated class NotificationHandler {
     
     private let notificationContentBuilder: NotificationContentBuilder
     
+    /// Whether this handler has already counted its notification towards the app icon badge.
+    private var hasCountedTowardsBadge = false
+    
     init(userSession: NSEUserSession,
          settings: CommonSettingsProtocol,
          contentHandler: @escaping (UNNotificationContent) -> Void,
@@ -42,11 +45,19 @@ nonisolated class NotificationHandler {
     func processEvent(_ eventID: String, roomID: String) async {
         MXLog.info("\(tag) Processing event: \(eventID) in room: \(roomID)")
         
+<<<<<<< HEAD
         // Copy over the unread information to the notification badge
         // :tchap: Temporarily disabled badge due to incorrect unread count from server
         // notificationContent.badge = notificationContent.unreadCount as NSNumber?
         notificationContent.badge = nil // :tchap:end
         MXLog.info("\(tag) New badge value: \(notificationContent.badge?.stringValue ?? "nil")")
+=======
+        if !settings.roomListNotificationCountEnabled {
+            // Copy over the unread information provided by the push payload to the notification badge.
+            notificationContent.badge = notificationContent.unreadCount as NSNumber?
+            MXLog.info("\(tag) New badge value: \(notificationContent.badge?.stringValue ?? "nil")")
+        }
+>>>>>>> release/26.09.2
         
         guard let notificationItemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
             MXLog.error("\(tag) Failed retrieving notification item")
@@ -81,17 +92,43 @@ nonisolated class NotificationHandler {
     // MARK: - Private
     
     private func deliverNotification() {
-        MXLog.info("\(tag) Delivering notification")
+        if settings.roomListNotificationCountEnabled {
+            notificationContent.badge = NSNumber(value: incrementBadgeCount())
+            MXLog.info("\(tag) Delivering notification, new badge value: \(settings.lastKnownBadgeCount)")
+        } else {
+            MXLog.info("\(tag) Delivering notification")
+        }
         contentHandler(notificationContent)
+    }
+    
+    private func incrementBadgeCount() -> Int {
+        // `handleTimeExpiration` can deliver a notification this handler already delivered.
+        guard !hasCountedTowardsBadge else {
+            return settings.lastKnownBadgeCount
+        }
+        
+        hasCountedTowardsBadge = true
+        settings.lastKnownBadgeCount += 1
+        
+        return settings.lastKnownBadgeCount
     }
     
     private func discardNotification() {
         MXLog.info("\(tag) Discarding notification")
         
         let content = UNMutableNotificationContent()
+<<<<<<< HEAD
         // :tchap: Temporarily disabled badge due to incorrect unread count from server
         // content.badge = notificationContent.unreadCount as NSNumber?
         content.badge = nil // :tchap:end
+=======
+        if settings.roomListNotificationCountEnabled {
+            // Nothing new is shown to the user, so leave the badge where the app last put it.
+            content.badge = NSNumber(value: settings.lastKnownBadgeCount)
+        } else {
+            content.badge = notificationContent.unreadCount as NSNumber?
+        }
+>>>>>>> release/26.09.2
         MXLog.info("\(tag) New badge value: \(content.badge?.stringValue ?? "nil")")
         
         contentHandler(content)
@@ -126,6 +163,9 @@ nonisolated class NotificationHandler {
                 
                 if let targetNotification = deliveredNotifications.first(where: { $0.request.content.eventID == redactedEventID }) {
                     UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [targetNotification.request.identifier])
+                    if settings.roomListNotificationCountEnabled {
+                        settings.lastKnownBadgeCount = max(0, settings.lastKnownBadgeCount - 1)
+                    }
                 }
                 
                 return .processedShouldDiscard

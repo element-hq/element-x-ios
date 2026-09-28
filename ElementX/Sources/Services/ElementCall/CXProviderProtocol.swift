@@ -11,6 +11,9 @@ import CallKit
 protocol CXProviderProtocol {
     func setDelegate(_ delegate: CXProviderDelegate?, queue: DispatchQueue?)
     func reportNewIncomingCall(with uuid: UUID, update: CXCallUpdate, completion: @escaping @Sendable (Error?) -> Void)
+    func reportOutgoingCall(with uuid: UUID, startedConnectingAt: Date?)
+    func reportOutgoingCall(with uuid: UUID, connectedAt: Date?)
+    func reportCall(with uuid: UUID, updated update: CXCallUpdate)
     func reportCall(with uuid: UUID, endedAt: Date?, reason: CXCallEndedReason)
 }
 

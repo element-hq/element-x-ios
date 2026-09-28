@@ -16,6 +16,8 @@ struct RoomListFiltersEmptyStateView: View {
             switch state.activeFilters[0] {
             case .unreads:
                 return L10n.screenRoomlistFilterUnreadsEmptyStateTitle
+            case .mentions:
+                return L10n.screenRoomlistFilterMentionEmptyStateTitle
             case .people:
                 return L10n.screenRoomlistFilterPeopleEmptyStateTitle
             case .rooms:

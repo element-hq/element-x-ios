@@ -23,7 +23,7 @@ struct OverridableAvatarImage: View {
             AsyncImage(url: overrideURL) { image in
                 image
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
             } placeholder: {
                 ProgressView()
             }

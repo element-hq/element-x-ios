@@ -16,6 +16,8 @@ class UserFlowTests: XCTestCase {
     private var app: XCUIApplication!
     
     override func setUp() async throws {
+        continueAfterFailure = false
+        
         app = Application.launch()
         try app.login(currentTestCase: self)
     }

@@ -177,8 +177,8 @@ actor NotificationServiceExtensionActor {
             let userSession = try await NSEUserSession(credentials: credentials,
                                                        roomID: roomID,
                                                        clientSessionDelegate: keychainController,
-                                                       appHooks: appHooks,
-                                                       appSettings: settings)
+                                                       appSettings: settings,
+                                                       appHooks: appHooks)
             
             notificationHandler = NotificationHandler(userSession: userSession,
                                                       settings: settings,
@@ -258,9 +258,15 @@ actor NotificationServiceExtensionActor {
         
         let content = UNMutableNotificationContent()
         content.body = L10n.notificationReceivedWhileOfflineIos
+<<<<<<< HEAD
         // :tchap: Temporarily disabled badge due to incorrect unread count from server
         // content.badge = originalRequest.content.unreadCount as NSNumber?
         content.badge = nil // :tchap:end:
+=======
+        if !settings.roomListNotificationCountEnabled {
+            content.badge = originalRequest.content.unreadCount as NSNumber?
+        }
+>>>>>>> release/26.09.2
         content.sound = settings.notificationSound
         
         let request = UNNotificationRequest(identifier: Self.receivedWhileOfflineNotificationID, content: content, trigger: nil)

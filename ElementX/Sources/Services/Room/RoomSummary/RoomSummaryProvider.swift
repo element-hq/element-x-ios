@@ -19,6 +19,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let appSettings: AppSettings
     
     private let roomListPageSize: UInt32
+    /// Remember how many rooms we had on the previous requests so we can deduplicate
+    private var roomCountOnLastPageAddRequest = -1
     
     private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
     
@@ -27,6 +29,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
+    private var currentFilter: RoomSummaryProviderFilter?
     private var stateUpdatesTaskHandle: TaskHandle?
     
     private let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
@@ -117,6 +120,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                                                                 })
             
             // Forces the listener above to be called with the current state
+            currentFilter = nil
             setFilter(.all(filters: []))
             
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: SDKListener { [loadingStateContinuation] state in
@@ -136,6 +140,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
+        guard filter != currentFilter else {
+            return
+        }
+        
+        currentFilter = filter
+        
         let baseFilter: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
                                                                              .all(filters: [.space, .invite])]),
                                                               .deduplicateVersions]
@@ -143,12 +153,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         switch filter {
         case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .none)
-        case let .search(query):
-            let filters = if appSettings.fuzzyRoomListSearchEnabled {
-                [.fuzzyMatchRoomName(pattern: query)] + baseFilter
-            } else {
-                [.normalizedMatchRoomName(pattern: query)] + baseFilter
-            }
+        case let .search(query, joinedOnly):
+            let filters = nameFilter(for: query) + baseFilter + (joinedOnly ? [.joined] : [])
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         case .rooms(let roomIDs, let filters):
             var rustFilters = filters.map(\.rustFilter) + baseFilter
@@ -173,7 +179,29 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     // MARK: - Private
     
+    private func nameFilter(for query: String) -> [RoomListEntriesDynamicFilterKind] {
+        appSettings.fuzzyRoomListSearchEnabled ? [.fuzzyMatchRoomName(pattern: query)] : [.normalizedMatchRoomName(pattern: query)]
+    }
+    
     private func setupVisibleRangeObservers() {
+        // Unthrottled to add another page half way through the last one
+        visibleItemRangePublisher
+            .sink { [weak self] range in
+                guard let self,
+                      !range.isEmpty,
+                      range.upperBound >= rooms.count - Int(roomListPageSize) / 2,
+                      rooms.count != roomCountOnLastPageAddRequest else {
+                    return
+                }
+                
+                roomCountOnLastPageAddRequest = rooms.count
+                
+                MXLog.info("\(self.name): Adding a page at \(rooms.count) rooms, visible range: \(range)")
+                
+                listUpdatesSubscriptionResult?.controller().addOnePage()
+            }
+            .store(in: &cancellables)
+        
         visibleItemRangePublisher
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates()
@@ -182,9 +210,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 
                 MXLog.info("\(self.name): Updating visible range: \(range)")
                 
-                if range.upperBound >= rooms.count {
-                    listUpdatesSubscriptionResult?.controller().addOnePage()
-                } else if range.lowerBound == 0 {
+                if range.lowerBound == 0, range.upperBound < rooms.count {
+                    roomCountOnLastPageAddRequest = -1
                     listUpdatesSubscriptionResult?.controller().resetToOnePage()
                 }
             }
@@ -207,6 +234,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     range = range.lowerBound..<upperBound
                 }
                 
+                MXLog.info("\(self.name): Subscribing to rooms in range: \(range)")
+                
                 return range
                     .filter { $0 < self.rooms.count }
                     .map { self.rooms[$0].id }
@@ -217,7 +246,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 
                 Task { [weak self] in
                     do {
-                        try await self?.roomListService.subscribeToRooms(roomIds: roomIDs)
+                        try await self?.roomListService.setRoomSubscriptions(roomIds: roomIDs)
                     } catch {
                         MXLog.error("Failed subscribing to rooms with error: \(error)")
                     }

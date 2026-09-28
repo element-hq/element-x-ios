@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Thử giải mã lại";
 "action_save" = "Lưu";
 "action_search" = "Tìm kiếm";
+"action_select" = "Select";
 "action_select_all" = "Chọn tất cả";
 "action_send" = "Gửi";
 "action_send_edited_message" = "Gửi tin nhắn đã chỉnh sửa";
@@ -375,6 +376,7 @@
 "common_success" = "Thành công";
 "common_suggested" = "Gợi ý";
 "common_suggestions" = "Gợi ý";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Đang đồng bộ";
 "common_text" = "Văn bản";
 "common_third_party_notices" = "Thông báo từ bên thứ ba";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "Không tìm thấy ứng dụng tương thích nào để xử lý hành động này.";
 "error_room_address_already_exists" = "Địa chỉ phòng này đã tồn tại. Vui lòng thử chỉnh sửa trường địa chỉ phòng hoặc thay đổi tên phòng.";
 "error_room_address_invalid_symbols" = "Một số ký tự không được phép. Chỉ các chữ cái, chữ số và các ký hiệu sau được hỗ trợ: ! $ &amp; &#39; ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Một số tin nhắn chưa được gửi";
 "error_unknown" = "Rất tiếc, đã có lỗi xảy ra.";
 "error.account_already_logged_in" = "Bạn đã đăng nhập trên thiết bị này với tư cách là%1$@ .";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Từ chối";
 "notification_invite_body" = "Đã mời bạn trò chuyện";
 "notification_invite_body_with_sender" = "%1$@ đã mời bạn trò chuyện";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Đã nhắc đến bạn: %1$@";
 "notification_new_messages" = "Tin nhắn mới";
@@ -771,7 +779,7 @@
 "screen_create_room_private_option_description" = "Chỉ những người được mời mới có thể tham gia.";
 "screen_create_room_private_option_title" = "Riêng tư";
 "screen_create_room_public_option_description" = "Bất kỳ ai cũng có thể tìm thấy phòng này. \nBạn có thể thay đổi cài đặt phòng bất cứ lúc nào.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Công cộng";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Allow ask to join";
@@ -779,7 +787,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Riêng tư";
-"screen_create_room_room_access_section_public_option_description" = "Anyone can join.";
+"screen_create_room_room_access_section_public_option_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_room_access_section_public_option_title" = "Công cộng";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
@@ -908,7 +916,7 @@
 "screen_join_room_loading_alert_title" = "Không thể hiển thị bản xem trước của phòng này";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
-"screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
+"screen_join_room_subtitle_knock" = "Tap the button below and a chat administrator will be notified. You'll be able to join the conversation once approved.";
 "screen_join_room_subtitle_no_preview" = "You must be a member of this room to view the message history.";
 "screen_join_room_title_knock" = "Want to join this room?";
 "screen_join_room_title_no_preview" = "Preview is not available";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "Không có yêu cầu tham gia nào đang chờ xử lý";
 "screen_knock_requests_list_initial_loading_title" = "Đang tải các yêu cầu tham gia…";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Cho phép trả lời theo chủ đề";
 "screen_labs_enable_threads_description" = "Ứng dụng sẽ khởi động lại để áp dụng thay đổi này.";
 "screen_labs_header_description" = "Hãy thử các ý tưởng mới nhất đang được phát triển. Các tính năng này chưa hoàn thiện; có thể không ổn định và có thể thay đổi.";
@@ -952,11 +964,11 @@
 "screen_leave_space_choose_owners_action" = "Chọn chủ sở hữu";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
-"screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
+"screen_leave_space_subtitle_last_admin" = "You need to assign another administrator for this space before you can leave.";
 "screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
-"screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_leave_space_title_last_admin" = "You are the only administrator for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Scan the QR code";
@@ -1043,7 +1055,7 @@
 "screen_missing_key_backup_open_element_classic" = "Open Element Classic";
 "screen_missing_key_backup_step_1" = "Open Element Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "Thành viên";
 "screen_room_change_role_unsaved_changes_description" = "Bạn có thay đổi chưa được lưu.";
 "screen_room_change_role_unsaved_changes_title" = "Lưu thay đổi?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Thêm chủ đề";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Bạn có muốn mời họ quay lại không?";
 "screen_room_invite_again_alert_title" = "Bạn đang một mình trong cuộc trò chuyện này";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Chặn";
 "screen_room_member_details_block_alert_description" = "Người dùng bị chặn sẽ không thể gửi tin nhắn cho bạn và tất cả tin nhắn của họ sẽ bị ẩn. Bạn có thể bỏ chặn họ bất cứ lúc nào.";
 "screen_room_member_details_block_user" = "Chặn người dùng";
@@ -1363,8 +1381,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Không thể khôi phục chế độ mặc định, vui lòng thử lại.";
 "screen_room_notification_settings_error_setting_mode" = "Không thể thiết lập chế độ, hãy thử lại nhé.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Máy chủ không hỗ trợ tùy chọn này trong phòng mã hóa, bạn sẽ không nhận thông báo ở đây.";
-"screen_room_notification_settings_mode_all_messages" = "Tất cả tin nhắn.";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Chỉ đề cập và từ khóa";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Trong phòng này, thông báo cho tôi khi";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Tin nhắn được ghim";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Ưu tiên thấp";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Bạn có thể bỏ chọn bộ lọc để xem các cuộc trò chuyện khác";
 "screen_roomlist_filter_mixed_empty_state_title" = "Bạn không có cuộc trò chuyện nào cho lựa chọn này";
 "screen_roomlist_filter_people" = "Danh bạ";
@@ -1450,7 +1471,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Once enabled, encryption cannot be disabled.";
 "screen_security_and_privacy_encryption_section_header" = "Mã hóa";
 "screen_security_and_privacy_encryption_toggle_title" = "Enable end-to-end encryption";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join, including people outside your organisation.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Chúng không khớp nhau";
 "screen_session_verification_they_match" = "Chúng khớp với nhau";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
@@ -1570,7 +1593,7 @@
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_space_menu_action_members" = "View members";
-"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Security & privacy.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
 "screen_space_settings_leave_space" = "Rời space";
 "screen_space_settings_roles_and_permissions" = "Vai trò và quyền hạn";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Error: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Error, cannot test push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Error, timeout waiting for push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back took %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Test Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Ensure that UnifiedPush distributors are available.";

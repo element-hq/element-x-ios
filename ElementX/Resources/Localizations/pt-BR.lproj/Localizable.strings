@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Tentar descriptografar novamente";
 "action_save" = "Salvar";
 "action_search" = "Pesquisar";
+"action_select" = "Select";
 "action_select_all" = "Selecionar tudo";
 "action_send" = "Enviar";
 "action_send_edited_message" = "Enviar mensagem editada";
@@ -375,6 +376,7 @@
 "common_success" = "Sucesso";
 "common_suggested" = "Sugerido";
 "common_suggestions" = "Sugestões";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Sincronizando";
 "common_text" = "Texto";
 "common_third_party_notices" = "Comunicados de terceiros";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "Nenhum aplicativo compatível foi encontrado para lidar com essa ação.";
 "error_room_address_already_exists" = "Este endereço de sala já existe. Tente editar o campo de endereço da sala ou alterar o nome da sala";
 "error_room_address_invalid_symbols" = "Alguns caracteres não são permitidos. Somente letras, dígitos e os seguintes símbolos são aceitos ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Algumas mensagens não foram enviadas";
 "error_unknown" = "Desculpe, ocorreu um erro";
 "error.account_already_logged_in" = "Você já está conectado neste dispositivo como %1$@ .";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Recusar";
 "notification_invite_body" = "Convidou você para conversar";
 "notification_invite_body_with_sender" = "%1$@ te convidou para conversar";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Mencionou você: %1$@";
 "notification_new_messages" = "Novas mensagens";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "Nenhum pedido de entrada pendente";
 "screen_knock_requests_list_initial_loading_title" = "Carregando solicitações de entrada...";
 "screen_knock_requests_list_title" = "Pedidos de entrada";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Ativar respostas de tópicos";
 "screen_labs_enable_threads_description" = "O app será reiniciado para aplicar esta mudança.";
 "screen_labs_header_description" = "Teste as nossas mais novas ideias em desenvolvimento. Esses recursos não estão finalizados; podem estar instáveis, e podem mudar.";
@@ -1043,7 +1055,7 @@
 "screen_missing_key_backup_open_element_classic" = "Open Element Classic";
 "screen_missing_key_backup_step_1" = "Open Element Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "Membros";
 "screen_room_change_role_unsaved_changes_description" = "Você tem alterações não salvas.";
 "screen_room_change_role_unsaved_changes_title" = "Salvar alterações?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Adicionar tópico";
 "screen_room_details_badge_encrypted" = "Criptografado";
 "screen_room_details_badge_not_encrypted" = "Não criptografado";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Gostaria de convidá-los de volta?";
 "screen_room_invite_again_alert_title" = "Você está sozinho nesta conversa";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Bloquear";
 "screen_room_member_details_block_alert_description" = "Usuários bloqueados não poderão enviar mensagens para você e todas as mensagens deles serão ocultadas. Você pode desbloqueá-los a qualquer momento.";
 "screen_room_member_details_block_user" = "Bloquear usuário";
@@ -1364,7 +1382,8 @@
 "screen_room_notification_settings_error_setting_mode" = "Falha ao definir o modo, tente novamente.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Seu servidor-casa não suporta esta opção em salas criptografadas, você não será notificado nesta sala.";
 "screen_room_notification_settings_mode_all_messages" = "Todas as mensagens";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Somente menções e palavras-chave";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Nesta sala, notifique-me de";
 "screen_room_pinned_banner_indicator" = "%1$@ de %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Mensagens fixadas";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Você não tem nenhum convite pendente.";
 "screen_roomlist_filter_low_priority" = "Baixa prioridade";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Você ainda não tem nenhuma conversa de baixa prioridade";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Você pode desmarcar filtros para ver suas outras conversas";
 "screen_roomlist_filter_mixed_empty_state_title" = "Você não tem conversas para esta seleção";
 "screen_roomlist_filter_people" = "Pessoas";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Verificação solicitada";
 "screen_session_verification_they_dont_match" = "Eles não combinam";
 "screen_session_verification_they_match" = "Eles combinam";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Certifique-se de que você tenha o app aberto no outro dispositivo antes de iniciar a verificação por aqui.";
 "screen_session_verification_use_another_device_title" = "Abra o aplicativo em outro dispositivo verificado";
 "screen_session_verification_user_initiator_subtitle" = "Para maior segurança, verifique esse usuário comparando um conjunto de emojis em seus dispositivos. Faça isso usando uma maneira confiável de se comunicar.";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Erro: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Erro, não é possível testar o push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Erro, tempo limite de espera pelo push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "O loopback do push levou %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Teste o loopback do push";
 "troubleshoot_notifications_test_unified_push_description" = "Certifique-se de que os distribuidores do UnifiedPush estejam disponíveis.";

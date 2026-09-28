@@ -12,11 +12,11 @@
 "a11y_edit_avatar" = "Uredi avatar";
 "a11y_edit_room_address_hint" = "Potpuna adresa bit će %1$@";
 "a11y_expand_message_text_field" = "Proširi tekstno polje poruke";
-"a11y_gallery_attachment" = "Gallery, attachment %1$d";
-"a11y_gallery_failed_scan" = "Gallery, failed scan %1$d";
-"a11y_gallery_image" = "Gallery, image %1$d";
-"a11y_gallery_scanning" = "Gallery, scanning %1$d";
-"a11y_gallery_video" = "Gallery, video %1$d";
+"a11y_gallery_attachment" = "Galerija, prilog %1$d";
+"a11y_gallery_failed_scan" = "Galerija, neuspješno skeniranje %1$d";
+"a11y_gallery_image" = "Galerija, slika %1$d";
+"a11y_gallery_scanning" = "Galerija, skeniranje %1$d";
+"a11y_gallery_video" = "Galerija, video %1$d";
 "a11y_hide_password" = "Sakrij zaporku";
 "a11y_info" = "Informacije";
 "a11y_join_call" = "Pridruži se pozivu";
@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Ponovno pokušaj dešifrirati";
 "action_save" = "Spremi";
 "action_search" = "Pretraži";
+"action_select" = "Odaberite";
 "action_select_all" = "Odaberi sve";
 "action_send" = "Pošalji";
 "action_send_edited_message" = "Pošalji uređenu poruku";
@@ -375,6 +376,7 @@
 "common_success" = "Uspjeh";
 "common_suggested" = "Preporučeno";
 "common_suggestions" = "Prijedlozi";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Sinkronizacija";
 "common_text" = "Tekst";
 "common_third_party_notices" = "Obavijesti trećih strana";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "Nije pronađena kompatibilna aplikacija za izvršavanje ove radnje.";
 "error_room_address_already_exists" = "Ova adresa sobe već postoji. Pokušajte urediti polje za adresu sobe ili promijeniti naziv sobe";
 "error_room_address_invalid_symbols" = "Neki znakovi nisu dopušteni. Podržana su samo slova, brojke i simboli ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Nevažeći MIME tip: %@";
+"error_sending_failure_missing_media_content" = "Nedostaje medijski sadržaj";
+"error_sending_failure_other" = "Detalji pogreške: %@";
+"error_sending_failure_sending_from_unverified_device" = "Slanje s neprovjerenog uređaja";
+"error_sending_failure_unknown" = "Nepoznata pogreška";
 "error_some_messages_have_not_been_sent" = "Neke poruke nisu poslane";
 "error_unknown" = "Žao nam je, došlo je do pogreške";
 "error.account_already_logged_in" = "Već ste prijavljeni na ovom uređaju kao %1$@.";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Odbij";
 "notification_invite_body" = "Pozvao/la te na razgovor";
 "notification_invite_body_with_sender" = "%1$@ pozvao/la te na razgovor";
+"notification_knock_request_body" = "Zatraženo pridruživanje";
 "notification_live_location_started_body" = "Počeli su dijeliti svoju lokaciju uživo";
 "notification_mentioned_you_body" = "Korisnik vas je spomenuo: %1$@";
 "notification_new_messages" = "Nove poruke";
@@ -707,7 +715,7 @@
 "screen_change_server_error_element_pro_required_action_ios" = "Trgovina aplikacija";
 "screen_change_server_error_element_pro_required_message" = "Potrebna je aplikacija Element Pro na %1$@. Molimo vas da je preuzmete iz trgovine.";
 "screen_change_server_error_element_pro_required_title" = "Potreban je Element Pro";
-"screen_change_server_error_invalid_homeserver" = "Nismo mogli pristupiti ovom matičnom poslužitelju. Provjerite jeste li ispravno unijeli URL matičnog poslužitelja. Ako je URL ispravan, obratite se administratoru matičnog poslužitelja za daljnju pomoć.";
+"screen_change_server_error_invalid_homeserver" = "Nismo mogli kontaktirati ovog davatelja računa. Provjerite jeste li ispravno unijeli URL davatelja računa. Ako je URL ispravan, obratite se administratoru davatelja računa za daljnju pomoć.";
 "screen_change_server_error_invalid_well_known" = "Poslužitelj nije dostupan zbog problema u .well-known datoteci:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Odabrani davatelj usluga računa ne podržava sliding sync. Za korištenje je potrebna nadogradnja poslužitelja %1$@sliding sync.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nije dopušteno povezivanje s %2$@.";
@@ -715,16 +723,16 @@
 "screen_change_server_error_unauthorized_homeserver_title" = "Davatelj usluga računa %1$@ nije dopušten.";
 "screen_change_server_form_header" = "URL matičnog poslužitelja";
 "screen_change_server_form_notice" = "Unesite adresu domene.";
-"screen_change_server_navigation_title_login" = "Sign in";
-"screen_change_server_navigation_title_register" = "Create account";
+"screen_change_server_navigation_title_login" = "Prijava";
+"screen_change_server_navigation_title_register" = "Izradi račun";
 "screen_change_server_subtitle" = "Koja je adresa vašeg poslužitelja?";
-"screen_change_server_textfield_footer_login" = "If your account is provided by your company or a community, then change the account provider (example: companyname.com).";
-"screen_change_server_textfield_footer_register" = "Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org).";
-"screen_change_server_textfield_header" = "Account provider";
-"screen_change_server_textfield_placeholder" = "example.com";
+"screen_change_server_textfield_footer_login" = "Ako vam je račun omogućila vaša tvrtka ili zajednica, promijenite pružatelja računa (primjer: nazivtvrtke.com).";
+"screen_change_server_textfield_footer_register" = "Besplatno kreirajte račun na matrix.org. Ako želite kreirati račun kod drugog pružatelja usluga, promijenite ga u skladu s tim (primjer: communityname.org).";
+"screen_change_server_textfield_header" = "Pružatelj usluga računa";
+"screen_change_server_textfield_placeholder" = "primjer.com";
 "screen_change_server_title" = "Odaberite svoj poslužitelj";
-"screen_change_server_title_login" = "Enter your account provider";
-"screen_change_server_title_register" = "Choose an account provider";
+"screen_change_server_title_login" = "Unesite davatelja usluge računa";
+"screen_change_server_title_register" = "Odaberite pružatelja usluga računa";
 "screen_chat_backup_key_backup_action_disable" = "Brisanje pohrane ključeva";
 "screen_chat_backup_key_backup_action_enable" = "Uključivanje sigurnosnog kopiranja";
 "screen_chat_backup_key_backup_description" = "To će vam omogućiti pregled povijesti razgovora na svim novim uređajima i potrebno je za sigurnosnu kopiju razgovora i digitalnog identiteta. %1$@ .";
@@ -771,7 +779,7 @@
 "screen_create_room_private_option_description" = "Samo pozvane osobe mogu se pridružiti.";
 "screen_create_room_private_option_title" = "Privatno";
 "screen_create_room_public_option_description" = "Svatko može pronaći ovu sobu.\nTo možete u svakom trenutku promijeniti u postavkama sobe.";
-"screen_create_room_public_option_short_description" = "Svatko se može pridružiti.";
+"screen_create_room_public_option_short_description" = "Svatko se može pridružiti, uključujući i osobe izvan vaše organizacije.";
 "screen_create_room_public_option_title" = "Javno";
 "screen_create_room_room_access_section_knocking_option_description" = "Svatko može zatražiti pridruživanje sobi, ali administrator ili moderator morat će prihvatiti zahtjev.";
 "screen_create_room_room_access_section_knocking_option_title" = "Dopusti traženje pridruživanja";
@@ -779,7 +787,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Zatraži pridruživanje";
 "screen_create_room_room_access_section_private_option_description" = "Samo pozvane osobe mogu pristupiti ovoj sobi. Sve su poruke sveobuhvatno šifrirane.";
 "screen_create_room_room_access_section_private_option_title" = "Privatno";
-"screen_create_room_room_access_section_public_option_description" = "Svatko se može pridružiti.";
+"screen_create_room_room_access_section_public_option_description" = "Svatko se može pridružiti, uključujući i osobe izvan vaše organizacije.";
 "screen_create_room_room_access_section_public_option_title" = "Javno";
 "screen_create_room_room_access_section_restricted_option_description" = "Svatko u %1$@ može se pridružiti.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "Nema zahtjeva za pridruživanje koji su na čekanju";
 "screen_knock_requests_list_initial_loading_title" = "Učitavanje zahtjeva za pridruživanje…";
 "screen_knock_requests_list_title" = "Zahtjevi za pridruživanje";
+"screen_labs_enable_gallery" = "Poruke iz galerije";
+"screen_labs_enable_gallery_description" = "Pošaljite više slika ili videozapisa odjednom. Stabilno na mobilnim uređajima, ali još nije podržano na webu.";
+"screen_labs_enable_knocking" = "Zatraži pridruživanje";
+"screen_labs_enable_knocking_description" = "Korisnici mogu zatražiti pristup sobi kojoj se nitko ne može pridružiti. Stabilno na mobilnim uređajima, web implementacija postoji, ali je eksperimentalna.";
 "screen_labs_enable_threads" = "Omogući odgovore u nizu";
 "screen_labs_enable_threads_description" = "Aplikacija će se ponovno pokrenuti kako bi se primijenila ova promjena.";
 "screen_labs_header_description" = "Isprobajte naše najnovije ideje u razvoju. Ove značajke nisu finalizirane; mogu biti nestabilne i mijenjati se.";
@@ -997,7 +1009,7 @@
 "screen_login_error_invalid_credentials" = "Netočno korisničko ime i/ili zaporka";
 "screen_login_error_invalid_user_id" = "To nije valjani identifikator korisnika. Očekivani oblik: ‘@korisnik:matičniposlužitelj.org’";
 "screen_login_error_refresh_tokens" = "Ovaj je poslužitelj konfiguriran za korištenje tokena za osvježavanje. Oni nisu podržani kada se upotrebljava prijava temeljena na zaporki.";
-"screen_login_error_unsupported_authentication" = "Odabrani matični poslužitelj ne podržava zaporku ili OAuth prijavu. Obratite se administratoru ili odaberite drugi matični poslužitelj.";
+"screen_login_error_unsupported_authentication" = "Odabrani pružatelj usluga računa ne podržava prijavu putem lozinke ili OAuth. Obratite se pružatelju usluga računa ili odaberite drugog.";
 "screen_login_form_header" = "Unesite svoje podatke";
 "screen_login_subtitle" = "Matrix je otvorena mreža za sigurnu, decentraliziranu komunikaciju.";
 "screen_login_title" = "Dobro došli natrag!";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "Članovi";
 "screen_room_change_role_unsaved_changes_description" = "Niste spremili sve promjene.";
 "screen_room_change_role_unsaved_changes_title" = "Želite li spremiti promjene?";
+"screen_room_confirm_removal_message" = "Jeste li sigurni da želite ukloniti ovu poruku?";
+"screen_room_confirm_removal_reason_label" = "Razlog (neobavezno)";
+"screen_room_confirm_removal_reason_placeholder" = "Unesite…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Neobavezno)";
+"screen_room_confirm_removal_title" = "Potvrdite uklanjanje";
 "screen_room_details_add_topic_title" = "Dodaj temu";
 "screen_room_details_badge_encrypted" = "Šifrirano";
 "screen_room_details_badge_not_encrypted" = "Nije šifrirano";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Želite li ih pozvati natrag?";
 "screen_room_invite_again_alert_title" = "Sami ste u ovom razgovoru";
 "screen_room_live_location_banner" = "Dijeljenje lokacije uživo";
+"screen_room_maximum_messages_selected" = "Odabran je maksimalan broj poruka";
 "screen_room_member_details_block_alert_action" = "Blokiraj";
 "screen_room_member_details_block_alert_description" = "Blokirani korisnici neće vam moći slati poruke i sve njihove poruke bit će skrivene. Možete ih odblokirati u bilo kojem trenutku.";
 "screen_room_member_details_block_user" = "Blokiraj korisnika";
@@ -1365,6 +1383,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Vaš matični poslužitelj ne podržava ovu mogućnost u šifriranim sobama; nećete dobiti obavijest u ovoj sobi.";
 "screen_room_notification_settings_mode_all_messages" = "Sve poruke";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Samo spominjanja i ključne riječi";
+"screen_room_notification_settings_mode_mute" = "Isključi zvuk";
 "screen_room_notification_settings_room_custom_settings_title" = "U ovoj sobi obavijesti me za";
 "screen_room_pinned_banner_indicator" = "%1$@ od %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Prikvačene poruke";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Nemate pozivnica na čekanju.";
 "screen_roomlist_filter_low_priority" = "Nizak prioritet";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Još nemate razgovora niskog prioriteta";
+"screen_roomlist_filter_mention" = "Spomeni";
+"screen_roomlist_filter_mention_empty_state_title" = "Nemate nepročitanih spominjanja";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Možete poništiti odabir filtara kako biste vidjeli ostale razgovore";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nemate razgovora za ovaj odabir";
 "screen_roomlist_filter_people" = "Osobe";
@@ -1450,7 +1471,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Nakon što se šifriranje omogući, više se neće moći onemogućiti.";
 "screen_security_and_privacy_encryption_section_header" = "Šifriranje";
 "screen_security_and_privacy_encryption_toggle_title" = "Omogući sveobuhvatno šifriranje";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Svatko se može pridružiti.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Svatko se može pridružiti, uključujući i osobe izvan vaše organizacije.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Bilo tko";
 "screen_security_and_privacy_room_access_footer" = "Odaberite iz kojih se prostora članovi mogu pridružiti ovoj sobi bez pozivnice. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Upravljaj prostorima";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Zatražena je provjera";
 "screen_session_verification_they_dont_match" = "Ne podudaraju se";
 "screen_session_verification_they_match" = "Podudaraju se";
+"screen_session_verification_unavailable_subtitle" = "Molimo koristite drugi uređaj ili ključ za oporavak.";
+"screen_session_verification_unavailable_title" = "Verifikacija s ovim uređajem trenutno nije dostupna";
 "screen_session_verification_use_another_device_subtitle" = "Prije nego što odavde započnete provjeru, provjerite jeste li otvorili aplikaciju na drugom uređaju.";
 "screen_session_verification_use_another_device_title" = "Otvorite aplikaciju na drugom potvrđenom uređaju";
 "screen_session_verification_user_initiator_subtitle" = "Radi dodatne sigurnosti potvrdite ovog korisnika tako da usporedite skup emotikona na svojim uređajima. Učinite to koristeći se pouzdanim načinom komunikacije.";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Pogreška: %1$@ .";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Pogreška, nije moguće testirati push obavijesti.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Pogreška, isteklo je vrijeme čekanja na push obavijest.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Pogreška: push gateway ograničava brzinu slanja obavijesti na ovom uređaju, pa obavijesti neće biti pouzdane. Postavite drugi push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Povratna push obavijest trajala je %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testiraj povratnu push obavijest";
 "troubleshoot_notifications_test_unified_push_description" = "Provjerite jesu li UnifiedPush distributeri dostupni.";

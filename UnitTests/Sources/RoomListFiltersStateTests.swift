@@ -19,7 +19,8 @@ import Testing
 final class RoomListFiltersStateTests {
     var appSettings: AppSettings
     var state: RoomListFiltersState
-    let allCasesWithoutLowPriority = RoomListFilter.allCases.filter { $0 != .lowPriority }
+    /// The filters that aren't hidden behind a feature flag.
+    let defaultFilters = RoomListFilter.allCases.filter { $0 != .mentions && $0 != .lowPriority }
     
     init() {
         appSettings = AppSettings.volatile()
@@ -30,7 +31,7 @@ final class RoomListFiltersStateTests {
     func initialState() {
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
-        #expect(state.availableFilters == allCasesWithoutLowPriority)
+        #expect(state.availableFilters == defaultFilters)
     }
     
     @Test
@@ -38,11 +39,11 @@ final class RoomListFiltersStateTests {
         state.activateFilter(.unreads)
         #expect(state.isFiltering)
         #expect(state.activeFilters == [.unreads])
-        #expect(state.availableFilters == [.people, .rooms, .favourites])
+        #expect(state.availableFilters == [.favourites, .people, .rooms])
         state.deactivateFilter(.unreads)
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
-        #expect(state.availableFilters == allCasesWithoutLowPriority)
+        #expect(state.availableFilters == defaultFilters)
     }
     
     @Test
@@ -55,7 +56,7 @@ final class RoomListFiltersStateTests {
         state.deactivateFilter(.people)
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
-        #expect(state.availableFilters == allCasesWithoutLowPriority)
+        #expect(state.availableFilters == defaultFilters)
         
         state.activateFilter(.rooms)
         #expect(state.isFiltering)
@@ -66,6 +67,14 @@ final class RoomListFiltersStateTests {
         #expect(state.isFiltering)
         #expect(state.activeFilters == [.rooms, .unreads])
         #expect(state.availableFilters == [.favourites])
+    }
+    
+    @Test
+    func ignoresIncompatibleFilter() {
+        state.activateFilter(.people)
+        state.activateFilter(.invites)
+        
+        #expect(state.activeFilters == [.people])
     }
     
     @Test
@@ -85,7 +94,7 @@ final class RoomListFiltersStateTests {
         state.clearFilters()
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
-        #expect(state.availableFilters == allCasesWithoutLowPriority)
+        #expect(state.availableFilters == defaultFilters)
     }
     
     @Test
@@ -96,7 +105,7 @@ final class RoomListFiltersStateTests {
         
         state.deactivateFilter(.favourites)
         #expect(state.activeFilters == [])
-        #expect(state.availableFilters == allCasesWithoutLowPriority)
+        #expect(state.availableFilters == defaultFilters)
         
         state.activateFilter(.rooms)
         #expect(state.activeFilters == [.rooms])
@@ -119,17 +128,38 @@ final class RoomListFiltersStateTests {
         enableLowPriorityFeature()
         #expect(!state.isFiltering)
         #expect(state.activeFilters == [])
-        #expect(state.availableFilters == RoomListFilter.allCases)
+        #expect(state.availableFilters == defaultFilters + [.lowPriority])
         
         state.activateFilter(.lowPriority)
         #expect(state.activeFilters == [.lowPriority])
         #expect(state.availableFilters == [.unreads, .people, .rooms])
     }
     
+    // MARK: Mentions feature flag
+    
+    /// Don't forget to add .mentions into the mix above when enabling the feature.
+    @Test
+    func withMentionsFeature() {
+        enableMentionsFeature()
+        #expect(!state.isFiltering)
+        #expect(state.activeFilters == [])
+        #expect(state.availableFilters == [.unreads, .mentions, .favourites, .people, .rooms, .invites])
+        
+        state.activateFilter(.mentions)
+        #expect(state.isFiltering)
+        #expect(state.activeFilters == [.mentions])
+        #expect(state.availableFilters == [.unreads, .favourites, .people, .rooms])
+    }
+    
     // MARK: - Helpers
     
     private func enableLowPriorityFeature() {
         appSettings.lowPriorityFilterEnabled = true
+        state = RoomListFiltersState(appSettings: appSettings)
+    }
+    
+    private func enableMentionsFeature() {
+        appSettings.mentionsFilterEnabled = true
         state = RoomListFiltersState(appSettings: appSettings)
     }
 }

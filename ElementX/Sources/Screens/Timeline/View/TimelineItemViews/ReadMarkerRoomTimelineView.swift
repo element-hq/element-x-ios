@@ -6,7 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import Compound
 import SwiftUI
 
 struct ReadMarkerRoomTimelineView: View {
@@ -15,10 +15,11 @@ struct ReadMarkerRoomTimelineView: View {
             Text(L10n.screenRoomTimelineReadMarkerTitle)
                 .textCase(.uppercase)
                 .font(.compound.bodyXSSemibold)
-                .foregroundColor(.compound.textSecondary)
+                .foregroundColor(.compound.textActionAccent)
+            
             Rectangle()
                 .frame(height: 0.5)
-                .foregroundColor(.compound.borderInteractivePrimary)
+                .foregroundColor(.compound.borderAccentPrimary)
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)

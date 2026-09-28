@@ -41,10 +41,10 @@ struct ToolbarButton: View {
             }
         }
         
-        var tint: Color {
+        var tint: Color? {
             switch self {
             case .cancel:
-                .compound.bgCanvasDefault
+                nil
             case .confirm:
                 .compound.bgAccentRest
             case .destructive:
@@ -58,15 +58,27 @@ struct ToolbarButton: View {
     
     var body: some View {
         if #available(iOS 26, *) {
-            Button(action: action) {
-                role.icon
-                    .accessibilityLabel(role.title)
+            if let tint = role.tint {
+                glassButton
+                    .tint(tint)
+                    .backportButtonStyleGlassProminent()
+            } else {
+                glassButton
             }
-            .tint(role.tint)
-            .backportButtonStyleGlassProminent()
         } else {
-            Button(role.title, action: action)
+            flatButton
         }
+    }
+    
+    private var glassButton: some View {
+        Button(action: action) {
+            role.icon
+                .accessibilityLabel(role.title)
+        }
+    }
+    
+    private var flatButton: some View {
+        Button(role.title, action: action)
     }
 }
 

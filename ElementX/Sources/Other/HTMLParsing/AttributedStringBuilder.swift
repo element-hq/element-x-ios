@@ -24,6 +24,7 @@ nonisolated protocol MentionBuilderProtocol: Sendable {
 
 nonisolated extension NSAttributedString.Key {
     static let MatrixBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
+    static let MatrixDetails: NSAttributedString.Key = .init(rawValue: DetailsAttribute.name)
     static let MatrixUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
     static let MatrixUserDisplayName: NSAttributedString.Key = .init(rawValue: UserDisplayNameAttribute.name)
     static let MatrixRoomDisplayName: NSAttributedString.Key = .init(rawValue: RoomDisplayNameAttribute.name)
@@ -43,6 +44,8 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let mentionBuilder: MentionBuilderProtocol
     
     private static let attributeMSC4286 = "msc4286-external-payment-details"
+    /// Tags whose content already ends in a newline.
+    private static let lineTerminatingTags: Set = ["p", "div", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "ul", "ol", "li"]
     private static let caches = Mutex<[String: LRUCache<String, AttributedString>]>([:])
     
     static func invalidateCaches() {
@@ -119,6 +122,14 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         for node in element.getChildNodes() {
             if let textNode = node as? TextNode {
+                // Markdown generated HTML separates block elements and list items with newlines.
+                // SwiftSoup normalises those whitespace only nodes into stray spaces which misindent
+                // the following line, whereas HTML rendering collapses them away entirely.
+                if !preserveFormatting, textNode.isBlank(),
+                   Self.isLineTerminating(node.previousSibling()) || Self.isLineTerminating(node.nextSibling()) {
+                    continue
+                }
+                
                 // If this node is plain text append the whitespace normalised version
                 if node.parent() == documentBody {
                     result.append(NSAttributedString(string: textNode.text()))
@@ -175,7 +186,7 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: content.length))
                 
-            case "s", "del":
+            case "s", "del", "strike":
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: content.length))
                 
@@ -192,6 +203,22 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             case "blockquote":
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.MatrixBlockquote, value: true, range: NSRange(location: 0, length: content.length))
+                
+            case "details":
+                // Pull the summary out of the tree so that it isn't rendered inline with the content,
+                // it is used as the title of the collapsed component instead.
+                let summaryElement = childElement.getChildNodes()
+                    .lazy
+                    .compactMap { $0 as? Element }
+                    .first { $0.tagName().lowercased() == "summary" }
+                let summary = summaryElement.flatMap { try? $0.text() } ?? ""
+                try? summaryElement?.remove()
+                
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                
+                // Browsers fall back to a default title when the summary is missing, match them.
+                let title = summary.isEmpty ? L10n.a11yViewDetails : summary
+                content.addAttribute(.MatrixDetails, value: title, range: NSRange(location: 0, length: content.length))
                 
             case "code", "pre":
                 let isCodeBlock = tag == "pre"
@@ -276,6 +303,14 @@ nonisolated struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         return result
+    }
+    
+    private static func isLineTerminating(_ node: Node?) -> Bool {
+        guard let element = node as? Element else {
+            return false
+        }
+        
+        return lineTerminatingTags.contains(element.tagName().lowercased())
     }
     
     private static func cacheValue(_ value: AttributedString?, forKey key: String, cacheKey: String) {

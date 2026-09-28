@@ -19,6 +19,7 @@ import SwiftUI
 nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     var lastNotificationBootTime: TimeInterval? { get set }
     var selectedNotificationTone: NotificationTone? { get set }
+    var lastKnownBadgeCount: Int { get set }
     
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
@@ -30,6 +31,7 @@ nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var threadsEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
+    var roomListNotificationCountEnabled: Bool { get }
 }
 
 nonisolated enum AppBuildType {
@@ -73,12 +75,13 @@ final nonisolated class AppSettings: @unchecked Sendable {
     func resetSessionSpecificSettings() {
         MXLog.warning("Resetting the user session specific AppSettings.")
         resetHasRunIdentityConfirmationOnboarding()
+        resetSearchBreadcrumbs()
     }
     
     // MARK: - Hooks
     
     // swiftlint:disable:next function_parameter_count
-    func override(accountProviders: [String],
+    func override(accountProviders: [AccountProvider],
                   allowOtherAccountProviders: Bool,
                   hideBrandChrome: Bool,
                   pushGatewayBaseURL: URL,
@@ -139,6 +142,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var hasSeenNewSoundBanner: Bool
     
+<<<<<<< HEAD
     // The initial set of account providers shown to the user in the authentication flow.
     //
     // Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
@@ -176,6 +180,13 @@ final nonisolated class AppSettings: @unchecked Sendable {
     #else
     private(set) var accountProviders = ["matrix.org"]
     #endif
+=======
+    /// The initial set of account providers shown to the user in the authentication flow.
+    ///
+    /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
+    /// match the last part of the user ID. For example `example.com` and not `https://matrix.example.com`.
+    private(set) var accountProviders: [AccountProvider] = [.managed(serverName: "matrix.org", baseURL: "https://matrix-client.matrix.org")]
+>>>>>>> release/26.09.2
     /// Whether or not the user is allowed to manually enter their own account provider or must select from one of `defaultAccountProviders`.
     private(set) var allowOtherAccountProviders = true
     /// Whether the components surrounding the app brand/logo should be hidden or not
@@ -256,8 +267,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(key: "previousServers", defaultValue: [])
     var previousServers: [String]
     
-    var defaultServer: String {
-        previousServers.first ?? accountProviders[0]
+    var defaultAccountProvider: AccountProvider {
+        if allowOtherAccountProviders {
+            previousServers.first.map { .generic($0) } ?? accountProviders[0]
+        } else {
+            accountProviders[0]
+        }
     }
     
     // MARK: - Security
@@ -358,6 +373,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// The device's last boot time as recorded by the NSE.
     @UserPreference
     var lastNotificationBootTime: TimeInterval?
+    
+    /// The app icon badge value the app last computed from the SDK's unread notification counts.
+    @UserPreference(defaultValue: 0)
+    var lastKnownBadgeCount: Int
     
     /// The sound played when delivering noisy notifications. If nil, use the ElementX default
     @UserPreference
@@ -464,6 +483,15 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: RoomListActivityVisibility.current)
     var roomListActivityVisibility: RoomListActivityVisibility
     
+    @UserPreference(defaultValue: false)
+    var roomListNotificationCountEnabled: Bool
+    
+    // MARK: - Search Screen
+    
+    /// The queries the user searched for and the rooms they opened from the results, most recent first.
+    @UserPreference(defaultValue: [SearchBreadcrumb]())
+    var searchBreadcrumbs: [SearchBreadcrumb]
+    
     // MARK: - Room Screen
     
     @UserPreference(defaultValue: AppBuildType.current == .debug)
@@ -537,6 +565,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var lowPriorityFilterEnabled: Bool
     
+    @UserPreference(defaultValue: false)
+    var mentionsFilterEnabled: Bool
+    
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(defaultValue: false)
     var enableOnlySignedDeviceIsolationMode: Bool
@@ -548,7 +579,7 @@ final nonisolated class AppSettings: @unchecked Sendable {
     var threadsEnabled: Bool
     
     @UserPreference(defaultValue: false)
-    var roomThreadListEnabled: Bool
+    var messageMultiSelectEnabled: Bool
     
     @UserPreference(defaultValue: ProcessInfo().isiOSAppOnMac)
     var globalSearchEnabled: Bool
@@ -576,11 +607,12 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(key: "clientPausingAndResumingEnabledV2", defaultValue: false, volatile: true)
     var clientPausingAndResumingEnabled: Bool
     
-    @UserPreference(defaultValue: false)
-    var userStatusEnabled: Bool
-    
     @UserPreference(defaultValue: AppBuildType.current != .release)
     var developerOptionsEnabled: Bool
+    
+    /// Runs calls through the native matrix-rust-rtc stack instead of the Element Call web view.
+    @UserPreference(defaultValue: false)
+    var nativeCallEnabled: Bool
     
     init(store: UserDefaultsProtocol) {
         self.store = store

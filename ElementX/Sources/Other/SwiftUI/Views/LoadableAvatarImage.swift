@@ -58,9 +58,12 @@ struct LoadableAvatarImage: View {
     private var clippedAvatar: some View {
         avatar
             .frame(width: frameSize, height: frameSize)
-            .background(Color.compound.bgCanvasDefault)
+            .background {
+                Color.compound.bgCanvasDefault
+                    .allowedDynamicRange(.standard) // Workaround an iOS 27.0 bug where full white goes HDR in a toolbar.
+            }
             .avatarShape(shape, scaledSize: _frameSize)
-            .allowedDynamicRange(.standard) // Prevent avatars from triggering HDR display.
+            .allowedDynamicRange(.standard) // Prevent loaded avatars from triggering HDR display.
             .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
     }
     

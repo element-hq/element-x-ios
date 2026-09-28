@@ -16,6 +16,8 @@ struct LabsScreen: View {
         Form {
             header
             threadsSection
+            gallerySection
+            knockingSection
         }
         .compoundList()
         .navigationTitle(L10n.screenLabsTitle)
@@ -57,6 +59,28 @@ struct LabsScreen: View {
         }
         .onChange(of: context.threadsEnabled) { _, _ in
             context.send(viewAction: .clearCache)
+        }
+    }
+    
+    private var gallerySection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.screenLabsEnableGallery,
+                                    icon: \.image),
+                    kind: .toggle($context.galleryEnabled))
+        } footer: {
+            Text(L10n.screenLabsEnableGalleryDescription)
+                .compoundListSectionFooter()
+        }
+    }
+    
+    private var knockingSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.screenLabsEnableKnocking,
+                                    icon: \.askToJoin),
+                    kind: .toggle($context.knockingEnabled))
+        } footer: {
+            Text(L10n.screenLabsEnableKnockingDescription)
+                .compoundListSectionFooter()
         }
     }
 }

@@ -25,7 +25,7 @@ struct SettingsScreen: View {
         Form {
             userSection
             
-            if context.viewState.showUserStatus {
+            if context.viewState.showUserStatusInput {
                 userStatusSection
             }
             
@@ -48,6 +48,13 @@ struct SettingsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarVisibility(context.viewState.navigationBarVisibility, for: .navigationBar)
         .toolbar { toolbar }
+        .sheet(isPresented: $context.isPresentingStatusPicker) {
+            SettingsScreenUserStatusPickerView { action in
+                context.send(viewAction: .userStatus(action))
+            }
+            .presentationDetents([.medium])
+            .presentationBackground(.compound.bgCanvasDefault)
+        }
     }
     
     private var userSection: some View {
@@ -98,13 +105,6 @@ struct SettingsScreen: View {
         Section {
             SettingsScreenUserStatusRow(mode: context.viewState.userStatusRowMode) { action in
                 context.send(viewAction: .userStatus(action))
-            }
-            .sheet(isPresented: $context.isPresentingStatusPicker) {
-                SettingsScreenUserStatusPickerView { action in
-                    context.send(viewAction: .userStatus(action))
-                }
-                .presentationDetents([.medium]) // Stop using a List and calculate the exact height?
-                .presentationBackground(.compound.bgCanvasDefault)
             }
         }
     }
@@ -275,7 +275,10 @@ struct SettingsScreen: View {
     }
     
     private var versionText: Text {
-        Text(L10n.settingsVersionNumber(InfoPlistReader.main.bundleShortVersionString, InfoPlistReader.main.bundleVersion))
+        // Let's not snapshot a changing version string.
+        let shortVersion = ProcessInfo.isRunningTests ? "0.0.0" : InfoPlistReader.main.bundleShortVersionString
+        let version = ProcessInfo.isRunningTests ? "1" : InfoPlistReader.main.bundleVersion
+        return Text(L10n.settingsVersionNumber(shortVersion, version))
     }
     
     private var toolbar: some ToolbarContent {
@@ -305,12 +308,16 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
             SettingsScreen(context: viewModel.context)
         }
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
+        .frame(height: 1100)
+        .previewLayout(.sizeThatFits)
         .previewDisplayName("Default")
         
         ElementNavigationStack {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
         .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
+        .frame(height: 1050)
+        .previewLayout(.sizeThatFits)
         .previewDisplayName("Bug report disabled")
     }
     

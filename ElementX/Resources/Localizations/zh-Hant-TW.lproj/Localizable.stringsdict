@@ -24,10 +24,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Gallery, %1$d more media</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>圖庫，還有 %1$d 項媒體內容</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -476,6 +474,22 @@
 			<string>d</string>
 			<key>other</key>
 			<string>%1$@ 與 %2$d 個其他人想要加入此聊天室</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_room_selection_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d message selected</string>
+			<key>other</key>
+			<string>%1$d messages selected</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

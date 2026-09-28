@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Opakovať dešifrovanie";
 "action_save" = "Uložiť";
 "action_search" = "Hľadať";
+"action_select" = "Select";
 "action_select_all" = "Vybrať všetko";
 "action_send" = "Odoslať";
 "action_send_edited_message" = "Odoslať upravenú správa";
@@ -375,6 +376,7 @@
 "common_success" = "Úspech";
 "common_suggested" = "Navrhované";
 "common_suggestions" = "Návrhy";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Synchronizuje sa";
 "common_text" = "Text";
 "common_third_party_notices" = "Oznámenia tretích strán";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "Nebola nájdená žiadna kompatibilná aplikácia, ktorá by túto akciu dokázala spracovať.";
 "error_room_address_already_exists" = "Táto adresa miestnosti už existuje, skúste upraviť pole adresy miestnosti alebo zmeňte názov miestnosti";
 "error_room_address_invalid_symbols" = "Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ & '() * +/; =? @ [] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Niektoré správy neboli odoslané";
 "error_unknown" = "Prepáčte, vyskytla sa chyba";
 "error.account_already_logged_in" = "Už ste prihlásený/á na tomto zariadení ako %1$@ .";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Odmietnuť";
 "notification_invite_body" = "Vás pozval/a na konverzáciu";
 "notification_invite_body_with_sender" = "%1$@ vás pozval/a na rozhovor";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Spomenul/a vás: %1$@";
 "notification_new_messages" = "Nové správy";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "Žiadna čakajúca žiadosť o pripojenie";
 "screen_knock_requests_list_initial_loading_title" = "Načítavajú sa žiadosti o pripojenie…";
 "screen_knock_requests_list_title" = "Žiadosti o vstup";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Povoliť odpovede vo vlákne";
 "screen_labs_enable_threads_description" = "Aplikácia sa reštartuje, aby sa táto zmena prejavila.";
 "screen_labs_header_description" = "Vyskúšajte naše najnovšie nápady vo vývoji. Tieto funkcie nie sú finalizované; môžu byť nestabilné a môžu sa zmeniť.";
@@ -1043,7 +1055,7 @@
 "screen_missing_key_backup_open_element_classic" = "Open Element Classic";
 "screen_missing_key_backup_step_1" = "Open Element Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "Členovia";
 "screen_room_change_role_unsaved_changes_description" = "Máte neuložené zmeny.";
 "screen_room_change_role_unsaved_changes_title" = "Uložiť zmeny?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Pridať tému";
 "screen_room_details_badge_encrypted" = "Zašifrované";
 "screen_room_details_badge_not_encrypted" = "Nešifrované";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Chceli by ste ich pozvať späť?";
 "screen_room_invite_again_alert_title" = "V tomto rozhovore ste sami";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Zablokovať";
 "screen_room_member_details_block_alert_description" = "Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať.";
 "screen_room_member_details_block_user" = "Zablokovať používateľa";
@@ -1365,6 +1383,7 @@
 "screen_room_notification_settings_mentions_only_disclaimer" = "Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v tejto miestnosti nedostanete upozornenie.";
 "screen_room_notification_settings_mode_all_messages" = "Všetky správy";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Iba zmienky a kľúčové slová";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "V tejto miestnosti ma upozorniť na";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pripnutých správ";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Nemáte žiadne čakajúce pozvánky.";
 "screen_roomlist_filter_low_priority" = "Nízka priorita";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Zatiaľ nemáte žiadne konverzácie s nízkou prioritou.";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nemáte konverzácie pre tento výber";
 "screen_roomlist_filter_people" = "Ľudia";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Vyžadované overenie";
 "screen_session_verification_they_dont_match" = "Nezhodujú sa";
 "screen_session_verification_they_match" = "Zhodujú sa";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Pred začatím overovania odtiaľto sa uistite, že máte aplikáciu otvorenú v inom zariadení.";
 "screen_session_verification_use_another_device_title" = "Otvorte aplikáciu na inom overenom zariadení";
 "screen_session_verification_user_initiator_subtitle" = "Pre väčšiu bezpečnosť overte tohto používateľa porovnaním sady emotikonov vo vašich zariadeniach. Urobte to pomocou dôveryhodného spôsobu komunikácie.";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Chyba: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Chyba, nie je možné testovať push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Chyba, časový limit na push vypršal.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back trvalo %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Testovať Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Uistite sa, že sú dostupní distribútori UnifiedPush.";

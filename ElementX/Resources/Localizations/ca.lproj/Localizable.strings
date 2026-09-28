@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Torna a intentar desxifrar";
 "action_save" = "Desa";
 "action_search" = "Cerca";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Envia";
 "action_send_edited_message" = "Send edited message";
@@ -375,6 +376,7 @@
 "common_success" = "Correcte";
 "common_suggested" = "Suggested";
 "common_suggestions" = "Suggeriments";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Sincronitzant";
 "common_text" = "Text";
 "common_third_party_notices" = "Avisos de tercers";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "No s'ha trobat cap aplicació compatible per gestionar aquesta acció.";
 "error_room_address_already_exists" = "Aquesta adreça de sala ja existeix. Prova d'editar el camp d'adreça o de canviar el nom de sala";
 "error_room_address_invalid_symbols" = "Alguns caràcters no estan permesos. Només s'admeten lletres, dígits i els símbols següents: ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Alguns missatges no s'han enviat";
 "error_unknown" = "S'ha produït un error";
 "error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Rebutja";
 "notification_invite_body" = "T'ha convidat a xatejar";
 "notification_invite_body_with_sender" = "%1$@ t'ha convidat a xatejar";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "T'ha mencionat: %1$@";
 "notification_new_messages" = "Missatges nous";
@@ -709,7 +717,7 @@
 "screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "No s'ha pogut accedir a aquest servidor. Comprova que hagis introduït correctament l'URL del servidor. Si ja és correcte, posa't en contacte amb l'administrador del servidor per a més informació.";
 "screen_change_server_error_invalid_well_known" = "Servidor no disponible a causa d'un problema al fitxer .well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. The server needs to be upgraded to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
@@ -771,7 +779,7 @@
 "screen_create_room_private_option_description" = "Només s'hi poden unir les persones convidades.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Tothom pot trobar aquesta sala.\nPots canviar-ho en qualsevol moment a la configuració de sala.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Qualsevol persona pot sol·licitar unir-s'hi però un administrador o moderador l'haurà d'acceptar";
 "screen_create_room_room_access_section_knocking_option_title" = "Permet sol·licituds d'unió";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "No hi ha sol·licituds d'unió pendents";
 "screen_knock_requests_list_initial_loading_title" = "Carregant sol·licituds d'unió…";
 "screen_knock_requests_list_title" = "Sol·licituds d'unió";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -952,11 +964,11 @@
 "screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
-"screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
+"screen_leave_space_subtitle_last_admin" = "You need to assign another administrator for this space before you can leave.";
 "screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
-"screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_leave_space_title_last_admin" = "You are the only administrator for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Escaneja el QR";
@@ -1043,7 +1055,7 @@
 "screen_missing_key_backup_open_element_classic" = "Open Element Classic";
 "screen_missing_key_backup_step_1" = "Open Element Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "Membres";
 "screen_room_change_role_unsaved_changes_description" = "Hi ha canvis sense desar.";
 "screen_room_change_role_unsaved_changes_title" = "Desar canvis?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Afegeix tema";
 "screen_room_details_badge_encrypted" = "Xifrada";
 "screen_room_details_badge_not_encrypted" = "No xifrada";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Vols tornar-los a convidar-los?";
 "screen_room_invite_again_alert_title" = "No hi ha ningú més al xat";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Bloqueja";
 "screen_room_member_details_block_alert_description" = "Els usuaris bloquejats no podran enviar-te missatges i tots els seus missatges s'amagaran. Pots desbloquejar-los en qualsevol moment.";
 "screen_room_member_details_block_user" = "Bloqueja usuari";
@@ -1363,8 +1381,9 @@
 "screen_room_notification_settings_error_restoring_default" = "No s'ha pogut restaurar el mode predeterminat. Torna-ho a provar.";
 "screen_room_notification_settings_error_setting_mode" = "No s'ha pogut configurar el mode. Torna-ho a provar.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "El servidor no admet aquesta opció en sales xifrades, no rebras notificacions en aquesta sala.";
-"screen_room_notification_settings_mode_all_messages" = "Tots els missatges";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Mencions y paraules clau (només)";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "En aquesta sala, notifica'm en";
 "screen_room_pinned_banner_indicator" = "%1$@ de %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ missatges fixats";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "No tens cap invitació pendent.";
 "screen_roomlist_filter_low_priority" = "Prioritat baixa";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Pots desseleccionar els filtres per veure els altres xats";
 "screen_roomlist_filter_mixed_empty_state_title" = "Cap xats per a aquesta selecció";
 "screen_roomlist_filter_people" = "Persones";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Verificació sol·licitada";
 "screen_session_verification_they_dont_match" = "No coincideixen";
 "screen_session_verification_they_match" = "Coincideixen";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Assegura't que tens l'aplicació oberta a l'altre dispositiu abans d'inicar la verificació des d'aquí.";
 "screen_session_verification_use_another_device_title" = "Obre l'aplicació en un altre dispositiu verificat";
 "screen_session_verification_user_initiator_subtitle" = "Per a més seguretat, verifica aquest usuari comparant un conjunt d'emoticones vostres dispositius. Fes-ho a través d'un mitjà de comunicació fiable, o en persona.";
@@ -1570,7 +1593,7 @@
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_space_menu_action_members" = "View members";
-"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Security & privacy.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "Rols i permisos";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Error: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Error, no s'han pogut provar les notificacions push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Error, s'ha acabat el temps d'espera de la notificació push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "El bucle de notificacions push ha tardat %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Prova el bucle de notificacions push";
 "troubleshoot_notifications_test_unified_push_description" = "Assegura't que hi hagi distribuïdors d'UnifiedPush disponibles.";

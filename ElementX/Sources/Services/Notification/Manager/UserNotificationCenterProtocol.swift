@@ -15,6 +15,7 @@ protocol UserNotificationCenterProtocol: AnyObject {
     func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
     func deliveredNotifications() async -> [UNNotification]
     func removeDeliveredNotifications(withIdentifiers identifiers: [String])
+    func setBadgeCount(_ newBadgeCount: Int) async throws
     func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
     func authorizationStatus() async -> UNAuthorizationStatus
     func notificationSettings() async -> UNNotificationSettings

@@ -74,9 +74,9 @@ struct TimelineControllerMockConfiguration {
             _ = await timelineProxy.toggleReaction(reaction, to: eventOrTransactionID)
         }
         
-        redactClosure = { [timelineProxy] eventOrTransactionID in
+        redactReasonClosure = { [timelineProxy] eventOrTransactionID, reason in
             guard let timelineProxy else { return }
-            _ = await timelineProxy.redact(eventOrTransactionID, reason: nil)
+            _ = await timelineProxy.redact(eventOrTransactionID, reason: reason)
         }
         
         editMessageHtmlIntentionalMentionsClosure = { [weak self] _, message, _, _ in

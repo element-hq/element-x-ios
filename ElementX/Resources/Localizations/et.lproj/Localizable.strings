@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Proovi dekrüptimist uuesti";
 "action_save" = "Salvesta";
 "action_search" = "Otsi";
+"action_select" = "Select";
 "action_select_all" = "Vali kõik";
 "action_send" = "Saada";
 "action_send_edited_message" = "Saada muudetud sõnum";
@@ -375,6 +376,7 @@
 "common_success" = "Õnnestus";
 "common_suggested" = "Soovitatud";
 "common_suggestions" = "Soovitused";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Sünkroniseerime";
 "common_text" = "Tekst";
 "common_third_party_notices" = "Kolmandate osapoolte teatised";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "Ei õnnestunud leida selle tegevuse jaoks vajalikku välist rakendust.";
 "error_room_address_already_exists" = "Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime";
 "error_room_address_invalid_symbols" = "Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Vigane MIME-tüüp: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Vea üksikasjad: %@";
+"error_sending_failure_sending_from_unverified_device" = "Saadetakse verifitseerimata seadmest";
+"error_sending_failure_unknown" = "Tundmatu viga";
 "error_some_messages_have_not_been_sent" = "Mõned sõnumid on saatmata";
 "error_unknown" = "Vabandust, ilmnes viga";
 "error.account_already_logged_in" = "Sa juba oled sellesse seadmesse sisseloginud kasutajana %1$@.";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Keeldu";
 "notification_invite_body" = "Kutse osalema vestluses";
 "notification_invite_body_with_sender" = "%1$@ saatus sulle vestluskutse";
+"notification_knock_request_body" = "Palun võimalust liitumiseks";
 "notification_live_location_started_body" = "Hakkas jagama oma asukohta reaalajas";
 "notification_mentioned_you_body" = "Mainis sind: %1$@";
 "notification_new_messages" = "Uued sõnumid";
@@ -537,7 +545,7 @@
 "notification_sender_mention_reply" = "%1$@ mainis või vastas";
 "notification_space_invite_body" = "Kutsus sind liituma kogukonnaga";
 "notification_space_invite_body_with_sender" = "%1$@ kutsus sind liituma kogukonnaga";
-"notification_test_push_notification_content" = "See ongi teavitus! Klõpsi mind!";
+"notification_test_push_notification_content" = "See ongi teavitus! Klõpsa mind!";
 "notification_thread_in_room" = "Jutulõng „%1$@“ jututoas";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "Pole ühtegi liitumispalvet";
 "screen_knock_requests_list_initial_loading_title" = "Laadime liitumispalveid…";
 "screen_knock_requests_list_title" = "Liitumispalved";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Võta kasutusele vastamine jutulõngas";
 "screen_labs_enable_threads_description" = "Selle muudatuse jõustamiseks käivitub rakendus uuesti.";
 "screen_labs_header_description" = "Katseta meie uusimaid arendusideid. Need funktsionaalsused pole veel lõplikud, nad ei pruugi toimida parimal viisil ning võivad veel muutuda.";
@@ -1074,7 +1086,7 @@
 "screen_notification_settings_mode_all" = "Kõik";
 "screen_notification_settings_mode_mentions" = "Mainimiste alusel";
 "screen_notification_settings_notification_section_title" = "Teavita mind";
-"screen_notification_settings_room_mention_label" = "Teavita mind @jututoa puhul";
+"screen_notification_settings_room_mention_label" = "@jututoa mainimised";
 "screen_notification_settings_sound_custom_fallback" = "Kohandatud";
 "screen_notification_settings_sound_custom_sound_button_title" = "Sinu valitud helin...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Viga faili kustutamisel";
@@ -1161,7 +1173,7 @@
 "screen_qr_code_login_error_sliding_sync_not_supported_title" = "%1$@ pole toetatud";
 "screen_qr_code_login_initial_state_button_title" = "Skaneerimiseks valmis";
 "screen_qr_code_login_initial_state_item_1" = "Ava %1$@ töölauarakenduses";
-"screen_qr_code_login_initial_state_item_2" = "Klõpsi oma tunnuspilti";
+"screen_qr_code_login_initial_state_item_2" = "Klõpsa oma tunnuspilti";
 "screen_qr_code_login_initial_state_item_3" = "Vali %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Seo uus seade“";
 "screen_qr_code_login_initial_state_item_4" = "Skaneeri QR-koodi selle seadmega";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "Liikmed";
 "screen_room_change_role_unsaved_changes_description" = "Sul on salvestamata muudatusi";
 "screen_room_change_role_unsaved_changes_title" = "Kas salvestame muudatused?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Lisa teema";
 "screen_room_details_badge_encrypted" = "Krüptitud jututuba";
 "screen_room_details_badge_not_encrypted" = "Krüptimata jututuba";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Kas sa sooviksid neid tagasi kutsuda?";
 "screen_room_invite_again_alert_title" = "Sa oled selles vestluses üksinda";
 "screen_room_live_location_banner" = "Asukoht on jagamisel reaalajas";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Blokeeri";
 "screen_room_member_details_block_alert_description" = "Blokeeritud kasutajad ei saa sulle kirjutada ja kõik nende sõnumid on sinu eest peidetud. Sa saad alati blokeeringu eemaldada.";
 "screen_room_member_details_block_user" = "Blokeeri kasutaja";
@@ -1363,8 +1381,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Vaikimisi seadistuste taastamine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_notification_settings_error_setting_mode" = "Seadistuste muutmine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Sinu koduserver ei toeta seda võimalust krüptitud jututubades, seega sa ei saa selle jututoa kohta teavitusi.";
-"screen_room_notification_settings_mode_all_messages" = "Kõikide sõnumite korral";
+"screen_room_notification_settings_mode_all_messages" = "Kõik sõnumid";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Mainimiste ja võtmesõnade alusel";
+"screen_room_notification_settings_mode_mute" = "Summuta";
 "screen_room_notification_settings_room_custom_settings_title" = "Selles jututoas teavita mind";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ esiletõstetud sõnumit";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Sul pole ootel kutseid.";
 "screen_roomlist_filter_low_priority" = "Vähetähtis";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Sul pole veel ühtegi olulist vestlust";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Oma teiste vestluste nägemiseks sa pead filtrid eemaldama";
 "screen_roomlist_filter_mixed_empty_state_title" = "Selle valiku jaoks sul veel pole vestlusi";
 "screen_roomlist_filter_people" = "Inimesed";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Verifitseerimispäring";
 "screen_session_verification_they_dont_match" = "Nad ei klapi omavahel";
 "screen_session_verification_they_match" = "Nad klapivad omavahel";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Enne kui alustad siin verifitseerimist, palun ava rakendus teises seadmes.";
 "screen_session_verification_use_another_device_title" = "Ava rakendus teises verifitseeritud seadmes";
 "screen_session_verification_user_initiator_subtitle" = "Lisaturvalisuse nimel verifitseeri seee kasutaja, võrreldes oma seadmetes olevaid emojisid. Tee seda, kasutades usaldusväärset suhtlusviisi.";
@@ -1707,7 +1730,7 @@
 "troubleshoot_notifications_test_display_notification_permission_failure" = "Teavituse kuvamine ei õnnestu.";
 "troubleshoot_notifications_test_display_notification_success" = "Sa oled teavitust klõpsinud!";
 "troubleshoot_notifications_test_display_notification_title" = "Kuva teavitust";
-"troubleshoot_notifications_test_display_notification_waiting" = "Testiga jätkamiseks palun klõpsi teavitust.";
+"troubleshoot_notifications_test_display_notification_waiting" = "Testiga jätkamiseks palun klõpsa teavitust.";
 "troubleshoot_notifications_test_firebase_availability_description" = "Palun veendu, et Firebase oleks saadaval.";
 "troubleshoot_notifications_test_firebase_availability_failure" = "Firebase pole saadaval.";
 "troubleshoot_notifications_test_firebase_availability_success" = "Firebase on saadaval.";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Viga: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Viga: katselist tõuketeavitust pole võimalik teha.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Viga: tõuketeavituse ootamisel tekkis aegumine.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Kogu tõuketeavituse ringi tegemiseks kulus %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Tee tõuketeenuse silmustest";
 "troubleshoot_notifications_test_unified_push_description" = "Palun veendu, et UnifiedPushi levitajad on saadaval.";

@@ -15,7 +15,7 @@ struct HomeScreenEmptyStateView: View {
     let context: HomeScreenViewModel.Context
     
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 2) {
             Text(L10n.screenRoomlistEmptyTitle)
                 .font(.compound.bodyLG)
                 .foregroundColor(.compound.textSecondary)
@@ -25,14 +25,14 @@ struct HomeScreenEmptyStateView: View {
                 .font(.compound.bodyLG)
                 .foregroundColor(.compound.textSecondary)
                 .multilineTextAlignment(.center)
-                .padding(.bottom, 12)
+                .padding(.bottom, 16)
             
             Button { context.send(viewAction: .startChat) } label: {
-                Label(L10n.actionStartChat, icon: \.compose)
+                Label(L10n.actionStartChat, icon: \.chat)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
                     .padding(.vertical, 6)
-                    .padding(.horizontal, 22)
+                    .padding(.horizontal, 8)
             }
             .buttonStyle(.borderedProminent)
             .buttonBorderShape(.capsule)
@@ -147,6 +147,7 @@ struct HomeScreenEmptyStateView_Previews: PreviewProvider, TestablePreview {
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: .volatile(),
                                    analyticsService: AnalyticsServiceMock(.init()),
+                                   bugReportService: BugReportServiceMock(.init()),
                                    notificationManager: NotificationManagerMock(),
                                    userIndicatorController: UserIndicatorControllerMock())
     }()

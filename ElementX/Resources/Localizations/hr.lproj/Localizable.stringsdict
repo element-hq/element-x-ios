@@ -28,10 +28,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string></string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
+			<string>Galerija, %1$d više medija</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Galerija, %1$d više medija</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -608,6 +610,24 @@
 			<string>%1$@ i još %2$d želi se pridružiti ovoj sobi</string>
 			<key>other</key>
 			<string>%1$@ i još %2$d želi se pridružiti ovoj sobi</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_room_selection_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string></string>
+			<key>one</key>
+			<string>Odabrana je poruka %1$d</string>
+			<key>other</key>
+			<string>Odabrano je %1$d poruka</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

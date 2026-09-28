@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Повторен опит за разшифроване";
 "action_save" = "Запазване";
 "action_search" = "Търсене";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Изпращане";
 "action_send_edited_message" = "Send edited message";
@@ -208,7 +209,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your account provider no longer supports the old protocol. Please sign out and sign back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
@@ -375,6 +376,7 @@
 "common_success" = "Успешно";
 "common_suggested" = "Suggested";
 "common_suggestions" = "Предложения";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Синхронизиране";
 "common_text" = "Текст";
 "common_third_party_notices" = "Уведомления от трети страни";
@@ -483,7 +485,7 @@
 "emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Символи";
 "emoji_picker_search_placeholder" = "Search emojis";
-"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
+"error_account_creation_not_possible" = "Your account provider needs to be upgraded to support Matrix Authentication Service and account creation.";
 "error_failed_creating_the_permalink" = "Неуспешно създаване на постоянна връзка";
 "error_failed_loading_map" = "%1$@ не успя да зареди картата. Моля, опитайте отново по-късно.";
 "error_failed_loading_messages" = "Неуспешно зареждане на съобщения";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Някои съобщения не са изпратени";
 "error_unknown" = "Съжаляваме, възникна грешка";
 "error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "Поканиха ви за чат";
 "notification_invite_body_with_sender" = "%1$@ invited you to chat";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Ви спомена: %1$@";
 "notification_new_messages" = "Нови съобщения";
@@ -709,7 +717,7 @@
 "screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Не можахме да достигнем този сървър. Моля, проверете дали сте въвели правилно URL адреса на сървъра. Ако URL адресът е правилен, свържете се с администратора на вашия сървър за допълнителна помощ.";
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. The server needs to be upgraded to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
@@ -739,7 +747,7 @@
 "screen_chat_backup_recovery_action_setup" = "Get recovery key";
 "screen_chat_backup_recovery_action_setup_description" = "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.";
 "screen_create_account_title" = "Създаване на акаунт";
-"screen_create_new_recovery_key_list_item_1" = "Open %1$@ in a desktop device";
+"screen_create_new_recovery_key_list_item_1" = "Open %1$@ on a desktop device";
 "screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
 "screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
 "screen_create_new_recovery_key_list_item_3_reset_all" = "“Reset all”";
@@ -771,7 +779,7 @@
 "screen_create_room_private_option_description" = "Само поканени хора имат достъп до тази стая. Всички съобщения са шифровани от край до край.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "Всеки може да намери тази стая.\nМожете да промените това по всяко време в настройките на стаята.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Allow ask to join";
@@ -908,7 +916,7 @@
 "screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
-"screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
+"screen_join_room_subtitle_knock" = "Tap the button below and a chat administrator will be notified. You'll be able to join the conversation once approved.";
 "screen_join_room_subtitle_no_preview" = "You must be a member of this room to view the message history.";
 "screen_join_room_title_knock" = "Want to join this room?";
 "screen_join_room_title_no_preview" = "Preview is not available";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Включване на отговори в нишка";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -952,11 +964,11 @@
 "screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
-"screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
+"screen_leave_space_subtitle_last_admin" = "You need to assign another administrator for this space before you can leave.";
 "screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
-"screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_leave_space_title_last_admin" = "You are the only administrator for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Scan the QR code";
@@ -1043,7 +1055,7 @@
 "screen_missing_key_backup_open_element_classic" = "Open Element Classic";
 "screen_missing_key_backup_step_1" = "Open Element Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
@@ -1212,7 +1224,7 @@
 "screen_report_content_hint" = "Причина за докладване на това съдържание";
 "screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
 "screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
-"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_footer" = "Report this chat to your account provider. If the messages are encrypted, your account provider will not be able to read them.";
 "screen_report_room_reason_placeholder" = "Describe the reason to report…";
 "screen_report_room_title" = "Докладване на стаята";
 "screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "Членове";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Добавяне на тема";
 "screen_room_details_badge_encrypted" = "С шифроване";
 "screen_room_details_badge_not_encrypted" = "Без шифроване";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Искате ли да ги поканите обратно?";
 "screen_room_invite_again_alert_title" = "Вие сте сами в този чат";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Блокиране";
 "screen_room_member_details_block_alert_description" = "Блокираните потребители няма да могат да ви изпращат съобщения и всички техни съобщения ще бъдат скрити. Можете да ги отблокирате по всяко време.";
 "screen_room_member_details_block_user" = "Блокиране на потребителя";
@@ -1362,9 +1380,10 @@
 "screen_room_notification_settings_error_loading_settings" = "Възникна грешка при зареждането на настройките за известия.";
 "screen_room_notification_settings_error_restoring_default" = "Неуспешно възстановяване на режима по подразбиране, моля, опитайте отново.";
 "screen_room_notification_settings_error_setting_mode" = "Неуспешно задаване на режима, моля, опитайте отново.";
-"screen_room_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.";
+"screen_room_notification_settings_mentions_only_disclaimer" = "Your account provider does not support this option in encrypted chats, you won't get notified in this chat.";
 "screen_room_notification_settings_mode_all_messages" = "Всички съобщения";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Само споменавания и ключови думи";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "В тази стая, да бъда известяван за";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Нямате чакащи покани.";
 "screen_roomlist_filter_low_priority" = "Нисък приоритет";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Можете да премахнете избора на филтрите, за да видите другите си чатове";
 "screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";
 "screen_roomlist_filter_people" = "Хора";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Поискано е потвърждение";
 "screen_session_verification_they_dont_match" = "Те не съвпадат";
 "screen_session_verification_they_match" = "Те съвпадат";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Уверете се, че приложението е отворено на другото устройство, преди да започнете потвърждението оттук.";
 "screen_session_verification_use_another_device_title" = "Отворете приложението на друго потвърдено устройство";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
@@ -1570,7 +1593,7 @@
 "screen_space_list_parent_space" = "%1$@ пространство";
 "screen_space_list_title" = "Пространства";
 "screen_space_menu_action_members" = "Преглед на членовете";
-"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Security & privacy.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
 "screen_space_settings_leave_space" = "Напускане на пространството";
 "screen_space_settings_roles_and_permissions" = "Роли и разрешения";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Грешка: %1$@";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Error, cannot test push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Error, timeout waiting for push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back took %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Test Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Ensure that UnifiedPush distributors are available.";

@@ -14,6 +14,7 @@ setup_github_actions_environment() {
     
     unset HOMEBREW_NO_INSTALL_FROM_API
     export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+<<<<<<< HEAD
 
     # Tchap 
     # SwiftFormat est volontairement figé à une version précise pour éviter
@@ -35,6 +36,10 @@ setup_github_actions_environment() {
     swiftformat --version
     # :tchap:end
 
+=======
+    
+    brew update && brew install xcodegen swiftlint swiftformat git-lfs pkl
+>>>>>>> release/26.09.2
 }
 
 setup_github_actions_translations_environment() {
@@ -49,7 +54,7 @@ setup_github_actions_translations_environment() {
 }
 
 xcode_select_for_github_actions() {
-    # We need to select it globally for other processes like xcresultparser and our custom tools to use the same Xcode version.
+    # We need to select it globally for our custom tools to use the same Xcode version.
     sudo xcode-select -s /Applications/Xcode_26.5.0.app
 }
 

@@ -179,16 +179,19 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     }
     
     private func addObservers() {
-        guard let internalAudioPlayer, let playerItem else {
+        // Deliberately not shadowing the properties, the observers compare against them to detect stale updates.
+        guard let currentAudioPlayer = internalAudioPlayer, let currentItem = playerItem else {
             return
         }
         
-        statusObserver = playerItem.observe(\.status, options: [.old, .new]) { [weak self] item, _ in
+        statusObserver = currentItem.observe(\.status, options: [.old, .new]) { [weak self] item, _ in
             // KVO fires on an arbitrary thread, hop to the main actor with the values we need.
             let status = item.status
             let error = item.error
             Task { @MainActor [weak self] in
-                guard let self else { return }
+                // Ignore an update that was queued before the content was replaced, it would leave
+                // the state out of sync with the item that is loaded now.
+                guard let self, item === playerItem else { return }
                 
                 switch status {
                 case .failed:
@@ -202,11 +205,11 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             }
         }
         
-        rateObserver = internalAudioPlayer.observe(\.rate, options: [.old, .new]) { [weak self] player, _ in
+        rateObserver = currentAudioPlayer.observe(\.rate, options: [.old, .new]) { [weak self] player, _ in
             // KVO fires on an arbitrary thread, hop to the main actor with the values we need.
             let rate = player.rate
             Task { @MainActor [weak self] in
-                guard let self else { return }
+                guard let self, player === internalAudioPlayer else { return }
                 
                 if rate == 0 {
                     if isStopped {
@@ -220,7 +223,9 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             }
         }
         
-        NotificationCenter.default.publisher(for: Notification.Name.AVPlayerItemDidPlayToEndTime)
+        NotificationCenter.default.publisher(for: Notification.Name.AVPlayerItemDidPlayToEndTime, object: currentItem)
+            // The notification isn't posted on the main thread, unlike the state updates it triggers.
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
                 setInternalState(.finishedPlaying)

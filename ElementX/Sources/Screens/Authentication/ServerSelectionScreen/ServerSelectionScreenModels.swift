@@ -88,18 +88,18 @@ struct ServerSelectionScreenViewState: BindableState {
     var hasValidationError: Bool {
         switch mode {
         case .userInput:
-            bindings.homeserverAddress.isEmpty || isShowingFooterError
+            bindings.serverNameOrBaseURL.isEmpty || isShowingFooterError
         case .picker(let options):
-            !options.contains(bindings.homeserverAddress) || isShowingFooterError
+            !options.contains(bindings.serverNameOrBaseURL) || isShowingFooterError
         }
     }
 }
 
 struct ServerSelectionScreenBindings {
-    /// The homeserver address input or chosen by the user.
-    var homeserverAddress: String
-    /// The selection range in `homeserverAddress`
-    var homeserverSelection: TextSelection?
+    /// The homeserver input or chosen by the user.
+    var serverNameOrBaseURL: String
+    /// The selection range in `serverNameOrBaseURL`
+    var serverNameOrBaseURLSelection: TextSelection?
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<ServerSelectionScreenErrorType>?

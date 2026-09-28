@@ -571,25 +571,334 @@ final class TimelineViewModelTests {
         #expect(viewModel.state.bindings.alertInfo?.title == "alice (@alice:matrix.org) shared this message since you were not in the room when it was sent.")
     }
     
+    @Test
+    func tapSendInfoSendingFailedDisplaysAlertWithActions() {
+        // Given a room with a message that failed to send for a known reason
+        let items = [TextRoomTimelineItem(eventID: "t1", sendFailure: .unknown(reason: "M_TOO_LARGE"))]
+        let timelineController = TimelineControllerMock(.init(timelineItems: items))
+        timelineController.sendHandleForReturnValue = .mock
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        viewModel.process(viewAction: .itemSendInfoTapped(itemID: items[0].id))
+        
+        // Then the reason and both recovery actions are offered
+        #expect(viewModel.state.bindings.alertInfo?.message == "M_TOO_LARGE")
+        #expect(viewModel.state.bindings.alertInfo?.verticalButtons?.count == 2)
+    }
+    
+    @Test
+    func tapSendInfoSendingFailedWithoutSendHandleStillDisplaysAlert() {
+        // Given a failed message whose send handle can no longer be found
+        let items = [TextRoomTimelineItem(eventID: "t1", sendFailure: .unknown(reason: "M_TOO_LARGE"))]
+        let timelineController = TimelineControllerMock(.init(timelineItems: items))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        viewModel.process(viewAction: .itemSendInfoTapped(itemID: items[0].id))
+        
+        // Then the reason is still shown, without any actions to recover with
+        #expect(viewModel.state.bindings.alertInfo?.message == "M_TOO_LARGE")
+        #expect(viewModel.state.bindings.alertInfo?.verticalButtons == nil)
+    }
+    
+    // MARK: - Redaction
+    
+    @Test
+    func redactionAsksForConfirmation() async throws {
+        // Given a timeline containing a message that has been sent.
+        let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        // When choosing to remove it.
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.bindings.redactConfirmationInfo?.id == item.id }
+        viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
+        
+        // Then a confirmation should be shown without anything being redacted yet.
+        try await deferred.fulfill()
+        #expect(!timelineController.redactReasonCalled)
+    }
+    
+    @Test
+    func redactionSendsTheReason() async throws {
+        // Given a timeline showing a redaction confirmation.
+        let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        let deferredConfirmation = deferFulfillment(viewModel.context.$viewState) { $0.bindings.redactConfirmationInfo != nil }
+        viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
+        try await deferredConfirmation.fulfill()
+        
+        // When confirming the removal with a reason.
+        // The redaction runs in an unstructured task, so wait for the call rather than asserting straight after.
+        await waitForConfirmation { confirmation in
+            timelineController.redactReasonClosure = { _, _ in confirmation() }
+            viewModel.context.send(viewAction: .redactConfirmed(itemID: item.id, reason: "Posted in the wrong room"))
+        }
+        
+        // Then the reason should be sent with the redaction and the confirmation dismissed.
+        #expect(timelineController.redactReasonReceivedArguments?.reason == "Posted in the wrong room")
+        #expect(viewModel.context.redactConfirmationInfo == nil)
+    }
+    
+    @Test
+    func redactionIgnoresABlankReason() async {
+        // Given a timeline containing a message that has been sent.
+        let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        
+        // When confirming the removal without typing a reason.
+        await waitForConfirmation { confirmation in
+            timelineController.redactReasonClosure = { _, _ in confirmation() }
+            viewModel.context.send(viewAction: .redactConfirmed(itemID: item.id, reason: "   "))
+        }
+        
+        // Then no reason should be sent, behaving exactly as it did before the confirmation existed.
+        #expect(timelineController.redactReasonReceivedArguments?.reason == nil)
+    }
+    
+    @Test
+    func redactionCanBeCancelled() async throws {
+        // Given a timeline showing a redaction confirmation.
+        let item = TextRoomTimelineItem(text: "Hello", sender: "bob")
+        let timelineController = TimelineControllerMock(.init(timelineItems: [item]))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.bindings.redactConfirmationInfo != nil }
+        viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact(isMedia: false)))
+        try await deferred.fulfill()
+        
+        // When dismissing the sheet without confirming.
+        viewModel.context.redactConfirmationInfo = nil
+        
+        // Then nothing should be redacted.
+        #expect(!timelineController.redactReasonCalled)
+    }
+    
+    @Test
+    func redactionOfAnUnsentMessageSkipsTheConfirmation() async {
+        // Given a message that was never sent, so has nobody to give a reason to.
+        let timelineController = TimelineControllerMock(.init(timelineItems: []))
+        let viewModel = makeViewModel(timelineController: timelineController)
+        let itemID = TimelineItemIdentifier.event(uniqueID: .init(UUID().uuidString),
+                                                  eventOrTransactionID: .transactionID(UUID().uuidString))
+        
+        // When choosing to remove it.
+        await waitForConfirmation { confirmation in
+            timelineController.redactReasonClosure = { _, _ in confirmation() }
+            viewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: itemID, action: .redact(isMedia: false)))
+        }
+        
+        // Then it should be redacted immediately, with no reason and no confirmation.
+        #expect(viewModel.context.redactConfirmationInfo == nil)
+        #expect(timelineController.redactReasonReceivedArguments?.reason == nil)
+    }
+    
+    // MARK: - Selection
+    
+    @Test
+    func selectMenuActionEntersSelection() async throws {
+        let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
+        let viewModel = makeSelectionViewModel(items: items)
+        
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            if case .composer(action: .removeFocus) = action {
+                return true
+            }
+            return false
+        }
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .selectMessages))
+        try await deferred.fulfill()
+        
+        #expect(viewModel.state.selection.isActive)
+        #expect(viewModel.state.selection.selectedEventIDs == ["$1"])
+    }
+    
+    @Test
+    func selectIsIgnoredWhenFlagIsOff() {
+        let items = [TextRoomTimelineItem(eventID: "$1")]
+        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)))
+        
+        viewModel.process(viewAction: .handleTimelineItemMenuAction(itemID: items[0].id, action: .selectMessages))
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        
+        #expect(!viewModel.state.selection.isActive)
+    }
+    
+    @Test
+    func toggleSelectionAddsAndRemovesItems() {
+        let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
+        let viewModel = makeSelectionViewModel(items: items)
+        
+        // Toggling before entering the selection does nothing.
+        viewModel.process(viewAction: .toggleSelection(itemID: items[0].id))
+        #expect(!viewModel.state.selection.isActive)
+        
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
+        #expect(viewModel.state.selection.selectedEventIDs == ["$1", "$2"])
+        #expect(viewModel.state.selection.count == 2)
+        
+        viewModel.process(viewAction: .toggleSelection(itemID: items[0].id))
+        #expect(viewModel.state.selection.selectedEventIDs == ["$2"])
+        
+        // Deselecting the last item ends the selection.
+        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
+        #expect(!viewModel.state.selection.isActive)
+    }
+    
+    @Test
+    func clearSelectionEndsTheSelection() {
+        let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
+        let viewModel = makeSelectionViewModel(items: items)
+        
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
+        viewModel.process(viewAction: .clearSelection)
+        
+        #expect(!viewModel.state.selection.isActive)
+        #expect(viewModel.state.selection.selectedEventIDs.isEmpty)
+    }
+    
+    @Test
+    func nonSelectableItemsAreIgnored() {
+        let text = TextRoomTimelineItem(eventID: "$1")
+        let state = StateRoomTimelineItem(id: .randomEvent,
+                                          body: "Alice joined",
+                                          timestamp: .mock,
+                                          isOutgoing: false,
+                                          isEditable: false,
+                                          canBeRepliedTo: false,
+                                          sender: .init(id: "@alice:matrix.org"))
+        let redacted = RedactedRoomTimelineItem(id: .randomEvent,
+                                                body: "Message removed",
+                                                timestamp: .mock,
+                                                isOutgoing: false,
+                                                isEditable: false,
+                                                canBeRepliedTo: false,
+                                                sender: .init(id: "@alice:matrix.org"))
+        let localEcho = TextRoomTimelineItem(id: .event(uniqueID: .init("local"), eventOrTransactionID: .transactionID("txn")),
+                                             timestamp: .mock,
+                                             isOutgoing: true,
+                                             isEditable: false,
+                                             canBeRepliedTo: true,
+                                             sender: .init(id: "@bob:matrix.org"),
+                                             content: .init(body: "Sending"))
+        let nonSelectableItems: [RoomTimelineItemProtocol] = [state, redacted, localEcho]
+        let viewModel = makeSelectionViewModel(items: [text] + nonSelectableItems)
+        
+        viewModel.process(viewAction: .startSelection(itemID: state.id))
+        #expect(!viewModel.state.selection.isActive)
+        
+        viewModel.process(viewAction: .startSelection(itemID: text.id))
+        for item in nonSelectableItems {
+            viewModel.process(viewAction: .toggleSelection(itemID: item.id))
+        }
+        #expect(viewModel.state.selection.selectedEventIDs == ["$1"])
+    }
+    
+    @Test
+    func selectionIsLimited() {
+        let items = (0...TimelineSelectionState.limit).map { TextRoomTimelineItem(eventID: "$\($0)") }
+        let userIndicatorController = UserIndicatorControllerMock()
+        let viewModel = makeSelectionViewModel(items: items, userIndicatorController: userIndicatorController)
+        
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        for item in items.dropFirst() {
+            viewModel.process(viewAction: .toggleSelection(itemID: item.id))
+        }
+        
+        #expect(viewModel.state.selection.count == TimelineSelectionState.limit)
+        #expect(viewModel.state.selection.isAtLimit)
+        #expect(!viewModel.state.selection.contains(items.last?.id.eventID))
+        #expect(userIndicatorController.submitIndicatorDelayCallsCount == 1)
+    }
+    
+    @Test
+    func selectionIsPrunedWhenItemsBecomeUnselectable() async throws {
+        let items = [TextRoomTimelineItem(eventID: "$1"), TextRoomTimelineItem(eventID: "$2")]
+        let timelineController = TimelineControllerMock(.init(timelineItems: items))
+        let viewModel = makeSelectionViewModel(timelineController: timelineController)
+        
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        viewModel.process(viewAction: .toggleSelection(itemID: items[1].id))
+        #expect(viewModel.state.selection.count == 2)
+        
+        // The first message gets redacted by someone else.
+        let redacted = RedactedRoomTimelineItem(id: items[0].id,
+                                                body: "Message removed",
+                                                timestamp: .mock,
+                                                isOutgoing: false,
+                                                isEditable: false,
+                                                canBeRepliedTo: false,
+                                                sender: .init(id: "@alice:matrix.org"))
+        let deferred = deferFulfillment(viewModel.context.$viewState) { $0.selection.selectedEventIDs == ["$2"] }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: [redacted, items[1]], isSwitchingTimelines: false))
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func selectionIsClearedWhenSwitchingTimelines() async throws {
+        let items = [TextRoomTimelineItem(eventID: "$1")]
+        let timelineController = TimelineControllerMock(.init(timelineItems: items))
+        let viewModel = makeSelectionViewModel(timelineController: timelineController)
+        
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        #expect(viewModel.state.selection.isActive)
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.selection.isActive }
+        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: items, isSwitchingTimelines: true))
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func disablingTheFlagClearsTheSelection() async throws {
+        let items = [TextRoomTimelineItem(eventID: "$1")]
+        let appSettings = AppSettings.volatile()
+        appSettings.messageMultiSelectEnabled = true
+        let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)), appSettings: appSettings)
+        
+        viewModel.process(viewAction: .startSelection(itemID: items[0].id))
+        #expect(viewModel.state.selection.isActive)
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.selection.isEnabled && !$0.selection.isActive }
+        appSettings.messageMultiSelectEnabled = false
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Helpers
     
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
-                               timelineController: TimelineControllerProtocol) -> TimelineViewModel {
+                               timelineController: TimelineControllerProtocol,
+                               userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock(),
+                               appSettings: AppSettings = .volatile()) -> TimelineViewModel {
+        TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
+                          focussedEventID: focussedEventID,
+                          timelineController: timelineController,
+                          userSession: UserSessionMock(.init()),
+                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                          userIndicatorController: userIndicatorController,
+                          appMediator: AppMediatorMock(.init()),
+                          appSettings: appSettings,
+                          analyticsService: AnalyticsServiceMock(.init()),
+                          emojiProvider: EmojiProvider(appSettings: appSettings),
+                          linkMetadataProvider: LinkMetadataProvider(),
+                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+    }
+    
+    private func makeSelectionViewModel(items: [RoomTimelineItemProtocol],
+                                        userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
+        makeSelectionViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)),
+                               userIndicatorController: userIndicatorController)
+    }
+    
+    private func makeSelectionViewModel(timelineController: TimelineControllerProtocol,
+                                        userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
         let appSettings = AppSettings.volatile()
-        
-        return TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
-                                 focussedEventID: focussedEventID,
-                                 timelineController: timelineController,
-                                 userSession: UserSessionMock(.init()),
-                                 mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 userIndicatorController: UserIndicatorControllerMock(),
-                                 appMediator: AppMediatorMock(.init()),
-                                 appSettings: appSettings,
-                                 analyticsService: AnalyticsServiceMock(.init()),
-                                 emojiProvider: EmojiProvider(appSettings: appSettings),
-                                 linkMetadataProvider: LinkMetadataProvider(),
-                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+        appSettings.messageMultiSelectEnabled = true
+        return makeViewModel(timelineController: timelineController,
+                             userIndicatorController: userIndicatorController,
+                             appSettings: appSettings)
     }
 }
 
@@ -648,6 +957,19 @@ private extension TextRoomTimelineItem {
                   sender: .init(id: ""),
                   content: .init(body: "Hello, World!"),
                   properties: RoomTimelineItemProperties(encryptionAuthenticity: encryptionAuthenticity))
+    }
+}
+
+private extension TextRoomTimelineItem {
+    init(eventID: String, sendFailure: TimelineItemSendFailure) {
+        self.init(id: .event(uniqueID: .init(UUID().uuidString), eventOrTransactionID: .eventID(eventID)),
+                  timestamp: .mock,
+                  isOutgoing: true,
+                  isEditable: false,
+                  canBeRepliedTo: true,
+                  sender: .init(id: ""),
+                  content: .init(body: "Hello, World!"),
+                  properties: RoomTimelineItemProperties(deliveryStatus: .sendingFailed(sendFailure)))
     }
 }
 

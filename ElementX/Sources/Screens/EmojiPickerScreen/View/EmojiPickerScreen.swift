@@ -47,7 +47,7 @@ struct EmojiPickerScreen: View {
                 }
                 .padding(.horizontal, 6)
             }
-            .navigationTitle(L10n.commonReactions)
+            .navigationTitle(context.viewState.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .isSearching($isSearching)

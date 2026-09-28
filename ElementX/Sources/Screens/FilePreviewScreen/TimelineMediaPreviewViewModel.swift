@@ -128,8 +128,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             default:
                 MXLog.error("Received unexpected action: \(action)")
             }
-        case .redactConfirmation(let item):
-            redactItem(item)
+        case .redactConfirmation(let item, let reason):
+            redactItem(item, reason: reason)
         case .timelineEndReached:
             showTimelineEndIndicator()
         }
@@ -231,6 +231,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                            pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                            isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
                                            areThreadsEnabled: timelineContext.viewState.areThreadsEnabled,
+                                           isMultiSelectEnabled: timelineContext.viewState.canSelectMessages,
                                            timelineKind: timelineContext.viewState.timelineKind,
                                            emojiProvider: timelineContext.viewState.emojiProvider)
                 .makeActions()
@@ -267,8 +268,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    private func redactItem(_ item: TimelineMediaPreviewItem.Media) {
-        timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.timelineItem.id, action: .redact(isMedia: true)))
+    private func redactItem(_ item: TimelineMediaPreviewItem.Media, reason: String) {
+        timelineViewModel.context.send(viewAction: .redactConfirmed(itemID: item.timelineItem.id, reason: reason))
         state.bindings.redactConfirmationItem = nil
         state.previewControllerDriver.send(.dismissDetailsSheet)
         actionsSubject.send(.dismiss)

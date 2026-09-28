@@ -54,10 +54,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Moves search to a separate tab")
                 }
                 
-                Toggle(isOn: $context.userStatusEnabled) {
-                    Text("User status")
-                }
-                
                 context.viewState.appHooks
                     .developerOptionsScreenHook
                     .generalSectionRows(isSignedIn: context.viewState.isSignedIn)
@@ -71,12 +67,21 @@ struct DeveloperOptionsScreen: View {
                     }
                 }
                 
+                Toggle(isOn: $context.roomListNotificationCountEnabled) {
+                    Text("Show unread notification count")
+                    Text("Also makes the app icon badge use the SDK's own unread notification count")
+                }
+                
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")
                 }
                 
                 Toggle(isOn: $context.lowPriorityFilterEnabled) {
                     Text("Low priority filter")
+                }
+                
+                Toggle(isOn: $context.mentionsFilterEnabled) {
+                    Text("Mentions filter")
                 }
                 
                 Toggle(isOn: $context.automaticBackPaginationEnabled) {
@@ -86,10 +91,6 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Room") {
-                Toggle(isOn: $context.roomThreadListEnabled) {
-                    Text("Room thread list")
-                }
-                
                 Toggle(isOn: $context.linkPreviewsEnabled) {
                     Text("Link previews")
                     Text("Follows the timeline media visibility settings.")
@@ -97,19 +98,14 @@ struct DeveloperOptionsScreen: View {
                         .foregroundStyle(.compound.textCriticalPrimary)
                 }
                 
-                Toggle(isOn: $context.galleryEnabled) {
-                    Text("Gallery messages")
-                    Text("Allows sending multiple media in a single message. Received galleries always render regardless of this setting.")
-                }
-                
                 Toggle(isOn: $context.jumpToReadMarkerEnabled) {
                     Text("Jump to unread")
                     Text("Adds a button to jump to the read marker, plus a presence dot on the scroll-to-bottom button when new messages arrive while scrolled away.")
                 }
                 
-                Toggle(isOn: $context.knockingEnabled) {
-                    Text("Knocking")
-                    Text("Ask to join rooms")
+                Toggle(isOn: $context.messageMultiSelectEnabled) {
+                    Text("Multi-select messages")
+                    Text("Adds a Select action to the message menu to pick several messages at once.")
                 }
             }
             
@@ -124,7 +120,7 @@ struct DeveloperOptionsScreen: View {
                 Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
             
-            Section("Element Call remote URL override") {
+            Section {
                 TextField("Leave empty to use EC locally", text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
@@ -137,6 +133,13 @@ struct DeveloperOptionsScreen: View {
                             context.elementCallBaseURLOverride = url
                         }
                     }
+                Toggle(isOn: $context.nativeCallEnabled) {
+                    Text("Experimental native calls")
+                }
+            } header: {
+                Text("Calls")
+            } footer: {
+                Text("The URL override only applies to calls run in the Element Call web view, which native calls replace.")
             }
             
             Section("Notifications") {

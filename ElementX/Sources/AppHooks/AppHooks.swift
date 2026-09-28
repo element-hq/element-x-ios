@@ -53,8 +53,8 @@ final nonisolated class AppHooks: AppHooksProtocol {
     @AppHook(default: DefaultTracingHook())
     var tracingHook: TracingHookProtocol
     
-    @AppHook(default: DefaultClientBuilderHook())
-    var clientBuilderHook: ClientBuilderHookProtocol
+    @AppHook(default: DefaultClientFactoryHook())
+    var clientFactoryHook: ClientFactoryHookProtocol
     
     @AppHook(default: DefaultRemoteSettingsHook())
     var remoteSettingsHook: RemoteSettingsHookProtocol

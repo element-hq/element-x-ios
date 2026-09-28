@@ -8,6 +8,7 @@
 
 @preconcurrency import Combine
 import CryptoKit
+import ElementCall
 import Foundation
 import MatrixRustSDK
 import OrderedCollections
@@ -233,11 +234,6 @@ class ClientProxy: ClientProxyProtocol {
         
         userProfileSubject = .init(UserProfile(userID: (try? client.userId()) ?? ""))
         
-        if appSettings.automaticBackPaginationEnabled {
-            // Must be called before creating the sync service, timelines etc.
-            client.enableAutomaticBackpagination()
-        }
-        
         mediaLoader = MediaLoader(client: client)
         
         // Route media downloads through a content scanner when one has been configured for the server,
@@ -300,7 +296,7 @@ class ClientProxy: ClientProxyProtocol {
         
         try await client.setUtdDelegate(utdDelegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
         
-        let canSubscribeToUserProfile = if appSettings.userStatusEnabled, case .success(true) = await isUserStatusSupported() {
+        let canSubscribeToUserProfile = if await (try? client.isProfilesSlidingSyncExtensionSupported()) == true {
             true
         } else {
             false
@@ -329,11 +325,9 @@ class ClientProxy: ClientProxyProtocol {
             mediaPreviewConfigListenerTaskHandle = await createMediaPreviewConfigObserver()
         }
         
-        if appSettings.userStatusEnabled {
-            Task {
-                guard case .success(true) = await isUserStatusSupported() else { return }
-                client.enableAutomaticCallStatus(enabled: true)
-            }
+        Task {
+            guard case .success(true) = await isUserStatusSupported() else { return }
+            client.enableAutomaticCallStatus(enabled: true)
         }
         
         liveLocationOwnInfoUpdatesListenerTaskHandle = createLiveLocationOwnInfoUpdatesObserver()
@@ -365,6 +359,10 @@ class ClientProxy: ClientProxyProtocol {
         client.canDeactivateAccount()
     }
     
+    var totalUnreadNotifications: UInt64 {
+        client.totalUnreadNotifications()
+    }
+    
     var userIDServerName: String? {
         do {
             return try client.userIdServerName()
@@ -388,12 +386,16 @@ class ClientProxy: ClientProxyProtocol {
     var isLiveKitRTCSupported: Bool {
         get async {
             do {
-                return try await client.isLivekitRtcSupported(fallbackToWellKnown: true)
+                return try await client.isLivekitRtcSupported()
             } catch {
                 MXLog.error("Failed checking LiveKit RTC support with error: \(error)")
                 return false
             }
         }
+    }
+    
+    func makeNativeCallTransport() -> ElementCallMatrixTransportProtocol? {
+        (client as? Client).flatMap { ElementCallSDKTransport(client: $0) }
     }
     
     var isLoginWithQRCodeSupported: Bool {
@@ -1264,7 +1266,8 @@ class ClientProxy: ClientProxyProtocol {
             
             // If we are using OAuth we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
-            await cacheAccountURL()
+            // Fire and forget as it might hit the network.
+            Task { await cacheAccountURL() }
             
             // Nudge the send queue listener to re-evaluate now that we're running; a resume doesn't otherwise
             // emit, and the SDK only re-enables queues when client.resume() runs (gated behind the flag).
@@ -1633,14 +1636,11 @@ private struct ClientProxyServices {
     init(client: ClientProtocol,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings) async throws {
-        var syncServiceBuilder = client
+        let syncService = try await client
             .syncService()
             .withOfflineMode()
             .withSharePos(enable: true)
-        if appSettings.userStatusEnabled {
-            syncServiceBuilder = syncServiceBuilder.withProfilesExtension()
-        }
-        let syncService = try await syncServiceBuilder.finish()
+            .finish()
         
         let roomListService = syncService.roomListService()
         
@@ -1665,7 +1665,6 @@ private struct ClientProxyServices {
                                                            name: "AlternateAllRooms",
                                                            notificationSettings: notificationSettings,
                                                            appSettings: appSettings)
-        try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
         
         staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                         eventStringBuilder: eventStringBuilder,
@@ -1673,7 +1672,29 @@ private struct ClientProxyServices {
                                                         roomListPageSize: .max,
                                                         notificationSettings: notificationSettings,
                                                         appSettings: appSettings)
-        try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
+        
+        // Setting a provider's room list will create summaries for every room so
+        // wait until the app is fully running for the alternate and static providers.
+        Task { [roomSummaryProvider, alternateRoomSummaryProvider, staticRoomSummaryProvider] in
+            // Wait for actual content (or a loaded-but-empty account) as the loading state
+            // doesn't take into account the app having build and published any summaries.
+            for await rooms in roomSummaryProvider.roomListPublisher.values {
+                if !rooms.isEmpty {
+                    break
+                }
+                
+                if case .loaded(0) = roomSummaryProvider.statePublisher.value {
+                    break
+                }
+            }
+            
+            do {
+                try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
+                try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
+            } catch {
+                fatalError("Failed setting up the deferred room summary providers: \(error)")
+            }
+        }
         
         self.syncService = syncService
         self.roomListService = roomListService

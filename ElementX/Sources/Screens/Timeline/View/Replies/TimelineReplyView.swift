@@ -266,11 +266,11 @@ struct TimelineReplyView: View {
                         CompoundIcon(\.image)
                             .padding(4.0)
                     }
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFill()
                 case .iconAsset(let asset):
                     Image(asset: asset)
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
+                        .scaledToFit()
                         .padding(8.0)
                 case .icon(let keyPath):
                     CompoundIcon(keyPath, size: .medium, relativeTo: .body)

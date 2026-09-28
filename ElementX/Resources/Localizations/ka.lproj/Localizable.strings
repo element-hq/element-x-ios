@@ -174,6 +174,7 @@
 "action_retry_decryption" = "გაშიფვრის ხელახლა ცდა";
 "action_save" = "შენახვა";
 "action_search" = "ძიება";
+"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "გაგზავნა";
 "action_send_edited_message" = "Send edited message";
@@ -208,7 +209,7 @@
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
-"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your account provider no longer supports the old protocol. Please sign out and sign back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
 "banner_new_sound_title" = "We’ve refreshed your sounds";
@@ -375,6 +376,7 @@
 "common_success" = "წარმატება";
 "common_suggested" = "Suggested";
 "common_suggestions" = "შეთავაზებები";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "სინქრონიზაცია";
 "common_text" = "ტექსტი";
 "common_third_party_notices" = "მესამე პირის შენიშვნები";
@@ -483,7 +485,7 @@
 "emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "სიმბოლოები";
 "emoji_picker_search_placeholder" = "Search emojis";
-"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
+"error_account_creation_not_possible" = "Your account provider needs to be upgraded to support Matrix Authentication Service and account creation.";
 "error_failed_creating_the_permalink" = "მუდმივი ბმულის შექმნა ვერ მოხერხდა";
 "error_failed_loading_map" = "ვერ გამოვიდა რუკის %1$@ ჩატვირთვა. გთხოვთ, მოგვიანებით სცადოთ.";
 "error_failed_loading_messages" = "შეტყობინებების ჩატვირთვა ვერ მოხერხდა";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "თავსებადი აპლიკაცია ვერ მოიძებნა ამ მოქმედების შესასრულებლად.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "ზოგიერთი შეტყობინება არ გაიგზავნა";
 "error_unknown" = "ბოდიშით, შეცდომა მოხდა";
 "error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "მოგიწვიათ ჩატში";
 "notification_invite_body_with_sender" = "%1$@ invited you to chat";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "მოგახსენათ: %1$@";
 "notification_new_messages" = "ახალი შეტყობინებები";
@@ -709,7 +717,7 @@
 "screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "ჩვენ ვერ მივაღწიეთ ამ სახლის სერვერს. გთხოვთ, შეამოწმოთ, რომ სწორად შეიყვანეთ სახლის სერვერის URL. თუ URL სწორია, დაუკავშირდით თქვენი სახლის სერვერის ადმინისტრატორს დამატებითი დახმარებისთვის.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync არ არის ხელმისაწვდომი well-known ფაილში პრობლემის გამო: %1$@";
-"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. The server needs to be upgraded to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
@@ -771,7 +779,7 @@
 "screen_create_room_private_option_description" = "ამ ოთახში შეტყობინებები დაშიფრულია. შემდგომ დაშიფვრის გამორთვა შეუძლებელია.";
 "screen_create_room_private_option_title" = "Private";
 "screen_create_room_public_option_description" = "ყველას ამ ოთახის მოძებნა შეუძლია.\nთქვენ ნებისმიერ დროს შეგიძლიათ ამის შეცვლა ოთახის პარამეტრებში.";
-"screen_create_room_public_option_short_description" = "Anyone can join.";
+"screen_create_room_public_option_short_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_public_option_title" = "Public";
 "screen_create_room_room_access_section_knocking_option_description" = "Anyone can ask to join but an administrator or a moderator must accept the request.";
 "screen_create_room_room_access_section_knocking_option_title" = "Allow ask to join";
@@ -779,7 +787,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "Ask to join";
 "screen_create_room_room_access_section_private_option_description" = "Only people invited can join.";
 "screen_create_room_room_access_section_private_option_title" = "Private";
-"screen_create_room_room_access_section_public_option_description" = "Anyone can join.";
+"screen_create_room_room_access_section_public_option_description" = "Anyone can join, including people outside your organisation.";
 "screen_create_room_room_access_section_public_option_title" = "Public";
 "screen_create_room_room_access_section_restricted_option_description" = "Anyone in %1$@ can join.";
 "screen_create_room_room_access_section_restricted_option_title" = "Standard";
@@ -908,7 +916,7 @@
 "screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
-"screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
+"screen_join_room_subtitle_knock" = "Tap the button below and a chat administrator will be notified. You'll be able to join the conversation once approved.";
 "screen_join_room_subtitle_no_preview" = "You must be a member of this room to view the message history.";
 "screen_join_room_title_knock" = "Want to join this room?";
 "screen_join_room_title_no_preview" = "Preview is not available";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
@@ -952,11 +964,11 @@
 "screen_leave_space_choose_owners_action" = "Choose owners";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
-"screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
+"screen_leave_space_subtitle_last_admin" = "You need to assign another administrator for this space before you can leave.";
 "screen_leave_space_subtitle_last_owner" = "You are the only owner of %1$@. You need to transfer ownership to someone else before you leave.";
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
-"screen_leave_space_title_last_admin" = "You are the only admin for %1$@";
+"screen_leave_space_title_last_admin" = "You are the only administrator for %1$@";
 "screen_leave_space_title_last_owner" = "Transfer ownership";
 "screen_link_new_device_authentication_reason_ios" = "Confirm it's you before linking a new device.";
 "screen_link_new_device_desktop_scanning_title" = "Scan the QR code";
@@ -1043,7 +1055,7 @@
 "screen_missing_key_backup_open_element_classic" = "Open Element Classic";
 "screen_missing_key_backup_step_1" = "Open Element Classic on your device";
 "screen_missing_key_backup_step_2_ios" = "Go to User settings > Security";
-"screen_missing_key_backup_step_3_ios" = "Scroll down to Secure Backup and tap on Set up";
+"screen_missing_key_backup_step_3_ios" = "Scroll down to Chat Backup and tap on Set up";
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
@@ -1212,7 +1224,7 @@
 "screen_report_content_hint" = "ამ კონტენტის დარეპორტების მიზეზი";
 "screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
 "screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
-"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_footer" = "Report this chat to your account provider. If the messages are encrypted, your account provider will not be able to read them.";
 "screen_report_room_reason_placeholder" = "Describe the reason to report…";
 "screen_report_room_title" = "Report room";
 "screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "წევრები";
 "screen_room_change_role_unsaved_changes_description" = "თქვენ გაქვთ შეუნახავი ცვლილებები";
 "screen_room_change_role_unsaved_changes_title" = "შენახვა?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "თემის დამატება";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "გსურთ მათი კვლავ მოწვევა?";
 "screen_room_invite_again_alert_title" = "თქვენ მარტო ხართ ამ ჩატში";
 "screen_room_live_location_banner" = "Sharing live location";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "დაბლოკვა";
 "screen_room_member_details_block_alert_description" = "დაბლოკილი მომხმარებლები ვერ შეძლებენ თქვენთვის შეტყობინების გაგზავნას და ყველა მათი შეტყობინება თქვენთვის დამალული იქნება. თქვენ მათი განბლოკვა ნებისმეირ დროს შეგიძლიათ.";
 "screen_room_member_details_block_user" = "მომხმარებლის დაბლოკვა";
@@ -1364,7 +1382,8 @@
 "screen_room_notification_settings_error_setting_mode" = "რეჟიმის დაყენება ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "თქვენი სახლის სერვერი არ უჭერს მხარს ამ პარამეტრს დაშიფრულ ოთახებში, თქვენ არ მიიღებთ შეტყობინებას ამ ოთახში.";
 "screen_room_notification_settings_mode_all_messages" = "ყველა შეტყობინება";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "მხოლოდ ხსენებები და საკვანძო სიტყვები";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "ამ ოთახში, შემატყობინეთ:";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "დაბალი პრიორიტეტი";
 "screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "თქვენ შეგიძლიათ წაშალოთ ფილტრები სხვა ჩეთების გამოსაჩენად";
 "screen_roomlist_filter_mixed_empty_state_title" = "თქვენ არ გაქვთ ოთახები ამ არჩევნისთვის";
 "screen_roomlist_filter_people" = "ხალხი";
@@ -1450,7 +1471,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Once enabled, encryption cannot be disabled.";
 "screen_security_and_privacy_encryption_section_header" = "Encryption";
 "screen_security_and_privacy_encryption_toggle_title" = "Enable end-to-end encryption";
-"screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join.";
+"screen_security_and_privacy_room_access_anyone_option_description" = "Anyone can join, including people outside your organisation.";
 "screen_security_and_privacy_room_access_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_access_footer" = "Choose which spaces’ members can join this room without an invitation. %1$@";
 "screen_security_and_privacy_room_access_footer_manage_spaces_action" = "Manage spaces";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "ისინი არ ემთხვევიან ერთმანეთს";
 "screen_session_verification_they_match" = "ისინი ემთხვევიან ერთმანეთს";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
@@ -1570,7 +1593,7 @@
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_space_menu_action_members" = "View members";
-"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Privacy & security.";
+"screen_space_remove_rooms_confirmation_content" = "Removing a room will not affect the room access. To change the access go to Room info > Security & privacy.";
 "screen_space_remove_rooms_confirmation_title_ios" = "Remove rooms from %1$@?";
 "screen_space_settings_leave_space" = "Leave space";
 "screen_space_settings_roles_and_permissions" = "როლები და ნებართვები";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "შეცდომა: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "შეცდომა, push-ის ტესტირება შეუძლებელია.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "შეცდომა, push-ისთვის ლოდინის დრო გავიდა.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push-შეტყობინების ციკლმა დაიკავა %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "push-შეტყობინების ციკლის ტესტირება";
 "troubleshoot_notifications_test_unified_push_description" = "დარწმუნდით რომ UnifiedPush დისტრიბუტორები ხელმისაწვდომია.";

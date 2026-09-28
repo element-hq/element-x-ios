@@ -8,6 +8,7 @@
 
 import CoreLocation
 import Foundation
+import MapLibreInterface
 import MatrixRustSDK
 
 enum LocationSharingViewAlert: Hashable {

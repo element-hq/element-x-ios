@@ -307,6 +307,48 @@ extension EnvironmentValues {
     @Entry var tabViewHorizontalSizeClass: UserInterfaceSizeClass?
 }
 
+/// Tracks whether the tab rail should be shown alongside the split view's sidebar.
+///
+/// The rail is laid out beside the split view, so hiding it hands that width back to the split, which may
+/// then have room for its sidebar again, which would show the rail, ad infinitum. The split reports the
+/// same column visibility whether it collapsed on its own or because the sidebar was toggled, and at the
+/// same width, so the two are told apart by when they arrive: the rebound lands in the next layout pass.
+private struct TabRailVisibility {
+    /// The longest a collapse can follow the rail being shown and still be considered caused by it.
+    private static let reboundDuration: TimeInterval = 0.5
+    
+    private(set) var isVisible = true
+    
+    private var containerWidth: CGFloat = 0
+    /// The container width at which the rail and the sidebar have been shown not to fit together.
+    private var blockedWidth: CGFloat?
+    /// When the rail was last shown, used to spot the split view collapsing as a direct result of it.
+    private var shownDate = Date.distantPast
+    
+    mutating func containerWidthChanged(to width: CGFloat) {
+        guard width != containerWidth else { return }
+        
+        containerWidth = width
+        blockedWidth = nil // The rail and the sidebar may well fit at the new width.
+    }
+    
+    mutating func splitVisibilityChanged(to visibility: NavigationSplitViewVisibility) {
+        if visibility == .detailOnly {
+            // A collapse this soon after showing the rail was caused by the rail's own width, so showing
+            // it again would only collapse the split view again, flickering forever. Note that the two
+            // don't fit at this width and leave the rail hidden until that changes.
+            if shownDate.timeIntervalSinceNow > -Self.reboundDuration {
+                blockedWidth = containerWidth
+            }
+            
+            isVisible = false
+        } else if !isVisible, blockedWidth != containerWidth {
+            isVisible = true
+            shownDate = .now
+        }
+    }
+}
+
 private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
@@ -315,7 +357,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     @State private var standardAppearance = UITabBarAppearance()
     @State private var window: UIWindow?
     @State private var isFullScreen = true
-    @State private var isRailVisible = true
+    @State private var railVisibility = TabRailVisibility()
     @State private var railBackgroundColor: Color = .compound.bgCanvasDefault
     
     var body: some View {
@@ -361,7 +403,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
     
     var tabRailLayout: some View {
         HStack(spacing: 0) {
-            if isRailVisible {
+            if railVisibility.isVisible {
                 TabRailView(navigationTabCoordinator: navigationTabCoordinator, isFullScreen: isFullScreen)
                     .background(railBackgroundColor.ignoresSafeArea())
                     .animation(.easeInOut(duration: 0.4).disabledDuringTests(), value: railBackgroundColor)
@@ -374,6 +416,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
         }
         // Match the rail's background to the colour of the split view's detail (or the root if there isn't a split).
         .onPreferenceChange(CompoundBackgroundPreferenceKey.self) { background in
+            guard #unavailable(iOS 27) else { return } // The background is only necessary for iOS 26's inset sidebar.
             railBackgroundColor = background?.colorValue ?? .compound.bgCanvasDefault
         }
         .introspect(.window, on: .supportedVersions) { window in
@@ -385,8 +428,10 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
             }
         }
         .onGeometryChange(for: CGSize.self) { geometry in
-            geometry.size // We don't need the size, but it's a signal to re-compute.
-        } action: { _ in
+            geometry.size
+        } action: { size in
+            railVisibility.containerWidthChanged(to: size.width)
+            
             guard let newValue = window?.isFullScreen else { return }
             
             if newValue != isFullScreen {
@@ -399,7 +444,9 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
             // feedback loop that locks up the app while resizing.
             //
             // Use a stored value (instead of a computed value) that is updated on the next run loop to break the loop.
-            DispatchQueue.main.async { isRailVisible = selectedTabSplitColumnVisibility != .detailOnly }
+            DispatchQueue.main.async {
+                railVisibility.splitVisibilityChanged(to: selectedTabSplitColumnVisibility)
+            }
         }
     }
     
@@ -442,6 +489,14 @@ struct TabRailView<Tag: Hashable>: View {
         isFullScreen || ProcessInfo.processInfo.isiOSAppOnMac ? 0 : 48
     }
     
+    var trailingPadding: CGFloat {
+        if #available(iOS 27, *) {
+            8
+        } else {
+            0
+        }
+    }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -462,6 +517,7 @@ struct TabRailView<Tag: Hashable>: View {
                 }
             }
             .padding(.leading, 8)
+            .padding(.trailing, trailingPadding)
             .padding(.top, topPadding)
             .padding(.bottom)
         }

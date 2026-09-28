@@ -20,8 +20,11 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(selectedEmojis: Set<String>, emojiProvider: EmojiProviderProtocol, continuation: EmojiPickerScreenContinuation) {
-        let initialViewState = EmojiPickerScreenViewState(categories: [], selectedEmojis: selectedEmojis)
+    init(mode: EmojiPickerScreenMode = .reaction,
+         selectedEmojis: Set<String>,
+         emojiProvider: EmojiProviderProtocol,
+         continuation: EmojiPickerScreenContinuation) {
+        let initialViewState = EmojiPickerScreenViewState(mode: mode, categories: [], selectedEmojis: selectedEmojis)
         self.emojiProvider = emojiProvider
         self.continuation = continuation
         super.init(initialViewState: initialViewState)

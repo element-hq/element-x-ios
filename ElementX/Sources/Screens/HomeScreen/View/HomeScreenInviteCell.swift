@@ -206,6 +206,7 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    appSettings: .volatile(),
                                    analyticsService: AnalyticsServiceMock(.init()),
+                                   bugReportService: BugReportServiceMock(.init()),
                                    notificationManager: NotificationManagerMock(),
                                    userIndicatorController: UserIndicatorControllerMock())
     }

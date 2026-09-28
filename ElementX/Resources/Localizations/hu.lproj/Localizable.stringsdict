@@ -27,9 +27,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
+			<string>Galéria, %1$d további médiatartalom</string>
 			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Galéria, %1$d további médiatartalom</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -265,9 +265,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
+			<string>Megosztott %1$d melléklet</string>
 			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>Megosztott %1$d melléklet</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -540,6 +540,22 @@
 			<string>%1$@ és még %2$d felhasználó szeretne csatlakozni ehhez a szobához</string>
 			<key>other</key>
 			<string>%1$@ és még %2$d felhasználó szeretne csatlakozni ehhez a szobához</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_room_selection_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d üzenet kijelölve</string>
+			<key>other</key>
+			<string>%1$d üzenet kijelölve</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

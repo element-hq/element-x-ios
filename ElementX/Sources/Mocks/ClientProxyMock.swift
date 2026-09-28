@@ -36,6 +36,8 @@ struct ClientProxyMockConfiguration {
     
     var maxMediaUploadSize: UInt = 100 * 1024 * 1024
     
+    var totalUnreadNotifications: UInt64 = 0
+    
     class Overrides {
         var joinedRoomIDs: Set<String> = []
     }
@@ -55,6 +57,8 @@ extension ClientProxyMock {
         
         homeserver = configuration.homeserver
         userIDServerName = configuration.userIDServerName
+        
+        totalUnreadNotifications = configuration.totalUnreadNotifications
         
         roomSummaryProvider = configuration.roomSummaryProvider
         alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())
@@ -94,7 +98,7 @@ extension ClientProxyMock {
         loadUserProfileIfNeededReturnValue = .success(())
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserAvatarMediaReturnValue = .success(())
-        isUserStatusSupportedReturnValue = .success(false)
+        isUserStatusSupportedReturnValue = .success(true)
         setUserStatusReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         removeUserAvatarReturnValue = .success(())
         isAliasAvailableReturnValue = .success(true)

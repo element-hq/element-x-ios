@@ -6,11 +6,14 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AVFoundation
 import Foundation
 
 class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private lazy var audioPlayer = AudioPlayer()
     private var audioPlayerStates: [String: AudioPlayerState] = [:]
+    /// Held onto for the duration of the playback, an unowned player is silent.
+    private var soundEffectPlayer: AVAudioPlayer?
     
     var player: AudioPlayerProtocol {
         audioPlayer
@@ -52,6 +55,17 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
                 continue
             }
             audioPlayerStates[key]?.detachAudioPlayer()
+        }
+    }
+    
+    /// Doesn't configure an audio session, so that it can be used alongside any existing player or session.
+    func play(soundEffect: SoundEffect) {
+        do {
+            let player = try AVAudioPlayer(contentsOf: soundEffect.fileURL)
+            soundEffectPlayer = player
+            player.play()
+        } catch {
+            MXLog.error("Failed playing the sound effect: \(error)")
         }
     }
     

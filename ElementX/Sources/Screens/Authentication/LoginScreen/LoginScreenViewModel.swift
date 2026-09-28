@@ -7,6 +7,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias LoginScreenViewModelType = StateStoreViewModelV2<LoginScreenViewState, LoginScreenViewAction>
@@ -69,10 +70,15 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     /// Parses the specified username and looks up the homeserver when a Matrix ID is entered.
     private func parseUsername() {
         let username = state.bindings.username
+<<<<<<< HEAD
 
         guard MatrixEntityRegex.isMatrixUserIdentifier(username) else { return }
         
         let homeserverDomain = String(username.split(separator: ":")[1])
+=======
+        
+        guard let homeserverDomain = try? serverNameFromUserId(userId: username) else { return }
+>>>>>>> release/26.09.2
         
         startLoading(isInteractionBlocking: false)
         

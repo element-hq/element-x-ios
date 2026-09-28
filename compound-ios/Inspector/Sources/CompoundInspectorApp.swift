@@ -29,11 +29,11 @@ struct CompoundInspectorApp: App {
                     .navigationTitle("Components")
                     .navigationDestination(for: Screen.self) { screen in
                         screen
-                        #if targetEnvironment(macCatalyst)
-                        .dynamicTypeSize(dynamicTypeSize)
-                        #endif
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar { screenToolbar }
+                            #if targetEnvironment(macCatalyst)
+                            .dynamicTypeSize(dynamicTypeSize)
+                            #endif
+                            .navigationBarTitleDisplayMode(.inline)
+                            .toolbar { screenToolbar }
                     }
             } detail: {
                 EmptyView()

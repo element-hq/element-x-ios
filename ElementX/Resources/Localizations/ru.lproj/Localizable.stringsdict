@@ -28,10 +28,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Галерея, ещё %1$d медиа</string>
+			<key>many</key>
+			<string>Галерея, ещё %1$d медиа</string>
 			<key>one</key>
-			<string>Gallery, %1$d more media</string>
-			<key>other</key>
-			<string>Gallery, %1$d more medias</string>
+			<string>Галерея, ещё %1$d медиа</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -80,10 +82,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d вложения...</string>
+			<key>many</key>
+			<string>%1$d вложений...</string>
 			<key>one</key>
-			<string>%1$d attachment…</string>
-			<key>other</key>
-			<string>%1$d attachments…</string>
+			<string>%1$d вложение...</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -96,10 +100,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d медиа...</string>
+			<key>many</key>
+			<string>%1$d медиа...</string>
 			<key>one</key>
-			<string>%1$d media item…</string>
-			<key>other</key>
-			<string>%1$d media items…</string>
+			<string>%1$d медиа...</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -292,10 +298,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Поделился(ась) %1$d вложениями</string>
+			<key>many</key>
+			<string>Поделился(ась) %1$d вложениями</string>
 			<key>one</key>
-			<string>Shared %1$d attachment</string>
-			<key>other</key>
-			<string>Shared %1$d attachments</string>
+			<string>Поделился(ась) %1$d вложением</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -380,10 +388,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d удалённых сообщения</string>
+			<key>many</key>
+			<string>%1$d удалённых сообщений</string>
 			<key>one</key>
-			<string>%1$d removed message</string>
-			<key>other</key>
-			<string>%1$d removed messages</string>
+			<string>%1$d удалённое сообщение</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -604,6 +614,24 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>screen_room_selection_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Выбрано %1$d сообщения</string>
+			<key>many</key>
+			<string>Выбрано %1$d сообщений</string>
+			<key>one</key>
+			<string>Выбрано %1$d сообщение</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
 	<dict>
 		<key>COUNT</key>
@@ -720,10 +748,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d присоединились</string>
+			<key>many</key>
+			<string>%1$d присоединилось</string>
 			<key>one</key>
-			<string>%1$d joined</string>
-			<key>other</key>
-			<string>%1$d joined</string>
+			<string>%1$d присоединился</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

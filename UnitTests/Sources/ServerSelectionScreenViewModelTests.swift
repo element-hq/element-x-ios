@@ -20,11 +20,11 @@ import Testing
 @MainActor
 struct ServerSelectionScreenViewModelTests {
     private static let passwordOnlyServer = "example.com" // password only, no OAuth
-    private static let pickerProviders = ["matrix.org", "beta.matrix.org", passwordOnlyServer]
+    private static let pickerProviders: [String] = ["matrix.org", "beta.matrix.org", passwordOnlyServer]
     
     var appSettings: AppSettings!
     var client: ClientSDKMock!
-    var clientFactory: AuthenticationClientFactoryMock!
+    var clientFactory: ClientFactoryMock!
     var service: AuthenticationServiceProtocol!
     var viewModel: ServerSelectionScreenViewModelProtocol!
     
@@ -37,16 +37,33 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for login.
         try setup(authenticationFlow: .login)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When selecting matrix.org.
-        context.homeserverAddress = "matrix.org"
+        context.serverNameOrBaseURL = "matrix.org"
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should succeed.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(service.homeserver.value == .mockMatrixDotOrg)
+    }
+    
+    @Test
+    mutating func selectForLoginUsingMatrixID() async throws {
+        // Given a view model for login.
+        try setup(authenticationFlow: .login)
+        #expect(service.homeserver.value.loginMode == .unknown)
+        
+        // When entering a Matrix ID instead of an account provider.
+        context.serverNameOrBaseURL = "@alice:matrix.org"
+        let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
+        context.send(viewAction: .confirm)
+        try await deferred.fulfill()
+        
+        // Then the homeserver from the ID should be used.
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments?.serverNameOrBaseURL == "matrix.org")
         #expect(service.homeserver.value == .mockMatrixDotOrg)
     }
     
@@ -55,17 +72,17 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for login.
         try setup(authenticationFlow: .login)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(context.alertInfo == nil)
         
         // When selecting a server that doesn't support login.
-        context.homeserverAddress = "server.net"
+        context.serverNameOrBaseURL = "server.net"
         let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should fail with an alert about not supporting registration.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(context.alertInfo?.id == .loginAlert)
     }
     
@@ -74,16 +91,16 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for registration.
         try setup(authenticationFlow: .register)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When selecting matrix.org.
-        context.homeserverAddress = "matrix.org"
+        context.serverNameOrBaseURL = "matrix.org"
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithOAuth }
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should succeed.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(service.homeserver.value == .mockMatrixDotOrg)
     }
     
@@ -92,17 +109,17 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for registration.
         try setup(authenticationFlow: .register)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(context.alertInfo == nil)
         
         // When selecting a server that doesn't support registration.
-        context.homeserverAddress = "example.com"
+        context.serverNameOrBaseURL = "example.com"
         let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should fail with an alert about not supporting registration.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(context.alertInfo?.id == .registrationAlert)
     }
     
@@ -111,17 +128,17 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model for login.
         try setup(authenticationFlow: .login)
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(context.alertInfo == nil)
         
         // When selecting a server that requires Element Pro
-        context.homeserverAddress = "secure.gov"
+        context.serverNameOrBaseURL = "secure.gov"
         let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
         // Then selection should fail with an alert telling the user to download Element Pro.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(context.alertInfo?.id == .elementProAlert)
     }
     
@@ -136,7 +153,7 @@ struct ServerSelectionScreenViewModelTests {
         
         // When attempting to discover an invalid server
         var deferred = deferFulfillment(context.observe(\.viewState.isShowingFooterError)) { $0 }
-        context.homeserverAddress = "idontexist"
+        context.serverNameOrBaseURL = "idontexist"
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
@@ -148,7 +165,7 @@ struct ServerSelectionScreenViewModelTests {
         
         // And when clearing the error.
         deferred = deferFulfillment(context.observe(\.viewState.isShowingFooterError)) { !$0 }
-        context.homeserverAddress = ""
+        context.serverNameOrBaseURL = ""
         context.send(viewAction: .clearFooterError)
         try await deferred.fulfill()
         
@@ -164,9 +181,9 @@ struct ServerSelectionScreenViewModelTests {
     mutating func userInputPasswordLoginWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured against a server that doesn't support OAuth.
         try setup(authenticationFlow: .login)
-        context.homeserverAddress = Self.passwordOnlyServer
+        context.serverNameOrBaseURL = Self.passwordOnlyServer
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When confirming from the server selection screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -174,7 +191,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then the service should be configured but no OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(service.homeserver.value.loginMode == .password)
     }
     
@@ -182,13 +199,13 @@ struct ServerSelectionScreenViewModelTests {
     mutating func userInputPasswordLoginAfterConfiguration() async throws {
         // Given a view model for login using a service that has already been configured against a server that doesn't support OAuth.
         try setup(authenticationFlow: .login)
-        context.homeserverAddress = Self.passwordOnlyServer
-        guard case .success = await service.configure(for: context.homeserverAddress, flow: .login) else {
+        context.serverNameOrBaseURL = Self.passwordOnlyServer
+        guard case .success = await service.configure(for: context.serverNameOrBaseURL, flow: .login) else {
             Issue.record("The configuration should succeed.")
             return
         }
         #expect(service.homeserver.value.loginMode == .password)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         
         // When confirming from the server selection screen.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -196,7 +213,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then the service should be re-configured but no OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 2)
     }
     
     // MARK: - Picker mode
@@ -207,7 +224,7 @@ struct ServerSelectionScreenViewModelTests {
         try setup(authenticationFlow: .login, mode: .picker(Self.pickerProviders))
         #expect(service.homeserver.value.loginMode == .unknown)
         #expect(context.viewState.mode == .picker(Self.pickerProviders))
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 0)
         
         // When confirming from the picker.
@@ -216,7 +233,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then the service should be configured and the OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount == 1)
         #expect(client.urlForOauthOauthConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments?.prompt == .consent)
         #expect(service.homeserver.value.loginMode == .oAuth(supportsCreatePrompt: true))
@@ -226,9 +243,9 @@ struct ServerSelectionScreenViewModelTests {
     mutating func pickerForPasswordLoginWithoutConfiguration() async throws {
         // Given a view model for login using a service that hasn't been configured against a server that doesn't support OAuth.
         try setup(authenticationFlow: .login, mode: .picker(Self.pickerProviders))
-        context.homeserverAddress = Self.passwordOnlyServer
+        context.serverNameOrBaseURL = Self.passwordOnlyServer
         #expect(service.homeserver.value.loginMode == .unknown)
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 0)
         
         // When confirming from the picker.
         let deferred = deferFulfillment(viewModel.actions) { $0.isContinueWithPassword }
@@ -236,7 +253,7 @@ struct ServerSelectionScreenViewModelTests {
         try await deferred.fulfill()
         
         // Then the service should be configured but no OAuth URL fetched.
-        #expect(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
+        #expect(clientFactory.makeAuthenticationClientServerNameOrBaseURLSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount == 1)
         #expect(service.homeserver.value.loginMode == .password)
     }
     
@@ -247,7 +264,7 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model with a previous server in history.
         try setup(authenticationFlow: .login)
         appSettings.previousServers = ["myserver.com"]
-        context.homeserverAddress = ""
+        context.serverNameOrBaseURL = ""
         let textField = UITextField()
         context.send(viewAction: .updateTextField(textField))
         
@@ -257,14 +274,14 @@ struct ServerSelectionScreenViewModelTests {
         let typed = typedSoFar + nextCharacter
         let expectedAddress = "myserver.com"
         textField.text = typedSoFar
-        let deferred = deferFulfillment(context.observe(\.homeserverAddress)) { $0 == expectedAddress }
+        let deferred = deferFulfillment(context.observe(\.serverNameOrBaseURL)) { $0 == expectedAddress }
         _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: typedSoFar.count, length: 0), replacementString: nextCharacter)
         try await deferred.fulfill()
         
         // Then the address should be completed and the appended portion selected.
         let selectionStart = expectedAddress.index(expectedAddress.startIndex, offsetBy: typed.count)
-        #expect(context.homeserverAddress == expectedAddress)
-        #expect(context.homeserverSelection == TextSelection(range: selectionStart..<expectedAddress.endIndex))
+        #expect(context.serverNameOrBaseURL == expectedAddress)
+        #expect(context.serverNameOrBaseURLSelection == TextSelection(range: selectionStart..<expectedAddress.endIndex))
     }
     
     @Test
@@ -272,7 +289,7 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model with no previous server history, falling back to the default account providers.
         try setup(authenticationFlow: .login)
         #expect(appSettings.previousServers.isEmpty)
-        context.homeserverAddress = ""
+        context.serverNameOrBaseURL = ""
         let textField = UITextField()
         context.send(viewAction: .updateTextField(textField))
         
@@ -282,14 +299,14 @@ struct ServerSelectionScreenViewModelTests {
         let typed = typedSoFar + nextCharacter
         let expectedAddress = "matrix.org"
         textField.text = typedSoFar
-        let deferred = deferFulfillment(context.observe(\.homeserverAddress)) { $0 == expectedAddress }
+        let deferred = deferFulfillment(context.observe(\.serverNameOrBaseURL)) { $0 == expectedAddress }
         _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: typedSoFar.count, length: 0), replacementString: nextCharacter)
         try await deferred.fulfill()
         
         // Then the address should be completed and the appended portion selected.
         let selectionStart = expectedAddress.index(expectedAddress.startIndex, offsetBy: typed.count)
-        #expect(context.homeserverAddress == expectedAddress)
-        #expect(context.homeserverSelection == TextSelection(range: selectionStart..<expectedAddress.endIndex))
+        #expect(context.serverNameOrBaseURL == expectedAddress)
+        #expect(context.serverNameOrBaseURLSelection == TextSelection(range: selectionStart..<expectedAddress.endIndex))
     }
     
     @Test
@@ -297,7 +314,7 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model with a known set of servers.
         try setup(authenticationFlow: .login)
         appSettings.previousServers = ["myserver.com"]
-        context.homeserverAddress = ""
+        context.serverNameOrBaseURL = ""
         let textField = UITextField()
         context.send(viewAction: .updateTextField(textField))
         
@@ -307,7 +324,7 @@ struct ServerSelectionScreenViewModelTests {
         try await Task.sleep(for: .milliseconds(50))
         
         // Then the address should remain unchanged.
-        #expect(context.homeserverAddress == "")
+        #expect(context.serverNameOrBaseURL == "")
     }
     
     @Test
@@ -315,30 +332,30 @@ struct ServerSelectionScreenViewModelTests {
         // Given a view model with an ordered server history.
         try setup(authenticationFlow: .login)
         appSettings.previousServers = ["abc.foo", "matrix.org", "mantis.asdf"]
-        context.homeserverAddress = ""
+        context.serverNameOrBaseURL = ""
         let textField = UITextField()
         context.send(viewAction: .updateTextField(textField))
         
         // Step 1: type "m" — first "m" match in history is "matrix.org".
         textField.text = ""
-        var deferred = deferFulfillment(context.observe(\.homeserverAddress)) { $0 == "matrix.org" }
+        var deferred = deferFulfillment(context.observe(\.serverNameOrBaseURL)) { $0 == "matrix.org" }
         _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: "m")
         try await deferred.fulfill()
-        #expect(context.homeserverAddress == "matrix.org")
+        #expect(context.serverNameOrBaseURL == "matrix.org")
         
         // Step 2: type "a" replacing the highlighted suffix — still matches "matrix.org".
         // textField.text = "matrix.org", "atrix.org" highlighted (loc: 1, len: 9).
-        deferred = deferFulfillment(context.observe(\.homeserverAddress)) { $0 == "matrix.org" }
+        deferred = deferFulfillment(context.observe(\.serverNameOrBaseURL)) { $0 == "matrix.org" }
         _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: 1, length: 9), replacementString: "a")
         try await deferred.fulfill()
-        #expect(context.homeserverAddress == "matrix.org")
+        #expect(context.serverNameOrBaseURL == "matrix.org")
         
         // Step 3: type "n" replacing the highlighted suffix — "man" now matches "mantis.asdf".
         // textField.text = "matrix.org", "trix.org" highlighted (loc: 2, len: 8).
-        deferred = deferFulfillment(context.observe(\.homeserverAddress)) { $0 == "mantis.asdf" }
+        deferred = deferFulfillment(context.observe(\.serverNameOrBaseURL)) { $0 == "mantis.asdf" }
         _ = textField.delegate?.textField?(textField, shouldChangeCharactersIn: NSRange(location: 2, length: 8), replacementString: "n")
         try await deferred.fulfill()
-        #expect(context.homeserverAddress == "mantis.asdf")
+        #expect(context.serverNameOrBaseURL == "mantis.asdf")
     }
     
     // MARK: - Helpers
@@ -347,10 +364,10 @@ struct ServerSelectionScreenViewModelTests {
                                 mode: ServerSelectionScreenMode = .userInput) throws {
         appSettings = AppSettings.volatile()
         
-        let factoryConfiguration = AuthenticationClientFactoryMock.Configuration()
+        let factoryConfiguration = ClientFactoryMock.Configuration()
         // matrix.org: OAuth. example.com: password only. server.net: no login. secure.gov: OAuth + Element Pro required.
         client = factoryConfiguration.homeserverClients["matrix.org"]
-        clientFactory = AuthenticationClientFactoryMock(factoryConfiguration)
+        clientFactory = ClientFactoryMock(factoryConfiguration)
         
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),

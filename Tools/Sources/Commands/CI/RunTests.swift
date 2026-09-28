@@ -139,12 +139,20 @@ struct RunTests: AsyncParsableCommand {
         command += " -destination 'platform=iOS Simulator,name=\(device),OS=\(osVersion),arch=arm64'"
         command += " -resultBundlePath \(resultBundlePath)"
         
+        // Use a dedicated compilation cache for incremental builds on CI (as Xcode's DerivedData
+        // is invalidated by a fresh checkout).
+        command += " COMPILATION_CACHE_ENABLE_CACHING=YES"
+        // Store it outside DerivedData so CI can cache just what it needs.
+        command += " COMPILATION_CACHE_CAS_PATH=$HOME/Library/Developer/Xcode/CompilationCache.noindex"
+        
         // Use xcodebuild's native retry support to re-run only failing tests
         // instead of re-running the entire suite. retries=0 means no retries (single run).
         if retries > 0 {
             // -test-iterations is the total number of attempts (initial + retries)
             command += " -retry-tests-on-failure"
             command += " -test-iterations \(retries + 1)"
+            // Ensure retries still happen when a runner exits early.
+            command += " -test-repetition-relaunch-enabled YES"
         }
         
         if let testName {

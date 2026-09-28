@@ -43,9 +43,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d τοις εκατό των συνολικών ψήφων</string>
+			<string>%1$d ποσοστό των συνολικών ψήφων</string>
 			<key>other</key>
-			<string>%1$d τοις εκατό του συνόλου των ψήφων</string>
+			<string>%1$d ποσοστά επί του συνόλου των ψήφων</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -363,9 +363,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Every %1$d meter</string>
+			<string>Κάθε %1$d μέτρο</string>
 			<key>other</key>
-			<string>Every %1$d meters</string>
+			<string>Κάθε %1$d μέτρα</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -542,6 +542,22 @@
 			<string>%1$@ +%2$d άλλοι θέλουν να συμμετάσχουν σε αυτή την αίθουσα</string>
 			<key>other</key>
 			<string>%1$@ +%2$d άλλοι θέλουν να συμμετάσχουν σε αυτή την αίθουσα</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_room_selection_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d message selected</string>
+			<key>other</key>
+			<string>%1$d messages selected</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

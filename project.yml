@@ -24,9 +24,7 @@ options:
     - UITests
     - AccessibilityTests
     - IntegrationTests
-    - DevelopmentAssets
-    - SDKMocks
-    - Secrets
+    - Components
     - Tools
   - pattern: ElementX
     order:
@@ -53,26 +51,30 @@ settings:
   ENABLE_BITCODE: false
   APP_NAME: ElementX
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 26.08.2
+  MARKETING_VERSION: 26.09.2
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
+  ARCHS: arm64
 
 include:
 - path: app.yml
 - path: ElementX/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
-- path: SDKMocks/SupportingFiles/target.yml
 - path: UnitTests/SupportingFiles/target.yml
 - path: PreviewTests/SupportingFiles/target.yml
 - path: UITests/SupportingFiles/target.yml
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: AccessibilityTests/SupportingFiles/target.yml
+- path: Components/MapLibre/MapLibreInterface/SupportingFiles/target.yml
+- path: Components/MapLibre/MapLibreShim/SupportingFiles/target.yml
+- path: Components/SDKMocks/SupportingFiles/target.yml
 # - path: MyAppVariant/override.yml
 
 packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
+<<<<<<< HEAD
 #    url: https://github.com/element-hq/matrix-rust-components-swift
 #    exactVersion: 26.08.11
 #
@@ -83,25 +85,34 @@ packages:
     exactVersion: 26.08.2
 # Use the local version of Tchap Matrix-rust-SDK
 #    path: ../matrix-rust-sdk-tchap/matrix-rust-components-swift
+=======
+    url: https://github.com/element-hq/matrix-rust-components-swift
+    exactVersion: 26.09.22
+    # path: ../matrix-rust-sdk
+>>>>>>> release/26.09.2
   Compound:
     path: compound-ios
+  ElementCall:
+    url: https://github.com/element-hq/element-call-ios
+    exactVersion: 0.1.0-rc.8
+    # path: ../element-call-ios
   BuildExtensions:
-    path: BuildExtensions
+    path: Components/BuildExtensions
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.37.0
+    exactVersion: 0.37.0
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.22.0
+    exactVersion: 0.25.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
-    # minorVersion: 1.5.0
+    # exactVersion: 1.5.0
     # path: ../emojibase-bindings
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
-    minorVersion: 0.0.4
+    exactVersion: 0.0.4
     # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
@@ -111,19 +122,16 @@ packages:
   # External dependencies
   Algorithms:
     url: https://github.com/apple/swift-algorithms
-    minorVersion: 1.2.1
+    exactVersion: 1.2.1
   AsyncAlgorithms:
     url: https://github.com/apple/swift-async-algorithms
-    minorVersion: 1.1.5
-  Clocks:
-    url: https://github.com/pointfreeco/swift-clocks
-    from: 1.1.0
+    exactVersion: 1.1.5
   Collections:
     url: https://github.com/apple/swift-collections
-    minorVersion: 1.6.0
+    exactVersion: 1.6.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
-    minorVersion: 5.8.0
+    exactVersion: 5.8.0
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.5.0
@@ -132,49 +140,49 @@ packages:
     exactVersion: 1.2.0
   GZIP:
     url: https://github.com/nicklockwood/GZIP
-    minorVersion: 1.3.2
+    exactVersion: 1.3.2
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
-    minorVersion: 4.2.2
+    exactVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    minorVersion: 8.11.0
+    exactVersion: 8.12.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
-    minorVersion: 1.2.0
+    exactVersion: 1.2.0
   LoremSwiftum:
     url: https://github.com/lukaskubanek/LoremSwiftum
-    minorVersion: 2.2.3
+    exactVersion: 2.2.3
   LRUCache:
     url: https://github.com/nicklockwood/LRUCache
-    minorVersion: 1.2.1
+    exactVersion: 1.3.0
   Mantis:
     url: https://github.com/guoyingtao/Mantis
-    minorVersion: 3.1.0
+    exactVersion: 3.1.0
   MapLibre:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
-    minorVersion: 6.27.0
+    exactVersion: 6.29.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.67.0
+    exactVersion: 3.71.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 9.22.0
+    exactVersion: 9.26.1
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.19.3
+    exactVersion: 1.19.4
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
-    minorVersion: 3.4.0
+    exactVersion: 3.5.1
   SwiftSoup:
     url: https://github.com/scinfu/SwiftSoup.git
-    minorVersion: 2.13.6
+    exactVersion: 2.13.9
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
-    minorVersion: 6.0.1
+    exactVersion: 6.0.1
   Version:
     url: https://github.com/mxcl/Version
-    minorVersion: 2.2.1
+    exactVersion: 2.2.1
 
 aggregateTargets:
   Periphery:

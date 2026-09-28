@@ -66,7 +66,7 @@ public extension Image {
     func bigIcon(insets: CGFloat = 16, style: BigIcon.Style = .defaultSolid) -> some View {
         resizable()
             .renderingMode(.template)
-            .aspectRatio(contentMode: .fit)
+            .scaledToFit()
             .scaledPadding(insets, relativeTo: .compound.headingLG)
             .modifier(BigIconModifier(style: style))
     }

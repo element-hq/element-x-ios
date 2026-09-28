@@ -614,6 +614,24 @@
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
 	</dict>
+	<key>screen_room_selection_count</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Zaznaczono %1$d wiadomości</string>
+			<key>many</key>
+			<string>Zaznaczono %1$d wiadomości</string>
+			<key>one</key>
+			<string>Zaznaczono %1$d wiadomość</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
 	<dict>
 		<key>COUNT</key>

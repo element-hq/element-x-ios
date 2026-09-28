@@ -92,7 +92,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
     
     static let failed: TextRoomTimelineItem = {
         var result = base
-        result.properties.deliveryStatus = .sendingFailed(.unknown)
+        result.properties.deliveryStatus = .sendingFailed(.unknown(reason: nil))
         return result
     }()
     

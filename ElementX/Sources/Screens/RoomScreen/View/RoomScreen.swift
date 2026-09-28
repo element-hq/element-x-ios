@@ -112,8 +112,10 @@ struct RoomScreen: View {
                         .environment(\.timelineContext, timelineContext)
                         // Make sure the reply header honours the hideTimelineMedia setting too.
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
+                        .collapsedInPlace(isSelectionActive)
                 }
             }
+            .navigationBarBackButtonHidden(isSelectionActive)
             .toolbarRole(RoomHeaderView.toolbarRole)
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
@@ -295,8 +297,23 @@ struct RoomScreen: View {
         }
     }
     
+    private var isSelectionActive: Bool {
+        timelineContext.viewState.selection.isActive
+    }
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
+        if isSelectionActive {
+            TimelineSelectionToolbar(count: timelineContext.viewState.selection.count) {
+                timelineContext.send(viewAction: .clearSelection)
+            }
+        } else {
+            roomToolbar
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var roomToolbar: some ToolbarContent {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
@@ -346,6 +363,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModels = makeViewModels()
     static let readOnlyViewModels = makeViewModels(canSendMessage: false)
     static let tombstonedViewModels = makeViewModels(hasSuccessor: true)
+    static let selectingViewModels = makeViewModels(isSelecting: true)
     static let composerViewModel = ComposerToolbarViewModel.mock()
     
     static var previews: some View {
@@ -371,9 +389,17 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Tombstoned")
         .snapshotPreferences(expect: tombstonedViewModels.room.context.$viewState.map(\.hasSuccessor))
+        
+        ElementNavigationStack {
+            RoomScreen(context: selectingViewModels.room.context,
+                       timelineContext: selectingViewModels.timeline.context,
+                       composerToolbar: ComposerToolbar(context: composerViewModel.context))
+        }
+        .previewDisplayName("Selecting")
+        .snapshotPreferences(expect: selectingViewModels.timeline.context.$viewState.map(\.selection.isActive))
     }
     
-    static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false) -> ViewModels {
+    static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false, isSelecting: Bool = false) -> ViewModels {
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                       name: "Preview room",
                                                       hasOngoingCall: true,
@@ -382,8 +408,11 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
         
         let appSettings = AppSettings.volatile()
+        appSettings.messageMultiSelectEnabled = isSelecting
+        
+        let timelineController = TimelineControllerMock(.init())
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
-                                                  timelineController: TimelineControllerMock(.init()),
+                                                  timelineController: timelineController,
                                                   userSession: UserSessionMock(.init()),
                                                   mediaPlayerProvider: MediaPlayerProviderMock(),
                                                   userIndicatorController: UserIndicatorControllerMock(),
@@ -393,6 +422,11 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                   emojiProvider: EmojiProvider(appSettings: appSettings),
                                                   linkMetadataProvider: LinkMetadataProvider(),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+        
+        if isSelecting {
+            let eventIDs = timelineController.timelineItems.compactMap { ($0 as? EventBasedTimelineItemProtocol)?.id.eventID }
+            timelineViewModel.state.selection.selectedEventIDs = Set(eventIDs.prefix(2))
+        }
         
         return .init(room: roomViewModel, timeline: timelineViewModel)
     }

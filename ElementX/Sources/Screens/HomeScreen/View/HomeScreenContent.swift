@@ -71,7 +71,7 @@ struct HomeScreenContent: View {
                 scrollViewAdapter.scrollView = scrollView
             }
             .onReceive(scrollViewAdapter.didScroll) { _ in
-                updateVisibleRange()
+                sendVisibleRange()
             }
             .onReceive(scrollViewAdapter.isScrolling) { _ in
                 updateVisibleRange()
@@ -139,13 +139,21 @@ struct HomeScreenContent: View {
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search
     /// Dispatch it with a delay to allow the UI to update and the computations to be correct
     /// Once we move to iOS 17 we should remove all of this and use scroll anchors instead
+    /// Update: We're on iOS 26 now and the scroll achors still don't work properly.
     private func updateVisibleRange() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { delayedUpdateVisibleRange() }
     }
     
     private func delayedUpdateVisibleRange() {
+        guard scrollViewAdapter.isScrolling.value == false else {
+            // Scrolling reports live through didScroll
+            return
+        }
+        sendVisibleRange()
+    }
+    
+    private func sendVisibleRange() {
         guard let scrollView = scrollViewAdapter.scrollView,
-              scrollViewAdapter.isScrolling.value == false, // Ignore while scrolling
               context.searchQuery.isEmpty == true, // Ignore while filtering
               !context.viewState.visibleRooms.isEmpty else {
             return

@@ -49,9 +49,14 @@ struct LoginScreen: View {
         VStack(spacing: 8) {
             BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 8)
+<<<<<<< HEAD
             // Tchap: [Beta DINUM] Customize login title
 //            Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
             Text(TchapL10n.screenLoginTitleLogin)
+=======
+            
+            Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.accountProvider.serverNameOrBaseURL))
+>>>>>>> release/26.09.2
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
@@ -137,7 +142,7 @@ struct LoginScreen: View {
 struct LoginScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let credentialsViewModel = makeViewModel(withCredentials: true)
-    static let unconfiguredViewModel = makeViewModel(homeserverAddress: "somethingtofailconfiguration")
+    static let unconfiguredViewModel = makeViewModel(serverNameOrBaseURL: "somethingtofailconfiguration")
     
     static var previews: some View {
         ElementNavigationStack {
@@ -158,10 +163,10 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Unsupported")
     }
     
-    static func makeViewModel(homeserverAddress: String = "example.com", withCredentials: Bool = false) -> LoginScreenViewModel {
+    static func makeViewModel(serverNameOrBaseURL: String = "example.com", withCredentials: Bool = false) -> LoginScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
-        Task { await authenticationService.configure(for: homeserverAddress, flow: .login) }
+        Task { await authenticationService.configure(for: serverNameOrBaseURL, flow: .login) }
         
         let viewModel = LoginScreenViewModel(authenticationService: authenticationService,
                                              loginHint: nil,

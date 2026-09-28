@@ -7,6 +7,7 @@
 //
 
 import Combine
+import ElementCall
 import Foundation
 import MatrixRustSDK
 
@@ -152,6 +153,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     var pusherNotificationClientIdentifier: String? { get }
     
+    /// The total number of unread notifications across all joined, non-muted rooms, as computed by the SDK.
+    var totalUnreadNotifications: UInt64 { get }
+    
     var mediaLoader: MediaLoaderProtocol { get }
     
     var contentScanner: ContentScannerProxyProtocol? { get }
@@ -182,6 +186,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     var isReportRoomSupported: Bool { get async }
     var isLiveKitRTCSupported: Bool { get async }
+    
+    /// Builds a Matrix transport for the call package, `nil` when not backed by a real SDK client.
+    func makeNativeCallTransport() -> ElementCallMatrixTransportProtocol?
     
     var isLoginWithQRCodeSupported: Bool { get async }
     

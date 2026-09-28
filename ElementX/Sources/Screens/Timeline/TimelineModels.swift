@@ -66,6 +66,14 @@ enum TimelineViewAction {
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
+    /// The user has confirmed the removal of an item, optionally giving a reason.
+    case redactConfirmed(itemID: TimelineItemIdentifier, reason: String?)
+    
+    /// Start a multi-selection with the specified item.
+    case startSelection(itemID: TimelineItemIdentifier)
+    /// Add or remove an item from the active multi-selection.
+    case toggleSelection(itemID: TimelineItemIdentifier)
+    case clearSelection
     
     case tappedOnSenderDetails(sender: TimelineItemSender)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
@@ -129,6 +137,8 @@ struct TimelineViewState: BindableState {
     var linkPreviewsEnabled: Bool
     var jumpToReadMarkerEnabled: Bool
     
+    var selection: TimelineSelectionState
+    
     let hasPredecessor: Bool
     
     /// The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
@@ -189,8 +199,37 @@ struct TimelineViewStateBindings {
     
     var manageMemberViewModel: ManageRoomMemberSheetViewModel?
     
+    var redactConfirmationInfo: TimelineRedactConfirmationInfo?
+    
     var showTranslation = false
     var textToBeTranslated: String?
+}
+
+/// The state of the multi-selection of messages, active as soon as an item is selected.
+struct TimelineSelectionState: Equatable {
+    static let limit = 30
+    
+    /// Mirrors the `messageMultiSelectEnabled` feature flag.
+    var isEnabled = false
+    /// The event IDs of the selected items. Only remote messages can be selected.
+    var selectedEventIDs: Set<String> = []
+    
+    var isActive: Bool {
+        !selectedEventIDs.isEmpty
+    }
+    
+    var count: Int {
+        selectedEventIDs.count
+    }
+    
+    var isAtLimit: Bool {
+        count >= Self.limit
+    }
+    
+    func contains(_ eventID: String?) -> Bool {
+        guard let eventID else { return false }
+        return selectedEventIDs.contains(eventID)
+    }
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {
@@ -219,10 +258,15 @@ struct ReadReceiptSummaryInfo: Identifiable {
     let id: TimelineItemIdentifier
 }
 
+/// The item that the user has asked to remove and must confirm, optionally giving a reason.
+struct TimelineRedactConfirmationInfo: Identifiable {
+    let id: TimelineItemIdentifier
+}
+
 enum TimelineAlertInfoType: Hashable {
     case audioRecodingPermissionError
     case pollEndConfirmation(String)
-    case sendingFailed
+    case sendingFailed(reason: String?, sendHandle: SendHandleProxy?)
     case encryptionAuthenticity(String)
     case encryptionForwarder(String)
     case inviteAgain
@@ -310,6 +354,15 @@ enum ScrollDirection: Equatable {
 }
 
 extension TimelineViewState {
+    /// Multi-selection is only offered in the room and thread timelines.
+    var canSelectMessages: Bool {
+        guard selection.isEnabled else { return false }
+        return switch timelineKind {
+        case .live, .detached, .thread: true
+        case .pinned, .media: false
+        }
+    }
+    
     /// The user is at the bottom of a live timeline (no jump-to-bottom button needed).
     var isAtBottomAndLive: Bool {
         bindings.isScrolledToBottom && timelineState.isLive

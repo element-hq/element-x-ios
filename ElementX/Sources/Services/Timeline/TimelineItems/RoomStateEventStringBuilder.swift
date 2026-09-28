@@ -87,26 +87,39 @@ nonisolated struct RoomStateEventStringBuilder {
         L10n.stateEventRoomInviteYou(senderDisplayName)
     }
     
-    func buildProfileChangeString(displayName: String?, previousDisplayName: String?,
-                                  avatarURLString: String?, previousAvatarURLString: String?,
-                                  member: String, memberIsYou: Bool) -> String? {
+    /// - Parameters:
+    ///   - displayName: The new display name, only set by the SDK when the display name changed.
+    ///   - previousDisplayName: The old display name, only set by the SDK when the display name changed.
+    ///   - avatarURLString: The new avatar URL, only set by the SDK when the avatar changed.
+    ///   - previousAvatarURLString: The old avatar URL, only set by the SDK when the avatar changed.
+    ///   - memberID: The member's user ID, used in the display name change strings.
+    ///   - memberDisplayName: The member's disambiguated display name, used when only the avatar changed.
+    ///   - memberIsYou: Whether the member is the current user, which selects the "You" variant of the strings.
+    func buildProfileChangeString(displayName: String?,
+                                  previousDisplayName: String?,
+                                  avatarURLString: String?,
+                                  previousAvatarURLString: String?,
+                                  memberID: String,
+                                  memberDisplayName: String,
+                                  memberIsYou: Bool) -> String? {
         let displayNameChanged = displayName != previousDisplayName
         let avatarChanged = avatarURLString != previousAvatarURLString
         
         switch (displayNameChanged, avatarChanged, memberIsYou) {
         case (true, false, false):
             if let displayName, let previousDisplayName {
-                return L10n.stateEventDisplayNameChangedFrom(member, previousDisplayName, displayName)
+                return L10n.stateEventDisplayNameChangedFrom(memberID, previousDisplayName, displayName)
             } else if let displayName {
-                return L10n.stateEventDisplayNameSet(member, displayName)
+                return L10n.stateEventDisplayNameSet(memberID, displayName)
             } else if let previousDisplayName {
-                return L10n.stateEventDisplayNameRemoved(member, previousDisplayName)
+                return L10n.stateEventDisplayNameRemoved(memberID, previousDisplayName)
             } else {
                 MXLog.error("The display name changed from nil to nil, filtering the item.")
                 return nil
             }
         case (false, true, false):
-            return L10n.stateEventAvatarUrlChanged(displayName ?? member)
+            // The SDK only sets displayName when it changed, so it's nil here and we need the member's current name.
+            return L10n.stateEventAvatarUrlChanged(memberDisplayName)
         case (true, false, true):
             if let displayName, let previousDisplayName {
                 return L10n.stateEventDisplayNameChangedFromByYou(previousDisplayName, displayName)
@@ -122,9 +135,13 @@ nonisolated struct RoomStateEventStringBuilder {
             return L10n.stateEventAvatarUrlChangedByYou
         case (true, true, _):
             // When both have changed, get the string for the display name and tack on that the avatar changed too.
-            guard let string = buildProfileChangeString(displayName: displayName, previousDisplayName: previousDisplayName,
-                                                        avatarURLString: nil, previousAvatarURLString: nil,
-                                                        member: member, memberIsYou: memberIsYou) else { return nil }
+            guard let string = buildProfileChangeString(displayName: displayName,
+                                                        previousDisplayName: previousDisplayName,
+                                                        avatarURLString: nil,
+                                                        previousAvatarURLString: nil,
+                                                        memberID: memberID,
+                                                        memberDisplayName: memberDisplayName,
+                                                        memberIsYou: memberIsYou) else { return nil }
             return string + "\n" + L10n.stateEventAvatarChangedToo
         case (false, false, _):
             MXLog.error("Nothing changed, shouldn't be possible. Filtering the item.")

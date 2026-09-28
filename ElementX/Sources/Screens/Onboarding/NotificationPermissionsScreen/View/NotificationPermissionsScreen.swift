@@ -47,7 +47,7 @@ struct NotificationPermissionsScreen: View {
             Asset.Images.notificationsPromptGraphic
                 .swiftUIImage
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .scaledToFit()
                 .accessibilityHidden(true)
         }
     }

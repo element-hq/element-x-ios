@@ -76,7 +76,8 @@ nonisolated struct RoomEventStringBuilder {
                                           previousDisplayName: prevDisplayName,
                                           avatarURLString: avatarUrl,
                                           previousAvatarURLString: prevAvatarUrl,
-                                          member: sender.id,
+                                          memberID: sender.id,
+                                          memberDisplayName: sender.disambiguatedDisplayName ?? sender.id,
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         case .callInvite:

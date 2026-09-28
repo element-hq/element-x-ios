@@ -1,13 +1,13 @@
 {
-  "originHash" : "4bc536b8dc1a24c51f7aee755efcae049ef53f92314c1fa8dfe3467b8ac0d54d",
+  "originHash" : "7f0f4d6b8ad5f932983be916083a4b6a5b17a693f1bb30ed788b96b2f85718fd",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "bc390b74b53447f04bc0a7a07adaecbb90e02e25",
-        "version" : "10.2.3"
+        "revision" : "86c15ef71798581d1e0cc39a7f99e598ad572419",
+        "version" : "11.0.0"
       }
     },
     {
@@ -56,12 +56,21 @@
       }
     },
     {
+      "identity" : "element-call-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/element-hq/element-call-ios",
+      "state" : {
+        "revision" : "7b9fb8ecf8606ac9e44505aaac818ead7b89ebc4",
+        "version" : "0.1.0-rc.8"
+      }
+    },
+    {
       "identity" : "element-call-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "06a2303e4b7019d9c2321666fbb7bf9c925346ee",
-        "version" : "0.22.0"
+        "revision" : "48ba4408d60d75006c9648ecc79ee56b39f8aaae",
+        "version" : "0.25.0"
       }
     },
     {
@@ -95,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "410984bf301f4fa224fe56277b3f8672cc465c79",
-        "version" : "8.11.0"
+        "revision" : "be0d257b9bd47a4e6e1265fc8c237411825f107a",
+        "version" : "8.12.0"
       }
     },
     {
@@ -122,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/LRUCache",
       "state" : {
-        "revision" : "cb5b2bd0da83ad29c0bec762d39f41c8ad0eaf3e",
-        "version" : "1.2.1"
+        "revision" : "f0570e943ea4445d258113ba73f50cb2b7e564ac",
+        "version" : "1.3.0"
       }
     },
     {
@@ -140,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/maplibre/maplibre-gl-native-distribution",
       "state" : {
-        "revision" : "84a79bc375a301169390ac110c868f06c857b83f",
-        "version" : "6.27.0"
+        "revision" : "86992aabad3e89ce8818adec2e8b9d03177d69da",
+        "version" : "6.29.0"
       }
     },
     {
@@ -167,8 +176,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "cd2aca60da2e59765b5a949e497f56cad29b88cf",
-        "version" : "26.8.11"
+        "revision" : "91eb17c79944811b4d5e3a18e389b351ee1e0a5e",
+        "version" : "26.9.22"
+      }
+    },
+    {
+      "identity" : "matrix-rust-rtc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/element-hq/matrix-rust-rtc",
+      "state" : {
+        "revision" : "9708f0be3615618a82f815e5c767f2fb20a895b0",
+        "version" : "0.3.0-rc.2"
       }
     },
     {
@@ -194,8 +212,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "0191008e2b089a59574ab02a9ee5afbd65631aaf",
-        "version" : "3.67.1"
+        "revision" : "d933f3050645b5df9fe86862110c1726e0c5b135",
+        "version" : "3.71.0"
       }
     },
     {
@@ -203,8 +221,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "67310f115f3fc1e5e1f2e262f9009c64bb387e3f",
-        "version" : "9.22.0"
+        "revision" : "a00a9784fff7193cbb0f9fae509fec8107e07744",
+        "version" : "9.26.1"
       }
     },
     {
@@ -235,30 +253,12 @@
       }
     },
     {
-      "identity" : "swift-clocks",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-clocks",
-      "state" : {
-        "revision" : "72d749bf341b78851203066ab421869b783ec42a",
-        "version" : "1.1.0"
-      }
-    },
-    {
       "identity" : "swift-collections",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
         "revision" : "a0cb0954ecb21e4e31b0070e6ed5674e8556685a",
         "version" : "1.6.0"
-      }
-    },
-    {
-      "identity" : "swift-concurrency-extras",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-concurrency-extras",
-      "state" : {
-        "revision" : "5a3825302b1a0d744183200915a47b508c828e6f",
-        "version" : "1.3.2"
       }
     },
     {
@@ -311,8 +311,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
       "state" : {
-        "revision" : "ead56133a693d0184d8c2db1a6d6394410cacfd6",
-        "version" : "2.13.6"
+        "revision" : "18b80329749eca5ea29fc50211dca5c7eff5bfec",
+        "version" : "2.13.9"
       }
     },
     {
@@ -329,8 +329,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tevelee/SwiftUI-Flow.git",
       "state" : {
-        "revision" : "798364823cdfc6afb4aff43eff5a3ddbca89b54f",
-        "version" : "3.4.0"
+        "revision" : "19e86b750b3c67260cbb28c459004c0dfdb11899",
+        "version" : "3.5.1"
       }
     },
     {
@@ -338,8 +338,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect",
       "state" : {
-        "revision" : "26986a57e31c813f98262ddb62d4b07d40008535",
-        "version" : "26.0.1"
+        "revision" : "a37eca1db7bebc9437ee89508e7b4433ff34adb4",
+        "version" : "27.0.0"
       }
     },
     {

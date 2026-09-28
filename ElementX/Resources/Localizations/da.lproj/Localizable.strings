@@ -174,6 +174,7 @@
 "action_retry_decryption" = "Prøv at dekryptere igen";
 "action_save" = "Gem";
 "action_search" = "Søg";
+"action_select" = "Select";
 "action_select_all" = "Vælg alle";
 "action_send" = "Send";
 "action_send_edited_message" = "Send redigeret besked";
@@ -375,6 +376,7 @@
 "common_success" = "Succes";
 "common_suggested" = "Forslag";
 "common_suggestions" = "Forslag";
+"common_switch_accounts" = "Switch accounts";
 "common_syncing" = "Synkroniserer";
 "common_text" = "Tekst";
 "common_third_party_notices" = "Tredjepartsmeddelelser";
@@ -495,6 +497,11 @@
 "error_no_compatible_app_found" = "Der blev ikke fundet nogen kompatibel app til at håndtere denne handling.";
 "error_room_address_already_exists" = "Denne rumadresse er allerede taget. Prøv at redigere rummets adressefelt eller at skifte rummets navn";
 "error_room_address_invalid_symbols" = "Nogle tegn er ikke tilladt. Kun bogstaver, cifre og følgende symboler understøttes! $ & '() * +/; =? @ [] - . _";
+"error_sending_failure_invalid_mime_type" = "Invalid mime type: %@";
+"error_sending_failure_missing_media_content" = "Missing media content";
+"error_sending_failure_other" = "Error details: %@";
+"error_sending_failure_sending_from_unverified_device" = "Sending from unverified device";
+"error_sending_failure_unknown" = "Unknown error";
 "error_some_messages_have_not_been_sent" = "Nogle beskeder er ikke blevet sendt";
 "error_unknown" = "Beklager, der opstod en fejl";
 "error.account_already_logged_in" = "Du er allerede logget ind på denne enhed som %1$@.";
@@ -524,6 +531,7 @@
 "notification_invitation_action_reject" = "Afvis";
 "notification_invite_body" = "Inviterede dig til at samtale";
 "notification_invite_body_with_sender" = "%1$@ inviterede dig til at samtale";
+"notification_knock_request_body" = "Requested to join";
 "notification_live_location_started_body" = "Started sharing their live location";
 "notification_mentioned_you_body" = "Nævnte dig: %1$@";
 "notification_new_messages" = "Nye beskeder";
@@ -944,6 +952,10 @@
 "screen_knock_requests_list_empty_state_title" = "Ingen ventende anmodning om at deltage";
 "screen_knock_requests_list_initial_loading_title" = "Indlæser anmodninger om at deltage...";
 "screen_knock_requests_list_title" = "Anmodninger om at deltage";
+"screen_labs_enable_gallery" = "Gallery messages";
+"screen_labs_enable_gallery_description" = "Send multiple images or videos in one go. Stable on mobile, but not yet supported by web.";
+"screen_labs_enable_knocking" = "Ask to join";
+"screen_labs_enable_knocking_description" = "Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental.";
 "screen_labs_enable_threads" = "Aktivér svar-tråde";
 "screen_labs_enable_threads_description" = "Appen genstarter for at anvende denne ændring.";
 "screen_labs_header_description" = "Prøv vores nyeste idéer under udvikling. Disse funktioner er ikke færdige; de ​​kan være ustabile og kan ændre sig.";
@@ -1279,6 +1291,11 @@
 "screen_room_change_role_section_users" = "Medlemmer";
 "screen_room_change_role_unsaved_changes_description" = "Du har ændringer, der ikke er gemt.";
 "screen_room_change_role_unsaved_changes_title" = "Gem ændringer?";
+"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
+"screen_room_confirm_removal_reason_label" = "Reason (optional)";
+"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
+"screen_room_confirm_removal_title" = "Confirm removal";
 "screen_room_details_add_topic_title" = "Tilføj emne";
 "screen_room_details_badge_encrypted" = "Krypteret";
 "screen_room_details_badge_not_encrypted" = "Ikke krypteret";
@@ -1324,6 +1341,7 @@
 "screen_room_invite_again_alert_message" = "Vil du invitere dem igen?";
 "screen_room_invite_again_alert_title" = "Du er alene i denne samtale";
 "screen_room_live_location_banner" = "Deler placering live";
+"screen_room_maximum_messages_selected" = "Maximum messages selected";
 "screen_room_member_details_block_alert_action" = "Bloker";
 "screen_room_member_details_block_alert_description" = "Blokerede brugere vil ikke være i stand til at sende dig beskeder, og alle deres beskeder vil blive skjult. Du kan fjerne blokeringen af dem når som helst.";
 "screen_room_member_details_block_user" = "Bloker bruger";
@@ -1363,8 +1381,9 @@
 "screen_room_notification_settings_error_restoring_default" = "Gendannelse af standardtilstanden mislykkedes. Prøv igen.";
 "screen_room_notification_settings_error_setting_mode" = "Kunne ikke indstille tilstanden. Prøv igen.";
 "screen_room_notification_settings_mentions_only_disclaimer" = "Din hjemmeserver understøtter ikke denne indstilling i krypterede rum, du får ikke besked i dette rum.";
-"screen_room_notification_settings_mode_all_messages" = "Alle beskeder";
-"screen_room_notification_settings_mode_mentions_and_keywords" = "Kun omtaler og nøgleord";
+"screen_room_notification_settings_mode_all_messages" = "All messages";
+"screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and replies only";
+"screen_room_notification_settings_mode_mute" = "Mute";
 "screen_room_notification_settings_room_custom_settings_title" = "Giv mig besked i dette rum for";
 "screen_room_pinned_banner_indicator" = "%1$@ af %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Fastgjorte beskeder";
@@ -1425,6 +1444,8 @@
 "screen_roomlist_filter_invites_empty_state_title" = "Du har ingen afventende invitationer.";
 "screen_roomlist_filter_low_priority" = "Lav prioritet";
 "screen_roomlist_filter_low_priority_empty_state_title" = "Du har endnu ingen chats med lav prioritet";
+"screen_roomlist_filter_mention" = "Mention";
+"screen_roomlist_filter_mention_empty_state_title" = "You don’t have any unread mentions";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Du kan fravælge filtre for at se dine andre samtaler";
 "screen_roomlist_filter_mixed_empty_state_title" = "Du har ingen samtaler til dette valg";
 "screen_roomlist_filter_people" = "Brugere";
@@ -1511,6 +1532,8 @@
 "screen_session_verification_request_title" = "Anmodet om verifikation";
 "screen_session_verification_they_dont_match" = "De matcher ikke";
 "screen_session_verification_they_match" = "De matcher";
+"screen_session_verification_unavailable_subtitle" = "Please use another device or recovery key.";
+"screen_session_verification_unavailable_title" = "Verification with this device is currently unavailable";
 "screen_session_verification_use_another_device_subtitle" = "Sørg for, at du har appen åben på den anden enhed, før du starter verifikationen herfra.";
 "screen_session_verification_use_another_device_title" = "Åbn appen på en anden bekræftet enhed";
 "screen_session_verification_user_initiator_subtitle" = "For ekstra sikkerhed, verificér denne bruger ved at sammenligne et sæt emojier på jeres enheder. Gør dette ved at bruge en kommunikationsmetode i stoler på.";
@@ -1721,6 +1744,7 @@
 "troubleshoot_notifications_test_push_loop_back_failure_2" = "Fejl: %1$@.";
 "troubleshoot_notifications_test_push_loop_back_failure_3" = "Fejl, kan ikke teste push.";
 "troubleshoot_notifications_test_push_loop_back_failure_4" = "Fejl, timeout venter på push.";
+"troubleshoot_notifications_test_push_loop_back_failure_rate_limit" = "Error: the push gateway is rate limiting this device, so notifications won't be reliable. Please set up a different push gateway.";
 "troubleshoot_notifications_test_push_loop_back_success" = "Push loop back tog %1$d ms.";
 "troubleshoot_notifications_test_push_loop_back_title" = "Afprøv Push loop back";
 "troubleshoot_notifications_test_unified_push_description" = "Sørg for, at UnifiedPush-distributører er tilgængelige.";

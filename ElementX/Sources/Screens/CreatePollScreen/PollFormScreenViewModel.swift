@@ -52,11 +52,19 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
                 }
             }
         case .delete:
+            // A blank reason is no reason at all, so don't send one.
+            var reason: String?
+            let binding: Binding<String> = .init(get: { reason ?? "" },
+                                                 set: { reason = $0.isBlank ? nil : $0 })
             state.bindings.alertInfo = .init(id: .init(),
                                              title: L10n.screenEditPollDeleteConfirmationTitle,
                                              message: L10n.screenEditPollDeleteConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                             secondaryButton: .init(title: L10n.actionOk) { Task { await self.deletePoll() } })
+                                             secondaryButton: .init(title: L10n.actionOk) { Task { await self.deletePoll(reason: reason) } },
+                                             textFields: [.init(placeholder: L10n.screenRoomConfirmRemovalReasonLabel,
+                                                                text: binding,
+                                                                autoCapitalization: .sentences,
+                                                                autoCorrectionDisabled: false)])
         case .cancel:
             if state.formContentHasChanged {
                 state.bindings.alertInfo = .init(id: .init(),
@@ -116,7 +124,7 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
         }
     }
     
-    private func deletePoll() async {
+    private func deletePoll(reason: String?) async {
         // There aren't any local echoes for redactions, so dismiss the screen early
         // until we have them: https://github.com/matrix-org/matrix-rust-sdk/issues/4162
         actionsSubject.send(.close)
@@ -126,6 +134,6 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
             return
         }
         
-        await timelineController.redact(.eventID(pollStartID))
+        await timelineController.redact(.eventID(pollStartID), reason: reason)
     }
 }

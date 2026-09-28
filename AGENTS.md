@@ -14,6 +14,9 @@ PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
 - **SwiftLint** (.swiftlint.yml) + **SwiftFormat** (.swiftformat) enforce style on build. Warnings show in Xcode. Build before **XcodeRefreshCodeIssuesInFile**.
 - Follow [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) everywhere, Rust SDK wrappers too (`ID` not `Id`, `URL` not `Url`, `configuration` not `config` or `cfg`).
 - File headers live in `IDETemplateMacros.plist`.
+- **Import `SwiftUI`, not `UIKit`** — need `UIPasteboard` etc, `SwiftUI` bring it. `SwiftUI` re-export `Foundation` too, so no `import Foundation` beside it.
+- **Clean Code** (Robert C. Martin) Newspaper order: headline first, detail down. Stepdown rule: caller above callee, calls point down. Tests: test cases first, helpers below. Swift idiom always win on clash.
+- **Member order in type**: properties (stored + computed, public + private) → `init` → functions. `View` types: properties → `init` → views (`body` first) → functions.
 
 ### Comments
 
@@ -52,6 +55,7 @@ PRs must follow rules. Prefer Xcode MCP tools over terminal commands.
 
 ## Pull Request Guidelines
 
+- New branch from `develop` must not track `develop`.
 - Sentence-style titles (no conventional commits).
 - Exactly one `pr-` label (see `.github/release.yml`).
 - Title = changelog entry — descriptive, no "Fixes #…".
@@ -378,7 +382,7 @@ Same pattern for publishers.
 | `app.yml` | App-level XcodeGen config |
 | `.swiftlint.yml` | SwiftLint rules |
 | `.swiftformat` | SwiftFormat rules |
-| `Dangerfile.swift` | Danger PR checks |
+| `.github/workflows/pr-checks.yml` | PR metadata checks (title, labels, size, screenshots) |
 | `Package.swift` | SPM manifest (Tools CLI) |
 | `localazy.json` | Localazy translation config |
 | `codecov.yml` | Codecov config |

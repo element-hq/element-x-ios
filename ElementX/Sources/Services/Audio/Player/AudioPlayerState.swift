@@ -128,7 +128,6 @@ class AudioPlayerState: ObservableObject, Identifiable {
     
     private func subscribeToAudioPlayer(audioPlayer: AudioPlayerProtocol) {
         audioPlayerSubscription = audioPlayer.actions
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self else {
                     return

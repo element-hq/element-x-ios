@@ -52,9 +52,10 @@ nonisolated extension String {
 }
 
 nonisolated extension String {
+    /// Drops stray new lines everywhere but paragraphs and lists when other paragraphs follow them
     func replacingHtmlBreaksOccurrences() -> String {
         var result = self
-        let pattern = #"</p>(\n+)<p>"#
+        let pattern = #"</(p|ul|ol)>(\n+)(?=<p[ >])"#
         
         guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
             return result
@@ -63,11 +64,12 @@ nonisolated extension String {
         
         for match in matches.reversed() {
             guard let range = Range(match.range, in: self),
-                  let innerMatchRange = Range(match.range(at: 1), in: self) else {
+                  let tagRange = Range(match.range(at: 1), in: self),
+                  let innerMatchRange = Range(match.range(at: 2), in: self) else {
                 continue
             }
             let numberOfBreaks = (self[innerMatchRange].components(separatedBy: "\n").count - 1)
-            let replacement = "<br>" + String(repeating: "<br>", count: numberOfBreaks)
+            let replacement = "</\(self[tagRange])>" + String(repeating: "<br>", count: numberOfBreaks)
             result.replaceSubrange(range, with: replacement)
         }
         
