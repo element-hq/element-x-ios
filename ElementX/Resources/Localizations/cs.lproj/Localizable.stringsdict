@@ -63,11 +63,27 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Přečetl(a) %1$@ a %2$d další</string>
+			<string></string>
 			<key>one</key>
-			<string>Přečetl(a) %1$@ a %2$d další</string>
+			<string>Předchozí zprávu přečetl(a) %1$@ a %2$d další</string>
 			<key>other</key>
-			<string>Přečetl(a) %1$@ a %2$d dalších</string>
+			<string>Předchozí zprávu přečetl(a) %1$@ a %2$d další</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>action_forward_messages</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Forward %1$d message</string>
+			<key>other</key>
+			<string>Forward %1$d messages</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -462,10 +478,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>%1$d stupně</string>
 			<key>one</key>
-			<string>%1$d degree</string>
+			<string>%1$d stupeň</string>
 			<key>other</key>
-			<string>%1$d degrees</string>
+			<string>%1$d stupňů</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -574,6 +592,22 @@
 			<string>%1$d pozván(a)</string>
 			<key>other</key>
 			<string>%1$d pozvaných</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+	</dict>
+	<key>screen_room_messages_forwarded</key>
+	<dict>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d message forwarded</string>
+			<key>other</key>
+			<string>%1$d messages forwarded</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

@@ -96,6 +96,7 @@
 "action_copy_link" = "Copier le lien";
 "action_copy_link_to_message" = "Copier le lien vers le message";
 "action_copy_text" = "Copier le texte";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Créer";
 "action_create_room" = "Créer un salon";
 "action_create_space" = "Créer un espace";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Réessayer le déchiffrement";
 "action_save" = "Enregistrer";
 "action_search" = "Rechercher";
-"action_select" = "Select";
 "action_select_all" = "Tout sélectionner";
 "action_send" = "Envoyer";
 "action_send_edited_message" = "Envoyer les modifications";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ne prend pas en charge l'utilisation d'accessoires Bluetooth dans cette version d'Android. Sélectionnez une autre sortie audio.";
 "common_about" = "À propos";
 "common_acceptable_use_policy" = "Politique d’utilisation acceptable";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Ajouter un compte";
 "common_add_another_account" = "Ajouter un autre compte";
 "common_adding_caption" = "Ajout d'une légende";
@@ -227,6 +228,7 @@
 "common_analytics" = "Statistiques d’utilisation";
 "common_android_shortcuts_remove_reason_left_room" = "Vous avez quitté le salon";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Vous avez été déconnecté de la session";
+"common_app_settings" = "App settings";
 "common_appearance" = "Apparence";
 "common_audio" = "Audio";
 "common_beta" = "Bêta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Appel démarré";
 "common_call_you_declined" = "Vous avez rejeté un appel";
 "common_chat_backup" = "Sauvegarde des discussions";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Copié dans le presse-papiers";
 "common_copyright" = "Droits d’auteur";
 "common_creating_room" = "Création du salon…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Fin de localisation en direct";
 "common_loading" = "Chargement…";
 "common_loading_more" = "Chargement…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Message";
 "common_message_actions" = "Actions sur le message";
 "common_message_failed_to_send" = "Échec de l'envoi du message";
 "common_message_layout" = "Mode d’affichage des messages";
 "common_message_removed" = "Message supprimé";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Moderne";
 "common_mute" = "Mettre en sourdine";
 "common_name" = "Nom";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "En attente de la position en temps réel…";
 "common_world_readable_history" = "Tout le monde peut voir les anciens messages";
 "common_you" = "Vous";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Confirmez votre clé de récupération pour conserver l’accès à votre stockage de clés et à l’historique des messages.";
 "confirm_recovery_key_banner_primary_button_title" = "Saisissez votre clé de récupération";
 "confirm_recovery_key_banner_secondary_button_title" = "Clé de récupération oubliée ?";
@@ -620,8 +627,8 @@
 "screen_advanced_settings_share_presence_description" = "Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie.";
 "screen_advanced_settings_show_media_timeline_always_hide" = "Toujours cacher";
 "screen_advanced_settings_show_media_timeline_always_show" = "Toujours montrer";
-"screen_advanced_settings_show_media_timeline_private_rooms" = "Dans les salons privés";
-"screen_advanced_settings_show_media_timeline_subtitle" = "Un média caché peut toujours être affiché en cliquant dessus";
+"screen_advanced_settings_show_media_timeline_private_rooms" = "Show in private rooms";
+"screen_advanced_settings_show_media_timeline_subtitle" = "Hidden media can always be shown by tapping on it.";
 "screen_advanced_settings_show_media_timeline_title" = "Afficher les médias dans les discussions.";
 "screen_advanced_settings_view_source_description" = "Activer cette option pour pouvoir voir la source des messages dans la discussion.";
 "screen_analytics_prompt_data_usage" = "Nous n’enregistrerons ni ne profilerons aucune donnée personnelle";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Suivez les instructions pour activer votre stockage de clés";
 "screen_missing_key_backup_step_5" = "Revenez à %1$@";
 "screen_missing_key_backup_title" = "Activez le stockage de vos clés avant de continuer avec %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Vous pourrez modifier vos paramètres ultérieurement.";
 "screen_notification_optin_title" = "Autorisez les notifications et ne manquez aucun message";
 "screen_notification_settings_additional_settings_section_title" = "Réglages supplémentaires";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Mentions";
 "screen_notification_settings_notification_section_title" = "Prévenez-moi pour";
 "screen_notification_settings_room_mention_label" = "Un message qui contient @room";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Personnalisé";
 "screen_notification_settings_sound_custom_sound_button_title" = "Son personnalisé...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Erreur lors de la suppression du fichier";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Membres";
 "screen_room_change_role_unsaved_changes_description" = "Vous avez des modifications non-enregistrées.";
 "screen_room_change_role_unsaved_changes_title" = "Enregistrer les changements ?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Ajouter un sujet";
 "screen_room_details_badge_encrypted" = "Chiffré";
 "screen_room_details_badge_not_encrypted" = "Non chiffré";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Demandes en attente";
 "screen_room_details_roles_and_permissions" = "Rôles & autorisations";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Nom";
 "screen_room_details_security_and_privacy_title" = "Sécurité & confidentialité";
 "screen_room_details_security_title" = "Sécurité";

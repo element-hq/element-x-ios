@@ -96,6 +96,7 @@
 "action_copy_link" = "Kopiatu esteka";
 "action_copy_link_to_message" = "Kopiatu esteka mezura";
 "action_copy_text" = "Kopiatu testua";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Sortu";
 "action_create_room" = "Sortu gela";
 "action_create_space" = "Create space";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Saiatu berriro deszifratzen";
 "action_save" = "Gorde";
 "action_search" = "Bilatu";
-"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Bidali";
 "action_send_edited_message" = "Bidali editatutako mezua";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Honi buruz";
 "common_acceptable_use_policy" = "Acceptable use policy";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Add an account";
 "common_add_another_account" = "Add account";
 "common_adding_caption" = "Testua gehitzen";
@@ -227,6 +228,7 @@
 "common_analytics" = "Estatistikak";
 "common_android_shortcuts_remove_reason_left_room" = "Gelatik atera zara";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
+"common_app_settings" = "App settings";
 "common_appearance" = "Itxura";
 "common_audio" = "Audioa";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Deia hasi da";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Txataren babeskopia";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Arbelean kopiatu da";
 "common_copyright" = "Copyrighta";
 "common_creating_room" = "Gela sortzen…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Live location ended";
 "common_loading" = "Kargatzen…";
 "common_loading_more" = "Gehiago kargatzen…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Mezua";
 "common_message_actions" = "Mezuen ekintzak";
 "common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Mezuen antolaketa";
 "common_message_removed" = "Mezua kendu da";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Modernoa";
 "common_mute" = "Mututu";
 "common_name" = "Name";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Zeu";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
 "confirm_recovery_key_banner_primary_button_title" = "Sartu zure berreskuratze-gakoa";
 "confirm_recovery_key_banner_secondary_button_title" = "Berreskuratze-gakoa ahaztu al duzu?";
@@ -620,8 +627,8 @@
 "screen_advanced_settings_share_presence_description" = "If turned off, you won’t be able to send or receive read receipts or typing notifications.";
 "screen_advanced_settings_show_media_timeline_always_hide" = "Ezkutatu beti";
 "screen_advanced_settings_show_media_timeline_always_show" = "Erakutsi beti";
-"screen_advanced_settings_show_media_timeline_private_rooms" = "In private rooms";
-"screen_advanced_settings_show_media_timeline_subtitle" = "A hidden media can always be shown by tapping on it";
+"screen_advanced_settings_show_media_timeline_private_rooms" = "Show in private rooms";
+"screen_advanced_settings_show_media_timeline_subtitle" = "Hidden media can always be shown by tapping on it.";
 "screen_advanced_settings_show_media_timeline_title" = "Show media in timeline";
 "screen_advanced_settings_view_source_description" = "Gaitu aukera mezuaren iturria denbora-lerroan ikusteko.";
 "screen_analytics_prompt_data_usage" = "We won't record or profile any personal data";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Geroago alda ditzakezu ezarpenak.";
 "screen_notification_optin_title" = "Baimendu jakinarazpenak eta ez galdu inoiz mezurik";
 "screen_notification_settings_additional_settings_section_title" = "Ezarpen gehiago";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Aipamenak";
 "screen_notification_settings_notification_section_title" = "Jakinarazi";
 "screen_notification_settings_room_mention_label" = "Jakinarazi @gelan";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Kideak";
 "screen_room_change_role_unsaved_changes_description" = "Gorde gabeko aldaketak dituzu.";
 "screen_room_change_role_unsaved_changes_title" = "Aldaketak gorde?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Gehitu hizketagaia";
 "screen_room_details_badge_encrypted" = "Zifratuta";
 "screen_room_details_badge_not_encrypted" = "Zifratu gabe";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profila";
 "screen_room_details_requests_to_join_title" = "Sartzeko eskaerak";
 "screen_room_details_roles_and_permissions" = "Rolak eta baimenak";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_and_privacy_title" = "Segurtasuna eta pribatutasuna";
 "screen_room_details_security_title" = "Segurtasuna";

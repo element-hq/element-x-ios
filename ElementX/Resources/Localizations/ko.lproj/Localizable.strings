@@ -96,6 +96,7 @@
 "action_copy_link" = "링크 복사";
 "action_copy_link_to_message" = "메시지에 링크 복사";
 "action_copy_text" = "텍스트 복사";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "만들기";
 "action_create_room" = "방 만들기";
 "action_create_space" = "스페이스 만들기";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "복호화 재시도";
 "action_save" = "저장";
 "action_search" = "검색";
-"action_select" = "Select";
 "action_select_all" = "전체 선택";
 "action_send" = "보내기";
 "action_send_edited_message" = "편집한 메시지 보내기";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call은 이 Android 버전에서 Bluetooth 오디오 장치 사용을 지원하지 않습니다. 다른 오디오 장치를 선택하세요.";
 "common_about" = "정보";
 "common_acceptable_use_policy" = "이용 목적 제한 방침";
+"common_account_settings" = "Account settings";
 "common_add_account" = "계정 추가";
 "common_add_another_account" = "다른 계정 추가";
 "common_adding_caption" = "캡션 추가";
@@ -227,6 +228,7 @@
 "common_analytics" = "통계";
 "common_android_shortcuts_remove_reason_left_room" = "방을 떠남";
 "common_android_shortcuts_remove_reason_session_logged_out" = "세션에서 로그아웃되었습니다.";
+"common_app_settings" = "App settings";
 "common_appearance" = "외관";
 "common_audio" = "소리";
 "common_beta" = "베타";
@@ -237,6 +239,7 @@
 "common_call_started" = "통화 시작";
 "common_call_you_declined" = "통화를 거절하셨습니다";
 "common_chat_backup" = "채팅 백업";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "클립보드에 복사됨";
 "common_copyright" = "저작권";
 "common_creating_room" = "방 만드는 중…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "실시간 위치 공유 종료";
 "common_loading" = "로딩 중…";
 "common_loading_more" = "더 많은 내용이 로딩 중…";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "메시지";
 "common_message_actions" = "메시지 작업";
 "common_message_failed_to_send" = "메시지 전송 실패";
 "common_message_layout" = "메시지 레이아웃";
 "common_message_removed" = "메시지 제거됨";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "모던";
 "common_mute" = "음소거";
 "common_name" = "이름";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "실시간 위치 정보를 기다리는 중…";
 "common_world_readable_history" = "누구나 대화 기록 보기 가능";
 "common_you" = "당신";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "키 저장소 및 메시지 기록에 대한 액세스를 유지하려면 복구 키를 확인하세요.";
 "confirm_recovery_key_banner_primary_button_title" = "복구 키를 입력하세요";
 "confirm_recovery_key_banner_secondary_button_title" = "복구 키를 잊으셨나요?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "안내에 따라 키 저장소를 활성화해 주세요";
 "screen_missing_key_backup_step_5" = "%1$@(으)로 돌아가기";
 "screen_missing_key_backup_title" = "%1$@(으)로 진행하기 전에 키 저장소를 활성화해 주세요.";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "나중에 설정을 변경할 수 있습니다.";
 "screen_notification_optin_title" = "알림을 허용하고 메시지를 놓치지 마세요.";
 "screen_notification_settings_additional_settings_section_title" = "추가 설정";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "언급";
 "screen_notification_settings_notification_section_title" = "나에게 알려주세요";
 "screen_notification_settings_room_mention_label" = "@room 에서 알림 받기";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "사용자 지정";
 "screen_notification_settings_sound_custom_sound_button_title" = "소리 사용자 지정";
 "screen_notification_settings_sound_delete_sound_error_title" = "파일 삭제 오류";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "회원들";
 "screen_room_change_role_unsaved_changes_description" = "저장되지 않은 변경 사항이 있습니다.";
 "screen_room_change_role_unsaved_changes_title" = "변경 사항을 저장하시겠습니까?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "화제 추가";
 "screen_room_details_badge_encrypted" = "암호화됨";
 "screen_room_details_badge_not_encrypted" = "암호화되지 않음";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "프로필";
 "screen_room_details_requests_to_join_title" = "참여 요청";
 "screen_room_details_roles_and_permissions" = "역할 및 권한";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "이름";
 "screen_room_details_security_and_privacy_title" = "보안 및 개인정보 보호";
 "screen_room_details_security_title" = "보안";

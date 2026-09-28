@@ -96,6 +96,7 @@
 "action_copy_link" = "Kopírovať odkaz";
 "action_copy_link_to_message" = "Kopírovať odkaz do správy";
 "action_copy_text" = "Kopírovať text";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Vytvoriť";
 "action_create_room" = "Vytvoriť miestnosť";
 "action_create_space" = "Vytvoriť priestor";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Opakovať dešifrovanie";
 "action_save" = "Uložiť";
 "action_search" = "Hľadať";
-"action_select" = "Select";
 "action_select_all" = "Vybrať všetko";
 "action_send" = "Odoslať";
 "action_send_edited_message" = "Odoslať upravenú správa";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call nepodporuje používanie zvukových zariadení Bluetooth v tejto verzii systému Android. Vyberte iné zvukové zariadenie.";
 "common_about" = "O aplikácii";
 "common_acceptable_use_policy" = "Zásady prijateľného používania";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Pridať účet";
 "common_add_another_account" = "Pridať ďalší účet";
 "common_adding_caption" = "Pridáva sa titulok";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analytika";
 "common_android_shortcuts_remove_reason_left_room" = "Opustili ste miestnosť";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Boli ste odhlásení zo relácie.";
+"common_app_settings" = "App settings";
 "common_appearance" = "Vzhľad";
 "common_audio" = "Zvuk";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Hovor sa začal";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Záloha konverzácie";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Skopírované do schránky";
 "common_copyright" = "Autorské práva";
 "common_creating_room" = "Vytváranie miestnosti...";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Live location ended";
 "common_loading" = "Načítava sa…";
 "common_loading_more" = "Načítava sa viac...";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Správa";
 "common_message_actions" = "Akcie správy";
 "common_message_failed_to_send" = "Správu sa nepodarilo odoslať";
 "common_message_layout" = "Štýl správ";
 "common_message_removed" = "Správa odstránená";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Moderné";
 "common_mute" = "Stlmiť";
 "common_name" = "Meno";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Vy";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Potvrďte svoj kľúč na obnovenie, aby ste zachovali prístup k úložisku kľúčov a histórii správ.";
 "confirm_recovery_key_banner_primary_button_title" = "Zadajte kľúč na obnovenie";
 "confirm_recovery_key_banner_secondary_button_title" = "Zabudli ste svoj kľúč na obnovenie?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Svoje nastavenia môžete neskôr zmeniť.";
 "screen_notification_optin_title" = "Povoľte oznámenia a nikdy nezmeškajte žiadnu správu";
 "screen_notification_settings_additional_settings_section_title" = "Ďalšie nastavenia";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Zmienky";
 "screen_notification_settings_notification_section_title" = "Upozorniť ma na";
 "screen_notification_settings_room_mention_label" = "Upozorniť ma na @miestnosť";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Členovia";
 "screen_room_change_role_unsaved_changes_description" = "Máte neuložené zmeny.";
 "screen_room_change_role_unsaved_changes_title" = "Uložiť zmeny?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Pridať tému";
 "screen_room_details_badge_encrypted" = "Zašifrované";
 "screen_room_details_badge_not_encrypted" = "Nešifrované";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Žiadosti o vstup";
 "screen_room_details_roles_and_permissions" = "Roly a povolenia";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Meno";
 "screen_room_details_security_and_privacy_title" = "Bezpečnosť a súkromie";
 "screen_room_details_security_title" = "Bezpečnosť";

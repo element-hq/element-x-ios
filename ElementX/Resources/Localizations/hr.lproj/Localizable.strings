@@ -96,6 +96,7 @@
 "action_copy_link" = "Kopiraj poveznicu";
 "action_copy_link_to_message" = "Kopiraj poveznicu u poruku";
 "action_copy_text" = "Kopiraj tekst";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Stvori";
 "action_create_room" = "Napravi sobu";
 "action_create_space" = "Stvori prostor";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Ponovno pokušaj dešifrirati";
 "action_save" = "Spremi";
 "action_search" = "Pretraži";
-"action_select" = "Odaberite";
 "action_select_all" = "Odaberi sve";
 "action_send" = "Pošalji";
 "action_send_edited_message" = "Pošalji uređenu poruku";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ne podržava korištenje Bluetooth audiouređaja u ovoj inačici Androida. Odaberite drugi audiouređaj.";
 "common_about" = "O aplikaciji";
 "common_acceptable_use_policy" = "Pravilnik o prihvatljivoj upotrebi";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Dodaj račun";
 "common_add_another_account" = "Dodaj još jedan račun";
 "common_adding_caption" = "Dodavanje opisa";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analitika";
 "common_android_shortcuts_remove_reason_left_room" = "Napustili ste sobu";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Odjavljeni ste iz sesije";
+"common_app_settings" = "App settings";
 "common_appearance" = "Izgled";
 "common_audio" = "Audiozapis";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Poziv je započeo";
 "common_call_you_declined" = "Odbili ste poziv";
 "common_chat_backup" = "Sigurnosna kopija razgovora";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopirano u međuspremnik";
 "common_copyright" = "Autorsko pravo";
 "common_creating_room" = "Stvaranje sobe…";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Prikaz lokacije uživo je završio";
 "common_loading" = "Učitavanje…";
 "common_loading_more" = "Učitava se još...";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Poruka";
 "common_message_actions" = "Radnje s porukama";
 "common_message_failed_to_send" = "Slanje poruke nije uspjelo";
 "common_message_layout" = "Izgled poruke";
 "common_message_removed" = "Poruka je uklonjena";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Suvremeni";
 "common_mute" = "Isključi zvuk";
 "common_name" = "Naziv";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Čekanje lokacije uživo…";
 "common_world_readable_history" = "Svatko može vidjeti povijest";
 "common_you" = "Vi";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Potvrdite svoj ključ za oporavak kako biste zadržali pristup pohrani ključeva i povijesti poruka.";
 "confirm_recovery_key_banner_primary_button_title" = "Unesite svoj ključ za oporavak";
 "confirm_recovery_key_banner_secondary_button_title" = "Zaboravili ste ključ za oporavak?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Slijedite upute za omogućavanje pohrane ključeva";
 "screen_missing_key_backup_step_5" = "Vrati se %1$@";
 "screen_missing_key_backup_title" = "Omogućite pohranu ključeva prije nego što nastavite na %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Postavke možete promijeniti poslije.";
 "screen_notification_optin_title" = "Omogućite obavijesti i nikada ne propustite poruku";
 "screen_notification_settings_additional_settings_section_title" = "Dodatne postavke";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Spominjanja";
 "screen_notification_settings_notification_section_title" = "Obavijesti me za";
 "screen_notification_settings_room_mention_label" = "Obavijesti me o sobi @soba";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Prilagođeno";
 "screen_notification_settings_sound_custom_sound_button_title" = "Personalizirano zvono";
 "screen_notification_settings_sound_delete_sound_error_title" = "Pogreška pri brisanju datoteke";
@@ -1291,7 +1302,6 @@
 "screen_room_change_role_section_users" = "Članovi";
 "screen_room_change_role_unsaved_changes_description" = "Niste spremili sve promjene.";
 "screen_room_change_role_unsaved_changes_title" = "Želite li spremiti promjene?";
-"screen_room_confirm_removal_message" = "Jeste li sigurni da želite ukloniti ovu poruku?";
 "screen_room_confirm_removal_reason_label" = "Razlog (neobavezno)";
 "screen_room_confirm_removal_reason_placeholder" = "Unesite…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Neobavezno)";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Zahtjevi za pridruživanje";
 "screen_room_details_roles_and_permissions" = "Uloge i dopuštenja";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Naziv";
 "screen_room_details_security_and_privacy_title" = "Sigurnost i privatnost";
 "screen_room_details_security_title" = "Sigurnost";

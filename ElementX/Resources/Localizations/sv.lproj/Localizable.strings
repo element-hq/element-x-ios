@@ -96,6 +96,7 @@
 "action_copy_link" = "Kopiera länk";
 "action_copy_link_to_message" = "Kopiera länk till meddelande";
 "action_copy_text" = "Kopiera text";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Skapa";
 "action_create_room" = "Skapa rum";
 "action_create_space" = "Create space";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Försök att avkryptera igen";
 "action_save" = "Spara";
 "action_search" = "Sök";
-"action_select" = "Select";
 "action_select_all" = "Select all";
 "action_send" = "Skicka";
 "action_send_edited_message" = "Skicka redigerat message";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call stöder inte användning av Bluetooth-ljudenheter i den här Android-versionen. Välj en annan ljudenhet.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Policy för godtagbar användning";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Lägg till ett konto";
 "common_add_another_account" = "Lägg till ytterligare ett konto";
 "common_adding_caption" = "Lägga till bildtext";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analysdata";
 "common_android_shortcuts_remove_reason_left_room" = "Du lämnade rummet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du loggades ut ur sessionen";
+"common_app_settings" = "App settings";
 "common_appearance" = "Utseende";
 "common_audio" = "Ljud";
 "common_beta" = "Beta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Samtal startat";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Chattsäkerhetskopia";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopierad till klippbordet";
 "common_copyright" = "Upphovsrätt";
 "common_creating_room" = "Skapar rum …";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Live location ended";
 "common_loading" = "Laddar …";
 "common_loading_more" = "Laddar mer …";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Meddelande";
 "common_message_actions" = "Meddelandeåtgärder";
 "common_message_failed_to_send" = "Message failed to send";
 "common_message_layout" = "Meddelandearrangemang";
 "common_message_removed" = "Meddelande borttaget";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Modernt";
 "common_mute" = "Tysta";
 "common_name" = "Name";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Waiting for live location…";
 "common_world_readable_history" = "Anyone can see history";
 "common_you" = "Du";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Bekräfta din återställningsnyckel för att behålla åtkomsten till din nyckellagring och meddelandehistorik.";
 "confirm_recovery_key_banner_primary_button_title" = "Ange din återställningsnyckel";
 "confirm_recovery_key_banner_secondary_button_title" = "Glömt din återställningsnyckel?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Follow the instructions to enable your key storage";
 "screen_missing_key_backup_step_5" = "Come back to %1$@";
 "screen_missing_key_backup_title" = "Enable your key storage before proceeding to %1$@";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Du kan ändra dina inställningar senare.";
 "screen_notification_optin_title" = "Tillåt aviseringar och missa aldrig ett meddelande";
 "screen_notification_settings_additional_settings_section_title" = "Ytterligare inställningar";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Omnämnanden";
 "screen_notification_settings_notification_section_title" = "Meddela mig för";
 "screen_notification_settings_room_mention_label" = "Omnämnanden av @rum";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1291,11 +1302,10 @@
 "screen_room_change_role_section_users" = "Medlemmar";
 "screen_room_change_role_unsaved_changes_description" = "Du har osparade ändringar.";
 "screen_room_change_role_unsaved_changes_title" = "Spara ändringar?";
-"screen_room_confirm_removal_message" = "Are you sure you wish to remove this message?";
 "screen_room_confirm_removal_reason_label" = "Reason (optional)";
-"screen_room_confirm_removal_reason_placeholder" = "Enter…";
+"screen_room_confirm_removal_reason_placeholder" = "Enter reason…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
-"screen_room_confirm_removal_title" = "Confirm removal";
+"screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Lägg till ämne";
 "screen_room_details_badge_encrypted" = "Krypterat";
 "screen_room_details_badge_not_encrypted" = "Inte krypterat";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Begäran om att gå med";
 "screen_room_details_roles_and_permissions" = "Roller och behörigheter";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Name";
 "screen_room_details_security_and_privacy_title" = "Säkerhet och sekretess";
 "screen_room_details_security_title" = "Säkerhet";

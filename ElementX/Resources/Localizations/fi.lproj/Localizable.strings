@@ -96,6 +96,7 @@
 "action_copy_link" = "Kopioi linkki";
 "action_copy_link_to_message" = "Kopioi linkki viestiin";
 "action_copy_text" = "Kopioi teksti";
+"action_copy_to_clipboard" = "Copy to clipboard";
 "action_create" = "Luo";
 "action_create_room" = "Luo huone";
 "action_create_space" = "Luo tila";
@@ -174,7 +175,6 @@
 "action_retry_decryption" = "Yritä salauksen purkamista uudelleen";
 "action_save" = "Tallenna";
 "action_search" = "Hae";
-"action_select" = "Valitse";
 "action_select_all" = "Valitse kaikki";
 "action_send" = "Lähetä";
 "action_send_edited_message" = "Lähetä muokattu viesti";
@@ -219,6 +219,7 @@
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ei tue Bluetooth-äänilaitteiden käyttöä tässä Android-versiossa. Valitse toinen äänilaite.";
 "common_about" = "Tietoa";
 "common_acceptable_use_policy" = "Hyväksyttävän käytön käytäntö";
+"common_account_settings" = "Account settings";
 "common_add_account" = "Lisää tili";
 "common_add_another_account" = "Lisää toinen tili";
 "common_adding_caption" = "Lisätään kuvatekstiä";
@@ -227,6 +228,7 @@
 "common_analytics" = "Analytiikka";
 "common_android_shortcuts_remove_reason_left_room" = "Poistuit huoneesta";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sinut kirjattiin ulos istunnosta";
+"common_app_settings" = "App settings";
 "common_appearance" = "Ulkoasu";
 "common_audio" = "Ääni";
 "common_beta" = "Beeta";
@@ -237,6 +239,7 @@
 "common_call_started" = "Puhelu alkoi";
 "common_call_you_declined" = "Hylkäsit puhelun";
 "common_chat_backup" = "Keskustelujen varmuuskopiointi";
+"common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopioitu leikepöydälle";
 "common_copyright" = "Tekijänoikeudet";
 "common_creating_room" = "Luodaan huonetta...";
@@ -290,11 +293,14 @@
 "common_live_location_ended" = "Reaaliaikainen sijainti päättyi";
 "common_loading" = "Ladataan…";
 "common_loading_more" = "Ladataan lisää...";
+"common_location_sharing" = "Location sharing";
+"common_media_upload_quality" = "Media upload quality";
 "common_message" = "Viesti";
 "common_message_actions" = "Viestitoiminnot";
 "common_message_failed_to_send" = "Viestin lähettäminen epäonnistui";
 "common_message_layout" = "Viestien asettelu";
 "common_message_removed" = "Viesti poistettu";
+"common_moderation_and_safety" = "Moderation & safety";
 "common_modern" = "Moderni";
 "common_mute" = "Mykistä";
 "common_name" = "Nimi";
@@ -417,6 +423,7 @@
 "common_waiting_live_location" = "Odotetaan reaaliaikaista sijaintia…";
 "common_world_readable_history" = "Kuka tahansa voi nähdä historian";
 "common_you" = "Sinä";
+"common_your_account" = "Your account";
 "confirm_recovery_key_banner_message" = "Vahvista palautusavaimesi, jotta pääset edelleen käyttämään avainten säilytystä ja viestihistoriaa.";
 "confirm_recovery_key_banner_primary_button_title" = "Anna palautusavaimesi";
 "confirm_recovery_key_banner_secondary_button_title" = "Unohditko palautusavaimesi?";
@@ -1059,6 +1066,9 @@
 "screen_missing_key_backup_step_4" = "Noudata ohjeita";
 "screen_missing_key_backup_step_5" = "Palaa takaisin %1$@ -sovellukseen";
 "screen_missing_key_backup_title" = "Ota avainten säilytys käyttöön ennen kuin jatkat %1$@ -sovellukseen";
+"screen_moderation_and_safety_invites_heading" = "Invites";
+"screen_moderation_and_safety_other_users_heading" = "Other users";
+"screen_moderation_and_safety_share_presence_heading" = "Your appearance";
 "screen_notification_optin_subtitle" = "Voit muuttaa asetuksia myöhemmin.";
 "screen_notification_optin_title" = "Salli ilmoitukset ja älä koskaan missaa viestejä";
 "screen_notification_settings_additional_settings_section_title" = "Lisäasetukset";
@@ -1087,6 +1097,7 @@
 "screen_notification_settings_mode_mentions" = "Maininnat";
 "screen_notification_settings_notification_section_title" = "Ilmoita minulle";
 "screen_notification_settings_room_mention_label" = "@room-maininnat";
+"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
 "screen_notification_settings_sound_custom_fallback" = "Mukautettu";
 "screen_notification_settings_sound_custom_sound_button_title" = "Mukautettu ääni...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Virhe tiedoston poistamisessa";
@@ -1291,7 +1302,6 @@
 "screen_room_change_role_section_users" = "Jäsenet";
 "screen_room_change_role_unsaved_changes_description" = "Sinulla on tallentamattomia muutoksia";
 "screen_room_change_role_unsaved_changes_title" = "Tallennetaanko muutokset?";
-"screen_room_confirm_removal_message" = "Oletko varma, että haluat poistaa tämän viestin?";
 "screen_room_confirm_removal_reason_label" = "Syy (valinnainen)";
 "screen_room_confirm_removal_reason_placeholder" = "Kirjoita...";
 "screen_room_confirm_removal_reason_supporting_text" = "(Valinnainen)";
@@ -1322,6 +1332,9 @@
 "screen_room_details_profile_row_title" = "Profiili";
 "screen_room_details_requests_to_join_title" = "Liittymispyynnöt";
 "screen_room_details_roles_and_permissions" = "Roolit ja oikeudet";
+"screen_room_details_room_audio_ptt" = "Push to talk";
+"screen_room_details_room_audio_title" = "Room Audio";
+"screen_room_details_room_audio_video_calls" = "Video calls";
 "screen_room_details_room_name_label" = "Nimi";
 "screen_room_details_security_and_privacy_title" = "Turvallisuus ja yksityisyys";
 "screen_room_details_security_title" = "Turvallisuus";
