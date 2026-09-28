@@ -102,8 +102,12 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         // Re-run the search when switching tabs so the newly active tab reflects the current query.
         let searchModeStream = context.observe(\.viewState.bindings.searchMode).removeDuplicates()
         searchModeObservationTask = Task { [weak self] in
-            for await _ in searchModeStream {
+            for await searchMode in searchModeStream {
                 guard let self else { return }
+                // Opening the messages tab signals the user actually wants history to be searchable.
+                if searchMode == .messages {
+                    clientProxy.startSearchBackfill(strategy: .foreground)
+                }
                 updateFilter(for: state.bindings.searchQuery)
             }
         }

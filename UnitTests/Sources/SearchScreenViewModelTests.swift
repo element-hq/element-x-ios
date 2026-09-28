@@ -21,6 +21,8 @@ struct SearchScreenViewModelTests {
     let setQuerySubject = PassthroughSubject<String, Never>()
     /// Fires each time an indicator is submitted.
     let submitIndicatorSubject = PassthroughSubject<Void, Never>()
+    /// Fires each time a search backfill is started, with whether it used the foreground strategy.
+    let startSearchBackfillSubject = PassthroughSubject<Bool, Never>()
     
     var context: SearchScreenViewModelType.Context {
         viewModel.context
@@ -42,6 +44,9 @@ struct SearchScreenViewModelTests {
         
         let clientProxy = ClientProxyMock(.init())
         clientProxy.searchService = searchService
+        clientProxy.startSearchBackfillStrategyClosure = { [startSearchBackfillSubject] strategy in
+            startSearchBackfillSubject.send(strategy == .foreground)
+        }
         let staticRoomSummaryProvider = RoomSummaryProviderMock()
         staticRoomSummaryProvider.roomListPublisher = staticRoomListSubject.asCurrentValuePublisher()
         clientProxy.staticRoomSummaryProvider = staticRoomSummaryProvider
@@ -95,6 +100,13 @@ struct SearchScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(searchService.setQueryReceivedQuery == "Foundation")
+    }
+    
+    @Test
+    func openingMessagesTabStartsSearchBackfill() async throws {
+        let deferred = deferFulfillment(startSearchBackfillSubject) { $0 }
+        context.searchMode = .messages
+        try await deferred.fulfill()
     }
     
     @Test
