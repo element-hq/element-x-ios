@@ -147,6 +147,8 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         case .selectMessage(let roomID, let eventID):
             recordBreadcrumb(.room(roomID: roomID))
             actionsSubject.send(.presentRoom(roomID: roomID, eventID: eventID))
+        case .removeBreadcrumb(let breadcrumb):
+            removeBreadcrumb(breadcrumb)
         case .reachedTop:
             if state.bindings.searchMode == .rooms {
                 updateVisibleRange(edge: .top)
@@ -220,6 +222,14 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         breadcrumbs.insert(breadcrumb, at: 0)
         
         userSettings.searchBreadcrumbs = Array(breadcrumbs.prefix(Self.maximumBreadcrumbCount))
+    }
+    
+    private func removeBreadcrumb(_ breadcrumb: SearchScreenBreadcrumb) {
+        let storedBreadcrumb: SearchBreadcrumb = switch breadcrumb {
+        case .query(let query): .query(query)
+        case .room(let room): .room(roomID: room.id)
+        }
+        userSettings.searchBreadcrumbs.removeAll { $0 == storedBreadcrumb }
     }
     
     private func setActiveTabLoading(_ isLoading: Bool) {
