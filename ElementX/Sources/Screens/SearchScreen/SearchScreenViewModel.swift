@@ -138,11 +138,14 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
             // The provider is shared, so other consumers may have changed its filter while we were off-screen.
             // Re-apply ours on every appearance to keep the displayed results in sync with the query.
             updateFilter(for: state.bindings.searchQuery, forced: true)
+        case .submitQuery:
+            guard !state.bindings.searchQuery.isEmpty else { return }
+            recordBreadcrumb(.query(state.bindings.searchQuery))
         case .selectRoom(let roomID):
-            recordBreadcrumbs(roomID: roomID)
+            recordBreadcrumb(.room(roomID: roomID))
             actionsSubject.send(.presentRoom(roomID: roomID, eventID: nil))
         case .selectMessage(let roomID, let eventID):
-            recordBreadcrumbs(roomID: roomID)
+            recordBreadcrumb(.room(roomID: roomID))
             actionsSubject.send(.presentRoom(roomID: roomID, eventID: eventID))
         case .reachedTop:
             if state.bindings.searchMode == .rooms {
@@ -210,16 +213,11 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         }
     }
     
-    /// Stores the query that led to the selected result, along with the room it belongs to.
-    private func recordBreadcrumbs(roomID: String) {
-        let searchQuery = state.bindings.searchQuery
-        let newBreadcrumbs: [SearchBreadcrumb] = searchQuery.isEmpty ? [.room(roomID: roomID)] : [.query(searchQuery), .room(roomID: roomID)]
-        
+    /// Moves the breadcrumb to the top of the history, adding it if needed.
+    private func recordBreadcrumb(_ breadcrumb: SearchBreadcrumb) {
         var breadcrumbs = userSettings.searchBreadcrumbs
-        for breadcrumb in newBreadcrumbs {
-            breadcrumbs.removeAll { $0 == breadcrumb }
-            breadcrumbs.insert(breadcrumb, at: 0)
-        }
+        breadcrumbs.removeAll { $0 == breadcrumb }
+        breadcrumbs.insert(breadcrumb, at: 0)
         
         userSettings.searchBreadcrumbs = Array(breadcrumbs.prefix(Self.maximumBreadcrumbCount))
     }

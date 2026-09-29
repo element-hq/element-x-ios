@@ -91,6 +91,7 @@ struct SearchScreen: View {
         .scrollDismissesKeyboard(.immediately)
         .background(tabShortcuts)
         .onSubmit(of: .search) {
+            context.send(viewAction: .submitQuery)
             // A software keyboard's submit/search button just dismisses; only a hardware return selects.
             if isHardwareKeyboardConnected, selectedID != nil {
                 selectCurrent()
