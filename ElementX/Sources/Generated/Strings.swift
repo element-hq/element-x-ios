@@ -218,6 +218,8 @@ internal nonisolated enum L10n {
   internal static var actionChoosePhoto: String { return L10n.tr("Localizable", "action_choose_photo") }
   /// Clear
   internal static var actionClear: String { return L10n.tr("Localizable", "action_clear") }
+  /// Clear all
+  internal static var actionClearAll: String { return L10n.tr("Localizable", "action_clear_all") }
   /// Close
   internal static var actionClose: String { return L10n.tr("Localizable", "action_close") }
   /// Complete verification
