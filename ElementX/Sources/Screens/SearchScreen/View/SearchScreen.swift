@@ -307,17 +307,21 @@ private struct SearchScreenRoomCell: View {
             HStack(spacing: 16) {
                 avatar
                 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(room.title)
-                        .font(.compound.bodyLGSemibold)
-                        .foregroundStyle(.compound.textPrimary)
-                        .lineLimit(1)
+                ZStack(alignment: .leading) {
+                    SearchScreenRowHeightPlaceholder()
                     
-                    if !room.description.isEmpty {
-                        Text(room.description)
-                            .font(.compound.bodyMD)
-                            .foregroundStyle(.compound.textSecondary)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(room.title)
+                            .font(.compound.bodyLGSemibold)
+                            .foregroundStyle(.compound.textPrimary)
                             .lineLimit(1)
+                        
+                        if !room.description.isEmpty {
+                            Text(room.description)
+                                .font(.compound.bodyMD)
+                                .foregroundStyle(.compound.textSecondary)
+                                .lineLimit(1)
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -391,9 +395,7 @@ private struct SearchScreenQueryCell: View {
                     .accessibilityHidden(true)
                 
                 ZStack(alignment: .leading) {
-                    // Hidden text with 2 lines to match the height of the room rows, scaling with dynamic text.
-                    Text(verbatim: " \n ")
-                        .font(.compound.bodyLG)
+                    SearchScreenRowHeightPlaceholder()
                     
                     Text(query)
                         .font(.compound.bodyLG)
@@ -411,6 +413,20 @@ private struct SearchScreenQueryCell: View {
         .listRowInsets(.init())
         .listRowSeparator(.hidden)
         .rowDivider()
+    }
+}
+
+/// Reserves the height of a title and subtitle so every row matches, scaling with dynamic type.
+private struct SearchScreenRowHeightPlaceholder: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(verbatim: " ")
+                .font(.compound.bodyLGSemibold)
+            Text(verbatim: " ")
+                .font(.compound.bodyMD)
+        }
+        .hidden()
+        .accessibilityHidden(true)
     }
 }
 
