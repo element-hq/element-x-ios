@@ -54,7 +54,8 @@ final class AccessibilityTests: XCTestCase {
         // Alows us to log the name of the preview that is being tested
         XCTContext.runActivity(named: name) { _ in
             // Previews that focus a text field bring up the system keyboard, which we can't fix.
-            let keyboardFrame = app.keyboards.firstMatch.exists ? app.keyboards.firstMatch.frame : .null
+            // Snapshot the keyboard in one query so one that's dismissing can't fail the test between checking and reading it.
+            let keyboardFrame = (try? app.keyboards.firstMatch.snapshot().frame) ?? .null
             
             do {
                 // We have removed `textClipped` and `contrast` for now

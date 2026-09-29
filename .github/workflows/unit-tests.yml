@@ -13,8 +13,8 @@ permissions: {}
 jobs:
   tests:
     name: Tests
-    runs-on: macos-26
-    timeout-minutes: 60
+    runs-on: xcode-27
+    timeout-minutes: 80
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.

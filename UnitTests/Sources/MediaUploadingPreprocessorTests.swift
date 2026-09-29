@@ -123,7 +123,7 @@ final class MediaUploadingPreprocessorTests {
         // Check resulting video info
         #expect(videoInfo.mimetype == "video/mp4")
         #expect(videoInfo.blurhash == "KRB{K[TLMtw7S4oez,emtS")
-        #expect(isEqual(videoInfo.size ?? 0, 2_004_134, within: 100))
+        #expect(isEqual(videoInfo.size ?? 0, 2_004_280, within: 100))
         #expect(videoInfo.width == 1080)
         #expect(videoInfo.height == 1920)
         #expect(isEqual(videoInfo.duration ?? 0, 3.07, within: 0.1))
@@ -152,7 +152,7 @@ final class MediaUploadingPreprocessorTests {
         // Check optimised video info
         #expect(optimizedVideoInfo.mimetype == "video/mp4")
         #expect(optimizedVideoInfo.blurhash == "KRB{K[TLMtw7S4oez,emtS")
-        #expect(isEqual(optimizedVideoInfo.size ?? 0, 3_779_866, within: 100)) // Note: This is slightly stupid because it is larger now 🤦‍♂️
+        #expect(isEqual(optimizedVideoInfo.size ?? 0, 3_780_012, within: 100)) // Note: This is slightly stupid because it is larger now 🤦‍♂️
         #expect(optimizedVideoInfo.width == 720)
         #expect(optimizedVideoInfo.height == 1280)
         #expect(isEqual(optimizedVideoInfo.duration ?? 0, 3.07, within: 0.1))

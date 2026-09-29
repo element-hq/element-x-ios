@@ -211,8 +211,9 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.subspaceScreen)
         
+        // iOS 27 doesn't expose accessibility identifiers on menu items, so find them by their label.
         app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
-        app.buttons[A11yIdentifiers.spaceScreen.createRoom].tap()
+        app.collectionViews.buttons["Create room"].tap()
         XCTAssertTrue(app.buttons[A11yIdentifiers.createRoomScreen.cancel].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.createSpaceRoomScreen)
@@ -221,7 +222,7 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
         
         app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
-        app.buttons[A11yIdentifiers.spaceScreen.addExistingRooms].tap()
+        app.collectionViews.buttons["Add existing rooms"].tap()
         XCTAssert(app.buttons[A11yIdentifiers.spaceAddRoomsScreen.cancel].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceAddRoomsScreen)
@@ -230,7 +231,7 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
         
         app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
-        app.buttons[A11yIdentifiers.spaceScreen.viewMembers].tap()
+        app.collectionViews.buttons["View members"].tap()
         XCTAssert(app.buttons[A11yIdentifiers.roomMembersListScreen.invite].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceMembersListScreen)
@@ -239,7 +240,7 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
         
         app.buttons[A11yIdentifiers.spaceScreen.moreMenu].tap()
-        app.buttons[A11yIdentifiers.spaceScreen.settings].tap()
+        app.collectionViews.buttons["Settings"].tap()
         XCTAssert(app.buttons[A11yIdentifiers.spaceSettingsScreen.editBaseInfo].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceSettingsScreen)

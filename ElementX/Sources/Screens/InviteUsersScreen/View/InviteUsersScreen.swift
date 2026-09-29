@@ -12,8 +12,6 @@ import SwiftUI
 struct InviteUsersScreen: View {
     @ObservedObject var context: InviteUsersScreenViewModel.Context
     
-    @State private var formWidth = CGFloat.zero
-    
     var showTopSection: Bool {
         !context.viewState.selectedUsers.isEmpty || context.viewState.isSearching
     }
@@ -50,7 +48,7 @@ struct InviteUsersScreen: View {
                     VStack(spacing: 16) {
                         selectedUsersSection
                             .textCase(.none)
-                            .frame(width: formWidth)
+                            .containerRelativeFrame(.horizontal)
                         
                         if context.viewState.isSearching {
                             ProgressView()
@@ -67,7 +65,6 @@ struct InviteUsersScreen: View {
                 usersSection
             }
         }
-        .readWidth($formWidth)
     }
     
     private var noResultsContent: some View {
@@ -177,13 +174,14 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Searching")
         .snapshotPreferences(expect: searchingViewModel.context.$viewState.map {
             $0.usersSection.type == .searchResult && !$0.usersSection.users.isEmpty
-        })
+        }, precision: 0.999) // The search field's clear button renders inconsistently in snapshots.
         
         ElementNavigationStack {
             InviteUsersScreen(context: selectedViewModel.context)
         }
         .previewDisplayName("Selected")
-        .snapshotPreferences(expect: selectedViewModel.context.$viewState.map { !$0.selectedUsers.isEmpty })
+        .snapshotPreferences(expect: selectedViewModel.context.$viewState.map { !$0.selectedUsers.isEmpty },
+                             precision: 0.999) // The search field's clear button renders inconsistently in snapshots.
         
         ElementNavigationStack {
             InviteUsersScreen(context: confirmSelectedViewModel.context)

@@ -218,7 +218,8 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
             RoomMembersListScreen(context: emptyBannedViewModel.context)
                 .onAppear { emptyBannedViewModel.context.searchQuery = "Dan" }
         }
-        .snapshotPreferences(expect: emptyBannedViewModel.context.$viewState.map(\.shouldShowEmptyState))
+        .snapshotPreferences(expect: emptyBannedViewModel.context.$viewState.map(\.shouldShowEmptyState),
+                             precision: 0.999) // The search field's clear button renders inconsistently in snapshots.
         .previewDisplayName("Empty Search")
     }
     

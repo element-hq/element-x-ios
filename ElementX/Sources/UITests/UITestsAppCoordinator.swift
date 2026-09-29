@@ -634,7 +634,8 @@ class MockScreen: Identifiable {
             
             let timelineControllerFactory = TimelineControllerFactoryMock(.init(timelineController: timelineController))
             
-            let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+            let userSession = UserSessionMock(.init(clientProxy: clientProxy,
+                                                    userSettings: UserSettings(appSettings: appSettings, accountSettings: .init())))
             let flowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
@@ -825,7 +826,7 @@ class MockScreen: Identifiable {
             navigationRootCoordinator.setSheetCoordinator(navigationStackCoordinator)
             return PlaceholderScreenCoordinator(hideBrandChrome: false)
         case .autoUpdatingTimeline:
-            let userSettings = UserSettings.volatile()
+            let userSettings = UserSettings(appSettings: appSettings, accountSettings: .init())
             appSettings.hasRunIdentityConfirmationOnboarding = true
             appSettings.hasRunNotificationPermissionsOnboarding = true
             appSettings.analyticsConsentState = .optedOut
