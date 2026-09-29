@@ -46,14 +46,28 @@ struct SearchScreenViewStateBindings {
     var searchMode: SearchScreenMode = .rooms
 }
 
-enum SearchScreenViewAction {
+enum SearchScreenViewAction: CustomStringConvertible {
     case appeared
     case submitQuery
     case selectRoom(roomID: String)
     case selectMessage(roomID: String, eventID: String)
+    case removeBreadcrumb(SearchScreenBreadcrumb)
     case reachedTop
     case reachedBottom
     case cancel
+    
+    var description: String {
+        switch self {
+        case .appeared: "appeared"
+        case .submitQuery: "submitQuery"
+        case .selectRoom(let roomID): "selectRoom(\(roomID))"
+        case .selectMessage(let roomID, let eventID): "selectMessage(\(roomID), \(eventID))"
+        case .removeBreadcrumb: "removeBreadcrumb"
+        case .reachedTop: "reachedTop"
+        case .reachedBottom: "reachedBottom"
+        case .cancel: "cancel"
+        }
+    }
 }
 
 struct SearchScreenRoom: Identifiable, Equatable {

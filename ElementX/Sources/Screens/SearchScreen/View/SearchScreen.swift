@@ -199,11 +199,13 @@ struct SearchScreen: View {
                 ForEach(context.viewState.breadcrumbs) { breadcrumb in
                     let isSelected = isHardwareKeyboardConnected && selectedID == breadcrumb.id
                     
+                    let onRemove = { context.send(viewAction: .removeBreadcrumb(breadcrumb)) }
+                    
                     switch breadcrumb {
                     case .query(let query):
-                        SearchScreenQueryCell(query: query, isSelected: isSelected) { context.searchQuery = query }
+                        SearchScreenQueryCell(query: query, isSelected: isSelected, onRemove: onRemove) { context.searchQuery = query }
                     case .room(let room):
-                        SearchScreenRoomCell(room: room, context: context, isSelected: isSelected, avatarSize: .searchHistory)
+                        SearchScreenRoomCell(room: room, context: context, isSelected: isSelected, avatarSize: .searchHistory, onRemove: onRemove)
                     }
                 }
             } header: {
@@ -283,6 +285,7 @@ private struct SearchScreenRoomCell: View {
     let context: SearchScreenViewModel.Context
     let isSelected: Bool
     var avatarSize: RoomAvatarSizeOnScreen = .search
+    var onRemove: (() -> Void)?
     
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
@@ -307,6 +310,10 @@ private struct SearchScreenRoomCell: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                
+                if let onRemove {
+                    SearchScreenRemoveBreadcrumbButton(action: onRemove)
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -360,6 +367,7 @@ private struct SearchScreenRoomCellButtonStyle: ButtonStyle {
 private struct SearchScreenQueryCell: View {
     let query: String
     let isSelected: Bool
+    let onRemove: () -> Void
     let action: () -> Void
     
     var body: some View {
@@ -382,6 +390,8 @@ private struct SearchScreenQueryCell: View {
                         .lineLimit(1)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                
+                SearchScreenRemoveBreadcrumbButton(action: onRemove)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -390,6 +400,20 @@ private struct SearchScreenQueryCell: View {
         .listRowInsets(.init())
         .listRowSeparator(.hidden)
         .rowDivider()
+    }
+}
+
+private struct SearchScreenRemoveBreadcrumbButton: View {
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            CompoundIcon(\.close)
+                .foregroundStyle(.compound.iconTertiary)
+                .accessibilityLabel(L10n.actionRemove)
+        }
+        // Borderless so the button handles its own taps instead of the row it's nested in.
+        .buttonStyle(.borderless)
     }
 }
 
