@@ -209,8 +209,19 @@ struct SearchScreen: View {
                     }
                 }
             } header: {
-                Text(UntranslatedL10n.screenSearchRecentSearches)
-                    .compoundListSectionHeader()
+                HStack(spacing: 8) {
+                    Text(UntranslatedL10n.screenSearchRecentSearches)
+                        .compoundListSectionHeader()
+                    
+                    Spacer()
+                    
+                    // The compound text link style has no accent colour variant.
+                    Button { context.send(viewAction: .clearBreadcrumbs) } label: {
+                        Text(L10n.actionClearAll)
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundStyle(.compound.textActionAccent)
+                    }
+                }
             }
         }
         .compoundList(.plain)

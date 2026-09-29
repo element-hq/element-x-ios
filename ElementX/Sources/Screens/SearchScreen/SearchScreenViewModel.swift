@@ -149,6 +149,8 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
             actionsSubject.send(.presentRoom(roomID: roomID, eventID: eventID))
         case .removeBreadcrumb(let breadcrumb):
             removeBreadcrumb(breadcrumb)
+        case .clearBreadcrumbs:
+            userSettings.searchBreadcrumbs = []
         case .reachedTop:
             if state.bindings.searchMode == .rooms {
                 updateVisibleRange(edge: .top)
