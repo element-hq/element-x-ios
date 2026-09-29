@@ -52,6 +52,7 @@ enum SearchScreenViewAction: CustomStringConvertible {
     case selectRoom(roomID: String)
     case selectMessage(roomID: String, eventID: String)
     case removeBreadcrumb(SearchScreenBreadcrumb)
+    case clearBreadcrumbs
     case reachedTop
     case reachedBottom
     case cancel
@@ -63,6 +64,7 @@ enum SearchScreenViewAction: CustomStringConvertible {
         case .selectRoom(let roomID): "selectRoom(\(roomID))"
         case .selectMessage(let roomID, let eventID): "selectMessage(\(roomID), \(eventID))"
         case .removeBreadcrumb: "removeBreadcrumb"
+        case .clearBreadcrumbs: "clearBreadcrumbs"
         case .reachedTop: "reachedTop"
         case .reachedBottom: "reachedBottom"
         case .cancel: "cancel"

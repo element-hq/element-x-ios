@@ -163,6 +163,15 @@ struct SearchScreenViewModelTests {
     }
     
     @Test
+    func clearingBreadcrumbs() {
+        userSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
+        
+        context.send(viewAction: .clearBreadcrumbs)
+        
+        #expect(userSettings.searchBreadcrumbs.isEmpty)
+    }
+    
+    @Test
     func breadcrumbsAreDisplayed() async throws {
         staticRoomListSubject.send([.mock(id: "2", name: "Second")])
         
