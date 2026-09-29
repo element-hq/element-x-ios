@@ -49,10 +49,6 @@ struct RedactConfirmationView: View {
             Text(L10n.screenRoomConfirmRemovalTitle)
                 .font(.compound.headingMDBold)
                 .foregroundStyle(.compound.textPrimary)
-            
-            Text(L10n.screenRoomConfirmRemovalMessage)
-                .font(.compound.bodyLG)
-                .foregroundStyle(.compound.textSecondary)
         }
         .multilineTextAlignment(.center)
         .padding(.top, 8)
