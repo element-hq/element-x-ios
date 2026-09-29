@@ -48,6 +48,7 @@ struct SearchScreenViewStateBindings {
 
 enum SearchScreenViewAction {
     case appeared
+    case submitQuery
     case selectRoom(roomID: String)
     case selectMessage(roomID: String, eventID: String)
     case reachedTop
