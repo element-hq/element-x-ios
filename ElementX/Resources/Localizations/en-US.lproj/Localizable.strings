@@ -86,6 +86,7 @@
 "action_choose_file" = "Choose file";
 "action_choose_photo" = "Choose photo";
 "action_clear" = "Clear";
+"action_clear_all" = "Clear all";
 "action_close" = "Close";
 "action_complete_verification" = "Complete verification";
 "action_confirm" = "Confirm";
