@@ -35,5 +35,13 @@
           "every 2 weeks on wednesday",
       ]
     },
+    {
+      "description": "Shared between Compound and the app, keep them in sync.",
+      "matchPackageNames": ["pointfreeco/swift-snapshot-testing", "https://github.com/pointfreeco/swift-snapshot-testing"],
+      "groupName": "Shared Dependencies",
+      "schedule": [
+          "every 2 weeks on wednesday",
+      ]
+    },
   ]
 }
