@@ -405,7 +405,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
     }
     
-    func notificationTapped(content: UNNotificationContent) async {
+    func notificationTapped(content: UNNotificationContent, isNewestInRoom: Bool) async {
         MXLog.info("Tapped Notification")
         
         guard let roomID = content.roomID,
@@ -423,11 +423,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
             handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID), windowType: nil)
-        } else if let eventID {
+        } else if let eventID, !isNewestInRoom {
             // Only track main timeline event deeplinking
             analyticsService.signpost.startTransaction(.notificationToMessage)
             handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []), windowType: nil)
         } else {
+            // The live timeline already ends with the newest message, so there's no need to focus on it.
             handleAppRoute(.room(roomID: roomID, via: []), windowType: nil)
         }
     }
