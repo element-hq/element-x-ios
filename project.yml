@@ -157,7 +157,7 @@ packages:
     exactVersion: 9.28.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    exactVersion: 1.19.5
+    exactVersion: 1.19.6
   SwiftFlow:
     url: https://github.com/tevelee/SwiftUI-Flow.git
     exactVersion: 3.5.1
