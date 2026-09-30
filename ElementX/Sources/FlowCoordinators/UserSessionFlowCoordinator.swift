@@ -371,7 +371,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     self.navigationTabCoordinator.setSheetCoordinator(nil)
                     
                     // The sheet needs to be dismissed before the alert can be shown
-                    try await Task.sleep(for: .milliseconds(100))
+                    try? await Task.sleep(for: .milliseconds(100))
                     await self.runLogoutFlow()
                 }
             case .forceLogout:

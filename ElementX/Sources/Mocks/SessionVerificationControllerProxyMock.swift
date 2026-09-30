@@ -30,14 +30,14 @@ extension SessionVerificationControllerProxyMock {
             Task {
                 guard let mock else { return }
                 
-                try await Task.sleep(for: requestDelay)
+                try? await Task.sleep(for: requestDelay)
                 
                 mock.actions.send(.acceptedVerificationRequest)
                 
                 if otherDeviceStartsSasVerification {
-                    try await Task.sleep(for: requestDelay)
+                    try? await Task.sleep(for: requestDelay)
                     mock.actions.send(.startedSasVerification)
-                    try await Task.sleep(for: requestDelay)
+                    try? await Task.sleep(for: requestDelay)
                     mock.actions.send(.receivedVerificationData(emojis))
                 }
             }
@@ -49,11 +49,11 @@ extension SessionVerificationControllerProxyMock {
             Task {
                 guard let mock else { return }
                 
-                try await Task.sleep(for: requestDelay)
+                try? await Task.sleep(for: requestDelay)
                 mock.actions.send(.startedSasVerification)
                 
                 Task {
-                    try await Task.sleep(for: requestDelay)
+                    try? await Task.sleep(for: requestDelay)
                     mock.actions.send(.receivedVerificationData(emojis))
                 }
             }
@@ -65,7 +65,7 @@ extension SessionVerificationControllerProxyMock {
             Task {
                 guard let mock else { return }
                 
-                try await Task.sleep(for: requestDelay)
+                try? await Task.sleep(for: requestDelay)
                 mock.actions.send(.finished)
             }
             
@@ -76,7 +76,7 @@ extension SessionVerificationControllerProxyMock {
             Task {
                 guard let mock else { return }
                 
-                try await Task.sleep(for: requestDelay)
+                try? await Task.sleep(for: requestDelay)
                 mock.actions.send(.cancelled)
             }
             
@@ -87,7 +87,7 @@ extension SessionVerificationControllerProxyMock {
             Task {
                 guard let mock else { return }
                 
-                try await Task.sleep(for: requestDelay)
+                try? await Task.sleep(for: requestDelay)
                 mock.actions.send(.cancelled)
             }
             

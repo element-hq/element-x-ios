@@ -721,7 +721,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        Task {
+        Task { [self] in
             let credentials = SoftLogoutScreenCredentials(userID: userSession.clientProxy.userID,
                                                           homeserverName: userSession.clientProxy.homeserver,
                                                           userDisplayName: userSession.clientProxy.userProfilePublisher.value.displayName ?? "",
@@ -742,7 +742,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                    appHooks: appHooks,
                                                                    userIndicatorController: userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
-            self.softLogoutCoordinator = coordinator
+            softLogoutCoordinator = coordinator
             coordinator.actions
                 .sink { [weak self] action in
                     guard let self else { return }

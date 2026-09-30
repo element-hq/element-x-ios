@@ -217,7 +217,7 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         super.init(frame: .zero, textContainer: nil)
         
         // Avoid `Publishing changes from within view update` warnings
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             presendCallback.wrappedValue = { [weak self] in
                 self?.acceptCurrentSuggestion()
             }

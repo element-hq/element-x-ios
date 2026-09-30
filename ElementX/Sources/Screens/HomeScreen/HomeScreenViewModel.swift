@@ -283,13 +283,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // perphery: ignore - used in release mode
     func presentCrashedLastRunAlert() {
         // Delay setting the alert otherwise it automatically gets dismissed. Same as the force logout one.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                                      title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),
-                                                      primaryButton: .init(title: L10n.actionNo, action: nil),
-                                                      secondaryButton: .init(title: L10n.actionYes) { [weak self] in
-                                                          self?.actionsSubject.send(.presentFeedbackScreen)
-                                                      })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+            state.bindings.alertInfo = AlertInfo(id: UUID(),
+                                                 title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),
+                                                 primaryButton: .init(title: L10n.actionNo, action: nil),
+                                                 secondaryButton: .init(title: L10n.actionYes) { [weak self] in
+                                                     self?.actionsSubject.send(.presentFeedbackScreen)
+                                                 })
         }
     }
     
@@ -401,7 +401,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
     
     private func startLeaveRoomProcess(roomID: String) {
-        Task {
+        Task { [self] in
             defer {
                 userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
             }

@@ -46,11 +46,12 @@ struct DeferredFulfillmentTests {
         let deferred = deferFulfillment(observable.observe(\.counter)) { $0 == newValue }
         
         // When that value is changed asynchronously.
-        Task { try await observable.setCounter(newValue, delay: .seconds(1)) }
+        let task = Task { try await observable.setCounter(newValue, delay: .seconds(1)) }
         #expect(observable.counter == 0)
         
         // Then the test should be fulfilled once the update has taken place.
         try await deferred.fulfill()
+        try await task.value
         #expect(observable.counter == newValue)
     }
     
@@ -61,7 +62,7 @@ struct DeferredFulfillmentTests {
         let deferred = deferFulfillment(observable.observe(\.counter)) { $0 == finalValue }
         
         // When that value is changed asynchronously with some intermediate values before it is reached.
-        Task {
+        let task = Task {
             try await observable.setCounter(100, delay: .seconds(.random(in: 1.0...2.0)))
             try await observable.setCounter(250, delay: .seconds(.random(in: 1.0...2.0)))
             try await observable.setCounter(finalValue, delay: .seconds(.random(in: 1.0...2.0)))
@@ -70,6 +71,7 @@ struct DeferredFulfillmentTests {
         
         // Then the test should be fulfilled once the expected update has taken place.
         try await deferred.fulfill()
+        try await task.value
         #expect(observable.counter == finalValue)
     }
 }

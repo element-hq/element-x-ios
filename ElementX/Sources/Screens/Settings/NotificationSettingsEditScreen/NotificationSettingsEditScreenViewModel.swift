@@ -166,7 +166,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
             roomNotificationModeProxy = .mentionsAndKeywordsOnly
         }
         state.pendingMode = mode
-        Task {
+        Task { [self] in
             do {
                 // On modern clients, we don't have different settings for encrypted and non-encrypted rooms.
                 let isOneToOne = chatType == .oneToOneChat
