@@ -279,7 +279,7 @@ Services = where product-level opinions live (Rust SDK stays spec-faithful).
 
 ## Concurrency & Actors
 
-- All targets **Swift 6.2**, approachable concurrency.
+- All targets **Swift 6** language mode (`SWIFT_VERSION: 6`), approachable concurrency. Compiler version come from Xcode toolchain.
 - **ElementX** app, **UnitTests** + **PreviewTests**: `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` — no redundant `@MainActor`. Other targets (incl. app extensions) nonisolated.
 - Services + data-layer types: `nonisolated` + `Sendable` when background work need.
 - Never `@unchecked Sendable` / `nonisolated(unsafe)`. Dev add these.
