@@ -48,6 +48,14 @@ class TimelineMediaPreviewController: QLPreviewController {
         captionHostingController.view
     }
     
+    /// Whether the displayed placeholder's index now holds a media, or a different placeholder
+    /// having reached the end of the timeline, in which case what's on display is stale.
+    private var isDisplayedPlaceholderStale: Bool {
+        guard let displayedItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading else { return false }
+        let dataSource = context.viewState.dataSource
+        return dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) as AnyObject !== displayedItem
+    }
+    
     override var overrideUserInterfaceStyle: UIUserInterfaceStyle {
         get { .dark }
         set { }
@@ -233,6 +241,12 @@ class TimelineMediaPreviewController: QLPreviewController {
         if let previewItem = currentPreviewItem as? TimelineMediaPreviewItem.Media {
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
+            // QuickLook prefetches every item up front, so the placeholder may predate a timeline update.
+            guard !isDisplayedPlaceholderStale else {
+                Task { await refreshStalePlaceholder() }
+                return
+            }
+            
             switch loadingItem.state {
             case .paginating:
                 context.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
@@ -255,14 +269,18 @@ class TimelineMediaPreviewController: QLPreviewController {
     }
     
     private func handleUpdatedItems() {
-        guard let displayedItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading else { return }
-        
-        // The index may now hold a media, or a different placeholder having reached the end of
-        // the timeline, in which case what's on display is stale.
-        let dataSource = context.viewState.dataSource
-        if dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) as AnyObject !== displayedItem {
-            refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
+        guard isDisplayedPlaceholderStale else { return }
+        Task { await refreshStalePlaceholder() }
+    }
+    
+    private func refreshStalePlaceholder() async {
+        // Refreshing whilst swiping completely breaks the QLPreviewController, so wait for the swipe to settle.
+        while let pageScrollView, pageScrollView.isDragging || pageScrollView.isDecelerating {
+            try? await Task.sleep(for: .seconds(0.1))
         }
+        
+        guard isDisplayedPlaceholderStale else { return }
+        refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
     }
     
     private func handleFileLoaded(itemID: MediaPreviewItemID) {
