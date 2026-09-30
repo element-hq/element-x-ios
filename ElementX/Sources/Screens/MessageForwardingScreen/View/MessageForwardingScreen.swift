@@ -36,7 +36,7 @@ struct MessageForwardingScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(L10n.commonForwardMessage)
+        .navigationTitle(L10n.commonForwardTo)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {

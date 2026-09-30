@@ -618,6 +618,8 @@ internal nonisolated enum L10n {
   internal static var commonFileSaved: String { return L10n.tr("Localizable", "common_file_saved") }
   /// Forward message
   internal static var commonForwardMessage: String { return L10n.tr("Localizable", "common_forward_message") }
+  /// Forward to
+  internal static var commonForwardTo: String { return L10n.tr("Localizable", "common_forward_to") }
   /// Frequently used
   internal static var commonFrequentlyUsed: String { return L10n.tr("Localizable", "common_frequently_used") }
   /// Gallery
