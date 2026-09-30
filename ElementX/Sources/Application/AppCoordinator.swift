@@ -1302,7 +1302,11 @@ private extension AppCoordinator {
             }
         }
         
+        await waitForSessionRestore()
+        
         guard let userSession else {
+            MXLog.info("Background app refresh: no user session, giving up.")
+            task.setTaskCompleted(success: false)
             return
         }
         
@@ -1391,5 +1395,17 @@ private extension AppCoordinator {
         
         MXLog.info("Marking search backfill task as complete.")
         task.setTaskCompleted(success: true)
+    }
+}
+
+private extension AppCoordinator {
+    /// When iOS relaunches a terminated app for a background task, the session is still being restored asynchronously.
+    func waitForSessionRestore() async {
+        let deadline = ContinuousClock.now + .seconds(5)
+        while userSession == nil,
+              stateMachine.state == .initial || stateMachine.state == .restoringSession,
+              ContinuousClock.now < deadline {
+            try? await Task.sleep(for: .milliseconds(100))
+        }
     }
 }
