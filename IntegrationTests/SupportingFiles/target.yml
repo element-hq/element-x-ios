@@ -47,7 +47,7 @@ targets:
       base:
         PRODUCT_NAME: IntegrationTests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.integration.tests
-        SWIFT_VERSION: 6.2
+        SWIFT_VERSION: 6
         SWIFT_APPROACHABLE_CONCURRENCY: YES
       debug:
       release:
