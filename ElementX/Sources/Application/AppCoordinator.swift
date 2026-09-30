@@ -15,6 +15,7 @@ import Sentry
 import SwiftUI
 import Version
 
+// swiftlint:disable:next type_body_length
 class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
@@ -60,6 +61,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     private var appDelegateObserver: AnyCancellable?
     private var userSessionObserver: AnyCancellable?
+    /// Becomes `true` once the app is no longer waiting on a session restore, whatever the outcome.
+    private let isSessionRestoredSubject = CurrentValueSubject<Bool, Never>(false)
     private var clientProxyObserver: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     
@@ -617,6 +620,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
+            
+            if context.toState != .restoringSession {
+                isSessionRestoredSubject.send(true)
+            }
             
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
@@ -1336,6 +1343,13 @@ private extension AppCoordinator {
                 }
             }
     }
+    
+    /// When iOS relaunches a terminated app for a background task, the session is still being restored asynchronously.
+    private func waitForSessionRestore() async {
+        for await isSessionRestored in isSessionRestoredSubject.timeout(.seconds(5), scheduler: DispatchQueue.main).values where isSessionRestored {
+            return
+        }
+    }
 }
 
 // MARK: Search backfill
@@ -1395,17 +1409,5 @@ private extension AppCoordinator {
         
         MXLog.info("Marking search backfill task as complete.")
         task.setTaskCompleted(success: true)
-    }
-}
-
-private extension AppCoordinator {
-    /// When iOS relaunches a terminated app for a background task, the session is still being restored asynchronously.
-    func waitForSessionRestore() async {
-        let deadline = ContinuousClock.now + .seconds(5)
-        while userSession == nil,
-              stateMachine.state == .initial || stateMachine.state == .restoringSession,
-              ContinuousClock.now < deadline {
-            try? await Task.sleep(for: .milliseconds(100))
-        }
     }
 }
