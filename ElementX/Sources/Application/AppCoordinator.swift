@@ -246,12 +246,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func handleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) {
+        // Read before resuming the services, by which time a push tap or deep link will have made the app active.
+        let animated = appMediator.appState == .active
         Task {
-            await asyncHandleAppRoute(appRoute, windowType: windowType)
+            await asyncHandleAppRoute(appRoute, windowType: windowType, animated: animated)
         }
     }
     
-    private func asyncHandleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?) async {
+    private func asyncHandleAppRoute(_ appRoute: AppRoute, windowType: SecondaryWindowType?, animated: Bool) async {
         MXLog.info("Handling app route:  \(appRoute)")
         
         await resumeClientServices()
@@ -266,12 +268,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         switch appRoute {
         case .accountProvisioningLink:
             if let authenticationFlowCoordinator {
-                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: animated)
                 handled = true
             }
         default:
             if let userSessionFlowCoordinator {
-                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: animated)
                 handled = true
             }
         }
