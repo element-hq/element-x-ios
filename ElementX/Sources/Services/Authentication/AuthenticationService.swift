@@ -280,7 +280,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     private func rotateSessionDirectory() {
-        sessionDirectories.delete()
+        try? sessionDirectories.delete()
         sessionDirectories = .init()
     }
     
