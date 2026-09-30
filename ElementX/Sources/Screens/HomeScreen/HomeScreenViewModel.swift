@@ -334,12 +334,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateRoomListMode(with roomSummaryProviderState: RoomSummaryProviderState, hasRooms: Bool) {
+        let isFiltering = state.bindings.filtersState.isFiltering || state.selectedSpaceFilter != nil || state.bindings.isSearchFieldFocused
+        
         let roomListMode: HomeScreenRoomListMode = if !roomSummaryProviderState.isLoaded {
             .skeletons // Still loading.
         } else if roomSummaryProviderState.totalNumberOfRooms == 0 {
             .empty // Loaded, there are no rooms at all.
-        } else if hasRooms {
-            .rooms // Loaded and the summaries have published.
+        } else if hasRooms || isFiltering {
+            .rooms // Loaded and the summaries have published (or filtered down to nothing).
         } else if state.roomListMode == .skeletons {
             .skeletons // Loaded but nothing published yet, flipping to .rooms would flash an empty list.
         } else {

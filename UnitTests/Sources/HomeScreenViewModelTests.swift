@@ -409,6 +409,19 @@ final class HomeScreenViewModelTests {
     }
     
     @Test
+    func roomListModeDoesntHoldSkeletonsForAnEmptyFilteredResult() async throws {
+        let (roomListSubject, stateSubject) = setupViewModelWithManualProvider()
+        #expect(context.viewState.roomListMode == .skeletons)
+        
+        // A filter is active before anything has published and the filtered list is loaded but empty.
+        context.filtersState.activateFilter(.people)
+        let deferred = deferFulfillment(context.$viewState) { $0.roomListMode == .rooms }
+        roomListSubject.send([])
+        stateSubject.send(.loaded(totalNumberOfRooms: 8))
+        try await deferred.fulfill()
+    }
+    
+    @Test
     func roomListModeDoesntReturnToSkeletonsWhenTheRoomsAreFilteredOut() async throws {
         let (roomListSubject, stateSubject) = setupViewModelWithManualProvider()
         
