@@ -73,7 +73,7 @@ struct UserSessionStoreTests {
     func restoreWhenClientCreationFails() async throws {
         // Given valid session data but a client factory that fails.
         let sessionDirectories = try makeValidSessionDirectories()
-        defer { sessionDirectories.delete() }
+        defer { try? sessionDirectories.delete() }
         let credentials = makeCredentials(sessionDirectories: sessionDirectories)
         keychainController.restorationTokensReturnValue = [credentials]
         clientFactory.makeAppClientCredentialsClientSessionDelegateAppSettingsAppHooksThrowableError = TestError.generic
@@ -92,7 +92,7 @@ struct UserSessionStoreTests {
     func restoreSucceeds() async throws {
         // Given valid session data and a client factory that returns a client.
         let sessionDirectories = try makeValidSessionDirectories()
-        defer { sessionDirectories.delete() }
+        defer { try? sessionDirectories.delete() }
         keychainController.restorationTokensReturnValue = [makeCredentials(sessionDirectories: sessionDirectories)]
         
         // When restoring the session.
