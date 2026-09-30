@@ -22,12 +22,18 @@
     },
     {
       "matchManagers": ["swift"],
-      "groupName" : "Tool Dependencies"
+      "groupName" : "Tool Dependencies",
+      "schedule": [
+          "every 2 weeks on wednesday",
+      ]
     },
     {
       "matchManagers": ["swift", "cocoapods"],
       "matchFileNames": ["compound-ios/Package.swift"],
-      "groupName": "Compound"
+      "groupName": "Compound Dependencies",
+      "schedule": [
+          "every 2 weeks on wednesday",
+      ]
     },
   ]
 }
