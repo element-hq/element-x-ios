@@ -45,20 +45,10 @@ extension View {
 ///     .alert(item: $context.alertInfo)
 /// ```
 struct AlertInfo<T: Hashable>: Identifiable, AlertProtocol {
-    struct AlertButton: Identifiable {
-        let id = UUID()
-        let title: String
-        var role: ButtonRole?
-        let action: (() -> Void)?
-    }
-    
-    struct AlertTextField: Identifiable {
-        let id = UUID()
-        let placeholder: String
-        let text: Binding<String>
-        let autoCapitalization: TextInputAutocapitalization
-        let autoCorrectionDisabled: Bool
-    }
+    // The button types live outside this generic type, otherwise the default
+    // primaryButton would need T's (possibly isolated) Hashable conformance.
+    typealias AlertButton = AlertInfoButton
+    typealias AlertTextField = AlertInfoTextField
     
     /// An identifier that can be used to distinguish one error from another.
     let id: T
@@ -97,6 +87,21 @@ extension AlertInfo {
         self.init(id: error.localizedDescription,
                   title: error.localizedDescription)
     }
+}
+
+struct AlertInfoButton: Identifiable {
+    let id = UUID()
+    let title: String
+    var role: ButtonRole?
+    let action: (() -> Void)?
+}
+
+struct AlertInfoTextField: Identifiable {
+    let id = UUID()
+    let placeholder: String
+    let text: Binding<String>
+    let autoCapitalization: TextInputAutocapitalization
+    let autoCorrectionDisabled: Bool
 }
 
 extension View {
