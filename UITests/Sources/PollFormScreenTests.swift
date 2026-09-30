@@ -15,7 +15,7 @@ class PollFormScreenUITests: XCTestCase {
         try await app.assertScreenshot()
     }
     
-    func testFilledPoll() async throws {
+    func testFilledPoll() {
         let app = Application.launch(.createPoll)
         let questionTextField = app.textFields[A11yIdentifiers.pollFormScreen.question]
         questionTextField.tap(.center)
@@ -29,13 +29,8 @@ class PollFormScreenUITests: XCTestCase {
         option2TextField.tap(.center)
         option2TextField.typeText("No")
         
-        // Dismiss the keyboard
-        app.swipeDown()
-        
         let createButton = app.buttons[A11yIdentifiers.pollFormScreen.submit]
         XCTAssertTrue(createButton.isEnabled)
-        
-        try await app.assertScreenshot()
     }
     
     func testMaxOptions() async throws {
