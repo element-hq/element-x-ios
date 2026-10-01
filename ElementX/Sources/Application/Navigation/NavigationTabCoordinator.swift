@@ -409,6 +409,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
             }
         }
         .backportTabBarMinimizeBehaviorOnScrollDown()
+        .backportTabViewSearchActivationOnSearchTabSelection()
         .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
     }
     
