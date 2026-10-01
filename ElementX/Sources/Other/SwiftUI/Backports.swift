@@ -20,6 +20,15 @@ extension View {
         }
     }
     
+    /// iOS 27 only detaches the search tab and docks its field at the bottom when selecting the tab activates search.
+    @ViewBuilder func backportTabViewSearchActivationOnSearchTabSelection() -> some View {
+        if #available(iOS 27.0, *) {
+            tabViewSearchActivation(.searchTabSelection)
+        } else {
+            self
+        }
+    }
+    
     @ViewBuilder
     func backportSafeAreaBar(edge: VerticalEdge,
                              alignment: HorizontalAlignment = .center,
