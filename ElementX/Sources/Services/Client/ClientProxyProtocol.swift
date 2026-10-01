@@ -283,7 +283,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     func trackRecentlyVisitedRoom(_ roomID: String) async -> Result<Void, ClientProxyError>
     
-    func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol]
+    /// The identifiers of the rooms the user visited most recently, newest first.
+    func recentlyVisitedRoomIDs() async -> Result<[String], ClientProxyError>
+    func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) async -> Bool) async -> [JoinedRoomProxyProtocol]
     func recentConversationCounterparts() async -> [UserProfile]
     
     // MARK: - Crypto

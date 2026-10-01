@@ -38,6 +38,119 @@ struct MessageForwardingScreenViewModelTests {
     }
     
     @Test
+    mutating func suggestionsShowRecentlyVisitedRooms() async throws {
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: ["3", "5", "2"])
+        context = viewModel.context
+        
+        let deferred = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
+        try await deferred.fulfill()
+        
+        #expect(context.viewState.suggestedRooms.map(\.id) == ["3", "5", "2"])
+    }
+    
+    @Test
+    mutating func suggestionsOnlyIncludeRoomsThatCanBeForwardedTo() async throws {
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: [forwardingPayload.roomID, "space", "7", "someAwesomeRoomId1", "!unknown:matrix.org", "2"])
+        context = viewModel.context
+        
+        let deferred = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
+        try await deferred.fulfill()
+        
+        #expect(context.viewState.suggestedRooms.map(\.id) == ["2"])
+    }
+    
+    @Test
+    mutating func suggestionsAreLimitedToFiveRooms() async throws {
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: [forwardingPayload.roomID, "7", "someAwesomeRoomId1", "2", "3", "4", "5", "6", "0"])
+        context = viewModel.context
+        
+        let deferred = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
+        try await deferred.fulfill()
+        
+        #expect(context.viewState.suggestedRooms.map(\.id) == ["2", "3", "4", "5", "6"])
+    }
+    
+    @Test
+    mutating func suggestionsAppearOnceTheRoomListLoads() async throws {
+        let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
+        let staticRoomSummaryProvider = RoomSummaryProviderMock()
+        staticRoomSummaryProvider.roomListPublisher = roomListSubject.asCurrentValuePublisher()
+        
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.staticRoomSummaryProvider = staticRoomSummaryProvider
+        clientProxy.recentlyVisitedRoomIDsReturnValue = .success(["2"])
+        clientProxy.roomSummaryForIdentifierClosure = { roomID in roomListSubject.value.first { $0.id == roomID } }
+        viewModel = MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                     userIndicatorController: UserIndicatorControllerMock())
+        context = viewModel.context
+        
+        // The room list is empty on a cold start.
+        let deferredColdStart = deferFailure(context.$viewState.map(\.showsSuggestions), timeout: .seconds(1)) { $0 }
+        try await deferredColdStart.fulfill()
+        
+        let deferredSuggestions = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
+        roomListSubject.send(.mockRooms)
+        try await deferredSuggestions.fulfill()
+        
+        #expect(context.viewState.suggestedRooms.map(\.id) == ["2"])
+    }
+    
+    @Test
+    mutating func suggestedRoomsAreAlsoListedInChats() async throws {
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: ["2"])
+        context = viewModel.context
+        
+        let deferred = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
+        try await deferred.fulfill()
+        
+        #expect(context.viewState.rooms.contains { $0.id == "2" })
+    }
+    
+    @Test
+    mutating func searchingHidesTheSuggestions() async throws {
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: ["2"])
+        context = viewModel.context
+        
+        let deferredSuggestions = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
+        try await deferredSuggestions.fulfill()
+        #expect(context.viewState.showsSuggestions)
+        
+        let deferredSearch = deferFulfillment(context.$viewState) { $0.rooms.count == 1 }
+        context.searchQuery = "Second"
+        try await deferredSearch.fulfill()
+        #expect(!context.viewState.showsSuggestions)
+        #expect(context.viewState.suggestedRooms.map(\.id) == ["2"], "The suggestions shouldn't be searched")
+        
+        context.searchQuery = ""
+        #expect(context.viewState.showsSuggestions)
+    }
+    
+    @Test
+    mutating func noSuggestionsAreShownWhenNoRecentRoomCanBeSuggested() async throws {
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: [forwardingPayload.roomID, "7"])
+        context = viewModel.context
+        
+        let deferred = deferFailure(context.$viewState.map(\.showsSuggestions), timeout: .seconds(1)) { $0 }
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    mutating func noSuggestionsAreShownWhenRecentRoomsFailToLoad() async throws {
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.recentlyVisitedRoomIDsReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        viewModel = MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                     userIndicatorController: UserIndicatorControllerMock())
+        context = viewModel.context
+        
+        let deferred = deferFailure(context.$viewState.map(\.showsSuggestions), timeout: .seconds(1)) { $0 }
+        try await deferred.fulfill()
+    }
+    
+    @Test
     mutating func roomSelection() {
         context.send(viewAction: .selectRoom(roomID: "2"))
         #expect(context.viewState.selectedRoomIDs == ["2"])
@@ -181,9 +294,13 @@ struct MessageForwardingScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private func makeViewModel(userIndicatorController: UserIndicatorControllerProtocol) -> MessageForwardingScreenViewModelProtocol {
+    private func makeViewModel(recentlyVisitedRoomIDs: [String] = [],
+                               userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> MessageForwardingScreenViewModelProtocol {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.roomForIdentifierClosure = { .joined(JoinedRoomProxyMock(.init(id: $0))) }
+        clientProxy.recentlyVisitedRoomIDsReturnValue = .success(recentlyVisitedRoomIDs)
+        let knownRooms: [RoomSummary] = .mockRooms + .mockInvites + [.mock(id: "space", name: "Space", isSpace: true)]
+        clientProxy.roomSummaryForIdentifierClosure = { roomID in knownRooms.first { $0.id == roomID } }
         
         return MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
                                                 userSession: UserSessionMock(.init(clientProxy: clientProxy)),

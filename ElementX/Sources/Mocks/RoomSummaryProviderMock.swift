@@ -72,13 +72,14 @@ extension RoomSummaryProviderMock {
 extension RoomSummary {
     static func mock(id: String,
                      name: String,
+                     isSpace: Bool = false,
                      canonicalAlias: String? = nil) -> RoomSummary {
         RoomSummary(room: RoomSDKMock(.init()),
                     id: id,
                     joinRequestType: nil,
                     name: name,
                     isDirect: false,
-                    isSpace: false,
+                    isSpace: isSpace,
                     avatarURL: nil,
                     heroes: [],
                     activeMembersCount: 0,

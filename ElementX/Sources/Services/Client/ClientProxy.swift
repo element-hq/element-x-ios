@@ -981,7 +981,17 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
+    func recentlyVisitedRoomIDs() async -> Result<[String], ClientProxyError> {
+        do {
+            let result = try await client.getRecentlyVisitedRooms()
+            return .success(result)
+        } catch {
+            MXLog.error("Failed retrieving recently visited rooms with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) async -> Bool) async -> [JoinedRoomProxyProtocol] {
         let maxResultsToReturn = 5
         
         guard case let .success(roomIdentifiers) = await recentlyVisitedRoomIDs() else {
@@ -992,7 +1002,7 @@ class ClientProxy: ClientProxyProtocol {
         
         for roomID in roomIdentifiers {
             guard case let .joined(roomProxy) = await roomForIdentifier(roomID),
-                  filter(roomProxy) else {
+                  await filter(roomProxy) else {
                 continue
             }
             
@@ -1033,16 +1043,6 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         return users.elements
-    }
-    
-    private func recentlyVisitedRoomIDs() async -> Result<[String], ClientProxyError> {
-        do {
-            let result = try await client.getRecentlyVisitedRooms()
-            return .success(result)
-        } catch {
-            MXLog.error("Failed retrieving recently visited rooms with error: \(error)")
-            return .failure(.sdkError(error))
-        }
     }
     
     // MARK: Moderation & Safety

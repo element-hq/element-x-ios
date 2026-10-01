@@ -12,6 +12,8 @@ import SwiftUI
 typealias MessageForwardingScreenViewModelType = StateStoreViewModel<MessageForwardingScreenViewState, MessageForwardingScreenViewAction>
 
 class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, MessageForwardingScreenViewModelProtocol {
+    private static let maxSuggestedRoomCount = 5
+    
     private let forwardingPayload: MessageForwardingPayload
     private let clientProxy: ClientProxyProtocol
     private let roomSummaryProvider: RoomSummaryProviderProtocol
@@ -54,6 +56,8 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             .store(in: &cancellables)
         
         updateRooms()
+        
+        Task { await loadSuggestedRooms() }
     }
     
     override func process(viewAction: MessageForwardingScreenViewAction) {
@@ -83,20 +87,34 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     // MARK: - Private
     
     private func updateRooms() {
-        var rooms = [MessageForwardingRoom]()
+        state.rooms = roomSummaryProvider.roomListPublisher.value
+            .filter { $0.id != forwardingPayload.roomID }
+            .map(MessageForwardingRoom.init(summary:))
+    }
+    
+    private func loadSuggestedRooms() async {
+        guard case let .success(roomIDs) = await clientProxy.recentlyVisitedRoomIDs() else { return }
         
-        for summary in roomSummaryProvider.roomListPublisher.value {
-            if summary.id == forwardingPayload.roomID {
-                continue
+        // The room list is empty on a cold start, so the suggestions are re-resolved as it loads.
+        clientProxy.staticRoomSummaryProvider.roomListPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateSuggestedRooms(recentlyVisitedRoomIDs: roomIDs)
             }
-            
-            rooms.append(.init(id: summary.id,
-                               title: summary.name,
-                               description: summary.roomListDescription,
-                               avatar: summary.avatar))
-        }
+            .store(in: &cancellables)
+    }
+    
+    /// Built from the room summaries: building room proxies is slow and would shift the list down when the section appears.
+    private func updateSuggestedRooms(recentlyVisitedRoomIDs: [String]) {
+        let suggestedRooms = recentlyVisitedRoomIDs
+            .filter { $0 != forwardingPayload.roomID }
+            .compactMap(clientProxy.roomSummaryForIdentifier)
+            .filter { $0.joinRequestType == nil && !$0.isSpace && !$0.isTombstoned }
+            .prefix(Self.maxSuggestedRoomCount)
+            .map(MessageForwardingRoom.init(summary:))
         
-        state.rooms = rooms
+        guard suggestedRooms != state.suggestedRooms else { return }
+        state.suggestedRooms = suggestedRooms
     }
     
     /// The actual range values don't matter as long as they contain the lower
