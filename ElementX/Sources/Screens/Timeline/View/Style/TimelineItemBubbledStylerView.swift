@@ -50,6 +50,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         context.viewState.messageSelection.contains(timelineItem.id.eventID)
     }
     
+    private var accessibilitySelection: TimelineItemAccessibilityMessageSelection {
+        guard isMessageSelectionActive else { return .none }
+        return .selecting(isSelected: isSelected, selectedCount: context.viewState.messageSelection.count)
+    }
+    
     /// The base padding applied to bubbles on either side.
     ///
     /// **Note:** This is on top of the insets applied to the cells by the table view.
@@ -171,7 +176,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // Figma overlaps reactions by 3
         VStack(alignment: alignment, spacing: -3) {
             messageBubbleWithActions
-                .timelineItemAccessibility(timelineItem, selection: isMessageSelectionActive ? .selecting(isSelected: isSelected) : .none) {
+                .timelineItemAccessibility(timelineItem, selection: accessibilitySelection) {
                     if isMessageSelectionActive {
                         toggleSelection()
                     } else {

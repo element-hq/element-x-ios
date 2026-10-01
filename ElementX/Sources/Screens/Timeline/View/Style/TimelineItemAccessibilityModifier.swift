@@ -13,7 +13,7 @@ enum TimelineItemAccessibilityMessageSelection {
     /// No selection is active, the item offers its regular message actions.
     case none
     /// A selection is active, the item acts as a toggle when it can be selected.
-    case selecting(isSelected: Bool)
+    case selecting(isSelected: Bool, selectedCount: Int)
 }
 
 private struct TimelineItemAccessibilityModifier: ViewModifier {
@@ -76,9 +76,13 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
                         action()
                     }
                 }
-        case .selecting(let isSelected):
+        case .selecting(let isSelected, let selectedCount):
             if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isForwardable {
                 view
+                    .accessibilityLabel { label in
+                        Text(L10n.screenRoomSelectionCount(selectedCount))
+                        label
+                    }
                     .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
                     .accessibilityAction(.default, action)
             } else {
