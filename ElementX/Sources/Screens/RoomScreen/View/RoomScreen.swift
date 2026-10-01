@@ -413,6 +413,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         
         if isSelecting {
             let eventIDs = timelineController.timelineItems.compactMap { ($0 as? EventBasedTimelineItemProtocol)?.id.eventID }
+            timelineViewModel.state.messageSelection.isActive = true
             timelineViewModel.state.messageSelection.selectedEventIDs = Set(eventIDs.prefix(2))
         }
         

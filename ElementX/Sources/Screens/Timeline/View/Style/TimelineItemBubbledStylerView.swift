@@ -476,6 +476,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                           emojiProvider: EmojiProvider(userSettings: userSettings),
                                           linkMetadataProvider: LinkMetadataProvider(),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+        viewModel.state.messageSelection.isActive = true
         viewModel.state.messageSelection.selectedEventIDs = ["selected"]
         return viewModel
     }()

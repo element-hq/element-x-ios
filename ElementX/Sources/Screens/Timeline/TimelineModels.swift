@@ -205,16 +205,14 @@ struct TimelineViewStateBindings {
     var textToBeTranslated: String?
 }
 
-/// The state of the multi-selection of messages, active as soon as an item is selected.
+/// The state of the multi-selection of messages.
 struct TimelineMessageSelectionState: Equatable {
     static let limit = 10
     
     var isEnabled = false
+    /// Stays on when every message is unselected, it only ends when closed or once the messages are forwarded.
+    var isActive = false
     var selectedEventIDs: Set<String> = []
-    
-    var isActive: Bool {
-        !selectedEventIDs.isEmpty
-    }
     
     var count: Int {
         selectedEventIDs.count
@@ -227,6 +225,11 @@ struct TimelineMessageSelectionState: Equatable {
     func contains(_ eventID: String?) -> Bool {
         guard let eventID else { return false }
         return selectedEventIDs.contains(eventID)
+    }
+    
+    mutating func end() {
+        isActive = false
+        selectedEventIDs.removeAll()
     }
 }
 

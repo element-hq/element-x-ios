@@ -122,6 +122,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         if isSelecting {
+            timelineViewModel.state.messageSelection.isActive = true
             timelineViewModel.state.messageSelection.selectedEventIDs = Set(eventIDs.prefix(2))
         }
         
