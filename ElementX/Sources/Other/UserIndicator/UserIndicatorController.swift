@@ -49,7 +49,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
                 delayedIndicators.insert(indicator.id)
                 
                 Task {
-                    try await Task.sleep(for: .seconds(delay.seconds))
+                    try? await Task.sleep(for: .seconds(delay.seconds))
                     
                     guard delayedIndicators.contains(indicator.id) else {
                         return

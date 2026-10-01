@@ -48,7 +48,7 @@ targets:
       base:
         PRODUCT_NAME: UITests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.ui.tests
-        SWIFT_VERSION: 6.2
+        SWIFT_VERSION: 6
         SWIFT_APPROACHABLE_CONCURRENCY: YES
       configs:
       # This is required to remove the $(inherited) flags

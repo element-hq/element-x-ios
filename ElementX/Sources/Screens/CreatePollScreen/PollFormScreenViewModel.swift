@@ -78,7 +78,7 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
         case .deleteOption(let index):
             // fixes a crash that caused an index out of range when an option with the keyboard focus was deleted
             Task {
-                try await Task.sleep(for: .milliseconds(100))
+                try? await Task.sleep(for: .milliseconds(100))
                 guard state.bindings.options.indices.contains(index) else {
                     return
                 }
