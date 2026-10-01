@@ -258,6 +258,15 @@ struct AttributedStringBuilderTests {
     }
     
     @Test
+    func componentIDChangesWithFormatting() throws {
+        let plain = try #require(attributedStringBuilder.fromHTML("test test test"), "Could not build the attributed string")
+        let formatted = try #require(attributedStringBuilder.fromHTML("test <code>test</code> test"), "Could not build the attributed string")
+        
+        #expect(plain.string == formatted.string)
+        #expect(plain.formattedComponents.map(\.id) != formatted.formattedComponents.map(\.id))
+    }
+    
+    @Test
     func detailsWithoutSummary() throws {
         let htmlString = "<details><p>Content</p></details>"
         

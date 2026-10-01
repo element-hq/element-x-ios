@@ -40,7 +40,8 @@ nonisolated extension AttributedString {
                 .plainText
             }
             
-            components.append(AttributedStringBuilderComponent(id: String(attributedString.characters),
+            // Hash attributes as well as characters so formatting-only edits change the ID and refresh the view.
+            components.append(AttributedStringBuilderComponent(id: String(attributedString.hashValue),
                                                                attributedString: attributedString,
                                                                type: componentType))
         }
