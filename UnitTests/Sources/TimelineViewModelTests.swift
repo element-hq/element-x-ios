@@ -781,9 +781,14 @@ final class TimelineViewModelTests {
         viewModel.process(viewAction: .toggleMessageSelection(itemID: items[0].id))
         #expect(viewModel.state.messageSelection.selectedEventIDs == ["$2"])
         
-        // Deselecting the last item ends the selection.
+        // Deselecting the last item keeps the selection going, with nothing selected.
         viewModel.process(viewAction: .toggleMessageSelection(itemID: items[1].id))
-        #expect(!viewModel.state.messageSelection.isActive)
+        #expect(viewModel.state.messageSelection.isActive)
+        #expect(viewModel.state.messageSelection.selectedEventIDs.isEmpty)
+        
+        // Selecting again still works.
+        viewModel.process(viewAction: .toggleMessageSelection(itemID: items[0].id))
+        #expect(viewModel.state.messageSelection.selectedEventIDs == ["$1"])
     }
     
     @Test

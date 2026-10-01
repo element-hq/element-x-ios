@@ -1200,7 +1200,7 @@ extension TimelineViewModel {
             .sink { [weak self] isEnabled in
                 self?.state.messageSelection.isEnabled = isEnabled
                 if !isEnabled {
-                    self?.state.messageSelection.selectedEventIDs.removeAll()
+                    self?.state.messageSelection.end()
                 }
             }
             .store(in: &cancellables)
@@ -1218,6 +1218,7 @@ extension TimelineViewModel {
             return
         }
         
+        state.messageSelection.isActive = true
         state.messageSelection.selectedEventIDs.insert(eventID)
     }
     
@@ -1239,7 +1240,7 @@ extension TimelineViewModel {
         guard state.messageSelection.isActive else { return }
         
         if isSwitchingTimelines {
-            state.messageSelection.selectedEventIDs.removeAll()
+            state.messageSelection.end()
             return
         }
         
@@ -1249,7 +1250,7 @@ extension TimelineViewModel {
     
     /// Ends the selection, either from the close button or once the selected messages have been forwarded.
     func clearMessageSelection() {
-        state.messageSelection.selectedEventIDs.removeAll()
+        state.messageSelection.end()
     }
     
     /// Forwards the selection in timeline order, which is unrelated to the order the messages were selected in.
