@@ -33,6 +33,7 @@ struct UserIndicatorToastView: View {
         .background(Color.compound.bgSubtlePrimary)
         .clipShape(RoundedCornerShape(radius: 24.0, corners: .allCorners))
         .shadow(color: .black.opacity(0.1), radius: 6.0, y: 4.0)
+        .accessibilityHidden(true)
         .transition(toastTransition)
     }
     
