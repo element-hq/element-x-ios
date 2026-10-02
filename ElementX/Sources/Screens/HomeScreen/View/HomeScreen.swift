@@ -98,11 +98,9 @@ struct HomeScreen: View {
     }
     
     private var settingsButton: some View {
-        Button {
+        AvatarSettingsButton(userProfile: context.viewState.userProfile,
+                             mediaProvider: context.mediaProvider) {
             context.send(viewAction: .showSettings)
-        } label: {
-            AvatarSettingsButtonLabel(userProfile: context.viewState.userProfile,
-                                      mediaProvider: context.mediaProvider)
         }
         .accessibilityLabel(L10n.commonSettings)
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
