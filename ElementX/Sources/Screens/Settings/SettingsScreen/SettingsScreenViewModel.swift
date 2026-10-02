@@ -22,12 +22,13 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, userSettings: UserSettings, isBugReportServiceEnabled: Bool, isInSecondaryWindow: Bool, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(userSession: UserSessionProtocol, userSettings: UserSettings, appHooks: AppHooks, isBugReportServiceEnabled: Bool, isInSecondaryWindow: Bool, userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSettings = userSettings
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
+        super.init(initialViewState: .init(appHooks: appHooks,
+                                           deviceID: userSession.clientProxy.deviceID,
                                            userProfile: userSession.clientProxy.userProfilePublisher.value,
                                            showLinkNewDeviceButton: userSettings.linkNewDeviceEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
@@ -133,6 +134,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.secureBackup)
         case .notifications:
             actionsSubject.send(.notifications)
+        case .additionalSettings:
+            actionsSubject.send(.additionalSettings)
         case .advancedSettings:
             actionsSubject.send(.advancedSettings)
         case .labs:

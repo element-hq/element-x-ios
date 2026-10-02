@@ -10,8 +10,38 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Clear PTT
+  internal static var actionClearPtt: String { return UntranslatedL10n.tr("Untranslated", "action_clear_ptt") }
+  /// Save PTT
+  internal static var actionSavePtt: String { return UntranslatedL10n.tr("Untranslated", "action_save_ptt") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Ignore battery optimization
+  internal static var screenPttSettingsBatteryOptimization: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_battery_optimization") }
+  /// Stay active in background
+  internal static var screenPttSettingsBatteryOptimizationDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_battery_optimization_description") }
+  /// Covert mode
+  internal static var screenPttSettingsCovertMode: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_covert_mode") }
+  /// Mute all channels
+  internal static var screenPttSettingsCovertModeDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_covert_mode_description") }
+  /// Show on lock screen
+  internal static var screenPttSettingsLockScreen: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_lock_screen") }
+  /// Access from the lock screen
+  internal static var screenPttSettingsLockScreenDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_lock_screen_description") }
+  /// Route
+  internal static var screenPttSettingsRoute: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_route") }
+  /// Enter route
+  internal static var screenPttSettingsRoutePrompt: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_route_prompt") }
+  /// Enter your push to talk server address
+  internal static var screenPttSettingsServerAddressPrompt: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_server_address_prompt") }
+  /// Server location
+  internal static var screenPttSettingsServerLocation: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_server_location") }
+  /// PTT server settings
+  internal static var screenPttSettingsServerTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_server_title") }
+  /// Enable system overlay
+  internal static var screenPttSettingsSystemOverlay: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_system_overlay") }
+  /// Access a floating action button
+  internal static var screenPttSettingsSystemOverlayDescription: String { return UntranslatedL10n.tr("Untranslated", "screen_ptt_settings_system_overlay_description") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...

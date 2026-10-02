@@ -113,6 +113,10 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
             
+            context.viewState.appHooks.settingsScreenHook.additionalRows {
+                context.send(viewAction: .additionalSettings)
+            }
+            
             ListRow(label: .default(title: L10n.commonScreenLock,
                                     icon: \.lock),
                     kind: .navigationLink {
@@ -314,6 +318,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    status: .mockFocussing))))
         return SettingsScreenViewModel(userSession: userSession,
                                        userSettings: .volatile(),
+                                       appHooks: AppHooks(),
                                        isBugReportServiceEnabled: isBugReportServiceEnabled,
                                        isInSecondaryWindow: false,
                                        userIndicatorController: UserIndicatorControllerMock())
