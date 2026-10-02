@@ -374,6 +374,22 @@ Same pattern for publishers.
 
 ---
 
+## Xcode Agent Skills
+
+Apple ship agent skills with Xcode 27. Installed per machine, not in repo. Skill missing? Suggest user export them (Xcode running): `xcrun agent skills export --output-dir <agent skills dir>` (Claude Code: `~/.claude/skills`). User decline? Skip skill, carry on.
+
+Skill clash this file? This file win. Build settings, entitlements, Info.plist keys, targets → `project.yml`/`target.yml` + `xcodegen`, never `.xcodeproj` or Xcode project-write tools (`UpdateTargetBuildSetting`, `AddEntitlement`…). API newer than target's deployment target → `#available`.
+
+| Skill | Best moment |
+|-------|-------------|
+| `swiftui-specialist` | Writing/reviewing views: data flow, `ForEach`/`List` identity, environment, perf. `L10n` + Compound tokens beat its samples. |
+| `device-interaction` | Runtime check of UI/flow change (subagent skill). Xcode must open this checkout. No login: env `UI_TESTS_SCREEN=<UITestsScreenIdentifier case>` launch that case's mock fixture, no real session. `roomLayout*`, `appLockFlow*`, `*Pagination` need UITests runner. |
+| `swiftui-whats-new-27` | SDK 27 `@State`/`@ContentBuilder` compile errors, or adopting iOS 27 SwiftUI APIs. Keep `AlertInfo` alerts. |
+| `modernize-tests` | Modernizing UnitTests suites (`@Test(arguments:)`, `withKnownIssue`, `#require`). XCUI targets stay XCTest. Keep `deferFulfillment`/`waitForConfirmation` — bare `confirmation()` no wait async. No `.serialized`/`@MainActor` adds. |
+| `app-intents-specialist`, `app-intents-whats-new-27` | Adding App Intents/Shortcuts/Siri/controls (full support planned; iOS 26+ APIs → `-whats-new-27`). Not SiriKit `IN*` code. Intent strings need `LocalizedStringResource` — `L10n` return `String`. |
+
+---
+
 ## Key Files
 
 | File | Purpose |
