@@ -213,7 +213,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     func start() {
         guard stateMachine.state == .initial else {
-            MXLog.error("Received a start request when already started")
+            MXLog.info("Received a start request when already started")
             return
         }
         
@@ -494,9 +494,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         MXLog.info("Migrating user session from \(oldVersion)")
         
-        MXLog.info("Performing client store optimizations.")
-        await userSession.clientProxy.optimizeStores()
-        MXLog.info("Finished optimizing client stores.")
+        // Vacuuming can outlast a background task, getting the app killed before the migrations below run.
+        if appMediator.appState != .background {
+            MXLog.info("Performing client store optimizations.")
+            await userSession.clientProxy.optimizeStores()
+            MXLog.info("Finished optimizing client stores.")
+        }
         
         if oldVersion < Version(25, 6, 0) {
             MXLog.info("Migrating to version 25.06.0, migrating timeline media settings to account data.")
@@ -1343,8 +1346,13 @@ private extension AppCoordinator {
             }
     }
     
-    /// When iOS relaunches a terminated app for a background task, the session is still being restored asynchronously.
+    /// When iOS relaunches a terminated app for a background task, the session needs restoring before the task can run.
     private func waitForSessionRestore() async {
+        // A background launch doesn't necessarily connect a scene, which is what normally calls `start()`.
+        if stateMachine.state == .initial, userSessionStore.hasSessions {
+            start()
+        }
+        
         for await isSessionRestored in isSessionRestoredSubject.timeout(.seconds(5), scheduler: DispatchQueue.main).values where isSessionRestored {
             return
         }
@@ -1388,6 +1396,8 @@ private extension AppCoordinator {
     
     func handleSearchBackfill(_ task: BGProcessingTask) async {
         MXLog.info("Started search backfill task")
+        
+        await waitForSessionRestore()
         
         guard let clientProxy = userSession?.clientProxy else {
             task.setTaskCompleted(success: false)
