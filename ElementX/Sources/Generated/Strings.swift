@@ -3631,6 +3631,8 @@ internal nonisolated enum L10n {
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   internal static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
+  /// Add account
+  internal static var screenSettingsAddAccount: String { return L10n.tr("Localizable", "screen_settings_add_account") }
   /// Away
   internal static var screenSettingsUserStatusAway: String { return L10n.tr("Localizable", "screen_settings_user_status_away") }
   /// Be right back
