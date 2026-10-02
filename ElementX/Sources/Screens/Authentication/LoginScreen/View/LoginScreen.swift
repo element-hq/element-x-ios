@@ -50,7 +50,7 @@ struct LoginScreen: View {
             BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 8)
             // Tchap: [Beta DINUM] Customize login title
- //           Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.accountProvider.serverNameOrBaseURL))
+            //           Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.accountProvider.serverNameOrBaseURL))
             Text(TchapL10n.screenLoginTitleLogin)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)

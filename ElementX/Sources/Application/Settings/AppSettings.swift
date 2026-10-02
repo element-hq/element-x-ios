@@ -142,39 +142,43 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var hasSeenNewSoundBanner: Bool
     
-    // TODO : accountProviders
+    // TODO: accountProviders
     // The initial set of account providers shown to the user in the authentication flow.
     //
     // Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
     // match the last part of the user ID. For example `example.com` and not `https://matrix.example.com`.
     #if IS_TCHAP_DEVELOPMENT
-    private(set) var accountProviders = [
-        "dev01.tchap.incubateur.net",
-        "dev02.tchap.incubateur.net",
-        "ext01.tchap.incubateur.net"
+    private(set) var accountProviders: [AccountProvider] = [
+        .generic("dev01.tchap.incubateur.net"),
+        .generic("dev02.tchap.incubateur.net"),
+        .generic("ext01.tchap.incubateur.net")
     ]
     #elseif IS_TCHAP_PREPROD
-    private(set) var accountProviders = ["i.tchap.gouv.fr",
-                                         "a.tchap.gouv.fr",
-                                         "e.tchap.gouv.fr"]
+    private(set) var accountProviders: [AccountProvider] = [
+        .generic("i.tchap.gouv.fr"),
+        .generic("a.tchap.gouv.fr"),
+        .generic("e.tchap.gouv.fr")
+    ]
     #elseif IS_TCHAP_PRODUCTION
-    private(set) var accountProviders = ["agent.externe.tchap.gouv.fr",
-                                         "agent.collectivites.tchap.gouv.fr",
-                                         "agent.tchap.gouv.fr",
-                                         "agent.elysee.tchap.gouv.fr",
-                                         "agent.pm.tchap.gouv.fr",
-                                         "agent.ssi.tchap.gouv.fr",
-                                         "agent.finances.tchap.gouv.fr",
-                                         "agent.social.tchap.gouv.fr",
-                                         "agent.interieur.tchap.gouv.fr",
-                                         "agent.agriculture.tchap.gouv.fr",
-                                         "agent.justice.tchap.gouv.fr",
-                                         "agent.diplomatie.tchap.gouv.fr",
-                                         "agent.intradef.tchap.gouv.fr",
-                                         "agent.dinum.tchap.gouv.fr",
-                                         "agent.culture.tchap.gouv.fr",
-                                         "agent.dev-durable.tchap.gouv.fr",
-                                         "agent.education.tchap.gouv.fr"]
+    private(set) var accountProviders: [AccountProvider] = [
+        .generic("agent.externe.tchap.gouv.fr"),
+        .generic("agent.collectivites.tchap.gouv.fr"),
+        .generic("agent.tchap.gouv.fr"),
+        .generic("agent.elysee.tchap.gouv.fr"),
+        .generic("agent.pm.tchap.gouv.fr"),
+        .generic("agent.ssi.tchap.gouv.fr"),
+        .generic("agent.finances.tchap.gouv.fr"),
+        .generic("agent.social.tchap.gouv.fr"),
+        .generic("agent.interieur.tchap.gouv.fr"),
+        .generic("agent.agriculture.tchap.gouv.fr"),
+        .generic("agent.justice.tchap.gouv.fr"),
+        .generic("agent.diplomatie.tchap.gouv.fr"),
+        .generic("agent.intradef.tchap.gouv.fr"),
+        .generic("agent.dinum.tchap.gouv.fr"),
+        .generic("agent.culture.tchap.gouv.fr"),
+        .generic("agent.dev-durable.tchap.gouv.fr"),
+        .generic("agent.education.tchap.gouv.fr")
+    ]
     #elseif IS_TCHAP_UNIT_TESTS
     private(set) var accountProviders = ["agent.dinum.tchap.gouv.fr"]
     #else

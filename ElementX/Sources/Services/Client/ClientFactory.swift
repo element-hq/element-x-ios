@@ -117,7 +117,10 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             .crossProcessLockConfig(crossProcessLockConfig: .multiProcess(holderName: InfoPlistReader.main.bundleIdentifier))
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .threadsEnabled(enabled: threadsEnabled, threadSubscriptions: threadsEnabled)
+            // :tchap: Disable thread subscriptions (MSC4308)
+            // The server response is missing the 'unsubscribed' field which causes infinite retry loops
+//            .threadsEnabled(enabled: threadsEnabled, threadSubscriptions: threadsEnabled)
+            .threadsEnabled(enabled: threadsEnabled, threadSubscriptions: false) // :tchap:end
             .requestConfig(config: .init(retryLimit: 3, // Must be non-zero for the SDK to retry API calls when rate-limited.
                                          timeout: requestTimeout,
                                          maxConcurrentRequests: nil,
@@ -152,7 +155,14 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
         if let httpProxy {
             builder = builder.proxy(url: httpProxy)
         }
-        
+
+        // :tchap: certificate pinning
+        if let derCertificates = ClientFactory.certificatePinningDERCertificates() {
+            builder = builder
+                .disableBuiltInRootCertificates()
+                .addRootCertificates(certificates: derCertificates)
+        } // :tchap:end:
+
         return builder
     }
     
@@ -184,5 +194,45 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
             case .restoration(let session, _): session
             }
         }
+    }
+
+    static func certificatePinningDERCertificates() -> [Data]? {
+        guard TchapFeatureFlag.Configuration.certificatePinning.isActivated(for: .all) else {
+            return nil
+        }
+
+        let pemCertificates = InfoPlistReader.app.embeddedPemCertificates
+
+        guard !pemCertificates.isEmpty else {
+            preconditionFailure("Certificate pinning is enabled but no certificates are configured.")
+        }
+
+        // `addRootCertificates(certificates: [Data])` awaits a list of Data type values containing Certificates in DER or PEM format.
+        // Actually, Certificates in PEM format don't work in ElementX implementation (it works in Rust direct test).
+        // But it works with Certificates in DER format.
+        // As DER format is not practical to store in info.plist, we store the certificates in PEM format in info.plist,
+        // and convert it in DER format in Swift to take the functional path of DER into Rust.
+
+        // Try to convert String based PEM to DER Data and check if no Certificate conversion failed.
+        // This step require the removal of header and footer and any newline.
+
+        return pemCertificates.enumerated().map { index, pem in
+            let base64 = pem
+                .replacingOccurrences(of: "-----BEGIN CERTIFICATE-----", with: "")
+                .replacingOccurrences(of: "-----END CERTIFICATE-----", with: "")
+                .components(separatedBy: .whitespacesAndNewlines)
+                .joined()
+
+            guard let data = Data(base64Encoded: base64) else {
+                preconditionFailure("Invalid certificate pinning configuration: PEM certificate \(index) cannot be decoded.")
+            }
+
+            return data
+        }
+
+        // If necessary, to get the real certificate format:
+        //    let certificateData = SecCertificateCreateWithData(nil, derCertificates as CFData)
+        // Then, if necessary to get the public key:
+        //    let publicKey = SecCertificateCopyKey(certificateData)
     }
 }

@@ -222,7 +222,20 @@ targetTemplates:
     - package: LoremSwiftum
     - package: LRUCache
     - package: Mantis
-    - package: MapLibre
+    - target: MapLibreInterface
+      embed: true
+    # Embedded but not linked, dlopen'd on first map use
+    - target: MapLibreShim
+      link: false
+      embed: true
+    # The app just embeds the framework so it's in the bundle for the shim's load 
+    # command to resolve against.
+    - framework: ../MapLibre.framework
+      implicit: true
+      link: false
+      embed: true
+    - package: ElementCall
+      product: ElementCall
     - package: PostHog
     - package: SwiftState
     - package: GZIP
@@ -245,7 +258,7 @@ targetTemplates:
       excludes:
         - Other/Extensions/XCTestCase.swift
         - Other/Extensions/XCUIElement.swift
-    - path: ../Secrets/Secrets.swift
+    - path: ../Components/Secrets/Secrets.swift
     - path: main/Sources
       excludes:
         - Other/Extensions/XCUIElement.swift
@@ -253,6 +266,7 @@ targetTemplates:
     - path: ../ElementX/Resources
     - path: ../ElementX/SupportingFiles/Settings.bundle
     - path: ../Tools/Scripts/Templates/SimpleScreenExample/ElementX
+    - path: ../Components/DevelopmentAssets/Media
 
     # This is required for testing purposes... The problem with unit tests is that if you
     # try to `@testable import NSE` you can only get the definition of files, but due to a

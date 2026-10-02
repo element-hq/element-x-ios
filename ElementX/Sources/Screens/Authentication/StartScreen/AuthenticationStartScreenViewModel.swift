@@ -117,17 +117,14 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             if classicAppAccount.state.availableSecrets == .requiresBackup {
                 state.bindings.showClassicAppBackupInstructions = true
             } else {
-                await loginDirectly(using: classicAppAccount.serverName,
-                                    loginHint: "mxid:\(classicAppAccount.userID)",
-                                    fallbackHomeserverURL: classicAppAccount.homeserverURL)
-                // :tchap: custom loginHint TODO
-//                await configureAccountProvider(classicAppAccount.serverName,
-//                                                               loginHint: "mxid:\(classicAppAccount.userID)",
-//                                                               fallbackHomeserverURL: classicAppAccount.homeserverURL)
+                // :tchap: custom loginHint
+//                await loginDirectly(using: classicAppAccount.serverName,
+//                                    loginHint: "mxid:\(classicAppAccount.userID)",
+//                                    fallbackHomeserverURL: classicAppAccount.homeserverURL)
                 let loginHint = classicAppAccount.emailAddress ?? convertMatrixIDToTchapEmail(classicAppAccount.userID)
-                await configureAccountProvider(classicAppAccount.serverName,
-                                               loginHint: loginHint,
-                                               fallbackHomeserverURL: classicAppAccount.homeserverURL)
+                await loginDirectly(using: classicAppAccount.serverName,
+                                    loginHint: loginHint,
+                                    fallbackHomeserverURL: classicAppAccount.homeserverURL)
                 // :tchap:end:
             }
         } else if let serverNameOrBaseURL = state.serverNameOrBaseURL {

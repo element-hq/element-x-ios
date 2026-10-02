@@ -80,7 +80,7 @@ struct ThreadTimelineScreen: View {
             ToolbarItem(placement: .principal) {
                 RoomHeaderView(roomName: L10n.commonThread,
                                // Tchap: remove subtitle (not enough space)
-    //                           roomSubtitle: context.viewState.roomTitle,
+                               //                           roomSubtitle: context.viewState.roomTitle,
                                roomSubtitle: nil,
                                roomAvatar: context.viewState.roomAvatar,
                                dmRecipientDetails: context.viewState.dmRecipientDetails,

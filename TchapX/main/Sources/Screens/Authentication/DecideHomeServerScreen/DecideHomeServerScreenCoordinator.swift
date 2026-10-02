@@ -20,7 +20,7 @@ struct DecideHomeServerScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let appSettings: AppSettings
     /// The Homeservers that can be queried to obtain the attachment Homeserver for a given email.
-    let accountProviders: [String]
+    let accountProviders: [AccountProvider]
 }
 
 enum DecideHomeServerScreenCoordinatorAction {

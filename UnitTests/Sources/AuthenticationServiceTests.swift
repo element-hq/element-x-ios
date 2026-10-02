@@ -81,8 +81,8 @@ struct AuthenticationServiceTests {
         
         #expect(service.flow == .login)
         // Tchap: adapt test
-        #expect(service.homeserver.value == .init(accountProvider: .managed(serverName: "matrix.org", baseURL: "https://matrix-client.matrix.org"),
- //       #expect(service.homeserver.value == .init(address: "matrix.agent.dinum.tchap.gouv.fr", loginMode: .unknown)) TODO Tchap
+        #expect(service.homeserver.value == .init(accountProvider: .managed(serverName: "matrix.org", baseURL: "https://matrix-client.matrix.org"), loginMode: .unknown))
+        //       #expect(service.homeserver.value == .init(address: "matrix.agent.dinum.tchap.gouv.fr", loginMode: .unknown)) TODO Tchap
     }
     
     @Test

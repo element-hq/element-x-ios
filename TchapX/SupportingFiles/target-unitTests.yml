@@ -34,8 +34,9 @@ targets:
     - target: TchapX-Production
     - package: MatrixRustSDK
     - package: AsyncAlgorithms
-    - package: Clocks
     - package: Dynamic
+    - package: BuildExtensions
+      product: Macros
 
     info:
       path: ../UnitTests/SupportingFiles/Info.plist
@@ -56,7 +57,9 @@ targets:
     sources:
     - path: ../../UnitTests/Sources
     - path: ../SupportingFiles
-    - path: ../../DevelopmentAssets
+    - path: ../../Components/DevelopmentAssets/Media
+    - path: ../../Components/DevelopmentAssets/ClassicAppFixtures
+      buildPhase: resources # Necessary to add binary files to the target.
     - path: ../../ElementX/Sources/Other/Extensions/Publisher.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit

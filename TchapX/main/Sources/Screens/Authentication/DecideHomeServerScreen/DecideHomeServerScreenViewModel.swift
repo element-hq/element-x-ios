@@ -16,7 +16,7 @@ class DecideHomeServerScreenViewModel: DecideHomeServerScreenViewModelType, Deci
     private let authenticationFlow: AuthenticationFlow
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appSettings: AppSettings
-    private let accountProviders: [String]
+    private let accountProviders: [AccountProvider]
     private var requestServerDomainsTask: Task<Void, Never>? // Will be canceled if View is leaved.
     
     private var actionsSubject: PassthroughSubject<DecideHomeServerScreenViewModelAction, Never> = .init()
@@ -27,7 +27,7 @@ class DecideHomeServerScreenViewModel: DecideHomeServerScreenViewModelType, Deci
     init(authenticationService: AuthenticationServiceProtocol,
          authenticationFlow: AuthenticationFlow,
          loginHint: String?,
-         accountProviders: [String],
+         accountProviders: [AccountProvider],
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
         self.authenticationService = authenticationService
@@ -101,7 +101,7 @@ class DecideHomeServerScreenViewModel: DecideHomeServerScreenViewModelType, Deci
                     return
                 }
                 
-                switch await self.requestHomeserverForInfo(homeserver: domain, forEmail: usernameIdWithoutNumericalSuffix) {
+                switch await self.requestHomeserverForInfo(homeserver: domain.serverNameOrBaseURL, forEmail: usernameIdWithoutNumericalSuffix) {
                 case .success(let homeserverDomain):
                     MXLog.info("[DecideHomeServerScreen] requestForHomeserver \(domain) returned domain -> \(homeserverDomain)")
                     if Task.isCancelled {
@@ -125,7 +125,7 @@ class DecideHomeServerScreenViewModel: DecideHomeServerScreenViewModelType, Deci
     }
     
     private func requestHomeserverForInfo(homeserver: String, forEmail: String) async -> Result<String, DecideHomeServerScreenErrorType> {
-        let derCertificates = ClientBuilder.certificatePinningDERCertificates()
+        let derCertificates = ClientFactory.certificatePinningDERCertificates()
         let config = TchapGetInstanceConfig(homeServer: homeserver,
                                             userAgent: UserAgentBuilder.makeASCIIUserAgent(),
                                             disableBuiltInRootCertificates: derCertificates != nil,
@@ -135,7 +135,7 @@ class DecideHomeServerScreenViewModel: DecideHomeServerScreenViewModelType, Deci
         do {
             let tchapInstance = try tchapGetInstance(config: config, forEmail: forEmail)
             // Reject login attempt if returned instance in not in a listed account provider.
-            if !accountProviders.contains(tchapInstance) {
+            if !accountProviders.contains(.generic(tchapInstance)) {
                 return .failure(.tchapGetInstanceError)
             }
             return .success(tchapInstance)
@@ -143,7 +143,7 @@ class DecideHomeServerScreenViewModel: DecideHomeServerScreenViewModelType, Deci
             return .failure(.tchapGetInstanceError)
         }
     }
-    
+
     private func globalProxy(for homeserver: String) -> String? {
         let homeserverURLString = if homeserver.hasPrefix("http://") || homeserver.hasPrefix("https://") {
             homeserver
