@@ -53,12 +53,16 @@ enum HomeScreenViewAction {
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
+    /// Shows nothing briefly on launch as the cached rooms usually publish in time to go straight to them.
+    case awaitingCachedRooms
     case skeletons
     case empty
     case rooms
     
     var description: String {
         switch self {
+        case .awaitingCachedRooms:
+            return "Awaiting cached rooms"
         case .skeletons:
             return "Showing placeholders"
         case .empty:
@@ -96,7 +100,7 @@ struct HomeScreenViewState: BindableState {
     var shouldShowNewSoundBanner = false
     
     var rooms: [HomeScreenRoom] = []
-    var roomListMode: HomeScreenRoomListMode = .skeletons
+    var roomListMode: HomeScreenRoomListMode = .awaitingCachedRooms
     
     var hasPendingInvitations = false
     
@@ -113,7 +117,7 @@ struct HomeScreenViewState: BindableState {
     var isRoomListSearchEnabled = true
     
     var visibleRooms: [HomeScreenRoom] {
-        if roomListMode == .skeletons {
+        if roomListMode == .skeletons || roomListMode == .awaitingCachedRooms {
             return placeholderRooms
         }
         

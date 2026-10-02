@@ -181,6 +181,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             updateRoomListMode(with: roomSummaryProvider.statePublisher.value,
                                hasRooms: !roomSummaryProvider.roomListPublisher.value.isEmpty)
         }
+        
+        // Fall back to the skeletons if the cached rooms take too long to publish.
+        Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(500))
+            guard let self, state.roomListMode == .awaitingCachedRooms else { return }
+            state.roomListMode = .skeletons
+        }
     }
     
     // MARK: - Public
@@ -342,8 +349,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .empty // Loaded, there are no rooms at all.
         } else if hasRooms || isFiltering {
             .rooms // Loaded and the summaries have published (or filtered down to nothing).
-        } else if state.roomListMode == .skeletons {
-            .skeletons // Loaded but nothing published yet, flipping to .rooms would flash an empty list.
+        } else if state.roomListMode == .skeletons || state.roomListMode == .awaitingCachedRooms {
+            state.roomListMode // Loaded but nothing published yet, flipping to .rooms would flash an empty list.
         } else {
             .rooms
         }
@@ -352,7 +359,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        if roomListMode == .rooms, state.roomListMode == .skeletons {
+        if roomListMode == .rooms, state.roomListMode == .skeletons || state.roomListMode == .awaitingCachedRooms {
             analyticsService.signpost.finishTransaction(.cachedRoomList)
         }
         

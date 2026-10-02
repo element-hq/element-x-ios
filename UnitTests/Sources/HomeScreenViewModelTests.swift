@@ -422,6 +422,25 @@ final class HomeScreenViewModelTests {
     }
     
     @Test
+    func roomListModeGoesStraightToTheCachedRooms() async throws {
+        let (roomListSubject, _) = setupViewModelWithManualProvider(state: .loaded(totalNumberOfRooms: 8))
+        #expect(context.viewState.roomListMode == .awaitingCachedRooms)
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.roomListMode == .rooms }
+        roomListSubject.send(.mockRooms)
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    func roomListModeShowsSkeletonsWhenTheCachedRoomsAreSlow() async throws {
+        _ = setupViewModelWithManualProvider(state: .loaded(totalNumberOfRooms: 8))
+        #expect(context.viewState.roomListMode == .awaitingCachedRooms)
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.roomListMode == .skeletons }
+        try await deferred.fulfill()
+    }
+    
+    @Test
     func roomListModeDoesntReturnToSkeletonsWhenTheRoomsAreFilteredOut() async throws {
         let (roomListSubject, stateSubject) = setupViewModelWithManualProvider()
         
@@ -437,9 +456,9 @@ final class HomeScreenViewModelTests {
         try await failure.fulfill()
     }
     
-    private func setupViewModelWithManualProvider() -> (CurrentValueSubject<[RoomSummary], Never>, CurrentValueSubject<RoomSummaryProviderState, Never>) {
+    private func setupViewModelWithManualProvider(state: RoomSummaryProviderState = .notLoaded) -> (CurrentValueSubject<[RoomSummary], Never>, CurrentValueSubject<RoomSummaryProviderState, Never>) {
         let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
-        let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
+        let stateSubject = CurrentValueSubject<RoomSummaryProviderState, Never>(state)
         
         let provider = RoomSummaryProviderMock()
         provider.roomListPublisher = roomListSubject.asCurrentValuePublisher()

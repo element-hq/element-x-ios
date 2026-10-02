@@ -219,7 +219,7 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         let userID = "@alice:example.com"
         
         let roomSummaryProviderState: RoomSummaryProviderMockConfigurationState = switch mode {
-        case .skeletons:
+        case .awaitingCachedRooms, .skeletons:
             .loading
         case .empty:
             .loaded([])
