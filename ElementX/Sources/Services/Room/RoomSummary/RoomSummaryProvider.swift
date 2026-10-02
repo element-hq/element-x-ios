@@ -17,6 +17,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let userSettings: UserSettings
+    private let baseFilter: [RoomListEntriesDynamicFilterKind]
     
     private let roomListPageSize: UInt32
     /// Remember how many rooms we had on the previous requests so we can deduplicate
@@ -62,10 +63,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     ///   - shouldUpdateVisibleRange: whether this summary provider should forward visible ranges
     ///   to the room list service through the `applyInput(input: .viewport(ranges` api. Only useful for
     ///   lists that need to update the visible range on Sliding Sync
+    ///   - includesOnlyJoinedRooms: whether to leave out invites and other rooms the user hasn't joined, whatever the filter
     init(roomListService: RoomListServiceProtocol,
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          shouldUpdateVisibleRange: Bool = false,
+         includesOnlyJoinedRooms: Bool = false,
          roomListPageSize: UInt32 = 100,
          notificationSettings: NotificationSettingsProxyProtocol,
          userSettings: UserSettings) {
@@ -76,6 +79,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.notificationSettings = notificationSettings
         self.userSettings = userSettings
         self.roomListPageSize = roomListPageSize
+        
+        baseFilter = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
+                                     .all(filters: [.space, .invite])]),
+                      .deduplicateVersions] + (includesOnlyJoinedRooms ? [.joined] : [])
         
         let (diffsStream, diffsContinuation) = AsyncStream<[RoomListEntriesUpdate]>.makeStream()
         self.diffsContinuation = diffsContinuation
@@ -120,8 +127,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                                                                 })
             
             // Forces the listener above to be called with the current state
+            let filter = currentFilter ?? .all(filters: [])
             currentFilter = nil
-            setFilter(.all(filters: []))
+            setFilter(filter)
             
             let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: SDKListener { [loadingStateContinuation] state in
                 loadingStateContinuation.yield(state)
@@ -146,15 +154,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         currentFilter = filter
         
-        let baseFilter: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
-                                                                             .all(filters: [.space, .invite])]),
-                                                              .deduplicateVersions]
-        
         switch filter {
         case .excludeAll:
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .none)
-        case let .search(query, joinedOnly):
-            let filters = nameFilter(for: query) + baseFilter + (joinedOnly ? [.joined] : [])
+        case let .search(query):
+            let filters = nameFilter(for: query) + baseFilter
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         case .rooms(let roomIDs, let filters):
             var rustFilters = filters.map(\.rustFilter) + baseFilter
@@ -372,6 +376,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return RoomSummary(room: room,
                            id: roomInfo.id,
                            joinRequestType: joinRequestType,
+                           isJoined: roomInfo.membership == .joined,
                            name: roomInfo.displayName ?? roomInfo.id,
                            isDirect: roomInfo.isDirect,
                            isSpace: roomInfo.isSpace,

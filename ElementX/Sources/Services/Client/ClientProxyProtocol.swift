@@ -149,7 +149,7 @@ protocol ClientProxyProtocol: AnyObject {
     
     /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering
     /// But can still be filtered by queries, since this may be shared across multiple views, remember to reset
-    /// The filtering state when you are done with it
+    /// The filtering state when you are done with it. Only lists joined rooms.
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol { get }
     
     /// Used for listing rooms, can't be filtered nor its state observed

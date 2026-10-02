@@ -74,25 +74,6 @@ struct SearchScreenViewModelTests {
     }
     
     @Test
-    func searchingExcludesRoomsThatAreNotJoined() async throws {
-        let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms + .mockInvites)))
-        let clientProxy = ClientProxyMock(.init())
-        clientProxy.searchService = searchService
-        let viewModel = SearchScreenViewModel(roomSummaryProvider: roomSummaryProvider,
-                                              clientProxy: clientProxy,
-                                              mediaProvider: MediaProviderMock(.init()),
-                                              userIndicatorController: userIndicatorController,
-                                              userSettings: userSettings)
-        
-        let deferred = deferFulfillment(viewModel.context.observe(\.viewState.rooms)) { !$0.isEmpty }
-        viewModel.context.searchQuery = "room"
-        try await deferred.fulfill()
-        
-        #expect(roomSummaryProvider.setFilterReceivedFilter == .search(query: "room", joinedOnly: true))
-        #expect(!viewModel.context.viewState.rooms.contains { $0.title == "First room" })
-    }
-    
-    @Test
     func messageSearch() async throws {
         let deferred = deferFulfillment(setQuerySubject) { $0 == "Foundation" }
         context.searchMode = .messages
@@ -192,6 +173,17 @@ struct SearchScreenViewModelTests {
         try await deferred.fulfill()
         
         #expect(context.viewState.breadcrumbs.map(\.id) == ["query-Second", "room-2"])
+    }
+    
+    @Test
+    func breadcrumbsOfRoomsThatAreNotJoinedAreHidden() async throws {
+        staticRoomListSubject.send([.mock(id: "2", name: "Second"), .mock(id: "left", name: "Left", isJoined: false)])
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.breadcrumbs)) { !$0.isEmpty }
+        userSettings.searchBreadcrumbs = [.room(roomID: "left"), .room(roomID: "2")]
+        try await deferred.fulfill()
+        
+        #expect(context.viewState.breadcrumbs.map(\.id) == ["room-2"])
     }
     
     /// The room list is empty when the app launches, so the rooms need resolving again once it has loaded.

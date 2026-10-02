@@ -43,8 +43,8 @@ extension RoomSummaryProviderMock {
         
         setFilterClosure = { [initialRooms, roomListSubject] filter in
             switch filter {
-            case let .search(query, joinedOnly):
-                var rooms = joinedOnly ? initialRooms.filter { $0.joinRequestType == nil } : initialRooms
+            case let .search(query):
+                var rooms = initialRooms
                 
                 if !query.isEmpty {
                     rooms = rooms.filter { $0.name.localizedCaseInsensitiveContains(query) }
@@ -73,10 +73,12 @@ extension RoomSummary {
     static func mock(id: String,
                      name: String,
                      isSpace: Bool = false,
+                     isJoined: Bool = true,
                      canonicalAlias: String? = nil) -> RoomSummary {
         RoomSummary(room: RoomSDKMock(.init()),
                     id: id,
                     joinRequestType: nil,
+                    isJoined: isJoined,
                     name: name,
                     isDirect: false,
                     isSpace: isSpace,
@@ -105,6 +107,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "1",
                     joinRequestType: nil,
+                    isJoined: true,
                     name: "Foundation 🔭🪐🌌",
                     isDirect: false,
                     isSpace: false,
@@ -128,6 +131,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "2",
                     joinRequestType: nil,
+                    isJoined: true,
                     name: "Foundation and Empire",
                     isDirect: false,
                     isSpace: false,
@@ -151,6 +155,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "3",
                     joinRequestType: nil,
+                    isJoined: true,
                     name: "Second Foundation",
                     isDirect: false,
                     isSpace: false,
@@ -174,6 +179,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "4",
                     joinRequestType: nil,
+                    isJoined: true,
                     name: "Foundation's Edge",
                     isDirect: false,
                     isSpace: false,
@@ -197,6 +203,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "5",
                     joinRequestType: nil,
+                    isJoined: true,
                     name: "Foundation and Earth",
                     isDirect: true,
                     isSpace: false,
@@ -220,6 +227,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "6",
                     joinRequestType: nil,
+                    isJoined: true,
                     name: "Prelude to Foundation",
                     isDirect: true,
                     isSpace: false,
@@ -243,6 +251,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "7",
                     joinRequestType: nil,
+                    isJoined: true,
                     name: "Tombstoned",
                     isDirect: false,
                     isSpace: false,
@@ -266,6 +275,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "0",
                     joinRequestType: nil,
+                    isJoined: true,
                     name: "Unknown",
                     isDirect: false,
                     isSpace: false,
@@ -322,6 +332,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "someAwesomeRoomId1",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
+                    isJoined: false,
                     name: "First room",
                     isDirect: false,
                     isSpace: false,
@@ -345,6 +356,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "someAwesomeRoomId2",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
+                    isJoined: false,
                     name: "Second room",
                     isDirect: true,
                     isSpace: false,
@@ -371,6 +383,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "!space1:matrix.org",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
+                    isJoined: false,
                     name: "First space",
                     isDirect: false,
                     isSpace: true,
@@ -394,6 +407,7 @@ extension Array where Element == RoomSummary {
         RoomSummary(room: RoomSDKMock(),
                     id: "!space2:matrix.org",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
+                    isJoined: false,
                     name: "Second space",
                     isDirect: false,
                     isSpace: true,

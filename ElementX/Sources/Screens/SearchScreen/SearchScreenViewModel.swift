@@ -194,7 +194,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         switch mode {
         case .rooms:
             searchedQueries[mode] = searchQuery
-            roomSummaryProvider.setFilter(.search(query: searchQuery, joinedOnly: true))
+            roomSummaryProvider.setFilter(.search(query: searchQuery))
         case .messages:
             setQueryTask = Task { [weak self] in
                 // Debounce message queries; superseded keystrokes cancel this before it commits.
@@ -215,7 +215,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
                 return .query(query)
             case .room(let roomID):
                 // Drop rooms the user has since left or is only invited to, we've got nothing to show for them.
-                guard let summary = clientProxy.roomSummaryForIdentifier(roomID), summary.joinRequestType == nil else { return nil }
+                guard let summary = clientProxy.roomSummaryForIdentifier(roomID), summary.isJoined else { return nil }
                 return .room(SearchScreenRoom(summary))
             }
         }

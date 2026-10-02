@@ -100,6 +100,7 @@ struct RoomSummaryTests {
         RoomSummary(room: RoomSDKMock(),
                     id: roomDetails.id,
                     joinRequestType: nil,
+                    isJoined: true,
                     name: roomDetails.name,
                     isDirect: isDirect,
                     isSpace: isSpace,

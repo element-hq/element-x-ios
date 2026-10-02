@@ -1582,6 +1582,7 @@ private struct ClientProxyServices {
         alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                            eventStringBuilder: eventStringBuilder,
                                                            name: "AlternateAllRooms",
+                                                           includesOnlyJoinedRooms: true,
                                                            notificationSettings: notificationSettings,
                                                            userSettings: userSettings)
         

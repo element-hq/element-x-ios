@@ -88,7 +88,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     
     private func updateRooms() {
         state.rooms = roomSummaryProvider.roomListPublisher.value
-            .filter { $0.id != forwardingPayload.roomID }
+            .filter { $0.id != forwardingPayload.roomID && !$0.isTombstoned }
             .map(MessageForwardingRoom.init(summary:))
     }
     
@@ -99,7 +99,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         state.suggestedRooms = roomIDs
             .filter { $0 != forwardingPayload.roomID }
             .compactMap(clientProxy.roomSummaryForIdentifier)
-            .filter { $0.joinRequestType == nil && !$0.isSpace && !$0.isTombstoned }
+            .filter { $0.isJoined && !$0.isSpace && !$0.isTombstoned }
             .prefix(Self.maxSuggestedRoomCount)
             .map(MessageForwardingRoom.init(summary:))
     }

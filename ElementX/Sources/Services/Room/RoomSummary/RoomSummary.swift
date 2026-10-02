@@ -30,6 +30,7 @@ nonisolated struct RoomSummary {
     let id: String
     
     let joinRequestType: JoinRequestType?
+    let isJoined: Bool
     
     let name: String
     let isDirect: Bool
@@ -118,6 +119,7 @@ nonisolated extension RoomSummary {
         RoomSummary(room: room,
                     id: room.id(),
                     joinRequestType: nil,
+                    isJoined: false,
                     name: room.id(),
                     isDirect: false,
                     isSpace: false,
@@ -165,6 +167,7 @@ nonisolated extension RoomSummary {
         activeCallIntent = nil
         
         joinRequestType = nil
+        isJoined = true
         isMarkedUnread = false
         isFavourite = false
         isTombstoned = false
