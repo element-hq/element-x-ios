@@ -27,6 +27,10 @@ struct SettingsScreen: View {
                 userStatusSection
             }
             
+            if context.viewState.showAddAccountButton {
+                addAccountSection
+            }
+            
             if !shouldHideManageAccountSection {
                 manageAccountSection
             }
@@ -95,6 +99,17 @@ struct SettingsScreen: View {
             SettingsScreenUserStatusRow(mode: context.viewState.userStatusRowMode) { action in
                 context.send(viewAction: .userStatus(action))
             }
+        }
+    }
+    
+    private var addAccountSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.screenSettingsAddAccount,
+                                    icon: \.plus),
+                    kind: .navigationLink {
+                        context.send(viewAction: .addAccount)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.addAccount)
         }
     }
     
@@ -288,7 +303,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
             SettingsScreen(context: viewModel.context)
         }
         .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
-        .frame(height: 1100)
+        .frame(height: 1200)
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Default")
         
@@ -296,7 +311,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
         .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountProfileURL).map { $0 != nil })
-        .frame(height: 1050)
+        .frame(height: 1150)
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Bug report disabled")
     }
@@ -306,8 +321,10 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    deviceID: "AAAAAAAAAAA",
                                                                                    displayName: "Alice Liddell",
                                                                                    status: .mockFocussing))))
+        let userSettings = UserSettings.volatile()
+        userSettings.multiAccountEnabled = true
         return SettingsScreenViewModel(userSession: userSession,
-                                       userSettings: .volatile(),
+                                       userSettings: userSettings,
                                        isBugReportServiceEnabled: isBugReportServiceEnabled,
                                        isInSecondaryWindow: false,
                                        userIndicatorController: UserIndicatorControllerMock())

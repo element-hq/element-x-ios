@@ -30,6 +30,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userProfile: userSession.clientProxy.userProfilePublisher.value,
                                            showLinkNewDeviceButton: userSettings.linkNewDeviceEnabled,
+                                           showAddAccountButton: userSettings.multiAccountEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: userSettings.developerOptionsEnabled,
                                            showAnalyticsSettings: userSettings.canPromptForAnalytics,
@@ -43,6 +44,10 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         
         userSettings.linkNewDeviceEnabledPublisher
             .weakAssign(to: \.state.showLinkNewDeviceButton, on: self)
+            .store(in: &cancellables)
+        
+        userSettings.multiAccountEnabledPublisher
+            .weakAssign(to: \.state.showAddAccountButton, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.userProfilePublisher
@@ -113,6 +118,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         case .userStatus(.cancel):
             state.bindings.isPresentingStatusPicker = false
             state.bindings.isShowingCustomStatusField = false
+        case .addAccount:
+            actionsSubject.send(.addAccount)
         case .linkNewDevice:
             actionsSubject.send(.linkNewDevice)
         case let .manageAccount(url):
