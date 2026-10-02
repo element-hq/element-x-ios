@@ -1563,6 +1563,7 @@
 "screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
