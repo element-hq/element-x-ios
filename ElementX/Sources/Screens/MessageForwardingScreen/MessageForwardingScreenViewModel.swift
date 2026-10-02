@@ -99,7 +99,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         state.suggestedRooms = roomIDs
             .filter { $0 != forwardingPayload.roomID }
             .compactMap(clientProxy.roomSummaryForIdentifier)
-            .filter { $0.joinRequestType == nil && !$0.isSpace && !$0.isTombstoned }
+            .filter { $0.isJoined && !$0.isSpace && !$0.isTombstoned }
             .prefix(Self.maxSuggestedRoomCount)
             .map(MessageForwardingRoom.init(summary:))
     }

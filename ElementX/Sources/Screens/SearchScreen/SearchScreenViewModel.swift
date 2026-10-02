@@ -215,7 +215,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
                 return .query(query)
             case .room(let roomID):
                 // Drop rooms the user has since left or is only invited to, we've got nothing to show for them.
-                guard let summary = clientProxy.roomSummaryForIdentifier(roomID), summary.joinRequestType == nil else { return nil }
+                guard let summary = clientProxy.roomSummaryForIdentifier(roomID), summary.isJoined else { return nil }
                 return .room(SearchScreenRoom(summary))
             }
         }

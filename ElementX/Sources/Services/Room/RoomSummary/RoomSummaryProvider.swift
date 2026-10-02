@@ -376,6 +376,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return RoomSummary(room: room,
                            id: roomInfo.id,
                            joinRequestType: joinRequestType,
+                           isJoined: roomInfo.membership == .joined,
                            name: roomInfo.displayName ?? roomInfo.id,
                            isDirect: roomInfo.isDirect,
                            isSpace: roomInfo.isSpace,

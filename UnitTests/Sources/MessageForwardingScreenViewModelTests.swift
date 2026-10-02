@@ -51,7 +51,7 @@ struct MessageForwardingScreenViewModelTests {
     
     @Test
     mutating func suggestionsOnlyIncludeRoomsThatCanBeForwardedTo() async throws {
-        viewModel = makeViewModel(recentlyVisitedRoomIDs: [forwardingPayload.roomID, "space", "7", "someAwesomeRoomId1", "!unknown:matrix.org", "2"])
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: [forwardingPayload.roomID, "space", "7", "someAwesomeRoomId1", "left", "!unknown:matrix.org", "2"])
         context = viewModel.context
         
         let deferred = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
@@ -290,7 +290,8 @@ struct MessageForwardingScreenViewModelTests {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.roomForIdentifierClosure = { .joined(JoinedRoomProxyMock(.init(id: $0))) }
         clientProxy.recentlyVisitedRoomIDsReturnValue = .success(recentlyVisitedRoomIDs)
-        let knownRooms: [RoomSummary] = .mockRooms + .mockInvites + [.mock(id: "space", name: "Space", isSpace: true)]
+        let knownRooms: [RoomSummary] = .mockRooms + .mockInvites + [.mock(id: "space", name: "Space", isSpace: true),
+                                                                     .mock(id: "left", name: "Left", isJoined: false)]
         clientProxy.roomSummaryForIdentifierClosure = { roomID in knownRooms.first { $0.id == roomID } }
         
         return MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,

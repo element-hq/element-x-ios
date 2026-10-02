@@ -25,6 +25,7 @@ struct HomeScreenRoomTests {
         roomSummary = RoomSummary(room: RoomSDKMock(),
                                   id: "Test room",
                                   joinRequestType: nil,
+                                  isJoined: true,
                                   name: "Test room",
                                   isDirect: false,
                                   isSpace: false,

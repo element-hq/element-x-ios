@@ -175,6 +175,17 @@ struct SearchScreenViewModelTests {
         #expect(context.viewState.breadcrumbs.map(\.id) == ["query-Second", "room-2"])
     }
     
+    @Test
+    func breadcrumbsOfRoomsThatAreNotJoinedAreHidden() async throws {
+        staticRoomListSubject.send([.mock(id: "2", name: "Second"), .mock(id: "left", name: "Left", isJoined: false)])
+        
+        let deferred = deferFulfillment(context.observe(\.viewState.breadcrumbs)) { !$0.isEmpty }
+        userSettings.searchBreadcrumbs = [.room(roomID: "left"), .room(roomID: "2")]
+        try await deferred.fulfill()
+        
+        #expect(context.viewState.breadcrumbs.map(\.id) == ["room-2"])
+    }
+    
     /// The room list is empty when the app launches, so the rooms need resolving again once it has loaded.
     @Test
     func roomBreadcrumbsAreDisplayedAfterTheRoomListLoads() async throws {

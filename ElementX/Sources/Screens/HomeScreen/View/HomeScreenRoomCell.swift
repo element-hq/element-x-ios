@@ -268,6 +268,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         let summary = RoomSummary(room: RoomSDKMock(),
                                   id: UUID().uuidString,
                                   joinRequestType: nil,
+                                  isJoined: true,
                                   name: name,
                                   isDirect: heroes.count == 1,
                                   isSpace: false,

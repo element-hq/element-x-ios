@@ -73,6 +73,7 @@ final class LoggingTests {
         let roomSummary = RoomSummary(room: RoomSDKMock(),
                                       id: "myroomid",
                                       joinRequestType: nil,
+                                      isJoined: true,
                                       name: roomName,
                                       isDirect: true,
                                       isSpace: false,
