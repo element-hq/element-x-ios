@@ -27,6 +27,13 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
                                            isSignedIn: clientProxy != nil,
                                            bindings: .init(developerOptions: developerOptions)))
         
+        developerOptions.multiAccountEnabledPublisher
+            .removeDuplicates()
+            .dropFirst() // The publisher replays the current value, so only an actual toggle arms the announcement.
+            .filter { $0 }
+            .sink { _ in developerOptions.hasSeenMultiAccountAnnouncement = false }
+            .store(in: &cancellables)
+        
         Task {
             if case let .success(sizes) = await clientProxy?.storeSizes() {
                 let formatter = ByteCountFormatStyle(style: .file)
