@@ -45,7 +45,7 @@ class AppLockService: AppLockServiceProtocol {
     
     var biometryType: LABiometryType {
         updateBiometrics()
-        guard context.evaluatedPolicyDomainState != nil else { return .none }
+        guard context.biometricStateHash != nil else { return .none }
         return context.biometryType
     }
     
@@ -56,7 +56,7 @@ class AppLockService: AppLockServiceProtocol {
     var biometricUnlockTrusted: Bool {
         guard let state = keychainController.pinCodeBiometricState() else { return false }
         updateBiometrics()
-        return state == context.evaluatedPolicyDomainState
+        return state == context.biometricStateHash
     }
     
     var numberOfPINAttempts: AnyPublisher<Int, Never> {
@@ -94,7 +94,7 @@ class AppLockService: AppLockServiceProtocol {
     
     func enableBiometricUnlock() -> Result<Void, AppLockServiceError> {
         guard isEnabled else { return .failure(.pinNotSet) }
-        guard let state = context.evaluatedPolicyDomainState else { return .failure(.biometricUnlockNotSupported) }
+        guard let state = context.biometricStateHash else { return .failure(.biometricUnlockNotSupported) }
         
         do {
             try keychainController.setPINCodeBiometricState(state)
@@ -227,5 +227,13 @@ class AppLockService: AppLockServiceProtocol {
     private func completeUnlock() {
         timer.registerUnlock()
         appSettings.appLockNumberOfPINAttempts = 0
+    }
+}
+
+nonisolated extension LAContext {
+    /// A hash of the enrolled biometric data that changes whenever biometrics are added or removed.
+    /// Only available once `canEvaluatePolicy` or `evaluatePolicy` has been called for a biometric policy.
+    @objc var biometricStateHash: Data? {
+        domainState.biometry.stateHash
     }
 }
