@@ -26,6 +26,14 @@ struct MessageForwardingScreenViewState: BindableState {
         bindings.searchQuery.isEmpty && !suggestedRooms.isEmpty
     }
     
+    /// Every room appears once: the suggested ones are left out unless searching.
+    var chats: [MessageForwardingRoom] {
+        guard showsSuggestions else { return rooms }
+        
+        let suggestedRoomIDs = Set(suggestedRooms.map(\.id))
+        return rooms.filter { !suggestedRoomIDs.contains($0.id) }
+    }
+    
     var isAtRoomSelectionLimit: Bool {
         selectedRoomIDs.count >= maxRoomSelectionCount
     }

@@ -25,14 +25,16 @@ struct MessageForwardingScreen: View {
             }
             
             Section {
-                ForEach(context.viewState.rooms, content: row)
+                ForEach(context.viewState.chats, content: row)
                 // Replace these with ScrollView's `scrollPosition` when dropping iOS 16.
             } header: {
-                Text(L10n.commonChats)
-                    .compoundListSectionHeader()
-                    .onAppear {
-                        context.send(viewAction: .reachedTop)
-                    }
+                if !context.viewState.chats.isEmpty {
+                    Text(L10n.commonChats)
+                        .compoundListSectionHeader()
+                        .onAppear {
+                            context.send(viewAction: .reachedTop)
+                        }
+                }
             } footer: {
                 emptyRectangle
                     .onAppear {

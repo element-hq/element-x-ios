@@ -92,29 +92,16 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             .map(MessageForwardingRoom.init(summary:))
     }
     
+    /// Built from the room summaries: building room proxies is slow and would shift the list down when the section appears.
     private func loadSuggestedRooms() async {
         guard case let .success(roomIDs) = await clientProxy.recentlyVisitedRoomIDs() else { return }
         
-        // The room list is empty on a cold start, so the suggestions are re-resolved as it loads.
-        clientProxy.staticRoomSummaryProvider.roomListPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateSuggestedRooms(recentlyVisitedRoomIDs: roomIDs)
-            }
-            .store(in: &cancellables)
-    }
-    
-    /// Built from the room summaries: building room proxies is slow and would shift the list down when the section appears.
-    private func updateSuggestedRooms(recentlyVisitedRoomIDs: [String]) {
-        let suggestedRooms = recentlyVisitedRoomIDs
+        state.suggestedRooms = roomIDs
             .filter { $0 != forwardingPayload.roomID }
             .compactMap(clientProxy.roomSummaryForIdentifier)
             .filter { $0.joinRequestType == nil && !$0.isSpace && !$0.isTombstoned }
             .prefix(Self.maxSuggestedRoomCount)
             .map(MessageForwardingRoom.init(summary:))
-        
-        guard suggestedRooms != state.suggestedRooms else { return }
-        state.suggestedRooms = suggestedRooms
     }
     
     /// The actual range values don't matter as long as they contain the lower

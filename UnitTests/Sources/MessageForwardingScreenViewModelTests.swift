@@ -71,41 +71,31 @@ struct MessageForwardingScreenViewModelTests {
     }
     
     @Test
-    mutating func suggestionsAppearOnceTheRoomListLoads() async throws {
-        let roomListSubject = CurrentValueSubject<[RoomSummary], Never>([])
-        let staticRoomSummaryProvider = RoomSummaryProviderMock()
-        staticRoomSummaryProvider.roomListPublisher = roomListSubject.asCurrentValuePublisher()
-        
-        let clientProxy = ClientProxyMock(.init())
-        clientProxy.staticRoomSummaryProvider = staticRoomSummaryProvider
-        clientProxy.recentlyVisitedRoomIDsReturnValue = .success(["2"])
-        clientProxy.roomSummaryForIdentifierClosure = { roomID in roomListSubject.value.first { $0.id == roomID } }
-        viewModel = MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
-                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                     userIndicatorController: UserIndicatorControllerMock())
-        context = viewModel.context
-        
-        // The room list is empty on a cold start.
-        let deferredColdStart = deferFailure(context.$viewState.map(\.showsSuggestions), timeout: .seconds(1)) { $0 }
-        try await deferredColdStart.fulfill()
-        
-        let deferredSuggestions = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
-        roomListSubject.send(.mockRooms)
-        try await deferredSuggestions.fulfill()
-        
-        #expect(context.viewState.suggestedRooms.map(\.id) == ["2"])
-    }
-    
-    @Test
-    mutating func suggestedRoomsAreAlsoListedInChats() async throws {
-        viewModel = makeViewModel(recentlyVisitedRoomIDs: ["2"])
+    mutating func suggestedRoomsAreNotListedInChats() async throws {
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: ["2", "5"])
         context = viewModel.context
         
         let deferred = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
         try await deferred.fulfill()
         
-        #expect(context.viewState.rooms.contains { $0.id == "2" })
+        let chatIDs = context.viewState.chats.map(\.id)
+        #expect(!chatIDs.contains("2") && !chatIDs.contains("5"))
+        #expect(chatIDs.contains("3"))
+    }
+    
+    @Test
+    mutating func searchingListsSuggestedRoomsInChats() async throws {
+        viewModel = makeViewModel(recentlyVisitedRoomIDs: ["2"])
+        context = viewModel.context
+        
+        let deferredSuggestions = deferFulfillment(context.$viewState) { !$0.suggestedRooms.isEmpty }
+        try await deferredSuggestions.fulfill()
+        
+        let deferredSearch = deferFulfillment(context.$viewState) { $0.rooms.count == 1 }
+        context.searchQuery = "Empire"
+        try await deferredSearch.fulfill()
+        
+        #expect(context.viewState.chats.map(\.id) == ["2"])
     }
     
     @Test
