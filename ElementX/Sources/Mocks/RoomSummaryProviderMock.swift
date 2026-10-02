@@ -51,7 +51,7 @@ extension RoomSummaryProviderMock {
                 }
                 
                 roomListSubject.send(rooms)
-            case let .rooms(_, filters), let .all(filters):
+            case let .rooms(_, filters):
                 var rooms = initialRooms
                 
                 if filters.count > 1 {
@@ -61,6 +61,17 @@ extension RoomSummaryProviderMock {
                     rooms = rooms.filter { filter == .people ? $0.isDirect : !$0.isDirect }
                 }
                 
+                roomListSubject.send(rooms)
+            case let .all(filters, joinedOnly):
+                var rooms = joinedOnly ? initialRooms.filter { $0.joinRequestType == nil } : initialRooms
+
+                if filters.count > 1 {
+                    // for testing purpose chaining more than one filter will always return an empty state
+                    rooms = []
+                } else if let filter = filters.first {
+                    rooms = rooms.filter { filter == .people ? $0.isDirect : !$0.isDirect }
+                }
+
                 roomListSubject.send(rooms)
             case .excludeAll:
                 roomListSubject.send([])

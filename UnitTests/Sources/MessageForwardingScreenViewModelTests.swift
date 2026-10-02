@@ -27,7 +27,7 @@ struct MessageForwardingScreenViewModelTests {
         
         viewModel = MessageForwardingScreenViewModel(forwardingPayload: forwardingPayload,
                                                      userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms + .mockInvites + .mockSpaceInvites))),
                                                      userIndicatorController: UserIndicatorControllerMock())
         context = viewModel.context
     }
@@ -35,6 +35,9 @@ struct MessageForwardingScreenViewModelTests {
     @Test
     func initialState() {
         #expect(!context.viewState.rooms.contains { $0.id == forwardingPayload.roomID }, "The source room ID shouldn't be shown")
+        #expect(!context.viewState.rooms.contains { $0.id == "someAwesomeRoomId1" || $0.id == "someAwesomeRoomId2" })
+        #expect(!context.viewState.rooms.contains { $0.id == "!space1:matrix.org" || $0.id == "!space2:matrix.org" })
+        #expect(context.viewState.rooms.contains { $0.id == "7" })
     }
     
     @Test
@@ -155,6 +158,8 @@ struct MessageForwardingScreenViewModelTests {
         context.searchQuery = "Second"
         
         try await deferred.fulfill()
+
+        #expect(context.viewState.rooms.map(\.id) == ["3"])
     }
     
     @Test

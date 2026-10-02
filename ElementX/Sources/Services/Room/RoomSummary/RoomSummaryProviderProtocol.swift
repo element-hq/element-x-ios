@@ -38,8 +38,8 @@ enum RoomSummaryProviderFilter: Equatable {
     case excludeAll
     /// Includes only the items that satisfy the predicate logic, optionally restricted to joined rooms
     case search(query: String, joinedOnly: Bool = false)
-    /// Includes only what satisfies the filters used
-    case all(filters: Set<RoomListFilter>)
+    /// Includes only what satisfies the filters used, optionally restricted to joined rooms
+    case all(filters: Set<RoomListFilter>, joinedOnly: Bool = false)
     /// Include only rooms from the given that satisfy the given filters
     case rooms(roomsIDs: Set<String>, filters: Set<RoomListFilter>)
 }

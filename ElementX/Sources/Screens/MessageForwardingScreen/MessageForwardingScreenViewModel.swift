@@ -48,9 +48,9 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             .removeDuplicates()
             .sink { [weak self] searchQuery in
                 if searchQuery.isEmpty {
-                    self?.roomSummaryProvider.setFilter(.all(filters: []))
+                    self?.roomSummaryProvider.setFilter(.all(filters: [], joinedOnly: true))
                 } else {
-                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery))
+                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery, joinedOnly: true))
                 }
             }
             .store(in: &cancellables)

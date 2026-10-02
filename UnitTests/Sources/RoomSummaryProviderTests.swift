@@ -40,6 +40,17 @@ final class RoomSummaryProviderTests {
         #expect(dynamicEntriesController.setFilterKindCallsCount == 2)
         #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters))
     }
+
+    @Test
+    func joinedOnlyRustFilters() async {
+        setup()
+        await Task.yield()
+
+        roomSummaryProvider.setFilter(.all(filters: [], joinedOnly: true))
+        await Task.yield()
+
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: baseFilters + [.joined]))
+    }
     
     @Test
     func lowPriorityRustFilters() async {

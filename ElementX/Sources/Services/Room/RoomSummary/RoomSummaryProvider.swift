@@ -166,9 +166,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
             
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: rustFilters))
-        case let .all(filters):
+        case let .all(filters, joinedOnly):
             var rustFilters = filters.map(\.rustFilter) + baseFilter
             
+            if joinedOnly {
+                rustFilters.append(.joined)
+            }
+
             if !filters.contains(.lowPriority), userSettings.lowPriorityFilterEnabled {
                 rustFilters.append(.nonLowPriority)
             }
