@@ -40,16 +40,37 @@ final class RoomSummaryProviderTests {
         #expect(dynamicEntriesController.setFilterKindCallsCount == 2)
         #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters))
     }
-
+    
     @Test
-    func joinedOnlyRustFilters() async {
-        setup()
+    func joinedRoomsOnlyRustFilters() async {
+        // Given a new room provider that only includes joined rooms.
+        setup(includesOnlyJoinedRooms: true)
         await Task.yield()
-
-        roomSummaryProvider.setFilter(.all(filters: [], joinedOnly: true))
-        await Task.yield()
-
+        
+        // Then the joined filter should be added to the default Rust filters.
         #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: baseFilters + [.joined]))
+        
+        // When searching.
+        roomSummaryProvider.setFilter(.search(query: "Foundation"))
+        await Task.yield()
+        
+        // Then the search should be restricted to joined rooms too.
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.normalizedMatchRoomName(pattern: "Foundation")] + baseFilters + [.joined]))
+    }
+    
+    @Test
+    func filterSetBeforeTheRoomListIsKept() async {
+        // Given a new room provider that is filtered before it has a room list.
+        setup(setsRoomList: false)
+        roomSummaryProvider.setFilter(.search(query: "Foundation"))
+        
+        // When setting its room list.
+        roomSummaryProvider.setRoomList(roomList)
+        await Task.yield()
+        
+        // Then the filter should be applied instead of the default one.
+        #expect(dynamicEntriesController.setFilterKindCallsCount == 1)
+        #expect(dynamicEntriesController.setFilterKindReceivedInvocations.last == .all(filters: [.normalizedMatchRoomName(pattern: "Foundation")] + baseFilters))
     }
     
     @Test
@@ -100,7 +121,7 @@ final class RoomSummaryProviderTests {
     
     // MARK: - Helpers
     
-    private func setup(isLowPriorityFilterEnabled: Bool = false) {
+    private func setup(isLowPriorityFilterEnabled: Bool = false, includesOnlyJoinedRooms: Bool = false, setsRoomList: Bool = true) {
         userSettings = UserSettings.volatile()
         userSettings.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
         
@@ -114,6 +135,7 @@ final class RoomSummaryProviderTests {
         roomSummaryProvider = RoomSummaryProvider(roomListService: RoomListServiceSDKMock(),
                                                   eventStringBuilder: eventStringBuilder,
                                                   name: "Test",
+                                                  includesOnlyJoinedRooms: includesOnlyJoinedRooms,
                                                   notificationSettings: NotificationSettingsProxyMock(with: .init()),
                                                   userSettings: userSettings)
         
@@ -124,6 +146,9 @@ final class RoomSummaryProviderTests {
         roomList = RoomListSDKMock()
         roomList.entriesWithDynamicAdaptersPageSizeListenerReturnValue = dynamicAdaptersResult
         roomList.loadingStateListenerReturnValue = .some(.init(state: .notLoaded, stateStream: TaskHandleSDKMock()))
-        roomSummaryProvider.setRoomList(roomList)
+        
+        if setsRoomList {
+            roomSummaryProvider.setRoomList(roomList)
+        }
     }
 }

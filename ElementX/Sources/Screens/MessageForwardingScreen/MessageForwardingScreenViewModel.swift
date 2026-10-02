@@ -48,9 +48,9 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             .removeDuplicates()
             .sink { [weak self] searchQuery in
                 if searchQuery.isEmpty {
-                    self?.roomSummaryProvider.setFilter(.all(filters: [], joinedOnly: true))
+                    self?.roomSummaryProvider.setFilter(.all(filters: []))
                 } else {
-                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery, joinedOnly: true))
+                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery))
                 }
             }
             .store(in: &cancellables)
@@ -88,7 +88,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     
     private func updateRooms() {
         state.rooms = roomSummaryProvider.roomListPublisher.value
-            .filter { $0.id != forwardingPayload.roomID }
+            .filter { $0.id != forwardingPayload.roomID && !$0.isTombstoned }
             .map(MessageForwardingRoom.init(summary:))
     }
     

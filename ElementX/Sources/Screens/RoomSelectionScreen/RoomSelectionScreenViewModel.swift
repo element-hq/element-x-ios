@@ -38,9 +38,9 @@ class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelect
             .removeDuplicates()
             .sink { [weak self] searchQuery in
                 if searchQuery.isEmpty {
-                    self?.roomSummaryProvider.setFilter(.all(filters: [], joinedOnly: true))
+                    self?.roomSummaryProvider.setFilter(.all(filters: []))
                 } else {
-                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery, joinedOnly: true))
+                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery))
                 }
             }
             .store(in: &cancellables)
@@ -77,7 +77,7 @@ class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelect
     private func updateRooms() {
         var rooms = [RoomSelectionRoom]()
         
-        for summary in roomSummaryProvider.roomListPublisher.value {
+        for summary in roomSummaryProvider.roomListPublisher.value where !summary.isTombstoned {
             rooms.append(.init(id: summary.id,
                                title: summary.name,
                                description: summary.roomListDescription,
