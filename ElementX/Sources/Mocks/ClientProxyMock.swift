@@ -106,6 +106,7 @@ extension ClientProxyMock {
         unignoreUserReturnValue = .success(())
         
         trackRecentlyVisitedRoomReturnValue = .success(())
+        recentlyVisitedRoomIDsReturnValue = .success([])
         recentlyVisitedRoomsFilterReturnValue = []
         recentConversationCounterpartsReturnValue = []
         

@@ -536,6 +536,8 @@ internal nonisolated enum L10n {
   internal static var commonCallYouDeclined: String { return L10n.tr("Localizable", "common_call_you_declined") }
   /// Chat backup
   internal static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
+  /// Chats
+  internal static var commonChats: String { return L10n.tr("Localizable", "common_chats") }
   /// Code block
   internal static var commonCodeBlock: String { return L10n.tr("Localizable", "common_code_block") }
   /// Copied to clipboard

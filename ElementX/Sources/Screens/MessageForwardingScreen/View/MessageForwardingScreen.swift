@@ -15,19 +15,26 @@ struct MessageForwardingScreen: View {
     
     var body: some View {
         Form {
-            Section {
-                ForEach(context.viewState.rooms) { room in
-                    MessageForwardingListRow(room: room,
-                                             isSelected: context.viewState.selectedRoomIDs.contains(room.id),
-                                             isDisabled: context.viewState.isAtRoomSelectionLimit && !context.viewState.selectedRoomIDs.contains(room.id),
-                                             context: context)
+            if context.viewState.showsSuggestions {
+                Section {
+                    ForEach(context.viewState.suggestedRooms, content: row)
+                } header: {
+                    Text(L10n.commonSuggestions)
+                        .compoundListSectionHeader()
                 }
+            }
+            
+            Section {
+                ForEach(context.viewState.chats, content: row)
                 // Replace these with ScrollView's `scrollPosition` when dropping iOS 16.
             } header: {
-                emptyRectangle
-                    .onAppear {
-                        context.send(viewAction: .reachedTop)
-                    }
+                if !context.viewState.chats.isEmpty {
+                    Text(L10n.commonChats)
+                        .compoundListSectionHeader()
+                        .onAppear {
+                            context.send(viewAction: .reachedTop)
+                        }
+                }
             } footer: {
                 emptyRectangle
                     .onAppear {
@@ -54,6 +61,15 @@ struct MessageForwardingScreen: View {
         .searchController(query: $context.searchQuery, showsCancelButton: false)
         .compoundSearchField()
         .disableAutocorrection(true)
+    }
+    
+    private func row(for room: MessageForwardingRoom) -> some View {
+        let isSelected = context.viewState.selectedRoomIDs.contains(room.id)
+        
+        return MessageForwardingListRow(room: room,
+                                        isSelected: isSelected,
+                                        isDisabled: context.viewState.isAtRoomSelectionLimit && !isSelected,
+                                        context: context)
     }
     
     /// The greedy size of Rectangle can create an issue with the navigation bar when the search is highlighted, so is best to use a fixed frame instead of hidden() or EmptyView()
@@ -97,17 +113,40 @@ private struct MessageForwardingListRow: View {
 // MARK: - Previews
 
 struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = makeViewModel()
+    static let searchingViewModel = makeViewModel(searchQuery: "Foundation")
+    
     static var previews: some View {
-        let summaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-        let viewModel = MessageForwardingScreenViewModel(forwardingPayload: .init(ids: [.randomEvent],
-                                                                                  roomID: "",
-                                                                                  contents: [RoomMessageEventContentWithoutRelationSDKMock()]),
-                                                         userSession: UserSessionMock(.init()),
-                                                         roomSummaryProvider: summaryProvider,
-                                                         userIndicatorController: UserIndicatorControllerMock())
-        
         ElementNavigationStack {
             MessageForwardingScreen(context: viewModel.context)
         }
+        .previewDisplayName("Suggestions")
+        .snapshotPreferences(expect: viewModel.context.$viewState.map(\.showsSuggestions))
+        
+        ElementNavigationStack {
+            MessageForwardingScreen(context: searchingViewModel.context)
+        }
+        .previewDisplayName("Searching")
+        .snapshotPreferences(expect: searchingViewModel.context.$viewState.map { !$0.suggestedRooms.isEmpty && !$0.showsSuggestions },
+                             precision: 0.999) // The search field's clear button renders inconsistently in snapshots.
+    }
+    
+    static func makeViewModel(searchQuery: String? = nil) -> MessageForwardingScreenViewModel {
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.recentlyVisitedRoomIDsReturnValue = .success(["2", "5", "3"])
+        clientProxy.roomSummaryForIdentifierClosure = { roomID in [RoomSummary].mockRooms.first { $0.id == roomID } }
+        
+        let viewModel = MessageForwardingScreenViewModel(forwardingPayload: .init(ids: [.randomEvent],
+                                                                                  roomID: "",
+                                                                                  contents: [RoomMessageEventContentWithoutRelationSDKMock()]),
+                                                         userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                         roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                         userIndicatorController: UserIndicatorControllerMock())
+        
+        if let searchQuery {
+            viewModel.context.searchQuery = searchQuery
+        }
+        
+        return viewModel
     }
 }

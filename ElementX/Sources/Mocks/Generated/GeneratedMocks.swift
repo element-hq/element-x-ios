@@ -4225,6 +4225,34 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return trackRecentlyVisitedRoomReturnValue
         }
     }
+    //MARK: - recentlyVisitedRoomIDs
+
+    private let recentlyVisitedRoomIDsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var recentlyVisitedRoomIDsUnderlyingCallsCount = 0
+    var recentlyVisitedRoomIDsCallsCount: Int {
+        get { recentlyVisitedRoomIDsCallsCountLock.withLock { recentlyVisitedRoomIDsUnderlyingCallsCount } }
+        set { recentlyVisitedRoomIDsCallsCountLock.withLock { recentlyVisitedRoomIDsUnderlyingCallsCount = newValue } }
+    }
+    var recentlyVisitedRoomIDsCalled: Bool {
+        return recentlyVisitedRoomIDsCallsCount > 0
+    }
+
+    private let recentlyVisitedRoomIDsReturnValueLock = NSLock()
+    private nonisolated(unsafe) var recentlyVisitedRoomIDsUnderlyingReturnValue: Result<[String], ClientProxyError>!
+    var recentlyVisitedRoomIDsReturnValue: Result<[String], ClientProxyError>! {
+        get { recentlyVisitedRoomIDsReturnValueLock.withLock { recentlyVisitedRoomIDsUnderlyingReturnValue } }
+        set { recentlyVisitedRoomIDsReturnValueLock.withLock { recentlyVisitedRoomIDsUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var recentlyVisitedRoomIDsClosure: (() async -> Result<[String], ClientProxyError>)?
+
+    @concurrent func recentlyVisitedRoomIDs() async -> Result<[String], ClientProxyError> {
+        recentlyVisitedRoomIDsCallsCountLock.withLock { recentlyVisitedRoomIDsUnderlyingCallsCount += 1 }
+        if let recentlyVisitedRoomIDsClosure = recentlyVisitedRoomIDsClosure {
+            return await recentlyVisitedRoomIDsClosure()
+        } else {
+            return recentlyVisitedRoomIDsReturnValue
+        }
+    }
     //MARK: - recentlyVisitedRooms
 
     private let recentlyVisitedRoomsFilterCallsCountLock = NSLock()
@@ -4243,9 +4271,9 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         get { recentlyVisitedRoomsFilterReturnValueLock.withLock { recentlyVisitedRoomsFilterUnderlyingReturnValue } }
         set { recentlyVisitedRoomsFilterReturnValueLock.withLock { recentlyVisitedRoomsFilterUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var recentlyVisitedRoomsFilterClosure: ((@Sendable (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol])?
+    nonisolated(unsafe) var recentlyVisitedRoomsFilterClosure: ((@Sendable (JoinedRoomProxyProtocol) async -> Bool) async -> [JoinedRoomProxyProtocol])?
 
-    @concurrent func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) -> Bool) async -> [JoinedRoomProxyProtocol] {
+    @concurrent func recentlyVisitedRooms(filter: @Sendable (JoinedRoomProxyProtocol) async -> Bool) async -> [JoinedRoomProxyProtocol] {
         recentlyVisitedRoomsFilterCallsCountLock.withLock { recentlyVisitedRoomsFilterUnderlyingCallsCount += 1 }
         if let recentlyVisitedRoomsFilterClosure = recentlyVisitedRoomsFilterClosure {
             return await recentlyVisitedRoomsFilterClosure(filter)

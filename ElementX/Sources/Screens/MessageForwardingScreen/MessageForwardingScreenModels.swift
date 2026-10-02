@@ -15,10 +15,24 @@ enum MessageForwardingScreenViewModelAction {
 }
 
 struct MessageForwardingScreenViewState: BindableState {
+    /// The recently visited rooms, never filtered by the search query.
+    var suggestedRooms: [MessageForwardingRoom] = []
     var rooms: [MessageForwardingRoom] = []
     var selectedRoomIDs: Set<String> = []
     let maxRoomSelectionCount = 5
     var bindings = MessageForwardingScreenViewStateBindings()
+    
+    var showsSuggestions: Bool {
+        bindings.searchQuery.isEmpty && !suggestedRooms.isEmpty
+    }
+    
+    /// Every room appears once: the suggested ones are left out unless searching.
+    var chats: [MessageForwardingRoom] {
+        guard showsSuggestions else { return rooms }
+        
+        let suggestedRoomIDs = Set(suggestedRooms.map(\.id))
+        return rooms.filter { !suggestedRoomIDs.contains($0.id) }
+    }
     
     var isAtRoomSelectionLimit: Bool {
         selectedRoomIDs.count >= maxRoomSelectionCount
@@ -42,6 +56,15 @@ struct MessageForwardingRoom: Identifiable, Equatable {
     let title: String
     let description: String
     let avatar: RoomAvatar
+}
+
+extension MessageForwardingRoom {
+    init(summary: RoomSummary) {
+        self.init(id: summary.id,
+                  title: summary.name,
+                  description: summary.roomListDescription,
+                  avatar: summary.avatar)
+    }
 }
 
 struct MessageForwardingPayload: Hashable {
