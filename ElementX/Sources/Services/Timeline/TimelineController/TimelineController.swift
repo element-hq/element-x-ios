@@ -63,7 +63,8 @@ class TimelineController: TimelineControllerProtocol {
         activeTimeline = timelineProxy
         activeTimelineItemProvider = liveTimelineItemProvider
         
-        guard let initialFocussedEventID else {
+        // No need for a detached timeline when the live one has already loaded the event.
+        guard let initialFocussedEventID, !liveTimelineItemProvider.containsEvent(initialFocussedEventID) else {
             configureActiveTimelineItemProvider()
             return
         }
@@ -763,5 +764,14 @@ private nonisolated extension TimelineItemProxy {
         }
         
         return false
+    }
+}
+
+private extension TimelineItemProviderProtocol {
+    func containsEvent(_ eventID: String) -> Bool {
+        itemProxies.contains { item in
+            guard case let .event(eventItem) = item else { return false }
+            return eventItem.id.eventID == eventID
+        }
     }
 }
