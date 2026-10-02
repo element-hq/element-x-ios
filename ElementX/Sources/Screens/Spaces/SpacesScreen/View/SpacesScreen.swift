@@ -95,11 +95,9 @@ struct SpacesScreen: View {
     private var toolbar: some ToolbarContent {
         // Use the title placement on iOS 26 to match the chats tab and fix a weird animation.
         ToolbarItem(placement: Compound.supportsGlass ? .title : .navigationBarLeading) {
-            Button {
+            AvatarSettingsButton(userProfile: context.viewState.userProfile,
+                                 mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .showSettings)
-            } label: {
-                AvatarSettingsButtonLabel(userProfile: context.viewState.userProfile,
-                                          mediaProvider: context.mediaProvider)
             }
             .buttonStyle(.borderless)
             .accessibilityLabel(L10n.commonSettings)

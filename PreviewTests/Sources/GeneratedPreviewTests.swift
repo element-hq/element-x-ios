@@ -103,8 +103,8 @@ extension PreviewTests {
     }
 
     @Test
-    func avatarSettingsButtonLabel() async throws {
-        for (index, preview) in AvatarSettingsButtonLabel_Previews._allPreviews.enumerated() {
+    func avatarSettingsButton() async throws {
+        for (index, preview) in AvatarSettingsButton_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
