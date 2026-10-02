@@ -95,8 +95,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
     }
     
     private func announceIfNeeded(_ indicator: UserIndicator) {
-        guard case .toast = indicator.type,
-              !indicator.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        guard case .toast = indicator.type else {
             return
         }
         
