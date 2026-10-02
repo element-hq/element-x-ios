@@ -21,7 +21,6 @@ final class NotificationManagerTests {
     private var shouldDisplayInAppNotificationReturnValue = false
     private var handleInlineReplyDelegateCalled = false
     private var notificationTappedDelegateCalled = false
-    private var notificationTappedIsNewestInRoom: Bool?
     private var registerForRemoteNotificationsDelegateCalled: (() -> Void)?
     private let appSettings: AppSettings
     
@@ -240,31 +239,6 @@ final class NotificationManagerTests {
     }
     
     @Test
-    func whenTappedNotificationIsTheNewestInItsRoom_delegateIsToldItIsNewest() async throws {
-        notificationManager.delegate = self
-        let date = Date.now
-        notificationCenter.deliveredNotificationsReturnValue = try [UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: "!room:matrix.org"], date: date - 60),
-                                                                    UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: "!other:matrix.org"], date: date + 60)]
-        
-        let response = try UNTextInputNotificationResponse.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: "!room:matrix.org"], date: date)
-        await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
-        
-        #expect(notificationTappedIsNewestInRoom == true)
-    }
-    
-    @Test
-    func whenTappedNotificationIsOlderThanAnotherInItsRoom_delegateIsToldItIsNotNewest() async throws {
-        notificationManager.delegate = self
-        let date = Date.now
-        notificationCenter.deliveredNotificationsReturnValue = try [UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: "!room:matrix.org"], date: date + 60)]
-        
-        let response = try UNTextInputNotificationResponse.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: "!room:matrix.org"], date: date)
-        await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
-        
-        #expect(notificationTappedIsNewestInRoom == false)
-    }
-    
-    @Test
     func updatingAppBadgeCountUsesTheClientSideCount() async {
         clientProxy.totalUnreadNotifications = 7
         
@@ -298,9 +272,8 @@ extension NotificationManagerTests: @MainActor NotificationManagerDelegate {
         shouldDisplayInAppNotificationReturnValue
     }
     
-    func notificationTapped(content: UNNotificationContent, isNewestInRoom: Bool) async {
+    func notificationTapped(content: UNNotificationContent) async {
         notificationTappedDelegateCalled = true
-        notificationTappedIsNewestInRoom = isNewestInRoom
     }
     
     func handleInlineReply(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {

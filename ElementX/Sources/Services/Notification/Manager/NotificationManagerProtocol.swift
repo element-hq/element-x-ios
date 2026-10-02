@@ -11,8 +11,7 @@ import UserNotifications
 
 protocol NotificationManagerDelegate: AnyObject {
     func shouldDisplayInAppNotification(content: UNNotificationContent) -> Bool
-    /// - Parameter isNewestInRoom: Whether no other delivered notification for the same room is more recent.
-    func notificationTapped(content: UNNotificationContent, isNewestInRoom: Bool) async
+    func notificationTapped(content: UNNotificationContent) async
     func handleInlineReply(_ service: NotificationManagerProtocol,
                            content: UNNotificationContent,
                            replyText: String) async

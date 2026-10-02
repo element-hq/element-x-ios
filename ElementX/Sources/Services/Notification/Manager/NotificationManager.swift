@@ -259,19 +259,9 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
                                               content: response.notification.request.content,
                                               replyText: response.userText)
         case UNNotificationDefaultActionIdentifier:
-            await delegate?.notificationTapped(content: response.notification.request.content,
-                                               isNewestInRoom: isNewestInRoom(response.notification))
+            await delegate?.notificationTapped(content: response.notification.request.content)
         default:
             break
-        }
-    }
-    
-    /// Whether no other delivered notification for the same room is more recent.
-    private func isNewestInRoom(_ notification: UNNotification) async -> Bool {
-        guard let roomID = notification.request.content.roomID else { return false }
-        
-        return await notificationCenter.deliveredNotifications().allSatisfy { deliveredNotification in
-            deliveredNotification.request.content.roomID != roomID || deliveredNotification.date <= notification.date
         }
     }
 }
