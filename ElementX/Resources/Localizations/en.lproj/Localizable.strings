@@ -1074,6 +1074,9 @@
 "screen_moderation_and_safety_invites_heading" = "Invites";
 "screen_moderation_and_safety_other_users_heading" = "Other users";
 "screen_moderation_and_safety_share_presence_heading" = "Your appearance";
+"screen_multi_account_announcement_action" = "Add account";
+"screen_multi_account_announcement_description" = "Go to %1$@ to sign into another account. Then you can easily switch between them.";
+"screen_multi_account_announcement_title" = "You can now add multiple accounts";
 "screen_notification_optin_subtitle" = "You can change your settings later.";
 "screen_notification_optin_title" = "Allow notifications and never miss a message";
 "screen_notification_settings_additional_settings_section_title" = "Additional settings";

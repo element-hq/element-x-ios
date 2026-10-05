@@ -37,7 +37,7 @@ struct MultiAccountAnnouncementScreen: View {
             BigIcon(icon: \.userProfileSolid)
             
             VStack(spacing: 8) {
-                Text(UntranslatedL10n.screenRoomlistAddAccountSheetTitle)
+                Text(L10n.screenMultiAccountAnnouncementTitle)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                 
@@ -80,7 +80,7 @@ struct MultiAccountAnnouncementScreen: View {
         Button {
             context.send(viewAction: .addAccount)
         } label: {
-            Label(UntranslatedL10n.screenRoomlistAddAccountSheetAction, icon: \.plus)
+            Label(L10n.screenMultiAccountAnnouncementAction, icon: \.plus)
         }
         .buttonStyle(.compound(.primary))
         .padding(16)

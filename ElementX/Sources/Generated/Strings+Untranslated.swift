@@ -12,14 +12,6 @@ import Foundation
 internal nonisolated enum UntranslatedL10n {
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
-  /// Add account
-  internal static var screenRoomlistAddAccountSheetAction: String { return UntranslatedL10n.tr("Untranslated", "screen_roomlist_add_account_sheet_action") }
-  /// Go to %1$@ to sign into another account. Then you can easily switch between them.
-  internal static func screenRoomlistAddAccountSheetDescription(_ p1: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_roomlist_add_account_sheet_description", String(describing: p1))
-  }
-  /// You can now add multiple accounts
-  internal static var screenRoomlistAddAccountSheetTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_roomlist_add_account_sheet_title") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...

@@ -17,7 +17,7 @@ struct MultiAccountAnnouncementScreenViewState: BindableState {
     
     init() {
         let boldPlaceholder = "{bold}"
-        var description = AttributedString(UntranslatedL10n.screenRoomlistAddAccountSheetDescription(boldPlaceholder))
+        var description = AttributedString(L10n.screenMultiAccountAnnouncementDescription(boldPlaceholder))
         var boldString = AttributedString("\(L10n.commonSettings) > \(L10n.screenSettingsAddAccount)")
         boldString.bold()
         description.replace(boldPlaceholder, with: boldString)
