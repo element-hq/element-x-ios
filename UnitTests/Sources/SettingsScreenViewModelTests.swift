@@ -178,7 +178,6 @@ struct SettingsScreenViewModelTests {
         clientProxy = ClientProxyMock(.init(userID: "", status: status))
         viewModel = SettingsScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                             userSettings: UserSettings.volatile(),
-                                            appHooks: AppHooks(),
                                             isBugReportServiceEnabled: true,
                                             isInSecondaryWindow: false,
                                             userIndicatorController: UserIndicatorControllerMock())

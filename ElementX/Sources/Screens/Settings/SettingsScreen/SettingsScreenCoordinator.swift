@@ -12,7 +12,6 @@ import SwiftUI
 struct SettingsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userSettings: UserSettings
-    let appHooks: AppHooks
     let isBugReportServiceEnabled: Bool
     let isInSecondaryWindow: Bool
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -32,7 +31,6 @@ enum SettingsScreenCoordinatorAction {
     case linkNewDevice
     case manageAccount(url: URL)
     case notifications
-    case additionalSettings
     case advancedSettings
     case labs
     case developerOptions
@@ -54,7 +52,6 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: SettingsScreenCoordinatorParameters) {
         viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
                                             userSettings: parameters.userSettings,
-                                            appHooks: parameters.appHooks,
                                             isBugReportServiceEnabled: parameters.isBugReportServiceEnabled,
                                             isInSecondaryWindow: parameters.isInSecondaryWindow,
                                             userIndicatorController: parameters.userIndicatorController)
@@ -88,8 +85,6 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.secureBackup)
                 case .notifications:
                     actionsSubject.send(.notifications)
-                case .additionalSettings:
-                    actionsSubject.send(.additionalSettings)
                 case .advancedSettings:
                     actionsSubject.send(.advancedSettings)
                 case .labs:

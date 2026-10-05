@@ -1048,7 +1048,6 @@
 		A2357AA4A188BC37085BC6F0 /* EditRoomAddressScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FDFAA04174CC99FB66391C /* EditRoomAddressScreenViewModel.swift */; };
 		A23B8B27A1436A1049EEF68E /* InfoPlistReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A580295A56B55A856CC4084 /* InfoPlistReader.swift */; };
 		A2434D4DFB49A68E5CD0F53C /* MediaLoaderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A02406480C351B8C6E0682C /* MediaLoaderProtocol.swift */; };
-		A2937A97959A0AFB064BE1DE /* SettingsScreenHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56630FCC9F78E5E8F1A75770 /* SettingsScreenHook.swift */; };
 		A32384E3D85CA65342D3A908 /* TimelineMediaPreviewRedactConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75FE3F524B575D53787868C /* TimelineMediaPreviewRedactConfirmationView.swift */; };
 		A33784831AD880A670CAA9F9 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DF593C3F7AF4B2FBAEB05D /* FileManager.swift */; };
 		A36AD251013402EDBD666C75 /* AppMediatorMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC027034248429A438886B /* AppMediatorMock.swift */; };
@@ -2288,7 +2287,6 @@
 		55BA4D3DFEA16CDD3FE99064 /* InverseMask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InverseMask.swift; sourceTree = "<group>"; };
 		5644919DB2022397D9D5825A /* MockSoftLogoutScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSoftLogoutScreenState.swift; sourceTree = "<group>"; };
 		565F1B2B300597C616B37888 /* FullscreenDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenDialog.swift; sourceTree = "<group>"; };
-		56630FCC9F78E5E8F1A75770 /* SettingsScreenHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenHook.swift; sourceTree = "<group>"; };
 		56852036214ABA9D7D305768 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		56D6F88FE35A0979D2821E06 /* AppLockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockScreen.swift; sourceTree = "<group>"; };
 		57084488B03BDB33C7B7CA0E /* ResolveVerifiedUserSendFailureScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolveVerifiedUserSendFailureScreenViewModelTests.swift; sourceTree = "<group>"; };
@@ -4000,7 +3998,6 @@
 				3674212CAB6C5143DD437AC4 /* RoomDetailsScreenHook.swift */,
 				99EB08B2C8B01F3BFE4B0CEC /* RoomMemberDetailsScreenHook.swift */,
 				B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */,
-				56630FCC9F78E5E8F1A75770 /* SettingsScreenHook.swift */,
 				2A95C9B8299A36A6495DECA6 /* TracingHook.swift */,
 				8B35734F3743563566413C9A /* UserProfileScreenHook.swift */,
 				E9773983346838AABFAA914D /* UserSessionHook.swift */,
@@ -9467,7 +9464,6 @@
 				755395927DDD6EBDDA5E217A /* SettingsFlowCoordinator.swift in Sources */,
 				34F1261CEF6D6A00D559B520 /* SettingsScreen.swift in Sources */,
 				AF8BFA37791E1756EE243E08 /* SettingsScreenCoordinator.swift in Sources */,
-				A2937A97959A0AFB064BE1DE /* SettingsScreenHook.swift in Sources */,
 				B93D7CE520088AD53FA6D53C /* SettingsScreenModels.swift in Sources */,
 				5E67990F98AF11563EA50080 /* SettingsScreenUserStatusPickerView.swift in Sources */,
 				B74CCA58911A0C9C3E277A6B /* SettingsScreenUserStatusRow.swift in Sources */,

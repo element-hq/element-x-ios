@@ -74,7 +74,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSettingsScreen(animated: Bool) {
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                                     userSettings: flowParameters.userSettings,
-                                                                                    appHooks: flowParameters.appHooks,
                                                                                     isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled,
                                                                                     isInSecondaryWindow: isInSecondaryWindow,
                                                                                     userIndicatorController: flowParameters.userIndicatorController))
@@ -114,10 +113,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentBlockedUsersScreen()
                 case .notifications:
                     presentNotificationSettings()
-                case .additionalSettings:
-                    if let coordinator = flowParameters.appHooks.settingsScreenHook.makeCoordinator(navigationStackCoordinator: navigationStackCoordinator) {
-                        navigationStackCoordinator.push(coordinator)
-                    }
                 case .advancedSettings:
                     presentAdvancedSettings()
                 case .labs:

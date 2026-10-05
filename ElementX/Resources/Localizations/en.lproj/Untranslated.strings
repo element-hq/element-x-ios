@@ -15,7 +15,6 @@
 "soft_logout_signin_title" = "Sign in";
 "untranslated" = "Untranslated";
 
-"screen_ptt_settings_server_title" = "PTT server settings";
 "screen_ptt_settings_covert_mode" = "Covert mode";
 "screen_ptt_settings_covert_mode_description" = "Mute all channels";
 "screen_ptt_settings_system_overlay" = "Enable system overlay";
@@ -24,9 +23,3 @@
 "screen_ptt_settings_lock_screen_description" = "Access from the lock screen";
 "screen_ptt_settings_battery_optimization" = "Ignore battery optimization";
 "screen_ptt_settings_battery_optimization_description" = "Stay active in background";
-"screen_ptt_settings_server_address_prompt" = "Enter your push to talk server address";
-"screen_ptt_settings_server_location" = "Server location";
-"screen_ptt_settings_route_prompt" = "Enter route";
-"screen_ptt_settings_route" = "Route";
-"action_save_ptt" = "Save PTT";
-"action_clear_ptt" = "Clear PTT";
