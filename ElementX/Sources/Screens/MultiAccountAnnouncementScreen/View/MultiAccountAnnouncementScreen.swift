@@ -13,21 +13,26 @@ struct MultiAccountAnnouncementScreen: View {
     
     @State private var contentHeight: CGFloat = .zero
     @State private var buttonHeight: CGFloat = .zero
+    private let topPadding: CGFloat = 44 // For the navigation bar
     
     var body: some View {
-        ScrollView {
-            content
-                .readHeight($contentHeight)
+        ElementNavigationStack {
+            ScrollView {
+                content
+                    .readHeight($contentHeight)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+            .backportSafeAreaBar(edge: .bottom, spacing: 0) {
+                addAccountButton
+                    .readHeight($buttonHeight)
+            }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    ToolbarButton(role: .close) { context.send(viewAction: .close) }
+                }
+            }
         }
-        .scrollBounceBehavior(.basedOnSize)
-        .overlay(alignment: .topTrailing) {
-            closeButton
-        }
-        .backportSafeAreaBar(edge: .bottom, spacing: 0) {
-            addAccountButton
-                .readHeight($buttonHeight)
-        }
-        .presentationDetents([.height(contentHeight + buttonHeight)])
+        .presentationDetents([.height(contentHeight + buttonHeight + topPadding)])
         .presentationDragIndicator(.hidden)
         .presentationBackground(.compound.bgCanvasDefault)
     }
@@ -49,31 +54,8 @@ struct MultiAccountAnnouncementScreen: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 24)
-        .padding(.top, 76)
+        .padding(.top, 16)
         .padding(.bottom, 24)
-    }
-    
-    private var closeButton: some View {
-        Button {
-            context.send(viewAction: .close)
-        } label: {
-            if #available(iOS 26, *) {
-                closeIcon
-                    .snapshotableGlassEffect(.regular.interactive(),
-                                             snapshotBackground: .compound.bgSubtleSecondary,
-                                             in: .circle)
-            } else {
-                closeIcon
-            }
-        }
-        .accessibilityLabel(L10n.actionClose)
-        .padding(16)
-    }
-    
-    private var closeIcon: some View {
-        CompoundIcon(\.close)
-            .foregroundStyle(.compound.iconPrimary)
-            .padding(10)
     }
     
     private var addAccountButton: some View {
