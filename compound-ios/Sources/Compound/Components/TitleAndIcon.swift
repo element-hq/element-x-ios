@@ -16,13 +16,25 @@ import SwiftUI
 /// than it is to add/subtract additional padding to some arbitrary defaults.
 public struct TitleAndIcon: View {
     private let title: String
-    private let subtitle: String?
+    private let subtitle: AttributedString?
     private let icon: KeyPath<CompoundIcons, Image>
     private let iconStyle: BigIcon.Style
     private let button: ButtonDetails?
     
     public init(title: String,
                 subtitle: String? = nil,
+                icon: KeyPath<CompoundIcons, Image>,
+                iconStyle: BigIcon.Style,
+                button: ButtonDetails? = nil) {
+        self.init(title: title,
+                  subtitle: subtitle.map { AttributedString($0) },
+                  icon: icon,
+                  iconStyle: iconStyle,
+                  button: button)
+    }
+    
+    public init(title: String,
+                subtitle: AttributedString?,
                 icon: KeyPath<CompoundIcons, Image>,
                 iconStyle: BigIcon.Style,
                 button: ButtonDetails? = nil) {
@@ -95,8 +107,21 @@ public struct TitleAndIcon_Previews: PreviewProvider, TestablePreview {
                          icon: \.circle,
                          iconStyle: .defaultSolid,
                          button: .init(title: "Learn more") { })
+            
+            TitleAndIcon(title: "Headline",
+                         subtitle: attributedSubtitle,
+                         icon: \.circle,
+                         iconStyle: .defaultSolid)
         }
         .padding(24)
         .padding(.bottom, 16)
+    }
+    
+    private static var attributedSubtitle: AttributedString {
+        var subtitle = AttributedString("Description with ")
+        var boldText = AttributedString("bold text")
+        boldText.inlinePresentationIntent = .stronglyEmphasized
+        subtitle.append(boldText)
+        return subtitle
     }
 }
