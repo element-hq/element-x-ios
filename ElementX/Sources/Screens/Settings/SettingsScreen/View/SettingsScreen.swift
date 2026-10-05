@@ -70,15 +70,9 @@ struct SettingsScreen: View {
                             .accessibilityHidden(true)
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            HStack(spacing: 6) {
-                                Text(context.viewState.userProfile.displayName ?? "")
-                                
-                                if let statusEmoji = context.viewState.userProfile.status.displayed?.emoji {
-                                    Text(String(statusEmoji))
-                                }
-                            }
-                            .font(.compound.headingMD)
-                            .foregroundColor(.compound.textPrimary)
+                            Text(context.viewState.userProfile.displayName ?? "")
+                                .font(.compound.headingMD)
+                                .foregroundColor(.compound.textPrimary)
                             
                             Text(context.viewState.userProfile.id)
                                 .font(.compound.bodySM)

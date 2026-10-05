@@ -59,8 +59,8 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "AvatarHeaderView_Previews")
     }
 
-    func testAvatarSettingsButtonLabel() async throws {
-        try await performAccessibilityAudit(named: "AvatarSettingsButtonLabel_Previews")
+    func testAvatarSettingsButton() async throws {
+        try await performAccessibilityAudit(named: "AvatarSettingsButton_Previews")
     }
 
     func testBadgeLabel() async throws {
