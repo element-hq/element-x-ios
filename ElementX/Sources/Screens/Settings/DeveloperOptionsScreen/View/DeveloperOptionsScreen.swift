@@ -62,7 +62,7 @@ struct DeveloperOptionsScreen: View {
             Section("Accounts") {
                 Toggle(isOn: $context.multiAccountEnabled) {
                     Text("Multi-account")
-                    Text("Experimental. Switching it on shows the announcement again.")
+                    Text("Switching it on shows the announcement again.")
                 }
             }
             

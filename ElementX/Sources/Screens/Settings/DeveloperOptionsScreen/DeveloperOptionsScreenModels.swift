@@ -73,11 +73,11 @@ protocol DeveloperOptionsProtocol: AnyObject {
     
     var globalSearchEnabled: Bool { get set }
     
-    var nativeCallEnabled: Bool { get set }
-    
     var multiAccountEnabled: Bool { get set }
     var multiAccountEnabledPublisher: AnyPublisher<Bool, Never> { get }
     var hasSeenMultiAccountAnnouncement: Bool { get set }
+    
+    var nativeCallEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
