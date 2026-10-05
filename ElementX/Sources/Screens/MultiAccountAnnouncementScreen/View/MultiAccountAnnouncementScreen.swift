@@ -38,24 +38,14 @@ struct MultiAccountAnnouncementScreen: View {
     }
     
     private var content: some View {
-        VStack(spacing: 16) {
-            BigIcon(icon: \.userProfileSolid)
-            
-            VStack(spacing: 8) {
-                Text(L10n.screenMultiAccountAnnouncementTitle)
-                    .font(.compound.headingMDBold)
-                    .foregroundStyle(.compound.textPrimary)
-                
-                Text(context.viewState.description)
-                    .font(.compound.bodyMD)
-                    .foregroundStyle(.compound.textSecondary)
-            }
-            .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, 24)
-        .padding(.top, 16)
-        .padding(.bottom, 24)
+        TitleAndIcon(title: L10n.screenMultiAccountAnnouncementTitle,
+                     subtitle: context.viewState.description,
+                     icon: \.userProfileSolid,
+                     iconStyle: .defaultSolid)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 24)
+            .padding(.top, 16)
+            .padding(.bottom, 24)
     }
     
     private var addAccountButton: some View {
