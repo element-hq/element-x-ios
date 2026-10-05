@@ -21,6 +21,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var detailsHostingController: UIHostingController<TimelineMediaPreviewDetailsView>?
     
     private var barButtonTimer: Timer?
+    @CancellableTask private var staleRefreshTask: Task<Void, Never>?
     
     private var pageScrollViewObservation: AnyCancellable?
     /// The content offset that the page scroll view rests at when showing the current item.
@@ -243,7 +244,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
             // QuickLook prefetches every item up front, so the placeholder may predate a timeline update.
             guard !isDisplayedPlaceholderStale else {
-                Task { await refreshStalePlaceholder() }
+                staleRefreshTask = Task { await refreshStalePlaceholder() }
                 return
             }
             
@@ -270,13 +271,15 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private func handleUpdatedItems() {
         guard isDisplayedPlaceholderStale else { return }
-        Task { await refreshStalePlaceholder() }
+        staleRefreshTask = Task { await refreshStalePlaceholder() }
     }
     
     private func refreshStalePlaceholder() async {
         // Refreshing whilst swiping completely breaks the QLPreviewController, so wait for the swipe to settle.
         while let pageScrollView, pageScrollView.isDragging || pageScrollView.isDecelerating {
             try? await Task.sleep(for: .seconds(0.1))
+            // The sleep returns immediately once cancelled, so bail out rather than spinning.
+            guard !Task.isCancelled else { return }
         }
         
         guard isDisplayedPlaceholderStale else { return }
