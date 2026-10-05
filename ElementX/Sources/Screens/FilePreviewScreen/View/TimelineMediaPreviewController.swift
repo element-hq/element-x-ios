@@ -22,6 +22,11 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var barButtonTimer: Timer?
     
+    @CancellableTask private var settledRefreshTask: Task<Void, Never>?
+    /// Media whose file loaded, kept until the swipe settles as each load is only reported once.
+    /// Whichever is on display by then gets refreshed and the rest are dropped.
+    private var itemIDsAwaitingRefresh: Set<MediaPreviewItemID> = []
+    
     private var pageScrollViewObservation: AnyCancellable?
     /// The content offset that the page scroll view rests at when showing the current item.
     private var pageScrollViewRestingOffset: CGFloat = 0
@@ -42,6 +47,12 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var pageScrollView: UIScrollView? {
         view.firstScrollView()
+    }
+    
+    /// Whether the pages are being touched or are still moving, including a touch that hasn't started dragging yet.
+    private var isSwiping: Bool {
+        guard let pageScrollView else { return false }
+        return pageScrollView.isTracking || pageScrollView.isDragging || pageScrollView.isDecelerating
     }
     
     private var captionView: UIView {
@@ -183,6 +194,8 @@ class TimelineMediaPreviewController: QLPreviewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
         barButtonTimer?.invalidate()
         barButtonTimer = nil
     }
@@ -243,7 +256,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         } else if let loadingItem = currentPreviewItem as? TimelineMediaPreviewItem.Loading {
             // QuickLook prefetches every item up front, so the placeholder may predate a timeline update.
             guard !isDisplayedPlaceholderStale else {
-                Task { await refreshStalePlaceholder() }
+                refreshCurrentItemWhenSettled()
                 return
             }
             
@@ -270,29 +283,30 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private func handleUpdatedItems() {
         guard isDisplayedPlaceholderStale else { return }
-        Task { await refreshStalePlaceholder() }
-    }
-    
-    private func refreshStalePlaceholder() async {
-        // Refreshing whilst swiping completely breaks the QLPreviewController, so wait for the swipe to settle.
-        while let pageScrollView, pageScrollView.isDragging || pageScrollView.isDecelerating {
-            try? await Task.sleep(for: .seconds(0.1))
-        }
-        
-        guard isDisplayedPlaceholderStale else { return }
-        refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
+        refreshCurrentItemWhenSettled()
     }
     
     private func handleFileLoaded(itemID: MediaPreviewItemID) {
-        guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
-        
-        // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController
-        // if it's called whilst swiping between items. So don't let that happen.
-        if let scrollView = pageScrollView, scrollView.isDragging || scrollView.isDecelerating {
-            return
+        itemIDsAwaitingRefresh.insert(itemID)
+        refreshCurrentItemWhenSettled()
+    }
+    
+    private func refreshCurrentItemWhenSettled() {
+        settledRefreshTask = Task {
+            // Refreshing whilst swiping completely breaks the QLPreviewController, so wait for the swipe to settle.
+            // The sleep returns immediately once cancelled, so stop waiting rather than spinning.
+            while !Task.isCancelled, isSwiping {
+                try? await Task.sleep(for: .seconds(0.1))
+            }
+            guard !Task.isCancelled else { return }
+            
+            let isDisplayedMediaAwaitingRefresh = (currentPreviewItem as? TimelineMediaPreviewItem.Media).map { itemIDsAwaitingRefresh.contains($0.id) } ?? false
+            itemIDsAwaitingRefresh.removeAll()
+            
+            if isDisplayedMediaAwaitingRefresh || isDisplayedPlaceholderStale {
+                refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
+            }
         }
-        
-        refreshCurrentPreviewItem()
     }
     
     // MARK: - Actions
