@@ -86,6 +86,7 @@
 "action_choose_file" = "Seleccionar archivo";
 "action_choose_photo" = "Elegir foto";
 "action_clear" = "Borrar";
+"action_clear_all" = "Clear all";
 "action_close" = "Cerrar";
 "action_complete_verification" = "Completar verificación";
 "action_confirm" = "Confirmar";
@@ -239,6 +240,7 @@
 "common_call_started" = "Llamada iniciada";
 "common_call_you_declined" = "Rechazaste una llamada";
 "common_chat_backup" = "Copia de seguridad del chat";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Copiado al portapapeles";
 "common_copyright" = "Derechos de autor";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Archivo eliminado";
 "common_file_saved" = "Archivo guardado";
 "common_forward_message" = "Reenviar mensaje";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Usado frecuentemente";
 "common_gallery" = "Galería";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Llamada grupal en curso";
+"common_header_rooms" = "Rooms";
 "common_image" = "Imagen";
 "common_in_reply_to" = "En respuesta a %1$@";
 "common_invite_unknown_profile" = "No se encontró este ID de Matrix, por lo que es posible que no se reciba la invitación.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Ubicación compartida en directo";
 "common_shared_location" = "Ubicación compartida";
 "common_shared_space" = "Espacio compartido";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Eliminando dispositivo";
 "common_something_went_wrong" = "Algo salió mal";
 "common_something_went_wrong_message" = "Hemos encontrado un problema. Inténtalo de nuevo.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Menciones";
 "screen_notification_settings_notification_section_title" = "Notificarme para";
 "screen_notification_settings_room_mention_label" = "Notificarme con @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Personalizado";
 "screen_notification_settings_sound_custom_sound_button_title" = "Sonido personalizado…";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error al eliminar el archivo";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Añadir tema";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Cifrada";
 "screen_room_details_badge_not_encrypted" = "No cifrada";
 "screen_room_details_badge_public" = "Sala pública";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Abre la aplicación en otro dispositivo verificado";
 "screen_session_verification_user_initiator_subtitle" = "Para mayor seguridad, verifica a este usuario comparando un conjunto de emojis en vuestros dispositivos. Hazlo utilizando una forma de comunicación de confianza.";
 "screen_session_verification_user_initiator_title" = "¿Verificar a este usuario?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Para mayor seguridad, otro usuario quiere verificar tu identidad digital. Se te mostrará un conjunto de emojis para compararlos.";
 "screen_session_verification_waiting_another_device_subtitle" = "Deberías ver una ventana emergente en el otro dispositivo. Inicia ahora la verificación desde allí.";
 "screen_session_verification_waiting_another_device_title" = "Iniciar la verificación en el otro dispositivo";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Una vez aceptada, podrás continuar con la verificación.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Acepta la solicitud para iniciar el proceso de verificación en tu otra sesión para continuar.";
 "screen_session_verification_waiting_to_accept_title" = "A la espera de aceptar la solicitud";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Ausente";
 "screen_settings_user_status_be_right_back" = "Vuelvo enseguida";
 "screen_settings_user_status_custom" = "Personalizado…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Has eliminado la sesión desde otra sesión";
 "screen_signed_out_reason_3" = "El administrador de tu servidor ha invalidado su acceso";
 "screen_signed_out_subtitle" = "Es posible que haya cerrado sesión por uno de los motivos que se enumeran a continuación. Por favor inicia sesión nuevamente para continuar usando %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Has cerrado sesión";
 "screen_signout_confirmation_dialog_content" = "¿Estás seguro de que quieres eliminar este dispositivo?";
 "screen_signout_confirmation_dialog_submit" = "Eliminar este dispositivo";

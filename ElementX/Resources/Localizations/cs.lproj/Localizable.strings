@@ -86,6 +86,7 @@
 "action_choose_file" = "Vyberte soubor";
 "action_choose_photo" = "Vybrat fotku";
 "action_clear" = "Vymazat";
+"action_clear_all" = "Clear all";
 "action_close" = "Zavřít";
 "action_complete_verification" = "Dokončit ověření";
 "action_confirm" = "Potvrdit";
@@ -239,6 +240,7 @@
 "common_call_started" = "Hovor zahájen";
 "common_call_you_declined" = "Odmítli jste hovor";
 "common_chat_backup" = "Záloha chatu";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Zkopírováno do schránky";
 "common_copyright" = "Autorská práva";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Soubor smazán";
 "common_file_saved" = "Soubor uložen";
 "common_forward_message" = "Přeposlat zprávu";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Často používané";
 "common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Obrázek";
 "common_in_reply_to" = "V odpovědi na %1$@";
 "common_invite_unknown_profile" = "Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Sdílená aktuální poloha";
 "common_shared_location" = "Sdílená poloha";
 "common_shared_space" = "Sdílený prostor";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Odebrání zařízení";
 "common_something_went_wrong" = "Něco se nepovedlo";
 "common_something_went_wrong_message" = "Narazili jsme na problém. Zkuste to prosím znovu.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Zmínky";
 "screen_notification_settings_notification_section_title" = "Upozornit mě na";
 "screen_notification_settings_room_mention_label" = "Zmínky o @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Vlastní";
 "screen_notification_settings_sound_custom_sound_button_title" = "Vlastní zvuk...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Chyba při mazání souboru";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Přidat téma";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Šifrováno";
 "screen_room_details_badge_not_encrypted" = "Není šifrováno";
 "screen_room_details_badge_public" = "Veřejná místnost";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Otevřete aplikaci na jiném ověřeném zařízení";
 "screen_session_verification_user_initiator_subtitle" = "Pro větší bezpečnost ověřte tohoto uživatele porovnáním sady emotikonů na svých zařízeních. Proveďte to pomocí důvěryhodného způsobu komunikace.";
 "screen_session_verification_user_initiator_title" = "Ověřte tohoto uživatele?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Z důvodu zvýšené bezpečnosti chce jiný uživatel ověřit vaši digitální identitu. Zobrazí se vám sada emodži, které je třeba porovnat.";
 "screen_session_verification_waiting_another_device_subtitle" = "Na druhém zařízení byste měli vidět vyskakovací okno. Začněte s ověrením tam.";
 "screen_session_verification_waiting_another_device_title" = "Spusťte ověření na druhém zařízení";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Po přijetí budete moci pokračovat v ověřování.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Pro pokračování přijměte požadavek na zahájení ověření v jiné relaci.";
 "screen_session_verification_waiting_to_accept_title" = "Čekání na přijetí žádosti";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Odstranili jste relaci z jiné relace";
 "screen_signed_out_reason_3" = "Správce vašeho serveru zrušil váš přístup";
 "screen_signed_out_subtitle" = "Je možné, že jste byli odhlášeni z některého z níže uvedených důvodů. Chcete-li pokračovat v používání %@, přihlaste se znovu.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Jste odhlášeni";
 "screen_signout_confirmation_dialog_content" = "Opravdu chcete odstranit toto zařízení?";
 "screen_signout_confirmation_dialog_submit" = "Odebrat toto zařízení";

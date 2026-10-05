@@ -86,6 +86,7 @@
 "action_choose_file" = "Choose file";
 "action_choose_photo" = "Избор на снимка";
 "action_clear" = "Изчистване";
+"action_clear_all" = "Clear all";
 "action_close" = "Затваряне";
 "action_complete_verification" = "Завършване на потвърждаването";
 "action_confirm" = "Потвърждаване";
@@ -239,6 +240,7 @@
 "common_call_started" = "Започнато обаждане";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Резервно копие на чатовете";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Copied to clipboard";
 "common_copyright" = "Авторски права";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Файлът е изтрит";
 "common_file_saved" = "Файлът е запазен";
 "common_forward_message" = "Препращане на съобщението";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Frequently used";
 "common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Изображение";
 "common_in_reply_to" = "В отговор на %1$@";
 "common_invite_unknown_profile" = "Този Matrix ID не може да бъде намерен, така че поканата може да не бъде получена.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Споделено местоположение";
 "common_shared_space" = "Shared space";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Излизате";
 "common_something_went_wrong" = "Нещо се обърка";
 "common_something_went_wrong_message" = "Възникна проблем. Моля, опитайте отново.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Споменавания";
 "screen_notification_settings_notification_section_title" = "Да бъда известяван за";
 "screen_notification_settings_room_mention_label" = "Известяване за @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Добавяне на тема";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "С шифроване";
 "screen_room_details_badge_not_encrypted" = "Без шифроване";
 "screen_room_details_badge_public" = "Общодостъпна стая";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Отворете приложението на друго потвърдено устройство";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
 "screen_session_verification_user_initiator_title" = "Потвърждаване на този потребител?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "След като бъдете приети, ще можете да продължите потвърждението.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Приемете заявката, за да започнете процеса на потвърждаване в другата си сесия, за да продължите.";
 "screen_session_verification_waiting_to_accept_title" = "В очакване на приемане на заявка";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1578,9 +1589,10 @@
 "screen_share_this_location_action" = "Споделяне на това местоположение";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
 "screen_signed_out_reason_1" = "Променили сте паролата си в друга сесия";
-"screen_signed_out_reason_2" = "You have deleted the session from another session";
-"screen_signed_out_reason_3" = "Your server’s administrator has invalidated your access";
+"screen_signed_out_reason_2" = "You’ve changed your password on another device";
+"screen_signed_out_reason_3" = "Your server's session expired or the administrator has blocked your access";
 "screen_signed_out_subtitle" = "You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Излезли сте";
 "screen_signout_confirmation_dialog_content" = "Сигурни ли сте, че искате да излезете?";
 "screen_signout_confirmation_dialog_submit" = "Изход";

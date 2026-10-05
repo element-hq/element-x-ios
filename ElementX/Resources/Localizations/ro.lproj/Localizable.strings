@@ -86,6 +86,7 @@
 "action_choose_file" = "Alegeți fișierul";
 "action_choose_photo" = "Alegeți o fotografie";
 "action_clear" = "Ștergeți";
+"action_clear_all" = "Clear all";
 "action_close" = "Închideți";
 "action_complete_verification" = "Finalizați verificarea";
 "action_confirm" = "Confirmați";
@@ -239,6 +240,7 @@
 "common_call_started" = "Apel inițiat";
 "common_call_you_declined" = "Ați respins un apel";
 "common_chat_backup" = "Backup conversații";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Copiat în clipboard";
 "common_copyright" = "Drepturi de autor";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Fișier șters";
 "common_file_saved" = "Fișier salvat";
 "common_forward_message" = "Redirecționați mesajul";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Utilizate frecvent";
 "common_gallery" = "Galerie";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Apel de grup în curs";
+"common_header_rooms" = "Rooms";
 "common_image" = "Imagine";
 "common_in_reply_to" = "Ca răspuns la %1$@";
 "common_invite_unknown_profile" = "Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost trimisă.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Locație în timp real partajată";
 "common_shared_location" = "Locație partajată";
 "common_shared_space" = "Spațiu comun";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Eliminare în curs";
 "common_something_went_wrong" = "Ceva nu a mers bine";
 "common_something_went_wrong_message" = "Am întâmpinat o problemă. Vă rugăm să încercați din nou.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Mențiuni";
 "screen_notification_settings_notification_section_title" = "Anunță-mă pentru";
 "screen_notification_settings_room_mention_label" = "Anunțați-mă pentru @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Personalizat";
 "screen_notification_settings_sound_custom_sound_button_title" = "Sunet personalizat...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Eroare la ștergerea fișierului";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Adăugare subiect";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Criptat";
 "screen_room_details_badge_not_encrypted" = "Necriptat";
 "screen_room_details_badge_public" = "Cameră publică";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Deschideți aplicația pe un alt dispozitiv verificat";
 "screen_session_verification_user_initiator_subtitle" = "Pentru securitate suplimentară, verificați acest utilizator comparând un set de emoji-uri pe dispozitivele dvs. Faceți acest lucru utilizând o metodă de comunicare de încredere.";
 "screen_session_verification_user_initiator_title" = "Verificați acest utilizator?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Pentru o securitate sporită, un alt utilizator dorește să vă verifice identitatea digitală. Vi se va afișa un set de emoji-uri pentru comparație.";
 "screen_session_verification_waiting_another_device_subtitle" = "Ar trebui să vedeți o fereastră pop-up pe celălalt dispozitiv. Începeți verificarea de acolo acum.";
 "screen_session_verification_waiting_another_device_title" = "Începeți verificarea pe celălalt dispozitiv";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "După acceptare, veți putea continua verificarea.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Acceptați cererea de a începe procesul de verificare în cealaltă sesiune pentru a continua.";
 "screen_session_verification_waiting_to_accept_title" = "Se așteptă acceptarea cererii";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Plecat";
 "screen_settings_user_status_be_right_back" = "Revin imediat";
 "screen_settings_user_status_custom" = "Personalizat…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Ați șters sesiunea dintr-o altă sesiune";
 "screen_signed_out_reason_3" = "Administratorul serverului dumneavoastra v-a invalidat accesul";
 "screen_signed_out_subtitle" = "Este posibil să fi fost deconectat din unul dintre motivele enumerate mai jos. Vă rugăm să vă conectați din nou pentru a continua utilizarea%@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Sunteți deconectat";
 "screen_signout_confirmation_dialog_content" = "Sunteți sigur că vreți să vă deconectați?";
 "screen_signout_confirmation_dialog_submit" = "Deconectați-vă";

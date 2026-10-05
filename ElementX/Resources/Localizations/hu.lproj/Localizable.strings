@@ -86,6 +86,7 @@
 "action_choose_file" = "Fájl kiválasztása";
 "action_choose_photo" = "Fénykép kiválasztása";
 "action_clear" = "Törlés";
+"action_clear_all" = "Clear all";
 "action_close" = "Bezárás";
 "action_complete_verification" = "Ellenőrzés befejezése";
 "action_confirm" = "Megerősítés";
@@ -239,6 +240,7 @@
 "common_call_started" = "A hívás elindult";
 "common_call_you_declined" = "Elutasított egy hívást";
 "common_chat_backup" = "Csevegés biztonsági mentése";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "A vágólapra másolva";
 "common_copyright" = "Szerzői jogok";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Fájl törölve";
 "common_file_saved" = "A fájl mentve";
 "common_forward_message" = "Üzenet továbbítása";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Gyakran használt";
 "common_gallery" = "Galéria";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Csoportos hívás folyamatban";
+"common_header_rooms" = "Rooms";
 "common_image" = "Kép";
 "common_in_reply_to" = "Válasz erre: %1$@";
 "common_invite_unknown_profile" = "Ez a Matrix-azonosító nem található, ezért előfordulhat, hogy a meghívó nem érkezik meg.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Megosztott élő helymeghatározás";
 "common_shared_location" = "Megosztott tartózkodási hely";
 "common_shared_space" = "Megosztott tér";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Eszköz eltávolítása";
 "common_something_went_wrong" = "Valamilyen hiba történt";
 "common_something_went_wrong_message" = "Problémába ütköztünk. Próbálja újra.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Említések";
 "screen_notification_settings_notification_section_title" = "Értesítés ezekről:";
 "screen_notification_settings_room_mention_label" = "@szoba említések";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Egyedi";
 "screen_notification_settings_sound_custom_sound_button_title" = "Egyedi hang...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Hiba a fájl törlésekor";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Választható)";
 "screen_room_confirm_removal_title" = "Eltávolítás megerősítése";
 "screen_room_details_add_topic_title" = "Téma hozzáadása";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Titkosított";
 "screen_room_details_badge_not_encrypted" = "Nem titkosított";
 "screen_room_details_badge_public" = "Nyilvános szoba";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Nyissa meg az alkalmazást egy másik ellenőrzött eszközön";
 "screen_session_verification_user_initiator_subtitle" = "A fokozott biztonság érdekében ellenőrizze ezt a felhasználót az eszközökön megjelenő emodzsik összehasonlításával. Ehhez használjon megbízható kommunikációs csatornát.";
 "screen_session_verification_user_initiator_title" = "Ellenőrzi ezt a felhasználót?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "A további biztonság érdekében egy másik felhasználó ellenőrizni szeretné személyazonosságát. Meg fog jelenni egy sor emodzsi, melyeket össze kell majd hasonlítania.";
 "screen_session_verification_waiting_another_device_subtitle" = "A másik eszközön egy felugró ablaknak kell megjelennie. Kezdje el az ellenőrzést onnan.";
 "screen_session_verification_waiting_another_device_title" = "Ellenőrzés megkezdése a másik eszközön";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Az elfogadása után folytathatja az ellenőrzést.";
 "screen_session_verification_waiting_to_accept_subtitle" = "A folytatáshoz fogadja el az ellenőrzési folyamat indítási kérését a másik munkamenetében.";
 "screen_session_verification_waiting_to_accept_title" = "Várakozás a kérés elfogadására";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Távol";
 "screen_settings_user_status_be_right_back" = "Rögtön visszajövök";
 "screen_settings_user_status_custom" = "Egyedi…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Törölte a munkamenetet egy másik munkamenetből";
 "screen_signed_out_reason_3" = "A kiszolgáló adminisztrátora érvénytelenítette a hozzáférését";
 "screen_signed_out_subtitle" = "Előfordulhat, hogy az alábbiakban felsorolt okok valamelyike miatt került kijelentkeztetésre. Jelentkezzen be újra, hogy folytatni tudja az %@ használatát.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Kijelentkezett";
 "screen_signout_confirmation_dialog_content" = "Biztosan eltávolítja ezt az eszközt?";
 "screen_signout_confirmation_dialog_submit" = "Eszköz eltávolítása";

@@ -85,6 +85,7 @@
 "action_choose_file" = "اختيار ملف";
 "action_choose_photo" = "اختيار صورة";
 "action_clear" = "مسح";
+"action_clear_all" = "Clear all";
 "action_close" = "إغلاق";
 "action_complete_verification" = "أتمم التحقق";
 "action_confirm" = "تأكيد";
@@ -238,6 +239,7 @@
 "common_call_started" = "بدأت المكالمة";
 "common_call_you_declined" = "رفضت مكالمة";
 "common_chat_backup" = "النسخ الاحتياطي للدردشة";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "تم النسخ إلى الحافظة";
 "common_copyright" = "حقوق الملكية";
@@ -276,10 +278,12 @@
 "common_file_deleted" = "تمت إزالة الملف";
 "common_file_saved" = "تم حفظ الملف";
 "common_forward_message" = "إعادة توجيه الرسالة";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "المستخدمة بكثرة";
 "common_gallery" = "المعرض";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "مكالمة جماعية جارية";
+"common_header_rooms" = "Rooms";
 "common_image" = "صورة";
 "common_in_reply_to" = "ردٌّ على %1$@";
 "common_invite_unknown_profile" = "لم يتم العثور على الـMatrix ID هذا، ولذا فالدعوة قد لا تكون وصلت.";
@@ -370,6 +374,7 @@
 "common_shared_live_location" = "تمت مشاركة الموقع المباشر";
 "common_shared_location" = "الموقع المشارَك";
 "common_shared_space" = "مساحة مشتركة";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "جارٍ إزالة الجهاز";
 "common_something_went_wrong" = "حدث خطأ ما";
 "common_something_went_wrong_message" = "واجهنا مشكلة. يرجى المحاولة مرة أخرى.";
@@ -1096,7 +1101,8 @@
 "screen_notification_settings_mode_mentions" = "الإشارات";
 "screen_notification_settings_notification_section_title" = "أرسل لي إشعارات لـ";
 "screen_notification_settings_room_mention_label" = "أرسل لي إشعاراً عندما يُكتب @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "مخصص";
 "screen_notification_settings_sound_custom_sound_button_title" = "صوت مخصص...";
 "screen_notification_settings_sound_delete_sound_error_title" = "خطأ في حذف الملف";
@@ -1306,6 +1312,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "إضافة موضوع";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "مشفّرة";
 "screen_room_details_badge_not_encrypted" = "غير مشفّرة";
 "screen_room_details_badge_public" = "غرفة عامة";
@@ -1550,6 +1559,7 @@
 "screen_session_verification_use_another_device_title" = "افتح التطبيق على جهاز آخر تم التحقق منه";
 "screen_session_verification_user_initiator_subtitle" = "لمزيد من الأمان، تحقّق من هذا المستخدم بمقارنة مجموعة من الرموز التعبيرية على أجهزتكما. افعل ذلك باستخدام وسيلة موثوقة للتواصل.";
 "screen_session_verification_user_initiator_title" = "هل تريد التحقق من هذا المستخدم؟";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "لمزيد من الأمان، يريد مستخدم آخر التحقق من هويتك الرقمية. ستُعرض لك مجموعة من الرموز التعبيرية لمقارنتها.";
 "screen_session_verification_waiting_another_device_subtitle" = "من المفترض أن تظهر نافذة منبثقة على الجهاز الآخر. ابدأ التحقق من هناك الآن.";
 "screen_session_verification_waiting_another_device_title" = "ابدأ التحقق على الجهاز الآخر";
@@ -1558,6 +1568,7 @@
 "screen_session_verification_waiting_subtitle" = "بمجرد القبول، ستتمكن من متابعة التحقق.";
 "screen_session_verification_waiting_to_accept_subtitle" = "اِقبل طلب بدء عملية التحقق في جلستك الأخرة للاستمرار.";
 "screen_session_verification_waiting_to_accept_title" = "بانتظار قبول الطلب";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "بعيد";
 "screen_settings_user_status_be_right_back" = "سأعود حالاً";
 "screen_settings_user_status_custom" = "مخصص…";
@@ -1580,6 +1591,7 @@
 "screen_signed_out_reason_2" = "لقد حذفت هذه الجلسة من جلسة أخرى";
 "screen_signed_out_reason_3" = "أبطل مسؤول الخادم صلاحية وصولك";
 "screen_signed_out_subtitle" = "ربما تم تسجيل خروجك لأحد الأسباب المذكورة أدناه. يُرجى تسجيل الدخول مرة أخرى لمتابعة استخدام %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "تم تسجيل خروجك";
 "screen_signout_confirmation_dialog_content" = "أمتأكد من إزالة هذا الجهاز؟";
 "screen_signout_confirmation_dialog_submit" = "إزالة هذا الجهاز";

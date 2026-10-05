@@ -86,6 +86,7 @@
 "action_choose_file" = "Odaberite datoteku";
 "action_choose_photo" = "Odaberi fotografiju";
 "action_clear" = "Očisti";
+"action_clear_all" = "Clear all";
 "action_close" = "Zatvori";
 "action_complete_verification" = "Dovrši provjeru";
 "action_confirm" = "Potvrdi";
@@ -239,6 +240,7 @@
 "common_call_started" = "Poziv je započeo";
 "common_call_you_declined" = "Odbili ste poziv";
 "common_chat_backup" = "Sigurnosna kopija razgovora";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopirano u međuspremnik";
 "common_copyright" = "Autorsko pravo";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Datoteka je izbrisana";
 "common_file_saved" = "Datoteka je spremljena";
 "common_forward_message" = "Proslijedi poruku";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Često korišteno";
 "common_gallery" = "Galerija";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Grupni poziv u tijeku";
+"common_header_rooms" = "Rooms";
 "common_image" = "Slika";
 "common_in_reply_to" = "Kao odgovor osobi %1$@";
 "common_invite_unknown_profile" = "Ovaj Matrix ID nije moguće pronaći, pa se pozivnica možda neće primiti.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Dijeljena lokacija uživo";
 "common_shared_location" = "Podijeljena lokacija";
 "common_shared_space" = "Zajednički prostor";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Uklanjanje uređaja";
 "common_something_went_wrong" = "Nešto je pošlo po zlu";
 "common_something_went_wrong_message" = "Naišli smo na problem. Pokušajte ponovno.";
@@ -627,7 +632,7 @@
 "screen_advanced_settings_share_presence_description" = "Ako je to isključeno, nećete moći slati ili primati potvrde o čitanju ili obavijesti o tipkanju.";
 "screen_advanced_settings_show_media_timeline_always_hide" = "Uvijek sakrij";
 "screen_advanced_settings_show_media_timeline_always_show" = "Uvijek prikaži";
-"screen_advanced_settings_show_media_timeline_private_rooms" = "U privatnim sobama";
+"screen_advanced_settings_show_media_timeline_private_rooms" = "Prikaži u privatnim sobama";
 "screen_advanced_settings_show_media_timeline_subtitle" = "Skriveni medij uvijek se može prikazati tako se da se dodirne";
 "screen_advanced_settings_show_media_timeline_title" = "Prikaži medije na vremenskoj traci";
 "screen_advanced_settings_view_source_description" = "Omogući opciju za prikaz izvora poruke na vremenskoj traci.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Spominjanja";
 "screen_notification_settings_notification_section_title" = "Obavijesti me za";
 "screen_notification_settings_room_mention_label" = "Obavijesti me o sobi @soba";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Prilagođeno";
 "screen_notification_settings_sound_custom_sound_button_title" = "Personalizirano zvono";
 "screen_notification_settings_sound_delete_sound_error_title" = "Pogreška pri brisanju datoteke";
@@ -1303,10 +1309,13 @@
 "screen_room_change_role_unsaved_changes_description" = "Niste spremili sve promjene.";
 "screen_room_change_role_unsaved_changes_title" = "Želite li spremiti promjene?";
 "screen_room_confirm_removal_reason_label" = "Razlog (neobavezno)";
-"screen_room_confirm_removal_reason_placeholder" = "Unesite…";
+"screen_room_confirm_removal_reason_placeholder" = "Unesite razlog…";
 "screen_room_confirm_removal_reason_supporting_text" = "(Neobavezno)";
-"screen_room_confirm_removal_title" = "Potvrdite uklanjanje";
+"screen_room_confirm_removal_title" = "Ukloniti poruku?";
 "screen_room_details_add_topic_title" = "Dodaj temu";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Šifrirano";
 "screen_room_details_badge_not_encrypted" = "Nije šifrirano";
 "screen_room_details_badge_public" = "Javna soba";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Otvorite aplikaciju na drugom potvrđenom uređaju";
 "screen_session_verification_user_initiator_subtitle" = "Radi dodatne sigurnosti potvrdite ovog korisnika tako da usporedite skup emotikona na svojim uređajima. Učinite to koristeći se pouzdanim načinom komunikacije.";
 "screen_session_verification_user_initiator_title" = "Želite li potvrditi ovog korisnika?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Radi dodatne sigurnosti drugi korisnik želi potvrditi vaš identitet. Bit će vam prikazan skup emotikona za usporedbu.";
 "screen_session_verification_waiting_another_device_subtitle" = "Trebali biste vidjeti skočni prozor na drugom uređaju. Sada započnite provjeru odatle.";
 "screen_session_verification_waiting_another_device_title" = "Započni provjeru na drugom uređaju";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Nakon prihvaćanja moći ćete nastaviti s potvrđivanjem.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Prihvatite zahtjev za pokretanje postupka provjere u drugoj sesiji kako biste nastavili.";
 "screen_session_verification_waiting_to_accept_title" = "Čekanje na prihvaćanje zahtjeva";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Odsutan/na";
 "screen_settings_user_status_be_right_back" = "Odmah se vraćam";
 "screen_settings_user_status_custom" = "Prilagođeno";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Izbrisali ste sesiju iz druge sesije";
 "screen_signed_out_reason_3" = "Administrator vašeg poslužitelja poništio je vaš pristup";
 "screen_signed_out_subtitle" = "Možda ste odjavljeni iz jednog od razloga navedenih u nastavku. Ponovno se prijavite kako biste nastavili koristiti %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Odjavljeni ste";
 "screen_signout_confirmation_dialog_content" = "Jeste li sigurni da želite ukloniti ovaj uređaj?";
 "screen_signout_confirmation_dialog_submit" = "Ukloni ovaj uređaj";

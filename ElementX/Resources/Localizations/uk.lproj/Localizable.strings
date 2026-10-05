@@ -86,6 +86,7 @@
 "action_choose_file" = "Вибрати файл";
 "action_choose_photo" = "Вибрати фото";
 "action_clear" = "Очистити";
+"action_clear_all" = "Очистити все";
 "action_close" = "Закрити";
 "action_complete_verification" = "Завершити звіряння";
 "action_confirm" = "Підтвердити";
@@ -239,6 +240,7 @@
 "common_call_started" = "Виклик розпочато";
 "common_call_you_declined" = "Ви відхилили виклик";
 "common_chat_backup" = "Резервне копіювання бесіди";
+"common_chats" = "Бесіди";
 "common_code_block" = "Блок коду";
 "common_copied_to_clipboard" = "Скопійовано до буферу обміну";
 "common_copyright" = "Авторське право";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Файл видалено";
 "common_file_saved" = "Файл збережено";
 "common_forward_message" = "Переслати повідомлення";
+"common_forward_to" = "Переслати";
 "common_frequently_used" = "Частовживані";
 "common_gallery" = "Галерея";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Триває груповий виклик";
+"common_header_rooms" = "Rooms";
 "common_image" = "Зображення";
 "common_in_reply_to" = "У відповідь на %1$@";
 "common_invite_unknown_profile" = "Цей Matrix-ID не знайдено, тому запрошення може не бути отримано.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Поділитися місцезнаходженням в реальному часі";
 "common_shared_location" = "Поширене розташування";
 "common_shared_space" = "Простір спільного користування";
+"common_signed_in" = "Вхід виконано";
 "common_signing_out" = "Вилучення пристрою";
 "common_something_went_wrong" = "Щось пішло не так";
 "common_something_went_wrong_message" = "Ми зіткнулися з проблемою. Будь ласка, повторіть спробу.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Згадки";
 "screen_notification_settings_notification_section_title" = "Сповіщати мене про";
 "screen_notification_settings_room_mention_label" = "Згадки @room";
-"screen_notification_settings_show_all_activity" = "Показати всю діяльність у списку кімнат (крапки або кількість непрочитаних повідомлень)";
+"screen_notification_settings_show_all_activity_subtitle" = "Крапки або кількість непрочитаних повідомлень";
+"screen_notification_settings_show_all_activity_title" = "Показати всю діяльність у списку кімнат";
 "screen_notification_settings_sound_custom_fallback" = "Власний";
 "screen_notification_settings_sound_custom_sound_button_title" = "Користувацький звук...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Помилка видалення файлу";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Необов'язково)";
 "screen_room_confirm_removal_title" = "Вилучити повідомлення?";
 "screen_room_details_add_topic_title" = "Додати тему";
+"screen_room_details_audio_push_to_talk" = "Натисніть, щоб говорити";
+"screen_room_details_audio_title" = "Аудіо в кімнаті";
+"screen_room_details_audio_video_calls" = "Відеовиклики";
 "screen_room_details_badge_encrypted" = "Зашифровано";
 "screen_room_details_badge_not_encrypted" = "Не зашифровано";
 "screen_room_details_badge_public" = "Загальнодоступна кімната";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Відкрийте застосунок на іншому звіреному пристрої";
 "screen_session_verification_user_initiator_subtitle" = "Для додаткової безпеки звірте цього користувача, порівнявши набір емоджі на ваших пристроях. Зробіть це, використовуючи надійний спосіб спілкування.";
 "screen_session_verification_user_initiator_title" = "Звірити цього користувача?";
+"screen_session_verification_user_requesting_verification" = "Користувач, який запитує звірку:";
 "screen_session_verification_user_responder_subtitle" = "Для додаткової безпеки інший користувач хоче звірити вашу цифрову ідентичність. Вам буде показано набір емодзі для порівняння.";
 "screen_session_verification_waiting_another_device_subtitle" = "На іншому пристрої має з’явитися спливне вікно. Розпочніть звіряння звідти.";
 "screen_session_verification_waiting_another_device_title" = "Розпочати звіряння на іншому пристрої";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Після схвалення ви зможете продовжити звіряння.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Прийміть запит, щоб розпочати процес звіряння в іншому сеансі та продовжити роботу.";
 "screen_session_verification_waiting_to_accept_title" = "Очікування на прийняття запиту";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Не на місці";
 "screen_settings_user_status_be_right_back" = "Зараз повернуся";
 "screen_settings_user_status_custom" = "Власний...";
@@ -1577,11 +1588,12 @@
 "screen_share_open_osm_maps" = "Відкрити в OpenStreetMap";
 "screen_share_this_location_action" = "Поділитися цим місцем перебування";
 "screen_sharing_location_option_sheet_title" = "Налаштування обміну геопозицією";
-"screen_signed_out_reason_1" = "Ви змінили пароль під час іншого сеансу";
-"screen_signed_out_reason_2" = "Ви видалили сеанс з іншого сеансу";
-"screen_signed_out_reason_3" = "Адміністратор вашого сервера визнав ваш доступ недійсним";
+"screen_signed_out_reason_1" = "Ви вилучили цей пристрій зі свого облікового запису";
+"screen_signed_out_reason_2" = "Ви змінили пароль на іншому пристрої";
+"screen_signed_out_reason_3" = "Термін дії сеансу на вашому сервері закінчився або адміністратор заблокував ваш доступ";
 "screen_signed_out_subtitle" = "Можливо, ви вийшли з системи з однієї з причин, наведених нижче. Будь ласка, увійдіть знову, щоб продовжити використання %@.";
-"screen_signed_out_title" = "Ви вийшли з системи";
+"screen_signed_out_subtitle_v2" = "Цей пристрій було видалено з однієї з наведених нижче причин. Будь ласка, увійдіть знову, щоб підключити цей пристрій до вашого облікового запису.";
+"screen_signed_out_title" = "Пристрій вилучено";
 "screen_signout_confirmation_dialog_content" = "Ви впевнені, що хочете видалити цей пристрій?";
 "screen_signout_confirmation_dialog_submit" = "Вилучити цей пристрій";
 "screen_signout_confirmation_dialog_title" = "Вилучити цей пристрій";

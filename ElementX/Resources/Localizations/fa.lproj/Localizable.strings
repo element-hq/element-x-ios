@@ -86,6 +86,7 @@
 "action_choose_file" = "انتخاب فایل";
 "action_choose_photo" = "گزینش عکس";
 "action_clear" = "پاک سازی";
+"action_clear_all" = "Clear all";
 "action_close" = "بستن";
 "action_complete_verification" = "تکمیل تأیید";
 "action_confirm" = "تأیید";
@@ -239,6 +240,7 @@
 "common_call_started" = "تماس آغاز شد";
 "common_call_you_declined" = "شما یک تماس را رد کردید";
 "common_chat_backup" = "پشتیبان گپ";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "در تخته‌گیره رونوشت شد";
 "common_copyright" = "حق رونوشت";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "پرونده حذف شد";
 "common_file_saved" = "پرونده ذخیره شد";
 "common_forward_message" = "هدایت پیام";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "پراستفاده";
 "common_gallery" = "گالری";
 "common_gif" = "جیف";
 "common_group_call_in_progress" = "تماس گروهی در جریان است";
+"common_header_rooms" = "Rooms";
 "common_image" = "تصویر";
 "common_in_reply_to" = "در پاسخ به %1$@";
 "common_invite_unknown_profile" = "شناسهٔ ماتریکس نتوانست پیدا شود. ممکن است دعوت نرسیده باشد.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "مکان زنده به اشتراک‌گذاری شده";
 "common_shared_location" = "مکان هم‌رسانده";
 "common_shared_space" = "فضای اشتراکی";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "خارج شدن";
 "common_something_went_wrong" = "چیزی اشتباه پیش رفت";
 "common_something_went_wrong_message" = "با مشکلی مواجه شدیم. لطفا دوباره امتحان کنید.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "اشاره‌ها";
 "screen_notification_settings_notification_section_title" = "آگاه کردنم برای";
 "screen_notification_settings_room_mention_label" = "آگاه کردنم برای ‪@room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "سفارشی";
 "screen_notification_settings_sound_custom_sound_button_title" = "صدای سفارشی...";
 "screen_notification_settings_sound_delete_sound_error_title" = "خطا در حذف فایل";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "افزودن موضوع";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "رمز شده";
 "screen_room_details_badge_not_encrypted" = "رمزنگاری نشده";
 "screen_room_details_badge_public" = "اتاق عمومی";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "برنامه را روی دستگاه تأیید شده دیگری باز کنید";
 "screen_session_verification_user_initiator_subtitle" = "برای امنیت بیشتر، با مقایسه مجموعه‌ای از ایموجی‌ها در دستگاه‌های خود، این کاربر را تأیید کنید. این کار را با استفاده از یک روش ارتباطی مطمئن انجام دهید.";
 "screen_session_verification_user_initiator_title" = "این کاربر را تایید می‌کنید؟";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "برای امنیت بیشتر، اگر کاربر دیگری بخواهد هویت دیجیتالی شما را تأیید کند، مجموعه‌ای از ایموجی‌ها برای مقایسه به شما نشان داده می‌شود.";
 "screen_session_verification_waiting_another_device_subtitle" = "باید یک پنجره‌ی پاپ‌آپ روی دستگاه دیگر ببینید. اکنون تأیید را از آنجا شروع کنید.";
 "screen_session_verification_waiting_another_device_title" = "شروع تأیید در دستگاه دیگر";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "پس از پذیرش، می‌توانید به تأیید ادامه دهید.";
 "screen_session_verification_waiting_to_accept_subtitle" = "برای ادامه، درخواست شروع فرآیند تأیید را در جلسه دیگر خود بپذیرید.";
 "screen_session_verification_waiting_to_accept_title" = "منظر پذیرش درخواست";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "بعدا";
 "screen_settings_user_status_be_right_back" = "همین الان برگرد";
 "screen_settings_user_status_custom" = "سفارشی…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "این نشست را از نشستی دیگر حذف کرده‌اید";
 "screen_signed_out_reason_3" = "مدیر کارسازتان دسترسیتان را نامعتبر کرده است";
 "screen_signed_out_subtitle" = "ممکن است به یکی از دلایل ذکر شده در زیر از سیستم خارج شده باشید. لطفا برای ادامه استفاده از %@ دوباره وارد شوید.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "خارج شده‌اید";
 "screen_signout_confirmation_dialog_content" = "مطمئنید که می‌خواهید این افزاره را بردارید؟";
 "screen_signout_confirmation_dialog_submit" = "برداشتن این افزاره";

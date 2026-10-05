@@ -86,6 +86,7 @@
 "action_choose_file" = "Choose file";
 "action_choose_photo" = "Dewis llun";
 "action_clear" = "Clirio";
+"action_clear_all" = "Clear all";
 "action_close" = "Cau";
 "action_complete_verification" = "Cwblhau'r gwirio";
 "action_confirm" = "Cadarnhau";
@@ -239,6 +240,7 @@
 "common_call_started" = "Galwad wedi dechrau";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Sgwrs wrth gefn";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Wedi'i gopïo i'r clipfwrdd";
 "common_copyright" = "Hawlfraint";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Ffeil wedi'i dileu";
 "common_file_saved" = "Ffeil wedi'i chadw";
 "common_forward_message" = "Anfonwyd neges ymlaen";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Defnydd cyffredin";
 "common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Delwedd";
 "common_in_reply_to" = "Mewn ymateb i %1$@";
 "common_invite_unknown_profile" = "Nid oes modd dod o hyd i'r ID Matrics hwn, felly mae'n bosibl na fydd y gwahoddiad yn cael ei dderbyn.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Lleoliad yn cael ei rannu";
 "common_shared_space" = "Shared space";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Allgofnodi";
 "common_something_went_wrong" = "Aeth rhywbeth o'i le";
 "common_something_went_wrong_message" = "Wedi canfod mater. Ceisiwch eto.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Crybwyll";
 "screen_notification_settings_notification_section_title" = "Rhoi gwybod i mi am";
 "screen_notification_settings_room_mention_label" = "Rhoi gwybod i mi ar @ystafell";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Ychwanegu pwnc";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Wedi'i amgryptio";
 "screen_room_details_badge_not_encrypted" = "Heb ei amgryptio";
 "screen_room_details_badge_public" = "Ystafell gyhoeddus";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Agorwch yr ap ar ddyfais arall sydd wedi'i gwirio";
 "screen_session_verification_user_initiator_subtitle" = "Er mwyn sicrhau diogelwch ychwanegol, gwiriwch y defnyddiwr hwn trwy gymharu set o emojis ar eich dyfeisiau. Gwnewch hyn trwy ddefnyddio ffordd ddibynadwy o gyfathrebu.";
 "screen_session_verification_user_initiator_title" = "Dilysu'r defnyddiwr hwn?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Er mwyn diogelwch ychwanegol, mae defnyddiwr arall eisiau gwirio pwy ydych chi. Bydd set o emojis yn cael eu dangos i chi eu cymharu.";
 "screen_session_verification_waiting_another_device_subtitle" = "Dylech weld llamlen ar y ddyfais arall. Dechreuwch y dilysiad o'r fan honno nawr.";
 "screen_session_verification_waiting_another_device_title" = "Cychwyn dilysu ar y ddyfais arall";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Unwaith y byddwch wedi'ch derbyn, byddwch yn gallu parhau â'r dilysu.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Derbyniwch y cais i gychwyn y broses ddilysu yn eich sesiwn arall i barhau.";
 "screen_session_verification_waiting_to_accept_title" = "Yn aros i dderbyn cais";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Rydych chi wedi dileu'r sesiwn o sesiwn arall";
 "screen_signed_out_reason_3" = "Mae gweinyddwr eich gweinydd wedi annilysu eich mynediad";
 "screen_signed_out_subtitle" = "Efallai eich bod wedi cael eich allgofnodi am un o'r rhesymau sy'n cael eu rhestru isod. Mewngofnodwch eto i barhau i ddefnyddio %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Rydych wedi'ch allgofnodi";
 "screen_signout_confirmation_dialog_content" = "Ydych chi'n siŵr eich bod am allgofnodi?";
 "screen_signout_confirmation_dialog_submit" = "Allgofnodi";

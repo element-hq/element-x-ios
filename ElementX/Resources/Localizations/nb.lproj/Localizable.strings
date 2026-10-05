@@ -86,6 +86,7 @@
 "action_choose_file" = "Velg fil";
 "action_choose_photo" = "Velg bilde";
 "action_clear" = "Tøm";
+"action_clear_all" = "Clear all";
 "action_close" = "Lukk";
 "action_complete_verification" = "Fullfør verifisering";
 "action_confirm" = "Bekreft";
@@ -239,6 +240,7 @@
 "common_call_started" = "Samtale startet";
 "common_call_you_declined" = "Du avviste en samtale";
 "common_chat_backup" = "Chat backup";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopiert til utklippstavlen";
 "common_copyright" = "Opphavsrett";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Fil slettet";
 "common_file_saved" = "Fil lagret";
 "common_forward_message" = "Videresend melding";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Ofte brukt";
 "common_gallery" = "Galleri";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Gruppesamtale pågår";
+"common_header_rooms" = "Rooms";
 "common_image" = "Bilde";
 "common_in_reply_to" = "Som svar på %1$@";
 "common_invite_unknown_profile" = "Finner ikke denne Matrix-IDen, så invitasjonen blir kanskje ikke mottatt.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Delt lokasjon i sanntid";
 "common_shared_location" = "Delt lokasjon";
 "common_shared_space" = "Delt område";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Fjerner enheten";
 "common_something_went_wrong" = "Noe gikk galt";
 "common_something_went_wrong_message" = "Vi har støtt på et problem. Vennligst prøv igjen.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Omtaler";
 "screen_notification_settings_notification_section_title" = "Varsle meg om";
 "screen_notification_settings_room_mention_label" = "Gi meg varsel på @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Egendefinert";
 "screen_notification_settings_sound_custom_sound_button_title" = "Tilpasset lyd...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Feil ved sletting av fil";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Legg til emne";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Kryptert";
 "screen_room_details_badge_not_encrypted" = "Ikke kryptert";
 "screen_room_details_badge_public" = "Offentlig rom";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Åpne appen på en annen bekreftet enhet";
 "screen_session_verification_user_initiator_subtitle" = "For ekstra sikkerhet, verifiser denne brukeren ved å sammenligne et sett med emojier på enhetene dine. Gjør dette ved å bruke en pålitelig måte å kommunisere på.";
 "screen_session_verification_user_initiator_title" = "Vil du verifisere denne brukeren?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "For ekstra sikkerhet ønsker en annen bruker å bekrefte din digitale identitet. Du vil se et sett med emojier du kan sammenligne.";
 "screen_session_verification_waiting_another_device_subtitle" = "Du skal se en popup på den andre enheten. Start bekreftelsen derfra nå.";
 "screen_session_verification_waiting_another_device_title" = "Start verifiseringen på den andre enheten";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Når du er akseptert, kan du fortsette med verifiseringen.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Godta forespørselen om å starte bekreftelsesprosessen i den andre sesjonen for å fortsette.";
 "screen_session_verification_waiting_to_accept_title" = "Venter på å godta forespørselen";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Borte";
 "screen_settings_user_status_be_right_back" = "Er straks tilbake";
 "screen_settings_user_status_custom" = "Egendefinert...";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Du har slettet sesjonen fra en annen sesjon";
 "screen_signed_out_reason_3" = "Serveradministratoren har ugyldiggjort tilgangen din";
 "screen_signed_out_subtitle" = "Du kan ha blitt logget ut av en av årsakene som er oppført nedenfor. Logg på igjen for å fortsette å bruke %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Du er logget ut";
 "screen_signout_confirmation_dialog_content" = "Er du sikker på at du vil fjerne denne enheten?";
 "screen_signout_confirmation_dialog_submit" = "Fjern denne enheten";

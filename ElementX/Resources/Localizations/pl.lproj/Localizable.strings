@@ -86,6 +86,7 @@
 "action_choose_file" = "Wybierz plik";
 "action_choose_photo" = "Wybierz zdjęcie";
 "action_clear" = "Wyczyść";
+"action_clear_all" = "Wyczyść wszystko";
 "action_close" = "Zamknij";
 "action_complete_verification" = "Dokończ weryfikację";
 "action_confirm" = "Potwierdź";
@@ -239,6 +240,7 @@
 "common_call_started" = "Rozpoczęto rozmowę";
 "common_call_you_declined" = "Odrzuciłeś połączenie";
 "common_chat_backup" = "Backup czatu";
+"common_chats" = "Czaty";
 "common_code_block" = "Blok kodu";
 "common_copied_to_clipboard" = "Skopiowano do schowka";
 "common_copyright" = "Prawa autorskie";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Plik usunięty";
 "common_file_saved" = "Plik zapisany";
 "common_forward_message" = "Przekaż wiadomość";
+"common_forward_to" = "Przekaż do";
 "common_frequently_used" = "Często używane";
 "common_gallery" = "Galeria";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Trwa połączenie grupowe";
+"common_header_rooms" = "Pokoje";
 "common_image" = "Zdjęcie";
 "common_in_reply_to" = "W odpowiedzi do %1$@";
 "common_invite_unknown_profile" = "Nie można znaleźć identyfikatora Matrix ID, zaproszenie mogło nie dotrzeć.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Udostępniona lokalizacja na żywo";
 "common_shared_location" = "Udostępniona lokalizacja";
 "common_shared_space" = "Udostępniona przestrzeń";
+"common_signed_in" = "Zalogowano";
 "common_signing_out" = "Usuwanie urządzenia";
 "common_something_went_wrong" = "Coś poszło nie tak";
 "common_something_went_wrong_message" = "Napotkaliśmy problem. Spróbuj ponownie.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Wzmianki";
 "screen_notification_settings_notification_section_title" = "Powiadamiaj mnie przez";
 "screen_notification_settings_room_mention_label" = "Wzmianki @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Kropki lub liczba nieprzeczytanych wiadomości";
+"screen_notification_settings_show_all_activity_title" = "Pokaż całą aktywność na liście pokoi";
 "screen_notification_settings_sound_custom_fallback" = "Własny";
 "screen_notification_settings_sound_custom_sound_button_title" = "Własny dźwięk...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Błąd usuwania pliku";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Opcjonalne)";
 "screen_room_confirm_removal_title" = "Usunąć wiadomość?";
 "screen_room_details_add_topic_title" = "Dodaj temat";
+"screen_room_details_audio_push_to_talk" = "Naciśnij i mów";
+"screen_room_details_audio_title" = "Pokój audio";
+"screen_room_details_audio_video_calls" = "Rozmowy wideo";
 "screen_room_details_badge_encrypted" = "Szyfrowany";
 "screen_room_details_badge_not_encrypted" = "Nieszyfrowany";
 "screen_room_details_badge_public" = "Pokój publiczny";
@@ -1332,9 +1341,9 @@
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Prośby o dołączenie";
 "screen_room_details_roles_and_permissions" = "Role i uprawnienia";
-"screen_room_details_room_audio_ptt" = "Push to talk";
-"screen_room_details_room_audio_title" = "Room Audio";
-"screen_room_details_room_audio_video_calls" = "Video calls";
+"screen_room_details_room_audio_ptt" = "Naciśnij i mów";
+"screen_room_details_room_audio_title" = "Pokój audio";
+"screen_room_details_room_audio_video_calls" = "Rozmowy wideo";
 "screen_room_details_room_name_label" = "Nazwa";
 "screen_room_details_security_and_privacy_title" = "Bezpieczeństwo i prywatność";
 "screen_room_details_security_title" = "Bezpieczeństwo";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Otwórz aplikację na drugim zweryfikowanym urządzeniu";
 "screen_session_verification_user_initiator_subtitle" = "Dla dodatkowej ochrony, zweryfikuj tego użytkownika, porównując zestaw emoji na obu urządzeniach. Zrób to, korzystając z zaufanej metody komunikacji.";
 "screen_session_verification_user_initiator_title" = "Zweryfikować tego użytkownika?";
+"screen_session_verification_user_requesting_verification" = "Użytkownik proszący o weryfikację:";
 "screen_session_verification_user_responder_subtitle" = "Dla dodatkowej ochrony, inny użytkownik chce zweryfikować Twoją tożsamość. Pojawi się unikalny zestaw emoji do porównania.";
 "screen_session_verification_waiting_another_device_subtitle" = "Powinno wyskoczyć okno na drugim urządzeniu. Rozpocznij tam weryfikację.";
 "screen_session_verification_waiting_another_device_title" = "Rozpocznij weryfikację na drugim urządzeniu";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Po zaakceptowaniu będziesz mógł kontynuować weryfikację.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Zaakceptuj prośbę o rozpoczęcie procesu weryfikacji w innej sesji, aby kontynuować.";
 "screen_session_verification_waiting_to_accept_title" = "Oczekiwanie na zaakceptowanie prośby";
+"screen_settings_add_account" = "Dodaj konto";
 "screen_settings_user_status_away" = "Z dala od urządzenia";
 "screen_settings_user_status_be_right_back" = "Zaraz wracam";
 "screen_settings_user_status_custom" = "Własny";
@@ -1577,11 +1588,12 @@
 "screen_share_open_osm_maps" = "Otwórz w OpenStreetMap";
 "screen_share_this_location_action" = "Udostępnij wybraną lokalizację";
 "screen_sharing_location_option_sheet_title" = "Opcje udostępniania";
-"screen_signed_out_reason_1" = "Zmieniono hasło w innej sesji";
-"screen_signed_out_reason_2" = "Sesja została usunięta z innej sesji";
-"screen_signed_out_reason_3" = "Administrator serwera unieważnił Twój dostęp";
+"screen_signed_out_reason_1" = "Usunięto urządzenie ze swojego konta";
+"screen_signed_out_reason_2" = "Hasło zostało zmienione na innym urządzeniu";
+"screen_signed_out_reason_3" = "Sesja serwera wygasła lub administrator zablokował Twój dostęp";
 "screen_signed_out_subtitle" = "Mogłeś zostać wylogowany z powodów wymienionych poniżej. Zaloguj się ponownie, aby dalej korzystać z %@.";
-"screen_signed_out_title" = "Zostałeś wylogowany";
+"screen_signed_out_subtitle_v2" = "Urządzenie zostało usunięte przez jedną z poniższych przyczyn. Zaloguj się ponownie, aby powiązać to urządzenie ze swoim kontem.";
+"screen_signed_out_title" = "Urządzenie usunięte";
 "screen_signout_confirmation_dialog_content" = "Czy na pewno chcesz usunąć to urządzenie?";
 "screen_signout_confirmation_dialog_submit" = "Usuń to urządzenie";
 "screen_signout_confirmation_dialog_title" = "Usuń to urządzenie";

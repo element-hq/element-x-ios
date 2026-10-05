@@ -86,6 +86,7 @@
 "action_choose_file" = "Choose file";
 "action_choose_photo" = "Fotoğraf seç";
 "action_clear" = "Temizle";
+"action_clear_all" = "Clear all";
 "action_close" = "Kapat";
 "action_complete_verification" = "Doğrulamayı tamamlayın";
 "action_confirm" = "Onayla";
@@ -239,6 +240,7 @@
 "common_call_started" = "Çağrı başladı";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Sohbet yedekleme";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Panoya kopyalandı";
 "common_copyright" = "Telif Hakkı";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Dosya silindi";
 "common_file_saved" = "Dosya kaydedildi";
 "common_forward_message" = "Mesajı ilet";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Sık kullanılanlar";
 "common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Resim";
 "common_in_reply_to" = "Cevap olarak %1$@";
 "common_invite_unknown_profile" = "Bu Matrix Kimliği bulunamıyor, bu nedenle davet alınmayabilir.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Paylaşılan konum";
 "common_shared_space" = "Shared space";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Oturumu kapatma";
 "common_something_went_wrong" = "Bir şeyler ters gitti";
 "common_something_went_wrong_message" = "Bir sorunla karşılaştık. Lütfen tekrar deneyin.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Bahsetmeler";
 "screen_notification_settings_notification_section_title" = "Bana bildir";
 "screen_notification_settings_room_mention_label" = "Bana @room'da bildir";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Konu ekle";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Şifrelenmiş";
 "screen_room_details_badge_not_encrypted" = "Şifrelenmemiş";
 "screen_room_details_badge_public" = "Herkese açık oda";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Uygulamayı doğrulanmış başka bir cihazda açın";
 "screen_session_verification_user_initiator_subtitle" = "Daha fazla güvenlik için, cihazlarınızdaki bir dizi emojiyi karşılaştırarak bu kullanıcıyı doğrulayın. Bunu, iletişim kurmak için güvenilir bir yol kullanarak yapın.";
 "screen_session_verification_user_initiator_title" = "Bu kullanıcıyı doğrula?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Ekstra güvenlik için, başka bir kullanıcı kimliğinizi doğrulamak istiyor. Karşılaştırmanız için size bir dizi emoji gösterilecektir.";
 "screen_session_verification_waiting_another_device_subtitle" = "Diğer cihazda bir açılır pencere görmelisiniz. Doğrulamayı şimdi oradan başlatın.";
 "screen_session_verification_waiting_another_device_title" = "Diğer cihazda doğrulamayı başlat";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Kabul edildikten sonra doğrulama işlemine devam edebileceksiniz.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Devam etmek için diğer oturumunuzda doğrulama işlemini başlatma isteğini kabul edin.";
 "screen_session_verification_waiting_to_accept_title" = "İsteğin kabul edilmesi bekleniyor";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Oturumu başka bir oturumdan sildiniz";
 "screen_signed_out_reason_3" = "Sunucunuzun yöneticisi erişiminizi geçersiz kıldı";
 "screen_signed_out_subtitle" = "Aşağıda listelenen nedenlerden biri nedeniyle oturumunuz kapatılmış olabilir. %@ kullanmaya devam etmek için lütfen tekrar oturum açın.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Oturumunuz kapatıldı";
 "screen_signout_confirmation_dialog_content" = "Çıkış yapmak istediğinize emin misiniz?";
 "screen_signout_confirmation_dialog_submit" = "Oturumu kapat";

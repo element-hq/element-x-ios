@@ -86,6 +86,7 @@
 "action_choose_file" = "選擇檔案";
 "action_choose_photo" = "選擇照片";
 "action_clear" = "清除";
+"action_clear_all" = "Clear all";
 "action_close" = "關閉";
 "action_complete_verification" = "完成驗證";
 "action_confirm" = "確認";
@@ -239,6 +240,7 @@
 "common_call_started" = "開始通話";
 "common_call_you_declined" = "您拒絕了通話";
 "common_chat_backup" = "聊天室備份";
+"common_chats" = "Chats";
 "common_code_block" = "程式碼區塊";
 "common_copied_to_clipboard" = "已複製到剪貼簿";
 "common_copyright" = "著作權";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "檔案已刪除";
 "common_file_saved" = "檔案已儲存";
 "common_forward_message" = "轉寄訊息";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "經常使用";
 "common_gallery" = "圖庫";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "群組通話進行中";
+"common_header_rooms" = "Rooms";
 "common_image" = "圖片";
 "common_in_reply_to" = "回覆 %1$@";
 "common_invite_unknown_profile" = "找不到此 Matrix ID，因此可能沒有人會收到邀請。";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "分享即時位置";
 "common_shared_location" = "位置分享";
 "common_shared_space" = "共享空間";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "正在移除裝置";
 "common_something_went_wrong" = "有錯誤發生";
 "common_something_went_wrong_message" = "我們了遇到了問題。請再試一次。";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "提及";
 "screen_notification_settings_notification_section_title" = "通知我";
 "screen_notification_settings_room_mention_label" = "提及 @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "自訂";
 "screen_notification_settings_sound_custom_sound_button_title" = "自訂音效⋯⋯";
 "screen_notification_settings_sound_delete_sound_error_title" = "刪除檔案時發生錯誤";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "（選擇性）";
 "screen_room_confirm_removal_title" = "確認移除";
 "screen_room_details_add_topic_title" = "新增主題";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "已加密";
 "screen_room_details_badge_not_encrypted" = "未加密";
 "screen_room_details_badge_public" = "公開的聊天室";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "在另外一個已驗證的裝置上開啟應用程式";
 "screen_session_verification_user_initiator_subtitle" = "為了提昇安全性，請透過比較您裝置上的一組表情符號來驗證此使用者。請透過可信的通訊方式來執行此動作。";
 "screen_session_verification_user_initiator_title" = "驗證此使用者？";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "為了強化安全性，另一位使用者希望驗證您的數位身分。系統將顯示一組表情符號供您比對。";
 "screen_session_verification_waiting_another_device_subtitle" = "您應該會在其他裝置上看到一個彈出式視窗。立刻從那裡開始驗證。";
 "screen_session_verification_waiting_another_device_title" = "在其他裝置上開始驗證";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "接受後，您就可以繼續進行驗證。";
 "screen_session_verification_waiting_to_accept_subtitle" = "準備開始驗證，請到您的其他工作階段接受請求。";
 "screen_session_verification_waiting_to_accept_title" = "等待接受請求";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "離開";
 "screen_settings_user_status_be_right_back" = "稍後回來";
 "screen_settings_user_status_custom" = "自訂⋯⋯";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "在另一個工作階段刪除了此工作階段";
 "screen_signed_out_reason_3" = "伺服器管理員撤銷了您的存取權限";
 "screen_signed_out_subtitle" = "您可能因為下列某個原因被登出了。請重新登入以繼續使用 %@。";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "您登出了";
 "screen_signout_confirmation_dialog_content" = "您確定要移除此裝置嗎？";
 "screen_signout_confirmation_dialog_submit" = "移除此裝置";
