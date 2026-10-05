@@ -184,6 +184,8 @@ class TimelineMediaPreviewController: QLPreviewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
         barButtonTimer?.invalidate()
         barButtonTimer = nil
     }
