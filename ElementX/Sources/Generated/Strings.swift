@@ -2518,6 +2518,14 @@ internal nonisolated enum L10n {
   internal static var screenModerationAndSafetyOtherUsersHeading: String { return L10n.tr("Localizable", "screen_moderation_and_safety_other_users_heading") }
   /// Your appearance
   internal static var screenModerationAndSafetySharePresenceHeading: String { return L10n.tr("Localizable", "screen_moderation_and_safety_share_presence_heading") }
+  /// Add account
+  internal static var screenMultiAccountAnnouncementAction: String { return L10n.tr("Localizable", "screen_multi_account_announcement_action") }
+  /// Go to %1$@ to sign into another account. Then you can easily switch between them.
+  internal static func screenMultiAccountAnnouncementDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_multi_account_announcement_description", String(describing: p1))
+  }
+  /// You can now add multiple accounts
+  internal static var screenMultiAccountAnnouncementTitle: String { return L10n.tr("Localizable", "screen_multi_account_announcement_title") }
   /// You can change your settings later.
   internal static var screenNotificationOptinSubtitle: String { return L10n.tr("Localizable", "screen_notification_optin_subtitle") }
   /// Allow notifications and never miss a message
