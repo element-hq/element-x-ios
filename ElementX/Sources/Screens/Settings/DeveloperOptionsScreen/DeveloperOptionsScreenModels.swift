@@ -6,6 +6,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 
 enum DeveloperOptionsScreenViewModelAction {
@@ -71,6 +72,10 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var linkNewDeviceEnabled: Bool { get set }
     
     var globalSearchEnabled: Bool { get set }
+    
+    var multiAccountEnabled: Bool { get set }
+    var multiAccountEnabledPublisher: AnyPublisher<Bool, Never> { get }
+    var hasSeenMultiAccountAnnouncement: Bool { get set }
     
     var nativeCallEnabled: Bool { get set }
 }

@@ -254,6 +254,7 @@ enum A11yIdentifiers {
     struct SettingsScreen {
         let done = "settings-done"
         let account = "settings-account"
+        let addAccount = "settings-add_account"
         let secureBackup = "settings-secure_backup"
         let notifications = "settings-notifications"
         let analytics = "settings-analytics"

@@ -59,6 +59,13 @@ struct DeveloperOptionsScreen: View {
                     .generalSectionRows(isSignedIn: context.viewState.isSignedIn)
             }
             
+            Section("Accounts") {
+                Toggle(isOn: $context.multiAccountEnabled) {
+                    Text("Multi-account")
+                    Text("Switching it on shows the announcement again.")
+                }
+            }
+            
             Section("Room List") {
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")

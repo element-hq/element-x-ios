@@ -139,6 +139,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: true)
     var hasSeenNewSoundBanner: Bool
     
+    /// Defaults to `true` so new users never see it. Developer options arms it for now, an upgrade migration will at launch.
+    @UserPreference(defaultValue: true)
+    var hasSeenMultiAccountAnnouncement: Bool
+    
     /// The initial set of account providers shown to the user in the authentication flow.
     ///
     /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
@@ -470,6 +474,9 @@ final nonisolated class AppSettings: @unchecked Sendable {
     /// Runs calls through the native matrix-rust-rtc stack instead of the Element Call web view.
     @UserPreference(defaultValue: false)
     var nativeCallEnabled: Bool
+    
+    @UserPreference(defaultValue: false)
+    var multiAccountEnabled: Bool
     
     init(store: UserDefaultsProtocol) {
         self.store = store
