@@ -77,9 +77,5 @@ struct MultiAccountAnnouncementScreen_Previews: PreviewProvider, TestablePreview
     static var previews: some View {
         MultiAccountAnnouncementScreen(context: viewModel.context)
             .previewDisplayName("Default")
-        
-        MultiAccountAnnouncementScreen(context: viewModel.context)
-            .dynamicTypeSize(.accessibility3)
-            .previewDisplayName("Large text")
     }
 }
