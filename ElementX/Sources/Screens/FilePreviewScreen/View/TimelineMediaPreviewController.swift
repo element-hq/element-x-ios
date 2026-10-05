@@ -23,8 +23,9 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var barButtonTimer: Timer?
     
     @CancellableTask private var settledRefreshTask: Task<Void, Never>?
-    /// Media whose file loaded whilst waiting to refresh, as QuickLook only shows a file once its page is refreshed.
-    private var loadedItemIDs: Set<MediaPreviewItemID> = []
+    /// Media whose file loaded, kept until the swipe settles as each load is only reported once.
+    /// Whichever is on display by then gets refreshed and the rest are dropped.
+    private var itemIDsAwaitingRefresh: Set<MediaPreviewItemID> = []
     
     private var pageScrollViewObservation: AnyCancellable?
     /// The content offset that the page scroll view rests at when showing the current item.
@@ -286,7 +287,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     }
     
     private func handleFileLoaded(itemID: MediaPreviewItemID) {
-        loadedItemIDs.insert(itemID)
+        itemIDsAwaitingRefresh.insert(itemID)
         refreshCurrentItemWhenSettled()
     }
     
@@ -299,10 +300,10 @@ class TimelineMediaPreviewController: QLPreviewController {
             }
             guard !Task.isCancelled else { return }
             
-            let isDisplayedMediaLoaded = (currentPreviewItem as? TimelineMediaPreviewItem.Media).map { loadedItemIDs.contains($0.id) } ?? false
-            loadedItemIDs.removeAll()
+            let isDisplayedMediaAwaitingRefresh = (currentPreviewItem as? TimelineMediaPreviewItem.Media).map { itemIDsAwaitingRefresh.contains($0.id) } ?? false
+            itemIDsAwaitingRefresh.removeAll()
             
-            if isDisplayedMediaLoaded || isDisplayedPlaceholderStale {
+            if isDisplayedMediaAwaitingRefresh || isDisplayedPlaceholderStale {
                 refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
             }
         }
