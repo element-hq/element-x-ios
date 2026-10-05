@@ -86,6 +86,7 @@
 "action_choose_file" = "Выбраць файл";
 "action_choose_photo" = "Выбраць фота";
 "action_clear" = "Ачысціць";
+"action_clear_all" = "Clear all";
 "action_close" = "Закрыць";
 "action_complete_verification" = "Праверка завершана";
 "action_confirm" = "Пацвердзіць";
@@ -239,6 +240,7 @@
 "common_call_started" = "Званок пачаўся";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Рэзервовае капіраванне чатаў";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Скапіравана ў буфер абмену";
 "common_copyright" = "Аўтарскае права";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Файл выдалены";
 "common_file_saved" = "Файл захаваны";
 "common_forward_message" = "Перасылка паведамлення";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Frequently used";
 "common_gallery" = "Галерэя";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Відарыс";
 "common_in_reply_to" = "У адказ на %1$@";
 "common_invite_unknown_profile" = "Гэты Matrix ID не знойдзены, таму запрашэнне можа быць не атрымана.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Абагулена месцазнаходжанне";
 "common_shared_space" = "Shared space";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Выхад";
 "common_something_went_wrong" = "Нешта пайшло не так";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Згадванні";
 "screen_notification_settings_notification_section_title" = "Апавясціць мяне";
 "screen_notification_settings_room_mention_label" = "Апавясціць пра @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Дадаць тэму";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Зашыфраваны";
 "screen_room_details_badge_not_encrypted" = "Не зашыфраваны";
 "screen_room_details_badge_public" = "Публічны пакой";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
 "screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Для працягу працы прыміце запыт на запуск працэсу праверкі ў іншым сеансе.";
 "screen_session_verification_waiting_to_accept_title" = "Чаканне прыняцця запыту";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Вы выдалілі сеанс з іншага сеансу";
 "screen_signed_out_reason_3" = "Адміністратар вашага сервера ануляваў ваш доступ";
 "screen_signed_out_subtitle" = "Магчыма, вы выйшлі з сістэмы па адной з прычын, пералічаных ніжэй. Калі ласка, увайдзіце яшчэ раз, каб працягнуць выкарыстанне %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Вы выйшлі з сістэмы";
 "screen_signout_confirmation_dialog_content" = "Вы ўпэўненыя, што хочаце выдаліць гэту прыладу?";
 "screen_signout_confirmation_dialog_submit" = "Выйсці";

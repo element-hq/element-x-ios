@@ -86,6 +86,7 @@
 "action_choose_file" = "Choose file";
 "action_choose_photo" = "Välj bild";
 "action_clear" = "Rensa";
+"action_clear_all" = "Clear all";
 "action_close" = "Stäng";
 "action_complete_verification" = "Slutför verifiering";
 "action_confirm" = "Bekräfta";
@@ -239,6 +240,7 @@
 "common_call_started" = "Samtal startat";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Chattsäkerhetskopia";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopierad till klippbordet";
 "common_copyright" = "Upphovsrätt";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Fil borttagen";
 "common_file_saved" = "Fil sparad";
 "common_forward_message" = "Vidarebefordra meddelande";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Används ofta";
 "common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Bild";
 "common_in_reply_to" = "Som svar på %1$@";
 "common_invite_unknown_profile" = "Det här Matrix-ID:t kan inte hittas, så inbjudan kanske inte tas emot.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Delade plats";
 "common_shared_space" = "Shared space";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Loggar ut";
 "common_something_went_wrong" = "Något gick fel";
 "common_something_went_wrong_message" = "Vi stötte på ett problem. Vänligen försök igen.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Omnämnanden";
 "screen_notification_settings_notification_section_title" = "Meddela mig för";
 "screen_notification_settings_room_mention_label" = "Omnämnanden av @rum";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Lägg till ämne";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Krypterat";
 "screen_room_details_badge_not_encrypted" = "Inte krypterat";
 "screen_room_details_badge_public" = "Offentligt rum";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Öppna appen på en annan verifierad enhet";
 "screen_session_verification_user_initiator_subtitle" = "För extra säkerhet, verifiera den här användaren genom att jämföra en uppsättning emojier på dina enheter. Gör detta med hjälp av ett betrott kommunikationssätt.";
 "screen_session_verification_user_initiator_title" = "Verifiera den här användaren?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "För extra säkerhet vill en annan användare verifiera din identitet. Du kommer att visas en uppsättning emojier att jämföra.";
 "screen_session_verification_waiting_another_device_subtitle" = "Du bör se en popup på den andra enheten. Starta verifieringen därifrån nu.";
 "screen_session_verification_waiting_another_device_title" = "Starta verifieringen på den andra enheten";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "När det har accepterats kommer du kunna fortsätta verifieringen.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Godkänn begäran om att starta verifieringsprocessen på din andra session för att fortsätta.";
 "screen_session_verification_waiting_to_accept_title" = "Väntar på att acceptera begäran";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Du har raderat sessionen från en annan session";
 "screen_signed_out_reason_3" = "Din servers administratör har ogiltigförklarat din åtkomst";
 "screen_signed_out_subtitle" = "Du kan ha loggats ut av någon av anledningarna nedan. Vänligen logga in igen för att fortsätta använda %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Du är utloggad";
 "screen_signout_confirmation_dialog_content" = "Är du säker på att du vill ta bort den här enheten?";
 "screen_signout_confirmation_dialog_submit" = "Ta bort den här enheten";

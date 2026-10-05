@@ -86,6 +86,7 @@
 "action_choose_file" = "Choose file";
 "action_choose_photo" = "Pasirinkti nuotrauką";
 "action_clear" = "Išvalyti";
+"action_clear_all" = "Clear all";
 "action_close" = "Uždaryti";
 "action_complete_verification" = "Užbaigti patvirtinimą";
 "action_confirm" = "Patvirtinti";
@@ -239,6 +240,7 @@
 "common_call_started" = "Call started";
 "common_call_you_declined" = "You declined a call";
 "common_chat_backup" = "Pokalbio atsarginė kopija";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Copied to clipboard";
 "common_copyright" = "Autorinės teisės";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "File deleted";
 "common_file_saved" = "File saved";
 "common_forward_message" = "Persiųsti žinutę";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Frequently used";
 "common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Vaizdas";
 "common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "Šio Matrix ID nepavyksta rasti, todėl kvietimas gali būti negautas.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Bendrinta vieta";
 "common_shared_space" = "Shared space";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Atsijungiama";
 "common_something_went_wrong" = "Something went wrong";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Mentions";
 "screen_notification_settings_notification_section_title" = "Notify me for";
 "screen_notification_settings_room_mention_label" = "Mentions of @room";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Custom";
 "screen_notification_settings_sound_custom_sound_button_title" = "Custom sound...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Error deleting file";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Pridėti temą";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
 "screen_room_details_badge_public" = "Public room";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
 "screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Kitoje sesijoje priimkite prašymą pradėti tikrinimo procesą, kad galėtumėte tęsti.";
 "screen_session_verification_waiting_to_accept_title" = "Laukiama prašymo priėmimo";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1577,10 +1588,11 @@
 "screen_share_open_osm_maps" = "Atverti programoje „OpenStreetMap“";
 "screen_share_this_location_action" = "Bendrinti pasirinktą vietą";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
-"screen_signed_out_reason_1" = "You’ve changed your password on another session";
-"screen_signed_out_reason_2" = "You have deleted the session from another session";
-"screen_signed_out_reason_3" = "Your server’s administrator has invalidated your access";
+"screen_signed_out_reason_1" = "You removed this device from your account";
+"screen_signed_out_reason_2" = "You’ve changed your password on another device";
+"screen_signed_out_reason_3" = "Your server's session expired or the administrator has blocked your access";
 "screen_signed_out_subtitle" = "You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Esate atsijungę";
 "screen_signout_confirmation_dialog_content" = "Ar tikrai norite pašalinti šį įrenginį?";
 "screen_signout_confirmation_dialog_submit" = "Atsijungti";

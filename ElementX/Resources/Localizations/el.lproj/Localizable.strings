@@ -86,6 +86,7 @@
 "action_choose_file" = "Επιλέξτε αρχείο";
 "action_choose_photo" = "Επιλογή φωτογραφίας";
 "action_clear" = "Εκκαθάριση";
+"action_clear_all" = "Clear all";
 "action_close" = "Κλείσιμο";
 "action_complete_verification" = "Ολοκλήρωση επαλήθευσης";
 "action_confirm" = "Επιβεβαίωση";
@@ -239,6 +240,7 @@
 "common_call_started" = "Η κλήση ξεκίνησε";
 "common_call_you_declined" = "Απορρίψατε μια κλήση";
 "common_chat_backup" = "Αντίγραφο ασφαλείας συνομιλίας";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Αντιγράφηκε στο πρόχειρο";
 "common_copyright" = "Πνευματικά δικαιώματα";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Το αρχείο διαγράφηκε";
 "common_file_saved" = "Το αρχείο αποθηκεύτηκε";
 "common_forward_message" = "Προώθηση μηνύματος";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Χρησιμοποιείται συχνά";
 "common_gallery" = "Γκαλερί";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Ομαδική κλήση σε εξέλιξη";
+"common_header_rooms" = "Rooms";
 "common_image" = "Εικόνα";
 "common_in_reply_to" = "Σε απάντηση στον χρήστη %1$@";
 "common_invite_unknown_profile" = "Αυτό το Matrix ID δεν μπορεί να βρεθεί, επομένως η πρόσκληση ενδέχεται να μην ληφθεί.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Κοινόχρηστη ζωντανή τοποθεσία";
 "common_shared_location" = "Κοινόχρηστη τοποθεσία";
 "common_shared_space" = "Κοινόχρηστος χώρος";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Αφαίρεση συσκευής";
 "common_something_went_wrong" = "Κάτι πήγε στραβά";
 "common_something_went_wrong_message" = "Αντιμετωπίσαμε ένα πρόβλημα. Παρακαλώ προσπαθήστε ξανά.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Αναφορές";
 "screen_notification_settings_notification_section_title" = "Ειδοποίησέ με για";
 "screen_notification_settings_room_mention_label" = "Αναφορές στην @αίθουσα";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Προσαρμοσμένο";
 "screen_notification_settings_sound_custom_sound_button_title" = "Προσαρμοσμένος ήχος...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Σφάλμα κατά τη διαγραφή αρχείου";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Προσθήκη θέματος";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Κρυπτογραφημένο";
 "screen_room_details_badge_not_encrypted" = "Μη κρυπτογραφημένο";
 "screen_room_details_badge_public" = "Δημόσια αίθουσα";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Άνοιξε την εφαρμογή σε άλλη επαληθευμένη συσκευή";
 "screen_session_verification_user_initiator_subtitle" = "Για επιπλέον ασφάλεια, επαληθεύστε αυτόν το χρήστη συγκρίνοντας ένα σύνολο emoji στις συσκευές σας. Κάντε το αυτό χρησιμοποιώντας έναν αξιόπιστο τρόπο επικοινωνίας.";
 "screen_session_verification_user_initiator_title" = "Επαλήθευση αυτού του χρήστη;";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Για επιπλέον ασφάλεια, ένας άλλος χρήστης θέλει να επαληθεύσει την ψηφιακή σας ταυτότητα. Θα σας εμφανιστεί ένα σύνολο emoji για σύγκριση.";
 "screen_session_verification_waiting_another_device_subtitle" = "Πρόκειται να δεις ένα αναδυόμενο παράθυρο στην άλλη συσκευή. Ξεκίνα την επαλήθευση από εκεί τώρα.";
 "screen_session_verification_waiting_another_device_title" = "Έναρξη επαλήθευσης στην άλλη συσκευή";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Μόλις γίνει αποδεκτό, θα μπορείτε να συνεχίσετε με την επαλήθευση.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Αποδέξου το αίτημα για να ξεκινήσεις τη διαδικασία επαλήθευσης στην άλλη συνεδρία σου για να συνεχίσεις.";
 "screen_session_verification_waiting_to_accept_title" = "Αναμονή για αποδοχή αιτήματος";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Λείπει";
 "screen_settings_user_status_be_right_back" = "Επιστρέφω αμέσως";
 "screen_settings_user_status_custom" = "Προσαρμοσμένη…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Έχεις διαγράψει τη συνεδρία από άλλη συνεδρία";
 "screen_signed_out_reason_3" = "Ο διαχειριστής του διακομιστή σου έχει ακυρώσει την πρόσβασή σου";
 "screen_signed_out_subtitle" = "Μπορεί να έχεις αποσυνδεθεί για έναν από τους λόγους που αναφέρονται παρακάτω. Συνδέσου ξανά για να συνεχίσεις να χρησιμοποιείς %@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Έχεις αποσυνδεθεί";
 "screen_signout_confirmation_dialog_content" = "Είστε βέβαιοι ότι θέλετε να καταργήσετε αυτήν τη συσκευή;";
 "screen_signout_confirmation_dialog_submit" = "Κατάργηση αυτής της συσκευής";

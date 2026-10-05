@@ -86,6 +86,7 @@
 "action_choose_file" = "选择文件";
 "action_choose_photo" = "选择照片";
 "action_clear" = "清除";
+"action_clear_all" = "全部清除";
 "action_close" = "关闭";
 "action_complete_verification" = "完成验证";
 "action_confirm" = "确认";
@@ -239,6 +240,7 @@
 "common_call_started" = "通话已开始";
 "common_call_you_declined" = "你已拒接来电";
 "common_chat_backup" = "聊天记录备份";
+"common_chats" = "聊天";
 "common_code_block" = "代码块";
 "common_copied_to_clipboard" = "已复制到剪贴板";
 "common_copyright" = "版权";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "文件已删除";
 "common_file_saved" = "文件已保存";
 "common_forward_message" = "转发消息";
+"common_forward_to" = "转发到";
 "common_frequently_used" = "常用";
 "common_gallery" = "媒体组";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "群组通话进行中";
+"common_header_rooms" = "房间";
 "common_image" = "图片";
 "common_in_reply_to" = "回复 %1$@";
 "common_invite_unknown_profile" = "找不到此 Matrix ID，因此可能无法收到邀请。";
@@ -329,7 +333,7 @@
 "common_poll_undisclosed_text" = "结果将在投票结束后显示";
 "common_preparing" = "正在准备…";
 "common_privacy_policy" = "隐私政策";
-"common_private" = "私密";
+"common_private" = "私有";
 "common_private_room" = "私有房间";
 "common_private_space" = "私有空间";
 "common_public" = "公共";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "已共享实时位置";
 "common_shared_location" = "共享位置";
 "common_shared_space" = "已共享的空间";
+"common_signed_in" = "已登录";
 "common_signing_out" = "正在移除设备";
 "common_something_went_wrong" = "发生了一些错误";
 "common_something_went_wrong_message" = "我们遇到了一个问题。请重试。";
@@ -784,7 +789,7 @@
 "screen_create_room_new_room_title" = "新房间";
 "screen_create_room_new_space_title" = "新空间";
 "screen_create_room_private_option_description" = "仅限受邀人员加入。";
-"screen_create_room_private_option_title" = "私密";
+"screen_create_room_private_option_title" = "私有";
 "screen_create_room_public_option_description" = "任何人都能找到此房间。\n你可以随时在房间设置中更改。";
 "screen_create_room_public_option_short_description" = "任何人都可以加入，包括你的组织之外的人员。";
 "screen_create_room_public_option_title" = "公共";
@@ -793,7 +798,7 @@
 "screen_create_room_room_access_section_knocking_restricted_option_description" = "%1$@ 中的任何人都可以加入，但其他人必须申请访问。";
 "screen_create_room_room_access_section_knocking_restricted_option_title" = "申请加入";
 "screen_create_room_room_access_section_private_option_description" = "仅限受邀人员加入。";
-"screen_create_room_room_access_section_private_option_title" = "私密";
+"screen_create_room_room_access_section_private_option_title" = "私有";
 "screen_create_room_room_access_section_public_option_description" = "任何人都可以加入，包括你的组织之外的人员。";
 "screen_create_room_room_access_section_public_option_title" = "公共";
 "screen_create_room_room_access_section_restricted_option_description" = "%1$@ 中的任何人都可以加入。";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "提及";
 "screen_notification_settings_notification_section_title" = "通知我以下类型";
 "screen_notification_settings_room_mention_label" = "含有 @room 的提及";
-"screen_notification_settings_show_all_activity" = "在房间列表上显示所有活动（用于未读消息的圆点或数字）";
+"screen_notification_settings_show_all_activity_subtitle" = "用于未读消息的圆点或数字";
+"screen_notification_settings_show_all_activity_title" = "显示房间列表中的所有活动";
 "screen_notification_settings_sound_custom_fallback" = "自定义";
 "screen_notification_settings_sound_custom_sound_button_title" = "自定义提示音…";
 "screen_notification_settings_sound_delete_sound_error_title" = "删除文件时出错";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "（可选）";
 "screen_room_confirm_removal_title" = "移除消息？";
 "screen_room_details_add_topic_title" = "添加主题";
+"screen_room_details_audio_push_to_talk" = "按下发言";
+"screen_room_details_audio_title" = "房间音频";
+"screen_room_details_audio_video_calls" = "视频通话";
 "screen_room_details_badge_encrypted" = "已加密";
 "screen_room_details_badge_not_encrypted" = "未加密";
 "screen_room_details_badge_public" = "公共房间";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "在另一台验证的设备上打开应用";
 "screen_session_verification_user_initiator_subtitle" = "为提高安全性，请通过比较设备上的一组 Emoji 以验证此用户。通过使用安全的方式比如面对面来实施此步骤。";
 "screen_session_verification_user_initiator_title" = "验证此用户？";
+"screen_session_verification_user_requesting_verification" = "用户正在请求验证：";
 "screen_session_verification_user_responder_subtitle" = "为提高安全性，另一用户想要验证你的数字身份。你将看到一组 Emoij 供你比较。";
 "screen_session_verification_waiting_another_device_subtitle" = "你应该会在另一台设备上看到一个弹出窗口。现在从该处开始验证。";
 "screen_session_verification_waiting_another_device_title" = "在另一台设备上开始验证";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "一旦被接受，你将能够继续进行验证。";
 "screen_session_verification_waiting_to_accept_subtitle" = "接受此请求以在另一会话中开始验证流程以继续操作。";
 "screen_session_verification_waiting_to_accept_title" = "等待接受请求";
+"screen_settings_add_account" = "添加账户";
 "screen_settings_user_status_away" = "离开";
 "screen_settings_user_status_be_right_back" = "马上回来";
 "screen_settings_user_status_custom" = "自定义…";
@@ -1577,11 +1588,12 @@
 "screen_share_open_osm_maps" = "在 OpenStreetMap 中打开";
 "screen_share_this_location_action" = "分享选定的位置";
 "screen_sharing_location_option_sheet_title" = "共享选项";
-"screen_signed_out_reason_1" = "你在另一个会话中更改了密码";
-"screen_signed_out_reason_2" = "你已从其它会话中删除此会话";
-"screen_signed_out_reason_3" = "服务器管理员已禁止你的访问";
+"screen_signed_out_reason_1" = "你已为账户移除此设备";
+"screen_signed_out_reason_2" = "你已在另一设备上更改密码";
+"screen_signed_out_reason_3" = "你的服务器会话已过期，或管理员已阻止你的访问。";
 "screen_signed_out_subtitle" = "你可能因以下原因而被注销。请重新登录以继续使用 %@。";
-"screen_signed_out_title" = "你已注销";
+"screen_signed_out_subtitle_v2" = "此设备因以下原因之一已被移除。请重新登录以连接设备到你的账户。";
+"screen_signed_out_title" = "设备已移除";
 "screen_signout_confirmation_dialog_content" = "你确定要移除此设备？";
 "screen_signout_confirmation_dialog_submit" = "移除此设备";
 "screen_signout_confirmation_dialog_title" = "移除此设备";

@@ -638,6 +638,8 @@ internal nonisolated enum L10n {
   internal static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Group call in progress
   internal static var commonGroupCallInProgress: String { return L10n.tr("Localizable", "common_group_call_in_progress") }
+  /// Rooms
+  internal static var commonHeaderRooms: String { return L10n.tr("Localizable", "common_header_rooms") }
   /// Image
   internal static var commonImage: String { return L10n.tr("Localizable", "common_image") }
   /// In reply to %1$@
@@ -852,6 +854,8 @@ internal nonisolated enum L10n {
   internal static var commonSharedLocation: String { return L10n.tr("Localizable", "common_shared_location") }
   /// Shared space
   internal static var commonSharedSpace: String { return L10n.tr("Localizable", "common_shared_space") }
+  /// Signed in
+  internal static var commonSignedIn: String { return L10n.tr("Localizable", "common_signed_in") }
   /// Removing device
   internal static var commonSigningOut: String { return L10n.tr("Localizable", "common_signing_out") }
   /// Something went wrong
@@ -3040,6 +3044,12 @@ internal nonisolated enum L10n {
   internal static var screenRoomConfirmRemovalTitle: String { return L10n.tr("Localizable", "screen_room_confirm_removal_title") }
   /// Add topic
   internal static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
+  /// Push to talk
+  internal static var screenRoomDetailsAudioPushToTalk: String { return L10n.tr("Localizable", "screen_room_details_audio_push_to_talk") }
+  /// Room Audio
+  internal static var screenRoomDetailsAudioTitle: String { return L10n.tr("Localizable", "screen_room_details_audio_title") }
+  /// Video calls
+  internal static var screenRoomDetailsAudioVideoCalls: String { return L10n.tr("Localizable", "screen_room_details_audio_video_calls") }
   /// Encrypted
   internal static var screenRoomDetailsBadgeEncrypted: String { return L10n.tr("Localizable", "screen_room_details_badge_encrypted") }
   /// Not encrypted
@@ -3615,6 +3625,8 @@ internal nonisolated enum L10n {
   internal static var screenSessionVerificationUserInitiatorSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_user_initiator_subtitle") }
   /// Verify this user?
   internal static var screenSessionVerificationUserInitiatorTitle: String { return L10n.tr("Localizable", "screen_session_verification_user_initiator_title") }
+  /// User requesting verification:
+  internal static var screenSessionVerificationUserRequestingVerification: String { return L10n.tr("Localizable", "screen_session_verification_user_requesting_verification") }
   /// For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare.
   internal static var screenSessionVerificationUserResponderSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_user_responder_subtitle") }
   /// You should see a popup on the other device. Start the verification from there now.
@@ -3631,6 +3643,8 @@ internal nonisolated enum L10n {
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
   internal static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
+  /// Add account
+  internal static var screenSettingsAddAccount: String { return L10n.tr("Localizable", "screen_settings_add_account") }
   /// Away
   internal static var screenSettingsUserStatusAway: String { return L10n.tr("Localizable", "screen_settings_user_status_away") }
   /// Be right back
@@ -3667,17 +3681,19 @@ internal nonisolated enum L10n {
   internal static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
   /// Sharing options
   internal static var screenSharingLocationOptionSheetTitle: String { return L10n.tr("Localizable", "screen_sharing_location_option_sheet_title") }
-  /// You’ve changed your password on another session
+  /// You removed this device from your account
   internal static var screenSignedOutReason1: String { return L10n.tr("Localizable", "screen_signed_out_reason_1") }
-  /// You have deleted the session from another session
+  /// You’ve changed your password on another device
   internal static var screenSignedOutReason2: String { return L10n.tr("Localizable", "screen_signed_out_reason_2") }
-  /// Your server’s administrator has invalidated your access
+  /// Your server's session expired or the administrator has blocked your access
   internal static var screenSignedOutReason3: String { return L10n.tr("Localizable", "screen_signed_out_reason_3") }
   /// You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.
   internal static func screenSignedOutSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_signed_out_subtitle", String(describing: p1))
   }
-  /// You’re signed out
+  /// This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.
+  internal static var screenSignedOutSubtitleV2: String { return L10n.tr("Localizable", "screen_signed_out_subtitle_v2") }
+  /// Device removed
   internal static var screenSignedOutTitle: String { return L10n.tr("Localizable", "screen_signed_out_title") }
   /// Are you sure you want to remove this device?
   internal static var screenSignoutConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_content") }

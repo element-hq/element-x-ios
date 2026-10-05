@@ -86,6 +86,7 @@
 "action_choose_file" = "Valitse tiedosto";
 "action_choose_photo" = "Valitse kuva";
 "action_clear" = "Tyhjennä";
+"action_clear_all" = "Clear all";
 "action_close" = "Sulje";
 "action_complete_verification" = "Viimeistele vahvistus";
 "action_confirm" = "Vahvista";
@@ -239,6 +240,7 @@
 "common_call_started" = "Puhelu alkoi";
 "common_call_you_declined" = "Hylkäsit puhelun";
 "common_chat_backup" = "Keskustelujen varmuuskopiointi";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Kopioitu leikepöydälle";
 "common_copyright" = "Tekijänoikeudet";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Tiedosto poistettu";
 "common_file_saved" = "Tiedosto tallennettu";
 "common_forward_message" = "Välitä viesti";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Usein käytetyt";
 "common_gallery" = "Galleria";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Ryhmäpuhelu käynnissä";
+"common_header_rooms" = "Rooms";
 "common_image" = "Kuva";
 "common_in_reply_to" = "Vastauksena käyttäjälle %1$@";
 "common_invite_unknown_profile" = "Tätä Matrix-tunnusta ei löytynyt, joten kutsu ei välttämättä mene perille.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Jaettu reaaliaikainen sijainti";
 "common_shared_location" = "Jaettu sijainti";
 "common_shared_space" = "Jaettu tila";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Poistetaan laitetta";
 "common_something_went_wrong" = "Jokin meni pieleen";
 "common_something_went_wrong_message" = "Kohtasimme ongelman. Yritä uudelleen.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Maininnat";
 "screen_notification_settings_notification_section_title" = "Ilmoita minulle";
 "screen_notification_settings_room_mention_label" = "@room-maininnat";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Mukautettu";
 "screen_notification_settings_sound_custom_sound_button_title" = "Mukautettu ääni...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Virhe tiedoston poistamisessa";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Valinnainen)";
 "screen_room_confirm_removal_title" = "Vahvista poistaminen";
 "screen_room_details_add_topic_title" = "Lisää aihe";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Salattu";
 "screen_room_details_badge_not_encrypted" = "Ei salattu";
 "screen_room_details_badge_public" = "Julkinen huone";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Avaa sovellus toisella vahvistetulla laitteella";
 "screen_session_verification_user_initiator_subtitle" = "Vahvista tämä käyttäjä turvallisuuden lisäämiseksi vertaamalla emojeja laitteillanne. Tee tämä käyttämällä luotettavaa viestintätapaa.";
 "screen_session_verification_user_initiator_title" = "Vahvistetaanko tämä käyttäjä?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Toinen käyttäjä haluaa vahvistaa digitaalisen identiteettisi turvallisuuden lisäämiseksi. Sinulle näytetään joukko emojeja vertailtavaksi.";
 "screen_session_verification_waiting_another_device_subtitle" = "Sinun pitäisi nähdä ponnahdusikkuna toisessa laitteessa. Aloita vahvistus nyt sieltä.";
 "screen_session_verification_waiting_another_device_title" = "Aloita vahvistus toisella laitteella";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Kun pyyntö on hyväksytty, voit jatkaa vahvistusta.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Hyväksy vahvistuspyyntö toisella laitteella jatkaaksesi.";
 "screen_session_verification_waiting_to_accept_title" = "Odotetaan pyynnön hyväksymistä";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Poissa";
 "screen_settings_user_status_be_right_back" = "Palaan pian";
 "screen_settings_user_status_custom" = "Mukautettu…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Olet poistanut istunnon toisesta istunnosta";
 "screen_signed_out_reason_3" = "Palvelimesi ylläpitäjä on mitätöinyt käyttöoikeutesi";
 "screen_signed_out_subtitle" = "Sinut on saatettu kirjata ulos jostakin alla luetellusta syystä. Kirjaudu uudelleen sisään jatkaaksesi %@ -sovelluksen käyttöä.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Sinut on kirjattu ulos";
 "screen_signout_confirmation_dialog_content" = "Haluatko varmasti poistaa tämän laitteen?";
 "screen_signout_confirmation_dialog_submit" = "Poista tämä laite";

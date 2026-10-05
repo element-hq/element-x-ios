@@ -86,6 +86,7 @@
 "action_choose_file" = "Faylni tanlang";
 "action_choose_photo" = "Fotosuratni tanlang";
 "action_clear" = "Tozalash";
+"action_clear_all" = "Clear all";
 "action_close" = "Yopish";
 "action_complete_verification" = "To'liq tekshirish";
 "action_confirm" = "Tasdiqlash";
@@ -239,6 +240,7 @@
 "common_call_started" = "Qoʻngʻiroq boshlandi";
 "common_call_you_declined" = "Siz qoʻngʻiroqni rad etdingiz";
 "common_chat_backup" = "Chatning zaxira nusxasi";
+"common_chats" = "Chats";
 "common_code_block" = "Code block";
 "common_copied_to_clipboard" = "Buferga nusxa koʻchirildi";
 "common_copyright" = "Mualliflik huquqi";
@@ -277,10 +279,12 @@
 "common_file_deleted" = "Fayl o'chirildi";
 "common_file_saved" = "Fayl saqlandi";
 "common_forward_message" = "Xabarni yo'naltirish";
+"common_forward_to" = "Forward to";
 "common_frequently_used" = "Tez-tez ishlatiladigan";
 "common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Surat";
 "common_in_reply_to" = "%1$@ga Javob bering";
 "common_invite_unknown_profile" = "Ushbu Matrix identifikatori topilmadi, shuning uchun taklif qabul qilinmasligi mumkin.";
@@ -371,6 +375,7 @@
 "common_shared_live_location" = "Ulashilgan jonli joylashuv";
 "common_shared_location" = "Joylashuvi ulashildi";
 "common_shared_space" = "Umumiy maydon";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Qurilma olib tashlanmoqda";
 "common_something_went_wrong" = "Nimadir xato ketdi";
 "common_something_went_wrong_message" = "Muammoga duch keldik. Iltimos, qayta urinib koʻring.";
@@ -1097,7 +1102,8 @@
 "screen_notification_settings_mode_mentions" = "Eslatmalar";
 "screen_notification_settings_notification_section_title" = "Menga xabar bering";
 "screen_notification_settings_room_mention_label" = "Menga @room orqali xabar bering";
-"screen_notification_settings_show_all_activity" = "Show all activity in the room list (dots or number of unread messages)";
+"screen_notification_settings_show_all_activity_subtitle" = "Dots or number of unread messages";
+"screen_notification_settings_show_all_activity_title" = "Show all activity in the room list";
 "screen_notification_settings_sound_custom_fallback" = "Maxsus";
 "screen_notification_settings_sound_custom_sound_button_title" = "Maxsus ovoz...";
 "screen_notification_settings_sound_delete_sound_error_title" = "Faylni oʻchirishda xatolik yuz berdi";
@@ -1307,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Mavzu qo'shish";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Shifrlangan";
 "screen_room_details_badge_not_encrypted" = "Shifrlanmagan";
 "screen_room_details_badge_public" = "Jamoat xonasi";
@@ -1551,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Ilovani boshqa tasdiqlangan qurilmada oching";
 "screen_session_verification_user_initiator_subtitle" = "Qo‘shimcha xavfsizlik chorasi sifatida, qurilmalaringizdagi emojilar to‘plamini solishtirish orqali ushbu foydalanuvchini tasdiqlang. Buni ishonchli aloqa usuli yordamida amalga oshiring.";
 "screen_session_verification_user_initiator_title" = "Bu foydalanuvchi tasdiqlansinmi?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "Qo‘shimcha xavfsizlik maqsadida, boshqa foydalanuvchi sizning shaxsingizni tasdiqlashni xohlaydi. Taqqoslash uchun sizga bir qator emojilar ko‘rsatiladi.";
 "screen_session_verification_waiting_another_device_subtitle" = "Boshqa qurilmangizda qalqib chiquvchi oyna paydo bo‘lishi kerak. Tekshirish jarayonini o‘sha yerdan boshlang.";
 "screen_session_verification_waiting_another_device_title" = "Boshqa qurilmada tekshirishni boshlang";
@@ -1559,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Qabul qilinganingizdan so‘ng, tasdiqlash jarayonini davom ettirishingiz mumkin bo‘ladi.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Davom etish uchun boshqa seansda tekshirish jarayonini boshlash soʻrovini qabul qiling.";
 "screen_session_verification_waiting_to_accept_title" = "Soʻrovni qabul qilish kutilmoqda";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1581,6 +1592,7 @@
 "screen_signed_out_reason_2" = "Siz seansni boshqa seansdan o'chirib tashladingiz";
 "screen_signed_out_reason_3" = "Serveringiz administratori ruxsatingizni bekor qildi";
 "screen_signed_out_subtitle" = "Siz quyida sanab o‘tilgan sabablardan biri tufayli tizimdan chiqqan bo‘lishingiz mumkin. Foydalanishni davom ettirish uchun qayta kiring%@.";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
 "screen_signed_out_title" = "Hisobingizdan chiqdingiz";
 "screen_signout_confirmation_dialog_content" = "Haqiqatan ham tizimdan chiqmoqchimisiz?";
 "screen_signout_confirmation_dialog_submit" = "Bu qurilmani olib tashlash";

@@ -82,10 +82,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Przekaż %1$d wiadomości</string>
+			<key>many</key>
+			<string>Przekaż %1$d wiadomości</string>
 			<key>one</key>
-			<string>Forward %1$d message</string>
-			<key>other</key>
-			<string>Forward %1$d messages</string>
+			<string>Przekaż %1$d wiadomość</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>
@@ -620,10 +622,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>few</key>
+			<string>Przekazano %1$d wiadomości</string>
+			<key>many</key>
+			<string>Przekazano %1$d wiadomości</string>
 			<key>one</key>
-			<string>%1$d message forwarded</string>
-			<key>other</key>
-			<string>%1$d messages forwarded</string>
+			<string>Przekazano %1$d wiadomość</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@COUNT@</string>

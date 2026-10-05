@@ -284,6 +284,7 @@
 "common_gallery" = "Gallery";
 "common_gif" = "GIF";
 "common_group_call_in_progress" = "Group call in progress";
+"common_header_rooms" = "Rooms";
 "common_image" = "Image";
 "common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "This Matrix ID can't be found, so the invite might not be received.";
@@ -374,6 +375,7 @@
 "common_shared_live_location" = "Shared live location";
 "common_shared_location" = "Shared location";
 "common_shared_space" = "Shared space";
+"common_signed_in" = "Signed in";
 "common_signing_out" = "Removing device";
 "common_something_went_wrong" = "Something went wrong";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
@@ -1311,6 +1313,9 @@
 "screen_room_confirm_removal_reason_supporting_text" = "(Optional)";
 "screen_room_confirm_removal_title" = "Remove message?";
 "screen_room_details_add_topic_title" = "Add topic";
+"screen_room_details_audio_push_to_talk" = "Push to talk";
+"screen_room_details_audio_title" = "Room Audio";
+"screen_room_details_audio_video_calls" = "Video calls";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
 "screen_room_details_badge_public" = "Public room";
@@ -1555,6 +1560,7 @@
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
 "screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
 "screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_requesting_verification" = "User requesting verification:";
 "screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
@@ -1563,6 +1569,7 @@
 "screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
+"screen_settings_add_account" = "Add account";
 "screen_settings_user_status_away" = "Away";
 "screen_settings_user_status_be_right_back" = "Be right back";
 "screen_settings_user_status_custom" = "Custom…";
@@ -1581,11 +1588,12 @@
 "screen_share_open_osm_maps" = "Open in OpenStreetMap";
 "screen_share_this_location_action" = "Share selected location";
 "screen_sharing_location_option_sheet_title" = "Sharing options";
-"screen_signed_out_reason_1" = "You’ve changed your password on another session";
-"screen_signed_out_reason_2" = "You have deleted the session from another session";
-"screen_signed_out_reason_3" = "Your server’s administrator has invalidated your access";
+"screen_signed_out_reason_1" = "You removed this device from your account";
+"screen_signed_out_reason_2" = "You’ve changed your password on another device";
+"screen_signed_out_reason_3" = "Your server's session expired or the administrator has blocked your access";
 "screen_signed_out_subtitle" = "You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.";
-"screen_signed_out_title" = "You’re signed out";
+"screen_signed_out_subtitle_v2" = "This device was removed for one of the reasons listed below. Please sign in again to connect this device to your account.";
+"screen_signed_out_title" = "Device removed";
 "screen_signout_confirmation_dialog_content" = "Are you sure you want to remove this device?";
 "screen_signout_confirmation_dialog_submit" = "Remove this device";
 "screen_signout_confirmation_dialog_title" = "Remove this device";
