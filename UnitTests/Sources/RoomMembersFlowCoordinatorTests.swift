@@ -51,7 +51,7 @@ struct RoomMembersFlowCoordinatorTests {
         let clientProxy = ClientProxyMock(.init())
         clientProxy.directRoomForUserIDReturnValue = .success(nil)
         
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         
         let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),

@@ -395,7 +395,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                       powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
         
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         userSettings.messageMultiSelectEnabled = isSelecting
         let userSession = UserSessionMock(.init(userSettings: userSettings))
         

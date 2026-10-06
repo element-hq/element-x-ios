@@ -629,31 +629,31 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      userSettings: UserSettings.volatile())
+                                                      userSettings: UserSettings.mock())
     static let noResultsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                           clientProxy: makeClientProxy(),
                                                           mediaProvider: MediaProviderMock(.init()),
                                                           userIndicatorController: UserIndicatorControllerMock(),
-                                                          userSettings: UserSettings.volatile(),
+                                                          userSettings: UserSettings.mock(),
                                                           initialSearchQuery: "John Doe")
     static let roomsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                       clientProxy: makeClientProxy(),
                                                       mediaProvider: MediaProviderMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      userSettings: UserSettings.volatile(),
+                                                      userSettings: UserSettings.mock(),
                                                       initialSearchQuery: "Foundation")
     static let messagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                          clientProxy: makeClientProxy(searchService: makeSearchService(results: .mockResults)),
                                                          mediaProvider: MediaProviderMock(.init()),
                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                         userSettings: UserSettings.volatile(),
+                                                         userSettings: UserSettings.mock(),
                                                          initialSearchQuery: "Foundation",
                                                          initialSearchMode: .messages)
     static let loadingMessagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
                                                                 clientProxy: makeClientProxy(searchService: makeSearchService(paginationState: .loading)),
                                                                 mediaProvider: MediaProviderMock(.init()),
                                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                                userSettings: UserSettings.volatile(),
+                                                                userSettings: UserSettings.mock(),
                                                                 initialSearchQuery: "Foundation",
                                                                 initialSearchMode: .messages)
     
@@ -708,7 +708,7 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func makeUserSettings(breadcrumbs: [SearchBreadcrumb]) -> UserSettings {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         userSettings.searchBreadcrumbs = breadcrumbs
         return userSettings
     }

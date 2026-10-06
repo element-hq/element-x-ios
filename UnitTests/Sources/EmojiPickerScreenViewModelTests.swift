@@ -55,7 +55,7 @@ struct EmojiPickerScreenViewModelTests {
         emojiPickerStream = stream
         
         viewModel = EmojiPickerScreenViewModel(selectedEmojis: selectedEmojis,
-                                               emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                               emojiProvider: EmojiProvider(userSettings: .mock()),
                                                continuation: continuation)
     }
 }

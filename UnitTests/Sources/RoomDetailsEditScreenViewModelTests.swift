@@ -167,7 +167,7 @@ struct RoomDetailsEditScreenViewModelTests {
         userIndicatorController = UserIndicatorControllerMock()
         viewModel = .init(roomProxy: JoinedRoomProxyMock(roomProxyConfiguration),
                           userSession: UserSessionMock(.init()),
-                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: .volatile()),
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: .mock()),
                           userIndicatorController: userIndicatorController)
     }
 }

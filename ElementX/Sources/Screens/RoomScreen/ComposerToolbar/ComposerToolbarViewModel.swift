@@ -852,7 +852,7 @@ extension ComposerToolbarViewModel {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
                                                  mediaProvider: MediaProviderMock(.init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                                 userSettings: .volatile(),
+                                                 userSettings: .mock(),
                                                  analyticsService: AnalyticsServiceMock(.init()),
                                                  composerDraftService: ComposerDraftServiceMock(.init()))
         viewModel.state.bindings.composerFocused = focused

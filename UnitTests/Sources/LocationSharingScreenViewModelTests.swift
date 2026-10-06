@@ -417,7 +417,7 @@ struct LocationSharingScreenViewModelTests {
         let roomProxyMock = JoinedRoomProxyMock(.init(members: .allMembers))
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
                                                    mapURLBuilder: userSettings.mapTilerConfiguration.publisher.value,
@@ -630,7 +630,7 @@ struct LocationSharingScreenViewModelTests {
     
     private mutating func setupViewModel(liveLocationManagerMock: LiveLocationManagerMock,
                                          members: [RoomMemberProxyMock] = .allMembersAsAdmin) {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
                                                    mapURLBuilder: userSettings.mapTilerConfiguration.publisher.value,
@@ -649,7 +649,7 @@ struct LocationSharingScreenViewModelTests {
                                                     liveLocationsSubject: CurrentValueSubject<[LiveLocationShare], Never>,
                                                     members: [RoomMemberProxyMock] = .allMembers,
                                                     isSharingLiveLocationFromThisDevice: Bool = false) {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
         if isSharingLiveLocationFromThisDevice {
             userSettings.liveLocationSharingSessionsByRoomID[Self.roomID] = .init(eventID: "$event:matrix.org", expirationDate: .distantFuture)
         }

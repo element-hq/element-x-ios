@@ -21,7 +21,7 @@ final nonisolated class UserSettings: Sendable {
         self.account = accountSettings
     }
     
-    static func volatile(userID: String = "@me:matrix.org") -> UserSettings {
+    static func mock(userID: String = "@me:matrix.org") -> UserSettings {
         AppSettings.volatile().userSettings(for: userID)
     }
     

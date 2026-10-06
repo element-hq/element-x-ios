@@ -17,7 +17,7 @@ final class MediaUploadingPreprocessorTests {
     var mediaUploadingPreprocessor: MediaUploadingPreprocessor!
     
     init() {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
         userSettings.optimizeMediaUploads = false
         mediaUploadingPreprocessor = MediaUploadingPreprocessor(userSettings: userSettings)
     }

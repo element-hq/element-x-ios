@@ -39,7 +39,7 @@ struct AnalyticsSettingsScreen: View {
 
 struct AnalyticsSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         let viewModel = AnalyticsSettingsScreenViewModel(userSettings: userSettings,
                                                          analytics: AnalyticsServiceMock(.init()))
         AnalyticsSettingsScreen(context: viewModel.context)

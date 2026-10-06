@@ -176,7 +176,7 @@ struct SettingsScreenViewModelTests {
     
     @Test
     mutating func addAccountButtonFollowsTheFeatureFlag() async throws {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         setupViewModel(userSettings: userSettings)
         #expect(!context.viewState.showAddAccountButton)
         
@@ -200,7 +200,7 @@ struct SettingsScreenViewModelTests {
     
     // MARK: - Helpers
     
-    private mutating func setupViewModel(status: UserStatus = .init(), userSettings: UserSettings = .volatile()) {
+    private mutating func setupViewModel(status: UserStatus = .init(), userSettings: UserSettings = .mock()) {
         clientProxy = ClientProxyMock(.init(userID: "", status: status))
         viewModel = SettingsScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                             userSettings: userSettings,

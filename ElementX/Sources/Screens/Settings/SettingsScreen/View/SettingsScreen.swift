@@ -321,7 +321,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    deviceID: "AAAAAAAAAAA",
                                                                                    displayName: "Alice Liddell",
                                                                                    status: .mockFocussing))))
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         userSettings.multiAccountEnabled = true
         return SettingsScreenViewModel(userSession: userSession,
                                        userSettings: userSettings,

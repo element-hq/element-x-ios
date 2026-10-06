@@ -55,7 +55,7 @@ struct TimelineControllerTests {
                                                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
                                   mediaProvider: MediaProviderMock(.init()),
-                                  userSettings: .volatile())
+                                  userSettings: .mock())
     }
     
     /// The live timeline's items are only published once any initial focus attempt has finished.

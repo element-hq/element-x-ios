@@ -22,7 +22,7 @@ final class RoomFlowCoordinatorTests {
     private let userSettings: UserSettings
     
     init() {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
     }
     
     @Test

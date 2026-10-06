@@ -34,7 +34,7 @@ final class JoinRoomScreenViewModelTests {
     private let userSettings: UserSettings
     
     init() {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
     }
     
     isolated deinit {
