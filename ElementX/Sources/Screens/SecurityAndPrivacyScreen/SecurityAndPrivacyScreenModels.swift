@@ -21,6 +21,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     
     var canonicalAlias: String?
     var isKnockingEnabled: Bool
+    var isPublicAccessAllowed = true
     var isSpace: Bool
     
     var canEditAddress = false
@@ -55,6 +56,11 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
             options.append(.invited)
         }
         return options.sorted()
+    }
+    
+    /// Keeps the option visible on rooms that are already public so the current state is shown.
+    var isAnyoneOptionAvailable: Bool {
+        currentSettings.accessType == .anyone || isPublicAccessAllowed
     }
     
     var isSpaceMembersOptionAvailable: Bool {

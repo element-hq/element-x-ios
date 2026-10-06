@@ -1420,7 +1420,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                                 clientProxy: userSession.clientProxy,
                                                                                 userIndicatorController: flowParameters.userIndicatorController,
-                                                                                appSetting: flowParameters.userSettings))
+                                                                                appSetting: flowParameters.userSettings,
+                                                                                appHooks: flowParameters.appHooks))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

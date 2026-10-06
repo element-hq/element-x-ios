@@ -26,18 +26,21 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     init(roomProxy: JoinedRoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userSettings: UserSettings) {
+         userSettings: UserSettings,
+         appHooks: AppHooks) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         self.userSettings = userSettings
         
-        super.init(initialViewState: SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
-                                                                       isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,
-                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
-                                                                       isSpace: roomProxy.infoPublisher.value.isSpace,
-                                                                       isKnockingEnabled: userSettings.knockingEnabled,
-                                                                       historySharingDetailsURL: userSettings.historySharingDetailsURL))
+        let viewState = SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
+                                                          isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,
+                                                          historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
+                                                          isSpace: roomProxy.infoPublisher.value.isSpace,
+                                                          isKnockingEnabled: userSettings.knockingEnabled,
+                                                          historySharingDetailsURL: userSettings.historySharingDetailsURL)
+        
+        super.init(initialViewState: appHooks.securityAndPrivacyScreenHook.update(viewState, homeserver: clientProxy.homeserver))
         
         if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
             setupPermissions(powerLevels: powerLevels)

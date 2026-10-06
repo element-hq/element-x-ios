@@ -473,6 +473,7 @@ final class SecurityAndPrivacyScreenViewModelTests {
                                                                                          spaceServiceConfiguration: .init(topLevelSpaces: topLevelSpaces,
                                                                                                                           joinedParentSpaces: joinedParentSpaces))),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      userSettings: userSettings)
+                                                      userSettings: userSettings,
+                                                      appHooks: AppHooks())
     }
 }
