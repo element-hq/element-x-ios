@@ -516,7 +516,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             appSettings.hasSignedInBefore = true
         }
         
-        #warning("Finalise the version number")
         if oldVersion < Version(26, 10, 1) {
             MXLog.info("Migrating to version 26.10.1, moving initial 'session specific' settings.")
             userSession.userSettings.migrateAppSettingsValueToAccountSettings(\.hasRunIdentityConfirmationOnboardingKey)
