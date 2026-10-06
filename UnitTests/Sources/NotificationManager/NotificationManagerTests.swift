@@ -8,6 +8,7 @@
 
 import Combine
 @testable import ElementX
+import MatrixRustSDKMocks
 import NotificationCenter
 import Testing
 
@@ -190,6 +191,28 @@ final class NotificationManagerTests {
         }
         
         #expect(authorizationStatusWasGranted)
+    }
+    
+    @Test
+    func removeDeliveredNotificationsForFullyReadRooms() async throws {
+        let room = RoomSummary(room: RoomSDKMock(), id: "!room:matrix.org", settingsMode: .allMessages,
+                               hasUnreadMessages: false, hasUnreadMentions: false, hasUnreadNotifications: false)
+        let lastMessageDate = try #require(room.lastMessageDate)
+        
+        // Delivered after the last message was sent, which is always the case for the last message's notification.
+        let readNotification = try UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: room.id,
+                                                                  NotificationConstants.UserInfoKey.eventDate: lastMessageDate.addingTimeInterval(0.5)],
+                                                       identifier: "read",
+                                                       date: lastMessageDate.addingTimeInterval(5))
+        let newerNotification = try UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: room.id,
+                                                                   NotificationConstants.UserInfoKey.eventDate: lastMessageDate.addingTimeInterval(1)],
+                                                        identifier: "newer",
+                                                        date: lastMessageDate.addingTimeInterval(5))
+        notificationCenter.deliveredNotificationsReturnValue = [readNotification, newerNotification]
+        
+        await notificationManager.removeDeliveredNotificationsForFullyReadRooms([room])
+        
+        #expect(notificationCenter.removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers == ["read"])
     }
     
     @Test

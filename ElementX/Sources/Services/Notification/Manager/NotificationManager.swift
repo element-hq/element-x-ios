@@ -151,7 +151,10 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                     return false
                 }
                 
-                return notification.date <= lastMessageDate
+                // The delivery date is later than the event's so only use it for notifications without an event date.
+                let notificationDate = notification.request.content.eventDate ?? notification.date
+                // Truncated to seconds to match `RoomSummary.lastMessageDate`.
+                return notificationDate.timeIntervalSince1970.rounded(.down) <= lastMessageDate.timeIntervalSince1970
             }
             .map(\.request.identifier)
         

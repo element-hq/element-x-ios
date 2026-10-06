@@ -12,6 +12,7 @@ nonisolated enum NotificationConstants {
     enum UserInfoKey {
         static let roomIdentifier = "room_id"
         static let eventIdentifier = "event_id"
+        static let eventDate = "event_date"
         static let threadRootEventIdentifier = "thread_root_event_id"
         static let pusherNotificationClientIdentifier = "pusher_notification_client_identifier"
         static let receiverIdentifier = "receiver_id"
