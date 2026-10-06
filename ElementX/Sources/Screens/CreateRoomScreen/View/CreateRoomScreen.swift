@@ -467,6 +467,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                          userSession: userSession,
                                          analytics: AnalyticsServiceMock(.init()),
                                          userIndicatorController: UserIndicatorControllerMock(),
-                                         userSettings: userSettings)
+                                         userSettings: userSettings,
+                                         appHooks: AppHooks())
     }
 }

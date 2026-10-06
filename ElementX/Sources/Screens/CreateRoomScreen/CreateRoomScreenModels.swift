@@ -31,6 +31,7 @@ struct CreateRoomScreenViewState: BindableState {
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
+    var isPublicAccessAllowed = true
     let canSelectSpace: Bool
     var aliasLocalPart: String
     var editableSpaces: [SpaceServiceRoom] = []
@@ -69,6 +70,11 @@ struct CreateRoomScreenViewState: BindableState {
             }
         }
         availableAccessTypes.append(.private)
+        
+        if !isPublicAccessAllowed {
+            availableAccessTypes.removeAll { $0 == .public }
+        }
+        
         return availableAccessTypes
     }
     

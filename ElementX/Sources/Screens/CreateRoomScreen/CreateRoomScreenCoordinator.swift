@@ -17,6 +17,7 @@ struct CreateRoomScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let userSettings: UserSettings
     let analytics: AnalyticsServiceProtocol
+    let appHooks: AppHooks
 }
 
 enum CreateRoomScreenCoordinatorAction {
@@ -41,7 +42,8 @@ final class CreateRoomScreenCoordinator: CoordinatorProtocol {
                                               userSession: parameters.userSession,
                                               analytics: parameters.analytics,
                                               userIndicatorController: parameters.userIndicatorController,
-                                              userSettings: parameters.userSettings)
+                                              userSettings: parameters.userSettings,
+                                              appHooks: parameters.appHooks)
     }
     
     func start() {

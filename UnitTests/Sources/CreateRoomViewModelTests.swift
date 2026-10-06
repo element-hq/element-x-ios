@@ -92,7 +92,8 @@ final class CreateRoomScreenViewModelTests {
                                                   userSession: userSession,
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  userSettings: userSettings)
+                                                  userSettings: userSettings,
+                                                  appHooks: AppHooks())
         self.viewModel = viewModel
         
         // Given a form with a blank topic.
@@ -342,7 +343,8 @@ final class CreateRoomScreenViewModelTests {
                                                   userSession: userSession,
                                                   analytics: AnalyticsServiceMock(.init()),
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  userSettings: userSettings)
+                                                  userSettings: userSettings,
+                                                  appHooks: AppHooks())
         self.viewModel = viewModel
     }
 }
