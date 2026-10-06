@@ -11,15 +11,16 @@ import UserNotifications
 import XCTest
 
 extension UNNotification {
-    static func with(userInfo: [AnyHashable: Any]) throws -> UNNotification {
+    static func with(userInfo: [AnyHashable: Any], identifier: String = "", date: Date = .now) throws -> UNNotification {
         let content = UNMutableNotificationContent()
         content.userInfo = userInfo
-        let request = UNNotificationRequest(identifier: "",
+        let request = UNNotificationRequest(identifier: identifier,
                                             content: content,
                                             trigger: nil)
         let archiver = MockCoder(requiringSecureCoding: false)
         let notification = try XCTUnwrap(UNNotification(coder: archiver))
         notification.setValue(request, forKey: "request")
+        notification.setValue(date, forKey: "date")
         return notification
     }
 }
