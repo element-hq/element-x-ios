@@ -23,7 +23,7 @@ final class AnalyticsSettingsScreenViewModelTests {
         client.isRunning = false
         analytics = AnalyticsService(client: client, appSettings: appSettings)
         
-        viewModel = AnalyticsSettingsScreenViewModel(userSettings: UserSettings(appSettings: appSettings, accountSettings: .init()),
+        viewModel = AnalyticsSettingsScreenViewModel(userSettings: appSettings.userSettings(for: "@me:matrix.org"),
                                                      analytics: analytics)
         context = viewModel.context
     }

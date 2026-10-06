@@ -6,22 +6,23 @@
 //
 
 import Foundation
+import Macros
 
 /// The settings for a signed in account, composed of the app wide settings and the settings
 /// specific to that account.
 @dynamicMemberLookup
 final nonisolated class UserSettings: Sendable {
+    // TODO: @pixlwave Make this private after handling Advanced/Labs/Developer screen models.
     let app: AppSettings
-    let account: AccountSettings
+    private let account: AccountSettings
     
     init(appSettings: AppSettings, accountSettings: AccountSettings) {
         self.app = appSettings
         self.account = accountSettings
     }
     
-    static func volatile() -> UserSettings {
-        let appSettings = AppSettings.volatile()
-        return UserSettings(appSettings: appSettings, accountSettings: .init())
+    static func volatile(userID: String = "@me:matrix.org") -> UserSettings {
+        AppSettings.volatile().userSettings(for: userID)
     }
     
     subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<AppSettings, Value>) -> Value {
@@ -41,9 +42,12 @@ final nonisolated class UserSettings: Sendable {
     subscript<Value>(dynamicMember keyPath: KeyPath<AccountSettings, Value>) -> Value {
         account[keyPath: keyPath]
     }
-}
-
-/// Settings specific to an account.
-struct AccountSettings {
-    // Placeholder for now, implementation to follow with a dedicated user defaults store scoped to a specific user ID.
+    
+    func migrateAppSettingsValueToAccountSettings(_ keyPath: KeyPath<AccountSettings, UserPreferenceKey>) {
+        account.migrateAppSettingsValue(keyPath)
+    }
+    
+    func resetSessionSpecificSettings() {
+        account.reset()
+    }
 }

@@ -42,4 +42,8 @@ final nonisolated class VolatileUserDefaults: UserDefaultsProtocol, Sendable {
     func reset() {
         storage = [:]
     }
+    
+    func dictionaryRepresentation() -> [String: Any] {
+        storage
+    }
 }
