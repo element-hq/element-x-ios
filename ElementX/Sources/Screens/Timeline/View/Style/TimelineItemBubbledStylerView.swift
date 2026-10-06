@@ -426,7 +426,7 @@ private extension TimelineItemKeyForwarder {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         userSettings.threadsEnabled = true
         let userSession = UserSessionMock(.init(userSettings: userSettings))
         
@@ -445,7 +445,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     }()
     
     static let viewModelWithPins: TimelineViewModel = {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         userSettings.threadsEnabled = true
         let userSession = UserSessionMock(.init(userSettings: userSettings))
         
@@ -466,7 +466,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static let unsafeViewModel = TimelineViewModel.mock(contentScannerService: ContentScannerServiceMock(.init(scanResult: false)))
     
     static let selectingViewModel: TimelineViewModel = {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         userSettings.messageMultiSelectEnabled = true
         let userSession = UserSessionMock(.init(userSettings: userSettings))
         

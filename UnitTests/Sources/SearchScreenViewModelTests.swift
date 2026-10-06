@@ -54,7 +54,7 @@ struct SearchScreenViewModelTests {
             staticRoomListSubject.value.first { $0.id == identifier }
         }
         
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
         
         viewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                           clientProxy: clientProxy,

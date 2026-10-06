@@ -405,7 +405,7 @@ struct CallScreen_Previews: PreviewProvider {
                                                         voiceOnly: false,
                                                         colorScheme: .light),
                                    allowPictureInPicture: false,
-                                   userSettings: .volatile(),
+                                   userSettings: .mock(),
                                    analyticsService: AnalyticsServiceMock(.init()))
     }
 }

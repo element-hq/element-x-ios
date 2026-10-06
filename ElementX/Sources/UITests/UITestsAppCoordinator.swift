@@ -298,7 +298,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "Some room name", avatarURL: nil)),
                                                              timelineController: TimelineControllerMock(.init()),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -318,7 +318,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: .mockMXCAvatar)),
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -338,7 +338,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: .mockMXCAvatar)),
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -357,7 +357,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: .mockMXCAvatar)),
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -382,7 +382,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: roomProxy,
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -407,7 +407,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: roomProxy,
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -431,7 +431,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: roomProxy,
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -457,7 +457,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: roomProxy,
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -482,7 +482,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: roomProxy,
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -503,7 +503,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "Timeline highlight", avatarURL: .mockMXCAvatar)),
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -537,7 +537,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "Polls timeline", avatarURL: .mockMXCAvatar)),
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -558,7 +558,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "Polls timeline", avatarURL: .mockMXCAvatar)),
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -579,7 +579,7 @@ class MockScreen: Identifiable {
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "Polls timeline", avatarURL: .mockMXCAvatar)),
                                                              timelineController: timelineController,
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                             emojiProvider: EmojiProvider(userSettings: .volatile()),
+                                                             emojiProvider: EmojiProvider(userSettings: .mock()),
                                                              linkMetadataProvider: LinkMetadataProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
@@ -597,14 +597,15 @@ class MockScreen: Identifiable {
                                                                                                           requestDelay: .seconds(5))
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
                                                                             flow: .deviceInitiator,
-                                                                            userSettings: .volatile(),
+                                                                            userSettings: .mock(),
                                                                             mediaProvider: MediaProviderMock(.init()))
             return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen, .userSessionScreenReply, .userSessionSpacesFlow:
-            let appSettings: AppSettings = appSettings
-            appSettings.hasRunIdentityConfirmationOnboarding = true
-            appSettings.hasRunNotificationPermissionsOnboarding = true
-            appSettings.analyticsConsentState = .optedOut
+            let userID = "@mock:client.com"
+            let userSettings = appSettings.userSettings(for: userID)
+            userSettings.hasRunIdentityConfirmationOnboarding = true
+            userSettings.hasRunNotificationPermissionsOnboarding = true
+            userSettings.analyticsConsentState = .optedOut
             
             let roomSummaries: [RoomSummary] = if id == .userSessionSpacesFlow {
                 [[RoomSummary].mockSpaceInvites[0]] + .mockRooms
@@ -612,7 +613,7 @@ class MockScreen: Identifiable {
                 .mockRooms
             }
             
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
+            let clientProxy = ClientProxyMock(.init(userID: userID,
                                                     deviceID: "MOCKCLIENT",
                                                     roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(topLevelSpaces: .mockSpaceList.filter(\.isSpace) + .mockSingleRoom),
@@ -634,8 +635,7 @@ class MockScreen: Identifiable {
             
             let timelineControllerFactory = TimelineControllerFactoryMock(.init(timelineController: timelineController))
             
-            let userSession = UserSessionMock(.init(clientProxy: clientProxy,
-                                                    userSettings: UserSettings(appSettings: appSettings, accountSettings: .init())))
+            let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
             let flowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
@@ -826,14 +826,15 @@ class MockScreen: Identifiable {
             navigationRootCoordinator.setSheetCoordinator(navigationStackCoordinator)
             return PlaceholderScreenCoordinator(hideBrandChrome: false)
         case .autoUpdatingTimeline:
-            let userSettings = UserSettings(appSettings: appSettings, accountSettings: .init())
-            appSettings.hasRunIdentityConfirmationOnboarding = true
-            appSettings.hasRunNotificationPermissionsOnboarding = true
-            appSettings.analyticsConsentState = .optedOut
+            let userID = "@mock:client.com"
+            let userSettings = appSettings.userSettings(for: userID)
+            userSettings.hasRunIdentityConfirmationOnboarding = true
+            userSettings.hasRunNotificationPermissionsOnboarding = true
+            userSettings.analyticsConsentState = .optedOut
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: false))
             navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
             
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let clientProxy = ClientProxyMock(.init(userID: userID, roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
             
             let roomProxy = JoinedRoomProxyMock(.init(id: "whatever", name: "okay", shouldUseAutoUpdatingTimeline: true))
@@ -905,6 +906,6 @@ class MockScreen: Identifiable {
                                                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
                                   mediaProvider: MediaProviderMock(.init()),
-                                  userSettings: .volatile())
+                                  userSettings: .mock())
     }
 }

@@ -69,12 +69,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
         store.reset()
     }
     
-    func resetSessionSpecificSettings() {
-        MXLog.warning("Resetting the user session specific AppSettings.")
-        resetHasRunIdentityConfirmationOnboarding()
-        resetSearchBreadcrumbs()
-    }
-    
     // MARK: - Hooks
     
     // swiftlint:disable:next function_parameter_count
@@ -339,9 +333,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     var hasRunNotificationPermissionsOnboarding: Bool
     
     @UserPreference(defaultValue: false)
-    var hasRunIdentityConfirmationOnboarding: Bool
-    
-    @UserPreference(defaultValue: false)
     var hasRequestedLocationAlwaysLocationAuthorization: Bool
     
     @UserPreference(defaultValue: [FrequentlyUsedEmoji]())
@@ -362,12 +353,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     @UserPreference(defaultValue: true)
     var showAllRoomListActivity: Bool
-    
-    // MARK: - Search Screen
-    
-    /// The queries the user searched for and the rooms they opened from the results, most recent first.
-    @UserPreference(defaultValue: [SearchBreadcrumb]())
-    var searchBreadcrumbs: [SearchBreadcrumb]
     
     // MARK: - Room Screen
     
@@ -480,6 +465,10 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     init(store: UserDefaultsProtocol) {
         self.store = store
+    }
+    
+    func userSettings(for userID: String) -> UserSettings {
+        UserSettings(appSettings: self, accountSettings: .init(userID: userID, store: store))
     }
     
     static func volatile() -> AppSettings {

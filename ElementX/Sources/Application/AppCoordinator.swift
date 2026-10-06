@@ -467,14 +467,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         MXLog.info("The app was upgraded from \(oldVersion) to \(newVersion)")
         
-        if oldVersion < Version(1, 6, 0) {
-            MXLog.info("Migrating to v1.6.0, marking identity confirmation onboarding as ran.")
-            if !userSessionStore.userIDs.isEmpty {
-                appSettings.hasRunIdentityConfirmationOnboarding = true
-                appSettings.hasRunNotificationPermissionsOnboarding = true
-            }
-        }
-        
         if oldVersion < Version(1, 6, 7) {
             Tracing.deleteLogFiles(in: Tracing.legacyLogsDirectory)
             MXLog.info("Migrating to v1.6.7, log files have been wiped")
@@ -498,6 +490,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         await userSession.clientProxy.optimizeStores()
         MXLog.info("Finished optimizing client stores.")
         
+        if oldVersion < Version(1, 6, 0) {
+            MXLog.info("Migrating to v1.6.0, marking identity confirmation onboarding as ran.")
+            userSession.userSettings.hasRunIdentityConfirmationOnboarding = true
+            userSession.userSettings.hasRunNotificationPermissionsOnboarding = true
+        }
+        
         if oldVersion < Version(25, 6, 0) {
             MXLog.info("Migrating to version 25.06.0, migrating timeline media settings to account data.")
             performSettingsToAccountDataMigration(userSession: userSession)
@@ -516,6 +514,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         if oldVersion < Version(26, 07, 3) {
             MXLog.info("Migrating to version 26.07.3, marking the app as previously signed in.")
             appSettings.hasSignedInBefore = true
+        }
+        
+        if oldVersion < Version(26, 10, 1) {
+            MXLog.info("Migrating to version 26.10.1, moving initial 'session specific' settings.")
+            userSession.userSettings.migrateAppSettingsValueToAccountSettings(\.hasRunIdentityConfirmationOnboardingKey)
+            userSession.userSettings.migrateAppSettingsValueToAccountSettings(\.searchBreadcrumbsKey)
         }
         
         userSessionMigrationsOldVersion = nil
@@ -863,7 +867,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSessionStore.logout(userSession: userSession)
             tearDownUserSession()
             
-            appSettings.resetSessionSpecificSettings()
+            userSession.userSettings.resetSessionSpecificSettings()
             appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics

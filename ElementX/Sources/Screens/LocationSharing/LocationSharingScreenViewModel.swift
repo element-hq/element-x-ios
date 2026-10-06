@@ -432,7 +432,7 @@ extension LocationSharingScreenViewModel {
         let roomProxy = JoinedRoomProxyMock(.init(members: .allMembers, ownUserID: RoomMemberProxyMock.mockMe.userID))
         roomProxy.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
                                               mapURLBuilder: userSettings.mapTilerConfiguration.publisher.value,

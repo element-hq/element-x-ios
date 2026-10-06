@@ -21,7 +21,7 @@ struct PresenceServiceTests {
     
     init() {
         clientProxy = ClientProxyMock(.init())
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
         notificationCenter = NotificationCenter()
         
         clientProxy.configurePresenceSendImmediatelyClosure = { [sendsSubject] presence, sendImmediately in

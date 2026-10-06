@@ -29,7 +29,7 @@ struct ChatsTabFlowCoordinatorTests {
     }
     
     init() async throws {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())

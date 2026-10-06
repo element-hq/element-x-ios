@@ -25,7 +25,7 @@ final class HomeScreenViewModelTests {
     var cancellables = Set<AnyCancellable>()
     
     init() {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
     }
     
     @Test

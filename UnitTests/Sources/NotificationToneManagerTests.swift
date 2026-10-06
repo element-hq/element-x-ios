@@ -18,7 +18,7 @@ struct NotificationToneManagerTests {
     private let manager: NotificationToneManager
     
     init() {
-        manager = NotificationToneManager(userSettings: .volatile())
+        manager = NotificationToneManager(userSettings: .mock())
     }
     
     // MARK: - Deletion

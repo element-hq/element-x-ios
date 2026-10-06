@@ -153,7 +153,7 @@ final class RoomScreenViewModelTests {
     
     @Test
     func pinnedEventsBannerThreadedSelection() async throws {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         userSettings.threadsEnabled = true
         let userSession = UserSessionMock(.init(userSettings: userSettings))
         

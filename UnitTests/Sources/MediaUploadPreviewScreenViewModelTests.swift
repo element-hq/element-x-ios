@@ -28,7 +28,7 @@ final class MediaUploadPreviewScreenViewModelTests {
     }
     
     init() {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
         userSettings.optimizeMediaUploads = false
         
         userIndicatorController = UserIndicatorControllerMock()

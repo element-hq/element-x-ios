@@ -262,7 +262,7 @@ struct NotificationSettingsScreen: View {
 @available(iOS 26.0, *)
 struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel: NotificationSettingsScreenViewModel = {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
@@ -290,7 +290,7 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let viewModelConfigurationMismatch: NotificationSettingsScreenViewModel = {
-        let userSettings = UserSettings.volatile()
+        let userSettings = UserSettings.mock()
         let notificationCenter = UserNotificationCenterMock()
         notificationCenter.authorizationStatusReturnValue = .notDetermined
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())

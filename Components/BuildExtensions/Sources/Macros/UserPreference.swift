@@ -16,7 +16,7 @@
 /// persisted under a legacy key).
 ///
 /// A `reset<Name>()` method is also generated, which clears the stored value so it reverts to the
-/// default.
+/// default. Non-volatile preferences also get a `<name>Key` property exposing the storage key.
 @attached(accessor)
 @attached(peer, names: arbitrary)
 public macro UserPreference<Value>(key: String? = nil, defaultValue: Value, volatile: Bool = false) =
@@ -27,3 +27,13 @@ public macro UserPreference<Value>(key: String? = nil, defaultValue: Value, vola
 @attached(peer, names: arbitrary)
 public macro UserPreference(key: String? = nil, volatile: Bool = false) =
     #externalMacro(module: "MacrosImplementation", type: "UserPreferenceMacro")
+
+/// The storage key of a `@UserPreference`, distinct from `String` so that only a generated
+/// `<name>Key` property can be passed where a preference key is expected.
+public struct UserPreferenceKey: Sendable {
+    public let rawValue: String
+    
+    public init(_ rawValue: String) {
+        self.rawValue = rawValue
+    }
+}

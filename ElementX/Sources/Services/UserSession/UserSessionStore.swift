@@ -59,7 +59,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.missingCredentials)
         }
         
-        let userSettings = UserSettings(appSettings: appSettings, accountSettings: .init())
+        let userSettings = appSettings.userSettings(for: credentials.userID)
         
         switch await restorePreviousLogin(credentials, userSettings: userSettings) {
         case .success(let clientProxy):
@@ -83,7 +83,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         do {
             let session = try client.session()
             let userID = try client.userId()
-            let userSettings = UserSettings(appSettings: appSettings, accountSettings: .init())
+            let userSettings = appSettings.userSettings(for: userID)
             let clientProxy = try await setupProxyForClient(client, userSettings: userSettings)
             
             keychainController.setRestorationToken(RestorationToken(session: session,

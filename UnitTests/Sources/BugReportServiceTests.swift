@@ -17,7 +17,7 @@ final class BugReportServiceTests {
     var bugReportService: BugReportServiceProtocol!
     
     init() throws {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
         userSettings.bugReportRageshakeURL.reset()
         
         let bugReportServiceMock = BugReportServiceMock()

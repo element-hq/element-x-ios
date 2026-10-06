@@ -17,7 +17,7 @@ final class RoomListFiltersStateTests {
     let defaultFilters = RoomListFilter.allCases.filter { $0 != .mentions && $0 != .lowPriority }
     
     init() {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
         state = RoomListFiltersState(userSettings: userSettings)
     }
     

@@ -24,7 +24,7 @@ final class CreateRoomScreenViewModelTests {
     }
     
     init() {
-        userSettings = UserSettings.volatile()
+        userSettings = UserSettings.mock()
     }
     
     isolated deinit {

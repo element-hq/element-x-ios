@@ -15,6 +15,7 @@ nonisolated protocol UserDefaultsProtocol: AnyObject {
     func set(_ value: Any?, forKey key: String)
     
     func reset()
+    func dictionaryRepresentation() -> [String: Any]
 }
 
 // MARK: - Codable handling
