@@ -90,6 +90,7 @@ enum TestablePreviewsDictionary {
             "LocationPickerSheet_Previews" : LocationPickerSheet_Previews.self,
             "LocationRoomTimelineView_Previews" : LocationRoomTimelineView_Previews.self,
             "LocationSharingScreen_Previews" : LocationSharingScreen_Previews.self,
+            "LocationSharingSettingsScreen_Previews" : LocationSharingSettingsScreen_Previews.self,
             "LongPressWithFeedback_Previews" : LongPressWithFeedback_Previews.self,
             "ManageAuthorizedSpacesScreen_Previews" : ManageAuthorizedSpacesScreen_Previews.self,
             "ManageRoomMemberSheetView_Previews" : ManageRoomMemberSheetView_Previews.self,

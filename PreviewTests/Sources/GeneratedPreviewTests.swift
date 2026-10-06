@@ -593,6 +593,13 @@ extension PreviewTests {
     }
 
     @Test
+    func locationSharingSettingsScreen() async throws {
+        for (index, preview) in LocationSharingSettingsScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func loginScreen() async throws {
         for (index, preview) in LoginScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
