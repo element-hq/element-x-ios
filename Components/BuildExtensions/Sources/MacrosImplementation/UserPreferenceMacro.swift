@@ -45,6 +45,10 @@ enum UserPreferenceMacro {
             "_\(raw: name)VolatileValue"
         }
         
+        var keyPropertyName: TokenSyntax {
+            "\(raw: name)Key"
+        }
+        
         var resetMethodName: TokenSyntax {
             "reset\(raw: name.prefix(1).uppercased() + name.dropFirst())"
         }
@@ -156,6 +160,14 @@ extension UserPreferenceMacro: PeerMacro {
             \(preference.subjectName).prepend(\(raw: name)).eraseToAnyPublisher()
         }
         """)
+        
+        if !preference.isVolatile {
+            peers.append("""
+            var \(preference.keyPropertyName): UserPreferenceKey {
+                .init(\(preference.key))
+            }
+            """)
+        }
         
         peers.append(resetMethod(for: preference))
         

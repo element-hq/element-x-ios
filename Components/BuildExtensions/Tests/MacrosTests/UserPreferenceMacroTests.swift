@@ -5,7 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import MacrosImplementation
+@testable import MacrosImplementation
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
@@ -33,6 +33,10 @@ final class UserPreferenceMacroTests: XCTestCase {
                              
                              var hasSeenNewSoundBannerPublisher: AnyPublisher<Bool, Never> {
                                  _hasSeenNewSoundBannerSubject.prepend(hasSeenNewSoundBanner).eraseToAnyPublisher()
+                             }
+                             
+                             var hasSeenNewSoundBannerKey: UserPreferenceKey {
+                                 .init("hasSeenNewSoundBanner")
                              }
                              
                              func resetHasSeenNewSoundBanner() {
@@ -65,6 +69,10 @@ final class UserPreferenceMacroTests: XCTestCase {
                                  _liveLocationSharingSessionsByRoomIDSubject.prepend(liveLocationSharingSessionsByRoomID).eraseToAnyPublisher()
                              }
                              
+                             var liveLocationSharingSessionsByRoomIDKey: UserPreferenceKey {
+                                 .init("liveLocationSharingTimeoutDatesByRoomID")
+                             }
+                             
                              func resetLiveLocationSharingSessionsByRoomID() {
                                  store.removeObject(forKey: "liveLocationSharingTimeoutDatesByRoomID")
                              }
@@ -95,6 +103,10 @@ final class UserPreferenceMacroTests: XCTestCase {
                                  _pusherProfileTagSubject.prepend(pusherProfileTag).eraseToAnyPublisher()
                              }
                              
+                             var pusherProfileTagKey: UserPreferenceKey {
+                                 .init("pusherProfileTag")
+                             }
+                             
                              func resetPusherProfileTag() {
                                  store.removeObject(forKey: "pusherProfileTag")
                              }
@@ -123,6 +135,10 @@ final class UserPreferenceMacroTests: XCTestCase {
                              
                              var viewSourceEnabledPublisher: AnyPublisher<Bool, Never> {
                                  _viewSourceEnabledSubject.prepend(viewSourceEnabled).eraseToAnyPublisher()
+                             }
+                             
+                             var viewSourceEnabledKey: UserPreferenceKey {
+                                 .init("viewSourceEnabled")
                              }
                              
                              func resetViewSourceEnabled() {
