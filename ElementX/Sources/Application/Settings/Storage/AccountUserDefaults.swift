@@ -16,7 +16,7 @@ final nonisolated class AccountUserDefaults: UserDefaultsProtocol, @unchecked Se
     private let store: UserDefaultsProtocol
     
     init(userID: String, store: UserDefaultsProtocol) {
-        keyPrefix = "accountSettings[\(userID)]."
+        keyPrefix = "account[\(userID)]."
         self.store = store
     }
     
