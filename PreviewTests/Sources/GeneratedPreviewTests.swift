@@ -649,6 +649,13 @@ extension PreviewTests {
     }
 
     @Test
+    func mediaUploadQualitySettingsScreen() async throws {
+        for (index, preview) in MediaUploadQualitySettingsScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func mentionSuggestionItemView() async throws {
         for (index, preview) in MentionSuggestionItemView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
