@@ -16,19 +16,19 @@ struct LocationSharingScreen: View {
         switch context.viewState.interactionMode {
         case .picker:
             mainContent
-                .sheet(isPresented: .constant(true)) {
+                .locationSheet {
                     LocationPickerSheet(context: context)
                         .alert(item: $context.alertInfo)
                 }
         case .viewStatic:
             mainContent
-                .sheet(isPresented: .constant(true)) {
+                .locationSheet {
                     StaticLocationSheet(context: context)
                         .alert(item: $context.alertInfo)
                 }
         case .viewLive:
             mainContent
-                .sheet(isPresented: .constant(true)) {
+                .locationSheet {
                     LiveLocationSheet(context: context)
                         .alert(item: $context.alertInfo)
                 }
@@ -119,6 +119,22 @@ struct LocationSharingScreen: View {
         .disabled(context.viewState.isLocationLoading)
         .dynamicTypeSize(.large)
         .padding(13)
+    }
+}
+
+private extension View {
+    /// The Mac hides a sheet's parent sheet while it's presented, taking the close button with it.
+    @ViewBuilder
+    func locationSheet<Content: View>(@ViewBuilder content: @escaping () -> Content) -> some View {
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            safeAreaInset(edge: .bottom, spacing: 0) {
+                content()
+                    .fixedSize(horizontal: false, vertical: true)
+                    .background(.compound.bgCanvasDefault)
+            }
+        } else {
+            sheet(isPresented: .constant(true), content: content)
+        }
     }
 }
 
