@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-enum MultiAccountAnnouncementScreenViewModelAction {
+enum MultiAccountAnnouncementViewModelAction {
     case addAccount
     case dismiss
 }
 
-struct MultiAccountAnnouncementScreenViewState: BindableState {
+struct MultiAccountAnnouncementViewState: BindableState {
     let description: AttributedString
     
     init() {
@@ -25,7 +25,7 @@ struct MultiAccountAnnouncementScreenViewState: BindableState {
     }
 }
 
-enum MultiAccountAnnouncementScreenViewAction {
+enum MultiAccountAnnouncementViewAction {
     case addAccount
     case close
 }

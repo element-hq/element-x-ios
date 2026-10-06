@@ -380,9 +380,87 @@ final class HomeScreenViewModelTests {
         #expect(userSettings.hasSeenNewSoundBanner)
     }
     
+    @Test
+    func multiAccountAnnouncement() async throws {
+        userSettings.multiAccountEnabled = true
+        setupViewModel()
+        
+        // Arming it after the view model exists (Developer options) doesn't present it on its own.
+        userSettings.hasSeenMultiAccountAnnouncement = false
+        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.multiAccountAnnouncementViewModel != nil }
+        try await deferredFailure.fulfill()
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.bindings.multiAccountAnnouncementViewModel != nil }
+        context.send(viewAction: .screenAppeared)
+        try await deferred.fulfill()
+        #expect(!userSettings.hasSeenMultiAccountAnnouncement)
+        
+        context.send(viewAction: .multiAccountAnnouncementAppeared)
+        #expect(userSettings.hasSeenMultiAccountAnnouncement)
+        #expect(context.viewState.bindings.multiAccountAnnouncementViewModel != nil)
+        
+        // A swipe down dismisses it without the announcement's actions.
+        context.multiAccountAnnouncementViewModel = nil
+        let deferredReappearance = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.multiAccountAnnouncementViewModel != nil }
+        context.send(viewAction: .screenAppeared)
+        try await deferredReappearance.fulfill()
+    }
+    
+    @Test(arguments: [MultiAccountAnnouncementViewAction.close, .addAccount])
+    func multiAccountAnnouncementActionsDismissIt(_ action: MultiAccountAnnouncementViewAction) async throws {
+        userSettings.multiAccountEnabled = true
+        userSettings.hasSeenMultiAccountAnnouncement = false
+        setupViewModel()
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.bindings.multiAccountAnnouncementViewModel != nil }
+        context.send(viewAction: .screenAppeared)
+        try await deferred.fulfill()
+        
+        context.viewState.bindings.multiAccountAnnouncementViewModel?.context.send(viewAction: action)
+        #expect(context.viewState.bindings.multiAccountAnnouncementViewModel == nil)
+    }
+    
+    @Test(arguments: MultiAccountAnnouncementHiddenCase.allCases)
+    func multiAccountAnnouncementHidden(_ hiddenCase: MultiAccountAnnouncementHiddenCase) async throws {
+        userSettings.multiAccountEnabled = hiddenCase != .flagOff
+        userSettings.hasSeenMultiAccountAnnouncement = hiddenCase == .alreadySeen
+        let verificationState: SessionVerificationState = hiddenCase == .unverified ? .unverified : .verified
+        let securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: verificationState, recoveryState: .enabled))
+        setupViewModel(securityStatePublisher: securityStateSubject.asCurrentValuePublisher())
+        
+        let deferred = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.multiAccountAnnouncementViewModel != nil }
+        context.send(viewAction: .screenAppeared)
+        try await deferred.fulfill()
+        #expect(userSettings.hasSeenMultiAccountAnnouncement == (hiddenCase == .alreadySeen))
+    }
+    
+    @Test
+    func multiAccountAnnouncementWaitsForTheVerificationState() async throws {
+        userSettings.multiAccountEnabled = true
+        userSettings.hasSeenMultiAccountAnnouncement = false
+        let securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .unknown, recoveryState: .unknown))
+        setupViewModel(securityStatePublisher: securityStateSubject.asCurrentValuePublisher())
+        
+        let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.multiAccountAnnouncementViewModel != nil }
+        context.send(viewAction: .screenAppeared)
+        context.send(viewAction: .screenAppeared)
+        try await deferredFailure.fulfill()
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.bindings.multiAccountAnnouncementViewModel != nil }
+        securityStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
+        try await deferred.fulfill()
+        
+        let presentedID = context.viewState.bindings.multiAccountAnnouncementViewModel?.id
+        let deferredReplacement = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.multiAccountAnnouncementViewModel?.id != presentedID }
+        context.send(viewAction: .screenAppeared)
+        try await deferredReplacement.fulfill()
+    }
+    
     // MARK: - Helpers
     
     enum InviteType { case rooms, spaces }
+    
+    enum MultiAccountAnnouncementHiddenCase: CaseIterable { case flagOff, alreadySeen, unverified }
     
     @Test
     func roomListModeIsSetSynchronouslyOnAWarmLaunch() {

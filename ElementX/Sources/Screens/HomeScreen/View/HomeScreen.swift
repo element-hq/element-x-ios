@@ -42,6 +42,11 @@ struct HomeScreen: View {
                     .navigationTransition(.zoom(sourceID: NavigationTransitionSourceID.spaceFilters,
                                                 in: navigationTransitionNamespace))
             }
+            .sheet(item: $context.multiAccountAnnouncementViewModel) { viewModel in
+                MultiAccountAnnouncementView(context: viewModel.context)
+                    .onAppear { context.send(viewAction: .multiAccountAnnouncementAppeared) }
+            }
+            .onAppear { context.send(viewAction: .screenAppeared) }
     }
     
     // MARK: - Private

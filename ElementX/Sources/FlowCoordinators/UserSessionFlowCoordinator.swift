@@ -46,8 +46,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let searchTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails?
     
     private var settingsFlowCoordinator: SettingsFlowCoordinator?
-    /// Set while a sheet is dismissed to make way for another flow, so the announcement doesn't jump in.
-    private var isDismissingSheetForAnotherFlow = false
     
     enum State: StateType {
         /// The state machine hasn't started.
@@ -56,8 +54,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case tabBar
         /// Showing the settings screen.
         case settingsScreen
-        /// Showing the announcement that several accounts can now be added.
-        case multiAccountAnnouncement
     }
     
     enum Event: EventType {
@@ -68,11 +64,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case showSettingsScreen
         /// The settings screen has been dismissed.
         case dismissedSettingsScreen
-        
-        /// Request presentation of the multi-account announcement.
-        case presentMultiAccountAnnouncement
-        /// The multi-account announcement has been dismissed.
-        case dismissedMultiAccountAnnouncement
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -165,9 +156,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             if ProcessInfo.processInfo.isiOSAppOnMac, flowParameters.windowManager.secondaryWindowsEnabled {
                 startSettingsFlow(detached: true)
             } else {
-                if stateMachine.state == .multiAccountAnnouncement {
-                    clearPresentedSheets(animated: animated)
-                }
                 if stateMachine.state != .settingsScreen {
                     stateMachine.tryEvent(.showSettingsScreen)
                 }
@@ -204,13 +192,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     /// or verification flows until they're complete… This needs more thought before we
     /// codify it all into the state machine.
     private func clearPresentedSheets(animated: Bool) {
-        isDismissingSheetForAnotherFlow = true
-        defer { isDismissingSheetForAnotherFlow = false }
-        
         switch stateMachine.state {
         case .initial, .tabBar:
             break
-        case .settingsScreen, .multiAccountAnnouncement:
+        case .settingsScreen:
             navigationTabCoordinator.setSheetCoordinator(nil, animated: animated)
         }
     }
@@ -235,17 +220,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             self?.startSettingsFlow(detached: false)
         }
         stateMachine.addRoutes(event: .dismissedSettingsScreen, transitions: [.settingsScreen => .tabBar]) { [weak self] _ in
-            guard let self else { return }
-            settingsFlowCoordinator = nil
-            if !isDismissingSheetForAnotherFlow {
-                scheduleMultiAccountAnnouncementAttempt()
-            }
+            self?.settingsFlowCoordinator = nil
         }
-        
-        stateMachine.addRoutes(event: .presentMultiAccountAnnouncement, transitions: [.tabBar => .multiAccountAnnouncement]) { [weak self] _ in
-            self?.presentMultiAccountAnnouncement()
-        }
-        stateMachine.addRoutes(event: .dismissedMultiAccountAnnouncement, transitions: [.multiAccountAnnouncement => .tabBar])
         
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition: \(context)")
@@ -297,7 +273,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 attemptStartingOnboarding()
-                attemptPresentingMultiAccountAnnouncement()
                 setupSessionVerificationRequestsObserver()
             }
             .store(in: &cancellables)
@@ -335,7 +310,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationTabCoordinator.setFullScreenCoverCoordinator(onboardingStackCoordinator, animated: animated)
                 case .dismiss:
                     navigationTabCoordinator.setFullScreenCoverCoordinator(nil)
-                    scheduleMultiAccountAnnouncementAttempt()
                 case .logoutConfirmed:
                     actionsSubject.send(.logout)
                 }
@@ -394,9 +368,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.clearCache)
             case .runLogoutFlow:
                 Task {
-                    self.isDismissingSheetForAnotherFlow = true
                     self.navigationTabCoordinator.setSheetCoordinator(nil)
-                    self.isDismissingSheetForAnotherFlow = false
                     
                     // The sheet needs to be dismissed before the alert can be shown
                     try? await Task.sleep(for: .milliseconds(100))
@@ -420,52 +392,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
                 self?.stateMachine.tryEvent(.dismissedSettingsScreen)
             }
-        }
-    }
-    
-    // MARK: - Multi-account announcement
-    
-    /// The announcement has the lowest priority, so it only shows when nothing else is presented.
-    private func attemptPresentingMultiAccountAnnouncement() {
-        guard flowParameters.userSettings.multiAccountEnabled,
-              !flowParameters.userSettings.hasSeenMultiAccountAnnouncement,
-              stateMachine.state == .tabBar,
-              navigationRootCoordinator.alertInfo == nil,
-              navigationTabCoordinator.sheetCoordinator == nil,
-              navigationTabCoordinator.fullScreenCoverCoordinator == nil,
-              navigationTabCoordinator.overlayCoordinator == nil,
-              chatsTabDetails.navigationSplitCoordinator?.sheetCoordinator == nil,
-              chatsTabDetails.navigationSplitCoordinator?.fullScreenCoverCoordinator == nil,
-              spacesTabDetails.navigationSplitCoordinator?.sheetCoordinator == nil,
-              spacesTabDetails.navigationSplitCoordinator?.fullScreenCoverCoordinator == nil else {
-            return
-        }
-        
-        stateMachine.tryEvent(.presentMultiAccountAnnouncement)
-    }
-    
-    /// Dismissal callbacks run inside the sheet's `didSet`, where a new sheet would never be started.
-    private func scheduleMultiAccountAnnouncementAttempt() {
-        Task { [weak self] in
-            self?.attemptPresentingMultiAccountAnnouncement()
-        }
-    }
-    
-    private func presentMultiAccountAnnouncement() {
-        flowParameters.userSettings.hasSeenMultiAccountAnnouncement = true
-        
-        let coordinator = MultiAccountAnnouncementScreenCoordinator()
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                switch action {
-                case .addAccount, .dismiss:
-                    self?.navigationTabCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationTabCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissedMultiAccountAnnouncement)
         }
     }
     
@@ -515,9 +441,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
         
-        navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
-            self?.scheduleMultiAccountAnnouncementAttempt()
-        }
+        navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator)
     }
     
     // MARK: - Calls
