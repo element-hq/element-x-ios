@@ -684,6 +684,13 @@ extension PreviewTests {
     }
 
     @Test
+    func moderationAndSafetySettingsScreen() async throws {
+        for (index, preview) in ModerationAndSafetySettingsScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func multiAccountAnnouncementScreen() async throws {
         for (index, preview) in MultiAccountAnnouncementScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
