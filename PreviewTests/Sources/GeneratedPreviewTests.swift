@@ -705,8 +705,8 @@ extension PreviewTests {
     }
 
     @Test
-    func multiAccountAnnouncementScreen() async throws {
-        for (index, preview) in MultiAccountAnnouncementScreen_Previews._allPreviews.enumerated() {
+    func multiAccountAnnouncementView() async throws {
+        for (index, preview) in MultiAccountAnnouncementView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

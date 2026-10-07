@@ -218,6 +218,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             state.securityBannerMode = .dismissed
         case .dismissNewSoundBanner:
             userSettings.hasSeenNewSoundBanner = true
+        case .screenAppeared:
+            // Use a task otherwise the presentation isn't animated.
+            Task { presentMultiAccountAnnouncementIfNeeded() }
+        case .multiAccountAnnouncementAppeared:
+            MXLog.info("The multi-account announcement has been seen.")
+            userSettings.hasSeenMultiAccountAnnouncement = true
+        case .dismissMultiAccountAnnouncement, .addAccount: // There is no add account flow to start yet.
+            state.bindings.isPresentingMultiAccountAnnouncement = false
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
@@ -474,6 +482,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                                               title: L10n.commonCurrentUserLeftRoom,
                                                               icon: \.check))
         actionsSubject.send(.roomLeft(roomIdentifier: roomID))
+    }
+    
+    // MARK: Multi-account announcement
+    
+    private func presentMultiAccountAnnouncementIfNeeded() {
+        // An unverified session gets the identity confirmation cover first, the room list appears again once it's dismissed.
+        guard userSettings.multiAccountEnabled,
+              !userSettings.hasSeenMultiAccountAnnouncement,
+              userSession.sessionSecurityStatePublisher.value.verificationState == .verified,
+              !state.bindings.isPresentingMultiAccountAnnouncement else {
+            return
+        }
+        
+        MXLog.info("Presenting the multi-account announcement.")
+        state.bindings.isPresentingMultiAccountAnnouncement = true
     }
     
     // MARK: Invites

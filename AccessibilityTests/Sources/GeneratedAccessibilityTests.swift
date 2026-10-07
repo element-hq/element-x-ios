@@ -403,8 +403,8 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ModerationAndSafetySettingsScreen_Previews")
     }
 
-    func testMultiAccountAnnouncementScreen() async throws {
-        try await performAccessibilityAudit(named: "MultiAccountAnnouncementScreen_Previews")
+    func testMultiAccountAnnouncementView() async throws {
+        try await performAccessibilityAudit(named: "MultiAccountAnnouncementView_Previews")
     }
 
     func testNoticeRoomTimelineView() async throws {
