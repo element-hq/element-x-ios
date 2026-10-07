@@ -460,6 +460,19 @@ final class HomeScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    @Test
+    func multiAccountAnnouncementIsMarkedSeenWithSeveralAccounts() async throws {
+        userSettings.multiAccountEnabled = true
+        userSettings.hasSeenMultiAccountAnnouncement = false
+        setupViewModel(otherAccountUserIDs: ["@other:client.com"])
+        
+        let deferred = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        context.send(viewAction: .screenAppeared)
+        try await deferred.fulfill()
+        
+        #expect(userSettings.hasSeenMultiAccountAnnouncement)
+    }
+    
     // MARK: - Helpers
     
     enum InviteType { case rooms, spaces }
@@ -551,7 +564,7 @@ final class HomeScreenViewModelTests {
         return (roomListSubject, stateSubject)
     }
     
-    private func setupViewModel(securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil, invites: InviteType? = nil, roomSummaryProvider: RoomSummaryProviderMock? = nil) {
+    private func setupViewModel(otherAccountUserIDs: [String] = [], securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil, invites: InviteType? = nil, roomSummaryProvider: RoomSummaryProviderMock? = nil) {
         cancellables.removeAll()
         
         var rooms: [RoomSummary] = .mockRooms
@@ -595,7 +608,11 @@ final class HomeScreenViewModelTests {
         
         notificationManager = NotificationManagerMock()
         
+        let otherUserSessions = otherAccountUserIDs.map { UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: $0)))) }
+        let userSessions: [UserSessionProtocol] = [userSession] + otherUserSessions
+        
         viewModel = HomeScreenViewModel(userSession: userSession,
+                                        userSessionManager: UserSessionManagerMock(.init(userSessions: userSessions)),
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         analyticsService: AnalyticsServiceMock(.init()),
                                         bugReportService: BugReportServiceMock(.init()),

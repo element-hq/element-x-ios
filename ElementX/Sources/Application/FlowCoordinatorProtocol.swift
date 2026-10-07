@@ -24,6 +24,9 @@ extension FlowCoordinatorProtocol {
 ///
 /// Please do **not** pass this type directly to screen coordinators/view models.
 struct CommonFlowParameters {
+    let userSessionManager: UserSessionManagerProtocol
+    /// The account this flow tree belongs to: the active session when the tree was built. It never changes,
+    /// so use the `userSessionManager` for anything involving the other accounts.
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
     let elementCallService: ElementCallServiceProtocol

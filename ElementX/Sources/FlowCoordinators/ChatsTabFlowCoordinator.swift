@@ -375,6 +375,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
+                                                         userSessionManager: flowParameters.userSessionManager,
                                                          bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
                                                          analyticsService: flowParameters.analytics,

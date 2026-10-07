@@ -15,6 +15,7 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let userSessionManager: UserSessionManagerProtocol
     private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsServiceProtocol
     private let bugReportService: BugReportServiceProtocol
@@ -31,12 +32,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol,
+         userSessionManager: UserSessionManagerProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          analyticsService: AnalyticsServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
+        self.userSessionManager = userSessionManager
         self.analyticsService = analyticsService
         self.bugReportService = bugReportService
         userSettings = userSession.userSettings
@@ -486,6 +489,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: Multi-account announcement
     
     private func presentMultiAccountAnnouncementIfNeeded() {
+        // Never announce it to someone who already uses several accounts, even once they've removed some.
+        if userSessionManager.userIDs.count > 1, !userSettings.hasSeenMultiAccountAnnouncement {
+            MXLog.info("Several accounts are signed in, marking the multi-account announcement as seen.")
+            userSettings.hasSeenMultiAccountAnnouncement = true
+        }
+        
         // An unverified session gets the identity confirmation cover first, the room list appears again once it's dismissed.
         guard userSettings.app.multiAccountEnabled,
               !userSettings.app.hasSeenMultiAccountAnnouncement,

@@ -144,6 +144,7 @@ struct HomeScreenEmptyStateView_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@user:example.com",
                                                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([])))))))
         return HomeScreenViewModel(userSession: userSession,
+                                   userSessionManager: UserSessionManagerMock(.init(userSessions: [userSession])),
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                    analyticsService: AnalyticsServiceMock(.init()),
                                    bugReportService: BugReportServiceMock(.init()),

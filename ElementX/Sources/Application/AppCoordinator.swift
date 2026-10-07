@@ -19,6 +19,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
+    private let userSessionManager: UserSessionManager
     // periphery:ignore - retaining purpose
     private let targetConfiguration: Target.ConfigurationResult
     private let appMediator: AppMediator
@@ -38,18 +39,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private var userSessionMigrationsOldVersion: Version?
     private var userSession: UserSessionProtocol? {
-        didSet {
-            userSessionObserver?.cancel()
-            if let userSession {
-                configureElementCallService()
-                configureNotificationManager()
-                observeUserSessionChanges()
-                Task {
-                    await resumeClientServices()
-                    await appHooks.configure(with: userSession)
-                }
-            }
-        }
+        userSessionManager.activeSession
     }
     
     private var authenticationFlowCoordinator: AuthenticationFlowCoordinator?
@@ -132,6 +122,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                             analyticsService: analyticsService,
                                             appHooks: appHooks,
                                             networkMonitor: networkMonitor)
+        userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
@@ -216,7 +207,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        guard userSessionStore.hasSessions else {
+        guard !userSessionManager.userIDs.isEmpty else {
             stateMachine.processEvent(.startWithAuthentication)
             return
         }
@@ -379,7 +370,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     // MARK: - AuthenticationFlowCoordinatorDelegate
     
     func authenticationFlowCoordinator(didLoginWithSession userSession: UserSessionProtocol) {
-        self.userSession = userSession
+        userSessionManager.add(userSession)
+        configureActiveSession()
         authenticationFlowCoordinator = nil
         stateMachine.processEvent(.createdUserSession)
     }
@@ -580,7 +572,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             appSettings.resetAllSettings()
             appLockFlowCoordinator.appLockService.disable()
         }
-        userSessionStore.reset()
+        userSessionManager.reset()
     }
     
     /// Manually cleans up any files in the app group's `tmp` directory.
@@ -673,10 +665,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func restoreUserSession() {
         Task {
-            switch await userSessionStore.restoreUserSession() {
+            switch await userSessionManager.restoreActiveSession() {
             case .success(let userSession):
                 await self.performUserSessionMigrations(userSession)
-                self.userSession = userSession
+                userSessionManager.add(userSession)
+                configureActiveSession()
                 stateMachine.processEvent(.createdUserSession)
             case .failure:
                 MXLog.error("Failed to restore an existing session.")
@@ -765,7 +758,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     
                     switch action {
                     case .signedIn(let session):
-                        self.userSession = session
+                        self.userSessionManager.add(session)
+                        self.configureActiveSession()
                         self.softLogoutCoordinator = nil
                         stateMachine.processEvent(.createdUserSession)
                     case .clearAllData:
@@ -792,7 +786,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             analyticsService.signpost.startTransaction(.cachedRoomList)
         }
         
-        let flowParameters = CommonFlowParameters(userSession: userSession,
+        let flowParameters = CommonFlowParameters(userSessionManager: userSessionManager,
+                                                  userSession: userSession,
                                                   bugReportService: bugReportService,
                                                   elementCallService: elementCallService,
                                                   timelineControllerFactory: TimelineControllerFactory(userSettings: userSession.userSettings),
@@ -867,7 +862,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             await userSession.clientProxy.logout()
             
             // Regardless of the result, clear user data
-            userSessionStore.logout(userSession: userSession)
+            userSessionManager.remove(userID: userSession.clientProxy.userID)
             tearDownUserSession()
             
             userSession.userSettings.account.reset()
@@ -886,7 +881,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func tearDownUserSession() {
         userIndicatorController.retractAllIndicators()
         
-        userSession = nil
+        userSessionObserver?.cancel()
         
         userSessionFlowCoordinator = nil
         
@@ -909,6 +904,22 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 appLockFlowCoordinator.appLockService.disable()
                 windowManager.switchToMain()
             }
+        }
+    }
+    
+    /// Points the app-wide services at the active account's session.
+    private func configureActiveSession() {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
+        userSessionObserver?.cancel()
+        configureElementCallService()
+        configureNotificationManager()
+        observeUserSessionChanges()
+        Task {
+            await resumeClientServices()
+            await appHooks.configure(with: userSession)
         }
     }
     
@@ -1354,7 +1365,7 @@ private extension AppCoordinator {
     /// When iOS relaunches a terminated app for a background task, the session needs restoring before the task can run.
     private func waitForSessionRestore() async {
         // A background launch doesn't necessarily connect a scene, which is what normally calls `start()`.
-        if stateMachine.state == .initial, userSessionStore.hasSessions {
+        if stateMachine.state == .initial, !userSessionManager.userIDs.isEmpty {
             start()
         }
         
