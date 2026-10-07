@@ -19,13 +19,6 @@ extension PreviewTests {
     }
 
     @Test
-    func advancedSettingsScreen() async throws {
-        for (index, preview) in AdvancedSettingsScreen_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    @Test
     func analyticsPromptScreen() async throws {
         for (index, preview) in AnalyticsPromptScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

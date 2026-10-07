@@ -11,7 +11,6 @@ enum TestablePreviewsDictionary {
     static let dictionary: [String: any PreviewProvider.Type] = {
         var dictionary: [String: any PreviewProvider.Type] = [
             "ActiveCallTimelineItemView_Previews" : ActiveCallTimelineItemView_Previews.self,
-            "AdvancedSettingsScreen_Previews" : AdvancedSettingsScreen_Previews.self,
             "AnalyticsPromptScreen_Previews" : AnalyticsPromptScreen_Previews.self,
             "AnalyticsSettingsScreen_Previews" : AnalyticsSettingsScreen_Previews.self,
             "AppLockScreen_Previews" : AppLockScreen_Previews.self,
