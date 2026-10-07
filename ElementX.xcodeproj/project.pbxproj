@@ -11075,7 +11075,7 @@
 			repositoryURL = "https://github.com/apple/swift-async-algorithms";
 			requirement = {
 				kind = exactVersion;
-				version = 1.1.5;
+				version = 1.1.6;
 			};
 		};
 		4BDA7F6042968E8422470F3F /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
@@ -11147,7 +11147,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 0.26.0;
+				version = 0.26.1;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
@@ -11163,7 +11163,7 @@
 			repositoryURL = "https://github.com/PostHog/posthog-ios";
 			requirement = {
 				kind = exactVersion;
-				version = 3.76.0;
+				version = 3.85.3;
 			};
 		};
 		A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
@@ -11171,7 +11171,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 9.28.0;
+				version = 9.29.2;
 			};
 		};
 		AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -11203,7 +11203,7 @@
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = exactVersion;
-				version = 8.12.0;
+				version = 8.13.0;
 			};
 		};
 		D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
@@ -11211,7 +11211,7 @@
 			repositoryURL = "https://github.com/devicekit/DeviceKit";
 			requirement = {
 				kind = exactVersion;
-				version = 5.8.0;
+				version = 5.9.0;
 			};
 		};
 		E025F19D013D9BA6C58B37F4 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
@@ -11267,7 +11267,7 @@
 			repositoryURL = "https://github.com/apple/swift-collections";
 			requirement = {
 				kind = exactVersion;
-				version = 1.6.0;
+				version = 1.7.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
