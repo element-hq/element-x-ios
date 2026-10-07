@@ -1014,7 +1014,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // so it might very well just all be false positives
         options.enableWatchdogTerminationTracking = false
         
-        // Disabled as it seems to report a lot of false positives
+        // MetricKit is now the preferred way to track app hangs
+        options.enableMetricKit = true
         options.enableAppHangTracking = false
         
         // Most of the network requests are made Rust side, this is useless
