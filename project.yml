@@ -112,7 +112,7 @@ packages:
     exactVersion: 1.2.1
   AsyncAlgorithms:
     url: https://github.com/apple/swift-async-algorithms
-    exactVersion: 1.1.6
+    exactVersion: 1.1.7
   Collections:
     url: https://github.com/apple/swift-collections
     exactVersion: 1.7.1
@@ -151,7 +151,7 @@ packages:
     exactVersion: 6.31.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    exactVersion: 3.85.3
+    exactVersion: 3.86.1
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     exactVersion: 9.29.2
