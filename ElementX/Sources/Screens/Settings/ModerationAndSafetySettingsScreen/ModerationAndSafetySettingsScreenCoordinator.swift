@@ -13,12 +13,34 @@ struct ModerationAndSafetySettingsScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
+enum ModerationAndSafetySettingsScreenCoordinatorAction {
+    case blockedUsers
+}
+
 final class ModerationAndSafetySettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: ModerationAndSafetySettingsScreenViewModelProtocol
+    
+    private let actionsSubject: PassthroughSubject<ModerationAndSafetySettingsScreenCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<ModerationAndSafetySettingsScreenCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(parameters: ModerationAndSafetySettingsScreenCoordinatorParameters) {
         viewModel = ModerationAndSafetySettingsScreenViewModel(userSession: parameters.userSession,
                                                                userIndicatorController: parameters.userIndicatorController)
+        
+        viewModel.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .blockedUsers:
+                    actionsSubject.send(.blockedUsers)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {

@@ -35,7 +35,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            showDeveloperOptions: userSettings.developerOptionsEnabled,
                                            showAnalyticsSettings: userSettings.canPromptForAnalytics,
                                            isBugReportServiceEnabled: isBugReportServiceEnabled,
-                                           navigationBarVisibility: isInSecondaryWindow ? .hidden : .automatic),
+                                           navigationBarVisibility: isInSecondaryWindow ? .hidden : .automatic,
+                                           bindings: .init(userSettings: userSettings)),
                    mediaProvider: userSession.mediaProvider)
         
         userSettings.developerOptionsEnabledPublisher
@@ -77,18 +78,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             }
             .store(in: &cancellables)
         
-        userSession.clientProxy.ignoredUsersPublisher
-            .receive(on: DispatchQueue.main)
-            .map {
-                guard let blockedUsers = $0 else {
-                    return false
-                }
-                
-                return !blockedUsers.isEmpty
-            }
-            .weakAssign(to: \.state.showBlockedUsers, on: self)
-            .store(in: &cancellables)
-        
         Task {
             if case .success(true) = await userSession.clientProxy.isUserStatusSupported() {
                 state.showUserStatusInput = true
@@ -102,6 +91,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         switch viewAction {
         case .close:
             actionsSubject.send(.close)
+            
         case .userDetails:
             actionsSubject.send(.userDetails)
         case .userStatus(.pickStatus):
@@ -118,38 +108,45 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         case .userStatus(.cancel):
             state.bindings.isPresentingStatusPicker = false
             state.bindings.isShowingCustomStatusField = false
+            
         case .addAccount:
             actionsSubject.send(.addAccount)
-        case .linkNewDevice:
-            actionsSubject.send(.linkNewDevice)
+            
         case let .manageAccount(url):
             actionsSubject.send(.manageAccount(url: url))
-        case .analytics:
-            actionsSubject.send(.analytics)
-        case .appLock:
-            actionsSubject.send(.appLock)
-        case .reportBug:
-            actionsSubject.send(.reportBug)
-        case .about:
-            actionsSubject.send(.about)
-        case .blockedUsers:
-            actionsSubject.send(.blockedUsers)
-        case .logout:
-            actionsSubject.send(.logout)
-        case .secureBackup:
-            actionsSubject.send(.secureBackup)
+        case .linkNewDevice:
+            actionsSubject.send(.linkNewDevice)
         case .notifications:
             actionsSubject.send(.notifications)
-        case .advancedSettings:
-            actionsSubject.send(.advancedSettings)
+        case .secureBackup:
+            actionsSubject.send(.secureBackup)
+        case .moderationAndSafety:
+            actionsSubject.send(.moderationAndSafety)
+        case .reportBug:
+            actionsSubject.send(.reportBug)
+            
+        case .logout:
+            actionsSubject.send(.logout)
+        case .deactivateAccount:
+            actionsSubject.send(.deactivateAccount)
+            
+        case .mediaUploadQuality:
+            actionsSubject.send(.mediaUploadQuality)
+        case .appLock:
+            actionsSubject.send(.appLock)
+        case .locationSharing:
+            actionsSubject.send(.locationSharing)
+        case .analytics:
+            actionsSubject.send(.analytics)
         case .labs:
             actionsSubject.send(.labs)
+        case .about:
+            actionsSubject.send(.about)
+            
         case .enableDeveloperOptions:
             userSettings.developerOptionsEnabled.toggle()
         case .developerOptions:
             actionsSubject.send(.developerOptions)
-        case .deactivateAccount:
-            actionsSubject.send(.deactivateAccount)
         }
     }
     
