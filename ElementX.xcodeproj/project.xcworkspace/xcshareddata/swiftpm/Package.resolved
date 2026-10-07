@@ -1,5 +1,5 @@
 {
-  "originHash" : "8bdc0118ee6f7785c7ff4143098fdbb70b55ab3d32c3d92d6ef5cf9aa5033c33",
+  "originHash" : "5ea45791d7b9a41e7a863e2cc8cdb24b1798f18ccf4de712f3a71ba4c4cf9d60",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devicekit/DeviceKit",
       "state" : {
-        "revision" : "56b997e8a61707218f9af09f32b2a1d1806fd792",
-        "version" : "5.8.0"
+        "revision" : "19528aa07e1426626ea9fb2c4a161edf43c4f9e8",
+        "version" : "5.9.0"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "0c8c78913eb91bbe7fce2c7761f66bc9b0791ce3",
-        "version" : "0.26.0"
+        "revision" : "befb5d37a7859ad38cf83719cbfd4abaffa04d82",
+        "version" : "0.26.1"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "be0d257b9bd47a4e6e1265fc8c237411825f107a",
-        "version" : "8.12.0"
+        "revision" : "8648fe649c5d62be38721110f835821906e9242a",
+        "version" : "8.13.0"
       }
     },
     {
@@ -212,8 +212,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/PostHog/posthog-ios",
       "state" : {
-        "revision" : "143d8337e9d39156f00fb5bde6c191a57febef1e",
-        "version" : "3.76.0"
+        "revision" : "d97d9a0babda42ecee026bd0a5a9ea1756349dc1",
+        "version" : "3.85.3"
       }
     },
     {
@@ -221,8 +221,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "61e8cb02434b26fb34c58126d883e5663cfde238",
-        "version" : "9.28.0"
+        "revision" : "8689e780a295dfdc6501ac0dbb502461e16d6551",
+        "version" : "9.29.2"
       }
     },
     {
@@ -248,8 +248,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-async-algorithms",
       "state" : {
-        "revision" : "3da39bbc4e687d4192af7c9cf4eab805745a0b9c",
-        "version" : "1.1.5"
+        "revision" : "789dcf1f3d3f00251482f40a432ab7144c181987",
+        "version" : "1.1.6"
       }
     },
     {
@@ -257,8 +257,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "a0cb0954ecb21e4e31b0070e6ed5674e8556685a",
-        "version" : "1.6.0"
+        "revision" : "98ef3c98609a1e31b7e157b5b619579001a789d6",
+        "version" : "1.7.1"
       }
     },
     {
