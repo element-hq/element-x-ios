@@ -521,8 +521,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if oldVersion < Version(26, 10, 1) {
             MXLog.info("Migrating to version 26.10.1, moving initial 'session specific' settings.")
-            userSession.userSettings.migrateAppSettingsValueToAccountSettings(\.hasRunIdentityConfirmationOnboardingKey)
-            userSession.userSettings.migrateAppSettingsValueToAccountSettings(\.searchBreadcrumbsKey)
+            userSession.userSettings.account.migrateAppSettingsValue(\.hasRunIdentityConfirmationOnboardingKey)
+            userSession.userSettings.account.migrateAppSettingsValue(\.searchBreadcrumbsKey)
         }
         
         userSessionMigrationsOldVersion = nil
@@ -870,7 +870,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSessionStore.logout(userSession: userSession)
             tearDownUserSession()
             
-            userSession.userSettings.resetSessionSpecificSettings()
+            userSession.userSettings.account.reset()
             appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics

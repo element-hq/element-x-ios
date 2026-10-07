@@ -63,8 +63,8 @@ struct UserSettingsTests {
         #expect(aliceSettings.account.searchBreadcrumbs.isEmpty)
         
         // When migrating those values into Alice's account settings.
-        aliceSettings.migrateAppSettingsValueToAccountSettings(\.hasRunIdentityConfirmationOnboardingKey)
-        aliceSettings.migrateAppSettingsValueToAccountSettings(\.searchBreadcrumbsKey)
+        aliceSettings.account.migrateAppSettingsValue(\.hasRunIdentityConfirmationOnboardingKey)
+        aliceSettings.account.migrateAppSettingsValue(\.searchBreadcrumbsKey)
         
         // Then the values should belong to Alice only.
         #expect(aliceSettings.account.hasRunIdentityConfirmationOnboarding)
@@ -90,7 +90,7 @@ struct UserSettingsTests {
         #expect(bobSettings.account.searchBreadcrumbs == [.query("Bob")])
         
         // When resetting Alice's session specific settings.
-        aliceSettings.resetSessionSpecificSettings()
+        aliceSettings.account.reset()
         
         // Then only Alice's account settings should be reset.
         #expect(!aliceSettings.account.hasRunIdentityConfirmationOnboarding)

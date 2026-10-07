@@ -22,12 +22,4 @@ final nonisolated class UserSettings: Sendable {
     static func mock(userID: String = "@me:matrix.org") -> UserSettings {
         AppSettings.volatile().userSettings(for: userID)
     }
-    
-    func migrateAppSettingsValueToAccountSettings(_ keyPath: KeyPath<AccountSettings, UserPreferenceKey>) {
-        account.migrateAppSettingsValue(keyPath)
-    }
-    
-    func resetSessionSpecificSettings() {
-        account.reset()
-    }
 }
