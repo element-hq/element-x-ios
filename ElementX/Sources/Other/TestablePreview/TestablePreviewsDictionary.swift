@@ -97,6 +97,7 @@ enum TestablePreviewsDictionary {
             "MatrixUserPermalink_Previews" : MatrixUserPermalink_Previews.self,
             "MediaEventsTimelineScreen_Previews" : MediaEventsTimelineScreen_Previews.self,
             "MediaUploadPreviewScreen_Previews" : MediaUploadPreviewScreen_Previews.self,
+            "MediaUploadQualitySettingsScreen_Previews" : MediaUploadQualitySettingsScreen_Previews.self,
             "MentionSuggestionItemView_Previews" : MentionSuggestionItemView_Previews.self,
             "MessageComposerTextField_Previews" : MessageComposerTextField_Previews.self,
             "MessageComposer_Previews" : MessageComposer_Previews.self,
