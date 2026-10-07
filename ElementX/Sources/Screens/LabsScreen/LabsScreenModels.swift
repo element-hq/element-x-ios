@@ -8,10 +8,6 @@
 
 import Foundation
 
-enum LabsScreenViewAction {
-    case clearCache
-}
-
 enum LabsScreenViewModelAction {
     case clearCache
 }
@@ -20,24 +16,29 @@ struct LabsScreenViewState: BindableState {
     var bindings: LabsScreenViewStateBindings
 }
 
-@dynamicMemberLookup
 struct LabsScreenViewStateBindings {
-    private let labsOptions: LabsOptionsProtocol
+    private let userSettings: UserSettings
     
-    init(labsOptions: LabsOptionsProtocol) {
-        self.labsOptions = labsOptions
+    init(userSettings: UserSettings) {
+        self.userSettings = userSettings
     }
     
-    subscript<Setting>(dynamicMember keyPath: ReferenceWritableKeyPath<LabsOptionsProtocol, Setting>) -> Setting {
-        get { labsOptions[keyPath: keyPath] }
-        set { labsOptions[keyPath: keyPath] = newValue }
+    var threadsEnabled: Bool {
+        get { userSettings.threadsEnabled }
+        set { userSettings.threadsEnabled = newValue }
+    }
+    
+    var galleryEnabled: Bool {
+        get { userSettings.galleryEnabled }
+        set { userSettings.galleryEnabled = newValue }
+    }
+    
+    var knockingEnabled: Bool {
+        get { userSettings.knockingEnabled }
+        set { userSettings.knockingEnabled = newValue }
     }
 }
 
-protocol LabsOptionsProtocol: AnyObject {
-    var threadsEnabled: Bool { get set }
-    var galleryEnabled: Bool { get set }
-    var knockingEnabled: Bool { get set }
+enum LabsScreenViewAction {
+    case clearCache
 }
-
-extension AppSettings: LabsOptionsProtocol { }

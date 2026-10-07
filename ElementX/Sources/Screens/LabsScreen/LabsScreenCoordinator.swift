@@ -28,7 +28,7 @@ final class LabsScreenCoordinator: CoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     init(parameters: LabsScreenCoordinatorParameters) {
-        viewModel = LabsScreenViewModel(labsOptions: parameters.userSettings.app)
+        viewModel = LabsScreenViewModel(userSettings: parameters.userSettings)
     }
     
     func start() {
