@@ -313,9 +313,10 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeveloperOptions() {
-        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: flowParameters.userSettings.app,
-                                                            appHooks: flowParameters.appHooks,
-                                                            clientProxy: flowParameters.userSession.clientProxy)
+        let parameters = DeveloperOptionsScreenParameters(settings: .init(source: .user(flowParameters.userSettings)),
+                                                          appHooks: flowParameters.appHooks,
+                                                          clientProxy: flowParameters.userSession.clientProxy)
+        let coordinator = DeveloperOptionsScreenCoordinator(parameters: parameters)
         
         coordinator.actions
             .sink { [weak self] action in

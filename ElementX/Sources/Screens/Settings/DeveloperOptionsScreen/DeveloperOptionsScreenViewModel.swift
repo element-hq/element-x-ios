@@ -20,18 +20,18 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     
     private let clientProxy: ClientProxyProtocol?
     
-    init(developerOptions: DeveloperOptionsProtocol, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
+    init(settings: DeveloperOptionsScreenSettings, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
         self.clientProxy = clientProxy
         super.init(initialViewState: .init(appHooks: appHooks,
                                            shouldShowClearCache: clientProxy != nil,
                                            isSignedIn: clientProxy != nil,
-                                           bindings: .init(developerOptions: developerOptions)))
+                                           bindings: .init(settings: settings)))
         
-        developerOptions.multiAccountEnabledPublisher
+        settings.multiAccountEnabledPublisher
             .removeDuplicates()
             .dropFirst() // The publisher replays the current value, so only an actual toggle arms the announcement.
             .filter { $0 }
-            .sink { _ in developerOptions.hasSeenMultiAccountAnnouncement = false }
+            .sink { _ in settings.hasSeenMultiAccountAnnouncement = false }
             .store(in: &cancellables)
         
         Task {

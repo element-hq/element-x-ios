@@ -9,6 +9,12 @@
 import Combine
 import SwiftUI
 
+struct DeveloperOptionsScreenParameters {
+    let settings: DeveloperOptionsScreenSettings
+    let appHooks: AppHooks
+    let clientProxy: ClientProxyProtocol?
+}
+
 enum DeveloperOptionsScreenCoordinatorAction {
     case clearCache
 }
@@ -23,10 +29,10 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(appSettings: AppSettings, appHooks: AppHooks, clientProxy: ClientProxyProtocol?) {
-        viewModel = DeveloperOptionsScreenViewModel(developerOptions: appSettings,
-                                                    appHooks: appHooks,
-                                                    clientProxy: clientProxy)
+    init(parameters: DeveloperOptionsScreenParameters) {
+        viewModel = DeveloperOptionsScreenViewModel(settings: parameters.settings,
+                                                    appHooks: parameters.appHooks,
+                                                    clientProxy: parameters.clientProxy)
         
         viewModel.actions
             .sink { [weak self] action in

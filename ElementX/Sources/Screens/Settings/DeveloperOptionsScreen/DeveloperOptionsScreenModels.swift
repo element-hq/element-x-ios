@@ -31,17 +31,140 @@ struct DeveloperOptionsScreenViewState: BindableState {
     }
 }
 
-@dynamicMemberLookup
 struct DeveloperOptionsScreenViewStateBindings {
-    private let developerOptions: DeveloperOptionsProtocol
+    private let settings: DeveloperOptionsScreenSettings
     
-    init(developerOptions: DeveloperOptionsProtocol) {
-        self.developerOptions = developerOptions
+    init(settings: DeveloperOptionsScreenSettings) {
+        self.settings = settings
     }
     
-    subscript<Setting>(dynamicMember keyPath: ReferenceWritableKeyPath<DeveloperOptionsProtocol, Setting>) -> Setting {
-        get { developerOptions[keyPath: keyPath] }
-        set { developerOptions[keyPath: keyPath] = newValue }
+    var logLevel: LogLevel {
+        get { settings.logLevel }
+        set { settings.logLevel = newValue }
+    }
+    
+    var traceLogPacks: Set<TraceLogPack> {
+        get { settings.traceLogPacks }
+        set { settings.traceLogPacks = newValue }
+    }
+    
+    var enableOnlySignedDeviceIsolationMode: Bool {
+        get { settings.enableOnlySignedDeviceIsolationMode }
+        set { settings.enableOnlySignedDeviceIsolationMode = newValue }
+    }
+    
+    var hideQuietNotificationAlerts: Bool {
+        get { settings.hideQuietNotificationAlerts }
+        set { settings.hideQuietNotificationAlerts = newValue }
+    }
+    
+    var focusEventOnNotificationTap: Bool {
+        get { settings.focusEventOnNotificationTap }
+        set { settings.focusEventOnNotificationTap = newValue }
+    }
+    
+    var elementCallBaseURLOverride: URL? {
+        get { settings.elementCallBaseURLOverride }
+        set { settings.elementCallBaseURLOverride = newValue }
+    }
+    
+    var fuzzyRoomListSearchEnabled: Bool {
+        get { settings.fuzzyRoomListSearchEnabled }
+        set { settings.fuzzyRoomListSearchEnabled = newValue }
+    }
+    
+    var lowPriorityFilterEnabled: Bool {
+        get { settings.lowPriorityFilterEnabled }
+        set { settings.lowPriorityFilterEnabled = newValue }
+    }
+    
+    var mentionsFilterEnabled: Bool {
+        get { settings.mentionsFilterEnabled }
+        set { settings.mentionsFilterEnabled = newValue }
+    }
+    
+    var linkPreviewsEnabled: Bool {
+        get { settings.linkPreviewsEnabled }
+        set { settings.linkPreviewsEnabled = newValue }
+    }
+    
+    var jumpToReadMarkerEnabled: Bool {
+        get { settings.jumpToReadMarkerEnabled }
+        set { settings.jumpToReadMarkerEnabled = newValue }
+    }
+    
+    var messageMultiSelectEnabled: Bool {
+        get { settings.messageMultiSelectEnabled }
+        set { settings.messageMultiSelectEnabled = newValue }
+    }
+    
+    var linkNewDeviceEnabled: Bool {
+        get { settings.linkNewDeviceEnabled }
+        set { settings.linkNewDeviceEnabled = newValue }
+    }
+    
+    var globalSearchEnabled: Bool {
+        get { settings.globalSearchEnabled }
+        set { settings.globalSearchEnabled = newValue }
+    }
+    
+    var multiAccountEnabled: Bool {
+        get { settings.multiAccountEnabled }
+        set { settings.multiAccountEnabled = newValue }
+    }
+    
+    var multiAccountEnabledPublisher: AnyPublisher<Bool, Never> {
+        settings.multiAccountEnabledPublisher
+    }
+    
+    var hasSeenMultiAccountAnnouncement: Bool {
+        get { settings.hasSeenMultiAccountAnnouncement }
+        set { settings.hasSeenMultiAccountAnnouncement = newValue }
+    }
+    
+    var nativeCallEnabled: Bool {
+        get { settings.nativeCallEnabled }
+        set { settings.nativeCallEnabled = newValue }
+    }
+}
+
+/// Shared access to app-specific settings, either via an `AppSettings` instance, or a user-specific `UserSettings` instance.
+///
+/// In the future this could also vend a (scoped) `account` object that takes `AccountSettings` key paths if we ever need to
+/// conditionalise some settings.
+@dynamicMemberLookup
+class DeveloperOptionsScreenSettings {
+    enum Source {
+        case app(AppSettings)
+        case user(UserSettings)
+    }
+    
+    let source: Source
+    
+    init(source: Source) {
+        self.source = source
+    }
+    
+    subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<AppSettings, Value>) -> Value {
+        get {
+            switch source {
+            case .app(let appSettings): appSettings[keyPath: keyPath]
+            case .user(let userSettings): userSettings[dynamicMember: keyPath]
+            }
+        }
+        set {
+            switch source {
+            case .app(let appSettings): appSettings[keyPath: keyPath] = newValue
+            case .user(let userSettings): userSettings[dynamicMember: keyPath] = newValue
+            }
+        }
+    }
+    
+    subscript<Value>(dynamicMember keyPath: KeyPath<AppSettings, Value>) -> Value {
+        switch source {
+        case .app(let appSettings): appSettings[keyPath: keyPath]
+        case .user(let userSettings): userSettings[dynamicMember: keyPath]
+        }
     }
 }
 
@@ -49,35 +172,3 @@ enum DeveloperOptionsScreenViewAction {
     case clearCache
     case markAllRoomsAsRead
 }
-
-protocol DeveloperOptionsProtocol: AnyObject {
-    var logLevel: LogLevel { get set }
-    var traceLogPacks: Set<TraceLogPack> { get set }
-    
-    var enableOnlySignedDeviceIsolationMode: Bool { get set }
-    var hideQuietNotificationAlerts: Bool { get set }
-    var focusEventOnNotificationTap: Bool { get set }
-    
-    var elementCallBaseURLOverride: URL? { get set }
-    
-    var fuzzyRoomListSearchEnabled: Bool { get set }
-    var lowPriorityFilterEnabled: Bool { get set }
-    var mentionsFilterEnabled: Bool { get set }
-    
-    var linkPreviewsEnabled: Bool { get set }
-    
-    var jumpToReadMarkerEnabled: Bool { get set }
-    var messageMultiSelectEnabled: Bool { get set }
-    
-    var linkNewDeviceEnabled: Bool { get set }
-    
-    var globalSearchEnabled: Bool { get set }
-    
-    var multiAccountEnabled: Bool { get set }
-    var multiAccountEnabledPublisher: AnyPublisher<Bool, Never> { get }
-    var hasSeenMultiAccountAnnouncement: Bool { get set }
-    
-    var nativeCallEnabled: Bool { get set }
-}
-
-extension AppSettings: DeveloperOptionsProtocol { }

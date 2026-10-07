@@ -442,9 +442,10 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showDeveloperOptionsScreen() {
         let stackCoordinator = NavigationStackCoordinator()
-        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: appSettings,
-                                                            appHooks: appHooks,
-                                                            clientProxy: nil)
+        let parameters = DeveloperOptionsScreenParameters(settings: .init(source: .app(appSettings)),
+                                                          appHooks: appHooks,
+                                                          clientProxy: nil)
+        let coordinator = DeveloperOptionsScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { action in
                 switch action {
