@@ -339,6 +339,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "LocationSharingScreen_Previews")
     }
 
+    func testLocationSharingSettingsScreen() async throws {
+        try await performAccessibilityAudit(named: "LocationSharingSettingsScreen_Previews")
+    }
+
     func testLoginScreen() async throws {
         try await performAccessibilityAudit(named: "LoginScreen_Previews")
     }
