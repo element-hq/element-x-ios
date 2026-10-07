@@ -2710,6 +2710,22 @@ internal nonisolated enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
+  /// Ignore battery optimisation
+  internal static var screenPttSettingsBatteryOptimization: String { return L10n.tr("Localizable", "screen_ptt_settings_battery_optimization") }
+  /// Stay active in background
+  internal static var screenPttSettingsBatteryOptimizationDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_battery_optimization_description") }
+  /// Covert mode
+  internal static var screenPttSettingsCovertMode: String { return L10n.tr("Localizable", "screen_ptt_settings_covert_mode") }
+  /// Mute all channels
+  internal static var screenPttSettingsCovertModeDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_covert_mode_description") }
+  /// Show on lock screen
+  internal static var screenPttSettingsLockScreen: String { return L10n.tr("Localizable", "screen_ptt_settings_lock_screen") }
+  /// Access from the lock screen
+  internal static var screenPttSettingsLockScreenDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_lock_screen_description") }
+  /// Enable system overlay
+  internal static var screenPttSettingsSystemOverlay: String { return L10n.tr("Localizable", "screen_ptt_settings_system_overlay") }
+  /// Access a floating action button
+  internal static var screenPttSettingsSystemOverlayDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_system_overlay_description") }
   /// Push history
   internal static var screenPushHistoryTitle: String { return L10n.tr("Localizable", "screen_push_history_title") }
   /// Establishing a secure connection
