@@ -12,8 +12,7 @@ import Macros
 /// specific to that account.
 @dynamicMemberLookup
 final nonisolated class UserSettings: Sendable {
-    // TODO: @pixlwave Make this private after handling Advanced/Labs/Developer screen models.
-    let app: AppSettings
+    private let app: AppSettings
     private let account: AccountSettings
     
     init(appSettings: AppSettings, accountSettings: AccountSettings) {
