@@ -89,16 +89,20 @@ final nonisolated class EventTimelineItemProxy: Sendable {
         }
         
         switch pendingSend.state {
-        case .sendingFailed(let error, _):
-            switch error {
-            case .identityViolations(let users):
-                return .sendingFailed(.verifiedUser(.changedIdentity(users: users)))
-            case .insecureDevices(let userDeviceMap):
-                return .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: userDeviceMap)))
-            case .genericApiError(let message):
-                return .sendingFailed(.unknown(reason: message))
-            default:
-                return .sendingFailed(.unknown(reason: nil))
+        case .sendingFailed(let error, let isRecoverable):
+            if isRecoverable {
+                return .sending
+            } else {
+                switch error {
+                case .identityViolations(let users):
+                    return .sendingFailed(.verifiedUser(.changedIdentity(users: users)))
+                case .insecureDevices(let userDeviceMap):
+                    return .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: userDeviceMap)))
+                case .genericApiError(let message):
+                    return .sendingFailed(.unknown(reason: message))
+                case .crossVerificationRequired, .missingMediaContent, .invalidMimeType:
+                    return .sendingFailed(.unknown(reason: nil))
+                }
             }
         case .notSentYet:
             return .sending
