@@ -61,7 +61,7 @@ class EmojiProvider: EmojiProviderProtocol {
             return []
         }
         
-        return userSettings.frequentlyUsedSystemEmojis.map(\.key)
+        return userSettings.app.frequentlyUsedSystemEmojis.map(\.key)
     }
     
     func markEmojiAsFrequentlyUsed(_ emoji: String) {
@@ -70,9 +70,9 @@ class EmojiProvider: EmojiProviderProtocol {
         }
         
         let frequentlyUsed = if !frequentlyUsedSystemEmojis().contains(emoji) {
-            userSettings.frequentlyUsedSystemEmojis + [.init(count: 0, key: emoji)]
+            userSettings.app.frequentlyUsedSystemEmojis + [.init(count: 0, key: emoji)]
         } else {
-            userSettings.frequentlyUsedSystemEmojis.map { frequentlyUsedEmoji in
+            userSettings.app.frequentlyUsedSystemEmojis.map { frequentlyUsedEmoji in
                 if frequentlyUsedEmoji.key == emoji {
                     return FrequentlyUsedEmoji(count: frequentlyUsedEmoji.count + 1, key: emoji)
                 }
@@ -81,7 +81,7 @@ class EmojiProvider: EmojiProviderProtocol {
             }
         }
         
-        userSettings.frequentlyUsedSystemEmojis = frequentlyUsed.sorted { $0.count > $1.count }
+        userSettings.app.frequentlyUsedSystemEmojis = frequentlyUsed.sorted { $0.count > $1.count }
     }
     
     // MARK: - Private

@@ -68,7 +68,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayNameOrID,
                                             roomAvatar: roomProxy.infoPublisher.value.avatar,
-                                            isNativeCallingEnabled: userSettings.nativeCallEnabled,
+                                            isNativeCallingEnabled: userSettings.app.nativeCallEnabled,
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
                                             isDM: roomProxy.infoPublisher.value.isDM,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
@@ -127,7 +127,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         Task {
             // When navigating away from the room, we need to mark the room as both read
             // and fully read for Synapse to clear this room from the app's badge count.
-            _ = await roomProxy.markAsRead(receiptType: userSettings.sharePresence ? .read : .readPrivate)
+            _ = await roomProxy.markAsRead(receiptType: userSettings.app.sharePresence ? .read : .readPrivate)
             _ = await roomProxy.markAsRead(receiptType: .fullyRead)
         }
         // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
@@ -166,11 +166,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
-        userSettings.threadsEnabledPublisher
+        userSettings.app.threadsEnabledPublisher
             .weakAssign(to: \.state.roomThreadListEnabled, on: self)
             .store(in: &cancellables)
         
-        userSettings.liveLocationSharingSessionsByRoomIDPublisher
+        userSettings.app.liveLocationSharingSessionsByRoomIDPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] sessionsByRoomID in
                 guard let self else { return }
@@ -264,10 +264,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         if let member = identityVerificationViolations.values.first {
             state.footerDetails = .verificationViolation(member: member,
-                                                         learnMoreURL: userSettings.identityPinningViolationDetailsURL)
+                                                         learnMoreURL: userSettings.app.identityPinningViolationDetailsURL)
         } else if let member = identityPinningViolations.values.first {
             state.footerDetails = .pinViolation(member: member,
-                                                learnMoreURL: userSettings.identityPinningViolationDetailsURL)
+                                                learnMoreURL: userSettings.app.identityPinningViolationDetailsURL)
         } else {
             state.footerDetails = nil
         }
@@ -428,7 +428,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task {
                 switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
                 case .success(let event):
-                    if userSettings.threadsEnabled,
+                    if userSettings.app.threadsEnabled,
                        let threadRootEventID = event.threadRootEventId() {
                         actionsSubject.send(.focusEvent(eventID: threadRootEventID))
                         actionsSubject.send(.displayThread(threadRootEventID: threadRootEventID, focussedEventID: eventID))

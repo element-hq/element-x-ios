@@ -83,7 +83,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
         
         let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .openRoom)
-        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: userSettings.threadsEnabled),
+        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: userSettings.app.threadsEnabled),
                                                                                                          filter: .eventFilter(filter: Self.excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
                                                                                                          dateDividerMode: .daily,
@@ -150,7 +150,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let openRoomSpan = analyticsService.signpost.addSpan(.timelineLoad, toTransaction: .notificationToMessage)
             let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID,
                                                                                                           numContextEvents: numberOfEvents,
-                                                                                                          threadMode: .automatic(hideThreadedEvents: userSettings.threadsEnabled)),
+                                                                                                          threadMode: .automatic(hideThreadedEvents: userSettings.app.threadsEnabled)),
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,

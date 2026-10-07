@@ -85,7 +85,7 @@ final class CreateRoomScreenViewModelTests {
                                             spaceServiceConfiguration: .init(spaceRoomLists: ["1": .init()])))
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        userSettings.knockingEnabled = true
+        userSettings.app.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: true,
                                                   spaceSelectionMode: .none,
                                                   shouldShowCancelButton: false,
@@ -336,7 +336,7 @@ final class CreateRoomScreenViewModelTests {
         clientProxy.spaceService = spaceService
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        userSettings.knockingEnabled = true
+        userSettings.app.knockingEnabled = true
         let viewModel = CreateRoomScreenViewModel(isSpace: isSpace,
                                                   spaceSelectionMode: spacesSelectionMode,
                                                   shouldShowCancelButton: false,

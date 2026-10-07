@@ -165,13 +165,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             
             // We only set the analytics configuration if analytics are enabled
             let analyticsConfiguration: ElementCallAnalyticsConfiguration? = if analyticsService.isEnabled {
-                .init(posthogAPIHost: userSettings.elementCallPosthogAPIHost,
-                      posthogAPIKey: userSettings.elementCallPosthogAPIKey,
-                      sentryDSN: userSettings.elementCallPosthogSentryDSN)
+                .init(posthogAPIHost: userSettings.app.elementCallPosthogAPIHost,
+                      posthogAPIKey: userSettings.app.elementCallPosthogAPIKey,
+                      sentryDSN: userSettings.app.elementCallPosthogSentryDSN)
             } else {
                 nil
             }
-            let rageshakeURL: String? = if case let .url(baseURL) = userSettings.bugReportRageshakeURL.publisher.value {
+            let rageshakeURL: String? = if case let .url(baseURL) = userSettings.app.bugReportRageshakeURL.publisher.value {
                 baseURL.absoluteString
             } else {
                 nil

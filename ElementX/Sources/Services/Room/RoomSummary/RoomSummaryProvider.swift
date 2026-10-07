@@ -165,7 +165,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             
             rustFilters.append(.identifiers(identifiers: Array(roomIDs)))
             
-            if !filters.contains(.lowPriority), userSettings.lowPriorityFilterEnabled {
+            if !filters.contains(.lowPriority), userSettings.app.lowPriorityFilterEnabled {
                 rustFilters.append(.nonLowPriority)
             }
             
@@ -173,7 +173,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         case let .all(filters):
             var rustFilters = filters.map(\.rustFilter) + baseFilter
             
-            if !filters.contains(.lowPriority), userSettings.lowPriorityFilterEnabled {
+            if !filters.contains(.lowPriority), userSettings.app.lowPriorityFilterEnabled {
                 rustFilters.append(.nonLowPriority)
             }
             
@@ -184,7 +184,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
     
     private func nameFilter(for query: String) -> [RoomListEntriesDynamicFilterKind] {
-        userSettings.fuzzyRoomListSearchEnabled ? [.fuzzyMatchRoomName(pattern: query)] : [.normalizedMatchRoomName(pattern: query)]
+        userSettings.app.fuzzyRoomListSearchEnabled ? [.fuzzyMatchRoomName(pattern: query)] : [.normalizedMatchRoomName(pattern: query)]
     }
     
     private func setupVisibleRangeObservers() {

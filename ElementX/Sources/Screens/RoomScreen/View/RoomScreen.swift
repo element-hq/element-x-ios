@@ -396,7 +396,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
         
         let userSettings = UserSettings.mock()
-        userSettings.messageMultiSelectEnabled = isSelecting
+        userSettings.app.messageMultiSelectEnabled = isSelecting
         let userSession = UserSessionMock(.init(userSettings: userSettings))
         
         let timelineController = TimelineControllerMock(.init())

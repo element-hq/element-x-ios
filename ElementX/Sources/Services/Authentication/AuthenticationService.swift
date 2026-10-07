@@ -235,7 +235,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 switch await userSession(for: client) {
                 case .success(let userSession):
                     // Since the QR code login flow includes verification.
-                    userSession.userSettings.hasRunIdentityConfirmationOnboarding = true
+                    userSession.userSettings.account.hasRunIdentityConfirmationOnboarding = true
                     progressSubject.send(.signedIn(userSession))
                 case .failure(let error):
                     progressSubject.send(completion: .failure(error))
@@ -366,7 +366,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             MXLog.info("Classic app account secrets imported.")
             
             // Importing the secrets automatically verifies the session.
-            appSettings.userSettings(for: classicAppAccount.userID).hasRunIdentityConfirmationOnboarding = true
+            appSettings.userSettings(for: classicAppAccount.userID).account.hasRunIdentityConfirmationOnboarding = true
         } catch {
             MXLog.error("Failed to import secrets for Classic app account: \(error)")
         }

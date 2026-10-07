@@ -73,7 +73,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
             .store(in: &cancellables)
         
         // The room list is empty on a cold start, so the room breadcrumbs are re-resolved as it loads.
-        userSettings.searchBreadcrumbsPublisher
+        userSettings.account.searchBreadcrumbsPublisher
             .combineLatest(clientProxy.staticRoomSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] storedBreadcrumbs, _ in
@@ -122,7 +122,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         }
         
         updateRooms(with: roomSummaryProvider.roomListPublisher.value)
-        state.breadcrumbs = makeBreadcrumbs(from: userSettings.searchBreadcrumbs)
+        state.breadcrumbs = makeBreadcrumbs(from: userSettings.account.searchBreadcrumbs)
     }
     
     isolated deinit {
@@ -154,7 +154,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         case .removeBreadcrumb(let breadcrumb):
             removeBreadcrumb(breadcrumb)
         case .clearBreadcrumbs:
-            userSettings.searchBreadcrumbs = []
+            userSettings.account.searchBreadcrumbs = []
         case .reachedTop:
             if state.bindings.searchMode == .rooms {
                 updateVisibleRange(edge: .top)
@@ -223,11 +223,11 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     
     /// Moves the breadcrumb to the top of the history, adding it if needed.
     private func recordBreadcrumb(_ breadcrumb: SearchBreadcrumb) {
-        var breadcrumbs = userSettings.searchBreadcrumbs
+        var breadcrumbs = userSettings.account.searchBreadcrumbs
         breadcrumbs.removeAll { $0 == breadcrumb }
         breadcrumbs.insert(breadcrumb, at: 0)
         
-        userSettings.searchBreadcrumbs = Array(breadcrumbs.prefix(Self.maximumBreadcrumbCount))
+        userSettings.account.searchBreadcrumbs = Array(breadcrumbs.prefix(Self.maximumBreadcrumbCount))
     }
     
     private func removeBreadcrumb(_ breadcrumb: SearchScreenBreadcrumb) {
@@ -235,7 +235,7 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
         case .query(let query): .query(query)
         case .room(let room): .room(roomID: room.id)
         }
-        userSettings.searchBreadcrumbs.removeAll { $0 == storedBreadcrumb }
+        userSettings.account.searchBreadcrumbs.removeAll { $0 == storedBreadcrumb }
     }
     
     private func setActiveTabLoading(_ isLoading: Bool) {

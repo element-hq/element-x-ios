@@ -458,8 +458,8 @@ final class SecurityAndPrivacyScreenViewModelTests {
                                 joinRule: ElementX.JoinRule,
                                 forceDisableE2EE: Bool = false) {
         let userSettings = UserSettings.mock()
-        userSettings.knockingEnabled = true
-        userSettings.forceDisableE2EE.applyRemoteValue(forceDisableE2EE)
+        userSettings.app.knockingEnabled = true
+        userSettings.app.forceDisableE2EE.applyRemoteValue(forceDisableE2EE)
         roomProxy = JoinedRoomProxyMock(.init(isEncrypted: false,
                                               canonicalAlias: "#room:matrix.org",
                                               members: .allMembersAsCreator,

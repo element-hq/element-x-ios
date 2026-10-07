@@ -29,25 +29,25 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userProfile: userSession.clientProxy.userProfilePublisher.value,
-                                           showLinkNewDeviceButton: userSettings.linkNewDeviceEnabled,
-                                           showAddAccountButton: userSettings.multiAccountEnabled,
+                                           showLinkNewDeviceButton: userSettings.app.linkNewDeviceEnabled,
+                                           showAddAccountButton: userSettings.app.multiAccountEnabled,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
-                                           showDeveloperOptions: userSettings.developerOptionsEnabled,
-                                           showAnalyticsSettings: userSettings.canPromptForAnalytics,
+                                           showDeveloperOptions: userSettings.app.developerOptionsEnabled,
+                                           showAnalyticsSettings: userSettings.app.canPromptForAnalytics,
                                            isBugReportServiceEnabled: isBugReportServiceEnabled,
                                            navigationBarVisibility: isInSecondaryWindow ? .hidden : .automatic,
                                            bindings: .init(userSettings: userSettings)),
                    mediaProvider: userSession.mediaProvider)
         
-        userSettings.developerOptionsEnabledPublisher
+        userSettings.app.developerOptionsEnabledPublisher
             .weakAssign(to: \.state.showDeveloperOptions, on: self)
             .store(in: &cancellables)
         
-        userSettings.linkNewDeviceEnabledPublisher
+        userSettings.app.linkNewDeviceEnabledPublisher
             .weakAssign(to: \.state.showLinkNewDeviceButton, on: self)
             .store(in: &cancellables)
         
-        userSettings.multiAccountEnabledPublisher
+        userSettings.app.multiAccountEnabledPublisher
             .weakAssign(to: \.state.showAddAccountButton, on: self)
             .store(in: &cancellables)
         
@@ -144,7 +144,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.about)
             
         case .enableDeveloperOptions:
-            userSettings.developerOptionsEnabled.toggle()
+            userSettings.app.developerOptionsEnabled.toggle()
         case .developerOptions:
             actionsSubject.send(.developerOptions)
         }

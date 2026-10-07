@@ -495,8 +495,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if oldVersion < Version(1, 6, 0) {
             MXLog.info("Migrating to v1.6.0, marking identity confirmation onboarding as ran.")
-            userSession.userSettings.hasRunIdentityConfirmationOnboarding = true
-            userSession.userSettings.hasRunNotificationPermissionsOnboarding = true
+            userSession.userSettings.account.hasRunIdentityConfirmationOnboarding = true
+            userSession.userSettings.app.hasRunNotificationPermissionsOnboarding = true
         }
         
         if oldVersion < Version(25, 6, 0) {
@@ -1383,7 +1383,7 @@ private extension AppCoordinator {
     }
     
     func scheduleSearchBackfill() {
-        guard let userSession, userSession.userSettings.globalSearchEnabled, #available(iOS 26.0, *) else {
+        guard let userSession, userSession.userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) else {
             return
         }
         

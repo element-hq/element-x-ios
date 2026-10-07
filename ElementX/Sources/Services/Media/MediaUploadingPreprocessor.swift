@@ -171,7 +171,7 @@ struct MediaUploadingPreprocessor {
             try stripLocationFromImage(at: url, type: type)
             
             var mimeType = mimeType
-            if userSettings.optimizeMediaUploads, !type.conforms(to: .gif) {
+            if userSettings.app.optimizeMediaUploads, !type.conforms(to: .gif) {
                 let outputType = type.conforms(to: .png) ? UTType.png : .jpeg
                 mimeType = outputType.preferredMIMEType ?? "application/octet-stream"
                 try resizeImage(at: url, maxPixelSize: Constants.optimizedMaxPixelSize, destination: url, type: outputType)
@@ -439,7 +439,7 @@ struct MediaUploadingPreprocessor {
     /// - Returns: the URL for the resulting video and its media info as a `VideoProcessingResult`
     private func convertVideoToMP4(_ url: URL, targetFileSize: UInt) async throws(MediaUploadingPreprocessorError) -> VideoProcessingInfo {
         let asset = AVURLAsset(url: url)
-        let presetName = userSettings.optimizeMediaUploads ? AVAssetExportPreset1280x720 : AVAssetExportPreset1920x1080
+        let presetName = userSettings.app.optimizeMediaUploads ? AVAssetExportPreset1280x720 : AVAssetExportPreset1920x1080
         
         guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetName) else {
             throw .failedConvertingVideo

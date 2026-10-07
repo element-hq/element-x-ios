@@ -52,7 +52,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                            bindings: .init(filtersState: .init(userSettings: userSettings))),
                    mediaProvider: userSession.mediaProvider)
         
-        if userSettings.globalSearchEnabled, #available(iOS 26.0, *) {
+        if userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) {
             state.isRoomListSearchEnabled = false
         }
         
@@ -113,21 +113,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        userSettings.showAllRoomListActivityPublisher
+        userSettings.app.showAllRoomListActivityPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.updateRooms()
             }
             .store(in: &cancellables)
         
-        userSettings.seenInvitesPublisher
+        userSettings.app.seenInvitesPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.updateRooms()
             }
             .store(in: &cancellables)
         
-        userSettings.hasSeenNewSoundBannerPublisher
+        userSettings.app.hasSeenNewSoundBannerPublisher
             .sink { [weak self] hasSeenNewSoundBanner in
                 self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner
             }
@@ -217,13 +217,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .skipRecoveryKeyConfirmation:
             state.securityBannerMode = .dismissed
         case .dismissNewSoundBanner:
-            userSettings.hasSeenNewSoundBanner = true
+            userSettings.app.hasSeenNewSoundBanner = true
         case .screenAppeared:
             // Use a task otherwise the presentation isn't animated.
             Task { presentMultiAccountAnnouncementIfNeeded() }
         case .multiAccountAnnouncementAppeared:
             MXLog.info("The multi-account announcement has been seen.")
-            userSettings.hasSeenMultiAccountAnnouncement = true
+            userSettings.app.hasSeenMultiAccountAnnouncement = true
         case .dismissMultiAccountAnnouncement, .addAccount: // There is no add account flow to start yet.
             state.bindings.isPresentingMultiAccountAnnouncement = false
         case .updateVisibleItemRange(let range):
@@ -275,7 +275,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .success:
                     analyticsService.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                     
-                    if case .failure(let error) = await roomProxy.markAsRead(receiptType: userSettings.sharePresence ? .read : .readPrivate) {
+                    if case .failure(let error) = await roomProxy.markAsRead(receiptType: userSettings.app.sharePresence ? .read : .readPrivate) {
                         MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
                     }
                 case .failure(let error):
@@ -389,11 +389,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         var rooms = [HomeScreenRoom]()
-        let seenInvites = userSettings.seenInvites
+        let seenInvites = userSettings.app.seenInvites
         
         for summary in roomSummaryProvider.roomListPublisher.value {
             let room = HomeScreenRoom(summary: summary,
-                                      showAllActivity: userSettings.showAllRoomListActivity,
+                                      showAllActivity: userSettings.app.showAllRoomListActivity,
                                       seenInvites: seenInvites)
             rooms.append(room)
         }
@@ -488,8 +488,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func presentMultiAccountAnnouncementIfNeeded() {
         // An unverified session gets the identity confirmation cover first, the room list appears again once it's dismissed.
-        guard userSettings.multiAccountEnabled,
-              !userSettings.hasSeenMultiAccountAnnouncement,
+        guard userSettings.app.multiAccountEnabled,
+              !userSettings.app.hasSeenMultiAccountAnnouncement,
               userSession.sessionSecurityStatePublisher.value.verificationState == .verified,
               !state.bindings.isPresentingMultiAccountAnnouncement else {
             return
@@ -545,7 +545,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
                                          isSpace: roomProxy.info.isSpace,
                                          activeMemberCount: UInt(roomProxy.info.activeMembersCount))
-        userSettings.seenInvites.remove(roomProxy.id)
+        userSettings.app.seenInvites.remove(roomProxy.id)
     }
     
     private func showDeclineInviteConfirmationAlert(roomID: String) async {
@@ -595,7 +595,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch result {
         case .success:
             await notificationManager.removeDeliveredMessageNotifications(for: roomID) // Normally handled by the room flow, but that's never presented in this case.
-            userSettings.seenInvites.remove(roomID)
+            userSettings.app.seenInvites.remove(roomID)
         case .failure:
             displayError()
         }

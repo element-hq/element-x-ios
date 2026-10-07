@@ -123,7 +123,7 @@ final class RoomSummaryProviderTests {
     
     private func setup(isLowPriorityFilterEnabled: Bool = false, includesOnlyJoinedRooms: Bool = false, setsRoomList: Bool = true) {
         userSettings = UserSettings.mock()
-        userSettings.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
+        userSettings.app.lowPriorityFilterEnabled = isLowPriorityFilterEnabled
         
         let stateEventStringBuilder = RoomStateEventStringBuilder(userID: "@me:matrix.org")
         let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())

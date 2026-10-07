@@ -67,12 +67,12 @@ nonisolated struct NotificationToneManager: NotificationToneManagerProtocol {
             try? FileManager.default.removeItem(at: Self.selectedToneLocation)
             let toneLocation = Self.toneLocation(for: alertTone)
             try FileManager.default.copyItem(at: toneLocation, to: Self.selectedToneLocation)
-            userSettings.selectedNotificationTone = alertTone
+            userSettings.app.selectedNotificationTone = alertTone
             return Self.selectedToneLocation
         } catch {
             if (try? Self.selectedToneLocation.checkResourceIsReachable()) != true {
                 // make sure the selected tone is reset if there's no custom tone present
-                userSettings.selectedNotificationTone = nil
+                userSettings.app.selectedNotificationTone = nil
             }
             throw error
         }

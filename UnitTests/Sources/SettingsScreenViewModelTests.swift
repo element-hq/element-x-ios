@@ -181,11 +181,11 @@ struct SettingsScreenViewModelTests {
         #expect(!context.viewState.showAddAccountButton)
         
         var deferred = deferFulfillment(context.observe(\.viewState.showAddAccountButton)) { $0 }
-        userSettings.multiAccountEnabled = true
+        userSettings.app.multiAccountEnabled = true
         try await deferred.fulfill()
         
         deferred = deferFulfillment(context.observe(\.viewState.showAddAccountButton)) { !$0 }
-        userSettings.multiAccountEnabled = false
+        userSettings.app.multiAccountEnabled = false
         try await deferred.fulfill()
     }
     

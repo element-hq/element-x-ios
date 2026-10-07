@@ -230,7 +230,7 @@ final class RoomFlowCoordinatorTests {
     
     @Test
     func threadedEventRoutes() async throws {
-        userSettings.threadsEnabled = true
+        userSettings.app.threadsEnabled = true
         setupRoomFlowCoordinator()
         
         // Navigate directly to the threaded event

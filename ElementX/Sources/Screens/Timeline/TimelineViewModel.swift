@@ -97,16 +97,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        hideTimelineMedia: hideTimelineMedia,
-                                                       isViewSourceEnabled: userSettings.viewSourceEnabled,
-                                                       areThreadsEnabled: userSettings.threadsEnabled,
-                                                       linkPreviewsEnabled: userSettings.linkPreviewsEnabled,
-                                                       jumpToReadMarkerEnabled: userSettings.jumpToReadMarkerEnabled,
-                                                       messageSelection: .init(isEnabled: userSettings.messageMultiSelectEnabled),
+                                                       isViewSourceEnabled: userSettings.app.viewSourceEnabled,
+                                                       areThreadsEnabled: userSettings.app.threadsEnabled,
+                                                       linkPreviewsEnabled: userSettings.app.linkPreviewsEnabled,
+                                                       jumpToReadMarkerEnabled: userSettings.app.jumpToReadMarkerEnabled,
+                                                       messageSelection: .init(isEnabled: userSettings.app.messageMultiSelectEnabled),
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
                                                        linkMetadataProvider: hideTimelineMedia ? nil : linkMetadataProvider,
-                                                       mapTilerConfiguration: userSettings.mapTilerConfiguration.publisher.value,
+                                                       mapTilerConfiguration: userSettings.app.mapTilerConfiguration.publisher.value,
                                                        bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: userSession.mediaProvider,
                    contentScannerService: userSession.contentScannerService)
@@ -272,7 +272,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .voiceMessage(let voiceMessageAction):
             processVoiceMessageAction(voiceMessageAction)
         case .contentChanged(let isEmpty):
-            guard userSettings.sharePresence else {
+            guard userSettings.app.sharePresence else {
                 return
             }
             
@@ -508,7 +508,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         roomProxy.typingMembersPublisher
             .receive(on: DispatchQueue.main)
-            .filter { [weak self] _ in self?.userSettings.sharePresence ?? false }
+            .filter { [weak self] _ in self?.userSettings.app.sharePresence ?? false }
             .weakAssign(to: \.state.typingMembers, on: self)
             .store(in: &cancellables)
         
@@ -560,7 +560,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     func viewInRoomTimeline(eventID: String) async {
         switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
         case .success(let event):
-            let threadRootEventID: String? = if userSettings.threadsEnabled {
+            let threadRootEventID: String? = if userSettings.app.threadsEnabled {
                 event.threadRootEventId()
             } else {
                 nil
@@ -572,19 +572,19 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func setupUserSettingsSubscriptions() {
-        userSettings.sharePresencePublisher
+        userSettings.app.sharePresencePublisher
             .weakAssign(to: \.state.showReadReceipts, on: self)
             .store(in: &cancellables)
         
-        userSettings.viewSourceEnabledPublisher
+        userSettings.app.viewSourceEnabledPublisher
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
             .store(in: &cancellables)
         
-        userSettings.threadsEnabledPublisher
+        userSettings.app.threadsEnabledPublisher
             .weakAssign(to: \.state.areThreadsEnabled, on: self)
             .store(in: &cancellables)
         
-        userSettings.jumpToReadMarkerEnabledPublisher
+        userSettings.app.jumpToReadMarkerEnabledPublisher
             .weakAssign(to: \.state.jumpToReadMarkerEnabled, on: self)
             .store(in: &cancellables)
         
@@ -1145,7 +1145,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              primaryButton: .init(title: L10n.actionOk, action: nil),
                                              secondaryButton: .init(title: L10n.actionLearnMore) { [weak self] in
                                                  guard let self else { return }
-                                                 appMediator.open(userSettings.historySharingDetailsURL)
+                                                 appMediator.open(userSettings.app.historySharingDetailsURL)
                                              })
         case .inviteAgain:
             state.bindings.alertInfo = .init(id: .inviteAgain,
@@ -1196,7 +1196,7 @@ extension TimelineViewModel {
 
 extension TimelineViewModel {
     private func setupSelectionSubscriptions() {
-        userSettings.messageMultiSelectEnabledPublisher
+        userSettings.app.messageMultiSelectEnabledPublisher
             .sink { [weak self] isEnabled in
                 self?.state.messageSelection.isEnabled = isEnabled
                 if !isEnabled {

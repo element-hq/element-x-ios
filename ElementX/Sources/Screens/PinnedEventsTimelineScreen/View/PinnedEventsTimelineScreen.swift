@@ -107,7 +107,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         let timelineController = TimelineControllerMock(.init(timelineKind: .pinned, timelineItems: timelineItems))
         
         let userSettings = UserSettings.mock()
-        userSettings.messageMultiSelectEnabled = isSelecting
+        userSettings.app.messageMultiSelectEnabled = isSelecting
         let userSession = UserSessionMock(.init(userSettings: userSettings))
         
         let timelineViewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room", pinnedEventIDs: Set(eventIDs))),

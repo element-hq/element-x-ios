@@ -68,7 +68,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                                    topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
                                                    joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                                    notificationSettingsState: .loading,
-                                                   isNativeCallingEnabled: userSettings.nativeCallEnabled,
+                                                   isNativeCallingEnabled: userSettings.app.nativeCallEnabled,
                                                    bindings: .init())
         super.init(initialViewState: appHooks.roomDetailsScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)

@@ -18,7 +18,7 @@ final class BugReportServiceTests {
     
     init() throws {
         userSettings = UserSettings.mock()
-        userSettings.bugReportRageshakeURL.reset()
+        userSettings.app.bugReportRageshakeURL.reset()
         
         let bugReportServiceMock = BugReportServiceMock()
         bugReportServiceMock.lastCrashEventIDSubject = .init(nil)
@@ -27,7 +27,7 @@ final class BugReportServiceTests {
     }
     
     deinit {
-        userSettings.bugReportRageshakeURL.reset()
+        userSettings.app.bugReportRageshakeURL.reset()
     }
     
     @Test
@@ -104,22 +104,22 @@ final class BugReportServiceTests {
     @Test
     @MainActor
     func configurations() async throws {
-        guard case let .url(initialURL) = userSettings.bugReportRageshakeURL.publisher.value else {
+        guard case let .url(initialURL) = userSettings.app.bugReportRageshakeURL.publisher.value else {
             Issue.record("Unexpected initial configuration.")
             return
         }
         
-        let service = BugReportService(rageshakeURLPublisher: userSettings.bugReportRageshakeURL.publisher,
+        let service = BugReportService(rageshakeURLPublisher: userSettings.app.bugReportRageshakeURL.publisher,
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        session: .mock,
                                        appHooks: AppHooks())
         #expect(service.isEnabled)
         
-        userSettings.bugReportRageshakeURL.applyRemoteValue(.disabled)
+        userSettings.app.bugReportRageshakeURL.applyRemoteValue(.disabled)
         #expect(!service.isEnabled)
         
-        userSettings.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
+        userSettings.app.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
         #expect(service.isEnabled)
         
         let bugReport = BugReport(userID: "@mock:client.com",
@@ -136,7 +136,7 @@ final class BugReportServiceTests {
         
         #expect(customConfigurationResponse.reportURL == "https://bugs.server.net/123")
         
-        userSettings.bugReportRageshakeURL.reset()
+        userSettings.app.bugReportRageshakeURL.reset()
         #expect(service.isEnabled)
         
         let defaultConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()

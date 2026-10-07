@@ -124,44 +124,44 @@ struct SearchScreenViewModelTests {
         context.searchQuery = "Second"
         context.send(viewAction: .selectRoom(roomID: "2"))
         
-        #expect(userSettings.searchBreadcrumbs == [.room(roomID: "2")])
+        #expect(userSettings.account.searchBreadcrumbs == [.room(roomID: "2")])
         
         context.send(viewAction: .submitQuery)
         
-        #expect(userSettings.searchBreadcrumbs == [.query("Second"), .room(roomID: "2")])
+        #expect(userSettings.account.searchBreadcrumbs == [.query("Second"), .room(roomID: "2")])
         
         // Selecting the same room again from the empty state only bumps it back to the top.
         context.searchQuery = ""
         context.send(viewAction: .selectRoom(roomID: "2"))
         
-        #expect(userSettings.searchBreadcrumbs == [.room(roomID: "2"), .query("Second")])
+        #expect(userSettings.account.searchBreadcrumbs == [.room(roomID: "2"), .query("Second")])
         
         // Submitting an empty query records nothing.
         context.send(viewAction: .submitQuery)
         
-        #expect(userSettings.searchBreadcrumbs == [.room(roomID: "2"), .query("Second")])
+        #expect(userSettings.account.searchBreadcrumbs == [.room(roomID: "2"), .query("Second")])
     }
     
     @Test
     func removingBreadcrumbs() {
-        userSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
+        userSettings.account.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
         
         context.send(viewAction: .removeBreadcrumb(.query("Second")))
         
-        #expect(userSettings.searchBreadcrumbs == [.room(roomID: "2")])
+        #expect(userSettings.account.searchBreadcrumbs == [.room(roomID: "2")])
         
         context.send(viewAction: .removeBreadcrumb(.room(SearchScreenRoom(.mock(id: "2", name: "Second")))))
         
-        #expect(userSettings.searchBreadcrumbs.isEmpty)
+        #expect(userSettings.account.searchBreadcrumbs.isEmpty)
     }
     
     @Test
     func clearingBreadcrumbs() {
-        userSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
+        userSettings.account.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
         
         context.send(viewAction: .clearBreadcrumbs)
         
-        #expect(userSettings.searchBreadcrumbs.isEmpty)
+        #expect(userSettings.account.searchBreadcrumbs.isEmpty)
     }
     
     @Test
@@ -169,7 +169,7 @@ struct SearchScreenViewModelTests {
         staticRoomListSubject.send([.mock(id: "2", name: "Second")])
         
         let deferred = deferFulfillment(context.observe(\.viewState.breadcrumbs)) { $0.count == 2 }
-        userSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
+        userSettings.account.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
         try await deferred.fulfill()
         
         #expect(context.viewState.breadcrumbs.map(\.id) == ["query-Second", "room-2"])
@@ -180,7 +180,7 @@ struct SearchScreenViewModelTests {
         staticRoomListSubject.send([.mock(id: "2", name: "Second"), .mock(id: "left", name: "Left", isJoined: false)])
         
         let deferred = deferFulfillment(context.observe(\.viewState.breadcrumbs)) { !$0.isEmpty }
-        userSettings.searchBreadcrumbs = [.room(roomID: "left"), .room(roomID: "2")]
+        userSettings.account.searchBreadcrumbs = [.room(roomID: "left"), .room(roomID: "2")]
         try await deferred.fulfill()
         
         #expect(context.viewState.breadcrumbs.map(\.id) == ["room-2"])
@@ -190,7 +190,7 @@ struct SearchScreenViewModelTests {
     @Test
     func roomBreadcrumbsAreDisplayedAfterTheRoomListLoads() async throws {
         var deferred = deferFulfillment(context.observe(\.viewState.breadcrumbs)) { $0.count == 1 }
-        userSettings.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
+        userSettings.account.searchBreadcrumbs = [.query("Second"), .room(roomID: "2")]
         try await deferred.fulfill()
         
         #expect(context.viewState.breadcrumbs.map(\.id) == ["query-Second"])
