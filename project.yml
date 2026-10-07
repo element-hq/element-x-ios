@@ -91,7 +91,7 @@ packages:
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.26.0
+    exactVersion: 0.26.1
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     revision: 60bc01f2e3b31445dc723f5af1a777b63d18e6c2 # pinned due to https://github.com/matrix-org/emojibase-bindings/issues/59
@@ -112,13 +112,13 @@ packages:
     exactVersion: 1.2.1
   AsyncAlgorithms:
     url: https://github.com/apple/swift-async-algorithms
-    exactVersion: 1.1.5
+    exactVersion: 1.1.6
   Collections:
     url: https://github.com/apple/swift-collections
-    exactVersion: 1.6.0
+    exactVersion: 1.7.1
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
-    exactVersion: 5.8.0
+    exactVersion: 5.9.0
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.5.0
@@ -133,7 +133,7 @@ packages:
     exactVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    exactVersion: 8.12.0
+    exactVersion: 8.13.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     exactVersion: 1.2.0
@@ -151,10 +151,10 @@ packages:
     exactVersion: 6.31.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    exactVersion: 3.76.0
+    exactVersion: 3.85.3
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    exactVersion: 9.28.0
+    exactVersion: 9.29.2
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     exactVersion: 1.19.6
