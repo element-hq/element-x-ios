@@ -110,6 +110,8 @@ struct NativeCallIcons: ElementCallIconRenderingProtocol {
         case .shareScreen: \.shareScreenSolid
         case .volumeOn: \.volumeOnSolid
         case .volumeOff: \.volumeOffSolid
+        case .headphones: \.headphonesSolid
+        case .bluetooth: \.headphonesSolid
         case .raisedHand: \.raisedHandSolid
         case .userProfile: \.userProfileSolid
         case .overflow: \.overflowHorizontal
