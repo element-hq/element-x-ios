@@ -2357,14 +2357,14 @@ nonisolated class ClientFactoryMock: ClientFactoryProtocol, @unchecked Sendable 
         return makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksCallsCount > 0
     }
     private let makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedArgumentsLock = NSLock()
-    private nonisolated(unsafe) var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReceivedArguments: (credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: CommonSettingsProtocol, appHooks: AppHooks)?
-    var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedArguments: (credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: CommonSettingsProtocol, appHooks: AppHooks)? {
+    private nonisolated(unsafe) var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReceivedArguments: (credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: UserSettings, appHooks: AppHooks)?
+    var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedArguments: (credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: UserSettings, appHooks: AppHooks)? {
         get { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedArgumentsLock.withLock { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReceivedArguments } }
         set { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedArgumentsLock.withLock { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReceivedArguments = newValue } }
     }
     private let makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedInvocationsLock = NSLock()
-    private nonisolated(unsafe) var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReceivedInvocations: [(credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: CommonSettingsProtocol, appHooks: AppHooks)] = []
-    var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedInvocations: [(credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: CommonSettingsProtocol, appHooks: AppHooks)] {
+    private nonisolated(unsafe) var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReceivedInvocations: [(credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: UserSettings, appHooks: AppHooks)] = []
+    var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedInvocations: [(credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: UserSettings, appHooks: AppHooks)] {
         get { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedInvocationsLock.withLock { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReceivedInvocations } }
         set { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReceivedInvocationsLock.withLock { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReceivedInvocations = newValue } }
     }
@@ -2375,9 +2375,9 @@ nonisolated class ClientFactoryMock: ClientFactoryProtocol, @unchecked Sendable 
         get { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReturnValueLock.withLock { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReturnValue } }
         set { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksReturnValueLock.withLock { makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksUnderlyingReturnValue = newValue } }
     }
-    nonisolated(unsafe) var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksClosure: ((KeychainCredentials, String, ClientSessionDelegate, CommonSettingsProtocol, AppHooks) async throws -> ClientProtocol)?
+    nonisolated(unsafe) var makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksClosure: ((KeychainCredentials, String, ClientSessionDelegate, UserSettings, AppHooks) async throws -> ClientProtocol)?
 
-    @concurrent func makeNSEClient(credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: CommonSettingsProtocol, appHooks: AppHooks) async throws -> ClientProtocol {
+    @concurrent func makeNSEClient(credentials: KeychainCredentials, roomID: String, clientSessionDelegate: ClientSessionDelegate, userSettings: UserSettings, appHooks: AppHooks) async throws -> ClientProtocol {
         if let error = makeNSEClientCredentialsRoomIDClientSessionDelegateUserSettingsAppHooksThrowableError {
             throw error
         }

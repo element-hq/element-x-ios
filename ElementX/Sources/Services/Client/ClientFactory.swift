@@ -81,7 +81,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
     func makeNSEClient(credentials: KeychainCredentials,
                        roomID: String,
                        clientSessionDelegate: ClientSessionDelegate,
-                       userSettings: CommonSettingsProtocol,
+                       userSettings: UserSettings,
                        appHooks: AppHooks) async throws -> ClientProtocol {
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         

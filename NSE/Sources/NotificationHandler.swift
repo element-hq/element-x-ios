@@ -13,7 +13,6 @@ import UserNotifications
 
 nonisolated class NotificationHandler {
     private let userSession: NSEUserSession
-    private let settings: CommonSettingsProtocol
     private let contentHandler: (UNNotificationContent) -> Void
     private var notificationContent: UNMutableNotificationContent
     private let tag: String
@@ -23,13 +22,15 @@ nonisolated class NotificationHandler {
     /// Whether this handler has already counted its notification towards the app icon badge.
     private var hasCountedTowardsBadge = false
     
+    private var userSettings: UserSettings {
+        userSession.userSettings
+    }
+    
     init(userSession: NSEUserSession,
-         settings: CommonSettingsProtocol,
          contentHandler: @escaping (UNNotificationContent) -> Void,
          notificationContent: UNMutableNotificationContent,
          tag: String) {
         self.userSession = userSession
-        self.settings = settings
         self.contentHandler = contentHandler
         self.notificationContent = notificationContent
         self.tag = tag
@@ -38,7 +39,7 @@ nonisolated class NotificationHandler {
                                                                style: .plain)
         
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
-                                                                notificationSoundName: settings.notificationSoundName,
+                                                                notificationSoundName: userSession.userSettings.notificationSoundName,
                                                                 userSession: userSession)
     }
     
@@ -55,7 +56,7 @@ nonisolated class NotificationHandler {
         case .processedShouldDiscard, .unsupportedShouldDiscard:
             discardNotification()
         case .shouldDisplay:
-            if settings.hideQuietNotificationAlerts, !notificationItemProxy.isNoisy {
+            if userSettings.hideQuietNotificationAlerts, !notificationItemProxy.isNoisy {
                 discardNotification()
                 return
             }
@@ -79,20 +80,20 @@ nonisolated class NotificationHandler {
     
     private func deliverNotification() {
         notificationContent.badge = NSNumber(value: incrementBadgeCount())
-        MXLog.info("\(tag) Delivering notification, new badge value: \(settings.lastKnownBadgeCount)")
+        MXLog.info("\(tag) Delivering notification, new badge value: \(userSettings.lastKnownBadgeCount)")
         contentHandler(notificationContent)
     }
     
     private func incrementBadgeCount() -> Int {
         // `handleTimeExpiration` can deliver a notification this handler already delivered.
         guard !hasCountedTowardsBadge else {
-            return settings.lastKnownBadgeCount
+            return userSettings.lastKnownBadgeCount
         }
         
         hasCountedTowardsBadge = true
-        settings.lastKnownBadgeCount += 1
+        userSettings.lastKnownBadgeCount += 1
         
-        return settings.lastKnownBadgeCount
+        return userSettings.lastKnownBadgeCount
     }
     
     private func discardNotification() {
@@ -100,7 +101,7 @@ nonisolated class NotificationHandler {
         
         let content = UNMutableNotificationContent()
         // Nothing new is shown to the user, so leave the badge where the app last put it.
-        content.badge = NSNumber(value: settings.lastKnownBadgeCount)
+        content.badge = NSNumber(value: userSettings.lastKnownBadgeCount)
         MXLog.info("\(tag) New badge value: \(content.badge?.stringValue ?? "nil")")
         
         contentHandler(content)
@@ -135,7 +136,7 @@ nonisolated class NotificationHandler {
                 
                 if let targetNotification = deliveredNotifications.first(where: { $0.request.content.eventID == redactedEventID }) {
                     UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [targetNotification.request.identifier])
-                    settings.lastKnownBadgeCount = max(0, settings.lastKnownBadgeCount - 1)
+                    userSettings.lastKnownBadgeCount = max(0, userSettings.lastKnownBadgeCount - 1)
                 }
                 
                 return .processedShouldDiscard

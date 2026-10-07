@@ -63,7 +63,7 @@ actor NotificationServiceExtensionActor {
     
     private static let firstNotificationThreshold: TimeInterval = 15 * 60
     
-    private let settings: CommonSettingsProtocol
+    private let appSettings: AppSettings
     private let appHooks: AppHooks
     
     /// This is nonisolated just because the expire function needs to be served ASAP so we should not call it from  a Task, however this is
@@ -82,7 +82,7 @@ actor NotificationServiceExtensionActor {
         guard let userDefaults = TrackedUserDefaults(suiteName: AppSettings.suiteName) else {
             fatalError("Catastrophic error retrieving user defaults for \(AppSettings.suiteName)")
         }
-        settings = AppSettings(store: userDefaults)
+        appSettings = AppSettings(store: userDefaults)
         
         appHooks = AppHooks()
         appHooks.setUp()
@@ -96,10 +96,10 @@ actor NotificationServiceExtensionActor {
         if !BootDetectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory) {
             Self.targetConfiguration.withLock { state in
                 guard state == nil else { return }
-                state = Target.nse.configure(logLevel: settings.logLevel,
-                                             traceLogPacks: settings.traceLogPacks,
+                state = Target.nse.configure(logLevel: appSettings.logLevel,
+                                             traceLogPacks: appSettings.traceLogPacks,
                                              sentryURL: nil,
-                                             rageshakeURL: settings.bugReportRageshakeURL,
+                                             rageshakeURL: appSettings.bugReportRageshakeURL,
                                              appHooks: appHooks)
             }
         }
@@ -161,7 +161,7 @@ actor NotificationServiceExtensionActor {
         }
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
-        await appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: settings)
+        await appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
         
         guard let mutableContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
             return contentHandler(request.content)
@@ -177,11 +177,10 @@ actor NotificationServiceExtensionActor {
             let userSession = try await NSEUserSession(credentials: credentials,
                                                        roomID: roomID,
                                                        clientSessionDelegate: keychainController,
-                                                       userSettings: settings,
+                                                       appSettings: appSettings,
                                                        appHooks: appHooks)
             
             notificationHandler = NotificationHandler(userSession: userSession,
-                                                      settings: settings,
                                                       contentHandler: contentHandler,
                                                       notificationContent: mutableContent,
                                                       tag: tag)
@@ -221,10 +220,10 @@ actor NotificationServiceExtensionActor {
             return false
         }
         
-        guard let lastKnownBootTime = settings.lastNotificationBootTime else {
+        guard let lastKnownBootTime = appSettings.lastNotificationBootTime else {
             // Assume a missing boot time indicates a fresh installation…
             // So store the current boot time but let the notification through.
-            settings.lastNotificationBootTime = currentBootTime
+            appSettings.lastNotificationBootTime = currentBootTime
             return false
         }
         
@@ -233,7 +232,7 @@ actor NotificationServiceExtensionActor {
         }
         
         // This is the first notification since boot, store the boot time.
-        settings.lastNotificationBootTime = currentBootTime
+        appSettings.lastNotificationBootTime = currentBootTime
         
         // At this point it becomes a trade-off. Once the device has been powered on for a long enough amount
         // of time it is a reasonable assumption that the device has now connected to a network and that any
@@ -258,7 +257,7 @@ actor NotificationServiceExtensionActor {
         
         let content = UNMutableNotificationContent()
         content.body = L10n.notificationReceivedWhileOfflineIos
-        content.sound = settings.notificationSound
+        content.sound = appSettings.notificationSound
         
         let request = UNNotificationRequest(identifier: Self.receivedWhileOfflineNotificationID, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)

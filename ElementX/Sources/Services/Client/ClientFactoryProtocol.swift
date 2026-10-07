@@ -36,6 +36,6 @@ nonisolated protocol ClientFactoryProtocol {
     func makeNSEClient(credentials: KeychainCredentials,
                        roomID: String,
                        clientSessionDelegate: ClientSessionDelegate,
-                       userSettings: CommonSettingsProtocol,
+                       userSettings: UserSettings,
                        appHooks: AppHooks) async throws -> ClientProtocol
 }
