@@ -11,10 +11,6 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ActiveCallTimelineItemView_Previews")
     }
 
-    func testAdvancedSettingsScreen() async throws {
-        try await performAccessibilityAudit(named: "AdvancedSettingsScreen_Previews")
-    }
-
     func testAnalyticsPromptScreen() async throws {
         try await performAccessibilityAudit(named: "AnalyticsPromptScreen_Previews")
     }
