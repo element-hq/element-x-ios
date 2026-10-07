@@ -81,7 +81,7 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
     func makeNSEClient(credentials: KeychainCredentials,
                        roomID: String,
                        clientSessionDelegate: ClientSessionDelegate,
-                       userSettings: CommonSettingsProtocol,
+                       userSettings: UserSettings,
                        appHooks: AppHooks) async throws -> ClientProtocol {
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         
@@ -90,10 +90,10 @@ nonisolated struct ClientFactory: ClientFactoryProtocol {
                                       discoverSlidingSync: false,
                                       sessionDelegate: clientSessionDelegate,
                                       appHooks: appHooks,
-                                      enableOnlySignedDeviceIsolationMode: userSettings.enableOnlySignedDeviceIsolationMode,
+                                      enableOnlySignedDeviceIsolationMode: userSettings.app.enableOnlySignedDeviceIsolationMode,
                                       requestTimeout: 15000,
                                       maxRequestRetryTime: 5000,
-                                      threadsEnabled: userSettings.threadsEnabled)
+                                      threadsEnabled: userSettings.app.threadsEnabled)
             .systemIsMemoryConstrained()
             .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                                        cachePath: credentials.restorationToken.sessionDirectories.cachePath)

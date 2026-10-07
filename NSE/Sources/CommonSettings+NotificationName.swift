@@ -7,7 +7,7 @@
 
 import UserNotifications
 
-nonisolated extension CommonSettingsProtocol {
+nonisolated extension AppSettings {
     /// The sound name to use in outgoing notifications.
     /// Falls back to the default Element X tone if no custom tone has been selected.
     var notificationSoundName: UNNotificationSoundName {

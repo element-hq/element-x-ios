@@ -15,24 +15,6 @@ import Foundation
 import Macros
 import SwiftUI
 
-/// Common settings between app and NSE
-nonisolated protocol CommonSettingsProtocol: AnyObject, Sendable {
-    var lastNotificationBootTime: TimeInterval? { get set }
-    var selectedNotificationTone: NotificationTone? { get set }
-    var lastKnownBadgeCount: Int { get set }
-    
-    var logLevel: LogLevel { get }
-    var traceLogPacks: Set<TraceLogPack> { get }
-    var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
-    var contentScannerURL: RemotePreference<URL?> { get }
-    var forceDisableE2EE: RemotePreference<Bool> { get }
-    var mapTilerConfiguration: RemotePreference<MapTilerConfiguration> { get }
-    
-    var enableOnlySignedDeviceIsolationMode: Bool { get }
-    var threadsEnabled: Bool { get }
-    var hideQuietNotificationAlerts: Bool { get }
-}
-
 nonisolated enum AppBuildType {
     case debug
     case nightly
@@ -475,5 +457,3 @@ final nonisolated class AppSettings: @unchecked Sendable {
         AppSettings(store: VolatileUserDefaults())
     }
 }
-
-nonisolated extension AppSettings: CommonSettingsProtocol { }
