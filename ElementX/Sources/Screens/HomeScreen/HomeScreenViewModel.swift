@@ -23,7 +23,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
-    private var multiAccountAnnouncementCancellable: AnyCancellable?
     
     private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<HomeScreenViewModelAction, Never> {
@@ -220,10 +219,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .dismissNewSoundBanner:
             userSettings.hasSeenNewSoundBanner = true
         case .screenAppeared:
-            presentMultiAccountAnnouncementIfNeeded()
+            // Use a task otherwise the presentation isn't animated.
+            Task { presentMultiAccountAnnouncementIfNeeded() }
         case .multiAccountAnnouncementAppeared:
             MXLog.info("The multi-account announcement has been seen.")
             userSettings.hasSeenMultiAccountAnnouncement = true
+        case .dismissMultiAccountAnnouncement, .addAccount: // There is no add account flow to start yet.
+            state.bindings.isPresentingMultiAccountAnnouncement = false
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
@@ -485,37 +487,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: Multi-account announcement
     
     private func presentMultiAccountAnnouncementIfNeeded() {
-        guard canPresentMultiAccountAnnouncement() else { return }
-        
-        // Waiting for a known verification state stops it competing with the identity confirmation cover.
-        multiAccountAnnouncementCancellable = userSession.sessionSecurityStatePublisher
-            .map(\.verificationState)
-            .first { $0 != .unknown }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] verificationState in
-                guard let self, verificationState == .verified, canPresentMultiAccountAnnouncement() else { return }
-                presentMultiAccountAnnouncement()
-            }
-    }
-    
-    private func canPresentMultiAccountAnnouncement() -> Bool {
-        userSettings.multiAccountEnabled && !userSettings.hasSeenMultiAccountAnnouncement && state.bindings.multiAccountAnnouncementViewModel == nil
-    }
-    
-    private func presentMultiAccountAnnouncement() {
-        let viewModel = MultiAccountAnnouncementViewModel()
-        
-        viewModel.actionsPublisher
-            .sink { [weak self] action in
-                switch action {
-                case .addAccount, .dismiss: // There is no add account flow to start yet.
-                    self?.state.bindings.multiAccountAnnouncementViewModel = nil
-                }
-            }
-            .store(in: &cancellables)
+        // An unverified session gets the identity confirmation cover first, the room list appears again once it's dismissed.
+        guard userSettings.multiAccountEnabled,
+              !userSettings.hasSeenMultiAccountAnnouncement,
+              userSession.sessionSecurityStatePublisher.value.verificationState == .verified,
+              !state.bindings.isPresentingMultiAccountAnnouncement else {
+            return
+        }
         
         MXLog.info("Presenting the multi-account announcement.")
-        state.bindings.multiAccountAnnouncementViewModel = viewModel
+        state.bindings.isPresentingMultiAccountAnnouncement = true
     }
     
     // MARK: Invites

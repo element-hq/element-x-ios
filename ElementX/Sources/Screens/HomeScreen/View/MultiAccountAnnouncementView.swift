@@ -9,11 +9,20 @@ import Compound
 import SwiftUI
 
 struct MultiAccountAnnouncementView: View {
-    let context: MultiAccountAnnouncementViewModel.Context
+    let context: HomeScreenViewModel.Context
     
     @State private var navigationBarHeight: CGFloat = .zero
     @State private var contentHeight: CGFloat = .zero
     @State private var buttonHeight: CGFloat = .zero
+    
+    private var subtitle: AttributedString {
+        let boldPlaceholder = "{bold}"
+        var subtitle = AttributedString(L10n.screenMultiAccountAnnouncementDescription(boldPlaceholder))
+        var boldString = AttributedString("\(L10n.commonSettings) > \(L10n.screenSettingsAddAccount)")
+        boldString.bold()
+        subtitle.replace(boldPlaceholder, with: boldString)
+        return subtitle
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -31,7 +40,7 @@ struct MultiAccountAnnouncementView: View {
                 .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.top } action: { navigationBarHeight = $0 }
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        ToolbarButton(role: .close) { context.send(viewAction: .close) }
+                        ToolbarButton(role: .close) { context.send(viewAction: .dismissMultiAccountAnnouncement) }
                     }
                 }
             }
@@ -43,7 +52,7 @@ struct MultiAccountAnnouncementView: View {
     
     private var content: some View {
         TitleAndIcon(title: L10n.screenMultiAccountAnnouncementTitle,
-                     subtitle: context.viewState.description,
+                     subtitle: subtitle,
                      icon: \.userProfileSolid,
                      iconStyle: .defaultSolid)
             .frame(maxWidth: .infinity)
@@ -67,7 +76,7 @@ struct MultiAccountAnnouncementView: View {
 // MARK: - Previews
 
 struct MultiAccountAnnouncementView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = MultiAccountAnnouncementViewModel()
+    static let viewModel = HomeScreen_Previews.viewModel(.rooms)
     
     static var previews: some View {
         MultiAccountAnnouncementView(context: viewModel.context)

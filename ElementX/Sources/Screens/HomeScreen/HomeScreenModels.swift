@@ -44,6 +44,8 @@ enum HomeScreenViewAction {
     case dismissNewSoundBanner
     case screenAppeared
     case multiAccountAnnouncementAppeared
+    case dismissMultiAccountAnnouncement
+    case addAccount
     case updateVisibleItemRange(Range<Int>)
     case spaceFilters
     case markRoomAsUnread(roomIdentifier: String)
@@ -163,7 +165,7 @@ struct HomeScreenViewStateBindings {
     var leaveRoomAlertItem: LeaveRoomAlertItem?
     
     var spaceFiltersViewModel: ChatsSpaceFiltersScreenViewModel?
-    var multiAccountAnnouncementViewModel: MultiAccountAnnouncementViewModel?
+    var isPresentingMultiAccountAnnouncement = false
 }
 
 enum CallBadgeType {

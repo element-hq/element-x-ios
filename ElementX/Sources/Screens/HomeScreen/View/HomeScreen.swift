@@ -42,8 +42,8 @@ struct HomeScreen: View {
                     .navigationTransition(.zoom(sourceID: NavigationTransitionSourceID.spaceFilters,
                                                 in: navigationTransitionNamespace))
             }
-            .sheet(item: $context.multiAccountAnnouncementViewModel) { viewModel in
-                MultiAccountAnnouncementView(context: viewModel.context)
+            .sheet(isPresented: $context.isPresentingMultiAccountAnnouncement) {
+                MultiAccountAnnouncementView(context: context)
                     .onAppear { context.send(viewAction: .multiAccountAnnouncementAppeared) }
             }
             .onAppear { context.send(viewAction: .screenAppeared) }
