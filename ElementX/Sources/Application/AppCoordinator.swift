@@ -913,25 +913,22 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        userSessionObserver?.cancel()
-        configureElementCallService()
-        configureNotificationManager()
-        observeUserSessionChanges()
+        configureServices(for: userSession)
         Task {
             await resumeClientServices()
             await appHooks.configure(with: userSession)
         }
     }
     
-    private func configureElementCallService() {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
+    /// Wires the services that work for every signed in account, not only the active one. They only hold a single session for now.
+    private func configureServices(for userSession: UserSessionProtocol) {
+        userSessionObserver?.cancel()
         elementCallService.setUserSession(userSession)
+        configureNotificationManager(for: userSession)
+        observeUserSessionChanges(userSession)
     }
     
-    private func configureNotificationManager() {
+    private func configureNotificationManager(for userSession: UserSessionProtocol) {
         notificationManager.setUserSession(userSession)
         
         appDelegateObserver = appDelegate.callbacks
@@ -946,11 +943,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
     }
     
-    private func observeUserSessionChanges() {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
+    private func observeUserSessionChanges(_ userSession: UserSessionProtocol) {
         userSessionObserver = userSession.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
