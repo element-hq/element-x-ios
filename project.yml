@@ -151,7 +151,7 @@ packages:
     exactVersion: 6.31.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    exactVersion: 3.85.3
+    exactVersion: 3.86.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     exactVersion: 9.29.2
