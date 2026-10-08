@@ -15,6 +15,8 @@ enum EncryptionResetFlowCoordinatorAction: Equatable {
     case resetComplete
     /// The flow was cancelled.
     case cancel
+    /// The user chose to sign out instead of resetting.
+    case logoutConfirmed
 }
 
 struct EncryptionResetFlowCoordinatorParameters {
@@ -23,6 +25,7 @@ struct EncryptionResetFlowCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let windowManger: WindowManagerProtocol
+    var variant: EncryptionResetScreenVariant = .hasConfirmationOptions
 }
 
 class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
@@ -32,6 +35,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let windowManager: WindowManagerProtocol
+    private let variant: EncryptionResetScreenVariant
     
     enum State: StateType {
         /// The state machine hasn't started.
@@ -66,6 +70,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
         windowManager = parameters.windowManger
+        variant = parameters.variant
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -113,6 +118,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentEncryptionResetScreen() {
         let coordinator = EncryptionResetScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
+                                                                             variant: variant,
                                                                              userIndicatorController: userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -125,6 +131,8 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.confirmPassword, userInfo: passwordPublisher)
             case .cancel:
                 actionsSubject.send(.cancel)
+            case .logoutConfirmed:
+                actionsSubject.send(.logoutConfirmed)
             case .resetFinished:
                 actionsSubject.send(.resetComplete)
             }

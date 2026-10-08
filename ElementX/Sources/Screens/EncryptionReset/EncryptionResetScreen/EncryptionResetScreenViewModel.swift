@@ -24,17 +24,21 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
     private var identityResetHandle: IdentityResetHandle?
     private var passwordCancellable: AnyCancellable?
     
-    init(clientProxy: ClientProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(clientProxy: ClientProxyProtocol,
+         variant: EncryptionResetScreenVariant = .hasConfirmationOptions,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: EncryptionResetScreenViewState(bindings: .init()))
+        super.init(initialViewState: EncryptionResetScreenViewState(variant: variant, bindings: .init()))
     }
     
     // MARK: - Public
     
     override func process(viewAction: EncryptionResetScreenViewAction) {
         switch viewAction {
+        case .reset where state.variant.isResetTheOnlyOption:
+            Task { await startResetFlow() }
         case .reset:
             state.bindings.alertInfo = .init(id: UUID(),
                                              title: L10n.screenResetEncryptionConfirmationAlertTitle,
@@ -45,6 +49,13 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
                                              })
         case .cancel:
             actionsSubject.send(.cancel)
+        case .signOut:
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: L10n.screenSignoutConfirmationDialogTitle,
+                                             message: L10n.screenSignoutConfirmationDialogContent,
+                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                 self?.actionsSubject.send(.logoutConfirmed)
+                                             })
         }
     }
     

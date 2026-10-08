@@ -257,8 +257,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case .skip:
                 userSettings.account.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
-            case .reset:
-                startEncryptionResetFlow()
+            case .reset(let hasConfirmationOptions):
+                startEncryptionResetFlow(hasConfirmationOptions: hasConfirmationOptions)
             case .logoutConfirmed:
                 actionsSubject.send(.logoutConfirmed)
             }
@@ -310,17 +310,29 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         presentCoordinator(coordinator)
     }
     
-    private func startEncryptionResetFlow() {
+    private func startEncryptionResetFlow(hasConfirmationOptions: Bool) {
+        let variant: EncryptionResetScreenVariant = if hasConfirmationOptions {
+            .hasConfirmationOptions
+        } else if userSession.clientProxy.hasEncryptedRooms() {
+            .noOptionsWithEncryptedChats
+        } else {
+            .noOptionsWithoutEncryptedChats
+        }
+        
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
                                                                            appMediator: appMediator,
                                                                            userIndicatorController: userIndicatorController,
                                                                            navigationStackCoordinator: resetNavigationStackCoordinator,
-                                                                           windowManger: windowManager))
+                                                                           windowManger: windowManager,
+                                                                           variant: variant))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
+            case .logoutConfirmed:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                actionsSubject.send(.logoutConfirmed)
             case .resetComplete:
                 // Moving to next state is handled by the global session verification listener
                 navigationStackCoordinator.setSheetCoordinator(nil)

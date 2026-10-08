@@ -46,7 +46,7 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         case .skip:
             actionsSubject.send(.skip)
         case .reset:
-            actionsSubject.send(.reset)
+            actionsSubject.send(.reset(hasConfirmationOptions: state.availableActions?.isEmpty == false))
         case .logout:
             confirmLogout()
         }
