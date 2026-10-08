@@ -363,7 +363,7 @@ struct ServerSelectionScreenViewModelTests {
         client = factoryConfiguration.homeserverClients["matrix.org"]
         clientFactory = ClientFactoryMock(factoryConfiguration)
         
-        service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
+        service = AuthenticationService(userSessionManager: UserSessionManagerMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,

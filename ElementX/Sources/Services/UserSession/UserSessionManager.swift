@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 import OrderedCollections
 
 /// Owns the live session of every account signed in on this device, most recently active first.
@@ -35,6 +36,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
     
     var activeSession: UserSessionProtocol? {
         accounts.values.first ?? nil
+    }
+    
+    var clientSessionDelegate: ClientSessionDelegate {
+        userSessionStore.clientSessionDelegate
     }
     
     init(userSessionStore: UserSessionStoreProtocol, appSettings: AppSettings) {
@@ -77,6 +82,10 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
         
         return .failure(.failedRestoringSessions)
+    }
+    
+    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+        await userSessionStore.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase)
     }
     
     func add(_ userSession: UserSessionProtocol) {

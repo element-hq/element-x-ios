@@ -296,7 +296,7 @@ final class AuthenticationStartScreenViewModelTests {
         notificationCenter = NotificationCenter()
         
         clientFactory = ClientFactoryMock(configuration)
-        authenticationService = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
+        authenticationService = AuthenticationService(userSessionManager: UserSessionManagerMock(.init()),
                                                       encryptionKeyProvider: EncryptionKeyProvider(),
                                                       classicAppManager: classicAppManager,
                                                       clientFactory: clientFactory,

@@ -18,7 +18,6 @@ import Version
 class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
-    private let userSessionStore: UserSessionStoreProtocol
     private let userSessionManager: UserSessionManagerProtocol
     // periphery:ignore - retaining purpose
     private let targetConfiguration: Target.ConfigurationResult
@@ -117,11 +116,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-        userSessionStore = UserSessionStore(keychainController: keychainController,
-                                            appSettings: appSettings,
-                                            analyticsService: analyticsService,
-                                            appHooks: appHooks,
-                                            networkMonitor: networkMonitor)
+        let userSessionStore = UserSessionStore(keychainController: keychainController,
+                                                appSettings: appSettings,
+                                                analyticsService: analyticsService,
+                                                appHooks: appHooks,
+                                                networkMonitor: networkMonitor)
         userSessionManager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings)
         
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
@@ -681,7 +680,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func startAuthentication() {
         let encryptionKeyProvider = EncryptionKeyProvider()
         let classicAppManager = ClassicAppManager()
-        let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
+        let authenticationService = AuthenticationService(userSessionManager: userSessionManager,
                                                           encryptionKeyProvider: encryptionKeyProvider,
                                                           classicAppManager: classicAppManager,
                                                           appSettings: appSettings,
@@ -736,7 +735,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                           userDisplayName: userSession.clientProxy.userProfilePublisher.value.displayName ?? "",
                                                           deviceID: userSession.clientProxy.deviceID)
             
-            let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
+            let authenticationService = AuthenticationService(userSessionManager: userSessionManager,
                                                               encryptionKeyProvider: EncryptionKeyProvider(),
                                                               classicAppManager: ClassicAppManager(),
                                                               appSettings: appSettings,
