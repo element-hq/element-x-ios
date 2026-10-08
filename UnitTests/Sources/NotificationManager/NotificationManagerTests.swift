@@ -262,10 +262,8 @@ final class NotificationManagerTests {
     }
     
     @Test
-    func updatingAppBadgeCountUsesTheClientSideCount() async {
-        clientProxy.totalUnreadNotifications = 7
-        
-        await notificationManager.updateAppBadgeCount()
+    func updatingAppBadgeCount() async {
+        await notificationManager.updateAppBadgeCount(7)
         
         #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 7)
         #expect(appSettings.lastKnownBadgeCount == 7)
@@ -275,7 +273,7 @@ final class NotificationManagerTests {
     func updatingAppBadgeCountWithoutASessionDoesNothing() async {
         notificationManager.setUserSession(nil)
         
-        await notificationManager.updateAppBadgeCount()
+        await notificationManager.updateAppBadgeCount(7)
         
         #expect(!notificationCenter.setBadgeCountCalled)
     }

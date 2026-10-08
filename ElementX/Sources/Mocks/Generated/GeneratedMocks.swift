@@ -9039,11 +9039,25 @@ nonisolated class NotificationManagerMock: NotificationManagerProtocol, @uncheck
     var updateAppBadgeCountCalled: Bool {
         return updateAppBadgeCountCallsCount > 0
     }
-    nonisolated(unsafe) var updateAppBadgeCountClosure: (() async -> Void)?
+    private let updateAppBadgeCountReceivedBadgeCountLock = NSLock()
+    private nonisolated(unsafe) var updateAppBadgeCountUnderlyingReceivedBadgeCount: Int?
+    var updateAppBadgeCountReceivedBadgeCount: Int? {
+        get { updateAppBadgeCountReceivedBadgeCountLock.withLock { updateAppBadgeCountUnderlyingReceivedBadgeCount } }
+        set { updateAppBadgeCountReceivedBadgeCountLock.withLock { updateAppBadgeCountUnderlyingReceivedBadgeCount = newValue } }
+    }
+    private let updateAppBadgeCountReceivedInvocationsLock = NSLock()
+    private nonisolated(unsafe) var updateAppBadgeCountUnderlyingReceivedInvocations: [Int] = []
+    var updateAppBadgeCountReceivedInvocations: [Int] {
+        get { updateAppBadgeCountReceivedInvocationsLock.withLock { updateAppBadgeCountUnderlyingReceivedInvocations } }
+        set { updateAppBadgeCountReceivedInvocationsLock.withLock { updateAppBadgeCountUnderlyingReceivedInvocations = newValue } }
+    }
+    nonisolated(unsafe) var updateAppBadgeCountClosure: ((Int) async -> Void)?
 
-    @concurrent func updateAppBadgeCount() async {
+    @concurrent func updateAppBadgeCount(_ badgeCount: Int) async {
         updateAppBadgeCountCallsCountLock.withLock { updateAppBadgeCountUnderlyingCallsCount += 1 }
-        await updateAppBadgeCountClosure?()
+        updateAppBadgeCountReceivedBadgeCount = badgeCount
+        updateAppBadgeCountReceivedInvocationsLock.withLock { updateAppBadgeCountUnderlyingReceivedInvocations.append(badgeCount) }
+        await updateAppBadgeCountClosure?(badgeCount)
     }
 }
 nonisolated class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @unchecked Sendable {
