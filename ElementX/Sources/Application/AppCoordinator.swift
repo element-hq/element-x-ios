@@ -15,7 +15,6 @@ import Sentry
 import SwiftUI
 import Version
 
-// swiftlint:disable:next type_body_length
 class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
