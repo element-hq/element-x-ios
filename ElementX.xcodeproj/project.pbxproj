@@ -266,6 +266,7 @@
 		288408E6151D7BD3EBAA073A /* RoomScreenHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */; };
 		28E8C44DD6E39BEB2A1599C8 /* AccessibilityTestsAppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CABD320DE5566D133890B24 /* AccessibilityTestsAppCoordinator.swift */; };
 		291A3E0EECD496D0FCC2ADAA /* TimelineScrollButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4E14E3688FF3532456A656 /* TimelineScrollButton.swift */; };
+		293179E5CE24DDF1FE82A110 /* NotificationCountBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E124365DC2141340F6F81A72 /* NotificationCountBadge.swift */; };
 		29491EE7AE37E239E839C5A3 /* LocationSharingScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEBF0E59F25E842EDB6FD11 /* LocationSharingScreenModels.swift */; };
 		2955F4C160CFD7794D819C64 /* EffectsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024F7398C5FC12586FB10E9D /* EffectsScene.swift */; };
 		298F9EC30E918F12AB7F1EE8 /* TypingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F0325E252B057FAEEE1B2D /* TypingIndicatorView.swift */; };
@@ -3135,6 +3136,7 @@
 		E0FCA0957FAA0E15A9F5579D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Untranslated.stringsdict; sourceTree = "<group>"; };
 		E0FF9CB3EFA753277291F609 /* EncryptionResetScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetScreenCoordinator.swift; sourceTree = "<group>"; };
 		E10DA51DBC8C7E1460DBCCBD /* UserProfileListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileListRow.swift; sourceTree = "<group>"; };
+		E124365DC2141340F6F81A72 /* NotificationCountBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCountBadge.swift; sourceTree = "<group>"; };
 		E157152B11E347F735C3FD6E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1573D28C8A9FB6399D0EEFB /* SecureBackupLogoutConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupLogoutConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
 		E1714DD78BFE27ADD40A6F89 /* LinkNewDeviceScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkNewDeviceScreenViewModelTests.swift; sourceTree = "<group>"; };
@@ -4191,6 +4193,7 @@
 				C352359663A0E52BA20761EE /* LoadableImage.swift */,
 				FFECCE59967018204876D0A5 /* LocationMarkerView.swift */,
 				50E31AB0E77BB70E2BC77463 /* MatrixUserShareLink.swift */,
+				E124365DC2141340F6F81A72 /* NotificationCountBadge.swift */,
 				648DD1C10E4957CB791FE0B8 /* OverridableAvatarImage.swift */,
 				C705E605EF57C19DBE86FFA1 /* PlaceholderAvatarImage.swift */,
 				95547A6C69606B5282C765D3 /* RemoveItemButton.swift */,
@@ -9245,6 +9248,7 @@
 				7F825CBD857D65DC986087BA /* NoticeRoomTimelineView.swift in Sources */,
 				3F70E237CE4C3FAB02FC227F /* NotificationConstants.swift in Sources */,
 				5500904C40D67D131E7E9A26 /* NotificationContentBuilder.swift in Sources */,
+				293179E5CE24DDF1FE82A110 /* NotificationCountBadge.swift in Sources */,
 				28426806399E3659BEBC5918 /* NotificationHandler.swift in Sources */,
 				E6A2F6E4795C1054025AACFF /* NotificationItemProxy.swift in Sources */,
 				9312F5A17AE59A9E910C51D6 /* NotificationItemProxyMock.swift in Sources */,

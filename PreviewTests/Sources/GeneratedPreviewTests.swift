@@ -712,6 +712,13 @@ extension PreviewTests {
     }
 
     @Test
+    func notificationCountBadge() async throws {
+        for (index, preview) in NotificationCountBadge_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func notificationPermissionsScreen() async throws {
         for (index, preview) in NotificationPermissionsScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

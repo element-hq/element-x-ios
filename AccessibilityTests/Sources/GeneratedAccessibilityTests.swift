@@ -407,6 +407,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "NoticeRoomTimelineView_Previews")
     }
 
+    func testNotificationCountBadge() async throws {
+        try await performAccessibilityAudit(named: "NotificationCountBadge_Previews")
+    }
+
     func testNotificationPermissionsScreen() async throws {
         try await performAccessibilityAudit(named: "NotificationPermissionsScreen_Previews")
     }
