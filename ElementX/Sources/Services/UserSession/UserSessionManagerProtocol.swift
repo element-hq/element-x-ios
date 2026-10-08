@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 enum UserSessionManagerError: Error {
     /// There are no signed in accounts to restore.
@@ -23,6 +24,8 @@ protocol UserSessionManagerProtocol: AnyObject {
     var sessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never> { get }
     /// The session of the account whose UI is on screen.
     var activeSession: UserSessionProtocol? { get }
+    /// The delegate that stores changes to a client's session, such as refreshed tokens.
+    var clientSessionDelegate: ClientSessionDelegate { get }
     
     func session(for userID: String) -> UserSessionProtocol?
     
@@ -32,6 +35,10 @@ protocol UserSessionManagerProtocol: AnyObject {
     ///
     /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
     func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError>
+    /// Creates the session of an account that has just signed in, and stores its credentials.
+    ///
+    /// The session isn't registered: `add` it once it's ready to be used.
+    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError>
     /// Registers a session that's ready to be used, replacing any previous session for its account.
     /// A new account becomes the active one, a known account keeps its place.
     func add(_ userSession: UserSessionProtocol)

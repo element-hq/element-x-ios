@@ -230,7 +230,7 @@ struct LoginScreenViewModelTests {
         let appSettings = AppSettings.volatile()
         
         clientFactory = ClientFactoryMock(.init())
-        service = AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
+        service = AuthenticationService(userSessionManager: UserSessionManagerMock(.init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
                                         classicAppManager: nil,
                                         clientFactory: clientFactory,

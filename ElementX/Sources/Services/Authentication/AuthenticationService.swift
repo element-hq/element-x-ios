@@ -15,7 +15,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private var sessionDirectories: SessionDirectories
     private let passphrase: Data
     
-    private let userSessionStore: UserSessionStoreProtocol
+    private let userSessionManager: UserSessionManagerProtocol
     private let classicAppManager: ClassicAppManagerProtocol?
     private let clientFactory: ClientFactoryProtocol
     private let appSettings: AppSettings
@@ -33,7 +33,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     let classicAppAccount: ClassicAppAccount?
     
-    init(userSessionStore: UserSessionStoreProtocol,
+    init(userSessionManager: UserSessionManagerProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
          classicAppManager: ClassicAppManagerProtocol?,
          clientFactory: ClientFactoryProtocol = ClientFactory(),
@@ -42,7 +42,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey()
         
-        self.userSessionStore = userSessionStore
+        self.userSessionManager = userSessionManager
         self.classicAppManager = classicAppManager
         self.clientFactory = clientFactory
         self.appSettings = appSettings
@@ -270,7 +270,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         let client = try await clientFactory.makeAuthenticationClient(serverNameOrBaseURL: serverNameOrBaseURL,
                                                                       sessionDirectories: sessionDirectories,
                                                                       passphrase: passphrase,
-                                                                      clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                                      clientSessionDelegate: userSessionManager.clientSessionDelegate,
                                                                       appSettings: appSettings,
                                                                       appHooks: appHooks)
         try await appHooks.remoteSettingsHook.initializeCache(using: client, applyingTo: appSettings).get()
@@ -284,7 +284,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
     
     private func userSession(for client: ClientProtocol) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        switch await userSessionStore.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase) {
+        switch await userSessionManager.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase) {
         case .success(let clientProxy):
             return .success(clientProxy)
         case .failure:
@@ -302,7 +302,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         do {
             let client = try await clientFactory.makeInMemoryClient(serverNameOrBaseURL: classicAppAccount.homeserverURL.absoluteString,
-                                                                    clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                                    clientSessionDelegate: userSessionManager.clientSessionDelegate,
                                                                     appSettings: appSettings,
                                                                     appHooks: appHooks)
             let loginDetails = await client.homeserverLoginDetails()
@@ -406,7 +406,7 @@ extension AuthenticationService {
     }
     
     static func mock(classicAppManager: ClassicAppManagerProtocol?) -> AuthenticationService {
-        AuthenticationService(userSessionStore: UserSessionStoreMock(.init()),
+        AuthenticationService(userSessionManager: UserSessionManagerMock(.init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
                               classicAppManager: classicAppManager,
                               clientFactory: ClientFactoryMock(.init()),

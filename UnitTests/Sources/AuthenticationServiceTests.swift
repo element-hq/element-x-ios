@@ -15,7 +15,7 @@ import Testing
 struct AuthenticationServiceTests {
     var client: ClientSDKMock!
     var encryption: EncryptionSDKMock!
-    var userSessionStore: UserSessionStoreMock!
+    var userSessionManager: UserSessionManagerMock!
     var encryptionKeyProvider: MockEncryptionKeyProvider!
     var service: AuthenticationService!
     
@@ -36,8 +36,8 @@ struct AuthenticationServiceTests {
         switch await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil) {
         case .success:
             #expect(client.loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount == 1)
-            #expect(userSessionStore.userSessionForSessionDirectoriesPassphraseCallsCount == 1)
-            #expect(userSessionStore.userSessionForSessionDirectoriesPassphraseReceivedArguments?.passphrase == encryptionKeyProvider.generateKey())
+            #expect(userSessionManager.userSessionForSessionDirectoriesPassphraseCallsCount == 1)
+            #expect(userSessionManager.userSessionForSessionDirectoriesPassphraseReceivedArguments?.passphrase == encryptionKeyProvider.generateKey())
         case .failure(let error):
             Issue.record("Unexpected failure: \(error)")
         }
@@ -138,14 +138,14 @@ struct AuthenticationServiceTests {
         encryption = EncryptionSDKMock()
         client.encryptionReturnValue = encryption
         
-        userSessionStore = UserSessionStoreMock(.init())
+        userSessionManager = UserSessionManagerMock(.init())
         encryptionKeyProvider = MockEncryptionKeyProvider()
         
         let classicAppManager = ClassicAppManagerMock(.init(accounts: classicAppAccounts,
                                                             availableSecrets: availableSecrets,
                                                             secretsBundle: SecretsBundleWithUserIdSDKMock()))
         
-        service = AuthenticationService(userSessionStore: userSessionStore,
+        service = AuthenticationService(userSessionManager: userSessionManager,
                                         encryptionKeyProvider: encryptionKeyProvider,
                                         classicAppManager: classicAppManager,
                                         clientFactory: clientFactory,
