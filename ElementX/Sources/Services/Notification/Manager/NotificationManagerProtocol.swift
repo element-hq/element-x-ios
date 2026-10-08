@@ -29,7 +29,8 @@ protocol NotificationManagerProtocol: AnyObject {
     func register(with deviceToken: Data) async -> Bool
     func registrationFailed(with error: Error)
     func showLocalNotification(with title: String, subtitle: String?) async
-    func setUserSession(_ userSession: UserSessionProtocol?)
+    func addUserSession(_ userSession: UserSessionProtocol)
+    func removeUserSession(userID: String)
     
     func requestAuthorization()
     

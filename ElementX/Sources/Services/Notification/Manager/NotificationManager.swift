@@ -15,7 +15,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private let appSettings: AppSettings
     
-    private var userSession: UserSessionProtocol?
+    private var userSessions: [String: UserSessionProtocol] = [:]
     
     private var cancellables = Set<AnyCancellable>()
     private var notificationsEnabled = false
@@ -65,7 +65,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func requestAuthorization() {
-        guard appSettings.enableNotifications, !userSession.isNil else { return }
+        guard appSettings.enableNotifications, !userSessions.isEmpty else { return }
         Task {
             do {
                 let permissionGranted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
@@ -82,14 +82,20 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func register(with deviceToken: Data) async -> Bool {
-        guard let userSession else {
+        guard !userSessions.isEmpty else {
             return false
         }
-        return await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
+        
+        var success = true
+        for userSession in userSessions.values {
+            let isPusherSet = await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
+            success = success && isPusherSet
+        }
+        return success
     }
     
-    func setUserSession(_ userSession: UserSessionProtocol?) {
-        self.userSession = userSession
+    func addUserSession(_ userSession: UserSessionProtocol) {
+        userSessions[userSession.clientProxy.userID] = userSession
         
         // If notification permissions were given previously then attempt re-registering
         // for remote notifications on startup. Otherwise let the onboarding flow handle it
@@ -105,6 +111,10 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             let settings = await notificationCenter.notificationSettings()
             MXLog.info("Notification sound enabled: \(settings.soundSetting == .enabled)")
         }
+    }
+    
+    func removeUserSession(userID: String) {
+        userSessions[userID] = nil
     }
     
     func registrationFailed(with error: Error) {
@@ -162,7 +172,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
     
     func updateAppBadgeCount(_ badgeCount: Int) async {
-        guard let userSession else { return }
+        guard !userSessions.isEmpty else { return }
         
         appSettings.lastKnownBadgeCount = badgeCount
         
@@ -194,7 +204,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                                         appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
                                                         deviceDisplayName: UIDevice.current.name,
                                                         profileTag: pusherProfileTag(),
-                                                        lang: Bundle.app.preferredLocalizations.first ?? "en")
+                                                        lang: Bundle.app.preferredLocalizations.first ?? "en",
+                                                        append: appSettings.multiAccountEnabled)
             try await clientProxy.setPusher(with: configuration)
             MXLog.info("Set pusher succeeded")
             return true

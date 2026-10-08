@@ -72,16 +72,28 @@ final class UserSessionManager: UserSessionManagerProtocol {
         }
         
         while let userID = accounts.keys.first {
-            switch await userSessionStore.restoreUserSession(userID: userID) {
-            case .success(let userSession):
+            if case .success(let userSession) = await restoreUserSession(userID: userID) {
                 return .success(userSession)
-            case .failure(let error):
-                MXLog.error("Failed restoring \(userID), falling back to the next account: \(error)")
-                accounts.removeValue(forKey: userID)
             }
         }
         
         return .failure(.failedRestoringSessions)
+    }
+    
+    func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionManagerError> {
+        // Remote settings are app wide, so only the active account's are ever applied.
+        if userID == accounts.keys.first {
+            userSessionStore.applyRemoteSettings(forUserID: userID)
+        }
+        
+        switch await userSessionStore.restoreUserSession(userID: userID) {
+        case .success(let userSession):
+            return .success(userSession)
+        case .failure(let error):
+            MXLog.error("Failed restoring \(userID): \(error)")
+            accounts.removeValue(forKey: userID)
+            return .failure(.failedRestoringSession)
+        }
     }
     
     func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: Data) async -> Result<UserSessionProtocol, UserSessionStoreError> {

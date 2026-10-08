@@ -82,6 +82,8 @@ struct PusherConfiguration {
     let deviceDisplayName: String
     let profileTag: String?
     let lang: String
+    /// Whether to keep the pushers of the other accounts using the same pushkey on this device.
+    let append: Bool
 }
 
 enum SessionVerificationState {

@@ -12,6 +12,8 @@ import MatrixRustSDK
 enum UserSessionManagerError: Error {
     /// There are no signed in accounts to restore.
     case noAccounts
+    /// The account couldn't be restored, so it has been removed.
+    case failedRestoringSession
     /// None of the signed in accounts could be restored, so they have all been removed.
     case failedRestoringSessions
 }
@@ -35,6 +37,10 @@ protocol UserSessionManagerProtocol: AnyObject {
     ///
     /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
     func restoreActiveSession() async -> Result<UserSessionProtocol, UserSessionManagerError>
+    /// Restores an account's session, removing the account when that fails (the store deletes its data).
+    ///
+    /// The session isn't registered: `add` it once it's ready to be used, e.g. after any migrations.
+    func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionManagerError>
     /// Creates the session of an account that has just signed in, and stores its credentials.
     ///
     /// The session isn't registered: `add` it once it's ready to be used.

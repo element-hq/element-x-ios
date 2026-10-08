@@ -38,4 +38,7 @@ protocol UserSessionStoreProtocol {
     
     /// Logs out of the specified session.
     func logout(userSession: UserSessionProtocol)
+    
+    /// Applies the cached remote settings of the given account's homeserver to the app settings.
+    func applyRemoteSettings(forUserID userID: String)
 }
