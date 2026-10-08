@@ -82,29 +82,27 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.appLockService = appLockService
         self.flowParameters = flowParameters
         presenceService = PresenceService(clientProxy: flowParameters.userSession.clientProxy,
-                                          userSettings: flowParameters.userSettings)
+                                          userSettings: flowParameters.userSession.userSettings)
         
         navigationTabCoordinator = NavigationTabCoordinator()
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
         
-        let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.userSettings.app.hideBrandChrome))
+        let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.userSession.userSettings.app.hideBrandChrome))
         chatsTabFlowCoordinator = ChatsTabFlowCoordinator(navigationSplitCoordinator: chatsSplitCoordinator,
                                                           flowParameters: flowParameters)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.navigationSplitCoordinator = chatsSplitCoordinator
         
-        let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.userSettings.app.hideBrandChrome))
+        let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.userSession.userSettings.app.hideBrandChrome))
         spacesTabFlowCoordinator = SpacesTabFlowCoordinator(navigationSplitCoordinator: spacesSplitCoordinator,
                                                             flowParameters: flowParameters)
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
         
-        if flowParameters.userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) {
+        if flowParameters.userSession.userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) {
             let searchCoordinator = SearchScreenCoordinator(parameters: .init(roomSummaryProvider: flowParameters.userSession.clientProxy.alternateRoomSummaryProvider,
-                                                                              clientProxy: flowParameters.userSession.clientProxy,
-                                                                              mediaProvider: flowParameters.userSession.mediaProvider,
-                                                                              userIndicatorController: flowParameters.userIndicatorController,
-                                                                              userSettings: flowParameters.userSettings))
+                                                                              userSession: flowParameters.userSession,
+                                                                              userIndicatorController: flowParameters.userIndicatorController))
             let searchStackCoordinator = NavigationStackCoordinator()
             searchStackCoordinator.setRootCoordinator(searchCoordinator)
             
@@ -425,8 +423,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
                                                                         flow: flow,
-                                                                        userSettings: flowParameters.userSettings,
-                                                                        mediaProvider: userSession.mediaProvider)
+                                                                        userSession: userSession)
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         
@@ -463,8 +460,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,
                                                clientID: InfoPlistReader.main.bundleIdentifier,
-                                               elementCallBaseURL: flowParameters.userSettings.app.elementCallBaseURL,
-                                               elementCallBaseURLOverride: flowParameters.userSettings.app.elementCallBaseURLOverride,
+                                               elementCallBaseURL: userSession.userSettings.app.elementCallBaseURL,
+                                               elementCallBaseURLOverride: userSession.userSettings.app.elementCallBaseURLOverride,
                                                voiceOnly: voiceOnly,
                                                colorScheme: colorScheme))
     }
@@ -486,7 +483,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
-                                                                            userSettings: flowParameters.userSettings,
+                                                                            userSettings: userSession.userSettings,
                                                                             analytics: flowParameters.analytics))
         
         callScreenCoordinator.actions

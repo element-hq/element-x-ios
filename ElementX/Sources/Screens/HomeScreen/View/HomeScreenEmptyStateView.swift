@@ -145,7 +145,6 @@ struct HomeScreenEmptyStateView_Previews: PreviewProvider, TestablePreview {
                                                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([])))))))
         return HomeScreenViewModel(userSession: userSession,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   userSettings: .mock(),
                                    analyticsService: AnalyticsServiceMock(.init()),
                                    bugReportService: BugReportServiceMock(.init()),
                                    notificationManager: NotificationManagerMock(),

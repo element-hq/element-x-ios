@@ -588,7 +588,7 @@ final class HomeScreenViewModelTests {
             break
         }
         
-        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
         if let securityStatePublisher {
             userSession.sessionSecurityStatePublisher = securityStatePublisher
         }
@@ -597,7 +597,6 @@ final class HomeScreenViewModelTests {
         
         viewModel = HomeScreenViewModel(userSession: userSession,
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                        userSettings: userSettings,
                                         analyticsService: AnalyticsServiceMock(.init()),
                                         bugReportService: BugReportServiceMock(.init()),
                                         notificationManager: notificationManager,

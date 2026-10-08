@@ -25,8 +25,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
          flow: SessionVerificationScreenFlow,
-         userSettings: UserSettings,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          verificationState: SessionVerificationScreenStateMachine.State = .initial) {
         self.sessionVerificationControllerProxy = sessionVerificationControllerProxy
         self.flow = flow
@@ -34,9 +33,9 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         stateMachine = SessionVerificationScreenStateMachine(state: verificationState)
         
         super.init(initialViewState: .init(flow: flow,
-                                           learnMoreURL: userSettings.app.encryptionURL,
+                                           learnMoreURL: userSession.userSettings.app.encryptionURL,
                                            verificationState: verificationState),
-                   mediaProvider: mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         setupStateMachine()
         

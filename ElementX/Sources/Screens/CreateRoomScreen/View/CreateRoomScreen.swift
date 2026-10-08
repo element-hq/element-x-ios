@@ -459,7 +459,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         clientProxy.isAliasAvailableReturnValue = .success(isAliasAvailable)
         let spaces = [SpaceServiceRoom].mockJoinedSpaces2
         clientProxy.spaceService = SpaceServiceProxyMock(.init(editableSpaces: spaces))
-        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy, userSettings: userSettings))
         
         return CreateRoomScreenViewModel(isSpace: isSpace,
                                          spaceSelectionMode: selectionMode,
@@ -467,7 +467,6 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                          userSession: userSession,
                                          analytics: AnalyticsServiceMock(.init()),
                                          userIndicatorController: UserIndicatorControllerMock(),
-                                         userSettings: userSettings,
                                          appHooks: AppHooks())
     }
 }

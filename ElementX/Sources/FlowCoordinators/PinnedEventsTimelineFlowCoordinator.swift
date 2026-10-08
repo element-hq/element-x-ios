@@ -69,7 +69,6 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   userSession: userSession,
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   appMediator: flowParameters.appMediator,
-                                                                                  userSettings: flowParameters.userSettings,
                                                                                   analytics: flowParameters.analytics,
                                                                                   emojiProvider: flowParameters.emojiProvider,
                                                                                   linkMetadataProvider: flowParameters.linkMetadataProvider,
@@ -107,15 +106,13 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
-                                                                mapURLBuilder: flowParameters.userSettings.app.mapTilerConfiguration.publisher.value,
+                                                                mapURLBuilder: userSession.userSettings.app.mapTilerConfiguration.publisher.value,
                                                                 roomProxy: roomProxy,
                                                                 timelineController: timelineController,
-                                                                liveLocationManager: flowParameters.userSession.liveLocationManager,
-                                                                userSettings: flowParameters.userSettings,
+                                                                userSession: userSession,
                                                                 appMediator: flowParameters.appMediator,
                                                                 analytics: flowParameters.analytics,
-                                                                userIndicatorController: flowParameters.userIndicatorController,
-                                                                mediaProvider: flowParameters.userSession.mediaProvider)
+                                                                userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = LocationSharingScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in

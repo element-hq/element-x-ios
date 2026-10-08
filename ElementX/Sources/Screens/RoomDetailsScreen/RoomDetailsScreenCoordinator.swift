@@ -12,7 +12,6 @@ import SwiftUI
 struct RoomDetailsScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let userSession: UserSessionProtocol
-    let userSettings: UserSettings
     let appHooks: AppHooks
     let analyticsService: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -54,7 +53,6 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         isSpace = parameters.roomProxy.infoPublisher.value.isSpace
         viewModel = RoomDetailsScreenViewModel(roomProxy: parameters.roomProxy,
                                                userSession: parameters.userSession,
-                                               userSettings: parameters.userSettings,
                                                appHooks: parameters.appHooks,
                                                analyticsService: parameters.analyticsService,
                                                userIndicatorController: parameters.userIndicatorController,

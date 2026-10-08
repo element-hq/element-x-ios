@@ -36,16 +36,14 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
          mapURLBuilder: MapTilerURLBuilderProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
-         liveLocationManager: LiveLocationManagerProtocol,
-         userSettings: UserSettings,
+         userSession: UserSessionProtocol,
          analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         mediaProvider: MediaProviderProtocol,
          notificationCenter: NotificationCenter = .default) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
-        self.liveLocationManager = liveLocationManager
-        self.userSettings = userSettings
+        liveLocationManager = userSession.liveLocationManager
+        userSettings = userSession.userSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.notificationCenter = notificationCenter
@@ -53,7 +51,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         super.init(initialViewState: .init(interactionMode: interactionMode,
                                            mapURLBuilder: mapURLBuilder,
                                            ownUserID: roomProxy.ownUserID),
-                   mediaProvider: mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         updateUserProfiles(members: roomProxy.membersPublisher.value)
         setupSubscriptions()
@@ -432,16 +430,14 @@ extension LocationSharingScreenViewModel {
         let roomProxy = JoinedRoomProxyMock(.init(members: .allMembers, ownUserID: RoomMemberProxyMock.mockMe.userID))
         roomProxy.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
-        let userSettings = UserSettings.mock()
+        let userSession = UserSessionMock(.init())
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
-                                              mapURLBuilder: userSettings.app.mapTilerConfiguration.publisher.value,
+                                              mapURLBuilder: userSession.userSettings.app.mapTilerConfiguration.publisher.value,
                                               roomProxy: roomProxy,
                                               timelineController: TimelineControllerMock(.init()),
-                                              liveLocationManager: LiveLocationManagerMock(),
-                                              userSettings: userSettings,
+                                              userSession: userSession,
                                               analytics: AnalyticsServiceMock(.init()),
-                                              userIndicatorController: UserIndicatorControllerMock(),
-                                              mediaProvider: MediaProviderMock(.init()))
+                                              userIndicatorController: UserIndicatorControllerMock())
     }
 }

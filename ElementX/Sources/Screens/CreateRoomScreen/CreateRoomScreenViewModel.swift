@@ -33,10 +33,9 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
          userSession: UserSessionProtocol,
          analytics: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userSettings: UserSettings,
          appHooks: AppHooks) {
         self.userSession = userSession
-        mediaUploadingPreprocessor = MediaUploadingPreprocessor(userSettings: userSettings)
+        mediaUploadingPreprocessor = MediaUploadingPreprocessor(userSettings: userSession.userSettings)
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
@@ -64,7 +63,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                   shouldShowCancelButton: shouldShowCancelButton,
                                                   roomName: "",
                                                   serverName: userSession.clientProxy.userIDServerName ?? "",
-                                                  isKnockingFeatureEnabled: userSettings.app.knockingEnabled,
+                                                  isKnockingFeatureEnabled: userSession.userSettings.app.knockingEnabled,
                                                   canSelectSpace: canSelectSpace,
                                                   aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
                                                   bindings: bindings)

@@ -23,6 +23,10 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let flowParameters: CommonFlowParameters
     
+    private var userSettings: UserSettings {
+        flowParameters.userSession.userSettings
+    }
+    
     // periphery:ignore - retaining purpose
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
@@ -73,7 +77,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSettingsScreen(animated: Bool) {
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
-                                                                                    userSettings: flowParameters.userSettings,
                                                                                     isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled,
                                                                                     isInSecondaryWindow: isInSecondaryWindow,
                                                                                     userIndicatorController: flowParameters.userIndicatorController))
@@ -139,7 +142,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentLabs() {
-        let coordinator = LabsScreenCoordinator(parameters: .init(userSettings: flowParameters.userSettings))
+        let coordinator = LabsScreenCoordinator(parameters: .init(userSettings: userSettings))
         coordinator.actions
             .sink { [weak self] action in
                 switch action {
@@ -190,7 +193,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentUserDetailsEditScreen() {
         let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(orientationManager: flowParameters.windowManager,
                                                                              userSession: flowParameters.userSession,
-                                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: flowParameters.userSettings),
+                                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: userSettings),
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              userIndicatorController: flowParameters.userIndicatorController))
         coordinator.actions
@@ -234,7 +237,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentAnalyticsScreen() {
-        let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(userSettings: flowParameters.userSettings,
+        let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(userSettings: userSettings,
                                                                                analytics: flowParameters.analytics))
         navigationStackCoordinator.push(coordinator)
     }
@@ -260,11 +263,11 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentLegalInformationScreen() {
-        navigationStackCoordinator.push(LegalInformationScreenCoordinator(userSettings: flowParameters.userSettings))
+        navigationStackCoordinator.push(LegalInformationScreenCoordinator(userSettings: userSettings))
     }
     
     private func presentBlockedUsersScreen() {
-        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: flowParameters.userSettings.app.hideIgnoredUserProfiles,
+        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: userSettings.app.hideIgnoredUserProfiles,
                                                                           userSession: flowParameters.userSession,
                                                                           userIndicatorController: flowParameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
@@ -275,8 +278,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                                      userSession: flowParameters.userSession,
                                                                                      userNotificationCenter: UNUserNotificationCenter.current(),
                                                                                      userIndicatorController: flowParameters.userIndicatorController,
-                                                                                     isModallyPresented: false,
-                                                                                     userSettings: flowParameters.userSettings)
+                                                                                     isModallyPresented: false)
         let coordinator = NotificationSettingsScreenCoordinator(parameters: notificationParameters)
         navigationStackCoordinator.push(coordinator)
     }
@@ -300,20 +302,20 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentMediaUploadQualitySettings() {
-        let parameters = MediaUploadQualitySettingsScreenCoordinatorParameters(userSettings: flowParameters.userSettings,
+        let parameters = MediaUploadQualitySettingsScreenCoordinatorParameters(userSettings: userSettings,
                                                                                analytics: flowParameters.analytics)
         let coordinator = MediaUploadQualitySettingsScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentLocationSharingSettings() {
-        let parameters = LocationSharingSettingsScreenCoordinatorParameters(userSettings: flowParameters.userSettings)
+        let parameters = LocationSharingSettingsScreenCoordinatorParameters(userSettings: userSettings)
         let coordinator = LocationSharingSettingsScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentDeveloperOptions() {
-        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: flowParameters.userSettings.app,
+        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: userSettings.app,
                                                             appHooks: flowParameters.appHooks,
                                                             clientProxy: flowParameters.userSession.clientProxy)
         
@@ -359,7 +361,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         accountSettingsPresenter = OAuthAccountSettingsPresenter(accountURL: url,
                                                                  presentationAnchor: flowParameters.windowManager.mainWindow,
                                                                  appMediator: flowParameters.appMediator,
-                                                                 userSettings: flowParameters.userSettings,
+                                                                 userSettings: userSettings,
                                                                  appHooks: flowParameters.appHooks,
                                                                  continuation: continuation)
         accountSettingsPresenter?.start()

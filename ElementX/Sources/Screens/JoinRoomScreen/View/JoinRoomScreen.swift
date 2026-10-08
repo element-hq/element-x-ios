@@ -402,8 +402,6 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
         self.isSpace = isSpace
         self.customPreviewName = customPreviewName
         
-        let userSettings = UserSettings.mock()
-        
         let clientProxy = ClientProxyMock(.init(hideInviteAvatars: hideInviteAvatars))
         clientProxy.canJoinRoomWithReturnValue = canJoinRoom
         
@@ -455,7 +453,6 @@ struct JoinRoomScreenPreviewWrapper: Identifiable {
         }
         
         viewModel = JoinRoomScreenViewModel(source: source,
-                                            userSettings: userSettings,
                                             userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                             userIndicatorController: UserIndicatorControllerMock())
     }

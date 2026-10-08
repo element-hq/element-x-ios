@@ -33,20 +33,18 @@ class SearchScreenViewModel: SearchScreenViewModelType, SearchScreenViewModelPro
     }
     
     init(roomSummaryProvider: RoomSummaryProviderProtocol,
-         clientProxy: ClientProxyProtocol,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userSettings: UserSettings,
          initialSearchQuery: String = "",
          initialSearchMode: SearchScreenMode = .rooms) {
         self.roomSummaryProvider = roomSummaryProvider
-        self.clientProxy = clientProxy
-        searchService = clientProxy.searchService
+        clientProxy = userSession.clientProxy
+        searchService = userSession.clientProxy.searchService
         self.userIndicatorController = userIndicatorController
-        self.userSettings = userSettings
+        userSettings = userSession.userSettings
         
         super.init(initialViewState: SearchScreenViewState(bindings: .init(searchQuery: initialSearchQuery, searchMode: initialSearchMode)),
-                   mediaProvider: mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)

@@ -383,7 +383,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
-                                                         userSettings: flowParameters.userSettings,
                                                          analyticsService: flowParameters.analytics,
                                                          notificationManager: flowParameters.notificationManager,
                                                          userIndicatorController: flowParameters.userIndicatorController)

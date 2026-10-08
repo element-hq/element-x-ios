@@ -21,7 +21,6 @@ struct ThreadTimelineScreenCoordinatorParameters {
     let linkMetadataProvider: LinkMetadataProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
-    let userSettings: UserSettings
     let analytics: AnalyticsServiceProtocol
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
@@ -56,7 +55,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: ThreadTimelineScreenCoordinatorParameters) {
-        userSettings = parameters.userSettings
+        userSettings = parameters.userSession.userSettings
         
         viewModel = ThreadTimelineScreenViewModel(roomProxy: parameters.roomProxy, userSession: parameters.userSession)
         
@@ -83,7 +82,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                                      completionSuggestionService: parameters.completionSuggestionService,
                                                      mediaProvider: parameters.userSession.mediaProvider,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
-                                                     userSettings: parameters.userSettings,
+                                                     userSettings: parameters.userSession.userSettings,
                                                      analyticsService: parameters.analytics,
                                                      composerDraftService: parameters.composerDraftService)
     }

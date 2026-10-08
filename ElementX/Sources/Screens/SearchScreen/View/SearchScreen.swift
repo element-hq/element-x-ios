@@ -626,46 +626,35 @@ private final class KeyNavigatingSearchTextField: UISearchTextField {
 
 struct SearchScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                      clientProxy: makeClientProxy(),
-                                                      mediaProvider: MediaProviderMock(.init()),
-                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                      userSettings: UserSettings.mock())
+                                                      userSession: UserSessionMock(.init(clientProxy: makeClientProxy())),
+                                                      userIndicatorController: UserIndicatorControllerMock())
     static let noResultsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                          clientProxy: makeClientProxy(),
-                                                          mediaProvider: MediaProviderMock(.init()),
+                                                          userSession: UserSessionMock(.init(clientProxy: makeClientProxy())),
                                                           userIndicatorController: UserIndicatorControllerMock(),
-                                                          userSettings: UserSettings.mock(),
                                                           initialSearchQuery: "John Doe")
     static let roomsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                      clientProxy: makeClientProxy(),
-                                                      mediaProvider: MediaProviderMock(.init()),
+                                                      userSession: UserSessionMock(.init(clientProxy: makeClientProxy())),
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      userSettings: UserSettings.mock(),
                                                       initialSearchQuery: "Foundation")
     static let messagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                         clientProxy: makeClientProxy(searchService: makeSearchService(results: .mockResults)),
-                                                         mediaProvider: MediaProviderMock(.init()),
+                                                         userSession: UserSessionMock(.init(clientProxy: makeClientProxy(searchService: makeSearchService(results: .mockResults)))),
                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                         userSettings: UserSettings.mock(),
                                                          initialSearchQuery: "Foundation",
                                                          initialSearchMode: .messages)
     static let loadingMessagesViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                                clientProxy: makeClientProxy(searchService: makeSearchService(paginationState: .loading)),
-                                                                mediaProvider: MediaProviderMock(.init()),
+                                                                userSession: UserSessionMock(.init(clientProxy: makeClientProxy(searchService: makeSearchService(paginationState: .loading)))),
                                                                 userIndicatorController: UserIndicatorControllerMock(),
-                                                                userSettings: UserSettings.mock(),
                                                                 initialSearchQuery: "Foundation",
                                                                 initialSearchMode: .messages)
     
     static let breadcrumbsViewModel = SearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded([]))),
-                                                            clientProxy: makeClientProxy(),
-                                                            mediaProvider: MediaProviderMock(.init()),
-                                                            userIndicatorController: UserIndicatorControllerMock(),
-                                                            userSettings: makeUserSettings(breadcrumbs: [.room(roomID: "!room1:matrix.org"),
-                                                                                                         .query("Bob"),
-                                                                                                         .room(roomID: "!room5:matrix.org"),
-                                                                                                         .query("Element HR"),
-                                                                                                         .query("Alice")]))
+                                                            userSession: UserSessionMock(.init(clientProxy: makeClientProxy(),
+                                                                                               userSettings: makeUserSettings(breadcrumbs: [.room(roomID: "!room1:matrix.org"),
+                                                                                                                                            .query("Bob"),
+                                                                                                                                            .room(roomID: "!room5:matrix.org"),
+                                                                                                                                            .query("Element HR"),
+                                                                                                                                            .query("Alice")]))),
+                                                            userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
         ElementNavigationStack {

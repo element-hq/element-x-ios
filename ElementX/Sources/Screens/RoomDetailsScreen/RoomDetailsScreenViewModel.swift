@@ -45,7 +45,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     init(roomProxy: JoinedRoomProxyProtocol,
          userSession: UserSessionProtocol,
-         userSettings: UserSettings,
          appHooks: AppHooks,
          analyticsService: AnalyticsServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -68,7 +67,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                                    topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
                                                    joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                                    notificationSettingsState: .loading,
-                                                   isNativeCallingEnabled: userSettings.app.nativeCallEnabled,
+                                                   isNativeCallingEnabled: userSession.userSettings.app.nativeCallEnabled,
                                                    bindings: .init())
         super.init(initialViewState: appHooks.roomDetailsScreenHook.update(viewState),
                    mediaProvider: userSession.mediaProvider)

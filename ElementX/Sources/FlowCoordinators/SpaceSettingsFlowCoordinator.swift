@@ -211,7 +211,6 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSpaceSettings(animated: Bool) {
         let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                          userSession: flowParameters.userSession,
-                                                                         userSettings: flowParameters.userSettings,
                                                                          appHooks: flowParameters.appHooks,
                                                                          analyticsService: flowParameters.analytics,
                                                                          userIndicatorController: flowParameters.userIndicatorController,
@@ -252,7 +251,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         let parameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                     userSession: flowParameters.userSession,
-                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: flowParameters.userSettings),
+                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: flowParameters.userSession.userSettings),
                                                                     navigationStackCoordinator: stackCoordinator,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
                                                                     orientationManager: flowParameters.appMediator.windowManager)
@@ -276,9 +275,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSecurityAndPrivacyScreen() {
         let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                clientProxy: flowParameters.userSession.clientProxy,
+                                                                                userSession: flowParameters.userSession,
                                                                                 userIndicatorController: flowParameters.userIndicatorController,
-                                                                                appSetting: flowParameters.userSettings,
                                                                                 appHooks: flowParameters.appHooks))
         
         coordinator.actionsPublisher.sink { [weak self] action in

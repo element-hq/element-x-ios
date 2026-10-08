@@ -14,12 +14,10 @@ struct LocationSharingScreenCoordinatorParameters {
     let mapURLBuilder: MapTilerURLBuilderProtocol
     let roomProxy: JoinedRoomProxyProtocol
     let timelineController: TimelineControllerProtocol
-    let liveLocationManager: LiveLocationManagerProtocol
-    let userSettings: UserSettings
+    let userSession: UserSessionProtocol
     let appMediator: AppMediatorProtocol
     let analytics: AnalyticsServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let mediaProvider: MediaProviderProtocol
 }
 
 enum LocationSharingScreenCoordinatorAction {
@@ -44,11 +42,9 @@ final class LocationSharingScreenCoordinator: CoordinatorProtocol {
                                                    mapURLBuilder: parameters.mapURLBuilder,
                                                    roomProxy: parameters.roomProxy,
                                                    timelineController: parameters.timelineController,
-                                                   liveLocationManager: parameters.liveLocationManager,
-                                                   userSettings: parameters.userSettings,
+                                                   userSession: parameters.userSession,
                                                    analytics: parameters.analytics,
-                                                   userIndicatorController: parameters.userIndicatorController,
-                                                   mediaProvider: parameters.mediaProvider)
+                                                   userIndicatorController: parameters.userIndicatorController)
     }
     
     // MARK: - Public
