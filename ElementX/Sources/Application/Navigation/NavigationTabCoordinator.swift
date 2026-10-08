@@ -447,7 +447,12 @@ struct TabRailView<Tag: Hashable>: View {
                     }
                     .buttonStyle(TabButtonStyle(isSelected: isSelected))
                     .accessibilityAddTraits(isSelected ? .isSelected : [])
-                    .badge(10) // TODO: Check if this works.
+                    .overlay(alignment: .topTrailing) {
+                        if module.details.badgeCount > 0 {
+                            NotificationCountBadge(count: module.details.badgeCount, size: .small)
+                                .allowsHitTesting(false)
+                        }
+                    }
                 }
             }
             .padding(.horizontal, 8)
