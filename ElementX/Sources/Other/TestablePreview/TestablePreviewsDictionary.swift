@@ -106,6 +106,7 @@ enum TestablePreviewsDictionary {
             "ModerationAndSafetySettingsScreen_Previews" : ModerationAndSafetySettingsScreen_Previews.self,
             "MultiAccountAnnouncementView_Previews" : MultiAccountAnnouncementView_Previews.self,
             "NoticeRoomTimelineView_Previews" : NoticeRoomTimelineView_Previews.self,
+            "NotificationCountBadge_Previews" : NotificationCountBadge_Previews.self,
             "NotificationPermissionsScreen_Previews" : NotificationPermissionsScreen_Previews.self,
             "NotificationSettingsEditScreenRoomCell_Previews" : NotificationSettingsEditScreenRoomCell_Previews.self,
             "NotificationSettingsEditScreen_Previews" : NotificationSettingsEditScreen_Previews.self,

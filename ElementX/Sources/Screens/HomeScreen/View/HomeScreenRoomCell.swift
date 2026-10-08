@@ -146,13 +146,7 @@ struct HomeScreenRoomCell: View {
                 
                 if room.badges.isDotShown {
                     if room.isHighlighted, room.badges.notificationCount > 0 {
-                        Text(formattedNotificationCount)
-                            .font(.compound.bodySMSemibold)
-                            .foregroundColor(.compound.textOnSolidPrimary)
-                            .lineLimit(1)
-                            .padding(.horizontal, 6)
-                            .frame(minWidth: 20, minHeight: 20)
-                            .background(.compound.iconAccentPrimary, in: .capsule)
+                        NotificationCountBadge(count: Int(room.badges.notificationCount))
                             .accessibilityLabel(L10n.a11yNotificationsNewMessages)
                     } else {
                         Circle()
@@ -168,10 +162,6 @@ struct HomeScreenRoomCell: View {
     private var mentionIcon: some View {
         CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
             .accessibilityLabel(L10n.a11yNotificationsNewMentions)
-    }
-    
-    private var formattedNotificationCount: String {
-        room.badges.notificationCount > 99 ? "99+" : "\(room.badges.notificationCount)"
     }
     
     @ViewBuilder
