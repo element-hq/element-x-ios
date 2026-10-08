@@ -540,6 +540,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 let badgeCount = Int(userSession.clientProxy.totalUnreadNotifications)
                 
+                chatsTabDetails.badgeCount = badgeCount
+                
                 await flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
                 await flowParameters.notificationManager.updateAppBadgeCount(badgeCount)
             }
