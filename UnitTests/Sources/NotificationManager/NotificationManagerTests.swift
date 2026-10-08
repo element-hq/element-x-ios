@@ -34,7 +34,7 @@ final class NotificationManagerTests {
         
         notificationManager = NotificationManager(notificationCenter: notificationCenter, appSettings: appSettings)
         notificationManager.start()
-        notificationManager.setUserSession(mockUserSession)
+        notificationManager.addUserSession(mockUserSession)
     }
     
     isolated deinit {
@@ -171,7 +171,7 @@ final class NotificationManagerTests {
         notificationCenter.authorizationStatusReturnValue = .authorized
         notificationManager.delegate = self
         
-        notificationManager.setUserSession(UserSessionMock(.init()))
+        notificationManager.addUserSession(UserSessionMock(.init()))
         try await Task.sleep(for: .seconds(1))
         
         #expect(!authorizationStatusWasGranted)
@@ -187,7 +187,7 @@ final class NotificationManagerTests {
             registerForRemoteNotificationsDelegateCalled = {
                 confirm()
             }
-            notificationManager.setUserSession(UserSessionMock(.init()))
+            notificationManager.addUserSession(UserSessionMock(.init()))
         }
         
         #expect(authorizationStatusWasGranted)
@@ -271,12 +271,37 @@ final class NotificationManagerTests {
     
     @Test
     func updatingAppBadgeCountWithoutASessionDoesNothing() async {
-        notificationManager.setUserSession(nil)
+        notificationManager.removeUserSession(userID: "@test:user.net")
         
         await notificationManager.updateAppBadgeCount(7)
         
         #expect(!notificationCenter.setBadgeCountCalled)
     }
+    
+    @Test
+    func whenRegistered_pusherIsSetForEveryAccount() async {
+        let otherClientProxy = ClientProxyMock(.init(userID: "@other:user.net"))
+        // A closure rather than setPusherWithThrowableError, which throws before the call is recorded.
+        otherClientProxy.setPusherWithClosure = { _ in throw TestError.someError }
+        notificationManager.addUserSession(UserSessionMock(.init(clientProxy: otherClientProxy)))
+        
+        let success = await notificationManager.register(with: Data())
+        
+        #expect(clientProxy.setPusherWithCalled)
+        #expect(otherClientProxy.setPusherWithCalled)
+        #expect(!success)
+    }
+    
+    @Test(arguments: [false, true])
+    func pusherAppendsOnlyWithMultiAccountEnabled(isMultiAccountEnabled: Bool) async {
+        appSettings.multiAccountEnabled = isMultiAccountEnabled
+        
+        _ = await notificationManager.register(with: Data())
+        
+        #expect(clientProxy.setPusherWithReceivedInvocations.first?.append == isMultiAccountEnabled)
+    }
+    
+    private enum TestError: Error { case someError }
 }
 
 extension NotificationManagerTests: @MainActor NotificationManagerDelegate {

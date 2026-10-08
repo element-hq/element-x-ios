@@ -61,6 +61,20 @@ struct UserSessionManagerTests {
     }
     
     @Test
+    func onlyTheActiveAccountsRemoteSettingsAreApplied() async {
+        let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
+        
+        // Another account's remote settings must never replace the active account's.
+        userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@bob:matrix.org"))
+        _ = await manager.restoreUserSession(userID: "@bob:matrix.org")
+        #expect(!userSessionStore.applyRemoteSettingsForUserIDCalled)
+        
+        userSessionStore.restoreUserSessionUserIDReturnValue = .success(makeUserSession(userID: "@alice:matrix.org"))
+        _ = await manager.restoreActiveSession()
+        #expect(userSessionStore.applyRemoteSettingsForUserIDReceivedInvocations == ["@alice:matrix.org"])
+    }
+    
+    @Test
     func addRegistersTheSession() {
         let manager = makeManager(userIDs: ["@alice:matrix.org", "@bob:matrix.org"])
         
