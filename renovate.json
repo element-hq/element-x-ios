@@ -17,14 +17,14 @@
       "matchManagers": ["xcodegen"],
       "groupName": "Project Dependencies",
       "schedule": [
-          "every 2 weeks on wednesday",
+          "every 2 weeks on wednesday before 4:00 am",
       ]
     },
     {
       "matchManagers": ["swift"],
       "groupName" : "Tool Dependencies",
       "schedule": [
-          "every 2 weeks on wednesday",
+          "every 2 weeks on wednesday before 4:00 am",
       ]
     },
     {
@@ -32,7 +32,7 @@
       "matchFileNames": ["compound-ios/Package.swift"],
       "groupName": "Compound Dependencies",
       "schedule": [
-          "every 2 weeks on wednesday",
+          "every 2 weeks on wednesday before 4:00 am",
       ]
     },
     {
@@ -40,7 +40,7 @@
       "matchPackageNames": ["pointfreeco/swift-snapshot-testing", "https://github.com/pointfreeco/swift-snapshot-testing"],
       "groupName": "Shared Dependencies",
       "schedule": [
-          "every 2 weeks on wednesday",
+          "every 2 weeks on wednesday before 4:00 am",
       ]
     },
   ]
