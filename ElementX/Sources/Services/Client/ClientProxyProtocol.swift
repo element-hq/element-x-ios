@@ -183,6 +183,9 @@ protocol ClientProxyProtocol: AnyObject {
     
     func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError>
     
+    /// Whether the user has joined any encrypted rooms (spaces excluded).
+    func hasEncryptedRooms() -> Bool
+    
     func resumeServices() async
     
     func pauseServices() async

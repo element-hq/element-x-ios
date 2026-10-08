@@ -692,7 +692,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .resetComplete:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
-            case .cancel:
+            case .cancel, .logoutConfirmed: // Sign out is only offered when resetting is the only option, which can't happen here.
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }
         }

@@ -97,6 +97,34 @@ struct IdentityConfirmationScreenViewModelTests {
         #expect(context.viewState.availableActions == nil)
     }
     
+    // MARK: - Reset
+    
+    @Test
+    mutating func resetWithoutOptions() async throws {
+        setupViewModel(hasDevicesToVerifyAgainst: false)
+        
+        let loaded = deferFulfillment(context.observe(\.viewState.availableActions)) { $0 != nil }
+        securityStateSubject.send(.init(verificationState: .unverified, recoveryState: .disabled))
+        try await loaded.fulfill()
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .reset(hasConfirmationOptions: false) }
+        context.send(viewAction: .reset)
+        try await deferred.fulfill()
+    }
+    
+    @Test
+    mutating func resetWithOptions() async throws {
+        setupViewModel(hasDevicesToVerifyAgainst: true)
+        
+        let loaded = deferFulfillment(context.observe(\.viewState.availableActions)) { $0 != nil }
+        securityStateSubject.send(.init(verificationState: .unverified, recoveryState: .enabled))
+        try await loaded.fulfill()
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .reset(hasConfirmationOptions: true) }
+        context.send(viewAction: .reset)
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Private
     
     mutating func setupViewModel(hasDevicesToVerifyAgainst: Bool = true) {
