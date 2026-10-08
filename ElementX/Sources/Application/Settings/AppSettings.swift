@@ -106,11 +106,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference
     var lastVersionLaunched: String?
     
-    /// Every account signed in on this device, most recently active first. The keychain decides
-    /// which accounts exist, this only orders them (see `UserSessionManager`).
-    @UserPreference(defaultValue: [String]())
-    var recentUserIDs: [String]
-    
     /// The Set of room identifiers of invites that the user already saw in the invites list.
     /// This Set is being used to implement badges for unread invites.
     @UserPreference(defaultValue: Set<String>())

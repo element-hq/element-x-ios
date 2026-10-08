@@ -37,8 +37,8 @@ struct ChatsTabFlowCoordinatorTests {
         notificationManager = NotificationManagerMock()
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let flowParameters = CommonFlowParameters(userSessionManager: UserSessionManagerMock(.init(userSessions: [userSession])),
-                                                  userSession: userSession,
+        let flowParameters = CommonFlowParameters(activeUserSession: userSession,
+                                                  availableSessionsPublisher: CurrentValueSubject<[UserSessionProtocol], Never>([userSession]).asCurrentValuePublisher(),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,

@@ -75,7 +75,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let flowParameters: CommonFlowParameters
     
     private var userSession: UserSessionProtocol {
-        flowParameters.userSession
+        flowParameters.activeUserSession
     }
     
     private var roomProxy: JoinedRoomProxyProtocol!
@@ -1438,7 +1438,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentManageAuthorizedSpacesScreen(selection: AuthorizedSpacesSelection) {
         let navigationStack = NavigationStackCoordinator()
         let coordinator = ManageAuthorizedSpacesScreenCoordinator(parameters: .init(authorizedSpacesSelection: selection,
-                                                                                    mediaProvider: flowParameters.userSession.mediaProvider))
+                                                                                    mediaProvider: flowParameters.activeUserSession.mediaProvider))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {

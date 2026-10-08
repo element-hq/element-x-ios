@@ -15,7 +15,7 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let userSessionManager: UserSessionManagerProtocol
+    private let availableSessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never>
     private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsServiceProtocol
     private let bugReportService: BugReportServiceProtocol
@@ -32,14 +32,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol,
-         userSessionManager: UserSessionManagerProtocol,
+         availableSessionsPublisher: CurrentValuePublisher<[UserSessionProtocol], Never>,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          analyticsService: AnalyticsServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
-        self.userSessionManager = userSessionManager
+        self.availableSessionsPublisher = availableSessionsPublisher
         self.analyticsService = analyticsService
         self.bugReportService = bugReportService
         userSettings = userSession.userSettings
@@ -490,9 +490,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func presentMultiAccountAnnouncementIfNeeded() {
         // Never announce it to someone who already uses several accounts, even once they've removed some.
-        if userSessionManager.userIDs.count > 1, !userSettings.hasSeenMultiAccountAnnouncement {
+        if availableSessionsPublisher.value.count > 1, !userSettings.app.hasSeenMultiAccountAnnouncement {
             MXLog.info("Several accounts are signed in, marking the multi-account announcement as seen.")
-            userSettings.hasSeenMultiAccountAnnouncement = true
+            userSettings.app.hasSeenMultiAccountAnnouncement = true
         }
         
         // An unverified session gets the identity confirmation cover first, the room list appears again once it's dismissed.

@@ -462,15 +462,15 @@ final class HomeScreenViewModelTests {
     
     @Test
     func multiAccountAnnouncementIsMarkedSeenWithSeveralAccounts() async throws {
-        userSettings.multiAccountEnabled = true
-        userSettings.hasSeenMultiAccountAnnouncement = false
+        userSettings.app.multiAccountEnabled = true
+        userSettings.app.hasSeenMultiAccountAnnouncement = false
         setupViewModel(otherAccountUserIDs: ["@other:client.com"])
         
         let deferred = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         context.send(viewAction: .screenAppeared)
         try await deferred.fulfill()
         
-        #expect(userSettings.hasSeenMultiAccountAnnouncement)
+        #expect(userSettings.app.hasSeenMultiAccountAnnouncement)
     }
     
     // MARK: - Helpers
@@ -612,7 +612,7 @@ final class HomeScreenViewModelTests {
         let userSessions: [UserSessionProtocol] = [userSession] + otherUserSessions
         
         viewModel = HomeScreenViewModel(userSession: userSession,
-                                        userSessionManager: UserSessionManagerMock(.init(userSessions: userSessions)),
+                                        availableSessionsPublisher: CurrentValueSubject<[UserSessionProtocol], Never>(userSessions).asCurrentValuePublisher(),
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         analyticsService: AnalyticsServiceMock(.init()),
                                         bugReportService: BugReportServiceMock(.init()),

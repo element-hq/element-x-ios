@@ -46,8 +46,8 @@ struct UserSessionStoreTests {
     // MARK: - Restoration
     
     @Test
-    func restoreWithoutCredentials() async {
-        guard case .failure(.missingCredentials) = await store.restoreUserSession(userID: "@alice:matrix.org") else {
+    func restoreUnknownAccount() async {
+        guard case .failure(.unknownAccount) = await store.restoreUserSession(userID: "@alice:matrix.org") else {
             Issue.record("Restoration should fail when there are no credentials.")
             return
         }

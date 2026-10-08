@@ -13,22 +13,15 @@ struct UserSessionManagerTests {
     let userSessionStore = UserSessionStoreMock()
     let appSettings = AppSettings.volatile()
     
-    @Test(arguments: [
-        // An upgrade from a single account, before any order was stored.
-        ([String](), ["@alice:matrix.org"], ["@alice:matrix.org"]),
-        // A stale account is dropped, the stored order wins.
-        (["@bob:matrix.org", "@alice:matrix.org", "@gone:matrix.org"], ["@alice:matrix.org", "@bob:matrix.org"], ["@bob:matrix.org", "@alice:matrix.org"]),
-        // Accounts missing from the stored order are appended, sorted.
-        (["@bob:matrix.org"], ["@carol:matrix.org", "@bob:matrix.org", "@alice:matrix.org"], ["@bob:matrix.org", "@alice:matrix.org", "@carol:matrix.org"])
-    ])
-    func reconcilesTheStoredOrderWithTheKeychain(storedUserIDs: [String], keychainUserIDs: [String], expectedUserIDs: [String]) {
-        appSettings.recentUserIDs = storedUserIDs
-        userSessionStore.userIDs = keychainUserIDs
+    @Test
+    func ordersAccountsByWhenTheyWereLastSelected() {
+        appSettings.userSettings(for: "@alice:matrix.org").account.lastSelectedDate = .now.addingTimeInterval(-60)
+        appSettings.userSettings(for: "@bob:matrix.org").account.lastSelectedDate = .now
         
-        let manager = UserSessionManager(userSessionStore: userSessionStore, appSettings: appSettings)
+        // Accounts that were never selected (e.g. after upgrading from a single account) come last.
+        let manager = makeManager(userIDs: ["@dave:matrix.org", "@alice:matrix.org", "@carol:matrix.org", "@bob:matrix.org"])
         
-        #expect(manager.userIDs == expectedUserIDs)
-        #expect(appSettings.recentUserIDs == expectedUserIDs)
+        #expect(manager.userIDs == ["@bob:matrix.org", "@alice:matrix.org", "@carol:matrix.org", "@dave:matrix.org"])
     }
     
     @Test
@@ -48,7 +41,6 @@ struct UserSessionManagerTests {
         
         #expect(userSession.clientProxy.userID == "@bob:matrix.org")
         #expect(manager.userIDs == ["@bob:matrix.org"])
-        #expect(appSettings.recentUserIDs == ["@bob:matrix.org"])
         #expect(manager.session(for: "@alice:matrix.org") == nil)
         // Nothing can use the session until it's added, e.g. while migrations run.
         #expect(manager.activeSession == nil)
@@ -83,9 +75,9 @@ struct UserSessionManagerTests {
         let carol = makeUserSession(userID: "@carol:matrix.org")
         manager.add(carol)
         #expect(manager.userIDs == ["@carol:matrix.org", "@alice:matrix.org", "@bob:matrix.org"])
-        #expect(appSettings.recentUserIDs == manager.userIDs)
+        #expect(appSettings.userSettings(for: "@carol:matrix.org").account.lastSelectedDate != nil)
         #expect((manager.activeSession as? UserSessionMock) === carol)
-        #expect(manager.sessions.map(\.clientProxy.userID) == ["@carol:matrix.org", "@bob:matrix.org"])
+        #expect(manager.sessionsPublisher.value.map(\.clientProxy.userID) == ["@carol:matrix.org", "@bob:matrix.org"])
     }
     
     @Test
@@ -112,7 +104,6 @@ struct UserSessionManagerTests {
         #expect((userSessionStore.logoutUserSessionReceivedUserSession as? UserSessionMock) === alice)
         #expect(manager.userIDs.isEmpty)
         #expect(manager.activeSession == nil)
-        #expect(appSettings.recentUserIDs.isEmpty)
     }
     
     // MARK: - Helpers

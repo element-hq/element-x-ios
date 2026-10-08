@@ -10,7 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 enum UserSessionStoreError: Error {
-    case missingCredentials
+    case unknownAccount
     case failedRestoringLogin
     case failedSettingUpSession
     case failedSettingUpClientProxy(Error)
@@ -30,7 +30,7 @@ protocol UserSessionStoreProtocol {
     /// Returns the delegate that should handle any changes to a `Client`'s `Session`.
     var clientSessionDelegate: ClientSessionDelegate { get }
     
-    /// Restores the session of the given account. When this fails, the account's credentials and data are deleted.
+    /// Restores the session of the given account. If this fails, the account's credentials and data are deleted.
     func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionStoreError>
     
     /// Creates a user session for a new client from the SDK along with the passphrase used for the data stores.

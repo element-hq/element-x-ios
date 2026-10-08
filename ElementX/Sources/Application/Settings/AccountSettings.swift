@@ -14,6 +14,12 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     private let store: AccountUserDefaults
     private let userID: String
     
+    // MARK: Accounts
+    
+    /// When this account was last selected, used to order the accounts most recently selected first.
+    @UserPreference
+    var lastSelectedDate: Date?
+    
     // MARK: Session
     
     @UserPreference(defaultValue: false)

@@ -182,7 +182,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentStartChatScreen() {
-        let parameters = StartChatScreenCoordinatorParameters(userSession: flowParameters.userSession,
+        let parameters = StartChatScreenCoordinatorParameters(userSession: flowParameters.activeUserSession,
                                                               userDiscoveryService: userDiscoveryService,
                                                               userIndicatorController: flowParameters.userIndicatorController,
                                                               analytics: flowParameters.analytics)
@@ -212,7 +212,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         let createParameters = CreateRoomScreenCoordinatorParameters(isSpace: isSpace,
                                                                      spaceSelectionMode: spaceSelectionMode,
                                                                      shouldShowCancelButton: isRoot,
-                                                                     userSession: flowParameters.userSession,
+                                                                     userSession: flowParameters.activeUserSession,
                                                                      userIndicatorController: flowParameters.userIndicatorController,
                                                                      analytics: flowParameters.analytics,
                                                                      appHooks: flowParameters.appHooks)
@@ -268,7 +268,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentInviteUsersScreen(roomProxy: JoinedRoomProxyProtocol, spaceRoomListProxy: SpaceRoomListProxyProtocol?) {
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.activeUserSession,
                                                                       roomType: .existingRoom(roomProxy: roomProxy),
                                                                       isSkippable: true,
                                                                       userDiscoveryService: userDiscoveryService,

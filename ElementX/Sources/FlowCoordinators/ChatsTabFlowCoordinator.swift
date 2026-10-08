@@ -26,7 +26,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     private let flowParameters: CommonFlowParameters
     
     private var userSession: UserSessionProtocol {
-        flowParameters.userSession
+        flowParameters.activeUserSession
     }
     
     private let stateMachine: ChatsTabFlowCoordinatorStateMachine
@@ -375,7 +375,7 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         userSessionManager: flowParameters.userSessionManager,
+                                                         availableSessionsPublisher: flowParameters.availableSessionsPublisher,
                                                          bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
                                                          analyticsService: flowParameters.analytics,

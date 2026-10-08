@@ -21,7 +21,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let flowParameters: CommonFlowParameters
     
     private var userSession: UserSessionProtocol {
-        flowParameters.userSession
+        flowParameters.activeUserSession
     }
     
     private let actionsSubject: PassthroughSubject<MediaEventsTimelineFlowCoordinatorAction, Never> = .init()

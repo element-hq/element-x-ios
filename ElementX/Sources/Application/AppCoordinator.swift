@@ -19,7 +19,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
-    private let userSessionManager: UserSessionManager
+    private let userSessionManager: UserSessionManagerProtocol
     // periphery:ignore - retaining purpose
     private let targetConfiguration: Target.ConfigurationResult
     private let appMediator: AppMediator
@@ -786,8 +786,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             analyticsService.signpost.startTransaction(.cachedRoomList)
         }
         
-        let flowParameters = CommonFlowParameters(userSessionManager: userSessionManager,
-                                                  userSession: userSession,
+        let flowParameters = CommonFlowParameters(activeUserSession: userSession,
+                                                  availableSessionsPublisher: userSessionManager.sessionsPublisher,
                                                   bugReportService: bugReportService,
                                                   elementCallService: elementCallService,
                                                   timelineControllerFactory: TimelineControllerFactory(userSettings: userSession.userSettings),
