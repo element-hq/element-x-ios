@@ -22,6 +22,9 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var barButtonTimer: Timer?
     
+    /// When not nil, the given item will have its caption hidden.
+    private var captionHiddenForItemID: MediaPreviewItemID?
+    
     @CancellableTask private var settledRefreshTask: Task<Void, Never>?
     /// Media whose file loaded, kept until the swipe settles as each load is only reported once.
     /// Whichever is on display by then gets refreshed and the rest are dropped.
@@ -57,6 +60,10 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var captionView: UIView {
         captionHostingController.view
+    }
+    
+    private var currentPreviewItemMediaID: MediaPreviewItemID? {
+        (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id
     }
     
     /// Whether the displayed placeholder's index now holds a media, or a different placeholder
@@ -204,8 +211,14 @@ class TimelineMediaPreviewController: QLPreviewController {
     private func updateCaptionVisibility() {
         // The caption should be hidden alongside the header.
         let isHeaderHidden = headerHostingController.view.window == nil
-        if captionView.isHidden != isHeaderHidden {
-            captionView.isHidden = isHeaderHidden
+        let currentItemID = currentPreviewItemMediaID
+        
+        let isHidden = isHeaderHidden || currentItemID == captionHiddenForItemID
+        if captionView.isHidden != isHidden {
+            captionView.isHidden = isHidden
+            if isHidden {
+                captionHiddenForItemID = currentItemID // Don't show the caption again for this item.
+            }
         }
     }
     
@@ -250,6 +263,14 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private func loadCurrentItem() {
         headerHostingController.view.sizeToFit() // Resizing isn't automatic in the toolbar 😒
+        
+        if #available(iOS 26, *), view.window != nil {
+            if captionHiddenForItemID != currentPreviewItemMediaID {
+                captionHiddenForItemID = nil // Allow the caption to be re-shown when swiping.
+            }
+            
+            updateCaptionVisibility()
+        }
         
         if let previewItem = currentPreviewItem as? TimelineMediaPreviewItem.Media {
             context.send(viewAction: .updateCurrentItem(.media(previewItem)))
