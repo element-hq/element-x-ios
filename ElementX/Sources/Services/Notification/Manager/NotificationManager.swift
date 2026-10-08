@@ -158,10 +158,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
     
-    func updateAppBadgeCount() async {
+    func updateAppBadgeCount(_ badgeCount: Int) async {
         guard let userSession else { return }
-        
-        let badgeCount = Int(userSession.clientProxy.totalUnreadNotifications)
         
         appSettings.lastKnownBadgeCount = badgeCount
         

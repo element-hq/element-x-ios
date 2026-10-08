@@ -317,6 +317,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         setupCallObservers()
+        setupUnreadNotificationsObserver()
         
         searchScreenCoordinator?.actionsPublisher
             .sink { [weak self] action in
@@ -528,6 +529,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         MXLog.info("Starting picture in picture to hide the call screen overlay.")
         callScreenPictureInPictureController.startPictureInPicture()
         navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+    }
+    
+    private func setupUnreadNotificationsObserver() {
+        let roomListPublisher = userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher
+        
+        Task { [weak self] in
+            for await roomSummaries in roomListPublisher.values {
+                guard let self else { return }
+                
+                let badgeCount = Int(userSession.clientProxy.totalUnreadNotifications)
+                
+                await flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
+                await flowParameters.notificationManager.updateAppBadgeCount(badgeCount)
+            }
+        }
+        .store(in: &cancellables)
     }
     
     // MARK: - Native calls

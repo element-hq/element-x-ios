@@ -337,12 +337,6 @@ class ChatsTabFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .receivedDecryptionError(let info):
                     processDecryptionError(info)
-                case .receivedSyncUpdate:
-                    Task {
-                        let roomSummaries = self.userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.value
-                        await self.flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
-                        await self.flowParameters.notificationManager.updateAppBadgeCount()
-                    }
                 default:
                     break
                 }
