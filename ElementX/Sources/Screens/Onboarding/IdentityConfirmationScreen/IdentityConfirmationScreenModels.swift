@@ -8,12 +8,12 @@
 
 import Foundation
 
-enum IdentityConfirmationScreenViewModelAction {
+enum IdentityConfirmationScreenViewModelAction: Equatable {
     case otherDevice
     case recoveryKey
     /// Only possible in debug builds.
     case skip
-    case reset
+    case reset(hasConfirmationOptions: Bool)
     case logoutConfirmed
 }
 

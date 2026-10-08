@@ -10,11 +10,13 @@ import SwiftUI
 
 /// Represents the position of a checkmark item in a list.
 enum ListPosition {
-    case top, middle, bottom
+    case single, top, middle, bottom
     
     /// The corners that should be rounded for this position.
     var roundedCorners: UIRectCorner {
         switch self {
+        case .single:
+            return .allCorners
         case .top:
             return [.topLeft, .topRight]
         case .middle:

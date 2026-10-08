@@ -10,8 +10,20 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal nonisolated enum UntranslatedL10n {
+  /// Any devices you’re signed in to will need to be reconfirmed
+  internal static var screenEncryptionResetBullet4: String { return UntranslatedL10n.tr("Untranslated", "screen_encryption_reset_bullet_4") }
+  /// It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity
+  internal static var screenEncryptionResetNoChatsMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_encryption_reset_no_chats_message") }
+  /// You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.
+  internal static var screenEncryptionResetNoOptionsSubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_encryption_reset_no_options_subtitle") }
+  /// You need to reset your digital identity
+  internal static var screenEncryptionResetNoOptionsTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_encryption_reset_no_options_title") }
+  /// If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.
+  internal static var screenEncryptionResetSubtitle: String { return UntranslatedL10n.tr("Untranslated", "screen_encryption_reset_subtitle") }
   /// Search
   internal static var screenHomeTabSearch: String { return UntranslatedL10n.tr("Untranslated", "screen_home_tab_search") }
+  /// Sign out
+  internal static var screenIdentityConfirmationSignOut: String { return UntranslatedL10n.tr("Untranslated", "screen_identity_confirmation_sign_out") }
   /// Search for chats and messages
   internal static var screenSearchEmptyStateMessage: String { return UntranslatedL10n.tr("Untranslated", "screen_search_empty_state_message") }
   /// Start searching...
