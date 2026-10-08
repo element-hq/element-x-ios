@@ -33,7 +33,7 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
     init(parameters: SecureBackupScreenCoordinatorParameters) {
         viewModel = SecureBackupScreenViewModel(secureBackupController: parameters.clientProxy.secureBackupController,
                                                 userIndicatorController: parameters.userIndicatorController,
-                                                chatBackupDetailsURL: parameters.userSettings.chatBackupDetailsURL)
+                                                chatBackupDetailsURL: parameters.userSettings.app.chatBackupDetailsURL)
     }
     
     func start() {

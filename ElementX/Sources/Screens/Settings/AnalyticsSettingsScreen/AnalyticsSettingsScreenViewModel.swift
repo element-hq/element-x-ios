@@ -17,13 +17,13 @@ class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, An
     init(userSettings: UserSettings, analytics: AnalyticsServiceProtocol) {
         self.analytics = analytics
         
-        let strings = AnalyticsSettingsScreenStrings(termsURL: userSettings.analyticsTermsURL)
+        let strings = AnalyticsSettingsScreenStrings(termsURL: userSettings.app.analyticsTermsURL)
         let bindings = AnalyticsSettingsScreenViewStateBindings(enableAnalytics: analytics.isEnabled)
         let state = AnalyticsSettingsScreenViewState(strings: strings, bindings: bindings)
         
         super.init(initialViewState: state)
         
-        userSettings.analyticsConsentStatePublisher
+        userSettings.app.analyticsConsentStatePublisher
             .map { $0 == .optedIn }
             .weakAssign(to: \.state.bindings.enableAnalytics, on: self)
             .store(in: &cancellables)

@@ -37,8 +37,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                                                           isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,
                                                           historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
                                                           isSpace: roomProxy.infoPublisher.value.isSpace,
-                                                          isKnockingEnabled: userSettings.knockingEnabled,
-                                                          historySharingDetailsURL: userSettings.historySharingDetailsURL)
+                                                          isKnockingEnabled: userSettings.app.knockingEnabled,
+                                                          historySharingDetailsURL: userSettings.app.historySharingDetailsURL)
         
         super.init(initialViewState: appHooks.securityAndPrivacyScreenHook.update(viewState, homeserver: clientProxy.homeserver))
         
@@ -154,7 +154,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             .weakAssign(to: \.state.isSpace, on: self)
             .store(in: &cancellables)
         
-        userSettings.knockingEnabledPublisher
+        userSettings.app.knockingEnabledPublisher
             .weakAssign(to: \.state.isKnockingEnabled, on: self)
             .store(in: &cancellables)
     }
@@ -163,7 +163,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         state.canEditAddress = powerLevels.canOwnUser(sendStateEvent: .roomCanonicalAlias)
         state.canEditJoinRule = powerLevels.canOwnUser(sendStateEvent: .roomJoinRules)
         state.canEditHistoryVisibility = powerLevels.canOwnUser(sendStateEvent: .roomHistoryVisibility)
-        state.canEnableEncryption = powerLevels.canOwnUser(sendStateEvent: .roomEncryption) && !userSettings.forceDisableE2EE.publisher.value
+        state.canEnableEncryption = powerLevels.canOwnUser(sendStateEvent: .roomEncryption) && !userSettings.app.forceDisableE2EE.publisher.value
     }
     
     private func setupRoomDirectoryVisibility() {

@@ -709,7 +709,7 @@ struct SearchScreen_Previews: PreviewProvider, TestablePreview {
     
     private static func makeUserSettings(breadcrumbs: [SearchBreadcrumb]) -> UserSettings {
         let userSettings = UserSettings.mock()
-        userSettings.searchBreadcrumbs = breadcrumbs
+        userSettings.account.searchBreadcrumbs = breadcrumbs
         return userSettings
     }
     

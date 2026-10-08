@@ -318,8 +318,8 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    displayName: "Alice Liddell",
                                                                                    status: .mockFocussing))))
         let userSettings = UserSettings.mock()
-        userSettings.multiAccountEnabled = true
-        userSettings.linkNewDeviceEnabled = true
+        userSettings.app.multiAccountEnabled = true
+        userSettings.app.linkNewDeviceEnabled = true
         return SettingsScreenViewModel(userSession: userSession,
                                        userSettings: userSettings,
                                        isBugReportServiceEnabled: isBugReportServiceEnabled,

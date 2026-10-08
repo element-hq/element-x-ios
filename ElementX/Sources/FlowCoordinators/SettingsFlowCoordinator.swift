@@ -264,7 +264,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentBlockedUsersScreen() {
-        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: flowParameters.userSettings.hideIgnoredUserProfiles,
+        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: flowParameters.userSettings.app.hideIgnoredUserProfiles,
                                                                           userSession: flowParameters.userSession,
                                                                           userIndicatorController: flowParameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)

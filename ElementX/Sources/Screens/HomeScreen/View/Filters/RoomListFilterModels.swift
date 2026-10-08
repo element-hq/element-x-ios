@@ -99,11 +99,11 @@ struct RoomListFiltersState {
     var availableFilters: [RoomListFilter] {
         var availableFilters = OrderedSet(RoomListFilter.availableFilters)
         
-        if !userSettings.lowPriorityFilterEnabled {
+        if !userSettings.app.lowPriorityFilterEnabled {
             availableFilters.remove(.lowPriority)
         }
         
-        if !userSettings.mentionsFilterEnabled {
+        if !userSettings.app.mentionsFilterEnabled {
             availableFilters.remove(.mentions)
         }
         

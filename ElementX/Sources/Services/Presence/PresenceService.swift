@@ -41,7 +41,7 @@ final class PresenceService {
     }
     
     private var desiredPresence: ClientProxyPresence {
-        switch (isForegroundActive, userSettings.sharePresence) {
+        switch (isForegroundActive, userSettings.app.sharePresence) {
         case (true, true):
             .online
         case (true, false):
@@ -68,7 +68,7 @@ final class PresenceService {
     }
     
     private func observeSharePresence() {
-        userSettings.sharePresencePublisher
+        userSettings.app.sharePresencePublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.reportCurrentState()

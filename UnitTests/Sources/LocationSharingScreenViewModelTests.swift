@@ -420,7 +420,7 @@ struct LocationSharingScreenViewModelTests {
         let userSettings = UserSettings.mock()
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: nil, initialLiveLocationShare: nil),
-                                                   mapURLBuilder: userSettings.mapTilerConfiguration.publisher.value,
+                                                   mapURLBuilder: userSettings.app.mapTilerConfiguration.publisher.value,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: TimelineControllerMock(.init(timelineProxy: TimelineProxyMock(.init()))),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),
@@ -546,7 +546,7 @@ struct LocationSharingScreenViewModelTests {
         #expect(context.showsUserLocationMode == .hide)
         
         // Another device takes over: this device's session is removed and a new own share arrives.
-        userSettings.liveLocationSharingSessionsByRoomID.removeValue(forKey: Self.roomID)
+        userSettings.app.liveLocationSharingSessionsByRoomID.removeValue(forKey: Self.roomID)
         let newOwnShare = makeLiveLocationShare(userID: RoomMemberProxyMock.mockMe.userID, latitude: 48.8, longitude: 2.3)
         
         let deferred = deferFulfillment(context.observe(\.showsUserLocationMode)) { $0 == .show }
@@ -633,7 +633,7 @@ struct LocationSharingScreenViewModelTests {
         userSettings = UserSettings.mock()
         timelineProxy = TimelineProxyMock(.init())
         viewModel = LocationSharingScreenViewModel(interactionMode: .picker(shouldShowLiveLocationOption: true),
-                                                   mapURLBuilder: userSettings.mapTilerConfiguration.publisher.value,
+                                                   mapURLBuilder: userSettings.app.mapTilerConfiguration.publisher.value,
                                                    roomProxy: JoinedRoomProxyMock(.init(members: members)),
                                                    timelineController: TimelineControllerMock(.init(timelineProxy: timelineProxy)),
                                                    liveLocationManager: liveLocationManagerMock,
@@ -651,7 +651,7 @@ struct LocationSharingScreenViewModelTests {
                                                     isSharingLiveLocationFromThisDevice: Bool = false) {
         userSettings = UserSettings.mock()
         if isSharingLiveLocationFromThisDevice {
-            userSettings.liveLocationSharingSessionsByRoomID[Self.roomID] = .init(eventID: "$event:matrix.org", expirationDate: .distantFuture)
+            userSettings.app.liveLocationSharingSessionsByRoomID[Self.roomID] = .init(eventID: "$event:matrix.org", expirationDate: .distantFuture)
         }
         
         let liveLocationServiceMock = RoomLiveLocationServiceMock()
@@ -661,7 +661,7 @@ struct LocationSharingScreenViewModelTests {
         roomProxyMock.makeLiveLocationServiceReturnValue = liveLocationServiceMock
         
         viewModel = LocationSharingScreenViewModel(interactionMode: .viewLive(sender: sender, initialLiveLocationShare: initialShare),
-                                                   mapURLBuilder: userSettings.mapTilerConfiguration.publisher.value,
+                                                   mapURLBuilder: userSettings.app.mapTilerConfiguration.publisher.value,
                                                    roomProxy: roomProxyMock,
                                                    timelineController: TimelineControllerMock(.init(timelineProxy: TimelineProxyMock(.init()))),
                                                    liveLocationManager: LiveLocationManagerMock(.init()),

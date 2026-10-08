@@ -89,8 +89,8 @@ struct SettingsScreenViewStateBindings {
     var isPresentingAccountDeactivationConfirmation = false
     
     var appAppearance: AppAppearance {
-        get { userSettings.appAppearance }
-        set { userSettings.appAppearance = newValue }
+        get { userSettings.app.appAppearance }
+        set { userSettings.app.appAppearance = newValue }
     }
     
     init(userSettings: UserSettings) {

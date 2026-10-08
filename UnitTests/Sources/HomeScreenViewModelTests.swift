@@ -275,7 +275,7 @@ final class HomeScreenViewModelTests {
                 room.roomID == invites[0].roomID && room.badges.isDotShown == false
             }
         }
-        userSettings.seenInvites = Set(invites.compactMap(\.roomID))
+        userSettings.app.seenInvites = Set(invites.compactMap(\.roomID))
         try await deferred.fulfill()
         invites = context.viewState.rooms.invites
         
@@ -289,14 +289,14 @@ final class HomeScreenViewModelTests {
         setupViewModel(invites: .rooms)
         
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
-        userSettings.seenInvites = Set(invitedRoomIDs)
+        userSettings.app.seenInvites = Set(invitedRoomIDs)
         #expect(invitedRoomIDs.count == 2)
         
         let deferred = deferFulfillment(viewModel.actions) { $0 == .presentRoom(roomIdentifier: invitedRoomIDs[0]) }
         context.send(viewAction: .acceptInvite(roomIdentifier: invitedRoomIDs[0]))
         try await deferred.fulfill()
         
-        #expect(userSettings.seenInvites == [invitedRoomIDs[1]])
+        #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
         #expect(!notificationManager.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
     }
     
@@ -305,7 +305,7 @@ final class HomeScreenViewModelTests {
         setupViewModel(invites: .spaces)
         
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
-        userSettings.seenInvites = Set(invitedRoomIDs)
+        userSettings.app.seenInvites = Set(invitedRoomIDs)
         #expect(invitedRoomIDs.count == 2)
         
         let deferred = deferFulfillment(viewModel.actions) {
@@ -314,7 +314,7 @@ final class HomeScreenViewModelTests {
         context.send(viewAction: .acceptInvite(roomIdentifier: invitedRoomIDs[0]))
         try await deferred.fulfill()
         
-        #expect(userSettings.seenInvites == [invitedRoomIDs[1]])
+        #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
         #expect(!notificationManager.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
     }
     
@@ -322,7 +322,7 @@ final class HomeScreenViewModelTests {
     func declineInvite() async throws {
         setupViewModel(invites: .rooms)
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
-        userSettings.seenInvites = Set(invitedRoomIDs)
+        userSettings.app.seenInvites = Set(invitedRoomIDs)
         #expect(invitedRoomIDs.count == 2)
         
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
@@ -345,7 +345,7 @@ final class HomeScreenViewModelTests {
         try await Task.sleep(for: .milliseconds(100))
         #expect(rejectCalled)
         
-        #expect(userSettings.seenInvites == [invitedRoomIDs[1]])
+        #expect(userSettings.app.seenInvites == [invitedRoomIDs[1]])
         #expect(notificationManager.removeDeliveredMessageNotificationsForCalled)
         #expect(notificationManager.removeDeliveredMessageNotificationsForReceivedInvocations == [invitedRoomIDs[0]])
     }
@@ -354,7 +354,7 @@ final class HomeScreenViewModelTests {
     func declineAndBlockInvite() async throws {
         setupViewModel(invites: .rooms)
         let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
-        userSettings.seenInvites = Set(invitedRoomIDs)
+        userSettings.app.seenInvites = Set(invitedRoomIDs)
         #expect(invitedRoomIDs.count == 2)
         
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
@@ -368,7 +368,7 @@ final class HomeScreenViewModelTests {
     
     @Test
     func newSoundBanner() {
-        userSettings.hasSeenNewSoundBanner = false
+        userSettings.app.hasSeenNewSoundBanner = false
         
         setupViewModel()
         #expect(context.viewState.shouldShowBanner)
@@ -377,26 +377,26 @@ final class HomeScreenViewModelTests {
         context.send(viewAction: .dismissNewSoundBanner)
         #expect(!context.viewState.shouldShowBanner)
         #expect(!context.viewState.shouldShowNewSoundBanner)
-        #expect(userSettings.hasSeenNewSoundBanner)
+        #expect(userSettings.app.hasSeenNewSoundBanner)
     }
     
     @Test
     func multiAccountAnnouncement() async throws {
-        userSettings.multiAccountEnabled = true
+        userSettings.app.multiAccountEnabled = true
         setupViewModel()
         
         // Arming it after the view model exists (Developer options) doesn't present it on its own.
-        userSettings.hasSeenMultiAccountAnnouncement = false
+        userSettings.app.hasSeenMultiAccountAnnouncement = false
         let deferredFailure = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         try await deferredFailure.fulfill()
         
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.isPresentingMultiAccountAnnouncement }
         context.send(viewAction: .screenAppeared)
         try await deferred.fulfill()
-        #expect(!userSettings.hasSeenMultiAccountAnnouncement)
+        #expect(!userSettings.app.hasSeenMultiAccountAnnouncement)
         
         context.send(viewAction: .multiAccountAnnouncementAppeared)
-        #expect(userSettings.hasSeenMultiAccountAnnouncement)
+        #expect(userSettings.app.hasSeenMultiAccountAnnouncement)
         #expect(context.viewState.bindings.isPresentingMultiAccountAnnouncement)
         
         // A swipe down dismisses it without any of the announcement's actions.
@@ -408,8 +408,8 @@ final class HomeScreenViewModelTests {
     
     @Test(arguments: [HomeScreenViewAction.dismissMultiAccountAnnouncement, .addAccount])
     func multiAccountAnnouncementActionsDismissIt(_ action: HomeScreenViewAction) async throws {
-        userSettings.multiAccountEnabled = true
-        userSettings.hasSeenMultiAccountAnnouncement = false
+        userSettings.app.multiAccountEnabled = true
+        userSettings.app.hasSeenMultiAccountAnnouncement = false
         setupViewModel()
         
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.isPresentingMultiAccountAnnouncement }
@@ -422,8 +422,8 @@ final class HomeScreenViewModelTests {
     
     @Test(arguments: MultiAccountAnnouncementHiddenCase.allCases)
     func multiAccountAnnouncementHidden(_ hiddenCase: MultiAccountAnnouncementHiddenCase) async throws {
-        userSettings.multiAccountEnabled = hiddenCase != .flagOff
-        userSettings.hasSeenMultiAccountAnnouncement = hiddenCase == .alreadySeen
+        userSettings.app.multiAccountEnabled = hiddenCase != .flagOff
+        userSettings.app.hasSeenMultiAccountAnnouncement = hiddenCase == .alreadySeen
         let verificationState: SessionVerificationState = switch hiddenCase {
         case .unverified: .unverified
         case .unknownVerificationState: .unknown
@@ -435,13 +435,13 @@ final class HomeScreenViewModelTests {
         let deferred = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
         context.send(viewAction: .screenAppeared)
         try await deferred.fulfill()
-        #expect(userSettings.hasSeenMultiAccountAnnouncement == (hiddenCase == .alreadySeen))
+        #expect(userSettings.app.hasSeenMultiAccountAnnouncement == (hiddenCase == .alreadySeen))
     }
     
     @Test
     func multiAccountAnnouncementPresentsOnTheNextAppearanceOnceVerified() async throws {
-        userSettings.multiAccountEnabled = true
-        userSettings.hasSeenMultiAccountAnnouncement = false
+        userSettings.app.multiAccountEnabled = true
+        userSettings.app.hasSeenMultiAccountAnnouncement = false
         let securityStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .unverified, recoveryState: .enabled))
         setupViewModel(securityStatePublisher: securityStateSubject.asCurrentValuePublisher())
         

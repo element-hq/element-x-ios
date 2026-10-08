@@ -31,7 +31,7 @@ class OAuthAccountSettingsPresenter: NSObject {
          appHooks: AppHooks,
          continuation: Continuation? = nil) {
         self.accountURL = accountURL
-        redirectURL = userSettings.oAuthRedirectURL
+        redirectURL = userSettings.app.oAuthRedirectURL
         self.presentationAnchor = presentationAnchor
         self.appMediator = appMediator
         self.appHooks = appHooks

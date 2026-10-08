@@ -52,7 +52,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             .sink { mode in
                 switch mode {
                 case .invited:
-                    userSettings.seenInvites.insert(roomID)
+                    userSettings.app.seenInvites.insert(roomID)
                 default:
                     break
                 }
@@ -350,7 +350,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         guard !hasSentJoinAction else { return }
         
         let roomID = state.roomID
-        userSettings.seenInvites.remove(roomID)
+        userSettings.app.seenInvites.remove(roomID)
         
         guard state.roomDetails?.isSpace == true else {
             hasSentJoinAction = true
@@ -464,7 +464,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             return false
         }
         
-        userSettings.seenInvites.remove(roomID)
+        userSettings.app.seenInvites.remove(roomID)
         
         actionsSubject.send(.dismiss)
         return true

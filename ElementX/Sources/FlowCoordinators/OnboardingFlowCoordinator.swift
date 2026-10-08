@@ -94,7 +94,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                       value == .verified,
                       stateMachine.state == .identityConfirmation else { return }
                 
-                userSettings.hasRunIdentityConfirmationOnboarding = true
+                userSettings.account.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             }
     }
@@ -129,11 +129,11 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     private var requiresVerification: Bool {
         // We want to make sure onboarding finishes but also every time the user becomes unverified (e.g. account reset)
-        !userSettings.hasRunIdentityConfirmationOnboarding || userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
+        !userSettings.account.hasRunIdentityConfirmationOnboarding || userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
     }
     
     private var requiresAppLockSetup: Bool {
-        userSettings.appLockIsMandatory && !appLockService.isEnabled
+        userSettings.app.appLockIsMandatory && !appLockService.isEnabled
     }
     
     private var requiresAnalyticsSetup: Bool {
@@ -141,7 +141,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var requiresNotificationsSetup: Bool {
-        !userSettings.hasRunNotificationPermissionsOnboarding
+        !userSettings.app.hasRunNotificationPermissionsOnboarding
     }
     
     private func configureStateMachine() {
@@ -225,7 +225,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 presentNotificationPermissionsScreen()
             case (_, _, .finished):
                 isNewLogin = false
-                userSettings.hasSignedInBefore = true
+                userSettings.app.hasSignedInBefore = true
                 actionsSubject.send(.dismiss)
                 stateMachine.tryState(.initial)
             case (.finished, _, .initial):
@@ -261,7 +261,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case .recoveryKey:
                 presentRecoveryKeyScreen()
             case .skip:
-                userSettings.hasRunIdentityConfirmationOnboarding = true
+                userSettings.account.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             case .reset:
                 startEncryptionResetFlow()
@@ -384,7 +384,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentAnalyticsPromptScreen() {
-        let coordinator = AnalyticsPromptScreenCoordinator(analytics: analyticsService, termsURL: userSettings.analyticsTermsURL)
+        let coordinator = AnalyticsPromptScreenCoordinator(analytics: analyticsService, termsURL: userSettings.app.analyticsTermsURL)
         
         coordinator.actions
             .sink { [weak self] action in
@@ -407,7 +407,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .done:
-                    userSettings.hasRunNotificationPermissionsOnboarding = true
+                    userSettings.app.hasRunNotificationPermissionsOnboarding = true
                     stateMachine.tryEvent(.next)
                 }
             }

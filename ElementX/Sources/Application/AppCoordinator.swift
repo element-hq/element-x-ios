@@ -495,8 +495,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if oldVersion < Version(1, 6, 0) {
             MXLog.info("Migrating to v1.6.0, marking identity confirmation onboarding as ran.")
-            userSession.userSettings.hasRunIdentityConfirmationOnboarding = true
-            userSession.userSettings.hasRunNotificationPermissionsOnboarding = true
+            userSession.userSettings.account.hasRunIdentityConfirmationOnboarding = true
+            userSession.userSettings.app.hasRunNotificationPermissionsOnboarding = true
         }
         
         if oldVersion < Version(25, 6, 0) {
@@ -521,8 +521,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if oldVersion < Version(26, 10, 1) {
             MXLog.info("Migrating to version 26.10.1, moving initial 'session specific' settings.")
-            userSession.userSettings.migrateAppSettingsValueToAccountSettings(\.hasRunIdentityConfirmationOnboardingKey)
-            userSession.userSettings.migrateAppSettingsValueToAccountSettings(\.searchBreadcrumbsKey)
+            userSession.userSettings.account.migrateAppSettingsValue(\.hasRunIdentityConfirmationOnboardingKey)
+            userSession.userSettings.account.migrateAppSettingsValue(\.searchBreadcrumbsKey)
         }
         
         userSessionMigrationsOldVersion = nil
@@ -872,7 +872,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSessionStore.logout(userSession: userSession)
             tearDownUserSession()
             
-            userSession.userSettings.resetSessionSpecificSettings()
+            userSession.userSettings.account.reset()
             appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics
@@ -1385,7 +1385,7 @@ private extension AppCoordinator {
     }
     
     func scheduleSearchBackfill() {
-        guard let userSession, userSession.userSettings.globalSearchEnabled, #available(iOS 26.0, *) else {
+        guard let userSession, userSession.userSettings.app.globalSearchEnabled, #available(iOS 26.0, *) else {
             return
         }
         

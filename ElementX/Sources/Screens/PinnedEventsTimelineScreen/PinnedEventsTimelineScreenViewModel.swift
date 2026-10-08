@@ -77,7 +77,7 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
     private func viewInRoomTimeline(eventID: String) async {
         switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
         case .success(let event):
-            let threadRootEventID: String? = if userSettings.threadsEnabled {
+            let threadRootEventID: String? = if userSettings.app.threadsEnabled {
                 event.threadRootEventId()
             } else {
                 nil

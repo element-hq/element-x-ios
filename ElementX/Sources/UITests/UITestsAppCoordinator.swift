@@ -603,9 +603,9 @@ class MockScreen: Identifiable {
         case .userSessionScreen, .userSessionScreenReply, .userSessionSpacesFlow:
             let userID = "@mock:client.com"
             let userSettings = appSettings.userSettings(for: userID)
-            userSettings.hasRunIdentityConfirmationOnboarding = true
-            userSettings.hasRunNotificationPermissionsOnboarding = true
-            userSettings.analyticsConsentState = .optedOut
+            userSettings.account.hasRunIdentityConfirmationOnboarding = true
+            userSettings.app.hasRunNotificationPermissionsOnboarding = true
+            userSettings.app.analyticsConsentState = .optedOut
             
             let roomSummaries: [RoomSummary] = if id == .userSessionSpacesFlow {
                 [[RoomSummary].mockSpaceInvites[0]] + .mockRooms
@@ -828,9 +828,9 @@ class MockScreen: Identifiable {
         case .autoUpdatingTimeline:
             let userID = "@mock:client.com"
             let userSettings = appSettings.userSettings(for: userID)
-            userSettings.hasRunIdentityConfirmationOnboarding = true
-            userSettings.hasRunNotificationPermissionsOnboarding = true
-            userSettings.analyticsConsentState = .optedOut
+            userSettings.account.hasRunIdentityConfirmationOnboarding = true
+            userSettings.app.hasRunNotificationPermissionsOnboarding = true
+            userSettings.app.analyticsConsentState = .optedOut
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: false))
             navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
             

@@ -20,8 +20,8 @@ struct MediaUploadQualitySettingsScreenViewStateBindings {
     }
     
     var optimizeMediaUploads: Bool {
-        get { userSettings.optimizeMediaUploads }
-        set { userSettings.optimizeMediaUploads = newValue }
+        get { userSettings.app.optimizeMediaUploads }
+        set { userSettings.app.optimizeMediaUploads = newValue }
     }
 }
 

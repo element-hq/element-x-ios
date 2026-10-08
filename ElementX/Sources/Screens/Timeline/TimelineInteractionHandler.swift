@@ -455,8 +455,8 @@ class TimelineInteractionHandler {
     // MARK: Audio Playback
     
     func changePlaybackSpeed(for itemID: TimelineItemIdentifier) {
-        let nextSpeed = userSettings.voiceMessagePlaybackSpeed.next
-        userSettings.voiceMessagePlaybackSpeed = nextSpeed
+        let nextSpeed = userSettings.app.voiceMessagePlaybackSpeed.next
+        userSettings.app.voiceMessagePlaybackSpeed = nextSpeed
         audioPlayerState(for: itemID)?.setPlaybackSpeed(nextSpeed)
     }
     
@@ -588,8 +588,8 @@ class TimelineInteractionHandler {
                                            title: L10n.commonVoiceMessage,
                                            duration: voiceMessageRoomTimelineItem.content.duration,
                                            waveform: voiceMessageRoomTimelineItem.content.waveform,
-                                           playbackSpeed: userSettings.voiceMessagePlaybackSpeed,
-                                           playbackSpeedPublisher: userSettings.voiceMessagePlaybackSpeedPublisher)
+                                           playbackSpeed: userSettings.app.voiceMessagePlaybackSpeed,
+                                           playbackSpeedPublisher: userSettings.app.voiceMessagePlaybackSpeedPublisher)
         mediaPlayerProvider.register(audioPlayerState: playerState)
         return playerState
     }

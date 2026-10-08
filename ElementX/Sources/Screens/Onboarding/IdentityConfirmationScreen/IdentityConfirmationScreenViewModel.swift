@@ -24,7 +24,7 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: userSettings.deviceVerificationURL))
+        super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: userSettings.app.deviceVerificationURL))
         
         Task { [weak self] in
             for await state in userSession.sessionSecurityStatePublisher.values {

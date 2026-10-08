@@ -24,31 +24,31 @@ struct UserSettingsTests {
     @Test
     func accountSettingsAreScopedToAccount() {
         // Given settings for two different accounts.
-        #expect(aliceSettings.searchBreadcrumbs.isEmpty)
-        #expect(bobSettings.searchBreadcrumbs.isEmpty)
+        #expect(aliceSettings.account.searchBreadcrumbs.isEmpty)
+        #expect(bobSettings.account.searchBreadcrumbs.isEmpty)
         
         // When updating an account setting for Alice.
-        aliceSettings.searchBreadcrumbs = [.query("Alice")]
+        aliceSettings.account.searchBreadcrumbs = [.query("Alice")]
         
         // Then only Alice should see the change.
-        #expect(aliceSettings.searchBreadcrumbs == [.query("Alice")])
-        #expect(bobSettings.searchBreadcrumbs.isEmpty)
+        #expect(aliceSettings.account.searchBreadcrumbs == [.query("Alice")])
+        #expect(bobSettings.account.searchBreadcrumbs.isEmpty)
     }
     
     @Test
     func appSettingsAreShared() {
         // Given settings for two different accounts.
         #expect(!appSettings.hasSignedInBefore)
-        #expect(!aliceSettings.hasSignedInBefore)
-        #expect(!bobSettings.hasSignedInBefore)
+        #expect(!aliceSettings.app.hasSignedInBefore)
+        #expect(!bobSettings.app.hasSignedInBefore)
         
         // When updating an app setting through Alice's settings.
-        aliceSettings.hasSignedInBefore = true
+        aliceSettings.app.hasSignedInBefore = true
         
         // Then the change should be seen by the app and every account.
         #expect(appSettings.hasSignedInBefore)
-        #expect(aliceSettings.hasSignedInBefore)
-        #expect(bobSettings.hasSignedInBefore)
+        #expect(aliceSettings.app.hasSignedInBefore)
+        #expect(bobSettings.app.hasSignedInBefore)
     }
     
     @Test
@@ -59,18 +59,18 @@ struct UserSettingsTests {
         try store.set(JSONEncoder().encode([SearchBreadcrumb.query("Alice")]), forKey: "searchBreadcrumbs")
         #expect(store.object(forKey: "hasRunIdentityConfirmationOnboarding") != nil)
         #expect(store.object(forKey: "searchBreadcrumbs") != nil)
-        #expect(!aliceSettings.hasRunIdentityConfirmationOnboarding)
-        #expect(aliceSettings.searchBreadcrumbs.isEmpty)
+        #expect(!aliceSettings.account.hasRunIdentityConfirmationOnboarding)
+        #expect(aliceSettings.account.searchBreadcrumbs.isEmpty)
         
         // When migrating those values into Alice's account settings.
-        aliceSettings.migrateAppSettingsValueToAccountSettings(\.hasRunIdentityConfirmationOnboardingKey)
-        aliceSettings.migrateAppSettingsValueToAccountSettings(\.searchBreadcrumbsKey)
+        aliceSettings.account.migrateAppSettingsValue(\.hasRunIdentityConfirmationOnboardingKey)
+        aliceSettings.account.migrateAppSettingsValue(\.searchBreadcrumbsKey)
         
         // Then the values should belong to Alice only.
-        #expect(aliceSettings.hasRunIdentityConfirmationOnboarding)
-        #expect(aliceSettings.searchBreadcrumbs == [.query("Alice")])
-        #expect(!bobSettings.hasRunIdentityConfirmationOnboarding)
-        #expect(bobSettings.searchBreadcrumbs.isEmpty)
+        #expect(aliceSettings.account.hasRunIdentityConfirmationOnboarding)
+        #expect(aliceSettings.account.searchBreadcrumbs == [.query("Alice")])
+        #expect(!bobSettings.account.hasRunIdentityConfirmationOnboarding)
+        #expect(bobSettings.account.searchBreadcrumbs.isEmpty)
         #expect(store.object(forKey: "hasRunIdentityConfirmationOnboarding") == nil)
         #expect(store.object(forKey: "searchBreadcrumbs") == nil)
     }
@@ -79,24 +79,24 @@ struct UserSettingsTests {
     func resetSessionSpecificSettings() {
         // Given app settings and account settings for two different accounts.
         appSettings.hasSignedInBefore = true
-        aliceSettings.hasRunIdentityConfirmationOnboarding = true
-        aliceSettings.searchBreadcrumbs = [.query("Alice")]
-        bobSettings.hasRunIdentityConfirmationOnboarding = true
-        bobSettings.searchBreadcrumbs = [.query("Bob")]
+        aliceSettings.account.hasRunIdentityConfirmationOnboarding = true
+        aliceSettings.account.searchBreadcrumbs = [.query("Alice")]
+        bobSettings.account.hasRunIdentityConfirmationOnboarding = true
+        bobSettings.account.searchBreadcrumbs = [.query("Bob")]
         #expect(appSettings.hasSignedInBefore)
-        #expect(aliceSettings.hasRunIdentityConfirmationOnboarding)
-        #expect(aliceSettings.searchBreadcrumbs == [.query("Alice")])
-        #expect(bobSettings.hasRunIdentityConfirmationOnboarding)
-        #expect(bobSettings.searchBreadcrumbs == [.query("Bob")])
+        #expect(aliceSettings.account.hasRunIdentityConfirmationOnboarding)
+        #expect(aliceSettings.account.searchBreadcrumbs == [.query("Alice")])
+        #expect(bobSettings.account.hasRunIdentityConfirmationOnboarding)
+        #expect(bobSettings.account.searchBreadcrumbs == [.query("Bob")])
         
         // When resetting Alice's session specific settings.
-        aliceSettings.resetSessionSpecificSettings()
+        aliceSettings.account.reset()
         
         // Then only Alice's account settings should be reset.
-        #expect(!aliceSettings.hasRunIdentityConfirmationOnboarding)
-        #expect(aliceSettings.searchBreadcrumbs.isEmpty)
-        #expect(bobSettings.hasRunIdentityConfirmationOnboarding)
-        #expect(bobSettings.searchBreadcrumbs == [.query("Bob")])
+        #expect(!aliceSettings.account.hasRunIdentityConfirmationOnboarding)
+        #expect(aliceSettings.account.searchBreadcrumbs.isEmpty)
+        #expect(bobSettings.account.hasRunIdentityConfirmationOnboarding)
+        #expect(bobSettings.account.searchBreadcrumbs == [.query("Bob")])
         #expect(appSettings.hasSignedInBefore)
     }
 }

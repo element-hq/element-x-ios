@@ -221,7 +221,7 @@ class ClientProxy: ClientProxyProtocol {
         
         // Route media downloads through a content scanner when one has been configured for the server,
         // and expose a proxy for the active scanning of content in the timeline.
-        if let contentScannerURL = userSettings.contentScannerURL.publisher.value, let client = client as? Client {
+        if let contentScannerURL = userSettings.app.contentScannerURL.publisher.value, let client = client as? Client {
             let scanner = ContentScanner(scannerUrl: contentScannerURL.absoluteString)
             await client.setContentScanner(contentScanner: scanner)
             contentScanner = ContentScannerProxy(contentScanner: scanner, client: client)
@@ -516,7 +516,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let parameters = CreateRoomParameters(name: nil,
                                                   topic: nil,
-                                                  isEncrypted: !userSettings.forceDisableE2EE.publisher.value,
+                                                  isEncrypted: !userSettings.app.forceDisableE2EE.publisher.value,
                                                   isDirect: true,
                                                   visibility: .private,
                                                   preset: .trustedPrivateChat,
@@ -559,7 +559,7 @@ class ClientProxy: ClientProxyProtocol {
             
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
-                                                  isEncrypted: !userSettings.forceDisableE2EE.publisher.value && accessType.isEncrypted,
+                                                  isEncrypted: !userSettings.app.forceDisableE2EE.publisher.value && accessType.isEncrypted,
                                                   isDirect: false,
                                                   visibility: accessType.visibility,
                                                   preset: accessType.preset,
@@ -1179,7 +1179,7 @@ class ClientProxy: ClientProxyProtocol {
     private func reconcileServiceState() async {
         switch desiredServiceState {
         case .running(let offline):
-            if userSettings.clientPausingAndResumingEnabled {
+            if userSettings.app.clientPausingAndResumingEnabled {
                 do {
                     MXLog.info("Resuming client")
                     try await client.resume()
@@ -1215,7 +1215,7 @@ class ClientProxy: ClientProxyProtocol {
             await syncService.stop()
             MXLog.info("Sync stopped")
             
-            if userSettings.clientPausingAndResumingEnabled {
+            if userSettings.app.clientPausingAndResumingEnabled {
                 do {
                     MXLog.info("Pausing client")
                     try await client.pause()

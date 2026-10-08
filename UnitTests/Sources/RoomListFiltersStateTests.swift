@@ -148,12 +148,12 @@ final class RoomListFiltersStateTests {
     // MARK: - Helpers
     
     private func enableLowPriorityFeature() {
-        userSettings.lowPriorityFilterEnabled = true
+        userSettings.app.lowPriorityFilterEnabled = true
         state = RoomListFiltersState(userSettings: userSettings)
     }
     
     private func enableMentionsFeature() {
-        userSettings.mentionsFilterEnabled = true
+        userSettings.app.mentionsFilterEnabled = true
         state = RoomListFiltersState(userSettings: userSettings)
     }
 }

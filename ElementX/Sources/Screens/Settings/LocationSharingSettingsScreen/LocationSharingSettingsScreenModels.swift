@@ -33,8 +33,8 @@ struct LocationSharingSettingsScreenViewStateBindings {
     }
     
     var liveLocationMinimumDistanceUpdate: Int {
-        get { userSettings.liveLocationMinimumDistanceUpdate }
-        set { userSettings.liveLocationMinimumDistanceUpdate = newValue }
+        get { userSettings.app.liveLocationMinimumDistanceUpdate }
+        set { userSettings.app.liveLocationMinimumDistanceUpdate = newValue }
     }
 }
 

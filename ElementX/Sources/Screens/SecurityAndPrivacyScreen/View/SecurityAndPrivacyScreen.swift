@@ -292,7 +292,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     
     static let askToJoinViewModel = {
         let userSettings = UserSettings.mock()
-        userSettings.knockingEnabled = true
+        userSettings.app.knockingEnabled = true
         
         return SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                       canonicalAlias: "#room:matrix.org",
@@ -307,7 +307,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     
     static let singleAskToJoinSpaceMembersViewModel = {
         let userSettings = UserSettings.mock()
-        userSettings.knockingEnabled = true
+        userSettings.app.knockingEnabled = true
         
         let space = [SpaceServiceRoom].mockSingleRoom[0]
         
@@ -325,7 +325,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
     
     static let multipleAskToJoinSpacesMembersViewModel = {
         let userSettings = UserSettings.mock()
-        userSettings.knockingEnabled = true
+        userSettings.app.knockingEnabled = true
         
         let spaces = [SpaceServiceRoom].mockJoinedSpaces
         

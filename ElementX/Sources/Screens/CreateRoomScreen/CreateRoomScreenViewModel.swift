@@ -64,7 +64,7 @@ class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreen
                                                   shouldShowCancelButton: shouldShowCancelButton,
                                                   roomName: "",
                                                   serverName: userSession.clientProxy.userIDServerName ?? "",
-                                                  isKnockingFeatureEnabled: userSettings.knockingEnabled,
+                                                  isKnockingFeatureEnabled: userSettings.app.knockingEnabled,
                                                   canSelectSpace: canSelectSpace,
                                                   aliasLocalPart: roomAliasNameFromRoomDisplayName(roomName: ""),
                                                   bindings: bindings)

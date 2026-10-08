@@ -34,7 +34,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         stateMachine = SessionVerificationScreenStateMachine(state: verificationState)
         
         super.init(initialViewState: .init(flow: flow,
-                                           learnMoreURL: userSettings.encryptionURL,
+                                           learnMoreURL: userSettings.app.encryptionURL,
                                            verificationState: verificationState),
                    mediaProvider: mediaProvider)
         

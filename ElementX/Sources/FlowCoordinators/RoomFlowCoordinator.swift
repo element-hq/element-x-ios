@@ -238,7 +238,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 defer { hideLoadingIndicator() }
                 switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
                 case .success(let event):
-                    if flowParameters.userSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
+                    if flowParameters.userSettings.app.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
                         if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreadScreenCoordinators.last {
                             threadCoordinator.focusOnEvent(eventID: eventID)
                         } else {
@@ -318,7 +318,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 // Otherwise check if the focussed event exists to handle a possible error or theaded event.
                 switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
                 case .success(let event):
-                    if flowParameters.userSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
+                    if flowParameters.userSettings.app.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
                         stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID,
                                                                                        focusEvent: .init(eventID: focusEvent.eventID,
                                                                                                          shouldSetPin: focusEvent.shouldSetPin))),
@@ -1119,8 +1119,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(mediaURLs: mediaURLs,
                                                                        caption: caption,
                                                                        title: title,
-                                                                       shouldShowCaptionWarning: flowParameters.userSettings.shouldShowMediaCaptionWarning,
-                                                                       galleryEnabled: flowParameters.userSettings.galleryEnabled,
+                                                                       shouldShowCaptionWarning: flowParameters.userSettings.app.shouldShowMediaCaptionWarning,
+                                                                       galleryEnabled: flowParameters.userSettings.app.galleryEnabled,
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(userSettings: flowParameters.userSettings),
                                                                        timelineController: timelineController,
                                                                        clientProxy: userSession.clientProxy,
@@ -1176,7 +1176,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = LocationSharingScreenCoordinatorParameters(interactionMode: interactionMode,
-                                                                mapURLBuilder: flowParameters.userSettings.mapTilerConfiguration.publisher.value,
+                                                                mapURLBuilder: flowParameters.userSettings.app.mapTilerConfiguration.publisher.value,
                                                                 roomProxy: roomProxy,
                                                                 timelineController: timelineController,
                                                                 liveLocationManager: flowParameters.userSession.liveLocationManager,

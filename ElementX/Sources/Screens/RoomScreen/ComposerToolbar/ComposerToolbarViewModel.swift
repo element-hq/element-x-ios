@@ -80,7 +80,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         super.init(initialViewState: ComposerToolbarViewState(wysiwygViewModel: wysiwygViewModel,
                                                               isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
-                                                              isLocationSharingEnabled: userSettings.mapTilerConfiguration.publisher.value.isEnabled,
+                                                              isLocationSharingEnabled: userSettings.app.mapTilerConfiguration.publisher.value.isEnabled,
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)
         

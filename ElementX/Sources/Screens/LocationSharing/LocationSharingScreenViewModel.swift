@@ -173,7 +173,7 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
         }
         .store(in: &cancellables)
         
-        userSettings.liveLocationSharingSessionsByRoomIDPublisher
+        userSettings.app.liveLocationSharingSessionsByRoomIDPublisher
             .map { [roomID = roomProxy.id] sessions in sessions[roomID] != nil }
             .removeDuplicates()
             .sink { [weak self] isSharingLiveLocationOnThisDevice in
@@ -261,14 +261,14 @@ class LocationSharingScreenViewModel: LocationSharingScreenViewModelType, Locati
     }
     
     private func showLiveLocationFlow() {
-        if userSettings.liveLocationDisclaimerDisplayed {
+        if userSettings.app.liveLocationDisclaimerDisplayed {
             showLiveLocationDurationPicker()
         } else {
             state.bindings.alertInfo = .init(alertID: .liveLocationDisclaimer,
                                              primaryButton: .init(title: L10n.actionDecline, role: .cancel, action: nil),
                                              secondaryButton: .init(title: L10n.actionAccept) { [weak self] in
                                                  guard let self else { return }
-                                                 userSettings.liveLocationDisclaimerDisplayed = true
+                                                 userSettings.app.liveLocationDisclaimerDisplayed = true
                                                  // Delay so SwiftUI finishes dismissing the current alert
                                                  // before presenting the next one.
                                                  DispatchQueue.main.async {
@@ -435,7 +435,7 @@ extension LocationSharingScreenViewModel {
         let userSettings = UserSettings.mock()
         
         return LocationSharingScreenViewModel(interactionMode: interactionMode,
-                                              mapURLBuilder: userSettings.mapTilerConfiguration.publisher.value,
+                                              mapURLBuilder: userSettings.app.mapTilerConfiguration.publisher.value,
                                               roomProxy: roomProxy,
                                               timelineController: TimelineControllerMock(.init()),
                                               liveLocationManager: LiveLocationManagerMock(),

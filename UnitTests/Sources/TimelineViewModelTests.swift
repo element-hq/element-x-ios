@@ -900,14 +900,14 @@ final class TimelineViewModelTests {
     func disablingTheFlagClearsTheSelection() async throws {
         let items = [TextRoomTimelineItem(eventID: "$1")]
         let userSettings = UserSettings.mock()
-        userSettings.messageMultiSelectEnabled = true
+        userSettings.app.messageMultiSelectEnabled = true
         let viewModel = makeViewModel(timelineController: TimelineControllerMock(.init(timelineItems: items)), userSettings: userSettings)
         
         startSelection(items[0].id, in: viewModel)
         #expect(viewModel.state.messageSelection.isActive)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.messageSelection.isEnabled && !$0.messageSelection.isActive }
-        userSettings.messageMultiSelectEnabled = false
+        userSettings.app.messageMultiSelectEnabled = false
         try await deferred.fulfill()
     }
     
@@ -945,7 +945,7 @@ final class TimelineViewModelTests {
     private func makeSelectionViewModel(timelineController: TimelineControllerProtocol,
                                         userIndicatorController: UserIndicatorControllerProtocol = UserIndicatorControllerMock()) -> TimelineViewModel {
         let userSettings = UserSettings.mock()
-        userSettings.messageMultiSelectEnabled = true
+        userSettings.app.messageMultiSelectEnabled = true
         return makeViewModel(timelineController: timelineController,
                              userIndicatorController: userIndicatorController,
                              userSettings: userSettings)
