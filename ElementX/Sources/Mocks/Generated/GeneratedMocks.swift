@@ -8692,6 +8692,11 @@ nonisolated class MediaProviderMock: MediaProviderProtocol, @unchecked Sendable 
     }
 }
 nonisolated class NSEUserSessionMock: NSEUserSessionProtocol, @unchecked Sendable {
+    var userSettings: UserSettings {
+        get { return underlyingUserSettings }
+        set(value) { underlyingUserSettings = value }
+    }
+    nonisolated(unsafe) var underlyingUserSettings: UserSettings!
     nonisolated(unsafe) var inviteAvatarsVisibilityCallsCount = 0
     var inviteAvatarsVisibilityCalled: Bool {
         return inviteAvatarsVisibilityCallsCount > 0

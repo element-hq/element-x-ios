@@ -250,10 +250,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: 0)
     var lastKnownBadgeCount: Int
     
-    /// The sound played when delivering noisy notifications. If nil, use the ElementX default
-    @UserPreference
-    var selectedNotificationTone: NotificationTone?
-    
     // MARK: - Logging
     
     @UserPreference(defaultValue: LogLevel.info)
@@ -328,11 +324,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     @UserPreference(defaultValue: false)
     var liveLocationDisclaimerDisplayed: Bool
     
-    // MARK: - Home Screen
-    
-    @UserPreference(defaultValue: true)
-    var showAllRoomListActivity: Bool
-    
     // MARK: - Room Screen
     
     @UserPreference(defaultValue: AppBuildType.current == .debug)
@@ -378,11 +369,6 @@ final nonisolated class AppSettings: @unchecked Sendable {
     
     /// The MapTiler configuration used to build map URLs, which defaults to the bundled one.
     private(set) var mapTilerConfiguration = RemotePreference(AppSettings.bundledMapTilerConfiguration)
-    
-    // MARK: - Presence
-    
-    @UserPreference(defaultValue: true)
-    var sharePresence: Bool
     
     // MARK: - Feature Flags
     

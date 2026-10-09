@@ -32,8 +32,8 @@ struct ModerationAndSafetySettingsScreenViewStateBindings {
     }
     
     var sharePresence: Bool {
-        get { userSettings.app.sharePresence }
-        set { userSettings.app.sharePresence = newValue }
+        get { userSettings.account.sharePresence }
+        set { userSettings.account.sharePresence = newValue }
     }
 }
 

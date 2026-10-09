@@ -115,7 +115,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
         
-        userSettings.app.showAllRoomListActivityPublisher
+        userSettings.account.showAllRoomListActivityPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.updateRooms()
@@ -277,7 +277,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .success:
                     analyticsService.trackInteraction(name: .MobileRoomListRoomContextMenuUnreadToggle)
                     
-                    if case .failure(let error) = await roomProxy.markAsRead(receiptType: userSettings.app.sharePresence ? .read : .readPrivate) {
+                    if case .failure(let error) = await roomProxy.markAsRead(receiptType: userSettings.account.sharePresence ? .read : .readPrivate) {
                         MXLog.error("Failed marking room \(roomIdentifier) as read with error: \(error)")
                     }
                 case .failure(let error):
@@ -395,7 +395,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         for summary in roomSummaryProvider.roomListPublisher.value {
             let room = HomeScreenRoom(summary: summary,
-                                      showAllActivity: userSettings.app.showAllRoomListActivity,
+                                      showAllActivity: userSettings.account.showAllRoomListActivity,
                                       seenInvites: seenInvites)
             rooms.append(room)
         }

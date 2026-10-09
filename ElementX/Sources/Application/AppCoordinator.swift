@@ -515,6 +515,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSession.userSettings.account.migrateAppSettingsValue(\.searchBreadcrumbsKey)
         }
         
+        if oldVersion < Version(26, 10, 2) {
+            MXLog.info("Migrating to version 26.10.2, moving visible account settings.")
+            userSession.userSettings.account.migrateAppSettingsValue(\.showAllRoomListActivityKey)
+            userSession.userSettings.account.migrateAppSettingsValue(\.selectedNotificationToneKey)
+            userSession.userSettings.account.migrateAppSettingsValue(\.sharePresenceKey)
+        }
+        
         userSessionMigrationsOldVersion = nil
     }
     

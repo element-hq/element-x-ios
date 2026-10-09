@@ -272,7 +272,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .voiceMessage(let voiceMessageAction):
             processVoiceMessageAction(voiceMessageAction)
         case .contentChanged(let isEmpty):
-            guard userSettings.app.sharePresence else {
+            guard userSettings.account.sharePresence else {
                 return
             }
             
@@ -508,7 +508,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         roomProxy.typingMembersPublisher
             .receive(on: DispatchQueue.main)
-            .filter { [weak self] _ in self?.userSettings.app.sharePresence ?? false }
+            .filter { [weak self] _ in self?.userSettings.account.sharePresence ?? false }
             .weakAssign(to: \.state.typingMembers, on: self)
             .store(in: &cancellables)
         
@@ -572,7 +572,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func setupUserSettingsSubscriptions() {
-        userSettings.app.sharePresencePublisher
+        userSettings.account.sharePresencePublisher
             .weakAssign(to: \.state.showReadReceipts, on: self)
             .store(in: &cancellables)
         
