@@ -702,6 +702,10 @@ internal nonisolated enum L10n {
   }
   /// No results
   internal static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
+  /// There are no results for “%1$@”. Try a new search term.
+  internal static func commonNoResultsFor(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_no_results_for", String(describing: p1))
+  }
   /// No room name
   internal static var commonNoRoomName: String { return L10n.tr("Localizable", "common_no_room_name") }
   /// No space name
@@ -792,6 +796,10 @@ internal nonisolated enum L10n {
   internal static var commonReportAProblem: String { return L10n.tr("Localizable", "common_report_a_problem") }
   /// Report submitted
   internal static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
+  /// Results for “%1$@”
+  internal static func commonResultsFor(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_results_for", String(describing: p1))
+  }
   /// Rich text editor
   internal static var commonRichTextEditor: String { return L10n.tr("Localizable", "common_rich_text_editor") }
   /// Role
@@ -2028,13 +2036,13 @@ internal nonisolated enum L10n {
   internal static var screenEditRoomAddressRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_edit_room_address_room_address_section_footer") }
   /// Edit address
   internal static var screenEditRoomAddressTitle: String { return L10n.tr("Localizable", "screen_edit_room_address_title") }
-  /// Continue reset
+  /// Continue
   internal static var screenEncryptionResetActionContinueReset: String { return L10n.tr("Localizable", "screen_encryption_reset_action_continue_reset") }
   /// Your account details, contacts, preferences, and chat list will be kept
   internal static var screenEncryptionResetBullet1: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_1") }
   /// You will lose any message history that’s stored only on the server
   internal static var screenEncryptionResetBullet2: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_2") }
-  /// You will need to verify all your existing devices and contacts again
+  /// Other users will see that your digital identity has been reset
   internal static var screenEncryptionResetBullet3: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_3") }
   /// Only reset your digital identity if you don't have access to another verified device and you don't have your recovery key.
   internal static var screenEncryptionResetFooter: String { return L10n.tr("Localizable", "screen_encryption_reset_footer") }
@@ -2726,6 +2734,22 @@ internal nonisolated enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
+  /// Ignore battery optimisation
+  internal static var screenPttSettingsBatteryOptimization: String { return L10n.tr("Localizable", "screen_ptt_settings_battery_optimization") }
+  /// Stay active in background
+  internal static var screenPttSettingsBatteryOptimizationDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_battery_optimization_description") }
+  /// Covert mode
+  internal static var screenPttSettingsCovertMode: String { return L10n.tr("Localizable", "screen_ptt_settings_covert_mode") }
+  /// Mute all channels
+  internal static var screenPttSettingsCovertModeDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_covert_mode_description") }
+  /// Show on lock screen
+  internal static var screenPttSettingsLockScreen: String { return L10n.tr("Localizable", "screen_ptt_settings_lock_screen") }
+  /// Access from the lock screen
+  internal static var screenPttSettingsLockScreenDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_lock_screen_description") }
+  /// Enable system overlay
+  internal static var screenPttSettingsSystemOverlay: String { return L10n.tr("Localizable", "screen_ptt_settings_system_overlay") }
+  /// Access a floating action button
+  internal static var screenPttSettingsSystemOverlayDescription: String { return L10n.tr("Localizable", "screen_ptt_settings_system_overlay_description") }
   /// Push history
   internal static var screenPushHistoryTitle: String { return L10n.tr("Localizable", "screen_push_history_title") }
   /// Establishing a secure connection
@@ -3320,6 +3344,8 @@ internal nonisolated enum L10n {
   internal static var screenRoomRolesAndPermissionsSpaceDetails: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_space_details") }
   /// Roles & permissions
   internal static var screenRoomRolesAndPermissionsTitle: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_title") }
+  /// The room list associated with this account cannot be loaded.
+  internal static var screenRoomSelectErrorCannotLoadRooms: String { return L10n.tr("Localizable", "screen_room_select_error_cannot_load_rooms") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomSelectionCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_selection_count", p1)

@@ -431,6 +431,11 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func hasEncryptedRooms() -> Bool {
+        // Invites, left rooms and spaces aren't chats the user could lose the history of.
+        client.rooms().contains { $0.membership() == .joined && !$0.isSpace() && $0.encryptionState() == .encrypted }
+    }
+    
     func resumeServices() async {
         MXLog.info("Resuming services")
         

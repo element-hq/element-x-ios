@@ -2670,6 +2670,34 @@ nonisolated class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return hasDevicesToVerifyAgainstReturnValue
         }
     }
+    //MARK: - hasEncryptedRooms
+
+    private let hasEncryptedRoomsCallsCountLock = NSLock()
+    private nonisolated(unsafe) var hasEncryptedRoomsUnderlyingCallsCount = 0
+    var hasEncryptedRoomsCallsCount: Int {
+        get { hasEncryptedRoomsCallsCountLock.withLock { hasEncryptedRoomsUnderlyingCallsCount } }
+        set { hasEncryptedRoomsCallsCountLock.withLock { hasEncryptedRoomsUnderlyingCallsCount = newValue } }
+    }
+    var hasEncryptedRoomsCalled: Bool {
+        return hasEncryptedRoomsCallsCount > 0
+    }
+
+    private let hasEncryptedRoomsReturnValueLock = NSLock()
+    private nonisolated(unsafe) var hasEncryptedRoomsUnderlyingReturnValue: Bool!
+    var hasEncryptedRoomsReturnValue: Bool! {
+        get { hasEncryptedRoomsReturnValueLock.withLock { hasEncryptedRoomsUnderlyingReturnValue } }
+        set { hasEncryptedRoomsReturnValueLock.withLock { hasEncryptedRoomsUnderlyingReturnValue = newValue } }
+    }
+    nonisolated(unsafe) var hasEncryptedRoomsClosure: (() -> Bool)?
+
+    func hasEncryptedRooms() -> Bool {
+        hasEncryptedRoomsCallsCountLock.withLock { hasEncryptedRoomsUnderlyingCallsCount += 1 }
+        if let hasEncryptedRoomsClosure = hasEncryptedRoomsClosure {
+            return hasEncryptedRoomsClosure()
+        } else {
+            return hasEncryptedRoomsReturnValue
+        }
+    }
     //MARK: - resumeServices
 
     private let resumeServicesCallsCountLock = NSLock()
