@@ -49,7 +49,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     private var appDelegateObserver: AnyCancellable?
-    private var userSessionObservers: [String: AnyCancellable] = [:]
+    private var userSessionObservers: [String: Set<AnyCancellable>] = [:]
     /// Becomes `true` once the app is no longer waiting on a session restore, whatever the outcome.
     private let isSessionRestoredSubject = CurrentValueSubject<Bool, Never>(false)
     private var clientProxyObserver: AnyCancellable?
@@ -953,6 +953,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func configureServices(for userSession: UserSessionProtocol) {
         configureNotificationManager(for: userSession)
         observeUserSessionChanges(userSession)
+        observeUnreadNotifications(userSession)
     }
     
     private func configureNotificationManager(for userSession: UserSessionProtocol) {
@@ -972,7 +973,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func observeUserSessionChanges(_ userSession: UserSessionProtocol) {
         let userID = userSession.clientProxy.userID
-        userSessionObservers[userID] = userSession.callbacks
+        userSession.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 guard let self else { return }
@@ -986,6 +987,23 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                     stateMachine.processEvent(.signOut(isSoft: isSoftLogout, disableAppLock: false))
                 }
             }
+            .store(in: &userSessionObservers[userID, default: []])
+    }
+    
+    /// Keeps the app badge and the delivered notifications in sync with the account's rooms.
+    private func observeUnreadNotifications(_ userSession: UserSessionProtocol) {
+        let clientProxy = userSession.clientProxy
+        let userID = clientProxy.userID
+        
+        Task { [weak self] in
+            for await roomSummaries in clientProxy.staticRoomSummaryProvider.roomListPublisher.values {
+                guard let self else { return }
+                
+                await notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries, for: userID)
+                await notificationManager.updateAppBadgeCount(Int(clientProxy.totalUnreadNotifications), for: userID)
+            }
+        }
+        .store(in: &userSessionObservers[userID, default: []])
     }
     
     private func observeAppLockChanges() {

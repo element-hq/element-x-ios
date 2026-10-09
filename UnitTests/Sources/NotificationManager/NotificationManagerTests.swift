@@ -210,9 +210,31 @@ final class NotificationManagerTests {
                                                         date: lastMessageDate.addingTimeInterval(5))
         notificationCenter.deliveredNotificationsReturnValue = [readNotification, newerNotification]
         
-        await notificationManager.removeDeliveredNotificationsForFullyReadRooms([room])
+        await notificationManager.removeDeliveredNotificationsForFullyReadRooms([room], for: "@test:user.net")
         
         #expect(notificationCenter.removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers == ["read"])
+    }
+    
+    @Test
+    func removeDeliveredNotificationsForFullyReadRoomsOnlyRemovesTheAccountsNotifications() async throws {
+        let room = RoomSummary(room: RoomSDKMock(), id: "!room:matrix.org", settingsMode: .allMessages,
+                               hasUnreadMessages: false, hasUnreadMentions: false, hasUnreadNotifications: false)
+        let lastMessageDate = try #require(room.lastMessageDate)
+        
+        // Both accounts are in the room, but only this one has read it.
+        let notification = try UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: room.id,
+                                                              NotificationConstants.UserInfoKey.receiverIdentifier: "@test:user.net",
+                                                              NotificationConstants.UserInfoKey.eventDate: lastMessageDate.addingTimeInterval(0.5)],
+                                                   identifier: "test")
+        let otherAccountNotification = try UNNotification.with(userInfo: [NotificationConstants.UserInfoKey.roomIdentifier: room.id,
+                                                                          NotificationConstants.UserInfoKey.receiverIdentifier: "@other:user.net",
+                                                                          NotificationConstants.UserInfoKey.eventDate: lastMessageDate.addingTimeInterval(0.5)],
+                                                               identifier: "other")
+        notificationCenter.deliveredNotificationsReturnValue = [notification, otherAccountNotification]
+        
+        await notificationManager.removeDeliveredNotificationsForFullyReadRooms([room], for: "@test:user.net")
+        
+        #expect(notificationCenter.removeDeliveredNotificationsWithIdentifiersReceivedIdentifiers == ["test"])
     }
     
     @Test
@@ -263,7 +285,7 @@ final class NotificationManagerTests {
     
     @Test
     func updatingAppBadgeCount() async {
-        await notificationManager.updateAppBadgeCount(7)
+        await notificationManager.updateAppBadgeCount(7, for: "@test:user.net")
         
         #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 7)
         #expect(appSettings.lastKnownBadgeCount == 7)
@@ -273,7 +295,7 @@ final class NotificationManagerTests {
     func updatingAppBadgeCountWithoutASessionDoesNothing() async {
         notificationManager.removeUserSession(userID: "@test:user.net")
         
-        await notificationManager.updateAppBadgeCount(7)
+        await notificationManager.updateAppBadgeCount(7, for: "@test:user.net")
         
         #expect(!notificationCenter.setBadgeCountCalled)
     }
@@ -299,6 +321,28 @@ final class NotificationManagerTests {
         _ = await notificationManager.register(with: Data())
         
         #expect(clientProxy.setPusherWithReceivedInvocations.first?.append == isMultiAccountEnabled)
+    }
+    
+    @Test
+    func updatingAppBadgeCountSumsEveryAccount() async {
+        notificationManager.addUserSession(UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@other:user.net")))))
+        
+        await notificationManager.updateAppBadgeCount(7, for: "@test:user.net")
+        await notificationManager.updateAppBadgeCount(3, for: "@other:user.net")
+        
+        #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 10)
+        #expect(appSettings.lastKnownBadgeCount == 10)
+    }
+    
+    @Test
+    func removingAnAccountDropsItsBadgeCount() async {
+        notificationManager.addUserSession(UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@other:user.net")))))
+        await notificationManager.updateAppBadgeCount(3, for: "@other:user.net")
+        
+        notificationManager.removeUserSession(userID: "@other:user.net")
+        await notificationManager.updateAppBadgeCount(7, for: "@test:user.net")
+        
+        #expect(notificationCenter.setBadgeCountReceivedNewBadgeCount == 7)
     }
     
     private enum TestError: Error { case someError }

@@ -36,7 +36,7 @@ protocol NotificationManagerProtocol: AnyObject {
     
     func removeDeliveredMessageNotifications(for roomID: String) async
     
-    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async
+    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary], for userID: String) async
     
-    func updateAppBadgeCount(_ badgeCount: Int) async
+    func updateAppBadgeCount(_ badgeCount: Int, for userID: String) async
 }
