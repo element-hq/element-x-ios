@@ -282,12 +282,14 @@ struct ComposerToolbar: View {
                 voiceMessageTrashButton
                     .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
                 VoiceMessageRecordingComposer(recorderState: state)
+                    .voiceMessageReplyHeader(context: context)
             }
         case .previewVoiceMessage(let state, let waveform, let isUploading):
             topBarLayout {
                 voiceMessageTrashButton
                     .scaledPadding(.vertical, buttonVerticalPadding, relativeTo: .compound.headingLG)
                 voiceMessagePreviewComposer(audioPlayerState: state, waveform: waveform)
+                    .voiceMessageReplyHeader(context: context)
             }
             .disabled(isUploading)
         default:
@@ -376,6 +378,20 @@ struct ComposerToolbarButtonStyle: ButtonStyle {
     }
 }
 
+private extension View {
+    /// Wraps the voice message composer in the same box as the text composer when recording a reply.
+    @ViewBuilder
+    func voiceMessageReplyHeader(context: ComposerToolbarViewModel.Context) -> some View {
+        if case let .reply(_, replyDetails, _) = context.viewState.voiceMessageReplyMode {
+            messageComposerStyle(header: MessageComposerReplyHeader(replyDetails: replyDetails) {
+                context.send(viewAction: .cancelReply)
+            })
+        } else {
+            self
+        }
+    }
+}
+
 // MARK: - Previews
 
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
@@ -389,6 +405,12 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let voiceMessageUploadingViewModel = ComposerToolbarViewModel.mock(mockMode: .previewVoiceMessage(isUploading: true))
     static let replyLoadingViewModel = ComposerToolbarViewModel.mock(mockMode: .reply(isLoading: true))
     static let replyLoadedViewModel = ComposerToolbarViewModel.mock(mockMode: .reply(isLoading: false))
+    static let voiceMessageReplyViewModel = {
+        let viewModel = ComposerToolbarViewModel.mock(mockMode: .previewVoiceMessage(isUploading: false))
+        viewModel.state.voiceMessageReplyMode = replyLoadedViewModel.state.composerMode
+        return viewModel
+    }()
+    
     static let suggestionsViewModel = ComposerToolbarViewModel.mock(hasSuggestions: true)
     static let disabledViewModel = ComposerToolbarViewModel.mock(canSend: false)
     
@@ -416,6 +438,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 8) {
             ComposerToolbar(context: replyLoadingViewModel.context)
             ComposerToolbar(context: replyLoadedViewModel.context)
+            ComposerToolbar(context: voiceMessageReplyViewModel.context)
         }
         .environmentObject(timelineViewModel.context)
         .previewDisplayName("Reply")

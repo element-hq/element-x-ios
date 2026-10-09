@@ -20,7 +20,7 @@ enum ComposerToolbarVoiceMessageAction {
     case pausePlayback
     case scrubPlayback(scrubbing: Bool)
     case seekPlayback(progress: Double)
-    case send
+    case send(inReplyToEventID: String?)
 }
 
 enum ComposerToolbarViewModelAction {
@@ -71,6 +71,9 @@ struct ComposerToolbarViewState: BindableState {
     let wysiwygViewModel: WysiwygComposerViewModel
     
     var composerMode: ComposerMode = .default
+    /// The `.reply` mode that was active when a voice message recording started, so that the
+    /// recording can be sent as a reply once the composer has left the reply mode to record it.
+    var voiceMessageReplyMode: ComposerMode?
     var composerEmpty = true
     /// Could be false if sending is disabled in the room
     var canSend = true

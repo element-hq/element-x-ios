@@ -203,7 +203,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             
             switch state.composerMode {
             case .previewVoiceMessage:
-                actionsSubject.send(.voiceMessage(.send))
+                actionsSubject.send(.voiceMessage(.send(inReplyToEventID: state.voiceMessageReplyMode?.replyEventID)))
             case .recordVoiceMessage:
                 MXLog.warning("Ignoring send action while recording a voice message.")
             default:
@@ -225,7 +225,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .editLastMessage:
             actionsSubject.send(.editLastMessage)
         case .cancelReply:
-            set(mode: .default)
+            if state.isVoiceMessageModeActivated {
+                state.voiceMessageReplyMode = nil
+            } else {
+                set(mode: .default)
+            }
         case .cancelEdit:
             cancelEdit()
         case .attach(let attachment):
@@ -603,6 +607,23 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
         
         guard mode != state.composerMode else { return }
+        
+        var mode = mode
+        switch (state.composerMode, mode) {
+        case (.reply, .recordVoiceMessage):
+            state.voiceMessageReplyMode = state.composerMode
+        case (.previewVoiceMessage(_, _, isUploading: true), .default):
+            // The voice message has been sent, so the reply is complete.
+            state.voiceMessageReplyMode = nil
+        case (.recordVoiceMessage, .default), (.previewVoiceMessage, .default):
+            // The voice message was discarded, go back to replying.
+            if let voiceMessageReplyMode = state.voiceMessageReplyMode {
+                state.voiceMessageReplyMode = nil
+                mode = voiceMessageReplyMode
+            }
+        default:
+            break
+        }
         
         state.composerMode = mode
         originalEditContent = nil

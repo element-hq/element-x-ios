@@ -901,7 +901,73 @@ final class ComposerToolbarViewModelTests {
         try await deferred.fulfill()
     }
     
+    // MARK: - Voice message replies
+    
+    @Test
+    func voiceMessageIsSentAsReply() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        viewModel.process(timelineAction: .setMode(mode: voicePreviewMode(isUploading: false)))
+        
+        var sentReplyEventID: String?
+        viewModel.actions
+            .sink { action in
+                if case .voiceMessage(.send(let inReplyToEventID)) = action {
+                    sentReplyEventID = inReplyToEventID
+                }
+            }
+            .store(in: &cancellables)
+        viewModel.process(viewAction: .sendMessage)
+        
+        #expect(sentReplyEventID == "testID")
+    }
+    
+    @Test
+    func discardingVoiceMessageRestoresReply() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        #expect(viewModel.state.voiceMessageReplyMode == replyMode)
+        
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode == replyMode)
+        #expect(viewModel.state.voiceMessageReplyMode == nil)
+    }
+    
+    @Test
+    func sendingVoiceMessageClearsReply() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        viewModel.process(timelineAction: .setMode(mode: .recordVoiceMessage(state: AudioRecorderState())))
+        viewModel.process(timelineAction: .setMode(mode: voicePreviewMode(isUploading: true)))
+        
+        viewModel.process(timelineAction: .setMode(mode: .default))
+        #expect(viewModel.state.composerMode == .default)
+        #expect(viewModel.state.voiceMessageReplyMode == nil)
+    }
+    
+    @Test
+    func cancellingReplyKeepsVoiceMessage() {
+        viewModel.process(timelineAction: .setMode(mode: replyMode))
+        let recordMode = ComposerMode.recordVoiceMessage(state: AudioRecorderState())
+        viewModel.process(timelineAction: .setMode(mode: recordMode))
+        
+        viewModel.process(viewAction: .cancelReply)
+        #expect(viewModel.state.composerMode == recordMode)
+        #expect(viewModel.state.voiceMessageReplyMode == nil)
+    }
+    
     // MARK: - Helpers
+    
+    private let replyMode = ComposerMode.reply(eventID: "testID",
+                                               replyDetails: .loaded(sender: .init(id: ""),
+                                                                     eventID: "testID",
+                                                                     eventContent: .message(.text(.init(body: "reply text")))),
+                                               isThread: false)
+    
+    private func voicePreviewMode(isUploading: Bool) -> ComposerMode {
+        .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: 10.0),
+                             waveform: .data([1.0]),
+                             isUploading: isUploading)
+    }
     
     private func collectSentMessages() -> CurrentValueSubject<[ComposerToolbarViewModelAction], Never> {
         let subject = CurrentValueSubject<[ComposerToolbarViewModelAction], Never>([])
