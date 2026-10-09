@@ -103,6 +103,16 @@ nonisolated extension URL {
         return systemRoot.appending(components: "System", "Library", "Audio", "UISounds", directoryHint: .isDirectory)
     }()
     
+    /// The directory holding notification tones imported by the user, inside the Library/Sounds directory searched by the system.
+    static var customTonesDirectory: URL {
+        libraryDirectory.appending(components: "Sounds", "Custom", directoryHint: .isDirectory)
+    }
+    
+    /// The directory holding copies of selected system tones, inside the Library/Sounds directory searched by the system.
+    static var systemTonesDirectory: URL {
+        libraryDirectory.appending(components: "Sounds", "System", directoryHint: .isDirectory)
+    }
+    
     var globalProxy: String? {
         guard let proxySettings = CFNetworkCopySystemProxySettings()?.takeRetainedValue() else {
             MXLog.error("Failed retrieving proxy settings")

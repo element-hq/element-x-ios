@@ -235,9 +235,6 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
 extension NotificationManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        guard appSettings.enableInAppNotifications else {
-            return []
-        }
         guard let delegate else {
             return [.badge, .sound, .list, .banner]
         }

@@ -23,7 +23,6 @@ nonisolated struct NotificationContentBuilderTests {
                                                           style: .plain)
         mediaProvider = MediaProviderMock(.init())
         notificationContentBuilder = await NotificationContentBuilder(messageEventStringBuilder: stringBuilder,
-                                                                      notificationSoundName: UNNotificationSoundName("message.caf"),
                                                                       userSession: NSEUserSessionMock(.init()))
     }
     

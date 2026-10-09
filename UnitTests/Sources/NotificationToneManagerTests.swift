@@ -10,7 +10,7 @@ import Foundation
 import Testing
 
 /// These tests exercise `NotificationToneManager` against the real app sandbox filesystem.
-/// Because all tests share a single `libraryLocation` directory on disk, they are inherently
+/// Because all tests share a single `customTonesDirectory` on disk, they are inherently
 /// incapable of running in parallel — files written by one test would corrupt the state of
 /// another. This project runs test in serial regardless, but this is just to document this is a specific case
 /// relying on that behavior.
@@ -56,8 +56,8 @@ struct NotificationToneManagerTests {
     @Test
     func customTonesFiltersToCAFOnly() throws {
         // Given both CAF and non-CAF files written to the library directory
-        let cafURL = NotificationToneManager.libraryLocation.appending(component: "\(UUID().uuidString).caf")
-        let mp3URL = NotificationToneManager.libraryLocation.appending(component: "\(UUID().uuidString).mp3")
+        let cafURL = URL.customTonesDirectory.appending(component: "\(UUID().uuidString).caf")
+        let mp3URL = URL.customTonesDirectory.appending(component: "\(UUID().uuidString).mp3")
         defer {
             try? FileManager.default.removeItem(at: cafURL)
             try? FileManager.default.removeItem(at: mp3URL)
@@ -79,7 +79,7 @@ struct NotificationToneManagerTests {
     func addingDuplicateToneThrowsFileAlreadyExists() async throws {
         // Given a CAF file that has already been imported into the library
         let sourceURL = URL.temporaryDirectory.appending(component: "\(UUID().uuidString).caf")
-        let importedURL = NotificationToneManager.libraryLocation
+        let importedURL = URL.customTonesDirectory
             .appending(component: sourceURL.deletingPathExtension().lastPathComponent)
             .appendingPathExtension("caf")
         defer {

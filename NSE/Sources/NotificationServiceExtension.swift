@@ -257,7 +257,7 @@ actor NotificationServiceExtensionActor {
         
         let content = UNMutableNotificationContent()
         content.body = L10n.notificationReceivedWhileOfflineIos
-        content.sound = appSettings.notificationSound
+        content.sound = appSettings.defaultNotificationSound // Use the default sound as missed notifications could be for any account.
         
         let request = UNNotificationRequest(identifier: Self.receivedWhileOfflineNotificationID, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)

@@ -14,22 +14,30 @@ final nonisolated class AccountSettings: @unchecked Sendable {
     private let store: AccountUserDefaults
     private let userID: String
     
-    // MARK: Accounts
+    // MARK: Session Activity
     
     /// When this account was last selected, used to order the accounts most recently selected first.
     @UserPreference
     var lastSelectedDate: Date?
     
-    // MARK: Session
-    
     @UserPreference(defaultValue: false)
     var hasRunIdentityConfirmationOnboarding: Bool
-    
-    // MARK: Search
     
     /// The queries the user searched for and the rooms they opened from the results, most recent first.
     @UserPreference(defaultValue: [SearchBreadcrumb]())
     var searchBreadcrumbs: [SearchBreadcrumb]
+    
+    // MARK: Visible Preferences
+    
+    @UserPreference(defaultValue: true)
+    var showAllRoomListActivity: Bool
+    
+    /// The sound played when delivering noisy notifications. If nil, use the Element X default
+    @UserPreference
+    var selectedNotificationTone: NotificationTone?
+    
+    @UserPreference(defaultValue: true)
+    var sharePresence: Bool
     
     init(userID: String, store: UserDefaultsProtocol) {
         self.store = .init(userID: userID, store: store)
