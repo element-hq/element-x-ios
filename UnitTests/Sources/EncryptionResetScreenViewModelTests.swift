@@ -58,6 +58,45 @@ struct EncryptionResetScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    @Test
+    func variantWithConfirmationOptionsIgnoresEncryptedChats() {
+        var checkedForChats = false
+        let variant = EncryptionResetScreenVariant(hasConfirmationOptions: true, hasEncryptedChats: {
+            checkedForChats = true
+            return false
+        }())
+        
+        #expect(variant == .hasConfirmationOptions)
+        #expect(!variant.isResetTheOnlyOption)
+        #expect(!checkedForChats)
+    }
+    
+    @Test
+    func variantWithoutOptions() {
+        let withChats = EncryptionResetScreenVariant(hasConfirmationOptions: false, hasEncryptedChats: true)
+        let withoutChats = EncryptionResetScreenVariant(hasConfirmationOptions: false, hasEncryptedChats: false)
+        
+        #expect(withChats == .noOptionsWithEncryptedChats)
+        #expect(withChats.isResetTheOnlyOption)
+        #expect(withoutChats == .noOptionsWithoutEncryptedChats)
+        #expect(withoutChats.isResetTheOnlyOption)
+    }
+    
+    @Test
+    func cancelIsForwarded() async throws {
+        let viewModel = makeViewModel(variant: .hasConfirmationOptions)
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) {
+            if case .cancel = $0 {
+                true
+            } else {
+                false
+            }
+        }
+        viewModel.context.send(viewAction: .cancel)
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Helpers
     
     private func makeViewModel(variant: EncryptionResetScreenVariant, clientProxy: ClientProxyMock = ClientProxyMock(.init())) -> EncryptionResetScreenViewModel {

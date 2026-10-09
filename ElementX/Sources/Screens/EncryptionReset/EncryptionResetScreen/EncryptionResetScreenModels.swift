@@ -26,6 +26,16 @@ enum EncryptionResetScreenVariant {
     /// The user can only reset, and has no encrypted chats to lose.
     case noOptionsWithoutEncryptedChats
     
+    init(hasConfirmationOptions: Bool, hasEncryptedChats: @autoclosure () -> Bool) {
+        self = if hasConfirmationOptions {
+            .hasConfirmationOptions
+        } else if hasEncryptedChats() {
+            .noOptionsWithEncryptedChats
+        } else {
+            .noOptionsWithoutEncryptedChats
+        }
+    }
+    
     var isResetTheOnlyOption: Bool {
         self != .hasConfirmationOptions
     }
