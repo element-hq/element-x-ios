@@ -15,6 +15,7 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>
     private let spaceFilterSubject: CurrentValueSubject<SpaceServiceFilter?, Never>
     private let analyticsService: AnalyticsServiceProtocol
     private let bugReportService: BugReportServiceProtocol
@@ -31,12 +32,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol,
+         availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          analyticsService: AnalyticsServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          notificationManager: NotificationManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
+        self.availableSessionsPublisher = availableSessionsPublisher
         self.analyticsService = analyticsService
         self.bugReportService = bugReportService
         userSettings = userSession.userSettings
@@ -486,6 +489,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: Multi-account announcement
     
     private func presentMultiAccountAnnouncementIfNeeded() {
+        // Never announce it to someone who already uses several accounts, even once they've removed some.
+        if availableSessionsPublisher.value.count > 1, !userSettings.app.hasSeenMultiAccountAnnouncement {
+            MXLog.info("Several accounts are signed in, marking the multi-account announcement as seen.")
+            userSettings.app.hasSeenMultiAccountAnnouncement = true
+        }
+        
         // An unverified session gets the identity confirmation cover first, the room list appears again once it's dismissed.
         guard userSettings.app.multiAccountEnabled,
               !userSettings.app.hasSeenMultiAccountAnnouncement,

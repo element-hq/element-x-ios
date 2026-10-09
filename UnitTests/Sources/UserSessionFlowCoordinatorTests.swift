@@ -51,6 +51,7 @@ struct UserSessionFlowCoordinatorTests {
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         let flowParameters = CommonFlowParameters(userSession: userSession,
+                                                  availableSessionsPublisher: .init([.init(userSession: userSession)]),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),

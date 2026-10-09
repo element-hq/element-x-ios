@@ -11,6 +11,7 @@ import SwiftUI
 
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let availableSessionsPublisher: CurrentValuePublisher<[UserSessionDetails], Never>
     let bugReportService: BugReportServiceProtocol
     let selectedRoomPublisher: CurrentValuePublisher<String?, Never>
     let analyticsService: AnalyticsServiceProtocol
@@ -48,6 +49,7 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: HomeScreenCoordinatorParameters) {
         viewModel = HomeScreenViewModel(userSession: parameters.userSession,
+                                        availableSessionsPublisher: parameters.availableSessionsPublisher,
                                         selectedRoomPublisher: parameters.selectedRoomPublisher,
                                         analyticsService: parameters.analyticsService,
                                         bugReportService: parameters.bugReportService,

@@ -52,11 +52,9 @@ class UserSessionStore: UserSessionStoreProtocol {
         keychainController.removeAllRestorationTokens()
     }
     
-    func restoreUserSession() async -> Result<UserSessionProtocol, UserSessionStoreError> {
-        let availableCredentials = keychainController.restorationTokens()
-        
-        guard let credentials = availableCredentials.first else {
-            return .failure(.missingCredentials)
+    func restoreUserSession(userID: String) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+        guard let credentials = keychainController.restorationTokens().first(where: { $0.userID == userID }) else {
+            return .failure(.unknownAccount)
         }
         
         let userSettings = appSettings.userSettings(for: credentials.userID)

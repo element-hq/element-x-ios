@@ -460,6 +460,19 @@ final class HomeScreenViewModelTests {
         try await deferred.fulfill()
     }
     
+    @Test
+    func multiAccountAnnouncementIsMarkedSeenWithSeveralAccounts() async throws {
+        userSettings.app.multiAccountEnabled = true
+        userSettings.app.hasSeenMultiAccountAnnouncement = false
+        setupViewModel(otherAccountUserIDs: ["@other:client.com"])
+        
+        let deferred = deferFailure(context.$viewState, timeout: .seconds(1)) { $0.bindings.isPresentingMultiAccountAnnouncement }
+        context.send(viewAction: .screenAppeared)
+        try await deferred.fulfill()
+        
+        #expect(userSettings.app.hasSeenMultiAccountAnnouncement)
+    }
+    
     // MARK: - Helpers
     
     enum InviteType { case rooms, spaces }
@@ -551,7 +564,7 @@ final class HomeScreenViewModelTests {
         return (roomListSubject, stateSubject)
     }
     
-    private func setupViewModel(securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil, invites: InviteType? = nil, roomSummaryProvider: RoomSummaryProviderMock? = nil) {
+    private func setupViewModel(otherAccountUserIDs: [String] = [], securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil, invites: InviteType? = nil, roomSummaryProvider: RoomSummaryProviderMock? = nil) {
         cancellables.removeAll()
         
         var rooms: [RoomSummary] = .mockRooms
@@ -595,7 +608,10 @@ final class HomeScreenViewModelTests {
         
         notificationManager = NotificationManagerMock()
         
+        let sessionDetails = [UserSessionDetails(userSession: userSession)] + otherAccountUserIDs.map { UserSessionDetails(userID: $0) }
+        
         viewModel = HomeScreenViewModel(userSession: userSession,
+                                        availableSessionsPublisher: .init(sessionDetails),
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         analyticsService: AnalyticsServiceMock(.init()),
                                         bugReportService: BugReportServiceMock(.init()),
